@@ -42,58 +42,58 @@ import org.osgi.test.support.compatibility.Semaphore;
  */
 public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl implements ResourceListener {
 
-	private static final String CONTEXT_NAME = "context1";
+	private static final String			CONTEXT_NAME	= "context1";
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * resource monitor
 	 */
-	private ResourceMonitor resourceMonitor;
+	private ResourceMonitor				resourceMonitor;
 
 	/**
 	 * resource context
 	 */
-	private ResourceContext resourceContext;
+	private ResourceContext				resourceContext;
 
 	/**
 	 * ResourceMonitoringService
 	 */
-	private ResourceMonitoringService resourceMonitoringService;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * cpu Resource Monitor Factory
 	 */
-	private ResourceMonitorFactory cpuFactory;
+	private ResourceMonitorFactory		cpuFactory;
 
 	// thresholds
-	private Comparable lowerError;
-	private Comparable lowerWarning;
-	private Comparable upperError;
-	private Comparable upperWarning;
+	private Comparable					lowerError;
+	private Comparable					lowerWarning;
+	private Comparable					upperError;
+	private Comparable					upperWarning;
 
 	/**
 	 * Service registration of the listener ServiceRegistration<ResourceListener>
 	 */
-	private ServiceRegistration listenerSr;
+	private ServiceRegistration			listenerSr;
 
 	/**
 	 * list of received events
 	 */
-	private final List receivedEvents = new ArrayList();
+	private final List					receivedEvents	= new ArrayList();
 
 	/**
 	 * See org.osgi.test.cases.enocean.utils.EventListener class.
 	 */
-	private final Semaphore waiter = new Semaphore();
+	private final Semaphore				waiter			= new Semaphore();
 
 	/**
 	 * last event received.
 	 */
-	private ResourceEvent lastEvent;
+	private ResourceEvent				lastEvent;
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;

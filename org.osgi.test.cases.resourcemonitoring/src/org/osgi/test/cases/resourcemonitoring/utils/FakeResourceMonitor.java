@@ -43,8 +43,7 @@ public class FakeResourceMonitor implements ResourceMonitor {
 	 * @param pResourceType
 	 * @param pResourceContext
 	 */
-	public FakeResourceMonitor(String pResourceType,
-			ResourceContext pResourceContext) {
+	public FakeResourceMonitor(String pResourceType, ResourceContext pResourceContext) {
 		resourceType = pResourceType;
 		resourceContext = pResourceContext;
 	}

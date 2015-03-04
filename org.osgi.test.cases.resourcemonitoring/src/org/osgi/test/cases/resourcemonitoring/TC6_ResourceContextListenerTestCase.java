@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -33,8 +34,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * @author $Id$
  */
-public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleControl
-		implements ResourceContextListener {
+public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleControl implements ResourceContextListener {
 
 	/**
 	 * name of the ResourceContext used for the tests
@@ -89,8 +89,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		ServiceReference sr = bundleContext
-				.getServiceReference(ResourceMonitoringService.class.getName());
+		ServiceReference sr = bundleContext.getServiceReference(ResourceMonitoringService.class.getName());
 		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(sr);
 	}
 
@@ -106,13 +105,13 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test case 1: ResourceContextListener with RESOURCE_CONTEXT_CREATED,
-	 * BUNDLE_ADDED, BUNDLE_REMOVED, and RESOURCE_CONTEXT_REMOVED events.
+	 * Test case 1: ResourceContextListener with RESOURCE_CONTEXT_CREATED, BUNDLE_ADDED, BUNDLE_REMOVED, and RESOURCE_CONTEXT_REMOVED
+	 * events.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws IllegalArgumentException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testResourceContextListenerEvents() throws IllegalArgumentException, ResourceContextException {
 		// registers the ResourceContextListener
@@ -124,62 +123,57 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
-		// BUNDLE_ADDED, BUNDLE_REMOVED, and RESOURCE_CONTEXT_REMOVED have been
-		// received
+		// checks that ResourceContextEvent.RESOURCE_CONTEXT_CREATED, BUNDLE_ADDED, BUNDLE_REMOVED, and
+		// RESOURCE_CONTEXT_REMOVED have been received
 		assertEquals("Events list mismatch.", 4, events.size());
-		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
-		assertEquals("Type mismatch.",
-				ResourceContextEvent.RESOURCE_CONTEXT_CREATED, event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
-				event.getContext().getName());
 
+		// first event is a RESOURCE_CONTEXT_CREATED
+		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
+		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
+
+		// second event is a BUNDLE_ADDED event
 		event = (ResourceContextEvent) events.get(1);
-		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED,
-				event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
-				event.getContext().getName());
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
 
+		// third event is a BUNDLE_REMOVED event
 		event = (ResourceContextEvent) events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
 
+		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
 		event = (ResourceContextEvent) events.get(3);
-		assertEquals("Type mismatch.",
-				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
-				event.getContext().getName());
+		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 	}
 
 	/**
-	 * Test case 2 : ResourceContextListener filtering events of a specific
-	 * ResourceContext.
+	 * Test case 2 : ResourceContextListener filtering events of a specific ResourceContext.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws IllegalArgumentException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testResourceContextListenerFilteringEventsOfASpecificResourceContext() throws IllegalArgumentException, ResourceContextException {
-		// register this instance as a ResourceContextListener filtering events
-		// of context1.
-		registerListener(new String[] {RESOURCE_CONTEXT_NAME});
+	public void testResourceContextListenerFilteringEventsOfASpecificResourceContext() throws IllegalArgumentException,
+			ResourceContextException {
+		// register this instance as a ResourceContextListener filtering events of context1.
+		registerListener(new String[] { RESOURCE_CONTEXT_NAME });
 
-		// executes scenario1 (related to context1) and scenario2 (related to
-		// context2)
+		// executes scenario1 (related to context1) and scenario2 (related to context2)
 		executeScenario1();
 		executeScenario2();
 
 		// unregister the listener
 		unregisterListener();
 
-		// checks received events => four events MUST have been received.
+		// checks received events => four events (related to context1) MUST have been received.
 		assertEquals("Events list mismatch.", 4, events.size());
 		// first event is a RESOURCE_CONTEXT_CREATED for context1
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events
-				.get(0);
+		ResourceContextEvent createdEvent = (ResourceContextEvent) events.get(0);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, createdEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, createdEvent.getContext().getName());
 
@@ -189,18 +183,14 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, addedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, addedEvent.getBundleId());
 
-		// third event is a BUNDLE_REMOVED event (bundle1 was removed from
-		// context1)
-		ResourceContextEvent removedEvent = (ResourceContextEvent) events
-				.get(2);
+		// third event is a BUNDLE_REMOVED event (bundle1 was removed from context1)
+		ResourceContextEvent removedEvent = (ResourceContextEvent) events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, removedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, removedEvent.getBundleId());
 
-		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
-		// (context1 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
-				.get(3);
+		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event (context1 was deleted)
+		ResourceContextEvent deletedEvent = (ResourceContextEvent) events.get(3);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, deletedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, deletedEvent.getContext().getName());
 	}
@@ -208,10 +198,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test case 3 : unregistering a ResourceContextListener.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws IllegalArgumentException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException
+	 *             , see {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testUnregisteringAResourceContextListener() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener without filters
@@ -230,8 +220,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		// checks received events => four events MUST have been received.
 		assertEquals("Events list mismatch.", 4, events.size());
 		// first event is a RESOURCE_CONTEXT_CREATED for context2
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events
-				.get(0);
+		ResourceContextEvent createdEvent = (ResourceContextEvent) events.get(0);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, createdEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, createdEvent.getContext().getName());
 
@@ -241,30 +230,16 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, addedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID2, addedEvent.getBundleId());
 
-		// third event is a BUNDLE_REMOVED event (bundle2 was removed from
-		// context2)
-		ResourceContextEvent removedEvent = (ResourceContextEvent) events
-				.get(2);
+		// third event is a BUNDLE_REMOVED event (bundle2 was removed from context2)
+		ResourceContextEvent removedEvent = (ResourceContextEvent) events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, removedEvent.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID2, removedEvent.getBundleId());
 
-		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
-		// (context2 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
-				.get(3);
+		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event (context2 was deleted)
+		ResourceContextEvent deletedEvent = (ResourceContextEvent) events.get(3);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, deletedEvent.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME2, deletedEvent.getContext().getName());
-	}
-
-	/**
-	 * This method is called to report a ResourceContextEvent. The received
-	 * event is added into the events list.
-	 */
-	public void notify(ResourceContextEvent event) {
-		log(TC6_ResourceContextListenerTestCase.class.getName() + " - event.getType(): " + event.getType() + ", event.getBundleId(): " + event.getBundleId());
-		// add the event into the list.
-		events.add(event);
 	}
 
 	/**
@@ -275,20 +250,17 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * <li>Removes bundle 1 from context1.</li>
 	 * <li>Deletes context1.</li>
 	 * </ul>
-	 * This method is called by all tests cases to generate
-	 * ResourceContextEvent.
+	 * This method is called by all tests cases to generate ResourceContextEvent.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
-	 *         {@link ResourceContext#removeContext(ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
+	 *             {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	private void executeScenario1() throws IllegalArgumentException, ResourceContextException {
 		// create context1
-		ResourceContext resourceContext = resourceMonitoringService.createContext(
-				RESOURCE_CONTEXT_NAME, null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(RESOURCE_CONTEXT_NAME, null);
 
 		// add bundle 1 to context1
 		resourceContext.addBundle(BUNDLE_ID);
@@ -308,20 +280,17 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * <li>Removes bundle 2 from context2.</li>
 	 * <li>Deletes context2.</li>
 	 * </ul>
-	 * This method is called by all tests cases to generate
-	 * ResourceContextEvent.
+	 * This method is called by all tests cases to generate ResourceContextEvent.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
-	 *         {@link ResourceContext#removeContext(ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
+	 *             {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	private void executeScenario2() throws IllegalArgumentException, ResourceContextException {
 		// create context2
-		ResourceContext resourceContext = resourceMonitoringService.createContext(
-				RESOURCE_CONTEXT_NAME2, null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(RESOURCE_CONTEXT_NAME2, null);
 
 		// add bundle 2 to context2
 		resourceContext.addBundle(BUNDLE_ID2);
@@ -336,23 +305,20 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Registers this instance as a ResourceContextListener.
 	 * 
-	 * @param resourceContexts resourceContexts
+	 * @param resourceContexts
+	 *            to be used as properties for this listerner service.
 	 */
 	private void registerListener(String[] resourceContexts) {
 		Dictionary properties = new Hashtable();
 		if (resourceContexts != null) {
 			if (resourceContexts.length > 1) {
-				properties.put(ResourceContextListener.RESOURCE_CONTEXT,
-						resourceContexts);
-			} else
-				if (resourceContexts.length == 1) {
-					properties.put(ResourceContextListener.RESOURCE_CONTEXT,
-							resourceContexts[0]);
-				}
+				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts);
+			} else if (resourceContexts.length == 1) {
+				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts[0]);
+			}
 		}
 
-		listenerServiceRegistration = bundleContext.registerService(
-				ResourceContextListener.class.getName(), this, properties);
+		listenerServiceRegistration = bundleContext.registerService(ResourceContextListener.class.getName(), this, properties);
 	}
 
 	/**
@@ -360,6 +326,16 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 */
 	private void unregisterListener() {
 		listenerServiceRegistration.unregister();
+	}
+
+	/**
+	 * This method is called to report a ResourceContextEvent. The received event is added into the events list.
+	 */
+	public void notify(ResourceContextEvent event) {
+		log(TC6_ResourceContextListenerTestCase.class.getName() + " - event.getType(): " + event.getType() + ", event.getBundleId(): "
+				+ event.getBundleId());
+		// add the event into the list.
+		events.add(event);
 	}
 
 }

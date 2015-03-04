@@ -48,8 +48,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
 
-		ServiceReference resourceMonitoringServiceSr = context
-				.getServiceReference(ResourceMonitoringService.class.getName());
+		ServiceReference resourceMonitoringServiceSr = context.getServiceReference(ResourceMonitoringService.class.getName());
 		if (resourceMonitoringServiceSr != null) {
 			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
 		}
@@ -87,10 +86,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * 
 	 * This test cases tests the adding of a bundle to a ResourceContext.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)}
 	 */
 	public void testAddingABundleToAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -116,16 +115,14 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test case 2 : adding a bundle previously associated with a
-	 * ResourceContext.
+	 * Test case 2 : adding a bundle previously associated with a ResourceContext.
 	 * 
-	 * This test case tests the adding of a bundle previously added to another
-	 * ResourceContext.
+	 * This test case tests the adding of a bundle previously added to another ResourceContext.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)}
 	 */
 	public void testAddingABundlePreviouslyAssociatedWithAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -151,7 +148,8 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		}
 
 		// Check that bundleId 1 is not associated with resourceContext2.
-		assertEquals("BundleIds list mismatch: the resourceContext2 bundleIds list is expected to be empty.", 0, resourceContext2.getBundleIds().length);
+		assertEquals("BundleIds list mismatch: the resourceContext2 bundleIds list is expected to be empty.", 0,
+				resourceContext2.getBundleIds().length);
 
 		// Check that bundleId 1 is still associated with resourceContext1.
 		bundleIds = resourceContext.getBundleIds();
@@ -162,14 +160,13 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test case 3 : removing a bundle from a ResourceContext.
 	 * 
-	 * This test case validates the removing of a bundle from a ResourceContext
-	 * (and checks that a {@link ResourceContextEvent} is received).
+	 * This test case validates the removing of a bundle from a ResourceContext (and checks that a {@link ResourceContextEvent} is
+	 * received).
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testRemoveBundleFromAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -207,15 +204,13 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test case 4 : removing a bundle with a destination ResourceContext.
 	 * 
-	 * This test case tests the removing of a bundle from a context with a
-	 * destination context (expects one ResourceContextEvent from removing the
-	 * bundle and one more for adding it into another ResourceContext).
+	 * This test case tests the removing of a bundle from a context with a destination context (expects one ResourceContextEvent from
+	 * removing the bundle and one more for adding it into another ResourceContext).
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testRemoveABundleWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
@@ -242,8 +237,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check a ResourceContextEvent has been received about the removed
 		// bundle (should be the last last received event)
-		ResourceContextEvent removedEvent = resourceContextListener
-				.getLastLastEvent();
+		ResourceContextEvent removedEvent = resourceContextListener.getLastLastEvent();
 		assertNotNull("RemovedEvent must not be null.", removedEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("BundleId mismatch.", bundleId, removedEvent.getBundleId());
@@ -251,8 +245,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check a ResourceContextEvent has been received about the newly added
 		// bundleId
-		ResourceContextEvent addedEvent = resourceContextListener
-				.getLastEvent();
+		ResourceContextEvent addedEvent = resourceContextListener.getLastEvent();
 		assertNotNull("AddedEvent must not be null.", addedEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, addedEvent.getType());
 		assertEquals("BundleId mismatch.", bundleId, addedEvent.getBundleId());
@@ -262,16 +255,13 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test case 5 : removing a bundle with a null destination ResourceContext.
 	 * 
-	 * This test case validates the removing of a bundle from a ResourceContext
-	 * with a null destination. This test case is similar to
-	 * {@link TC3_ResourceContextBundleManagementTestCases#testRemoveBundleFromAResourceContext()}
-	 * (Expect a REMOVED_BUNDLE event).
+	 * This test case validates the removing of a bundle from a ResourceContext with a null destination. This test case is similar to
+	 * {@link TC3_ResourceContextBundleManagementTestCases#testRemoveBundleFromAResourceContext()} (Expect a REMOVED_BUNDLE event).
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testRemoveABundleWithANullDestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -300,21 +290,18 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test case 6 : removing a bundle with a destination context which has been
-	 * previously deleted.
+	 * Test case 6 : removing a bundle with a destination context which has been previously deleted.
 	 * 
-	 * This test case checks the removing of a bundle from a ResourceContext
-	 * with a destination Resource Context which has been removed (Expect a
-	 * ResourceContextException when invoking
-	 * {@link ResourceContext#removeBundle(long, ResourceContext)}).
+	 * This test case checks the removing of a bundle from a ResourceContext with a destination Resource Context which has been removed
+	 * (Expect a ResourceContextException when invoking {@link ResourceContext#removeBundle(long, ResourceContext)}).
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException , see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testRemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws IllegalArgumentException, ResourceContextException {
+	public void testRemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws IllegalArgumentException,
+			ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;

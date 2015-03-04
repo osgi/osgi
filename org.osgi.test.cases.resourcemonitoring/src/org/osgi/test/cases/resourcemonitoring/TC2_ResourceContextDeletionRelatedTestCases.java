@@ -17,6 +17,7 @@
 package org.osgi.test.cases.resourcemonitoring;
 
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
@@ -50,8 +51,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
 
-		ServiceReference resourceMonitoringServiceSr = context
-				.getServiceReference(ResourceMonitoringService.class.getName());
+		ServiceReference resourceMonitoringServiceSr = context.getServiceReference(ResourceMonitoringService.class.getName());
 		if (resourceMonitoringServiceSr != null) {
 			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
 		}
@@ -87,27 +87,26 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test case 1 : deletion of a ResourceContext.
 	 * 
-	 * This test case validates the deletion of a ResourceContext with no
-	 * ResourceContext as destination.
+	 * This test case validates the deletion of a ResourceContext with no ResourceContext as destination.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#removeContext(ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	public void testDeletionOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 
 		// create the resource context.
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 
 		// delete this new resourceContext.
 		resourceContext.removeContext(null);
 
 		// check existing ResourceContext.
 		assertEquals("ResourceContext list must be empty.", 0, resourceMonitoringService.listContext().length);
-		assertNull("ResourceMonitoringService must not contain a ResourceContext named: " + name, resourceMonitoringService.getContext(name));
+		assertNull("ResourceMonitoringService must not contain a ResourceContext named: " + name,
+				resourceMonitoringService.getContext(name));
 
 		// check the resource context name is still accessible.
 		assertEquals("Name mismatch.", name, resourceContext.getName());
@@ -148,17 +147,14 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test case 2 : deletion of a ResourceContext with a destination
-	 * ResourceContext.
+	 * Test case 2 : deletion of a ResourceContext with a destination ResourceContext.
 	 * 
-	 * This test case validates the deletion of a ResourceContext with a
-	 * destination.
+	 * This test case validates the deletion of a ResourceContext with a destination.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addBundle(long)}
-	 *         {@link ResourceContext#removeContext(ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	public void testDeletionOfAResourceContextWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
@@ -166,10 +162,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, null);
 		log("resourceContext1:" + resourceContext1);
 		log("resourceContext2:" + resourceContext2);
 
@@ -222,8 +216,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// The fourth received event is a BUNDLE_REMOVED ResourceContextEvent
 		// has been received
-		ResourceContextEvent fourthEvent = (ResourceContextEvent) receivedEvents
-				.get(3);
+		ResourceContextEvent fourthEvent = (ResourceContextEvent) receivedEvents.get(3);
 		assertNotNull("FourthEvent must not be null.", fourthEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, fourthEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext1, fourthEvent.getContext());
@@ -231,8 +224,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// check a BUNDLE_ADDED ResourceContextEvent has been received (fifth
 		// received event)
-		ResourceContextEvent fifthEvent = (ResourceContextEvent) receivedEvents
-				.get(4);
+		ResourceContextEvent fifthEvent = (ResourceContextEvent) receivedEvents.get(4);
 		assertNotNull("FifthEvent must not be null.", fifthEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, fifthEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext2, fifthEvent.getContext());
@@ -240,8 +232,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// check the sixth received event is a RESOURCE_CONTEXT_REMOVED
 		// event
-		ResourceContextEvent sixthEvent = (ResourceContextEvent) receivedEvents
-				.get(5);
+		ResourceContextEvent sixthEvent = (ResourceContextEvent) receivedEvents.get(5);
 		assertNotNull("SixthEvent must not be null.", sixthEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, sixthEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext1, sixthEvent.getContext());
@@ -249,28 +240,24 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test case 3 : deletion of a ResourceContext with a previously deleted
-	 * ResourceContext as destination.
+	 * Test case 3 : deletion of a ResourceContext with a previously deleted ResourceContext as destination.
 	 * 
-	 * This test case validates the deletion of a ResourceContext with a
-	 * ResourceContext destination which has been previously deleted.
+	 * This test case validates the deletion of a ResourceContext with a ResourceContext destination which has been previously deleted.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addBundle(long)},
-	 *         {@link ResourceContext#removeContext(ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)}, {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testDeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws IllegalArgumentException, ResourceContextException {
+	public void testDeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws IllegalArgumentException,
+			ResourceContextException {
 		final String name1 = "name1";
 		final String name2 = "name2";
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, null);
 
 		// add bundleId to resourceContext1
 		resourceContext1.addBundle(bundleId);
@@ -328,7 +315,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// event BUNDLE_REMOVED from context1
 		event = (ResourceContextEvent) events.get(4);
-		assertEquals("Type mismatch: ResourceContextEvent.BUNDLE_REMOVED is expected.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
+		assertEquals("Type mismatch: ResourceContextEvent.BUNDLE_REMOVED is expected.", ResourceContextEvent.BUNDLE_REMOVED,
+				event.getType());
 		assertEquals("Name mismatch.", name1, event.getContext().getName());
 		assertEquals("BundleId mismatch.", bundleId, event.getBundleId());
 

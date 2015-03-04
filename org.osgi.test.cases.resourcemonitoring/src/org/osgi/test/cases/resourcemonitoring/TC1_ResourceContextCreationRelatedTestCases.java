@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -59,8 +60,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		ServiceReference serviceReference = bundleContext
-				.getServiceReference(ResourceMonitoringService.class);
+		ServiceReference serviceReference = bundleContext.getServiceReference(ResourceMonitoringService.class);
 		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
 	}
 
@@ -92,13 +92,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test case 1 : Creation of a ResourceContext
 	 * 
-	 * This test case validates the Resource Context creation and the retrieving
-	 * of a ResourceContext.
+	 * This test case validates the Resource Context creation and the retrieving of a ResourceContext.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#getMonitors()}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#getMonitors()}
 	 */
 	public void testCreationOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -112,8 +111,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// A ResourceContextListener service was already registered.
 
 		// Creates a new ResourceContext named "context1".
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 
 		// Check that the returned ResourceContext object is not null.
 		assertNotNull("The resourceContext must not be null.", resourceContext);
@@ -146,13 +144,13 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// the length of the array is equal to initialResourceContextsLength +
 		// 1.
 		assertNotNull("ResourceContext list must not be null.", resourceContexts);
-		assertEquals("ResourceContext list length must be equal to " + initialResourceContextsLength + 1, initialResourceContextsLength + 1, resourceContexts.length);
+		assertEquals("ResourceContext list length must be equal to " + initialResourceContextsLength + 1,
+				initialResourceContextsLength + 1, resourceContexts.length);
 		assertEquals("ResourceContext mismatch.", resourceContext, resourceContexts[0]);
 
 		// Retrieves the ResourceContext using ResourceContext.getContext(name
 		// of context)
-		ResourceContext retrievedResourceContext = resourceMonitoringService
-				.getContext(name);
+		ResourceContext retrievedResourceContext = resourceMonitoringService.getContext(name);
 
 		// Checks that the returned ResourceContext object is equal to the
 		// created ResourceContext.
@@ -161,14 +159,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test case 2 : Creation of a ResourceContext with an existing
-	 * ResourceContext name
+	 * Test case 2 : Creation of a ResourceContext with an existing ResourceContext name
 	 * 
-	 * This test case tests that it is no possible to create two ResourceContext
-	 * with the same name.
+	 * This test case tests that it is no possible to create two ResourceContext with the same name.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 */
 	public void testCreationOfAResourceContextWithAnExistingResourceContextName() throws IllegalArgumentException {
 		final String name = "context1";
@@ -178,8 +174,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		int initialResourceContextsLength = resourceMonitoringService.listContext().length;
 
 		// Creates a new ResourceContext named "context1".
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 		// Checks the returned ResourceContext object is not null.
 		assertNotNull("ResourceContext must not be null.", resourceContext);
 
@@ -189,7 +184,8 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// Retrieves all existing Resource Contexts, and Check the created
 		// ResourceContext is in the returned array and the length of the array
 		// is initialResourceContextsLength + 1.
-		assertEquals("ResourceMonitoringService.listContext() mismatch.", initialResourceContextsLength + 1, resourceMonitoringService.listContext().length);
+		assertEquals("ResourceMonitoringService.listContext() mismatch.", initialResourceContextsLength + 1,
+				resourceMonitoringService.listContext().length);
 
 		// Try to creates again a ResourceContext named "context1", i.e. with
 		// the same name.
@@ -207,43 +203,37 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// Checks that there is still the same number of ResourceContext in the
 		// list.
-		assertEquals("ResourceMonitoringService.listContext().length mismatch.", initialResourceContextsLength + 1, resourceMonitoringService.listContext().length);
+		assertEquals("ResourceMonitoringService.listContext().length mismatch.", initialResourceContextsLength + 1,
+				resourceMonitoringService.listContext().length);
 	}
 
 	/**
-	 * Test case 3 : Creation of a ResourceContext based on a template
-	 * ResourceContext
+	 * Test case 3 : Creation of a ResourceContext based on a template ResourceContext
 	 * 
-	 * This test case validates the Resource Context creation with a template
-	 * Resource Context.
+	 * This test case validates the Resource Context creation with a template Resource Context.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
-	 *         {@link ResourceContext#getMonitors()}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addResourceMonitor(ResourceMonitor)}, {@link ResourceContext#getMonitors()}
 	 */
-	public void testCreationOfAResourceContextBasedOnATemplateResourceContext()
-			throws IllegalArgumentException, ResourceContextException {
+	public void testCreationOfAResourceContextBasedOnATemplateResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 
 		// Creates a template ResourceContext named "context1".
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
 
 		// Checks the created ResourceContext is not null.
 		assertNotNull("ResourceContext must not be null.", resourceContext1);
 
 		// Add a FakeResourceMonitor simulating a CPU ResourceMonitor to
 		// context1.
-		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
+		resourceContext1.addResourceMonitor(new FakeResourceMonitor(ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
 		// Creates a new ResourceContext named "context2" with "context1" as
 		// template.
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				resourceContext1);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, resourceContext1);
 
 		// Checks the newly created ResourceContext is not null.
 		assertNotNull("ResourceContext must not be null.", resourceContext2);
@@ -260,42 +250,36 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test case 4 : Creation of a ResourceContext based on a template
-	 * ResourceContext previously deleted.
+	 * Test case 4 : Creation of a ResourceContext based on a template ResourceContext previously deleted.
 	 * 
-	 * This test case tests the ResourceContext creation with a template
-	 * ResourceContext which has been previously deleted.
+	 * This test case tests the ResourceContext creation with a template ResourceContext which has been previously deleted.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
-	 *         {@link ResourceContext#removeContext(ResourceContext)},
-	 *         {@link ResourceContext#getMonitors()}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addResourceMonitor(ResourceMonitor)}, {@link ResourceContext#removeContext(ResourceContext)}
+	 *             , {@link ResourceContext#getMonitors()}
 	 */
-	public void testCreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted()
-			throws IllegalArgumentException, ResourceContextException {
+	public void testCreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted() throws IllegalArgumentException,
+			ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		// Creates a template ResourceContext named "context1".
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
 
 		// Checks the created ResourceContext is not null.
 		assertNotNull("ResourceContext must not be null.", resourceContext1);
 
 		// Add a FakeResourceMonitor simulating a CPU ResourceMonitor to
 		// context1.
-		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
+		resourceContext1.addResourceMonitor(new FakeResourceMonitor(ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
 		// Delete the ResourceContext context1.
 		resourceContext1.removeContext(null);
 
 		// Creates a new ResourceContext named "context2" with "context1" as
 		// template.
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				resourceContext1);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, resourceContext1);
 
 		// Checks the newly created ResourceContext is not null.
 		assertNotNull("ResourceContext must not be null.", resourceContext2);
@@ -311,13 +295,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test case 5 : Retrieving a ResourceContext based on a bundle identifier.
 	 * 
-	 * This test case validates the retrieving a ResourceContext based on a
-	 * bundle.
+	 * This test case validates the retrieving a ResourceContext based on a bundle.
 	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException, see
-	 *         {@link ResourceContext#addBundle(long)}
+	 * @throws IllegalArgumentException
+	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException
+	 *             , see {@link ResourceContext#addBundle(long)}
 	 */
 	public void testRetrievingAResourceContextBasedOnABundleIdentifier() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
@@ -328,8 +311,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		assertNull("ResourceContext must be null.", resourceContext);
 
 		// Create the ResourceContext named "context1".
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name, null);
 		// Associates bundleId 1 with context1
 		resourceContext1.addBundle(bundleId);
 
@@ -350,11 +332,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test case 6 : Supported types of resources.
 	 * 
-	 * This test case checks the retrieving of available Resource Monitor
-	 * Factory.
+	 * This test case checks the retrieving of available Resource Monitor Factory.
 	 * 
-	 * @throws InvalidSyntaxException, see
-	 *         {@link BundleContext#getServiceReferences(Class, String)}
+	 * @throws InvalidSyntaxException
+	 *             , see {@link BundleContext#getServiceReferences(Class, String)}
 	 */
 	public void testSupportedTypesOfResources() throws InvalidSyntaxException {
 
@@ -366,21 +347,20 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// Retrieve all ServiceReference of ResourceMonitorFactory services
 		// through the BundleContext
-		Collection factorySrs = getContext().getServiceReferences(
-				ResourceMonitorFactory.class, null);
+		Collection factorySrs = getContext().getServiceReferences(ResourceMonitorFactory.class, null);
 
 		// Check that the number of ServiceReference is not null.
 		assertNotNull("The collection of ServiceReference of ResourceMonitorFactory services must not be null.", factorySrs);
 		// Check that the number of ServiceReference is equal to the number of
 		// type returned by getSupportedTypes.
-		assertEquals("the number of ServiceReference must be equal to the number of type returned by getSupportedTypes.", supportedTypes.length, factorySrs.size());
+		assertEquals("the number of ServiceReference must be equal to the number of type returned by getSupportedTypes.",
+				supportedTypes.length, factorySrs.size());
 
 		// Iterate over the ServiceReference collection and retrieve each
 		// ResourceMonitorFactory service.
 		List computedSupportedTypes = new ArrayList();
 		for (Iterator it = factorySrs.iterator(); it.hasNext();) {
-			ResourceMonitorFactory rmf = (ResourceMonitorFactory) getContext().getService(
-					(ServiceReference) it.next());
+			ResourceMonitorFactory rmf = (ResourceMonitorFactory) getContext().getService((ServiceReference) it.next());
 			// add the type in the list
 			computedSupportedTypes.add(rmf.getType());
 		}
@@ -390,7 +370,8 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		assertEquals("SupportedTypes list mismatch.", supportedTypes.length, computedSupportedTypes.size());
 		// Check that each supported types is in the list
 		for (int i = 0; i < supportedTypes.length; i++) {
-			assertTrue("The given supportedType must appear in the SupportedTypes list.", computedSupportedTypes.contains(supportedTypes[i]));
+			assertTrue("The given supportedType must appear in the SupportedTypes list.",
+					computedSupportedTypes.contains(supportedTypes[i]));
 		}
 	}
 

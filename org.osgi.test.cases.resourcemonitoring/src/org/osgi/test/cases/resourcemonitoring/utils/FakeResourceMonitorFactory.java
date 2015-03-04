@@ -18,6 +18,7 @@ package org.osgi.test.cases.resourcemonitoring.utils;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContext;
@@ -32,8 +33,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
  * 
  * @author $Id$
  */
-public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
-		ResourceContextListener {
+public class FakeResourceMonitorFactory implements ResourceMonitorFactory, ResourceContextListener {
 
 	/**
 	 * type of {@link ResourceMonitor} this factory is able to create
@@ -46,33 +46,27 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 	private final BundleContext	bundleContext;
 
 	/**
-	 * Register the factory as a ResourceContextListener to be informed when a
-	 * ResourceContext is deleted. ServiceRegistration<ResourceContextListener>
+	 * Register the factory as a ResourceContextListener to be informed when a ResourceContext is deleted.
+	 * ServiceRegistration<ResourceContextListener>
 	 */
 	private ServiceRegistration	serviceRegistration;
 
 	/**
-	 * Create, and register this FakeResourceMonitorFactory as a service in the
-	 * OSGi services registry.
+	 * Create, and register this FakeResourceMonitorFactory as a service in the OSGi services registry.
 	 * 
 	 * @param bundleContext
 	 * @param factoryType
 	 */
-	public FakeResourceMonitorFactory(BundleContext bundleContext,
-			String factoryType) {
+	public FakeResourceMonitorFactory(BundleContext bundleContext, String factoryType) {
 		this.bundleContext = bundleContext;
 		this.factoryType = factoryType;
 
 		// register this factory as a ResourceContextListener.
 		// Dictionary<String, Object> properties.
 		Dictionary properties = new Hashtable();
-		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
-				factoryType);
-		serviceRegistration = this.bundleContext
-				.registerService(
-						new String[] {ResourceContextListener.class.getName(),
-								ResourceMonitorFactory.class.getName()}, this,
-						properties);
+		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY, factoryType);
+		serviceRegistration = this.bundleContext.registerService(new String[] { ResourceContextListener.class.getName(),
+				ResourceMonitorFactory.class.getName() }, this, properties);
 	}
 
 	/**

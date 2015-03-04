@@ -19,12 +19,10 @@ package org.osgi.test.cases.resourcemonitoring;
 /**
  * This class contains:
  * 
- * - testSignatures, cf. testSignatures() method from org.osgi.test.support.
- * signature.SignatureTestCase.
+ * - testSignatures, cf. testSignatures() method from org.osgi.test.support. signature.SignatureTestCase.
  * 
  * @author $Id$
  */
-public class SignatureTestCase extends
-		org.osgi.test.support.signature.SignatureTestCase {
+public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
 }

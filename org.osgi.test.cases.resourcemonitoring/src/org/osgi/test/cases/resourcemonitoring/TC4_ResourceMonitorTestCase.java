@@ -63,8 +63,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		ServiceReference serviceReference = bundleContext
-				.getServiceReference(ResourceMonitoringService.class);
+		ServiceReference serviceReference = bundleContext.getServiceReference(ResourceMonitoringService.class);
 		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
 
 		StringBuffer filter = new StringBuffer();
@@ -78,12 +77,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
-			Collection factoryReferences = bundleContext.getServiceReferences(
-					ResourceMonitorFactory.class, filter.toString());
+			Collection factoryReferences = bundleContext.getServiceReferences(ResourceMonitorFactory.class, filter.toString());
 			if (factoryReferences != null) {
 				if (factoryReferences.size() > 0) {
-					ServiceReference factoryReference = (ServiceReference) factoryReferences
-							.iterator().next();
+					ServiceReference factoryReference = (ServiceReference) factoryReferences.iterator().next();
 					cpuFactory = (ResourceMonitorFactory) bundleContext.getService(factoryReference);
 
 				}
@@ -97,8 +94,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		resourceContext = resourceMonitoringService.createContext(resourceContextName,
-				null);
+		resourceContext = resourceMonitoringService.createContext(resourceContextName, null);
 
 		assertNotNull("CpuFactory must not be null.", cpuFactory);
 	}
@@ -112,17 +108,14 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test case 1 : creation of a ResourceMonitor.
 	 * 
-	 * This test case tests the creation of a ResourceMonitor through a
-	 * ResourceMonitorFactory.
+	 * This test case tests the creation of a ResourceMonitor through a ResourceMonitorFactory.
 	 * 
 	 * @throws ResourceMonitorException
-	 *             , see
-	 *             {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 *             , see {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
 	 * @throws ResourceContextException
 	 *             , see {@link ResourceContext#getMonitors()}
 	 */
-	public void testCreationOfResourceMonitor()
-			throws ResourceMonitorException, ResourceContextException {
+	public void testCreationOfResourceMonitor() throws ResourceMonitorException, ResourceContextException {
 
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
@@ -130,8 +123,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		assertEquals("Monitors list mismatch.", 0, monitors.length);
 
 		// create ResourceMonitor
-		ResourceMonitor resourceMonitor = cpuFactory
-				.createResourceMonitor(resourceContext);
+		ResourceMonitor resourceMonitor = cpuFactory.createResourceMonitor(resourceContext);
 		assertNotNull("ResourceMonitor must not be null.", resourceMonitor);
 
 		// check ResourceContext
@@ -140,8 +132,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		assertEquals("ResourceMonitor mismatch.", resourceMonitor, monitors[0]);
 
 		// get monitor from ResourceContext
-		ResourceMonitor retrievedMonitor = resourceContext
-				.getMonitor(ResourceMonitoringService.RES_TYPE_CPU);
+		ResourceMonitor retrievedMonitor = resourceContext.getMonitor(ResourceMonitoringService.RES_TYPE_CPU);
 		assertNotNull("ResourceMonitor must not be null.", retrievedMonitor);
 		assertEquals("ResourceMonitor mismatch.", resourceMonitor, retrievedMonitor);
 
@@ -172,21 +163,16 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test case 2 : deletion of a ResourceMonitor from a ResourceContext.
 	 * 
-	 * This test case validates the deletion of ResourceMonitor from a
-	 * ResourceContext (check that the monitor is removed from the context).
+	 * This test case validates the deletion of ResourceMonitor from a ResourceContext (check that the monitor is removed from the context).
 	 * 
 	 * @throws ResourceMonitorException
-	 *             , see
-	 *             {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 *             , see {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
 	 * @throws ResourceContextException
-	 *             , see {@link ResourceMonitor#delete()}
-	 *             {@link ResourceContext#getMonitors()}
+	 *             , see {@link ResourceMonitor#delete()} {@link ResourceContext#getMonitors()}
 	 */
-	public void testDeletionOfAResourceMonitorFromAResourceContext()
-			throws ResourceMonitorException, ResourceContextException {
+	public void testDeletionOfAResourceMonitorFromAResourceContext() throws ResourceMonitorException, ResourceContextException {
 		// create ResourceMonitor
-		ResourceMonitor resourceMonitor = cpuFactory
-				.createResourceMonitor(resourceContext);
+		ResourceMonitor resourceMonitor = cpuFactory.createResourceMonitor(resourceContext);
 
 		// delete ResourceMonitor
 		resourceMonitor.delete();
@@ -206,16 +192,12 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * This test case checks the enabling/disabling of a ResourceMonitor.
 	 * 
 	 * @throws ResourceMonitorException
-	 *             , see
-	 *             {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
-	 *             {@link ResourceMonitor#enable()}
-	 *             {@link ResourceMonitor#disable()}
-	 *             {@link ResourceMonitor#delete()}
+	 *             , see {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)} {@link ResourceMonitor#enable()}
+	 *             {@link ResourceMonitor#disable()} {@link ResourceMonitor#delete()}
 	 */
 	public void testEnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
 		// create ResourceMonitor
-		ResourceMonitor resourceMonitor = cpuFactory
-				.createResourceMonitor(resourceContext);
+		ResourceMonitor resourceMonitor = cpuFactory.createResourceMonitor(resourceContext);
 
 		// check the monitor is disabled by default
 		assertFalse("ResourceMonitor must not be enabled.", resourceMonitor.isEnabled());
@@ -256,21 +238,15 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test case 4 : retrieving a resource usage.
 	 * 
-	 * This use case checks the retrieving of the resource usage a
-	 * ResourceContext is consuming.
+	 * This use case checks the retrieving of the resource usage a ResourceContext is consuming.
 	 * 
 	 * @throws ResourceMonitorException
-	 *             , see
-	 *             {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
-	 *             {@link ResourceMonitor#getUsage()}
-	 *             {@link ResourceMonitor#enable()}
-	 *             {@link ResourceMonitor#disable()}
-	 *             {@link ResourceMonitor#delete()}
+	 *             , see {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)} {@link ResourceMonitor#getUsage()}
+	 *             {@link ResourceMonitor#enable()} {@link ResourceMonitor#disable()} {@link ResourceMonitor#delete()}
 	 */
 	public void testRetrievingResourceUsage() throws ResourceMonitorException {
 		// create ResourceMonitor
-		ResourceMonitor resourceMonitor = cpuFactory
-				.createResourceMonitor(resourceContext);
+		ResourceMonitor resourceMonitor = cpuFactory.createResourceMonitor(resourceContext);
 
 		// retrieves the resource usage
 		assertNotNull("Usage must not be null.", resourceMonitor.getUsage());

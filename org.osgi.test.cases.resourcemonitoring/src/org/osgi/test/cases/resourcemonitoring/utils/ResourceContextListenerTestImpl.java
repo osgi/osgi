@@ -18,6 +18,7 @@ package org.osgi.test.cases.resourcemonitoring.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
@@ -48,21 +49,17 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	}
 
 	/**
-	 * Register this instance as a {@link ResourceContextListener} service. Once
-	 * registered, this instance will receive {@link ResourceContextEvent}.
+	 * Register this instance as a {@link ResourceContextListener} service. Once registered, this instance will receive
+	 * {@link ResourceContextEvent}.
 	 * 
 	 * @param bundleContext
 	 */
 	public void start(BundleContext bundleContext) {
-		serviceRegistration = bundleContext
-				.registerService(
-						ResourceContextListener.class.getName(),
-						this, null);
+		serviceRegistration = bundleContext.registerService(ResourceContextListener.class.getName(), this, null);
 	}
 
 	/**
-	 * Unregister this instance as a {@link ResourceContextListener} service.
-	 * Once unregistered, this instance won't receive anymore
+	 * Unregister this instance as a {@link ResourceContextListener} service. Once unregistered, this instance won't receive anymore
 	 * {@link ResourceContextEvent}.
 	 */
 	public void stop() {
@@ -79,8 +76,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	}
 
 	/**
-	 * Returns the last received event got through
-	 * {@link #notify(ResourceContextEvent)} method.
+	 * Returns the last received event got through {@link #notify(ResourceContextEvent)} method.
 	 * 
 	 * @return last received resource context event.
 	 */
@@ -94,8 +90,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	}
 
 	/**
-	 * Returns the last last event got through
-	 * {@link #notify(ResourceContextEvent)} method.
+	 * Returns the last last event got through {@link #notify(ResourceContextEvent)} method.
 	 * 
 	 * @return last last received event
 	 */
