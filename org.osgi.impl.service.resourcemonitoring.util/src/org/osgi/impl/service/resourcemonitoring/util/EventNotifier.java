@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -117,7 +118,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @param value new resource usage value
 	 */
-	public void notify(final Object value) {
+	public void notify(final Comparable value) {
 		List/* <ResourceListener> */currentResourceListeners = getResourceListeners();
 
 		// iterate over the list of ResourceListeners related to this
@@ -266,8 +267,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * 
 	 * @return event or null if this listener MUST not be notified
 	 */
-	private static ResourceEvent createResourceEvent(ResourceListener listener,
-			Object value, ResourceContext resourceContext) {
+	private static ResourceEvent createResourceEvent(ResourceListener listener, Comparable value, ResourceContext resourceContext) {
 
 		ResourceEvent event = null;
 
@@ -319,7 +319,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * @return true if the result of the comparison between comparable and value
 	 *         is equal to expected
 	 */
-	private static boolean compare(Comparable comparable, Object value,
+	private static boolean compare(Comparable comparable, Comparable value,
 			int expected) {
 
 		try {

@@ -51,7 +51,7 @@ public class ResourceEvent {
 	private final int				type;
 	private final boolean			isUpperThreshold;
 	private final ResourceContext	resourceContext;
-	private final Object			value;
+	private final Comparable		value;
 
 	/**
 	 * Creates a new ResourceEvent.
@@ -61,7 +61,7 @@ public class ResourceEvent {
 	 * @param pIsUpperThreshold whether it is an upper threshold
 	 * @param pValue the value
 	 */
-	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Object pValue) {
+	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Comparable pValue) {
 		type = pType;
 		resourceContext = pContext;
 		isUpperThreshold = pIsUpperThreshold;
@@ -89,7 +89,7 @@ public class ResourceEvent {
 	 * @return the resource consumption value, or null if a resource monitor is
 	 *         not relevant.
 	 */
-	public Object getValue() {
+	public Comparable getValue() {
 		return value;
 	}
 
