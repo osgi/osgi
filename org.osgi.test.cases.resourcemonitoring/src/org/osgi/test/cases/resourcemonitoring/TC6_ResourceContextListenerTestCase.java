@@ -117,8 +117,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		// registers the ResourceContextListener
 		registerListener(null);
 
-		// executes the scenario
-		executeScenario1();
+		// executes the scenario1
+		manageContext(RESOURCE_CONTEXT_NAME, BUNDLE_ID);
 
 		// unregisters the listener
 		unregisterListener();
@@ -160,12 +160,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 */
 	public void testResourceContextListenerFilteringEventsOfASpecificResourceContext() throws IllegalArgumentException,
 			ResourceContextException {
-		// register this instance as a ResourceContextListener filtering events of context1.
+		// register this instance as a ResourceContextListener filtering events of RESOURCE_CONTEXT_NAME.
 		registerListener(new String[] { RESOURCE_CONTEXT_NAME });
 
 		// executes scenario1 (related to context1) and scenario2 (related to context2)
-		executeScenario1();
-		executeScenario2();
+		manageContext(RESOURCE_CONTEXT_NAME, BUNDLE_ID);
+		manageContext(RESOURCE_CONTEXT_NAME2, BUNDLE_ID2);
 
 		// unregister the listener
 		unregisterListener();
@@ -208,13 +208,13 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 		registerListener(null);
 
 		// execute scenario2 (related to context2)
-		executeScenario2();
+		manageContext(RESOURCE_CONTEXT_NAME2, BUNDLE_ID2);
 
 		// unregister this instace as a ResourceContextListener
 		unregisterListener();
 
 		// execute scenario1 (related to context1)
-		executeScenario1();
+		manageContext(RESOURCE_CONTEXT_NAME, BUNDLE_ID);
 
 		// check that the Listener receives four events all related to context2
 		// checks received events => four events MUST have been received.
@@ -245,60 +245,33 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * This method executes the following scenario:
 	 * <ul>
-	 * <li>Creates a ResourceContext named context1</li>
-	 * <li>Adds bundle 1 to context1.</li>
-	 * <li>Removes bundle 1 from context1.</li>
-	 * <li>Deletes context1.</li>
+	 * <li>Creates a ResourceContext named resourceContextName</li>
+	 * <li>Adds bundleId to resourceContextName.</li>
+	 * <li>Removes bundleId from resourceContextName.</li>
+	 * <li>Deletes resourceContextName.</li>
 	 * </ul>
 	 * This method is called by all tests cases to generate ResourceContextEvent.
 	 * 
+	 * @param resourceContextName
+	 * @param bundleId
 	 * @throws IllegalArgumentException
 	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException
 	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
 	 *             {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	private void executeScenario1() throws IllegalArgumentException, ResourceContextException {
+	private void manageContext(final String resourceContextName, final long bundleId) throws IllegalArgumentException,
+			ResourceContextException {
 		// create context1
-		ResourceContext resourceContext = resourceMonitoringService.createContext(RESOURCE_CONTEXT_NAME, null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(resourceContextName, null);
 
 		// add bundle 1 to context1
-		resourceContext.addBundle(BUNDLE_ID);
+		resourceContext.addBundle(bundleId);
 
 		// remove bundle1
-		resourceContext.removeBundle(BUNDLE_ID);
+		resourceContext.removeBundle(bundleId);
 
 		// delete context1
-		resourceContext.removeContext(null);
-	}
-
-	/**
-	 * This method executes the following scenario:
-	 * <ul>
-	 * <li>Creates a ResourceContext named context2</li>
-	 * <li>Adds bundle 2 to context2.</li>
-	 * <li>Removes bundle 2 from context2.</li>
-	 * <li>Deletes context2.</li>
-	 * </ul>
-	 * This method is called by all tests cases to generate ResourceContextEvent.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             , see {@link ResourceMonitoringService#createContext(String, ResourceContext)}
-	 * @throws ResourceContextException
-	 *             , see {@link ResourceContext#addBundle(long)} {@link ResourceContext#removeBundle(long)}
-	 *             {@link ResourceContext#removeContext(ResourceContext)}
-	 */
-	private void executeScenario2() throws IllegalArgumentException, ResourceContextException {
-		// create context2
-		ResourceContext resourceContext = resourceMonitoringService.createContext(RESOURCE_CONTEXT_NAME2, null);
-
-		// add bundle 2 to context2
-		resourceContext.addBundle(BUNDLE_ID2);
-
-		// remove bundle2
-		resourceContext.removeBundle(BUNDLE_ID2);
-
-		// delete context2
 		resourceContext.removeContext(null);
 	}
 
