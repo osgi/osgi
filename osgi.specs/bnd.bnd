@@ -6,7 +6,7 @@
 
 -buildpath: \
     ee.j2se;         version=${javac.compliance}, \
-    dmforest;        version=project;packages=*, \
+    dmforest;        version=project;packages=**, \
     com.sun.tools;   version=1.5.0, \
     org.apache.bcel; version=1.0, \
     ee.foundation; version=latest, \

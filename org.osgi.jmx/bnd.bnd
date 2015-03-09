@@ -5,4 +5,4 @@ Export-Package: ${p}.*; -split-package:=first
 
 # Remarkably, this project MUST not have the OSGi libs!
 -buildpath = ee.j2se; version=${javac.compliance}, \
-    osgi.annotation; version=6.0;packages=*
+    osgi.annotation; version=6.0;packages=**

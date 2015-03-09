@@ -7,4 +7,4 @@ Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(mu
 
 -buildpath = \
     ee.j2se; version=${javac.compliance}, \
-    osgi.annotation; version=6.0;packages=*
+    osgi.annotation; version=6.0;packages=**
