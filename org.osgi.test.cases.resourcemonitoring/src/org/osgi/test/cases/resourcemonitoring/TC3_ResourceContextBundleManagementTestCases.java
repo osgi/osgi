@@ -93,7 +93,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	public void testAddingABundleToAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = 1l;
+		final long bundleId = 1;
 
 		// create ResourceContext
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
