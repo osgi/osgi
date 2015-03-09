@@ -36,7 +36,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	/**
 	 * bundleContext
 	 */
-	private BundleContext					context;
+	private BundleContext					bundleContext;
 
 	/**
 	 * ResourceMonitoringService
@@ -48,12 +48,12 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 */
 	private ResourceContextListenerTestImpl	resourceContextListener;
 
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
+	public void setBundleContext(BundleContext bundleContext) {
+		this.bundleContext = bundleContext;
 
-		ServiceReference resourceMonitoringServiceSr = context.getServiceReference(ResourceMonitoringService.class.getName());
+		ServiceReference resourceMonitoringServiceSr = bundleContext.getServiceReference(ResourceMonitoringService.class.getName());
 		if (resourceMonitoringServiceSr != null) {
-			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
+			resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(resourceMonitoringServiceSr);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		super.setUp();
 
 		resourceContextListener = new ResourceContextListenerTestImpl();
-		resourceContextListener.start(context);
+		resourceContextListener.start(bundleContext);
 
 		// delete all existing ResourceContext
 		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
@@ -159,7 +159,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	public void testDeletionOfAResourceContextWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
-		final long bundleId = 1;
+		final long bundleId = bundleContext.getBundle().getBundleId();
 
 		// create ResourceContexts
 		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
@@ -253,7 +253,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			ResourceContextException {
 		final String name1 = "name1";
 		final String name2 = "name2";
-		final long bundleId = 1;
+		final long bundleId = bundleContext.getBundle().getBundleId();
 
 		// create ResourceContexts
 		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);

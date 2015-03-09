@@ -304,7 +304,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 */
 	public void testRetrievingAResourceContextBasedOnABundleIdentifier() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
-		final long bundleId = 1;
+		final long bundleId = bundleContext.getBundle().getBundleId();
 		// Retrieve the ResourceContext associated with bundle id 1.
 		ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
 		// Check that the returned ResourceContext object is null.
