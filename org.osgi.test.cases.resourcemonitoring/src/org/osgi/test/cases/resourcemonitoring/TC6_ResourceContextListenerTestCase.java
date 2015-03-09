@@ -284,13 +284,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	private void registerListener(String[] resourceContexts) {
 		Dictionary properties = new Hashtable();
 		if (resourceContexts != null) {
-			if (resourceContexts.length > 1) {
+			if (resourceContexts.length >= 1) {
 				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts);
-			} else if (resourceContexts.length == 1) {
-				properties.put(ResourceContextListener.RESOURCE_CONTEXT, resourceContexts[0]);
 			}
 		}
-
 		listenerServiceRegistration = bundleContext.registerService(ResourceContextListener.class.getName(), this, properties);
 	}
 
