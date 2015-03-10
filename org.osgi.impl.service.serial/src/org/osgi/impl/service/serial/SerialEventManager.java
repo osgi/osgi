@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,8 +18,11 @@ package org.osgi.impl.service.serial;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.serial.SerialDevice;
 import org.osgi.service.serial.SerialEvent;
 import org.osgi.service.serial.SerialEventListener;
 import org.osgi.util.tracker.ServiceTracker;
@@ -35,18 +38,27 @@ public class SerialEventManager {
 		tracker.open();
 	}
 
-	public void sendEvent(String comPort) {
-		SerialEvent event = new SerialEventImpl(comPort, SerialEvent.DATA_AVAILABLE);
-		for (int i = 0; i < list.size(); i++) {
-			ServiceReference ref = (ServiceReference) list.get(i);
-			String filter = (String) ref.getProperty(SerialEventListener.SERIAL_COMPORT);
-			if (filter == null) {
-				SerialEventListener listener = (SerialEventListener) context.getService(ref);
-				listener.notifyEvent(event);
-			} else if (filter.equals(comPort)) {
-				SerialEventListener listener = (SerialEventListener) context.getService(ref);
-				listener.notifyEvent(event);
+	public void sendEvent(String id) {
+		try {
+			String serialDeviceFilter = "(service.id=" + id + ")";
+			ServiceReference[] serialDeviceRefs = context.getServiceReferences(SerialDevice.class.getName(), serialDeviceFilter);
+			String comPort = (String) serialDeviceRefs[0].getProperty(SerialDevice.SERIAL_COMPORT);
+
+			SerialEvent event = new SerialEventImpl(comPort, SerialEvent.DATA_AVAILABLE);
+			for (int i = 0; i < list.size(); i++) {
+				ServiceReference ref = (ServiceReference) list.get(i);
+				String filter = (String) ref.getProperty(SerialEventListener.SERIAL_COMPORT);
+				if (filter == null) {
+					SerialEventListener listener = (SerialEventListener) context.getService(ref);
+					listener.notifyEvent(event);
+				} else if (filter.equals(comPort)) {
+					SerialEventListener listener = (SerialEventListener) context.getService(ref);
+					listener.notifyEvent(event);
+				}
 			}
+
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
 		}
 	}
 

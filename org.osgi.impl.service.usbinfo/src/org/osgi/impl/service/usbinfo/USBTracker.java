@@ -19,6 +19,7 @@ package org.osgi.impl.service.usbinfo;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.device.Device;
@@ -44,7 +45,7 @@ class USBTracker {
 		usbMap.clear();
 	}
 
-	synchronized long addUsb(Dictionary props) {
+	synchronized String addUsb(Dictionary props) {
 
 		Device device = new USBInfoDeviceImpl();
 		String[] clazzes = new String[] {
@@ -52,16 +53,16 @@ class USBTracker {
 				USBInfoDevice.class.getName()
 		};
 		ServiceRegistration reg = Activator.getContext().registerService(clazzes, device, props);
-		Long id = (Long) reg.getReference().getProperty(Constants.SERVICE_ID);
+		String id = ((Long) reg.getReference().getProperty(Constants.SERVICE_ID)).toString();
 
 		usbMap.put(id, reg);
 
-		return id.longValue();
+		return id;
 	}
 
-	synchronized void removeUsb(long id) {
+	synchronized void removeUsb(String id) {
 
-		ServiceRegistration reg = (ServiceRegistration) usbMap.remove(new Long(id));
+		ServiceRegistration reg = (ServiceRegistration) usbMap.remove(id);
 		reg.unregister();
 	}
 }

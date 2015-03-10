@@ -16,29 +16,29 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.networkadapter.NetworkAdapter;
-import org.osgi.test.cases.networkadapter.util.NetworkIfTestUtil;
 import org.osgi.test.cases.networkadapter.util.NetworkTestProxy;
 import org.osgi.test.cases.networkadapter.util.TestServiceListener;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class NetworkAdapterTestCase extends DefaultTestBundleControl {
-	private NetworkTestProxy testProxy;
+    private NetworkTestProxy testProxy;
 
     protected void setUp() throws Exception {
-		this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
+        this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
     protected void tearDown() throws Exception {
-		this.testProxy.close();
+        this.testProxy.close();
     }
-    
+
     /**
      * Tests NetworkAdapter of the loopback interface.
-     * Please set in advance the information to the system property (bnd.bnd file).
      */
     public void testNetworkAdapter01() {
         String[] ids = null;
@@ -46,42 +46,45 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the loopback network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_LB_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_LB_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_LB_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_LB_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_LB_MTU);
-            parameters[5] = "true";
-            parameters[6] = "false";
-            parameters[7] = System.getProperty(NetworkIfTestUtil.PROP_LB_ISUP);
-            parameters[8] = System.getProperty(NetworkIfTestUtil.PROP_LB_ISVIRTUAL);
-            parameters[9] = System.getProperty(NetworkIfTestUtil.PROP_LB_SUPPORTSMULTICAST);
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_LB_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_LB_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_LB_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_LB_MASKLENGTH);
-
+            String message = "[TEST-ADA01] Add a loopback network adapter.";
+            String[] parameters = new String[]{"loopback"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-
-            assertTrue("Loopback is expected.", networkAdapter.isLoopback());
-            assertFalse("Not Point-to-point is expected.", networkAdapter.isPointToPoint());
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_ISUP, Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_ISVIRTUAL, Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_LB_SUPPORTSMULTICAST, Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,7 +92,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -103,49 +106,52 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the point-to-point network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_PTP_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_PTP_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_PTP_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_PTP_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_PTP_MTU);
-            parameters[5] = "false";
-            parameters[6] = "true";
-            parameters[7] = System.getProperty(NetworkIfTestUtil.PROP_PTP_ISUP);
-            parameters[8] = System.getProperty(NetworkIfTestUtil.PROP_PTP_ISVIRTUAL);
-            parameters[9] = System.getProperty(NetworkIfTestUtil.PROP_PTP_SUPPORTSMULTICAST);
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_PTP_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_PTP_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_PTP_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_PTP_MASKLENGTH);
-
+            String message = "[TEST-ADA02] Add a point-to-point network adapter.";
+            String[] parameters = new String[]{"point-to-point"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-
-            assertFalse("Not loopback is expected.", networkAdapter.isLoopback());
-            assertTrue("Point-to-point is expected.",networkAdapter.isPointToPoint());
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_ISUP, Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_ISVIRTUAL, Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_PTP_SUPPORTSMULTICAST, Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -159,48 +165,52 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the up network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_UP_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_UP_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_UP_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_UP_MTU);
-            parameters[5] = System.getProperty(NetworkIfTestUtil.PROP_UP_ISLOOPBACK);
-            parameters[6] = System.getProperty(NetworkIfTestUtil.PROP_UP_ISPOINTTOPOINT);
-            parameters[7] = "true";
-            parameters[8] = "false";
-            parameters[9] = System.getProperty(NetworkIfTestUtil.PROP_UP_SUPPORTSMULTICAST);
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_UP_MASKLENGTH);
-
+            String message = "[TEST-ADA03] Add an up network adapter.";
+            String[] parameters = new String[]{"up"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_ISLOOPBACK, Boolean.valueOf(parameters[5]).booleanValue(), networkAdapter.isLoopback());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_ISPOINTTOPOINT, Boolean.valueOf(parameters[6]).booleanValue(), networkAdapter.isPointToPoint());
-
-            assertTrue("Up is expected.", networkAdapter.isUp());
-            assertFalse("Not virtual is expected.", networkAdapter.isVirtual());
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_SUPPORTSMULTICAST, Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -215,42 +225,45 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the down network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_UP_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_UP_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_UP_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_UP_MTU);
-            parameters[5] = System.getProperty(NetworkIfTestUtil.PROP_UP_ISLOOPBACK);
-            parameters[6] = System.getProperty(NetworkIfTestUtil.PROP_UP_ISPOINTTOPOINT);
-            parameters[7] = "false";
-            parameters[8] = "false";
-            parameters[9] = System.getProperty(NetworkIfTestUtil.PROP_UP_SUPPORTSMULTICAST);
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_UP_MASKLENGTH);
-
+            String message = "[TEST-ADA04] Add a down network adapter.";
+            String[] parameters = new String[]{"down"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_ISLOOPBACK, Boolean.valueOf(parameters[5]).booleanValue(), networkAdapter.isLoopback());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_ISPOINTTOPOINT, Boolean.valueOf(parameters[6]).booleanValue(), networkAdapter.isPointToPoint());
-
-            assertFalse("Not up is expected.", networkAdapter.isUp());
-            assertFalse("Not virtual is expected.", networkAdapter.isVirtual());
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_UP_SUPPORTSMULTICAST, Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -258,7 +271,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -272,48 +285,52 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the virtual network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_VIR_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_VIR_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_VIR_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_VIR_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_VIR_MTU);
-            parameters[5] = System.getProperty(NetworkIfTestUtil.PROP_VIR_ISLOOPBACK);
-            parameters[6] = System.getProperty(NetworkIfTestUtil.PROP_VIR_ISPOINTTOPOINT);
-            parameters[7] = System.getProperty(NetworkIfTestUtil.PROP_VIR_ISUP);
-            parameters[8] = "true";
-            parameters[9] = System.getProperty(NetworkIfTestUtil.PROP_VIR_SUPPORTSMULTICAST);
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_VIR_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_VIR_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_VIR_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_VIR_MASKLENGTH);
-
+            String message = "[TEST-ADA05] Add a virtual network adapter.";
+            String[] parameters = new String[]{"virtual"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_ISLOOPBACK, Boolean.valueOf(parameters[5]).booleanValue(), networkAdapter.isLoopback());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_ISPOINTTOPOINT, Boolean.valueOf(parameters[6]).booleanValue(), networkAdapter.isPointToPoint());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_ISUP, Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
-
-            assertTrue("Virtual is expected.", networkAdapter.isVirtual());
-
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_VIR_SUPPORTSMULTICAST, Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -327,47 +344,51 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the multicast support network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_MUL_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_MUL_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MTU);
-            parameters[5] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISLOOPBACK);
-            parameters[6] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISPOINTTOPOINT);
-            parameters[7] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISUP);
-            parameters[8] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISVIRTUAL);
-            parameters[9] = "true";
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MASKLENGTH);
-
+            String message = "[TEST-ADA06] Add a supported multicast network adapter.";
+            String[] parameters = new String[]{"multicast"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISLOOPBACK, Boolean.valueOf(parameters[5]).booleanValue(), networkAdapter.isLoopback());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISPOINTTOPOINT, Boolean.valueOf(parameters[6]).booleanValue(), networkAdapter.isPointToPoint());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISUP, Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISVIRTUAL, Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
-
-            assertTrue("SupportsMulticast is expected.", networkAdapter.supportsMulticast());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -381,47 +402,52 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             String command = "addNetworkAdapter";
-			String message = "Add the multicast no-support network adapter set in System Properties.";
-            String[] parameters = new String[16];
-            parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE);
-            parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_MUL_DISPLAYNAME);
-            parameters[2] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NAME);
-            parameters[3] = System.getProperty(NetworkIfTestUtil.PROP_MUL_HARDWAREADDRESS);
-            parameters[4] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MTU);
-            parameters[5] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISLOOPBACK);
-            parameters[6] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISPOINTTOPOINT);
-            parameters[7] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISUP);
-            parameters[8] = System.getProperty(NetworkIfTestUtil.PROP_MUL_ISVIRTUAL);
-            parameters[9] = "false";
-            parameters[10] = System.getProperty(NetworkIfTestUtil.PROP_PARENT);
-            parameters[11] = System.getProperty(NetworkIfTestUtil.PROP_SUBINTERFACE);
-            parameters[12] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS_VERSION);
-            parameters[13] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS_SCOPE);
-            parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS);
-            parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MASKLENGTH);
-
+            String message = "[TEST-ADA07] Add an unsupported multicast network adapter.";
+            String[] parameters = new String[]{"no-multicast"};
             ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
+
+            ServiceReference ref = adapterListener.get(0);
+            Object type = ref.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE);
+            Object displayName = ref.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME);
+            Object name = ref.getProperty(NetworkAdapter.NETWORKADAPTER_NAME);
+            Object hardwareAddress = ref.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS);
+            Object isLoopback = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK);
+            Object isPointToPoint = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT);
+            Object isUp = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP);
+            Object isVirtual = ref.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL);
+            Object supportsMulticast = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST);
+            Object subInterface = ref.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE);
+
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, type instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, name instanceof String);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, hardwareAddress instanceof byte[]);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, isLoopback instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, isPointToPoint instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, isUp instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, isVirtual instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, supportsMulticast instanceof Boolean);
+            assertTrue("The following service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, subInterface instanceof String[]);
+
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_TYPE, type, networkAdapter.getNetworkAdapterType());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE, parameters[0], networkAdapter.getNetworkAdapterType());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_DISPLAYNAME, parameters[1], networkAdapter.getDisplayName());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_NAME, parameters[2], networkAdapter.getName());
-            assertTrue("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), networkAdapter.getHardwareAddress()));
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_MTU, Integer.parseInt(parameters[4]), networkAdapter.getMTU());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISLOOPBACK, Boolean.valueOf(parameters[5]).booleanValue(), networkAdapter.isLoopback());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISPOINTTOPOINT, Boolean.valueOf(parameters[6]).booleanValue(), networkAdapter.isPointToPoint());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISUP, Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
-            assertEquals("The following NetworkAdapter information does not match: "+ NetworkIfTestUtil.PROP_MUL_ISVIRTUAL, Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
-
-            assertFalse("Not supportsMulticast is expected.", networkAdapter.supportsMulticast());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
         } finally {
             if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+                testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
