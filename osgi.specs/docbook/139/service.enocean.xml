@@ -205,6 +205,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.5in"
+                     contentwidth="5.000in"
                      fileref="enocean_device_import_DeviceImport-1.svg"/>
         </imageobject>
       </mediaobject>
@@ -291,6 +292,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.5in"
+                     contentwidth="5.000in"
                      fileref="enocean_base_driver_and_a_refinement_driver_representing_devices_in_an_abstract_model_RefinedDriver-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -608,6 +610,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.5in"
+                     contentwidth="5.000in"
                      fileref="enocean_channel_and_enocean_channel_descriptions_channel_diagram_v5.svg"/>
         </imageobject>
       </mediaobject>
