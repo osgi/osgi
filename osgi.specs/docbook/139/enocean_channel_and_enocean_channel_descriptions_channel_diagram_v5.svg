@@ -1028,14 +1028,14 @@ Channel</xhtml:span>
        x="964.61328"
        y="130"
        id="text385"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="976.73633"
        y="142"
        id="text387"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4636">EnOceanChannel</tspan>
     </text>
     <text
@@ -1044,7 +1044,7 @@ Channel</xhtml:span>
        style="fill:#000000;font-family:Helvetica"
        id="text4185">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
          id="tspan4617">DescriptionSet</tspan>
     </text>
   </g>
@@ -1066,14 +1066,14 @@ Channel</xhtml:span>
        x="927.55859"
        y="223"
        id="text409"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="939.68164"
        y="237"
        id="text411"
        style="fill:#000000;font-family:Helvetica">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
          id="tspan4613">EnOceanChannel</tspan>
     </text>
     <text
@@ -1082,7 +1082,7 @@ Channel</xhtml:span>
        style="fill:#000000;font-family:Helvetica"
        id="text4187">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
          id="tspan4615">Description</tspan>
     </text>
   </g>
@@ -1104,14 +1104,14 @@ Channel</xhtml:span>
        x="957.87695"
        y="359"
        id="text417"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="970"
        y="373"
        id="text419"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4646">EnOceanChannel</tspan>
     </text>
   </g>
@@ -1206,14 +1206,14 @@ Channel</xhtml:span>
        x="1064.0664"
        y="155.44862"
        id="text409-7"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="1026.4785"
        y="169.44862"
        id="text411-4"
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4613-0">EnOceanFlag</tspan>
     </text>
     <text
@@ -1222,7 +1222,7 @@ Channel</xhtml:span>
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
        id="text4187-9">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4615-4">ChannelDescription</tspan>
     </text>
   </g>
@@ -1247,14 +1247,14 @@ Channel</xhtml:span>
        x="971.52679"
        y="89.368546"
        id="text409-7-1"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="933.9389"
        y="103.36855"
        id="text411-4-7"
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4613-0-1">EnOceanEnum</tspan>
     </text>
     <text
@@ -1263,7 +1263,7 @@ Channel</xhtml:span>
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
        id="text4187-9-1">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4615-4-5">ChannelDescription</tspan>
     </text>
   </g>
@@ -1284,14 +1284,14 @@ Channel</xhtml:span>
        x="935.01904"
        y="122.91992"
        id="text409-7-3"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="897.43115"
        y="136.91992"
        id="text411-4-2"
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4613-0-2">EnOceanData</tspan>
     </text>
     <text
@@ -1300,7 +1300,7 @@ Channel</xhtml:span>
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
        id="text4187-9-16">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4615-4-8">ChannelDescription</tspan>
     </text>
   </g>
@@ -1330,14 +1330,14 @@ Channel</xhtml:span>
        x="971.52679"
        y="89.368546"
        id="text409-7-1-4"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="933.9389"
        y="103.36855"
        id="text411-4-7-3"
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4613-0-1-1">EnOceanChannel</tspan>
     </text>
     <text
@@ -1346,7 +1346,7 @@ Channel</xhtml:span>
        style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
        id="text4187-9-1-2">
       <tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial Bold"
          id="tspan4615-4-5-3">EnumValue</tspan>
     </text>
   </g>

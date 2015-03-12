@@ -1771,14 +1771,14 @@
        x="692.01965"
        y="205.93719"
        id="text393-7"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="689.42395"
        y="219.93719"
        id="text395-4"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4638-0">CPUMonitor</tspan>
     </text>
     <rect
@@ -1794,23 +1794,23 @@
        x="692.74866"
        y="270.04623"
        id="text393-7-4"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="690.20569"
        y="284.04623"
        id="text395-4-8"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4638-0-8">DiskStorage</tspan>
     </text>
     <text
        x="677.19202"
        y="298.31021"
        id="text395-4-8-45"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4638-0-8-51">Monitor</tspan>
     </text>
     <rect
@@ -1854,9 +1854,9 @@
          x="337"
          y="524"
          id="text17-4-0-8-5"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-9-8">A ResourceMonitor</tspan>
       </text>
       <text
@@ -1865,7 +1865,7 @@
          style="fill:#000000;font-family:Helvetica"
          id="text7304-2-2-3">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4605-8-9">implementer</tspan>
       </text>
     </g>
@@ -1895,14 +1895,14 @@
          id="text281"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4609">A ResourceMonitorFactory</tspan>
       </text>
       <text
          x="41.005859"
          y="545"
          id="text283"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">implementer</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">implementer</text>
     </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.88109612px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:none"
@@ -1936,9 +1936,9 @@
          x="337"
          y="522"
          id="text17-4-0-5"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-5">Bundle</tspan>
       </text>
     </g>
@@ -1975,9 +1975,9 @@
          x="345"
          y="524"
          id="text17-4-0-8"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-9">A ResourceMonitoring</tspan>
       </text>
       <text
@@ -1986,7 +1986,7 @@
          style="fill:#000000;font-family:Helvetica"
          id="text7304-2-2">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4605-8">Service implementer</tspan>
       </text>
     </g>
@@ -2041,23 +2041,23 @@
          x="596.20703"
          y="130"
          id="text377"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="616.01758"
          y="144"
          id="text379"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4632">ResourceMonitoring</tspan>
       </text>
       <text
          x="579.39966"
          y="158"
-         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS"
          id="text4183">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4634">Service</tspan>
       </text>
     </g>
@@ -2144,12 +2144,12 @@
          x="602"
          y="24"
          id="text85"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">A ResourceContext</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">A ResourceContext</text>
       <text
          x="570"
          y="38"
          id="text87"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Listener</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">Listener</text>
     </g>
     <g
        font-size="12px"
@@ -2160,12 +2160,12 @@
          x="324.00098"
          y="14.555008"
          id="text187"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Resource Monitoring</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">Resource Monitoring</text>
       <text
          x="283.31659"
          y="28"
          id="text189"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Client</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">Client</text>
     </g>
     <rect
        x="417"
@@ -2264,14 +2264,14 @@
          x="340"
          y="239"
          id="text393"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="372"
          y="253"
          id="text395"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4638">ResourceMonitorFactory</tspan>
       </text>
     </g>
@@ -2293,14 +2293,14 @@
          x="334.20117"
          y="361"
          id="text433"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="346"
          y="375"
          id="text435"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4603">ResourceMonitor</tspan>
       </text>
     </g>
@@ -2318,14 +2318,14 @@
            x="596.20703"
            y="130"
            id="text377-7"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
         <text
            x="608.01758"
            y="144"
            id="text379-4"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
           <tspan
-             style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+             style="font-weight:bold Bold"
              id="tspan4632-7">ResourceContext</tspan>
         </text>
       </g>
@@ -2403,14 +2403,14 @@
          x="927.55859"
          y="223"
          id="text409-5"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="939.68164"
          y="237"
          id="text411-7"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4613-6">ResourceContext</tspan>
       </text>
       <text
@@ -2419,7 +2419,7 @@
          style="fill:#000000;font-family:Helvetica"
          id="text4187-1">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4615-8">Listener</tspan>
       </text>
     </g>
@@ -2434,7 +2434,7 @@
     </text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="257.65195"
        y="101.85194"
        id="text6086-6"
@@ -2488,9 +2488,9 @@
          x="345"
          y="524"
          id="text17-4-0-8-1"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-9-4">ResourceContextEvent</tspan>
       </text>
     </g>
@@ -2504,7 +2504,7 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="368.83347"
        y="254.961"
        id="text6086-6-2-4"
@@ -2524,7 +2524,7 @@
     </text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="271.17206"
        y="175.35318"
        id="text6086-8"
@@ -2567,7 +2567,7 @@
     </text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="156.20036"
        y="150.4989"
        id="text6086-8-6"
@@ -2587,7 +2587,7 @@
     </text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="271.38217"
        y="282.02972"
        id="text6086-8-3"
@@ -2667,9 +2667,9 @@
          x="339"
          y="524"
          id="text17-4-0-8-1-7"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-9-4-6">ResourceEvent</tspan>
       </text>
     </g>
@@ -2745,14 +2745,14 @@ Description</xhtml:span>
          x="927.55859"
          y="223"
          id="text409-5-7"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="939.68164"
          y="237"
          id="text411-7-3"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4613-6-3">ResourceListener</tspan>
       </text>
     </g>
@@ -2762,26 +2762,26 @@ Description</xhtml:span>
        id="path7438-6-3-7-2"
        inkscape:connector-curvature="0" />
     <text
-       style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+       style="font-size:12px;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS"
        id="text17-4-0-8-9"
        y="444.06836"
        x="269.13446">
       <tspan
          id="tspan4607-9-7"
-         style="font-family:Arial;-inkscape-font-specification:Arial">A ResourceListener</tspan>
+         style="font-family:ArialUnicodeMS">A ResourceListener</tspan>
     </text>
     <text
        x="691.64526"
        y="335.13593"
        id="text393-7-4-2"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="699.10425"
        y="349.13593"
        id="text395-4-8-4"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4638-0-8-5">MemoryMonitor</tspan>
     </text>
     <rect
@@ -2797,14 +2797,14 @@ Description</xhtml:span>
        x="691.6452"
        y="399.13596"
        id="text393-7-4-2-6"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
     <text
        x="696.20398"
        y="413.13596"
        id="text395-4-8-4-1"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan4638-0-8-5-4">SocketMonitor</tspan>
     </text>
     <path
@@ -2829,7 +2829,7 @@ Description</xhtml:span>
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="47.080627"
        y="102.04424"
        id="text6086-9-8-7"
@@ -2840,7 +2840,7 @@ Description</xhtml:span>
          y="102.04424">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="184.73576"
        y="44.881096"
        id="text6086-9-8-7-1"
@@ -2851,7 +2851,7 @@ Description</xhtml:span>
          y="44.881096">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="257.57248"
        y="67.49221"
        id="text6086-9-8-7-0"
@@ -2862,7 +2862,7 @@ Description</xhtml:span>
          y="67.49221">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="701.07904"
        y="68.933807"
        id="text6086-9-8-7-4"
@@ -2873,7 +2873,7 @@ Description</xhtml:span>
          y="68.933807">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="700.49786"
        y="102.17882"
        id="text6086-9-8-7-8"
@@ -2884,7 +2884,7 @@ Description</xhtml:span>
          y="102.17882">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="255.88962"
        y="202.29135"
        id="text6086-9-8-7-45"
@@ -2895,7 +2895,7 @@ Description</xhtml:span>
          y="202.29135">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="404.43945"
        y="255.00787"
        id="text6086-9-8-7-17"
@@ -2906,7 +2906,7 @@ Description</xhtml:span>
          y="255.00787">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="184.73547"
        y="331.24863"
        id="text6086-9-8-7-15"
@@ -2917,7 +2917,7 @@ Description</xhtml:span>
          y="331.24863">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="257.30841"
        y="308.6076"
        id="text6086-9-8-7-6"
@@ -2928,7 +2928,7 @@ Description</xhtml:span>
          y="308.6076">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="50.955116"
        y="388.09338"
        id="text6086-9-8-7-22"
@@ -2939,7 +2939,7 @@ Description</xhtml:span>
          y="388.09338">0..*</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="50.52494"
        y="421.97229"
        id="text6086-9-8-7-85"
@@ -2997,7 +2997,7 @@ Description</xhtml:span>
        inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="58.172699"
        y="282.5177"
        id="text6086-8-3-2"
@@ -3008,7 +3008,7 @@ Description</xhtml:span>
          y="282.5177">1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="47.080471"
        y="309.09558"
        id="text6086-9-8-7-6-6"
@@ -3057,15 +3057,15 @@ Description</xhtml:span>
        x="696.20398"
        y="477.13599"
        id="text3496"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">
       <tspan
-         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         style="font-weight:bold Bold"
          id="tspan3498">ThreadMonitor</tspan>
     </text>
     <text
        x="691.18713"
        y="462.67746"
        id="text393-7-4-2-6-1"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
   </g>
 </svg>

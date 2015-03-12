@@ -1181,7 +1181,7 @@
          x="337"
          y="536"
          id="text17"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">EnOcean Base Driver</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">EnOcean Base Driver</text>
     </g>
     <path
        d="m 255.99995,492.46439 0,-115.43261"
@@ -1324,12 +1324,12 @@
          x="612"
          y="24"
          id="text85"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">An EnOcean Message</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">An EnOcean Message</text>
       <text
          x="578"
          y="38"
          id="text87"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Descriptor</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">Descriptor</text>
     </g>
     <rect
        x="602"
@@ -1501,12 +1501,12 @@ Description</xhtml:span>
          x="318.33594"
          y="14"
          id="text187"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">An EnOcean RPC</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">An EnOcean RPC</text>
       <text
          x="296.36914"
          y="28"
          id="text189"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Descriptor</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">Descriptor</text>
     </g>
     <rect
        x="417"
@@ -1765,14 +1765,14 @@ Channel</xhtml:span>
          id="text281"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4609">A listener implementing</tspan>
       </text>
       <text
          x="45.005859"
          y="543"
          id="text283"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">EventHandler</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">EventHandler</text>
     </g>
     <rect
        x="107"
@@ -1947,14 +1947,14 @@ Description</xhtml:span>
          x="328.56641"
          y="132"
          id="text369"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="329.68555"
          y="144"
          id="text371"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4630">EnOceanRPC</tspan>
       </text>
       <g
@@ -1965,10 +1965,10 @@ Description</xhtml:span>
           <text
              x="329.35938"
              y="156"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS"
              id="text4619">
             <tspan
-               style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+               style="font-weight:bold Bold"
                id="tspan4628">DescriptionSet</tspan>
           </text>
         </g>
@@ -2006,23 +2006,23 @@ Description</xhtml:span>
          x="596.20703"
          y="130"
          id="text377"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="610.01758"
          y="144"
          id="text379"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4632">EnOceanMessage</tspan>
       </text>
       <text
          x="601"
          y="158"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS"
          id="text4183">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4634">DescriptionSet</tspan>
       </text>
     </g>
@@ -2051,14 +2051,14 @@ Description</xhtml:span>
          x="964.61328"
          y="130"
          id="text385"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="976.73633"
          y="142"
          id="text387"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4636">EnOceanChannel</tspan>
       </text>
       <text
@@ -2067,7 +2067,7 @@ Description</xhtml:span>
          style="fill:#000000;font-family:Helvetica"
          id="text4185">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4617">DescriptionSet</tspan>
       </text>
     </g>
@@ -2096,17 +2096,17 @@ Description</xhtml:span>
          x="340"
          y="239"
          id="text393"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="340"
          y="253"
          id="text395"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4638">EnOceanRPC</tspan>
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4870" />
       </text>
     </g>
@@ -2128,32 +2128,32 @@ Description</xhtml:span>
          x="576.47852"
          y="225"
          id="text401"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="590.28906"
          y="237"
          id="text403"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4640">EnOceanMessage</tspan>
       </text>
       <text
          x="571.91992"
          y="249"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS"
          id="text4181">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4642">Description</tspan>
       </text>
       <text
          x="140.24318"
          y="251.65123"
-         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ArialUnicodeMS"
          id="text4181-1">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4642-2">Description</tspan>
       </text>
     </g>
@@ -2175,14 +2175,14 @@ Description</xhtml:span>
          x="927.55859"
          y="223"
          id="text409"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="939.68164"
          y="237"
          id="text411"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4613">EnOceanChannel</tspan>
       </text>
       <text
@@ -2191,7 +2191,7 @@ Description</xhtml:span>
          style="fill:#000000;font-family:Helvetica"
          id="text4187">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4615">Description</tspan>
       </text>
     </g>
@@ -2213,14 +2213,14 @@ Description</xhtml:span>
          x="957.87695"
          y="359"
          id="text417"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="970"
          y="373"
          id="text419"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4646">EnOceanChannel</tspan>
       </text>
     </g>
@@ -2242,14 +2242,14 @@ Description</xhtml:span>
          x="600.26953"
          y="361"
          id="text425"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="612"
          y="375"
          id="text427"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4644">EnOceanMessage</tspan>
       </text>
     </g>
@@ -2276,14 +2276,14 @@ Description</xhtml:span>
          x="332.20117"
          y="361"
          id="text433"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="340"
          y="375"
          id="text435"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial Bold"
            id="tspan4603">EnOceanDevice</tspan>
       </text>
     </g>
@@ -2307,16 +2307,16 @@ Description</xhtml:span>
          id="text441"
          style="fill:#000000;font-family:Helvetica">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4611">&lt;&lt;Interface&gt;&gt;</tspan>
       </text>
       <text
          x="634"
          y="545"
          id="text443"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4648">EnOceanHost</tspan>
       </text>
     </g>
@@ -2329,11 +2329,11 @@ Description</xhtml:span>
          x="337"
          y="522"
          id="text17-4"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">An EnOcean device</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">An EnOcean device</text>
       <text
          x="323.8457"
          y="536"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS"
          id="text7304">implementation</text>
     </g>
     <path
@@ -2438,9 +2438,9 @@ Description</xhtml:span>
          x="337"
          y="522"
          id="text17-4-0"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607">An EnOcean device</tspan>
       </text>
       <text
@@ -2449,7 +2449,7 @@ Description</xhtml:span>
          style="fill:#000000;font-family:Helvetica"
          id="text7304-2">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4605">implementer</tspan>
       </text>
     </g>
@@ -2778,14 +2778,14 @@ Description</xhtml:span>
          x="340"
          y="239"
          id="text393-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">&lt;&lt;Interface&gt;&gt;</text>
       <text
          x="340"
          y="253"
          id="text395-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+           style="font-weight:bold Bold"
            id="tspan4638-5">EnOceanRPC</tspan>
       </text>
     </g>
@@ -2807,9 +2807,9 @@ Description</xhtml:span>
          x="337"
          y="522"
          id="text17-4-0-4"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+         style="fill:#000000;font-family:ArialUnicodeMS">
         <tspan
-           style="font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-family:ArialUnicodeMS"
            id="tspan4607-2">An EnOcean device</tspan>
       </text>
       <text
@@ -2818,7 +2818,7 @@ Description</xhtml:span>
          style="fill:#000000;font-family:Helvetica"
          id="text7304-2-7">
         <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ArialUnicodeMS"
            id="tspan4605-7">client</tspan>
       </text>
     </g>
