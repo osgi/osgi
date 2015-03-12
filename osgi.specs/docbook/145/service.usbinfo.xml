@@ -138,9 +138,9 @@
 					Descriptor
 				</title>
 				<tgroup cols="4">
-					<colspec colnum="1" colwidth="3*" />
+					<colspec colnum="1" colwidth="3.5*" />
 					<colspec colnum="2" colwidth="1*" />
-					<colspec colnum="3" colwidth="4*" />
+					<colspec colnum="3" colwidth="3.5*" />
 					<colspec colnum="4" colwidth="2*" />
 					<thead>
 						<row>
@@ -327,9 +327,9 @@
 					Descriptor
 				</title>
 				<tgroup cols="4">
-					<colspec colnum="1" colwidth="3*" />
+					<colspec colnum="1" colwidth="3.5*" />
 					<colspec colnum="2" colwidth="1*" />
-					<colspec colnum="3" colwidth="4*" />
+					<colspec colnum="3" colwidth="3.5*" />
 					<colspec colnum="4" colwidth="2*" />
 					<thead>
 						<row>
