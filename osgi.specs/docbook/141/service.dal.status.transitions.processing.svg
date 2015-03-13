@@ -12,12 +12,12 @@
 <!-- STATUS_OFFLINE -->
 <g id="node1" class="node"><title>STATUS_OFFLINE</title>
 <ellipse fill="none" stroke="black" cx="84.4925" cy="-216.602" rx="84.485" ry="18"/>
-<text text-anchor="middle" x="84.4925" y="-212.902" font-family="Times,serif" font-size="14.00">STATUS_OFFLINE</text>
+<text text-anchor="middle" x="84.4925" y="-212.902" font-family="ProductusSemibold" font-size="14.00">STATUS_OFFLINE</text>
 </g>
 <!-- STATUS_PROCESSING -->
 <g id="node2" class="node"><title>STATUS_PROCESSING</title>
 <ellipse fill="none" stroke="black" cx="597.803" cy="-216.602" rx="102.082" ry="18"/>
-<text text-anchor="middle" x="597.803" y="-212.902" font-family="Times,serif" font-size="14.00">STATUS_PROCESSING</text>
+<text text-anchor="middle" x="597.803" y="-212.902" font-family="ProductusSemibold" font-size="14.00">STATUS_PROCESSING</text>
 </g>
 <!-- STATUS_OFFLINE&#45;&gt;STATUS_PROCESSING -->
 <g id="edge1" class="edge"><title>STATUS_OFFLINE&#45;&gt;STATUS_PROCESSING</title>
@@ -28,7 +28,7 @@
 <!-- STATUS_REMOVED -->
 <g id="node4" class="node"><title>STATUS_REMOVED</title>
 <ellipse fill="none" stroke="black" cx="397.06" cy="-42.9505" rx="92.0841" ry="18"/>
-<text text-anchor="middle" x="397.06" y="-39.2505" font-family="Times,serif" font-size="14.00">STATUS_REMOVED</text>
+<text text-anchor="middle" x="397.06" y="-39.2505" font-family="ProductusSemibold" font-size="14.00">STATUS_REMOVED</text>
 </g>
 <!-- STATUS_PROCESSING&#45;&gt;STATUS_REMOVED -->
 <g id="edge3" class="edge"><title>STATUS_PROCESSING&#45;&gt;STATUS_REMOVED</title>
@@ -38,7 +38,7 @@
 <!-- STATUS_NOT_INITIALIZED -->
 <g id="node5" class="node"><title>STATUS_NOT_INITIALIZED</title>
 <ellipse fill="none" stroke="black" cx="773.9" cy="-18" rx="122.678" ry="18"/>
-<text text-anchor="middle" x="773.9" y="-14.3" font-family="Times,serif" font-size="14.00">STATUS_NOT_INITIALIZED</text>
+<text text-anchor="middle" x="773.9" y="-14.3" font-family="ProductusSemibold" font-size="14.00">STATUS_NOT_INITIALIZED</text>
 </g>
 <!-- STATUS_PROCESSING&#45;&gt;STATUS_NOT_INITIALIZED -->
 <g id="edge4" class="edge"><title>STATUS_PROCESSING&#45;&gt;STATUS_NOT_INITIALIZED</title>
@@ -49,7 +49,7 @@
 <!-- STATUS_NOT_CONFIGURED -->
 <g id="node6" class="node"><title>STATUS_NOT_CONFIGURED</title>
 <ellipse fill="none" stroke="black" cx="768.985" cy="-419.457" rx="127.277" ry="18"/>
-<text text-anchor="middle" x="768.985" y="-415.757" font-family="Times,serif" font-size="14.00">STATUS_NOT_CONFIGURED</text>
+<text text-anchor="middle" x="768.985" y="-415.757" font-family="ProductusSemibold" font-size="14.00">STATUS_NOT_CONFIGURED</text>
 </g>
 <!-- STATUS_PROCESSING&#45;&gt;STATUS_NOT_CONFIGURED -->
 <g id="edge5" class="edge"><title>STATUS_PROCESSING&#45;&gt;STATUS_NOT_CONFIGURED</title>
@@ -60,7 +60,7 @@
 <!-- STATUS_ONLINE -->
 <g id="node3" class="node"><title>STATUS_ONLINE</title>
 <ellipse fill="none" stroke="black" cx="397.06" cy="-390.254" rx="81.4863" ry="18"/>
-<text text-anchor="middle" x="397.06" y="-386.554" font-family="Times,serif" font-size="14.00">STATUS_ONLINE</text>
+<text text-anchor="middle" x="397.06" y="-386.554" font-family="ProductusSemibold" font-size="14.00">STATUS_ONLINE</text>
 </g>
 <!-- STATUS_ONLINE&#45;&gt;STATUS_PROCESSING -->
 <g id="edge2" class="edge"><title>STATUS_ONLINE&#45;&gt;STATUS_PROCESSING</title>
