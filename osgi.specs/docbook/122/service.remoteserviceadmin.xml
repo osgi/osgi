@@ -148,6 +148,14 @@
           well as to receive notifications from other parties, potentially
           remote, about their available Endpoints.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Endpoint Listener</emphasis> – An older version
+          of the Endpoint Event Listener defined by version <code>1.0</code>
+          of this specification. The Endpoint Event Listener supersedes
+          the Endpoint Listener, and should be used in preference where
+          possible.</para>
+        </listitem>
 
         <listitem>
           <para><emphasis>Remote Service Admin Listener</emphasis> - A
@@ -211,9 +219,9 @@
         </listitem>
 
         <listitem>
-          <para>An Endpoint Event Listener service to detect Endpoints that
-          are made available through discovery protocols, configuration data,
-          or other means.</para>
+          <para>Endpoint Event Listener and Endpoint Listener services to detect 
+          Endpoints that are made available through discovery protocols, 
+          configuration data, or other means.</para>
         </listitem>
       </itemizedlist>
 
@@ -285,6 +293,24 @@
       of the Endpoint Listener service. Parties that use some discovery
       mechanism can use the scope to trigger directed searches across the
       network.</para>
+      
+      <section>
+        <title>Endpoint Listener Services</title>
+        <para>The <code>1.0</code> version of this specification defined an
+        Endpoint Listener service, which has an identical purpose and similar 
+        behaviours to an Endpoint Event Listener service. Unfortunately the
+        design of the Endpoint Listener limited its extensibility, meaning
+        that it had to be replaced in version <code>1.1</code> of this
+        specification.
+        </para>
+        <para>In order to maintain backward compatible interoperability with
+        Remote Service Admin <code>1.0</code> actors, Remote Service Admin
+        <code>1.1</code> actors must continue to register Endpoint Listener
+        services as well as Endpoint Event Listener services. They must
+        also continue to call Endpoint Listener services as well as
+        EndpointEventListener services.
+        </para>
+      </section>
     </section>
   </section>
 
@@ -1491,14 +1517,28 @@
     availability of an Endpoint Description. Scoping is intended to limit the
     delivery of unnecessary Endpoint Descriptions as well as signal the need
     for specific Endpoints.</para>
+    
+    <para>In addition to providing an Endpoint Event Listener actors must 
+    provide an Endpoint Listener. This may, or may not, be the same service 
+    object as the Endpoint Event Listener. Registering an Endpoint Listener 
+    in addition to an Endpoint Event Listener ensures that Endpoint 
+    announcements from version <code>1.0</code> actors will continue to be 
+    visible. If a service object is advertised as both an Endpoint Listener 
+    <emphasis>and</emphasis> an Endpoint Event Listener then version 
+    <code>1.1</code> actors must use the Endpoint Event Listener interface
+    of the service in preference, and not call it as an Endpoint Listener.
+    For this reason the Endpoint Listener interface is marked as
+    <code>Deprecated</code>. The reason that the Endpoint Event Listener
+    interface should be preferred is that it supports more advanced
+    notification types, such as modification events.</para>
 
     <para>A Topology Manager has knowledge of its local Endpoints and is
     likely to be only interested in remote Endpoints. It can therefore set the
     scope to only match remote Endpoint Descriptions. See <xref
     linkend="i1887500"/> for how to limit the scope to local or remote
     Endpoints. At the same time, a Topology manager should inform any locally
-    registered Endpoint Event Listener services with Endpoints that it has
-    created or deleted.</para>
+    registered Endpoint Event Listener and Endpoint Listener services about 
+    Endpoints that it has created or deleted.</para>
 
     <para>This architecture allows many different use cases. For example, a
     bundle could display a map of the topology by registering an Endpoint
@@ -1510,12 +1550,12 @@
     xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3
     frameworks that collaborate through some discovery bundle. The
     <code>Top</code> framework has created an Endpoint and decides to notify
-    all Endpoint Event Listeners registered in this framework that are scoped
-    to this new Endpoint. Local bundle <code>D</code> has set its scope to all
-    Endpoint Descriptions that originate from its local framework, it
-    therefore receives the Endpoint Description from <code>T</code>. Bundle
-    <code>D</code> then sends the Endpoint Description to all its peers on the
-    network.</para>
+    all Endpoint Event Listeners and Endpoint Listners registered in this 
+    framework that are scoped to this new Endpoint. Local bundle <code>D</code> 
+    has set its scope to all Endpoint Descriptions that originate from its local 
+    framework, it therefore receives the Endpoint Description from <code>T</code>. 
+    Bundle <code>D</code> then sends the Endpoint Description to all its peers on 
+    the network.</para>
 
     <para>In the <code>Quark</code> framework, the manager bundle
     <code>T</code> has expressed an interest by setting its scope to a filter
@@ -1555,12 +1595,12 @@
     <section>
       <title>Scope and Filters</title>
 
-      <para>An Endpoint Event Listener service is registered with the <xref
-      linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE"
+      <para>An Endpoint Event Listener or Endpoint Listener service is 
+      registered with the <xref linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE"
       xrefstyle="hyperlink"/> service property. This property, which is
       <code>String+</code>, must be set and must contain at least one filter.
       If there is not at least one filter, then that Endpoint Event Listener
-      must not receive any Endpoint Descriptions.</para>
+      or Endpoint Listener must not receive any Endpoint Descriptions.</para>
 
       <para>Each filter in the scope is applied against the properties of the
       Endpoint Description until one succeeds. Only if one succeeds is the
@@ -1616,9 +1656,53 @@
       Providers of their known Endpoint Descriptions that match their
       scope.</para>
     </section>
+    
+    <section>
+      <title>Endpoint Listener Interface</title>
+      
+      <para>The <code>EndpointListener</code> interface is marked as
+      <code>Deprecated</code> because the <code>EndpointEventListener</code> 
+      interface must be used in preference when both are implemented by the
+      same object. The <code>EndpointEvent</code> interface has the following 
+      methods:</para>  
+      
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
+          xrefstyle="hyperlink"/> – Notify the Endpoint Listener of a new
+          Endpoint Description. The second parameter is the filter that
+          matched the Endpoint Description. Registering the same Endpoint
+          multiple times counts as a single registration.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"
+          xrefstyle="hyperlink"/> – Notify the Endpoint Listener that the
+          provided Endpoint Description is no longer available.</para>
+        </listitem>
+      </itemizedlist> 
+      
+      <para>These methods must only be called if the Endpoint Listener service
+      has a filter in its scope that matches the Endpoint Description
+      properties. The reason for the filter string in the methods is to
+      simplify and speed up matching an Endpoint Description to the cause of
+      interest. For example, if the Listener Hook is used to do on demand
+      import of services, then the filter can be associated with the Listener
+      Info of the hook, see <xref linkend="i1755239"/>. If multiple filters in
+      the scope match the Endpoint Description than the first filter in the
+      scope must be passed.</para>
+
+      <para>The Endpoint Listener interface is
+      <emphasis>idempotent</emphasis>. Endpoint Description Providers must
+      inform an Endpoint Listener service that is registered of all their
+      matching Endpoints.</para> 
+      
+    </section>
 
     <section>
-      <title>Endpoint Event Listener Implementations</title>
+      <title>Endpoint Event Listener and Endpoint Listener Implementations</title>
 
       <para>An Endpoint Event Listener service tracks the known Endpoints in
       its given scope. There are potentially a large number of bundles
@@ -1701,34 +1785,49 @@
     <section>
       <title>Endpoint Description Providers</title>
 
-      <para>The Endpoint Event Listener service is based on an asynchronous,
-      unreliable, best effort model because there are few guarantees in a
-      distributed world. It is the task of an Endpoint Description Provider,
-      for example a discovery bundle, to keep the Endpoint Event Listener
-      services up to date of any Endpoint Descriptions the provider is aware
-      of and that match the tracked service's scope.</para>
+      <para>The Endpoint Event Listener and Endpoint Listener services are
+      based on an asynchronous, unreliable, best effort model because there 
+      are few guarantees in a distributed world. It is the task of an Endpoint 
+      Description Provider, for example a discovery bundle, to keep the Endpoint 
+      Event Listener services up to date of any Endpoint Descriptions the 
+      provider is aware of and that match the tracked service's scope.</para>
 
-      <para>If an Endpoint Event Listener service is registered, a provider
-      must add all matching Endpoint Descriptions that it is aware of and
-      match the tracked Endpoint Event Listener’s scope. This can be done
-      during registration or asynchronously later. For example, it is possible
-      to use the filters in the scope to request remote systems for any
-      Endpoint Descriptions that match those filters. For expediency reasons,
-      the service registration event should not be delayed until those results
-      return; it is therefore applicable to add these Endpoint Descriptions
-      later when the returns from the remote systems finally arrive.</para>
+      <para>If an Endpoint Event Listener or Endpoint Listener service is registered, 
+      a provider must add all matching Endpoint Descriptions that it is aware of and
+      match the tracked listener’s scope. This can be done during registration or 
+      asynchronously later. For example, it is possible to use the filters in the 
+      scope to request remote systems for any Endpoint Descriptions that match those 
+      filters. For expediency reasons, the service registration event should not be 
+      delayed until those results return; it is therefore applicable to add these 
+      Endpoint Descriptions later when the returns from the remote systems finally 
+      arrive.</para>
+      
+      <para>If a tracked listener service object is both an Endpoint Event Listener 
+      and an Endpoint Listener then the EndpointDescription Provider must ignore the
+      <code>EndpointListener</code> interface, and treat the listener only as an
+      Endpoint Event Listener. Remote Service Admin <code>1.0</code> actors will be
+      unaware of the <code>EndpointEventListener</code> interface, and will treat
+      the service object purely as an Endpoint Listener. This restriction ensures
+      that all actors will treat the service either as an Endpoint Event Listener, 
+      or an Endpoint Listener, but never as both. As a result the listener service
+      will not have to disambiguate duplicate events from a single source. If an
+      Endpoint Description Provider uses both the Endpoint Listener and Endpoint
+      Event Listener interfaces of a single service object then the resulting 
+      behaviour is undefined. The implementation may detect the misuse and throw 
+      an Exception, process or ignore the events from one of the interfaces, or it 
+      may simply corrupt the internal registry of Endpoints within the listener.</para>
 
-      <para>A tracked Endpoint Event Listener is allowed to modify its scope
-      by setting new properties on its Service Registration. An Endpoint
-      Description provider must process the new scope and add any newly
+      <para>A tracked Endpoint Event Listener or Endpoint Listener is allowed to 
+      modify its scope by setting new properties on its Service Registration. An 
+      Endpoint Description provider must process the new scope and add any newly
       matching Endpoint Descriptions. It is not necessary to remove any
       Endpoint Descriptions that were added before but no longer match the new
       scope. Removing those orphaned descriptions is the responsibility of the
-      Endpoint Event Listener implementation.</para>
+      listener implementation.</para>
 
       <para>It is not necessary to remove any registered Endpoint Descriptions
-      when the Endpoint Event Listener is unregistered; also here it is the
-      responsibility of the Endpoint Event Listener to do the proper
+      when the Endpoint Event Listener or Endpoint Listener is unregistered; 
+      also here it is the responsibility of the listener to do the proper
       cleanup.</para>
     </section>
 
@@ -2551,6 +2650,61 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
     </section>    
+  </section>
+  
+  <section>
+    <title>Advice to implementations</title>
+    <para>
+      This section is not intended to be normative, but offers advice to
+      implementations as to how the complexity of supporting both the new
+      Endpoint Event Listener and Endpoint Listener services can be managed
+      and minimised. This advice applies to both Discovery Providers and
+      Topology Managers implementing Remote Service Admin <code>1.1</code>.
+    </para>
+    
+    <section>
+      <title>Notifying listeners</title>
+      
+      <para>Endpoint Event Listeners and Endpoint Listeners have a very similar
+      behaviour and lifecycle. They also use the same property names to define 
+      their scope filter. It is therefore relatively simple for an Endpoint 
+      Description Provider to notify both Endpoint Listener and Endpoint Event 
+      Listeners using a single code path.</para>   
+      
+      <para>One possible mechanism is to introspect the listener object. If it 
+      implements <code>EndpointEventListener</code> then it should be treated as
+      an Endpoint Event Listener. If not then the Endpoint Listener can be wrapped
+      in an adapter that converts Endpoint Event Listener events into the appropriate
+      Endpoint Listener calls. The notification code can then treat every listener as
+      an Endpoint Event Listener.</para>
+
+    </section>
+    
+    <section>
+      
+      <title>Receiving Endpoint lifecycle notifications</title>
+      
+      <para>The Remote Service Admin <code>1.1</code> specification is backward 
+      compatible with version <code>1.0</code>, meaning that version 1.1 actors must 
+      register an Endpoint Listener service. There is no restriction requiring this 
+      listener to be the same service as the Endpoint Event Listener, however there
+      is a significant advantage to combining the listeners into a single service
+      registration.</para>
+      
+      <para>By making the two listeners a single service object a bundle can 
+      guarantee that it will not receive multiple notifications for the same event.
+      If the service registrations are separate then Endpoint Description Providers 
+      will see two separate listeners, and notify them both. As a single service
+      registration only one event will occur, and using the highest mutually 
+      supported version of the Remote Service Admin Specification.</para>
+      
+      <para>The behaviour of a listener registered as both an Endpoint Listener and
+      an Endpoint Event Listener is undefined if a single client attempts to use
+      both interfaces. Implementations may choose to throw an exception in this 
+      case, or they may simply process the events. Throwing an exception is 
+      recommended as it avoids any need to "pair up" events.</para>
+      
+    </section>
   </section>
 
   <section xml:id="i1789427">
