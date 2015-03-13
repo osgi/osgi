@@ -43,7 +43,7 @@
 				<title>USB Information Device Service Overview Diagram</title>
 				<mediaobject>
 					<imageobject>
-						<imagedata align="center" contentdepth="3.750in"
+						<imagedata align="center" contentdepth="3.550in"
 							contentwidth="5.000in" fileref="service_usbinfo_classes.svg" />
 					</imageobject>
 				</mediaobject>
