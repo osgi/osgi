@@ -1,3 +1,5 @@
+osgi.version.micro = ${if;${is;6;${osgi.version.major}};1;0}
+
 Bundle-License: http://opensource.org/licenses/apache2.0.php; \
     link="http://www.apache.org/licenses/LICENSE-2.0"; \
     description="Apache License, Version 2.0"
@@ -10,7 +12,7 @@ Bundle-Name: ${groupid}:${p}
  version=${osgi.version}
 companion.code = true
 
-Private-Package: ${osgi.annotation.packages}
+Export-Package: ${osgi.annotation.packages}
 
 Include-Resource: ${osgi.annotation.resources}
 
