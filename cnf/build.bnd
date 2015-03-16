@@ -73,7 +73,10 @@ copyright = Copyright (c) OSGi Alliance (2000, ${copyright.year}). All Rights Re
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
 
 osgi.release				= 6
-osgi.version				= 6.0.0
+osgi.version.major			= ${osgi.release}
+osgi.version.minor			= 0
+osgi.version.micro			= 0
+osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.micro}
 
 build.version				= ${osgi.version}.${project.build}
 
