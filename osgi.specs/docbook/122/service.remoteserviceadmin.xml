@@ -1596,7 +1596,7 @@
       <title>Scope and Filters</title>
 
       <para>An Endpoint Event Listener or Endpoint Listener service is 
-      registered with the <xref linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE"
+      registered with the <xref linkend="org.osgi.service.remoteserviceadmin.EndpointEventListener.ENDPOINT_LISTENER_SCOPE"
       xrefstyle="hyperlink"/> service property. This property, which is
       <code>String+</code>, must be set and must contain at least one filter.
       If there is not at least one filter, then that Endpoint Event Listener
@@ -1802,7 +1802,7 @@
       Endpoint Descriptions later when the returns from the remote systems finally 
       arrive.</para>
       
-      <para>If a tracked listener service object is both an Endpoint Event Listener 
+      <para>If a tracked listener service object is advertised as both an Endpoint Event Listener 
       and an Endpoint Listener then the EndpointDescription Provider must ignore the
       <code>EndpointListener</code> interface, and treat the listener only as an
       Endpoint Event Listener. Remote Service Admin <code>1.0</code> actors will be
@@ -2671,11 +2671,12 @@ xml                    ::= &lt;*&gt; *</programlisting>
       Description Provider to notify both Endpoint Listener and Endpoint Event 
       Listeners using a single code path.</para>   
       
-      <para>One possible mechanism is to introspect the listener object. If it 
-      implements <code>EndpointEventListener</code> then it should be treated as
-      an Endpoint Event Listener. If not then the Endpoint Listener can be wrapped
+      <para>One possible mechanism is to track both the listener types using the
+      same Service Tracker. If the tracked Service Reference advertises the
+      <code>EndpointEventListener</code> interface then it must be treated as
+      an Endpoint Event Listener. If not then the Endpoint Listener service can be wrapped
       in an adapter that converts Endpoint Event Listener events into the appropriate
-      Endpoint Listener calls. The notification code can then treat every listener as
+      Endpoint Listener calls. The main notification code path can then treat every listener as
       an Endpoint Event Listener.</para>
 
     </section>
@@ -2697,12 +2698,6 @@ xml                    ::= &lt;*&gt; *</programlisting>
       will see two separate listeners, and notify them both. As a single service
       registration only one event will occur, and using the highest mutually 
       supported version of the Remote Service Admin Specification.</para>
-      
-      <para>The behaviour of a listener registered as both an Endpoint Listener and
-      an Endpoint Event Listener is undefined if a single client attempts to use
-      both interfaces. Implementations may choose to throw an exception in this 
-      case, or they may simply process the events. Throwing an exception is 
-      recommended as it avoids any need to "pair up" events.</para>
       
     </section>
   </section>
