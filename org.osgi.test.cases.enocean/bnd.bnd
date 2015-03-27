@@ -26,13 +26,13 @@ Test-Cases			= ${testcases}
 	${junit}
 
 -runbundles: \
-	org.osgi.service.enocean;version=latest,\
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\
 	org.osgi.impl.service.enocean;version=latest
 
--runproperties: comm.rxtx.disable=true, \
+-runproperties = ${runproperties}, \
+    comm.rxtx.disable=true, \
 	org.osgi.service.enocean.host.path=:testcase:, \
 	org.osgi.service.enocean.loglevel.debug=true, \
 	org.osgi.service.enocean.loglevel.warn=true, \
