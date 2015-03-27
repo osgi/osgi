@@ -16,6 +16,8 @@
 
 package org.osgi.service.remoteserviceadmin;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A white board service that represents a listener for endpoints.
  * 
@@ -84,6 +86,8 @@ package org.osgi.service.remoteserviceadmin;
  * @ThreadSafe
  * @since 1.1
  */
+@SuppressWarnings("javadoc")
+@ConsumerType
 public interface EndpointEventListener {
 	/**
 	 * Specifies the interest of this listener with filters. This listener is
