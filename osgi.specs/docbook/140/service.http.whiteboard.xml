@@ -73,9 +73,8 @@
     protocols if these protocols can conform to the semantics of the Java
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support at least version 3.0 of
-    the Java Servlet API, although newer versions can also be
-    supported.</para>
+    <para>Http Whiteboard implementations must support version 3.1 of
+    the Java Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -368,11 +367,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para>The <code>ServletContext</code> provided to Whiteboard services is
       based on the associated <code>ServletContextHelper</code>, Whiteboard
       service registration properties and the underlying servlet container.
-      Implementations only need to support the APIs available on the servlet
-      specification version being provided by the implementation. For example
-      a Http Whiteboard imlementation based on a Servlet 3.0 implementation
-      does not need to support the methods introduced in
-      <code>ServletContext</code> 3.1 and later.</para>
+      </para>
 
       <para>Methods to programmatically add servlets, servlet filters and
       listeners are not supported on the <code>ServletContext</code>. Such
@@ -1670,6 +1665,11 @@ public class SomeResourceService {}</programlisting>
         <para><code>HttpSessionAttributeListener</code> - Receive
         notifications when Http Session attributes change.</para>
       </listitem>
+      
+      <listitem>
+        <para><code>HttpSessionIdListener</code> - Receive notifications
+        when Http Session ID changes.</para>
+      </listitem>
     </itemizedlist>
 
     <para>Events are sent to listeners in the Service Registry with the
@@ -1737,23 +1737,8 @@ public class MyServletRequestListener implements ServletRequestListener {
     }
 }</programlisting>
 
-    <section>
-      <title>Servlet 3.1</title>
-
-      <para>The listener in this section was introduced in the Servlet 3.1
-      specification and should be supported by implementations that support
-      Servlet 3.1 or later.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><code>HttpSessionIdListener</code> - Receive notifications
-          when Http Session ID changes.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>For more details on the behavior of the listeners see the <xref
+    <para>For more details on the behavior of the listeners see the <xref
       linkend="i21217577"/>.</para>
-    </section>
   </section>
 
   <section>
