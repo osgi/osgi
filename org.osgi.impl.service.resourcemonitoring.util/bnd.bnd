@@ -5,9 +5,7 @@ Bundle-Vendor				= Orange
 Bundle-Description: Resource Monitoring Utils provides classes common for Resource Monitor Factories bundles. It includes the EventNotifier class which can be used by Resource Monitor to notify all their related ResourceListeners.
 Bundle-Name: Resource Monitoring Utils
 
-Export-Package: org.osgi.impl.service.resourcemonitoring.util
-
-Import-Package: org.osgi.framework;version=1.5,*
+Export-Package: ${p}
 
 Private-Package: ${p}.*
 
@@ -16,5 +14,3 @@ Private-Package: ${p}.*
 	osgi.core;version=4.3,\
 	osgi.cmpn;version=4.3,\
 	org.osgi.service.resourcemonitoring;version=latest
-
-Bundle-Version: 1.0.1

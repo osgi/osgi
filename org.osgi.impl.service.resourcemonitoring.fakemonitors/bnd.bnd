@@ -13,4 +13,3 @@ Private-Package: ${p}.*
 	osgi.cmpn;version=4.3,\
 	org.osgi.service.resourcemonitoring;version=latest,\
 	org.osgi.impl.service.resourcemonitoring.util;version=latest
-Bundle-Version: 1.0.3
