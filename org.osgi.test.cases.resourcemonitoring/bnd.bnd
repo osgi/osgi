@@ -16,12 +16,11 @@ Import-Package: ${-signaturetest}, *
 
 -runbundles: \
 	org.osgi.impl.service.log;version=latest,\
-	org.osgi.service.resourcemonitoring;version=latest,\
 	org.osgi.impl.service.resourcemonitoring;version=latest,\
 	org.osgi.impl.service.resourcemonitoring.util;version=latest,\
 	org.osgi.impl.service.resourcemonitoring.fakemonitors;version=latest\
 
--runproperties = ${runproperties}
-
 Test-Cases							= ${testcases}
--signaturetest                      =  org.osgi.service.resourcemonitoring
+-signaturetest                      =  \
+    org.osgi.service.resourcemonitoring, \
+    org.osgi.service.resourcemonitoring.monitor
