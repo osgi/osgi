@@ -27,6 +27,7 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.step.TestStepProxy;
 
 /**
@@ -63,6 +64,7 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	protected ServiceListener	enOceanHostServiceListener;
 
 	protected void setUp() throws Exception {
+		Sleep.sleep(1000);
 		this.testStepProxy = new TestStepProxy(super.getContext());
 
 		/* Tracks device creation */
