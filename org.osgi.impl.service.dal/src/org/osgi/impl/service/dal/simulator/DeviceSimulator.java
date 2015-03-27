@@ -7,7 +7,7 @@
  * Amended and Restated as of May 23, 2011.
  */
 
-package org.osgi.service.dal.simulator;
+package org.osgi.impl.service.dal.simulator;
 
 import java.util.Dictionary;
 import org.osgi.framework.Constants;

@@ -18,8 +18,8 @@ import java.util.Timer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.dal.simulator.DeviceSimulator;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.simulator.DeviceSimulator;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**

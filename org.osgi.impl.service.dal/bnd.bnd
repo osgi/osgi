@@ -7,7 +7,8 @@ Bundle-Activator	= ${p}.Activator
 Private-Package		= ${p}.*
 
 Export-Package		= \
-    org.osgi.service.dal.simulator; -split-package:=first; provide:=true
+    org.osgi.service.dal.*; -split-package:=first; provide:=true, \
+    org.osgi.impl.service.dal.simulator; -split-package:=first; provide:=true
 
 -buildpath			= \
     org.osgi.service.dal;				version=project, \

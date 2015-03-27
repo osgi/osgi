@@ -12,7 +12,7 @@ package org.osgi.impl.service.dal.step;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dal.simulator.DeviceSimulator;
+import org.osgi.impl.service.dal.simulator.DeviceSimulator;
 import org.osgi.test.support.step.TestStep;
 import org.osgi.util.tracker.ServiceTracker;
 
