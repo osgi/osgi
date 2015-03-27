@@ -22,13 +22,8 @@ Test-Cases		= \
 	${junit}
 
 -runbundles		= \
-	org.osgi.service.event;			version=latest, \
-	org.osgi.service.dal;			version=latest, \
-	org.osgi.service.dal.functions;	version=latest, \
-	org.osgi.service.cm;			version=latest, \
-	org.osgi.service.component;		version=latest, \
 	org.osgi.impl.service.dal;		version=latest, \
 	org.osgi.impl.service.dal.step;	version=latest, \
-	org.osgi.impl.service.event;	version=latest, \
+	org.osgi.impl.service.event;	version=latest
 
 -runproperties	= ${runsecureproperties}
