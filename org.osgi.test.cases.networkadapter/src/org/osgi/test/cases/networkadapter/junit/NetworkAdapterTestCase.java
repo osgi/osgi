@@ -16,7 +16,6 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
@@ -80,10 +79,18 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
             assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, networkAdapter.isLoopback());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertFalse("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, networkAdapter.isPointToPoint());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertFalse("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, networkAdapter.isVirtual());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
@@ -140,8 +147,13 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, displayName, networkAdapter.getDisplayName());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_NAME, name, networkAdapter.getName());
             assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
+            assertFalse("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, networkAdapter.isLoopback());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, networkAdapter.isPointToPoint());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
@@ -201,7 +213,10 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, networkAdapter.isUp());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
@@ -261,7 +276,10 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals((byte[])hardwareAddress, networkAdapter.getHardwareAddress()));
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+            assertFalse("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, networkAdapter.isUp());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
@@ -322,7 +340,10 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, ((Boolean)isLoopback).booleanValue(), networkAdapter.isLoopback());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, networkAdapter.isVirtual());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
@@ -381,7 +402,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
+            assertTrue("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -440,7 +463,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, ((Boolean)isPointToPoint).booleanValue(), networkAdapter.isPointToPoint());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_UP, ((Boolean)isUp).booleanValue(), networkAdapter.isUp());
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, ((Boolean)isVirtual).booleanValue(), networkAdapter.isVirtual());
+
             assertEquals("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, ((Boolean)supportsMulticast).booleanValue(), networkAdapter.supportsMulticast());
+            assertFalse("The following NetworkAdapter information does not match: "+ NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, networkAdapter.supportsMulticast());
 
         } catch (Exception e) {
             e.printStackTrace();

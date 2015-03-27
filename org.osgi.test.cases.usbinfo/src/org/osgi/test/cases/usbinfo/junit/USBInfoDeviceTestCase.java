@@ -62,18 +62,111 @@ public class USBInfoDeviceTestCase extends DefaultTestBundleControl {
                 }
             }
             assertTrue("The following service property is not correct: " + org.osgi.service.device.Constants.DEVICE_CATEGORY, categoryFlag);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICECLASS, ref.getProperty(USBInfoDevice.USB_BDEVICECLASS) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICESUBCLASS, ref.getProperty(USBInfoDevice.USB_BDEVICESUBCLASS) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICEPROTOCOL, ref.getProperty(USBInfoDevice.USB_BDEVICEPROTOCOL) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_IDVENDOR, ref.getProperty(USBInfoDevice.USB_IDVENDOR) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_IDPRODUCT, ref.getProperty(USBInfoDevice.USB_IDPRODUCT) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BCDDEVICE, ref.getProperty(USBInfoDevice.USB_BCDDEVICE) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACENUMBER, ref.getProperty(USBInfoDevice.USB_BINTERFACENUMBER) instanceof Integer);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACECLASS, ref.getProperty(USBInfoDevice.USB_BINTERFACECLASS) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACESUBCLASS, ref.getProperty(USBInfoDevice.USB_BINTERFACESUBCLASS) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACEPROTOCOL, ref.getProperty(USBInfoDevice.USB_BINTERFACEPROTOCOL) instanceof String);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BUS, ref.getProperty(USBInfoDevice.USB_BUS) instanceof Integer);
-            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_ADDRESS, ref.getProperty(USBInfoDevice.USB_ADDRESS) instanceof Integer);
+
+            // usbinfo.bDeviceClass: String, Hexadecimal, 2-digits.
+            Object value = ref.getProperty(USBInfoDevice.USB_BDEVICECLASS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICECLASS, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BDEVICECLASS, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BDEVICECLASS, e);
+            }
+
+            // usbinfo.bDeviceSubClass: String, Hexadecimal, 2-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BDEVICESUBCLASS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICESUBCLASS, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BDEVICESUBCLASS, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BDEVICESUBCLASS, e);
+            }
+
+            // usbinfo.bDeviceProtocol: String, Hexadecimal, 2-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BDEVICEPROTOCOL);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BDEVICEPROTOCOL, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BDEVICEPROTOCOL, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BDEVICEPROTOCOL, e);
+            }
+
+            // usbinfo.idVendor: String, Hexadecimal, 4-digits.
+            value = ref.getProperty(USBInfoDevice.USB_IDVENDOR);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_IDVENDOR, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_IDVENDOR, 4, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+            	fail("The following service property is not correct: " + USBInfoDevice.USB_IDVENDOR, e);
+            }
+
+            // usbinfo.idProduct: String, Hexadecimal, 4-digits.
+            value = ref.getProperty(USBInfoDevice.USB_IDPRODUCT);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_IDPRODUCT, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_IDPRODUCT, 4, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_IDPRODUCT, e);
+            }
+
+            // usbinfo.bcdDevice: String, BCD format, 4-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BCDDEVICE);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BCDDEVICE, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BCDDEVICE, 4, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 10);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BCDDEVICE, e);
+            }
+
+            // usbinfo.bInterfaceNumber: Integer.
+            value = ref.getProperty(USBInfoDevice.USB_BINTERFACENUMBER);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACENUMBER, value instanceof Integer);
+
+            // usbinfo.bInterfaceClass: String, Hexadecimal, 2-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BINTERFACECLASS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACECLASS, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACECLASS, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACECLASS, e);
+            }
+
+            // usbinfo.bInterfaceSubClass: String, Hexadecimal, 2-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BINTERFACESUBCLASS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACESUBCLASS, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACESUBCLASS, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACESUBCLASS, e);
+            }
+
+            // usbinfo.bInterfaceProtocol: String, Hexadecimal, 2-digits.
+            value = ref.getProperty(USBInfoDevice.USB_BINTERFACEPROTOCOL);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACEPROTOCOL, value instanceof String);
+            assertEquals("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACEPROTOCOL, 2, ((String) value).length());
+            try {
+                Integer.parseInt(((String) value), 16);
+            } catch (NumberFormatException e) {
+                fail("The following service property is not correct: " + USBInfoDevice.USB_BINTERFACEPROTOCOL, e);
+            }
+
+            // usbinfo.bus: Integer.
+            value = ref.getProperty(USBInfoDevice.USB_BUS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_BUS, value instanceof Integer);
+
+            // usbinfo.address: Integer(001-127).
+            value = ref.getProperty(USBInfoDevice.USB_ADDRESS);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_ADDRESS, value instanceof Integer);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_ADDRESS, ((Integer) value).intValue() >= 1);
+            assertTrue("The following service property is not correct: " + USBInfoDevice.USB_ADDRESS, ((Integer) value).intValue() <= 127);
+
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);

@@ -92,7 +92,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA02] Add an ipv4-host network adapter.";
         String type = "ipv4-host";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_HOST);
     }
 
     /**
@@ -105,7 +105,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA03] Add an ipv4-private-use network adapter.";
         String type = "ipv4-private-use";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_PRIVATE_USE);
     }
 
     /**
@@ -118,7 +118,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA04] Add an ipv4-shared network adapter.";
         String type = "ipv4-shared";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_SHARED);
     }
 
     /**
@@ -131,7 +131,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA05] Add an ipv4-loopback network adapter.";
         String type = "ipv4-loopback";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_LOOPBACK);
     }
 
     /**
@@ -144,7 +144,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA06] Add an ipv4-linklocal network adapter.";
         String type = "ipv4-linklocal";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_LINKLOCAL);
     }
 
     /**
@@ -157,7 +157,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA07] Add an ipv4-global network adapter.";
         String type = "ipv4-global";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_4, NetworkAddress.IPADDRESS_SCOPE_GLOBAL);
     }
 
     /**
@@ -170,7 +170,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA08] Add an ipv6-loopback network adapter.";
         String type = "ipv6-loopback";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_6, NetworkAddress.IPADDRESS_SCOPE_LOOPBACK);
     }
 
     /**
@@ -183,7 +183,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA09] Add an ipv6-unspecified network adapter.";
         String type = "ipv6-unspecified";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_6, NetworkAddress.IPADDRESS_SCOPE_UNSPECIFIED);
     }
 
     /**
@@ -196,7 +196,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA10] Add an ipv6-uniquelocal network adapter.";
         String type = "ipv6-uniquelocal";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_6, NetworkAddress.IPADDRESS_SCOPE_UNIQUE_LOCAL);
     }
 
     /**
@@ -209,7 +209,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA11] Add an ipv6-linkedscopedunicast network adapter.";
         String type = "ipv6-linkedscopedunicast";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_6, NetworkAddress.IPADDRESS_SCOPE_LINKED_SCOPED_UNICAST);
     }
 
     /**
@@ -222,10 +222,10 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         String message = "[TEST-AA12] Add an ipv6-global network adapter.";
         String type = "ipv6-global";
 
-        testAddNetworkAdapter(message, type);
+        testAddNetworkAdapter(message, type, NetworkAddress.IPADDRESS_VERSION_6, NetworkAddress.IPADDRESS_SCOPE_GLOBAL);
     }
 
-    private void testAddNetworkAdapter(String message, String type) {
+    private void testAddNetworkAdapter(String message,String type, String version, String scope) {
         String[] ids = null;
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
@@ -258,8 +258,8 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 
             ServiceReference addressRef = addressListener.get(0);
             assertTrue("The following service property is not correct: " + NetworkAddress.NETWORKADAPTER_TYPE, addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE) instanceof String);
-            assertTrue("The following service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION) instanceof String);
-            assertTrue("The following service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE) instanceof String);
+            assertEquals("The following service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, version, addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+            assertEquals("The following service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, scope, addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
             assertTrue("The following service property is not correct: " + NetworkAddress.IPADDRESS, addressRef.getProperty(NetworkAddress.IPADDRESS) instanceof String);
             assertTrue("The following service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH) instanceof Integer);
             assertTrue("The following service property is not correct: " + NetworkAddress.NETWORKADAPTER_PID, addressRef.getProperty(NetworkAddress.NETWORKADAPTER_PID) instanceof String);
