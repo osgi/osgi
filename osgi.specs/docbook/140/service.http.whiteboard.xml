@@ -145,8 +145,8 @@
     <title>The Servlet Context</title>
 
     <para>The servlet specification defines the <code>ServletContext</code>
-    which is provided to servlets at runtime by the container. Servlets
-    registered as Whiteboard services are also provided with a
+    which is provided to servlets at runtime by the container. 
+    Whiteboard services defined by this specification are also provided with a
     <code>ServletContext</code>. The behavior of this Servlet Context can be
     influenced by providing a <xref
     linkend="org.osgi.service.http.context.ServletContextHelper"
@@ -157,7 +157,7 @@
 
     <para>The Http Whiteboard implementation must create a separate
     <code>ServletContext</code> instance for each
-    <code>ServletContextHelper</code> service. Whiteboard Servlets can be
+    <code>ServletContextHelper</code> service. Whiteboard services can be
     associated with the Servlet Context Helper by using the
     <code>osgi.http.whiteboard.context.select</code> property. If this
     property is not set, the <emphasis>default</emphasis> Servlet Context
@@ -256,7 +256,7 @@
 
     <para>Multiple <code>ServletContextHelper</code> services can have
     identical or overlapping <code>osgi.http.whiteboard.context.path</code>
-    values. In that case a matching servlet or resource is located as follows:
+    values. A matching servlet or resource is located as follows:
     <orderedlist>
         <listitem>
           <para>The Servlet Context Helper service with the longest matching
@@ -304,8 +304,9 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting>
     <code>ServletContextHelper</code> implementation.</para>
 
     <programlisting>@Component(service = ServletContextHelper.class,
+   scope = ServiceScope.BUNDLE,     
    property = {
-       "osgi.http.whiteboard.context.name=my-sch",
+       "osgi.http.whiteboard.context.name=my-context",
        "osgi.http.whiteboard.context.path=/myapp"})
 public class CDNServletContextHelper extends ServletContextHelper {
     public URL getResource(String name) {
@@ -324,7 +325,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
       <para><emphasis>Default behavior</emphasis> - Assumes the resources are
       in the bundle registering the Whiteboard service. Its
-      <code>Bundle.getResource()</code> method is called to obtain a URL to
+      <code>Bundle.getEntry()</code> method is called to obtain a URL to
       the resource. The default Servlet Context Helper implementation assumes
       the path to be relative to the bundle's root.</para>
     </section>
@@ -919,8 +920,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
             xrefstyle="hyperlink"/> service to use. If this property is
             missing the default Servlet Context Helper is used.</para>
             <para>For example, to select a Servlet Context Helper with name
-            <code>mySCH</code> provide the following value:</para>
-            <programlisting>(osgi.http.whiteboard.context.name=mySCH)</programlisting>
+            <code>myCTX</code> provide the following value:</para>
+            <programlisting>(osgi.http.whiteboard.context.name=myCTX)</programlisting>
             <para>To select all Servlet Context Helpers provide the following
             value:</para> <programlisting>(osgi.http.whiteboard.context.name=*)</programlisting>
             <para>If no matching context exists this is reflected in the
@@ -955,11 +956,13 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>If multiple Servlet Context Helper services match the
     <code>osgi.http.whiteboard.context.select</code> property the servlet,
-    filter or listener will be registered with all these Servlet Context
-    Helpers if it is registered as a Prototype Service Factory. Otherwise it
-    is only registered with the Servlet Context Helper with the highest
+    filter, resource or listener will be registered with all these Servlet Context
+    Helpers. Servlets and filters need to be registered as Prototype Service Factory for this to happen,
+    otherwise these are only registered with the Servlet Context Helper with the highest
     service ranking. In the case of a tie, the lowest service ID wins. In
-    other words, the normal service ranking rules apply.</para>
+    other words, the normal service ranking rules apply.
+    Resource services and listeners do not need to be registered as Prototype Service Factory; these
+    are always registered with all matching Servlet Context Helpers.</para>
   </section>
 
   <section xml:id="i21223311">
@@ -1211,7 +1214,7 @@ public class MyServlet extends HttpServlet {
     linkend="service.http.whiteboard.servletcontext" xrefstyle="template:%n"/>
     add the following service registration property:</para>
 
-    <programlisting>osgi.http.whiteboard.context.select=my-sch</programlisting>
+    <programlisting>osgi.http.whiteboard.context.select=my-context</programlisting>
 
     <para>This will cause the servlet to move to <code>/myapp/myservlet</code>
     as configured by the custom Servlet Context Handler.</para>
