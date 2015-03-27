@@ -20,9 +20,7 @@ Test-Cases							= ${testcases}
 
 -runbundles:  \
 	org.osgi.impl.service.networkadapter;version=latest,\
-	org.osgi.impl.service.event
-
--runproperties = ${runproperties}
+	org.osgi.impl.service.event;version=latest
 
 Export-Package:  \
 	org.osgi.test.support.step
