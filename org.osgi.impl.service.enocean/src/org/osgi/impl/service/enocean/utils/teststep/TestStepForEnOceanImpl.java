@@ -59,7 +59,8 @@ public class TestStepForEnOceanImpl implements TestStep {
 	}
 
 	public String execute(String stepId, String userPrompt) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: " + stepId + ", userPrompt: " + userPrompt);
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: "
+				+ clean(stepId) + ", userPrompt: " + userPrompt);
 		String result = null;
 		if (stepId == null) {
 			Logger.e(TestStepForEnOceanImpl.class.getName(), "The given stepId is null, but it can NOT be.");
@@ -110,5 +111,14 @@ public class TestStepForEnOceanImpl implements TestStep {
 									}
 					}
 		return result;
+	}
+
+	private String clean(String input) {
+		char[] result = new char[input.length()];
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			result[i] = c >= ' ' ? c : '?';
+		}
+		return new String(result);
 	}
 }
