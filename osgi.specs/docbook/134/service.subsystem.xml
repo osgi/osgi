@@ -4792,6 +4792,47 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     uninstalling the Subsystems implementation.</para>
   </section>
 
+  <section xml:id="service.subsystem-capabilities">
+    <title>Capabilities</title>
+
+    <para>Implementations of the Subsystem Service specification must
+    provide the following capabilities.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A capability in the <link
+        linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+        namespace declaring the implemented specification to be
+        <code>osgi.subsystem</code>. This capability must also declare a uses
+        constraint for the <code>org.osgi.service.subsystem</code> package. For
+        example:</para>
+
+        <programlisting>Provide-Capability: osgi.implementation;
+    osgi.implementation="osgi.subsystem";
+    version:Version="1.1";
+    uses:="org.osgi.service.subsystem"</programlisting>
+
+        <para>This capability must follow the rules defined for the <xref
+        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>A capability in the <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+        namespace representing the <xref
+        linkend="org.osgi.service.subsystem.Subsystem" xrefstyle="hyperlink"/>
+        service. This capability must also declare a uses constraint for the
+        <code>org.osgi.service.subsystem</code> package. For example:</para>
+
+        <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;="org.osgi.service.subsystem.Subsystem";
+    uses:="org.osgi.service.subsystem"</programlisting>
+
+        <para>This capability must follow the rules defined for the <xref
+        linkend="service.namespaces-osgi.service.namespace"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
   <section>
     <title>Security</title>
 
