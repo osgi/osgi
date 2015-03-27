@@ -5,6 +5,8 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
     ${p}.junit.*, \
     ${p}.util.*
+Export-Package:  \
+	org.osgi.test.support.step
 Import-Package: ${-signaturetest}, *
 
 -buildpath:  \
@@ -21,9 +23,4 @@ Test-Cases							= ${testcases}
 -runbundles:  \
 	org.osgi.impl.service.usbinfo;version=latest,\
 	org.osgi.impl.service.device.manager;version=latest,\
-	org.osgi.impl.service.event
-
--runproperties = ${runproperties}
-
-Export-Package:  \
-	org.osgi.test.support.step
+	org.osgi.impl.service.event;version=latest
