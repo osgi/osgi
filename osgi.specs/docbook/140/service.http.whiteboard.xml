@@ -1711,6 +1711,12 @@ public class SomeResourceService {}</programlisting>
     associated with a Servlet Context Helper will receive events relating to
     the <emphasis>default</emphasis> instance.</para>
 
+    <para>
+    Multiple listeners of the same type registered with a given Servlet Context Helper
+    are invoked in sequence, service ranking rules are used to detemine the order;
+    the highest ranked being invoked first.
+    </para>
+
     <table>
       <title>Service registration properties for listener services.</title>
 
