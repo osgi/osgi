@@ -1257,11 +1257,10 @@ public class MyServlet extends HttpServlet {
       range.</para>
 
       <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and
-      <code>osgi.http.whiteboard.servlet.pattern</code> properties are
-      mutually exclusive. If a single servlet registration has both these
-      registration properties this is considered invalid and this servlet will
-      not be handled by the Http Whiteboard implementation. The servlet will
-      be reported via the Failure DTOs.</para>
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties 
+      can be combined. If a single servlet registration has both these
+      registration properties it is considered both an ordinary servlet as well
+      as an error page.</para>
 
       <para>Matching exceptions follows the exception hierarchy. First the
       most specific exception class - the actual class of the exception - is
