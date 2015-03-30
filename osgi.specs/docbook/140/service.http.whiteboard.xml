@@ -1020,10 +1020,28 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>All <code>Servlet</code> objects and resource registrations
     associated with a single Http Whiteboard implementation share the same
-    name-space. If an attempt is made to register a Whiteboard service under
-    the same pattern as a currently registered service, service ranking rules
-    are used to select the service providing the pattern. This ensures a predictable
-    end result regardless of the order in which services are registerd.</para>
+    name-space. In case of overlapping registrations, the following rules are 
+    used to determine which servlet handles a given path.</para>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          The servlet with the longest path takes precedence.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          In the case of paths of equal length, service ranking rules are used to
+          select the servlet.
+        </para>
+      </listitem>
+    </orderedlist>
+    
+    <para>
+    The above rules can cause servlets that are already registered being unregistered 
+    if a better match arrives. This ensures a predictable
+    end result regardless of the order in which services are registered.</para>
    
     <para>With implementations that 
     both implement this specification as well as the <xref linkend="service.http"/>  
