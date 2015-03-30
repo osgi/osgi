@@ -86,7 +86,6 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @ThreadSafe
  * @since 1.1
  */
-@SuppressWarnings("javadoc")
 @ConsumerType
 public interface EndpointEventListener {
 	/**
