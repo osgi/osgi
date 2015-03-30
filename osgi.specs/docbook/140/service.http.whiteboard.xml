@@ -1646,6 +1646,16 @@ public class SomeResourceService {}</programlisting>
     service can be associated to a custom <code>ServletContextHelper</code>.
     For example, a custom Servlet Context Helper can serve resources from
     locations other than the current bundle.</para>
+
+    <para>
+    Resources and servlets registered with the same Http Whiteboard implementation
+    share a single URI namespace. This means that the value specified in
+    <code>osgi.http.whiteboard.resource.pattern</code> competes with
+    the <code>osgi.http.whiteboard.servlet.pattern</code> property specified on servlets.
+    If these values overlap, the rules as outlined in <xref
+    linkend="i21223311"/> are used to resolve conflicts,
+    where resource services are treated just like servlets.
+    </para>
   </section>
 
   <section>
