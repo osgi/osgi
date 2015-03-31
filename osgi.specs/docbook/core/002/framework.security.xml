@@ -257,7 +257,7 @@
       actual resources. These digests must be placed in their name section of
       the manifest. The name of the digest header is constructed with its
       algorithm followed by <code>-Digest</code>. An example is the
-      <code>SHA1-Digest</code>. It is recommended that OSGi Framework
+      <code>SHA-1-Digest</code>. It is recommended that OSGi Framework
       implementations support the following digest algorithms.</para>
 
       <itemizedlist>
@@ -268,7 +268,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>SHA1</emphasis> - An improved version of SHA,
+          <para><emphasis>SHA-1</emphasis> - An improved version of SHA,
           delivers a 160 bit hash. It is defined in <xref
           linkend="i1483030"/>.</para>
         </listitem>
@@ -283,10 +283,10 @@
 Bundle-Name: DisplayManifest
 <phrase role="symbol">↵</phrase>
 Name: x/A.class
-SHA1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
+SHA-1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
 <phrase role="symbol">↵</phrase>
 Name: x/B.class
-SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
+SHA-1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 <phrase role="symbol">↵</phrase></programlisting>
 
       <para>Graphically this looks like <xref linkend="i1506821"/>.</para>
@@ -326,11 +326,11 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 
       <para>The only relevant part of the signature resource is the digest of
       the Manifest resource. The name of the header must be the name algorithm
-      (e.g. <code>SHA1</code>) followed by <code>-Digest-Manifest</code>. For
+      (e.g. <code>SHA-1</code>) followed by <code>-Digest-Manifest</code>. For
       example:</para>
 
       <programlisting><code>Signature-Version: 1.0</code>
-SHA1-Digest-Manifest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
+SHA-1-Digest-Manifest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
 MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
       <para>The signature resource can contain name sections as well. However,
@@ -400,7 +400,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
 
         <listitem>
-          <para>The manifest entry must contain an SHA1 and/or MD5 digest for
+          <para>The manifest entry must contain a SHA-1 and/or MD5 digest for
           the complete manifest.</para>
         </listitem>
 
