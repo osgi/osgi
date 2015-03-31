@@ -63,7 +63,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       Get the Bundle representation of a specific bundle.
@@ -80,7 +80,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle Header
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       Get the Bundle Header representation of a specific bundle.
@@ -93,7 +93,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle Representations List
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       List the bundles details.
@@ -106,7 +106,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle List
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       List the bundles.
@@ -123,7 +123,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle Start Level
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       Get the Bundle Start Level representation of a specific bundle.
@@ -140,7 +140,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle State
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
       Get the Bundle State representation of a specific bundle.
@@ -153,7 +153,7 @@ REST JavaScript Client API Version 1.0
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Framework Start Level
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
 Obtain the Framework Start Level.
@@ -170,7 +170,7 @@ Obtain the Framework Start Level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Service
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
 Get a service representation.
@@ -183,7 +183,7 @@ Get a service representation.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Service Representations List
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
 Get all services representations.
@@ -196,7 +196,7 @@ Get all services representations.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Service List
-        representation.</para>
+        representation as JavaScript object.</para>
       </formalpara>
       <para role="description">
 Get all services URIs.
@@ -234,7 +234,7 @@ Install a bundle from a URI or by value.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the resulting Framework Start Level
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Change the Framework Start Level and/or initial bundle start level.
@@ -255,7 +255,7 @@ Change the Framework Start Level and/or initial bundle start level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the resulting Bundle Start Level
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Change the Bundle Start Level and/or other options defined in the Bundle Start Level representation.
@@ -272,7 +272,7 @@ Change the Bundle Start Level and/or other options defined in the Bundle Start L
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the resulting Framework Start Level
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Change the Framework Start Level and/or initial bundle start level.
@@ -289,7 +289,7 @@ Change the Framework Start Level and/or initial bundle start level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle State
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
       Start a bundle.
@@ -310,7 +310,7 @@ Change the Framework Start Level and/or initial bundle start level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle State
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
       Start a bundle.
@@ -327,7 +327,7 @@ Change the Framework Start Level and/or initial bundle start level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle State
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
       Stop a bundle.
@@ -348,7 +348,7 @@ Change the Framework Start Level and/or initial bundle start level.
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
         the <code>success()</code> callback is invoked with the Bundle State
-        representation. This parameter is optional.</para>
+        representation as JavaScript object. This parameter is optional.</para>
       </formalpara>
       <para role="description">
       Stop a bundle.
