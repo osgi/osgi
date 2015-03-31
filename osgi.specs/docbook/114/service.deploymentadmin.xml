@@ -697,17 +697,17 @@ DeploymentPackage-SymbolicName: com.third._3d
 DeploymentPacakge-Version: 1.2.3.build22032005
 <phrase role="symbol">↵</phrase>
 Name: bundles/3dlib.jar
-SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
+SHA-1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
 Bundle-SymbolicName: com.third._3d
 Bundle-Version: 2.3.1
 <phrase role="symbol">↵</phrase>
 Name: bundles/3dnative.jar
-SHA1-Digest: N8Ow2UY4yjnHZv5zeq2I1Uv/+uE=
+SHA-1-Digest: N8Ow2UY4yjnHZv5zeq2I1Uv/+uE=
 Bundle-SymbolicName: com.third._3d.native
 Bundle-Version: 1.5.3
 <phrase role="symbol">↵</phrase>
 Name: OSGI-INF/autoconf.xml
-SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
+SHA-1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
 Resource-Processor: org.osgi.deployment.rp.autoconf
 <phrase role="symbol">↵</phrase></programlisting>
     </section>
@@ -886,7 +886,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
         <para>For example:</para>
 
         <programlisting>Name: certificate/certificates.xml
-SHA1-Digest: M78w249126182Ak5zeq2X1Uv-+uF=
+SHA-1-Digest: M78w249126182Ak5zeq2X1Uv-+uF=
 Resource-Processor: com.securitas.keystore</programlisting>
 
         <para>In the example, the <code>certificates.xml</code> in the
@@ -964,22 +964,22 @@ DeploymentPackage-Name: %name
 Bundle-Localization: <code>OSGI-INF/l10n/dp</code>
 <phrase role="symbol">↵</phrase>
 Name: bundles/3dlib.jar
-SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
+SHA-1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
 Bundle-SymbolicName: com.third._3d
 Bundle-Version: 2.3.1
 <phrase role="symbol">↵</phrase>
 Name: OSGI-INF/autoconf.xml
-SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
+SHA-1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
 Resource-Processor: org.osgi.deployment.rp.autoconf
 <phrase role="symbol">↵</phrase>
 Name: icon_nl.gif
-SHA1-Digest: n72w21124hGiZV5zQeAXxUvaaUf=
+SHA-1-Digest: n72w21124hGiZV5zQeAXxUvaaUf=
 <phrase role="symbol">↵</phrase>
 Name: OSGI-INF/l10n/dp.properties
-SHA1-Digest: V5zQeAXxUvaaUfn72w21124hGiZ=
+SHA-1-Digest: V5zQeAXxUvaaUfn72w21124hGiZ=
 <phrase role="symbol">↵</phrase>
 Name: OSGI-INF/l10n/dp_nl.properties
-SHA1-Digest: xUvaaUfn72w21124hGiZV5zQeAXx
+SHA-1-Digest: xUvaaUfn72w21124hGiZV5zQeAXx
 <phrase role="symbol">↵</phrase></programlisting>
 
       <para>Different language translations can be provided, such as:</para>
