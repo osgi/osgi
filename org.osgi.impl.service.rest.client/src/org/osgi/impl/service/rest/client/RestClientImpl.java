@@ -271,14 +271,14 @@ public class RestClientImpl implements RestClient {
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundleHeaders(long)
 	 */
-	public Map<String, Object> getBundleHeader(final long id) throws Exception {
+	public Map<String, String> getBundleHeader(final long id) throws Exception {
 		return getBundleHeader("framework/bundle/" + id);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundleHeaders(java.lang.String)
 	 */
-	public Map<String, Object> getBundleHeader(final String bundlePath)
+	public Map<String, String> getBundleHeader(final String bundlePath)
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve(bundlePath + "/header"))

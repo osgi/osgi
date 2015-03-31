@@ -67,7 +67,7 @@ public final class DTOReflector {
 		}
 	}
 
-	public static Map<String, Object> getMap(Representation repr) throws Exception {
+	public static Map<String, String> getMap(final Representation repr) throws Exception {
 		if (JSON_BASED.includes(repr.getMediaType())) {
 			final JSONObject data = new JsonRepresentation(repr).getJsonObject();
 			return getMapfromJsonObject(data);

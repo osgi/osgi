@@ -47,7 +47,7 @@ public interface RestApiExtension {
 
 	/**
 	 * this service property describes a URI to the REST extension on this local
-	 * machine. It is either an absolute URI with a different port if no
+	 * machine. It is either an fully qualified URI with a different port if no
 	 * integration with the framework REST service is possible or a relative URL
 	 * implicitly using the same port if integration is possible. In either
 	 * case, the path to the extension must be absolute and must not start with
@@ -66,12 +66,12 @@ public interface RestApiExtension {
 	public static final String	NAME		= "org.osgi.rest.name";
 
 	/**
-	 * this service property describes the refers to the id of the service the
-	 * the REST API extension provides management capabilities for. Clients can
-	 * use this information to retrieve the service properties of the service,
-	 * e.g., for the case that there are multiple services of the same type on
-	 * the framework and the client wants to retrieve the REST management
-	 * extension for a specific service instance. The type of the property is
+	 * this service property refers to the id of the service the REST API
+	 * extension provides management capabilities for. Clients can use this
+	 * information to retrieve the service properties of the service, e.g., for
+	 * the case that there are multiple services of the same type on the
+	 * framework and the client wants to retrieve the REST management extension
+	 * for a specific service instance. The type of the property is
 	 * <code>java.lang.Long</code> and the property is optional.
 	 */
 	public static final String	SERVICE		= "org.osgi.rest.service";

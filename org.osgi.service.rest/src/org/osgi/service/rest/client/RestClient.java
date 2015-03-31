@@ -189,7 +189,7 @@ public interface RestClient {
 	 * @return Returns the map of headers entries.
 	 * @throws Exception
 	 */
-	Map<String, Object> getBundleHeader(long id) throws Exception;
+	Map<String, String> getBundleHeader(long id) throws Exception;
 
 	/**
 	 * Get the header for a bundle given by its URI path.
@@ -198,7 +198,7 @@ public interface RestClient {
 	 * @return Returns the map of headers entries.
 	 * @throws Exception
 	 */
-	Map<String, Object> getBundleHeader(String bundlePath) throws Exception;
+	Map<String, String> getBundleHeader(String bundlePath) throws Exception;
 
 	/**
 	 * Get the start level for a bundle given by its bundle Id.
@@ -245,12 +245,12 @@ public interface RestClient {
 	 * Install a new bundle given by an externally reachable location string,
 	 * typically describing a URL.
 	 * 
-	 * @param url Passes the location string to retrieve the bundle content
+	 * @param location Passes the location string to retrieve the bundle content
 	 *        from.
 	 * @return Returns the URI path of the newly installed bundle.
 	 * @throws Exception
 	 */
-	String installBundle(String url) throws Exception;
+	String installBundle(String location) throws Exception;
 
 	/**
 	 * Install a new bundle given by an {@link InputStream} to a bundle content.

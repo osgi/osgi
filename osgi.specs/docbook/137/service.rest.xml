@@ -231,7 +231,8 @@ framework/service/{serviceid}
 
       <para><code>framework/bundles?namespace1=ldap-filter1&amp;namespace2=ldap-filter2&amp;...</code></para>
 
-      <para>A missing namespace declaration implies the IdentityNamespace
+      <para>When multiple filter expression are given, the filters are combined with AND operators so that results must match all filters. 
+            A missing namespace declaration (e.g., <code>framework/bundles?namespace1=ldap-filter</code>) implies the IdentityNamespace
       (<code>osgi.identity</code>).</para>
     </section>
 
@@ -371,6 +372,8 @@ framework/service/{serviceid}
 
     <section>
       <title>Bundles Resource</title>
+      
+      <para><code>framework/bundles</code></para>
 
       <para>The bundles resource represents the list of all bundles installed
       on the managed framework. It supports the GET request and two
@@ -449,7 +452,7 @@ framework/service/{serviceid}
 
         <para>This variant of the POST request uploads the bundle as the body
         of the request. The media type of the request should be set to
-        vnd.osgi.bundle which must be supported by all REST management
+        application/vnd.osgi.bundle which must be supported by all REST management
         services. Implementations are free to accept other media types for
         this request with the exception of text/plain. For instance, they can
         opt to additionally support application/zip or
@@ -484,10 +487,16 @@ framework/service/{serviceid}
           </listitem>
         </itemizedlist>
       </section>
+    </section>
+    
+    <section>
+      <title>Bundles Representations Resource</title>
+      
+      <para><code>framework/bundles/representations</code></para>
 
       <section>
         <title>GET of the Representations</title>
-
+        
         <para>The bundles resource returns a list of the URIs of all bundles
         installed on the framework. For clients interested in all bundles
         there is also the possibility to retrieve the bundle representation of
@@ -515,6 +524,8 @@ framework/service/{serviceid}
 
     <section>
       <title>Bundle Resource</title>
+      
+      <para><code>framework/bundle/{bundleid}</code></para>
 
       <para>The bundle resource represents a single, distinct bundle in the
       system. Hence, it has to be qualified by a bundle id. The resource
@@ -588,7 +599,7 @@ framework/service/{serviceid}
 
         <para>The PUT request updates the bundle with a new version, uploaded
         as the body of the request. The media type of the request should be
-        set to vnd.osgi.bundle which must be supported by all REST management
+        set to application/vnd.osgi.bundle which must be supported by all REST management
         services. Implementations are free to accept other media types for
         this request with the exception of text/plain. For instance, they can
         opt to additionally support application/zip or application/x-jar. The
@@ -645,6 +656,8 @@ framework/service/{serviceid}
 
     <section>
       <title>Bundle State Resource</title>
+
+	  <para><code>framework/bundle/{bundleid}/state</code></para>
 
       <para>The bundle state resource represents the internal state of an
       installed bundle qualified through its bundle id. It supports the GET
@@ -727,6 +740,8 @@ framework/service/{serviceid}
     <section>
       <title>Bundle Header Resource</title>
 
+      <para><code>framework/bundle/{bundleid}/header</code></para>
+
       <para>The bundle header resource represents manifest header of a bundle
       which is qualified by its bundle id. It can only be read through a GET
       request.</para>
@@ -736,8 +751,10 @@ framework/service/{serviceid}
 
         <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.header.representation"
-        xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes:</para>
+        xrefstyle="template:%t"/> from the REST management service. 
+        The default locale is used unless an Accept-Language header is set on the http request.
+        If multiple accepted languages are set only the first is used to localize the header. 
+        The request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -760,6 +777,8 @@ framework/service/{serviceid}
 
     <section>
       <title>Bundle Startlevel Resource</title>
+      
+      <para><code>framework/bundle/{bundleid}/startlevel</code></para>
 
       <para>The bundle startlevel resource represents the start level of the
       bundle qualified by its bundle id. It supports the GET and PUT
@@ -836,6 +855,8 @@ framework/service/{serviceid}
     <section>
       <title>Services Resource</title>
 
+	  <para><code>framework/services</code></para>
+
       <para>The services resource represents the set of all services available
       on the framework, optionally constrained by a filter expression. It is
       read-only and therefore only supports the GET request.</para>
@@ -865,10 +886,16 @@ framework/service/{serviceid}
           </listitem>
         </itemizedlist>
       </section>
+    </section>
+    
+    <section>
+      <title>Services Representations Resource</title>
+
+      <para><code>framework/services/representations</code></para>
 
       <section>
         <title>GET of the Representations</title>
-
+        
         <para>The services resource returns a list of the URIs of all services
         registered on the framework. For clients interested in all services
         there is also the possiblity to retrieve the service representation of
@@ -900,6 +927,8 @@ framework/service/{serviceid}
 
     <section>
       <title>Service Resource</title>
+      
+      <para><code>framework/service/{serviceid}</code></para>
 
       <para>The service resource represents a single, distinct service in the
       framework. Hence, it has to be qualified by a service id. Services can
@@ -949,7 +978,6 @@ framework/service/{serviceid}
         <programlisting>{
    "id":0,
    "lastModified":1314999275542,
-   "location":"System Bundle",
    "state":32,
    "symbolicName":"org.eclipse.osgi",
    "version":"3.7.0.v20110613"
@@ -965,7 +993,6 @@ framework/service/{serviceid}
         <programlisting>&lt;bundle&gt;
    &lt;id&gt;0&lt;/id&gt;
    &lt;lastModified&gt;1314999275542&lt;/lastModified&gt;
-   &lt;location&gt;System Bundle&lt;/location&gt;
    &lt;state&gt;32&lt;/state&gt;
    &lt;symbolicName&gt;org.eclipse.osgi&lt;/symbolicName&gt;
    &lt;version&gt;3.7.0.v20110613&lt;/version&gt;
@@ -1046,6 +1073,9 @@ framework/service/{serviceid}
    "state":32
    “options”:1
 }</programlisting>
+
+	  The options are used in start or stop calls. Valid options include, e.g., Bundle.START_TRANSIENT and Bundle.START_ACTIVATION_POLICY. 
+
       </section>
 
       <section>
@@ -1329,7 +1359,10 @@ framework/service/{serviceid}
 
     <para>In order to be discoverable REST interface extensions to OSGi core,
     compendium, or enterprise services must use their canonical package name
-    as names. User-defined extensions should use the package name of the
+    as names. E.g., the name of the REST interface for the UserAdmin must be 
+    <code>org.osgi.service.useradmin</code>. This way, a client is able to check if 
+    there is a given extension available on a host. 
+    User-defined extensions should use the package name of the
     sevice they provide management capabilities for.</para>
 
     <section xml:id="service.rest-extension.resource">
