@@ -328,9 +328,9 @@
     linkend="residential.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 5</title>
+      <title>OSGi Core Release 6</title>
 
-      <para>This specification is based on the OSGi Core Release 5. This
+      <para>This specification is based on the OSGi Core Release 6. This
       specification can be downloaded from:</para>
 
       <programlisting>http://www.osgi.org/Specifications/HomePage</programlisting>
@@ -424,8 +424,9 @@
               <entry><xref linkend="service.metatype"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.metatype"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.metatype"/></code></para><para><code><xref
+              linkend="org.osgi.service.metatype.annotations"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.metatype-version"
               linkend="service.metatype"/></code></entry>
@@ -517,6 +518,103 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.namespaces"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.implementation"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.service"/></code></para></entry>
+
+              <entry><code><xref endterm="service.namespaces-version"
+              linkend="service.namespaces"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.enocean"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.enocean"/></code></para><para><code><xref
+              linkend="org.osgi.service.enocean.descriptions"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.enocean-version"
+              linkend="service.enocean"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.dal"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.dal"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.dal-version"
+              linkend="service.dal"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.dal.functions"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.dal.functions"/></code></para><para><code><xref
+              linkend="org.osgi.service.dal.functions.data"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.dal.functions-version"
+              linkend="service.dal.functions"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.network"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.networkadapter"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.networkadapter-version"
+              linkend="service.network"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.resourcemonitoring"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.resourcemonitoring"/></code></para><para><code><xref
+              linkend="org.osgi.service.resourcemonitoring.monitor"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.resourcemonitoring-version"
+              linkend="service.resourcemonitoring"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.usbinfo"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.usbinfo"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.usbinfo-version"
+              linkend="service.usbinfo"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.serial"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.serial"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.serial-version"
+              linkend="service.serial"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -524,6 +622,18 @@
 
               <entry><code><xref endterm="org.osgi.util.xml-version"
               linkend="util.xml"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="util.promise"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.util.promise"/></code></para><para><code><xref
+              linkend="org.osgi.util.function"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.util.promise-version"
+              linkend="util.promise"/></code></entry>
             </row>
           </tbody>
         </tgroup>
@@ -570,5 +680,55 @@
       Objects for
       CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Updated <xref linkend="service.metatype"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.component"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.namespaces"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.enocean"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.dal"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.dal.functions"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.network"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.resourcemonitoring"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.usbinfo"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.serial"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="util.promise"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
