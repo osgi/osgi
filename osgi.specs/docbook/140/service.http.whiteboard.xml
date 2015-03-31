@@ -21,10 +21,11 @@
 
     <para>Servlets have become a popular and widely supported mechanism for
     providing dynamic content on the Internet. While the servlets themselves
-    are defined in the <xref linkend="i21217577"/>, the OSGi Http Whiteboard
-    Specification provides a light and convenient way of using servlets,
-    servlet filters and web resources in an OSGi environment through the use
-    of the <xref linkend="http.whiteboard-whiteboard.pattern.ref"/>.</para>
+    are defined in the <xref linkend="service.http.whiteboard-i21217577"/>,
+    the OSGi Http Whiteboard Specification provides a light and convenient way
+    of using servlets, servlet filters and web resources in an OSGi
+    environment through the use of the <xref
+    linkend="service.http.whiteboard-whiteboard.pattern.ref"/>.</para>
 
     <para>The Http Whiteboard specification supports:</para>
 
@@ -61,11 +62,11 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="i21231452"/></para>
+        <para><xref linkend="service.http.whiteboard-i21231452"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="i21215926"/></para>
+        <para><xref linkend="service.http.whiteboard-i21215926"/></para>
       </listitem>
     </itemizedlist>
 
@@ -73,8 +74,8 @@
     protocols if these protocols can conform to the semantics of the Java
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support version 3.1 of
-    the Java Servlet API.</para>
+    <para>Http Whiteboard implementations must support version 3.1 of the Java
+    Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -145,8 +146,8 @@
     <title>The Servlet Context</title>
 
     <para>The servlet specification defines the <code>ServletContext</code>
-    which is provided to servlets at runtime by the container. 
-    Whiteboard services defined by this specification are also provided with a
+    which is provided to servlets at runtime by the container. Whiteboard
+    services defined by this specification are also provided with a
     <code>ServletContext</code>. The behavior of this Servlet Context can be
     influenced by providing a <xref
     linkend="org.osgi.service.http.context.ServletContextHelper"
@@ -164,19 +165,19 @@
     Helper is used.</para>
 
     <para>To achieve the required behavior for
-    <code>ServletContext.getClassLoader()</code> each bundle must be provided with
-    a separate Servlet Context instance to serve the classloader of the Whiteboard 
-    services for that bundle. For more information see <code>getClassLoader()</code> in <xref
+    <code>ServletContext.getClassLoader()</code> each bundle must be provided
+    with a separate Servlet Context instance to serve the classloader of the
+    Whiteboard services for that bundle. For more information see
+    <code>getClassLoader()</code> in <xref
     linkend="service.http.whiteboard.servletcontext.methods"
     xrefstyle="template:Table %n"/>.</para>
 
-    <para>Some implementations of the 
-    <code>ServletContextHelper</code> may be implemented using a Service Factory, 
-    for example to provide resources from the associated bundle, as the 
-    <emphasis>default</emphasis> implementation does. Therefore the 
-    Whiteboard implementation must get the Servlet
-    Context Helper using the Bundle Context of the associated Whiteboard
-    service. </para>
+    <para>Some implementations of the <code>ServletContextHelper</code> may be
+    implemented using a Service Factory, for example to provide resources from
+    the associated bundle, as the <emphasis>default</emphasis> implementation
+    does. Therefore the Whiteboard implementation must get the Servlet Context
+    Helper using the Bundle Context of the associated Whiteboard
+    service.</para>
 
     <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
       <title>Service registration properties for
@@ -203,7 +204,7 @@
           <row>
             <entry><code>osgi.http.whiteboard.context.name</code></entry>
 
-            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Name of the Servlet Context Helper. This name is
             referred to by Whiteboard services via the
@@ -216,9 +217,9 @@
             are registered with the same name, the one with the highest
             Service Ranking is used. In case of a tie, the service with the
             lowest service ID wins. In other words, the normal OSGi service
-            ranking applies.</para> <para>Registrations with an invalid or 
-            unspecified name are not used and reflected in the failure DTOs. See
-            <xref
+            ranking applies.</para> <para>Registrations with an invalid or
+            unspecified name are not used and reflected in the failure DTOs.
+            See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -226,29 +227,29 @@
           <row>
             <entry><code>osgi.http.whiteboard.context.path</code></entry>
 
-            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
-            RFC 3986, section 3.3. If the path is invalid or unspecified, the 
+            RFC 3986, section 3.3. If the path is invalid or unspecified, the
             service is not used and reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
+
           <row>
             <entry><code>context.init.*</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are provided as
-                    init parameters through the <code>ServletContext.getInitParameter()</code>
-                    and <code>ServletContext.getInitParameterNames()</code> methods.
-                    The <code>context.init.</code> prefix is removed from the parameter
-                    name. See <xref
+            init parameters through the
+            <code>ServletContext.getInitParameter()</code> and
+            <code>ServletContext.getInitParameterNames()</code> methods. The
+            <code>context.init.</code> prefix is removed from the parameter
+            name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_INIT_PARAM_PREFIX"
-            xrefstyle="hyperlink"/>.</para>
-            
-            </entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -256,8 +257,7 @@
 
     <para>Multiple <code>ServletContextHelper</code> services can have
     identical or overlapping <code>osgi.http.whiteboard.context.path</code>
-    values. A matching servlet or resource is located as follows:
-    <orderedlist>
+    values. A matching servlet or resource is located as follows: <orderedlist>
         <listitem>
           <para>The Servlet Context Helper service with the longest matching
           path is matched first.</para>
@@ -272,12 +272,10 @@
       </orderedlist></para>
 
     <para>For example, if two <code>ServletContextHelper</code> services are
-        registered as follows
-        <programlisting>osgi.http.whiteboard.context.path = /foo
-osgi.http.whiteboard.context.path = /foo/bar</programlisting>
-
-        Then a request for <code>http://localhost/foo/bar/someServlet</code>
-        is looked up in the following order: <orderedlist>
+    registered as follows <programlisting>osgi.http.whiteboard.context.path = /foo
+osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
+    for <code>http://localhost/foo/bar/someServlet</code> is looked up in the
+    following order: <orderedlist>
         <listitem>
           <para><code>/foo/bar</code> context looking for a pattern to match
           <code>/someServlet</code></para>
@@ -295,7 +293,7 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting>
     <para>For details on the association process between servlet, servlet
     filter, resource and listener services and the
     <code>ServletContextHelper</code> see <xref
-    linkend="service.http.common.properties"/>.</para>
+    linkend="service.http.whiteboard.common.properties"/>.</para>
 
     <para>An example Servlet Context Helper can be found below, it prefixes
     the path with <code>/myapp</code> for any associated whiteboard service.
@@ -325,9 +323,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
       <para><emphasis>Default behavior</emphasis> - Assumes the resources are
       in the bundle registering the Whiteboard service. Its
-      <code>Bundle.getEntry()</code> method is called to obtain a URL to
-      the resource. The default Servlet Context Helper implementation assumes
-      the path to be relative to the bundle's root.</para>
+      <code>Bundle.getEntry()</code> method is called to obtain a URL to the
+      resource. The default Servlet Context Helper implementation assumes the
+      path to be relative to the bundle's root.</para>
     </section>
 
     <section>
@@ -367,8 +365,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
       <para>The <code>ServletContext</code> provided to Whiteboard services is
       based on the associated <code>ServletContextHelper</code>, Whiteboard
-      service registration properties and the underlying servlet container.
-      </para>
+      service registration properties and the underlying servlet
+      container.</para>
 
       <para>Methods to programmatically add servlets, servlet filters and
       listeners are not supported on the <code>ServletContext</code>. Such
@@ -484,13 +482,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>3.0</para></entry>
 
-              <entry><para>Returns the class loader of the bundle that registered the
-              Whiteboard service.
-              An implementation of this specification can achieve this by
-              returning separate façades of the ServletContext to each
-              Whiteboard service. Each façade accesses the Whiteboard
-              service's Bundle Wiring to obtain its classloader. 
-              </para></entry>
+              <entry><para>Returns the class loader of the bundle that
+              registered the Whiteboard service. An implementation of this
+              specification can achieve this by returning separate façades of
+              the ServletContext to each Whiteboard service. Each façade
+              accesses the Whiteboard service's Bundle Wiring to obtain its
+              classloader. </para></entry>
             </row>
 
             <row>
@@ -616,11 +613,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.2</para></entry>
 
-              <entry><para>Provides the Whiteboard servlet
-              with the specified name, provided through the
-              <code>osgi.http.whiteboard.servlet.name</code> property, if 
-              associated with this Servlet Context Helper.
-              </para></entry>
+              <entry><para>Provides the Whiteboard servlet with the specified
+              name, provided through the
+              <code>osgi.http.whiteboard.servlet.name</code> property, if
+              associated with this Servlet Context Helper. </para></entry>
             </row>
 
             <row>
@@ -646,9 +642,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.1</para></entry>
 
-              <entry><para>If the argument matches a servlet associated with this
-                      Servlet Context Helper,
-              this will be returned.</para></entry>
+              <entry><para>If the argument matches a servlet associated with
+              this Servlet Context Helper, this will be
+              returned.</para></entry>
             </row>
 
             <row>
@@ -736,8 +732,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <entry><para>3.0</para></entry>
 
               <entry><para>Returns a <code>SessionCookieConfig</code> object.
-                      This object is read-only and all setters throw a 
-                      <code>IllegalStateException</code>.</para></entry>
+              This object is read-only and all setters throw a
+              <code>IllegalStateException</code>.</para></entry>
             </row>
 
             <row>
@@ -875,13 +871,14 @@ public class CDNServletContextHelper extends ServletContextHelper {
             is, <code>HttpRequest.getSession()</code> calls must provide
             different sessions per associated
             <code>ServletContextHelper</code>. Http Sessions are defined in
-            chapter 7 of the <xref linkend="i21217577"/>.</para>
+            chapter 7 of the <xref
+            linkend="service.http.whiteboard-i21217577"/>.</para>
           </listitem>
         </orderedlist></para>
     </section>
   </section>
 
-  <section xml:id="service.http.common.properties">
+  <section xml:id="service.http.whiteboard.common.properties">
     <title>Common Whiteboard Properties</title>
 
     <para>Whiteboard servlet, servlet filter, resource and listener services
@@ -889,7 +886,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <code>ServletContextHelper</code> and/or a Http Whiteboard
     implementation.</para>
 
-    <table xml:id="service.http.whiteboard.common.properties">
+    <table xml:id="service.http.whiteboard.common.properties.table">
       <title>Common properties</title>
 
       <tgroup cols="3">
@@ -913,7 +910,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>osgi.http.whiteboard.context.select</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>An LDAP-style filter to select the associated <xref
             linkend="org.osgi.service.http.context.ServletContextHelper"
@@ -933,7 +930,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>osgi.http.whiteboard.target</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The value of this service property is an LDAP-style
             filter expression to select the Http Whiteboard implementation(s)
@@ -956,16 +953,17 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>If multiple Servlet Context Helper services match the
     <code>osgi.http.whiteboard.context.select</code> property the servlet,
-    filter, resource or listener will be registered with all these Servlet Context
-    Helpers. Servlets and filters need to be registered as Prototype Service Factory for this to happen,
-    otherwise these are only registered with the Servlet Context Helper with the highest
-    service ranking. In the case of a tie, the lowest service ID wins. In
-    other words, the normal service ranking rules apply.
-    Resource services and listeners do not need to be registered as Prototype Service Factory; these
-    are always registered with all matching Servlet Context Helpers.</para>
+    filter, resource or listener will be registered with all these Servlet
+    Context Helpers. Servlets and filters need to be registered as Prototype
+    Service Factory for this to happen, otherwise these are only registered
+    with the Servlet Context Helper with the highest service ranking. In the
+    case of a tie, the lowest service ID wins. In other words, the normal
+    service ranking rules apply. Resource services and listeners do not need
+    to be registered as Prototype Service Factory; these are always registered
+    with all matching Servlet Context Helpers.</para>
   </section>
 
-  <section xml:id="i21223311">
+  <section xml:id="service.http.whiteboard-i21223311">
     <title>Registering Servlets</title>
 
     <para>Servlets can be registered with the Http Whiteboard implementation
@@ -977,9 +975,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <code>osgi.http.whiteboard.servlet.pattern</code> service registration
     property. The pattern(s) define the URL context(s) that will trigger the
     servlet to handle the request. They are defined by the <xref
-    linkend="i21217577"/> in section 12.2, Specification of Mappings. Note
-    that these mapping rules are slightly different than those defined in the
-    <xref linkend="service.http"/>. The mapping rules are:</para>
+    linkend="service.http.whiteboard-i21217577"/> in section 12.2,
+    Specification of Mappings. Note that these mapping rules are slightly
+    different than those defined in the <xref linkend="service.http"/>. The
+    mapping rules are:</para>
 
     <itemizedlist>
       <listitem>
@@ -1020,35 +1019,30 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>All <code>Servlet</code> objects and resource registrations
     associated with a single Http Whiteboard implementation share the same
-    name-space. In case of overlapping registrations, the following rules are 
+    name-space. In case of overlapping registrations, the following rules are
     used to determine which servlet handles a given path.</para>
 
     <orderedlist>
       <listitem>
-        <para>
-          The servlet with the longest path takes precedence.
-        </para>
+        <para>The servlet with the longest path takes precedence.</para>
       </listitem>
 
       <listitem>
-        <para>
-          In the case of paths of equal length, service ranking rules are used to
-          select the servlet.
-        </para>
+        <para>In the case of paths of equal length, service ranking rules are
+        used to select the servlet.</para>
       </listitem>
     </orderedlist>
-    
-    <para>
-    The above rules can cause servlets that are already registered being unregistered 
-    if a better match arrives. This ensures a predictable
-    end result regardless of the order in which services are registered.</para>
-   
-    <para>With implementations that 
-    both implement this specification as well as the <xref linkend="service.http"/>  
-    situations can arise where a servlet is registered for the same
-    pattern with the Http Service as well as with the Http Whiteboard. In such cases 
-    the service registered with the Http Service wins and the Whiteboard service fails. 
-    The failing servlet is reflected in the failure DTOs.</para>
+
+    <para>The above rules can cause servlets that are already registered being
+    unregistered if a better match arrives. This ensures a predictable end
+    result regardless of the order in which services are registered.</para>
+
+    <para>With implementations that both implement this specification as well
+    as the <xref linkend="service.http"/> situations can arise where a servlet
+    is registered for the same pattern with the Http Service as well as with
+    the Http Whiteboard. In such cases the service registered with the Http
+    Service wins and the Whiteboard service fails. The failing servlet is
+    reflected in the failure DTOs.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
@@ -1062,7 +1056,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>The following table describes the properties that can be used by
     <code>Servlet</code>s registered as Whiteboard services. Additionally, the
     common properties listed in <xref
-    linkend="service.http.whiteboard.common.properties"
+    linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n"/> are supported.</para>
 
     <table>
@@ -1090,11 +1084,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet supports the
-                    asynchronous operation mode. Allowed values are <code>true</code> and <code>false</code>
-                    independent of case. Defaults to <code>false</code>. See <xref
+            asynchronous operation mode. Allowed values are <code>true</code>
+            and <code>false</code> independent of case. Defaults to
+            <code>false</code>. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1102,7 +1097,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;errorPage</code></para></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Register the servlet as an error page for the error
             code and/or exception specified; the value may be a fully
@@ -1118,7 +1113,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;name</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The name of the servlet. This name is used as the
             value of the
@@ -1132,7 +1127,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><code>String+</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Registration pattern(s) for the servlet. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN"
@@ -1142,15 +1137,14 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>servlet.init.*</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are provided as
             init parameters to the <code>javax.servlet.Servlet.init()</code>
-            method. The
-            <code>servlet.init.</code> prefix is removed from the parameter
-            name.</para> See <xref
+            method. The <code>servlet.init.</code> prefix is removed from the
+            parameter name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX"
-            xrefstyle="hyperlink"/>.</entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -1202,7 +1196,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>The following example code uses Declarative Services annotations to
     register a servlet</para>
 
-    <programlisting xml:id="i21223332">@Component(service = Servlet.class,
+    <programlisting xml:id="service.http.whiteboard-i21223332">@Component(service = Servlet.class,
     scope = ServiceScope.PROTOTYPE,
     property = {
         "osgi.http.whiteboard.servlet.pattern=/myservlet",
@@ -1257,10 +1251,10 @@ public class MyServlet extends HttpServlet {
       range.</para>
 
       <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and
-      <code>osgi.http.whiteboard.servlet.pattern</code> properties 
-      can be combined. If a single servlet registration has both these
-      registration properties it is considered both an ordinary servlet as well
-      as an error page.</para>
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties can be
+      combined. If a single servlet registration has both these registration
+      properties it is considered both an ordinary servlet as well as an error
+      page.</para>
 
       <para>Matching exceptions follows the exception hierarchy. First the
       most specific exception class - the actual class of the exception - is
@@ -1358,7 +1352,7 @@ public class AsyncServlet extends HttpServlet {
     services, by registering a <code>javax.servlet.Filter</code> instance in
     the Service Registry. The following table describes the supported service
     registration properties. In addition the common properties as described in
-    <xref linkend="service.http.whiteboard.common.properties"
+    <xref linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n"/> are supported.</para>
 
     <table>
@@ -1386,11 +1380,12 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><para><code>osgi.http.whiteboard.filter.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet filter supports
-                    asynchronous operation mode. Allowed values are <code>true</code> and <code>false</code>
-                    independent of case. Defaults to <code>false</code>. See <xref
+            asynchronous operation mode. Allowed values are <code>true</code>
+            and <code>false</code> independent of case. Defaults to
+            <code>false</code>. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1398,7 +1393,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><para><code>osgi.http.whiteboard.filter.«</code></para><para><code>&#160;dispatcher</code></para></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Select the dispatcher configuration when the servlet
             filter should be called. Allowed string values are
@@ -1412,7 +1407,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.name</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The name of a servlet filter. This name is used as
             the value of the <code>FilterConfig.getFilterName()</code> method
@@ -1425,7 +1420,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.pattern</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url path
             patterns. The format of the patterns is specified in the servlet
@@ -1437,7 +1432,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.regex</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url paths.
             The paths are specified as regular expressions following the
@@ -1450,7 +1445,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.servlet</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the referenced
             servlet(s) by name. See <xref
@@ -1461,25 +1456,24 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>filter.init.*</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are passed as
             init parameters to the <code>Filter.init()</code>method. The
             <code>filter.init.</code> prefix is removed from the parameter
-            name.</para> See <xref
+            name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX"
-            xrefstyle="hyperlink"/>.</entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
 
-    <para><emphasis>&#x2020;</emphasis> note that at least one of the following properties 
-        <emphasis>must</emphasis> be specified on <code>Filter</code> Whiteboard services:
-        <programlisting>    osgi.http.whiteboard.filter.pattern
+    <para><emphasis>†</emphasis> note that at least one of the following
+    properties <emphasis>must</emphasis> be specified on <code>Filter</code>
+    Whiteboard services: <programlisting>    osgi.http.whiteboard.filter.pattern
     osgi.http.whiteboard.filter.regex
-    osgi.http.whiteboard.filter.servlet</programlisting>
-    </para>
+    osgi.http.whiteboard.filter.servlet</programlisting></para>
 
     <para>Similar to servlets, <code>Filter</code> objects are initialized by
     a Http Whiteboard implementation when they are registered and bound to
@@ -1496,7 +1490,7 @@ public class AsyncServlet extends HttpServlet {
     servlet filter can be used with any Servlet Context Helper or Http
     Whiteboard implementation. To restrict a servlet filter to a single
     implementation or a specific Servlet Context Helper, the <xref
-    linkend="service.http.common.properties"/> can be used.</para>
+    linkend="service.http.whiteboard.common.properties"/> can be used.</para>
 
     <para>To deal with the dynamicity of the Whiteboard service lifecycle, it
     is recommended to implement a servlet filter as Prototype Service Factory
@@ -1559,7 +1553,7 @@ public class MyFilter implements Filter {
 
     <para>The following table describes the supported service registration
     properties. In addition the common properties as described in <xref
-    linkend="service.http.whiteboard.common.properties"
+    linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n"/> are supported.</para>
 
     <table>
@@ -1586,7 +1580,7 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;prefix</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The prefix used to map a requested resource to the
             bundle's entries. If the request's path info is not null, it is
@@ -1603,10 +1597,11 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><code>String+</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The servlet pattern(s) to be used to serve resources.
-            As defined by the <xref linkend="i21217577"/> in section 12.2
+            As defined by the <xref
+            linkend="service.http.whiteboard-i21217577"/> in section 12.2
             Specification of Mappings.</para> <para>See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
             xrefstyle="hyperlink"/>.</para></entry>
@@ -1646,15 +1641,13 @@ public class SomeResourceService {}</programlisting>
     For example, a custom Servlet Context Helper can serve resources from
     locations other than the current bundle.</para>
 
-    <para>
-    Resources and servlets registered with the same Http Whiteboard implementation
-    share a single URI namespace. This means that the value specified in
-    <code>osgi.http.whiteboard.resource.pattern</code> competes with
-    the <code>osgi.http.whiteboard.servlet.pattern</code> property specified on servlets.
-    If these values overlap, the rules as outlined in <xref
-    linkend="i21223311"/> are used to resolve conflicts,
-    where resource services are treated just like servlets.
-    </para>
+    <para>Resources and servlets registered with the same Http Whiteboard
+    implementation share a single URI namespace. This means that the value
+    specified in <code>osgi.http.whiteboard.resource.pattern</code> competes
+    with the <code>osgi.http.whiteboard.servlet.pattern</code> property
+    specified on servlets. If these values overlap, the rules as outlined in
+    <xref linkend="service.http.whiteboard-i21223311"/> are used to resolve
+    conflicts, where resource services are treated just like servlets.</para>
   </section>
 
   <section>
@@ -1695,26 +1688,24 @@ public class SomeResourceService {}</programlisting>
         <para><code>HttpSessionAttributeListener</code> - Receive
         notifications when Http Session attributes change.</para>
       </listitem>
-      
+
       <listitem>
-        <para><code>HttpSessionIdListener</code> - Receive notifications
-        when Http Session ID changes.</para>
+        <para><code>HttpSessionIdListener</code> - Receive notifications when
+        Http Session ID changes.</para>
       </listitem>
     </itemizedlist>
 
     <para>Events are sent to listeners in the Service Registry with the
-    <code>osgi.http.whiteboard.listener</code> property set to 
+    <code>osgi.http.whiteboard.listener</code> property set to
     <code>true</code>, independent of case. Listeners can be associated with a
     <code>ServletContextHelper</code> as described in <xref
-    linkend="service.http.common.properties"/>. Listeners not specifically
-    associated with a Servlet Context Helper will receive events relating to
-    the <emphasis>default</emphasis> instance.</para>
+    linkend="service.http.whiteboard.common.properties"/>. Listeners not
+    specifically associated with a Servlet Context Helper will receive events
+    relating to the <emphasis>default</emphasis> instance.</para>
 
-    <para>
-    Multiple listeners of the same type registered with a given Servlet Context Helper
-    are invoked in sequence, service ranking rules are used to detemine the order;
-    the highest ranked being invoked first.
-    </para>
+    <para>Multiple listeners of the same type registered with a given Servlet
+    Context Helper are invoked in sequence, service ranking rules are used to
+    detemine the order; the highest ranked being invoked first.</para>
 
     <table>
       <title>Service registration properties for listener services.</title>
@@ -1740,16 +1731,15 @@ public class SomeResourceService {}</programlisting>
           <row>
             <entry><para><code>osgi.http.whiteboard.listener</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>When set to <code>true</code> this listener service is handled by 
-                    the Http Whiteboard implementation. When not set or set to <code>false</code>
-                    the service is ignored.
-                    Any other value is invalid and will be reflected in a 
-                    <xref linkend="org.osgi.service.http.runtime.dto.FailedListenerDTO" xrefstyle="hyperlink"/>.
-                    Note this property is case independent.
-                    
-                    See <xref
+            <entry><para>When set to <code>true</code> this listener service
+            is handled by the Http Whiteboard implementation. When not set or
+            set to <code>false</code> the service is ignored. Any other value
+            is invalid and will be reflected in a <xref
+            linkend="org.osgi.service.http.runtime.dto.FailedListenerDTO"
+            xrefstyle="hyperlink"/>. Note this property is case independent.
+            See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1760,7 +1750,7 @@ public class SomeResourceService {}</programlisting>
     <para>An example listener that reports on client requests being
     initialized and destroyed is listed below:</para>
 
-<programlisting>@Component(property = "osgi.http.whiteboard.listener=true")
+    <programlisting>@Component(property = "osgi.http.whiteboard.listener=true")
 public class MyServletRequestListener implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent sre) {
         System.out.println("Request initialized for client: " + 
@@ -1774,7 +1764,7 @@ public class MyServletRequestListener implements ServletRequestListener {
 }</programlisting>
 
     <para>For more details on the behavior of the listeners see the <xref
-      linkend="i21217577"/>.</para>
+    linkend="service.http.whiteboard-i21217577"/>.</para>
   </section>
 
   <section>
@@ -1927,12 +1917,13 @@ public class MyServletRequestListener implements ServletRequestListener {
     linkend="org.osgi.service.http.runtime.dto.RuntimeDTO"
     xrefstyle="hyperlink"/> provides information on services that have been
     successfully registered as well as information about the Whiteboard
-    services that were not succesfully registered. Whiteboard services that have the 
-    required properties set but cannot be processed, are reflected in the Failure DTOs.
-    Whiteboard services of interfaces described in this specification that do not have 
-    the required properties set are ignored and not reflected in the failure DTOs.</para>
-    <para>The Runtime DTO can be
-    obtained using the <xref
+    services that were not succesfully registered. Whiteboard services that
+    have the required properties set but cannot be processed, are reflected in
+    the Failure DTOs. Whiteboard services of interfaces described in this
+    specification that do not have the required properties set are ignored and
+    not reflected in the failure DTOs.</para>
+
+    <para>The Runtime DTO can be obtained using the <xref
     linkend="org.osgi.service.http.runtime.HttpServiceRuntime.getRuntimeDTO--"
     xrefstyle="hyperlink"/> method. The Runtime DTO provided has the following
     structure:</para>
@@ -2003,9 +1994,9 @@ public class MyServletRequestListener implements ServletRequestListener {
       capability with name <code>osgi.http</code>. This capability can be used
       by provisioning tools and during resolution to ensure that a Http
       Whiteboard implementation is present to process the Whiteboard services
-      defined in this specification. The capability must also declare a uses constraint
-      for the Servlet and OSGi Http Whiteboard packages and provide the version of this
-      specification:</para>
+      defined in this specification. The capability must also declare a uses
+      constraint for the Servlet and OSGi Http Whiteboard packages and provide
+      the version of this specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.http";
@@ -2020,13 +2011,13 @@ public class MyServletRequestListener implements ServletRequestListener {
     <section>
       <title>osgi.contract Capability</title>
 
-      <para>The Http Whiteboard implementation should provide a capability in the
-      <link
+      <para>The Http Whiteboard implementation should provide a capability in
+      the <link
       linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
       namespace with name <code>JavaServlet</code> if it exports the
       <code>javax.servlet</code> and <code>javax.servlet.http</code> packages.
       See <xref
-      linkend="http.whiteboard-portable.java.contracts.ref"/>.</para>
+      linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
@@ -2087,11 +2078,12 @@ public class MyServletRequestListener implements ServletRequestListener {
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="i21231452"><title>HTTP 1.0 Specification
-      RFC-1945</title>http://www.ietf.org/rfc/rfc1945.txt, May
+      <bibliomixed xml:id="service.http.whiteboard-i21231452"><title>HTTP 1.0
+      Specification RFC-1945</title>http://www.ietf.org/rfc/rfc1945.txt, May
       1996</bibliomixed>
 
-      <bibliomixed xml:id="i21215926"><title>HTTP 1.1 Specifications RFCs
+      <bibliomixed xml:id="service.http.whiteboard-i21215926"><title>HTTP 1.1
+      Specifications RFCs
       7230-7235</title>https://tools.ietf.org/html/rfc7230,
       https://tools.ietf.org/html/rfc7231,
       https://tools.ietf.org/html/rfc7232,
@@ -2099,21 +2091,21 @@ public class MyServletRequestListener implements ServletRequestListener {
       https://tools.ietf.org/html/rfc7234,
       https://tools.ietf.org/html/rfc7235</bibliomixed>
 
-      <bibliomixed xml:id="i21217577"><title>Java Servlet 3.0
-      Specification</title>
+      <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
+      Servlet 3.0 Specification</title>
       https://jcp.org/aboutJava/communityprocess/final/jsr315/</bibliomixed>
 
       <bibliomixed
-      xml:id="http.whiteboard-portable.java.contracts.ref"><title>Portable
+      xml:id="service.http.whiteboard-portable.java.contracts.ref"><title>Portable
       Java Contract Definitions</title>
       http://www.osgi.org/Specifications/ReferenceContract</bibliomixed>
 
-      <bibliomixed xml:id="i21220308"><title>RFC 2617: HTTP Authentication:
-      Basic and Digest Access
+      <bibliomixed xml:id="service.http.whiteboard-i21220308"><title>RFC 2617:
+      HTTP Authentication: Basic and Digest Access
       Authentication</title>http://www.ietf.org/rfc/rfc2617.txt</bibliomixed>
 
       <bibliomixed
-      xml:id="http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
+      xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
