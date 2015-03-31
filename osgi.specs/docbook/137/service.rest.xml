@@ -1074,8 +1074,9 @@ framework/service/{serviceid}
    “options”:1
 }</programlisting>
 
+      <para>
 	  The options are used in start or stop calls. Valid options include, e.g., Bundle.START_TRANSIENT and Bundle.START_ACTIVATION_POLICY. 
-
+      </para>
       </section>
 
       <section>
