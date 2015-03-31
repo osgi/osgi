@@ -1450,13 +1450,12 @@ framework/service/{serviceid}
       capability with name <code>osgi.rest</code>. This capability can be used
       by provisioning tools and during resolution to ensure that a REST Management
       implementation is present to handle REST requests
-      defined in this specification. The capability must also declare uses constraints
-      on the <code>org.osgi.service.rest</code> and <code>org.osgi.service.rest.client</code>
-      packages defined in this specification:</para>
+      defined in this specification. The capability must also declare a uses constraint
+      on the <code>org.osgi.service.rest</code> package:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
   osgi.implementation="osgi.rest";
-  uses:="org.osgi.service.rest,org.osgi.service.rest.client";
+  uses:="org.osgi.service.rest";
   version:Version="1.0"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
@@ -1466,9 +1465,10 @@ framework/service/{serviceid}
     <section>
       <title>osgi.service Capability</title>
 
-      <para>The REST implementation provides the 
+      <para>A bundle providing the
           <xref linkend="org.osgi.service.rest.client.RestClientFactory" xrefstyle="hyperlink"/>
-       service. To inform tools about this service it must provide the
+          service as described by this specification must inform tools about this service
+          by providing the
       <link
         linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
     capability representing this service. 
