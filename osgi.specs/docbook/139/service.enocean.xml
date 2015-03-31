@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="139"
          revision="$Id$"
-         version="5" xml:id="enocean" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="service.enocean"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -11,7 +12,8 @@
   <title>EnOcean Device Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="rfc199-version">Version 1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.enocean-version"
+    linkend="org.osgi.service.enocean"/></releaseinfo>
   </info>
 
   <section>
@@ -28,7 +30,7 @@
     interoperate with EnOcean clients on the other hand. In particular, a Java
     mapping is provided for the standard representation of EnOcean devices
     called EnOcean Equipment Profile (EEPs) <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> .</para>
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> .</para>
 
     <para>The specification also describes the external API of an EnOcean Base
     Driver according to Device Access specification, the example made by
@@ -97,18 +99,19 @@
       <listitem>
         <para><emphasis>EnOcean Base Driver</emphasis> - The bundle that
         implements the bridge between OSGi and EnOcean networks (see <xref
-        linkend="rfc199_figure_id_20140603_11h12_46"/> ). It is responsible
-        for accessing the various EnOcean gateway chips on the execution
-        machine, and ensures the reception and translation of EnOcean messages
-        into proper objects. It is also used to send messages on the EnOcean
-        network, using whatever chip it deems most appropriate.</para>
+        linkend="service.enocean-figure_id_20140603_11h12_46"/> ). It is
+        responsible for accessing the various EnOcean gateway chips on the
+        execution machine, and ensures the reception and translation of
+        EnOcean messages into proper objects. It is also used to send messages
+        on the EnOcean network, using whatever chip it deems most
+        appropriate.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>EnOcean Host</emphasis> - The EnOceanHost object is a
         link between the software and the EnOcean network. It represents the
         chip configuration (gateway capabilities) described in <xref
-        linkend="rfc199_bibliomixed_id_20140602_17h03_46_9"/> . It is
+        linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/> . It is
         registered as an OSGi service.</para>
       </listitem>
 
@@ -125,10 +128,10 @@
         equipment is supposed to follow a “profile”, which is essentially the
         way the emitted data is encoded. In order to reflect this standard as
         it is defined in the <xref
-        linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> , manufacturers
-        are able to register the description of “Messages”, the essence of a
-        profile, along with their associated payload (as Channels). See
-        “EnOcean Channels” below for more information.</para>
+        linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> ,
+        manufacturers are able to register the description of “Messages”, the
+        essence of a profile, along with their associated payload (as
+        Channels). See “EnOcean Channels” below for more information.</para>
       </listitem>
 
       <listitem>
@@ -171,7 +174,7 @@
       </listitem>
     </itemizedlist>
 
-    <figure xml:id="rfc199_figure_id_20140603_11h12_46">
+    <figure xml:id="service.enocean-figure_id_20140603_11h12_46">
       <title>EnOcean Service Specification class diagram.</title>
 
       <mediaobject>
@@ -193,13 +196,13 @@
 
     <para>The EnOcean Base Driver is responsible for mapping external devices
     into EnOceanDevice objects, through the use of an EnOcean gateway <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h02_51_3"/> . The latter is
-    represented on OSGi framework as an object implementing EnOceanHost
-    interface. EnOcean “teach-in” messages will trigger this behaviour, this
-    is called a device import situation (see <xref
-    linkend="rfc199_figure_id_20140603_11h32_54"/> ).</para>
+    linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/> . The
+    latter is represented on OSGi framework as an object implementing
+    EnOceanHost interface. EnOcean “teach-in” messages will trigger this
+    behaviour, this is called a device import situation (see <xref
+    linkend="service.enocean-figure_id_20140603_11h32_54"/> ).</para>
 
-    <figure xml:id="rfc199_figure_id_20140603_11h32_54">
+    <figure xml:id="service.enocean-figure_id_20140603_11h32_54">
       <title>EnOcean device import.</title>
 
       <mediaobject>
@@ -213,14 +216,14 @@
 
     <para>Client bundles may also expose framework-internal (local)
     EnOceanDevice instances, registered within the framework (see <xref
-    linkend="rfc199_figure_id_20140603_11h43_01"/> ). The Base Driver then
-    should emulate those objects as EnOcean devices on the EnOcean network.
-    This is a device export situation, made possible by the use of the 127
-    virtual base IDs available on an EnOcean gateway. For more information
-    about this process, please report to the “Exporting an EnOcean device”
-    section below.</para>
+    linkend="service.enocean-figure_id_20140603_11h43_01"/> ). The Base Driver
+    then should emulate those objects as EnOcean devices on the EnOcean
+    network. This is a device export situation, made possible by the use of
+    the 127 virtual base IDs available on an EnOcean gateway. For more
+    information about this process, please report to the “Exporting an EnOcean
+    device” section below.</para>
 
-    <figure xml:id="rfc199_figure_id_20140603_11h43_01">
+    <figure xml:id="service.enocean-figure_id_20140603_11h43_01">
       <title>EnOcean device export.</title>
 
       <mediaobject>
@@ -243,7 +246,7 @@
     description that enables applications to retrieve information about
     supported RPCs, messages or channels that compose messages.</para>
 
-    <figure xml:id="rfc199_figure_id_20140603_11h53_00">
+    <figure xml:id="service.enocean-figure_id_20140603_11h53_00">
       <title>Using a set of message descriptions.</title>
 
       <mediaobject>
@@ -274,18 +277,19 @@
     layer of base drivers. The refinement driver is responsible for adapting
     technology-specific device services registered by the base driver into
     device services of another model (see AbstractDevice interface in <xref
-    linkend="rfc199_figure_id_20140603_14h51_11"/> ). In the case of a generic
-    device abstraction layer, the model is agnostic to technologies.</para>
+    linkend="service.enocean-figure_id_20140603_14h51_11"/> ). In the case of
+    a generic device abstraction layer, the model is agnostic to
+    technologies.</para>
 
     <para>The EnOcean Alliance defines their own abstract model with EnOcean
     Equipment Profiles and refinement drivers may provide the implementation
     of all EEPs with EnOcean specific Java interfaces. The AbstractDevice
-    interface of <xref linkend="rfc199_figure_id_20140603_14h51_11"/> is then
-    replaced by an EEP specific Java interface in that case. The need and the
-    choice of the abstraction depends on the targeted application
+    interface of <xref linkend="service.enocean-figure_id_20140603_14h51_11"/>
+    is then replaced by an EEP specific Java interface in that case. The need
+    and the choice of the abstraction depends on the targeted application
     domain.</para>
 
-    <figure xml:id="rfc199_figure_id_20140603_14h51_11">
+    <figure xml:id="service.enocean-figure_id_20140603_14h51_11">
       <title>EnOcean Base Driver and a refinement driver representing devices
       in an abstract model.</title>
 
@@ -359,10 +363,10 @@
 
       <para>The EnOceanDevice also keeps security features as defined in the
       EnOcean Security Draft <xref
-      linkend="rfc199_bibliomixed_id_20140602_17h03_46_9"/> , which allow for
-      a security level format (integer mask), an encryption key and/or a
-      rolling authentication code. See the Security Of EnOcean networks
-      section below.</para>
+      linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/> , which
+      allow for a security level format (integer mask), an encryption key
+      and/or a rolling authentication code. See the Security Of EnOcean
+      networks section below.</para>
 
       <para>The EnOceanDevice service MUST also be registered with
       org.osgi.service.device.Constants.DEVICE_CATEGORY property (see OSGi
@@ -455,14 +459,14 @@
 
     <para>EnOcean Messages are at the core of the EnOcean application layer as
     a whole and the EnOcean Equipment Profile specification <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> in particular. Every
-    exchange of information within EnOcean networks is done with a dedicated
-    message. The EnOceanMessage interface provides a set of getters. The
-    latter enables OSGi applications to get the information contained in the
-    payload of an EnOcean message and defined as data and optional data of the
-    EnOcean Serial Protocol Type 1 (RADIO) message (see Table 2 in Section
-    "1.6.1 Packet description" of <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h03_37_8"/> ).</para>
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> in
+    particular. Every exchange of information within EnOcean networks is done
+    with a dedicated message. The EnOceanMessage interface provides a set of
+    getters. The latter enables OSGi applications to get the information
+    contained in the payload of an EnOcean message and defined as data and
+    optional data of the EnOcean Serial Protocol Type 1 (RADIO) message (see
+    Table 2 in Section "1.6.1 Packet description" of <xref
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_37_8"/> ).</para>
 
     <para>This model enables reading both the EnOcean radio telegram data and
     the associated metadata that may be attached to it in a single object,
@@ -581,8 +585,8 @@
 
     <para>This ID, or channelID, is constituted of the “Shortcut” field of
     this channel from the EEP 2.5 Specification <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> and a number fixed
-    by the order of appearance of such a “Shortcut” in the
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> and a
+    number fixed by the order of appearance of such a “Shortcut” in the
     specification.</para>
 
     <para>This unique identifier links a Channel to an
@@ -604,7 +608,7 @@
     deserialization process from the raw bytes to a proper, physical
     unit-augmented, result.</para>
 
-    <figure xml:id="rfc199_figure_id_20140603_16h48_38">
+    <figure xml:id="service.enocean-figure_id_20140603_16h48_38">
       <title>EnOcean channel and EnOcean channel descriptions.</title>
 
       <mediaobject>
@@ -876,15 +880,13 @@
 
     <para>The Remote Procedure Calls, or RPCs - as defined by the EnOcean
     Remote Management specification <xref
-    linkend="rfc199_bibliomixed_id_20140602_17h03_19_6"/> - are not related to
-    any EnOcean Equipment Profile.</para>
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_19_6"/> - are not
+    related to any EnOcean Equipment Profile.</para>
 
-    <para>Note that EnOcean Remote Commissioning is detailed in an additional 
-    EnOcean document
-    <xref linkend="rfc199_bibliomixed_id_20150105_16h26_16_99"/>
-	.
-    </para>
-    
+    <para>Note that EnOcean Remote Commissioning is detailed in an additional
+    EnOcean document <xref
+    linkend="service.enocean-bibliomixed_id_20150105_16h26_16_99"/> .</para>
+
     <section>
       <title>EnOcean RPC</title>
 
@@ -927,7 +929,7 @@
       service registry. Thanks to the EnOcean Base Driver, the OSGi service
       availability in the registry mirrors EnOcean device availability on
       EnOcean network <xref
-      linkend="rfc199_bibliomixed_id_20140602_17h02_51_3"/> .</para>
+      linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/> .</para>
 
       <para>Thanks to service events, a bundle is able to track the addition,
       modification and removal of an EnOceanDevice service.</para>
@@ -1092,10 +1094,12 @@
 
   <section>
     <title>Security</title>
-    <para>It is recommended that <code>ServicePermission[EnOceanDevice|EnOceanHost, 
-        REGISTER|GET]</code> be used sparingly and only for bundles that are trusted.</para>
+
+    <para>It is recommended that
+    <code>ServicePermission[EnOceanDevice|EnOceanHost, REGISTER|GET]</code> be
+    used sparingly and only for bundles that are trusted.</para>
   </section>
-  
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.descriptions.xml"/>
@@ -1105,38 +1109,38 @@
 
     <bibliolist>
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h02_51_3"><title></title>Bottaro, A.,
-      Gérodolle, A., Lalanda, P., "Pervasive Service Composition in the Home
-      Network", 21st IEEE International Conference on Advanced Information
-      Networking and Applications (AINA-07), Niagara Falls, Canada, May
-      2007</bibliomixed>
+      xml:id="service.enocean-bibliomixed_id_20140602_17h02_51_3"><title/>Bottaro,
+      A., Gérodolle, A., Lalanda, P., "Pervasive Service Composition in the
+      Home Network", 21st IEEE International Conference on Advanced
+      Information Networking and Applications (AINA-07), Niagara Falls,
+      Canada, May 2007</bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h03_10_5"><title></title>"EnOcean 
-      Equipment Profiles v2.6.2", EnOcean Alliance, 
-      https://www.enocean-alliance.org/en/enocean_standard/, November 19, 2014
-      </bibliomixed>
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_10_5"><title/>"EnOcean
+      Equipment Profiles v2.6.2", EnOcean Alliance,
+      https://www.enocean-alliance.org/en/enocean_standard/, November 19,
+      2014</bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h03_19_6"><title></title>"EnOcean
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_19_6"><title/>"EnOcean
       System Specification - Remote Management v1.7", EnOcean Alliance,
       December 16, 2010</bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h03_37_8"><title></title>"EnOcean
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_37_8"><title/>"EnOcean
       System Specification - EnOcean Serial Protocol v1.17", EnOcean Alliance,
       August 2, 2011</bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h03_46_9"><title></title>"EnOcean
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_46_9"><title/>"EnOcean
       System Specification - Security of EnOcean Radio Networks v1.3", EnOcean
       Alliance, July 31, 2012</bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20150105_16h26_16_99"><title></title>"EnOcean
-      Remote Commissioning Summary v1.0", EnOcean Alliance, 
-      https://www.enocean-alliance.org/en/downloads/, December 01, 2014
-      </bibliomixed>  
+      xml:id="service.enocean-bibliomixed_id_20150105_16h26_16_99"><title/>"EnOcean
+      Remote Commissioning Summary v1.0", EnOcean Alliance,
+      https://www.enocean-alliance.org/en/downloads/, December 01,
+      2014</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
