@@ -703,4 +703,24 @@ Import-Package:
       Chapter 3, Common Header Syntax</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified osgi.extender namespace and added a section on the
+        relationship with framework hooks.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified osgi.contract namespace and examples.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref
+        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>
