@@ -41,7 +41,10 @@ REST JavaScript Client API Version 1.0
     <para><emphasis>Note:</emphasis>
     some datatypes in Web IDL have slightly different names than commonly used in languages like Java or JavaScript. For example 
     a <code>String</code> is called <code>DOMString</code> and the equivalent of a Java <code>long</code> is called 
-    <code>long long</code>. For more information see the Web IDL specification.
+    <code>long long</code>. Additionally, when a representation as defined in this specification is passed to one of 
+    the JavaScript client APIs this representation is provided as a JavaScript object. Following the recommendations 
+    for mapping these to Web IDL, these JavaScript Object parameters are described using the <code>dictionary</code>
+    data type. For more information see the Web IDL specification.
     </para>
   </section>
   
