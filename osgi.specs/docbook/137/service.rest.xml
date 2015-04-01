@@ -328,33 +328,6 @@ framework/service/{serviceid}
             negative.</para>
           </listitem>
         </itemizedlist>
-
-        <remark>Maybe include the representations here, might be a little more
-        convenient than having them separate in a different location?</remark>
-      </section>
-
-      <section>
-        <title>JSON representation</title>
-
-        <para><code>Content-Type:
-        application/org.osgi.frameworkstartlevel+json</code></para>
-
-        <programlisting>{
-    "startLevel":6,
-    "initialBundleStartLevel":4
-}</programlisting>
-      </section>
-
-      <section>
-        <title>XML representation</title>
-
-        <para><code>Content-Type:
-        application/org.osgi.frameworkstartlevel+xml</code></para>
-
-        <programlisting>&lt;frameworkStartLevel&gt;
-    &lt;startLevel&gt;6&lt;/startLevel&gt;
-    &lt;initialBundleStartLevel&gt;4&lt;/initialBundleStartLevel&gt;
-&lt;/frameworkStartLevel&gt;</programlisting>
       </section>
     </section>
 
@@ -410,9 +383,9 @@ framework/service/{serviceid}
         timestamp. A detected collision is indicated to the requesting clients
         through an error code 409.</para>
 
-        <para>The response for the POST request is a local URI denoting path
-        of the newly installed bundle relative to the REST management service
-        root URL. The request can return the following status codes:</para>
+        <para>The body of the response is <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the newly installed bundle.  The following status codes can be returned:</para>
 
         <itemizedlist>
           <listitem>
@@ -451,9 +424,9 @@ framework/service/{serviceid}
         service implementations must generate a unique location string in
         order to avoid unintended collisions between unrelated bundles.</para>
 
-        <para>The response for the POST request is a local URI denoting path
-        of the newly installed bundle relative to the REST management service
-        root URL. The request can return the following status codes:</para>
+        <para>The body of the response is <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the newly installed bundle. The following status codes can be returned:</para>
 
         <itemizedlist>
           <listitem>
@@ -558,8 +531,11 @@ framework/service/{serviceid}
         given it must point to a location reachable by the managed framework.
         If no location string is passed as the body of the request, the
         framework will perform an update based on the existing bundle's
-        location string. The request can return the following status
-        codes:</para>
+        location string.</para>
+
+        <para>The body of the response is <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the updated bundle.  The following status codes can be returned:</para>
 
         <itemizedlist>
           <listitem>
@@ -590,8 +566,12 @@ framework/service/{serviceid}
         set to application/vnd.osgi.bundle which must be supported by all REST management
         services. Implementations are free to accept other media types for
         this request with the exception of text/plain. For instance, they can
-        opt to additionally support application/zip or application/x-jar. The
-        request can return the following status codes:</para>
+        opt to additionally support application/zip or application/x-jar.
+        </para>
+       
+        <para>The body of the response is <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the updated bundle.  The following status codes can be returned:</para>
 
         <itemizedlist>
           <listitem>
@@ -617,8 +597,11 @@ framework/service/{serviceid}
       <section>
         <title>DELETE</title>
 
-        <para>The DELETE request uninstalls the bundle from the framework. The
-        request can return the following status codes:</para>
+        <para>The DELETE request uninstalls the bundle from the framework.</para>
+        <para>The body of the response is <xref
+            linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the uninstalled bundle, where the bundle state will be UNINSTALLED. 
+        The following status codes can be returned:</para>
 
         <itemizedlist>
           <listitem>
