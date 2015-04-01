@@ -215,8 +215,8 @@ Get all services URIs.
       <formalpara role="parameter">
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
-        the <code>success()</code> callback is invoked with the URI path of the newly installed
-        Bundle as a <code>DOMString</code>. This parameter is optional.</para>
+        the <code>success()</code> callback is invoked with the Bundle representation of the newly installed
+        Bundle. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Install a bundle from a URI or by value.
@@ -366,8 +366,9 @@ Change the Framework Start Level and/or initial bundle start level.
       </formalpara>
       <formalpara role="parameter">
         <title>cb</title> 
-        <para>The callbacks invoked on completion of the remote invocation. 
-        This parameter is optional.</para>
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle representation of the uninstalled
+        Bundle. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Uninstall a bundle.
@@ -386,8 +387,9 @@ Uninstall a bundle.
       </formalpara>
       <formalpara role="parameter">
         <title>cb</title> 
-        <para>The callbacks invoked on completion of the remote invocation. 
-        This parameter is optional.</para>
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle representation of the updated
+        Bundle. This parameter is optional.</para>
       </formalpara>
       <para role="description">
 Update a bundle from a URI or by value.
