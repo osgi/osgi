@@ -184,11 +184,11 @@
       <code>ServletContextHelper</code> services.</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.5*"/>
+        <colspec colnum="1" colwidth="2.2*"/>
 
-        <colspec colnum="2" colwidth="0.7*"/>
+        <colspec colnum="2" colwidth="0.6*"/>
 
-        <colspec colnum="3" colwidth="3.3*"/>
+        <colspec colnum="3" colwidth="3.5*"/>
 
         <thead>
           <row>
@@ -202,7 +202,7 @@
 
         <tbody>
           <row>
-            <entry><code>osgi.http.whiteboard.context.name</code></entry>
+            <entry><para><code>osgi.http.whiteboard.context.«</code></para><para><code>&#160;name</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
@@ -225,7 +225,7 @@
           </row>
 
           <row>
-            <entry><code>osgi.http.whiteboard.context.path</code></entry>
+            <entry><para><code>osgi.http.whiteboard.context.«</code></para><para><code>&#160;path</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
