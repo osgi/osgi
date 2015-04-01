@@ -692,7 +692,8 @@ framework/service/{serviceid}
 
           <listitem>
             <para>402 (PRECONDITION FAILED): the requested target state is not
-            reachable from the current bundle state.</para>
+                reachable from the current bundle state or is not a target
+                state. An example such state is the STOPPING state.</para>
           </listitem>
 
           <listitem>
@@ -723,7 +724,7 @@ framework/service/{serviceid}
         <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.header.representation"
         xrefstyle="template:%t"/> from the REST management service. 
-        The default locale is used unless an Accept-Language header is set on the http request.
+        The raw header value is used unless an Accept-Language header is set on the http request.
         If multiple accepted languages are set only the first is used to localize the header. 
         The request can return the following status codes:</para>
 
@@ -787,7 +788,8 @@ framework/service/{serviceid}
         <para>The PUT request sets the target bundle startlevel. The body of
         the request needs to be a <xref
         linkend="service.rest-bundle.startlevel.representation"
-        xrefstyle="template:%t"/>. The request can return the following status
+        xrefstyle="template:%t"/>, however only the <code>startLevel</code>
+        property is used. The request can return the following status
         codes:</para>
 
         <itemizedlist>
@@ -826,7 +828,7 @@ framework/service/{serviceid}
     <section>
       <title>Services Resource</title>
 
-	  <para><code>framework/services</code></para>
+      <para><code>framework/services</code></para>
 
       <para>The services resource represents the set of all services available
       on the framework, optionally constrained by a filter expression. It is
@@ -1166,7 +1168,7 @@ framework/service/{serviceid}
 
         <programlisting>{
    "id":10,
-   properties:
+   "properties":
    {
       key:value,
       key:value,
