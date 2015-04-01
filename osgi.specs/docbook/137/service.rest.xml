@@ -257,8 +257,8 @@ framework/service/{serviceid}
       variants of representations must return the best matching variant based
       on the HTTP accept header. In addition, they must respect the file
       extensions defined for the different media types as specified in the
-      respective IETF RFC (e.g., “.xml” as specified in IETF RFC 3032 and
-      “.json” as specified in IETF RFC 4627). If a file extension is appended
+      respective IETF RFC (e.g., ".xml" as specified in IETF RFC 3032 and
+      ".json" as specified in IETF RFC 4627). If a file extension is appended
       to the resource, an implementation must return the variant mandated by
       the file extension provided that it supports this content type.</para>
     </section>
@@ -1014,7 +1014,9 @@ framework/service/{serviceid}
           <para><code>Content-Type:
           application/org.osgi.bundles.representations+json</code></para>
 
-          <programlisting>[BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, …, BUNDLE REPRESENTATION]</programlisting>
+          <programlisting>{
+    [BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, ..., BUNDLE REPRESENTATION]
+}</programlisting>
         </section>
 
         <section>
@@ -1044,7 +1046,7 @@ framework/service/{serviceid}
 
         <programlisting>{
    "state":32
-   “options”:1
+   "options":1
 }</programlisting>
 
       <para>
@@ -1137,8 +1139,8 @@ framework/service/{serviceid}
         <programlisting>{
    "startLevel":6
 
-   “activationPolicyUsed”:true
-   “persistentlyStarted”:false
+   "activationPolicyUsed":true
+   "persistentlyStarted":false
 }</programlisting>
       </section>
 
@@ -1170,14 +1172,21 @@ framework/service/{serviceid}
    "id":10,
    "properties":
    {
-      key:value,
-      key:value,
+      "prop1":"val1",
+      "prop2":2.82,
       ...
-      key:value
+      "prop3":true
    },
    "bundle":bundleURI,
-   "usingBundles":[bundleURI, bundleURI, … bundleURI],
+   "usingBundles":[bundleURI, bundleURI, ... bundleURI]
 }</programlisting>
+
+      <para>
+          <emphasis>Note:</emphasis> service properties are converted to JSON-supported data 
+          types where possible: <code>"string"</code>, number or boolean <code>(true|false)</code>. 
+          If there is no conversion to JSON datatypes is possible the <code>toString()</code> 
+          result is used as a string value.
+</para>
       </section>
 
       <section>
@@ -1189,10 +1198,10 @@ framework/service/{serviceid}
         <programlisting>&lt;service&gt;
    &lt;id&gt;10&lt;/id&gt;
    &lt;properties&gt;
-      &lt;entry key=”key” value=”value”/&gt;
-      &lt;entry key=”key” value=”value”/&gt;
+      &lt;property name="prop1" value="val1"/&gt;
+      &lt;property name="prop2" type="Float" value="2.82"/&gt;
       ...
-      &lt;entry key=”key” value=”value”/&gt;
+      &lt;property name="prop3" type="Boolean" value="true"/&gt;
    &lt;/properties&gt;
    &lt;bundle&gt;bundleURI&lt;/bundle&gt;
    &lt;usingBundles&gt;
@@ -1202,6 +1211,15 @@ framework/service/{serviceid}
       &lt;bundle&gt;bundleURI&lt;/bundle&gt;
    &lt;/usingBundles&gt;
 &lt;/service&gt;</programlisting>
+
+      <para>
+          <emphasis>Note:</emphasis> service properties are represented using the same method
+          as used for the <code>property</code> XML element in the Declarative Services 
+          specification, see <xref linkend="service.component-property.properties.elements"/>. 
+          Service properties that cannot be represented using the supported data types, will 
+          be represented as String values obtained via the <code>toString()</code> method.
+      </para>
+
       </section>
     </section>
 
@@ -1246,7 +1264,7 @@ framework/service/{serviceid}
           <para><code>Content-Type:
           org.osgi.services.representations+json</code></para>
 
-          <programlisting>[SERVICE REPRESENTATION, SERVICE REPRESENTATION, …, SERVICE REPRESENTATION]</programlisting>
+          <programlisting>[SERVICE REPRESENTATION, SERVICE REPRESENTATION, ..., SERVICE REPRESENTATION]</programlisting>
         </section>
 
         <section>
@@ -1275,8 +1293,8 @@ framework/service/{serviceid}
         application/org.osgi.bundleexception+json</code></para>
 
         <programlisting>{
-   “typecode”: 5,
-   “message”: “BundleException: Bundle activation error”
+   "typecode": 5,
+   "message": "BundleException: Bundle activation error"
 }</programlisting>
       </section>
 
@@ -1379,7 +1397,7 @@ framework/service/{serviceid}
 
         <programlisting>{ 
    [ { "name" : "org.osgi.service.event", "path" : "extensions/eventadmin", 
-       "service" : 12 }, … ]
+       "service" : 12 }, ... ]
 }</programlisting>
       </section>
 
