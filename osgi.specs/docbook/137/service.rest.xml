@@ -217,8 +217,8 @@ framework/service/{serviceid}
       <code>services</code>, and <code>services/representations</code>
       resources allow the use of a query parameter which specifies a filter to
       restrict the result set. The filter expression follows the Core
-      Specifications Framework Filter
-      Syntax<citation>CoreFilter</citation>.</para>
+      Specifications <emphasis>Framework Filter Syntax</emphasis> 
+      <citation>CoreFilter</citation>.</para>
 
       <para>Filters on services are matched against the service attributes.
       The query parameter is of the form:</para>
@@ -231,18 +231,21 @@ framework/service/{serviceid}
 
       <para><code>framework/bundles?namespace1=ldap-filter1&amp;namespace2=ldap-filter2&amp;...</code></para>
 
-      <para>When multiple filter expression are given, the filters are combined with AND operators so that results must match all filters. 
-            A missing namespace declaration (e.g., <code>framework/bundles?namespace1=ldap-filter</code>) implies the IdentityNamespace
-      (<code>osgi.identity</code>).</para>
+      <para>If multiple capabilities for a given namespace are present,
+      then a filter succeeds when one of these capabilities matches.
+      
+      When multiple filter expressions across namespaces are given, these are combined with the <emphasis>and</emphasis> operator.
+    </para>
     </section>
 
     <section>
       <title>Content Type Matching</title>
 
       <para>Resources can present themselves through different representation
-      variants. For instance, an implementation of the REST Management Service
-      could support both a JSON representation and an XML representation of
-      the same resource. Matching the clients capabilities to understand
+      variants. An implementation of this specification must support at least
+      the JSON representation and the XML representation of resources.
+      Clients can support a subset of representations.
+      Matching the clients capabilities to understand
       certain representation formats with the servers supported formats
       follows the typical HTTP pattern of content negotiation and requires the
       client to set corresponding HTTP Accept headers for supported formats in
@@ -258,21 +261,6 @@ framework/service/{serviceid}
       “.json” as specified in IETF RFC 4627). If a file extension is appended
       to the resource, an implementation must return the variant mandated by
       the file extension provided that it supports this content type.</para>
-    </section>
-
-    <section>
-      <title>Versioning and Interoperability</title>
-
-      <para>All representations described in this specification have version
-      1. Future versions of the representations must contain the version
-      number in their content type (e.g.,
-      <emphasis>application/org.osgi.bundlesV2</emphasis>) to allow legacy
-      clients to explicitly request an older version of the representation by
-      setting their accept header accordingly.</para>
-
-      <para>Clients must understand all attributes described in this documents
-      and may ignore any further attribute that a specific implementation of
-      the REST Management Service might add.</para>
     </section>
   </section>
 
