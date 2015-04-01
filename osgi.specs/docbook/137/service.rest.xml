@@ -1313,6 +1313,12 @@ framework/service/{serviceid}
   </section>
 
   <section>
+      <title>REST Management Clients</title>
+      <para>TODO</para>
+      <remark>TODO</remark>
+  </section>
+
+  <section>
     <title>Extending the REST Management Service</title>
 
     <para>This specification describes a REST-based management interface for
