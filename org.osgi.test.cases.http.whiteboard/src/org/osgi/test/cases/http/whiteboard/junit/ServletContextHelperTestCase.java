@@ -83,7 +83,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
 			Assert.assertEquals(
-					DTOConstants.FAILURE_REASON_SERVLET_CONTEXT_FAILURE, failedServletContextDTO.failureReason);
+					DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedServletContextDTO.failureReason);
 		}
 	}
 
