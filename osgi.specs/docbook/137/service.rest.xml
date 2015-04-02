@@ -1366,6 +1366,7 @@ restClient.startBundle(newBundle.id);</programlisting>
               <programlisting>var client = new OsgiRestClient('http://localhost:8080/restendpoint');
 client.installBundle({
   success : function(res) {
+    // Start the bundle once the install has finished
     client.startBundle(res.id);
   },
   failure : function(httpCode, res) {
