@@ -1011,31 +1011,21 @@ public class CDNServletContextHelper extends ServletContextHelper {
       </listitem>
     </itemizedlist>
 
+    <para><code>Servlet</code> and resource service registrations
+    associated with a single Http Whiteboard implementation share the same
+    name-space. In case of identical registration patterns, service ranking
+    rules are used to select the service handling a request.
+    </para>
+
+    <para>The above rules can cause servlets that are already registered being
+    unregistered if a better match arrives. This ensures a predictable end
+    result regardless of the order in which services are registered.</para>
+
     <para>A servlet may be registered with the property
     <code>osgi.http.whiteboard.servlet.name</code> which can be used by
     servlet filters to address this servlet. If the servlet service does not
     have this property, the servlet name defaults to the fully qualified class
     name of the service object.</para>
-
-    <para>All <code>Servlet</code> objects and resource registrations
-    associated with a single Http Whiteboard implementation share the same
-    name-space. In case of overlapping registrations, the following rules are
-    used to determine which servlet handles a given path.</para>
-
-    <orderedlist>
-      <listitem>
-        <para>The servlet with the longest path takes precedence.</para>
-      </listitem>
-
-      <listitem>
-        <para>In the case of paths of equal length, service ranking rules are
-        used to select the servlet.</para>
-      </listitem>
-    </orderedlist>
-
-    <para>The above rules can cause servlets that are already registered being
-    unregistered if a better match arrives. This ensures a predictable end
-    result regardless of the order in which services are registered.</para>
 
     <para>With implementations that both implement this specification as well
     as the <xref linkend="service.http"/> situations can arise where a servlet
@@ -1250,9 +1240,10 @@ public class MyServlet extends HttpServlet {
       special value <code>5xx</code> means every error code in the 500-599
       range.</para>
 
-      <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and
-      <code>osgi.http.whiteboard.servlet.pattern</code> properties can be
-      combined. If a single servlet registration has both these registration
+      <para>While not being common practise, it is possible to combine the 
+      <code>osgi.http.whiteboard.servlet.errorPage</code> and
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties.
+      If a single servlet registration has both these registration
       properties it is considered both an ordinary servlet as well as an error
       page.</para>
 
@@ -1588,7 +1579,7 @@ public class MyFilter implements Filter {
             <xref
             linkend="org.osgi.service.http.context.ServletContextHelper.getResource-String-"
             xrefstyle="hyperlink"/> method of the associated Servlet Context
-            Helper. </para> <para>This property marks a service as a resouce
+            Helper. </para> <para>This property marks a service as a resource
             service. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX"
             xrefstyle="hyperlink"/>.</para></entry>
@@ -1599,7 +1590,7 @@ public class MyFilter implements Filter {
 
             <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>The servlet pattern(s) to be used to serve resources.
+            <entry><para>The pattern(s) to be used to serve resources.
             As defined by the <xref
             linkend="service.http.whiteboard-i21217577"/> in section 12.2
             Specification of Mappings.</para> <para>See <xref
@@ -1641,6 +1632,8 @@ public class SomeResourceService {}</programlisting>
     For example, a custom Servlet Context Helper can serve resources from
     locations other than the current bundle.</para>
 
+    <section>
+    <title>Overlapping Resource and Servlet registrations</title>
     <para>Resources and servlets registered with the same Http Whiteboard
     implementation share a single URI namespace. This means that the value
     specified in <code>osgi.http.whiteboard.resource.pattern</code> competes
@@ -1648,6 +1641,7 @@ public class SomeResourceService {}</programlisting>
     specified on servlets. If these values overlap, the rules as outlined in
     <xref linkend="service.http.whiteboard-i21223311"/> are used to resolve
     conflicts, where resource services are treated just like servlets.</para>
+    </section>
   </section>
 
   <section>
@@ -1705,7 +1699,7 @@ public class SomeResourceService {}</programlisting>
 
     <para>Multiple listeners of the same type registered with a given Servlet
     Context Helper are invoked in sequence, service ranking rules are used to
-    detemine the order; the highest ranked being invoked first.</para>
+    determine the order.</para>
 
     <table>
       <title>Service registration properties for listener services.</title>
@@ -2092,8 +2086,8 @@ public class MyServletRequestListener implements ServletRequestListener {
       https://tools.ietf.org/html/rfc7235</bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
-      Servlet 3.0 Specification</title>
-      https://jcp.org/aboutJava/communityprocess/final/jsr315/</bibliomixed>
+      Servlet 3.1 Specification</title>
+      https://jcp.org/aboutJava/communityprocess/final/jsr340/</bibliomixed>
 
       <bibliomixed
       xml:id="service.http.whiteboard-portable.java.contracts.ref"><title>Portable
