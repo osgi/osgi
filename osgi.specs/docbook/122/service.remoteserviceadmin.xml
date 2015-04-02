@@ -2362,14 +2362,19 @@ xml                    ::= &lt;*&gt; *</programlisting>
       framework.</para>
 
       <para>Implementations of this specification must provide this extender
-      capability as follows:</para>
+      capability at version 1.0 as follows:</para>
 
       <programlisting>Provide-Capability: osgi.extender;
     osgi.extender="osgi.remoteserviceadmin.localdiscovery";
     version:Version="1.0";
     uses:="org.osgi.service.remoteserviceadmin"</programlisting>
+    
+      <para>The reason that the extender capability is declared at version 
+      1.0 is because the extender is unchanged from version 1.0 of this
+      specification.
+      </para>
     </section>
-
+    
     <section>
       <title>Discovery Provider Capability</title>
 
@@ -2890,6 +2895,11 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <listitem>
         <para>Removed text around setting of Framework UUID property (not
         needed for Core Frameworks version 4.3 or newer).</para>
+      </listitem>
+      
+      <listitem>
+        <para>Clarified the rules concerning Remote Service Endpoint identifier
+        uniqueness.</para>
       </listitem>
     </itemizedlist>
   </section>
