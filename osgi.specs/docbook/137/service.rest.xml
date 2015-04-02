@@ -1338,7 +1338,7 @@ RestClient restClient = restClientFactory.createRestClient(
 
 // Now we can start interacting
 Collection&lt;String&gt; bundles = restClient.getBundles();
-BundleDTO newBundle = restClient.installBundle(bundleURI, bundleStream);
+BundleDTO newBundle = restClient.installBundle(bundleLocation, bundleStream);
 restClient.startBundle(newBundle.id);</programlisting>
           </para>
 
@@ -1350,8 +1350,34 @@ restClient.startBundle(newBundle.id);</programlisting>
 
       <section>
           <title>JavaScript Client</title>
-          <para>...</para>
-      <remark>TODO</remark>
+          <para>This specification also describes a JavaScript client to the REST Management service.
+              This client makes it easy to manage an OSGi framework from any JavaScript environment.
+          </para>
+
+          <para>The JavaScript client follows the promises <emphasis>programming</emphasis> style; the request is made 
+              asynchronously and a <code>success()</code> or <code>failure()</code> callback is made
+              when the response arrives.
+          </para>
+
+          <para>
+              To use the JavaScript client create an instance of <code>OSGiRestClient</code> 
+              providing the root URL of the REST service.
+
+              <programlisting>var client = new OsgiRestClient('http://localhost:8080/restendpoint');
+client.installBundle({
+  success : function(res) {
+    client.startBundle(res.id);
+  },
+  failure : function(httpCode, res) {
+    // handle failure
+  }
+});</programlisting>
+          </para>
+
+          <para>
+              The more details on the JavaScript Client can be found in the
+              <xref linkend="service.rest-javascript.api" xrefstyle="hyperlink"/> API documentation section.
+          </para>
       </section>
   </section>
 
