@@ -1313,9 +1313,46 @@ framework/service/{serviceid}
   </section>
 
   <section>
-      <title>REST Management Clients</title>
-      <para>TODO</para>
+      <title>Clients</title>
+      <para>The REST service can be used by a variety of clients directly. In addition
+          this specification describes Client APIs built over this REST protocol to facilitate
+          the use from Java and JavaScript clients.
+      </para>
+
+      <section>
+          <title>Java Client</title>
+
+          <para>
+              The Java Client provides a Java API over the REST API providing a convenient and
+              portable way to use this API from a Java client application.
+          </para>
+          
+          <para>
+              To use the Java Client, obtain the 
+              <xref linkend="org.osgi.service.rest.client.RestClientFactory" xrefstyle="hyperlink"/>
+              service. Create a client by providing the root URL of the REST service.
+
+              <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
+RestClient restClient = restClientFactory.createRestClient(
+    new URI("http://localhost:8080/restendpoint"));
+
+// Now we can start interacting
+Collection&lt;String&gt; bundles = restClient.getBundles();
+BundleDTO newBundle = restClient.installBundle(bundleURI, bundleStream);
+restClient.startBundle(newBundle.id);</programlisting>
+          </para>
+
+          <para>
+              The more details on the Java Client can be found in the
+              <xref linkend="org.osgi.service.rest.client" xrefstyle="hyperlink"/> API documentation section.
+          </para>
+      </section>
+
+      <section>
+          <title>JavaScript Client</title>
+          <para>...</para>
       <remark>TODO</remark>
+      </section>
   </section>
 
   <section>
