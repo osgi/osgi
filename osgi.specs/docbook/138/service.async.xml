@@ -260,7 +260,7 @@ public synchronized void doStuff() {
 
       <para>If the client knows that no Promise object representing the result
       of the asynchronous task is needed then it can signal this to the Async
-      service. This allows the Async service to better optimise the async
+      service. This allows the Async service to better optimize the async
       invocation by not providing a result.</para>
 
       <para>To indicate that the client wants to make a fire-and-forget style
@@ -298,7 +298,7 @@ public synchronized void doStuff() {
       <para>Note that the <code>execute()</code> method does still return a
       <code>Promise</code>. This Promise is not the same as the ones returned
       by <code>call()</code>, its resolution value does not provide access to
-      the result, but instead indicates whether the fire-and forget call could
+      the result, but instead indicates whether the fire-and-forget call could
       be successfully started. If there is a failure which prevents the task
       from being executed then this is used to fail the returned
       promise.</para>
@@ -307,7 +307,7 @@ public synchronized void doStuff() {
     <section>
       <title>Multi Threading</title>
 
-      <para>By their very definition asychronous tasks do not run inline, and
+      <para>By their very definition asynchronous tasks do not run inline, and
       typically they will not run on the same thread as the caller. This is
       not, however, a guarantee. A valid implementation of the Async service
       may have only one worker thread, which may be the thread currently
@@ -381,7 +381,7 @@ public synchronized void doStuff() {
       started correctly by the client, but then fail without running the
       asynchronous task. In any of these cases the Promise representing the
       async invocation must fail with a Service Exception. This service
-      exception must be initialised with a type of <code>ASYNC_ERROR</code>.
+      exception must be initialized with a type of <code>ASYNC_ERROR</code>.
       If there is no promise representing the async invocation then there is
       no way to notify the client of the failure, therefore the service
       exception must be logged by the Async service using all available Log
@@ -470,7 +470,7 @@ public synchronized void doStuff() {
     or from a service object. The actions and overall result are similar for
     both <code>mediate(...)</code> methods, with the primary difference being
     that mediated objects created from a <code>ServiceReference</code> will
-    validate whether the service object is still available immdiately before
+    validate whether the service object is still available immediately before
     the asynchronous task is executed.</para>
 
     <section>
@@ -485,7 +485,7 @@ public synchronized void doStuff() {
       <para>When building a mediator object the Async service has the
       opportunity to detect numerous problems, for example if the service
       reference to be mediated has been unregistered. Although fail-fast
-      behaviour is usually preferable, in this case it would force the client
+      behavior is usually preferable, in this case it would force the client
       to handle errors in two places; both when creating the mediator, and for
       the returned Promise. To simplify client usage, error cases detected
       when creating a mediator must not prevent the mediator from being
@@ -519,17 +519,17 @@ public synchronized void doStuff() {
     </section>
 
     <section>
-      <title>Async mediator behaviours</title>
+      <title>Async mediator behaviors</title>
 
-      <para>When invoked the Async mediator must record the method call, and
-      its arguments, and then return rapidly (i.e. it should not perform
-      blocking operations). The values returned by the mediator object are
+      <para>When invoked, the Async mediator must record the method call, and
+      its arguments, and then return rapidly and should avoid performing
+      blocking operations. The values returned by the mediator object are
       opaque, and the client should not attempt to interpret the returned
       value. The value may be null (or null-like in the case of primitives) or
       contain implementation specific information. If the mediated method call
       has a return type, specifically it is non-void, then this object must be
-      passed to the the async service's <code>call</code> method when
-      beginning the async invocation</para>
+      passed to the async service's <code>call</code> method when beginning
+      the async invocation</para>
 
       <para>Async mediators should make a best-effort attempt to detect
       incorrect API usage from the client. If this incorrect usage is detected
@@ -547,7 +547,7 @@ public synchronized void doStuff() {
       <title>Thread safety and instance sharing</title>
 
       <para>Async mediators, like instances of the Async service, are required
-      to be thread safe. Clients may therefore share mediator objects accross
+      to be thread safe. Clients may therefore share mediator objects across
       threads, and can safely store them as instance fields. Whilst mediators
       are thread safe, if a client wishes to make an async invocation then the
       call to the mediator and the call to <code>async.call(...)</code> must
@@ -576,8 +576,8 @@ public synchronized void doStuff() {
     <code>execute()</code> method, which behaves similarly to
     <code>call()</code>, but does not provide access to the eventual result.
     Instead the <code>execute()</code> method returns a <code>Promise</code>
-    that indicates whether the fire-and forget call is able to be be
-    successfully started.</para>
+    that indicates whether the fire-and-forget call is able to be successfully
+    started.</para>
 
     <para>The returned Promise must be resolved with <code>null</code> if the
     asynchronous task begins executing successfully. There is no
@@ -611,7 +611,7 @@ public synchronized void doStuff() {
     can be used by the Async service implementation, or by the client
     directly, to make an asynchronous call on the service.</para>
 
-    <para>Because the Async Delegate behaviour is transparently handled by the
+    <para>Because the Async Delegate behavior is transparently handled by the
     async service, clients of the async service do not need to know whether
     the target service implements Async Delegate or not, their usage pattern
     can remain unchanged.</para>
@@ -643,7 +643,7 @@ public synchronized void doStuff() {
         </listitem>
 
         <listitem>
-          <para>If the Async Delegate is unable to optimise the call then it
+          <para>If the Async Delegate is unable to optimize the call then it
           may return a <code>null</code> Promise from the <code>async</code>
           method. In this case the Async service must continue processing the
           async invocation, treating the service as a normal object.</para>
@@ -656,7 +656,7 @@ public synchronized void doStuff() {
 
       <para>If no promise is needed by the client then the async service must
       attempt to delegate to the <code>execute</code> method. This gives the
-      Async Delegate implementation the opportunity to further optimise its
+      Async Delegate implementation the opportunity to further optimize its
       processing. The delegation proceeds as follows:</para>
 
       <itemizedlist>
@@ -673,7 +673,7 @@ public synchronized void doStuff() {
         </listitem>
 
         <listitem>
-          <para>If the Async Delegate is unable to optimise the call then it
+          <para>If the Async Delegate is unable to optimize the call then it
           may return <code>false</code> from the <code>execute</code> method.
           In this case the Async service must continue processing the async
           invocation, treating the service as a normal object.</para>
@@ -788,12 +788,12 @@ public synchronized void doStuff() {
         <para>If the mediator object was created using a service reference,
         then the Async services implementation must use the client's bundle
         context when retrieving the target service. If the service lookup
-        occurs on a worker thread then the lookup must use the
-        <code>AccessControlContext</code>. collected during the call to
+        occurs on a worker thread, then the lookup must use the
+        <code>AccessControlContext</code> collected during the call to
         <code>call()</code> or <code>execute()</code>. This prevents the
         client bundle from being able to make calls on a service object that
         they do not have permission to obtain, and ensures that an
-        appropriately customised object is returned if the service is
+        appropriately customized object is returned if the service is
         implemented using a service factory.</para>
       </listitem>
     </itemizedlist>

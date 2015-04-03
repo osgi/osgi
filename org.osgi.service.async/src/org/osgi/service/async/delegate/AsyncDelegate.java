@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public interface AsyncDelegate {
 	 * using the supplied arguments asynchronously. This method differs from
 	 * {@link #async(Method, Object[])} in that it does not return a promise.
 	 * This method therefore allows the implementation to perform more
-	 * aggressive optimisations because the end result of the invocation does
+	 * aggressive optimizations because the end result of the invocation does
 	 * not need to be returned to the client.
 	 * 
 	 * If the method cannot be executed asynchronously by the delegate then it

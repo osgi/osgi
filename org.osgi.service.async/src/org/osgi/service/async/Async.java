@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,7 +145,7 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <p>
-	 * Generally it is preferrable to use {@link #call(Object)} like this:
+	 * Generally it is preferable to use {@link #call(Object)} like this:
 	 * </p>
 	 * 
 	 * <pre>
@@ -178,7 +178,7 @@ public interface Async {
 	 * 
 	 * <p>
 	 * The advantage of the {@link #execute()} method is that it allows for
-	 * greater optimisation of the underlying asynchronous execution. Clients
+	 * greater optimization of the underlying asynchronous execution. Clients
 	 * are therefore likely to see better performance when using this method
 	 * compared to using {@link #call()} and discarding the return value.
 	 * </p>
