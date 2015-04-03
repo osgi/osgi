@@ -80,12 +80,16 @@ public class RemoteServiceAdminEvent {
 	/**
 	 * Update an import registration. The Remote Service Admin will send this
 	 * event when it updates a service.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			IMPORT_UPDATE			= 9;
 
 	/**
 	 * Update an export registration. The Remote Service Admin will send this
 	 * event when it exports a service.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			EXPORT_UPDATE			= 10;
 
