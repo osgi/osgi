@@ -299,7 +299,7 @@
 
         <para>The <code>1.0</code> version of this specification defined an
         Endpoint Listener service, which has an identical purpose and similar
-        behaviours to an Endpoint Event Listener service. Unfortunately the
+        behaviors to an Endpoint Event Listener service. Unfortunately the
         design of the Endpoint Listener limited its extensibility, meaning
         that it had to be replaced in version <code>1.1</code> of this
         specification.</para>
@@ -717,7 +717,7 @@
 
             <entry><para>All remaining public service properties must be
             present (that is, not starting with full stop (<code>'.'
-            \u002E</code>)). If the values can not be marshalled by the
+            \u002E</code>)). If the values can not be marshaled by the
             Distribution Provider then they must be ignored.</para></entry>
           </row>
         </tbody>
@@ -965,7 +965,7 @@
       <para>Configuration types can use URLs to point to local resources
       describing in detail the Endpoint parameters for specific protocols.
       However, the purpose of an Endpoint Description is to describe an
-      Endpoint to a remote system. This implies that there is some marshalling
+      Endpoint to a remote system. This implies that there is some marshaling
       process that will transfer the Endpoint Description to another process.
       This other process is unlikely to be able to access resource URLs. Local
       bundle resource URLs are only usable in the framework that originates
@@ -1550,7 +1550,7 @@
     xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3
     frameworks that collaborate through some discovery bundle. The
     <code>Top</code> framework has created an Endpoint and decides to notify
-    all Endpoint Event Listeners and Endpoint Listners registered in this
+    all Endpoint Event Listeners and Endpoint Listeners registered in this
     framework that are scoped to this new Endpoint. Local bundle
     <code>D</code> has set its scope to all Endpoint Descriptions that
     originate from its local framework, it therefore receives the Endpoint
@@ -1563,7 +1563,7 @@
     When the bundle <code>D</code> on the <code>Quark</code> framework
     receives the Endpoint Description from bundle <code>D</code> on the
     <code>Top</code> framework, it matches it against all local Endpoint Event
-    Listener’s scope. In this case, the local manager bundle <code>T</code>
+    Listener's scope. In this case, the local manager bundle <code>T</code>
     matches and is given the Endpoint Description. The manager then uses the
     Remote Service Admin service to import the exported service described by
     the given Endpoint Description.</para>
@@ -1621,7 +1621,7 @@
       Endpoints. It is easy to discriminate between local and remote by
       filtering on the <code>endpoint.framework.uuid</code> property. Endpoint
       Descriptions contain the Universally Unique ID (UUID) of the originating
-      framework.This UUID must be available from the local framework as well.
+      framework. This UUID must be available from the local framework as well.
       See <xref linkend="i1887500"/>.</para>
     </section>
 
@@ -1796,7 +1796,7 @@
 
       <para>If an Endpoint Event Listener or Endpoint Listener service is
       registered, a provider must add all matching Endpoint Descriptions that
-      it is aware of and match the tracked listener’s scope. This can be done
+      it is aware of and match the tracked listener's scope. This can be done
       during registration or asynchronously later. For example, it is possible
       to use the filters in the scope to request remote systems for any
       Endpoint Descriptions that match those filters. For expediency reasons,
@@ -1816,7 +1816,7 @@
       a result the listener service will not have to disambiguate duplicate
       events from a single source. If an Endpoint Description Provider uses
       both the Endpoint Listener and Endpoint Event Listener interfaces of a
-      single service object then the resulting behaviour is undefined. The
+      single service object then the resulting behavior is undefined. The
       implementation may detect the misuse and throw an Exception, process or
       ignore the events from one of the interfaces, or it may simply corrupt
       the internal registry of Endpoints within the listener.</para>
@@ -1861,14 +1861,14 @@ st.open();</programlisting>
       <code>ListenerInfo</code> to any Listener Hook services. The
       <code>getFilter</code> method on a <code>ListenerInfo</code> object
       provides a filter that is directly applicable for the Endpoint Event
-      Listener’s scope. In the previous example, this would be the
+      Listener's scope. In the previous example, this would be the
       filter:</para>
 
       <programlisting>(objectClass=org.osgi.service.log.LogService)</programlisting>
 
       <para>A Topology Manager could verify if this listener is satisfied.
       That is, if it has at least one service. If no such service could be
-      found, it could then add this filter to its Endpoint Event Listener’s
+      found, it could then add this filter to its Endpoint Event Listener's
       scope to detect remote implementations of this service. If such an
       Endpoint is detected, it could then request the import of this service
       through the Remote Service Admin service.</para>
@@ -2282,7 +2282,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
 &lt;/property&gt;</programlisting>
 
     <para>The <code>xml</code> element is used to convey XML from other
-    namespaces, it is allowed to contain one foreign Xml root element, with
+    namespaces, it is allowed to contain one foreign XML root element, with
     any number of children, that will act as the root element of an XML
     document. This root element will be included in the corresponding property
     as a string. The XML element must be a valid XML document but not contain
@@ -2368,13 +2368,12 @@ xml                    ::= &lt;*&gt; *</programlisting>
     osgi.extender="osgi.remoteserviceadmin.localdiscovery";
     version:Version="1.0";
     uses:="org.osgi.service.remoteserviceadmin"</programlisting>
-    
-      <para>The reason that the extender capability is declared at version 
-      1.0 is because the extender is unchanged from version 1.0 of this
-      specification.
-      </para>
+
+      <para>The reason that the extender capability is declared at version 1.0
+      is because the extender is unchanged from version 1.0 of this
+      specification.</para>
     </section>
-    
+
     <section>
       <title>Discovery Provider Capability</title>
 
@@ -2667,15 +2666,15 @@ xml                    ::= &lt;*&gt; *</programlisting>
     <para>This section is not intended to be normative, but offers advice to
     implementations as to how the complexity of supporting both the new
     Endpoint Event Listener and Endpoint Listener services can be managed and
-    minimised. This advice applies to both Discovery Providers and Topology
+    minimized. This advice applies to both Discovery Providers and Topology
     Managers implementing Remote Service Admin <code>1.1</code>.</para>
 
     <section>
       <title>Notifying listeners</title>
 
       <para>Endpoint Event Listeners and Endpoint Listeners have a very
-      similar behaviour and lifecycle. They also use the same property names
-      to define their scope filter. It is therefore relatively simple for an
+      similar behavior and lifecycle. They also use the same property names to
+      define their scope filter. It is therefore relatively simple for an
       Endpoint Description Provider to notify both Endpoint Listener and
       Endpoint Event Listeners using a single code path.</para>
 
@@ -2896,10 +2895,10 @@ xml                    ::= &lt;*&gt; *</programlisting>
         <para>Removed text around setting of Framework UUID property (not
         needed for Core Frameworks version 4.3 or newer).</para>
       </listitem>
-      
+
       <listitem>
-        <para>Clarified the rules concerning Remote Service Endpoint identifier
-        uniqueness.</para>
+        <para>Clarified the rules concerning Remote Service Endpoint
+        identifier uniqueness.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public interface RemoteServiceAdmin {
 	 *         or if the service properties and the overlaid properties do not
 	 *         contain a {@link RemoteConstants#SERVICE_EXPORTED_INTERFACES}
 	 *         entry. This means that implementations must not ignore invalid
-	 *         values for property names that they recognise.
+	 *         values for property names that they recognize.
 	 */
 	Collection<ExportRegistration> exportService(ServiceReference<?> reference, Map<String, ?> properties);
 
