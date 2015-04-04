@@ -15,30 +15,33 @@
  */
 
 package org.osgi.service.rest.client;
-import java.net.URI;
 
+import java.net.URI;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Factory to construct new REST client instances. Each instance is specific to
  * a REST service endpoint.
  * 
+ * <p>
  * Implementations can choose to extend this interface to add additional
- * creation methods, e.g., where additional arguments are needed for request
- * signing, etc.
+ * creation methods, where additional arguments are needed for request signing,
+ * etc.
  * 
- * In OSGi environments this factory is registered as a service.
+ * <p>
+ * In OSGi environments, this factory is registered as a service.
  * 
  * @author $Id$
- *
  */
+@ProviderType
 public interface RestClientFactory {
 
 	/**
-	 * create a new REST client instance.
+	 * Create a new REST client instance.
 	 * 
-	 * @param uri the URI to the REST service endpoint.
-	 * @return a new REST client instance.
+	 * @param uri The URI to the REST service endpoint.
+	 * @return A new REST client instance for the specified REST service
+	 *         endpoint.
 	 */
 	RestClient createRestClient(URI uri);
-
 }

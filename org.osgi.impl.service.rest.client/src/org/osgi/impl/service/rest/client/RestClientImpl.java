@@ -133,7 +133,7 @@ public class RestClientImpl implements RestClient {
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundles()
 	 */
-	public Collection<String> getBundles() throws Exception {
+	public Collection<String> getBundlePaths() throws Exception {
 		final ClientResource res = new ClientResource(Method.GET,
 				baseUri.resolve("framework/bundles"));
 		final Representation repr = res.get(BUNDLES);
@@ -144,7 +144,7 @@ public class RestClientImpl implements RestClient {
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundleRepresentations()
 	 */
-	public Collection<BundleDTO> getBundleRepresentations() throws Exception {
+	public Collection<BundleDTO> getBundles() throws Exception {
 		try {
 			final Representation repr = new ClientResource(Method.GET,
 					baseUri.resolve("framework/bundles/representations"))
@@ -271,14 +271,14 @@ public class RestClientImpl implements RestClient {
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundleHeaders(long)
 	 */
-	public Map<String, String> getBundleHeader(final long id) throws Exception {
-		return getBundleHeader("framework/bundle/" + id);
+	public Map<String, String> getBundleHeaders(final long id) throws Exception {
+		return getBundleHeaders("framework/bundle/" + id);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getBundleHeaders(java.lang.String)
 	 */
-	public Map<String, String> getBundleHeader(final String bundlePath)
+	public Map<String, String> getBundleHeaders(final String bundlePath)
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve(bundlePath + "/header"))
@@ -312,7 +312,7 @@ public class RestClientImpl implements RestClient {
 	 *      org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
 	 */
 	public void setBundleStartLevel(final long id,
-			final BundleStartLevelDTO startLevel) throws Exception {
+			final int startLevel) throws Exception {
 		setBundleStartLevel("framework/bundle/" + id, startLevel);
 	}
 
@@ -321,27 +321,29 @@ public class RestClientImpl implements RestClient {
 	 *      org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
 	 */
 	public void setBundleStartLevel(final String bundlePath,
-			final BundleStartLevelDTO startLevel) throws Exception {
+			final int startLevel) throws Exception {
+		BundleStartLevelDTO bsl = new BundleStartLevelDTO();
+		bsl.startLevel = startLevel;
 		new ClientResource(Method.PUT, baseUri.resolve(bundlePath
 				+ "/startlevel")).put(
-				DTOReflector.getJson(BundleStartLevelDTO.class, startLevel),
+				DTOReflector.getJson(BundleStartLevelDTO.class, bsl),
 				BUNDLE_STARTLEVEL);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#installBundle(java.net.URL)
 	 */
-	public String installBundle(final String url) throws Exception {
+	public BundleDTO installBundle(final String url) throws Exception {
 		final ClientResource res = new ClientResource(Method.POST,
 				baseUri.resolve("framework/bundles"));
 		final Representation repr = res.post(url, MediaType.TEXT_PLAIN);
-		return repr.getText();
+		return DTOReflector.getDTO(BundleDTO.class, repr);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#installBundle(java.io.InputStream)
 	 */
-	public String installBundle(final String location, final InputStream in)
+	public BundleDTO installBundle(final String location, final InputStream in)
 			throws Exception {
 		final ClientResource res = new ClientResource(Method.POST,
 				baseUri.resolve("framework/bundles"));
@@ -360,63 +362,66 @@ public class RestClientImpl implements RestClient {
 		 */
 		final Representation repr = res.post(in);
 
-		return repr.getText();
+		return DTOReflector.getDTO(BundleDTO.class, repr);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long)
 	 */
-	public void updateBundle(final long id) throws Exception {
+	public BundleDTO updateBundle(final long id) throws Exception {
 		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
 				+ id)).put("", MediaType.TEXT_PLAIN);
+		return null; // TODO return a BundleDTO
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long, java.net.URL)
 	 */
-	public void updateBundle(final long id, final String url) throws Exception {
+	public BundleDTO updateBundle(final long id, final String url) throws Exception {
 		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
 				+ id)).put(url, MediaType.TEXT_PLAIN);
-
+		return null; // TODO return a BundleDTO
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long,
 	 *      java.io.InputStream)
 	 */
-	public void updateBundle(final long id, final InputStream in)
+	public BundleDTO updateBundle(final long id, final InputStream in)
 			throws Exception {
 		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
 				+ id)).put(in);
+		return null; // TODO return a BundleDTO
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#uninstallBundle(long)
 	 */
-	public void uninstallBundle(final long id) throws Exception {
-		uninstallBundle("framework/bundle/" + id);
+	public BundleDTO uninstallBundle(final long id) throws Exception {
+		return uninstallBundle("framework/bundle/" + id);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#uninstallBundle(java.lang.String)
 	 */
-	public void uninstallBundle(final String bundlePath) throws Exception {
+	public BundleDTO uninstallBundle(final String bundlePath) throws Exception {
 		final ClientResource res = new ClientResource(Method.DELETE,
 				baseUri.resolve(bundlePath));
 		res.delete();
+		return null; // TODO return a BundleDTO
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getServices()
 	 */
-	public Collection<String> getServices() throws Exception {
-		return getServices(null);
+	public Collection<String> getServicePaths() throws Exception {
+		return getServicePaths(null);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getServices(java.lang.String)
 	 */
-	public Collection<String> getServices(final String filter) throws Exception {
+	public Collection<String> getServicePaths(final String filter) throws Exception {
 		final ClientResource res = new ClientResource(Method.GET,
 				baseUri.resolve("framework/services"));
 
@@ -433,16 +438,16 @@ public class RestClientImpl implements RestClient {
 	/**
 	 * @see org.osgi.rest.client.RestClient#getServiceRepresentations()
 	 */
-	public Collection<ServiceReferenceDTO> getServiceRepresentations()
+	public Collection<ServiceReferenceDTO> getServiceReferences()
 			throws Exception {
-		return getServiceRepresentations(null);
+		return getServiceReferences(null);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getServiceRepresentations(java.lang.String
 	 *      )
 	 */
-	public Collection<ServiceReferenceDTO> getServiceRepresentations(
+	public Collection<ServiceReferenceDTO> getServiceReferences(
 			final String filter) throws Exception {
 		final ClientResource res = new ClientResource(Method.GET,
 				baseUri.resolve("framework/services/representations"));

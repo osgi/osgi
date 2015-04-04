@@ -105,7 +105,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testBundleListRestClient() throws Exception {
-    Collection<String> bundleCollection = getRestClient().getBundles();
+    Collection<String> bundleCollection = getRestClient().getBundlePaths();
 
     Bundle[] bundles = getInstalledBundles();
     assertBundleCollection(bundles, bundleCollection);
@@ -119,13 +119,13 @@ public class RestClientTestCase extends RestTestUtils {
     String url = getContext().getBundle().getEntry(TB1).toString();
 
     // install bundle with location
-    String result = getRestClient().installBundle(url);
+		BundleDTO result = getRestClient().installBundle(url);
     assertNotNull("Bundle location for installed bundle is not null", result);
 
     tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     assertNotNull("Test bundle TB1 is installed", tb1Bundle);
 
-    assertEquals("Bundle location", getBundleURI(tb1Bundle), result);
+		assertEquals("Bundle location", getBundleURI(tb1Bundle), getBundleURI(result.id));
 
     // same bundle location
     boolean receiveError = false;
@@ -187,7 +187,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testBundleRepresentationsListRestClient() throws Exception {
-    Collection<BundleDTO> bundleRepresentationsList = getRestClient().getBundleRepresentations();
+    Collection<BundleDTO> bundleRepresentationsList = getRestClient().getBundles();
     assertNotNull("Bundle representations list", bundleRepresentationsList);
 
     Bundle[] bundles = getInstalledBundles();
@@ -415,17 +415,17 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testBundleHeaderRestClient() throws Exception {
     Bundle bundle = getRandomBundle();
-    Map<String, Object> bHeaders = getRestClient().getBundleHeader(bundle.getBundleId());
+		Map<String, String> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
-    bHeaders = getRestClient().getBundleHeader(getBundlePath(bundle));
+    bHeaders = getRestClient().getBundleHeaders(getBundlePath(bundle));
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
     long notExistingBundleId = getNotExistingBundleId();
 
     boolean receiveError = false;
     try {
-      getRestClient().getBundleHeader(notExistingBundleId);
+      getRestClient().getBundleHeaders(notExistingBundleId);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -471,7 +471,7 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb1StartLevelDTO = new BundleStartLevelDTO();
     tb1StartLevelDTO.startLevel = tb1NewStartLevel;
 
-    getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO);
+		getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     assertEquals("New start level ", tb1NewStartLevel, tb1StartLevel);
@@ -479,7 +479,7 @@ public class RestClientTestCase extends RestTestUtils {
     // set start level by bundle id for non existing bundle id
     receiveError = false;
     try {
-      getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO);
+			getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -489,7 +489,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb1StartLevelDTO.startLevel = -1;
-      getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO);
+			getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -502,14 +502,14 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb2StartLevelDTO = new BundleStartLevelDTO();
     tb2StartLevelDTO.startLevel = tb2NewStartLevel;
 
-    getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO);
+		getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     tb2StartLevel = getBundleStartLevel(tb2Bundle).getStartLevel();
     assertEquals("New start level ", tb2NewStartLevel, tb2StartLevel);
 
     // set start level by bundle path for non existing bundle path
     receiveError = false;
     try {
-      getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO);
+			getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -519,7 +519,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb2StartLevelDTO.startLevel = -1;
-      getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO);
+			getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -529,21 +529,21 @@ public class RestClientTestCase extends RestTestUtils {
   public void testServiceListRestClient() throws Exception {
     String filter = null;
 
-    Collection<String> services = getRestClient().getServices();
+    Collection<String> services = getRestClient().getServicePaths();
     ServiceReference<?>[] serviceRefs = getServices(filter);
     assertServiceList(serviceRefs, services);
 
     filter = "(&(" + Constants.SERVICE_ID + ">=" + serviceRefs.length / 2 + ")"
         + "(" + Constants.SERVICE_ID + "<=" + serviceRefs.length + "))";
 
-    services = getRestClient().getServices(filter);
+    services = getRestClient().getServicePaths(filter);
     serviceRefs = getServices(filter);
     assertServiceList(serviceRefs, services);
 
     String invalidFilter = "invalid-filter";
     boolean receiveError = false;
     try {
-      services = getRestClient().getServices(invalidFilter);
+      services = getRestClient().getServicePaths(invalidFilter);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -552,7 +552,7 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testServiceRepresentationsListRestClient() throws Exception {
     String filter = null;
-    Collection<ServiceReferenceDTO> serviceRepresentationsDTO = getRestClient().getServiceRepresentations();
+    Collection<ServiceReferenceDTO> serviceRepresentationsDTO = getRestClient().getServiceReferences();
     ServiceReference<?>[] serviceRefs = getServices(filter);
     assertServiceRepresentationList(serviceRefs, serviceRepresentationsDTO);
 
@@ -560,13 +560,13 @@ public class RestClientTestCase extends RestTestUtils {
         + "(" + Constants.SERVICE_ID + "<=" + serviceRefs.length + "))";
 
     serviceRefs = getServices(filter);
-    serviceRepresentationsDTO = getRestClient().getServiceRepresentations(filter);
+    serviceRepresentationsDTO = getRestClient().getServiceReferences(filter);
     assertServiceRepresentationList(serviceRefs, serviceRepresentationsDTO);
 
     filter = "invalid-filter";
     boolean receiveError = false;
     try {
-      getRestClient().getServices(filter);
+      getRestClient().getServicePaths(filter);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -693,7 +693,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("persistentlyStarted:", bundleStartLevel.isPersistentlyStarted(), bundleStartLevelDTO.persistentlyStarted);
   }
 
-  protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, Object> bHeaders) {
+	protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, String> bHeaders) {
     Dictionary<String, String> headers = bundle.getHeaders();
     if (headers == null) {
       assertNull("Bundle headers" + bundle.getBundleId() + ": ", bHeaders);
