@@ -217,8 +217,8 @@ framework/service/{serviceid}
       <code>services</code>, and <code>services/representations</code>
       resources allow the use of a query parameter which specifies a filter to
       restrict the result set. The filter expression follows the Core
-      Specifications <emphasis>Framework Filter Syntax</emphasis> 
-      <citation>CoreFilter</citation>.</para>
+      Specifications <emphasis>Framework Filter Syntax</emphasis>; see
+      <xref linkend="service.rest-corefilter"/>.</para>
 
       <para>Filters on services are matched against the service attributes.
       The query parameter is of the form:</para>
@@ -1565,12 +1565,12 @@ client.installBundle({
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><abbrev>CoreFilter</abbrev><title>Framework Filter
+      <bibliomixed xml:id="service.rest-corefilter"><title>Framework Filter
       Syntax</title>OSGi Core, Chapter 3.2.7 Filter Syntax</bibliomixed>
 
-      <bibliomixed><abbrev>WebIDL</abbrev><title>Web IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
+      <bibliomixed xml:id="service.rest-webidl"><title>Web IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
 
-      <bibliomixed><title>XML Schema Part 2: Data types Second
+      <bibliomixed xml:id="service.rest-xml.schema.2"><title>XML Schema Part 2: Data types Second
       Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
     </bibliolist>
   </section>

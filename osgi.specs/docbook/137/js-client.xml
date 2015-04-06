@@ -34,7 +34,7 @@ REST JavaScript Client API Version 1.0
     </para>
     
     <para>
-    To facilitate documenting the JavaScript APIs <emphasis>Web IDL</emphasis> <citation>WebIDL</citation> is used. This clarifies
+    To facilitate documenting the JavaScript APIs <emphasis>Web IDL</emphasis> is used; see <xref linkend="service.rest-webidl"/>. This clarifies
     the accepted arguments and return types for otherwise untyped functions. Web IDL is only used for 
     documentation purposes and has no bearing on the implementation of this API. </para>
     
