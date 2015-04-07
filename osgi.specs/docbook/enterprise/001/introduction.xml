@@ -185,13 +185,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Whiteboard Service Specification</emphasis> -
+          <para><emphasis>Http Whiteboard Specification</emphasis> -
           The <xref linkend="enterprise.intro-whiteboard.pattern.ref"/>
           pattern has shown to be a powerful and flexible mechanism for
           registering customized functionality with a container. The Http
-          Whiteboard Service Specification allows the registration of Servlet,
+          Whiteboard Specification allows the registration of Servlets,
           Servlet Filters, Resources and Servlet-related listeners via the
-          Whiteboard pattern, providing an alternative approach to working
+          Whiteboard pattern, providing a convenient approach to working
           with servlets to the Http Service Specification. See <xref
           linkend="service.http.whiteboard"/>.</para>
         </listitem>
