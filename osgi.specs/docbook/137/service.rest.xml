@@ -149,7 +149,7 @@
       transmitted as a representation. The format of the representation is
       subject to a mutual agreement between client and management service
       regarding media types commonly supported by both endpoints. This
-      specification describes two possible representation formats: JSON and
+      specification describes two representation formats: JSON and
       XML.</para>
     </section>
   </section>
@@ -158,7 +158,7 @@
     <title>Interacting with the REST Management Service</title>
 
     <para>The REST Management Service is not a traditional OSGi service and it
-    does not even appear in the service registry. Its purpose is to expose a
+    does not appear in the service registry. Its purpose is to expose a
     management interface to clients which can perform operations on the
     framework through a network connection. Therefore, it is ideally suited
     for situations where the user of an OSGi framework does not have direct
@@ -212,7 +212,10 @@ framework/service/{serviceid}
 
       <para><code>framework/bundle/0/state</code> is an alias for
       <code>framework/state</code></para>
+    </section>
 
+    <section xml:id="service.rest-resource.filters">
+      <title>Filtering Results</title>
       <para>The <code>bundles</code>, <code>bundles/representations</code>,
       <code>services</code>, and <code>services/representations</code>
       resources allow the use of a query parameter which specifies a filter to
@@ -340,6 +343,9 @@ framework/service/{serviceid}
       syntactically different forms of POST requests which are used to install
       new bundles to the framework.</para>
 
+      <para>Results for this resource can be filtered as described in 
+      <xref linkend="service.rest-resource.filters"/>.</para>
+
       <section>
         <title>GET</title>
 
@@ -459,8 +465,9 @@ framework/service/{serviceid}
       <section>
         <title>GET of the Representations</title>
 
-        <para>The bundles resource returns a list of the URIs of all bundles
-        installed on the framework. For clients interested in all bundles
+        <para>The <code>bundles</code> resource returns a list of the URIs of all bundles
+        installed on the framework. For clients interested in the details of 
+        multiple bundles
         there is also the possibility to retrieve the bundle representation of
         each installed bundle with a single request through the
         <emphasis>bundles/representations</emphasis> resource.</para>
@@ -469,6 +476,9 @@ framework/service/{serviceid}
         linkend="service.rest-bundle.representations.list.representation"
         xrefstyle="template:%t"/>. The request can return the following status
         codes:</para>
+
+        <para>Results for this resource can be filtered as described in 
+        <xref linkend="service.rest-resource.filters"/>.</para>
 
         <itemizedlist>
           <listitem>
@@ -729,8 +739,8 @@ framework/service/{serviceid}
         <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.header.representation"
         xrefstyle="template:%t"/> from the REST management service. The raw
-        header value is used unless an Accept-Language header is set on the
-        http request. If multiple accepted languages are set only the first is
+        header value is used unless an <code>Accept-Language</code> header is set on the
+        HTTP request. If multiple accepted languages are set only the first is
         used to localize the header. The request can return the following
         status codes:</para>
 
@@ -840,6 +850,9 @@ framework/service/{serviceid}
       on the framework, optionally constrained by a filter expression. It is
       read-only and therefore only supports the GET request.</para>
 
+      <para>Results for this resource can be filtered as described in 
+      <xref linkend="service.rest-resource.filters"/>.</para>
+  
       <section>
         <title>GET</title>
 
@@ -876,7 +889,8 @@ framework/service/{serviceid}
         <title>GET of the Representations</title>
 
         <para>The services resource returns a list of the URIs of all services
-        registered on the framework. For clients interested in all services
+        registered on the framework. For clients interested in the details
+        of multiple services
         there is also the possibility to retrieve the service representation
         of each available service with a single request through the
         <emphasis>services/representations</emphasis> resource. The body of
@@ -885,6 +899,9 @@ framework/service/{serviceid}
         xrefstyle="template:%t"/> from the REST management service. The
         request can return the following status codes:</para>
 
+        <para>Results for this resource can be filtered as described in 
+        <xref linkend="service.rest-resource.filters"/>.</para>
+    
         <itemizedlist>
           <listitem>
             <para>200 (OK): the request has been served successfully and the
@@ -1323,19 +1340,20 @@ framework/service/{serviceid}
 
     <para>The REST service can be used by a variety of clients directly. In
     addition this specification describes Client APIs built over this REST
-    protocol to facilitate the use from Java and JavaScript clients.</para>
+    protocol to facilitate use from Java and JavaScript clients.</para>
 
     <section>
       <title>Java Client</title>
 
       <para>The Java Client provides a Java API over the REST API providing a
-      convenient and portable way to use this API from a Java client
+      convenient and portable way to use this API from a Java
       application.</para>
 
       <para>To use the Java Client, obtain the <xref
       linkend="org.osgi.service.rest.client.RestClientFactory"
       xrefstyle="hyperlink"/> service. Create a client by providing the root
-      URL of the REST service. <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
+      URL of the REST service, for example:
+      <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
 RestClient restClient = restClientFactory.createRestClient(
     new URI("http://localhost:8080/restendpoint"));
 
@@ -1354,16 +1372,16 @@ restClient.startBundle(newBundle.id);</programlisting></para>
 
       <para>This specification also describes a JavaScript client to the REST
       Management service. This client makes it easy to manage an OSGi
-      framework from any JavaScript environment.</para>
+      framework from any JavaScript environment, including Web Browsers.</para>
 
-      <para>The JavaScript client follows the promises
-      <emphasis>programming</emphasis> style; the request is made
+      <para>The JavaScript client follows the 
+      <emphasis>promises</emphasis> programming style; the request is made
       asynchronously and a <code>success()</code> or <code>failure()</code>
       callback is made when the response arrives.</para>
 
       <para>To use the JavaScript client create an instance of
       <code>OSGiRestClient</code> providing the root URL of the REST service.
-      <programlisting>var client = new OsgiRestClient('http://localhost:8080/restendpoint');
+      <programlisting>var client = new OSGiRestClient('http://localhost:8080/restendpoint');
 client.installBundle({
   success : function(res) {
     // Start the bundle once the install has finished
@@ -1374,7 +1392,7 @@ client.installBundle({
   }
 });</programlisting></para>
 
-      <para>The more details on the JavaScript Client can be found in the
+      <para>More details on the JavaScript Client can be found in the
       <xref linkend="service.rest-javascript.api" xrefstyle="hyperlink"/> API
       documentation section.</para>
     </section>
