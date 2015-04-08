@@ -422,7 +422,8 @@ Update a bundle from a URI or by value.
       <title>void failure(short httpCode, object response)</title>
       <formalpara role="parameter">
         <title>httpCode</title> 
-        <para>The HTTP code returned.</para>
+        <para>The HTTP code returned. If no HTTP code is associated with the failure
+        this parameter is set to <code>-1</code>.</para>
       </formalpara>
 
       <formalpara role="parameter">
@@ -431,19 +432,7 @@ Update a bundle from a URI or by value.
       </formalpara>
       
       <para role="description">
-      Called when the HTTP response code is not what was expected.
-      </para>
-    </section>
-
-    <section role="method">
-      <title>void error(object response)</title>
-      <formalpara role="parameter">
-        <title>response</title> 
-        <para>The error.</para>
-      </formalpara>
-      
-      <para role="description">
-      Called when an error occurred with the remote invocation.
+      Called when the invocation failed.
       </para>
     </section>
 
