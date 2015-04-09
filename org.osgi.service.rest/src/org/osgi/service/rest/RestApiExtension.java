@@ -35,10 +35,9 @@ package org.osgi.service.rest;
  * supporting abstraction layer and not offer extensibility.
  * </p>
  * <p>
- * Using this marker service, the REST service can provide a common directory
- * page through which clients can discover the presence of a REST API extension
- * on the managed framework and derive a URI through which they get access to
- * it.
+ * Using this marker service, the REST service includes the advertised service
+ * in the Extensions Resource, allowing clients to discover it and 
+ * use the extension's functionality.
  * </p>
  * 
  * @author $Id$
@@ -46,12 +45,11 @@ package org.osgi.service.rest;
 public interface RestApiExtension {
 
 	/**
-	 * this service property describes a URI to the REST extension on this local
+	 * This service property describes a URI to the REST extension on this local
 	 * machine. It is either an fully qualified URI with a different port if no
 	 * integration with the framework REST service is possible or a relative URI
-	 * implicitly using the same port if integration is possible. In either
-	 * case, the path to the extension must be absolute and must not start with
-	 * <code>framework/</code> or <code>extensions/</code>. The type of this property is
+	 * implicitly using the same port if integration is possible. 
+	 * The type of this property is
 	 * <code>java.lang.String</code> and the property is mandatory.
 	 */
 	public static final String	URI_PATH	= "org.osgi.rest.uri.path";
@@ -60,7 +58,7 @@ public interface RestApiExtension {
 	 * This service property describes the package name of the technology 
          * manageable by this REST API extension. Services specified in OSGi
 	 * specifications must use their canonical package name as the name.
-	 * Third-party technologies should use their package names. The type of this
+	 * Third-party technologies should also use their package names. The type of this
 	 * property is <code>java.lang.String</code> and the property is mandatory.
 	 */
 	public static final String	NAME		= "org.osgi.rest.name";
@@ -74,8 +72,8 @@ public interface RestApiExtension {
          * service instance.
 	 * The type of the property is
 	 * <code>java.lang.Long</code> and the property is optional; if the REST
-         * extension is not directly associated with an OSGi Service, the property
-         * should not be set.
+         * extension is not directly associated with a service in the service 
+         * registry, the property should not be set.
 	 */
 	public static final String	SERVICE		= "org.osgi.rest.service";
 

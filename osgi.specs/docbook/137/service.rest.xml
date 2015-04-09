@@ -211,7 +211,7 @@ framework/service/{serviceid}</programlisting>
       <para><code>framework/bundle/0/state</code> is an alias for
           <code>framework/state</code></para>
 
-      <para>Extensions to the REST Management Service can be discovered by visiting the extensions resource at:</para>
+      <para>Extensions to the REST Management Service can be discovered by visiting the Extensions Resource at:</para>
 
       <programlisting>extensions</programlisting>
 
@@ -1407,11 +1407,11 @@ client.installBundle({
     <title>Extending the REST Management Service</title>
 
     <para>This specification describes a REST-based management interface for
-    the Core Framework functionality. Other services on the framework might
+    Core Framework functionality. Other services in the framework might
     also benefit from management access through REST. This can involve
     services specified by the OSGi Alliance as part of the Core Framework,
     Compendium, or Enterprise Specifications but also application-specific
-    services provided by the developer. It is desirable to expose such
+    functionality provided by the developer. It is desirable to expose such
     management services as extensions of the REST Management Service.</para>
 
     <para>This REST service can be implemented by using various technologies
@@ -1429,13 +1429,14 @@ client.installBundle({
     <para>The main purpose of the extension mechanism is to advertise extensions
     to the core REST implementation, which makes them discoverable for 
     clients. This mechanism can be used to check if
-    a REST interface exists for a specific service. This is made possible by
+    a REST interface exists for a specific service. This is done through
     the <xref linkend="service.rest-extensions.resource"
     xrefstyle="template:%t"/> which contains a description and a path for
     every extension currently available. Implementations that want to contribute their
     extensions to the REST Management Service can do so by registering the
     <xref linkend="org.osgi.service.rest.RestApiExtension"
-    xrefstyle="hyperlink"/> service using the Whiteboard Pattern. The
+    xrefstyle="hyperlink"/> service using the <xref
+    linkend="service.rest-whiteboard.pattern.ref"/>. The
     extension interface is only a marker and the relevant information is
     exposed through the 
     <xref linkend="org.osgi.service.rest.RestApiExtension.NAME"
@@ -1444,7 +1445,11 @@ client.installBundle({
     xrefstyle="hyperlink"/> and optionally
     <xref linkend="org.osgi.service.rest.RestApiExtension.SERVICE"
     xrefstyle="hyperlink"/>
-    properties.</para>
+    properties. Note that it is the responsibility of the extension to ensure
+    that the endpoint announced via the <code>RestApiExtension</code> service
+    is actually present. The Whiteboard service does not realize the extension
+    endpoint; it purely announces it to the main REST implementation for 
+    inclusion in the Extensions Resource.</para>
 
     <para>In order to be discoverable REST interface extensions to OSGi Core,
     Compendium, or Enterprise services must use their canonical package name
@@ -1602,6 +1607,10 @@ client.installBundle({
       <bibliomixed xml:id="service.rest-xml.schema.2"><title>XML Schema Part
       2: Data types Second
       Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
