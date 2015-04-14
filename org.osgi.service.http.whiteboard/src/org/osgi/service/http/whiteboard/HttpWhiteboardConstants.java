@@ -181,8 +181,8 @@ public final class HttpWhiteboardConstants {
 	 * <p>
 	 * The service property values may be the name of a fully qualified
 	 * exception class, a three digit HTTP status code, the value "4xx" for all
-	 * error codes in the 400 rage, or the value "5xx" for all error codes in
-	 * the 500 rage. Any value that is not a three digit number, or one of the
+	 * error codes in the 400 range, or the value "5xx" for all error codes in
+	 * the 500 range. Any value that is not a three digit number, or one of the
 	 * two special values is considered to be the name of a fully qualified
 	 * exception class.
 	 * 
