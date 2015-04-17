@@ -288,12 +288,21 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
       </orderedlist> Note that whole path segments must match. Therefore the
     following request can only be handled by the Servlet Context Helper
     registered under the /foo path:
-    <code>http://localhost/foo/bars/someOtherServlet</code></para>
+    <code>http://localhost/foo/bars/someOtherServlet</code>.</para>
 
     <para>For details on the association process between servlet, servlet
     filter, resource and listener services and the
     <code>ServletContextHelper</code> see <xref
-    linkend="service.http.whiteboard.common.properties"/>.</para>
+        linkend="service.http.whiteboard.common.properties"/>.</para>
+
+    <para>If a Servlet Context Helper can not be used, for example because 
+    it is shadowed by another Servlet Context Helper service with the same
+    name, but with a higher ranking, this is reflected in the
+    <xref linkend="org.osgi.service.http.runtime.dto.FailedServletContextDTO"
+        xrefstyle="hyperlink"/>. Similarly, if an alternative <code>default</code> 
+    Servlet Context Helper is provided, the default Servlet
+    Context Helper provided by the Http Whiteboard implementation is 
+    not used and represented using this failure DTO.</para>
 
     <para>An example Servlet Context Helper can be found below, it prefixes
     the path with <code>/myapp</code> for any associated whiteboard service.
@@ -316,8 +325,14 @@ public class CDNServletContextHelper extends ServletContextHelper {
     }
 }</programlisting>
 
+    <para>The following sections outline the methods a custom <xref
+    linkend="org.osgi.service.http.context.ServletContextHelper"
+    xrefstyle="hyperlink"/> can 
+    provide and the behavior of the <emphasis>default</emphasis> 
+    implementation.</para>
+
     <section>
-      <title>ServletContextHelper.getResource(String)</title>
+      <title>URL getResource(String)</title>
 
       <para>Obtain a URL for a given resource request.</para>
 
@@ -329,7 +344,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>ServletContextHelper.getMimeType(String)</title>
+      <title>String getMimeType(String)</title>
 
       <para>Called to provide the MIME type for a resource.</para>
 
@@ -338,7 +353,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>ServletContextHelper.getResourcePaths(String)</title>
+      <title>Set&lt;String&gt; getResourcePaths(String)</title>
 
       <para>Called to support the
       <code>ServletContext.getResourcePaths()</code> method. Returns all the
@@ -351,13 +366,22 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>ServletContextHelper.getRealPath(String)</title>
+      <title>String getRealPath(String)</title>
 
       <para>Called to support the <code>ServletContext.getRealPath()</code>
       method.</para>
 
       <para><emphasis>Default Behavior</emphasis> - Always returns
       <code>null</code>.</para>
+    </section>
+
+    <section>
+      <title>boolean handleSecurity(HttpServletRequest,HttpServletResponse)</title>
+
+      <para>This method is invoked to handle implementation-defined security on the request.
+      It is invoked before the request is sent to the filter-servlet pipeline.</para>
+
+    <para><emphasis>Default Behavior</emphasis> - Always returns <code>true</code>.</para>
     </section>
 
     <section>
@@ -914,7 +938,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
             <entry><para>An LDAP-style filter to select the associated <xref
             linkend="org.osgi.service.http.context.ServletContextHelper"
-            xrefstyle="hyperlink"/> service to use. If this property is
+            xrefstyle="hyperlink"/> service to use. Any service property of the Servlet Context Helper
+            can be filtered on. If this property is
             missing the default Servlet Context Helper is used.</para>
             <para>For example, to select a Servlet Context Helper with name
             <code>myCTX</code> provide the following value:</para>
@@ -954,13 +979,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>If multiple Servlet Context Helper services match the
     <code>osgi.http.whiteboard.context.select</code> property the servlet,
     filter, resource or listener will be registered with all these Servlet
-    Context Helpers. Servlets and filters need to be registered as Prototype
-    Service Factory for this to happen, otherwise these are only registered
-    with the Servlet Context Helper with the highest service ranking. In the
-    case of a tie, the lowest service ID wins. In other words, the normal
-    service ranking rules apply. Resource services and listeners do not need
-    to be registered as Prototype Service Factory; these are always registered
-    with all matching Servlet Context Helpers.</para>
+    Context Helpers. To avoid multiple <code>init()</code> and <code>destroy()</code>
+    calls on the same instance, servlets and filters should be registered as 
+    Prototype Service Factory.</para>
   </section>
 
   <section xml:id="service.http.whiteboard-i21223311">
@@ -1017,8 +1038,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     rules are used to select the service handling a request.
     </para>
 
-    <para>The above rules can cause servlets that are already registered being
-    unregistered if a better match arrives. This ensures a predictable end
+    <para>The above rules can cause servlets that are already bound being
+    unbound if a better match arrives. This ensures a predictable end
     result regardless of the order in which services are registered.</para>
 
     <para>A servlet may be registered with the property
@@ -1032,7 +1053,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
     is registered for the same pattern with the Http Service as well as with
     the Http Whiteboard. In such cases the service registered with the Http
     Service wins and the Whiteboard service fails. The failing servlet is
-    reflected in the failure DTOs.</para>
+    reflected in the failure DTOs. Similarly, Whiteboard servlets can have 
+    overlapping patterns. In this case the patterns that are shadowed by 
+    a higher-ranked service are represented by the failure DTOs.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
@@ -1141,15 +1164,18 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </table>
 
     <para><code>Servlet</code> objects are initialized by a Http Whiteboard
-    implementation when they are registered and bound to that specific
-    implementation. The initialization is done by calling the
+    implementation before they start serving requests.
+    The initialization is done by calling the
     <code>Servlet</code> object's <code>Servlet.init(ServletConfig)</code>
     method. The <code>ServletConfig</code> parameter provides access to the
     initialization parameters specified when the <code>Servlet</code> object
     was registered. Once the servlet is no longer used by the Http Whiteboard
-    implementation the <code>destroy()</code> method is called. This also
-    happens if a servlet associated with the same pattern with a higher
-    ranking is registered.</para>
+    implementation the <code>destroy()</code> method is called. Failure during 
+    <code>Servlet.init()</code> will prevent the servlet from being used,
+    which is reflected using a failure DTO. In such a case the system does 
+    <emphasis>not</emphasis>
+    attempt to find an alternative servlet which might be present in the system
+    with a lower ranking.</para>
 
     <para>If the service registration properties of the servlet Whiteboard
     service are modified, the <code>destroy()</code> method is called.
@@ -1216,7 +1242,7 @@ public class MyServlet extends HttpServlet {
     linkend="service.http.whiteboard.servletcontext" xrefstyle="template:%n"/>
     add the following service registration property:</para>
 
-    <programlisting>osgi.http.whiteboard.context.select=my-context</programlisting>
+    <programlisting>osgi.http.whiteboard.context.select=(osgi.http.whiteboard.context.name=my-context)</programlisting>
 
     <para>This will cause the servlet to move to <code>/myapp/myservlet</code>
     as configured by the custom Servlet Context Handler.</para>
@@ -1238,7 +1264,8 @@ public class MyServlet extends HttpServlet {
       <para>Two special error code values are recognized. The special value
       <code>4xx</code> means every error code in the 400-499 range. The
       special value <code>5xx</code> means every error code in the 500-599
-      range.</para>
+      range. To override such wildcard error page for a specific error, register an error page with the
+      specific error code and a higher service ranking.</para>
 
       <para>While not being common practise, it is possible to combine the 
       <code>osgi.http.whiteboard.servlet.errorPage</code> and
@@ -1640,7 +1667,10 @@ public class SomeResourceService {}</programlisting>
     with the <code>osgi.http.whiteboard.servlet.pattern</code> property
     specified on servlets. If these values overlap, the rules as outlined in
     <xref linkend="service.http.whiteboard-i21223311"/> are used to resolve
-    conflicts, where resource services are treated just like servlets.</para>
+    conflicts, where resource services are treated just like servlets.
+    Any shadowed resource patterns are reported as 
+    <xref linkend="org.osgi.service.http.runtime.dto.FailedResourceDTO" 
+        xrefstyle="hyperlink"/>.</para>
     </section>
   </section>
 
@@ -1857,9 +1887,9 @@ public class MyServletRequestListener implements ServletRequestListener {
       <code>HttpServiceRuntime</code> service</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.5*"/>
+        <colspec colnum="1" colwidth="1.5*"/>
 
-        <colspec colnum="2" colwidth="0.7*"/>
+        <colspec colnum="2" colwidth="1.7*"/>
 
         <colspec colnum="3" colwidth="3.3*"/>
 
@@ -1894,7 +1924,7 @@ public class MyServletRequestListener implements ServletRequestListener {
           <row>
             <entry><code>osgi.http.service.id</code></entry>
 
-            <entry><code>Integer+</code></entry>
+            <entry><para><code>Collection&lt;Integer&gt;</code></para></entry>
 
             <entry><para> If this Http Whiteboard implementation also
             implements the <xref linkend="service.http"/>, this property is
@@ -2021,6 +2051,25 @@ public class MyServletRequestListener implements ServletRequestListener {
       <para>If the Servlet API is provided by another bundle, the Http
       Whiteboard implementation should be a consumer of the API and require
       the contract.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the 
+          <xref linkend="org.osgi.service.http.runtime.HttpServiceRuntime"
+      xrefstyle="hyperlink"/> service should provide a capability in the 
+      <link linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare a
+      uses constraint for the <code>org.osgi.service.http.runtime</code> and
+      <code>org.osgi.service.http.runtime.dto</code> packages:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.http.runtime.HttpServiceRuntime";
+  uses:="org.osgi.service.http.runtime,org.osgi.service.http.runtime.dto"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
     </section>
   </section>
 
