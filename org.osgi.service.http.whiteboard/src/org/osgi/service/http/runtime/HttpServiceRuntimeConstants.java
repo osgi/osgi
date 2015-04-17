@@ -59,7 +59,7 @@ public final class HttpServiceRuntimeConstants {
 	 * implementation.
 	 * 
 	 * <p>
-	 * The value of this attribute must be of type {@code Collection<Integer>}.
+	 * The value of this attribute must be of type {@code Collection<Long>}.
 	 */
 	public static final String	HTTP_SERVICE_ID_ATTRIBUTE		= "osgi.http.service.id";
 }
