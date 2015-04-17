@@ -32,8 +32,8 @@
     <itemizedlist>
       <listitem>
         <para><emphasis>Registering Servlets</emphasis> - Registering a
-        servlet in the Service Registry makes it available to serve content
-        over the network.</para>
+        servlet in the Service Registry makes it available to be bound to an
+        endpoint to serve content over the network.</para>
       </listitem>
 
       <listitem>
@@ -46,8 +46,7 @@
       <listitem>
         <para><emphasis>Registering resources</emphasis> - Resources such as
         HTML files, Javascript, image files, and other static resources can be
-        made available over the network by registering a resources
-        service.</para>
+        made available over the network by registering resource services.</para>
       </listitem>
 
       <listitem>
@@ -95,7 +94,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Service Runtime Service</emphasis> - Service
+          <para><emphasis>Http Service Runtime service</emphasis> - Service
           providing runtime introspection into the Http Whiteboard
           implementation.</para>
         </listitem>
@@ -206,8 +205,8 @@
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>Name of the Servlet Context Helper. This name is
-            referred to by Whiteboard services via the
+            <entry><para>Name of the Servlet Context Helper. This name can
+            be referred to by Whiteboard services via the
             <code>osgi.http.whiteboard.context.select</code> property. The
             syntax of the name is the same as the syntax for a Bundle Symbolic
             Name. The default Servlet Context Helper is named
@@ -302,9 +301,10 @@ osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then a request
         xrefstyle="hyperlink"/>. Similarly, if an alternative <code>default</code> 
     Servlet Context Helper is provided, the default Servlet
     Context Helper provided by the Http Whiteboard implementation is 
-    not used and represented using this failure DTO.</para>
+    not used and represented in a failure DTO.</para>
 
-    <para>An example Servlet Context Helper can be found below, it prefixes
+    <para>An example Servlet Context Helper defined using Declarative Services 
+    annotations can be found below, it prefixes
     the path with <code>/myapp</code> for any associated whiteboard service.
     Additionally, it serves static resources from a non-standard location, a
     content delivery network. Other methods use the default
@@ -328,8 +328,27 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>The following sections outline the methods a custom <xref
     linkend="org.osgi.service.http.context.ServletContextHelper"
     xrefstyle="hyperlink"/> can 
-    provide and the behavior of the <emphasis>default</emphasis> 
+    override and the behavior of the <emphasis>default</emphasis> 
     implementation.</para>
+
+    <section>
+      <title>String getMimeType(String)</title>
+
+      <para>Called to provide the MIME type for a resource.</para>
+
+      <para><emphasis>Default Behavior</emphasis> - Always returns
+      <code>null</code>.</para>
+    </section>
+
+    <section>
+      <title>String getRealPath(String)</title>
+
+      <para>Called to support the <code>ServletContext.getRealPath()</code>
+      method.</para>
+
+      <para><emphasis>Default Behavior</emphasis> - Always returns
+      <code>null</code>.</para>
+    </section>
 
     <section>
       <title>URL getResource(String)</title>
@@ -344,15 +363,6 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>String getMimeType(String)</title>
-
-      <para>Called to provide the MIME type for a resource.</para>
-
-      <para><emphasis>Default Behavior</emphasis> - Always returns
-      <code>null</code>.</para>
-    </section>
-
-    <section>
       <title>Set&lt;String&gt; getResourcePaths(String)</title>
 
       <para>Called to support the
@@ -363,16 +373,6 @@ public class CDNServletContextHelper extends ServletContextHelper {
       in the bundle registering the Whiteboard service. Its
       <code>Bundle.findEntries()</code> method is called to obtain the
       listing.</para>
-    </section>
-
-    <section>
-      <title>String getRealPath(String)</title>
-
-      <para>Called to support the <code>ServletContext.getRealPath()</code>
-      method.</para>
-
-      <para><emphasis>Default Behavior</emphasis> - Always returns
-      <code>null</code>.</para>
     </section>
 
     <section>
@@ -1053,9 +1053,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
     is registered for the same pattern with the Http Service as well as with
     the Http Whiteboard. In such cases the service registered with the Http
     Service wins and the Whiteboard service fails. The failing servlet is
-    reflected in the failure DTOs. Similarly, Whiteboard servlets can have 
-    overlapping patterns. In this case the patterns that are shadowed by 
-    a higher-ranked service are represented by the failure DTOs.</para>
+    reflected in the failure DTOs. Similarly, Whiteboard servlets that have 
+    patterns shadowed by other Whiteboard services are represented in
+    the failure DTOs.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
@@ -1179,7 +1179,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>If the service registration properties of the servlet Whiteboard
     service are modified, the <code>destroy()</code> method is called.
-    Subsequently the servlet is re-initialized.</para>
+    Subsequently the servlet is re-initialized. If a Prototype Service Factory 
+    is used for the servlet this re-initialization is done on a new service 
+    object.</para>
 
     <para>When multiple Http Whiteboard implementations are present all of
     them can potentially register the <code>Servlet</code>. In such situations
@@ -1233,7 +1235,7 @@ public class MyServlet extends HttpServlet {
 </programlisting>
 
     <para>This example registers the servlet at: <code>/myservlet</code>.
-    Future requests for <code>http://www.acme.com/myservlet</code> map to the
+    Requests for <code>http://www.acme.com/myservlet</code> map to the
     servlet, whose <code>service()</code> method is called to process the
     request.</para>
 
@@ -1244,7 +1246,7 @@ public class MyServlet extends HttpServlet {
 
     <programlisting>osgi.http.whiteboard.context.select=(osgi.http.whiteboard.context.name=my-context)</programlisting>
 
-    <para>This will cause the servlet to move to <code>/myapp/myservlet</code>
+    <para>This will cause the servlet to move to <code>http://www.acme.com/myapp/myservlet</code>
     as configured by the custom Servlet Context Handler.</para>
 
     <section>
@@ -1494,8 +1496,8 @@ public class AsyncServlet extends HttpServlet {
     osgi.http.whiteboard.filter.servlet</programlisting></para>
 
     <para>Similar to servlets, <code>Filter</code> objects are initialized by
-    a Http Whiteboard implementation when they are registered and bound to
-    that specific implementation. The initialization is done by calling the
+    a Http Whiteboard implementation before they start filtering requests.
+    The initialization is done by calling the
     <code>Filter.init(FilterConfig)</code> method. The
     <code>FilterConfig</code> parameter provides access to
     <code>filter.init.*</code> properties on the servlet filter service
@@ -1566,8 +1568,8 @@ public class MyFilter implements Filter {
     service registration property that marks it as a resource service:
     <code>osgi.http.whiteboard.resource.pattern</code>. The actual service
     object registered is not used to serve resources, it is merely used to
-    inform the Http Whiteboard implementation how to serve resources from the
-    bundle that registered the service.</para>
+    inform the Http Whiteboard implementation to serve resources from 
+    a certain source.</para>
 
     <para>The following table describes the supported service registration
     properties. In addition the common properties as described in <xref
@@ -1654,7 +1656,8 @@ public class MyResourceService {}</programlisting>
 public class SomeResourceService {}</programlisting>
 
     <para>The above examples use the default <code>ServletContextHelper</code>
-    implementation. For more control around serving resources, a resources
+    implementation, which loads these resources from the bundle that registered
+    the resource service. For more control around serving resources, a resources
     service can be associated to a custom <code>ServletContextHelper</code>.
     For example, a custom Servlet Context Helper can serve resources from
     locations other than the current bundle.</para>
@@ -1822,14 +1825,18 @@ public class MyServletRequestListener implements ServletRequestListener {
       </listitem>
     </orderedlist>
 
+    <para>Note that some of the above actions may not be performed immediately,
+    allowing an implementation to utilize lazy or asynchronous behavior.
+    </para>
+
     <para>As servlets and servlet filters services might come and go as well
     as <code>ServletContextHelper</code> services might come and go, use of
     the Whiteboard services can be very dynamic. Therefore servlet and servlet
-    filter services might transition between used by a Http Whiteboard
-    implementation to not being used and back to be used. For example, when a
-    matching Servlet Context Helper arrives with a higher ranking than the
+    filter services might transition between bound to a Http Whiteboard
+    implementation to being unbound and back to be bound. For example, when a
+    matching Servlet Context Helper with the same name arrives with a higher ranking than the
     currently bound Servlet Context Helper, the servlet will be destroyed and
-    reinitialized, bound to this better matching Servlet Context Helper. This
+    re-initialized, bound to this better matching Servlet Context Helper. This
     is to ensure that timing issues cannot dictate the topology of the
     system.</para>
 
@@ -1943,7 +1950,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     successfully registered as well as information about the Whiteboard
     services that were not succesfully registered. Whiteboard services that
     have the required properties set but cannot be processed, are reflected in
-    the Failure DTOs. Whiteboard services of interfaces described in this
+    the failure DTOs. Whiteboard services of interfaces described in this
     specification that do not have the required properties set are ignored and
     not reflected in the failure DTOs.</para>
 
