@@ -1931,7 +1931,7 @@ public class MyServletRequestListener implements ServletRequestListener {
           <row>
             <entry><code>osgi.http.service.id</code></entry>
 
-            <entry><para><code>Collection&lt;Integer&gt;</code></para></entry>
+            <entry><para><code>Collection&lt;Long&gt;</code></para></entry>
 
             <entry><para> If this Http Whiteboard implementation also
             implements the <xref linkend="service.http"/>, this property is
