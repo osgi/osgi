@@ -2095,18 +2095,17 @@ public class MyServletRequestListener implements ServletRequestListener {
     <section>
       <title>Service Permissions</title>
 
-      <para>Bundles that need to register a servlet, listener, resource
-      filter, or servlet context helpers must be granted
-      <code>ServicePermission[interfaceName, REGISTER]</code> where interface
-      name is the whiteboard interface the service is registered for.</para>
+      <para>Bundles that need to register Http Whiteboard services must be
+      granted <code>ServicePermission[interfaceName, REGISTER]</code> where
+      interface name is the Http Whiteboard service interface name.</para>
 
       <para>The Http Whiteboard implementation must be granted
-      <code>ServicePermission[interfaceName, GET]</code> to retrieve the
-      services from the service registry.</para>
+      <code>ServicePermission[interfaceName, GET]</code> to retrieve the Http
+      Whiteboard services from the service registry.</para>
 
-      <para>In addition if a whiteboard service wants to be associated with a
-      shared servlet context helper registered by another bundle, the bundle
-      registering the whiteboard service must be granted
+      <para>In addition if an Http Whiteboard service wants to be associated
+      with a shared servlet context helper registered by another bundle, the
+      bundle registering the Http Whiteboard service must be granted
       <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper,
       GET]</code>.<remark>BJH Does this mean that the http whiteboard
       implementation must perform a hasPermission check on the bundle that
@@ -2126,8 +2125,8 @@ public class MyServletRequestListener implements ServletRequestListener {
     </section>
 
     <section>
-      <title>Accessing Resources with the default Servlet Context Helper
-      implementation</title>
+      <title>Accessing Resources with the Default Servlet Context Helper
+      Implementation</title>
 
       <para>The Http Whiteboard implementation must be granted
       <code>AdminPermission[*,RESOURCE]</code> so that bundles may use the
@@ -2198,17 +2197,20 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
       <para>This ensures the Http Whiteboard implementation can only use the
       URL if the bundle registering the <code>ServletContextHelper</code>
-      service that returned the URL also has permission to use the URL.</para>
+      service that returned the URL also has permission to use the URL. The
+      use of a captured <code>AccessControlContext</code> only applies when
+      accessing URL objects returned by the <code>getResource</code> method of
+      the <code>ServletContextHelper</code> service.</para>
     </section>
 
     <section>
-      <title>Servlet and HttpContext objects</title>
+      <title>Calling Http Whiteboard Services</title>
 
       <para>This specification does not require that the Http Whiteboard
-      implementation is granted All Permission or wraps calls to the
-      whiteboard services in a <code>doPrivileged</code> block. Therefore, it
-      is the responsibility of the whiteboard service implementations to use a
-      <code>doPrivileged</code> block when performing privileged
+      implementation is granted All Permission or wraps calls to the Http
+      Whiteboard services in a <code>doPrivileged</code> block. Therefore, it
+      is the responsibility of the Http Whiteboard service implementations to
+      use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
     </section>
   </section>
