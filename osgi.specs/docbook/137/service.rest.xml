@@ -1524,7 +1524,18 @@ client.installBundle({
   <section>
     <title>XML Schema</title>
 
-    <remark>TODO: needs REST representations XML schema</remark>
+    <para>The namespace for XML representations is:</para>
+
+    <programlisting>http://www.osgi.org/xmlns/rest/v1.0.0</programlisting>
+
+    <para>The recommended prefix for this namespace is
+    <code>rest</code>.</para>
+
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/rest/v1.0.0/rest.xsd" parse="text"/></programlisting>
+
+    <para>The schema is also available in digital form from <xref
+    linkend="service.rest-reference.xml.schemas"/>.</para>
   </section>
 
   <section>
@@ -1603,9 +1614,8 @@ client.installBundle({
       <bibliomixed xml:id="service.rest-webidl"><title>Web
       IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
 
-      <bibliomixed xml:id="service.rest-xml.schema.2"><title>XML Schema Part
-      2: Data types Second
-      Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+      <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
+      Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
 
       <bibliomixed
       xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
