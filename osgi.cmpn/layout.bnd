@@ -50,4 +50,5 @@ osgi.cmpn.resources = {${project.workspace}/osgi.companion/legal/jar}, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   				xmlns/rsa=${project.workspace}/xmlns/rsa, \
                 xmlns/repository=${project.workspace}/xmlns/repository, \
+                xmlns/rest=${project.workspace}/xmlns/rest, \
   				xmlns/scr=${project.workspace}/xmlns/scr
