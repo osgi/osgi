@@ -149,8 +149,7 @@
       transmitted as a representation. The format of the representation is
       subject to a mutual agreement between client and management service
       regarding media types commonly supported by both endpoints. This
-      specification describes two representation formats: JSON and
-      XML.</para>
+      specification describes two representation formats: JSON and XML.</para>
     </section>
   </section>
 
@@ -209,18 +208,20 @@ framework/services/representations
 framework/service/{serviceid}</programlisting>
 
       <para><code>framework/bundle/0/state</code> is an alias for
-          <code>framework/state</code></para>
+      <code>framework/state</code></para>
 
-      <para>Extensions to the REST Management Service can be discovered by visiting the Extensions Resource at:</para>
+      <para>Extensions to the REST Management Service can be discovered by
+      visiting the Extensions Resource at:</para>
 
       <programlisting>extensions</programlisting>
 
-      <para>For more details on the extension mechanism see <xref linkend="service.rest-extensions"/>
-      </para>
+      <para>For more details on the extension mechanism see <xref
+      linkend="service.rest-extensions"/></para>
     </section>
 
     <section xml:id="service.rest-resource.filters">
       <title>Filtering Results</title>
+
       <para>The <code>bundles</code>, <code>bundles/representations</code>,
       <code>services</code>, and <code>services/representations</code>
       resources allow the use of a query parameter which specifies a filter to
@@ -348,8 +349,8 @@ framework/service/{serviceid}</programlisting>
       syntactically different forms of POST requests which are used to install
       new bundles to the framework.</para>
 
-      <para>Results for this resource can be filtered as described in 
-      <xref linkend="service.rest-resource.filters"/>.</para>
+      <para>Results for this resource can be filtered as described in <xref
+      linkend="service.rest-resource.filters"/>.</para>
 
       <section>
         <title>GET</title>
@@ -470,20 +471,20 @@ framework/service/{serviceid}</programlisting>
       <section>
         <title>GET of the Representations</title>
 
-        <para>The <code>bundles</code> resource returns a list of the URIs of all bundles
-        installed on the framework. For clients interested in the details of 
-        multiple bundles
-        there is also the possibility to retrieve the bundle representation of
-        each installed bundle with a single request through the
-        <emphasis>bundles/representations</emphasis> resource.</para>
+        <para>The <code>bundles</code> resource returns a list of the URIs of
+        all bundles installed on the framework. For clients interested in the
+        details of multiple bundles there is also the possibility to retrieve
+        the bundle representation of each installed bundle with a single
+        request through the <emphasis>bundles/representations</emphasis>
+        resource.</para>
 
         <para>The body of the response is a <xref
         linkend="service.rest-bundle.representations.list.representation"
         xrefstyle="template:%t"/>. The request can return the following status
         codes:</para>
 
-        <para>Results for this resource can be filtered as described in 
-        <xref linkend="service.rest-resource.filters"/>.</para>
+        <para>Results for this resource can be filtered as described in <xref
+        linkend="service.rest-resource.filters"/>.</para>
 
         <itemizedlist>
           <listitem>
@@ -744,10 +745,10 @@ framework/service/{serviceid}</programlisting>
         <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.header.representation"
         xrefstyle="template:%t"/> from the REST management service. The raw
-        header value is used unless an <code>Accept-Language</code> header is set on the
-        HTTP request. If multiple accepted languages are set only the first is
-        used to localize the header. The request can return the following
-        status codes:</para>
+        header value is used unless an <code>Accept-Language</code> header is
+        set on the HTTP request. If multiple accepted languages are set only
+        the first is used to localize the header. The request can return the
+        following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -855,9 +856,9 @@ framework/service/{serviceid}</programlisting>
       on the framework, optionally constrained by a filter expression. It is
       read-only and therefore only supports the GET request.</para>
 
-      <para>Results for this resource can be filtered as described in 
-      <xref linkend="service.rest-resource.filters"/>.</para>
-  
+      <para>Results for this resource can be filtered as described in <xref
+      linkend="service.rest-resource.filters"/>.</para>
+
       <section>
         <title>GET</title>
 
@@ -894,19 +895,18 @@ framework/service/{serviceid}</programlisting>
         <title>GET of the Representations</title>
 
         <para>The services resource returns a list of the URIs of all services
-        registered on the framework. For clients interested in the details
-        of multiple services
-        there is also the possibility to retrieve the service representation
-        of each available service with a single request through the
-        <emphasis>services/representations</emphasis> resource. The body of
-        the response is a <xref
+        registered on the framework. For clients interested in the details of
+        multiple services there is also the possibility to retrieve the
+        service representation of each available service with a single request
+        through the <emphasis>services/representations</emphasis> resource.
+        The body of the response is a <xref
         linkend="service.rest-service.representations.list.representation"
         xrefstyle="template:%t"/> from the REST management service. The
         request can return the following status codes:</para>
 
-        <para>Results for this resource can be filtered as described in 
-        <xref linkend="service.rest-resource.filters"/>.</para>
-    
+        <para>Results for this resource can be filtered as described in <xref
+        linkend="service.rest-resource.filters"/>.</para>
+
         <itemizedlist>
           <listitem>
             <para>200 (OK): the request has been served successfully and the
@@ -1357,8 +1357,7 @@ framework/service/{serviceid}</programlisting>
       <para>To use the Java Client, obtain the <xref
       linkend="org.osgi.service.rest.client.RestClientFactory"
       xrefstyle="hyperlink"/> service. Create a client by providing the root
-      URL of the REST service, for example:
-      <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
+      URL of the REST service, for example: <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
 RestClient restClient = restClientFactory.createRestClient(
     new URI("http://localhost:8080/restendpoint"));
 
@@ -1377,12 +1376,13 @@ restClient.startBundle(newBundle.id);</programlisting></para>
 
       <para>This specification also describes a JavaScript client to the REST
       Management service. This client makes it easy to manage an OSGi
-      framework from any JavaScript environment, including Web Browsers.</para>
+      framework from any JavaScript environment, including Web
+      Browsers.</para>
 
-      <para>The JavaScript client follows the 
-      <emphasis>promises</emphasis> programming style; the request is made
-      asynchronously and a <code>success()</code> or <code>failure()</code>
-      callback is made when the response arrives.</para>
+      <para>The JavaScript client follows the <emphasis>promises</emphasis>
+      programming style; the request is made asynchronously and a
+      <code>success()</code> or <code>failure()</code> callback is made when
+      the response arrives.</para>
 
       <para>To use the JavaScript client create an instance of
       <code>OSGiRestClient</code> providing the root URL of the REST service.
@@ -1397,8 +1397,8 @@ client.installBundle({
   }
 });</programlisting></para>
 
-      <para>More details on the JavaScript Client can be found in the
-      <xref linkend="service.rest-javascript.api" xrefstyle="hyperlink"/> API
+      <para>More details on the JavaScript Client can be found in the <xref
+      linkend="service.rest-javascript.api" xrefstyle="hyperlink"/> API
       documentation section.</para>
     </section>
   </section>
@@ -1407,12 +1407,12 @@ client.installBundle({
     <title>Extending the REST Management Service</title>
 
     <para>This specification describes a REST-based management interface for
-    Core Framework functionality. Other services in the framework might
-    also benefit from management access through REST. This can involve
-    services specified by the OSGi Alliance as part of the Core Framework,
-    Compendium, or Enterprise Specifications but also application-specific
-    functionality provided by the developer. It is desirable to expose such
-    management services as extensions of the REST Management Service.</para>
+    Core Framework functionality. Other services in the framework might also
+    benefit from management access through REST. This can involve services
+    specified by the OSGi Alliance as part of the Core Framework, Compendium,
+    or Enterprise Specifications but also application-specific functionality
+    provided by the developer. It is desirable to expose such management
+    services as extensions of the REST Management Service.</para>
 
     <para>This REST service can be implemented by using various technologies
     such as Java Servlets, Restlet, JAX-RS, and others. Therefore, it might
@@ -1426,44 +1426,43 @@ client.installBundle({
     specification might offer mechanisms for tighter integration for the case
     that extensions are developed using the same underlying technology.</para>
 
-    <para>The main purpose of the extension mechanism is to advertise extensions
-    to the core REST implementation, which makes them discoverable for 
-    clients. This mechanism can be used to check if
-    a REST interface exists for a specific service. This is done through
-    the <xref linkend="service.rest-extensions.resource"
-    xrefstyle="template:%t"/> which contains a description and a path for
-    every extension currently available. Implementations that want to contribute their
-    extensions to the REST Management Service can do so by registering the
-    <xref linkend="org.osgi.service.rest.RestApiExtension"
-    xrefstyle="hyperlink"/> service using the <xref
-    linkend="service.rest-whiteboard.pattern.ref"/>. The
-    extension interface is only a marker and the relevant information is
-    exposed through the 
-    <xref linkend="org.osgi.service.rest.RestApiExtension.NAME"
-    xrefstyle="hyperlink"/>,
-    <xref linkend="org.osgi.service.rest.RestApiExtension.URI_PATH"
-    xrefstyle="hyperlink"/> and optionally
-    <xref linkend="org.osgi.service.rest.RestApiExtension.SERVICE"
-    xrefstyle="hyperlink"/>
-    properties. Note that it is the responsibility of the extension to ensure
-    that the endpoint announced via the <code>RestApiExtension</code> service
-    is actually present. The Whiteboard service does not realize the extension
-    endpoint; it purely announces it to the main REST implementation for 
-    inclusion in the Extensions Resource.</para>
+    <para>The main purpose of the extension mechanism is to advertise
+    extensions to the core REST implementation, which makes them discoverable
+    for clients. This mechanism can be used to check if a REST interface
+    exists for a specific service. This is done through the <xref
+    linkend="service.rest-extensions.resource" xrefstyle="template:%t"/> which
+    contains a description and a path for every extension currently available.
+    Implementations that want to contribute their extensions to the REST
+    Management Service can do so by registering the <xref
+    linkend="org.osgi.service.rest.RestApiExtension" xrefstyle="hyperlink"/>
+    service using the <xref linkend="service.rest-whiteboard.pattern.ref"/>.
+    The extension interface is only a marker and the relevant information is
+    exposed through the <xref
+    linkend="org.osgi.service.rest.RestApiExtension.NAME"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.rest.RestApiExtension.URI_PATH"
+    xrefstyle="hyperlink"/> and optionally <xref
+    linkend="org.osgi.service.rest.RestApiExtension.SERVICE"
+    xrefstyle="hyperlink"/> properties. Note that it is the responsibility of
+    the extension to ensure that the endpoint announced via the
+    <code>RestApiExtension</code> service is actually present. The Whiteboard
+    service does not realize the extension endpoint; it purely announces it to
+    the main REST implementation for inclusion in the Extensions
+    Resource.</para>
 
     <para>In order to be discoverable REST interface extensions to OSGi Core,
     Compendium, or Enterprise services must use their canonical package name
-    as advertised name. E.g., the name of the REST interface for the User Admin must be
-    <code>org.osgi.service.useradmin</code>. This way, a client is able to
-    check if there is a given extension available on a host. User-defined
-    extensions should use the package name of the service they provide
-    management capabilities for.</para>
+    as advertised name. E.g., the name of the REST interface for the User
+    Admin must be <code>org.osgi.service.useradmin</code>. This way, a client
+    is able to check if there is a given extension available on a host.
+    User-defined extensions should use the package name of the service they
+    provide management capabilities for.</para>
 
     <section xml:id="service.rest-extensions.resource">
       <title>Extensions Resource</title>
 
       <para><code>extensions</code></para>
-      
+
       <para>The extensions resource enumerates all extensions currently
       registered through the Whiteboard Pattern. It is read-only and therefore
       only supports the GET request.</para>
