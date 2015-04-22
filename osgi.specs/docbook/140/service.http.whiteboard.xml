@@ -2089,9 +2089,6 @@ public class MyServletRequestListener implements ServletRequestListener {
     <para>This section only applies when executing in an OSGi environment
     which is enforcing Java permissions.</para>
 
-    <para><remark>BJH Need review of this section by Tom, David, Carsten,
-    ...</remark></para>
-
     <section>
       <title>Service Permissions</title>
 
@@ -2102,16 +2099,6 @@ public class MyServletRequestListener implements ServletRequestListener {
       <para>The Http Whiteboard implementation must be granted
       <code>ServicePermission[interfaceName, GET]</code> to retrieve the Http
       Whiteboard services from the service registry.</para>
-
-      <para>In addition if an Http Whiteboard service wants to be associated
-      with a shared servlet context helper registered by another bundle, the
-      bundle registering the Http Whiteboard service must be granted
-      <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper,
-      GET]</code>.<remark>BJH Does this mean that the http whiteboard
-      implementation must perform a hasPermission check on the bundle that
-      registered the whiteboard service? This seems a pretty broad permission
-      requirement and I am not sure it makes sense. Only the whiteboard
-      implementation should have get permission for SCH.</remark></para>
     </section>
 
     <section>
