@@ -268,4 +268,26 @@
             <element name="message" type="string" />
         </all>
     </complexType>
+
+    <element name="extensions" type="rest:Textensions">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.extensions+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Textensions">
+        <sequence>
+            <element name="extension" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <all>
+                        <element name="name" type="string" />
+                        <element name="path" type="string" />
+                        <element name="service" type="long" minOccurs="0" />
+                    </all>
+                </complexType>
+            </element>
+        </sequence>
+    </complexType>
 </schema>
