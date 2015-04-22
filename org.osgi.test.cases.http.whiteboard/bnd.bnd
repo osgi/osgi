@@ -4,10 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
-# Export-Package						= \
-#	${p}.services.*
-Import-Package: *
-#Import-Package: ${-signaturetest}, *
+Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	tb1.jar,\
@@ -29,5 +26,9 @@ Include-Resource					= \
 	org.osgi.service.http.port=8080
 
 Test-Cases							= ${testcases}
-# -signaturetest                      = org.osgi.service.rest
+-signaturetest = \
+  org.osgi.service.http.whiteboard, \
+  org.osgi.service.http.context, \
+  org.osgi.service.http.runtime, \
+  org.osgi.service.http.runtime.dto
 
