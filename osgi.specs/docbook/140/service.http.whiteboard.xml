@@ -176,7 +176,18 @@
     implemented using a Service Factory, for example to provide resources from
     the associated bundle, as the <emphasis>default</emphasis> implementation
     does. Therefore the Whiteboard implementation must get the Servlet Context
-    Helper using the Bundle Context of the associated Whiteboard
+    Helper using the Bundle Context of the bundle that registered the
+    Whiteboard service.</para>
+
+    <para>Some environments may use <xref
+    linkend="service.http.whiteboard-service.hook.ref"/> to isolate
+    <code>ServletContextHelper</code> service registrations.  For example,
+    <xref linkend="service.subsystem"/>.  The Whiteboard implementation
+    must check that the bundle registering the Whiteboard service has the
+    ability to find the <code>ServletContextHelper</code> service before
+    allowing the Whiteboard service to bind to the Servlet Context Helper.
+    This can be done by calling one of the <code>getServiceReferences</code>
+    methods on the Bundle Context of bundle that registered the Whiteboard
     service.</para>
 
     <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
@@ -2089,6 +2100,9 @@ public class MyServletRequestListener implements ServletRequestListener {
     <para>This section only applies when executing in an OSGi environment
     which is enforcing Java permissions.</para>
 
+    <para><remark>BJH Need review of this section by Tom, David, Carsten,
+    ...</remark></para>
+
     <section>
       <title>Service Permissions</title>
 
@@ -2099,6 +2113,16 @@ public class MyServletRequestListener implements ServletRequestListener {
       <para>The Http Whiteboard implementation must be granted
       <code>ServicePermission[interfaceName, GET]</code> to retrieve the Http
       Whiteboard services from the service registry.</para>
+
+      <para>In addition if an Http Whiteboard service wants to be associated
+      with a shared servlet context helper registered by another bundle, the
+      bundle registering the Http Whiteboard service must be granted
+      <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper,
+      GET]</code>.<remark>BJH Does this mean that the http whiteboard
+      implementation must perform a hasPermission check on the bundle that
+      registered the whiteboard service? This seems a pretty broad permission
+      requirement and I am not sure it makes sense. Only the whiteboard
+      implementation should have get permission for SCH.</remark></para>
     </section>
 
     <section>
@@ -2243,6 +2267,10 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <bibliomixed
       xml:id="service.http.whiteboard-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.http.whiteboard-service.hook.ref"><title>Core Service
+      Hooks</title>OSGi Core, Chapter 55 Service Hook Service Specification</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
