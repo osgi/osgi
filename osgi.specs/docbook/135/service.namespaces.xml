@@ -86,9 +86,9 @@
       See <xref linkend="service.namespaces-osgi.extender.namespace"
       xrefstyle="template:%t"/> for an example.</para>
 
-      <para>From some Namespaces, capabilities do not follow Semantic
+      <para>For some Namespaces, capabilities are not versioned using Semantic
       Versioning. The versioning scheme used in those Namespaces will be
-      described in the documentation for the Namespace.</para>
+      described in the specification for the Namespace.</para>
     </section>
   </section>
 
