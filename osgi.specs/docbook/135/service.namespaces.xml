@@ -88,7 +88,7 @@
 
       <para>From some Namespaces, capabilities do not follow Semantic
       Versioning. The versioning scheme used in those Namespaces will be
-      described in the documentation for the Namespace .</para>
+      described in the documentation for the Namespace.</para>
     </section>
   </section>
 
@@ -360,16 +360,6 @@ DynamicImport-Package:
     attribute. The contract bundle does not require such coordination; it also
     allows the package exporters to reside in different and unrelated
     bundles.</para>
-
-    <para>A client bundle may only work with a specific range of contract
-    versions. For example, a client may not work with JavaServlet with a
-    version range of [3.0,3.1). In this case the following could be
-    used</para>
-
-    <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=3.0)(!(version&gt;=3.1)))",
-Import-Package:
-    javax.servlet, javax.servlet.http</programlisting>
 
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
