@@ -263,6 +263,17 @@
     attributes must be used to make sure it is bound to the correct versions
     of the packages.</para>
 
+    <para>Additionally, the <code>osgi.contract</code> Namespace can be used in 
+    cases where API is defined by entities not using semantic versioning. 
+    In those cases it can be unclear what the exported package version is
+    and impossible to create a meaningful import package version range. 
+    In such cases importing the package <emphasis>without</emphasis> version 
+    number and requiring the <code>osgi.contract</code> Namespace can provide
+    a way to create portable bundles that use such API. OSGi has defined 
+    contract names for a number of such APIs, for more information see 
+    <xref linkend="namespace-portable.java.contracts.ref"/>.
+    </para>
+
     <para>An <code>osgi.contract</code> capability can then be used in the
     following ways:</para>
 
