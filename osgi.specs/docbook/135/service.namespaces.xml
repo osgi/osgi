@@ -75,6 +75,23 @@
         linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>Versioning Namespaces</title>
+      <para>In general capability namespaces are versioned using the 
+        <xref linkend="coresemver"/> scheme. 
+        As a result namespaces specify one version in the capability and 
+        a version range in the requirement. An example of this versioning scheme
+        applied can be found in the 
+        <xref linkend="service.namespaces-osgi.extender.namespace" xrefstyle="template:%t"/>.
+      </para>
+
+      <para>
+        In certain cases namespaces don't follow semantic versioning. The versioning
+        scheme used in those cases will be described together with the capability namespace
+        documentation.
+      </para>
+    </section>
   </section>
 
   <section xml:id="service.namespaces-osgi.extender.namespace">
@@ -307,7 +324,7 @@ Export-Package:
     the following manifest:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))",
+    filter:="(&amp;(osgi.contract=JavaServlet)(version=2.5))",
 Import-Package:
     javax.servlet, javax.servlet.http</programlisting>
 
@@ -325,7 +342,7 @@ Import-Package:
     include an attribute on the exports. For example:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))"
+    filter:="(&amp;(osgi.contract=JavaServlet)(version=2.5))"
 DynamicImport-Package: 
     *;JavaServlet=contract</programlisting>
 
@@ -434,6 +451,26 @@ Import-Package:
         </tbody>
       </tgroup>
     </table>
+
+    <section>
+      <title>Versioning</title>
+
+      <para>
+        As the <code>osgi.contract</code> namespace follows the versioning
+        of the associated contract this namespace is <emphasis>not</emphasis> semantically versioned.
+        The associated contracts are often versioned using marketing or other versioning schemes and
+        therefore the version number cannot be used as an indication of backward compatibility.
+      </para>
+
+      <para>As a result, the <code>osgi.contract</code> capability follows a 
+        <emphasis>discrete</emphasis> versioning scheme. In such a versioning scheme each 
+        version is treated as separate without 
+        any implied relation to another version. The provider of the capability lists 
+        <emphasis>all</emphasis> compatible versions. The requirer of the capability only selects
+        one version.
+      </para>
+    </section>
+
   </section>
 
   <section xml:id="service.namespaces-osgi.service.namespace">
@@ -539,6 +576,15 @@ Import-Package:
         </tbody>
       </tgroup>
     </table>
+
+    <section>
+      <title>Versioning</title>
+      <para>
+        The <code>osgi.service</code> namespace is <emphasis>not</emphasis> versioned.
+        The version of the package of the associated service is found via the uses 
+        clause specified on the capability.
+      </para>
+    </section>
   </section>
 
   <section xml:id="service.namespaces-osgi.implementation.namespace">
@@ -700,7 +746,10 @@ Import-Package:
       Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 
       <bibliomixed xml:id="i1777884"><title>Common Headers</title>OSGi Core,
-      Chapter 3, Common Header Syntax</bibliomixed>
+        Chapter 3, Common Header Syntax</bibliomixed>
+
+      <bibliomixed xml:id="coresemver"><title>Semantic Versioning</title>OSGi Core,
+        Chapter 3, Sematic Versioning</bibliomixed>
     </bibliolist>
   </section>
 
