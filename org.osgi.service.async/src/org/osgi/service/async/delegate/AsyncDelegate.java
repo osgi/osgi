@@ -21,72 +21,81 @@ import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.util.promise.Promise;
 
 /**
- * This interface is used by services to allow them to optimize Asynchronous calls where they are capable
- * of executing more efficiently.
+ * This interface is used by services to allow them to optimize Asynchronous
+ * calls where they are capable of executing more efficiently.
  * 
- * This may mean that the service has access to its own thread pool, or that it can delegate work to a remote 
- * node, or act in some other way to reduce the load on the Asynchronous Services implementation when making
- * an asynchronous call.
+ * <p>
+ * This may mean that the service has access to its own thread pool, or that it
+ * can delegate work to a remote node, or act in some other way to reduce the
+ * load on the Asynchronous Services implementation when making an asynchronous
+ * call.
  */
 @ConsumerType
 public interface AsyncDelegate {
 	/**
-	 * This method can be used by clients, or the Async service, to optimize
+	 * Invoke the specified method as an asynchronous task with the specified
+	 * arguments.
+	 * 
+	 * <p>
+	 * This method can be used by clients, or the Async Service, to optimize
 	 * Asynchronous execution of methods.
 	 * 
-	 * When called, the {@link AsyncDelegate} should execute the supplied method
-	 * using the supplied arguments asynchronously, returning a promise that can
-	 * be used to access the result.
+	 * <p>
+	 * When called, this method should invoke the supplied method using the
+	 * supplied arguments asynchronously, returning a Promise that can be used
+	 * to access the result.
 	 * 
-	 * If the method cannot be executed asynchronously by the delegate then it
-	 * should return <code>null</code>.
+	 * <p>
+	 * If the method cannot be executed asynchronously by this method then
+	 * {@code null} must be returned.
 	 * 
-	 * @param m the method that should be asynchronously executed
-	 * @param args the arguments that should be used to invoke the method
-	 * 
-	 * @return A promise representing the asynchronous result, or
-	 *         <code>null</code> if this method cannot be asynchronously invoked
-	 *         by the AsyncDelegate.
-	 * @throws Exception An exception should be thrown only if there was an
-	 *         serious error that prevented the asynchronous call from starting,
-	 *         for example the supplied method does not exist on this object.
-	 *         Exceptions should not be thrown to indicate that the call does
-	 *         not support asynchronous invocation, instead the AsyncDelegate
-	 *         should return
-	 *         <code>null<code>. Exceptions should also not be thrown to
-	 *         indicate a failure from the execution of the underlying method, 
-	 *         this should be handled by failing the returned promise.
+	 * @param m The method to be asynchronously invoked.
+	 * @param args The arguments to be used to invoke the method.
+	 * @return A Promise representing the asynchronous result, or {@code null}
+	 *         if this method cannot be asynchronously invoked.
+	 * @throws Exception An exception should be thrown only if there was a
+	 *         serious error that prevented the asynchronous task from starting.
+	 *         For example, the specified method does not exist on this object.
+	 *         Exceptions must not be thrown to indicate that the call does not
+	 *         support asynchronous invocation. Instead this method must return
+	 *         {@code null}. Exceptions must also not be thrown to indicate a
+	 *         failure from the execution of the underlying method. This must be
+	 *         handled by failing the returned Promise.
 	 */
 	Promise<?> async(Method m, Object[] args) throws Exception;
 
 	/**
-	 * This method can be used by clients, or the Async service, to optimize
+	 * Invoke the specified method as a "fire-and-forget" asynchronous task with
+	 * the specified arguments.
+	 * 
+	 * <p>
+	 * This method can be used by clients, or the Async Service, to optimize
 	 * Asynchronous execution of methods.
 	 * 
-	 * When called, the {@link AsyncDelegate} should execute the supplied method
-	 * using the supplied arguments asynchronously. This method differs from
-	 * {@link #async(Method, Object[])} in that it does not return a promise.
+	 * <p>
+	 * When called, this method should invoke the specified method using the
+	 * specified arguments asynchronously. This method differs from
+	 * {@link #async(Method, Object[])} in that it does not return a Promise.
 	 * This method therefore allows the implementation to perform more
 	 * aggressive optimizations because the end result of the invocation does
-	 * not need to be returned to the client.
+	 * not need to be returned to the caller.
 	 * 
-	 * If the method cannot be executed asynchronously by the delegate then it
-	 * should return <code>false</code>.
+	 * <p>
+	 * If the method cannot be executed asynchronously by this method then
+	 * {@code false} must be returned.
 	 * 
-	 * @param m the method that should be asynchronously executed
-	 * @param args the arguments that should be used to invoke the method
-	 * 
-	 * @return <code>true<code> if the asynchronous execution request has
-	 *         been accepted, or <code>false</code> if this method cannot be
+	 * @param m The method to be asynchronously invoked.
+	 * @param args The arguments to be used to invoke the method.
+	 * @return {@code true} if the asynchronous execution request has been
+	 *         accepted, or {@code false} if this method cannot be
 	 *         asynchronously invoked by the AsyncDelegate.
-	 * @throws Exception An exception should be thrown only if there was an
-	 *         serious error that prevented the asynchronous call from starting,
-	 *         for example the supplied method does not exist on this object.
-	 *         Exceptions should not be thrown to indicate that the call does
-	 *         not support asynchronous invocation, instead the AsyncDelegate
-	 *         should return
-	 *         <code>false<code>. Exceptions should also not be thrown to
-	 *         indicate a failure from the execution of the underlying method.
+	 * @throws Exception An exception should be thrown only if there was a
+	 *         serious error that prevented the asynchronous task from starting.
+	 *         For example, the specified method does not exist on this object.
+	 *         Exceptions must not be thrown to indicate that the call does not
+	 *         support asynchronous invocation. Instead this method must return
+	 *         {@code false}. Exceptions must also not be thrown to indicate a
+	 *         failure from the execution of the underlying method.
 	 */
 	boolean execute(Method m, Object[] args) throws Exception;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.async; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.async.delegate; version="[1.0,2.0)"}
  * 
- * @version 1.0
  * @author $Id$
  */
 
+@Version("1.0")
 package org.osgi.service.async.delegate;
+
+import org.osgi.annotation.versioning.Version;
 
