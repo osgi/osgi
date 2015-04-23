@@ -32,7 +32,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Inter-operatbility</emphasis> - Full
+          <para><emphasis>Interoperatbility</emphasis> - Full
           inter-operability between foreign application models and OSGi
           services is required. This requires both getting services,
           registering services, and listening to Framework events.</para>
@@ -924,7 +924,7 @@ public class Example extends MIDlet {
 
       <para>Applications can package permissions as described in the
       Conditional Permission Admin. These permissions will restrict the
-      foreign's application permissions to maximally the permissions in this
+      foreign application's permissions to maximally the permissions in this
       file scoped by the signer's permissions.</para>
     </section>
   </section>

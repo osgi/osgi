@@ -172,7 +172,7 @@ public abstract class ServletContextHelper {
 	 * When this method returns {@code false}, the Http Whiteboard
 	 * Implementation will send the response back to the client, thereby
 	 * completing the request. When this method returns {@code true}, the Http
-	 * Whitboard Implementation will proceed with servicing the request.
+	 * Whiteboard Implementation will proceed with servicing the request.
 	 * 
 	 * <p>
 	 * If the specified request has been authenticated, this method must set the

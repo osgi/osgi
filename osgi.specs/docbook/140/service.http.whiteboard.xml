@@ -45,7 +45,7 @@
 
       <listitem>
         <para><emphasis>Registering resources</emphasis> - Resources such as
-        HTML files, Javascript, image files, and other static resources can be
+        HTML files, JavaScript, image files, and other static resources can be
         made available over the network by registering resource
         services.</para>
       </listitem>
@@ -832,7 +832,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>3.0</para></entry>
 
-              <entry><para>Thows <code>IllegalStateException</code>. The
+              <entry><para>Throws <code>IllegalStateException</code>. The
               <code>ServletContext</code> has already been
               initialized.</para></entry>
             </row>
@@ -842,7 +842,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>3.0</para></entry>
 
-              <entry><para>Thows <code>IllegalStateException</code>. The
+              <entry><para>Throws <code>IllegalStateException</code>. The
               <code>ServletContext</code> has already been
               initialized.</para></entry>
             </row>
@@ -855,7 +855,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <title>Relation to the Servlet Container</title>
 
       <para>Implementations of this specification will often be backed by
-      existing servlet containers or a JavaEE application server. There may
+      existing servlet containers or a Java EE application server. There may
       also exist implementations which bridge into a servlet container into
       which the OSGi Framework has been deployed as a Web Application.</para>
 
@@ -1283,7 +1283,7 @@ public class MyServlet extends HttpServlet {
       register an error page with the specific error code and a higher service
       ranking.</para>
 
-      <para>While not being common practise, it is possible to combine the
+      <para>While not being common practice, it is possible to combine the
       <code>osgi.http.whiteboard.servlet.errorPage</code> and
       <code>osgi.http.whiteboard.servlet.pattern</code> properties. If a
       single servlet registration has both these registration properties it is
@@ -1575,7 +1575,7 @@ public class MyFilter implements Filter {
     JavaScript, CSS, sounds, movies, etc. Resources do not require any
     handling from the bundle. They are transferred directly from their source
     - usually the JAR file that contains the code for the bundle - to the
-    requestor.</para>
+    requester.</para>
 
     <para>Resources can be served by registering a service of any type with a
     service registration property that marks it as a resource service:
@@ -1931,7 +1931,7 @@ public class MyServletRequestListener implements ServletRequestListener {
             <entry><code>String+</code></entry>
 
             <entry><para> Endpoint(s) where this Http Whiteboard
-            implementation is listenining. Registered Whiteboard services are
+            implementation is listening. Registered Whiteboard services are
             made available here. Values could be provided as URLs e.g.
             <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
             <code>/myapp/</code>. Relative paths may be used if the scheme and
@@ -1962,7 +1962,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     linkend="org.osgi.service.http.runtime.dto.RuntimeDTO"
     xrefstyle="hyperlink"/> provides information on services that have been
     successfully registered as well as information about the Whiteboard
-    services that were not succesfully registered. Whiteboard services that
+    services that were not successfully registered. Whiteboard services that
     have the required properties set but cannot be processed, are reflected in
     the failure DTOs. Whiteboard services of interfaces described in this
     specification that do not have the required properties set are ignored and

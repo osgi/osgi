@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,7 +147,7 @@ public interface DmtSession {
 	 * mechanism in the underlying plugins. As an example, if plugin A has
 	 * committed successfully but plugin B failed, the whole session must fail,
 	 * but there is no way to undo the commit performed by A. To provide
-	 * predictable behaviour, the commit operation should continue with the
+	 * predictable behavior, the commit operation should continue with the
 	 * remaining plugins even after detecting a failure. All exceptions received
 	 * from failed commits are aggregated into one {@code TRANSACTION_ERROR}
 	 * exception thrown by this method.

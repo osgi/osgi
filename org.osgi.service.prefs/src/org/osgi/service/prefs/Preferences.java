@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -442,7 +442,7 @@ public interface Preferences {
 	 *         associated value does not exist or cannot be interpreted as a
 	 *         {@code double} type.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
-	 *         removed with the the {@link #removeNode()} method.
+	 *         removed with the {@link #removeNode()} method.
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @see #putDouble(String,double)
 	 * @see #get(String,String)

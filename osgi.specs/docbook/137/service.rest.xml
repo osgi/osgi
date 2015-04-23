@@ -1212,7 +1212,7 @@ framework/service/{serviceid}</programlisting>
         <para><emphasis>Note:</emphasis> service properties are converted to
         JSON-supported data types where possible: <code>"string"</code>,
         number or boolean <code>(true|false)</code>. If there is no conversion
-        to JSON datatypes is possible the <code>toString()</code> result is
+        to JSON data types is possible the <code>toString()</code> result is
         used as a string value.</para>
       </section>
 

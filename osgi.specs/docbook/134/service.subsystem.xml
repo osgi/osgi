@@ -193,7 +193,7 @@
       </itemizedlist>
 
       <figure>
-        <title>Entities org.osgi.service. subsystem</title>
+        <title>Entities org.osgi.service.subsystem</title>
 
         <mediaobject>
           <imageobject>
@@ -505,13 +505,13 @@
         attribute is permitted: <itemizedlist>
             <listitem>
               <para>size - (integer) Specifies the size of the icon in pixels
-              horizontal. It is recommended to always includea 64x64
+              horizontal. It is recommended to always include a 64x64
               icon.</para>
             </listitem>
-          </itemizedlist> The URLs are interpreted as relative to the subsytem
-        archive. That is, if a URL with a scheme is provided, then this is
-        taken as an absolute URL. Otherwise, the path points to an entry in
-        the subsystem archive file.</para>
+          </itemizedlist> The URLs are interpreted as relative to the
+        subsystem archive. That is, if a URL with a scheme is provided, then
+        this is taken as an absolute URL. Otherwise, the path points to an
+        entry in the subsystem archive file.</para>
       </section>
 
       <section>
@@ -1093,12 +1093,12 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
   <section>
     <title>Subsystem Relationships</title>
 
-    <para>Subsystems installed into a framework become part of the S
-    <emphasis>ubsystem graph</emphasis>. The Subsystem graph may be thought of
-    as is directed acyclic graph with one and only one source vertex, which is
-    the Root Subsystem. The edges have the child as the head and parent as the
-    tail (parent<phrase role="symbol">→</phrase>child). This is depicted in
-    <xref linkend="i3298109"/>.</para>
+    <para>Subsystems installed into a framework become part of the
+    <emphasis>Subsystem graph</emphasis>. The Subsystem graph may be thought
+    of as is directed acyclic graph with one and only one source vertex, which
+    is the Root Subsystem. The edges have the child as the head and parent as
+    the tail (parent<phrase role="symbol">→</phrase>child). This is depicted
+    in <xref linkend="i3298109"/>.</para>
 
     <figure xml:id="i3298109">
       <title>Parent Child Relationship</title>
@@ -1116,7 +1116,7 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
     is called a <emphasis>child Subsystem</emphasis>. A Subsystem which has
     one or more child Subsystem(s) installed or included in it is called a
     <emphasis>parent Subsystem</emphasis>. Note that a Subsystem may be both a
-    parent and child Subsystem.The Subsystem graph has the following
+    parent and child Subsystem. The Subsystem graph has the following
     rules:</para>
 
     <itemizedlist>
@@ -4758,17 +4758,17 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     subsystem. The scoped subsystem, if any, containing the bundle as a
     constituent is retrieved.</para>
 
-    <para>It's possible for a classload request to occur on a bundle in an
+    <para>It's possible for a class load request to occur on a bundle in an
     unresolved subsystem because the framework is free to resolve bundles
-    whenever it desires. A resolved bundle can potentially receive a classload
-    request. For example, a <code>BundleEventListener</code> registered with
-    the system bundle context could receive the <code>RESOLVED</code> event
-    and, for whatever reason, load a class. Also, a resolved bundle in an
-    unresolved feature might get wired to another bundle. If this is the case,
-    the subsystem must be resolved in order to guarantee the dynamic imports
-    will not effect the resolution and, therefore, potentially create a wiring
-    inconsistent with the deployment manifest. Just as the framework is free
-    to resolve bundles at anytime and for whatever reason, Subsystems
+    whenever it desires. A resolved bundle can potentially receive a class
+    load request. For example, a <code>BundleEventListener</code> registered
+    with the system bundle context could receive the <code>RESOLVED</code>
+    event and, for whatever reason, load a class. Also, a resolved bundle in
+    an unresolved feature might get wired to another bundle. If this is the
+    case, the subsystem must be resolved in order to guarantee the dynamic
+    imports will not effect the resolution and, therefore, potentially create
+    a wiring inconsistent with the deployment manifest. Just as the framework
+    is free to resolve bundles at anytime and for whatever reason, Subsystems
     implementations are free to resolve subsystems.</para>
 
     <para>The sharing policy is only updated if the dynamic import cannot be
@@ -4788,15 +4788,15 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     installed as a result of installing a Subsystem may still be installed
     after stopping or uninstalling the Subsystems implementation bundle. If it
     is important to clean up the bundles associated with a Subsystem
-    installation then the Subsystem should should be uninstalled before
-    uninstalling the Subsystems implementation.</para>
+    installation then the Subsystem should be uninstalled before uninstalling
+    the Subsystems implementation.</para>
   </section>
 
   <section xml:id="service.subsystem-capabilities">
     <title>Capabilities</title>
 
-    <para>Implementations of the Subsystem Service specification must
-    provide the following capabilities.</para>
+    <para>Implementations of the Subsystem Service specification must provide
+    the following capabilities.</para>
 
     <itemizedlist>
       <listitem>
@@ -4804,8 +4804,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
         namespace declaring the implemented specification to be
         <code>osgi.subsystem</code>. This capability must also declare a uses
-        constraint for the <code>org.osgi.service.subsystem</code> package. For
-        example:</para>
+        constraint for the <code>org.osgi.service.subsystem</code> package.
+        For example:</para>
 
         <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.subsystem";
@@ -4833,6 +4833,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       </listitem>
     </itemizedlist>
   </section>
+
   <section>
     <title>Security</title>
 

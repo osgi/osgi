@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ package org.osgi.service.dmt;
  * The interface has several types of functions to describe the nodes in the
  * DMT. Some methods can be used to retrieve standard OMA DM metadata such as
  * access type, cardinality, default, etc., others are for data extensions such
- * as valid names and values. In some cases the standard behaviour has been
+ * as valid names and values. In some cases the standard behavior has been
  * extended, for example it is possible to provide several valid MIME types, or
  * to differentiate between normal and automatic dynamic nodes.
  * <p>
@@ -204,7 +204,7 @@ public interface MetaNode {
 	 * Get the maximum allowed value associated with a node of numeric format.
 	 * If no meta-data is provided for a node, there is no upper limit to its
 	 * value. This method is only meaningful if the node has one of the numeric
-	 * formats: integer, float, or long. format. The returned limit has
+	 * formats: integer, float, or long format. The returned limit has
 	 * {@code double} type, as this can be used to denote all numeric limits
 	 * with full precision. The actual maximum should be the largest integer,
 	 * float or long number that does not exceed the returned value.

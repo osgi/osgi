@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,9 +133,9 @@ public interface ManagedService {
 	 * method.
 	 * 
 	 * <p>
-	 * If the the location allows multiple managed services to be called back
-	 * for a single configuration then the callbacks must occur in service
-	 * ranking order. Changes in the location must be reflected by deleting the
+	 * If the location allows multiple managed services to be called back for a
+	 * single configuration then the callbacks must occur in service ranking
+	 * order. Changes in the location must be reflected by deleting the
 	 * configuration if the configuration is no longer visible and updating when
 	 * it becomes visible.
 	 * 

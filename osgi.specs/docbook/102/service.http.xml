@@ -222,8 +222,8 @@ getHttpService().unregister("/servletAlias");
 
     <para>A resource is a file containing images, static HTML pages, sounds,
     movies, applets, etc. Resources do not require any handling from the
-    bundle. They are transferred directly from their source--usually the JAR
-    file that contains the code for the bundle--to the requestor using
+    bundle. They are transferred directly from their source - usually the JAR
+    file that contains the code for the bundle - to the requester using
     HTTP.</para>
 
     <para>Resources could be handled by Servlet objects as explained in <xref

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,8 +115,8 @@ public interface ProvisioningService {
 	public final static String	MIME_STRING					= "text/plain;charset=utf-8";
 
 	/**
-	 * MIME type to be stored stored in the extra field of a {@code ZipEntry}
-	 * object for {@code byte[]} data.
+	 * MIME type to be stored in the extra field of a {@code ZipEntry} object
+	 * for {@code byte[]} data.
 	 */
 	public final static String	MIME_BYTE_ARRAY				= "application/octet-stream";
 

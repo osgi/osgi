@@ -1576,7 +1576,7 @@ Bundle-Version: 5.7
 
     <para>If an installed Deployment Package has the same name as the source,
     it is called the <emphasis>target</emphasis> Deployment Package. If no
-    target exists, an invisible empty target with a version of 0.0.0. must be
+    target exists, an invisible empty target with a version of 0.0.0 must be
     assumed without any bundles and resources.</para>
 
     <para>The installation of a deployment package can result in these
@@ -2032,7 +2032,7 @@ Resource-Processor: RP-y
 
     <para>The <code>ResourceProcessor</code> interface is based on a session
     (see <xref linkend="i1609646"/> ). The transactionality is limited to the
-    bracketing of any processing or dropping of resources.The bracketing
+    bracketing of any processing or dropping of resources. The bracketing
     begins when a Resource Processor joins an install session. A Resource
     Processor service can assume that it is never in two sessions at the same
     time (see <xref linkend="i1610495"/> ). It can, however, be called

@@ -270,7 +270,7 @@ public final class HttpWhiteboardConstants {
 	 * The specified names are used to determine the servlets whose requests
 	 * should be mapped to the servlet filter. Servlet filter services without
 	 * this service property or the {@link #HTTP_WHITEBOARD_FILTER_PATTERN} or
-	 * the {@link #HTTP_WHITEBOARD_FILTER_REGEX} service propertyare ignored.
+	 * the {@link #HTTP_WHITEBOARD_FILTER_REGEX} service property are ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},

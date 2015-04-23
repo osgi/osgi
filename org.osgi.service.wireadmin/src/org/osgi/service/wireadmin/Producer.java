@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ public interface Producer {
 	 * Consumer service calling the {@code Wire} object's {@code poll} method.
 	 * The Producer should coerce the value to be an instance of one of the
 	 * types specified by {@link Wire#getFlavors()}. The types are specified in
-	 * order of of preference. The returned value should be as new or newer than
+	 * order of preference. The returned value should be as new or newer than
 	 * the last value furnished by this object.
 	 * 
 	 * <p>
@@ -85,8 +85,8 @@ public interface Producer {
 	 * (via the {@link #consumersConnected(Wire[])} method).
 	 * <p>
 	 * If the Producer service returns an {@code Envelope} object that has an
-	 * unpermitted scope name, then the Wire object must ignore (or remove) the
-	 * transfer.
+	 * impermissible scope name, then the Wire object must ignore (or remove)
+	 * the transfer.
 	 * <p>
 	 * If the {@code Wire} object has a scope set, the return value must be an
 	 * array of {@code Envelope} objects ({@code Envelope[]}). The {@code Wire}

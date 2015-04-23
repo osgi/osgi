@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public final class TopicPermission extends Permission {
 	private volatile String				actions				= null;
 
 	/**
-	 * Defines the authority to publich and/or subscribe to a topic within the
+	 * Defines the authority to publish and/or subscribe to a topic within the
 	 * EventAdmin service.
 	 * <p>
 	 * The name is specified as a slash-separated string. Wildcards may be used.

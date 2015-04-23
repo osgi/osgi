@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
 	 * <p>
 	 * In many cases the tree is not the only way to manage a given part of the
 	 * system. It may happen that while modifying some nodes in an atomic
-	 * session, the underlying settings are modified parallelly outside the
+	 * session, the underlying settings are modified in parallel outside the
 	 * scope of the DMT. If this is detected during commit, an exception with
 	 * the code {@code CONCURRENT_ACCESS} is thrown.
 	 * 

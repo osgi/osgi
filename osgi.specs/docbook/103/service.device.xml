@@ -274,9 +274,9 @@
     services.</para>
 
     <para>A device category specifies the methods for communicating with a
-    Device service, and enables inter-operability between bundles that are
+    Device service, and enables interoperability between bundles that are
     based on the same underlying technology. Generic Device services will
-    allow inter-operability between bundles that are not coupled to specific
+    allow interoperability between bundles that are not coupled to specific
     device technologies.</para>
 
     <para>For example, a device category is required for the USB, so that

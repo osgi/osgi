@@ -1361,7 +1361,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
 
       <para>The created <code>InitialContext</code> object is a facade for the
       real Context that is requested by the caller. It provides the
-      bootstrapping mechanism for JNDI Provider plugability. In order to
+      bootstrapping mechanism for JNDI Provider pluggability. In order to
       obtain the provider's Context, the <code>InitialContext</code> class
       makes a call to the static <code>getContext</code> method on the
       <code>NamingManager</code> class. The JNDI code in the JRE then

@@ -364,7 +364,7 @@
     <xref
     linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"
     xrefstyle="hyperlink"/> to the location of this new Remote Manager's
-    Initial Provisioning ZIP file.This process is called
+    Initial Provisioning ZIP file. This process is called
     <emphasis>re-provisioning</emphasis>.</para>
 
     <para>If errors occur during this process, the Initial Provisioning
@@ -1259,7 +1259,7 @@ http://server.operator.com/service-x? «
   <section>
     <title>Exception Handling</title>
 
-    <para>The Initial Provisioning process is a a sensitive process that must
+    <para>The Initial Provisioning process is a sensitive process that must
     run without user supervision. There is therefore a need to handle
     exceptional cases in a well defined way to simplify trouble
     shooting.</para>

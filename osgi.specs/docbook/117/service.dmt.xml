@@ -127,7 +127,7 @@
 
       <listitem>
         <para><code>org.osgi.service.dmt.notification.spi</code> - The API to
-        provide the possibilitity to extend the notification system.</para>
+        provide the possibility to extend the notification system.</para>
       </listitem>
 
       <listitem>
@@ -568,7 +568,7 @@
     <title>The DMT Admin Service</title>
 
     <para>The Dmt Admin service operates on the Device Management Tree of an
-    OSGi-based device. The Dmt Admin API is loosely modelled after the OMA DM
+    OSGi-based device. The Dmt Admin API is loosely modeled after the OMA DM
     protocol: the operations for <code>Get</code>, <code>Replace</code>,
     <code>Add</code>, <code>Delete</code> and <code>Exec</code> are directly
     available. The Dmt Admin is a singleton service.</para>
@@ -2267,7 +2267,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Data and Exec Plugins live in independent trees and can fully
       overlap. However, an Exec Plugin can only execute a node when the there
-      exists a valid node at the corresponding node in the Data tree. that is,
+      exists a valid node at the corresponding node in the Data tree. That is,
       to be able to execute a node it is necessary that <xref
       linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-"
       xrefstyle="hyperlink"/> would return <code>true</code>.</para>
@@ -5633,7 +5633,7 @@ SESSION_CLOSED {
       <para><code>LIST</code> nodes can be mutable if the Meta Node of its
       index nodes support the <code>Add</code> or <code>Delete</code> action.
       A LIST node is modeled after a <code>java.util.List</code> that can
-      automatically accomodate new elements. <code>Get</code> and
+      automatically accommodate new elements. <code>Get</code> and
       <code>Replace</code> operations use the node name to index in this
       list.</para>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -153,7 +153,7 @@ public interface AttributeDefinition {
 	 * share this aspect with LDAP/X.500 attributes. In these standards the OSI
 	 * Object Identifier (OID) is used to uniquely identify an attribute. If
 	 * such an OID exists, (which can be requested at several standard
-	 * organisations and many companies already have a node in the tree) it can
+	 * organizations and many companies already have a node in the tree) it can
 	 * be returned here. Otherwise, a unique id should be returned which can be
 	 * a Java class name (reverse domain name) or generated with a GUID
 	 * algorithm. Note that all LDAP defined attributes already have an OID. It

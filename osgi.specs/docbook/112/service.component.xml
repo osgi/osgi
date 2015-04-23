@@ -4102,7 +4102,7 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
 
       <para>The Component Annotations are build time annotations because one
       of the key aspects of Declarative Services is its laziness. SCR can
-      easily read the component description XML from the bundle, pre-process
+      easily read the component description XML from the bundle, preprocess
       it, and cache the results between framework invocations. This way it is
       unnecessary to load a class from the bundle when the bundle is started
       and/or scan the classes for annotations. Component Annotations are not
