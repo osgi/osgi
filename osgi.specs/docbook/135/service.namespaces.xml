@@ -77,20 +77,18 @@
     </itemizedlist>
 
     <section>
-      <title>Versioning Namespaces</title>
-      <para>In general capability namespaces are versioned using the 
-        <xref linkend="coresemver"/> scheme. 
-        As a result namespaces specify one version in the capability and 
-        a version range in the requirement. An example of this versioning scheme
-        applied can be found in the 
-        <xref linkend="service.namespaces-osgi.extender.namespace" xrefstyle="template:%t"/>.
-      </para>
+      <title>Versioning</title>
 
-      <para>
-        In certain cases namespaces don't follow semantic versioning. The versioning
-        scheme used in those cases will be described together with the capability namespace
-        documentation.
-      </para>
+      <para>In general, capabilities in a Namespace are versioned using
+      Semantic Versioning. See <xref
+      linkend="service.namespaces-coresemver"/>. Therefore, a capability will
+      specify a single version and a requirement will specify a version range.
+      See <xref linkend="service.namespaces-osgi.extender.namespace"
+      xrefstyle="template:%t"/> for an example.</para>
+
+      <para>From some Namespaces, capabilities do not follow Semantic
+      Versioning. The versioning scheme used in those Namespaces will be
+      described in the documentation for the Namespace .</para>
     </section>
   </section>
 
@@ -102,8 +100,8 @@
     extend that bundle's functionality when that bundle is active. It can use
     metadata (headers, or files inside the extendee) to control its
     functionality. Extendees therefore have a dependency on the Extender that
-    can be modeled with the <code>osgi.extender</code> namespace. The
-    definition for this namespace can be found in the following table and the
+    can be modeled with the <code>osgi.extender</code> Namespace. The
+    definition for this Namespace can be found in the following table and the
     <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"
     xrefstyle="hyperlink"/> class.</para>
 
@@ -263,16 +261,17 @@
     attributes must be used to make sure it is bound to the correct versions
     of the packages.</para>
 
-    <para>Additionally, the <code>osgi.contract</code> Namespace can be used in 
-    cases where API is defined by entities not using semantic versioning. 
-    In those cases it can be unclear what the exported package version is
-    and impossible to create a meaningful import package version range. 
-    In such cases importing the package <emphasis>without</emphasis> version 
-    number and requiring the <code>osgi.contract</code> Namespace can provide
-    a way to create portable bundles that use such API. OSGi has defined 
-    contract names for a number of such APIs, for more information see 
-    <xref linkend="namespace-portable.java.contracts.ref"/>.
-    </para>
+    <para>Additionally, the <code>osgi.contract</code> Namespace can be used
+    in cases where API is defined by parties that do not use Semantic
+    Versioning. In those cases, the version of the exported package can be
+    unclear and so it is difficult to specify a meaningful version range for
+    the package import. In such cases, importing the package
+    <emphasis>without</emphasis> specifying a version range and specifying a
+    requirement in the <code>osgi.contract</code> Namespace can provide a way
+    to create portable bundles that use the API. OSGi has defined contract
+    names for a number of such APIs. See <xref
+    linkend="service.namespaces-portable.java.contracts.ref"/> for more
+    information.</para>
 
     <para>An <code>osgi.contract</code> capability can then be used in the
     following ways:</para>
@@ -376,7 +375,7 @@ Import-Package:
     following table and in the <xref
     linkend="org.osgi.namespace.contract.ContractNamespace"
     xrefstyle="hyperlink"/> class. See <xref
-    linkend="namespace-portable.java.contracts.ref"/>.</para>
+    linkend="service.namespaces-portable.java.contracts.ref"/>.</para>
 
     <table pgwide="1">
       <title>osgi.contract Namespace</title>
@@ -466,22 +465,20 @@ Import-Package:
     <section>
       <title>Versioning</title>
 
-      <para>
-        As the <code>osgi.contract</code> namespace follows the versioning
-        of the associated contract this namespace is <emphasis>not</emphasis> semantically versioned.
-        The associated contracts are often versioned using marketing or other versioning schemes and
-        therefore the version number cannot be used as an indication of backward compatibility.
-      </para>
+      <para>As the <code>osgi.contract</code> Namespace follows the versioning
+      of the associated contract, capabilities in this Namespace are
+      <emphasis>not</emphasis> semantically versioned. The associated
+      contracts are often versioned using marketing or other versioning
+      schemes and therefore the version number cannot be used as an indication
+      of backwards compatibility.</para>
 
-      <para>As a result, the <code>osgi.contract</code> capability follows a 
-        <emphasis>discrete</emphasis> versioning scheme. In such a versioning scheme each 
-        version is treated as separate without 
-        any implied relation to another version. The provider of the capability lists 
-        <emphasis>all</emphasis> compatible versions. The requirer of the capability only selects
-        one version.
-      </para>
+      <para>As a result, capabilities in the <code>osgi.contract</code>
+      Namespace use a <emphasis>discrete</emphasis> versioning scheme. In such
+      a versioning scheme, each version is treated as separate without any
+      implied relation to another version. A capability lists
+      <emphasis>all</emphasis> compatible versions. A requirement only selects
+      a single version.</para>
     </section>
-
   </section>
 
   <section xml:id="service.namespaces-osgi.service.namespace">
@@ -517,7 +514,7 @@ Import-Package:
 
     <para>See the following table and the <xref
     linkend="org.osgi.namespace.service.ServiceNamespace"
-    xrefstyle="hyperlink"/> class for this namespace definition.</para>
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
 
     <table pgwide="1">
       <title>osgi.service Namespace</title>
@@ -590,11 +587,11 @@ Import-Package:
 
     <section>
       <title>Versioning</title>
-      <para>
-        The <code>osgi.service</code> namespace is <emphasis>not</emphasis> versioned.
-        The version of the package of the associated service is found via the uses 
-        clause specified on the capability.
-      </para>
+
+      <para>Capabilities in the <code>osgi.service</code> Namespace are
+      <emphasis>not</emphasis> versioned. The package of a service's object
+      class is generally versioned and the package can be associated with the
+      capability via the <code>uses</code> directive.</para>
     </section>
   </section>
 
@@ -622,7 +619,7 @@ Import-Package:
       </listitem>
 
       <listitem>
-        <para>Used as a general capability namespace for specifications or
+        <para>Used as a general capability Namespace for specifications or
         contracts to express their provided function in the Repository model,
         see the <emphasis>Repository Service Specification</emphasis>.</para>
       </listitem>
@@ -640,7 +637,7 @@ Import-Package:
 
     <para>See the following table and the <xref
     linkend="org.osgi.namespace.implementation.ImplementationNamespace"
-    xrefstyle="hyperlink"/> class for this namespace definition.</para>
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
 
     <table pgwide="1">
       <title>osgi.implementation Namespace</title>
@@ -741,8 +738,8 @@ Import-Package:
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
       <bibliomixed
-      xml:id="namespace-portable.java.contracts.ref"><title>Portable Java
-      Contract
+      xml:id="service.namespaces-portable.java.contracts.ref"><title>Portable
+      Java Contract
       Definitions</title>http://www.osgi.org/Specifications/ReferenceContract</bibliomixed>
 
       <bibliomixed xml:id="i1777721"><title>Resources API
@@ -757,10 +754,11 @@ Import-Package:
       Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 
       <bibliomixed xml:id="i1777884"><title>Common Headers</title>OSGi Core,
-        Chapter 3, Common Header Syntax</bibliomixed>
+      Chapter 3, Common Header Syntax</bibliomixed>
 
-      <bibliomixed xml:id="coresemver"><title>Semantic Versioning</title>OSGi Core,
-        Chapter 3, Sematic Versioning</bibliomixed>
+      <bibliomixed xml:id="service.namespaces-coresemver"><title>Semantic
+      Versioning</title>OSGi Core, Chapter 3, Semantic
+      Versioning</bibliomixed>
     </bibliolist>
   </section>
 
@@ -769,17 +767,21 @@ Import-Package:
 
     <itemizedlist>
       <listitem>
-        <para>Clarified osgi.extender namespace and added a section on the
+        <para>Clarified osgi.extender Namespace and added a section on the
         relationship with framework hooks.</para>
       </listitem>
 
       <listitem>
-        <para>Clarified osgi.contract namespace and examples.</para>
+        <para>Clarified osgi.contract Namespace and examples.</para>
       </listitem>
 
       <listitem>
         <para>Added <xref
         linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified versioning of capabilities in a namespace.</para>
       </listitem>
     </itemizedlist>
   </section>
