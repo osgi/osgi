@@ -26,6 +26,8 @@ Include-Resource					= \
 -runproperties = ${runproperties}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.async
+-signaturetest                      = \
+ org.osgi.service.async, \
+ org.osgi.service.async.delegate
 	
 	
