@@ -858,9 +858,7 @@ public class XmlDoclet extends Doclet {
 		outer: while (i < signature.length()) {
 			switch (signature.charAt(i)) {
 				case '<' :
-					parts.add(signature.substring(begin, i));
 					i = skipGenericParameters(signature, i + 1);
-					begin = i + 1;
 					break;
 
 				case ' ' :
@@ -869,14 +867,14 @@ public class XmlDoclet extends Doclet {
 
 				case ',' :
 					if (begin < i) {
-						parts.add(signature.substring(begin, i));
+						parts.add(stripGenericParameters(signature.substring(begin, i)));
 					}
 					begin = i + 1;
 					break;
 
 				case ')' :
 					if (begin < i) {
-						parts.add(signature.substring(begin, i));
+						parts.add(stripGenericParameters(signature.substring(begin, i)));
 					}
 					break outer;
 			}
@@ -892,6 +890,15 @@ public class XmlDoclet extends Doclet {
 		}
 		sb.append(")");
 		return sb.toString();
+	}
+
+	String stripGenericParameters(String part) {
+		int i = part.indexOf('<');
+		if (i < 0) {
+			return part;
+		}
+		int e = skipGenericParameters(part, i + 1);
+		return part.substring(0, i) + part.substring(e + 1);
 	}
 
 	int skipGenericParameters(String s, int n) {
