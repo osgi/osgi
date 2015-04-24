@@ -538,7 +538,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
     <programlisting>  return getTimeConsumingAnswer().fallbackTo(Promises.resolved("Fallback Value"));</programlisting>
 
     <para>The Promises class also provides the <xref
-    linkend="org.osgi.util.promise.Promises.all-Promise-...-"
+    linkend="org.osgi.util.promise.Promises.all-Promise...-"
     xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Promises.all-Collection-"
     xrefstyle="hyperlink"/> methods which return a new Promise that is a latch
