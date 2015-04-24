@@ -16,7 +16,7 @@ Export-Package					= org.osgi.service.async.*; -split-package:=first; provide:=t
 Include-Resource: OSGI-INF/=permissions
 
 Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.async.Async";uses:="org.osgi.service.async",\
-	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async"
+	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async,org.osgi.service.async.delegate"
 
 -buildpath:  \
 	org.osgi.service.async;version=project,\

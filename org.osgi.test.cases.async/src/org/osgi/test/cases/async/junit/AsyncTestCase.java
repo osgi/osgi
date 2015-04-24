@@ -18,6 +18,7 @@ package org.osgi.test.cases.async.junit;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
@@ -113,7 +114,8 @@ public class AsyncTestCase extends OSGiTestCase {
 				hasCapability = true;
 				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
 				if (usesDirective != null) {
-					uses = new HashSet<String>(Arrays.asList(usesDirective.split(","))).contains("org.osgi.service.async");
+					Set<String> packages = new HashSet<String>(Arrays.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.async");
 				}
 				break;
 			}
@@ -144,7 +146,8 @@ public class AsyncTestCase extends OSGiTestCase {
 				hasCapability = true;
 				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
 				if (usesDirective != null) {
-					uses = new HashSet<String>(Arrays.asList(usesDirective.split(","))).contains("org.osgi.service.async");
+					Set<String> packages = new HashSet<String>(Arrays.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.async") && packages.contains("org.osgi.service.async.delegate");
 				}
 				version = (Version) cap.getAttributes().get("version");
 				break;
