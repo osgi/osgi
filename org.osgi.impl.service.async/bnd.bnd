@@ -9,7 +9,8 @@ Conditional-Package				= net.sf.cglib.*
 
 Import-Package					= !net.sf.cglib.asm.util, *
 
-Export-Package					= org.osgi.service.async.*; -split-package:=first; provide:=true,\
+Export-Package					= org.osgi.service.async; -split-package:=first; provide:=true,\
+								  org.osgi.service.async.delegate; -split-package:=first,\
 								  org.osgi.util.promise,\
 								  org.osgi.util.function
 
