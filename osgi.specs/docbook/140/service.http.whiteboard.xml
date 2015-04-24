@@ -68,6 +68,11 @@
       <listitem>
         <para><xref linkend="service.http.whiteboard-i21215926"/></para>
       </listitem>
+
+      <listitem>
+        <para><remark>BJH Do we need to say anything about
+        HTTP/2?</remark></para>
+      </listitem>
     </itemizedlist>
 
     <para>Alternatively, implementations of this service can support other
@@ -383,6 +388,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
       in the bundle registering the Whiteboard service. Its
       <code>Bundle.findEntries()</code> method is called to obtain the
       listing.</para>
+
+      <remark>BJH This method is specified to return null (instead of an empty
+      Set) when then are no matching resources. Can we change to return an
+      empty Set?</remark>
     </section>
 
     <section>
@@ -1314,6 +1323,9 @@ public class MyErrorServlet extends HttpServlet {
       is more than one error page registered for the same exception or error
       code, service ranking rules are used to select the handling
       servlet.</para>
+
+      <para><remark>BJH What about error loops? The error servlet throws an
+      exception?</remark></para>
     </section>
 
     <section>
