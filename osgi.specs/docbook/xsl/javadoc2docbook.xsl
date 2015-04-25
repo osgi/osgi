@@ -127,7 +127,7 @@ version="1.1">
         <xsl:variable name="classes" select="class[not(skip)]"/>
   
         <!-- Summary only for non-DDF output -->
-        <xsl:if test="count($classes) &gt; 1 and not($ddf)">
+        <xsl:if test="count($classes) &gt; 0 and not($ddf)">
           <xsl:element name="section" namespace="{$ns}">
             <xsl:attribute name="role">summary</xsl:attribute>
             <xsl:element name="title" namespace="{$ns}">
@@ -142,7 +142,7 @@ version="1.1">
           </xsl:element>
         </xsl:if>
     
-        <xsl:if test="count($classes) &gt; 1 and .//security and not($ddf)">
+        <xsl:if test="count($classes) &gt; 0 and .//security and not($ddf)">
           <xsl:element name="section" namespace="{$ns}">
     
             <xsl:element name="title" namespace="{$ns}">
