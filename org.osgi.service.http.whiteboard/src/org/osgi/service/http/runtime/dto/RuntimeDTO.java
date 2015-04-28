@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.osgi.service.http.runtime.dto;
 
-import java.util.Map;
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
  * Represents the state of a Http Service Runtime.
@@ -28,9 +28,11 @@ import org.osgi.dto.DTO;
 public class RuntimeDTO extends DTO {
 
 	/**
-	 * The runtime attributes. This value is never {@code null}.
+	 * The DTO for the corresponding
+	 * {@code org.osgi.service.http.runtime.HttpServiceRuntime}. This value is
+	 * never {@code null}.
 	 */
-	public Map<String, String>	attributes;
+	public ServiceReferenceDTO			serviceDTO;
 
 	/**
 	 * Returns the representations of the {@code javax.servlet.ServletContext}
