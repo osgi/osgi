@@ -17,8 +17,6 @@
 package org.osgi.service.dal;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 
 /**
  * {@code DeviceException} is a special {@code IOException}, which is thrown to
@@ -54,17 +52,16 @@ public class DeviceException extends IOException {
 	public static final int		NO_DATA				= 4;
 
 	private static final long	serialVersionUID	= -1876565249188512600L;
-	private static final String	CAUSED_BY			= "Caused by: ";
 
 	private final int			code;
-	private final Throwable		cause;
 
 	/**
 	 * Construct a new device exception with {@code null} message. The cause is
 	 * not initialized and the exception code is set to {@link #UNKNOWN}.
 	 */
 	public DeviceException() {
-		this(null, null, UNKNOWN);
+		super();
+		this.code = UNKNOWN;
 	}
 
 	/**
@@ -74,7 +71,8 @@ public class DeviceException extends IOException {
 	 * @param message The exception message.
 	 */
 	public DeviceException(String message) {
-		this(message, null, UNKNOWN);
+		super(message);
+		this.code = UNKNOWN;
 	}
 
 	/**
@@ -97,8 +95,8 @@ public class DeviceException extends IOException {
 	 */
 	public DeviceException(String message, Throwable cause, int code) {
 		super(message);
-		this.cause = cause;
 		this.code = code;
+		initCause(cause);
 	}
 
 	/**
@@ -120,59 +118,5 @@ public class DeviceException extends IOException {
 	 */
 	public int getCode() {
 		return this.code;
-	}
-
-	/**
-	 * Returns the cause for this exception or {@code null} if the cause is
-	 * missing. The cause can be protocol specific exception with an appropriate
-	 * message and error code.
-	 * 
-	 * @return A throwable cause.
-	 */
-	public Throwable getCause() {
-		return this.cause;
-	}
-
-	/**
-	 * Prints the exception stack trace to the standard error stream.
-	 * 
-	 * @see java.lang.Throwable#printStackTrace()
-	 */
-	public void printStackTrace() {
-		printStackTrace(System.err);
-	}
-
-	/**
-	 * Prints the exception stack trace to the given stream.
-	 * 
-	 * @param s The stream used for the output.
-	 * 
-	 * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
-	 */
-	public void printStackTrace(PrintStream s) {
-		synchronized (s) {
-			super.printStackTrace(s);
-			if (null != this.cause) {
-				s.println(CAUSED_BY);
-				this.cause.printStackTrace(s);
-			}
-		}
-	}
-
-	/**
-	 * Prints the exception stack trace to the given writer.
-	 * 
-	 * @param s The writer used for the output.
-	 * 
-	 * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
-	 */
-	public void printStackTrace(PrintWriter s) {
-		synchronized (s) {
-			super.printStackTrace(s);
-			if (null != this.cause) {
-				s.println(CAUSED_BY);
-				this.cause.printStackTrace(s);
-			}
-		}
 	}
 }
