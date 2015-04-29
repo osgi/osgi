@@ -14,7 +14,7 @@
     linkend="org.osgi.service.dal.functions"/></releaseinfo>
   </info>
 
-  <section xml:id="service.dal.functions.introduction">
+  <section xml:id="service.dal.functions-introduction">
     <title>Introduction</title>
 
     <para>Concrete function interfaces are used to unify the access and the
@@ -25,16 +25,16 @@
     is support for: control, monitoring and metering information.</para>
   </section>
 
-  <section xml:id="service.dal.functions.list">
+  <section xml:id="service.dal.functions-list">
     <title>Functions</title>
 
-    <section xml:id="service.dal.functions.boolean.control">
+    <section xml:id="service.dal.functions-boolean.control">
       <title>BooleanControl</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.BooleanControl"
       xrefstyle="hyperlink"/> function provides a binary control support. The
       property eventing must follow the definition of Device Abstraction
-      Layer, <xref linkend="service.dal.function.event"/>. The full function
+      Layer, <xref linkend="service.dal-function.event"/>. The full function
       definition is available in the next tables.</para>
 
       <table>
@@ -149,7 +149,7 @@
         </itemizedlist></para>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.boolean"/> data structure to provide
+      linkend="service.dal.functions-data.boolean"/> data structure to provide
       the control state.</para>
 
       <para>The next code snippet sets to <code>true</code> all
@@ -169,14 +169,14 @@ if (booleanControlSRefs != null) {
 }</programlisting></para>
     </section>
 
-    <section xml:id="service.dal.functions.boolean.sensor">
+    <section xml:id="service.dal.functions-boolean.sensor">
       <title>BooleanSensor</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.BooleanSensor"
       xrefstyle="hyperlink"/> function provides binary sensor monitoring. It
       reports the state when an important event is available. There are no
       operations. The property eventing must follow the definition of Device
-      Abstraction Layer, <xref linkend="service.dal.function.event"/>. The
+      Abstraction Layer, <xref linkend="service.dal-function.event"/>. The
       full function definition is available in the next table.</para>
 
       <table>
@@ -315,17 +315,17 @@ if (booleanControlSRefs != null) {
         </itemizedlist></para>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.boolean"/> data structure to provide
+      linkend="service.dal.functions-data.boolean"/> data structure to provide
       the sensor state.</para>
     </section>
 
-    <section xml:id="service.dal.functions.multi.level.control">
+    <section xml:id="service.dal.functions-multi.level.control">
       <title>MultiLevelControl</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.MultiLevelControl"
       xrefstyle="hyperlink"/> function provides multi-level control support.
       The property eventing must follow the definition of Device Abstraction
-      Layer, <xref linkend="service.dal.function.event"/>. The full function
+      Layer, <xref linkend="service.dal-function.event"/>. The full function
       definition is available in the next table.</para>
 
       <table>
@@ -484,18 +484,18 @@ if (booleanControlSRefs != null) {
         </itemizedlist></para>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.level"/> data structure to provide
+      linkend="service.dal.functions-data.level"/> data structure to provide
       the level.</para>
     </section>
 
-    <section xml:id="service.dal.functions.multi.level.sensor">
+    <section xml:id="service.dal.functions-multi.level.sensor">
       <title>MultiLevelSensor</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.MultiLevelSensor"
       xrefstyle="hyperlink"/> function provides multi-level sensor monitoring.
       It reports its state when an important event is available. There are no
       operations. The property eventing must follow the definition of Device
-      Abstraction Later, <xref linkend="service.dal.function.event"/>. The
+      Abstraction Later, <xref linkend="service.dal-function.event"/>. The
       full function definition is available in the next table.</para>
 
       <table>
@@ -620,18 +620,18 @@ if (booleanControlSRefs != null) {
         </itemizedlist></para>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.level"/> data structure to provide
+      linkend="service.dal.functions-data.level"/> data structure to provide
       the level.</para>
     </section>
 
-    <section xml:id="service.dal.functions.meter">
+    <section xml:id="service.dal.functions-meter">
       <title>Meter</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.Meter"
       xrefstyle="hyperlink"/> function can measure metering information. It
       provides the current and total consumptions or generations. The property
       eventing must follow the definition of Device Abstraction Later, <xref
-      linkend="service.dal.function.event"/>. The full function definition is
+      linkend="service.dal-function.event"/>. The full function definition is
       available in the next tables.</para>
 
       <table>
@@ -717,7 +717,7 @@ if (booleanControlSRefs != null) {
         </itemizedlist></para>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.level"/> data structure to provide
+      linkend="service.dal.functions-data.level"/> data structure to provide
       metering information.</para>
 
       <para><code>Meter</code> function service can be optionally registered
@@ -731,14 +731,14 @@ if (booleanControlSRefs != null) {
       xrefstyle="hyperlink"/> for a production.</para>
     </section>
 
-    <section xml:id="service.dal.functions.alarm">
+    <section xml:id="service.dal.functions-alarm">
       <title>Alarm</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.Alarm"
       xrefstyle="hyperlink"/> function provides alarm sensor support. There is
       only one eventable property and no operations. The property eventing
       must follow the definition of Device Abstraction Layer, <xref
-      linkend="service.dal.function.event"/>. The full function definition is
+      linkend="service.dal-function.event"/>. The full function definition is
       available in the next table.</para>
 
       <table>
@@ -765,12 +765,12 @@ if (booleanControlSRefs != null) {
       </table>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.alarm"/> data structure to report
+      linkend="service.dal.functions-data.alarm"/> data structure to report
       the alarm. The property eventing must follow the definition of Device
-      Abstraction Layer, <xref linkend="service.dal.function.event"/>.</para>
+      Abstraction Layer, <xref linkend="service.dal-function.event"/>.</para>
     </section>
 
-    <section xml:id="service.dal.functions.keypad">
+    <section xml:id="service.dal.functions-keypad">
       <title>Keypad</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.Keypad"
@@ -781,7 +781,7 @@ if (booleanControlSRefs != null) {
       released event. It's not possible to have two consecutive key pressed or
       key released events. There is only one eventable property and no
       operations. The property eventing must follow the definition of Device
-      Abstraction Layer, <xref linkend="service.dal.function.event"/>. The
+      Abstraction Layer, <xref linkend="service.dal-function.event"/>. The
       full function definition is available in the next table.</para>
 
       <table>
@@ -808,11 +808,11 @@ if (booleanControlSRefs != null) {
       </table>
 
       <para>The function is using <xref
-      linkend="service.dal.functions.data.keypad"/> data structure to report
+      linkend="service.dal.functions-data.keypad"/> data structure to report
       the keys.</para>
     </section>
 
-    <section xml:id="service.dal.functions.wake.up">
+    <section xml:id="service.dal.functions-wake.up">
       <title>WakeUp</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.WakeUp"
@@ -822,7 +822,7 @@ if (booleanControlSRefs != null) {
       linkend="org.osgi.service.dal.functions.WakeUp.PROPERTY_AWAKE"
       xrefstyle="hyperlink"/> property event. The property eventing must
       follow the definition of Device Abstraction Layer, <xref
-      linkend="service.dal.function.event"/>.</para>
+      linkend="service.dal-function.event"/>.</para>
 
       <para>The device can periodically wake up for commands. The interval can
       be managed with <xref
@@ -848,7 +848,7 @@ if (booleanControlSRefs != null) {
               <entry>Specifies the awake eventable property name. If the
               device is awake, it will trigger a property event. The property
               value type is <xref
-              linkend="service.dal.functions.data.boolean"/>.</entry>
+              linkend="service.dal.functions-data.boolean"/>.</entry>
             </row>
 
             <row>
@@ -858,7 +858,7 @@ if (booleanControlSRefs != null) {
               periodically wake up and receive commands. That interval is
               managed by this property. The property access is readable,
               writable and eventable. The property value type is <xref
-              linkend="service.dal.functions.data.level"/>.</entry>
+              linkend="service.dal.functions-data.level"/>.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -866,7 +866,7 @@ if (booleanControlSRefs != null) {
     </section>
   </section>
 
-  <section xml:id="service.dal.functions.data">
+  <section xml:id="service.dal.functions-data">
     <title>Functions Data</title>
 
     <para><xref linkend="org.osgi.service.dal.FunctionData"
@@ -885,7 +885,7 @@ if (booleanControlSRefs != null) {
 
         <listitem>
           <para>unit - represents the value unit as it's defined in <xref
-          linkend="service.dal.function.properties"/>.</para>
+          linkend="service.dal-function.properties"/>.</para>
         </listitem>
 
         <listitem>
@@ -894,14 +894,14 @@ if (booleanControlSRefs != null) {
         </listitem>
       </itemizedlist></para>
 
-    <section xml:id="service.dal.functions.data.boolean">
+    <section xml:id="service.dal.functions-data.boolean">
       <title>BooleanData</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.data.BooleanData"
       xrefstyle="hyperlink"/> is used by <xref
-      linkend="service.dal.functions.boolean.control"/>, <xref
-      linkend="service.dal.functions.boolean.sensor"/> and <xref
-      linkend="service.dal.functions.wake.up"/>.</para>
+      linkend="service.dal.functions-boolean.control"/>, <xref
+      linkend="service.dal.functions-boolean.sensor"/> and <xref
+      linkend="service.dal.functions-wake.up"/>.</para>
 
       <para>It provides information about the function state. That data object
       contains boolean value, the value collecting time and additional
@@ -936,20 +936,20 @@ if (booleanControlSRefs != null) {
       metadata, value.</para>
     </section>
 
-    <section xml:id="service.dal.functions.data.level">
+    <section xml:id="service.dal.functions-data.level">
       <title>LevelData</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.data.LevelData"
       xrefstyle="hyperlink"/> is used by <xref
-      linkend="service.dal.functions.multi.level.control"/>, <xref
-      linkend="service.dal.functions.multi.level.sensor"/>, <xref
-      linkend="service.dal.functions.meter"/> and <xref
-      linkend="service.dal.functions.wake.up"/>.</para>
+      linkend="service.dal.functions-multi.level.control"/>, <xref
+      linkend="service.dal.functions-multi.level.sensor"/>, <xref
+      linkend="service.dal.functions-meter"/> and <xref
+      linkend="service.dal.functions-wake.up"/>.</para>
 
       <para>It provides information about the function level. That data object
       contains <code>BigDecimal</code> value and the value unit. The
       measurement unit is used as it's defined in <xref
-      linkend="service.dal.function.properties"/>. The <code>unit</code> field
+      linkend="service.dal-function.properties"/>. The <code>unit</code> field
       is accessible with <xref
       linkend="org.osgi.service.dal.functions.data.LevelData.getUnit--"
       xrefstyle="hyperlink"/> getter. The <code>level</code> field is
@@ -981,12 +981,12 @@ if (booleanControlSRefs != null) {
       metadata, level, unit.</para>
     </section>
 
-    <section xml:id="service.dal.functions.data.alarm">
+    <section xml:id="service.dal.functions-data.alarm">
       <title>AlarmData</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.data.AlarmData"
       xrefstyle="hyperlink"/> is used by <xref
-      linkend="service.dal.functions.alarm"/>.</para>
+      linkend="service.dal.functions-alarm"/>.</para>
 
       <para><code>AlarmData</code> data structure is used to provide
       information about the available alarm. That data object contains:
@@ -1032,12 +1032,12 @@ if (booleanControlSRefs != null) {
       metadata, type, severity.</para>
     </section>
 
-    <section xml:id="service.dal.functions.data.keypad">
+    <section xml:id="service.dal.functions-data.keypad">
       <title>KeypadData</title>
 
       <para><xref linkend="org.osgi.service.dal.functions.data.KeypadData"
       xrefstyle="hyperlink"/> is used by <xref
-      linkend="service.dal.functions.keypad"/>.</para>
+      linkend="service.dal.functions-keypad"/>.</para>
 
       <para><code>KeypadData</code> data structure is used to provide
       information when a change with some key from the keypad has occurred.

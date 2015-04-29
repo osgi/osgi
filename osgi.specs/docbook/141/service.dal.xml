@@ -14,7 +14,7 @@
     linkend="org.osgi.service.dal"/></releaseinfo>
   </info>
 
-  <section xml:id="service.dal.introduction">
+  <section xml:id="service.dal-introduction">
     <title>Introduction</title>
 
     <para>The remote device control provides an opportunity to save energy, to
@@ -89,7 +89,7 @@
     </section>
   </section>
 
-  <section xml:id="service.dal.device.access.category">
+  <section xml:id="service.dal-device.access.category">
     <title>Device Access Category</title>
 
     <para>The device access category is called <code>DAL</code>. The category
@@ -101,7 +101,7 @@
     sentence mean?</remark></para>
   </section>
 
-  <section xml:id="service.dal.device.service">
+  <section xml:id="service.dal-device.service">
     <title>Device Service</title>
 
     <para>The <xref linkend="org.osgi.service.dal.Device"
@@ -199,7 +199,7 @@
                 unregistered from the service registry. The status is
                 available for stale device services too. All transitions to
                 this status are described in <xref
-                linkend="service.dal.status.transitions.removed"/>.</para>
+                linkend="service.dal-status.transitions.removed"/>.</para>
               </listitem>
 
               <listitem>
@@ -211,7 +211,7 @@
                 controller is unplugged or there is no connection. All
                 transitions to and from this status are described in detail in
                 <xref
-                linkend="service.dal.status.transitions.offline"/>.</para>
+                linkend="service.dal-status.transitions.offline"/>.</para>
               </listitem>
 
               <listitem>
@@ -221,7 +221,7 @@
                 currently available for operations. The recent communication
                 with the device has been passed through. All transitions to
                 and from this status are described in detail in <xref
-                linkend="service.dal.status.transitions.online"/>.</para>
+                linkend="service.dal-status.transitions.online"/>.</para>
               </listitem>
 
               <listitem>
@@ -230,7 +230,7 @@
                 xrefstyle="hyperlink"/> – Indicates that the device is
                 currently busy with an operation. All transitions to and from
                 this status are described in detail in <xref
-                linkend="service.dal.status.transitions.processing"/>.</para>
+                linkend="service.dal-status.transitions.processing"/>.</para>
               </listitem>
 
               <listitem>
@@ -241,7 +241,7 @@
                 information right after the device is connected. The device
                 can be initialized later when it's awakened. All transitions
                 to and from this status are described in detail in <xref
-                linkend="service.dal.status.transitions.not.initialized"/>.</para>
+                linkend="service.dal-status.transitions.not.initialized"/>.</para>
               </listitem>
 
               <listitem>
@@ -252,7 +252,7 @@
                 actions to become completely connected to the network. All
                 transitions to and from this status are described in detail in
                 <xref
-                linkend="service.dal.status.transitions.not.configured"/>.</para>
+                linkend="service.dal-status.transitions.not.configured"/>.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -395,10 +395,10 @@
             the specified codes. To prevent possible collisions with further
             updates, custom codes must be greater than <code>100</code> and
             less than <code>-100</code>. <xref
-            linkend="service.dal.table.status.detail.mapping"/> contains the
+            linkend="service.dal-table.status.detail.mapping"/> contains the
             mapping of the status details to the statuses.</para>
 
-            <table xml:id="service.dal.table.status.detail.mapping">
+            <table xml:id="service.dal-table.status.detail.mapping">
               <title>Status detail to status mapping.</title>
 
               <tgroup cols="2">
@@ -567,7 +567,7 @@ if (deviceSRefs != null) {
         </itemizedlist></para>
     </section>
 
-    <section xml:id="service.dal.device.registration">
+    <section xml:id="service.dal-device.registration">
       <title>Device Registration</title>
 
       <para>The devices are registered as services in the OSGi service
@@ -578,7 +578,7 @@ if (deviceSRefs != null) {
       there is <xref linkend="org.osgi.service.dal.Function"
       xrefstyle="hyperlink"/> service registration. The function registration
       procedure is described in <xref
-      linkend="service.dal.function.registration"/>.</para>
+      linkend="service.dal-function.registration"/>.</para>
 
       <para>The OSGi service registry is only for the read-only access to the
       services. There are no control operations. The service provider is
@@ -635,7 +635,7 @@ if (deviceSRefs != null) {
       xrefstyle="hyperlink"/>.</para>
     </section>
 
-    <section xml:id="service.dal.status.transitions">
+    <section xml:id="service.dal-status.transitions">
       <title>Device Status Transitions</title>
 
       <para>The device status reveals the device availability. It can
@@ -643,8 +643,8 @@ if (deviceSRefs != null) {
       that the device requires some additional configuration steps. The status
       can move between the different values according to the rules defined in
       this section. The status transitions are summarized in <xref
-      linkend="service.dal.table.device.status.transitions"/>, visualized on
-      <xref linkend="service.dal.figure.device.status.transitions"/> and
+      linkend="service.dal-table.device.status.transitions"/>, visualized on
+      <xref linkend="service.dal-figure.device.status.transitions"/> and
       described in detail in the next sections. The initial device status is
       always <xref linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
       xrefstyle="hyperlink"/>. When device info is processed, the device can
@@ -654,7 +654,7 @@ if (deviceSRefs != null) {
       removed from the network. After that status, the device service will be
       unregistered.</para>
 
-      <figure pgwide="1" xml:id="service.dal.figure.device.status.transitions">
+      <figure pgwide="1" xml:id="service.dal-figure.device.status.transitions">
         <title>Device Status Transitions</title>
 
         <mediaobject>
@@ -666,7 +666,7 @@ if (deviceSRefs != null) {
         </mediaobject>
       </figure>
 
-      <table xml:id="service.dal.table.device.status.transitions">
+      <table xml:id="service.dal-table.device.status.transitions">
         <title>Device Status Transitions</title>
 
         <tgroup cols="7">
@@ -788,7 +788,7 @@ if (deviceSRefs != null) {
         </tgroup>
       </table>
 
-      <section xml:id="service.dal.status.transitions.removed">
+      <section xml:id="service.dal-status.transitions.removed">
         <title>Removed</title>
 
         <para>The device can go to <xref
@@ -810,7 +810,7 @@ if (deviceSRefs != null) {
         operation.</para>
       </section>
 
-      <section xml:id="service.dal.status.transitions.offline">
+      <section xml:id="service.dal-status.transitions.offline">
         <title>Offline</title>
 
         <para>The <xref linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
@@ -888,9 +888,9 @@ if (deviceSRefs != null) {
               is not accessible any more.</para>
             </listitem>
           </itemizedlist> The possible transitions are summarized on <xref
-        linkend="service.dal.figure.device.status.transitions.offline"/>.
+        linkend="service.dal-figure.device.status.transitions.offline"/>.
         <figure pgwide="1"
-            xml:id="service.dal.figure.device.status.transitions.offline">
+            xml:id="service.dal-figure.device.status.transitions.offline">
             <title>Transitions to and from STATUS_OFFLINE</title>
 
             <mediaobject>
@@ -903,7 +903,7 @@ if (deviceSRefs != null) {
           </figure></para>
       </section>
 
-      <section xml:id="service.dal.status.transitions.online">
+      <section xml:id="service.dal-status.transitions.online">
         <title>Online</title>
 
         <para>The <xref linkend="org.osgi.service.dal.Device.STATUS_ONLINE"
@@ -975,9 +975,9 @@ if (deviceSRefs != null) {
               <code>STATUS_PROCESSING</code> will be used.</para>
             </listitem>
           </itemizedlist> The possible transitions are summarized on <xref
-        linkend="service.dal.figure.device.status.transitions.online"/>.
+        linkend="service.dal-figure.device.status.transitions.online"/>.
         <figure pgwide="1"
-            xml:id="service.dal.figure.device.status.transitions.online">
+            xml:id="service.dal-figure.device.status.transitions.online">
             <title>Transitions to and from STATUS_ONLINE</title>
 
             <mediaobject>
@@ -990,7 +990,7 @@ if (deviceSRefs != null) {
           </figure></para>
       </section>
 
-      <section xml:id="service.dal.status.transitions.processing">
+      <section xml:id="service.dal-status.transitions.processing">
         <title>Processing</title>
 
         <para>The status indicates that the device is currently busy with an
@@ -1067,9 +1067,9 @@ if (deviceSRefs != null) {
               processing.</para>
             </listitem>
           </itemizedlist> The possible transitions are summarized on <xref
-        linkend="service.dal.figure.device.status.transitions.processing"/>.
+        linkend="service.dal-figure.device.status.transitions.processing"/>.
         <figure pgwide="1"
-            xml:id="service.dal.figure.device.status.transitions.processing">
+            xml:id="service.dal-figure.device.status.transitions.processing">
             <title>Transitions to and from STATUS_PROCESSING</title>
 
             <mediaobject>
@@ -1082,7 +1082,7 @@ if (deviceSRefs != null) {
           </figure></para>
       </section>
 
-      <section xml:id="service.dal.status.transitions.not.initialized">
+      <section xml:id="service.dal-status.transitions.not.initialized">
         <title>Not Initialized</title>
 
         <para>The status indicates that the device is currently not
@@ -1158,9 +1158,9 @@ if (deviceSRefs != null) {
               The online device is initialized.</para>
             </listitem>
           </itemizedlist> The possible transitions are summarized on <xref
-        linkend="service.dal.figure.device.status.transitions.not.initialized"/>.
+        linkend="service.dal-figure.device.status.transitions.not.initialized"/>.
         <figure pgwide="1"
-            xml:id="service.dal.figure.device.status.transitions.not.initialized">
+            xml:id="service.dal-figure.device.status.transitions.not.initialized">
             <title>Transitions to and from STATUS_NOT_INITIALIZED</title>
 
             <mediaobject>
@@ -1173,7 +1173,7 @@ if (deviceSRefs != null) {
           </figure></para>
       </section>
 
-      <section xml:id="service.dal.status.transitions.not.configured">
+      <section xml:id="service.dal-status.transitions.not.configured">
         <title>Not Configured</title>
 
         <para>Indicates that the device is currently not configured. The
@@ -1248,9 +1248,9 @@ if (deviceSRefs != null) {
               possible. Device requires some data processing.</para>
             </listitem>
           </itemizedlist> The possible transitions are summarized on <xref
-        linkend="service.dal.figure.device.status.transitions.not.configured"/>.
+        linkend="service.dal-figure.device.status.transitions.not.configured"/>.
         <figure pgwide="1"
-            xml:id="service.dal.figure.device.status.transitions.not.configured">
+            xml:id="service.dal-figure.device.status.transitions.not.configured">
             <title>Transitions to and from STATUS_NOT_CONFIGURED</title>
 
             <mediaobject>
@@ -1265,7 +1265,7 @@ if (deviceSRefs != null) {
     </section>
   </section>
 
-  <section xml:id="service.dal.function">
+  <section xml:id="service.dal-function">
     <title>Function Service</title>
 
     <para>The user applications have full control over the device with the
@@ -1388,7 +1388,7 @@ if (deviceSRefs != null) {
         </itemizedlist></para>
     </section>
 
-    <section xml:id="service.dal.function.registration">
+    <section xml:id="service.dal-function.registration">
       <title>Function Registration</title>
 
       <para>On start up, the <code>Function</code> services are registered
@@ -1401,7 +1401,7 @@ if (deviceSRefs != null) {
       xrefstyle="hyperlink"/> service is unregistered before the <xref
       linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
       services. The device registration procedure is available in <xref
-      linkend="service.dal.device.registration"/>.</para>
+      linkend="service.dal-device.registration"/>.</para>
 
       <para><xref linkend="org.osgi.service.dal.Function"
       xrefstyle="hyperlink"/> service must be registered under the function
@@ -1523,7 +1523,7 @@ if (deviceSRefs != null) {
           <listitem>
             <para>Java Bean, but its properties must use those rules. Java
             Bean is defined in <xref
-            linkend="service.dal.ref.bean.spec"/>.</para>
+            linkend="service.dal-ref.bean.spec"/>.</para>
           </listitem>
 
           <listitem>
@@ -1621,7 +1621,7 @@ if (deviceSRefs != null) {
       full details are defined in the next section.</para>
     </section>
 
-    <section xml:id="service.dal.function.properties">
+    <section xml:id="service.dal-function.properties">
       <title>Function Properties</title>
 
       <para><xref linkend="org.osgi.service.dal.Function"
@@ -1698,7 +1698,7 @@ if (deviceSRefs != null) {
         </itemizedlist></para>
 
       <para>The accessor method names must be defined according to <xref
-      linkend="service.dal.ref.bean.spec"/>.</para>
+      linkend="service.dal-ref.bean.spec"/>.</para>
 
       <para>The properties can be optionally described with a set of metadata
       properties. The property values can be collected with <xref
@@ -1750,7 +1750,7 @@ if (deviceSRefs != null) {
                 linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_READABLE"
                 xrefstyle="hyperlink"/> – Marks the property as a readable.
                 Function must provide a getter method for this property
-                according to <xref linkend="service.dal.ref.bean.spec"/>.
+                according to <xref linkend="service.dal-ref.bean.spec"/>.
                 Function operations must not be overridden by this getter
                 method.</para>
               </listitem>
@@ -1760,7 +1760,7 @@ if (deviceSRefs != null) {
                 linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_WRITABLE"
                 xrefstyle="hyperlink"/> – Marks the property as writable.
                 Function must provide a setter method for this property
-                according to <xref linkend="service.dal.ref.bean.spec"/>.
+                according to <xref linkend="service.dal-ref.bean.spec"/>.
                 Function operations must not be overridden by this setter
                 method.</para>
               </listitem>
@@ -1837,7 +1837,7 @@ if (deviceSRefs != null) {
         </itemizedlist></para>
     </section>
 
-    <section xml:id="service.dal.function.event">
+    <section xml:id="service.dal-function.event">
       <title>Function Property Events</title>
 
       <para>The eventable function properties can trigger a new event on each
@@ -1875,7 +1875,7 @@ if (deviceSRefs != null) {
     </section>
   </section>
 
-  <section xml:id="service.dal.security">
+  <section xml:id="service.dal-security">
     <title>Security</title>
 
     <section>
@@ -1941,11 +1941,11 @@ if (deviceSRefs != null) {
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.xml"/>
 
-  <section xml:id="service.dal.references">
+  <section xml:id="service.dal-references">
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="service.dal.ref.bean.spec"><title>JavaBeans
+      <bibliomixed xml:id="service.dal-ref.bean.spec"><title>JavaBeans
       Spec</title>
       http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html</bibliomixed>
     </bibliolist>
