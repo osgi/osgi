@@ -370,7 +370,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
       <para>Obtain a URL for a given resource request.</para>
 
-      <para><emphasis>Default behavior</emphasis> - Assumes the resources are
+      <para><emphasis>Default Behavior</emphasis> - Assumes the resources are
       in the bundle registering the Whiteboard service. Its
       <code>Bundle.getEntry()</code> method is called to obtain a URL to the
       resource. The default Servlet Context Helper implementation assumes the
