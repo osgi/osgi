@@ -49,8 +49,8 @@ import org.osgi.service.dal.functions.data.LevelData;
 public interface MultiLevelControl extends Function {
 
 	/**
-	 * Specifies the level property name. The eventabl property can be read with
-	 * {@link #getData()} getter and can be set with
+	 * Specifies the level property name. The eventable property can be read
+	 * with {@link #getData()} getter and can be set with
 	 * {@link #setData(BigDecimal, String)} setters.
 	 */
 	public static final String	PROPERTY_DATA	= "data";

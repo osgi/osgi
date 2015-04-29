@@ -217,7 +217,7 @@ public interface Types { // NO_UCD
 	 * <li>
 	 * {@code BooleanControl} - indicates that there is a door position control.
 	 * {@code true} state means that the door will be opened. {@code false}
-	 * state means that the the door will be closed.</li>
+	 * state means that the door will be closed.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
@@ -242,7 +242,7 @@ public interface Types { // NO_UCD
 	 * <li>
 	 * {@code BooleanControl} - indicates that there is a window position
 	 * control. {@code true} state means that the window will be opened.
-	 * {@code false} state means that the the window will be closed.</li>
+	 * {@code false} state means that the window will be closed.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
