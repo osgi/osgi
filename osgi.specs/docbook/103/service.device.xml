@@ -295,7 +295,7 @@
     from using Framework mechanisms for services that are not related to
     physical devices.</para>
 
-    <section xml:id="i1262671">
+    <section xml:id="service.device-device.service.registration">
       <title>Device Service Registration</title>
 
       <para>A Device service is defined as a normal service registered with
@@ -1228,7 +1228,8 @@
     <para>Driver services are identified by the <code>DRIVER_ID</code>
     property. Driver Locator services use this particular ID to identify the
     bundles that can be installed. Driver ID properties have uniqueness
-    requirements as specified in <xref linkend="i1262671"/>. This uniqueness
+    requirements as specified in <xref
+    linkend="service.device-device.service.registration"/>. This uniqueness
     allows the device manager to maintain a list of Driver services and
     prevent unnecessary installs.</para>
 
