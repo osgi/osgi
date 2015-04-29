@@ -632,27 +632,36 @@ public synchronized void doStuff() {
     call.</para>
 
     <para>Services that already have some level of asynchronous support may
-    advertise this to clients and to the Async Service by implementing <xref
+    advertise this to clients and to the Async Service by having their service
+    object be an <code>instanceof</code> <xref
     linkend="org.osgi.service.async.delegate.AsyncDelegate"
-    xrefstyle="hyperlink"/>. This interface can be used by the Async Service
-    implementation, or by the client directly, to make an asynchronous call on
-    the service.</para>
+    xrefstyle="hyperlink"/>. The service object can be cast to <xref
+    linkend="org.osgi.service.async.delegate.AsyncDelegate"
+    xrefstyle="hyperlink"/> to be used by the Async Service implementation, or
+    by the client directly, to make an asynchronous call on the
+    service.</para>
 
     <para>Because the Async Delegate behavior is transparently handled by the
     Async Service, clients of the Async Service do not need to know whether
-    the target service implements Async Delegate or not, their usage pattern
-    can remain unchanged.</para>
+    the service object is an <code>instanceof</code> <xref
+    linkend="org.osgi.service.async.delegate.AsyncDelegate"
+    xrefstyle="hyperlink"/> or not. Their usage pattern can remain
+    unchanged.</para>
 
-    <para>When making an async invocation the Async Service must check to see
-    whether the target service implements Async Delegate. If the target
-    service does implement Async Delegate then the Async Service must attempt
-    to delegate the asynchronous call. The exact delegation pattern depends on
-    whether a Promise is required.</para>
+    <para>When making an async invocation, the Async Service must check to see
+    whether the service object is an <code>instanceof</code> <xref
+    linkend="org.osgi.service.async.delegate.AsyncDelegate"
+    xrefstyle="hyperlink"/>. If the service object is an
+    <code>instanceof</code> <xref
+    linkend="org.osgi.service.async.delegate.AsyncDelegate"
+    xrefstyle="hyperlink"/>, then the Async Service must attempt to delegate
+    the asynchronous call. The exact delegation operation depends on whether a
+    Promise result is required.</para>
 
     <section>
       <title>Obtaining a Promise from an Async Delegate</title>
 
-      <para>If the result of the method invocation is needed by the client
+      <para>If the result of the method invocation is needed by the client,
       then the Async Service must attempt to delegate to the <xref
       linkend="org.osgi.service.async.delegate.AsyncDelegate.async-Method-Object---"
       xrefstyle="hyperlink"/> method. The delegation proceeds as
@@ -672,12 +681,12 @@ public synchronized void doStuff() {
         </listitem>
 
         <listitem>
-          <para>If the Async Delegate is unable to optimize the call, then it
-          may return a <code>null</code> from the <xref
+          <para>If the Async Delegate is unable to optimize the call and
+          returns <code>null</code> from the <xref
           linkend="org.osgi.service.async.delegate.AsyncDelegate.async-Method-Object---"
-          xrefstyle="hyperlink"/> method. In this case the Async Service must
-          continue processing the async invocation, treating the service as a
-          normal service object.</para>
+          xrefstyle="hyperlink"/> method, the Async Service must continue
+          processing the async invocation, treating the service as a normal
+          service object.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -685,8 +694,8 @@ public synchronized void doStuff() {
     <section>
       <title>Delegating Fire and Forget Calls to an Async Delegate</title>
 
-      <para>If the result of the method invocation is not needed by the client
-      then the Async Service must attempt to delegate to the <xref
+      <para>If the result of the method invocation is not needed by the
+      client, then the Async Service must attempt to delegate to the <xref
       linkend="org.osgi.service.async.delegate.AsyncDelegate.execute-Method-Object---"
       xrefstyle="hyperlink"/> method. This gives the Async Delegate
       implementation the opportunity to further optimize its processing. The
@@ -706,21 +715,21 @@ public synchronized void doStuff() {
         </listitem>
 
         <listitem>
-          <para>If the Async Delegate is unable to optimize the call, then it
-          may return <code>false</code> from the <xref
+          <para>If the Async Delegate is unable to optimize the call and
+          returns <code>false</code> from the <xref
           linkend="org.osgi.service.async.delegate.AsyncDelegate.execute-Method-Object---"
-          xrefstyle="hyperlink"/> method. In this case the Async Service must
-          continue processing the async invocation, treating the service as a
-          normal service object.</para>
+          xrefstyle="hyperlink"/> method, the Async Service must continue
+          processing the async invocation, treating the service as a normal
+          service object.</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Lifecycle for Service Objects Implementing Async Delegate</title>
+      <title>Lifecycle for Service Objects When Delegating</title>
 
       <para>If an Async Delegate implementation accepts an asynchronous task,
-      either via a call to <xref
+      via a call to either <xref
       linkend="org.osgi.service.async.delegate.AsyncDelegate.execute-Method-Object---"
       xrefstyle="hyperlink"/> or <xref
       linkend="org.osgi.service.async.delegate.AsyncDelegate.async-Method-Object---"
@@ -733,19 +742,21 @@ public synchronized void doStuff() {
       <para>If the Async Service implementation used a service reference to
       obtain the service, then it must release the service object after the
       task has been accepted. This means that if the service object is
-      provided by a service factory then the service object should take extra
+      provided by a service factory, then the service object should take extra
       care not to destroy its internal state when released. The service object
       must remain valid until all executing asynchronous tasks associated with
       the service object are either completed or failed.</para>
 
-      <para>If an Async Delegate implementation rejects an asynchronous task
-      with a return of <code>false</code> or <code>null</code>, the Async
-      Service implementation will take over the asynchronous invocation of the
-      method. In this case the Async Service should not release the service
-      object until the asynchronous task is completed.</para>
+      <para>If an Async Delegate implementation rejects an asynchronous task,
+      by returning <code>false</code> or <code>null</code>, the Async Service
+      implementation must take over the asynchronous invocation of the method.
+      In this case, if the Async Service implementation used a service
+      reference to obtain the service, the Async Service must not release the
+      service object until the asynchronous task is completed.</para>
 
-      <para>If an Async Delegate implementation throws an exception, then the
-      service object must be released immediately.</para>
+      <para>If an Async Delegate implementation throws an exception and the
+      Async Service implementation used a service reference to obtain the
+      service, then the service object must be released immediately.</para>
     </section>
   </section>
 
