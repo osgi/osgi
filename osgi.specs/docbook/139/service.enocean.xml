@@ -29,19 +29,17 @@
     control EnOcean devices on the one hand, and act as EnOcean devices and
     interoperate with EnOcean clients on the other hand. In particular, a Java
     mapping is provided for the standard representation of EnOcean devices
-    called EnOcean Equipment Profile (EEPs) <xref
-    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> .</para>
+    called EnOcean Equipment Profile (EEPs). See <xref
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/>.</para>
 
     <para>The specification also describes the external API of an EnOcean Base
-    Driver according to Device Access specification, the example made by
-    ZigBee Device Service specification and spread OSGi practices on
-    residential market.</para>
+    Driver according to Device Access specification.</para>
   </section>
 
   <section>
     <title>Essentials</title>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
         <para><emphasis role="italic">Scope</emphasis> - This specification is
         limited to general device discovery and control aspects of the
@@ -78,7 +76,7 @@
 
       <listitem>
         <para><emphasis>Discover and control EnOcean devices as OSGi services
-        </emphasis> - Available learnt (via an EnOcean teach-in procedure)
+        </emphasis> - Available learned (via an EnOcean teach-in procedure)
         EnOcean external endpoints are dynamically reified as OSGi services on
         the service registry upon discovery.</para>
       </listitem>
@@ -95,23 +93,23 @@
   <section>
     <title>Entities</title>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
         <para><emphasis>EnOcean Base Driver</emphasis> - The bundle that
-        implements the bridge between OSGi and EnOcean networks (see <xref
-        linkend="service.enocean-figure_id_20140603_11h12_46"/> ). It is
-        responsible for accessing the various EnOcean gateway chips on the
-        execution machine, and ensures the reception and translation of
-        EnOcean messages into proper objects. It is also used to send messages
-        on the EnOcean network, using whatever chip it deems most
-        appropriate.</para>
+        implements the bridge between OSGi and EnOcean networks, see <xref
+        linkend="service.enocean-figure_id_20140603_11h12_46"
+        xrefstyle="template:Figure %n on page %p"/>. It is responsible for
+        accessing the various EnOcean gateway chips on the execution machine,
+        and ensures the reception and translation of EnOcean messages into
+        proper objects. It is also used to send messages on the EnOcean
+        network, using whatever chip it deems most appropriate.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>EnOcean Host</emphasis> - The EnOceanHost object is a
         link between the software and the EnOcean network. It represents the
         chip configuration (gateway capabilities) described in <xref
-        linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/> . It is
+        linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/>. It is
         registered as an OSGi service.</para>
       </listitem>
 
@@ -127,8 +125,8 @@
         <para><emphasis>EnOcean Message</emphasis> - Every EnOcean reporting
         equipment is supposed to follow a “profile”, which is essentially the
         way the emitted data is encoded. In order to reflect this standard as
-        it is defined in the <xref
-        linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> ,
+        it is defined in <xref
+        linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/>,
         manufacturers are able to register the description of “Messages”, the
         essence of a profile, along with their associated payload (as
         Channels). See “EnOcean Channels” below for more information.</para>
@@ -195,12 +193,13 @@
     within the OSGi framework.</para>
 
     <para>The EnOcean Base Driver is responsible for mapping external devices
-    into EnOceanDevice objects, through the use of an EnOcean gateway <xref
-    linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/> . The
+    into EnOceanDevice objects, through the use of an EnOcean gateway. See
+    <xref linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/>. The
     latter is represented on OSGi framework as an object implementing
     EnOceanHost interface. EnOcean “teach-in” messages will trigger this
-    behaviour, this is called a device import situation (see <xref
-    linkend="service.enocean-figure_id_20140603_11h32_54"/> ).</para>
+    behavior, this is called a device import situation, see <xref
+    linkend="service.enocean-figure_id_20140603_11h32_54"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="service.enocean-figure_id_20140603_11h32_54">
       <title>EnOcean device import.</title>
@@ -215,13 +214,14 @@
     </figure>
 
     <para>Client bundles may also expose framework-internal (local)
-    EnOceanDevice instances, registered within the framework (see <xref
-    linkend="service.enocean-figure_id_20140603_11h43_01"/> ). The Base Driver
-    then should emulate those objects as EnOcean devices on the EnOcean
-    network. This is a device export situation, made possible by the use of
-    the 127 virtual base IDs available on an EnOcean gateway. For more
-    information about this process, please report to the “Exporting an EnOcean
-    device” section below.</para>
+    EnOceanDevice instances, registered within the framework, see <xref
+    linkend="service.enocean-figure_id_20140603_11h43_01"
+    xrefstyle="template:Figure %n on page %p"/>. The Base Driver then should
+    emulate those objects as EnOcean devices on the EnOcean network. This is a
+    device export situation, made possible by the use of the 127 virtual base
+    IDs available on an EnOcean gateway. For more information about this
+    process, see <xref
+    linkend="service.enocean-export.enocean.device"/>.</para>
 
     <figure xml:id="service.enocean-figure_id_20140603_11h43_01">
       <title>EnOcean device export.</title>
@@ -276,18 +276,18 @@
     layer may then be implemented as a layer of refinement drivers above a
     layer of base drivers. The refinement driver is responsible for adapting
     technology-specific device services registered by the base driver into
-    device services of another model (see AbstractDevice interface in <xref
-    linkend="service.enocean-figure_id_20140603_14h51_11"/> ). In the case of
-    a generic device abstraction layer, the model is agnostic to
-    technologies.</para>
+    device services of another model, see AbstractDevice interface in <xref
+    linkend="service.enocean-figure_id_20140603_14h51_11"
+    xrefstyle="template:Figure %n on page %p"/>. In the case of a generic
+    device abstraction layer, the model is agnostic to technologies.</para>
 
     <para>The EnOcean Alliance defines their own abstract model with EnOcean
     Equipment Profiles and refinement drivers may provide the implementation
     of all EEPs with EnOcean specific Java interfaces. The AbstractDevice
-    interface of <xref linkend="service.enocean-figure_id_20140603_14h51_11"/>
-    is then replaced by an EEP specific Java interface in that case. The need
-    and the choice of the abstraction depends on the targeted application
-    domain.</para>
+    interface of <xref linkend="service.enocean-figure_id_20140603_14h51_11"
+    xrefstyle="template:Figure %n on page %p"/> is then replaced by an EEP
+    specific Java interface in that case. The need and the choice of the
+    abstraction depends on the targeted application domain.</para>
 
     <figure xml:id="service.enocean-figure_id_20140603_14h51_11">
       <title>EnOcean Base Driver and a refinement driver representing devices
@@ -315,7 +315,7 @@
 
     <para>The EnOceanHost interface enables OSGi applications to:</para>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
         <para>Get or set gateway metadata (version, name, etc);</para>
       </listitem>
@@ -337,8 +337,9 @@
     <section>
       <title>Generics</title>
 
-      <para>A physical EnOcean device is reified as an EnOceanDevice object
-      within the framework.</para>
+      <para>A physical EnOcean device is reified as an <xref
+      linkend="org.osgi.service.enocean.EnOceanDevice" xrefstyle="hyperlink"/>
+      object within the framework.</para>
 
       <para>An EnOcean device holds most of the natural properties for an
       EnOcean object: its unique ID, the profile, a friendly name, its
@@ -362,23 +363,26 @@
       (RORG / FUNC / TYPE integers).</para>
 
       <para>The EnOceanDevice also keeps security features as defined in the
-      EnOcean Security Draft <xref
-      linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/> , which
+      EnOcean Security Draft, <xref
+      linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/>, which
       allow for a security level format (integer mask), an encryption key
       and/or a rolling authentication code. See the Security Of EnOcean
-      networks section below.</para>
+      networks section below.<remark>BJH Where is this section? If it exists,
+      we need to &lt;xref&gt; to it.</remark></para>
 
-      <para>The EnOceanDevice service MUST also be registered with
-      org.osgi.service.device.Constants.DEVICE_CATEGORY property (see OSGi
-      Compendium: 103 Device Access Specification) that describes a table
-      (String[]) of categories to which the device belongs. One value MUST be
-      “EnOcean”
-      (org.osgi.service.enocean.EnOceanDevice.DEVICE_CATEGORY).</para>
+      <para>The EnOceanDevice service MUST also be registered with the
+      <code>DEVICE_CATEGORY</code> service property, see <xref
+      linkend="service.device-device.service.registration"/>, that describes a
+      array of categories to which the device belongs. One value MUST be
+      <code>EnOcean</code> which is specified in <xref
+      linkend="org.osgi.service.enocean.EnOceanDevice.DEVICE_CATEGORY"
+      xrefstyle="hyperlink"/>.</para>
 
-      <para>The additional properties (defined in Device Access – 103.2.1) :
-      DEVICE_DESCRIPTION, DEVICE_SERIAL values are not specified here as no
-      description nor application-level serial number are provided in the
-      EnOcean standard protocol.</para>
+      <para>Values for the additional service properties,
+      <code>DEVICE_DESCRIPTION</code>, <code>DEVICE_SERIAL</code> as defined
+      in <xref linkend="service.device-device.service.registration"/>, are not
+      specified here as no description nor application-level serial number are
+      provided in the EnOcean standard protocol.</para>
     </section>
 
     <section>
@@ -386,13 +390,14 @@
 
       <para>In import situations, the device's chip ID is uniquely set by the
       Base Driver, according to the one present in the teach-in message that
-      originated the Device's creation. The service PID (cf. Core
-      Specification R4 v4.3, section 5.2.5) should also be generated and
-      deterministically derived from the chip ID to allow reconstruction of a
-      device without a new teach-in process after a framework restart.</para>
+      originated the Device's creation. The service PID, see <xref
+      linkend="service.enocean-reference.service.pid"/>, should also be
+      generated and deterministically derived from the chip ID to allow
+      reconstruction of a device without a new teach-in process after a
+      framework restart.</para>
     </section>
 
-    <section>
+    <section xml:id="service.enocean-export.enocean.device">
       <title>Export Situation</title>
 
       <para>In export situations:</para>
@@ -408,8 +413,10 @@
           <para>The chip ID (this device's EnOcean source ID when it issues
           messages) will be allocated by the Base Driver. The latter keeps a
           dictionary of the currently allocated chip IDs. The Client bundle
-          must also set an ENOCEAN_EXPORT property in the registered device's
-          Property Map.</para>
+          must also set an <xref
+          linkend="org.osgi.service.enocean.EnOceanDevice.ENOCEAN_EXPORT"
+          xrefstyle="hyperlink"/> property in the registered device's Property
+          Map.</para>
         </listitem>
       </orderedlist>
 
@@ -417,7 +424,7 @@
       from a given service PID is by using EnOceanHost's dedicated interface
       for this use.</para>
 
-      <para>The Base Driver MUST ensure the persistency of the
+      <para>The Base Driver MUST ensure the persistence of the
       CHIP_ID:SERVICE_PID mapping.</para>
 
       <para>As an application developer, please refer to the documentation of
@@ -430,7 +437,7 @@
 
       <para>The EnOceanDevice interface enables client bundles to:</para>
 
-      <itemizedlist mark="bullet">
+      <itemizedlist>
         <listitem>
           <para>Get or set the security features of the device in a protected
           way;</para>
@@ -448,7 +455,9 @@
         </listitem>
 
         <listitem>
-          <para>Invoke RPCs onto the device, through the invoke() call.</para>
+          <para>Invoke RPCs onto the device, through the <xref
+          linkend="org.osgi.service.enocean.EnOceanDevice.invoke-EnOceanRPC-EnOceanHandler-"
+          xrefstyle="hyperlink"/> call.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -458,15 +467,17 @@
     <title>EnOcean Messages</title>
 
     <para>EnOcean Messages are at the core of the EnOcean application layer as
-    a whole and the EnOcean Equipment Profile specification <xref
-    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> in
+    a whole and the EnOcean Equipment Profile specification, <xref
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/>, in
     particular. Every exchange of information within EnOcean networks is done
-    with a dedicated message. The EnOceanMessage interface provides a set of
-    getters. The latter enables OSGi applications to get the information
-    contained in the payload of an EnOcean message and defined as data and
-    optional data of the EnOcean Serial Protocol Type 1 (RADIO) message (see
-    Table 2 in Section "1.6.1 Packet description" of <xref
-    linkend="service.enocean-bibliomixed_id_20140602_17h03_37_8"/> ).</para>
+    with a dedicated message. The <xref
+    linkend="org.osgi.service.enocean.EnOceanMessage" xrefstyle="hyperlink"/>
+    interface provides a set of getters. The latter enables OSGi applications
+    to get the information contained in the payload of an EnOcean message and
+    defined as data and optional data of the EnOcean Serial Protocol Type 1
+    (RADIO) message (see Table 2 in Section "1.6.1 Packet description" of
+    <xref
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_37_8"/>).</para>
 
     <para>This model enables reading both the EnOcean radio telegram data and
     the associated metadata that may be attached to it in a single object,
@@ -484,7 +495,7 @@
       Admin.</para>
 
       <para>Details about the available topics, filters and properties can be
-      found in the Event API section below.</para>
+      found in <xref linkend="service.enocean-event.api"/>.</para>
 
       <para>EnOceanMessage objects will be created only if the originating
       device has already been registered in the OSGi Service Registry, along
@@ -497,7 +508,7 @@
       <para>The RORG of a message defines its shape and generic type; all the
       RORGs are defined in the EnOcean Radio Specification.</para>
 
-      <para>An addressed message will be encapsulated into an Adressed
+      <para>An addressed message will be encapsulated into an Addressed
       Telegram (ADT) by the base driver transparently; this means that from
       the application level, it will be represented under its original RORG,
       but with a valid destinationID.</para>
@@ -508,17 +519,22 @@
       though an EXTRA identifier is sometimes needed to identify a particular
       message layout for that profile.</para>
 
-      <para>Those identifiers allow for retrieving EnOceanMessageDescription
-      objects within a registered EnOceanMessageDescriptionSet, which give the
-      application more information to parse the message.</para>
+      <para>Those identifiers allow for retrieving <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescription"
+      xrefstyle="hyperlink"/> objects within a registered <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet"
+      xrefstyle="hyperlink"/>, which give the application more information to
+      parse the message.</para>
     </section>
 
     <section>
       <title>Interface</title>
 
-      <para>The methods available in the EnOceanMessage interface are:</para>
+      <para>The methods available in the <xref
+      linkend="org.osgi.service.enocean.EnOceanMessage"
+      xrefstyle="hyperlink"/> interface are:</para>
 
-      <itemizedlist mark="bullet">
+      <itemizedlist>
         <listitem>
           <para>Identification methods, retrieving the message's profile,
           sender ID, optional destination ID, status;</para>
@@ -526,10 +542,14 @@
 
         <listitem>
           <para>A method to get the raw bytes of payload data in the message.
-          This data can then be passed to the deserializer of the
-          EnOceanMessageDescription object to be converted to EnOceanChannels,
-          which may -again- be documented (through EnOceanChannelDescription
-          objects) or not.</para>
+          This data can then be passed to the deserializer of the <xref
+          linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescription"
+          xrefstyle="hyperlink"/> object to be converted to <xref
+          linkend="org.osgi.service.enocean.EnOceanChannel"
+          xrefstyle="hyperlink"/>, which may -again- be documented (through
+          <xref
+          linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+          xrefstyle="hyperlink"/> objects) or not.</para>
         </listitem>
 
         <listitem>
@@ -543,18 +563,28 @@
   <section>
     <title>EnOcean Message Description</title>
 
-    <para>EnOceanMessageDescription objects exposes only two methods:</para>
+    <para><xref
+    linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescription"
+    xrefstyle="hyperlink"/> objects exposes only two methods:</para>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
-        <para>deserialize(): makes the user able to deserialize the payload
-        bytes of a raw EnOceanMessage object, into a collection of
-        EnOceanChannel objects.</para>
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescription.deserialize-byte---"
+        xrefstyle="hyperlink"/>: makes the user able to deserialize the
+        payload bytes of a raw <xref
+        linkend="org.osgi.service.enocean.EnOceanMessage"
+        xrefstyle="hyperlink"/> object, into a collection of <xref
+        linkend="org.osgi.service.enocean.EnOceanChannel"
+        xrefstyle="hyperlink"/> objects.</para>
       </listitem>
 
       <listitem>
-        <para>serialize(): serializes the input EnOceanChannel objects into a
-        collection of bytes.</para>
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanMessageDescription.serialize-EnOceanChannel---"
+        xrefstyle="hyperlink"/>: serializes the input <xref
+        linkend="org.osgi.service.enocean.EnOceanChannel"
+        xrefstyle="hyperlink"/> objects into a collection of bytes.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -562,20 +592,25 @@
   <section>
     <title>EnOcean Channel</title>
 
-    <para>The EnOceanChannel interface is the first step of an abstraction to
-    generate or interpret EnOceanMessage channels with plain Java
-    types.</para>
+    <para>The <xref linkend="org.osgi.service.enocean.EnOceanChannel"
+    xrefstyle="hyperlink"/> interface is the first step of an abstraction to
+    generate or interpret <xref
+    linkend="org.osgi.service.enocean.EnOceanMessage" xrefstyle="hyperlink"/>
+    channels with plain Java types.</para>
 
     <para>The simple EnOceanChannel interface provides a way to separate the
     different fields in a message payload, knowing their offset and size in
     the byte array that constitutes the full message's payload.</para>
 
     <para>At the EnOceanChannel level, the only way to get/set the information
-    contained in the channel is through a pair of getRawValue() and
-    setRawValue() methods, which act on plain bytes.</para>
+    contained in the channel is through a pair of <xref
+    linkend="org.osgi.service.enocean.EnOceanChannel.getRawValue--"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.enocean.EnOceanChannel.setRawValue-byte---"
+    xrefstyle="hyperlink"/> methods, which act on plain bytes.</para>
 
     <para>Those bytes are meant right-aligned, and the number of those bytes
-    is the size of the datafield, floored up to the next multiple of 8. For
+    is the size of the data field, floored up to the next multiple of 8. For
     instance, a 3-bit long channel would be encoded on one byte, all the
     necessary information starting from bit 0.</para>
 
@@ -584,13 +619,14 @@
     unique ID.</para>
 
     <para>This ID, or channelID, is constituted of the “Shortcut” field of
-    this channel from the EEP 2.5 Specification <xref
-    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/> and a
+    this channel from the EEP 2.5 Specification, <xref
+    linkend="service.enocean-bibliomixed_id_20140602_17h03_10_5"/>, and a
     number fixed by the order of appearance of such a “Shortcut” in the
     specification.</para>
 
-    <para>This unique identifier links a Channel to an
-    EnOceanChannelDescription object that provides more information to encode
+    <para>This unique identifier links a Channel to an <xref
+    linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+    xrefstyle="hyperlink"/> object that provides more information to encode
     and decode that channel's information; see below for more details. This
     enables for loose coupling of the raw Channel itself and a richer,
     3rd-party provided, information.</para>
@@ -624,52 +660,70 @@
   <section>
     <title>EnOcean Channel Description</title>
 
-    <para>The EnOceanChannelDescription interface enables the description of
-    all the various channels as specified in the EnOcean specification, as
-    well as the description of channels issued by 3rd party actors.</para>
+    <para>The <xref
+    linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+    xrefstyle="hyperlink"/> interface enables the description of all the
+    various channels as specified in the EnOcean specification, as well as the
+    description of channels issued by 3rd party actors.</para>
 
-    <para>Those description objects are retrieved from the registered
-    EnOceanChannelDescriptionSet interface using an unique ID known as the
+    <para>Those description objects are retrieved from the registered <xref
+    linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet"
+    xrefstyle="hyperlink"/> interface using an unique ID known as the
     channelID.</para>
 
     <para>Here are the Channel types defined in this specification:</para>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
-        <para>CHANNEL_TYPE_RAW: A collection of bytes. This type is used when
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.TYPE_RAW"
+        xrefstyle="hyperlink"/>: A collection of bytes. This type is used when
         the description is not provided, and is thus the default. For this
-        type, the EnOceanChannelDescription's deserialize() call actually
-        returns a byte[] collection. The encryption key or a device ID on 4
-        bytes are examples of such raw types.</para>
+        type, the <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+        xrefstyle="hyperlink"/> call actually returns a byte[] collection. The
+        encryption key or a device ID on 4 bytes are examples of such raw
+        types.</para>
       </listitem>
 
       <listitem>
-        <para>CHANNEL_TYPE_DATA: A scaled physical value. Used when the data
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.TYPE_DATA"
+        xrefstyle="hyperlink"/>: A scaled physical value. Used when the data
         can be mapped to a physical value; for instance, the 'WND – Wind
         Speed' channel is a raw binary value, in a range from 0 to 255, that
         will be mapped as a wind speed between 0 and 70 m/s. For this type,
-        the EnOceanChannelDescription's deserialize() call actually returns a
-        Double value.</para>
+        the <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+        xrefstyle="hyperlink"/> call actually returns a Double value.</para>
       </listitem>
 
       <listitem>
-        <para>CHANNEL_TYPE_FLAG: A boolean value. Used when the Channel value
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.TYPE_FLAG"
+        xrefstyle="hyperlink"/>: A boolean value. Used when the Channel value
         can be either 1 or 0. The “Teach-In” Channel is a well-known example;
         this 1-bit field may either be 0 or 1, depending whether the Message
-        is a teach-in one or not. For this type, the
-        EnOceanChannelDescription's deserialize() call actually returns a
-        Boolean value.</para>
+        is a teach-in one or not. For this type, the <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+        xrefstyle="hyperlink"/> call actually returns a Boolean value.</para>
       </listitem>
 
       <listitem>
-        <para>CHANNEL_TYPE_ENUM: An enumeration of possible values. Used when
+        <para><xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.TYPE_ENUM"
+        xrefstyle="hyperlink"/>: An enumeration of possible values. Used when
         the Channel can only take a discrete number of values. More
-        complicated than the Flag type, Enumerated types may have thresholds:
-        for instance, the A5-30 “Digital Input- Input State (IPS)” channel is
-        a 8-bit value which means “Contact closed” between 0 and 195, and
-        “Contact open” from 196 to 255. For this type, the
-        EnOceanChannelDescription's deserialize() call actually returns an
-        EnOceanChannelEnum object.</para>
+        complicated than <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.TYPE_FLAG"
+        xrefstyle="hyperlink"/>, enumerated types may have thresholds: for
+        instance, the A5-30 “Digital Input- Input State (IPS)” channel is a
+        8-bit value which means “Contact closed” between 0 and 195, and
+        “Contact open” from 196 to 255. For this type, the <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+        xrefstyle="hyperlink"/> call actually returns an <xref
+        linkend="org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue"
+        xrefstyle="hyperlink"/> object.</para>
       </listitem>
     </itemizedlist>
 
@@ -681,20 +735,26 @@
     <section>
       <title>EnOcean Data Channel Description</title>
 
-      <para>The EnOceanDataChannelDescription interface inherits from
-      EnOceanChannelDescription interface.</para>
+      <para>The <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription"
+      xrefstyle="hyperlink"/> interface inherits from <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+      xrefstyle="hyperlink"/> interface.</para>
 
       <para>Two more methods give access to the integer input domain of the
       data channel (such as 0-255) and to the floating-point output range of
-      it (such as -30,0°C – 24,5°C). A method is also present to retrieve the
-      physical unit of the channel. The serialize() and deserialize() methods
-      are implemented to easily convert from the raw byte[] collection to a
-      Double, and vice versa.</para>
+      it (such as -30.0°C – 24.5°C). A method is also present to retrieve the
+      physical unit of the channel. The <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.serialize-Object-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+      xrefstyle="hyperlink"/> methods are implemented to easily convert from
+      the raw byte[] collection to a Double, and vice versa.</para>
 
       <para>Here are a few samples of such Channels:</para>
 
-      <table frame="all">
-        <title>Table of channels samples.</title>
+      <table>
+        <title>EnOcean Data Channel Description example</title>
 
         <tgroup align="left" cols="6" colsep="1" rowsep="1">
           <colspec colname="c1" colwidth="1*"/>
@@ -725,22 +785,6 @@
             </row>
           </thead>
 
-          <tfoot>
-            <row>
-              <entry>HUM</entry>
-
-              <entry>Humidity</entry>
-
-              <entry>HumidityScaledChannel_X</entry>
-
-              <entry>0..250</entry>
-
-              <entry>0..100</entry>
-
-              <entry>%</entry>
-            </row>
-          </tfoot>
-
           <tbody>
             <row>
               <entry>TMP</entry>
@@ -755,6 +799,20 @@
 
               <entry>°C</entry>
             </row>
+
+            <row>
+              <entry>HUM</entry>
+
+              <entry>Humidity</entry>
+
+              <entry>HumidityScaledChannel_X</entry>
+
+              <entry>0..250</entry>
+
+              <entry>0..100</entry>
+
+              <entry>%</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -763,36 +821,55 @@
     <section>
       <title>EnOcean Flag Channel Description</title>
 
-      <para>The EnOceanFlagChannelDescription interface inherits from the
-      EnOceanChannelDescription interface.</para>
+      <para>The <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanFlagChannelDescription"
+      xrefstyle="hyperlink"/> interface inherits from the <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+      xrefstyle="hyperlink"/> interface.</para>
 
       <para>Those channels, are typically used for On/Off reporting values
-      (like a switch); they have no additional methods, though the
-      deserialize() method converts the input bit into a proper Boolean
-      object.</para>
+      (like a switch); they have no additional methods, though the <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+      xrefstyle="hyperlink"/> method converts the input bit into a proper
+      Boolean object.</para>
     </section>
 
     <section>
       <title>EnOcean Enumerated Channel Description</title>
 
-      <para>The EnOceanEnumChannelDescription interface inherits from the
-      EnOceanChannelDescription interface.</para>
+      <para>The <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanEnumChannelDescription"
+      xrefstyle="hyperlink"/> interface inherits from the <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription"
+      xrefstyle="hyperlink"/> interface.</para>
 
-      <para>The additional method provided to this interface is
-      getPossibleValues(), which returns an array of the available
-      EnOceanChannelEnumValue objects accessible to this channel. Every
-      EnumValue object contains its integer input range and a String
-      identifier that defines its meaning.</para>
+      <para>The additional method provided to this interface is <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanEnumChannelDescription.getPossibleValues--"
+      xrefstyle="hyperlink"/>, which returns an array of the available <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue"
+      xrefstyle="hyperlink"/> objects accessible to this channel. Every <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue"
+      xrefstyle="hyperlink"/> object contains its integer input range and a
+      String identifier that defines its meaning.</para>
 
-      <para>The serialize() and deserialize() methods of an
-      EnOceanEnumChannelDescription object thus convert an integer input value
-      (say, 156) to an EnOceanChannelEnumValue, and vice versa.</para>
+      <para>The <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.serialize-Object-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelDescription.deserialize-byte---"
+      xrefstyle="hyperlink"/> methods of an <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanEnumChannelDescription"
+      xrefstyle="hyperlink"/> object thus convert an integer input value (say,
+      156) to an <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue"
+      xrefstyle="hyperlink"/>, and vice versa.</para>
 
       <para>Here is an example that shows the input range and the associated
-      EnOceanChannelEnumValues:</para>
+      <xref
+      linkend="org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue"
+      xrefstyle="hyperlink"/>:</para>
 
-      <table frame="all">
-        <title>Table of channels samples.</title>
+      <table>
+        <title>EnOcean Enumerated Channel Description example</title>
 
         <tgroup align="left" cols="5" colsep="1" rowsep="1">
           <colspec colname="c1" colwidth="3*"/>
@@ -819,24 +896,10 @@
             </row>
           </thead>
 
-          <tfoot>
-            <row>
-              <entry/>
-
-              <entry>FanStageSwitch_Stage0</entry>
-
-              <entry>190</entry>
-
-              <entry>209</entry>
-
-              <entry>Fan speed: Stage 0</entry>
-            </row>
-          </tfoot>
-
           <tbody>
             <row>
-              <entry morerows="2" valign="top"><para><!-- Pernicous Mixed Content -->
-              Fan speed stage switch</para></entry>
+              <entry morerows="3" valign="top"><para> Fan speed stage
+              switch</para></entry>
 
               <entry>FanStageSwitch_Stage3</entry>
 
@@ -866,6 +929,16 @@
 
               <entry>Fan speed: Stage 1</entry>
             </row>
+
+            <row>
+              <entry>FanStageSwitch_Stage0</entry>
+
+              <entry>190</entry>
+
+              <entry>209</entry>
+
+              <entry>Fan speed: Stage 0</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -879,40 +952,50 @@
     configured and maintained over the air using radio messages.</para>
 
     <para>The Remote Procedure Calls, or RPCs - as defined by the EnOcean
-    Remote Management specification <xref
+    Remote Management specification, <xref
     linkend="service.enocean-bibliomixed_id_20140602_17h03_19_6"/> - are not
     related to any EnOcean Equipment Profile.</para>
 
     <para>Note that EnOcean Remote Commissioning is detailed in an additional
-    EnOcean document <xref
-    linkend="service.enocean-bibliomixed_id_20150105_16h26_16_99"/> .</para>
+    EnOcean document, <xref
+    linkend="service.enocean-bibliomixed_id_20150105_16h26_16_99"/>.</para>
 
     <section>
       <title>EnOcean RPC</title>
 
-      <para>An EnOceanRPC object enables client bundles to remotely manage
-      EnOcean devices using already defined behaviour.</para>
+      <para>An <xref linkend="org.osgi.service.enocean.EnOceanRPC"
+      xrefstyle="hyperlink"/> object enables client bundles to remotely manage
+      EnOcean devices using already defined behavior.</para>
 
-      <para>RPCs are mandatorily defined by a MANUFACTURER_ID (11 bits, 0x7FF
-      for the EnOcean alliance) and a unique FUNCTION_ID code on 12
-      bits.</para>
+      <para>RPCs are defined by a <xref
+      linkend="org.osgi.service.enocean.EnOceanRPC.MANUFACTURER_ID"
+      xrefstyle="hyperlink"/> (11 bits, 0x7FF for the EnOcean alliance) and a
+      unique <xref linkend="org.osgi.service.enocean.EnOceanRPC.FUNCTION_ID"
+      xrefstyle="hyperlink"/> code on 12 bits.</para>
 
-      <para>RPCs are called directly onto an EnOceanDevice object via the
-      device.invoke() method, which accepts also a non-mandatory
-      EnOceanHandler object as a parameter to retrieve the asynchronous
-      answer.</para>
+      <para>RPCs are called directly onto an <xref
+      linkend="org.osgi.service.enocean.EnOceanDevice" xrefstyle="hyperlink"/>
+      object via the <xref
+      linkend="org.osgi.service.enocean.EnOceanDevice.invoke-EnOceanRPC-EnOceanHandler-"
+      xrefstyle="hyperlink"/> method, which accepts also a non-mandatory <xref
+      linkend="org.osgi.service.enocean.EnOceanHandler"
+      xrefstyle="hyperlink"/> object as a parameter to retrieve the
+      asynchronous answer.</para>
 
       <para>Broadcasted RPCs can be addressed directly to the Base Driver
-      using the relevant Event Admin topic; see the Event API section
-      below.</para>
+      using the relevant Event Admin topic; see <xref
+      linkend="service.enocean-event.api"/>.</para>
     </section>
 
     <section>
       <title>EnOcean Handler</title>
 
       <para>Responses to RPCs are processed by the driver and sent back to a
-      handler using EnOceanHandler's notifyResponse() method when an
-      EnOceanHandler is passed to the base driver.</para>
+      handler using <xref
+      linkend="org.osgi.service.enocean.EnOceanHandler.notifyResponse-EnOceanRPC-byte---"
+      xrefstyle="hyperlink"/> method when an <xref
+      linkend="org.osgi.service.enocean.EnOceanHandler"
+      xrefstyle="hyperlink"/> is passed to the base driver.</para>
     </section>
   </section>
 
@@ -923,58 +1006,60 @@
       <title>Service Tracking</title>
 
       <para>All discovered EnOcean devices in the local networks are
-      registered under EnOceanDevice interface within the OSGi framework.
-      Every time an EnOcean device appears or quits the network, the
-      associated OSGi service is registered or unregistered in the OSGi
-      service registry. Thanks to the EnOcean Base Driver, the OSGi service
-      availability in the registry mirrors EnOcean device availability on
-      EnOcean network <xref
-      linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/> .</para>
+      registered under <xref linkend="org.osgi.service.enocean.EnOceanDevice"
+      xrefstyle="hyperlink"/> interface within the OSGi framework. Every time
+      an EnOcean device appears or quits the network, the associated OSGi
+      service is registered or unregistered in the OSGi service registry.
+      Thanks to the EnOcean Base Driver, the OSGi service availability in the
+      registry mirrors EnOcean device availability on EnOcean network, <xref
+      linkend="service.enocean-bibliomixed_id_20140602_17h02_51_3"/>.</para>
 
       <para>Thanks to service events, a bundle is able to track the addition,
-      modification and removal of an EnOceanDevice service.</para>
+      modification and removal of an <xref
+      linkend="org.osgi.service.enocean.EnOceanDevice" xrefstyle="hyperlink"/>
+      service.</para>
 
       <para>Below stands an example showing how the tracking can be
       implemented. The sample Controller class extends the ServiceTracker
-      class so that it can track all EnOceanDevice services.</para>
+      class so that it can track all EnOceanDevice services. <remark>BJH This
+      is an incomplete example. This class cannot be instantiated. What is
+      eoDevice for? Needs more work.</remark></para>
 
-      <programlisting>
-				public Class Controller extends ServiceTracker {
-				public Object addingService(ServiceReference arg0) {
-				Object service = context.getService(arg0);
-				if (service != null &amp;&amp; service instanceof EnOceanDevice) {
-				eoDevice = (EnOceanDevice) service;
-				}
-				Logger.debug(service.getClass().getName() + " service found.", null);
-				return
-				service;
-				}
+      <programlisting>public Class Controller extends ServiceTracker {
+  public Object addingService(ServiceReference ref) {
+    Object service = context.getService(ref);
+    if (service != null &amp;&amp; service instanceof EnOceanDevice) {
+      eoDevice = (EnOceanDevice) service;
+    }
+    Logger.debug(service.getClass().getName() + " service found.", null);
+    return service;
+  }
 
-				public void modifiedService(ServiceReference arg0, Object arg1) {
-				/* Unimplemented */
-				}
+  public void modifiedService(ServiceReference ref, Object service) {
+    /* Unimplemented */
+  }
 
-				public void
-				removedService(ServiceReference arg0, Object service) {
-				if (service instanceof EnOceanDevice) {
-				eoDevice = null;
-				Logger.debug("EnOceanDevice service was removed.", null);
-				}
-				}
-				}
-			</programlisting>
+  public void removedService(ServiceReference ref, Object service) {
+    if (service instanceof EnOceanDevice) {
+      eoDevice = null;
+      Logger.debug("EnOceanDevice service was removed.", null);
+    }
+  }
+}</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.enocean-event.api">
     <title>Event API</title>
 
     <para>EnOcean events must be delivered to the EventAdmin service by the
     EnOcean implementation, if present. EnOcean event topic follow the
-    following form: org/osgi/service/enocean/EnOceanEvent/SUBTOPIC</para>
+    following form:
+    org/osgi/service/enocean/EnOceanEvent/<emphasis>SUBTOPIC</emphasis>.</para>
 
-    <para>MESSAGE_RECEIVED, and RPC_BROADCAST are the two available
-    subtopics.</para>
+    <para>MESSAGE_RECEIVED, and RPC_BROADCAST are the two available subtopics.
+    <remark>BJH MESSAGE_RECEIVED is defined in EnOceanEvent, but RPC_BROADCAST
+    is not.</remark></para>
 
     <section>
       <title>MESSAGE_RECEIVED</title>
@@ -982,43 +1067,49 @@
       <para>Properties (every event may dispatch some or all of the following
       properties):</para>
 
-      <itemizedlist mark="bullet">
+      <itemizedlist>
         <listitem>
-          <para>EnOceanDevice.CHIP_ID – (enocean.device.chip_id/String). The
-          chip ID of the sending device.</para>
+          <para><xref linkend="org.osgi.service.enocean.EnOceanDevice.CHIP_ID"
+          xrefstyle="hyperlink"/> – . The chip ID of the sending
+          device.</para>
         </listitem>
 
         <listitem>
-          <para>Constants.SERVICE_PID – (service.pid/String). The service PID
-          of the exported device.</para>
+          <para><code>service.pid</code> – The service PID of the exported
+          device.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanDevice.RORG – (enocean.device.profile.rorg/String). The
-          RORG (Radio Telegram Type) of the sending device.</para>
+          <para><xref linkend="org.osgi.service.enocean.EnOceanDevice.RORG"
+          xrefstyle="hyperlink"/> – The RORG (Radio Telegram Type) of the
+          sending device.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanDevice.FUNC – (enocean.device.profile.func/String). The
-          FUNC profile identifier of the sending device.</para>
+          <para><xref linkend="org.osgi.service.enocean.EnOceanDevice.FUNC"
+          xrefstyle="hyperlink"/> – The FUNC profile identifier of the sending
+          device.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanDevice.TYPE – (enocean.device.profile.type/String). The
-          TYPE profile identifier of the sending device.</para>
+          <para><xref linkend="org.osgi.service.enocean.EnOceanDevice.TYPE"
+          xrefstyle="hyperlink"/> – The TYPE profile identifier of the sending
+          device.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanEvent.PROPERTY_MESSAGE –
-          (enocean.message/EnOceanMessage). The EnOceanMessage object
-          associated with this event.</para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanEvent.PROPERTY_MESSAGE"
+          xrefstyle="hyperlink"/> – The EnOceanMessage object associated with
+          this event.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanEvent.PROPERTY_EXPORTED –
-          (enocean.message.is_exported/Object). The presence of this property
-          means that this message has actually been exported from a locally
-          implemented EnOcean Device.</para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanEvent.PROPERTY_EXPORTED"
+          xrefstyle="hyperlink"/> – The presence of this property means that
+          this message has actually been exported from a locally implemented
+          EnOcean Device.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1032,28 +1123,31 @@
       <para>Properties (every event may dispatch some or all of the following
       properties):</para>
 
-      <itemizedlist mark="bullet">
+      <itemizedlist>
         <listitem>
-          <para>EnOceanRPC.MANUFACTURER_ID –
-          (enocean.rpc.manufacturer_id/String). The RPC's manufacturer
-          ID.</para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanRPC.MANUFACTURER_ID"
+          xrefstyle="hyperlink"/> – The RPC's manufacturer ID.</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanRPC.FUNCTION_ID – (enocean.rpc.function_id/String)
-          .</para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanRPC.FUNCTION_ID"
+          xrefstyle="hyperlink"/> – The RPC's function ID .</para>
         </listitem>
 
         <listitem>
-          <para>EnOceanEvent.PROPERTY_EXPORTED –
-          (enocean.message.is_exported/Object). The presence of this property
-          means that this RPC has actually been exported from a locally
-          implemented EnOcean Device.</para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanEvent.PROPERTY_EXPORTED"
+          xrefstyle="hyperlink"/> – The presence of this property means that
+          this RPC has actually been exported from a locally implemented
+          EnOcean Device.</para>
         </listitem>
 
         <listitem>
           <para>EnOceanEvent.PROPERTY_RPC – (enocean.rpc/EnOceanRPC). The
-          EnOceanRPC object associated with this event.</para>
+          EnOceanRPC object associated with this event. <remark>BJH This is
+          not defined in the API code.</remark></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1062,32 +1156,42 @@
   <section>
     <title>EnOcean Exceptions</title>
 
-    <para>The EnOceanException can be thrown and holds information about the
+    <para>The <xref linkend="org.osgi.service.enocean.EnOceanException"
+    xrefstyle="hyperlink"/> can be thrown and holds information about the
     different EnOcean layers. Here below, ESP stands for “EnOcean Serial
     Protocol”. The following errors are defined:</para>
 
-    <itemizedlist mark="bullet">
+    <itemizedlist>
       <listitem>
-        <para>FAILURE – ( 0x01 ) Operation was not successful.</para>
+        <para><xref
+        linkend="org.osgi.service.enocean.EnOceanException.ESP_UNEXPECTED_FAILURE"
+        xrefstyle="hyperlink"/> – Operation was not successful.</para>
       </listitem>
 
       <listitem>
-        <para>ESP_RET_NOT_SUPPORTED – ( 0x02 ) The ESP command was not
-        supported by the driver.</para>
+        <para><xref
+        linkend="org.osgi.service.enocean.EnOceanException.ESP_RET_NOT_SUPPORTED"
+        xrefstyle="hyperlink"/> – The ESP command was not supported by the
+        driver.</para>
       </listitem>
 
       <listitem>
-        <para>ESP_RET_WRONG_PARAM – ( 0x03 ) The ESP command was supplied
-        wrong parameters.</para>
+        <para><xref
+        linkend="org.osgi.service.enocean.EnOceanException.ESP_RET_WRONG_PARAM"
+        xrefstyle="hyperlink"/> – The ESP command was supplied wrong
+        parameters.</para>
       </listitem>
 
       <listitem>
-        <para>ESP_RET_OPERATION_DENIED – ( 0x04 ) The ESP command was denied
+        <para><xref
+        linkend="org.osgi.service.enocean.EnOceanException.ESP_RET_OPERATION_DENIED"
+        xrefstyle="hyperlink"/> – The ESP command was denied
         authorization.</para>
       </listitem>
 
       <listitem>
-        <para>INVALID_TELEGRAM – ( 0xF0 ) The message was invalid.</para>
+        <para>INVALID_TELEGRAM – ( 0xF0 ) The message was invalid. <remark>BJH
+        This is not defined in the API code.</remark></para>
       </listitem>
     </itemizedlist>
   </section>
@@ -1109,38 +1213,42 @@
 
     <bibliolist>
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20140602_17h02_51_3"><title/>Bottaro,
-      A., Gérodolle, A., Lalanda, P., "Pervasive Service Composition in the
-      Home Network", 21st IEEE International Conference on Advanced
+      xml:id="service.enocean-bibliomixed_id_20140602_17h02_51_3"><title>Pervasive
+      Service Composition in the Home Network</title>Bottaro, A., Gérodolle,
+      A., Lalanda, P., 21st IEEE International Conference on Advanced
       Information Networking and Applications (AINA-07), Niagara Falls,
       Canada, May 2007</bibliomixed>
 
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20140602_17h03_10_5"><title/>"EnOcean
-      Equipment Profiles v2.6.2", EnOcean Alliance,
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_10_5"><title>EnOcean
+      Equipment Profiles v2.6.2</title>EnOcean Alliance,
       https://www.enocean-alliance.org/en/enocean_standard/, November 19,
       2014</bibliomixed>
 
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20140602_17h03_19_6"><title/>"EnOcean
-      System Specification - Remote Management v1.7", EnOcean Alliance,
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_19_6"><title>EnOcean
+      System Specification - Remote Management v1.7</title>EnOcean Alliance,
       December 16, 2010</bibliomixed>
 
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20140602_17h03_37_8"><title/>"EnOcean
-      System Specification - EnOcean Serial Protocol v1.17", EnOcean Alliance,
-      August 2, 2011</bibliomixed>
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_37_8"><title>EnOcean
+      System Specification - EnOcean Serial Protocol v1.17</title>EnOcean
+      Alliance, August 2, 2011</bibliomixed>
 
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20140602_17h03_46_9"><title/>"EnOcean
-      System Specification - Security of EnOcean Radio Networks v1.3", EnOcean
-      Alliance, July 31, 2012</bibliomixed>
+      xml:id="service.enocean-bibliomixed_id_20140602_17h03_46_9"><title>EnOcean
+      System Specification - Security of EnOcean Radio Networks
+      v1.3</title>EnOcean Alliance, July 31, 2012</bibliomixed>
 
       <bibliomixed
-      xml:id="service.enocean-bibliomixed_id_20150105_16h26_16_99"><title/>"EnOcean
-      Remote Commissioning Summary v1.0", EnOcean Alliance,
+      xml:id="service.enocean-bibliomixed_id_20150105_16h26_16_99"><title>EnOcean
+      Remote Commissioning Summary v1.0</title>EnOcean Alliance,
       https://www.enocean-alliance.org/en/downloads/, December 01,
       2014</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.enocean-reference.service.pid"><title>Persistent
+      Identifier (PID)</title>OSGi Core Release, Service Layer</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

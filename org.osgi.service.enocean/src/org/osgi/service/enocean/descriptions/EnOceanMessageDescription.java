@@ -34,7 +34,7 @@ public interface EnOceanMessageDescription {
      * @return serialized value.
      * @throws IllegalArgumentException if the given channels is null.
      */
-    public byte[] serialize(EnOceanChannel[] channels) throws IllegalArgumentException;
+    public byte[] serialize(EnOceanChannel[] channels);
 
     /**
      * Deserializes an array of bytes into the EnOceanChannels available to the
@@ -47,7 +47,7 @@ public interface EnOceanMessageDescription {
      *         message is not compatible with the bytes it is fed with (RORG to
      *         begin with).
      */
-    public EnOceanChannel[] deserialize(byte[] bytes) throws IllegalArgumentException;
+    public EnOceanChannel[] deserialize(byte[] bytes);
 
     /**
      * @return the message description containing the RORG, (and the FUNC, and

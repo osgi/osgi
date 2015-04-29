@@ -29,7 +29,7 @@ public interface EnOceanHandler {
      * 
      * @param original the original {@link EnOceanRPC} that originated this
      *        answer.
-     * @param payload the payload of the response; may be deserialiazed to an
+     * @param payload the payload of the response; may be deserialized to an
      *        {@link EnOceanRPC} object.
      */
     public void notifyResponse(EnOceanRPC original, byte[] payload);

@@ -42,6 +42,6 @@ public interface EnOceanMessageDescriptionSet {
      * @throws IllegalArgumentException if there was an error related to the
      *         input arguments.
      */
-    public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException;
+    public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra);
 
 }

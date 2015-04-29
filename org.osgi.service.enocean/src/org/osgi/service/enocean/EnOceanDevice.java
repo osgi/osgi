@@ -177,7 +177,7 @@ public interface EnOceanDevice {
      * @param handler
      * @throws IllegalArgumentException
      */
-    public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException;
+    public void invoke(EnOceanRPC rpc, EnOceanHandler handler);
 
     /**
      * Removes the device's OSGi service from OSGi service platform.

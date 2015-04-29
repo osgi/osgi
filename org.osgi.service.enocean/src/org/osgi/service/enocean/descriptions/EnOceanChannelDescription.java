@@ -66,7 +66,7 @@ public interface EnOceanChannelDescription {
      * @return the right-aligned value, in raw bytes, of the channel.
      * @throws IllegalArgumentException
      */
-    public byte[] serialize(Object obj) throws IllegalArgumentException;
+    public byte[] serialize(Object obj);
 
     /**
      * Tries to deserialize a series of bytes into a documented value object
@@ -78,5 +78,5 @@ public interface EnOceanChannelDescription {
      * @return a value object.
      * @throws IllegalArgumentException
      */
-    public Object deserialize(byte[] bytes) throws IllegalArgumentException;
+    public Object deserialize(byte[] bytes);
 }

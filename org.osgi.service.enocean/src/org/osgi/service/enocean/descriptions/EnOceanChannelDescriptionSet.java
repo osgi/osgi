@@ -37,6 +37,6 @@ public interface EnOceanChannelDescriptionSet {
      * @throws IllegalArgumentException if the supplied String is invalid, null,
      *         or other reason.
      */
-    public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException;
+    public EnOceanChannelDescription getChannelDescription(String channelId);
 
 }

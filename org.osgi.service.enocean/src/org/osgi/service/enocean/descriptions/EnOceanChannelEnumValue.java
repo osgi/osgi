@@ -42,7 +42,7 @@ public interface EnOceanChannelEnumValue {
     /**
      * A non-mandatory description of what this enumerated value is about.
      * 
-     * @return the english description of this channel.
+     * @return the description of this channel.
      */
     public String getDescription();
 
