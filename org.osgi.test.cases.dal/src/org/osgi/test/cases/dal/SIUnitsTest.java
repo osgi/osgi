@@ -9,19 +9,19 @@
 
 package org.osgi.test.cases.dal;
 
+import junit.framework.TestCase;
 import org.osgi.service.dal.SIUnits;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Validates the values of {@link SIUnits} constants.
  */
-public final class SIUnitsTest extends DefaultTestBundleControl {
+public final class SIUnitsTest extends TestCase {
 
 	/**
 	 * Tests SI base unit symbols.
 	 */
 	public void testSIBaseUnits() {
-		assertEquals("Metre symbol is not correct.", "m", SIUnits.METRE);
+		assertEquals("Meter symbol is not correct.", "m", SIUnits.METER);
 		assertEquals("Kilogram symbol is not correct.", "kg", SIUnits.KILOGRAM);
 		assertEquals("Second symbol is not correct.", "s", SIUnits.SECOND);
 		assertEquals("Ampere symbol is not correct.", "A", SIUnits.AMPERE);
@@ -34,28 +34,28 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 	 * Tests derived units in the SI expressed in terms of base units.
 	 */
 	public void testSIDerivedUnits() {
-		assertEquals("Square metre symbol is not correct.", SIUnits.METRE + "\u00B2", SIUnits.SQUARE_METRE);
-		assertEquals("Cubic metre symbol is not correct.", SIUnits.METRE + "\u00B3", SIUnits.CUBIC_METRE);
-		assertEquals("Metre per second symbol is not correct.",
-				SIUnits.METRE + '/' + SIUnits.SECOND, SIUnits.METRE_PER_SECOND);
-		assertEquals("Metre per second squared symbol is not correct.",
-				SIUnits.METRE + '/' + SIUnits.SECOND + "\u00B2", SIUnits.METRE_PER_SECOND_SQUARED);
-		assertEquals("Reciprocal metre symbol is not correct.",
-				SIUnits.METRE + "\u207B\u00B9", SIUnits.RECIPROCAL_METRE);
-		assertEquals("Kilogram per cubic metre symbol is not correct.",
-				SIUnits.KILOGRAM + '/' + SIUnits.CUBIC_METRE, SIUnits.KILOGRAM_PER_CUBIC_METRE);
-		assertEquals("Kilogram per square metre symbol is not correct.",
-				SIUnits.KILOGRAM + '/' + SIUnits.SQUARE_METRE, SIUnits.KILOGRAM_PER_SQUARE_METRE);
-		assertEquals("Cubic metre per kilogram symbol is not correct.",
-				SIUnits.CUBIC_METRE + '/' + SIUnits.KILOGRAM, SIUnits.CUBIC_METRE_PER_KILOGRAM);
-		assertEquals("Ampere per square metre symbol is not correct.",
-				SIUnits.AMPERE + '/' + SIUnits.SQUARE_METRE, SIUnits.AMPERE_PER_SQUARE_METRE);
-		assertEquals("Ampere per metre symbol is not correct.",
-				SIUnits.AMPERE + '/' + SIUnits.METRE, SIUnits.AMPERE_PER_METRE);
-		assertEquals("Mole per cubic metre symbol is not correct.",
-				SIUnits.MOLE + '/' + SIUnits.CUBIC_METRE, SIUnits.MOLE_PER_CUBIC_METRE);
-		assertEquals("Candela per square metre symbol is not correct.",
-				SIUnits.CANDELA + '/' + SIUnits.SQUARE_METRE, SIUnits.CANDELA_PER_SQUARE_METRE);
+		assertEquals("Square meter symbol is not correct.", SIUnits.METER + "\u00B2", SIUnits.SQUARE_METER);
+		assertEquals("Cubic meter symbol is not correct.", SIUnits.METER + "\u00B3", SIUnits.CUBIC_METER);
+		assertEquals("Meter per second symbol is not correct.",
+				SIUnits.METER + '/' + SIUnits.SECOND, SIUnits.METER_PER_SECOND);
+		assertEquals("Meter per second squared symbol is not correct.",
+				SIUnits.METER + '/' + SIUnits.SECOND + "\u00B2", SIUnits.METER_PER_SECOND_SQUARED);
+		assertEquals("Reciprocal meter symbol is not correct.",
+				SIUnits.METER + "\u207B\u00B9", SIUnits.RECIPROCAL_METER);
+		assertEquals("Kilogram per cubic meter symbol is not correct.",
+				SIUnits.KILOGRAM + '/' + SIUnits.CUBIC_METER, SIUnits.KILOGRAM_PER_CUBIC_METER);
+		assertEquals("Kilogram per square meter symbol is not correct.",
+				SIUnits.KILOGRAM + '/' + SIUnits.SQUARE_METER, SIUnits.KILOGRAM_PER_SQUARE_METER);
+		assertEquals("Cubic meter per kilogram symbol is not correct.",
+				SIUnits.CUBIC_METER + '/' + SIUnits.KILOGRAM, SIUnits.CUBIC_METER_PER_KILOGRAM);
+		assertEquals("Ampere per square meter symbol is not correct.",
+				SIUnits.AMPERE + '/' + SIUnits.SQUARE_METER, SIUnits.AMPERE_PER_SQUARE_METER);
+		assertEquals("Ampere per meter symbol is not correct.",
+				SIUnits.AMPERE + '/' + SIUnits.METER, SIUnits.AMPERE_PER_METER);
+		assertEquals("Mole per cubic meter symbol is not correct.",
+				SIUnits.MOLE + '/' + SIUnits.CUBIC_METER, SIUnits.MOLE_PER_CUBIC_METER);
+		assertEquals("Candela per square meter symbol is not correct.",
+				SIUnits.CANDELA + '/' + SIUnits.SQUARE_METER, SIUnits.CANDELA_PER_SQUARE_METER);
 	}
 
 	/**
@@ -93,16 +93,16 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 	public void testSICompositeSpecialDerivedUnits() {
 		assertEquals("Pascal second symbol is not correct.",
 				SIUnits.PASCAL + ' ' + SIUnits.SECOND, SIUnits.PASCAL_SECOND);
-		assertEquals("Newton metre symbol is not correct.",
-				SIUnits.NEWTON + ' ' + SIUnits.METRE, SIUnits.NEWTON_METRE);
-		assertEquals("Newton per metre symbol is not correct.",
-				SIUnits.NEWTON + '/' + SIUnits.METRE, SIUnits.NEWTON_PER_METRE);
+		assertEquals("Newton meter symbol is not correct.",
+				SIUnits.NEWTON + ' ' + SIUnits.METER, SIUnits.NEWTON_METER);
+		assertEquals("Newton per meter symbol is not correct.",
+				SIUnits.NEWTON + '/' + SIUnits.METER, SIUnits.NEWTON_PER_METER);
 		assertEquals("Radian per second symbol is not correct.",
 				SIUnits.RADIAN + '/' + SIUnits.SECOND, SIUnits.RADIAN_PER_SECOND);
 		assertEquals("Radian per second squared symbol is not correct.",
 				SIUnits.RADIAN + '/' + SIUnits.SECOND + "\u00B2", SIUnits.RADIAN_PER_SECOND_SQUARED);
-		assertEquals("Watt per square metre symbol is not correct.",
-				SIUnits.WATT + '/' + SIUnits.METRE + "\u00B2", SIUnits.WATT_PER_SQUARE_METRE);
+		assertEquals("Watt per square meter symbol is not correct.",
+				SIUnits.WATT + '/' + SIUnits.METER + "\u00B2", SIUnits.WATT_PER_SQUARE_METER);
 		assertEquals("Joule per kelvin symbol is not correct.",
 				SIUnits.JOULE + '/' + SIUnits.KELVIN, SIUnits.JOULE_PER_KELVIN);
 		assertEquals("Joule per kilogram kelvin symbol is not correct.",
@@ -110,18 +110,18 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 				SIUnits.JOULE_PER_KILOGRAM_KELVIN);
 		assertEquals("Joule per kilogram symbol is not correct.",
 				SIUnits.JOULE + '/' + SIUnits.KILOGRAM, SIUnits.JOULE_PER_KILOGRAM);
-		assertEquals("Watt per metre kelvin symbol is not correct.",
-				SIUnits.WATT + "/(" + SIUnits.METRE + ' ' + SIUnits.KELVIN + ')', SIUnits.WATT_PER_METRE_KELVIN);
-		assertEquals("Volt per metre symbol is not correct.",
-				SIUnits.VOLT + '/' + SIUnits.METRE, SIUnits.VOLT_PER_METRE);
-		assertEquals("Coulomb per cubic metre symbol is not correct.",
-				SIUnits.COULOMB + '/' + SIUnits.METRE + "\u00B3", SIUnits.COULOMB_PER_CUBIC_METRE);
-		assertEquals("Coulomb per square metre symbol is not correct.",
-				SIUnits.COULOMB + '/' + SIUnits.METRE + "\u00B2", SIUnits.COULOMB_PER_SQUARE_METRE);
-		assertEquals("Farad per metre symbol is not correct.",
-				SIUnits.FARAD + '/' + SIUnits.METRE, SIUnits.FARAD_PER_METRE);
-		assertEquals("Henry per metre symbol is not correct.",
-				SIUnits.HENRY + '/' + SIUnits.METRE, SIUnits.HENRY_PER_METRE);
+		assertEquals("Watt per meter kelvin symbol is not correct.",
+				SIUnits.WATT + "/(" + SIUnits.METER + ' ' + SIUnits.KELVIN + ')', SIUnits.WATT_PER_METER_KELVIN);
+		assertEquals("Volt per meter symbol is not correct.",
+				SIUnits.VOLT + '/' + SIUnits.METER, SIUnits.VOLT_PER_METER);
+		assertEquals("Coulomb per cubic meter symbol is not correct.",
+				SIUnits.COULOMB + '/' + SIUnits.METER + "\u00B3", SIUnits.COULOMB_PER_CUBIC_METER);
+		assertEquals("Coulomb per square meter symbol is not correct.",
+				SIUnits.COULOMB + '/' + SIUnits.METER + "\u00B2", SIUnits.COULOMB_PER_SQUARE_METER);
+		assertEquals("Farad per meter symbol is not correct.",
+				SIUnits.FARAD + '/' + SIUnits.METER, SIUnits.FARAD_PER_METER);
+		assertEquals("Henry per meter symbol is not correct.",
+				SIUnits.HENRY + '/' + SIUnits.METER, SIUnits.HENRY_PER_METER);
 		assertEquals("Joule per mole symbol is not correct.",
 				SIUnits.JOULE + '/' + SIUnits.MOLE, SIUnits.JOULE_PER_MOLE);
 		assertEquals("Joule per mole kelvin symbol is not correct.",
@@ -132,11 +132,11 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 				SIUnits.GRAY + '/' + SIUnits.SECOND, SIUnits.GRAY_PER_SECOND);
 		assertEquals("Watt per steradian symbol is not correct.",
 				SIUnits.WATT + '/' + SIUnits.STERADIAN, SIUnits.WATT_PER_STERADIAN);
-		assertEquals("Watt per square metre steradian symbol is not correct.",
-				SIUnits.WATT + "/(" + SIUnits.METRE + "\u00B2 " + SIUnits.STERADIAN + ')',
-				SIUnits.WATT_PER_SQUARE_METRE_STERADIAN);
-		assertEquals("Katal per cubic metre symbol is not correct.",
-				SIUnits.KATAL + '/' + SIUnits.METRE + "\u00B3", SIUnits.KATAL_PER_CUBIC_METRE);
+		assertEquals("Watt per square meter steradian symbol is not correct.",
+				SIUnits.WATT + "/(" + SIUnits.METER + "\u00B2 " + SIUnits.STERADIAN + ')',
+				SIUnits.WATT_PER_SQUARE_METER_STERADIAN);
+		assertEquals("Katal per cubic meter symbol is not correct.",
+				SIUnits.KATAL + '/' + SIUnits.METER + "\u00B3", SIUnits.KATAL_PER_CUBIC_METER);
 	}
 
 	/**
@@ -151,10 +151,10 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 		assertEquals("Plane angle minute symbol is not correct.", "\u2032", SIUnits.PLANE_ANGLE_MINUTE);
 		assertEquals("Plane angle second symbol is not correct.", "\u2033", SIUnits.PLANE_ANGLE_SECOND);
 		assertEquals("Hectare symbol is not correct.", "ha", SIUnits.HECTARE);
-		assertEquals("Litre symbol is not correct.", "l", SIUnits.LITRE);
+		assertEquals("Liter symbol is not correct.", "l", SIUnits.LITER);
 		assertEquals("Tonne symbol is not correct.", "t", SIUnits.TONNE);
 		assertEquals("Bar symbol is not correct.", "bar", SIUnits.BAR);
-		assertEquals("Millimetre of mercury symbol is not correct.", "mmHg", SIUnits.MILLIMETRE_OF_MERCURY);
+		assertEquals("Millimeter of mercury symbol is not correct.", "mmHg", SIUnits.MILLIMETER_OF_MERCURY);
 		assertEquals("Angstrom symbol is not correct.", "\u212B", SIUnits.ANGSTROM);
 		assertEquals("Nautical mile symbol is not correct.", "M", SIUnits.NAUTICAL_MILE);
 		assertEquals("Barn symbol is not correct.", "b", SIUnits.BARN);

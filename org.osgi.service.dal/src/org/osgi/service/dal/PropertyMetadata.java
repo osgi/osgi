@@ -99,13 +99,13 @@ public interface PropertyMetadata {
 	 * follow those rules:
 	 * <ul>
 	 * <li>The International System of Units must be used where it's applicable.
-	 * For example, kg for kilogram and km for kilometre.</li>
+	 * For example, kg for kilogram and km for kilometer.</li>
 	 * <li>If the unit name matches to an Unicode symbol name, the Unicode
 	 * symbol must be used. For example, the degree unit matches to the Unicode
 	 * degree sign ({@code \u00B0}).</li>
 	 * <li>If the unit name doesn't match to an Unicode symbol, the unit symbol
 	 * must be built by Unicode Basic Latin block of characters, superscript and
-	 * subscript characters. For example, watt per square metre steradian is
+	 * subscript characters. For example, watt per square meter steradian is
 	 * built by {@code W/(m\u00B2 sr)}.</li>
 	 * </ul>
 	 * If those rules cannot be applied to the unit symbol, custom rules are

@@ -21,14 +21,17 @@ package org.osgi.service.dal;
  * name represents the unit name. The constant value represents the unit symbol
  * as it's defined in {@link PropertyMetadata#UNITS}.
  */
-public interface SIUnits {
+public final class SIUnits {
+	private SIUnits() {
+		// non-instantiable
+	}
 
 	// Table 1. SI base units
 	/**
 	 * Unit of length defined by the International System of Units (SI). It's
-	 * one of be base units called metre.
+	 * one of be base units called meter.
 	 */
-	public static final String	METRE							= "m";
+	public static final String	METER							= "m";
 
 	/**
 	 * Unit of mass defined by the International System of Units (SI). It's one
@@ -71,92 +74,92 @@ public interface SIUnits {
 	// of base units.
 	/**
 	 * Unit of area. It's one of coherent derived units in the SI expressed in
-	 * terms of base units. The unit is called square metre.
+	 * terms of base units. The unit is called square meter.
 	 */
 	// m and superscript two
-	public static final String	SQUARE_METRE					= METRE + "\u00B2";
+	public static final String	SQUARE_METER					= METER + "\u00B2";
 
 	/**
 	 * Unit of volume. It's one of coherent derived units in the SI expressed in
-	 * terms of base units. The unit is called cubic metre.
+	 * terms of base units. The unit is called cubic meter.
 	 */
 	// m and superscript three
-	public static final String	CUBIC_METRE						= METRE + "\u00B3";
+	public static final String	CUBIC_METER						= METER + "\u00B3";
 
 	/**
 	 * Unit of speed, velocity. It's one of coherent derived units in the SI
-	 * expressed in terms of base units. The unit is called metre per second.
+	 * expressed in terms of base units. The unit is called meter per second.
 	 */
-	public static final String	METRE_PER_SECOND				= METRE + '/' + SECOND;
+	public static final String	METER_PER_SECOND				= METER + '/' + SECOND;
 
 	/**
 	 * Unit of acceleration. It's one of coherent derived units in the SI
-	 * expressed in terms of base units. The unit is called metre per second
+	 * expressed in terms of base units. The unit is called meter per second
 	 * squared.
 	 */
 	// m per s and superscript two
-	public static final String	METRE_PER_SECOND_SQUARED		= METRE + '/' + SECOND + "\u00B2";
+	public static final String	METER_PER_SECOND_SQUARED		= METER + '/' + SECOND + "\u00B2";
 
 	/**
 	 * Unit of wavenumber. It's one of coherent derived units in the SI
-	 * expressed in terms of base units. The unit is called reciprocal metre.
+	 * expressed in terms of base units. The unit is called reciprocal meter.
 	 */
 	// m and superscript minus and superscript one
-	public static final String	RECIPROCAL_METRE				= METRE + "\u207B\u00B9";
+	public static final String	RECIPROCAL_METER				= METER + "\u207B\u00B9";
 
 	/**
 	 * Unit of density, mass density, mass concentration. It's one of coherent
 	 * derived units in the SI expressed in terms of base units. The unit is
-	 * called kilogram per cubic metre.
+	 * called kilogram per cubic meter.
 	 */
 	// kg per m and superscript three
-	public static final String	KILOGRAM_PER_CUBIC_METRE		= KILOGRAM + '/' + METRE + "\u00B3";
+	public static final String	KILOGRAM_PER_CUBIC_METER		= KILOGRAM + '/' + METER + "\u00B3";
 
 	/**
 	 * Unit of surface density. It's one of coherent derived units in the SI
 	 * expressed in terms of base units. The unit is called kilogram per square
-	 * metre.
+	 * meter.
 	 */
 	// kg per m and superscript two
-	public static final String	KILOGRAM_PER_SQUARE_METRE		= KILOGRAM + '/' + METRE + "\u00B2";
+	public static final String	KILOGRAM_PER_SQUARE_METER		= KILOGRAM + '/' + METER + "\u00B2";
 
 	/**
 	 * Unit of specific volume. It's one of coherent derived units in the SI
-	 * expressed in terms of base units. The unit is called cubic metre per
+	 * expressed in terms of base units. The unit is called cubic meter per
 	 * kilogram.
 	 */
 	// m and superscript three per kg
-	public static final String	CUBIC_METRE_PER_KILOGRAM		= METRE + "\u00B3" + '/' + KILOGRAM;
+	public static final String	CUBIC_METER_PER_KILOGRAM		= METER + "\u00B3" + '/' + KILOGRAM;
 
 	/**
 	 * Unit of current density. It's one of coherent derived units in the SI
 	 * expressed in terms of base units. The unit is called ampere per square
-	 * metre.
+	 * meter.
 	 */
 	// A per m and superscript two
-	public static final String	AMPERE_PER_SQUARE_METRE			= AMPERE + '/' + METRE + "\u00B2";
+	public static final String	AMPERE_PER_SQUARE_METER			= AMPERE + '/' + METER + "\u00B2";
 
 	/**
 	 * Unit of magnetic field strength. It's one of coherent derived units in
 	 * the SI expressed in terms of base units. The unit is called ampere per
-	 * metre.
+	 * meter.
 	 */
-	public static final String	AMPERE_PER_METRE				= AMPERE + '/' + METRE;
+	public static final String	AMPERE_PER_METER				= AMPERE + '/' + METER;
 
 	/**
 	 * Unit of amount concentration, concentration. It's one of coherent derived
 	 * units in the SI expressed in terms of base units. The unit is called mole
-	 * per cubic metre.
+	 * per cubic meter.
 	 */
 	// mol per m and superscript three
-	public static final String	MOLE_PER_CUBIC_METRE			= MOLE + '/' + METRE + "\u00B3";
+	public static final String	MOLE_PER_CUBIC_METER			= MOLE + '/' + METER + "\u00B3";
 
 	/**
 	 * Unit of luminance. It's one of coherent derived units in the SI expressed
-	 * in terms of base units. The unit is called candela per square metre.
+	 * in terms of base units. The unit is called candela per square meter.
 	 */
 	// cd per m and superscript two
-	public static final String	CANDELA_PER_SQUARE_METRE		= CANDELA + '/' + METRE + "\u00B2";
+	public static final String	CANDELA_PER_SQUARE_METER		= CANDELA + '/' + METER + "\u00B2";
 
 	// Table 3. Coherent derived units in the SI with special names and symbols
 	/**
@@ -312,16 +315,16 @@ public interface SIUnits {
 	/**
 	 * Unit of moment of force. It's one of coherent derived units whose names
 	 * and symbols include SI coherent derived units with special names and
-	 * symbols. The unit is called newton metre.
+	 * symbols. The unit is called newton meter.
 	 */
-	public static final String	NEWTON_METRE					= NEWTON + ' ' + METRE;
+	public static final String	NEWTON_METER					= NEWTON + ' ' + METER;
 
 	/**
 	 * Unit of surface tension. It's one of coherent derived units whose names
 	 * and symbols include SI coherent derived units with special names and
-	 * symbols. The unit is called newton per metre.
+	 * symbols. The unit is called newton per meter.
 	 */
-	public static final String	NEWTON_PER_METRE				= NEWTON + '/' + METRE;
+	public static final String	NEWTON_PER_METER				= NEWTON + '/' + METER;
 
 	/**
 	 * Unit of angular velocity. It's one of coherent derived units whose names
@@ -341,10 +344,10 @@ public interface SIUnits {
 	/**
 	 * Unit of heat flux density, irradiance. It's one of coherent derived units
 	 * whose names and symbols include SI coherent derived units with special
-	 * names and symbols. The unit is called watt per square metre.
+	 * names and symbols. The unit is called watt per square meter.
 	 */
 	// W per m and superscript two
-	public static final String	WATT_PER_SQUARE_METRE			= WATT + '/' + METRE + "\u00B2";
+	public static final String	WATT_PER_SQUARE_METER			= WATT + '/' + METER + "\u00B2";
 
 	/**
 	 * Unit of heat capacity, entropy. It's one of coherent derived units whose
@@ -371,55 +374,55 @@ public interface SIUnits {
 	/**
 	 * Unit of thermal conductivity. It's one of coherent derived units whose
 	 * names and symbols include SI coherent derived units with special names
-	 * and symbols. The unit is called watt per metre kelvin.
+	 * and symbols. The unit is called watt per meter kelvin.
 	 */
-	public static final String	WATT_PER_METRE_KELVIN			= WATT + "/(" + METRE + ' ' + KELVIN + ')';
+	public static final String	WATT_PER_METER_KELVIN			= WATT + "/(" + METER + ' ' + KELVIN + ')';
 
 	/**
 	 * Unit of energy density. It's one of coherent derived units whose names
 	 * and symbols include SI coherent derived units with special names and
-	 * symbols. The unit is called joule per cubic metre.
+	 * symbols. The unit is called joule per cubic meter.
 	 */
 	// J per m and superscript three
-	public static final String	JOULE_PER_CUBIC_METRE			= JOULE + '/' + METRE + "\u00B3";
+	public static final String	JOULE_PER_CUBIC_METER			= JOULE + '/' + METER + "\u00B3";
 
 	/**
 	 * Unit of electric field strength. It's one of coherent derived units whose
 	 * names and symbols include SI coherent derived units with special names
-	 * and symbols. The unit is called volt per metre.
+	 * and symbols. The unit is called volt per meter.
 	 */
-	public static final String	VOLT_PER_METRE					= VOLT + '/' + METRE;
+	public static final String	VOLT_PER_METER					= VOLT + '/' + METER;
 
 	/**
 	 * Unit of electric charge density. It's one of coherent derived units whose
 	 * names and symbols include SI coherent derived units with special names
-	 * and symbols. The unit is called coulomb per cubic metre.
+	 * and symbols. The unit is called coulomb per cubic meter.
 	 */
 	// C per m and superscript three
-	public static final String	COULOMB_PER_CUBIC_METRE			= COULOMB + '/' + METRE + "\u00B3";
+	public static final String	COULOMB_PER_CUBIC_METER			= COULOMB + '/' + METER + "\u00B3";
 
 	/**
 	 * Unit of surface charge density, electric flux density, electric
 	 * displacement. It's one of coherent derived units whose names and symbols
 	 * include SI coherent derived units with special names and symbols. The
-	 * unit is called coulomb per square metre.
+	 * unit is called coulomb per square meter.
 	 */
 	// C per m and superscript two
-	public static final String	COULOMB_PER_SQUARE_METRE		= COULOMB + '/' + METRE + "\u00B2";
+	public static final String	COULOMB_PER_SQUARE_METER		= COULOMB + '/' + METER + "\u00B2";
 
 	/**
 	 * Unit of permittivity. It's one of coherent derived units whose names and
 	 * symbols include SI coherent derived units with special names and symbols.
-	 * The unit is called farad per metre.
+	 * The unit is called farad per meter.
 	 */
-	public static final String	FARAD_PER_METRE					= FARAD + '/' + METRE;
+	public static final String	FARAD_PER_METER					= FARAD + '/' + METER;
 
 	/**
 	 * Unit of permeability. It's one of coherent derived units whose names and
 	 * symbols include SI coherent derived units with special names and symbols.
-	 * The unit is called henry per metre.
+	 * The unit is called henry per meter.
 	 */
-	public static final String	HENRY_PER_METRE					= HENRY + '/' + METRE;
+	public static final String	HENRY_PER_METER					= HENRY + '/' + METER;
 
 	/**
 	 * Unit of molar energy. It's one of coherent derived units whose names and
@@ -459,16 +462,16 @@ public interface SIUnits {
 	/**
 	 * Unit of radiance. It's one of coherent derived units whose names and
 	 * symbols include SI coherent derived units with special names and symbols.
-	 * The unit is called watt per square metre steradian.
+	 * The unit is called watt per square meter steradian.
 	 */
-	public static final String	WATT_PER_SQUARE_METRE_STERADIAN	= WATT + "/(" + METRE + "\u00B2" + ' ' + STERADIAN + ')';
+	public static final String	WATT_PER_SQUARE_METER_STERADIAN	= WATT + "/(" + METER + "\u00B2" + ' ' + STERADIAN + ')';
 
 	/**
 	 * Unit of catalytic activity concentration. It's one of coherent derived
 	 * units whose names and symbols include SI coherent derived units with
-	 * special names and symbols. The unit is called katal per cubic metre.
+	 * special names and symbols. The unit is called katal per cubic meter.
 	 */
-	public static final String	KATAL_PER_CUBIC_METRE			= KATAL + '/' + METRE + "\u00B3";
+	public static final String	KATAL_PER_CUBIC_METER			= KATAL + '/' + METER + "\u00B3";
 
 	// Table 6. Non-SI units accepted for use with the International System of
 	// Units
@@ -519,11 +522,11 @@ public interface SIUnits {
 
 	/**
 	 * Unit of volume. It's one of non-SI units accepted for use with the
-	 * International System of Units. The unit is called litre. International
+	 * International System of Units. The unit is called liter. International
 	 * System of Units accepts two symbols: lower-case l and capital L. That
 	 * constant value is using the lower-case l.
 	 */
-	public static final String	LITRE							= "l";
+	public static final String	LITER							= "l";
 
 	/**
 	 * Unit of mass. It's one of non-SI units accepted for use with the
@@ -539,9 +542,9 @@ public interface SIUnits {
 
 	/**
 	 * Unit of pressure. It's one of other non-SI units. The unit is called
-	 * millimetre of mercury.
+	 * millimeter of mercury.
 	 */
-	public static final String	MILLIMETRE_OF_MERCURY			= "mmHg";
+	public static final String	MILLIMETER_OF_MERCURY			= "mmHg";
 
 	/**
 	 * Unit of length. It's one of other non-SI units. The unit is called
