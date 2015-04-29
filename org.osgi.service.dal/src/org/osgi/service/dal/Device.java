@@ -55,15 +55,15 @@ public interface Device {
 	 * The service property value contains the reference device unique
 	 * identifiers. It's an optional property. The value type is
 	 * {@code java.lang.String[]}. It can be used to represent different
-	 * relationships between the devices. For example, the ZigBee controller can
-	 * have a reference to the USB dongle.
+	 * relationships between the devices. For example, the EnOcean controller
+	 * can have a reference to the USB dongle.
 	 */
 	public static final String	SERVICE_REFERENCE_UIDS					= "dal.device.reference.UIDs";
 
 	/**
 	 * The service property value contains the device driver name. For example,
-	 * ZigBee, Z-Wave, Bluetooth, etc. It's a mandatory property. The value type
-	 * is {@code java.lang.String}.
+	 * EnOcean, Z-Wave, Bluetooth, etc. It's a mandatory property. The value
+	 * type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DRIVER							= "dal.device.driver";
 

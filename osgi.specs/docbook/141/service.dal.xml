@@ -80,45 +80,58 @@
           </imageobject>
         </mediaobject>
       </figure>
+
+      <remark>BJH The fonts in the above figure are not the correct fonts used
+      for other figures in the various specs. The fonts being used render
+      badly. The figure must be updated to use the correct fonts. The fonts
+      are all in osgi.specs/fonts and can be installed on your local system to
+      be used with your SVG editor.</remark>
     </section>
   </section>
 
   <section xml:id="service.dal.device.access.category">
     <title>Device Access Category</title>
 
-    <para>The device access category is called <emphasis>DAL</emphasis>. The
-    category name is defined as a value of <code>Device.DEVICE_CATEGORY</code>
-    constant. It can be used as a part of
-    <code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code> service
-    property key value. The category mandates this specification rules.</para>
+    <para>The device access category is called <code>DAL</code>. The category
+    name is defined by the <xref
+    linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY"
+    xrefstyle="hyperlink"/> constant. It can be used as a part of
+    <code>DEVICE_CATEGORY</code> service property key value. The category
+    mandates this specification rules. <remark>BJH What does the previous
+    sentence mean?</remark></para>
   </section>
 
   <section xml:id="service.dal.device.service">
     <title>Device Service</title>
 
-    <para><code>Device</code> interface is dedicated to a common access to the
+    <para>The <xref linkend="org.osgi.service.dal.Device"
+    xrefstyle="hyperlink"/> interface is dedicated to a common access to the
     devices provided by different protocols. It can be mapped one to one with
     the physical device, but can be mapped only with a given functional part
     of the device. Another mapping can be a device realized with a set of
-    <code>Device</code> services and different relations between them.
-    <code>Device</code> service can represent pure software unit. For example,
-    it can simulate the real device work. There are basic management
-    operations for removal and property access. New protocol devices can be
-    supported with the registration of new <code>Device</code>
+    <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+    services and different relations between them. <xref
+    linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> service can
+    represent pure software unit. For example, it can simulate the real device
+    work. There are basic management operations for removal and property
+    access. New protocol devices can be supported with the registration of new
+    <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
     services.</para>
 
-    <para>If the underlying protocol and the implementation allow, the
-    <code>Device</code> services must be registered again after the OSGi
-    framework reboots. The service properties must be restored, the supported
-    functions must be registered and <code>Device</code> relations must be
-    visible to the applications.</para>
+    <para>If the underlying protocol and the implementation allow, the <xref
+    linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> services
+    must be registered again after the OSGi framework restarts. The service
+    properties must be restored, the supported functions must be registered
+    and <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+    relations must be visible to the applications.</para>
 
     <section>
       <title>Device Service Properties</title>
 
       <para>The OSGi service registry has the advantage of being easily
       accessible. The services can be filtered and accessed with their
-      properties. The device service has a rich set of such properties:
+      properties. The <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service has a rich set of such properties:
       <itemizedlist>
           <listitem>
             <para><xref linkend="org.osgi.service.dal.Device.SERVICE_UID"
@@ -127,11 +140,23 @@
             <code>java.lang.String</code>. To simplify the unique identifier
             generation, the property value must follow the rule:</para>
 
-            <programlisting>UID ::= driver-name ':' device-id
+            <programlisting>UID ::= driver-name ':' device-id</programlisting>
 
-UID – device unique identifier
-driver-name – the value of the <code>Device.SERVICE_DRIVER</code> service property
-device-id – device unique identifier in the scope of the driver</programlisting>
+            <itemizedlist>
+              <listitem>
+                <para>UID – device unique identifier</para>
+              </listitem>
+
+              <listitem>
+                <para>driver-name – the value of the
+                <code>Device.SERVICE_DRIVER</code> service property</para>
+              </listitem>
+
+              <listitem>
+                <para>device-id – device unique identifier in the scope of the
+                driver</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
 
           <listitem>
@@ -141,13 +166,13 @@ device-id – device unique identifier in the scope of the driver</programlistin
             identifiers. It's an optional property. The value type is
             <code>java.lang.String[]</code>. It can be used to represent
             different relationships between the devices. For example, The
-            ZigBee controller can have a reference to the USB dongle.</para>
+            EnOcean controller can have a reference to the USB dongle.</para>
           </listitem>
 
           <listitem>
             <para><xref linkend="org.osgi.service.dal.Device.SERVICE_DRIVER"
             xrefstyle="hyperlink"/> – Specifies the device driver name. For
-            example, ZigBee, Z-Wave, Bluetooth, etc. It's a mandatory
+            example, EnOcean, Z-Wave, Bluetooth, etc. It's a mandatory
             property. The value type is <code>java.lang.String</code>.</para>
           </listitem>
 
@@ -240,10 +265,13 @@ device-id – device unique identifier in the scope of the driver</programlistin
             cannot be externally set or modified. The value type is
             <code>java.lang.Integer</code>. There are two value categories.
             Positive values indicate the reason for the current status like
-            <code>Device.STATUS_DETAIL_CONNECTING</code>. Negative values
-            indicate errors related to the current device status like
-            <code>Device.STATUS_DETAIL_BROKEN</code>. The list with defined
-            status details is:</para>
+            <xref
+            linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONNECTING"
+            xrefstyle="hyperlink"/>. Negative values indicate errors related
+            to the current device status like <xref
+            linkend="org.osgi.service.dal.Device.STATUS_DETAIL_BROKEN"
+            xrefstyle="hyperlink"/>. The list with defined status details
+            is:</para>
 
             <itemizedlist>
               <listitem>
@@ -251,8 +279,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONNECTING"
                 xrefstyle="hyperlink"/> – The device is currently connecting
                 to the network. The status detail indicates the reason with a
-                positive value <code>1</code>. The device status must be
-                STATUS_PROCESSING.</para>
+                positive value <code>1</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -262,8 +291,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 of initialization. The status detail indicates the reason with
                 a positive value <code>2</code>. The network controller
                 initializing means that information about the network is
-                currently read. The device status must be
-                <code>STATUS_PROCESSING</code>.</para>
+                currently read. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -271,8 +301,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_REMOVING"
                 xrefstyle="hyperlink"/> – The device is leaving the network.
                 The status detail indicates the reason with positive value
-                <code>3</code>. The device status must be
-                <code>STATUS_PROCESSING</code>.</para>
+                <code>3</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -280,8 +311,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_FIRMWARE_UPDATING"
                 xrefstyle="hyperlink"/> – The device firmware is updating. The
                 status detail indicates the reason with positive value
-                <code>4</code>. The device status must be
-                <code>STATUS_PROCESSING</code>.</para>
+                <code>4</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -289,8 +321,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONFIGURATION_UNAPPLIED"
                 xrefstyle="hyperlink"/> – The device configuration is not
                 applied. The status detail indicates an error with a negative
-                value <code>-1</code>. The device status must be
-                <code>STATUS_NOT_CONFIGURED</code>.</para>
+                value <code>-1</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_CONFIGURED"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -298,8 +331,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_BROKEN"
                 xrefstyle="hyperlink"/> – The device is broken. The status
                 detail indicates an error with a negative value
-                <code>-2</code>. The device status must be
-                <code>STATUS_OFFLINE</code>.</para>
+                <code>-2</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -308,8 +342,10 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 xrefstyle="hyperlink"/> – The device communication is
                 problematic. The status detail indicates an error with a
                 negative value <code>-3</code>. The device status must be
-                <code>STATUS_ONLINE</code> or
-                <code>STATUS_NOT_INITIALIZED</code>.</para>
+                <xref linkend="org.osgi.service.dal.Device.STATUS_ONLINE"
+                xrefstyle="hyperlink"/> or <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -318,8 +354,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 xrefstyle="hyperlink"/> – The device doesn't provide enough
                 information and cannot be determined. The status detail
                 indicates an error with a negative value <code>-4</code>. The
-                device status must be
-                <code>STATUS_NOT_INITIALIZED</code>.</para>
+                device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -328,7 +365,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 xrefstyle="hyperlink"/> – The device is not accessible and
                 further communication is not possible. The status detail
                 indicates an error with a negative value <code>-5</code>. The
-                device status must be <code>STATUS_OFFLINE</code>.</para>
+                device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -336,8 +375,9 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONFIGURATION_ERROR"
                 xrefstyle="hyperlink"/> – The device cannot be configured. The
                 status detail indicates an error with a negative value
-                <code>-6</code>. The device status must be
-                <code>STATUS_NOT_CONFIGURED</code>.</para>
+                <code>-6</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_CONFIGURED"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
 
               <listitem>
@@ -345,17 +385,18 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 linkend="org.osgi.service.dal.Device.STATUS_DETAIL_DUTY_CYCLE"
                 xrefstyle="hyperlink"/> – The device is in duty cycle. The
                 status detail indicates an error with a negative value
-                <code>-7</code>. The device status must be
-                <code>STATUS_OFFLINE</code>.</para>
+                <code>-7</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
               </listitem>
             </itemizedlist>
 
             <para>Custom status details are allowed, but they must not overlap
             the specified codes. To prevent possible collisions with further
             updates, custom codes must be greater than <code>100</code> and
-            less than <code>-100</code> . <xref
-            linkend="service.dal.table.status.detail.mapping"/> table contains
-            the mapping of the status details to the statuses.</para>
+            less than <code>-100</code>. <xref
+            linkend="service.dal.table.status.detail.mapping"/> contains the
+            mapping of the status details to the statuses.</para>
 
             <table xml:id="service.dal.table.status.detail.mapping">
               <title>Status detail to status mapping.</title>
@@ -445,7 +486,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
             linkend="org.osgi.service.dal.Device.SERVICE_HARDWARE_VENDOR"
             xrefstyle="hyperlink"/> – Specifies the device hardware vendor.
             It's an optional property. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -453,7 +494,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
             linkend="org.osgi.service.dal.Device.SERVICE_HARDWARE_VERSION"
             xrefstyle="hyperlink"/> – Specifies the device hardware version.
             It's an optional property. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -461,7 +502,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
             linkend="org.osgi.service.dal.Device.SERVICE_FIRMWARE_VENDOR"
             xrefstyle="hyperlink"/> – Specifies the device firmware vendor.
             It's an optional property. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -469,21 +510,21 @@ device-id – device unique identifier in the scope of the driver</programlistin
             linkend="org.osgi.service.dal.Device.SERVICE_FIRMWARE_VERSION"
             xrefstyle="hyperlink"/> – Specifies the device firmware version.
             It's an optional property. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
             <para><xref linkend="org.osgi.service.dal.Device.SERVICE_TYPES"
             xrefstyle="hyperlink"/> – Specifies the device types. It's an
             optional property. The value type is
-            <code>java.lang.String[]</code> .</para>
+            <code>java.lang.String[]</code>.</para>
           </listitem>
 
           <listitem>
             <para><xref linkend="org.osgi.service.dal.Device.SERVICE_MODEL"
             xrefstyle="hyperlink"/> – Specifies the device model. It's an
-            optional property. The value type is <code>java.lang.String</code>
-            .</para>
+            optional property. The value type is
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -491,18 +532,17 @@ device-id – device unique identifier in the scope of the driver</programlistin
             linkend="org.osgi.service.dal.Device.SERVICE_SERIAL_NUMBER"
             xrefstyle="hyperlink"/> – Specifies the device serial number. It's
             an optional property. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
         </itemizedlist></para>
 
       <para>The next code snippet prints all online devices. <programlisting>ServiceReference[] deviceSRefs = context.getServiceReferences(
     Device.class.getName(),
     '(' + Device.SERVICE_STATUS + '=' + Device.STATUS_ONLINE + ')');
-if (null == deviceSRefs) {
-    return; // no such services
-}
-for (int i = 0; i &lt; deviceSRefs.length; i++) {
-    printDevice(deviceSRefs[i]);
+if (deviceSRefs != null) {
+    for (int i = 0; i &lt; deviceSRefs.length; i++) {
+        printDevice(deviceSRefs[i]);
+    }
 }</programlisting></para>
 
       <para>Applications need to have an access to the device properties. For
@@ -533,52 +573,66 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
       <para>The devices are registered as services in the OSGi service
       registry. The service interface is
       <code>org.osgi.service.dal.Device</code>. There is a registration order.
-      <code>Device</code> services are registered last on start up. Before
-      their registration, there is <code>Function</code> service registration.
-      The function registration procedure is described in <xref
+      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+      services are registered last on start up. Before their registration,
+      there is <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> service registration. The function registration
+      procedure is described in <xref
       linkend="service.dal.function.registration"/>.</para>
 
       <para>The OSGi service registry is only for the read-only access to the
       services. There are no control operations. The service provider is
       responsible to register and unregister the services. That design is not
-      very convenient for the device life cycle. The <code>Device</code>
-      interface fills this gap with <xref
-      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
-      method. It's a callback to the service provider to remove the device
-      from the network. The method can be optionally implemented.
-      <code>java.lang.UnsupportedOperationException</code> can be thrown if
-      the method is not supported. When the <xref
+      very convenient for the device life cycle. The <xref
+      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> interface
+      fills this gap with <xref linkend="org.osgi.service.dal.Device.remove--"
+      xrefstyle="hyperlink"/> method. It's a callback to the service provider
+      to remove the device from the network. The method can be optionally
+      implemented. <code>java.lang.UnsupportedOperationException</code> can be
+      thrown if the method is not supported. When the <xref
       linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
       callback is called, an appropriate command will be synchronously send to
       the device. As a result it can leave the network and the device related
       service will be unregistered. There is an unregistration order. The
       registration reverse order is used when the services are unregistered.
-      <code>Device</code> services are unregistered first before
-      <code>Function</code> services.</para>
+      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+      services are unregistered first before <xref
+      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+      services.</para>
     </section>
 
     <section>
       <title>Reference Devices</title>
 
-      <para><code>Device</code> service can have a reference to other devices.
+      <para><xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service can have a reference to other devices.
       That link can be used to represent different relationships between
-      devices. For example, the ZigBee dongle can be used as USB Device and
-      ZigBee network controller <code>Device</code>. The network controller
-      device can have a reference to the physical USB device as it's depicted
-      on the next diagram. <figure pgwide="1">
-          <title>Device Reference</title>
+      devices. For example, the EnOcean dongle can be used as USB Device and
+      EnOcean network controller <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/>. The network controller device can have a
+      reference to the physical USB device as it's depicted on the next
+      diagram.</para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center"
-                         fileref="service.dal.device.reference.svg"
-                         width="15%"/>
-            </imageobject>
-          </mediaobject>
-        </figure></para>
+      <figure pgwide="1">
+        <title>Device Reference</title>
 
-      <para>The related service property is
-      <code>Device.SERVICE_REFERENCE_UIDS</code>.</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="service.dal.device.reference.svg" width="15%"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <remark>BJH The fonts in the above figure are not the correct fonts used
+      for other figures in the various specs. The fonts being used render
+      badly. The figure must be updated to use the correct fonts. The fonts
+      are all in osgi.specs/fonts and can be installed on your local system to
+      be used with your SVG editor.</remark>
+
+      <para>The related service property is <xref
+      linkend="org.osgi.service.dal.Device.SERVICE_REFERENCE_UIDS"
+      xrefstyle="hyperlink"/>.</para>
     </section>
 
     <section xml:id="service.dal.status.transitions">
@@ -742,8 +796,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
         xrefstyle="hyperlink"/> from any other status. Once reached, the
         device status cannot be updated any more. The device has been removed
         from the network and the device service is unregistered from the OSGi
-        service registry. If there are stale references to the
-        <code>Device</code> service, their status will be set to <xref
+        service registry. If there are stale references to the <xref
+        linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> service,
+        their status will be set to <xref
         linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
         xrefstyle="hyperlink"/>.</para>
 
@@ -770,8 +825,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <listitem>
               <para>From <code>STATUS_OFFLINE</code> to
               <code>STATUS_REMOVED</code> – The device has been removed. The
-              status can be set as a result of <code>Device.remove()</code>
-              method call.</para>
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
             </listitem>
 
             <listitem>
@@ -796,7 +852,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
               <para>From <code>STATUS_OFFLINE</code> to
               <code>STATUS_NOT_INITIALIZED</code> – That transition is not
               possible, because the status have to go through
-              <code>STATUS_PROCESSING</code> . If the processing is
+              <code>STATUS_PROCESSING</code>. If the processing is
               unsuccessful, <code>STATUS_NOT_INITIALIZED</code> will be
               set.</para>
             </listitem>
@@ -857,8 +913,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <listitem>
               <para>From <code>STATUS_ONLINE</code> to
               <code>STATUS_REMOVED</code> – The device has been removed. The
-              status can be set as a result of <code>Device.remove()</code>
-              method call.</para>
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
             </listitem>
 
             <listitem>
@@ -949,8 +1006,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <listitem>
               <para>From <code>STATUS_PROCESSING</code> to
               <code>STATUS_REMOVED</code> – The device has been removed. The
-              status can be set as a result of <code>Device.remove()</code>
-              method call.</para>
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
             </listitem>
 
             <listitem>
@@ -1038,8 +1096,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <listitem>
               <para>From <code>STATUS_NOT_INITIALIZED</code> to
               <code>STATUS_REMOVED</code> – The device has been removed. The
-              status can be set as a result of <code>Device.remove()</code>
-              method call.</para>
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
             </listitem>
 
             <listitem>
@@ -1127,8 +1186,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <listitem>
               <para>From <code>STATUS_NOT_CONFIGURED</code> to
               <code>STATUS_REMOVED</code> – The device has been removed. The
-              status can be set as a result of <code>Device.remove()</code>
-              method call.</para>
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
             </listitem>
 
             <listitem>
@@ -1209,15 +1269,16 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
     <title>Function Service</title>
 
     <para>The user applications have full control over the device with the
-    <code>Function</code> services. Synchronous or asynchronous operations can
-    trigger different actions. For example, turn on or off the light, can
-    change the room temperature, send an user notification, etc. The action
-    result can be reported immediately or later in case of concurrent
-    execution. As a result, a <code>Function</code> property can be updated.
-    The property is the device value container. It can provide, sensor
-    information, meter data, the switch current position, etc. Different
-    property access types allow the applications to read, write or receive
-    events.</para>
+    <xref linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+    services. Synchronous or asynchronous operations can trigger different
+    actions. For example, turn on or off the light, can change the room
+    temperature, send an user notification, etc. The action result can be
+    reported immediately or later in case of concurrent execution. As a
+    result, a <xref linkend="org.osgi.service.dal.Function"
+    xrefstyle="hyperlink"/> property can be updated. The property is the
+    device value container. It can provide, sensor information, meter data,
+    the switch current position, etc. Different property access types allow
+    the applications to read, write or receive events.</para>
 
     <section>
       <title>Function Service Properties</title>
@@ -1230,14 +1291,26 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
             <para><xref linkend="org.osgi.service.dal.Function.SERVICE_UID"
             xrefstyle="hyperlink"/> – mandatory service property. The property
             value is the function unique identifier. The value type is
-            <code>java.lang.String</code> . To simplify the unique identifier
+            <code>java.lang.String</code>. To simplify the unique identifier
             generation, the property value must follow the rule:</para>
 
-            <programlisting>function UID ::= device-id ':' function-id
+            <programlisting>function UID ::= device-id ':' function-id</programlisting>
 
-function UID – function unique identifier
-device-id – the value of the Device.SERVICE_UID Device service property
-function-id – function identifier in the scope of the device</programlisting>
+            <itemizedlist>
+              <listitem>
+                <para>function UID – function unique identifier</para>
+              </listitem>
+
+              <listitem>
+                <para>device-id – the value of the Device.SERVICE_UID Device
+                service property</para>
+              </listitem>
+
+              <listitem>
+                <para>function-id – function identifier in the scope of the
+                device</para>
+              </listitem>
+            </itemizedlist>
 
             <para>If the function is not bound to a device, the function
             unique identifier can be device independent.</para>
@@ -1248,7 +1321,7 @@ function-id – function identifier in the scope of the device</programlisting>
             xrefstyle="hyperlink"/> – optional service property. The service
             property value contains the function type. For example, the sensor
             function can have different types like temperature, pressure, etc.
-            The value type is <code>java.lang.String</code> .</para>
+            The value type is <code>java.lang.String</code>.</para>
 
             <para>Organizations that want to use function types that do not
             clash with OSGi Alliance defined types should prefix their types
@@ -1262,7 +1335,7 @@ function-id – function identifier in the scope of the device</programlisting>
             property value contains the function version. That version can
             point to specific implementation version and vary in the different
             vendor implementations. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -1270,7 +1343,7 @@ function-id – function identifier in the scope of the device</programlisting>
             linkend="org.osgi.service.dal.Function.SERVICE_DEVICE_UID"
             xrefstyle="hyperlink"/> – optional service property. The property
             value is the device identifier. The function belongs to this
-            device. The value type is java.lang.String.</para>
+            device. The value type is <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -1278,7 +1351,7 @@ function-id – function identifier in the scope of the device</programlisting>
             linkend="org.osgi.service.dal.Function.SERVICE_REFERENCE_UIDS"
             xrefstyle="hyperlink"/> – optional service property. The service
             property value contains the reference function unique identifiers.
-            The value type is <code>java.lang.String[]</code> . It can be used
+            The value type is <code>java.lang.String[]</code>. It can be used
             to represent different relationships between the functions.</para>
           </listitem>
 
@@ -1287,7 +1360,7 @@ function-id – function identifier in the scope of the device</programlisting>
             linkend="org.osgi.service.dal.Function.SERVICE_DESCRIPTION"
             xrefstyle="hyperlink"/> – optional service property. The property
             value is the function description. The value type is
-            <code>java.lang.String</code> .</para>
+            <code>java.lang.String</code>.</para>
           </listitem>
 
           <listitem>
@@ -1297,8 +1370,8 @@ function-id – function identifier in the scope of the device</programlisting>
             is missing when there are no function operations and property must
             be set when there are function operations. The property value is
             the function operation names. The value type is
-            <code>java.lang.String[]</code> . It's not possible to exist two
-            or more function operations with the same name i.e. the operation
+            <code>java.lang.String[]</code>. It's not possible to exist two or
+            more function operations with the same name i.e. the operation
             overloading is not allowed.</para>
           </listitem>
 
@@ -1309,8 +1382,8 @@ function-id – function identifier in the scope of the device</programlisting>
             is missing when there are no function properties and property must
             be set when there are function properties. The property value is
             the function property names. The value type is
-            <code>java.lang.String[]</code> . It's not possible to exist two
-            or more function properties with the same name.</para>
+            <code>java.lang.String[]</code>. It's not possible to exist two or
+            more function properties with the same name.</para>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -1319,33 +1392,42 @@ function-id – function identifier in the scope of the device</programlisting>
       <title>Function Registration</title>
 
       <para>On start up, the <code>Function</code> services are registered
-      before the <code>Device</code> service. It's possible that
-      <code>Function.SERVICE_DEVICE_UID</code> points to missing service at
-      the moment of the registration. The reverse order is used when the
-      services are unregistered. <code>Device</code> service is unregistered
-      before the <code>Function</code> services. The device registration
-      procedure is available in <xref
+      before the <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service. It's possible that <xref
+      linkend="org.osgi.service.dal.Function.SERVICE_DEVICE_UID"
+      xrefstyle="hyperlink"/> points to missing service at the moment of the
+      registration. The reverse order is used when the services are
+      unregistered. <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service is unregistered before the <xref
+      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+      services. The device registration procedure is available in <xref
       linkend="service.dal.device.registration"/>.</para>
 
-      <para><code>Function</code> service must be registered under the
-      function class hierarchy. Other interfaces are not allowed. All classes
-      from the function class hierarchy must participate as registration
-      classes in the order from child to parent. The <code>Function</code>
-      interface must be the last one in the list. For example, <code>MeterV2
-      extends MeterV1 extends Function</code> are function interfaces. If the
-      implementation would like to provide <code>MeterV2</code> and
-      <code>MeterV1</code> functionality, the registration is:
-      <programlisting>context.registerService(new String[]{
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> service must be registered under the function
+      class hierarchy. Other interfaces are not allowed. <remark>BJH This is
+      contradictory. Either other interfaces are allowed, or they are
+      not.</remark> All classes from the function class hierarchy must
+      participate as registration classes in the order from child to parent.
+      The <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> interface must be the last one in the list. For
+      example, <code>MeterV2 extends MeterV1 extends Function</code> are
+      function interfaces. If the implementation would like to provide
+      <code>MeterV2</code> and <code>MeterV1</code> functionality, the
+      registration is: <programlisting>context.registerService(new String[]{
   MeterV2.class.getName(),
   MeterV1.class.getName(),
   Function.class.getName()}, this, regProps);</programlisting>
       <code>MeterV2</code> is the last child in the class hierarchy and it's
-      on the first position. <code>MeterV1</code> is a parent of
-      <code>MeterV2</code> and child of <code>Function</code>.
-      <code>MeterV1</code> position is between <code>MeterV2</code> and
-      <code>Function</code> in the registration classes. If the implementation
-      would like to provide <code>MeterV1</code> functionality, the
-      registration is: <programlisting>context.registerService(new String[]{
+      on the first position.<remark>BJH What is the point of this ordering
+      here? It means nothing. The framework does not care about the ordering
+      and the ordering is not visible in anyway from the service registry.
+      </remark> <code>MeterV1</code> is a parent of <code>MeterV2</code> and
+      child of <code>Function</code>. <code>MeterV1</code> position is between
+      <code>MeterV2</code> and <code>Function</code> in the registration
+      classes. If the implementation would like to provide
+      <code>MeterV1</code> functionality, the registration is:
+      <programlisting>context.registerService(new String[]{
   MeterV1.class.getName(),
   Function.class.getName()}, this, regProps);</programlisting> If the
       implementation would like to mark that there is a function, but no
@@ -1354,7 +1436,9 @@ function-id – function identifier in the scope of the device</programlisting>
       Note that such functions usually don't have operations and
       properties.</para>
 
-      <para>Some examples of not allowed registrations: <itemizedlist>
+      <para>Some examples of not allowed registrations: <remark>BJH Why is it
+      not allowed? Why would you care? If they are not allowed, how would this
+      be enforced? Is there a CT test for this?</remark><itemizedlist>
           <listitem>
             <para><code>context.registerService(new String[]
             {ManagedService.class.getName(), Function.class.getName()}, this,
@@ -1372,7 +1456,7 @@ function-id – function identifier in the scope of the device</programlisting>
             <para><code>context.registerService(new String[]
             {MeterV1.class.getName(), Alarm.class.getName(),
             Function.class.getName()}, this, regProps);</code> where
-            <code>MeterV1 extends Function and Alarm extends Function</code> .
+            <code>MeterV1 extends Function and Alarm extends Function</code>.
             - <code>MeterV1</code> and <code>Alarm</code> are from different
             function class hierarchies.</para>
           </listitem>
@@ -1381,20 +1465,25 @@ function-id – function identifier in the scope of the device</programlisting>
       <para>That registration rule helps the applications to find the
       supported function classes and to identify the metadata. Otherwise the
       function services can be accessed, but it's not clear which are the
-      function classes and metadata.</para>
+      function classes and metadata. <remark>BJH It should be pretty easy to
+      tell which service types are Function subtypes since they extend
+      Function.</remark></para>
     </section>
 
     <section>
       <title>Function Interface</title>
 
-      <para><code>Function</code> is built by a set of properties and
-      operations. The function can have unique identifier, type, version,
-      description, link to the <code>Device</code> service and information
-      about the referenced functions. <code>Function</code> interface must be
-      the base interface for all functions. If the device provider defines
-      custom functions, all of them must extend <code>Function</code>
-      interface. It provides a common access to the operations and properties
-      metadata.</para>
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> is built by a set of properties and operations.
+      The function can have unique identifier, type, version, description,
+      link to the <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service and information about the referenced
+      functions. <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> interface must be the base interface for all
+      functions. If the device provider defines custom functions, all of them
+      must extend <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> interface. It provides a common access to the
+      operations and properties metadata.</para>
 
       <para>There are some general type rules, which unify the access to the
       function data. They make easier the transfer over different protocols.
@@ -1405,7 +1494,7 @@ function-id – function identifier in the scope of the device</programlisting>
 
           <listitem>
             <para>Numerical type i.e. the type which extends
-            <code>java.lang.Number</code> . The numerical type must follow
+            <code>java.lang.Number</code>. The numerical type must follow
             these conventions:</para>
 
             <itemizedlist>
@@ -1433,13 +1522,13 @@ function-id – function identifier in the scope of the device</programlisting>
 
           <listitem>
             <para>Java Bean, but its properties must use those rules. Java
-            Bean is defined in <xref linkend="service.dal.ref.bean.spec"/>
-            .</para>
+            Bean is defined in <xref
+            linkend="service.dal.ref.bean.spec"/>.</para>
           </listitem>
 
           <listitem>
             <para><code>java.util.Map</code> instance. The map keys can be
-            <code>java.lang.String</code> . The values of a single type follow
+            <code>java.lang.String</code>. The values of a single type follow
             these rules.</para>
           </listitem>
 
@@ -1509,10 +1598,11 @@ function-id – function identifier in the scope of the device</programlisting>
     <section>
       <title>Function Operations</title>
 
-      <para><code>Function</code> operations are the main callable units. They
-      can perform a specific task on the device like turn on or turn off. They
-      can be used by the applications to control the device. Operation names
-      are available as a value of the service property <xref
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> operations are the main callable units. They can
+      perform a specific task on the device like turn on or turn off. They can
+      be used by the applications to control the device. Operation names are
+      available as a value of the service property <xref
       linkend="org.osgi.service.dal.Function.SERVICE_OPERATION_NAMES"
       xrefstyle="hyperlink"/>. The operations are identified by their names.
       It's not possible to exist two operations with the same name i.e.
@@ -1534,8 +1624,9 @@ function-id – function identifier in the scope of the device</programlisting>
     <section xml:id="service.dal.function.properties">
       <title>Function Properties</title>
 
-      <para><code>Function</code> properties are class fields. Their values
-      can be read with getter methods and can be set with setter methods. The
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> properties are class fields. Their values can be
+      read with getter methods and can be set with setter methods. The
       property names are available as a value of the service property <xref
       linkend="org.osgi.service.dal.Function.SERVICE_PROPERTY_NAMES"
       xrefstyle="hyperlink"/>. The properties are identified by their names.
@@ -1545,29 +1636,36 @@ function-id – function identifier in the scope of the device</programlisting>
       rules: <itemizedlist>
           <listitem>
             <para>Getter methods must be available for all properties with
-            <code>PropertyMetadata.ACCESS_READABLE</code> access.</para>
+            <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_READABLE"
+            xrefstyle="hyperlink"/> access.</para>
           </listitem>
 
           <listitem>
-            <para>Getter method must return a subclass of
-            <code>FunctionData</code> .</para>
+            <para>Getter method must return a subclass of <xref
+            linkend="org.osgi.service.dal.FunctionData"
+            xrefstyle="hyperlink"/>.</para>
           </listitem>
 
           <listitem>
             <para>Setter methods must be available for all properties with
-            <code>PropertyMetadata.ACCESS_WRITABLE</code> access.</para>
+            <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_WRITABLE"
+            xrefstyle="hyperlink"/> access.</para>
           </listitem>
 
           <listitem>
             <para>Setter methods can be any combination of: <itemizedlist>
                 <listitem>
-                  <para>Setter method which accepts a subclass of
-                  <code>FunctionData</code>.</para>
+                  <para>Setter method which accepts a subclass of <xref
+                  linkend="org.osgi.service.dal.FunctionData"
+                  xrefstyle="hyperlink"/>.</para>
                 </listitem>
 
                 <listitem>
                   <para>Setter method which accepts the values used by the
-                  <code>FunctionData</code> subclass, if there are no equal
+                  <xref linkend="org.osgi.service.dal.FunctionData"
+                  xrefstyle="hyperlink"/> subclass, if there are no equal
                   types.</para>
                 </listitem>
               </itemizedlist> It's possible to have only one or both of them.
@@ -1593,8 +1691,9 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
 
           <listitem>
-            <para>No methods are required for properties with
-            <code>PropertyMetadata.ACCESS_EVENTABLE</code> access.</para>
+            <para>No methods are required for properties with <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_EVENTABLE"
+            xrefstyle="hyperlink"/> access.</para>
           </listitem>
         </itemizedlist></para>
 
@@ -1604,35 +1703,36 @@ function-id – function identifier in the scope of the device</programlisting>
       <para>The properties can be optionally described with a set of metadata
       properties. The property values can be collected with <xref
       linkend="org.osgi.service.dal.Function.getPropertyMetadata-String-"
-      xrefstyle="hyperlink"/> method. The method result is
-      <code>PropertyMetadata</code> with: <itemizedlist>
+      xrefstyle="hyperlink"/> method. The method result is <xref
+      linkend="org.osgi.service.dal.PropertyMetadata" xrefstyle="hyperlink"/>
+      with: <itemizedlist>
           <listitem>
             <para>Minimum value – available through <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getMinValue-String-"
-            xrefstyle="hyperlink"/> . The minimum value can be different for
+            xrefstyle="hyperlink"/>. The minimum value can be different for
             the different units.</para>
           </listitem>
 
           <listitem>
             <para>Maximum value – available through <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getMaxValue-String-"
-            xrefstyle="hyperlink"/> . The maximum value can be different for
+            xrefstyle="hyperlink"/>. The maximum value can be different for
             the different units.</para>
           </listitem>
 
           <listitem>
             <para>Enumeration of values – available through <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getEnumValues-String-"
-            xrefstyle="hyperlink"/> . The array of the possible values is
+            xrefstyle="hyperlink"/>. The array of the possible values is
             sorted in increasing order according to the given unit.</para>
           </listitem>
 
           <listitem>
             <para>Step – available through <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getStep-String-"
-            xrefstyle="hyperlink"/> . The difference between two values in
+            xrefstyle="hyperlink"/>. The difference between two values in
             series. For example, if the range is <code>[0, 100]</code>, the
-            step can be <code>10</code> .</para>
+            step can be <code>10</code>.</para>
           </listitem>
 
           <listitem>
@@ -1681,17 +1781,17 @@ function-id – function identifier in the scope of the device</programlisting>
             <para>Units - available as a value in <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
             xrefstyle="hyperlink"/> result map. They can be requested with key
-            <code>PropertyMetadata.UNITS</code> . The value contains the
-            property supported units. The property value type is
-            <code>java.lang.String[]</code> . The array first element at index
-            <code>0</code> represents the default unit. Each unit must follow
-            those rules:</para>
+            <xref linkend="org.osgi.service.dal.PropertyMetadata.UNITS"
+            xrefstyle="hyperlink"/>. The value contains the property supported
+            units. The property value type is <code>java.lang.String[]</code>.
+            The array first element at index <code>0</code> represents the
+            default unit. Each unit must follow those rules:</para>
 
             <itemizedlist>
               <listitem>
                 <para>The International System of Units must be used where
                 it's applicable. For example, kg for kilogram and km for
-                kilometre.</para>
+                kilometer.</para>
               </listitem>
 
               <listitem>
@@ -1704,7 +1804,7 @@ function-id – function identifier in the scope of the device</programlisting>
                 <para>If the unit name doesn't match to a Unicode symbol, the
                 unit symbol must be built by Unicode Basic Latin block of
                 characters, superscript and subscript characters. For example,
-                watt per square metre steradian is built by <code>W/(m²
+                watt per square meter steradian is built by <code>W/(m²
                 sr)</code>.</para>
               </listitem>
             </itemizedlist>
@@ -1720,9 +1820,10 @@ function-id – function identifier in the scope of the device</programlisting>
             <para>Description – available as a value in <xref
             linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
             xrefstyle="hyperlink"/> result map. It can be requested with key
-            <code>PropertyMetadata.DESCRIPTION</code> . The property value
-            type is <code>java.lang.String</code> and specifies a user
-            readable description. It doesn't depend on the given unit.</para>
+            <xref linkend="org.osgi.service.dal.PropertyMetadata.DESCRIPTION"
+            xrefstyle="hyperlink"/>. The property value type is
+            <code>java.lang.String</code> and specifies a user readable
+            description. It doesn't depend on the given unit.</para>
           </listitem>
 
           <listitem>
@@ -1743,21 +1844,26 @@ function-id – function identifier in the scope of the device</programlisting>
       property value modification. It doesn't require a modification of the
       value. For example, the motion sensor can send a few events with no
       property value change when motion is detected and continued to be
-      detected. The event must use <code>FunctionEvent</code> class. The event
-      properties are: <itemizedlist>
+      detected. The event must use <xref
+      linkend="org.osgi.service.dal.FunctionEvent" xrefstyle="hyperlink"/>
+      class. The event properties are: <itemizedlist>
           <listitem>
-            <para><code>FunctionEvent.FUNCTION_UID</code> – the event source
-            function unique identifier.</para>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.FUNCTION_UID"
+            xrefstyle="hyperlink"/> – the event source function unique
+            identifier.</para>
           </listitem>
 
           <listitem>
-            <para><code>FunctionEvent.PROPERTY_NAME</code> – the property
-            name.</para>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.PROPERTY_NAME"
+            xrefstyle="hyperlink"/> – the property name.</para>
           </listitem>
 
           <listitem>
-            <para><code>FunctionEvent.PROPERTY_VALUE</code> – the property
-            value.</para>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.PROPERTY_VALUE"
+            xrefstyle="hyperlink"/> – the property value.</para>
           </listitem>
         </itemizedlist> For example, there is function with an eventable
       boolean property called “state”. When “state” value is changed to
@@ -1775,27 +1881,33 @@ function-id – function identifier in the scope of the device</programlisting>
     <section>
       <title>Device Permission</title>
 
-      <para>The device permission controls the bundle's authority to perform
+      <para>The <xref linkend="org.osgi.service.dal.DevicePermission"
+      xrefstyle="hyperlink"/> controls the bundle's authority to perform
       specific privileged administrative operations on the devices. There is
-      only one action for this permission <code>DevicePermission.REMOVE</code>
-      to protect <code>Device.remove()</code> method.</para>
+      only one action for this permission <xref
+      linkend="org.osgi.service.dal.DevicePermission.REMOVE"
+      xrefstyle="hyperlink"/> to protect <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method.</para>
 
       <para>The name of the permission is a filter based. For more details
       about filter based permissions, see OSGi Core Specification, Filter
       Based Permissions. The filter provides an access to all device service
       properties. Filter attribute names are processed in a case sensitive
       manner. For example, the operator can give a bundle the permission to
-      only manage devices of vendor "acme": <programlisting>org.osgi.service.dal.DevicePermission("dal.device.hardware.vendor=acme", …)</programlisting></para>
+      only manage devices of vendor "acme": <programlisting>org.osgi.service.dal.DevicePermission("dal.device.hardware.vendor=acme", "remove")</programlisting></para>
 
       <para>The permission action allows the operator to assign only the
       necessary permissions to the bundle. For example, the management bundle
       can have permission to remove all registered devices: <programlisting>org.osgi.service.dal.DevicePermission("*", "remove")</programlisting></para>
 
       <para>The code that needs to check the device permission must always use
-      the constructor that takes the device as a parameter
-      DevicePermission(Device, String) with a single action. For example, the
-      implementation of org.osgi.service.dal.Device.remove() method must check
-      that the caller has an access to the operation: <programlisting>public class DeviceImpl implements Device {
+      the constructor that takes the device as a parameter <xref
+      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> with a
+      single action. For example, the implementation of <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method must check that the caller has an access to the operation:
+      <programlisting>public class DeviceImpl implements Device {
   ...
   public void remove() {
     securityManager.checkPermission(
@@ -1814,7 +1926,16 @@ function-id – function identifier in the scope of the device</programlisting>
       against the caller the implementation will proceed with the actual
       operation. The operation can require a number of other permissions to
       complete. The implementation must isolate the caller from such
-      permission checks by use of proper privileged blocks.</para>
+      permission checks by use of proper privileged blocks. <remark>BJH This
+      means that each DeviceImpl must be granted permission to remove itself.
+      It will be on the call stack when it checks the permission above (to see
+      of the caller has permission to remove this device). How will it be
+      coordinated that every bundle implementing a Device must be given
+      permission to remove its device? At the very least the need to grant
+      bundles implementing Device this permission needs to be documents.
+      However, this whole permission seems like an issue since there is not
+      central implementation to perform the security check which will be
+      granted the remove permission.</remark></para>
     </section>
   </section>
 
