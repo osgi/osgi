@@ -568,7 +568,8 @@ DynamicImport-Package:
 
             <entry><para>Custom attributes that will be provided as service
             properties if they do not conflict with the service properties
-            rules and are not private service properties (start with a full
+            rules and are not private service properties. Private properties
+            start with a full
             stop (<code>'.' \u002E</code>).</para></entry>
           </row>
         </tbody>
