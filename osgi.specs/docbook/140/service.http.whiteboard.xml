@@ -390,8 +390,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </section>
 
     <section>
-      <title>boolean
-      handleSecurity(HttpServletRequest,HttpServletResponse)</title>
+      <title>boolean handleSecurity(HttpServletRequest,
+      HttpServletResponse)</title>
 
       <para>This method is invoked to handle implementation-defined security
       on the request. It is invoked before the request is sent to the
@@ -1277,15 +1277,15 @@ public class MyServlet extends HttpServlet {
       property <code>osgi.http.whiteboard.servlet.errorPage</code> must be
       set. This property can have multiple values, allowing a single servlet
       to handle a variety of error situations. Possible values are 3-digit
-      Http error codes and fully qualified exception names.</para>
+      HTTP error codes and fully qualified exception names.</para>
 
       <para>Two special error code values are recognized. The special value
       <code>4xx</code> means every error code in the 400-499 range. The
       special value <code>5xx</code> means every error code in the 500-599
       range. To override such wildcard error page for a specific error,
       register an error page with the specific error code and a higher service
-      ranking. Error pages shadowed by other error pages are reported via
-      the failure DTOs. A <code>4xx/5xx</code> wildcard error page is only
+      ranking. Error pages shadowed by other error pages are reported via the
+      failure DTOs. A <code>4xx/5xx</code> wildcard error page is only
       reported in the failure DTOs if it is shadowed by another wildcard
       page.</para>
 
@@ -1303,12 +1303,13 @@ public class MyServlet extends HttpServlet {
       considered both an ordinary servlet as well as an error page.</para>
 
       <para>If an error or exception occurs for which an error page servlet
-      can be matched, it is invoked to render the error page. If 
-      the error page itself causes an error while handling the request
-      an implementation built-in error page is shown for the error code with the
-      additional message that the registered error page caused an exception.</para>
+      can be matched, it is invoked to render the error page. If the error
+      page servlet causes an error or exception while handling the request, an
+      implementation built-in error page is shown for the error or exception
+      with the additional message that the registered error page caused an
+      error or exception.</para>
 
-      <para>Example:</para>
+      <para>For example:</para>
 
       <programlisting>@Component(service = Servlet.class,
     scope = ServiceScope.PROTOTYPE,
@@ -2260,8 +2261,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       https://tools.ietf.org/html/rfc7234,
       https://tools.ietf.org/html/rfc7235</bibliomixed>
 
-      <bibliomixed xml:id="service.http.whiteboard-http2"><title>HTTP 2.0
-      Specification</title>https://http2.github.io</bibliomixed>
+      <bibliomixed xml:id="service.http.whiteboard-http2"><title>HTTP/2
+      Specifications</title>https://http2.github.io</bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
       Servlet 3.1 Specification</title>
