@@ -109,10 +109,10 @@ public interface ResourceMonitoringService {
 	 *        inherit all resource monitoring settings (enabled monitors,
 	 *        thresholds) from the template.
 	 * @return A new {@link ResourceContext} instance.
-	 * @throws IllegalArgumentException if a problem occurred, e.g. if the name
+	 * @throws IllegalArgumentException if a problem occurred, for example if the name
 	 *         is already used.
 	 */
-	public ResourceContext createContext(String name, ResourceContext template) throws IllegalArgumentException;
+	public ResourceContext createContext(String name, ResourceContext template);
 
 	/**
 	 * Returns the context with the specified resource context name.

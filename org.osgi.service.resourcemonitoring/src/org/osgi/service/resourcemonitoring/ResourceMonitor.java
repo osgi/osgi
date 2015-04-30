@@ -61,8 +61,8 @@ public interface ResourceMonitor {
 	 * update the list of ResourceMonitor instances hold by the Resource Context
 	 * (getContext().removeMonitor(this)).
 	 * 
-	 * @throws ResourceMonitorException, e.g. when the monitor can't be removed
-	 *         from the ResourceContext.
+	 * @throws ResourceMonitorException For example, when the monitor can't be
+	 *         removed from the ResourceContext.
 	 */
 	public void delete() throws ResourceMonitorException;
 
@@ -76,7 +76,7 @@ public interface ResourceMonitor {
 	public boolean isEnabled();
 
 	/**
-	 * Returns true if the ResourceMonitor instance has been deleted, i.e. the
+	 * Returns true if the ResourceMonitor instance has been deleted, that is the
 	 * {@link #delete()} method has been called previously.
 	 * 
 	 * @return true if deleted.
@@ -91,7 +91,7 @@ public interface ResourceMonitor {
 	 * was disabled).
 	 * 
 	 * @throws ResourceMonitorException if the ResourceMonitor instance can not
-	 *         be enabled (for example some MemoryMonitor implementations
+	 *         be enabled (for example, some MemoryMonitor implementations
 	 *         evaluate the memory consumption by tracking memory allocation
 	 *         operation at runtime. This kind of Monitor can not get
 	 *         instantaneous memory value. Such Monitor instances need to be

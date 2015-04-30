@@ -18,7 +18,7 @@ package org.osgi.service.resourcemonitoring;
 
 /**
  * A Resource Monitor Factory is a service that provides Resource Monitor
- * instances of a specific resource type (e.g., CPUMonitor, MemoryMonitor...)
+ * instances of a specific resource type (for example, CPUMonitor, MemoryMonitor...)
  * for every Resource Context.
  * 
  * Every Resource Monitor Factory service is registered with the
@@ -34,7 +34,7 @@ package org.osgi.service.resourcemonitoring;
 public interface ResourceMonitorFactory {
 
 	/**
-	 * Resource type property. The value is of type {@link String}, e.g.,
+	 * Resource type property. The value is of type {@link String}. For example,
 	 * {@link ResourceMonitoringService#RES_TYPE_CPU}
 	 */
 	public static final String	RESOURCE_TYPE_PROPERTY	= "org.osgi.resourcemonitoring.ResourceType";
@@ -57,8 +57,8 @@ public interface ResourceMonitorFactory {
 	 * @param resourceContext ResourceContext instance associated with the newly
 	 *        created ResourceMonitor instance
 	 * @return a ResourceMonitor instance
-	 * @throws ResourceMonitorException, whether the factory is unable to create
-	 *         a ResourceMonitor, e.g. when a ResourceMonitor of this type
+	 * @throws ResourceMonitorException If the factory is unable to create a
+	 *         ResourceMonitor For example, when a ResourceMonitor of this type
 	 *         already exists for this ResourceContext
 	 */
 	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException;

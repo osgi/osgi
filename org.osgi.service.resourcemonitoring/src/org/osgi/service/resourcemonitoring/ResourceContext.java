@@ -73,8 +73,8 @@ public interface ResourceContext {
 	 * 
 	 * @param bundleId The bundle to add to this resource context
 	 * 
-	 * @throws ResourceContextException, e.g. when the bundle can't be added to
-	 *         the ResourceContext.
+	 * @throws ResourceContextException For example, when the bundle can't be
+	 *         added to the ResourceContext.
 	 */
 	public void addBundle(long bundleId) throws ResourceContextException;
 
@@ -83,8 +83,8 @@ public interface ResourceContext {
 	 * bundle is no longer to this Resource Context.
 	 * 
 	 * @param bundleId bundle identifier
-	 * @throws ResourceContextException, e.g. when the bundle can't be removed
-	 *         from the ResourceContext.
+	 * @throws ResourceContextException For example, when the bundle can't be
+	 *         removed from the ResourceContext.
 	 */
 	public void removeBundle(long bundleId) throws ResourceContextException;
 
@@ -102,10 +102,10 @@ public interface ResourceContext {
 	 * @param bundleId the identifier of the bundle to be removed from the
 	 *        Resource Context
 	 * @param destination A resource context in which to add the bundle, after
-	 *        removing it from this context. If no destination is provided (i.e.
-	 *        null), the bundle is not associated to a new Resource Context.
-	 * @throws ResourceContextException, e.g. when the bundle can't be removed
-	 *         from the ResourceContext.
+	 *        removing it from this context. If no destination is provided (that
+	 *        is null), the bundle is not associated to a new Resource Context.
+	 * @throws ResourceContextException For example, when the bundle can't be
+	 *         removed from the ResourceContext.
 	 */
 	public void removeBundle(long bundleId, ResourceContext destination) throws ResourceContextException;
 
@@ -118,8 +118,8 @@ public interface ResourceContext {
 	 *        requested
 	 * @return A ResourceMonitor instance, or null, if this resource type is not
 	 *         supported
-	 * @throws ResourceContextException, e.g. when the monitor(s) can't be
-	 *         retrieved from the ResourceContext.
+	 * @throws ResourceContextException For example, when the monitor(s) can't
+	 *         be retrieved from the ResourceContext.
 	 */
 	public ResourceMonitor getMonitor(String resourceType) throws ResourceContextException;
 
@@ -127,8 +127,8 @@ public interface ResourceContext {
 	 * Retrieves all the existing ResourceMonitor belonging to this context.
 	 * 
 	 * @return an array of ResourceMonitor. May be empty if no ResourceMonitor
-	 * @throws ResourceContextException, e.g. when the monitor(s) can't be
-	 *         retrieved from the ResourceContext.
+	 * @throws ResourceContextException For example, when the monitor(s) can't
+	 *         be retrieved from the ResourceContext.
 	 */
 	public ResourceMonitor[] getMonitors() throws ResourceContextException;
 
@@ -138,8 +138,8 @@ public interface ResourceContext {
 	 * instance.
 	 * 
 	 * @param resourceMonitor resourceMonitor instance to be added
-	 * @throws ResourceContextException, e.g. when the monitor can't be added to
-	 *         the ResourceContext.
+	 * @throws ResourceContextException For example, when the monitor can't be
+	 *         added to the ResourceContext.
 	 */
 	public void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
 
@@ -147,8 +147,8 @@ public interface ResourceContext {
 	 * Removes a ResourceMonitor instance from the context.
 	 * 
 	 * @param resourceMonitor resource monitor instance to be removed
-	 * @throws ResourceContextException, e.g. when the monitor can't be removed
-	 *         from the ResourceContext.
+	 * @throws ResourceContextException For example, when the monitor can't be
+	 *         removed from the ResourceContext.
 	 */
 	public void removeResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
 
@@ -163,8 +163,8 @@ public interface ResourceContext {
 	 * 
 	 * @param destination The {@link ResourceContext} where the resources
 	 *        currently allocated by this resource context will be moved.
-	 * @throws ResourceContextException, e.g. when the resource context can't be
-	 *         removed.
+	 * @throws ResourceContextException For example, when the resource context
+	 *         can't be removed.
 	 */
 	public void removeContext(ResourceContext destination) throws ResourceContextException;
 

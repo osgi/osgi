@@ -28,13 +28,13 @@
     which are responsible for distinct set of bundles running with their own
     business logic and lifecycle.</para>
 
-    <para>The chapter defines the API for applications to monitor hardware
+    <para>The chapter defines an API for applications to monitor hardware
     resources consumed by any set of bundles. The bundle is the smallest unit
     that can be considered as a resource context, the entity that is
     monitored. Monitored data may enable applications to take decisions on
     management actions to apply. Resource management actions are mentioned as
-    examples in this chapter, e.g., actions on the lifecycle of components,
-    bundles, the framework and the JVM, Java threads, raise of
+    examples in this chapter, for example, actions on the lifecycle of
+    components, bundles, the framework and the JVM, Java threads, raise of
     exceptions.</para>
   </section>
 
@@ -196,14 +196,16 @@
     <para>The Resource Monitoring Service manages the set of Resource
     Contexts. Resource Contexts are persistent between platform restarts.
     Resource Context Listeners are notified when a Resource Context is created
-    or deleted or when a Resource Context configuration (i.e., adding or
+    or deleted or when a Resource Context configuration (that is, adding or
     removing of bundle) is updated.</para>
   </section>
 
   <section>
     <title>Resource Context</title>
 
-    <para>A Resource Context instance is a logical entity used to account
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext"
+    xrefstyle="hyperlink"/> instance is a logical entity used to account
     resource usage. Every Resource Context defines a bundle scope which can be
     either a single bundle or a set of bundles. Once the bundle scope is
     defined, resources used by those bundles are monitored through a set of
@@ -214,33 +216,50 @@
     instance.</para>
 
     <para>Each Resource Context is uniquely identified by a name. It can be
-    retrieved through the getName() method. It can not be changed, i.e. it is
+    retrieved through the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.getName--"
+    xrefstyle="hyperlink"/> method. It can not be changed, that is it is
     definitively set when the Resource Context instance is created.</para>
 
-    <para>The Resource Context bundle scope is retrieved through the
-    getBundles() method. This bundle scope can be extended through the
-    addBundle(Bundle) method. Bundles can also be removed from a Resource
-    Context through the removeBundle(Bundle, ResourceContext) method. For this
-    last method, a Resource Context instance MAY be specified in order to
-    associate the removed bundle to another Resource Context instance.</para>
+    <para>The Resource Context bundle scope is retrieved through the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.getBundleIds--"
+    xrefstyle="hyperlink"/> method. This bundle scope can be extended through
+    the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.addBundle-long-"
+    xrefstyle="hyperlink"/> method. Bundles can also be removed from a
+    Resource Context through the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.removeBundle-long-ResourceContext-"
+    xrefstyle="hyperlink"/> method. For this last method, a Resource Context
+    instance MAY be specified in order to associate the removed bundle to
+    another Resource Context instance.</para>
 
-    <para>Resource Monitor instances are retrieved through getMonitor(String
-    resourceType) method or the getMonitors() method. The list of available
-    resource types is retrieved through the Resource Monitoring Service
-    singleton instance.</para>
+    <para>Resource Monitor instances are retrieved through <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.getMonitor-String-"
+    xrefstyle="hyperlink"/> method or the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.getMonitors--"
+    xrefstyle="hyperlink"/> method. The list of available resource types is
+    retrieved through the Resource Monitoring Service singleton
+    instance.</para>
 
     <para>Resource Monitor instances are added to and removed from a Resource
-    Context instance by calling either addMonitor() method or removeMonitor()
-    method. Both methods SHOULD only be called by ResourceMonitorFactory
-    instances (see ResourceMonitorFactory.createMonitor() method).</para>
+    Context instance by calling either <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.addResourceMonitor-ResourceMonitor-"
+    xrefstyle="hyperlink"/> method or <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.removeResourceMonitor-ResourceMonitor-"
+    xrefstyle="hyperlink"/> method. Both methods SHOULD only be called by
+    <xref linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory"
+    xrefstyle="hyperlink"/> instances (see <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory.createResourceMonitor-ResourceContext-"
+    xrefstyle="hyperlink"/> method).</para>
 
     <para>A Resource Context is retrieved through the Resource Monitoring
     Service service.</para>
 
-    <para>A Resource Context instance can be deleted through
-    removeContext(ResourceContext) method. The Resource Context input argument
-    then defines a destination Resource Context instance for the bundles
-    belonging to the to-be-removed Resource Context instance.</para>
+    <para>A Resource Context instance can be deleted through <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.removeContext-ResourceContext-"
+    xrefstyle="hyperlink"/> method. The Resource Context input argument then
+    defines a destination Resource Context instance for the bundles belonging
+    to the to-be-removed Resource Context instance.</para>
   </section>
 
   <section>
@@ -251,7 +270,9 @@
     bundle "0". It is retrieved through the Resource Monitoring Service
     service.</para>
 
-    <para>The name of this context is “system”.</para>
+    <para>The name of this context is “system”. See <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.SYSTEM_CONTEXT_NAME"
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section>
@@ -262,29 +283,38 @@
     Monitoring Service service. This Resource Context holds all hosted bundles
     allowing access to the whole platform resource consumption.</para>
 
-    <para>The name of this context is “framework”.</para>
+    <para>The name of this context is “framework”. See <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.FRAMEWORK_CONTEXT_NAME"
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section>
     <title>Resource Monitor</title>
 
-    <para>A Resource Monitor instance monitors a resource type consumed by the
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor"
+    xrefstyle="hyperlink"/> instance monitors a resource type consumed by the
     bundles of a specific Resource Context instance.</para>
 
     <para>A Resource Context instance holds at most one Resource Monitor
     instance per monitor-able resource type. Resource Monitor instances are
     retrieved through their related Resource Context instance. Resource
     Monitor instances give access to their related Resource Context instance
-    through a call to getContext() method.</para>
+    through a call to See <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.getContext--"
+    xrefstyle="hyperlink"/> method.</para>
 
-    <para>The monitored resource type is retrieved through getType()
-    method.</para>
+    <para>The monitored resource type is retrieved through the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.getResourceType--"
+    xrefstyle="hyperlink"/> method.</para>
 
     <para>The current usage of a resource consumed by a Resource Context
-    instance is given through getUsage() method. This method returns a Java
-    Object to be casted to the appropriate Java object type depending on the
-    Resource type. The next table provides the expected Java Object type for
-    each specified resource type:</para>
+    instance is given through the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.getUsage--"
+    xrefstyle="hyperlink"/> method. This method returns a Java Object to be
+    casted to the appropriate Java object type depending on the Resource type.
+    The next table provides the expected Java Object type for each specified
+    resource type:</para>
 
     <table frame="all">
       <title>Table of resource types.</title>
@@ -310,7 +340,7 @@
           <row>
             <entry>Disk storage space</entry>
 
-            <entry>Long</entry>
+            <entry><code>Long</code></entry>
 
             <entry>Bytes on the bundle persistent storage area.</entry>
           </row>
@@ -320,7 +350,7 @@
           <row>
             <entry>CPU</entry>
 
-            <entry>Long</entry>
+            <entry><code>Long</code></entry>
 
             <entry>Cumulative CPU time in ns.</entry>
           </row>
@@ -328,7 +358,7 @@
           <row>
             <entry>Memory</entry>
 
-            <entry>Long</entry>
+            <entry><code>Long</code></entry>
 
             <entry>Allocated memory in bytes.</entry>
           </row>
@@ -336,7 +366,7 @@
           <row>
             <entry>Threads</entry>
 
-            <entry>Long</entry>
+            <entry><code>Long</code></entry>
 
             <entry>Number of alive thread.</entry>
           </row>
@@ -344,7 +374,7 @@
           <row>
             <entry>Socket</entry>
 
-            <entry>Long</entry>
+            <entry><code>Long</code></entry>
 
             <entry>Number of in-use socket.</entry>
           </row>
@@ -352,21 +382,31 @@
       </tgroup>
     </table>
 
-    <para>For example, for a Memory Monitor instance, a call to
-    MemoryMonitor.getUsage() returns a Long java object indicating the amount
+    <para>For example, for a <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.MemoryMonitor"
+    xrefstyle="hyperlink"/> instance, a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.getUsage--"
+    xrefstyle="hyperlink"/> returns a Long java object indicating the amount
     of memory the related Resource Context instance is consuming.</para>
 
-    <para>A Resource Monitor instance is enabled and disabled through enable()
-    and disable() methods. The state (enabled or disabled) of a Resource
-    Monitor is retrieved through a call to isEnabled() method. Enable and
-    disable monitoring mechanisms on-the-fly on localized set of bundles may
-    be crucial for performance issues <xref
-    linkend="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1"/>
-    .</para>
+    <para>A Resource Monitor instance is enabled and disabled through <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.enable--"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.disable--"
+    xrefstyle="hyperlink"/> methods. The state (enabled or disabled) of a
+    Resource Monitor is retrieved through a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.isEnabled--"
+    xrefstyle="hyperlink"/> method. Enable and disable monitoring mechanisms
+    on-the-fly on localized set of bundles may be crucial for performance
+    issues. See <xref
+    linkend="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1"/>.</para>
 
-    <para>A Resource Monitor instance can also be deleted (delete() method).
-    isDeleted() method returns true if the ResourceMonitor instance has been
-    deleted.</para>
+    <para>A Resource Monitor instance can also be deleted (<xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.delete--"
+    xrefstyle="hyperlink"/> method). <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.isDeleted--"
+    xrefstyle="hyperlink"/> method returns true if the ResourceMonitor
+    instance has been deleted.</para>
 
     <para>Five types of Resource Monitor are specified:</para>
 
@@ -394,8 +434,10 @@
 
     <para>The support of any Resource Monitor is optional. This list MAY be
     extended by the solution vendor. The list of the types that are supported
-    on the OSGi platform can be computed by querying ResourceMonitorFactory
-    services. Resource monitoring algorithms may vary with factories <xref
+    on the OSGi platform can be computed by querying <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory"
+    xrefstyle="hyperlink"/> services. Resource monitoring algorithms may vary
+    with factories, see <xref
     linkend="service.resourcemonitoring_bibliomixed_id_20150105_11h46_2"/>.
     They are out of the scope of this specification.</para>
   </section>
@@ -403,31 +445,46 @@
   <section>
     <title>Resource Monitor Factory</title>
 
-    <para>A Resource Monitor Factory is a service that provides Resource
-    Monitor instances of a specific resource type (e.g., CPUMonitor,
-    MemoryMonitor...) for every Resource Context.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory"
+    xrefstyle="hyperlink"/> is a service that provides Resource Monitor
+    instances of a specific resource type (for example, <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.CPUMonitor"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.MemoryMonitor"
+    xrefstyle="hyperlink"/>, etc.) for every Resource Context.</para>
 
     <para>Every Resource Monitor Factory service is registered with the
-    org.osgi.resourcemonitoring.ResourceType mandatory property. This property
-    indicates which type of Resource Monitor a Resource Monitor Factory is
-    able to create. The type can also be retrieved through a call to
-    ResourceMonitorFactory.getType(). The type MUST be unique (two Resource
-    Monitor Factory instances MUST not have the same type).</para>
+    <code>org.osgi.resourcemonitoring.ResourceType</code> mandatory property,
+    see <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY"
+    xrefstyle="hyperlink"/>. This property indicates which type of Resource
+    Monitor a Resource Monitor Factory is able to create. The type can also be
+    retrieved through a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory.getType--"
+    xrefstyle="hyperlink"/>. The type MUST be unique (two Resource Monitor
+    Factory services MUST not have the same type).</para>
 
-    <para>New Resource Monitor instances are created by a call to
-    createResourceMonitor(ResourceContext). This method returns a new Resource
-    Monitor instance associated to the provided Resource Context instance (the
-    ResourceMonitorFactory MUST call ResourceContext.addMonitor() to associate
-    the newly created ResourceMonitor with the provided ResourceContext
-    instance). The newly created Resource Monitor is disabled, i.e., it is
-    initially not monitoring the Resource Context resource consumption. It can
-    be activated through a call to ResourceMonitor.enable().</para>
+    <para>New Resource Monitor instances are created by a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory.createResourceMonitor-ResourceContext-"
+    xrefstyle="hyperlink"/>. This method returns a new Resource Monitor
+    instance associated to the provided Resource Context instance. The
+    ResourceMonitorFactory MUST call <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContext.addResourceMonitor-ResourceMonitor-"
+    xrefstyle="hyperlink"/> to associate the newly created ResourceMonitor
+    with the provided ResourceContext instance. The newly created Resource
+    Monitor is disabled, that is, it is initially not monitoring the Resource
+    Context resource consumption. It can be activated through a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.enable--"
+    xrefstyle="hyperlink"/>.</para>
 
-    <para>Resource Monitor instances are deleted by calling
-    ResourceMonitor.delete() method.</para>
+    <para>Resource Monitor instances are deleted by calling <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitor.delete--"
+    xrefstyle="hyperlink"/> method.</para>
 
-    <para>A Resource Monitor instance MUST only be created through its
-    ResourceMonitorFactory.</para>
+    <para>A Resource Monitor instance MUST only be created through its <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitorFactory"
+    xrefstyle="hyperlink"/>.</para>
 
     <para>Resource Monitor Factory instances should be only used by the
     Resource Monitoring Service singleton instance. The Resource Monitoring
@@ -440,27 +497,33 @@
   <section>
     <title>CPU Monitor</title>
 
-    <para>A CPU Monitor instance is a Resource Monitor used to monitor the CPU
-    usage of the bundles belonging to a Resource Context.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.CPUMonitor"
+    xrefstyle="hyperlink"/> instance is a Resource Monitor used to monitor the
+    CPU usage of the bundles belonging to a Resource Context.</para>
 
     <para>CPU usage and thresholds are expressed as a cumulative number of
-    nanoseconds (long). The encapsulated value can be retrieved with the
-    CPUMonitor.getCPUUsage() method.</para>
+    nanoseconds (long). The encapsulated value can be retrieved with the <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.CPUMonitor.getCPUUsage--"
+    xrefstyle="hyperlink"/> method.</para>
 
     <para>In case where a threshold is reached, the CPU Monitor instance
     generates an event triggering Resource Monitoring Clients defined
-    corrective actions (e.g., decrease thread priority).</para>
+    corrective actions (for example, decrease thread priority).</para>
   </section>
 
   <section>
     <title>Memory Monitor</title>
 
-    <para>A Memory Monitor instance monitors and limits the memory used by the
-    bundles of a Resource Context instance.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.MemoryMonitor"
+    xrefstyle="hyperlink"/> instance monitors and limits the memory used by
+    the bundles of a Resource Context instance.</para>
 
     <para>Memory is accounted as bytes. Memory usage and thresholds are long
-    java objects. The encapsulated value can be retrieved through the
-    getMemoryUsage() method.</para>
+    java objects. The encapsulated value can be retrieved through the <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.MemoryMonitor.getMemoryUsage--"
+    xrefstyle="hyperlink"/> method.</para>
 
     <para>When an error threshold is reached, the next memory allocation MAY
     be prevented by the system and MAY throw a specific Exception in the
@@ -470,59 +533,80 @@
   <section>
     <title>Socket Monitor</title>
 
-    <para>A Socket Monitor instance monitors and limits the number of existing
-    sockets (e.g., TCP, UDP) which are considered to be in use (e.g.,
-    listening for incoming packet, bound, or sending outgoing packets).</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.SocketMonitor"
+    xrefstyle="hyperlink"/> instance monitors and limits the number of
+    existing sockets (for example, TCP, UDP) which are considered to be in use
+    (for example, listening for incoming packet, bound, or sending outgoing
+    packets).</para>
 
     <para>A Socket is considered to be in-use state when a native socket file
     descriptor is created. It leaves this state when this socket file
     descriptor is deleted.</para>
 
     <para>The number of in-use sockets is a long. The encapsulated value can
-    be retrieved using SocketMonitor.getSocketUsage() method.</para>
+    be retrieved using <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.SocketMonitor.getSocketUsage--"
+    xrefstyle="hyperlink"/> method.</para>
 
-    <para>When an ERROR threshold is reached, the next socket file descriptor
-    creation in the associated context MAY throw a SocketException.</para>
+    <para>When an <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> threshold is reached, the next socket file
+    descriptor creation in the associated context MAY throw a
+    SocketException.</para>
   </section>
 
   <section>
     <title>Disk Storage Monitor</title>
 
-    <para>A Disk Storage Monitor instance monitors and limits the use of
-    persistent storage within Bundle Persistent Storage Area a Resource
-    Context (the bundles actually belonging to it) consumes.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.DiskStorageMonitor"
+    xrefstyle="hyperlink"/> instance monitors and limits the use of persistent
+    storage within Bundle Persistent Storage Area a Resource Context (the
+    bundles actually belonging to it) consumes.</para>
 
     <para>Disk Storage is expressed as a number of bytes of type long. The
-    encapsulated value can be retrieved using
-    DiskStorageMonitor.getUsedDiskStorage() method.</para>
+    encapsulated value can be retrieved using <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.DiskStorageMonitor.getUsedDiskStorage--"
+    xrefstyle="hyperlink"/> method.</para>
 
-    <para>A IOException MAY be thrown in the associated context when an error
-    threshold is reached.</para>
+    <para>An IOException MAY be thrown in the associated context when an <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> threshold is reached.</para>
   </section>
 
   <section>
     <title>Thread Monitor</title>
 
-    <para>A Thread Monitor instance monitors and limits the number of alive
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.ThreadMonitor"
+    xrefstyle="hyperlink"/> instance monitors and limits the number of alive
     Java Thread objects for a Resource Context instance. A Thread is
-    considered to be alive when it is in the RUNNABLE, BLOCKED, WAITING or
-    TIMED_WAITING java state.</para>
+    considered to be alive when it is in the <code>RUNNABLE</code>,
+    <code>BLOCKED</code>, <code>WAITING</code> or <code>TIMED_WAITING</code>
+    thread state.</para>
 
     <para>Usage and thresholds are Java int objects. The encapsulated value
-    can be retrieved using ThreadMonitor.getAliveThreads() method.</para>
+    can be retrieved using <xref
+    linkend="org.osgi.service.resourcemonitoring.monitor.ThreadMonitor.getAliveThreads--"
+    xrefstyle="hyperlink"/> method.</para>
 
-    <para>When an error threshold is reached, any further thread activation
-    will be prevented in the associated context. An InternalError exception
-    MAY also be thrown in the associated context.</para>
+    <para>When an <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> threshold is reached, any further thread
+    activation will be prevented in the associated context. An InternalError
+    exception MAY also be thrown in the associated context.</para>
   </section>
 
   <section>
     <title>Resource Listener</title>
 
-    <para>A Resource Listener receives notifications about resource usage for
-    a specific Resource Context and a specific type of resource. A
-    notification will be sent to a Resource Listener when one of its
-    thresholds is violated.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceListener"
+    xrefstyle="hyperlink"/> receives notifications about resource usage for a
+    specific Resource Context and a specific type of resource. A notification
+    will be sent to a Resource Listener when one of its thresholds is
+    violated.</para>
 
     <para>A Resource Listener holds two types of threshold:</para>
 
@@ -542,11 +626,15 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>a WARNING level.</para>
+        <para>a <xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+        xrefstyle="hyperlink"/> level.</para>
       </listitem>
 
       <listitem>
-        <para>an ERROR level.</para>
+        <para>an <xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+        xrefstyle="hyperlink"/> level.</para>
       </listitem>
     </itemizedlist>
 
@@ -564,6 +652,12 @@
       </mediaobject>
     </figure>
 
+    <remark>BJH The fonts in the above figure are not the correct fonts used
+    for other figures in the various specs. The fonts being used render badly.
+    The figure must be updated to use the correct fonts. The fonts are all in
+    osgi.specs/fonts and can be installed on your local system to be used with
+    your SVG editor.</remark>
+
     <para>A threshold state depends on the current consumption of resource and
     the type of threshold (upper or lower threshold).</para>
 
@@ -572,13 +666,17 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>RESOURCE_CONTEXT property – a String defining the name of
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.RESOURCE_CONTEXT"
+        xrefstyle="hyperlink"/> property – a String defining the name of
         Resource Context for which the Listener want to receive threshold
         notifications.</para>
       </listitem>
 
       <listitem>
-        <para>RESOURCE_TYPE property – a String defining which type of
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.RESOURCE_TYPE"
+        xrefstyle="hyperlink"/> property – a String defining which type of
         resource the listener wants to monitor.</para>
       </listitem>
     </itemizedlist>
@@ -588,19 +686,27 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>UPPER_WARNING_THRESHOLD</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.UPPER_WARNING_THRESHOLD"
+        xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para>UPPER_ERROR_THRESHOLD</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.UPPER_ERROR_THRESHOLD"
+        xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para>LOWER_WARNING_THRESHOLD</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.LOWER_WARNING_THRESHOLD"
+        xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para>LOWER_ERROR_THRESHOLD</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceListener.LOWER_ERROR_THRESHOLD"
+        xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
 
@@ -610,15 +716,20 @@
     modified.</para>
 
     <para>Threshold values can also be retrieved through a set of getter
-    methods. All of these methods returns a Comparable object used by the
-    associated Resource Monitor in order to determine the current state of the
-    current usage.</para>
+    methods. All of these methods returns a <code>Comparable</code> object
+    used by the associated Resource Monitor in order to determine the current
+    state of the current usage.</para>
 
-    <para>RESOURCE_CONTEXT and RESOURCE_TYPE properties are used by Resource
-    Monitors to identify their associated Resource Listeners. Once associated,
-    a Resource Monitor retrieves the threshold settings using service
-    properties. When one of its thresholds is reached, the Resource Monitor
-    calls ResourceListener.notify(ResourceEvent).</para>
+    <para><xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceListener.RESOURCE_CONTEXT"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceListener.RESOURCE_TYPE"
+    xrefstyle="hyperlink"/> properties are used by Resource Monitors to
+    identify their associated Resource Listeners. Once associated, a Resource
+    Monitor retrieves the threshold settings using service properties. When
+    one of its thresholds is reached, the Resource Monitor calls <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceListener.notify-ResourceEvent-"
+    xrefstyle="hyperlink"/>.</para>
 
     <para>Two examples of resource consumption are explained below, first with
     in-use sockets monitoring, second with CPU monitoring. The next picture
@@ -636,21 +747,45 @@
       </mediaobject>
     </figure>
 
+    <remark>BJH The fonts in the above figure are not the correct fonts used
+    for other figures in the various specs. The fonts being used render badly.
+    The figure must be updated to use the correct fonts. The fonts are all in
+    osgi.specs/fonts and can be installed on your local system to be used with
+    your SVG editor.</remark>
+
     <para>In our example, the lower warning threshold and the lower error
     threshold of the Resource Listener are respectively set to 10 and 5. When
     the number of in-use sockets decreases under 10, the usage goes from the
-    NORMAL state to the WARNING state and the Resource Listener receives a
-    WARNING event. If the number of in-use state sockets decreases again and
-    goes down to 5, the usage goes from the WARNING state to the ERROR state
-    and the Resource Listener receives a ERROR Resource Event.</para>
+    <xref linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state and the Resource Listener receives a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> event. If the number of in-use state sockets
+    decreases again and goes down to 5, the usage goes from the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> state and the Resource Listener receives a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> Resource Event.</para>
 
     <para>The upper threshold is also set. The upper warning threshold and the
     upper error threshold are respectively set to 100 and 1000 in-use state
     sockets. When the number of sockets reaches 100, the usage goes from the
-    NORMAL state to the WARNING state and the Resource Listener receives a
-    WARNING Resource Event. If this number is still increasing and exceeds
-    1000, then the usage goes from the WARNING state to the ERROR state and
-    the Resource Listener receives an ERROR Resource Event.</para>
+    <xref linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state and the Resource Listener receives a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> Resource Event. If this number is still increasing
+    and exceeds 1000, then the usage goes from the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> state and the Resource Listener receives an <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> Resource Event.</para>
 
     <para>This is a typical use case for a Java Web server. Indeed, one of the
     most important quality of service indicator is the number of in-use state
@@ -676,25 +811,50 @@
       </mediaobject>
     </figure>
 
+    <remark>BJH The fonts in the above figure are not the correct fonts used
+    for other figures in the various specs. The fonts being used render badly.
+    The figure must be updated to use the correct fonts. The fonts are all in
+    osgi.specs/fonts and can be installed on your local system to be used with
+    your SVG editor.</remark>
+
     <para>In this example, only the upper threshold is set. The upper warning
     threshold is set to 50%, the error one is set to 75%. CPU consumption
-    fluctuates between 0 and 50%, the usage is in the NORMAL state. Then it
-    increases and reaches 50%. The usage then goes from the NORMAL state to
-    the WARNING state and the Resource Listener holding the threshold receives
-    a WARNING Resource Event.</para>
+    fluctuates between 0 and 50%, the usage is in the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> state. Then it increases and reaches 50%. The
+    usage then goes from the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state and the Resource Listener holding the
+    threshold receives a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> Resource Event.</para>
 
     <para>Afterwards, CPU consumption decreases under 50%; the usage goes from
-    the WARNING state to the NORMAL state. The related Resource listener
-    receives a NORMAL Resource Event.</para>
+    the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> state. The related Resource listener receives a
+    <xref linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+    xrefstyle="hyperlink"/> Resource Event.</para>
 
-    <para>It then increases again and exceeds 50%. The usage goes to the
-    WARNING state. CPU consumption is still increasing and exceeds 75%. At
-    this moment, the usage goes from the WARNING state to the ERROR state and
-    the related Resource Listener receives an ERROR Resource Event.</para>
+    <para>It then increases again and exceeds 50%. The usage goes to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state. CPU consumption is still increasing and
+    exceeds 75%. At this moment, the usage goes from the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+    xrefstyle="hyperlink"/> state to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> state and the related Resource Listener receives
+    an <xref linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> Resource Event.</para>
 
-    <para>After some seconds in the ERROR state, the Resource Listener
-    implementation stops the bundle in order to preserve the quality of
-    service.</para>
+    <para>After some seconds in the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+    xrefstyle="hyperlink"/> state, the Resource Listener implementation stops
+    the bundle in order to preserve the quality of service.</para>
 
     <para>The choice of the type of threshold (lower or upper, or both of
     them) depends on the type of resource and the needs of the Resource
@@ -705,7 +865,8 @@
   <section>
     <title>Resource Event</title>
 
-    <para>A Resource Event instance is an event synchronously sent to a
+    <para>A <xref linkend="org.osgi.service.resourcemonitoring.ResourceEvent"
+    xrefstyle="hyperlink"/> instance is an event synchronously sent to a
     Resource Listener when one of its thresholds is reached. This event is
     notified to a Resource Listener through a call to
     ResourceListener.notify(ResourceEvent).</para>
@@ -714,20 +875,26 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>ERROR – The resource consumption reaches either the upper or the
-        lower error threshold of the Resource Listener receiving this
-        event.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.ERROR"
+        xrefstyle="hyperlink"/> – The resource consumption reaches either the
+        upper or the lower error threshold of the Resource Listener receiving
+        this event.</para>
       </listitem>
 
       <listitem>
-        <para>WARNING – The resource consumption reaches either the upper or
-        the lower warning threshold of the Resource Listener receiving this
-        event.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.WARNING"
+        xrefstyle="hyperlink"/> – The resource consumption reaches either the
+        upper or the lower warning threshold of the Resource Listener
+        receiving this event.</para>
       </listitem>
 
       <listitem>
-        <para>NORMAL – The resource consumption is back from warning or error
-        state to normal state.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.NORMAL"
+        xrefstyle="hyperlink"/> – The resource consumption is back from
+        warning or error state to normal state.</para>
       </listitem>
     </itemizedlist>
 
@@ -736,26 +903,34 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>getValue() method returns the resource consumption at the time
-        when the Resource Event instance was generated.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.getValue--"
+        xrefstyle="hyperlink"/> method returns the resource consumption at the
+        time when the Resource Event instance was generated.</para>
       </listitem>
 
       <listitem>
-        <para>isUpperThreshold() method returns true if the reached threshold
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.isUpperThreshold--"
+        xrefstyle="hyperlink"/> method returns true if the reached threshold
         is an upper threshold type. If this method returns false, this is a
         lower threshold.</para>
       </listitem>
 
       <listitem>
-        <para>getType() method indicates the state (WARNING, ERROR, or NORMAL)
-        of the resource usage.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.getType--"
+        xrefstyle="hyperlink"/> method indicates the state (WARNING, ERROR, or
+        NORMAL) of the resource usage.</para>
       </listitem>
 
       <listitem>
-        <para>getContext() method returns the Resource Context instance
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceEvent.getContext--"
+        xrefstyle="hyperlink"/> method returns the Resource Context instance
         related to this event. The Resource Listener can use it to retrieve
-        the Resource Monitor instance (e.g.,
-        event.getContext().getMonitor(event.getResourceType()).</para>
+        the Resource Monitor instance. For example,
+        <code>event.getContext().getMonitor(event.getResourceType())</code>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -763,7 +938,9 @@
   <section>
     <title>Resource Context Listener</title>
 
-    <para>A Resource Listener instance receives notifications about Resource
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextListener"
+    xrefstyle="hyperlink"/> instance receives notifications about Resource
     Context lifecycle and configuration.</para>
 
     <para>A notification will be sent when:</para>
@@ -774,8 +951,8 @@
       </listitem>
 
       <listitem>
-        <para>A Resource Context is updated, i.e., a bundle has been added or
-        removed from a Resource Context instance.</para>
+        <para>A Resource Context is updated, that is, a bundle has been added
+        or removed from a Resource Context instance.</para>
       </listitem>
 
       <listitem>
@@ -791,93 +968,131 @@
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>RESOURCE_CONTEXT property – An array of String defining the name
-        of Resource Context instances. If defined, a Resource Listener
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextListener.RESOURCE_CONTEXT"
+        xrefstyle="hyperlink"/> property – An array of String defining the
+        name of Resource Context instances. If defined, a Resource Listener
         instance will only receive notifications related to these specified
         Resource Context instances.</para>
       </listitem>
 
       <listitem>
-        <para>RESOURCE_TYPE property – an array of integers defining the type
-        of notifications a Resource Context Listener instance will receive
-        (see types defined in section Resource Context Event).</para>
+        <para>RESOURCE_TYPE property <remark>(BJH The RESOURCE_TYPE property
+        is not defined in ResourceContextListener. Either the spec is wrong or
+        the java type is wrong.) </remark>– an array of integers defining the
+        type of notifications a Resource Context Listener instance will
+        receive (see types defined in section Resource Context Event).</para>
       </listitem>
     </itemizedlist>
 
     <para>A Resource Context Listener instance is notified through a call to
-    notify(ResourceContextEvent) method.</para>
+    <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextListener.notify-ResourceContextEvent-"
+    xrefstyle="hyperlink"/> method.</para>
   </section>
 
   <section>
     <title>Resource Context Event</title>
 
-    <para>A Resource Context Event instance is an event sent to Resource
-    Context Listener instances through a call to
-    ResourceContextListener.notify(ResourceContextEvent) method.</para>
+    <para>A <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent"
+    xrefstyle="hyperlink"/> instance is an event sent to Resource Context
+    Listener instances through a call to the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextListener.notify-ResourceContextEvent-"
+    xrefstyle="hyperlink"/> method.</para>
 
     <para>A Resource Context Event has a type among the four following
     ones:</para>
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>RESOURCE_CONTEXT_CREATED – A new Resource Context instance has
-        been created.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.RESOURCE_CONTEXT_CREATED"
+        xrefstyle="hyperlink"/> – A new Resource Context instance has been
+        created.</para>
       </listitem>
 
       <listitem>
-        <para>RESOURCE_CONTEXT_REMOVED – A Resource Context instance has been
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.RESOURCE_CONTEXT_REMOVED"
+        xrefstyle="hyperlink"/> – A Resource Context instance has been
         deleted.</para>
       </listitem>
 
       <listitem>
-        <para>BUNDLE_ADDED – A bundle has been added in the scope of a
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.BUNDLE_ADDED"
+        xrefstyle="hyperlink"/> – A bundle has been added in the scope of a
         Resource Context instance.</para>
       </listitem>
 
       <listitem>
-        <para>BUNDLE_REMOVED – A bundle has been removed from the scope of a
-        Resource Context instance.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.BUNDLE_REMOVED"
+        xrefstyle="hyperlink"/> – A bundle has been removed from the scope of
+        a Resource Context instance.</para>
       </listitem>
     </itemizedlist>
 
-    <para>In the case of a RESOURCE_CONTEXT_ADDED event or a
-    RESOURCE_CONTEXT_REMOVED event, a call to getContext() returns the
-    targeted Resource Context instance.</para>
+    <para>In the case of a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.RESOURCE_CONTEXT_CREATED"
+    xrefstyle="hyperlink"/> event or a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.RESOURCE_CONTEXT_REMOVED"
+    xrefstyle="hyperlink"/> event, a call to <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.getContext--"
+    xrefstyle="hyperlink"/> returns the targeted Resource Context
+    instance.</para>
 
-    <para>In the case of a BUNDLE_ADDED type or BUNDLE_REMOVED type,
-    getBundle() returns the Bundle object to be added to or removed from. The
-    related Resource Context instance is given by a call to
-    getContext().</para>
+    <para>In the case of a <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.BUNDLE_ADDED"
+    xrefstyle="hyperlink"/> type or <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.BUNDLE_REMOVED"
+    xrefstyle="hyperlink"/> type, <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.getBundleId--"
+    xrefstyle="hyperlink"/> returns the id of the bundle to be added to or
+    removed from. The related Resource Context instance is given by a call to
+    <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceContextEvent.getContext--"
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section>
     <title>Resource Monitoring Service</title>
 
-    <para>The Resource Monitoring Service manages the Resource Context
-    instances. The Resource Monitoring Service is available through the OSGi
-    service registry.</para>
+    <para>The <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService"
+    xrefstyle="hyperlink"/> manages the Resource Context instances. The
+    Resource Monitoring Service is available through the OSGi service
+    registry.</para>
 
     <para>This service holds the existing Resource Context instances. Resource
-    Context instances are created by calling the createContext(String,
-    ResourceContext) method. The caller provides a context name as a string
-    and optionally a template as a ResourceContext object.</para>
+    Context instances are created by calling the <xref
+    linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.createContext-String-ResourceContext-"
+    xrefstyle="hyperlink"/> method. The caller provides a context name as a
+    string and optionally a template as a ResourceContext object.</para>
 
     <para>The list of existing Resource Context instances can be retrieved
     through the following methods:</para>
 
     <itemizedlist mark="bullet">
       <listitem>
-        <para>getContext(String) – returns the ResourceContext with the
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.getContext-String-"
+        xrefstyle="hyperlink"/> – returns the ResourceContext with the
         specified resource context name.</para>
       </listitem>
 
       <listitem>
-        <para>getContext(long bundleId) – returns the ResourceContext
-        associated to the provided bundle id.</para>
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.getContext-long-"
+        xrefstyle="hyperlink"/> – returns the ResourceContext associated to
+        the provided bundle id.</para>
       </listitem>
 
       <listitem>
-        <para>listContexts() – retrieve all existing Resource Context
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceMonitoringService.listContext--"
+        xrefstyle="hyperlink"/> – retrieve all existing Resource Context
         instances as an array.</para>
       </listitem>
     </itemizedlist>
@@ -905,7 +1120,7 @@
     Context instances is implementation specific. The implementer is free to
     use any file format and file location it wants. At startup, the Resource
     Monitoring Service will load the persisted Resource Context instances to
-    restore shutdown state.</para>
+    restore the state prior to shutdown.</para>
   </section>
 
   <section>
@@ -946,23 +1161,20 @@
   <section>
     <title>References</title>
 
-    <para/>
-
-    <para/>
-
     <bibliolist>
       <bibliomixed
-      xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1"><title/>Y.
-      Maurel, A. Bottaro, R. Kopetz, and K. Attouchi. Adaptive Monitoring of
-      End-user OSGi based Home Boxes. In Component Base Software Engineering,
-      15th ACM SIGSOFT International Symposium on Component-Based Software
-      Engineering, CBSE'2012, Bertinoro, Italy, June 2012.</bibliomixed>
+      xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1"><title>Adaptive
+      Monitoring of End-user OSGi based Home Boxes</title>Y. Maurel, A.
+      Bottaro, R. Kopetz, and K. Attouchi. Component Base Software
+      Engineering, 15th ACM SIGSOFT International Symposium on Component-Based
+      Software Engineering, CBSE'2012, Bertinoro, Italy, June
+      2012.</bibliomixed>
 
       <bibliomixed
-      xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h46_2"><title/>K.
-      Attouchi, G. Thomas, A. Bottaro, and G. Muller. Memory Monitoring in a
-      Multi-tenant OSGi Execution Environment. In Proceedings of the 17th ACM
-      SIGSOFT symposium on Component Based Software Engineering, CBSE’14,
+      xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h46_2"><title>Memory
+      Monitoring in a Multi-tenant OSGi Execution Environment</title>K.
+      Attouchi, G. Thomas, A. Bottaro, and G. Muller. Proceedings of the 17th
+      ACM SIGSOFT symposium on Component Based Software Engineering, CBSE’14,
       Lille, France, July 2014.</bibliomixed>
     </bibliolist>
   </section>
