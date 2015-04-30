@@ -52,19 +52,21 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		RuntimeDTO runtimeDTO = httpServiceRuntime.getRuntimeDTO();
 
-		Assert.assertEquals(2, runtimeDTO.servletContextDTOs.length);
+		final int numberOfContexts = runtimeDTO.servletContextDTOs.length;
+
+		Assert.assertTrue(numberOfContexts >= 2);
 
 		bundles.get(0).stop();
 
 		runtimeDTO = httpServiceRuntime.getRuntimeDTO();
 
-		Assert.assertEquals(1, runtimeDTO.servletContextDTOs.length);
+		Assert.assertEquals(numberOfContexts - 1, runtimeDTO.servletContextDTOs.length);
 
 		bundles.get(0).start();
 
 		runtimeDTO = httpServiceRuntime.getRuntimeDTO();
 
-		Assert.assertEquals(2, runtimeDTO.servletContextDTOs.length);
+		Assert.assertEquals(numberOfContexts, runtimeDTO.servletContextDTOs.length);
 	}
 
 	public void test_failedServletContextHelpers() throws Exception {
@@ -79,12 +81,29 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		FailedServletContextDTO[] failedServletContextDTOs = runtimeDTO.failedServletContextDTOs;
 
-		Assert.assertEquals(4, failedServletContextDTOs.length);
+		// at least four failed
+		Assert.assertTrue(failedServletContextDTOs.length >= 4);
 
+		final String[] failedContextPaths = {"/sc2", "/sc4", "badpath"}; // and
+																			// null
+		int numberOfFailed = 0;
 		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
-			Assert.assertEquals(
-					DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedServletContextDTO.failureReason);
+			boolean isFailed = failedServletContextDTO.contextPath == null;
+			if (!isFailed) {
+				for (final String path : failedContextPaths) {
+					if (path.equals(failedServletContextDTO.contextPath)) {
+						isFailed = true;
+						break;
+					}
+				}
+			}
+			if (isFailed) {
+				Assert.assertEquals(
+						DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedServletContextDTO.failureReason);
+				numberOfFailed++;
+			}
 		}
+		assertEquals(4, numberOfFailed);
 	}
 
 }
