@@ -70,8 +70,7 @@
       </listitem>
 
       <listitem>
-        <para><remark>BJH Do we need to say anything about
-        HTTP/2?</remark></para>
+        <para><xref linkend="service.http.whiteboard-http2"/></para>
       </listitem>
     </itemizedlist>
 
@@ -388,10 +387,6 @@ public class CDNServletContextHelper extends ServletContextHelper {
       in the bundle registering the Whiteboard service. Its
       <code>Bundle.findEntries()</code> method is called to obtain the
       listing.</para>
-
-      <remark>BJH This method is specified to return null (instead of an empty
-      Set) when then are no matching resources. Can we change to return an
-      empty Set?</remark>
     </section>
 
     <section>
@@ -1289,13 +1284,10 @@ public class MyServlet extends HttpServlet {
       special value <code>5xx</code> means every error code in the 500-599
       range. To override such wildcard error page for a specific error,
       register an error page with the specific error code and a higher service
-      ranking.</para>
-
-      <para>While not being common practice, it is possible to combine the
-      <code>osgi.http.whiteboard.servlet.errorPage</code> and
-      <code>osgi.http.whiteboard.servlet.pattern</code> properties. If a
-      single servlet registration has both these registration properties it is
-      considered both an ordinary servlet as well as an error page.</para>
+      ranking. Error pages shadowed by other error pages are reported via
+      the failure DTOs. A <code>4xx/5xx</code> wildcard error page is only
+      reported in the failure DTOs if it is shadowed by another wildcard
+      page.</para>
 
       <para>Matching exceptions follows the exception hierarchy. First the
       most specific exception class - the actual class of the exception - is
@@ -1304,8 +1296,17 @@ public class MyServlet extends HttpServlet {
       and so on. The process ends by looking up an error page for the
       <code>java.lang.Throwable</code> class.</para>
 
-      <para>If a matching error or exception occurs the servlet is invoked to
-      render the error page.</para>
+      <para>While not being common practice, it is possible to combine the
+      <code>osgi.http.whiteboard.servlet.errorPage</code> and
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties. If a
+      single servlet registration has both these registration properties it is
+      considered both an ordinary servlet as well as an error page.</para>
+
+      <para>If an error or exception occurs for which an error page servlet
+      can be matched, it is invoked to render the error page. If 
+      the error page itself causes an error while handling the request
+      an implementation built-in error page is shown for the error code with the
+      additional message that the registered error page caused an exception.</para>
 
       <para>Example:</para>
 
@@ -1323,9 +1324,6 @@ public class MyErrorServlet extends HttpServlet {
       is more than one error page registered for the same exception or error
       code, service ranking rules are used to select the handling
       servlet.</para>
-
-      <para><remark>BJH What about error loops? The error servlet throws an
-      exception?</remark></para>
     </section>
 
     <section>
@@ -2261,6 +2259,9 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       https://tools.ietf.org/html/rfc7233,
       https://tools.ietf.org/html/rfc7234,
       https://tools.ietf.org/html/rfc7235</bibliomixed>
+
+      <bibliomixed xml:id="service.http.whiteboard-http2"><title>HTTP 2.0
+      Specification</title>https://http2.github.io</bibliomixed>
 
       <bibliomixed xml:id="service.http.whiteboard-i21217577"><title>Java
       Servlet 3.1 Specification</title>
