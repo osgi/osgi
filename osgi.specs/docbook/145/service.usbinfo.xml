@@ -19,19 +19,19 @@
   <section>
     <title>Introduction</title>
 
-    <para>OSGi Device Access Specification defines a unified and sophisticated
-    way to handle devices attached to a residential gateway or devices found
-    in the home network by using various protocols such as USB, ZigBee, ZWave,
-    KNX, UPnP etc. However, OSGi Device Access Specification clearly declare
-    that Device Category must be defined outside of OSGi Device Access
-    Specification.</para>
+    <para>The <xref linkend="service.device"/> defines a unified and
+    sophisticated way to handle devices attached to a residential gateway or
+    devices found in the home network by using various protocols such as USB,
+    ZigBee, ZWave, KNX, UPnP, etc.</para>
 
     <para>Recently, OSGi is gaining popularity as enabling technology for
-    building embedded system in residential market. It gets popular that a HGW
-    has USB interfaces and the needs of handling USB devices attached to a
-    residential gateway is increased.</para>
+    building embedded system in the residential market. Such systems often
+    have USB interfaces and the needs of handling USB devices attached to
+    these systems is increasing.</para>
 
-    <para>This specification defines a device category for USB devices.</para>
+    <para> <xref linkend="service.device-device.category"/> defines the
+    concept of a device category. This specification defines a device category
+    for USB devices.</para>
 
     <section>
       <title>Entities</title>
@@ -55,6 +55,12 @@
           </imageobject>
         </mediaobject>
       </figure>
+
+      <remark>BJH The fonts in the above figure are not the correct fonts used
+      for other figures in the various specs. The fonts being used render
+      badly. The figure must be updated to use the correct fonts. The fonts
+      are all in osgi.specs/fonts and can be installed on your local system to
+      be used with your SVG editor.</remark>
     </section>
   </section>
 
@@ -62,12 +68,14 @@
     <title>USBInfoDevice Service</title>
 
     <para>The device services are registered in the OSGi service registry with
-    <code>org.osgi.service.usbinfo.USBInfoDevice</code> interface. The service
-    is registered by a USB information base driver bundle when a USB device is
-    attached. A USB information base driver bundle must implement
-    <code>org.osgi.service.usbinfo.USBInfoDevice</code> interface and register
-    the OSGi service under <code>org.osgi.service.usbinfo.USBInfoDevice</code>
-    . Refining drivers can find USB devices via <code>USBInfoDevice</code>
+    the <xref linkend="org.osgi.service.usbinfo.USBInfoDevice"
+    xrefstyle="hyperlink"/> interface. The service is registered by a USB
+    information base driver bundle when a USB device is attached. A USB
+    information base driver bundle must implement <xref
+    linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/>
+    interface and register the OSGi service under <xref
+    linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/> .
+    Refining drivers can find USB devices via <code>USBInfoDevice</code>
     services and identify the device. The <code>USBInfoDevice</code> service
     has a set of properties.</para>
 
@@ -84,30 +92,27 @@
     <section>
       <title>Device Access Category</title>
 
-      <para>The device access category is called "USBInfo". The category name
-      is defined as a value of <code>USBInfoDevice.DEVICE_CATEGORY</code>
-      constant. It can be used as a part of
-      <code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code> service
-      key value. The category imposes the following specification
-      rules.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><code>USBInfoDevice.DEVICE_CATEGORY</code> - MANDATORY
-          property. The value is "USBInfo". Constant for the value of the
-          service property <code>DEVICE_CATEGORY</code> used for all USB
-          devices. A USB information base driver bundle must set this property
-          key.</para>
-        </listitem>
-      </itemizedlist>
+      <para>The device access category is called "<code>USBInfo</code>". The
+      category name is defined as a value of <xref
+      linkend="org.osgi.service.usbinfo.USBInfoDevice.DEVICE_CATEGORY"
+      xrefstyle="hyperlink"/> constant. It must be used as a part of the<xref
+      linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
+      xrefstyle="hyperlink"/> service property value on the <xref
+      linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/>
+      service. The category defines the following additional service
+      properties for the <xref
+      linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/>
+      service.</para>
     </section>
 
     <section>
-      <title>Service properties from USB Specification</title>
+      <title>Service Properties based upon USB Specification</title>
 
-      <para>The USB Specification defines a device descriptor. USB devices
-      report their attributes using descriptors. USBInfoDevice service has
-      some properties from the USB device descriptor.</para>
+      <para>The USB Specification defines a Device Descriptor. USB devices
+      report their attributes using descriptors. The following <xref
+      linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/>
+      service properties use information from the USB device
+      descriptor.</para>
 
       <table>
         <title>Service properties of USBInfoDevice service from Device
@@ -141,7 +146,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>OPTIONAL property key. The 4-digit BCD
-              format.</para> <para>Example: "0210"</para></entry>
+              format.</para><para>Example: "0210"</para></entry>
 
               <entry>bcdUSB</entry>
             </row>
@@ -152,7 +157,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bDeviceClass</entry>
             </row>
@@ -163,7 +168,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bDeviceSubClass</entry>
             </row>
@@ -174,13 +179,13 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bDeviceProtocol</entry>
             </row>
 
             <row>
-              <entry><code>usbinfo.bMaxPacketSize</code></entry>
+              <entry><code>usbinfo.bMaxPacketSize0</code></entry>
 
               <entry><code>Integer</code></entry>
 
@@ -195,7 +200,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              4-digits.</para> <para>Example: "0403"</para></entry>
+              4-digits.</para><para>Example: "0403"</para></entry>
 
               <entry>idVendor</entry>
             </row>
@@ -206,7 +211,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              4-digits.</para> <para>Example: "8372"</para></entry>
+              4-digits.</para><para>Example: "8372"</para></entry>
 
               <entry>idProduct</entry>
             </row>
@@ -217,7 +222,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. The 4-digit BCD
-              format.</para> <para>Example: "0200"</para></entry>
+              format.</para><para>Example: "0200"</para></entry>
 
               <entry>bcdDevice</entry>
             </row>
@@ -227,9 +232,10 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>OPTIONAL property key. String of indicated in
-              iManufacturer. (The value is not the index.) </para>
-              <para>Example: "Buffalo Inc."</para></entry>
+              <entry><para>OPTIONAL property key. String value referenced by
+              iManufacturer. The value is not the index value of
+              iManufacturer.</para><para>Example: "Buffalo
+              Inc."</para></entry>
 
               <entry>iManufacturer</entry>
             </row>
@@ -239,9 +245,9 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>OPTIONAL property key. String of indicated in
-              iProduct. (The value is not the index.) </para> <para>Example:
-              "USB2.0 PC Camera"</para></entry>
+              <entry><para>OPTIONAL property key. String value referenced by
+              iProduct. The value is not the index value of
+              iProduct.</para><para>Example: "USB2.0 PC Camera"</para></entry>
 
               <entry>iProduct</entry>
             </row>
@@ -251,9 +257,10 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>OPTIONAL property key. String of indicated in
-              iSerialNumber. (The value is not the index.) </para>
-              <para>Example: "57B0002600000001"</para></entry>
+              <entry><para>OPTIONAL property key. String value referenced by
+              iSerialNumber. The value is not the index value of
+              iSerialNumber.</para><para>Example:
+              "57B0002600000001"</para></entry>
 
               <entry>iSerialNumber</entry>
             </row>
@@ -272,11 +279,13 @@
       </table>
 
       <para>According to the USB Specification, a device descriptor has some
-      interface descriptors.</para>
+      Interface Descriptors.</para>
 
-      <para>Refining drivers need each interface descriptors' bInterfaceClass,
-      bInterfaceSubClass and bInterfaceProtocol to identify devices. So these
-      fields add to the service properties.</para>
+      <para>Refining drivers need each interface descriptor's bInterfaceClass,
+      bInterfaceSubClass and bInterfaceProtocol to identify devices. The
+      following <xref linkend="org.osgi.service.usbinfo.USBInfoDevice"
+      xrefstyle="hyperlink"/> service properties use information from the USB
+      interface descriptor.</para>
 
       <table>
         <title>Service properties of USBInfoDevice service from Interface
@@ -325,7 +334,7 @@
             </row>
 
             <row>
-              <entry><code>usbinfo.bAlternateSetting</code></entry>
+              <entry><code>usbinfo.bNumEndpoints</code></entry>
 
               <entry><code>Integer</code></entry>
 
@@ -340,7 +349,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bInterfaceClass</entry>
             </row>
@@ -351,7 +360,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bInterfaceSubClass</entry>
             </row>
@@ -362,7 +371,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>MANDATORY property key. Hexadecimal,
-              2-digits.</para> <para>Example: "ff"</para></entry>
+              2-digits.</para><para>Example: "ff"</para></entry>
 
               <entry>bInterfaceProtocol</entry>
             </row>
@@ -372,8 +381,9 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>OPTIONAL property key. String of indicated in
-              iInterface. (The value is not the index.) </para></entry>
+              <entry><para>OPTIONAL property key. String value referenced by
+              iInterface. The value is not the index value of
+              iInterface.</para></entry>
 
               <entry>iInterface</entry>
             </row>
@@ -383,14 +393,13 @@
     </section>
 
     <section>
-      <title>Other Service properties</title>
+      <title>Additional Service Properties</title>
 
-      <para>Some other service properties are needed to identify and access a
-      device by refining drivers.</para>
+      <para>Some additional service properties are needed to identify and
+      access a device by refining drivers.</para>
 
       <table>
-        <title>Service properties of USBInfoDevice service from Interface
-        Descriptor</title>
+        <title>Additional service properties of USBInfoDevice service</title>
 
         <tgroup cols="3">
           <colspec colnum="1" colwidth="2*"/>
@@ -419,8 +428,7 @@
               to identify USB devices with same VID / PID. The value is the ID
               of the USB bus assigned when connecting the USB device. USB bus
               ID is integer. The USB bus ID does not change while the USB
-              device remains connected. </para> <para>Example:
-              3</para></entry>
+              device remains connected. </para><para>Example: 3</para></entry>
             </row>
 
             <row>
@@ -431,9 +439,9 @@
               <entry><para>MANDATORY property key. The value is Integer. Used
               to identify USB devices with same VID / PID. The value is the ID
               of the USB address assigned when connecting the USB device. USB
-              address is integer (001-127). The USB address does not change
-              while the USB device remains connected. </para> <para>Example:
-              2</para></entry>
+              address is integer in the range 1-127. The USB address does not
+              change while the USB device remains connected.
+              </para><para>Example: 2</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -444,42 +452,80 @@
       <title>Match scale</title>
 
       <para>When the driver service is registered by the driver bundle, the
-      Device Manager calls Driver#match() with the argument of the
-      USBInfoDevice service's ServiceReference. The driver responds with the
-      value based on below scale.</para>
+      Device Manager calls <xref
+      linkend="org.osgi.service.device.Driver.match-ServiceReference-"
+      xrefstyle="hyperlink"/> with the argument of the
+      <code>USBInfoDevice</code> service's Service Reference. The driver
+      responds with a match value based on following choices.</para>
 
       <itemizedlist>
         <listitem>
-          <para>MATCH_VERSION - Constant for the USB device match scale,
-          indicating a match with usbinfo.idVendor, usbinfo.idProduct and
-          usbinfo.bcdDevice. Value is 50.</para>
+          <para><xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.MATCH_VERSION"
+          xrefstyle="hyperlink"/> - Constant for the USB device match scale,
+          indicating a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_IDVENDOR"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_IDPRODUCT"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BCDDEVICE"
+          xrefstyle="hyperlink"/>. Value is 50.</para>
         </listitem>
 
         <listitem>
-          <para>MATCH_MODEL - Constant for the USB device match scale,
-          indicating a match with usbinfo.idVendor and eusbinfo.idProduct.
-          Value is 40.</para>
+          <para><xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.MATCH_MODEL"
+          xrefstyle="hyperlink"/> - Constant for the USB device match scale,
+          indicating a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_IDVENDOR"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_IDPRODUCT"
+          xrefstyle="hyperlink"/>. Value is 40.</para>
         </listitem>
 
         <listitem>
-          <para>MATCH_PROTOCOL - Constant for the USB device match scale,
-          indicating a match with usbinfo.bDeviceClass,
-          usbinfo.bDeviceSubClass and usbinfo.bDeviceProtocol, or a match with
-          usbinfo.bInterfaceClass, usbinfo.bInterfaceSubClass and
-          usbinfo.bInterfaceProtocol. Value is 30.</para>
+          <para><xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.MATCH_PROTOCOL"
+          xrefstyle="hyperlink"/> - Constant for the USB device match scale,
+          indicating a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICECLASS"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICESUBCLASS"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICEPROTOCOL"
+          xrefstyle="hyperlink"/>, or a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACECLASS"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACESUBCLASS"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACEPROTOCOL"
+          xrefstyle="hyperlink"/>. Value is 30.</para>
         </listitem>
 
         <listitem>
-          <para>MATCH_SUBCLASS - Constant for the USB device match scale,
-          indicating a match usbinfo.bDeviceClass and usbinfo.bDeviceSubClass,
-          or a match with usbinfo.bInterfaceClass and
-          usbinfo.bInterfaceSubClass. Value is 20.</para>
+          <para><xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.MATCH_SUBCLASS"
+          xrefstyle="hyperlink"/> - Constant for the USB device match scale,
+          indicating a match <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICECLASS"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICESUBCLASS"
+          xrefstyle="hyperlink"/>, or a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACECLASS"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACESUBCLASS"
+          xrefstyle="hyperlink"/>. Value is 20.</para>
         </listitem>
 
         <listitem>
-          <para>MATCH_CLASS - Constant for the USB device match scale,
-          indicating a match with usbinfo.bDeviceClass, or a match with
-          usbinfo.bInterfaceClass. Value is 10.</para>
+          <para><xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.MATCH_CLASS"
+          xrefstyle="hyperlink"/> - Constant for the USB device match scale,
+          indicating a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BDEVICECLASS"
+          xrefstyle="hyperlink"/>, or a match with <xref
+          linkend="org.osgi.service.usbinfo.USBInfoDevice.USB_BINTERFACECLASS"
+          xrefstyle="hyperlink"/>. Value is 10.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -488,13 +534,13 @@
   <section>
     <title>Security</title>
 
-    <para>To acquire USB information device service, The refining bundle need
-    that <code>ServicePermission[USBInfoDevice, GET]</code> are
+    <para>To acquire USB information device service, The refining bundle
+    require that <code>ServicePermission[USBInfoDevice, GET]</code> is
     assigned.</para>
 
     <para><code>USBInfoDevice</code> service should only be implemented by
     trusted bundles. This bundle requires
-    <code>ServicePermission[USBInfoDevice, REGISTER]</code> .</para>
+    <code>ServicePermission[USBInfoDevice, REGISTER]</code>.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.usbinfo.xml"/>
@@ -503,15 +549,8 @@
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>Bradner, S., Key words for use in RFCs to Indicate
-      Requirement Levels. </title> https://www.ietf.org/rfc/rfc2119.txt, March
-      1997.</bibliomixed>
-
-      <bibliomixed><title>Software Requirements &amp; Specifications.</title>
-      Michael Jackson. ISBN 0-201-87712-0</bibliomixed>
-
       <bibliomixed xml:id="service.usbinfo-usbspec"><title>Universal Serial
-      Bus Specification Revision 1.1</title> September 23, 1998.</bibliomixed>
+      Bus Specification Revision 1.1</title>September 23, 1998.</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

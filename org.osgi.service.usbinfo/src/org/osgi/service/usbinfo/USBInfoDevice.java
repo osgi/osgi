@@ -26,252 +26,222 @@ package org.osgi.service.usbinfo;
  *
  * The package name is org.osgi.service.usbinfo.
  *
+ * @ThreadSafe
+ * @author $Id$
  */
-public interface /* org.osgi.service.usbinfo. */USBInfoDevice {
+public interface USBInfoDevice {
 
 	/**
-	 * MANDATORY property. The value is "USBInfo".
+	 * Constant for the value of the service property {@code DEVICE_CATEGORY}
+	 * used for all USB devices.
+	 * 
+	 * <p>
+	 * A USB information base driver bundle must set this property key.
 	 *
-	 * Constant for the value of the service property DEVICE_CATEGORY used for
-	 * all USB devices. A USB information base driver bundle must set this
-	 * property key.
-	 *
-	 * See Also org.osgi.service.device.Constants.DEVICE_CATEGORY
+	 * @see org.osgi.service.device.Constants#DEVICE_CATEGORY
 	 */
 	String	DEVICE_CATEGORY			= "USBInfo";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.bcdUSB" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bcdUSB".<br>
-	 * The value is String, the 4-digit BCD format. Example: "0210"<br>
+	 * Service property for USB Device Descriptor field "bcdUSB".
+	 * <p>
+	 * The value type is String; the value is in 4-digit BCD format. For
+	 * example, "0210". This service property is optional.
 	 */
 	String	USB_BCDUSB				= "usbinfo.bcdUSB";
 
 	/**
-	 * The key string of "usbinfo.bDeviceClass" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bDeviceClass".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Device Descriptor field "bDeviceClass".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BDEVICECLASS		= "usbinfo.bDeviceClass";
 
 	/**
-	 * The key string of "usbinfo.bDeviceSubClass" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bDeviceSubClass".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Device Descriptor field "bDeviceSubClass".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BDEVICESUBCLASS		= "usbinfo.bDeviceSubClass";
 
 	/**
-	 * The key string of "usbinfo.bDeviceProtocol" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bDeviceProtocol".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Device Descriptor field "bDeviceProtocol".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BDEVICEPROTOCOL		= "usbinfo.bDeviceProtocol";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.bMaxPacketSize0" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bMaxPacketSize0".<br>
-	 * The value is Integer.<br>
+	 * Service property for USB Device Descriptor field "bMaxPacketSize0".
+	 * <p>
+	 * The value type is Integer. This service property is optional.
 	 */
 	String	USB_BMAXPACKETSIZE0		= "usbinfo.bMaxPacketSize0";
 
 	/**
-	 * The key string of "usbinfo.idVendor" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "idVendor".<br>
-	 * The value is String, hexadecimal, 4-digits.<br>
-	 * Example: "0403"<br>
+	 * Service property for USB Device Descriptor field "idVendor".
+	 * <p>
+	 * The value type is String; the value is in 4-digit hexadecimal. For
+	 * example, "0403".
 	 */
 	String	USB_IDVENDOR			= "usbinfo.idVendor";
 
 	/**
-	 * The key string of "usbinfo.idProduct" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "idProduct".<br>
-	 * The value is String, hexadecimal, 4-digits.<br>
-	 * Example: "8372"
+	 * Service property for USB Device Descriptor field "idProduct".
+	 * <p>
+	 * The value type is String; the value is in 4-digit hexadecimal. For
+	 * example, "8372".
 	 */
 	String	USB_IDPRODUCT			= "usbinfo.idProduct";
 
 	/**
-	 * The key string of "usbinfo.bcdDevice" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bcdDevice".<br>
-	 * The value is String, the 4-digit BCD format.<br>
-	 * Example: "0200"<br>
+	 * Service property for USB Device Descriptor field "bcdDevice".
+	 * <p>
+	 * The value type is String; the value is in 4-digit BCD format. For
+	 * example, "0200".
 	 */
 	String	USB_BCDDEVICE			= "usbinfo.bcdDevice";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.Manufacturer" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "iManufacturer".<br>
-	 * The value is String of indicated in iManufacturer. (The value is not the
-	 * index.)<br>
-	 * Example: "Buffalo Inc."<br>
+	 * Service property for name referenced by USB Device Descriptor field
+	 * "iManufacturer".
+	 * <p>
+	 * The value type is String. For example, "Buffalo Inc.". This service
+	 * property is optional.
 	 */
 	String	USB_MANUFACTURER		= "usbinfo.Manufacturer";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.Product" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "iProduct".<br>
-	 * The value is String of indicated in iProduct. (The value is not the
-	 * index.)<br>
-	 * Example: "USB2.0 PC Camera"<br>
+	 * Service property for name referenced by USB Device Descriptor field
+	 * "iProduct".
+	 * <p>
+	 * The value type is String. For example, "USB2.0 PC Camera". This service
+	 * property is optional.
 	 */
 	String	USB_PRODUCT				= "usbinfo.Product";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.SerialNumber" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "iSerialNumber".<br>
-	 * The value is String of indicated in iSerialNumber. (The value is not the
-	 * index.)<br>
-	 * Example: "57B0002600000001"<br>
+	 * Service property for name referenced by USB Device Descriptor field
+	 * "iSerialNumber".
+	 * <p>
+	 * The value type is String. For example, "57B0002600000001". This service
+	 * property is optional.
 	 */
 	String	USB_SERIALNUMBER		= "usbinfo.SerialNumber";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.bNumConfigurations" service property.<br>
-	 * Service properties from USB Device Descriptor. Device Descriptor's Field
-	 * from USB Spec is "bNumConfigurations".<br>
-	 * The value is Integer.<br>
+	 * Service property for USB Device Descriptor field "bNumConfigurations".
+	 * <p>
+	 * The value type is Integer. This service property is optional.
 	 */
 	String	USB_BNUMCONFIGURATIONS	= "usbinfo.bNumConfigurations";
 
 	/**
-	 * The key string of "usbinfo.bInterfaceNumber" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bInterfaceNumber".<br>
-	 * The value is Integer.<br>
+	 * Service property for USB Interface Descriptor field "bInterfaceNumber".
+	 * <p>
+	 * The value type is Integer.
 	 */
 	String	USB_BINTERFACENUMBER	= "usbinfo.bInterfaceNumber";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.bAlternateSetting" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bAlternateSetting".<br>
-	 * The value is Integer.<br>
+	 * Service property for USB Interface Descriptor field "bAlternateSetting".
+	 * <p>
+	 * The value type is Integer. This service property is optional.
 	 */
 	String	USB_BALTERNATESETTING	= "usbinfo.bAlternateSetting";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.bNumEndpoints" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bNumEndpoints".<br>
-	 * The value is Integer.<br>
+	 * Service property for USB Interface Descriptor field "bNumEndpoints".
+	 * <p>
+	 * The value type is Integer. This service property is optional.
 	 */
 	String	USB_BNUMENDPOINTS		= "usbinfo.bNumEndpoints";
 
 	/**
-	 * The key string of "usbinfo.bInterfaceClass" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bInterfaceClass".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Interface Descriptor field "bInterfaceClass".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BINTERFACECLASS		= "usbinfo.bInterfaceClass";
 
 	/**
-	 * The key string of "usbinfo.bInterfaceSubClass" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bInterfaceSubClass".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Interface Descriptor field "bInterfaceSubClass".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BINTERFACESUBCLASS	= "usbinfo.bInterfaceSubClass";
 
 	/**
-	 * The key string of "usbinfo.bInterfaceProtocol" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "bInterfaceProtocol".<br>
-	 * The value is String, hexadecimal, 2-digits.<br>
-	 * Example: "ff"<br>
+	 * Service property for USB Interface Descriptor field "bInterfaceProtocol".
+	 * <p>
+	 * The value type is String; the value is in 2-digit hexadecimal. For
+	 * example, "ff".
 	 */
 	String	USB_BINTERFACEPROTOCOL	= "usbinfo.bInterfaceProtocol";
 
 	/**
-	 * Optional.<br>
-	 * The key string of "usbinfo.Interface" service property.<br>
-	 * Service properties from USB Interface Descriptor. Interface Descriptor's
-	 * Field from USB Spec is "iInterface".<br>
-	 * The value is String of indicated in iInterface. (The value is not the
-	 * index.)<br>
+	 * Service property for name referenced by USB Interface Descriptor field
+	 * "iInterface".
+	 * <p>
+	 * The value type is String. This service property is optional.
 	 */
 	String	USB_INTERFACE			= "usbinfo.Interface";
 
 	/**
-	 * The key string of "usbinfo.bus" service property.<br>
+	 * Service property to identify USB bus.
+	 * <p>
 	 * Used to identify USB devices with same VID / PID. The value is the ID of
-	 * the USB bus assigned when connecting the USB device. USB bus ID is
-	 * integer. The USB bus ID does not change while the USB device remains
-	 * connected.<br>
-	 * The value is Integer.<br>
-	 * Example: 3<br>
+	 * the USB bus assigned when connecting the USB device. The USB bus ID is an
+	 * integer and does not change while the USB device remains connected. The
+	 * value type is Integer.
 	 */
 	String	USB_BUS					= "usbinfo.bus";
 
 	/**
-	 * The key string of "usbinfo.address" service property.<br>
+	 * Service property to identify USB address.
+	 * <p>
 	 * Used to identify USB devices with same VID / PID. The value is the ID of
 	 * the USB address assigned when connecting the USB device. USB address is
-	 * integer (001-127). The USB address does not change while the USB device
-	 * remains connected.<br>
-	 * The value is Integer.<br>
-	 * Example: 2<br>
+	 * an integer in the range 1-127 and does not change while the USB device
+	 * remains connected. The value type is Integer.
 	 */
 	String	USB_ADDRESS				= "usbinfo.address";
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with
-	 * usbinfo.idVendor, usbinfo.idProduct and usbinfo.bcdDevice. Value is 50.
+	 * Device Access match value indicating a match with {@link #USB_IDVENDOR},
+	 * {@link #USB_IDPRODUCT}, and {@link #USB_BCDDEVICE}.
 	 */
 	int		MATCH_VERSION			= 50;
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with
-	 * usbinfo.idVendor and usbinfo.idProduct. Value is 40.
+	 * Device Access match value indicating a match with {@link #USB_IDVENDOR},
+	 * and {@link #USB_IDPRODUCT}.
 	 */
 	int		MATCH_MODEL				= 40;
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with
-	 * usbinfo.bDeviceClass, usbinfo.bDeviceSubClass and
-	 * usbinfo.bDeviceProtocol, or a match with bInterfaceClass,
-	 * bInterfaceSubClass and bInterfaceProtocol in one of
-	 * usbinfo.interfaceclasses. Value is 30.
+	 * Device Access match value indicating a match with
+	 * {@link #USB_BDEVICECLASS}, {@link #USB_BDEVICESUBCLASS}, and
+	 * {@link #USB_BDEVICEPROTOCOL} or a match with {@link #USB_BINTERFACECLASS}
+	 * , {@link #USB_BINTERFACESUBCLASS}, and {@link #USB_BINTERFACEPROTOCOL}.
 	 */
 	int		MATCH_PROTOCOL			= 30;
 
 	/**
-	 * Constant for the USB device match scale, indicating a
-	 * matchusbinfo.bDeviceClass and usbinfo.bDeviceSubClass, or a match with
-	 * bInterfaceClass and bInterfaceSubClass in one of
-	 * usbinfo.interfaceclasses. Value is 20.
+	 * Device Access match value indicating a match with
+	 * {@link #USB_BDEVICECLASS}, and {@link #USB_BDEVICESUBCLASS} or a match
+	 * with {@link #USB_BINTERFACECLASS}, and {@link #USB_BINTERFACESUBCLASS}.
 	 */
 	int		MATCH_SUBCLASS			= 20;
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with
-	 * usbinfo.bDeviceClass, or a match with bInterfaceClass in one of
-	 * usbinfo.interfaceclasses. Value is 10.
+	 * Device Access match value indicating a match with
+	 * {@link #USB_BDEVICECLASS} or a match with {@link #USB_BINTERFACECLASS}.
 	 */
 	int		MATCH_CLASS				= 10;
 }
