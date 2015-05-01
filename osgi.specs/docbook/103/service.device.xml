@@ -424,7 +424,7 @@
     </section>
   </section>
 
-  <section xml:id="i1279208">
+  <section xml:id="service.device-device.category">
     <title>Device Category Specifications</title>
 
     <para>A device category specifies the rules and interfaces needed for the
@@ -724,7 +724,8 @@
     more refined form of the device.</para>
 
     <para>Both refined Device services as well as generic services should be
-    defined in a Device Category. See <xref linkend="i1279208"/>.</para>
+    defined in a Device Category. See <xref
+    linkend="service.device-device.category"/>.</para>
 
     <section>
       <title>Driver Bundles</title>
