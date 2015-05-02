@@ -22,7 +22,6 @@ import java.util.Map;
  * This interface represents a physical device that communicates over the
  * EnOcean protocol.
  * 
- * @version 1.0
  * @author $Id$
  */
 public interface EnOceanDevice {

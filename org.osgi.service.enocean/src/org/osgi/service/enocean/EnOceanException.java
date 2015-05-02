@@ -21,7 +21,6 @@ package org.osgi.service.enocean;
  * exceptions. This class is mostly used with low-level, gateway-interacting
  * code : EnOceanHost.
  * 
- * @version 1.0
  * @author $Id$
  */
 public class EnOceanException extends Exception {
@@ -35,7 +34,7 @@ public class EnOceanException extends Exception {
     public static final short SUCCESS                  = 0;
 
     /**
-     * Unexpected failure.s
+     * Unexpected failure.
      */
     public static final short ESP_UNEXPECTED_FAILURE   = 1;
 

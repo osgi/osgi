@@ -19,7 +19,6 @@ package org.osgi.service.enocean;
 /**
  * A very basic interface for RPCs.
  * 
- * @version 1.0
  * @author $Id$
  */
 public interface EnOceanRPC {

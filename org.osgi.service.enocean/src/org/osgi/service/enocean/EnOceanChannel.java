@@ -19,7 +19,6 @@ package org.osgi.service.enocean;
 /**
  * Holds the raw value and channel identification info of an EnOceanChannel.
  * 
- * @version 1.0
  * @author $Id$
  */
 public interface EnOceanChannel {

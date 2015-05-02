@@ -20,7 +20,6 @@ package org.osgi.service.enocean;
  * This interface represents an EnOcean Host, a device that offers EnOcean
  * networking features.
  * 
- * @version 1.0
  * @author $Id$
  */
 public interface EnOceanHost {
