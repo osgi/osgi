@@ -19,6 +19,8 @@ package org.osgi.service.serial;
 /**
  * A exception used to indicate that a serial device communication problem
  * occurred.
+ * 
+ * @author $Id$
  */
 public class SerialDeviceException extends Exception {
 
@@ -60,5 +62,4 @@ public class SerialDeviceException extends Exception {
 	public int getType() {
 		return type;
 	}
-
 }

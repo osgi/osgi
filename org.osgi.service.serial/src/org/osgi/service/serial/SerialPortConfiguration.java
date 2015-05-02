@@ -18,6 +18,9 @@ package org.osgi.service.serial;
 
 /**
  * An object represents the Serial port configuration.
+ * 
+ * @Immutable
+ * @author $Id$
  */
 public class SerialPortConfiguration {
 	private final int	baudRate;
@@ -45,8 +48,9 @@ public class SerialPortConfiguration {
 	}
 
 	/**
-	 * Creates an instance of the serial port configuration with the specified Baud rate and the following configurations.
-	 * Data bits = 8, Flow control = none, Parity = none, Stop bits = 1.
+	 * Creates an instance of the serial port configuration with the specified
+	 * Baud rate and the following configuration: Data bits = 8, Flow control =
+	 * none, Parity = none, Stop bits = 1.
 	 * 
 	 * @param baudRate Baud rate.
 	 */
@@ -59,8 +63,9 @@ public class SerialPortConfiguration {
 	}
 
 	/**
-	 * Creates an instance of the serial port configuration with the following configurations.
-	 * Baud rate = auto, Data bits = 8, Flow control = none, Parity = none, Stop bits = 1.
+	 * Creates an instance of the serial port configuration with the following
+	 * configuration: Baud rate = auto, Data bits = 8, Flow control = none,
+	 * Parity = none, Stop bits = 1.
 	 */
 	public SerialPortConfiguration() {
 		this.baudRate = SerialConstants.BAUD_AUTO;
@@ -71,48 +76,47 @@ public class SerialPortConfiguration {
 	}
 
 	/**
-	 * Gets the baud rate value.<br>
+	 * Returns the baud rate.
 	 *
-	 * @return the baud rate
+	 * @return The baud rate.
 	 */
 	public int getBaudRate() {
 		return baudRate;
 	}
 
 	/**
-	 * Gets the data bits.<br>
+	 * Returns the data bits.
 	 *
-	 * @return the data bits
+	 * @return The data bits.
 	 */
 	public int getDataBits() {
 		return dataBits;
 	}
 
 	/**
-	 * Gets the flow control.<br>
+	 * Returns the flow control.
 	 *
-	 * @return the flow control
+	 * @return The flow control.
 	 */
 	public int getFlowControl() {
 		return flowControl;
 	}
 
 	/**
-	 * Gets the parity.<br>
+	 * Returns the parity.
 	 *
-	 * @return the parity
+	 * @return The parity.
 	 */
 	public int getParity() {
 		return parity;
 	}
 
 	/**
-	 * Gets the stop bits. <br>
+	 * Returns the stop bits.
 	 *
-	 * @return the stop bits
+	 * @return The stop bits.
 	 */
 	public int getStopBits() {
 		return stopBits;
 	}
-
 }

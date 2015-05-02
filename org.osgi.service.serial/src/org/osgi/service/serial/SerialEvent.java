@@ -20,8 +20,12 @@ package org.osgi.service.serial;
  * A serial device event. SerialEvent objects are delivered to
  * SerialEventListeners when an event occurs.
  * 
+ * <p>
  * A type of code is used to identify the event. Additional event types may be
  * defined in the future.
+ * 
+ * @ThreadSafe
+ * @author $Id$
  */
 public interface SerialEvent {
 
@@ -33,16 +37,19 @@ public interface SerialEvent {
 	/**
 	 * Returns the type of this event.
 	 * 
-	 * @return the type of this event.
+	 * @return The type of this event.
 	 */
 	int getType();
 
 	/**
-	 * Returns the port name of this event. This value must be equal to the
-	 * value of "serial.comport" service property of the SerialDevice.
+	 * Returns the port name of this event.
 	 * 
-	 * @return the port name of this event.
+	 * <p>
+	 * This value must be equal to the value of
+	 * {@link SerialDevice#SERIAL_COMPORT} service property of the
+	 * {@link SerialDevice}.
+	 * 
+	 * @return The port name of this event.
 	 */
 	String getComPort();
-
 }

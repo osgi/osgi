@@ -17,22 +17,24 @@
 package org.osgi.service.serial;
 
 /**
- *
  * Serial events are sent using the white board model, in which a bundle
  * interested in receiving the Serial events registers an object implementing
  * the SerialEventListener interface. A COM port name can be set to limit the
  * events for which a bundle is notified.
  * 
+ * @ThreadSafe
+ * @author $Id$
  */
 public interface SerialEventListener {
 
 	/**
 	 * Key for a service property that is used to limit received events.
 	 */
-	String	SERIAL_COMPORT	= "serial.comport";
+	String	SERIAL_COMPORT	= SerialDevice.SERIAL_COMPORT;
 
 	/**
 	 * Callback method that is invoked for received an event.
+	 * 
 	 * @param event The SerialEvent object.
 	 */
 	void notifyEvent(SerialEvent event);
