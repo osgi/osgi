@@ -21,10 +21,9 @@ package org.osgi.service.usbinfo;
  * the framework under the USBInfoDevice interface. A USB information base
  * driver must implement this interface.
  *
+ * <p>
  * The values of the USB property names are defined by the USB Implementers
  * Forum, Inc.
- *
- * The package name is org.osgi.service.usbinfo.
  *
  * @ThreadSafe
  * @author $Id$
