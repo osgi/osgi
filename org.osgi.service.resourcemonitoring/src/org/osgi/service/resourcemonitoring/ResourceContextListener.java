@@ -26,16 +26,18 @@ package org.osgi.service.resourcemonitoring;
  * 
  * <p>
  * A <code>ResourceContextListener</code> is registered as an OSGi service. At
- * registration time, the following property may be provided:
+ * registration time, the following properties may be provided:
  * <ul>
  * <li>the {@link #RESOURCE_CONTEXT} property which limits the Resource Context
  * for which notifications will be received. This property can be either a
  * String value or an array of String. If this property is not set, the Resource
  * Context Listener receives events from all the Resource Context.</li>
+ * <li>the {@link #RESOURCE_TYPE} property defining the type of notifications a
+ * Resource Context Listener instance will receive.</li>
  * </ul>
  * 
  * @version 1.0
- * @author $Id$
+ * @author $Id: 9070aaa94df0c75078647e7d4a9819fe54ac393f $
  */
 public interface ResourceContextListener {
 
@@ -50,6 +52,13 @@ public interface ResourceContextListener {
 	 * {@link ResourceContext}).
 	 */
 	public static final String	RESOURCE_CONTEXT	= "resource.context";
+
+	/**
+	 * RESOURCE_TYPE property: an array of integers defining the type of
+	 * notifications a Resource Context Listener instance will receive (see
+	 * types defined in section Resource Context Event).
+	 */
+	public final String			RESOURCE_TYPE		= "resource.type";
 
 	/**
 	 * Notify this listener about a {@link ResourceContext} events.
