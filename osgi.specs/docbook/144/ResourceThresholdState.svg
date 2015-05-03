@@ -48,21 +48,21 @@
        <g id="id8">
         <path fill="rgb(255,255,255)" stroke="none" d="M 4199,8725 C 4049,8725 3899,8875 3899,9025 L 3899,10225 C 3899,10375 4049,10525 4199,10525 L 7399,10525 C 7549,10525 7700,10375 7700,10225 L 7700,9025 C 7700,8875 7549,8725 7399,8725 L 4199,8725 Z M 3899,8725 L 3899,8725 Z M 7700,10526 L 7700,10526 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 4199,8725 C 4049,8725 3899,8875 3899,9025 L 3899,10225 C 3899,10375 4049,10525 4199,10525 L 7399,10525 C 7549,10525 7700,10375 7700,10225 L 7700,9025 C 7700,8875 7549,8725 7399,8725 L 4199,8725 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="635px" font-weight="400"><tspan class="TextPosition" x="4838" y="9879"><tspan fill="rgb(0,0,0)" stroke="none">Normal</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="635px" font-weight="400"><tspan class="TextPosition" x="4838" y="9879"><tspan fill="rgb(0,0,0)" stroke="none">Normal</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id9">
         <path fill="rgb(255,255,255)" stroke="none" d="M 10200,8796 C 10050,8796 9900,8946 9900,9096 L 9900,10296 C 9900,10446 10050,10596 10200,10596 L 13400,10596 C 13550,10596 13701,10446 13701,10296 L 13701,9096 C 13701,8946 13550,8796 13400,8796 L 10200,8796 Z M 9900,8796 L 9900,8796 Z M 13701,10597 L 13701,10597 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 10200,8796 C 10050,8796 9900,8946 9900,9096 L 9900,10296 C 9900,10446 10050,10596 10200,10596 L 13400,10596 C 13550,10596 13701,10446 13701,10296 L 13701,9096 C 13701,8946 13550,8796 13400,8796 L 10200,8796 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="635px" font-weight="400"><tspan class="TextPosition" x="10710" y="9950"><tspan fill="rgb(0,0,0)" stroke="none">Warning</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="635px" font-weight="400"><tspan class="TextPosition" x="10710" y="9950"><tspan fill="rgb(0,0,0)" stroke="none">Warning</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id10">
         <path fill="rgb(255,255,255)" stroke="none" d="M 16400,8796 C 16250,8796 16100,8946 16100,9096 L 16100,10296 C 16100,10446 16250,10596 16400,10596 L 19600,10596 C 19750,10596 19901,10446 19901,10296 L 19901,9096 C 19901,8946 19750,8796 19600,8796 L 16400,8796 Z M 16100,8796 L 16100,8796 Z M 19901,10597 L 19901,10597 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 16400,8796 C 16250,8796 16100,8946 16100,9096 L 16100,10296 C 16100,10446 16250,10596 16400,10596 L 19600,10596 C 19750,10596 19901,10446 19901,10296 L 19901,9096 C 19901,8946 19750,8796 19600,8796 L 16400,8796 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="635px" font-weight="400"><tspan class="TextPosition" x="17352" y="9950"><tspan fill="rgb(0,0,0)" stroke="none">Error</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="635px" font-weight="400"><tspan class="TextPosition" x="17352" y="9950"><tspan fill="rgb(0,0,0)" stroke="none">Error</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.ConnectorShape">
@@ -96,7 +96,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 8155,11133 L 8612,10125"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 6599,11176 L 6599,11176 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 11000,12609 L 11000,12609 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="7574" y="11809"><tspan fill="rgb(0,0,0)" stroke="none">when warning </tspan></tspan><tspan class="TextPosition" x="6941" y="12316"><tspan fill="rgb(0,0,0)" stroke="none">threshold is reached. </tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="7574" y="11809"><tspan fill="rgb(0,0,0)" stroke="none">when warning </tspan></tspan><tspan class="TextPosition" x="6941" y="12316"><tspan fill="rgb(0,0,0)" stroke="none">threshold is reached. </tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -106,7 +106,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 15069,11099 L 14741,10104"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 13513,11141 L 13513,11141 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 17914,12542 L 17914,12542 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="13821" y="11757"><tspan fill="rgb(0,0,0)" stroke="none">when error threshold </tspan></tspan></tspan><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="14835" y="12264"><tspan fill="rgb(0,0,0)" stroke="none">is reached</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="13821" y="11757"><tspan fill="rgb(0,0,0)" stroke="none">when error threshold </tspan></tspan></tspan><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="14835" y="12264"><tspan fill="rgb(0,0,0)" stroke="none">is reached</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -116,7 +116,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 8302,8300 L 8735,9334"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 6699,7125 L 6699,7125 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 11100,8326 L 11100,8326 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="7604" y="7895"><tspan fill="rgb(0,0,0)" stroke="none">back to normal</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="7604" y="7895"><tspan fill="rgb(0,0,0)" stroke="none">back to normal</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -126,7 +126,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 15918,8336 L 15311,9347"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 12700,7125 L 12700,7125 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 17101,8326 L 17101,8326 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="13527" y="7895"><tspan fill="rgb(0,0,0)" stroke="none">back to warning</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="13527" y="7895"><tspan fill="rgb(0,0,0)" stroke="none">back to warning</tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -148,7 +148,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 18617,5099 L 16776,5683"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 17014,3924 L 17014,3924 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 21415,5125 L 21415,5125 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="17371" y="4474"><tspan fill="rgb(0,0,0)" stroke="none">when error threshold </tspan></tspan><tspan class="TextPosition" x="17595" y="4981"><tspan fill="rgb(0,0,0)" stroke="none">is directly reached </tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="17371" y="4474"><tspan fill="rgb(0,0,0)" stroke="none">when error threshold </tspan></tspan><tspan class="TextPosition" x="17595" y="4981"><tspan fill="rgb(0,0,0)" stroke="none">is directly reached </tspan></tspan></tspan></text>
        </g>
       </g>
       <g class="com.sun.star.drawing.CustomShape">
@@ -158,7 +158,7 @@
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 18439,14056 L 17416,13264"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 17100,14125 L 17100,14125 Z"/>
         <path fill="none" stroke="rgb(0,0,0)" stroke-width="71" d="M 21501,15326 L 21501,15326 Z"/>
-        <text class="TextShape"><tspan class="TextParagraph" font-family="Calibri, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="18005" y="14895"><tspan fill="rgb(0,0,0)" stroke="none">back to normal</tspan></tspan></tspan></text>
+        <text class="TextShape"><tspan class="TextParagraph" font-family="Arial Unicode MS" font-size="423px" font-weight="400"><tspan class="TextPosition" x="18005" y="14895"><tspan fill="rgb(0,0,0)" stroke="none">back to normal</tspan></tspan></tspan></text>
        </g>
       </g>
      </g>
