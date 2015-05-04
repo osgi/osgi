@@ -81,11 +81,6 @@
         </mediaobject>
       </figure>
 
-      <remark>BJH The fonts in the above figure are not the correct fonts used
-      for other figures in the various specs. The fonts being used render
-      badly. The figure must be updated to use the correct fonts. The fonts
-      are all in osgi.specs/fonts and can be installed on your local system to
-      be used with your SVG editor.</remark>
     </section>
   </section>
 
@@ -623,12 +618,6 @@ if (deviceSRefs != null) {
           </imageobject>
         </mediaobject>
       </figure>
-
-      <remark>BJH The fonts in the above figure are not the correct fonts used
-      for other figures in the various specs. The fonts being used render
-      badly. The figure must be updated to use the correct fonts. The fonts
-      are all in osgi.specs/fonts and can be installed on your local system to
-      be used with your SVG editor.</remark>
 
       <para>The related service property is <xref
       linkend="org.osgi.service.dal.Device.SERVICE_REFERENCE_UIDS"

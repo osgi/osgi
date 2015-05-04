@@ -25,14 +25,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="-244.79651"
-     inkscape:cy="142.94466"
+     inkscape:cx="-154.15179"
+     inkscape:cy="-34.972622"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1366"
-     inkscape:window-height="711"
-     inkscape:window-x="-4"
+     inkscape:window-height="715"
+     inkscape:window-x="-2"
      inkscape:window-y="-3"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -57,72 +57,19 @@
      id="layer1"
      transform="translate(-221.75,-61.25)">
     <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.215;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.21499991;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect3033"
        width="228.57143"
        height="107.14286"
-       x="222.85715"
-       y="62.36219" />
-    <g
-       id="g3039"
-       transform="translate(-65.255302,-272.85714)"
-       style="stroke-width:2.21499991;stroke-miterlimit:4;stroke-dasharray:none">
-      <text
-         sodipodi:linespacing="0%"
-         id="text3019"
-         y="385.21933"
-         x="316.06027"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:0%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           y="385.21933"
-           x="316.06027"
-           id="tspan3021"
-           sodipodi:role="line">Network</tspan></text>
-      <text
-         sodipodi:linespacing="0%"
-         id="text3023"
-         y="419.50507"
-         x="302.85715"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:0%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           y="419.50507"
-           x="302.85715"
-           id="tspan3025"
-           sodipodi:role="line">Controller</tspan></text>
-    </g>
+       x="222.8009"
+       y="62.890289" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.21499991;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect3033-7"
        width="228.57143"
        height="107.14286"
-       x="222.85715"
+       x="222.8009"
        y="270.21933" />
-    <g
-       id="g3101"
-       transform="translate(14.988838,48.57143)">
-      <text
-         sodipodi:linespacing="0%"
-         id="text3019-0"
-         y="273.07648"
-         x="273.07199"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:0%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           y="273.07648"
-           x="273.07199"
-           id="tspan3021-9"
-           sodipodi:role="line">USB</tspan></text>
-      <text
-         sodipodi:linespacing="0%"
-         id="text3023-4"
-         y="307.36221"
-         x="252.85715"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:0%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           y="307.36221"
-           x="252.85715"
-           id="tspan3025-8"
-           sodipodi:role="line">Device</tspan></text>
-    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 340,169.50504 0,101.42857"
@@ -133,8 +80,8 @@
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:0%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="229.42857"
+       style="font-size:35px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:0%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       x="257.42859"
        y="232.3622"
        id="text3117"
        sodipodi:linespacing="0%"
@@ -142,8 +89,42 @@
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan3119"
-         x="229.42857"
+         x="257.42859"
          y="232.3622"
-         style="font-size:32px">has reference</tspan></text>
+         style="font-size:35px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:0%;writing-mode:lr-tb;text-anchor:start;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">has reference</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+       x="336.39099"
+       y="109.13672"
+       id="text3001"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3003"
+         x="336.39099"
+         y="109.13672"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">Network</tspan><tspan
+         sodipodi:role="line"
+         x="336.39099"
+         y="149.13672"
+         id="tspan3005"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">Controller</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+       x="336.68256"
+       y="315.39075"
+       id="text3007"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3009"
+         x="336.68256"
+         y="315.39075"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">USB</tspan><tspan
+         sodipodi:role="line"
+         x="336.68256"
+         y="355.39075"
+         id="tspan3011"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">Device</tspan></text>
   </g>
 </svg>
