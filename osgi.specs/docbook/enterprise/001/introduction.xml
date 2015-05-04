@@ -74,10 +74,9 @@
   should be driven by requirements and use cases.</para>
 
   <para>The Enterprise Specification includes the recommended specifications
-  for a number of areas. The services of the Enterprise Specification have
-  been designed to guarantee integration with OSGi and cooperation among each
-  other. Together they address use-cases found in the enterprise context and
-  provide a powerful set of tools to build enterprise OSGi deployments.</para>
+  for a number of areas. Together they address use-cases found in the
+  enterprise context and provide a powerful set of tools to build enterprise
+  OSGi deployments.</para>
 
   <para>These Enterprise Specification areas are described in the following
   sections.</para>
@@ -138,7 +137,7 @@
           <para><emphasis>Remote Services</emphasis> - The Remote Services
           specification defines a number of service properties that
           participating bundles can use to convey information to a
-          distribution provider.The distribution provider creates endpoints
+          distribution provider. The distribution provider creates endpoints
           that are accessible to remote clients or registers proxies that
           access services hosted external to the OSGi framework. See chapter
           <xref linkend="service.remoteservices"/>.</para>
@@ -162,7 +161,7 @@
       <para>Current Enterprise Java architectures almost always require
       support for web technologies in the form of Java Servlets or Web
       Applications. The Enterprise Specification includes three complementary
-      service specifications in support:</para>
+      service specifications in support of web technologies.</para>
 
       <itemizedlist>
         <listitem>
@@ -185,14 +184,14 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Whiteboard Specification</emphasis> -
-          The <xref linkend="enterprise.intro-whiteboard.pattern.ref"/>
-          pattern has shown to be a powerful and flexible mechanism for
-          registering customized functionality with a container. The Http
-          Whiteboard Specification allows the registration of Servlets,
-          Servlet Filters, Resources and Servlet-related listeners via the
-          Whiteboard pattern, providing a convenient approach to working
-          with servlets to the Http Service Specification. See <xref
+          <para><emphasis>Http Whiteboard Specification</emphasis> - The <xref
+          linkend="enterprise.intro-whiteboard.pattern.ref"/> pattern has
+          shown to be a powerful and flexible mechanism for registering
+          customized functionality with a container. The Http Whiteboard
+          Specification allows the registration of Servlets, Servlet Filters,
+          Resources and Servlet-related listeners via the Whiteboard pattern,
+          providing a convenient approach to working with servlets to the Http
+          Service Specification. See <xref
           linkend="service.http.whiteboard"/>.</para>
         </listitem>
       </itemizedlist>

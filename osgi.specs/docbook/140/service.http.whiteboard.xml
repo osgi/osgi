@@ -20,10 +20,10 @@
     <title>Introduction</title>
 
     <para>Servlets have become a popular and widely supported mechanism for
-    providing dynamic content on the Internet. While the servlets themselves
-    are defined in the <xref linkend="service.http.whiteboard-i21217577"/>,
-    the OSGi Http Whiteboard Specification provides a light and convenient way
-    of using servlets, servlet filters and web resources in an OSGi
+    providing dynamic content on the Internet. While servlets are defined in
+    the <xref linkend="service.http.whiteboard-i21217577"/>, the OSGi Http
+    Whiteboard Specification provides a light and convenient way of using
+    servlets, servlet filters, servlet listeners and web resources in an OSGi
     environment through the use of the <xref
     linkend="service.http.whiteboard-whiteboard.pattern.ref"/>.</para>
 
@@ -44,7 +44,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Registering resources</emphasis> - Resources such as
+        <para><emphasis>Registering Resources</emphasis> - Resources such as
         HTML files, JavaScript, image files, and other static resources can be
         made available over the network by registering resource
         services.</para>
@@ -111,8 +111,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource Service</emphasis> - A service thats
-          registers static resources.</para>
+          <para><emphasis>Resource Service</emphasis> - A service thats binds
+          static resources.</para>
         </listitem>
 
         <listitem>
@@ -122,7 +122,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Servlet Context Helper</emphasis> - Service to
+          <para><emphasis>Servlet Context Helper</emphasis> - A service to
           control the behavior of the Servlet Context.</para>
         </listitem>
 
@@ -193,7 +193,8 @@
     by calling one of the <code>getServiceReferences</code> methods on the
     Bundle Context of bundle that registered the Whiteboard service.</para>
 
-    <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
+    <table pgwide="1"
+           xml:id="service.http.whiteboard.servletcontext.helper.properties">
       <title>Service registration properties for
       <code>ServletContextHelper</code> services.</title>
 
@@ -216,7 +217,7 @@
 
         <tbody>
           <row>
-            <entry><para><code>osgi.http.whiteboard.context.«</code></para><para><code>&#160;name</code></para></entry>
+            <entry><para><code>osgi.http.whiteboard.context.name</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
@@ -239,7 +240,7 @@
           </row>
 
           <row>
-            <entry><para><code>osgi.http.whiteboard.context.«</code></para><para><code>&#160;path</code></para></entry>
+            <entry><para><code>osgi.http.whiteboard.context.path</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
 
@@ -1305,9 +1306,7 @@ public class MyServlet extends HttpServlet {
       <para>If an error or exception occurs for which an error page servlet
       can be matched, it is invoked to render the error page. If the error
       page servlet causes an error or exception while handling the request, an
-      implementation built-in error page is shown for the error or exception
-      with the additional message that the registered error page caused an
-      error or exception.</para>
+      implementation built-in error page is returned.</para>
 
       <para>For example:</para>
 
