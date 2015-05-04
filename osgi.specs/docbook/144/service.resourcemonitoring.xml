@@ -652,12 +652,6 @@
       </mediaobject>
     </figure>
 
-    <remark>BJH The fonts in the above figure are not the correct fonts used
-    for other figures in the various specs. The fonts being used render badly.
-    The figure must be updated to use the correct fonts. The fonts are all in
-    osgi.specs/fonts and can be installed on your local system to be used with
-    your SVG editor.</remark>
-
     <para>A threshold state depends on the current consumption of resource and
     the type of threshold (upper or lower threshold).</para>
 
@@ -747,12 +741,6 @@
       </mediaobject>
     </figure>
 
-    <remark>BJH The fonts in the above figure are not the correct fonts used
-    for other figures in the various specs. The fonts being used render badly.
-    The figure must be updated to use the correct fonts. The fonts are all in
-    osgi.specs/fonts and can be installed on your local system to be used with
-    your SVG editor.</remark>
-
     <para>In our example, the lower warning threshold and the lower error
     threshold of the Resource Listener are respectively set to 10 and 5. When
     the number of in-use sockets decreases under 10, the usage goes from the
@@ -810,12 +798,6 @@
         </imageobject>
       </mediaobject>
     </figure>
-
-    <remark>BJH The fonts in the above figure are not the correct fonts used
-    for other figures in the various specs. The fonts being used render badly.
-    The figure must be updated to use the correct fonts. The fonts are all in
-    osgi.specs/fonts and can be installed on your local system to be used with
-    your SVG editor.</remark>
 
     <para>In this example, only the upper threshold is set. The upper warning
     threshold is set to 50%, the error one is set to 75%. CPU consumption
@@ -977,9 +959,9 @@
       </listitem>
 
       <listitem>
-        <para>RESOURCE_TYPE property <remark>(BJH The RESOURCE_TYPE property
-        is not defined in ResourceContextListener. Either the spec is wrong or
-        the java type is wrong.) </remark>– an array of integers defining the
+        <para><xref
+        linkend="org.osgi.service.resourcemonitoring.ResourceContextListener.RESOURCE_TYPE"
+        xrefstyle="hyperlink"/> property – an array of integers defining the
         type of notifications a Resource Context Listener instance will
         receive (see types defined in section Resource Context Event).</para>
       </listitem>

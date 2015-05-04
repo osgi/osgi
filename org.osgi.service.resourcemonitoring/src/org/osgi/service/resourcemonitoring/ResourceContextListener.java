@@ -37,7 +37,7 @@ package org.osgi.service.resourcemonitoring;
  * </ul>
  * 
  * @version 1.0
- * @author $Id: 9070aaa94df0c75078647e7d4a9819fe54ac393f $
+ * @author $Id$
  */
 public interface ResourceContextListener {
 
