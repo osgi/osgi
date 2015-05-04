@@ -246,8 +246,12 @@
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
-            RFC 3986, section 3.3. If the path is invalid or unspecified, the
-            service is not used and reflected in the failure DTOs. See <xref
+            RFC 3986, section 3.3. 
+            The context path of the default Servlet Context Helper is <code>/</code>. 
+            A custom default Servlet Context Helper may use an alternative path.
+            If the path is invalid or unspecified, the
+            service is not used and reflected in the failure DTOs. 
+            See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
