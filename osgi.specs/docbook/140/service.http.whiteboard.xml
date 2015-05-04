@@ -545,11 +545,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.5</para></entry>
 
-              <entry><para>
-              Return the web context path of the Servlet Context. This 
-              takes into account the <code>osgi.http.whiteboard.context.path</code>
-              of the Servlet Context Helper and the path of the http runtime. 
-              </para></entry>
+              <entry><para>Return the web context path of the Servlet Context.
+              This takes into account the
+              <code>osgi.http.whiteboard.context.path</code> of the Servlet
+              Context Helper and the path of the http runtime.</para></entry>
             </row>
 
             <row>
