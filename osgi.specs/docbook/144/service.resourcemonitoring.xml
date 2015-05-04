@@ -946,7 +946,7 @@
     a Resource Context Listener instance as an OSGi service. The application
     may provide a set of properties at registration time to reduce the number
     of notifications a Resource Listener instance will receive. The available
-    properties are:</para>
+    property is:</para>
 
     <itemizedlist mark="bullet">
       <listitem>
@@ -956,14 +956,6 @@
         name of Resource Context instances. If defined, a Resource Listener
         instance will only receive notifications related to these specified
         Resource Context instances.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.resourcemonitoring.ResourceContextListener.RESOURCE_TYPE"
-        xrefstyle="hyperlink"/> property – an array of integers defining the
-        type of notifications a Resource Context Listener instance will
-        receive (see types defined in section Resource Context Event).</para>
       </listitem>
     </itemizedlist>
 
