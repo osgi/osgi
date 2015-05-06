@@ -53,6 +53,11 @@ public class EnOceanException extends Exception {
      */
     public static final short ESP_RET_OPERATION_DENIED = 4;
 
+    /**
+     * The message was invalid.
+     */
+    public static final short INVALID_TELEGRAM         = 0xF0;
+
     private final int         errorCode;
 
     /**
