@@ -366,9 +366,7 @@
       EnOcean Security Draft, <xref
       linkend="service.enocean-bibliomixed_id_20140602_17h03_46_9"/>, which
       allow for a security level format (integer mask), an encryption key
-      and/or a rolling authentication code. See the Security Of EnOcean
-      networks section below.<remark>BJH Where is this section? If it exists,
-      we need to &lt;xref&gt; to it.</remark></para>
+      and/or a rolling authentication code.</para>
 
       <para>The EnOceanDevice service MUST also be registered with the
       <code>DEVICE_CATEGORY</code> service property, see <xref
@@ -1021,30 +1019,46 @@
 
       <para>Below stands an example showing how the tracking can be
       implemented. The sample Controller class extends the ServiceTracker
-      class so that it can track all EnOceanDevice services. <remark>BJH This
-      is an incomplete example. This class cannot be instantiated. What is
-      eoDevice for? Needs more work.</remark></para>
+      class so that it can track all EnOceanDevice services.</para>
 
-      <programlisting>public Class Controller extends ServiceTracker {
-  public Object addingService(ServiceReference ref) {
-    Object service = context.getService(ref);
-    if (service != null &amp;&amp; service instanceof EnOceanDevice) {
-      eoDevice = (EnOceanDevice) service;
-    }
-    Logger.debug(service.getClass().getName() + " service found.", null);
-    return service;
-  }
+      <programlisting>// Example of class for managing incoming and outgoing EnOcean devices
+import java.util.ArrayList;
+import java.util.List;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.util.tracker.ServiceTracker;
 
-  public void modifiedService(ServiceReference ref, Object service) {
+public class Controller extends ServiceTracker {
+
+   private List eoDevices; // List of EnOcean devices
+   private BundleContext context;  // The OSGi bundle context
+   
+   public Controller(BundleContext context) {
+      super(context, EnOceanDevice.class.getName(), null);
+      this.context = context;
+      this.eoDevices = new ArrayList();
+   }
+  
+   public Object addingService(ServiceReference ref) {
+      Object service = context.getService(ref);
+      if (service != null &amp;&amp; (service instanceof EnOceanDevice)) {
+         // New EnOcean device detected
+         eoDevices.add((EnOceanDevice) service);
+      }
+      return service;
+   }
+
+   public void modifiedService(ServiceReference ref, Object service) {
     /* Unimplemented */
-  }
+   }
 
-  public void removedService(ServiceReference ref, Object service) {
-    if (service instanceof EnOceanDevice) {
-      eoDevice = null;
-      Logger.debug("EnOceanDevice service was removed.", null);
-    }
-  }
+   public void removedService(ServiceReference ref, Object service) {
+      if (service instanceof EnOceanDevice) {
+         // Disappeared EnOcean device
+         eoDevices.remove(service);
+      }
+   }
 }</programlisting>
     </section>
   </section>
@@ -1057,9 +1071,8 @@
     following form:
     org/osgi/service/enocean/EnOceanEvent/<emphasis>SUBTOPIC</emphasis>.</para>
 
-    <para>MESSAGE_RECEIVED, and RPC_BROADCAST are the two available subtopics.
-    <remark>BJH MESSAGE_RECEIVED is defined in EnOceanEvent, but RPC_BROADCAST
-    is not.</remark></para>
+    <para>MESSAGE_RECEIVED and RPC_BROADCAST are the two available subtopics.
+    </para>
 
     <section>
       <title>MESSAGE_RECEIVED</title>
@@ -1145,9 +1158,10 @@
         </listitem>
 
         <listitem>
-          <para>EnOceanEvent.PROPERTY_RPC – (enocean.rpc/EnOceanRPC). The
-          EnOceanRPC object associated with this event. <remark>BJH This is
-          not defined in the API code.</remark></para>
+          <para><xref
+          linkend="org.osgi.service.enocean.EnOceanEvent.PROPERTY_RPC"
+          xrefstyle="hyperlink"/> – The EnOceanRPC object associated with
+		  this event.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1190,8 +1204,9 @@
       </listitem>
 
       <listitem>
-        <para>INVALID_TELEGRAM – ( 0xF0 ) The message was invalid. <remark>BJH
-        This is not defined in the API code.</remark></para>
+        <para><xref
+        linkend="org.osgi.service.enocean.EnOceanException.INVALID_TELEGRAM"
+        xrefstyle="hyperlink"/> – The message was invalid.</para>
       </listitem>
     </itemizedlist>
   </section>
