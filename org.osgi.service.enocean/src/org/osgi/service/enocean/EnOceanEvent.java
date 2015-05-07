@@ -17,11 +17,14 @@
 package org.osgi.service.enocean;
 
 /**
- * EnOcean's event.
+ * Constants for use in EnOcean events.
  * 
  * @author $Id$
  */
 public final class EnOceanEvent {
+    private EnOceanEvent() {
+        // non-instantiable
+    }
 
     /**
      * Main topic for all OSGi dispatched EnOcean messages, imported or
