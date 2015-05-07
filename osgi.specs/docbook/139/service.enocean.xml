@@ -1017,49 +1017,22 @@
       linkend="org.osgi.service.enocean.EnOceanDevice" xrefstyle="hyperlink"/>
       service.</para>
 
-      <para>Below stands an example showing how the tracking can be
-      implemented. The sample Controller class extends the ServiceTracker
-      class so that it can track all EnOceanDevice services.</para>
+      <para>The following example shows using a ServiceTracker to track
+      EnOceanDevice services.</para>
 
-      <programlisting>// Example of class for managing incoming and outgoing EnOcean devices
-import java.util.ArrayList;
-import java.util.List;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.util.tracker.ServiceTracker;
+      <programlisting>ServiceTracker&lt;EnOceanDevice, EnOceanDevice&gt; enOceanTracker = 
+    new ServiceTracker&lt;&gt;(bundleContext, EnOceanDevice.class, null);
+enOceanTracker.open(); // open the tracker
 
-public class Controller extends ServiceTracker {
+...
 
-   private List eoDevices; // List of EnOcean devices
-   private BundleContext context;  // The OSGi bundle context
-   
-   public Controller(BundleContext context) {
-      super(context, EnOceanDevice.class.getName(), null);
-      this.context = context;
-      this.eoDevices = new ArrayList();
-   }
-  
-   public Object addingService(ServiceReference ref) {
-      Object service = context.getService(ref);
-      if (service != null &amp;&amp; (service instanceof EnOceanDevice)) {
-         // New EnOcean device detected
-         eoDevices.add((EnOceanDevice) service);
-      }
-      return service;
-   }
+// get a snaphot of the current EnOceanDevice services
+EnOceanDevice[] enOceanDeviceSnapshot = 
+    enOceanTracker.getServices(new EnOceanDevice[0]);
 
-   public void modifiedService(ServiceReference ref, Object service) {
-    /* Unimplemented */
-   }
+...
 
-   public void removedService(ServiceReference ref, Object service) {
-      if (service instanceof EnOceanDevice) {
-         // Disappeared EnOcean device
-         eoDevices.remove(service);
-      }
-   }
-}</programlisting>
+enOceanTracker.close(); // close the tracker</programlisting>
     </section>
   </section>
 
@@ -1069,10 +1042,10 @@ public class Controller extends ServiceTracker {
     <para>EnOcean events must be delivered to the EventAdmin service by the
     EnOcean implementation, if present. EnOcean event topic follow the
     following form:
-    org/osgi/service/enocean/EnOceanEvent/<emphasis>SUBTOPIC</emphasis>.</para>
+    <code>org/osgi/service/enocean/EnOceanEvent/</code><emphasis>SUBTOPIC</emphasis>.</para>
 
-    <para>MESSAGE_RECEIVED and RPC_BROADCAST are the two available subtopics.
-    </para>
+    <para><code>MESSAGE_RECEIVED</code> and <code>RPC_BROADCAST</code> are the
+    two available subtopics.</para>
 
     <section>
       <title>MESSAGE_RECEIVED</title>
@@ -1160,8 +1133,8 @@ public class Controller extends ServiceTracker {
         <listitem>
           <para><xref
           linkend="org.osgi.service.enocean.EnOceanEvent.PROPERTY_RPC"
-          xrefstyle="hyperlink"/> – The EnOceanRPC object associated with
-		  this event.</para>
+          xrefstyle="hyperlink"/> – The EnOceanRPC object associated with this
+          event.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1172,8 +1145,8 @@ public class Controller extends ServiceTracker {
 
     <para>The <xref linkend="org.osgi.service.enocean.EnOceanException"
     xrefstyle="hyperlink"/> can be thrown and holds information about the
-    different EnOcean layers. Here below, ESP stands for “EnOcean Serial
-    Protocol”. The following errors are defined:</para>
+    different EnOcean layers. Here below, ESP stands for <emphasis>EnOcean
+    Serial Protocol</emphasis>. The following errors are defined:</para>
 
     <itemizedlist>
       <listitem>
