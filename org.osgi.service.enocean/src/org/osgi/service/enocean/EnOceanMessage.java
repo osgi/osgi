@@ -91,7 +91,7 @@ public interface EnOceanMessage {
 
     /**
      * Returns the security level of this message, as specified in the 'Security
-     * of EnOcean Radio Networks' draft, section 4.2.3.
+     * of EnOcean Radio Networks' draft, section 4.2.1.3.
      * 
      * @return The security level format.
      */
