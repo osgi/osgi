@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+ <?xml version="1.0" encoding="utf-8"?>
 <chapter label="1" revision="$Id$"
          version="5" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -12,9 +12,7 @@
   <para>When the OSGi Alliance started in 1998 the focus was in residential
   gateways, it actually was an acronym that contained the word
   <emphasis>gateway</emphasis> before it became a name. Since that time, OSGi
-  flourished in several different markets but did not gain a wide-spread
-  adoption in the residential markets so far. However, some of the road blocks
-  to this wide spread adoption have changed:</para>
+  flourished in several different markets. With the release of the OSGi Residential Specification in January 2012 it made it also to widespread adoption for residential gateways/gome gateways. This is due to the fact that:</para>
 
   <itemizedlist>
     <listitem>
@@ -22,61 +20,37 @@
     </listitem>
 
     <listitem>
-      <para>Capabilities of those small devices increased many fold.</para>
+      <para>Capabilities of those small devices increased manyfolds.</para>
     </listitem>
 
     <listitem>
-      <para>The license fee for Java Virtual Machines has decreased.</para>
+      <para>The number of devices in a household has increased.</para>
     </listitem>
 
-    <listitem>
-      <para>The number of devices in a house hold has increased.</para>
-    </listitem>
-
+	<listitem>
+      <para>Smart Home has become mainstream due to the growing interest in the Internet-of-Things (IoT).</para>
+  </listitem>
+  
+  <listitem>
+      <para>The need for interoperability due to the increasing amount of communication protocols.</para>
+  </listitem>
+  
     <listitem>
       <para>Always-on and broadband access to the Internet has become
       pervasive.</para>
     </listitem>
   </itemizedlist>
 
-  <para>This specification, produced by the OSGi Residential Expert Group
-  (REG), defines a set of new and refined service guidelines that focus on the
-  residential market. The REG is chartered to define the requirements and
-  specifications to tailor the OSGi Framework for fixed network connected
-  devices. Examples of such devices include residential gateways, building
-  automation controllers, white goods, consumer electronics, and many other
-  devices.</para>
+  <para>This specification, produced by the OSGi Residential Expert Group (REG), defines a set of new and refined service specifications that focus on the residential market. The REG is chartered to define the requirements and specifications to tailor the OSGi framework for fixed network connected devices. Examples of such devices include residential gateways, building automation controllers, white goods, consumer electronics and many others.</para>
 
-  <para>Technical Areas addressed by the REG include the requirements,
-  functional specifications, and APIs for gateway devices. The REG also
-  created a functional model for local and remote management of gateway
-  devices. This model resolves the requirements of inter-operation with
-  existing management systems and protocols, the need to remotely manage the
-  user applications life cycles, the need for large-scale deployments and
-  adequate security.</para>
+  <para>Technical areas addressed by the REG include the requirements, functional specifications, and APIs for gateway devices. The first release of the OSGi Residential Specification resolved the requirements of inter-operation with existing management systems and protocols, the need to remotely manage user applications life cycle as well as the need for large-scale deployments and adequate security.</para>
 
-  <para>The services of this Residential Specification have been designed with
-  the residential market in mind. Requirements and management protocols for
-  this environment are defined in the specifications by consortias like the
-  <xref linkend="i434636"/>, (HGI) the <xref linkend="i434640"/> (BBF) and the
-  <xref linkend="i434644"/>. These specifications provide requirements for
-  execution environments in a Consumer Premises Equipment (CPE) and other
-  consumer devices, as well as protocols for the management of residential
-  environments. Here, the scope of management protocols span the remote
-  management of thousands and millions of CPE devices by a telecommunications
-  provider as well as local management of single consumer devices in a home or
-  residence building.</para>
-
-  <para>The services guidelines of the Residential Specification have been
-  designed to integrate with OSGi, fulfill the requirements of the mentioned
-  consortias and cooperate with each other. None of the listed service
-  specifications is mandatory; all service specifications are optional.</para>
+ <para>With this second release of the OSGi Residential Specification we introduce new specifications for abstracting devices, sensors, actuators, etc. from their corresponding communication protocols and facilitate the development of new innovative application and services. This release also contains specifications that address device connectivity via the EnOcean wireless protocol, USB and serial port. With the Resource Monitoring Specification resources consumed by bundles can be monitored in order to fairly share resources and preserve the overall quality of service. The Network Interface Information Service Specification enables to dynamically discover changes in the network interface.</para>
 
   <para>It is not suggested, or expected, that a solution will support all
   listed specifications. More likely, platform providers define their specific
   runtime environment. It is highly recommended to choose the mandatory and
-  optional services defined by the <xref linkend="i435333"/> as a basis. The
-  same is true for the management protocols defined by BBF and the UPnP Forum.
+  optional services defined by the <xref linkend="i435333"/> as a basis.
   A solution can further include other core and compendium services that are
   not listed as part the Residential Specification.</para>
 
@@ -142,7 +116,7 @@
     </section>
 
     <section>
-      <title>Management and Configuration services</title>
+      <title>Configuration, Monitoring and Management Services</title>
 
       <para>The OSGi Framework is unique in that it does not hide anything,
       all aspects are manageable from the system itself. To locally manage the
@@ -212,6 +186,16 @@
           for details.</para>
         </listitem>
       </itemizedlist>
+	  
+	     <itemizedlist>
+        <listitem>
+			<para><emphasis>Network Interface Information Service Specification</emphasis> - The Network Interface Information Service is a service for obtaining the network interface information and IP address information which can't presently be obtained via standard Java APIs. See chapter 143 in <xref linkend="BJ"/>.</para>
+        </listitem>
+	  
+	        <itemizedlist>
+        <listitem>
+			<para><emphasis>Resource Monitoring</emphasis> - The Resource Monitoring Specification defines an API for applications to monitor hardware resources consumed by any set of bundles. Monitored data may enable applications to take decisions on management actions to apply. Resource management actions are mentioned as examples in this chapter, e.g., actions on the lifecycle of components, bundles, the framework and the JVM, Java threads, raise of exceptions. See chapter 144 in <xref linkend="BJ"/>.</para>
+        </listitem>
     </section>
 
     <section>
@@ -271,7 +255,7 @@
     </section>
 
     <section>
-      <title>Other Residential Services</title>
+      <title>Device Interoperability</title>
 
       <para>A residential gateway can directly attach devices, for example via
       a USB adaptor, through a home network. There is therefore a need to have
@@ -296,7 +280,41 @@
           linkend="i437630"/>. See <xref linkend="service.upnp"/>.</para>
         </listitem>
       </itemizedlist>
+	 
+	  <listitem>
+          <para><emphasis>Device Abstraction Layer</emphasis> - The
+          UPnP specification specifies how OSGi bundles can be developed that
+          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
+          control points. See <xref linkend="BJ"/>.</para>
+        </listitem>
+	</itemizedlist>
+	  
+	<listitem>
+          <para><emphasis>Device Abstraction Layer Functions</emphasis> - The Device Abstraction Layer Functions specifiy the minimal set of such basic device operations and the related properties. They can be extended or replaced to cover domain specific scenarios. The set is not closed and can be incorporated with vendor specific functions. There is support for: control, monitoring and metering information See <xref linkend="BJ"/>.</para>
+        </listitem>
+	</itemizedlist>
+	
+	  <listitem>
+          <para><emphasis>EnOcean Device Service Specification</emphasis> - This specification defines how OSGi bundles can be developed to discover and control EnOcean devices on the one hand, and act as EnOcean devices and interoperate with EnOcean clients on the other hand. In particular, a Java mapping is provided for the standard representation of EnOcean devices called EnOcean Equipment Profile (EEP). See <xref linkend="BJ"/>.</para>
+        </listitem>
+	</itemizedlist>
+	
+	<listitem>
+          <para><emphasis>USB Information Device Category Specification</emphasis> - The
+          UPnP specification specifies how OSGi bundles can be developed that
+          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
+          control points. See <xref linkend="BJ"/>.</para>
+        </listitem>
+	</itemizedlist>
     </section>
+	
+	<listitem>
+          <para><emphasis>Serial Device Service Specification</emphasis> - The
+          UPnP specification specifies how OSGi bundles can be developed that
+          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
+          control points. See <xref linkend="BJ"/>.</para>
+        </listitem>
+	</itemizedlist>
 
     <section>
       <title>Miscellaneous Supporting Services</title>
@@ -424,9 +442,8 @@
               <entry><xref linkend="service.metatype"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><para><code><xref
-              linkend="org.osgi.service.metatype"/></code></para><para><code><xref
-              linkend="org.osgi.service.metatype.annotations"/></code></para></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.metatype"/></code></entry>
 
               <entry><code><xref endterm="org.osgi.service.metatype-version"
               linkend="service.metatype"/></code></entry>
@@ -472,9 +489,7 @@
 
               <entry><para><code><xref
               linkend="org.osgi.service.component"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.annotations"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.runtime"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.runtime.dto"/></code></para></entry>
+              linkend="org.osgi.service.component.annotations"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.component-version"
               linkend="service.component"/></code></entry>
@@ -518,103 +533,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.namespaces"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
-              linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
-              linkend="org.osgi.namespace.implementation"/></code></para><para><code><xref
-              linkend="org.osgi.namespace.service"/></code></para></entry>
-
-              <entry><code><xref endterm="service.namespaces-version"
-              linkend="service.namespaces"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.enocean"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.enocean"/></code></para><para><code><xref
-              linkend="org.osgi.service.enocean.descriptions"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.service.enocean-version"
-              linkend="service.enocean"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.dal"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.dal"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.service.dal-version"
-              linkend="service.dal"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.dal.functions"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.dal.functions"/></code></para><para><code><xref
-              linkend="org.osgi.service.dal.functions.data"/></code></para></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.dal.functions-version"
-              linkend="service.dal.functions"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.network"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.networkadapter"/></code></para></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.networkadapter-version"
-              linkend="service.network"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.resourcemonitoring"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.resourcemonitoring"/></code></para><para><code><xref
-              linkend="org.osgi.service.resourcemonitoring.monitor"/></code></para></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.resourcemonitoring-version"
-              linkend="service.resourcemonitoring"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.usbinfo"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.usbinfo"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.service.usbinfo-version"
-              linkend="service.usbinfo"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="service.serial"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.serial"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.service.serial-version"
-              linkend="service.serial"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -622,18 +540,6 @@
 
               <entry><code><xref endterm="org.osgi.util.xml-version"
               linkend="util.xml"/></code></entry>
-            </row>
-
-            <row>
-              <entry><xref linkend="util.promise"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.util.promise"/></code></para><para><code><xref
-              linkend="org.osgi.util.function"/></code></para></entry>
-
-              <entry><code><xref endterm="org.osgi.util.promise-version"
-              linkend="util.promise"/></code></entry>
             </row>
           </tbody>
         </tgroup>
@@ -663,9 +569,8 @@
       <bibliomixed xml:id="i434636"><title>Home Gateway
       Initiative</title>http://www.homegatewayinitiative.org</bibliomixed>
 
-      <bibliomixed xml:id="i435333"><title>HG Requirements for Software
-      Execution
-      Environment</title>http://www.homegatewayinitiative.org/publis/RD-008-R3.pdf</bibliomixed>
+      <bibliomixed xml:id="i435333"><title>HG Requirements for HGI Open Platform 2.0
+      </title>http://www.homegatewayinitiative.org/publis/HGI-RD048-HG_Requirements_for_HGI_Open_Platform_2_0_published_text.pdf</bibliomixed>
 
       <bibliomixed xml:id="i434644"><title>UPnP™
       Forum</title>http://upnp.org</bibliomixed>
@@ -679,9 +584,9 @@
       <bibliomixed xml:id="i437933"><title>TR-157 Amendment 3 Component
       Objects for
       CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
+
     </bibliolist>
   </section>
-
   <section>
     <title>Changes</title>
 
@@ -730,5 +635,5 @@
         <para>Added <xref linkend="util.promise"/>.</para>
       </listitem>
     </itemizedlist>
-  </section>
+</section>
 </chapter>
