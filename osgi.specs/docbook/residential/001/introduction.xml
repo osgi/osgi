@@ -9,10 +9,13 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Introduction</title>
 
-  <para>When the OSGi Alliance started in 1998 the focus was in residential
-  gateways, it actually was an acronym that contained the word
-  <emphasis>gateway</emphasis> before it became a name. Since that time, OSGi
-  flourished in several different markets. With the release of the OSGi Residential Specification in January 2012 it made it also to widespread adoption for residential gateways/gome gateways. This is due to the fact that:</para>
+  <para>When the OSGi Alliance started in 1998, the focus was in residential
+  gateways the organization's name contained the word
+  <emphasis>gateway</emphasis> before it was changed to the OSGi Alliance.
+  Since that time, OSGi flourished in several different markets. With the
+  release of the OSGi Residential Specification in January 2012, it made it
+  also to widespread adoption for residential gateways/home gateways. This is
+  due to the fact that:</para>
 
   <itemizedlist>
     <listitem>
@@ -20,38 +23,61 @@
     </listitem>
 
     <listitem>
-      <para>Capabilities of those small devices increased manyfolds.</para>
+      <para>Capabilities of those small devices increased many fold.</para>
     </listitem>
 
     <listitem>
       <para>The number of devices in a household has increased.</para>
     </listitem>
 
-	<listitem>
-      <para>Smart Home has become mainstream due to the growing interest in the Internet-of-Things (IoT).</para>
-    </listitem>
-  
     <listitem>
-      <para>The need for interoperability due to the increasing amount of communication protocols.</para>
+      <para>Smart Home has become mainstream due to the growing interest in
+      the Internet-of-Things (IoT).</para>
     </listitem>
-  
+
     <listitem>
-      <para>Always-on and broadband access to the Internet has become pervasive.</para>
+      <para>The need for interoperability due to the increasing amount of
+      communication protocols.</para>
+    </listitem>
+
+    <listitem>
+      <para>Always-on and broadband access to the Internet has become
+      pervasive.</para>
     </listitem>
   </itemizedlist>
 
-  <para>This specification, produced by the OSGi Residential Expert Group (REG), defines a set of new and refined service specifications that focus on the residential market. The REG is chartered to define the requirements and specifications to tailor the OSGi framework for fixed network connected devices. Examples of such devices include residential gateways, building automation controllers, white goods, consumer electronics and many others.</para>
+  <para>This specification, produced by the OSGi Residential Expert Group
+  (REG), defines a set of new and refined service specifications that focus on
+  the residential market. The REG is chartered to define the requirements and
+  specifications to tailor the OSGi framework for fixed network connected
+  devices. Examples of such devices include residential gateways, building
+  automation controllers, white goods, consumer electronics and many
+  others.</para>
 
-  <para>Technical areas addressed by the REG include the requirements, functional specifications, and APIs for gateway devices. The first release of the OSGi Residential Specification resolved the requirements of inter-operation with existing management systems and protocols, the need to remotely manage user applications life cycle as well as the need for large-scale deployments and adequate security.</para>
+  <para>Technical areas addressed by the REG include the requirements,
+  functional specifications, and APIs for gateway devices. The first release
+  of the OSGi Residential Specification resolved the requirements of
+  inter-operation with existing management systems and protocols, the need to
+  remotely manage user applications life cycle as well as the need for
+  large-scale deployments and adequate security.</para>
 
- <para>With this second release of the OSGi Residential Specification we introduce new specifications for abstracting devices, sensors, actuators, etc. from their corresponding communication protocols and facilitate the development of new innovative application and services. This release also contains specifications that address device connectivity via the EnOcean wireless protocol, USB and serial port. With the Resource Monitoring Specification resources consumed by bundles can be monitored in order to fairly share resources and preserve the overall quality of service. The Network Interface Information Service Specification enables to dynamically discover changes in the network interface.</para>
+  <para>With this second release of the OSGi Residential Specification we
+  introduce new specifications for abstracting devices, sensors, actuators,
+  etc. from their corresponding communication protocols and facilitate the
+  development of new innovative application and services. This release also
+  contains specifications that address device connectivity via the EnOcean
+  wireless protocol, USB and serial port. With the Resource Monitoring
+  Specification, resources consumed by bundles can be monitored in order to
+  fairly share resources and preserve the overall quality of service. The
+  Network Interface Information Service Specification enables dynamic
+  discovery of changes in the network interface.</para>
 
   <para>It is not suggested, or expected, that a solution will support all
   listed specifications. More likely, platform providers define their specific
   runtime environment. It is highly recommended to choose the mandatory and
-  optional services defined by the <xref linkend="i435333"/> as a basis.
-  A solution can further include other core and compendium services that are
-  not listed as part the Residential Specification.</para>
+  optional services defined by the <xref linkend="i435333"/> as a basis. A
+  solution can further include other core and compendium services that are not
+  listed as part the Residential Specification.</para>
 
   <section>
     <title>Overview of the Residential Specifications</title>
@@ -108,7 +134,8 @@
           based on the TR-069 Remote Procedure Calls concept that is
           implemented on top of Dmt Admin. This connector supports data
           conversion and the object modeling constructs defined in the Dmt
-          Admin service, <xref linkend="service.dmt.osgiobjectmodeling"/>.</para>
+          Admin service, <xref
+          linkend="service.dmt.osgiobjectmodeling"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -126,17 +153,18 @@
           Specification</emphasis> - The Conditional Permission Admin service
           allows an operator to control the Java Permissions to be granted to
           the bundles running on the OSGi Framework using a condition based
-          model. See chapter 50 in <xref linkend="i432874"/>.</para>
+          model. See <xref linkend="intro.core.release"
+          xrefstyle="template:%t"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Permission Admin Service Specification</emphasis> -
           The Permission Admin service allows an operator to control the Java
           Permissions to be granted to the bundles running on the OSGi
-          Framework based on the bundle location. The Permission Admin has
-          been superseded by the Conditional Permission admin, but is included
-          for backwards compatibility. See chapter 51 in <xref
-          linkend="i432874"/>.</para>
+          Framework based on the bundle location. Permission Admin has been
+          superseded by Conditional Permission Admin, but is included for
+          backwards compatibility. See <xref linkend="intro.core.release"
+          xrefstyle="template:%t"/>.</para>
         </listitem>
 
         <listitem>
@@ -145,7 +173,8 @@
           with new URL schemes and content handlers. Dynamically extending the
           URL schemes that are supported in an OSGi Framework is a very
           powerful concept to provide more functionality to existing
-          applications. See chapter 51 in <xref linkend="i432874"/>.</para>
+          applications. See <xref linkend="intro.core.release"
+          xrefstyle="template:%t"/>.</para>
         </listitem>
 
         <listitem>
@@ -183,15 +212,26 @@
           Configuration Admin Service. See <xref linkend="service.metatype"/>
           for details.</para>
         </listitem>
-   	  
+
         <listitem>
-			<para><emphasis>Network Interface Information Service Specification</emphasis> - The Network Interface Information Service is a service for obtaining the network interface information and IP address information which can't presently be obtained via standard Java APIs. See chapter 143 in .</para>
+          <para><emphasis>Network Interface Information Service
+          Specification</emphasis> - The Network Interface Information Service
+          is a service for obtaining the network interface information and IP
+          address information which can't presently be obtained via standard
+          Java APIs. See <xref linkend="service.network"/>.</para>
         </listitem>
-	  
+
         <listitem>
-			<para><emphasis>Resource Monitoring</emphasis> - The Resource Monitoring Specification defines an API for applications to monitor hardware resources consumed by any set of bundles. Monitored data may enable applications to take decisions on management actions to apply. Resource management actions are mentioned as examples in this chapter, e.g., actions on the lifecycle of components, bundles, the framework and the JVM, Java threads, raise of exceptions. See chapter 144 in .</para>
+          <para><emphasis>Resource Monitoring Specification</emphasis> - The
+          Resource Monitoring Specification defines an API for applications to
+          monitor hardware resources consumed by any set of bundles. Monitored
+          data may enable applications to take decisions on management actions
+          to apply. Resource management actions are mentioned as examples in
+          this chapter including actions on the lifecycle of components,
+          bundles, the framework and the JVM, Java threads, and the raising of
+          exceptions. See <xref linkend="service.resourcemonitoring"/>.</para>
         </listitem>
-	 </itemizedlist>
+      </itemizedlist>
     </section>
 
     <section>
@@ -254,7 +294,7 @@
       <title>Device Interoperability</title>
 
       <para>A residential gateway can directly attach devices, for example via
-      a USB adaptor, through a home network. There is therefore a need to have
+      a USB adapter, through a home network. There is therefore a need to have
       a unified device abstraction, discovery and control model. For this
       purpose, this Specification contains the following services:</para>
 
@@ -275,39 +315,57 @@
           control points. The specification is based on <xref
           linkend="i437630"/>. See <xref linkend="service.upnp"/>.</para>
         </listitem>
-	 
-	  <listitem>
-          <para><emphasis>Device Abstraction Layer</emphasis> - The
-          UPnP specification specifies how OSGi bundles can be developed that
-          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See.</para>
+
+        <listitem>
+          <para><emphasis>Device Abstraction Layer Specification</emphasis> -
+          <remark>(BJH This text is wrong. It is a copy of the UPnP text.)
+          </remark>The UPnP specification specifies how OSGi bundles can be
+          developed that inter-operate with UPnP (Universal Plug and Play)
+          devices and UPnP control points. See <xref
+          linkend="service.dal"/>.</para>
         </listitem>
-	  
-	<listitem>
-          <para><emphasis>Device Abstraction Layer Functions</emphasis> - The Device Abstraction Layer Functions specifiy the minimal set of such basic device operations and the related properties. They can be extended or replaced to cover domain specific scenarios. The set is not closed and can be incorporated with vendor specific functions. There is support for: control, monitoring and metering information See .</para>
+
+        <listitem>
+          <para><emphasis>Device Abstraction Layer Functions
+          Specification</emphasis> - The Device Abstraction Layer Functions
+          specify the minimal set of such basic device operations and the
+          related properties. They can be extended or replaced to cover domain
+          specific scenarios. The set is not closed and can be incorporated
+          with vendor specific functions. There is support for: control,
+          monitoring and metering information See <xref
+          linkend="service.dal.functions"/>.</para>
         </listitem>
-	
-	  <listitem>
-          <para><emphasis>EnOcean Device Service Specification</emphasis> - This specification defines how OSGi bundles can be developed to discover and control EnOcean devices on the one hand, and act as EnOcean devices and interoperate with EnOcean clients on the other hand. In particular, a Java mapping is provided for the standard representation of EnOcean devices called EnOcean Equipment Profile (EEP). See .</para>
+
+        <listitem>
+          <para><emphasis>EnOcean Device Service Specification</emphasis> -
+          This specification defines how OSGi bundles can be developed to
+          discover and control EnOcean devices on the one hand, and act as
+          EnOcean devices and interoperate with EnOcean clients on the other
+          hand. In particular, a Java mapping is provided for the standard
+          representation of EnOcean devices called EnOcean Equipment Profile
+          (EEP). See <xref linkend="service.enocean"/>.</para>
         </listitem>
-	
-	<listitem>
-          <para><emphasis>USB Information Device Category Specification</emphasis> - The
-          UPnP specification specifies how OSGi bundles can be developed that
-          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See .</para>
+
+        <listitem>
+          <para><emphasis>USB Information Device Category
+          Specification</emphasis> - <remark>(BJH This text is wrong. It is a
+          copy of the UPnP text.) </remark>The UPnP specification specifies
+          how OSGi bundles can be developed that inter-operate with UPnP
+          (Universal Plug and Play) devices and UPnP control points. See <xref
+          linkend="service.usbinfo"/>.</para>
         </listitem>
-   
-	
-	<listitem>
-          <para><emphasis>Serial Device Service Specification</emphasis> - The
-          UPnP specification specifies how OSGi bundles can be developed that
-          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See .</para>
+
+        <listitem>
+          <para><emphasis>Serial Device Service Specification</emphasis> -
+          <remark>(BJH This text is wrong. It is a copy of the UPnP text.)
+          </remark>The UPnP specification specifies how OSGi bundles can be
+          developed that inter-operate with UPnP (Universal Plug and Play)
+          devices and UPnP control points. See <xref
+          linkend="service.serial"/>.</para>
         </listitem>
-	</itemizedlist>
-  </section>
-	
+      </itemizedlist>
+    </section>
+
     <section>
       <title>Miscellaneous Supporting Services</title>
 
@@ -325,6 +383,12 @@
           <para><emphasis>XML Parser Service Specification</emphasis> -
           Addresses how the classes defined in JAXP can be used in an OSGi
           Framework. See <xref linkend="util.xml"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Promises Specification</emphasis> - An asynchronous
+          programming model by which clients retrieve the result of the
+          asynchronous task. See <xref linkend="util.promise"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -667,14 +731,12 @@
       Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
       1997.</bibliomixed>
 
-      <bibliomixed xml:id="i432874"><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
-
       <bibliomixed xml:id="i434636"><title>Home Gateway
       Initiative</title>http://www.homegatewayinitiative.org</bibliomixed>
 
-      <bibliomixed xml:id="i435333"><title>HG Requirements for HGI Open Platform 2.0
-      </title>http://www.homegatewayinitiative.org/publis/HGI-RD048-HG_Requirements_for_HGI_Open_Platform_2_0_published_text.pdf</bibliomixed>
+      <bibliomixed xml:id="i435333"><title>HG Requirements for HGI Open
+      Platform
+      2.0</title>http://www.homegatewayinitiative.org/publis/HGI-RD048-HG_Requirements_for_HGI_Open_Platform_2_0_published_text.pdf</bibliomixed>
 
       <bibliomixed xml:id="i434644"><title>UPnP™
       Forum</title>http://upnp.org</bibliomixed>
@@ -688,9 +750,9 @@
       <bibliomixed xml:id="i437933"><title>TR-157 Amendment 3 Component
       Objects for
       CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
-
     </bibliolist>
   </section>
+
   <section>
     <title>Changes</title>
 
@@ -739,5 +801,5 @@
         <para>Added <xref linkend="util.promise"/>.</para>
       </listitem>
     </itemizedlist>
-</section>
+  </section>
 </chapter>
