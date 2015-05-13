@@ -7,7 +7,7 @@
          xmlns:ns4="http://www.w3.org/2000/svg"
          xmlns:ns3="http://www.w3.org/1998/Math/MathML"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Device Abstraction Layer</title>
+  <title>Device Abstraction Layer Specification</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.dal-version"
@@ -80,7 +80,6 @@
           </imageobject>
         </mediaobject>
       </figure>
-
     </section>
   </section>
 
