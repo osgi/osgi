@@ -17,10 +17,10 @@
 
     <releaseinfo xml:id="cmpn.book-release">Release 6</releaseinfo>
 
-    <pubdate>TBD</pubdate>
+    <pubdate>July 2015</pubdate>
 
     <copyright>
-      <year>2000, 2013</year>
+      <year>2000, 2015</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
@@ -97,7 +97,7 @@
   <xi:include href="../135/service.namespaces.xml"/>
 
   <xi:include href="../136/service.resolver.xml"/>
-  
+
   <xi:include href="../137/service.rest.xml"/>
 
   <xi:include href="../138/service.async.xml"/>
