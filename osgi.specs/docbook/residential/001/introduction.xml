@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <chapter label="1" revision="$Id$"
          version="5" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -29,15 +29,14 @@
 
 	<listitem>
       <para>Smart Home has become mainstream due to the growing interest in the Internet-of-Things (IoT).</para>
-  </listitem>
-  
-  <listitem>
-      <para>The need for interoperability due to the increasing amount of communication protocols.</para>
-  </listitem>
+    </listitem>
   
     <listitem>
-      <para>Always-on and broadband access to the Internet has become
-      pervasive.</para>
+      <para>The need for interoperability due to the increasing amount of communication protocols.</para>
+    </listitem>
+  
+    <listitem>
+      <para>Always-on and broadband access to the Internet has become pervasive.</para>
     </listitem>
   </itemizedlist>
 
@@ -109,8 +108,7 @@
           based on the TR-069 Remote Procedure Calls concept that is
           implemented on top of Dmt Admin. This connector supports data
           conversion and the object modeling constructs defined in the Dmt
-          Admin service, <xref
-          linkend="service.dmt.osgiobjectmodeling"/>.</para>
+          Admin service, <xref linkend="service.dmt.osgiobjectmodeling"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -185,17 +183,15 @@
           Configuration Admin Service. See <xref linkend="service.metatype"/>
           for details.</para>
         </listitem>
-      </itemizedlist>
-	  
-	     <itemizedlist>
+   	  
         <listitem>
-			<para><emphasis>Network Interface Information Service Specification</emphasis> - The Network Interface Information Service is a service for obtaining the network interface information and IP address information which can't presently be obtained via standard Java APIs. See chapter 143 in <xref linkend="BJ"/>.</para>
+			<para><emphasis>Network Interface Information Service Specification</emphasis> - The Network Interface Information Service is a service for obtaining the network interface information and IP address information which can't presently be obtained via standard Java APIs. See chapter 143 in .</para>
         </listitem>
 	  
-	        <itemizedlist>
         <listitem>
-			<para><emphasis>Resource Monitoring</emphasis> - The Resource Monitoring Specification defines an API for applications to monitor hardware resources consumed by any set of bundles. Monitored data may enable applications to take decisions on management actions to apply. Resource management actions are mentioned as examples in this chapter, e.g., actions on the lifecycle of components, bundles, the framework and the JVM, Java threads, raise of exceptions. See chapter 144 in <xref linkend="BJ"/>.</para>
+			<para><emphasis>Resource Monitoring</emphasis> - The Resource Monitoring Specification defines an API for applications to monitor hardware resources consumed by any set of bundles. Monitored data may enable applications to take decisions on management actions to apply. Resource management actions are mentioned as examples in this chapter, e.g., actions on the lifecycle of components, bundles, the framework and the JVM, Java threads, raise of exceptions. See chapter 144 in .</para>
         </listitem>
+	 </itemizedlist>
     </section>
 
     <section>
@@ -279,43 +275,39 @@
           control points. The specification is based on <xref
           linkend="i437630"/>. See <xref linkend="service.upnp"/>.</para>
         </listitem>
-      </itemizedlist>
 	 
 	  <listitem>
           <para><emphasis>Device Abstraction Layer</emphasis> - The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See <xref linkend="BJ"/>.</para>
+          control points. See.</para>
         </listitem>
-	</itemizedlist>
 	  
 	<listitem>
-          <para><emphasis>Device Abstraction Layer Functions</emphasis> - The Device Abstraction Layer Functions specifiy the minimal set of such basic device operations and the related properties. They can be extended or replaced to cover domain specific scenarios. The set is not closed and can be incorporated with vendor specific functions. There is support for: control, monitoring and metering information See <xref linkend="BJ"/>.</para>
+          <para><emphasis>Device Abstraction Layer Functions</emphasis> - The Device Abstraction Layer Functions specifiy the minimal set of such basic device operations and the related properties. They can be extended or replaced to cover domain specific scenarios. The set is not closed and can be incorporated with vendor specific functions. There is support for: control, monitoring and metering information See .</para>
         </listitem>
-	</itemizedlist>
 	
 	  <listitem>
-          <para><emphasis>EnOcean Device Service Specification</emphasis> - This specification defines how OSGi bundles can be developed to discover and control EnOcean devices on the one hand, and act as EnOcean devices and interoperate with EnOcean clients on the other hand. In particular, a Java mapping is provided for the standard representation of EnOcean devices called EnOcean Equipment Profile (EEP). See <xref linkend="BJ"/>.</para>
+          <para><emphasis>EnOcean Device Service Specification</emphasis> - This specification defines how OSGi bundles can be developed to discover and control EnOcean devices on the one hand, and act as EnOcean devices and interoperate with EnOcean clients on the other hand. In particular, a Java mapping is provided for the standard representation of EnOcean devices called EnOcean Equipment Profile (EEP). See .</para>
         </listitem>
-	</itemizedlist>
 	
 	<listitem>
           <para><emphasis>USB Information Device Category Specification</emphasis> - The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See <xref linkend="BJ"/>.</para>
+          control points. See .</para>
         </listitem>
-	</itemizedlist>
-    </section>
+   
 	
 	<listitem>
           <para><emphasis>Serial Device Service Specification</emphasis> - The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. See <xref linkend="BJ"/>.</para>
+          control points. See .</para>
         </listitem>
 	</itemizedlist>
-
+  </section>
+	
     <section>
       <title>Miscellaneous Supporting Services</title>
 
