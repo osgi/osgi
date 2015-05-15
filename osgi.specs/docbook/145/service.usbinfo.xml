@@ -29,9 +29,9 @@
     have USB interfaces and the needs of handling USB devices attached to
     these systems is increasing.</para>
 
-    <para> <xref linkend="service.device-device.category"/> defines the
-    concept of a device category. This specification defines a device category
-    for USB devices.</para>
+    <para><xref linkend="service.device-device.category"/> defines the concept
+    of a device category. This specification defines a device category for USB
+    devices.</para>
 
     <section>
       <title>Entities</title>
@@ -55,7 +55,6 @@
           </imageobject>
         </mediaobject>
       </figure>
-
     </section>
   </section>
 

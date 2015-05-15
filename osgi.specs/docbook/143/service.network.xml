@@ -19,7 +19,9 @@
   <section>
     <title>Introduction</title>
 
-    <para>The Network Interface Information Service is a service that provides a standard way for bundles to receive notification about changes in the network interface and IP address.</para>
+    <para>The Network Interface Information Service is a service that provides
+    a standard way for bundles to receive notification about changes in the
+    network interface and IP address.</para>
 
     <para>When the IP address is changed, a bundles utilizing the IP address
     information needs to detect the change. When using a standard Java API,
@@ -68,18 +70,21 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Network Interface Information Service bundle</emphasis> - The OSGi bundle that
-          implements NetworkAdapter and NetworkAddress services. Network Interface Information Service bundle registers NetworkAdapter and NetworkAddress services with the Framework.</para>
+          <para><emphasis>Network Interface Information Service
+          bundle</emphasis> - The OSGi bundle that implements NetworkAdapter
+          and NetworkAddress services. Network Interface Information Service
+          bundle registers NetworkAdapter and NetworkAddress services with the
+          Framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Network Interface Type</emphasis> - An identifier of the
-          network interface. It is independent of the operating system. The
-          two type of identifier string is specified in this specification.
-          This specification allows that Network Interface type other than them
-          can be defined by the platform provider in each environment. This
-          identifier is used by user bundle to specify the network interface
-          to be monitored.</para>
+          <para><emphasis>Network Interface Type</emphasis> - An identifier of
+          the network interface. It is independent of the operating system.
+          The two type of identifier string is specified in this
+          specification. This specification allows that Network Interface type
+          other than them can be defined by the platform provider in each
+          environment. This identifier is used by user bundle to specify the
+          network interface to be monitored.</para>
         </listitem>
 
         <listitem>
@@ -284,28 +289,28 @@
     <section>
       <title>Network Interface Type</title>
 
-      <para>Identifying the network interface is possible
-      by using the network interface name. However, since the network
-      interface name is an identifier that is dependent on the operating
-      system, if network interface name is used as identifier, bundles must be
-      implemented to be aware of the operating system. Therefore, in this
-      specification, “network interface type” which is independent of the
-      operating system, is used to identify the network interface. The network
-      interface type string of “LAN” and “WAN” are defined in this
-      specification. This specification allows that Network Interface type other
-      than “LAN”and “WAN” can be defined by the platform provider in each
-      environment. It is provided by the platform provider on which Network
-      Interface Information Service bundle is running. Network Interface type
-      “LAN”indicates the network interface connects to a local area network.
-      Network Interface type “WAN” indicates the network interface connects to
-      an external network (i.e. Internet). If a bundle wants to obtain the
-      information of the network interface connected to the Internet, the
-      bundle is able to get it by obtaining <code>NetworkAdapter</code>
-      service which sets "NetworkAdapter.NETWORKADAPTER_TYPE = WAN" to service
-      property from the service registry.</para>
+      <para>Identifying the network interface is possible by using the network
+      interface name. However, since the network interface name is an
+      identifier that is dependent on the operating system, if network
+      interface name is used as identifier, bundles must be implemented to be
+      aware of the operating system. Therefore, in this specification,
+      "network interface type” which is independent of the operating system,
+      is used to identify the network interface. The network interface type
+      string of "LAN" and "WAN" are defined in this specification. This
+      specification allows that Network Interface type other than "LAN"and
+      "WAN" can be defined by the platform provider in each environment. It is
+      provided by the platform provider on which Network Interface Information
+      Service bundle is running. Network Interface type "LAN"indicates the
+      network interface connects to a local area network. Network Interface
+      type "WAN" indicates the network interface connects to an external
+      network (i.e. Internet). If a bundle wants to obtain the information of
+      the network interface connected to the Internet, the bundle is able to
+      get it by obtaining <code>NetworkAdapter</code> service with the
+      <code>networkAdapter.type</code> service property set to the value
+      "WAN".</para>
 
       <para>This specification allows that Network Interface type other than
-      “LAN”and “WAN” can be defined by the platform provider in each
+      "LAN"and "WAN" can be defined by the platform provider in each
       environment. It may be provided by the platform provider on which
       Network Interface Information Service bundle is running.</para>
 
@@ -351,10 +356,9 @@
     <para><xref linkend="org.osgi.service.networkadapter.NetworkAddress"
     xrefstyle="hyperlink"/> interface provides information about an IP address
     available in the execution environment in which the a Network Interface
-    Information Service bundle is
-    running. <code>NetworkAddress</code> service is registered with the
-    service registry together with service properties as shown in the
-    following table.</para>
+    Information Service bundle is running. <code>NetworkAddress</code> service
+    is registered with the service registry together with service properties
+    as shown in the following table.</para>
 
     <table>
       <title>Service properties of NetworkAddress service</title>
@@ -443,11 +447,11 @@
     is updated with updated service properties. A bundle can detect the change
     of IP address by monitoring the registration or unregistering, updating of
     the <code>NetworkAddress</code> service. When registering a NetworkAdapter
-    service, the Network Interface Information Service bundle must register it with a unique service PID. Because IP
-    addresses are bound to a network interface, the service PID of the
-    associated <code>NetworkAdapter</code> service and its network interface
-    type are set in the service properties of the <code>NetworkAddress</code>
-    service.</para>
+    service, the Network Interface Information Service bundle must register it
+    with a unique service PID. Because IP addresses are bound to a network
+    interface, the service PID of the associated <code>NetworkAdapter</code>
+    service and its network interface type are set in the service properties
+    of the <code>NetworkAddress</code> service.</para>
 
     <section>
       <title>IP Address Version</title>
@@ -562,10 +566,10 @@
 
       <para>If a bundle which wants to check for an IP address of the IPv4
       global, the bundle is able to confirm by obtaining
-      <code>NetworkAddress</code> service which sets "
-      <code>NetworkAddress.IPADDRESS_VERSION = IPV4</code> " and "
-      <code>NetworkAddress.IPADDRESS_SCOPE = GLOBAL</code> " to service property from
-      service registry.</para>
+      <code>NetworkAddress</code> service with the
+      <code>ipAddress.version</code> service property set to the value
+      "<code>IPV4</code>" and the <code>ipAddress.scope</code> service
+      property set to the value "<code>GLOBAL</code>".</para>
     </section>
   </section>
 
