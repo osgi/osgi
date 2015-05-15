@@ -27,7 +27,7 @@ import java.net.SocketException;
  * correspond to each network interface must be registered. Network interface
  * information service is set the following information as service property.
  * <ul>
- * <li>{@link #NETWORKADAPTER_TYPE} : Network Adapter Type</li>
+ * <li>{@link #NETWORKADAPTER_TYPE} : Network Interface Type</li>
  * <li>{@link #NETWORKADAPTER_DISPLAYNAME} : Network Interface Display Name</li>
  * <li>{@link #NETWORKADAPTER_NAME} : Network Interface Name</li>
  * <li>{@link #NETWORKADAPTER_HARDWAREADDRESS} : Hardware Address</li>
@@ -169,13 +169,13 @@ public interface NetworkAdapter {
 	public String	NETWORKADAPTER_SUBINTERFACE			= "networkAdapter.subInterface";
 
 	/**
-	 * The string of networkadapter type which means the network interface to
+	 * The string of network interface type which means the network interface to
 	 * connect to an external network (i.e. Internet).
 	 */
 	public String	WAN									= "WAN";
 
 	/**
-	 * The string of networkadapter type which means the network interface to
+	 * The string of network interface type which means the network interface to
 	 * connect to a local area network.
 	 */
 	public String	LAN									= "LAN";

@@ -69,13 +69,13 @@ public interface NetworkAddress {
 	public String	NETWORKADAPTER_TYPE						= "networkAdapter.type";
 
 	/**
-	 * The key string of "ipAddress.version" service property. IP Address Type
-	 * is specified.
+	 * The key string of "ipAddress.version" service property. IP Address
+	 * version is specified.
 	 */
 	public String	IPADDRESS_VERSION						= "ipAddress.version";
 
 	/**
-	 * The key string of "ipAddress.scope" service property. IP Address Type is
+	 * The key string of "ipAddress.scope" service property. IP Address scope is
 	 * specified.
 	 */
 	public String	IPADDRESS_SCOPE							= "ipAddress.scope";

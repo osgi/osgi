@@ -19,9 +19,7 @@
   <section>
     <title>Introduction</title>
 
-    <para>The Network Interface Information Service is a service for obtaining
-    the network interface information and IP address information which
-    standard Java API presents.</para>
+    <para>The Network Interface Information Service is a service that provides a standard way for bundles to receive notification of the network interface information and IP address information.</para>
 
     <para>When the IP address is changed, a bundles utilizing the IP address
     information needs to detect the change. When using a standard Java API,
@@ -42,13 +40,7 @@
 
     <para>This specification defines the <code>NetworkAdapter</code> Service
     and <code>NetworkAddress</code> Service. These services provide network
-    interface information and IP address information. However how to receive
-    the notification of network interface information and IP address
-    information is implementation dependent. <remark>BJH What does this last
-    sentence mean? I thought the point of this spec (as described in the
-    opening paragraphs) was that it defined a standard way for bundles to
-    receive notification of changes in the network
-    information?</remark></para>
+    interface information and IP address information.</para>
 
     <section>
       <title>Entities</title>
@@ -76,10 +68,15 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>NetworkAdapterType</emphasis> - An identifier of the
+          <para><emphasis>Network Interface Information Service bundle</emphasis> - The OSGi bundle that
+          implements NetworkAdapter and NetworkAddress services. Network Interface Information Service bundle registers NetworkAdapter and NetworkAddress services with the Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Network Interface Type</emphasis> - An identifier of the
           network interface. It is independent of the operating system. The
           two type of identifier string is specified in this specification.
-          This specification allows that Network Adapter type other than them
+          This specification allows that Network Interface type other than them
           can be defined by the platform provider in each environment. This
           identifier is used by user bundle to specify the network interface
           to be monitored.</para>
@@ -111,12 +108,6 @@
           </imageobject>
         </mediaobject>
       </figure>
-
-      <remark>BJH The fonts in the above figure are not the correct fonts used
-      for other figures in the various specs. The fonts being used render
-      badly. The figure must be updated to use the correct fonts. The fonts
-      are all in osgi.specs/fonts and can be installed on your local system to
-      be used with your SVG editor.</remark>
 
       <para>The <xref linkend="org.osgi.service.networkadapter.NetworkAdapter"
       xrefstyle="hyperlink"/> service provides the network interface
@@ -288,25 +279,12 @@
     <code>NetworkAdapter</code> service is updated with changed service
     properties. <code>NetworkAdapter</code> interface provides a method
     corresponding to <code>java.net.NetworkInterface</code> in order to
-    provide information on the associated network interface. However, this
-    interface method does not support the Static method. In addition, because
-    <code>NetworkInterface</code> object or <code>InetAddress</code> object is
-    registered in the service registry as <code>NetworkAdapter</code> and
-    <code>NetworkAddress</code> , the <code>NetworkAdapter</code> interface
-    does not provide a method to get those objects.
-    <code>NetworkAdapter</code> provides a method to retrieve the value of an
-    attribute of a network interface. <remark>BJH I don't understand what this
-    paragraph is trying to say. Please explain.</remark></para>
+    provide information on the associated network interface.</para>
 
     <section>
-      <title>Network Adapter Type</title>
+      <title>Network Interface Type</title>
 
-      <para>Identifying the network interface <remark>(BJH It is very
-      confusing to read network adapter and network interface. I think these
-      are the same thing. If so, why do we call the type NetworkAdapter
-      instead NetworkInterface? It would reduce a lot of confusion in reading
-      this spec. Otherwise we need to be a lot more consistent about using the
-      right term rather than using them interchangeably.) </remark>is possible
+      <para>Identifying the network interface is possible
       by using the network interface name. However, since the network
       interface name is an identifier that is dependent on the operating
       system, if network interface name is used as identifier, bundles must be
@@ -314,27 +292,25 @@
       specification, “network interface type” which is independent of the
       operating system, is used to identify the network interface. The network
       interface type string of “LAN” and “WAN” are defined in this
-      specification. This specification allows that Network Adapter type other
+      specification. This specification allows that Network Interface type other
       than “LAN”and “WAN” can be defined by the platform provider in each
       environment. It is provided by the platform provider on which Network
-      Interface Information Service bundle is running. Network Adapter type
+      Interface Information Service bundle is running. Network Interface type
       “LAN”indicates the network interface connects to a local area network.
-      Network Adapter type “WAN” indicates the network interface connects to
+      Network Interface type “WAN” indicates the network interface connects to
       an external network (i.e. Internet). If a bundle wants to obtain the
       information of the network interface connected to the Internet, the
       bundle is able to get it by obtaining <code>NetworkAdapter</code>
-      service which sets "SERVICE_NETWORKADAPTER_TYPE = WAN" to service
-      property from the service registry.<remark>BJH I got lost. What is
-      SERVICE_NETWORKADAPTER_TYPE? Is that supposed to be
-      NetworkAdapter.NETWORKADAPTER_TYPE?</remark></para>
+      service which sets "NetworkAdapter.NETWORKADAPTER_TYPE = WAN" to service
+      property from the service registry.</para>
 
-      <para>This specification allows that Network Adapter type other than
+      <para>This specification allows that Network Interface type other than
       “LAN”and “WAN” can be defined by the platform provider in each
       environment. It may be provided by the platform provider on which
       Network Interface Information Service bundle is running.</para>
 
       <table>
-        <title>Network Adapter Type</title>
+        <title>Network Interface Type</title>
 
         <tgroup cols="2">
           <colspec colnum="1" colwidth="2*"/>
@@ -375,9 +351,7 @@
     <para><xref linkend="org.osgi.service.networkadapter.NetworkAddress"
     xrefstyle="hyperlink"/> interface provides information about an IP address
     available in the execution environment in which the a Network Interface
-    Information Service bundle <remark>(BJH The term "Network Interface
-    Information Service bundle" has been used several times without having
-    been defined. I suspect it should be defined in Entities.)</remark> is
+    Information Service bundle is
     running. <code>NetworkAddress</code> service is registered with the
     service registry together with service properties as shown in the
     following table.</para>
@@ -469,21 +443,11 @@
     is updated with updated service properties. A bundle can detect the change
     of IP address by monitoring the registration or unregistering, updating of
     the <code>NetworkAddress</code> service. When registering a NetworkAdapter
-    service, the implementation bundle <remark>(BJH Is this implementation
-    bundle the same as the "Network Interface Information Service
-    bundle"?)</remark> must register it with a unique service PID. Because IP
-    addresses are bound to a network adapter, the service PID of the
+    service, the Network Interface Information Service bundle must register it with a unique service PID. Because IP
+    addresses are bound to a network interface, the service PID of the
     associated <code>NetworkAdapter</code> service and its network interface
     type are set in the service properties of the <code>NetworkAddress</code>
-    service. <code>NetworkAdapter</code> service MUST be registered after the
-    all associated <code>NetworkAddress</code> services are registered.
-    <remark>(BJH This does not make sense. If NetworkAddress services must
-    refer to NetworkAdapter services, by pid, it only makes sense that the
-    NetworkAdapter service must be registered before any NetworkAddress
-    services.)</remark> On the other hand, when unregistering services, after
-    associated <code>NetworkAdapter</code> service is unregistered,
-    <code>NetworkAddress</code> of all related services are
-    unregistered.</para>
+    service.</para>
 
     <section>
       <title>IP Address Version</title>
@@ -599,12 +563,9 @@
       <para>If a bundle which wants to check for an IP address of the IPv4
       global, the bundle is able to confirm by obtaining
       <code>NetworkAddress</code> service which sets "
-      <code>SERVICE_IPADDRESS_VERSION = IPV4</code> " and "
-      <code>SERVICE_IPADDRESS_SCOPE = GLOBAL</code> " to service property from
-      service registry.<remark>BJH What is SERVICE_IPADDRESS_VERSION? Is that
-      supposed to be NetworkAddress.IPADDRESS_VERSION? What is
-      SERVICE_IPADDRESS_SCOPE? Is that supposed to be
-      NetworkAddress.IPADDRESS_SCOPE?</remark></para>
+      <code>NetworkAddress.IPADDRESS_VERSION = IPV4</code> " and "
+      <code>NetworkAddress.IPADDRESS_SCOPE = GLOBAL</code> " to service property from
+      service registry.</para>
     </section>
   </section>
 
