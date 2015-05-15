@@ -19,7 +19,7 @@
   <section>
     <title>Introduction</title>
 
-    <para>The Network Interface Information Service is a service that provides a standard way for bundles to receive notification of the network interface information and IP address information.</para>
+    <para>The Network Interface Information Service is a service that provides a standard way for bundles to receive notification about changes in the network interface and IP address.</para>
 
     <para>When the IP address is changed, a bundles utilizing the IP address
     information needs to detect the change. When using a standard Java API,
