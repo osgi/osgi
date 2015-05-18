@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -521,12 +520,12 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			BundleRequirement requirement = wire.getRequirement();
 			// directives
 			Map<String, String> directivesMap = requirement.getDirectives();
-			if ( ! directivesMap.equals(rmtReqDirectivesMap) ) 
+			if (!directivesMap.equals(rmtReqDirectivesMap))
 				continue;
 			
 			// attributes
 			Map<String, Object> attributeMap = requirement.getAttributes();
-			if ( ! attributeMap.equals(rmtReqAttributeMap) ) 
+			if (!equalMapContent(attributeMap, rmtReqAttributeMap))
 				continue;
 			
 			// FILTER
