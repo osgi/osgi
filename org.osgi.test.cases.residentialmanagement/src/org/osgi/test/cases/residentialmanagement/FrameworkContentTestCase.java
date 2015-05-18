@@ -108,7 +108,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 */
 	public void testBundleFields() throws Exception {
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);
@@ -142,7 +142,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		testBundle1 = installBundle(TESTBUNDLE_FRAGMENT, false);
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);
@@ -174,7 +174,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	public void testBundleHeaders() throws Exception {
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);
@@ -187,7 +187,9 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			String[] headers = session.getChildNodeNames(headersUri);
 			for (String header : headers ) {
 				String value = session.getNodeValue(headersUri + "/" + header).getString();
-				assertTrue( "Header '"+header+"' exists in RMT but not in the bundle.", realHeaders.get(header) != null );
+				assertNotNull("Header '" + header
+						+ "' exists in RMT but not in the bundle.",
+						realHeaders.get(header));
 				assertEquals( "Values for header '"+header+"' are different in RMT and bundle.", realHeaders.get(header), value);
 			} 
 		}
@@ -210,7 +212,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		testBundle6 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 		
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for the root node", session);
 		
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);
@@ -238,7 +240,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		testBundle2 = installAndStartBundle(TESTBUNDLE_NON_TRUSTED);
 		
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for the root node.", session);
 
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);
@@ -275,10 +277,14 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				matchAndRemoveSignerCertificateChain(session, bundleUri + "/" + SIGNERS, signer, allSignerDNs, trustedSignerDNs, unknownSignerIds);
 			
 			// now both maps should be empty
-			assertTrue("Some signer certificates are missing in the RMT: " + allSignerDNs, allSignerDNs.size() == 0 );
-			assertTrue("Some trusted signer certificates are missing in the RMT: " + trustedSignerDNs, trustedSignerDNs.size() == 0 );
+			assertEquals("Some signer certificates are missing in the RMT: "
+					+ allSignerDNs, 0, allSignerDNs.size());
+			assertEquals(
+					"Some trusted signer certificates are missing in the RMT: "
+							+ trustedSignerDNs, 0, trustedSignerDNs.size());
 
-			assertTrue("There are unknown Signers in the RMT: " + unknownSignerIds, unknownSignerIds.size() == 0 );
+			assertEquals("There are unknown Signers in the RMT: "
+					+ unknownSignerIds, 0, unknownSignerIds.size());
 		}
 	}
 	
@@ -289,7 +295,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	public void testFrameworkBundleEntries() throws Exception {
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		String[] bundleKeys = session.getChildNodeNames(uri);

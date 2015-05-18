@@ -24,9 +24,7 @@
  */
 package org.osgi.test.cases.residentialmanagement;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
@@ -60,7 +58,7 @@ public class FilterStructureTestCase extends RMTTestBase {
 		HashSet<String> unknown = new HashSet<String>();
 
 		session = dmtAdmin.getSession(FILTER_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FILTER_ROOT, session);
 		// create one exemplary filter to initialize creation of the automatic nodes
 		String relUri = "example";
 		session.createInteriorNode(relUri);
@@ -95,7 +93,7 @@ public class FilterStructureTestCase extends RMTTestBase {
 	 */
 	public void testMetaDataAndTypes() throws Exception {
 		session = dmtAdmin.getSession(FILTER_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FILTER_ROOT, session);
 		String uri = FILTER_ROOT + "/" + "example";
 
 		assertMetaData( FILTER_ROOT, false, "_G__", "0,1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
@@ -135,7 +133,7 @@ public class FilterStructureTestCase extends RMTTestBase {
 	public void testDefaults() throws DmtException {
 
 		session = dmtAdmin.getSession(FILTER_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FILTER_ROOT, session);
 		// create one exemplary filter to initialize creation of the automatic nodes
 		String uri = FILTER_ROOT + "/" + "example";
 		session.createInteriorNode(uri);
