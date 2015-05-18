@@ -228,10 +228,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	}
 
 	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
-		Enumeration<String> pathes = bundle.getEntryPaths(folder);
-		while (pathes.hasMoreElements()) {
+		Enumeration<String> paths = bundle.getEntryPaths(folder);
+		if (null == paths) {
+			//Only entries that have content will be returned, that is, empty directories in the Bundle’s archive are not returned.
+			return;
+		}
+		while (paths.hasMoreElements()) {
 			// filter out directories
-			String path = pathes.nextElement();
+			String path = paths.nextElement();
 			if ( path.endsWith("/"))
 				addBundleEntryFolder(results, bundle, path, encode );
 			else {
