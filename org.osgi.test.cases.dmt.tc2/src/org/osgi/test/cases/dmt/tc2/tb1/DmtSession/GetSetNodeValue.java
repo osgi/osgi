@@ -40,7 +40,6 @@
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
@@ -95,6 +94,7 @@ public class GetSetNodeValue implements TestInterface {
 		testGetSetNodeValue016();
 		testGetSetNodeValue017();
 		testGetSetNodeValue018();
+		testGetSetNodeValue019();
 	}
     
     private void prepare() {
@@ -500,9 +500,9 @@ public class GetSetNodeValue implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that a replaced interior node sends out events for 
-	 * each of its children in depth first order and node names sorted with 
-	 * Arrays.sort(String[]). 
+	 * This method asserts that a replaced interior node sends out events for
+	 * each of its children in depth first order and node names sorted with
+	 * Arrays.sort(String[]).
 	 * 
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
@@ -543,6 +543,31 @@ public class GetSetNodeValue implements TestInterface {
 		}
 	}
 	
+	/**
+	 * This method asserts that {@code DmtSession.getNodeValue(String)} doesn't
+	 * return {@code null} in case of malicious plug-in, which returns
+	 * {@code null}.
+	 *
+	 * @spec DmtSession.getNodeValue(String)
+	 */
+	private void testGetSetNodeValue019() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeValue019");
+			session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_SHARED);
+			session.getNodeValue(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_FAILED",
+					DmtException.COMMAND_FAILED, e.getCode());
+		} catch (Exception e) {
+			tbc.failExpectedOtherException(DmtException.class, e);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
 	public class EventTest implements EventHandler {
 		private int count=0;
 		private String[] nodeNames = new String[2];

@@ -36,7 +36,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.dmt.dispatcher.Plugin;
 import org.osgi.impl.service.dmt.dispatcher.Segment;
@@ -455,7 +454,7 @@ public class DmtSessionImpl implements DmtSession {
 		// then it can't be a structural node
 		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(
 				nodePath.getPath());
-		for (Segment segment : (List<Segment>) plugin.getOwns()) {
+		for (Segment segment : plugin.getOwns()) {
 			if (nodePath.getUri().equals(segment.getUri().toString()))
 				return false;
 		}
@@ -639,8 +638,11 @@ public class DmtSessionImpl implements DmtSession {
 		Node node = makeAbsoluteUri(nodeUri);
 		if (isScaffoldNode(nodeUri))
 			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "This operation is not allowed on scaffold nodes.");
-		else
-			return internalGetNodeValue(node);
+		DmtData result = internalGetNodeValue(node);
+		if (result == null) {
+			throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "The node value cannot be null.");
+		}
+		return result;
 	}
 
 	// also used by copy() to pass an already validated Node instead of a URI
@@ -761,7 +763,7 @@ public class DmtSessionImpl implements DmtSession {
 			for (Segment child : childSegments)
 				v.add(child.getName());
 		}
-		String[] structuralChildNodes = (String[]) v.toArray(new String[v
+		String[] structuralChildNodes = v.toArray(new String[v
 				.size()]);
 
 		// // we have to merge the node-names from the plugin with the defined
@@ -786,7 +788,7 @@ public class DmtSessionImpl implements DmtSession {
 		children.addAll(normalizeChildNodeNames(pluginChildNodes));
 		children.addAll(normalizeChildNodeNames(structuralChildNodes));
 
-		String[] processedChildNodeArray = (String[]) children
+		String[] processedChildNodeArray = children
 				.toArray(new String[children.size()]);
 		// ordering is not a requirement, but allows easier testing of plugins
 		Arrays.sort(processedChildNodeArray);
