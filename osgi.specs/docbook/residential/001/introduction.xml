@@ -215,10 +215,10 @@
 
         <listitem>
           <para><emphasis>Network Interface Information Service
-          Specification</emphasis> - The Network Interface Information Service
-          is a service for obtaining the network interface information and IP
-          address information which can't presently be obtained via standard
-          Java APIs. See <xref linkend="service.network"/>.</para>
+		  Specification</emphasis> - The Network Interface Information
+		  Service is a service that provides a standard way for bundles
+		  to receive notifications about changes in the network interface
+		  and IP address. See <xref linkend="service.network"/>.</para>
         </listitem>
 
         <listitem>
@@ -318,21 +318,22 @@
 
         <listitem>
           <para><emphasis>Device Abstraction Layer Specification</emphasis> -
-          <remark>(BJH This text is wrong. It is a copy of the UPnP text.)
-          </remark>The UPnP specification specifies how OSGi bundles can be
-          developed that inter-operate with UPnP (Universal Plug and Play)
-          devices and UPnP control points. See <xref
+          The Device Abstraction Layer Specification provides a unified interface 
+		  for application developers to interact with sensor, devices, etc
+		  connected to a gateway. Application developers don't have to deal with
+		  protocol specific details and as such facilities the development of their applications.
+		  See <xref
           linkend="service.dal"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Device Abstraction Layer Functions
           Specification</emphasis> - The Device Abstraction Layer Functions
-          specify the minimal set of such basic device operations and the
+          specify a minimal set of basic device operations and the
           related properties. They can be extended or replaced to cover domain
           specific scenarios. The set is not closed and can be incorporated
           with vendor specific functions. There is support for: control,
-          monitoring and metering information See <xref
+          monitoring and metering information. See <xref
           linkend="service.dal.functions"/>.</para>
         </listitem>
 
@@ -347,20 +348,17 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>USB Information Device Category
-          Specification</emphasis> - <remark>(BJH This text is wrong. It is a
-          copy of the UPnP text.) </remark>The UPnP specification specifies
-          how OSGi bundles can be developed that inter-operate with UPnP
-          (Universal Plug and Play) devices and UPnP control points. See <xref
-          linkend="service.usbinfo"/>.</para>
+          <para><emphasis>USB Information Device Category Specification
+		  Specification</emphasis> - The USB Information Device Category Specification
+		  defines a new device category for USB devices in order to handle the
+		  integration of communication protocols, e.g. ZigBee and Z-Wave via USB dongles.
+		  See <xref linkend="service.usbinfo"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Serial Device Service Specification</emphasis> -
-          <remark>(BJH This text is wrong. It is a copy of the UPnP text.)
-          </remark>The UPnP specification specifies how OSGi bundles can be
-          developed that inter-operate with UPnP (Universal Plug and Play)
-          devices and UPnP control points. See <xref
+		  The Serial Device Service Specification defines an API to communicate with 
+		  controllers connected to a serial port. See <xref
           linkend="service.serial"/>.</para>
         </listitem>
       </itemizedlist>

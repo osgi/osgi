@@ -17,13 +17,24 @@
   <section xml:id="service.dal-introduction">
     <title>Introduction</title>
 
-    <para>The remote device control provides an opportunity to save energy, to
+    <para>The Internet-of-Things (IoT) has a major impact in the IT-industry. 
+	It requires backend systems to receive information from sensors, actuators, 
+	appliances in various vertical markets, such as smart home, eHealth, industrial automation,
+	logistics,automotive telematics. Application developers have to face the still increasing
+	amount of communication	protocols which are the major hurdle for interoperability. </para>
+
+	<para>The Device Abstraction Layer Specification provides a unified interface 
+    for application developers to interact with sensors, devices, etc
+	connected to a gateway. Application developers don't have to deal with
+	protocol specific details and such facilities the development of their applications.</para>
+	
+	<para>The remote device control provides an opportunity to save energy, to
     support better security, to save your time during daily tasks and more.
     The devices can play different roles in their networks as event reporters,
     controllers, etc. That dynamic behavior is well mappable to the dynamic
     OSGi service registry. When a new device is available in the network,
-    there is a registration of <code>Device</code> service. It realizes basic
-    set of management operations and provides rich set of properties. The
+    there is a registration of a <code>Device</code> service. It realizes basic
+    set of management operations and provides a rich set of properties. The
     applications can track the device status, read descriptive information and
     follow the device relations. A set of functions can belong to a single
     device. They represent the device operations and related properties in an

@@ -23,26 +23,26 @@
     a standard way for bundles to receive notification about changes in the
     network interface and IP address.</para>
 
-    <para>When the IP address is changed, a bundles utilizing the IP address
-    information needs to detect the change. When using a standard Java API,
+    <para>When the IP address has changed, a bundles utilizing the IP address
+    information needs to detect this change. When using the standard Java API,
     such as <code>java.net.NetworkInterface</code> and
     <code>java.net.InetAddress</code>, calls to confirm the IP address at
     regular intervals are required. Since this is a process common to all
     bundles that need to detect any change in IP address information, this
-    specification defines a change notification feature for each piece of
-    network interface information, including the IP address information. In
-    addition, this specification defines APIs that provide the function to
+    specification defines a notification feature for all available
+    network interface information, including the IP address. In
+    addition, this specification defines an APIs that provide the function to
     obtain the network interface information and the information of IP address
     bound to the network interfaces.</para>
 
-    <para>The name of a network interface can be OS specific. It is necessary
-    to distinguish a network interface in a form that is independent of the OS
-    so that bundles can refer to the network interface indepenent of the
-    OS.</para>
+    <para>The name of a network interface can be Operating System specific. 
+	In order for bundles to refer to the network interface it is necessary to
+	distinguish the network interface in a form that it is independent of the Operating
+	System. </para>
 
     <para>This specification defines the <code>NetworkAdapter</code> Service
-    and <code>NetworkAddress</code> Service. These services provide network
-    interface information and IP address information.</para>
+    and <code>NetworkAddress</code> Service. These services provide information about the 
+	network interface and IP addresses.</para>
 
     <section>
       <title>Entities</title>
