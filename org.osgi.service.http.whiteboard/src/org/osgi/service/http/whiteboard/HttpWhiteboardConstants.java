@@ -148,11 +148,7 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * <p>
 	 * Servlet names should be unique among all servlet services associated with
-	 * a single {@link ServletContextHelper}. If multiple servlet services
-	 * associated with the same ServletContextHelper have the same servlet name,
-	 * the one with the highest service ranking is referenced by a servlet
-	 * filter with the name specified through the
-	 * {@link #HTTP_WHITEBOARD_FILTER_SERVLET} service property.
+	 * a single {@link ServletContextHelper}.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
