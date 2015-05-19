@@ -154,7 +154,7 @@ public interface Device {
 
 	/**
 	 * Device status indicates that the device has been removed from the
-	 * network. That status must be set as the last device status and after that
+	 * network. That status must be set as the last device status. After that
 	 * the device service can be unregistered from the service registry. It can
 	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
@@ -306,9 +306,16 @@ public interface Device {
 	public String[] getServicePropertyKeys();
 
 	/**
-	 * Removes this device. The method must synchronously remove the device from
-	 * the device network and unregister the device service from the OSGi
-	 * service registry.
+	 * Removes this device.
+	 * <p>
+	 * The method must synchronously:
+	 * <ul>
+	 * <li>Remove the device from the device network.</li>
+	 * <li>Set the device status to {@link #STATUS_REMOVED}.</li>
+	 * <li>Unregister the device service from the OSGi service registry.</li>
+	 * </ul>
+	 * The caller should release the device service after successful execution,
+	 * because the device will not be operational.
 	 * 
 	 * @throws DeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported

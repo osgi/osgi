@@ -583,26 +583,40 @@ if (deviceSRefs != null) {
       xrefstyle="hyperlink"/> service registration. The function registration
       procedure is described in <xref
       linkend="service.dal-function.registration"/>.</para>
-
-      <para>The OSGi service registry is only for the read-only access to the
-      services. There are no control operations. The service provider is
-      responsible to register and unregister the services. That design is not
-      very convenient for the device life cycle. The <xref
-      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> interface
-      fills this gap with <xref linkend="org.osgi.service.dal.Device.remove--"
-      xrefstyle="hyperlink"/> method. It's a callback to the service provider
-      to remove the device from the network. The method can be optionally
-      implemented. <code>java.lang.UnsupportedOperationException</code> can be
-      thrown if the method is not supported. When the <xref
-      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
-      callback is called, an appropriate command will be synchronously send to
-      the device. As a result it can leave the network and the device related
-      service will be unregistered. There is an unregistration order. The
-      registration reverse order is used when the services are unregistered.
-      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
-      services are unregistered first before <xref
-      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
-      services.</para>
+      <para>
+        The OSGi service registry provides an access to the services, but
+        there are no management operations like remove a given service.
+        The service provider is responsible to register and unregister
+        own services. That design doesn't provide an option to remove
+        the device services. The <xref
+        linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> interface
+        fills this gap with <xref linkend="org.osgi.service.dal.Device.remove--"
+        xrefstyle="hyperlink"/> method. It's a callback to the service provider
+        to remove the device from the network. The method can be optionally
+        implemented. <code>java.lang.UnsupportedOperationException</code> can be
+        thrown if the method is not supported. When the <xref
+        linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+        is called:
+        <itemizedlist>
+          <listitem><para>
+            An appropriate command will be synchronously send to
+            the device. As a result it can leave the network.
+          </para></listitem>
+          <listitem><para>
+            The device status will be set to
+            <xref linkend="org.osgi.service.dal.Device.STATUS_REMOVED" xrefstyle="hyperlink"/>.
+          </para></listitem>
+          <listitem><para>
+            The related device service will be unregistered from the OSGi service registry.
+          </para></listitem>
+        </itemizedlist>
+        There is an unregistration order. The
+        registration reverse order is used when the services are unregistered.
+        <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+        services are unregistered first before <xref
+        linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+        services.
+      </para>
     </section>
 
     <section>
@@ -1877,22 +1891,25 @@ if (deviceSRefs != null) {
     <section>
       <title>Required Permissions</title>
 
-      <para>The <code>Device</code> implementation must check the caller for
-      the appropriate <code>DevicePermission</code> before execution of the
-      remove operation. Once the <code>DevicePermission</code> is checked
-      against the caller the implementation will proceed with the actual
-      operation. The operation can require a number of other permissions to
-      complete. The implementation must isolate the caller from such
-      permission checks by use of proper privileged blocks. <remark>BJH This
-      means that each DeviceImpl must be granted permission to remove itself.
-      It will be on the call stack when it checks the permission above (to see
-      of the caller has permission to remove this device). How will it be
-      coordinated that every bundle implementing a Device must be given
-      permission to remove its device? At the very least the need to grant
-      bundles implementing Device this permission needs to be documents.
-      However, this whole permission seems like an issue since there is not
-      central implementation to perform the security check which will be
-      granted the remove permission.</remark></para>
+      <para>
+        The <code>Device</code> implementation must check the caller for
+        the appropriate <code>DevicePermission</code> before execution of the
+        remove operation. Once the <code>DevicePermission</code> is checked
+        against the caller the implementation will proceed with the actual
+        operation. The operation can require a number of other permissions to
+        complete. The implementation must isolate the caller from such
+        permission checks by use of proper privileged blocks.
+      </para>
+      <para>
+        <code>DevicePermission</code> check will keep the <code>Device</code>
+        implementation in the call stack. It will push the implementation
+        to have this permission to perform the operation. The security
+        policy should be aware of this and should grant the correct permissions.
+        Note that the <code>DevicePermission</code> is a filter based permission,
+        see OSGi Core Specification, Filter Based Permissions.
+        It provides flexibility and fine control based on the <code>Device</code>
+        service properties.
+      </para>
     </section>
   </section>
 
