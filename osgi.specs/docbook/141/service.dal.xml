@@ -95,15 +95,14 @@
   </section>
 
   <section xml:id="service.dal-device.access.category">
-    <title>Device Access Category</title>
+    <title>Device Category</title>
 
-    <para>The device access category is called <code>DAL</code>. The category
-    name is defined by the <xref
-    linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY"
-    xrefstyle="hyperlink"/> constant. It can be used as a part of
-    <code>DEVICE_CATEGORY</code> service property key value. The category
-    mandates this specification rules. <remark>BJH What does the previous
-    sentence mean?</remark></para>
+    <para>
+      The device category defined in the scope of the Device Access service specification
+      is called <code>DAL</code>.
+      <xref linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY" xrefstyle="hyperlink"/> constant
+      contains the category name.
+    </para>
   </section>
 
   <section xml:id="service.dal-device.service">
