@@ -662,7 +662,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <entry><para>Provides the Whiteboard servlet with the specified
               name, provided through the
               <code>osgi.http.whiteboard.servlet.name</code> property, if
-              associated with this Servlet Context Helper. </para></entry>
+              associated with this Servlet Context Helper. If multiple servlets
+              have the same name and are associated with this Servlet Context
+              Helper then the highest ranked servlet is used. In the case of a
+              tie, the one with the lowest service ID is used.</para></entry>
             </row>
 
             <row>
