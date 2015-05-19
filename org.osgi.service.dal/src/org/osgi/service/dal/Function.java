@@ -24,6 +24,7 @@ package org.osgi.service.dal;
  * <li>properties;</li>
  * <li>operations.</li>
  * </ul>
+ * <p>
  * The function service is registered in the service registry with these service
  * properties:
  * <ul>
@@ -49,50 +50,36 @@ package org.osgi.service.dal;
  * when there are function properties. The property value is the function
  * property names.</li>
  * </ul>
+ * <p>
  * On start up, the {@code Function} services are registered before the
  * {@code Device} services. It's possible that {@link #SERVICE_DEVICE_UID} point
  * to missing services at the moment of the registration. The reverse order is
  * used when the services are unregistered. {@code Function} services are
  * unregistered last after {@code Device} services.
  * <p>
- * Function service must be registered under the function class hierarchy. Other
- * interfaces are not allowed. All classes from the function class hierarchy
- * must participate as registration classes in the order from child to parent.
- * The {@code Function} interface must be the last one in the list. For example,
- * {@code MeterV2 extends MeterV1 extends Function} are function interfaces. If
- * the implementation would like to provide {@code MeterV2} functionality, the
- * registration is:
- * <code>context.registerService(new String[]{MeterV2.class.getName(), MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
- * {@code MeterV2} is the last child in the class hierarchy and it's on the
- * first position. {@code MeterV1} is a parent of {@code MeterV2} and child of
- * {@code Function}. {@code MeterV1} position is between {@code MeterV2} and
- * {@code Function} in the registration classes. If the implementation would
- * like to provide {@code MeterV1} functionality, the registration is:
- * <code>context.registerService(new String[]{MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
+ * The {@code Function} service should be registered only under the function
+ * class hierarchy. Other classes can be used if there are no ambiguous
+ * representations. For example, an ambiguous representation can be a function
+ * registered under two independent function classes like {@code BinarySwitch}
+ * and {@code Meter}. In this example, both functions support the same property
+ * {@code state} with different meaning.
+ * {@code getPropertyMetadata(String propertyName)} method cannot determinate
+ * which property is requested. It can be <code>BinarySwitch state</code> or
+ * <code>Meter state</code>.
+ * <p>
+ * To simplify the generic function discovery, the {@code Function} interface
+ * must be used for the service registration. In this way, the generic
+ * applications can easily find all services, which are functions in the service
+ * registry. Because of this rule, this registration is not allowed:
+ * <p>
+ * <code>context.registerService(MeterV1.class.getName(), this, regProps);</code>
+ * <p>
  * If the implementation would like to mark that there is a function, but no
  * specific function interface exists, the registration can be:
- * <code>context.registerService(new String[]{Function.class.getName()}, this, regProps);</code>
+ * <p>
+ * <code>context.registerService(Function.class.getName(), this, regProps);</code>
+ * <p>
  * Note that such functions usually don't have operations and properties.
- * <p>
- * Some examples of not allowed registrations:
- * <ul>
- * <li>
- * <code>context.registerService(new String[] {ManagedService.class.getName(), Function.class.getName()}, this, regProps);</code>
- * - {@code ManagedService} interface doesn't participate in a function class
- * hierarchy.</li>
- * <li>
- * <code>context.registerService(new String[] {MeterV1.class.getName()}, this, regProps);</code>
- * - {@code Function} interface is missing.</li>
- * <li>
- * <code>context.registerService(new String[] {MeterV1.class.getName(), Alarm.class.getName(), Function.class.getName()}, this, regProps);</code>
- * , where {@code MeterV1 extends Function} and {@code Alarm extends Function} -
- * {@code MeterV1} and {@code Alarm} are from different function class
- * hierarchies.</li>
- * </ul>
- * <p>
- * That registration rule helps the applications to find the supported function
- * classes and to identify the metadata. Otherwise the function services can be
- * accesses, but it's not clear which are the function classes and metadata.
  * <p>
  * The function properties must be integrated according to these rules:
  * <ul>
@@ -126,12 +113,12 @@ package org.osgi.service.dal;
  * <li>No methods are required for properties with
  * {@link PropertyMetadata#ACCESS_EVENTABLE} access.</li>
  * </ul>
+ * <p>
  * The accessor method names must be defined according JavaBeans specification.
  * <p>
  * The function operations are java methods, which cannot override the property
  * accessor methods. They can have zero or more parameters and zero or one
  * return value.
- * 
  * <p>
  * Operation arguments and function properties are restricted by the same set of
  * rules. The data type can be one of the following types:
@@ -157,10 +144,11 @@ package org.osgi.service.dal;
  * of a single type follow these rules.</li>
  * <li>Arrays of defined types.</li>
  * </ul>
+ * <p>
  * The properties metadata is accessible with
  * {@link #getPropertyMetadata(String)}. The operations metadata is accessible
  * with {@link #getOperationMetadata(String)}.
- * 
+ * <p>
  * In order to provide common behavior, all functions must follow a set of
  * common rules related to the implementation of their setters, getters,
  * operations and events:

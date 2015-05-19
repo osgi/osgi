@@ -56,7 +56,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 	public SimulatedBooleanSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		super.register(
-				new String[] {BooleanSensor.class.getName(), Function.class.getName()},
+				new String[] {Function.class.getName(), BooleanSensor.class.getName()},
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 

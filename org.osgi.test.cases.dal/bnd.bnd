@@ -6,8 +6,6 @@ Export-Package: org.osgi.test.support.step;-noimport:=true, \
 
 Conditional-Package: org.osgi.test.support.*
 
-DynamicImport-Package : *
-
 Private-Package	= \
 	${p}
 

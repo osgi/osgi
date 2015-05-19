@@ -30,12 +30,10 @@ import org.osgi.test.cases.dal.step.DeviceTestSteps;
 public class FunctionTest extends AbstractDeviceTest {
 
 	/**
-	 * The function must be registered under only one interface, the function
-	 * interface. The test method checks that rule.
-	 * 
-	 * @throws ClassNotFoundException If the function class cannot be loaded.
+	 * Validates that the {@code Function} class is a part of the function
+	 * registration.
 	 */
-	public void testRegistrationClasses() throws ClassNotFoundException {
+	public void testRegistrationClasses() {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
@@ -49,12 +47,15 @@ public class FunctionTest extends AbstractDeviceTest {
 		for (int i = 0; i < functions.length; i++) {
 			String[] regClasses = (String[]) functions[i].getServiceProperty(Constants.OBJECTCLASS);
 			assertTrue("At least one registration class is expected!", regClasses.length >= 1);
-			assertEquals("The last registration class must be: " + Function.class.getName(),
-					Function.class.getName(), regClasses[regClasses.length - 1]);
-			Class[] classes = loadClasses(regClasses);
-			for (int ii = 0, lastIndex = classes.length - 1; ii < lastIndex; ii++) {
-				assertTrue("The child in the class hierarchy must be before the parent", classes[ii + 1].isAssignableFrom(classes[ii]));
+			String functionClassName = Function.class.getName();
+			boolean functionClassInUse = false;
+			for (int ii = 0; ii < regClasses.length; ii++) {
+				if (functionClassName.equals(regClasses[ii])) {
+					functionClassInUse = true;
+					break;
+				}
 			}
+			assertTrue("Function class is not used for the function registration.", functionClassInUse);
 		}
 	}
 
@@ -268,30 +269,16 @@ public class FunctionTest extends AbstractDeviceTest {
 		for (int i = 0; i < functions.length; i++) {
 			String[] operationNames = (String[]) functions[i].getServiceProperty(Function.SERVICE_OPERATION_NAMES);
 			for (int ii = 0; ii < operationNames.length; ii++) {
-				Class functionClass = TestUtil.getFunctionClass(
-						functions[i], super.getContext());
-				Method[] methods = TestUtil.getMethods(functionClass, operationNames[ii]);
+				Method[] methods = TestUtil.getFunctionMethods(functions[i], operationNames[ii], super.getContext());
 				assertNotNull("There is no method for operation: " + operationNames[ii], methods);
-				assertEquals("There is operation overloafing for: " + operationNames[ii], 1, methods.length);
+				assertEquals("There is operation overloading for: " + operationNames[ii], 1, methods.length);
 			}
 		}
 	}
 
-	private static Class[] loadClasses(String[] classNames) throws ClassNotFoundException {
-		if (null == classNames) {
-			return null;
-		}
-		Class[] classes = new Class[classNames.length];
-		for (int i = 0; i < classNames.length; i++) {
-			classes[i] = Class.forName(classNames[i]);
-		}
-		return classes;
-	}
-
-	private void checkPropertySetter(Function function, String propertyName) throws NoSuchMethodException, ClassNotFoundException {
+	private void checkPropertySetter(Function function, String propertyName) throws ClassNotFoundException {
 		String setterName = TestUtil.getBeanAccessor(propertyName, "set");
-		Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
-		Method[] setters = TestUtil.getMethods(functionClass, setterName);
+		Method[] setters = TestUtil.getFunctionMethods(function, setterName, super.getContext());
 		assertNotNull("There are no setters for property: " + propertyName, setters);
 		assertTrue("There must be one or two setters.",
 				(1 == setters.length) || (2 == setters.length));
@@ -320,8 +307,10 @@ public class FunctionTest extends AbstractDeviceTest {
 
 	private void checkPropertyGetter(Function function, String propertyName) throws NoSuchMethodException, ClassNotFoundException {
 		String getterName = TestUtil.getBeanAccessor(propertyName, "get");
-		Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
-		Method getter = functionClass.getMethod(getterName, null);
+		Method[] getters = TestUtil.getFunctionMethods(function, getterName, super.getContext());
+		assertEquals("Only one getter is expected: " + getterName, 1, getters.length);
+		Method getter = getters[0];
+		assertEquals("The getter must not accept parameters.", 0, getter.getParameterTypes().length);
 		Class returnType = getter.getReturnType();
 		assertNotNull("The function getter must have return type: " + getterName, returnType);
 		assertTrue(

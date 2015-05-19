@@ -1401,71 +1401,30 @@ if (deviceSRefs != null) {
       services. The device registration procedure is available in <xref
       linkend="service.dal-device.registration"/>.</para>
 
-      <para><xref linkend="org.osgi.service.dal.Function"
-      xrefstyle="hyperlink"/> service must be registered under the function
-      class hierarchy. Other interfaces are not allowed. <remark>BJH This is
-      contradictory. Either other interfaces are allowed, or they are
-      not.</remark> All classes from the function class hierarchy must
-      participate as registration classes in the order from child to parent.
-      The <xref linkend="org.osgi.service.dal.Function"
-      xrefstyle="hyperlink"/> interface must be the last one in the list. For
-      example, <code>MeterV2 extends MeterV1 extends Function</code> are
-      function interfaces. If the implementation would like to provide
-      <code>MeterV2</code> and <code>MeterV1</code> functionality, the
-      registration is: <programlisting>context.registerService(new String[]{
-  MeterV2.class.getName(),
-  MeterV1.class.getName(),
-  Function.class.getName()}, this, regProps);</programlisting>
-      <code>MeterV2</code> is the last child in the class hierarchy and it's
-      on the first position.<remark>BJH What is the point of this ordering
-      here? It means nothing. The framework does not care about the ordering
-      and the ordering is not visible in anyway from the service registry.
-      </remark> <code>MeterV1</code> is a parent of <code>MeterV2</code> and
-      child of <code>Function</code>. <code>MeterV1</code> position is between
-      <code>MeterV2</code> and <code>Function</code> in the registration
-      classes. If the implementation would like to provide
-      <code>MeterV1</code> functionality, the registration is:
-      <programlisting>context.registerService(new String[]{
-  MeterV1.class.getName(),
-  Function.class.getName()}, this, regProps);</programlisting> If the
-      implementation would like to mark that there is a function, but no
-      specific function interface exists, the registration can be:
-      <programlisting>context.registerService(Function.class.getName(), this, regProps);</programlisting>
-      Note that such functions usually don't have operations and
-      properties.</para>
-
-      <para>Some examples of not allowed registrations: <remark>BJH Why is it
-      not allowed? Why would you care? If they are not allowed, how would this
-      be enforced? Is there a CT test for this?</remark><itemizedlist>
-          <listitem>
-            <para><code>context.registerService(new String[]
-            {ManagedService.class.getName(), Function.class.getName()}, this,
-            regProps);</code> - <code>ManagedService</code> interface doesn't
-            participate in a function class hierarchy.</para>
-          </listitem>
-
-          <listitem>
-            <para><code>context.registerService(new String[]
-            {MeterV1.class.getName()}, this, regProps);</code> -
-            <code>Function</code> interface is missing.</para>
-          </listitem>
-
-          <listitem>
-            <para><code>context.registerService(new String[]
-            {MeterV1.class.getName(), Alarm.class.getName(),
-            Function.class.getName()}, this, regProps);</code> where
-            <code>MeterV1 extends Function and Alarm extends Function</code>.
-            - <code>MeterV1</code> and <code>Alarm</code> are from different
-            function class hierarchies.</para>
-          </listitem>
-        </itemizedlist></para>
-
-      <para>That registration rule helps the applications to find the
-      supported function classes and to identify the metadata. Otherwise the
-      function services can be accessed, but it's not clear which are the
-      function classes and metadata. <remark>BJH It should be pretty easy to
-      tell which service types are Function subtypes since they extend
-      Function.</remark></para>
+      <para>
+        The <xref linkend="org.osgi.service.dal.Function"
+        xrefstyle="hyperlink"/> service should be registered only under the function
+        class hierarchy. Other classes can be used if there are no ambiguous representations.
+        For example, an ambiguous representation can be a function registered under
+        two independent function classes like <code>BinarySwitch</code> and <code>Meter</code>.
+        In this example, both functions support the same property “state” with different meaning.
+        <code>getPropertyMetadata(String propertyName)</code> method cannot determinate which
+        property is requested. It can be <code>BinarySwitch</code> “state” or <code>Meter</code> “state”.
+      </para>
+      <para>
+        To simplify the generic function discovery, the <code>Function</code> interface must be
+        used for the service registration. In this way, the generic applications can easily
+        find all services, which are functions in the service registry. Because of this rule,
+        this registration is not allowed:
+        <programlisting>context.registerService(MeterV1.class.getName(), this, regProps);</programlisting>
+      </para>
+      <para>
+        If the implementation would like to mark that there is a function, but no
+        specific function interface exists, the registration can be:
+        <programlisting>context.registerService(Function.class.getName(), this, regProps);</programlisting>
+        Note that such functions usually don't have operations and
+        properties.
+      </para>
     </section>
 
     <section>

@@ -60,7 +60,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 	public SimulatedMultiLevelSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		super.register(
-				new String[] {MultiLevelSensor.class.getName(), Function.class.getName()},
+				new String[] {Function.class.getName(), MultiLevelSensor.class.getName()},
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 

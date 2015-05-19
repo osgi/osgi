@@ -11,8 +11,10 @@ package org.osgi.test.cases.dal;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -106,49 +108,63 @@ public final class TestUtil {
 	}
 
 	/**
-	 * Returns all class methods with the given name.
-	 * 
-	 * @param classObj The class to search in.
-	 * @param methodName The method name.
-	 * 
-	 * @return All methods or {@code null} if there are no such methods.
-	 */
-	public static Method[] getMethods(Class classObj, String methodName) {
-		Method[] methods = classObj.getMethods();
-		List result = new ArrayList();
-		for (int i = 0; i < methods.length; i++) {
-			if (methodName.equals(methods[i].getName())) {
-				result.add(methods[i]);
-			}
-		}
-		return (result.isEmpty()) ? null :
-				(Method[]) result.toArray(new Method[result.size()]);
-	}
-
-	/**
 	 * Returns the function class instance.
 	 * 
+	 *
 	 * @param function The function.
+	 * @param methodName The method name.
 	 * @param bc The bundle context.
 	 * 
 	 * @return The function class.
 	 * 
 	 * @throws ClassNotFoundException If the class cannot be found.
 	 */
-	public static Class getFunctionClass(Function function, BundleContext bc) throws ClassNotFoundException {
+	public static Method[] getFunctionMethods(Function function, String methodName, BundleContext bc) throws ClassNotFoundException {
+		Class[] functionClasses = getClasses(function, bc);
+		return getMethods(function.getClass(), methodName, functionClasses);
+	}
+
+	private static Class[] getClasses(Function function, BundleContext bc) throws ClassNotFoundException {
+		Long serviceId = (Long) function.getServiceProperty(Constants.SERVICE_ID);
+		ServiceReference[] sRefs = null;
 		try {
-			Long serviceId = (Long) function.getServiceProperty(Constants.SERVICE_ID);
-			ServiceReference[] sRefs = bc.getServiceReferences(
+			sRefs = bc.getServiceReferences(
 					null, '(' + Constants.SERVICE_ID + '=' + serviceId + ')');
-			if (1 != sRefs.length) {
-				throw new IllegalArgumentException(
-						"Cannot find the function service with id: " + serviceId);
-			}
-			return sRefs[0].getBundle().loadClass(
-					((String[]) function.getServiceProperty(Constants.OBJECTCLASS))[0]);
-		} catch (InvalidSyntaxException e) {
-			// the filter is valid, it's not possible
-			return null;
+		} catch (InvalidSyntaxException ise) {
+			// the filter is valid
 		}
+		if ((null == sRefs) || (1 != sRefs.length)) {
+			throw new IllegalArgumentException(
+					"Cannot find the function service with id: " + serviceId);
+		}
+		String[] objectClasses = (String[]) function.getServiceProperty(Constants.OBJECTCLASS);
+		Class[] result = new Class[objectClasses.length];
+		Bundle functionBundle = sRefs[0].getBundle();
+		for (int i = 0; i < objectClasses.length; i++) {
+			result[i] = functionBundle.loadClass(objectClasses[i]);
+		}
+		return result;
+	}
+
+	private static Method[] getMethods(Class classObj, String methodName, Class[] usedClasses) {
+		Method[] methods = classObj.getMethods();
+		List result = new ArrayList();
+		for (int i = 0; i < methods.length; i++) {
+			Method currentMethod = methods[i];
+			if (Modifier.isPublic(currentMethod.getModifiers()) &&
+					methodName.equals(currentMethod.getName())) {
+				for (int ii = 0; ii < usedClasses.length; ii++) {
+					try {
+						usedClasses[ii].getMethod(currentMethod.getName(), currentMethod.getParameterTypes());
+						result.add(currentMethod);
+						break;
+					} catch (NoSuchMethodException nsme) {
+						// try the next class
+					}
+				}
+			}
+		}
+		return (result.isEmpty()) ? null :
+				(Method[]) result.toArray(new Method[result.size()]);
 	}
 }
