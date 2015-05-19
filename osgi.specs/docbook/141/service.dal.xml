@@ -17,26 +17,29 @@
   <section xml:id="service.dal-introduction">
     <title>Introduction</title>
 
-    <para>The Internet-of-Things (IoT) has a major impact in the IT-industry. 
-	It requires backend systems to receive information from sensors, actuators, 
-	appliances in various vertical markets, such as smart home, eHealth, industrial automation,
-	logistics,automotive telematics. Application developers have to face the still increasing
-	amount of communication	protocols which are the major hurdle for interoperability. </para>
+    <para>The Internet-of-Things (IoT) has a major impact in the IT industry.
+    It requires backend systems to receive information from sensors,
+    actuators, and appliances in various vertical markets such as Smart Home,
+    eHealth, industrial automation, logistics, and automotive telematics.
+    Application developers have to face the still increasing amount of
+    communication protocols which are the major hurdle for
+    interoperability.</para>
 
-	<para>The Device Abstraction Layer Specification provides a unified interface 
-    for application developers to interact with sensors, devices, etc
-	connected to a gateway. Application developers don't have to deal with
-	protocol specific details and such facilities the development of their applications.</para>
-	
-	<para>The remote device control provides an opportunity to save energy, to
+    <para>The Device Abstraction Layer specification provides a unified
+    interface for application developers to interact with sensor, devices,
+    etc. connected to a gateway. Application developers don't have to deal
+    with protocol specific details which simplifies the development of their
+    applications.</para>
+
+    <para>The remote device control provides an opportunity to save energy, to
     support better security, to save your time during daily tasks and more.
     The devices can play different roles in their networks as event reporters,
     controllers, etc. That dynamic behavior is well mappable to the dynamic
     OSGi service registry. When a new device is available in the network,
-    there is a registration of a <code>Device</code> service. It realizes basic
-    set of management operations and provides a rich set of properties. The
-    applications can track the device status, read descriptive information and
-    follow the device relations. A set of functions can belong to a single
+    there is a registration of a <code>Device</code> service. It realizes
+    basic set of management operations and provides a rich set of properties.
+    The applications can track the device status, read descriptive information
+    and follow the device relations. A set of functions can belong to a single
     device. They represent the device operations and related properties in an
     atomic way. The device functions can be found in the OSGi service
     registry. The applications are allowed to get directly the required
@@ -97,12 +100,10 @@
   <section xml:id="service.dal-device.access.category">
     <title>Device Category</title>
 
-    <para>
-      The device category defined in the scope of the Device Access service specification
-      is called <code>DAL</code>.
-      <xref linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY" xrefstyle="hyperlink"/> constant
-      contains the category name.
-    </para>
+    <para>The device category defined in the scope of the Device Access
+    service specification is called <code>DAL</code>. <xref
+    linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY"
+    xrefstyle="hyperlink"/> constant contains the category name.</para>
   </section>
 
   <section xml:id="service.dal-device.service">
@@ -583,40 +584,41 @@ if (deviceSRefs != null) {
       xrefstyle="hyperlink"/> service registration. The function registration
       procedure is described in <xref
       linkend="service.dal-function.registration"/>.</para>
-      <para>
-        The OSGi service registry provides an access to the services, but
-        there are no management operations like remove a given service.
-        The service provider is responsible to register and unregister
-        own services. That design doesn't provide an option to remove
-        the device services. The <xref
-        linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> interface
-        fills this gap with <xref linkend="org.osgi.service.dal.Device.remove--"
-        xrefstyle="hyperlink"/> method. It's a callback to the service provider
-        to remove the device from the network. The method can be optionally
-        implemented. <code>java.lang.UnsupportedOperationException</code> can be
-        thrown if the method is not supported. When the <xref
-        linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
-        is called:
-        <itemizedlist>
-          <listitem><para>
-            An appropriate command will be synchronously send to
-            the device. As a result it can leave the network.
-          </para></listitem>
-          <listitem><para>
-            The device status will be set to
-            <xref linkend="org.osgi.service.dal.Device.STATUS_REMOVED" xrefstyle="hyperlink"/>.
-          </para></listitem>
-          <listitem><para>
-            The related device service will be unregistered from the OSGi service registry.
-          </para></listitem>
-        </itemizedlist>
-        There is an unregistration order. The
-        registration reverse order is used when the services are unregistered.
-        <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
-        services are unregistered first before <xref
-        linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
-        services.
-      </para>
+
+      <para>The OSGi service registry provides an access to the services, but
+      there are no management operations like remove a given service. The
+      service provider is responsible to register and unregister own services.
+      That design doesn't provide an option to remove the device services. The
+      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+      interface fills this gap with <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method. It's a callback to the service provider to remove the device
+      from the network. The method can be optionally implemented.
+      <code>java.lang.UnsupportedOperationException</code> can be thrown if
+      the method is not supported. When the <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      is called: <itemizedlist>
+          <listitem>
+            <para>An appropriate command will be synchronously send to the
+            device. As a result it can leave the network.</para>
+          </listitem>
+
+          <listitem>
+            <para>The device status will be set to <xref
+            linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+            xrefstyle="hyperlink"/>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The related device service will be unregistered from the
+            OSGi service registry.</para>
+          </listitem>
+        </itemizedlist> There is an unregistration order. The registration
+      reverse order is used when the services are unregistered. <xref
+      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> services
+      are unregistered first before <xref
+      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+      services.</para>
     </section>
 
     <section>
@@ -1415,30 +1417,28 @@ if (deviceSRefs != null) {
       services. The device registration procedure is available in <xref
       linkend="service.dal-device.registration"/>.</para>
 
-      <para>
-        The <xref linkend="org.osgi.service.dal.Function"
-        xrefstyle="hyperlink"/> service should be registered only under the function
-        class hierarchy. Other classes can be used if there are no ambiguous representations.
-        For example, an ambiguous representation can be a function registered under
-        two independent function classes like <code>BinarySwitch</code> and <code>Meter</code>.
-        In this example, both functions support the same property “state” with different meaning.
-        <code>getPropertyMetadata(String propertyName)</code> method cannot determinate which
-        property is requested. It can be <code>BinarySwitch</code> “state” or <code>Meter</code> “state”.
-      </para>
-      <para>
-        To simplify the generic function discovery, the <code>Function</code> interface must be
-        used for the service registration. In this way, the generic applications can easily
-        find all services, which are functions in the service registry. Because of this rule,
-        this registration is not allowed:
-        <programlisting>context.registerService(MeterV1.class.getName(), this, regProps);</programlisting>
-      </para>
-      <para>
-        If the implementation would like to mark that there is a function, but no
-        specific function interface exists, the registration can be:
-        <programlisting>context.registerService(Function.class.getName(), this, regProps);</programlisting>
-        Note that such functions usually don't have operations and
-        properties.
-      </para>
+      <para>The <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> service should be registered only under the
+      function class hierarchy. Other classes can be used if there are no
+      ambiguous representations. For example, an ambiguous representation can
+      be a function registered under two independent function classes like
+      <code>BinarySwitch</code> and <code>Meter</code>. In this example, both
+      functions support the same property “state” with different meaning.
+      <code>getPropertyMetadata(String propertyName)</code> method cannot
+      determinate which property is requested. It can be
+      <code>BinarySwitch</code> “state” or <code>Meter</code> “state”.</para>
+
+      <para>To simplify the generic function discovery, the
+      <code>Function</code> interface must be used for the service
+      registration. In this way, the generic applications can easily find all
+      services, which are functions in the service registry. Because of this
+      rule, this registration is not allowed: <programlisting>context.registerService(MeterV1.class.getName(), this, regProps);</programlisting></para>
+
+      <para>If the implementation would like to mark that there is a function,
+      but no specific function interface exists, the registration can be:
+      <programlisting>context.registerService(Function.class.getName(), this, regProps);</programlisting>
+      Note that such functions usually don't have operations and
+      properties.</para>
     </section>
 
     <section>
@@ -1891,25 +1891,22 @@ if (deviceSRefs != null) {
     <section>
       <title>Required Permissions</title>
 
-      <para>
-        The <code>Device</code> implementation must check the caller for
-        the appropriate <code>DevicePermission</code> before execution of the
-        remove operation. Once the <code>DevicePermission</code> is checked
-        against the caller the implementation will proceed with the actual
-        operation. The operation can require a number of other permissions to
-        complete. The implementation must isolate the caller from such
-        permission checks by use of proper privileged blocks.
-      </para>
-      <para>
-        <code>DevicePermission</code> check will keep the <code>Device</code>
-        implementation in the call stack. It will push the implementation
-        to have this permission to perform the operation. The security
-        policy should be aware of this and should grant the correct permissions.
-        Note that the <code>DevicePermission</code> is a filter based permission,
-        see OSGi Core Specification, Filter Based Permissions.
-        It provides flexibility and fine control based on the <code>Device</code>
-        service properties.
-      </para>
+      <para>The <code>Device</code> implementation must check the caller for
+      the appropriate <code>DevicePermission</code> before execution of the
+      remove operation. Once the <code>DevicePermission</code> is checked
+      against the caller the implementation will proceed with the actual
+      operation. The operation can require a number of other permissions to
+      complete. The implementation must isolate the caller from such
+      permission checks by use of proper privileged blocks.</para>
+
+      <para><code>DevicePermission</code> check will keep the
+      <code>Device</code> implementation in the call stack. This requires the
+      implementation to have this permission to perform the operation. The
+      security policy should be aware of this and should grant the correct
+      permissions. Note that the <code>DevicePermission</code> is a filter
+      based permission, see OSGi Core Specification, Filter Based Permissions.
+      It provides flexibility and fine control based on the
+      <code>Device</code> service properties.</para>
     </section>
   </section>
 

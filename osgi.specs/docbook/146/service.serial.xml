@@ -20,25 +20,28 @@
     <title>Introduction</title>
 
     <para>Recently, OSGi is gaining popularity as an enabling technology for
-    building embedded systems in the residential market as well as other IoT domains.
-	It is expected that communication with various devices attached to OSGi enabled 
-	gateways will be necessary.</para>
+    building embedded systems in the residential market as well as other
+    Internet-of-Things (IoT) domains. It is expected that communication with
+    various devices attached to OSGi enabled gateways will be
+    necessary.</para>
 
     <para>Such communication can be implemented by means of serial connection
     when using non-IP devices based on ZigBee and Z-wave protocols. The most
     typical case arises when a USB dongle that supports such protocols is
-    connected to the USB port of such a device (e.g. residential gateway). The 
-	Operating System on the gateways will recognize the dongle as a virtual 
-	serial device, and initiate a serial communication with the application process.</para>
+    connected to the USB port of such a device, for example, residential
+    gateway. The Operating System on the gateways will recognize the dongle as
+    a virtual serial device and initiate a serial communication with the
+    application process.</para>
 
-    <para>The Serial Device Service Specification defines an API that is required 
-		for establishing a communication between an OSGi bundle and a serial device,
-		such as a ZigBee coordinator or Z-Wave controller.</para>
+    <para>The Serial Device Service specification defines an API for
+    establishing communications between an OSGi bundle and a serial device,
+    such as a ZigBee coordinator or Z-Wave controller.</para>
 
     <para><xref linkend="service.device-device.category"/> defines the concept
-    of a device category. <xref linkend="service.usbinfo"/> defines a device
-    category for USB devices. Both specifications incl. this one are the solution
-	for the USB serial use case.</para>
+    of device categories. <xref linkend="service.usbinfo"/> defines a device
+    category for USB devices. This specification and <xref
+    linkend="service.usbinfo"/> provide a solution for the USB serial use
+    case.</para>
 
     <section>
       <title>Entities</title>

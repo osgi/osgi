@@ -24,13 +24,14 @@
     devices found in the home network by using various protocols such as USB,
     ZigBee, Z-Wave, KNX, UPnP, etc.</para>
 
-    <para>Recently, OSGi is gaining popularity as enabling technology for 
-    building embedded systems in the residential market as well as other IoT domains.
-	Such systems often have USB interfaces and the need of handling USB devices attached to
-    these systems is increasing.</para>
+    <para>Recently, OSGi is gaining popularity as enabling technology for
+    building embedded systems in the residential market as well as other
+    Internet-of-Things (IoT) domains. Such systems often have USB interfaces
+    and the need of handling USB devices attached to these systems is
+    increasing.</para>
 
     <para><xref linkend="service.device-device.category"/> defines the concept
-    of device category. This specification defines additionally a device category for USB
+    of device categories. This specification defines a device category for USB
     devices.</para>
 
     <section>
