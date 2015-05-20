@@ -240,7 +240,7 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
       ext.destinationDir = new File(buildDir, 'fo')
       ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
       ext.bookfo = new File(destinationDir, taskName)
-      ext.watermark = 'docbook/graphics/proposed-final-draft.svg'
+      ext.watermark = 'docbook/graphics/draft.svg'
       inputs.files stylesheet, booktask.bookxml
       outputs.file bookfo
       doFirst {
