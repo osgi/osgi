@@ -1062,9 +1062,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para><code>Servlet</code> and resource service registrations associated
     with a single Servlet Context share the same namespace. In
     case of identical registration patterns, service ranking rules are used to
-    select the service handling a request. In such cases, Whiteboard servlets
-    that have patterns shadowed by other Whiteboard services are represented 
-    in the failure DTOs.</para>
+    select the service handling a request. That is, Whiteboard servlets
+    that have patterns shadowed by other Whiteboard services associated with 
+    the <emphasis>same</emphasis> Servlet Context are represented in the 
+    failure DTOs.</para>
 
     <para>The above rules can cause servlets that are already bound becoming
     unbound if a better match arrives. This ensures a predictable end result
@@ -1698,14 +1699,14 @@ public class SomeResourceService {}</programlisting>
     <section>
       <title>Overlapping Resource and Servlet registrations</title>
 
-      <para>Resources and servlets registered with the same Http Whiteboard
+      <para>Resources and servlets registered with the same Servlet Context
       implementation share a single URI namespace. This means that the value
       specified in <code>osgi.http.whiteboard.resource.pattern</code> competes
       with the <code>osgi.http.whiteboard.servlet.pattern</code> property
       specified on servlets. If these values overlap, the rules as outlined in
       <xref linkend="service.http.whiteboard-i21223311"/> are used to resolve
-      conflicts, where resource services are treated just like servlets. Any
-      shadowed resource patterns are reported as <xref
+      conflicts, where resource services are treated just like servlets. 
+      Shadowed resource patterns are reported as <xref
       linkend="org.osgi.service.http.runtime.dto.FailedResourceDTO"
       xrefstyle="hyperlink"/>.</para>
     </section>
