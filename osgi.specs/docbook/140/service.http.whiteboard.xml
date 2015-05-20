@@ -246,12 +246,11 @@
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
-            RFC 3986, section 3.3. 
-            The context path of the default Servlet Context Helper is <code>/</code>. 
-            A custom default Servlet Context Helper may use an alternative path.
-            If the path is invalid or unspecified, the
-            service is not used and reflected in the failure DTOs. 
-            See <xref
+            RFC 3986, section 3.3. The context path of the default Servlet
+            Context Helper is <code>/</code>. A custom default Servlet Context
+            Helper may use an alternative path. If the path is invalid or
+            unspecified, the service is not used and reflected in the failure
+            DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -552,7 +551,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <entry><para>Return the web context path of the Servlet Context.
               This takes into account the
               <code>osgi.http.whiteboard.context.path</code> of the Servlet
-              Context Helper and the path of the http runtime.</para></entry>
+              Context Helper and the path of the Http runtime.</para></entry>
             </row>
 
             <row>
@@ -662,10 +661,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <entry><para>Provides the Whiteboard servlet with the specified
               name, provided through the
               <code>osgi.http.whiteboard.servlet.name</code> property, if
-              associated with this Servlet Context Helper. If multiple servlets
-              have the same name and are associated with this Servlet Context
-              Helper then the highest ranked servlet is used. In the case of a
-              tie, the one with the lowest service ID is used.</para></entry>
+              associated with this Servlet Context Helper. If multiple
+              servlets have the same name and are associated with this Servlet
+              Context Helper then the highest ranked servlet is used. In the
+              case of a tie, the one with the lowest service ID is
+              used.</para></entry>
             </row>
 
             <row>
@@ -1060,12 +1060,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </itemizedlist>
 
     <para><code>Servlet</code> and resource service registrations associated
-    with a single Servlet Context share the same namespace. In
-    case of identical registration patterns, service ranking rules are used to
-    select the service handling a request. That is, Whiteboard servlets
-    that have patterns shadowed by other Whiteboard services associated with 
-    the <emphasis>same</emphasis> Servlet Context are represented in the 
-    failure DTOs.</para>
+    with a single Servlet Context share the same namespace. In case of
+    identical registration patterns, service ranking rules are used to select
+    the service handling a request. That is, Whiteboard servlets that have
+    patterns shadowed by other Whiteboard services associated with the
+    <emphasis>same</emphasis> Servlet Context are represented in the failure
+    DTOs.</para>
 
     <para>The above rules can cause servlets that are already bound becoming
     unbound if a better match arrives. This ensures a predictable end result
@@ -1082,9 +1082,10 @@ public class CDNServletContextHelper extends ServletContextHelper {
     servlet is registered for the same pattern with the Http Service as well
     as with the Http Whiteboard. The Servlet Context of the Http Service is
     treated in the same way as all contexts managed by the Whiteboard
-    implementation. The highest ranking is associated with the context of
-    the Http Service. For a request, contexts are processed in the order as
-    described in section <xref linkend="service.http.whiteboard.servletcontext"/>.</para>
+    implementation. The highest ranking is associated with the context of the
+    Http Service. For a request, contexts are processed in the order as
+    described in section <xref
+    linkend="service.http.whiteboard.servletcontext"/>.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
@@ -1476,7 +1477,7 @@ public class AsyncServlet extends HttpServlet {
 
             <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
-            <entry><para>Apply this servlet filter to the specified url path
+            <entry><para>Apply this servlet filter to the specified URL path
             patterns. The format of the patterns is specified in the servlet
             specification. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN"
@@ -1488,7 +1489,7 @@ public class AsyncServlet extends HttpServlet {
 
             <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
-            <entry><para>Apply this servlet filter to the specified url paths.
+            <entry><para>Apply this servlet filter to the specified URL paths.
             The paths are specified as regular expressions following the
             syntax defined in the <code>java.util.regex.Pattern</code> class.
             See <xref
@@ -1700,12 +1701,12 @@ public class SomeResourceService {}</programlisting>
       <title>Overlapping Resource and Servlet registrations</title>
 
       <para>Resources and servlets registered with the same Servlet Context
-      share a single URI namespace. This means that the value
-      specified in <code>osgi.http.whiteboard.resource.pattern</code> competes
-      with the <code>osgi.http.whiteboard.servlet.pattern</code> property
-      specified on servlets. If these values overlap, the rules as outlined in
-      <xref linkend="service.http.whiteboard-i21223311"/> are used to resolve
-      conflicts, where resource services are treated just like servlets. 
+      share a single URI namespace. This means that the value specified in
+      <code>osgi.http.whiteboard.resource.pattern</code> competes with the
+      <code>osgi.http.whiteboard.servlet.pattern</code> property specified on
+      servlets. If these values overlap, the rules as outlined in <xref
+      linkend="service.http.whiteboard-i21223311"/> are used to resolve
+      conflicts, where resource services are treated just like servlets.
       Shadowed resource patterns are reported as <xref
       linkend="org.osgi.service.http.runtime.dto.FailedResourceDTO"
       xrefstyle="hyperlink"/>.</para>
