@@ -1700,7 +1700,7 @@ public class SomeResourceService {}</programlisting>
       <title>Overlapping Resource and Servlet registrations</title>
 
       <para>Resources and servlets registered with the same Servlet Context
-      implementation share a single URI namespace. This means that the value
+      share a single URI namespace. This means that the value
       specified in <code>osgi.http.whiteboard.resource.pattern</code> competes
       with the <code>osgi.http.whiteboard.servlet.pattern</code> property
       specified on servlets. If these values overlap, the rules as outlined in
