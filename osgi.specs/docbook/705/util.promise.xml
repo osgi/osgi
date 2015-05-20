@@ -306,8 +306,9 @@ answer.onResolve(new Runnable() {
       callbacks. The <xref linkend="org.osgi.util.promise.Success"
       xrefstyle="hyperlink"/> callback is only called if the Promise is
       successfully resolved with a value. The <xref
-      linkend="org.osgi.util.promise.Failure" xrefstyle="hyperlink"/> is only
-      called if the Promise is unsuccessfully resolved with a failure.</para>
+      linkend="org.osgi.util.promise.Failure" xrefstyle="hyperlink"/> callback
+      is only called if the Promise is unsuccessfully resolved with a
+      failure.</para>
 
       <programlisting>Promise&lt;String&gt; answer = getTimeConsumingAnswer();
 answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFailure()));</programlisting>
@@ -348,13 +349,13 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
 
     <programlisting>Promise&lt;String&gt; name = getDownloadName();
 Promise&lt;URL&gt; mirror = name.then(p -&gt; getMirror(p.getValue()));
-Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());</programlisting>
+Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</programlisting>
 
     <para>Since we probably do not need the intermediate Promises, we can
     collapse the chain into a single statement.</para>
 
     <programlisting>Promise&lt;InputStream&gt; in = getDownloadName().then(p -&gt; getMirror(p.getValue()))
-                                           .then(p -&gt; p.getValue().openStream());</programlisting>
+                                           .then(p -&gt; getStream(p.getValue()));</programlisting>
 
     <para>The chain of Promises will also propagate any exceptions that occur
     to resolve the last Promise in the chain which means we do not need to do
