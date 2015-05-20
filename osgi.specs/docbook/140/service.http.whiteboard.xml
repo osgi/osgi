@@ -1060,9 +1060,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </itemizedlist>
 
     <para><code>Servlet</code> and resource service registrations associated
-    with a single Http Whiteboard implementation share the same namespace. In
+    with a single Servlet Context share the same namespace. In
     case of identical registration patterns, service ranking rules are used to
-    select the service handling a request.</para>
+    select the service handling a request. In such cases, Whiteboard servlets
+    that have patterns shadowed by other Whiteboard services are represented 
+    in the failure DTOs.</para>
 
     <para>The above rules can cause servlets that are already bound becoming
     unbound if a better match arrives. This ensures a predictable end result
@@ -1077,11 +1079,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
     <para>With implementations that both implement this specification as well
     as the <xref linkend="service.http"/>, situations can arise where a
     servlet is registered for the same pattern with the Http Service as well
-    as with the Http Whiteboard. In such cases the service registered with the
-    Http Service wins and the Whiteboard service fails. The failing servlet is
-    reflected in the failure DTOs. Similarly, Whiteboard servlets that have
-    patterns shadowed by other Whiteboard services are represented in the
-    failure DTOs.</para>
+    as with the Http Whiteboard. The Servlet Context of the Http Service is
+    treated in the same way as all contexts managed by the Whiteboard
+    implementation. The highest ranking is associated with the context of
+    the Http Service. For a request, contexts are processed in the order as
+    described in section <xref linkend="service.http.whiteboard.servletcontext"/>.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
