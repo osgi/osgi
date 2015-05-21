@@ -1,27 +1,27 @@
 
 package org.osgi.impl.service.tr069todmt;
 
-import java.util.Arrays;
-import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.text.ParseException;
-import org.osgi.service.dmt.Uri;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.DmtException;
+import org.osgi.impl.service.tr069todmt.encode.Base64;
+import org.osgi.impl.service.tr069todmt.encode.HexBinary;
 import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.log.LogService;
 import org.osgi.service.tr069todmt.ParameterInfo;
 import org.osgi.service.tr069todmt.ParameterValue;
 import org.osgi.service.tr069todmt.TR069Connector;
 import org.osgi.service.tr069todmt.TR069Exception;
-import org.osgi.impl.service.tr069todmt.encode.Base64;
-import org.osgi.impl.service.tr069todmt.encode.HexBinary;
 
 /**
  * 
@@ -482,26 +482,15 @@ public class TR069ConnectorImpl implements TR069Connector {
 	private void addChildren(String aliasedParentUri, ArrayList<ParameterInfo> names, boolean nextLevel) {
 		try {
 			/*
-			 * Any MAP and LIST node must include a ParameterInfo for the
-			 * corresponding NumberOfEntries parameter
-			 */
-			/*
 			 * If the parent node is a MAP, then the synthetic Alias parameter
 			 * must be included
 			 */
-			String parentPath = toPath(aliasedParentUri);
-			if (DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, aliasedParentUri)) ||
-					DmtConstants.DDF_LIST.equals(factory.persistenceManager.getNodeType(session, aliasedParentUri))) {
-				int parentPathLength = parentPath.length();
-				String numberOfEntriesName = escape(parentPath.substring(parentPath.lastIndexOf(Utils.DOT, parentPathLength - 2) + 1, parentPathLength - 1)) + Utils.NUMBER_OF_ENTRIES;
-				names.add(new ParameterInfoImpl(this, parentPath + numberOfEntriesName, new Node(aliasedParentUri + Uri.PATH_SEPARATOR + numberOfEntriesName, session)));
-			}
-
 			String[] children = factory.persistenceManager.getChildNodeNames(session, aliasedParentUri, true);
 			if (children == null || children.length == 0) {
 				return;
 			}
 			boolean isParentMap = DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, aliasedParentUri));
+			String parentPath = toPath(aliasedParentUri);
 			for (int i = 0; i < children.length; i++) {
 				if (Utils.INSTANCE_ID.equals(children[i])) {
 					continue;
@@ -519,6 +508,22 @@ public class TR069ConnectorImpl implements TR069Connector {
 					names.add(new ParameterInfoImpl(this,
 							childPath + Utils.ALIAS, new Node(childUri + Uri.PATH_SEPARATOR + Utils.ALIAS, session))
 							);
+				}
+
+				// If the child is MAP or LIST, add NumberOfEntries node.
+				String childType = factory.persistenceManager.getNodeType(session,
+						childUri);
+				if ((DmtConstants.DDF_MAP.equals(childType)) ||
+						(DmtConstants.DDF_LIST.equals(childType))) {
+					int childPathLength = childPath.length();
+					String numberOfEntriesName = escape(childPath.substring(
+							childPath.lastIndexOf(Utils.DOT, childPathLength - 2) + 1,
+							childPathLength - 1)) + Utils.NUMBER_OF_ENTRIES;
+					String numberOfEntriesUri = (aliasedParentUri.length() > 0 ?
+							aliasedParentUri + Uri.PATH_SEPARATOR : aliasedParentUri)
+							+ numberOfEntriesName;
+					names.add(new ParameterInfoImpl(this, parentPath + numberOfEntriesName,
+							new Node(numberOfEntriesUri, session)));
 				}
 
 				if (!nextLevel) {
@@ -614,7 +619,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 			StringBuffer path = new StringBuffer();
 			toPath(uri, path);
 			try {
-				if (!session.isLeafNode(uri)) {
+				if ((uri.length() > 0) && !session.isLeafNode(uri)) {
 					path.append(Utils.DOT);
 				}
 			} catch (DmtException e) {
