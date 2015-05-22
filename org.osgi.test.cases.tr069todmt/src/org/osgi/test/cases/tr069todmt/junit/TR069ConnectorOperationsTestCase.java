@@ -1266,17 +1266,19 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 				continue;
 			// if child is a list/map entry, then the name must be replaced by the corresponding InstanceId value
 			String id = child;
+			String instanceIdUri = uri + "/" + child + "/InstanceId";
 			boolean isLeaf = session.isLeafNode(uri + "/" + child);
-			if ( uriIsList || uriIsMap ) {
-				id = "" + session.getNodeValue(uri + "/" + child + "/InstanceId" ).getLong();
-				// if parent is a Map, then child is a map-key and needs a synthetic Alias parameter
-				if ( uriIsMap )
-					subtree.add(prefix + "." + id + ".Alias");
+			if ((uriIsList || uriIsMap) && !isLeaf && (session.isNodeUri(instanceIdUri))) {
+				id = String.valueOf(session.getNodeValue(instanceIdUri).getLong());
 			}
-
-			if ( ! nextLevel && ! isLeaf )
+			if (!nextLevel && !isLeaf) {
+				if (uriIsMap) {
+					// if parent is a Map, then child is a map-key and needs a
+					// synthetic Alias parameter
+					subtree.add(prefix + "." + id + ".Alias");
+				}
 				fillPathSubtree(subtree, uri + "/" + child, prefix + "." + id, nextLevel);
-			else {
+			} else {
 				if ( isLeaf )
 					subtree.add( prefix + "." + id );
 				else 

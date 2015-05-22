@@ -1,16 +1,17 @@
 
 package org.osgi.impl.service.tr069todmt;
 
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.regex.Pattern;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.regex.Pattern;
 import org.osgi.impl.service.tr069todmt.encode.Base64;
 import org.osgi.impl.service.tr069todmt.encode.HexBinary;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.tr069todmt.TR069Connector;
 import org.osgi.service.tr069todmt.TR069Exception;
 
@@ -456,5 +457,15 @@ public class Utils {
 			default :
 				return "Unknown";
 		}
+	}
+
+	static String getParentPath(String uri) {
+		String[] path = Uri.toPath(uri);
+		if (path.length == 0) {
+			return "";
+		}
+		String[] parentPath = new String[path.length - 1];
+		System.arraycopy(path, 0, parentPath, 0, parentPath.length);
+		return Uri.toUri(parentPath);
 	}
 }

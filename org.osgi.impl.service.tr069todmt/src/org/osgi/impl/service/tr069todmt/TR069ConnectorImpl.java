@@ -489,8 +489,13 @@ public class TR069ConnectorImpl implements TR069Connector {
 			if (children == null || children.length == 0) {
 				return;
 			}
-			boolean isParentMap = DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, aliasedParentUri));
+			boolean addAliasChild = DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(
+					session, Utils.getParentPath(aliasedParentUri)));
 			String parentPath = toPath(aliasedParentUri);
+			if (addAliasChild) {
+				names.add(new ParameterInfoImpl(this,
+						parentPath + Utils.ALIAS, new Node(parentPath + Utils.ALIAS, session)));
+			}
 			for (int i = 0; i < children.length; i++) {
 				if (Utils.INSTANCE_ID.equals(children[i])) {
 					continue;
@@ -504,15 +509,9 @@ public class TR069ConnectorImpl implements TR069Connector {
 				String childPath = toPath(childUri);
 
 				names.add(new ParameterInfoImpl(this, childPath, new Node(childUri, session)));
-				if (isParentMap) {
-					names.add(new ParameterInfoImpl(this,
-							childPath + Utils.ALIAS, new Node(childUri + Uri.PATH_SEPARATOR + Utils.ALIAS, session))
-							);
-				}
 
 				// If the child is MAP or LIST, add NumberOfEntries node.
-				String childType = factory.persistenceManager.getNodeType(session,
-						childUri);
+				String childType = factory.persistenceManager.getNodeType(session, childUri);
 				if ((DmtConstants.DDF_MAP.equals(childType)) ||
 						(DmtConstants.DDF_LIST.equals(childType))) {
 					int childPathLength = childPath.length();
