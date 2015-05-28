@@ -1,0 +1,11 @@
+Bundle-SymbolicName:	${p}.tbnontrusted.jar
+Bundle-Name:			${p}.tbnontrusted
+Bundle-Description:		Residential Plugin Test Bundle non trusted
+Bundle-Activator:		${p}.tbnontrusted.Activator
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package:		${p}.tbnontrusted
+
+-sign: test_expired
