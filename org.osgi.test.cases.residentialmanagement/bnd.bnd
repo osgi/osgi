@@ -40,4 +40,4 @@ Include-Resource	= \
 	${p}.tb7.jar=tb7.jar ,\
 	${p}.tb8.jar=tb8.jar ,\
 	${p}.tb9.jar=tb9.jar ,\
-	${p}.tbnontrusted.jar=resources/NonTrustedBundle.jar
+	${p}.tbnontrusted.jar=tbnontrusted.jar
