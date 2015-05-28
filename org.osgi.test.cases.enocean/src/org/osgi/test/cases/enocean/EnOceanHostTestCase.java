@@ -33,19 +33,20 @@ import org.osgi.service.enocean.EnOceanHost;
  */
 public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Test that at least one EnOceanHost service is registered when an
-	 * implementation of the EnOcean specification is running.
-	 */
-	public void testEnOceanHostServiceAvailability() {
-		try {
-			super.testStepProxy.execute("Plug the EnOcean USB dongle", "Plug the EnOcean USB dongle.");
-			ServiceReference[] srs = getContext().getAllServiceReferences(EnOceanHost.class.getName(), null);
-			assertNotNull("Test failed: no EnOceanHost service has been found in the OSGi service registry.", srs);
-			log("DEBUG: The test found " + srs.length + " EnOceanHost service(s).");
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-			fail("If this exception occurred, then there is a pb. in the test implementation.");
-		}
+    /**
+     * Test that at least one EnOceanHost service is registered when an
+     * implementation of the EnOcean specification is running.
+     */
+    public void testEnOceanHostServiceAvailability() {
+	try {
+	    super.testStepProxy.execute(PLUG_DONGLE, "Plug the EnOcean USB dongle.");
+	    ServiceReference[] srs = getContext().getAllServiceReferences(EnOceanHost.class.getName(), null);
+	    assertNotNull("Test failed: no EnOceanHost service has been found in the OSGi service registry.", srs);
+	    tlog("The test found " + srs.length + " EnOceanHost service(s).");
+	} catch (InvalidSyntaxException e) {
+	    e.printStackTrace();
+	    fail("If this exception occurred, then there is a pb. in the test implementation.");
 	}
+    }
+    
 }

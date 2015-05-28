@@ -72,6 +72,8 @@ public class Utils {
 	}
 
 	/**
+	 * Transforms a byte into an array of 1 byte
+	 * 
 	 * @param x
 	 * @return a byte[] collection from a single byte.
 	 */
@@ -100,6 +102,8 @@ public class Utils {
 	}
 
 	/**
+	 * Concatenates a byte at the end of a byte array.
+	 * 
 	 * @param a
 	 * @param b
 	 * @return concatenated value.
@@ -114,6 +118,8 @@ public class Utils {
 	}
 
 	/**
+	 * Concatenates a byte at the beginning of a byte array.
+	 * 
 	 * @param a
 	 * @param b
 	 * @return concatenated value.
@@ -124,6 +130,18 @@ public class Utils {
 			c[1 + i] = b[i];
 		}
 		c[0] = a;
+		return c;
+	}
+
+	/**
+	 * @param a
+	 * @param b
+	 * @return corresponding byte array.
+	 */
+	public static byte[] byteConcat(byte a, byte b) {
+		byte[] c = new byte[2];
+		c[0] = a;
+		c[1] = b;
 		return c;
 	}
 
@@ -183,10 +201,14 @@ public class Utils {
 	final private static char[]	hexArray	= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 	/**
+	 * Creates a string made of hexadecimal characters out of a byte array
+	 * 
 	 * @param bytes
 	 * @return bytesToHex
 	 */
 	public static String bytesToHex(byte[] bytes) {
+		if (bytes == null)
+			return null;
 		char[] hexChars = new char[bytes.length * 2];
 		int v;
 		for (int j = 0; j < bytes.length; j++) {
@@ -195,6 +217,30 @@ public class Utils {
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
+	}
+
+	/**
+	 * Creates a byte array out of a string made of hexadecimal characters
+	 * 
+	 * @param s
+	 * @return hex2Bytes
+	 */
+	public static byte[] hex2Bytes(String s) {
+		int l = s.length();
+		char[] hexChars = new char[l];
+		s.getChars(0, l, hexChars, 0);
+		byte[] ret = new byte[l / 2];
+		for (int i = 0; i < l - 1; i += 2) {
+			byte b = 0;
+			for (int j = 1; j < hexArray.length; j++) {
+				if (hexChars[i] == hexArray[j])
+					b += (byte) (j << 4);
+				if (hexChars[i + 1] == hexArray[j])
+					b += (byte) j;
+			}
+			ret[i / 2] = b;
+		}
+		return ret;
 	}
 
 	/**
@@ -224,6 +270,21 @@ public class Utils {
 			out[i] = bytes[offset + i];
 		}
 		return out;
+	}
+
+	/**
+	 * @param orig
+	 * @param len
+	 * @return padded.
+	 */
+	public static byte[] padUpTo(byte[] orig, int len) {
+		byte[] padded = new byte[len];
+		if (orig.length < len) {
+			for (int i = 0; i < orig.length; i++) {
+				padded[i] = orig[i];
+			}
+		}
+		return padded;
 	}
 
 }

@@ -34,7 +34,8 @@ public class QueryFunction implements EnOceanRPC {
 	}
 
 	public byte[] getPayload() {
-		return null;
+		return new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x66 };
+		// 0x55, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x66 };
 	}
 
 	public int getSenderId() {
@@ -46,7 +47,6 @@ public class QueryFunction implements EnOceanRPC {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

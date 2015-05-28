@@ -17,6 +17,7 @@
 package org.osgi.impl.service.enocean.utils.teststep;
 
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.test.support.step.TestStep;
 
 /**
@@ -25,100 +26,102 @@ import org.osgi.test.support.step.TestStep;
  */
 public class TestStepForEnOceanImpl implements TestStep {
 
-	private byte[]	currentCommand	= null;
-	private byte[]	currentData		= null;
+    static public final String PLUG_DONGLE = "Plug the EnOcean USB dongle";
+    static public final String MSG_EXAMPLE_1A = "MessageExample1_A";
+    static public final String MSG_EXAMPLE_1B = "MessageExample1_B";
+    static public final String MSG_EXAMPLE_2 = "MessageExample2_";
+    static public final String MDSET_WITH_MD = "EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription";
+    static public final String CDSET_WITH_CD = "EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID";
+    static public final String GET_EVENT = "Get_the_event_that_the_base_driver_should_have_received";
 
-	/**
-	 * It is possible to change this contructor in order to add some parameters
-	 * to specify simulators.
-	 */
-	public TestStepForEnOceanImpl() {
+    static private final String TAG = "TestStepForEnOceanImpl";
 
+    private byte[] currentCommand;
+    private byte[] currentData;
+
+    /**
+     * It is possible to change this constructor in order to add some parameters
+     * to specify simulators.
+     */
+    public TestStepForEnOceanImpl() {
+
+    }
+
+    /**
+     * Get current command and replace it by null.
+     * 
+     * @return the current command.
+     */
+    public byte[] getCurrentCommandAndReplaceItByNull() {
+	Logger.d(TAG, 
+		"getCurrentCommandAndReplaceItByNull() returns currentCommand: " + currentCommand);
+	byte[] result = currentCommand;
+	currentCommand = null;
+	return result;
+    }
+
+    /**
+     * Push data in test step.
+     * 
+     * @param data
+     */
+    public void pushDataInTestStep(byte[] data) {
+	Logger.d(TAG, "pushDataInTestStep: " + Utils.bytesToHexString(data));
+	currentData = data;
+    }
+
+    public String execute(String stepId, String userPrompt) {
+	Logger.d(TAG, "execute the stepId: " + stepId + ", userPrompt: "
+		+ userPrompt);
+	if (stepId == null) {
+	    Logger.e(TAG, "The given stepId is null, but it can NOT be.");
+	    return null;
 	}
-
-	/**
-	 * Get current command and replace it by null.
-	 * 
-	 * @return the current command.
-	 */
-	public byte[] getCurrentCommandAndReplaceItByNull() {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "getCurrentCommandAndReplaceItByNull() returns currentCommand: " + currentCommand);
-		byte[] result = currentCommand;
-		currentCommand = null;
-		return result;
+	if (stepId.equals(MSG_EXAMPLE_1A)) {
+	    // Teach in telegram, see in test.cases.enocean
+	    // MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER)
+	    byte[] teachInTelegram = { 85, 0, 10, 7, 1, -21, -91, 8, 14, -22,
+		    -128, 18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, -78 };
+	    currentCommand = teachInTelegram;
+	    return null;
 	}
-
-	/**
-	 * Push data in test step.
-	 * 
-	 * @param data
-	 */
-	public void pushDataInTestStep(byte[] data) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "pushDataInTestStep(data: " + data + ")");
-		currentData = data;
+	if (stepId.equals(MSG_EXAMPLE_1B)) {
+	    byte[] teachInTelegram = { 85, 0, 10, 7, 1, -21, -91, 0, 0, 127, 8,
+		    18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, 48 };
+	    currentCommand = teachInTelegram;
+	    return null;
 	}
-
-	public String execute(String stepId, String userPrompt) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: "
-				+ clean(stepId) + ", userPrompt: " + userPrompt);
-		String result = null;
-		if (stepId == null) {
-			Logger.e(TestStepForEnOceanImpl.class.getName(), "The given stepId is null, but it can NOT be.");
-		} else
-			if (stepId.equals("MessageExample1_A")) {
-				// Teach in telegram, see
-				// MessageExample1.generateTeachInMsg(Fixtures.HOST_ID,
-				// Fixtures.MANUFACTURER) in test.cases.enocean
-				byte[] teachInTelegram = {85, 0, 10, 7, 1, -21, -91, 8, 14, -22, -128, 18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, -78};
-				currentCommand = teachInTelegram;
-				// ignore result;
-			} else
-				if (stepId.equals("MessageExample1_B")) {
-					byte[] teachInTelegram = {85, 0, 10, 7, 1, -21, -91, 0, 0, 127, 8, 18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, 48};
-					currentCommand = teachInTelegram;
-					// ignore result;
-				} else
-					if (stepId.startsWith("MessageExample2_")) {
-						currentCommand = stepId.replaceFirst("MessageExample2_", "").getBytes();
-						// ignore result;
-					} else {
-						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
-							currentCommand = stepId.getBytes();
-							// ignore result;
-						} else
-							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
-								currentCommand = stepId.getBytes();
-								// ignore result;
-							} else
-								if ("Get_the_event_that_the_base_driver_should_have_received".equals(stepId)) {
-									Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-									if (currentData == null) {
-										result = null;
-									} else {
-										result = new String(currentData);
-										currentData = null;
-									}
-									return result;
-								} else
-									if ("Plug the EnOcean USB dongle".equals(stepId)) {
-										Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData);
-										// This message should be display on the
-										// user screen when testing EnOcean
-										// implementation for real.
-									} else {
-										Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-										// ignore result;
-									}
-					}
-		return result;
+	if (stepId.startsWith(MSG_EXAMPLE_2)) {
+	    currentCommand = Utils.hex2Bytes(stepId.replaceFirst(MSG_EXAMPLE_2, ""));
+	    return null;
 	}
-
-	private String clean(String input) {
-		char[] result = new char[input.length()];
-		for (int i = 0; i < input.length(); i++) {
-			char c = input.charAt(i);
-			result[i] = c >= ' ' ? c : '?';
-		}
-		return new String(result);
+	if (stepId.equals(MDSET_WITH_MD)) {
+	    currentCommand = stepId.getBytes();
+	    return null;
 	}
+	if (stepId.equals(CDSET_WITH_CD)) {
+	    currentCommand = stepId.getBytes();
+	    return null;
+	}
+	if (stepId.equals(GET_EVENT)) {
+	    Logger.d(TAG, "execute(...) returns currentData: " 
+		    + Utils.bytesToHexString(currentData));
+	    String result = null;
+	    if (currentData != null) {
+		result = Utils.bytesToHexString(currentData);
+		currentData = null;
+	    }
+	    return result;
+	}
+	if (stepId.equals(PLUG_DONGLE)) {
+	    Logger.d(TAG, "execute(...) returns currentData: "
+		    + Utils.bytesToHexString(currentData));
+	    // This message should be displayed on the user screen
+	    // when testing EnOcean implementation for real.
+	    return null;
+	}
+	Logger.e(TAG, "The given command is UNKNOWN.");
+	return null;
+    }
+
 }

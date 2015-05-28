@@ -45,58 +45,62 @@ import org.osgi.test.cases.enocean.utils.Utils;
  */
 public class ExportTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Tests device exportation.
-	 * 
-	 * @throws Exception
+    /**
+     * Tests device exportation.
+     * 
+     * @throws Exception
+     */
+    public void testDeviceExport() throws Exception {
+
+	ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+
+	/* Wait for the proper and full registration */
+	String lastServiceEvent = devices.waitForService();
+	assertNotNull("Timeout reached.", lastServiceEvent);
+	assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+
+	/* Get CHIP_ID attributed by the driver from the given service PID. */
+	ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+	int dynamicChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+	assertTrue("The created CHIP_ID for an exported device was not created", dynamicChipId != -1);
+
+	/*
+	 * Now that we have gotten the device registered and all, we are able to
+	 * try and make it send data, via EventAdmin broadcast.
 	 */
-	public void testDeviceExport() throws Exception {
+	Map properties = new Hashtable();
+	EnOceanMessage msg = new MessageExample1(Fixtures.FLOATVALUE);
+	properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
+	properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
+	properties.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
+	properties.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
+	properties.put(EnOceanEvent.PROPERTY_EXPORTED, "1");
+	properties.put(EnOceanEvent.PROPERTY_MESSAGE, msg);
+	Event evt = new Event(EnOceanEvent.TOPIC_MSG_RECEIVED, properties);
+	eventAdmin.sendEvent(evt);
 
-		ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+	tlog("get any new data from testStepService.");
 
-		/* Wait for the proper and full registration */
-		String lastServiceEvent = devices.waitForService();
-		assertNotNull("Timeout reached.", lastServiceEvent);
-		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+	String executionResult = super.testStepProxy.execute(GET_EVENT,
+		"An event has been sent by the test to the base driver. Just hit [enter] to continue, and get this event.");
+	assertNotNull("The base driver didn't received the expected event (i.e., here, it didn't received any event at all).",
+		executionResult);
 
-		/* Get CHIP_ID attributed by the driver from the given service PID. */
-		ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
-		int dynamicChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
-		assertTrue("The created CHIP_ID for an exported device was not created", dynamicChipId != -1);
+	byte[] data = Utils.hex2Bytes(executionResult);
+	EspPacket pkt = new EspPacket(data);
 
-		/*
-		 * Now that we have gotten the device registered and all, we are able to
-		 * try and make it send data, via EventAdmin broadcast.
-		 */
-		Map properties = new Hashtable();
-		EnOceanMessage msg = new MessageExample1(Fixtures.FLOATVALUE);
-		properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
-		properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
-		properties.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
-		properties.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
-		properties.put(EnOceanEvent.PROPERTY_EXPORTED, "1");
-		properties.put(EnOceanEvent.PROPERTY_MESSAGE, msg);
-		Event evt = new Event(EnOceanEvent.TOPIC_MSG_RECEIVED, properties);
-		eventAdmin.sendEvent(evt);
+	tlog("Utils.bytesToHex(msg.getBytes()): " + Utils.bytesToHex(msg.getBytes())
+		+ ", Utils.bytesToHex(pkt.getData().getBytes()): " + Utils.bytesToHex(pkt.getData().getBytes()));
 
-		byte[] data = new byte[256];
-		log("DEBUG: get any new data from testStepService.");
+	assertEquals("EnOcean radio message and forged message mismatch",
+		Utils.bytesToHex(msg.getBytes()),
+		Utils.bytesToHex(pkt.getData().getBytes()));
 
-		String executionResult = super.testStepProxy.execute("Get_the_event_that_the_base_driver_should_have_received",
-				"An event has been sent by the test to the base driver. Just hit [enter] to continue, and get this event.");
-		assertNotNull("The base driver didn't received the expected event (i.e., here, it didn't received any event at all).", executionResult);
-		data = executionResult.getBytes();
-		int size = data.length;
-		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
+	// Needed not to mess with further tests
+	sReg.unregister();
+	tlog("Unget service with service reference: " + hostRef);
+	getContext().ungetService(hostRef);
+    }
 
-		log("DEBUG: Utils.bytesToHex(msg.getBytes()): " + Utils.bytesToHex(msg.getBytes()) + ", Utils.bytesToHex(pkt.getData().getBytes()): " + Utils.bytesToHex(pkt.getData().getBytes()));
-
-		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.getBytes()), Utils.bytesToHex(pkt.getData().getBytes()));
-
-		// Needed not to mess with further tests
-		sReg.unregister();
-		log("Unget service with service reference: " + hostRef);
-		getContext().ungetService(hostRef);
-	}
 }

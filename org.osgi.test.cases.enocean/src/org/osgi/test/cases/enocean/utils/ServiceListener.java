@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.enocean.utils;
 
+import java.util.LinkedList;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -28,6 +30,8 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ServiceListener extends ServiceTracker {
 
+	static private final String TAG = "ServiceListener";
+
 	/** SERVICE_ADDED */
 	public static final String	SERVICE_ADDED		= "SERVICE_ADDED";
 	/** SERVICE_MODIFIED */
@@ -38,7 +42,7 @@ public class ServiceListener extends ServiceTracker {
 	private final Semaphore		waiter;
 
 	private BundleContext		bc;
-	private String				lastAction;
+	private LinkedList lastActions;
 	private ServiceReference	serviceReference;
 
 	/**
@@ -50,27 +54,26 @@ public class ServiceListener extends ServiceTracker {
 			throws InvalidSyntaxException {
 		super(bc, bc.createFilter("(&(objectclass=" + cls.getName() + "))"), null);
 		this.bc = bc;
+		this.lastActions = new LinkedList();
 		waiter = new Semaphore();
 		open();
 	}
 
 	public Object addingService(ServiceReference ref) {
 		Object service = bc.getService(ref);
-		if (service == null) {
-			return null;
-		} else {
+		if (service != null) {
 			serviceReference = ref;
-			lastAction = SERVICE_ADDED;
+			lastActions.addFirst(SERVICE_ADDED);
 			waiter.signal();
-			return service;
 		}
+		return service;
 	}
 
 	public void modifiedService(ServiceReference ref, Object service) {
 		super.modifiedService(ref, service);
 		if (service != null) {
 			serviceReference = ref;
-			lastAction = SERVICE_MODIFIED;
+			lastActions.addFirst(SERVICE_MODIFIED);
 			waiter.signal();
 		}
 	}
@@ -79,7 +82,7 @@ public class ServiceListener extends ServiceTracker {
 		super.removedService(ref, service);
 		if (service != null) {
 			serviceReference = ref;
-			lastAction = SERVICE_REMOVED;
+			lastActions.addFirst(SERVICE_REMOVED);
 			waiter.signal();
 		}
 	}
@@ -102,8 +105,12 @@ public class ServiceListener extends ServiceTracker {
 	 * @throws InterruptedException
 	 */
 	public String waitForEvent(long timeout) throws InterruptedException {
+		if (!lastActions.isEmpty()) {
+			return (String) lastActions.removeLast();
+		}
 		if (waiter.waitForSignal(timeout)) {
-			return lastAction;
+			return lastActions.isEmpty() ? null : (String) lastActions
+					.removeLast();
 		}
 		return null;
 	}
@@ -120,6 +127,7 @@ public class ServiceListener extends ServiceTracker {
 		if (serviceReference != null) {
 			serviceReference = null;
 		}
+		lastActions.clear();
 		super.close();
 	}
 

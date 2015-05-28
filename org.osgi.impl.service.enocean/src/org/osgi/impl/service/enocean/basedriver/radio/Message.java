@@ -18,6 +18,7 @@ package org.osgi.impl.service.enocean.basedriver.radio;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanMessage;
 
@@ -26,210 +27,215 @@ import org.osgi.service.enocean.EnOceanMessage;
  */
 public abstract class Message implements EnOceanMessage {
 
-	/** MESSAGE_4BS */
-	public static final byte	MESSAGE_4BS		= (byte) 0xA5;
-	/** MESSAGE_RPS */
-	public static final byte	MESSAGE_RPS		= (byte) 0xF6;
-	/** MESSAGE_1BS */
-	public static final byte	MESSAGE_1BS		= (byte) 0xD5;
-	/** MESSAGE_VLD */
-	public static final byte	MESSAGE_VLD		= (byte) 0xD2;
-	/** MESSAGE_SYS_EX */
-	public static final byte	MESSAGE_SYS_EX	= (byte) 0xC5;
+    /** MESSAGE_4BS */
+    public static final byte	MESSAGE_4BS	= (byte) 0xA5;
+    /** MESSAGE_RPS */
+    public static final byte	MESSAGE_RPS	= (byte) 0xF6;
+    /** MESSAGE_1BS */
+    public static final byte	MESSAGE_1BS	= (byte) 0xD5;
+    /** MESSAGE_VLD */
+    public static final byte	MESSAGE_VLD	= (byte) 0xD2;
+    /** MESSAGE_SYS_EX */
+    public static final byte	MESSAGE_SYS_EX	= (byte) 0xC5;
 
-	private byte				RORG;
-	private byte[]				data;
-	private byte[]				senderId;
-	private byte				status;
-	private byte				subTelNum;
-	private byte[]				destinationId;
-	private byte				dbm;
-	private byte				securityLevel;
-	private byte				func;
-	private byte				type;
+    protected byte RORG;
+    protected byte[] data;
+    protected byte[] senderId;
+    protected byte status;
+    protected byte subTelNum;
+    protected int destinationId;
+    protected byte dbm;
+    protected byte securityLevel;
+    protected byte func;
+    protected byte type;
 
-	private byte[]				messageBytes;
+    protected byte[] messageBytes;
 
-	/**
-	 * 
-	 */
-	public Message() {
+    /**
+     * 
+     */
+    public Message() {
+    }
 
-	}
+    /**
+     * @param data
+     */
+    public Message(byte[] data) {
+	this.messageBytes = data;
+	setRORG(data[0]);
+	setPayloadBytes(Utils.byteRange(data, 1, data.length - 6 - 7));
+	setSenderId(Utils.byteRange(data, data.length - 5 - 7, 4));
+	setStatus(data[data.length - 1 - 7]);
+	setSubTelNum(data[data.length - 7]);
+	// setDestinationId(Utils.byteRange(data, data.length - 6, 4));
+	setDestinationId(Utils.bytes2intLE(data, data.length - 6, 4));
+	setDbm(data[data.length - 2]);
+	setSecurityLevel(data[data.length - 1]);
+    }
 
-	/**
-	 * @param data
-	 */
-	public Message(byte[] data) {
-		this.messageBytes = data;
-		setRORG(data[0]);
-		setPayloadBytes(Utils.byteRange(data, 1, data.length - 6 - 7));
-		setSenderId(Utils.byteRange(data, data.length - 5 - 7, 4));
-		setStatus(data[data.length - 1 - 7]);
-		setSubTelNum(data[data.length - 7]);
-		setDestinationId(Utils.byteRange(data, data.length - 6, 4));
-		setDbm(data[data.length - 2]);
-		setSecurityLevel(data[data.length - 1]);
-	}
+    public String toString() {
+	byte[] out = Utils.byteConcat(RORG, data);
+	out = Utils.byteConcat(out, senderId);
+	out = Utils.byteConcat(out, status);
+	return Utils.bytesToHexString(out);
+    }
 
-	private void setPayloadBytes(byte[] byteRange) {
-		this.data = byteRange;
-	}
+    /**
+     * The message's RadioTelegram Type
+     */
+    public int getRorg() {
+	return (RORG & 0xff);
+    }
 
-	public String toString() {
-		byte[] out = Utils.byteConcat(RORG, data);
-		out = Utils.byteConcat(out, senderId);
-		out = Utils.byteConcat(out, status);
-		return Utils.bytesToHexString(out);
-	}
+    /**
+     * @param rorg
+     */
+    public void setRORG(int rorg) {
+	RORG = (byte) (rorg & 0xff);
+    }
 
-	/**
-	 * The message's RadioTelegram Type
-	 */
-	public int getRorg() {
-		return (RORG & 0xff);
-	}
+    public byte[] getBytes() {
+	return messageBytes;
+    }
 
-	/**
-	 * @param rorg
-	 */
-	public void setRORG(int rorg) {
-		RORG = (byte) (rorg & 0xff);
-	}
+    public int getSenderId() {
+	return Utils.bytes2intLE(senderId, 0, 4);
+    }
 
-	public byte[] getBytes() {
-		return messageBytes;
-	}
+    /**
+     * Sender ID of the message
+     * 
+     * @param senderId
+     */
+    public void setSenderId(byte[] senderId) {
+	this.senderId = senderId;
+    }
 
-	public int getSenderId() {
-		return Utils.bytes2intLE(senderId, 0, 4);
-	}
+    /**
+     * EnOceanMessage status byte. bit 7 : if set, use crc8 else use checksum
+     * bits 5-6 : reserved bits 0-4 : repeater count
+     */
+    public int getStatus() {
+	return (status & 0xff);
+    }
 
-	/**
-	 * Sender ID of the message
-	 * 
-	 * @param senderId
-	 */
-	public void setSenderId(byte[] senderId) {
-		this.senderId = senderId;
-	}
+    /**
+     * @param status
+     */
+    public void setStatus(int status) {
+	this.status = (byte) (status & 0xff);
+    }
 
-	/**
-	 * EnOceanMessage status byte. bit 7 : if set, use crc8 else use checksum
-	 * bits 5-6 : reserved bits 0-4 : repeater count
-	 */
-	public int getStatus() {
-		return (status & 0xff);
-	}
+    public int getSubTelNum() {
+	return subTelNum;
+    }
 
-	/**
-	 * @param status
-	 */
-	public void setStatus(int status) {
-		this.status = (byte) (status & 0xff);
-	}
+    /**
+     * @param subTelNum
+     */
+    public void setSubTelNum(byte subTelNum) {
+	this.subTelNum = subTelNum;
+    }
 
-	public int getSubTelNum() {
-		return subTelNum;
-	}
+    public int getDestinationId() {
+	// return Utils.bytes2intLE(destinationId, 0, 4);
+	return destinationId;
+    }
 
-	/**
-	 * @param subTelNum
-	 */
-	public void setSubTelNum(byte subTelNum) {
-		this.subTelNum = subTelNum;
-	}
+    /**
+     * @param destinationId
+     */
+    public void setDestinationId(int destinationId) {
+	this.destinationId = destinationId;
+    }
 
-	public int getDestinationId() {
-		return Utils.bytes2intLE(destinationId, 0, 4);
-	}
+    public int getDbm() {
+	return dbm;
+    }
 
-	/**
-	 * @param destinationId
-	 */
-	public void setDestinationId(byte[] destinationId) {
-		this.destinationId = destinationId;
-	}
+    /**
+     * @param dbm
+     */
+    public void setDbm(byte dbm) {
+	this.dbm = dbm;
+    }
 
-	public int getDbm() {
-		return dbm;
-	}
+    public int getSecurityLevelFormat() {
+	return securityLevel;
+    }
 
-	/**
-	 * @param dbm
-	 */
-	public void setDbm(byte dbm) {
-		this.dbm = dbm;
-	}
+    /**
+     * @param securityLevel
+     */
+    public void setSecurityLevel(byte securityLevel) {
+	this.securityLevel = securityLevel;
+    }
 
-	public int getSecurityLevelFormat() {
-		return securityLevel;
-	}
+    /**
+     * @param func
+     */
+    public void setFunc(int func) {
+	this.func = (byte) func;
+    }
 
-	/**
-	 * @param securityLevel
-	 */
-	public void setSecurityLevel(byte securityLevel) {
-		this.securityLevel = securityLevel;
-	}
+    public int getFunc() {
+	return func;
+    }
 
-	/**
-	 * @param func
-	 */
-	public void setFunc(int func) {
-		this.func = (byte) func;
-	}
+    /**
+     * @param type
+     */
+    public void setType(int type) {
+	this.type = (byte) type;
+    }
 
-	public int getFunc() {
-		return func;
-	}
+    public int getType() {
+	return type;
+    }
 
-	/**
-	 * @param type
-	 */
-	public void setType(int type) {
-		this.type = (byte) type;
-	}
+    public byte[] getPayloadBytes() {
+	return data;
+    }
 
-	public int getType() {
-		return type;
-	}
+    protected void setPayloadBytes(byte[] data) {
+	this.data = data;
+    }
 
-	public byte[] getPayloadBytes() {
-		return data;
-	}
+    protected byte getPayloadByte(int idx) {
+	return data[idx];
+    }
 
-	/**
-	 * @return telegram(s)
-	 */
-	public List getTelegrams() {
-		List list = new ArrayList();
-		list.add(getBytes());
-		return list;
-	}
+    /**
+     * @return telegram(s)
+     */
+    public List getTelegrams() {
+	List list = new ArrayList();
+	list.add(getBytes());
+	return list;
+    }
 
-	/**
-	 * @return isTeachin.
-	 */
-	public abstract boolean isTeachin();
+    /**
+     * @return isTeachin.
+     */
+    public abstract boolean isTeachin();
 
-	/**
-	 * @return hasTeachInInfo.
-	 */
-	public abstract boolean hasTeachInInfo();
+    /**
+     * @return hasTeachInInfo.
+     */
+    public abstract boolean hasTeachInInfo();
 
-	/**
-	 * @return teachInFunc.
-	 */
-	public abstract int teachInFunc();
+    /**
+     * @return teachInFunc.
+     */
+    public abstract int teachInFunc();
 
-	/**
-	 * @return teachInType.
-	 */
-	public abstract int teachInType();
+    /**
+     * @return teachInType.
+     */
+    public abstract int teachInType();
 
-	/**
-	 * @return teachInManuf.
-	 */
-	public abstract int teachInManuf();
+    /**
+     * @return teachInManuf.
+     */
+    public abstract int teachInManuf();
 }

@@ -37,44 +37,46 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  */
 public class EventTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Test event notification in the context of an actual message passing to
-	 * the Base Driver.
-	 * 
-	 * This actually also tests the MessageSet registration since the Base
-	 * Driver needs to know about it before firing on EventAdmin.
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void testEventNotification() throws InterruptedException {
-		/* Insert a device */
-		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");
+    /**
+     * Test event notification in the context of an actual message passing to
+     * the Base Driver.
+     * 
+     * This actually also tests the MessageSet registration since the Base
+     * Driver needs to know about it before firing on EventAdmin.
+     * 
+     * @throws InterruptedException
+     */
+    public void testEventNotification() throws InterruptedException {
+	/* Insert a device */
+	super.testStepProxy.execute(MSG_EXAMPLE_1A, "Insert an a5_02_01 device.");
 
-		/* First get a reference towards the device */
-		String lastServiceEvent = devices.waitForService();
-		assertNotNull("Timeout reached.", lastServiceEvent);
-		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+	/* First get a reference towards the device */
+	String lastServiceEvent = devices.waitForService();
+	assertNotNull("Timeout reached.", lastServiceEvent);
+	assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
-		/* Make the inserted device send a message */
-		super.testStepProxy.execute("MessageExample1_B", "Make the inserted device send a message.");
+	/* Make the inserted device send a message */
+	super.testStepProxy.execute(MSG_EXAMPLE_1B, "Make the inserted device send a message.");
 
-		Event event = events.waitForEvent();
-		assertNotNull("Timeout reached (no event has been received).", event);
+	Event event = events.waitForEvent();
+	assertNotNull("Timeout reached (no event has been received).", event);
 
-		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
-		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
-		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
-		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
-		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
+	assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
+	assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
+	assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
+	assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
+	assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
 
-		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
-		assertNotNull("Msg must not be null.", msg);
-		EnOceanMessageDescription description = new EnOceanMessageDescription2();
-		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
+	EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
+	assertNotNull("Msg must not be null.", msg);
+	EnOceanMessageDescription description = new EnOceanMessageDescription2();
+	EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
 
-		assertNotNull("The EnOcean message description is expected to contain channels.", channels);
-		assertNotNull("The EnOcean message description is expected to contain at least one channel.", channels[0]);
-		assertNotNull("The EnOcean message description is expected to contain at least one channel with a raw value.", channels[0].getRawValue());
-		assertEquals("The raw value is expected to be 1 byte long.", 1, channels[0].getRawValue().length);
-	}
+	assertNotNull("The EnOcean message description is expected to contain channels.", channels);
+	assertNotNull("The EnOcean message description is expected to contain at least one channel.", channels[0]);
+	assertNotNull("The EnOcean message description is expected to contain at least one channel with a raw value.",
+		channels[0].getRawValue());
+	assertEquals("The raw value is expected to be 1 byte long.", 1, channels[0].getRawValue().length);
+    }
+
 }

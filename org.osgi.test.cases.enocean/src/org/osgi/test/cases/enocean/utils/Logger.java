@@ -27,43 +27,52 @@ public final class Logger {
 	static final boolean		ERROR	= Boolean.getBoolean("org.osgi.service.enocean.loglevel.error");
 
 	/**
-	 * EnOcean base driver's tag/prefix for logger.
-	 */
-	private static final String	TAG		= "EnOcean's CT";
-
-	/**
+	 * @param tag
 	 * @param msg
 	 */
-	public static final void d(String msg) {
+	public static final void d(String tag, String msg) {
 		if (DEBUG) {
-			System.out.println("[" + TAG + "] " + msg);
+			display(tag, msg);
 		}
 	}
 
 	/**
+	 * @param tag
 	 * @param msg
 	 */
-	public static final void i(String msg) {
+	public static final void i(String tag, String msg) {
 		if (INFO) {
-			System.out.println("[" + TAG + "] " + msg);
+			display(tag, msg);
 		}
 	}
 
 	/**
+	 * @param tag
 	 * @param msg
 	 */
-	public static final void w(String msg) {
+	public static final void w(String tag, String msg) {
 		if (WARN) {
-			System.out.println("[" + TAG + "] " + msg);
+			display(tag, msg);
 		}
 	}
 
 	/**
+	 * @param tag
 	 * @param msg
 	 */
-	public static final void e(String msg) {
+	public static final void e(String tag, String msg) {
 		if (ERROR) {
-			System.out.println("[" + TAG + "] " + msg);
+			display(tag, msg);
 		}
 	}
+
+	/**
+	 * @param stringToBeDisplayed
+	 *            will be displayed via System.out.println(stringToBeDisplayed);
+	 */
+	private static final void display(String tag, String msg) {
+		System.out.println("[" + tag + "," + Thread.currentThread().getName()
+				+ "] " + msg);
+	}
+
 }

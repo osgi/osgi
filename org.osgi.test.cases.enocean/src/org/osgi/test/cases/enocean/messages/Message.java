@@ -26,24 +26,24 @@ import org.osgi.test.cases.enocean.utils.Utils;
 public class Message implements EnOceanMessage, ByteSerializable {
 
 	/** MESSAGE_RPS */
-	public static final int	MessageType_1	= 0xF6;
+	public static final int MessageType_1 = 0xF6;
 	/** MESSAGE_4BS */
-	public static final int	MessageType_2	= 0xA5;
+	public static final int MessageType_2 = 0xA5;
 
-	private byte			RORG;
-	private byte[]			data;
-	private byte[]			senderId;
-	private byte			status;				// bit7: checksum type.
-													// 1=crc8,0=checksum
-													// bits 0-4: repeater count.
+	private byte RORG;
+	protected byte[] data;
+	private byte[] senderId;
+	private byte status; // bit7: checksum type.
+	// 1=crc8,0=checksum
+	// bits 0-4: repeater count.
 
 	// Additional fields
-	private int				slf;
-	private int				dbm;
-	private int				subTelNum;
-	private int				destinationId;
-	private int				type;
-	private int				func;
+	private int slf;
+	private int dbm;
+	private int subTelNum;
+	private int destinationId;
+	private int type;
+	private int func;
 
 	/**
 	 * Sets senderId and status default values, see EnOcean Radio Protocol spec
@@ -125,6 +125,13 @@ public class Message implements EnOceanMessage, ByteSerializable {
 
 	public int getDestinationId() {
 		return destinationId;
+	}
+
+	/**
+	 * @param destinationId
+	 */
+	public void setDestinationId(int destinationId) {
+		this.destinationId = destinationId;
 	}
 
 	public byte[] getPayloadBytes() {

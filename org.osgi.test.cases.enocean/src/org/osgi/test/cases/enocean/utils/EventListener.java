@@ -17,6 +17,8 @@
 package org.osgi.test.cases.enocean.utils;
 
 import java.util.Hashtable;
+import java.util.LinkedList;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
@@ -29,8 +31,10 @@ import org.osgi.test.support.compatibility.Semaphore;
  */
 public class EventListener implements EventHandler {
 
+	static private final String TAG = "EventListener";
+
 	private Semaphore			waiter;
-	private Event				lastEvent;
+	private LinkedList lastEvents;
 	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
@@ -41,6 +45,7 @@ public class EventListener implements EventHandler {
 	 */
 	public EventListener(BundleContext bc, String[] topics, String filter) {
 		this.bc = bc;
+		lastEvents = new LinkedList();
 		Hashtable ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
 		if (filter != null) {
@@ -51,7 +56,7 @@ public class EventListener implements EventHandler {
 	}
 
 	public void handleEvent(Event event) {
-		lastEvent = event;
+		lastEvents.addFirst(event);
 		waiter.signal();
 	}
 
@@ -63,8 +68,12 @@ public class EventListener implements EventHandler {
 	 * @throws InterruptedException
 	 */
 	public Event waitForEvent(long timeout) throws InterruptedException {
+		if (!lastEvents.isEmpty()) {
+			return (Event) lastEvents.removeLast();
+		}
 		if (waiter.waitForSignal(timeout)) {
-			return lastEvent;
+			return lastEvents.isEmpty() ? null : (Event) lastEvents
+					.removeLast();
 		}
 		return null;
 	}
@@ -81,7 +90,9 @@ public class EventListener implements EventHandler {
 	 * 
 	 */
 	public void close() {
+		lastEvents.clear();
 		sReg.unregister();
 		waiter.signal();
 	}
+
 }

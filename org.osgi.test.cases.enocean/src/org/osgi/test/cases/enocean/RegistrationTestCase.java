@@ -19,7 +19,6 @@ package org.osgi.test.cases.enocean;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.test.cases.enocean.utils.Fixtures;
-import org.osgi.test.cases.enocean.utils.Logger;
 
 /**
  * This class contains:
@@ -32,68 +31,70 @@ import org.osgi.test.cases.enocean.utils.Logger;
  */
 public class RegistrationTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Tests initial device registration from a raw Radio teach-in packet.
-	 * 
-	 * @throws Exception
+    /**
+     * Tests initial device registration from a raw Radio teach-in packet.
+     * 
+     * @throws Exception
+     */
+    public void testAutoDeviceRegistration() throws Exception {
+
+	/* Insert a device */
+	super.testStepProxy.execute(MSG_EXAMPLE_1A, "Insert an a5_02_01 device.");
+
+	// Device added
+	String lastServiceEvent = devices.waitForService();
+	tlog("Device added, lastServiceEvent: " + lastServiceEvent);
+	assertNotNull("Timeout reached.", lastServiceEvent);
+
+	// Device modified (profile)
+	lastServiceEvent = devices.waitForService();
+	tlog("Device modified (profile), lastServiceEvent: " + lastServiceEvent);
+	assertNotNull("Timeout reached.", lastServiceEvent);
+
+	/*
+	 * NOTE: The service should have been modified AFTER insertion,
+	 * nevertheless it seems that when registration and modification happen
+	 * almost in the same time, OSGi only generates a single SERVICE_ADDED
+	 * event.
 	 */
-	public void testAutoDeviceRegistration() throws Exception {
+	ServiceReference ref = devices.getServiceReference();
 
-		/* Insert a device */
-		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");
+	/*
+	 * Verify that the device has been registered with the correct service
+	 * properties
+	 */
+	assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY,
+		ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
+	assertEquals("RORG mismatch; 0xA5 is expected.", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
+	assertEquals("FUNC mismatch; 0x02 is expected.", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+	assertEquals("TYPE mismatch; 0x01 is expected.", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 
-		// Device added
-		String lastServiceEvent = devices.waitForService();
-		Logger.d("Device added, lastServiceEvent: " + lastServiceEvent);
-		assertNotNull("Timeout reached.", lastServiceEvent);
-
-		// Device modified (profile)
-		lastServiceEvent = devices.waitForService();
-		Logger.d("Device modified (profile), lastServiceEvent: " + lastServiceEvent);
-		assertNotNull("Timeout reached.", lastServiceEvent);
-
-		/*
-		 * NOTE: The service should have been modified AFTER insertion,
-		 * nevertheless it seems that when registration and modification happen
-		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
-		 * event.
-		 */
-		ServiceReference ref = devices.getServiceReference();
-
-		/*
-		 * Verify that the device has been registered with the correct service
-		 * properties
-		 */
-		assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY, ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
-
-		assertEquals("RORG mismatch; 0xA5 is expected.", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
-		assertEquals("FUNC mismatch; 0x02 is expected.", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch; 0x01 is expected.", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
-
-		// Check the existency of the following properties, and that they are
-		// String, and defined.
-		Object chipId = ref.getProperty(EnOceanDevice.CHIP_ID);
-		assertNotNull("The service representing the just registered device should have the EnOceanDevice.CHIP_ID: " + EnOceanDevice.CHIP_ID + " property.", chipId);
-		if (!(chipId instanceof String)) {
-			fail("The EnOceanDevice.CHIP_ID is expected to be a String.");
-		}
-		String chipIdAsAString = (String) chipId;
-		if ("".equals(chipIdAsAString)) {
-			fail("The EnOceanDevice.CHIP_ID is expected to be a defined String; \"\" is not an acceptable value.");
-		}
-
-		Object manuf = ref.getProperty(EnOceanDevice.MANUFACTURER);
-		assertNotNull("The service representing the just registered device should have the EnOceanDevice.MANUFACTURER: " + EnOceanDevice.MANUFACTURER + " property.",
-				manuf);
-		if (!(manuf instanceof String)) {
-			fail("The EnOceanDevice.MANUFACTURER is expected to be a String.");
-		}
-		String manufAsAString = (String) manuf;
-		if ("".equals(manufAsAString)) {
-			fail("The EnOceanDevice.MANUFACTURER is expected to be a defined String; \"\" is not an acceptable value.");
-		}
-
-		log("Unget service with service reference: " + ref);
-		getContext().ungetService(ref);
+	// Check the existency of the following properties, and that they are
+	// String, and defined.
+	Object chipId = ref.getProperty(EnOceanDevice.CHIP_ID);
+	assertNotNull("The service representing the just registered device should have the EnOceanDevice.CHIP_ID: "
+		+ EnOceanDevice.CHIP_ID + " property.", chipId);
+	if (! (chipId instanceof String)) {
+	    fail("The EnOceanDevice.CHIP_ID is expected to be a String.");
 	}
+	String chipIdAsAString = (String) chipId;
+	if ("".equals(chipIdAsAString)) {
+	    fail("The EnOceanDevice.CHIP_ID is expected to be a defined String; \"\" is not an acceptable value.");
+	}
+
+	Object manuf = ref.getProperty(EnOceanDevice.MANUFACTURER);
+	assertNotNull("The service representing the just registered device should have the EnOceanDevice.MANUFACTURER: " 
+		+ EnOceanDevice.MANUFACTURER + " property.", manuf);
+	if (! (manuf instanceof String)) {
+	    fail("The EnOceanDevice.MANUFACTURER is expected to be a String.");
+	}
+	String manufAsAString = (String) manuf;
+	if ("".equals(manufAsAString)) {
+	    fail("The EnOceanDevice.MANUFACTURER is expected to be a defined String; \"\" is not an acceptable value.");
+	}
+
+	tlog("Unget service with service reference: " + ref);
+	getContext().ungetService(ref);
+    }
+    
 }
