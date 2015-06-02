@@ -5,7 +5,7 @@ Conditional-Package                 = org.osgi.test.support.*
 Private-Package                     =  \
     ${p}.junit.*
 Import-Package: ${-signaturetest}, *
-    
+
 Include-Resource: \
     xml/ = resources/xmlresources/xml/ ,\
     / = resources/testresources/ ,\
@@ -14,23 +14,20 @@ Include-Resource: \
     tb2.jar ,\
     tb3.jar ,\
     tb4.jar
-    
+
 -buildpath                          = ee.j2se; version=${javac.compliance}, \
     org.osgi.test.support;          version=project, \
-    org.osgi.util.function;         version=latest, \
-    org.osgi.util.promise;          version=latest, \
     org.osgi.service.repository;    version=project , \
     osgi.core;                      version=5.0     , \
-    ${junit}    
+    osgi.promise;                   version=6.0, \
+    ${junit}
 
 -runbundles                         = \
-    org.osgi.util.function;           version=latest, \
-    org.osgi.util.promise;            version=latest, \
     org.osgi.impl.service.repository; version=latest
 
 Test-Cases                          = ${testcases}
 -signaturetest                      = \
     org.osgi.service.repository
-            
+
 -runproperties = ${runproperties}
 
