@@ -35,7 +35,7 @@ public class TargetProperties implements BaseService, ComponentContextExposer {
 
     Object prop = properties.get("serial.num");
     if (prop != null) {
-      Properties serviceProps = new Properties();
+			Dictionary serviceProps = new Properties();
       serviceProps.put("serial.num", prop);
       sr = ctxt.getBundleContext().registerService(getClass().getName(), this, serviceProps);
     }
