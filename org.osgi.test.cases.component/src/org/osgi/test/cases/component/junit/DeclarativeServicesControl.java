@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -36,12 +37,19 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.namespace.service.ServiceNamespace;
+import org.osgi.resource.Namespace;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
+import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
@@ -368,9 +376,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 */
 	public void testStartStopSCR() throws Exception {
 		Bundle scr = getSCRBundle();
-		if (scr == null) {
-			fail("testStartStopSCR test cannot execute: Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.");
-		}
+		assertNotNull(
+				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
+				scr);
 
 		ServiceReference refs[];
 		BundleContext bc = getContext();
@@ -402,6 +410,80 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals(
 				"The Service Component Runtime must start all components that are installed prior it",
 				count, (refs == null) ? 0 : refs.length);
+	}
+
+	public void testSCRExtenderCapability() throws Exception {
+		Bundle scr = getSCRBundle();
+		assertNotNull(
+				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
+				scr);
+		BundleWiring wiring = scr.adapt(BundleWiring.class);
+		assertNotNull("No BundleWiring available for SCR bundle", wiring);
+		boolean found = false;
+		List<BundleCapability> extenders = wiring
+				.getCapabilities(ExtenderNamespace.EXTENDER_NAMESPACE);
+		for (BundleCapability extender : extenders) {
+			if ("osgi.component".equals(extender.getAttributes().get(
+					ExtenderNamespace.EXTENDER_NAMESPACE))) {
+				found = true;
+				assertEquals(
+						"osgi.extender capability version wrong",
+						new Version(1, 3, 0),
+						extender.getAttributes()
+								.get(
+								ExtenderNamespace.CAPABILITY_VERSION_ATTRIBUTE));
+				String uses = extender.getDirectives().get(
+						Namespace.CAPABILITY_USES_DIRECTIVE);
+				assertNotNull(
+						"osgi.extender capability uses directive missing", uses);
+				boolean usefound = false;
+				for (String use : uses.split("\\s*,\\s*")) {
+					if ("org.osgi.service.component".equals(use)) {
+						usefound = true;
+						break;
+					}
+				}
+				assertTrue("osgi.extender capability missing package in uses",
+						usefound);
+				break;
+			}
+		}
+		assertTrue("missing osgi.extender capability for osgi.component", found);
+	}
+
+	public void testSCRServiceCapability() throws Exception {
+		Bundle scr = getSCRBundle();
+		assertNotNull(
+				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
+				scr);
+		BundleWiring wiring = scr.adapt(BundleWiring.class);
+		assertNotNull("No BundleWiring available for SCR bundle", wiring);
+		boolean found = false;
+		List<BundleCapability> services = wiring
+				.getCapabilities(ServiceNamespace.SERVICE_NAMESPACE);
+		for (BundleCapability service : services) {
+			List<String> objectClass = (List<String>) service.getAttributes()
+					.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
+			if (objectClass.contains(ServiceComponentRuntime.class.getName())) {
+				found = true;
+				String uses = service.getDirectives().get(
+						Namespace.CAPABILITY_USES_DIRECTIVE);
+				assertNotNull("osgi.service capability uses directive missing",
+						uses);
+				boolean usefound = false;
+				for (String use : uses.split("\\s*,\\s*")) {
+					if ("org.osgi.service.component.runtime".equals(use)) {
+						usefound = true;
+						break;
+					}
+				}
+				assertTrue("osgi.service capability missing package in uses",
+						usefound);
+				break;
+			}
+		}
+		assertTrue("missing osgi.service capability for "
+				+ ServiceComponentRuntime.class.getName(), found);
 	}
 
 	/**
@@ -517,7 +599,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// clear any previously reported 'error' bundles
 		errorLog = false;
-		LogReaderService logService = (LogReaderService) getService(LogReaderService.class);
+		LogReaderService logService = getService(LogReaderService.class);
 		logService.addLogListener(this);
 
 		// the bundle contains some illegal definitions
