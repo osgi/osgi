@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.component.tb7;
 
+import static org.osgi.test.cases.component.service.DSTestConstants.*;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Map;
@@ -28,12 +30,6 @@ import org.osgi.test.cases.component.service.ComponentEnabler;
 public class BindUnbind implements BaseService {
   private Dictionary properties = new Properties();
   private ComponentContext ctxt;
-	public static final int		BIND_SR			= 1 << 0;
-	public static final int		UNBIND_SR		= 1 << 1;
-	public static final int		BIND_CE			= 1 << 2;
-	public static final int		UNBIND_CE		= 1 << 3;
-	public static final int		BIND_CE_MAP		= 1 << 4;
-	public static final int		UNBIND_CE_MAP	= 1 << 5;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
@@ -50,41 +46,41 @@ public class BindUnbind implements BaseService {
   }
 
   protected void bindSr(ServiceReference sr) {
-    setDataBits(BIND_SR);
+		setDataBits(BIND_1);
   }
 
   protected void unbindSr(ServiceReference sr) {
-    setDataBits(UNBIND_SR);
+		setDataBits(UNBIND_1);
   }
 
   protected void bindCe(ComponentEnabler ce) {
-    setDataBits(BIND_CE);
+		setDataBits(BIND_2);
   }
 
   protected void unbindCe(ComponentEnabler ce) {
-    setDataBits(UNBIND_CE);
+		setDataBits(UNBIND_2);
   }
 
   protected void bindCeMap(ComponentEnabler ce, Map props) {
-    setDataBits(BIND_CE_MAP);
+		setDataBits(BIND_3);
   }
 
   protected void unbindCeMap(ComponentEnabler ce, Map props) {
-    setDataBits(UNBIND_CE_MAP);
+		setDataBits(UNBIND_3);
   }
 
   public Dictionary getProperties() {
     return properties;
   }
 
-  private void setDataBits(int value) {
-    if (properties == null) {
-      return;
-    }
-    Object prop = properties.get("config.base.data");
-    int data = (prop instanceof Integer) ? ((Integer) prop).intValue() : 0;
-    properties.put("config.base.data", new Integer(data | value));
-  }
+	private void setDataBits(long value) {
+		if (properties == null) {
+			return;
+		}
+		Object prop = properties.get("config.base.data");
+		long data = (prop instanceof Long) ? ((Long) prop).longValue() : 0;
+		properties.put("config.base.data", new Long(data | value));
+	}
 
   public ComponentContext getComponentContext() {
     return ctxt;

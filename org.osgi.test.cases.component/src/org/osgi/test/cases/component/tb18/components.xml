@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- This component provides ComponentEnabler service which other components use -->
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.EnablerProvider"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EnablerProvider"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.ComponentEnabler"/>
+		</service>
+	</component>
+
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.1"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind1"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind1"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.2"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind2"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind2"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.3"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind3"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind3"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.4"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind4"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind4"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.5"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind5"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind5"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.6"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind6"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind6"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.7"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind7"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind7"/>
+	</component>
+	
+	<component
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
+	      name="org.osgi.test.cases.component.tb18.8"
+	      immediate="true">
+	   <implementation
+	         class="org.osgi.test.cases.component.tb18.EventMethods"/>
+	   <service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          bind="bind8"
+	          interface="org.osgi.test.cases.component.service.ComponentEnabler"
+	          name="componentenabler"
+	          unbind="unbind8"/>
+	</component>
+	
+</components>

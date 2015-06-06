@@ -57,12 +57,12 @@ import org.osgi.service.log.LogService;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 import org.osgi.test.cases.component.service.ComponentEnabler;
+import org.osgi.test.cases.component.service.DSTestConstants;
 import org.osgi.test.cases.component.service.TBCService;
 import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb13.ModifyRegistrator;
 import org.osgi.test.cases.component.tb13a.ModifyRegistrator2;
 import org.osgi.test.cases.component.tb6.ActDeactComponent;
-import org.osgi.test.cases.component.tb7.BindUnbind;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
@@ -1250,7 +1250,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cc.disableComponent(CC_BC_MAP_INT_NS110);
 		log("disabled " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
-		int data = getBaseConfigData(bs);
+		long data = getBaseConfigData(bs);
 		assertTrue("Deactivate method of " + CC_BC_MAP_INT_NS110
 				+ " should be called",
 				checkDataBits(ActDeactComponent.DEACT_CC_BC_MAP_INT, data));
@@ -1359,11 +1359,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		log("uninstalled tb6");
 	}
 
-	public void testBindUnbindParams() throws Exception {
-		Bundle tb7 = installBundle("tb7.jar", false);
-		tb7.start();
-		Sleep.sleep(SLEEP * 3);
-
+	public void testEventMethods110() throws Exception {
 		final String SR_NS100 = TEST_CASE_ROOT + ".tb7.SrNS100";
 		final String SR_NS110 = TEST_CASE_ROOT + ".tb7.SrNS110";
 		final String CE_NS100 = TEST_CASE_ROOT + ".tb7.CeNS100";
@@ -1371,74 +1367,308 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String CE_MAP_NS100 = TEST_CASE_ROOT + ".tb7.CeMapNS100";
 		final String CE_MAP_NS110 = TEST_CASE_ROOT + ".tb7.CeMapNS110";
 
-		ServiceReference ref = getContext().getServiceReference(
-				ComponentEnabler.class.getName());
-		assertNotNull(
-				"Component Enabler Service Reference should be available", ref);
-		ComponentEnabler enabler = (ComponentEnabler) getContext().getService(
-				ref);
-		assertNotNull("Component Enabler Service should be available", enabler);
+		Bundle tb7 = installBundle("tb7.jar", false);
+		assertNotNull("tb7 failed to install", tb7);
 
-		BaseService bs = getBaseService(SR_NS100);
-		assertNotNull("Component " + SR_NS100 + " should be activated", bs);
-		assertTrue("Bind method of " + SR_NS100 + " should be called",
-				checkDataBits(BindUnbind.BIND_SR, getBaseConfigData(bs)));
-		enabler.enableComponent(SR_NS100, false);
-		Sleep.sleep(SLEEP * 3);
-		assertTrue("Unbind method of " + SR_NS100 + " should be called",
-				checkDataBits(BindUnbind.UNBIND_SR, getBaseConfigData(bs)));
+		try {
+			tb7.start();
+			Sleep.sleep(SLEEP * 3);
 
-		bs = getBaseService(SR_NS110);
-		assertNotNull("Component " + SR_NS110 + " should be activated", bs);
-		assertTrue("Bind method of " + SR_NS110 + " should be called",
-				checkDataBits(BindUnbind.BIND_SR, getBaseConfigData(bs)));
-		enabler.enableComponent(SR_NS110, false);
-		Sleep.sleep(SLEEP * 3);
-		assertTrue("Unbind method of " + SR_NS110 + " should be called",
-				checkDataBits(BindUnbind.UNBIND_SR, getBaseConfigData(bs)));
+			ServiceReference ref = getContext().getServiceReference(
+					ComponentEnabler.class.getName());
+			assertNotNull(
+					"Component Enabler Service Reference should be available",
+					ref);
+			ComponentEnabler enabler = (ComponentEnabler) getContext()
+					.getService(ref);
+			assertNotNull("Component Enabler Service should be available",
+					enabler);
 
-		bs = getBaseService(CE_NS100);
-		assertNotNull("Component " + CE_NS100 + " should be activated", bs);
-		assertTrue("Bind method of " + CE_NS100 + " should be called",
-				checkDataBits(BindUnbind.BIND_CE, getBaseConfigData(bs)));
-		enabler.enableComponent(CE_NS100, false);
-		Sleep.sleep(SLEEP * 3);
-		assertTrue("Unbind method of " + CE_NS100 + " should be called",
-				checkDataBits(BindUnbind.UNBIND_CE, getBaseConfigData(bs)));
+			try {
+				BaseService bs = getBaseService(SR_NS100);
+				assertNotNull("Component " + SR_NS100 + " should be activated",
+						bs);
+				assertTrue(
+						"Bind method of " + SR_NS100 + " should be called",
+						checkDataBits(DSTestConstants.BIND_1,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(SR_NS100, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + SR_NS100 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_1,
+								getBaseConfigData(bs)));
 
-		bs = getBaseService(CE_NS110);
-		assertNotNull("Component " + CE_NS110 + " should be activated", bs);
-		assertTrue("Bind method of " + CE_NS110 + " should be called",
-				checkDataBits(BindUnbind.BIND_CE, getBaseConfigData(bs)));
-		enabler.enableComponent(CE_NS110, false);
-		Sleep.sleep(SLEEP * 3);
-		assertTrue("Unbind method of " + CE_NS110 + " should be called",
-				checkDataBits(BindUnbind.UNBIND_CE, getBaseConfigData(bs)));
+				bs = getBaseService(SR_NS110);
+				assertNotNull("Component " + SR_NS110 + " should be activated",
+						bs);
+				assertTrue(
+						"Bind method of " + SR_NS110 + " should be called",
+						checkDataBits(DSTestConstants.BIND_1,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(SR_NS110, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + SR_NS110 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_1,
+								getBaseConfigData(bs)));
 
-		bs = getBaseService(CE_MAP_NS100);
-		assertNotNull("Component " + CE_MAP_NS100 + " should be activated", bs);
-		assertFalse("Bind method of " + CE_MAP_NS100 + " should not be called",
-				checkDataBits(BindUnbind.BIND_CE_MAP, getBaseConfigData(bs)));
+				bs = getBaseService(CE_NS100);
+				assertNotNull("Component " + CE_NS100 + " should be activated",
+						bs);
+				assertTrue(
+						"Bind method of " + CE_NS100 + " should be called",
+						checkDataBits(DSTestConstants.BIND_2,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(CE_NS100, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + CE_NS100 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_2,
+								getBaseConfigData(bs)));
 
-		enabler.enableComponent(CE_MAP_NS100, false);
-		Sleep.sleep(SLEEP * 3);
-		assertFalse("Unbind method of " + CE_MAP_NS100
-				+ " should not be called",
-				checkDataBits(BindUnbind.UNBIND_CE_MAP, getBaseConfigData(bs)));
+				bs = getBaseService(CE_NS110);
+				assertNotNull("Component " + CE_NS110 + " should be activated",
+						bs);
+				assertTrue(
+						"Bind method of " + CE_NS110 + " should be called",
+						checkDataBits(DSTestConstants.BIND_2,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(CE_NS110, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + CE_NS110 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_2,
+								getBaseConfigData(bs)));
 
-		bs = getBaseService(CE_MAP_NS110);
-		assertNotNull("Component " + CE_MAP_NS110 + " should be activated", bs);
-		assertTrue("Bind method of " + CE_MAP_NS110 + " should be called",
-				checkDataBits(BindUnbind.BIND_CE_MAP, getBaseConfigData(bs)));
-		enabler.enableComponent(CE_MAP_NS110, false);
-		Sleep.sleep(SLEEP * 3);
-		assertTrue("Unbind method of " + CE_MAP_NS110 + " should be called",
-				checkDataBits(BindUnbind.UNBIND_CE_MAP, getBaseConfigData(bs)));
+				bs = getBaseService(CE_MAP_NS100);
+				assertNotNull("Component " + CE_MAP_NS100
+						+ " should be activated", bs);
+				assertFalse(
+						"Bind method of " + CE_MAP_NS100
+								+ " should not be called",
+						checkDataBits(DSTestConstants.BIND_3,
+								getBaseConfigData(bs)));
 
-		getContext().ungetService(ref);
-		uninstallBundle(tb7);
+				enabler.enableComponent(CE_MAP_NS100, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Unbind method of " + CE_MAP_NS100
+								+ " should not be called",
+						checkDataBits(DSTestConstants.UNBIND_3,
+								getBaseConfigData(bs)));
+
+				bs = getBaseService(CE_MAP_NS110);
+				assertNotNull("Component " + CE_MAP_NS110
+						+ " should be activated", bs);
+				assertTrue(
+						"Bind method of " + CE_MAP_NS110 + " should be called",
+						checkDataBits(DSTestConstants.BIND_3,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(CE_MAP_NS110, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + CE_MAP_NS110
+								+ " should be called",
+						checkDataBits(DSTestConstants.UNBIND_3,
+								getBaseConfigData(bs)));
+			}
+			finally {
+				getContext().ungetService(ref);
+			}
+		}
+		finally {
+			uninstallBundle(tb7);
+		}
 	}
 
+	public void testEventMethods130() throws Exception {
+
+		Bundle tb18 = installBundle("tb18.jar", false);
+		assertNotNull("tb18 failed to install", tb18);
+		
+		try {
+			tb18.start();
+			Sleep.sleep(SLEEP * 3);
+
+			ServiceReference ref = getContext().getServiceReference(
+					ComponentEnabler.class.getName());
+			assertNotNull(
+					"Component Enabler Service Reference should be available",
+					ref);
+			ComponentEnabler enabler = (ComponentEnabler) getContext()
+					.getService(ref);
+			assertNotNull("Component Enabler Service should be available",
+					enabler);
+
+			try {
+				final String COMPONENT_1 = TEST_CASE_ROOT + ".tb18.1";
+				BaseService bs = getBaseService(COMPONENT_1);
+				assertNotNull("Component " + COMPONENT_1 + " should be activated", bs);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_1 + " called",
+						checkDataBits(DSTestConstants.ERROR_1,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Bind method of " + COMPONENT_1 + " should be called",
+						checkDataBits(DSTestConstants.BIND_1,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_1, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Wrong unbind method of " + COMPONENT_1 + " called",
+						checkDataBits(DSTestConstants.ERROR_1,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Unbind method of " + COMPONENT_1 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_1,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_2 = TEST_CASE_ROOT + ".tb18.2";
+				bs = getBaseService(COMPONENT_2);
+				assertNotNull("Component " + COMPONENT_2 + " should be activated", bs);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_2 + " called",
+						checkDataBits(DSTestConstants.ERROR_2,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Bind method of " + COMPONENT_2 + " should be called",
+						checkDataBits(DSTestConstants.BIND_2,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_2, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Wrong unbind method of " + COMPONENT_2 + " called",
+						checkDataBits(DSTestConstants.ERROR_2,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Unbind method of " + COMPONENT_2 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_2,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_3 = TEST_CASE_ROOT + ".tb18.3";
+				bs = getBaseService(COMPONENT_3);
+				assertNotNull("Component " + COMPONENT_3 + " should be activated",
+						bs);
+				assertTrue(
+						"Bind method of " + COMPONENT_3 + " should be called",
+						checkDataBits(DSTestConstants.BIND_3,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_3, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + COMPONENT_3 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_3,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_4 = TEST_CASE_ROOT + ".tb18.4";
+				bs = getBaseService(COMPONENT_4);
+				assertNotNull("Component " + COMPONENT_4
+						+ " should be activated", bs);
+				assertTrue(
+						"Bind method of " + COMPONENT_4 + " should be called",
+						checkDataBits(DSTestConstants.BIND_4,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_4, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + COMPONENT_4 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_4,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_5 = TEST_CASE_ROOT + ".tb18.5";
+				bs = getBaseService(COMPONENT_5);
+				assertNotNull("Component " + COMPONENT_5
+						+ " should be activated", bs);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_5 + " called",
+						checkDataBits(DSTestConstants.ERROR_5,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Bind method of " + COMPONENT_5 + " should be called",
+						checkDataBits(DSTestConstants.BIND_5,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_5, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_5 + " called",
+						checkDataBits(DSTestConstants.ERROR_5,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Unbind method of " + COMPONENT_5 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_5,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_6 = TEST_CASE_ROOT + ".tb18.6";
+				bs = getBaseService(COMPONENT_6);
+				assertNotNull("Component " + COMPONENT_6
+						+ " should be activated", bs);
+				assertTrue(
+						"Bind method of " + COMPONENT_6 + " should be called",
+						checkDataBits(DSTestConstants.BIND_6,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_6, false);
+				Sleep.sleep(SLEEP * 3);
+				assertTrue(
+						"Unbind method of " + COMPONENT_6 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_6,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_7 = TEST_CASE_ROOT + ".tb18.7";
+				bs = getBaseService(COMPONENT_7);
+				assertNotNull("Component " + COMPONENT_7
+						+ " should be activated", bs);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_7 + " called",
+						checkDataBits(DSTestConstants.ERROR_7,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Bind method of " + COMPONENT_7 + " should be called",
+						checkDataBits(DSTestConstants.BIND_7,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_7, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Wrong unbind method of " + COMPONENT_7 + " called",
+						checkDataBits(DSTestConstants.ERROR_7,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Unbind method of " + COMPONENT_7 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_7,
+								getBaseConfigData(bs)));
+
+				final String COMPONENT_8 = TEST_CASE_ROOT + ".tb18.8";
+				bs = getBaseService(COMPONENT_8);
+				assertNotNull("Component " + COMPONENT_8
+						+ " should be activated", bs);
+				assertFalse(
+						"Wrong bind method of " + COMPONENT_8 + " called",
+						checkDataBits(DSTestConstants.ERROR_8,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Bind method of " + COMPONENT_8 + " should be called",
+						checkDataBits(DSTestConstants.BIND_8,
+								getBaseConfigData(bs)));
+				enabler.enableComponent(COMPONENT_8, false);
+				Sleep.sleep(SLEEP * 3);
+				assertFalse(
+						"Wrong unbind method of " + COMPONENT_8 + " called",
+						checkDataBits(DSTestConstants.ERROR_8,
+								getBaseConfigData(bs)));
+				assertTrue(
+						"Unbind method of " + COMPONENT_8 + " should be called",
+						checkDataBits(DSTestConstants.UNBIND_8,
+								getBaseConfigData(bs)));
+			}
+			finally {
+				getContext().ungetService(ref);
+			}
+		}
+		finally {
+			uninstallBundle(tb18);
+		}
+	}
+	
 	public void testOptionalNames() throws Exception {
 		Bundle tb8 = installBundle("tb8.jar", false);
 		tb8.start();
@@ -2478,20 +2708,25 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 *         activated. Returned value is 0 when component with specified name
 	 *         is active but doesn't have property "config.base.data".
 	 */
-	private int getBaseConfigData(String componentName) {
+	private long getBaseConfigData(String componentName) {
 		BaseService s = getBaseService(componentName);
 		return getBaseConfigData(s);
 	}
 
-	private int getBaseConfigData(BaseService s) {
+	private long getBaseConfigData(BaseService s) {
 		Dictionary props = null;
-		int value = -1;
+		long value = -1L;
 		if (s != null) {
 			value = 0;
 			if ((props = s.getProperties()) != null) {
 				Object prop = props.get("config.base.data");
 				if (prop instanceof Integer) {
-					value = ((Integer) prop).intValue();
+					value = ((Integer) prop).longValue();
+				}
+				else
+					if (prop instanceof Long) {
+						value = ((Long) prop).longValue();
+
 				}
 			}
 		}
@@ -2524,7 +2759,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		return ref != null;
 	}
 
-	private static boolean checkDataBits(int bits, int data) {
+	private static boolean checkDataBits(long bits, long data) {
 		return bits == (bits & data);
 	}
 
