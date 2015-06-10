@@ -54,7 +54,6 @@ public class RestClientTestCase extends RestTestUtils {
     }
   }
 
-  // TODO - events
   public void testFrameworkStartLevelRestClient() throws Exception {
     FrameworkStartLevel frameworkStartLevel = getFrameworkStartLevel();
     int originalStartLevel = frameworkStartLevel.getStartLevel();
@@ -67,12 +66,12 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("original initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), frameworkStartLevelDTO.initialBundleStartLevel);
 
     FrameworkStartLevelDTO updateFWStartLevelDTO = new FrameworkStartLevelDTO();
-    updateFWStartLevelDTO.startLevel = originalStartLevel /* TODO + 1 */;
+    updateFWStartLevelDTO.startLevel = originalStartLevel;
     updateFWStartLevelDTO.initialBundleStartLevel = originalInitialBundleStartLevel + 1;
 
     getRestClient().setFrameworkStartLevel(updateFWStartLevelDTO);
 
-    frameworkStartLevel = getFrameworkStartLevel();  // TODO Is it necessary
+    frameworkStartLevel = getFrameworkStartLevel();
 
     assertEquals("startLevel after set", updateFWStartLevelDTO.startLevel, frameworkStartLevel.getStartLevel());
     assertEquals("initialBundleStartLevel after set", updateFWStartLevelDTO.initialBundleStartLevel, frameworkStartLevel.getInitialBundleStartLevel());
@@ -98,7 +97,6 @@ public class RestClientTestCase extends RestTestUtils {
     try {
       getRestClient().setFrameworkStartLevel(updateFWStartLevelDTO);
     } catch (Exception cause) {
-      // TODO can we be more specific about what error (or failure) we catch?
       receiveError = true;
     }
     assertTrue("Error for updating framework start level with negative value ", receiveError);
@@ -110,8 +108,6 @@ public class RestClientTestCase extends RestTestUtils {
     Bundle[] bundles = getInstalledBundles();
     assertBundleCollection(bundles, bundleCollection);
 
-    // TODO filter ?
-
     Bundle tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     if (tb1Bundle != null) { // test bundle is already installed => uninstall
       tb1Bundle.uninstall();
@@ -119,13 +115,13 @@ public class RestClientTestCase extends RestTestUtils {
     String url = getContext().getBundle().getEntry(TB1).toString();
 
     // install bundle with location
-		BundleDTO result = getRestClient().installBundle(url);
+    BundleDTO result = getRestClient().installBundle(url);
     assertNotNull("Bundle location for installed bundle is not null", result);
 
     tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     assertNotNull("Test bundle TB1 is installed", tb1Bundle);
 
-		assertEquals("Bundle location", getBundleURI(tb1Bundle), getBundleURI(result.id));
+    assertEquals("Bundle location", getBundleURI(tb1Bundle), getBundleURI(result.id));
 
     // same bundle location
     boolean receiveError = false;
@@ -133,8 +129,6 @@ public class RestClientTestCase extends RestTestUtils {
       getRestClient().installBundle(url);
     } catch (Exception cause) {
       receiveError = true;
-
-      // TODO check statis code CLIENT_ERROR_CONFLICT?
     }
     assertTrue("Install bundle by same URI", receiveError);
 
@@ -144,8 +138,6 @@ public class RestClientTestCase extends RestTestUtils {
       getRestClient().installBundle("invalid bundle location");
     } catch (Exception cause) {
       receiveError = true;
-
-      // TODO check statis code SERVER_ERROR_INTERNAL?
     }
     assertTrue("Install bundle by invalid URI", receiveError);
 
@@ -218,7 +210,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertBundleRepresentation(bundle, bundleRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleRepresentation = getRestClient().getBundle(notExistingBundleId);  // TODO Exception?
+    bundleRepresentation = getRestClient().getBundle(notExistingBundleId);
     assertNull("Bundle representation for not existing bundle " + notExistingBundleId + " :", bundleRepresentation);
 
     // GET by bundle path
@@ -415,7 +407,7 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testBundleHeaderRestClient() throws Exception {
     Bundle bundle = getRandomBundle();
-		Map<String, String> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
+    Map<String, String> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
     bHeaders = getRestClient().getBundleHeaders(getBundlePath(bundle));
@@ -471,7 +463,7 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb1StartLevelDTO = new BundleStartLevelDTO();
     tb1StartLevelDTO.startLevel = tb1NewStartLevel;
 
-		getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
+    getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     assertEquals("New start level ", tb1NewStartLevel, tb1StartLevel);
@@ -479,7 +471,7 @@ public class RestClientTestCase extends RestTestUtils {
     // set start level by bundle id for non existing bundle id
     receiveError = false;
     try {
-			getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -489,7 +481,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb1StartLevelDTO.startLevel = -1;
-			getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -502,14 +494,14 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb2StartLevelDTO = new BundleStartLevelDTO();
     tb2StartLevelDTO.startLevel = tb2NewStartLevel;
 
-		getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
+    getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     tb2StartLevel = getBundleStartLevel(tb2Bundle).getStartLevel();
     assertEquals("New start level ", tb2NewStartLevel, tb2StartLevel);
 
     // set start level by bundle path for non existing bundle path
     receiveError = false;
     try {
-			getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -519,7 +511,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb2StartLevelDTO.startLevel = -1;
-			getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -693,7 +685,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("persistentlyStarted:", bundleStartLevel.isPersistentlyStarted(), bundleStartLevelDTO.persistentlyStarted);
   }
 
-	protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, String> bHeaders) {
+  protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, String> bHeaders) {
     Dictionary<String, String> headers = bundle.getHeaders();
     if (headers == null) {
       assertNull("Bundle headers" + bundle.getBundleId() + ": ", bHeaders);
@@ -724,7 +716,6 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("state:", bundle.getState(), bundleRepresentation.state);
     assertEquals("symbolicName:", bundle.getSymbolicName(), bundleRepresentation.symbolicName);
     assertEquals("version:", bundle.getVersion().toString(), bundleRepresentation.version);
-    //  location ?
   }
 
   protected void assertEquivalent(final String[] a1, final String[] a2) {

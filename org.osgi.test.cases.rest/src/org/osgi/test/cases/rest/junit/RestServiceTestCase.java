@@ -36,10 +36,10 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
+import java.lang.reflect.Array;
 
 public class RestServiceTestCase extends RestTestUtils {
 
-  // TODO - Events
   // 5.1.1
   public void testFrameworkStartLevel() throws JSONException, IOException {
     FrameworkStartLevel frameworkStartLevel = getFrameworkStartLevel();
@@ -54,11 +54,11 @@ public class RestServiceTestCase extends RestTestUtils {
     Object object = getNonSupportedMediaTypeObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
 
-    int startLevel = originalStartLevel /* TODO + 1 */;
+    int startLevel = originalStartLevel;
     int initialBundleStartLevel = originalInitialBundleStartLevel + 1;
     updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_NO_CONTENT, null, true);
 
-    frameworkStartLevel = getFrameworkStartLevel();  // TODO Is it necessary
+    frameworkStartLevel = getFrameworkStartLevel();
 
     assertEquals("startLevel after put", startLevel, frameworkStartLevel.getStartLevel());
     assertEquals("initialBundleStartLevel after put", initialBundleStartLevel, frameworkStartLevel.getInitialBundleStartLevel());
@@ -73,9 +73,6 @@ public class RestServiceTestCase extends RestTestUtils {
     jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertEquals("updated startLevel", originalStartLevel, jsonStartLevel.getInt("startLevel"));
     assertEquals("updated initialBundleStartLevel", originalInitialBundleStartLevel, jsonStartLevel.getInt("initialBundleStartLevel"));
-
-    // Check PUT with UNSUPPORTED MEDIA TYPE)
-    //updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, false);
 
     //  Check PUT with Illegal Arguments
     updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_BAD_REQUEST, null, true);
@@ -137,7 +134,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, HttpURLConnection.HTTP_CONFLICT);
     assertNull("Install bundle by same bundle content:", result);
 
-	result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, HttpURLConnection.HTTP_BAD_REQUEST);
+    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, HttpURLConnection.HTTP_BAD_REQUEST);
 
     assertBundleException(result, "Install bundle by invalid bundle content.");
   }
@@ -201,7 +198,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB11), null, true, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
 
-	result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST);
+    result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST);
 
     assertBundleException(result, "Update bundle with invalid location " + tb1Bundle.getBundleId());
 
@@ -284,7 +281,7 @@ public class RestServiceTestCase extends RestTestUtils {
       tb21Bundle.start();
     }
 
-	result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
+  result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
     assertBundleException(result, "Stop bundle for bundle with error in stop method  " + tb21Bundle.getBundleId());
 
     // stop bundle with options
@@ -331,7 +328,7 @@ public class RestServiceTestCase extends RestTestUtils {
 
     int tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     int newStartLevel = tb1StartLevel + 1;
-		bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
     assertNull("Bundle start level updated  " + tb1Bundle.getBundleId() + " :", bundleStartLevelRepresentation);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
@@ -346,7 +343,7 @@ public class RestServiceTestCase extends RestTestUtils {
       assertNull("Bundle start level updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
     }
 
-		result = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
+    result = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
   }
 
   // 5.1.7.1
@@ -487,7 +484,7 @@ public class RestServiceTestCase extends RestTestUtils {
         try {
           JSONObject props = serviceRepresentation.getJSONObject("properties");
           assertNotNull("Service representation properties ", props);
-          
+
           Object id = props.get(Constants.SERVICE_ID);
           assertNotNull("Service id ", id);
           String serviceId = String.valueOf(id);
@@ -524,7 +521,22 @@ public class RestServiceTestCase extends RestTestUtils {
         Object value = serviceRef.getProperty(key);
 
         assertTrue("Service property " + key, propNames.contains(key));
-        if (value instanceof String) {  // TODO
+        if (value.getClass().isArray()) {
+          JSONArray arrayProp = propsRepresentation.getJSONArray(key);
+
+          HashSet<Object> arrayPropValues = new HashSet<Object>();
+          for (int k = 0; k < arrayProp.length(); k++) {
+            arrayPropValues.add(arrayProp.get(k));
+          }
+
+          int length = Array.getLength(value);
+          assertEquals("Service array property size ", arrayProp.length(), length);
+          for (int k = 0; k < length; k++) {
+            assertTrue("Service array property " + key, arrayPropValues.contains(Array.get(value, k)));
+          }
+        } else if (value instanceof Number) {
+          assertEquals("Service number property " + key, ((Number)value).intValue(), propsRepresentation.get(key));
+        } else {
           assertEquals("Service property value for " + key, value, propsRepresentation.get(key));
         }
       }
@@ -559,19 +571,17 @@ public class RestServiceTestCase extends RestTestUtils {
     assertNotNull(assertMessage, result);
 
     if (result instanceof JSONObject) {
-      // TODO
       int typeCode = ((JSONObject)result).getInt("typecode");
       String message = ((JSONObject)result).getString("message");
 
-      assertTrue("typecode:" + typeCode, true);  // print value?
-      assertTrue("message:" + message, true);  // print values?
+      assertTrue(assertMessage, typeCode >= 0); // some of BundleException error codes
+      assertTrue("Error message is not null.", message != null);
     } else {
       fail("BundleException Representation expected.");
     }
   }
 
   protected void updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, String acceptType, boolean jsonMediaType) throws JSONException {
-    //ClientResource resource = new ClientResource(baseURI + FW_START_LEVEL_URI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(startLevel);
     jsonWriter.key("initialBundleStartLevel").value(initialBundleStartLevel);
@@ -596,7 +606,7 @@ public class RestServiceTestCase extends RestTestUtils {
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-	if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
+  if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
@@ -613,9 +623,9 @@ public class RestServiceTestCase extends RestTestUtils {
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-		System.err.println("RESULT IS " + result);
+    debug("RESULT IS " + result, null);
 
-		if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
@@ -655,11 +665,11 @@ public class RestServiceTestCase extends RestTestUtils {
     String result = executeRequest(requestURI, "PUT", contentType, acceptType, null, expectedResponseCode, null, jsonWriter.endObject().toString());
 
     if (result != null && expectedResponseCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
-			try {
-				return new JSONObject(result);
-			} catch (JSONException _) {
-				return null;
-			}
+      try {
+        return new JSONObject(result);
+      } catch (JSONException _) {
+        return null;
+      }
     }
 
     return null;
@@ -687,7 +697,7 @@ public class RestServiceTestCase extends RestTestUtils {
     if (notAcceptableCheck) {
       return executeRequest(uri, "GET", null, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedResponseCode, null, null);
     }
-   return null; 
+   return null;
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -735,7 +745,7 @@ public class RestServiceTestCase extends RestTestUtils {
           assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
         }
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+      } else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
       }
 
@@ -770,7 +780,6 @@ public class RestServiceTestCase extends RestTestUtils {
     HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
     connection.setRequestMethod(method); //type: POST, PUT, DELETE, GET
     connection.setDoOutput(true);
-    //connection.setDoInput(true);
     connection.setConnectTimeout(60000); //60 secs
     connection.setReadTimeout(60000); //60 secs
     if (acceptType != null) {
