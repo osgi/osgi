@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -410,8 +411,67 @@ public class RestServiceTestCase extends RestTestUtils {
     assertNull("Request with not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE, result);
   }
 
+  // 5.6.1 The Extensions Resource
+  public void testExtensions() throws JSONException, IOException, BundleException {
+    JSONArray result = getJSONArray("extensions", EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
+    assertExtensions(result, null, 0);
+
+    Bundle bundle = getTestBundle(TB5_TEST_BUNDLE_SYMBOLIC_NAME, TB5);
+    bundle.start();
+
+    result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
+    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"})/* name, path*/, 1);
+
+    bundle = getTestBundle(TB6_TEST_BUNDLE_SYMBOLIC_NAME, TB6);
+    bundle.start();
+
+    result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
+    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension",
+            "REST Extension full URI", "http://127.0.0.1/ct/rest/extension"})/* name, path, name, path*/, 2);
+
+    bundle.stop();
+    result = getJSONArray(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
+    assertExtensions(result, Arrays.asList(new String[]{"REST CT Extension", "contributions/extension"}), 1);
+
+    Object notSupportedResult = getNonSupportedMediaTypeObject(EXTENSIONS_URI, EXTENSIONS_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
+    assertNull("Request with not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE, notSupportedResult);
+  }
 
 // protected
+
+  protected void assertExtensions(JSONArray jsonExtensionsList, List<String> extProps /* name, path, name, path*/, int expectedExtensionsCount) throws JSONException {
+    if (expectedExtensionsCount == 0) {
+      assertEquals("No extensions.", expectedExtensionsCount, jsonExtensionsList.length());
+      return;
+    }
+
+    assertNotNull("Extensions are not null.", jsonExtensionsList);
+    assertEquals("Extensions size is " + expectedExtensionsCount + ".", expectedExtensionsCount, jsonExtensionsList.length());
+
+    HashMap<String, JSONObject> extensions = new HashMap<String, JSONObject>();
+    for (int k = 0; k < jsonExtensionsList.length(); k++) {
+      JSONObject ext = jsonExtensionsList.getJSONObject(k);
+
+      String name = ext.getString("name");
+      String path = ext.getString("path");
+
+      assertNotNull("Name is not null.", name);
+      assertNotNull("Path is not null.", path);
+
+      extensions.put(name, ext);
+    }
+
+    for (int k = 0; k < extProps.size(); k++) {
+      String expectedName = extProps.get(k++);
+      String expectedPath = extProps.get(k);
+
+      JSONObject ext = extensions.get(expectedName);
+
+      assertTrue("Extensions list contains " + expectedName + ".", ext != null);
+      assertEquals("Extension path.", expectedPath, ext.getString("path"));
+    }
+  }
+
 
   protected void assertBundleRepresentation(Bundle bundle, JSONObject bundleRepresentation) throws JSONException {
     assertEquals("lastModified:", bundle.getLastModified(), bundleRepresentation.getLong("lastModified"));
@@ -587,7 +647,7 @@ public class RestServiceTestCase extends RestTestUtils {
     jsonWriter.key("initialBundleStartLevel").value(initialBundleStartLevel);
 
     String strBody = jsonWriter.endObject().toString();
-    String contentType = jsonMediaType ? "application/json" : NON_SUPPORTED_MEDIA_TYPE;
+    String contentType = jsonMediaType ? APPLICATION_JSON : NON_SUPPORTED_MEDIA_TYPE;
 
     executeRequest(FW_START_LEVEL_URI, "PUT", contentType, acceptType, null, expectedStatusCode, null, strBody);
   }
@@ -676,7 +736,7 @@ public class RestServiceTestCase extends RestTestUtils {
   }
 
   protected JSONObject getJSONObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
-    String result = executeRequest(uri, "GET", null, "application/json", expectedContentType, expectedResponseCode, null, null);
+    String result = executeRequest(uri, "GET", null, APPLICATION_JSON, expectedContentType, expectedResponseCode, null, null);
     if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
       return new JSONObject(result);
     }
@@ -685,7 +745,7 @@ public class RestServiceTestCase extends RestTestUtils {
   }
 
   protected JSONArray getJSONArray(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
-    String result = executeRequest(uri, "GET", null, "application/json", expectedContentType, expectedResponseCode, null, null);
+    String result = executeRequest(uri, "GET", null, APPLICATION_JSON, expectedContentType, expectedResponseCode, null, null);
     if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
       return new JSONArray(result);
     }
@@ -697,14 +757,15 @@ public class RestServiceTestCase extends RestTestUtils {
     if (notAcceptableCheck) {
       return executeRequest(uri, "GET", null, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedResponseCode, null, null);
     }
-   return null;
+
+    return null;
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-  private String executeRequest(String uri, String method, String contentType, String acceptType, String expectedContentType, int expectedResponseCode, Map<String, String> additionalProps, Object body) throws JSONException {
+  protected String executeRequest(String uri, String method, String contentType, String acceptType, String expectedContentType,
+          int expectedResponseCode, Map<String, String> additionalProps, Object body) {
     HttpURLConnection connection = null;
     BufferedReader in = null;
     try {
@@ -771,36 +832,6 @@ public class RestServiceTestCase extends RestTestUtils {
     }
 
     return null;
-  }
-
-  private HttpURLConnection getHttpConnection(String url, String method, String acceptType, String contentType, Map<String, String> additionalProps) throws IOException {
-    debug(method + " " + url, null);
-
-    URL uri = new URL(url);
-    HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
-    connection.setRequestMethod(method); //type: POST, PUT, DELETE, GET
-    connection.setDoOutput(true);
-    connection.setConnectTimeout(60000); //60 secs
-    connection.setReadTimeout(60000); //60 secs
-    if (acceptType != null) {
-      connection.setRequestProperty("Accept", acceptType);
-      debug("Accept:" + acceptType, null);
-    } else {
-      connection.setRequestProperty("Accept", "*/*");
-    }
-    if (contentType != null) {
-      connection.setRequestProperty("Content-Type", contentType);
-      debug("Content-Type:" + contentType, null);
-    }
-
-    if (additionalProps != null) {
-      for (Iterator<String> iterator = additionalProps.keySet().iterator(); iterator.hasNext();) {
-        String key = iterator.next();
-        connection.setRequestProperty(key, additionalProps.get(key));
-      }
-    }
-
-    return connection;
   }
 
 }

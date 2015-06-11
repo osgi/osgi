@@ -1,0 +1,5 @@
+Bundle-SymbolicName: ${p}.tb5
+Bundle-Version: 1.0.0
+Bundle-Description: Test Bundle Rest Service
+Bundle-Activator: $(p).tb5.TBActivator
+Export-Package: ${p}.tb5

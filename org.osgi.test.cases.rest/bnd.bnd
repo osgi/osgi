@@ -21,6 +21,8 @@ Include-Resource          = \
   tb21.jar=tb21.jar, \
   tb3.jar=tb3.jar, \
   tb4.jar=tb4.jar, \
+  tb5.jar=tb5.jar, \
+  tb6.jar=tb6.jar
 
 Test-Cases              = ${testcases}
 -signaturetest          = org.osgi.service.rest
@@ -48,6 +50,7 @@ Test-Cases              = ${testcases}
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
     rest.ct.debug=false
 #  rest.ct.not_acceptable.check=false,\
+#  rest.ct.validate.xmls=false,\
 #  rest.ct.base.uri="http://localhost:8888,\
 #  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
 
