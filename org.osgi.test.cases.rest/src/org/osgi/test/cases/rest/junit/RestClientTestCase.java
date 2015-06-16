@@ -30,6 +30,11 @@ import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
 import org.osgi.service.rest.client.RestClient;
 import org.osgi.service.rest.client.RestClientFactory;
 
+/**
+ * Tests {@link RestClient} OSGi Service.
+ *
+ * @author Petia Sotirova
+ */
 public class RestClientTestCase extends RestTestUtils {
 
   private ServiceReference<RestClientFactory> restClientFactoryRef;
@@ -636,7 +641,7 @@ public class RestClientTestCase extends RestTestUtils {
 
         assertTrue("Service property " + key, propertiesDTO.containsKey(key));
         if (value instanceof String[]) {
-          assertEquivalent((String[]) value, (String[]) propertiesDTO.get(key));
+          assertEquivalent((String[])value, (String[])propertiesDTO.get(key));
         } else {
           assertEquals("Service property value ", value, propertiesDTO.get(key));
         }

@@ -81,6 +81,9 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String EXTENSIONS_CONTENT_TYPE_JSON = "application/org.osgi.extensions+json";
   public static String EXTENSIONS_CONTENT_TYPE_XML = "application/org.osgi.extensions+xml";
 
+  public static String BUNDLE_EXCEPTION_CONTENT_TYPE_JSON = "application/org.osgi.bundleexception+json";
+  public static String BUNDLE_EXCEPTION_CONTENT_TYPE_XML = "application/org.osgi.bundleexception+xml";
+
   public static String NON_SUPPORTED_MEDIA_TYPE = "application/vnd.oasis.opendocument.chart";
 
   public static String EXTENSIONS_URI = "extensions";

@@ -22,7 +22,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
@@ -39,6 +38,11 @@ import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import java.lang.reflect.Array;
 
+/**
+ * Tests REST Management Service JSON Representations.
+ *
+ * @author Petia Sotirova
+ */
 public class RestServiceTestCase extends RestTestUtils {
 
   // 5.1.1
@@ -282,7 +286,7 @@ public class RestServiceTestCase extends RestTestUtils {
       tb21Bundle.start();
     }
 
-  result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
+    result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
     assertBundleException(result, "Stop bundle for bundle with error in stop method  " + tb21Bundle.getBundleId());
 
     // stop bundle with options
@@ -666,7 +670,7 @@ public class RestServiceTestCase extends RestTestUtils {
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-  if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
