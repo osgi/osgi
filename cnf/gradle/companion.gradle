@@ -37,8 +37,8 @@ javadoc {
             'GuardedBy:mf:"Guarded By:"',
             'security:m:"Required Permissions"',
             'noimplement:t:"Consumers of this API must not implement this interface"']
-    classpath bnd.project.bootclasspath*.file
-    links('http://docs.oracle.com/javase/6/docs/api/')
+    classpath bnd.project.getBootclasspath()*.getFile()
+    links('http://docs.oracle.com/javase/7/docs/api/')
   }
   if (project.name.startsWith('osgi.')) {
     // compute dependencies on other javadoc builds based upon the classpath

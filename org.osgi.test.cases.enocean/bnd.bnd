@@ -1,0 +1,42 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description	= EnOcean Test Bundle
+
+Export-Package: \
+ org.osgi.test.support.step;-noimport:=true
+Conditional-Package: \
+ org.osgi.test.support.*
+Import-Package: \
+  ${-signaturetest}, \
+  *
+Private-Package		=  \
+	${p}.*
+
+Test-Cases			= ${testcases}
+-signaturetest = \
+ org.osgi.service.enocean, \
+ org.osgi.service.enocean.descriptions
+
+-buildpath: org.osgi.test.support;version=project,\
+	org.osgi.service.enocean;version=project,\
+	osgi.core;version=4.2,\
+	osgi.cmpn;version=4.2,\
+	ee.minimum;version=1.2,\
+	${junit}
+
+-runbundles: \
+	org.osgi.impl.service.log;version=latest,\
+	org.osgi.impl.service.cm;version=latest,\
+	org.osgi.impl.service.event;version=latest,\
+	org.osgi.impl.service.enocean;version=latest
+
+-runproperties = ${runproperties}, \
+    comm.rxtx.disable=true, \
+	org.osgi.service.enocean.host.path=:testcase:, \
+	org.osgi.service.enocean.loglevel.debug=true, \
+	org.osgi.service.enocean.loglevel.warn=true, \
+	org.osgi.service.enocean.loglevel.info=true, \
+	org.osgi.service.enocean.loglevel.error=true, \
+	org.osgi.service.enocean.host.chip_id=12345678, \
+	org.osgi.service.enocean.host.base_id=9876543

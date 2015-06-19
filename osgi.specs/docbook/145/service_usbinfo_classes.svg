@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:ooo="http://xml.openoffice.org/svg/export"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.2"
+   width="254mm"
+   height="190.5mm"
+   viewBox="0 0 25400 19050"
+   preserveAspectRatio="xMidYMid"
+   fill-rule="evenodd"
+   clip-path="url(#presentation_clip_path)"
+   stroke-width="28.222"
+   stroke-linejoin="round"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="service_usbinfo_classes.svg"><metadata
+   id="metadata693"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1018"
+   id="namedview691"
+   showgrid="false"
+   inkscape:zoom="1.0824912"
+   inkscape:cx="450"
+   inkscape:cy="329.92488"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" />
+ <defs
+   class="ClipPathGroup"
+   id="defs4">
+  <clipPath
+   id="presentation_clip_path"
+   clipPathUnits="userSpaceOnUse">
+   <rect
+   x="0"
+   y="0"
+   width="25400"
+   height="19050"
+   id="rect7" />
+  </clipPath>
+ </defs>
+ <defs
+   class="TextShapeIndex"
+   id="defs259">
+  <g
+   ooo:slide="id1"
+   ooo:id-list="id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37"
+   id="g261" />
+ </defs>
+ <g
+   id="g294">
+  <g
+   id="id2"
+   class="Master_Slide">
+   <g
+   id="bg-id2"
+   class="Background">
+    <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 12700,19049 L 0,19049 0,0 25399,0 25399,19049 12700,19049 Z"
+   id="path298" />
+   </g>
+   
+  </g>
+ </g>
+ <g
+   class="SlideGroup"
+   id="g326">
+  <g
+   id="g328">
+   <g
+   id="id1"
+   class="Slide"
+   clip-path="url(#presentation_clip_path)">
+    <g
+   class="Page"
+   id="g331">
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g333">
+      <g
+   id="id6">
+       <path
+   fill="rgb(191,191,191)"
+   stroke="none"
+   d="M 1473,2323 L 8623,2323 8623,6323 1473,6323 1473,2323 Z M 1473,2323 L 1473,2323 Z M 8623,6323 L 8623,6323 Z"
+   id="path336" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g338">
+      <g
+   id="id7">
+       <path
+   fill="rgb(191,191,191)"
+   stroke="none"
+   d="M 15899,2323 L 23049,2323 23049,6323 15899,6323 15899,2323 Z M 15899,2323 L 15899,2323 Z M 23049,6323 L 23049,6323 Z"
+   id="path341" />
+      </g>
+     </g>
+     <g
+   class="Group"
+   id="g343">
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g345">
+       <g
+   id="id8">
+        <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 16750,3173 L 22250,3173 22250,5673 16750,5673 16750,3173 Z M 16750,3173 L 16750,3173 Z M 22250,5673 L 22250,5673 Z"
+   id="path348" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 16750,3173 L 22250,3173 22250,5673 16750,5673 16750,3173 Z"
+   id="path350" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g352">
+       <g
+   id="id9">
+        <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 16550,2973 L 22050,2973 22050,5473 16550,5473 16550,2973 Z M 16550,2973 L 16550,2973 Z M 22050,5473 L 22050,5473 Z"
+   id="path355" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 16550,2973 L 22050,2973 22050,5473 16550,5473 16550,2973 Z"
+   id="path357" />
+        <text
+   class="TextShape"
+   id="text359"><tspan
+     class="TextParagraph"
+     font-size="564px"
+     font-weight="400"
+     id="tspan361"
+     style="font-family:ProductusOSGiBookc;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusOSGiBookc"><tspan
+       class="TextPosition"
+       x="16800"
+       y="3662"
+       id="tspan363"
+       style="font-family:ProductusOSGiBookc;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusOSGiBookc">A Device impl</tspan></tspan></text>
+
+
+       </g>
+      </g>
+     </g>
+     <g
+   class="Group"
+   id="g367">
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g369">
+       <g
+   id="id10">
+        <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 2398,3173 L 7898,3173 7898,5673 2398,5673 2398,3173 Z M 2398,3173 L 2398,3173 Z M 7898,5673 L 7898,5673 Z"
+   id="path372" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 2398,3173 L 7898,3173 7898,5673 2398,5673 2398,3173 Z"
+   id="path374" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g376">
+       <g
+   id="id11">
+        <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 2198,2973 L 7698,2973 7698,5473 2198,5473 2198,2973 Z M 2198,2973 L 2198,2973 Z M 7698,5473 L 7698,5473 Z"
+   id="path379" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 2198,2973 L 7698,2973 7698,5473 2198,5473 2198,2973 Z"
+   id="path381" />
+        <text
+   class="TextShape"
+   id="text383"><tspan
+     class="TextParagraph"
+     font-size="564px"
+     font-weight="400"
+     id="tspan385"
+     style="font-family:ProductusOSGiBookc;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusOSGiBookc"><tspan
+       class="TextPosition"
+       x="2448"
+       y="3662"
+       id="tspan387"
+       style="font-family:ProductusOSGiBookc;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusOSGiBookc">A Driver impl</tspan></tspan></text>
+
+
+       </g>
+      </g>
+     </g>
+     <g
+   class="Group"
+   id="g391">
+      <g
+   class="Group"
+   id="g393">
+       <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g395">
+        <g
+   id="id12">
+         <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 16750,8624 L 22250,8624 22250,11124 16750,11124 16750,8624 Z M 16750,8624 L 16750,8624 Z M 22250,11124 L 22250,11124 Z"
+   id="path398" />
+         <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 16750,8624 L 22250,8624 22250,11124 16750,11124 16750,8624 Z"
+   id="path400" />
+        </g>
+       </g>
+       <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g402">
+        <g
+   id="id13">
+         <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 16550,8424 L 22050,8424 22050,10924 16550,10924 16550,8424 Z M 16550,8424 L 16550,8424 Z M 22050,10924 L 22050,10924 Z"
+   id="path405" />
+         <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 16550,8424 L 22050,8424 22050,10924 16550,10924 16550,8424 Z"
+   id="path407" />
+         <text
+   class="TextShape"
+   id="text409"><tspan
+     class="TextParagraph"
+     font-size="564px"
+     font-weight="400"
+     id="tspan411"
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"><tspan
+       class="TextPosition"
+       x="16800"
+       y="9113"
+       id="tspan413"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan></tspan></text>
+
+
+        <text
+   id="text3693"
+   class="TextShape"
+   y="733.77789"><tspan
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+     id="tspan3695"
+     font-weight="400"
+     font-size="564px"
+     class="TextParagraph"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+       id="tspan3697"
+       y="9846.7764"
+       x="16800"
+       class="TextPosition">USBInfoDevice</tspan></tspan></text>
+
+</g>
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g423">
+       <g
+   id="id14">
+        <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 22149,11024 L 22149,9724 20849,11024 22149,11024 Z M 22149,9724 L 22149,9724 Z M 20849,11024 L 20849,11024 Z"
+   id="path426" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 22149,11024 L 22149,9724 20849,11024 22149,11024 Z"
+   id="path428" />
+       </g>
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.LineShape"
+   id="g430">
+      <g
+   id="id15">
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 19300,5474 L 19300,8098"
+   id="path433" />
+       <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 19300,8425 L 19125,8075 19475,8075 19300,8425 Z"
+   id="path435" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g437">
+      <g
+   id="id16">
+       <text
+   class="TextShape"
+   id="text440"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan442"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="1740"
+       y="2057"
+       id="tspan444"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">Refining driver bundle</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g448">
+      <g
+   id="id17">
+       <text
+   class="TextShape"
+   id="text451"
+   x="846.66681"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan453"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="15250.665"
+       y="2057"
+       id="tspan455"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">USB information base driver bundle</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g459">
+      <g
+   id="id18">
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 6223,5507 L 6223,7464 17614,7464 17614,8422"
+   id="path462" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 6223,5507 L 6223,5507 Z"
+   id="path464" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 17614,8422 L 17614,8422 Z"
+   id="path466" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g468">
+      <g
+   id="id19">
+       <text
+   class="TextShape"
+   id="text471"
+   x="-1975.5559"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan473"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="7187.4482"
+       y="8084"
+       id="tspan475"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">attaches device and possible refines</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g483">
+      <g
+   id="id20">
+       <text
+   class="TextShape"
+   id="text486"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan488"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="6434"
+       y="6284"
+       id="tspan490"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">0,1</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g494">
+      <g
+   id="id21">
+       <text
+   class="TextShape"
+   id="text497"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan499"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="16546"
+       y="8058"
+       id="tspan501"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">0..n</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g505">
+      <g
+   id="id22">
+       <path
+   fill="rgb(191,191,191)"
+   stroke="none"
+   d="M 8699,13524 L 15849,13524 15849,17524 8699,17524 8699,13524 Z M 8699,13524 L 8699,13524 Z M 15849,17524 L 15849,17524 Z"
+   id="path508" />
+      </g>
+     </g>
+     <g
+   class="Group"
+   id="g510">
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g512">
+       <g
+   id="id23">
+        <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 9599,14375 L 15099,14375 15099,16875 9599,16875 9599,14375 Z M 9599,14375 L 9599,14375 Z M 15099,16875 L 15099,16875 Z"
+   id="path515" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 9599,14375 L 15099,14375 15099,16875 9599,16875 9599,14375 Z"
+   id="path517" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g519">
+       <g
+   id="id24">
+        <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 9399,14175 L 14899,14175 14899,16675 9399,16675 9399,14175 Z M 9399,14175 L 9399,14175 Z M 14899,16675 L 14899,16675 Z"
+   id="path522" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 9399,14175 L 14899,14175 14899,16675 9399,16675 9399,14175 Z"
+   id="path524" />
+        <text
+   class="TextShape"
+   id="text526"><tspan
+     class="TextParagraph"
+     font-size="564px"
+     font-weight="400"
+     id="tspan528"
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"><tspan
+       class="TextPosition"
+       x="9649"
+       y="14864"
+       id="tspan530"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">Device Manager</tspan></tspan></text>
+
+
+       <text
+   id="text3312"
+   class="TextShape"
+   y="564.44452"
+   x="56.444443"><tspan
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+     id="tspan3314"
+     font-weight="400"
+     font-size="564px"
+     class="TextParagraph"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="tspan3316"
+       y="15428.443"
+       x="9705.4443"
+       class="TextPosition">impl</tspan></tspan></text>
+</g>
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g538">
+      <g
+   id="id25">
+       <text
+   class="TextShape"
+   id="text541"
+   x="-1298.2224"
+   y="-112.88889"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan543"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="15701.771"
+       y="13200.111"
+       id="tspan545"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">listens to all device registrations</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g553">
+      <g
+   id="id26">
+       <text
+   class="TextShape"
+   id="text556"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan558"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="19464"
+       y="11698"
+       id="tspan560"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">0..n</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g564">
+      <g
+   id="id27">
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 19300,10950 L 19300,12573 13800,12573 13800,14156"
+   id="path567" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 13800,10950 L 13800,10950 Z"
+   id="path569" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 19300,14156 L 19300,14156 Z"
+   id="path571" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g573">
+      <g
+   id="id28">
+       <text
+   class="TextShape"
+   id="text576"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan578"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="13938"
+       y="14059"
+       id="tspan580"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">1</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g584">
+      <g
+   id="id29">
+       <text
+   class="TextShape"
+   id="text587"
+   x="-7256.4932"
+   y="2216.0815"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan589"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="8939.5068"
+       y="18101.082"
+       id="tspan591"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">device manager</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="Group"
+   id="g595">
+      <g
+   class="Group"
+   id="g597">
+       <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g599">
+        <g
+   id="id30">
+         <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 2398,8624 L 7898,8624 7898,11124 2398,11124 2398,8624 Z M 2398,8624 L 2398,8624 Z M 7898,11124 L 7898,11124 Z"
+   id="path602" />
+         <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 2398,8624 L 7898,8624 7898,11124 2398,11124 2398,8624 Z"
+   id="path604" />
+        </g>
+       </g>
+       <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g606">
+        <g
+   id="id31">
+         <path
+   fill="rgb(255,255,255)"
+   stroke="none"
+   d="M 2198,8424 L 7698,8424 7698,10924 2198,10924 2198,8424 Z M 2198,8424 L 2198,8424 Z M 7698,10924 L 7698,10924 Z"
+   id="path609" />
+         <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 2198,8424 L 7698,8424 7698,10924 2198,10924 2198,8424 Z"
+   id="path611" />
+         <text
+   class="TextShape"
+   id="text613"><tspan
+     class="TextParagraph"
+     font-size="564px"
+     font-weight="400"
+     id="tspan615"
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"><tspan
+       class="TextPosition"
+       x="2448"
+       y="9113"
+       id="tspan617"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan></tspan></text>
+
+
+        <text
+   id="text3687"
+   class="TextShape"
+   y="733.77789"><tspan
+     style="font-size:564px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+     id="tspan3689"
+     font-weight="400"
+     font-size="564px"
+     class="TextParagraph"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+       id="tspan3691"
+       y="9846.7764"
+       x="2448"
+       class="TextPosition">Driver</tspan></tspan></text>
+
+</g>
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g627">
+       <g
+   id="id32">
+        <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 7797,11024 L 7797,9724 6497,11024 7797,11024 Z M 7797,9724 L 7797,9724 Z M 6497,11024 L 6497,11024 Z"
+   id="path630" />
+        <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="71"
+   stroke-linejoin="round"
+   d="M 7797,11024 L 7797,9724 6497,11024 7797,11024 Z"
+   id="path632" />
+       </g>
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g634">
+      <g
+   id="id33">
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 4948,5474 L 4950,8098"
+   id="path637" />
+       <path
+   fill="rgb(0,0,0)"
+   stroke="none"
+   d="M 4950,8425 L 4775,8075 5125,8075 4950,8425 Z"
+   id="path639" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g641">
+      <g
+   id="id34">
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 4947,10924 L 4947,12547 10447,12547 10447,14130"
+   id="path644" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 10447,10924 L 10447,10924 Z"
+   id="path646" />
+       <path
+   fill="none"
+   stroke="rgb(0,0,0)"
+   stroke-width="26"
+   stroke-linejoin="round"
+   d="M 4947,14130 L 4947,14130 Z"
+   id="path648" />
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g650">
+      <g
+   id="id35">
+       <text
+   class="TextShape"
+   id="text653"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan655"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="10755"
+       y="14059"
+       id="tspan657"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">1</tspan></tspan></text>
+
+
+      </g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g661">
+      <g
+   id="id36">
+       <text
+   class="TextShape"
+   id="text664"
+   x="-1524.0002"
+   y="-225.77779"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan666"
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="1734.0022"
+       y="13161.223"
+       id="tspan668"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">corrects all drivers</tspan></tspan></text>
+
+
+      <text
+   id="text3681"
+   class="TextShape"
+   y="338.66669"
+   x="-1524.0002"><tspan
+     style="font-size:635px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"
+     id="tspan3683"
+     font-weight="400"
+     font-size="635px"
+     class="TextParagraph"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:ProductusBook;-inkscape-font-specification:ProductusBook"
+       id="tspan3685"
+       y="13725.666"
+       x="1734.0022"
+       class="TextPosition">and matches them to devices</tspan></tspan></text>
+
+</g>
+     </g>
+     <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g680">
+      <g
+   id="id37">
+       <text
+   class="TextShape"
+   id="text683"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan685"
+     style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook"><tspan
+       class="TextPosition"
+       x="5155"
+       y="11684"
+       id="tspan687"
+       style="font-family:ProductusBook;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;-inkscape-font-specification:ProductusBook">0..n</tspan></tspan></text>
+
+
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

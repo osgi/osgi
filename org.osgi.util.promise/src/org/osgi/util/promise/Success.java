@@ -26,6 +26,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success)} method and is called if the Promise is resolved
  * successfully.
  * 
+ * <p>
+ * This is a functional interface and can be used as the assignment target for a
+ * lambda expression or method reference.
+ * 
  * @param <T> The value type of the resolved Promise passed as input to this
  *        callback.
  * @param <R> The value type of the returned Promise from this callback.
@@ -49,16 +53,16 @@ public interface Success<T, R> {
 	 * registered as the chained Promise.
 	 * 
 	 * <p>
-	 * If the returned Promise is {@code null} then the chained Promise will
+	 * If the returned Promise is {@code null} then the chained Promise must
 	 * resolve immediately with a successful value of {@code null}. If the
-	 * returned Promise is not {@code null} then the chained Promise will be
+	 * returned Promise is not {@code null} then the chained Promise must be
 	 * resolved when the returned Promise is resolved.
 	 * 
 	 * @param resolved The successfully resolved {@link Promise}.
 	 * @return The Promise to use to resolve the chained Promise, or
-	 *         {@code null} if the chained Promise is to be resolved
-	 *         immediately.
-	 * @throws Exception The chained Promise will be failed with the thrown
+	 *         {@code null} if the chained Promise is to be resolved immediately
+	 *         with the value {@code null}.
+	 * @throws Exception The chained Promise must be failed with the thrown
 	 *         exception.
 	 */
 	Promise<R> call(Promise<T> resolved) throws Exception;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,7 +129,7 @@ public interface ConfigurationAdmin {
 	public final static String	SERVICE_FACTORYPID		= "service.factoryPid";
 	/**
 	 * Configuration property naming the location of the bundle that is
-	 * associated with a a {@code Configuration} object. This property can be
+	 * associated with a {@code Configuration} object. This property can be
 	 * searched for but must not appear in the configuration dictionary for
 	 * security reason. The property's value is of type {@code String}.
 	 * 

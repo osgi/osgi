@@ -363,24 +363,39 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <para>In some situations it may be needed to specify requirements that
       cover multiple namespaces. For example a bundle might be needed that
-      exports the above package, but the bundle must also have the ASL2
-      license. A resource's license is available as an attribute on the
-      <code>osgi.identity</code> namespace. Constructing a constraint that
-      combines requirements from multiple namespaces can be done by using an
-      Expression Combiner, which can be obtained from the Repository service.
-      The Repository service provides a <xref
+      exports the above package, but the bundle must also have the Apache
+      License, Version 2.0 license. A resource's license is available as an
+      attribute on the <code>osgi.identity</code> namespace. Constructing a
+      constraint that combines requirements from multiple namespaces can be
+      done by using an Expression Combiner, which can be obtained from the
+      Repository service. The Repository service provides a <xref
       linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
       xrefstyle="hyperlink"/> overload that can take a requirement expression
-      and returns a collection of matching resources: <programlisting>
-  RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
+      and returns a Promise to a collection of matching resources.
+      <programlisting>  RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
   String lf = "(license=http://opensource.org/licenses/Apache-2.0)";
   lb.addDirective("filter", lf);
 
   RequirementExpression expr = repo.getExpressionCombiner().and(
     lb.buildExpression(), rb.buildExpression());
 
-  Collection&lt;Resource&gt; matches = repo.findProviders(expr);
-      </programlisting></para>
+  Promise&lt;Collection&lt;Resource&gt;&gt; p = repo.findProviders(expr);
+
+  // Let findProviders() do its work async and update a ui component 
+  // once the result is available
+  p.then(new Success&lt;Collection&lt;Resource&gt;, Void&gt;() {
+    public Promise&lt;Void&gt; call(Promise&lt;Collection&lt;Resource&gt;&gt; resolved) 
+        throws Exception {
+      ui.update(resolved.getValue());
+      return null;
+    }
+  });
+
+  // Instead of the async chain above its also possiblye to 
+  // wait for the promise value synchronously:
+  //   Collection&lt;Resource&gt; resources = p.getValue();</programlisting>
+      For more details on OSGi Promises, see the <xref
+      linkend="util.promise"/>.</para>
     </section>
   </section>
 
@@ -1206,6 +1221,54 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
   </section>
 
   <section>
+    <title>Capabilities</title>
+
+    <para>Implementations of the Repository Service specification must provide
+    the capabilities listed in this section.</para>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The Repository Service implementation bundle must provide the
+      <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.repository</code>. This capability can
+      be used by provisioning tools and during resolution to ensure that a
+      Repository Service implementation is present. The capability must also
+      declare a uses constraint for the
+      <code>org.osgi.service.repository</code> package and provide the version
+      of this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.repository";
+       uses:="org.osgi.service.repository";
+       version:Version="1.1"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The Repository Service implementation must provide a capability in
+      the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing the <xref
+      linkend="org.osgi.service.repository.Repository" xrefstyle="hyperlink"/>
+      service. This capability must also declare a uses constraint for the
+      <code>org.osgi.service.repository</code> package. For example:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+       objectClass:List&lt;String&gt;="org.osgi.service.repository.Repository";
+       uses:="org.osgi.service.repository"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
     <title>Security</title>
 
     <section>
@@ -1241,18 +1304,18 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
     </section>
 
     <section>
-      <title>Minimum Implementation Permissions</title>
+      <title>Permissions</title>
 
-      <programlisting>PackagePermission[org.osgi.service.repository,IMPORT]
-ServicePermission[...Repository, REGISTER ]
+      <para>Implementations of this specification will need the following
+      minimum permissions.</para>
+
+      <programlisting>ServicePermission[...Repository, REGISTER ]
 SocketPermission[ ... carefully restrict external access...]</programlisting>
-    </section>
 
-    <section>
-      <title>Minimum Using Permissions</title>
+      <para>Users of this specification will need the following minimum
+      permissions.</para>
 
-      <programlisting>PackagePermission[org.osgi.service.repository, IMPORT ]
-ServicePermission[...Repository, GET ]</programlisting>
+      <programlisting>ServicePermission[...Repository, GET ]</programlisting>
     </section>
   </section>
 
@@ -1295,6 +1358,11 @@ ServicePermission[...Repository, GET ]</programlisting>
         <para>Changes to default content for the <emphasis>Repository
         Content</emphasis> API and <code>osgi.content</code>
         capability.</para>
+      </listitem>
+
+      <listitem>
+        <para>Introduction of <code>osgi.implementation</code> and
+        <code>osgi.service</code> <emphasis>capabilities</emphasis>.</para>
       </listitem>
     </itemizedlist>
   </section>

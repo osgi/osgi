@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ public interface DeploymentPackage {
 	 * Returns a URL pointing to an image that represents the icon for this
 	 * Deployment Package.
 	 * 
-	 * The {@code DeploymentPackage-Icon} header can set an icon for the the
+	 * The {@code DeploymentPackage-Icon} header can set an icon for the
 	 * deployment package. This method returns an absolute URL that is defined
 	 * by this header. The Deployment Admin service must provide this icon as a
 	 * local resource. That is, the Deployment Admin must make a local copy of

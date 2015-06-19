@@ -1275,7 +1275,7 @@ public void start( BundleContext context ) {
             <code>Consumer</code>. <xref
             linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"
             xrefstyle="hyperlink"/> returned and the time the filter is
-            evaluated. </para></entry>
+            evaluated.</para></entry>
           </row>
         </tbody>
       </tgroup>

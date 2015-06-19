@@ -36,7 +36,10 @@
 <polyline points="113.76,97.067 99.24,104.327 99.24,103.907 99.36,103.728 113.52,96.647 "/>
 <rect x="56.7" y="82.427" width="43.021" height="0.48"/>
 <rect x="56.7" y="96.587" width="43.021" height="0.48"/>
-<text transform="matrix(1 0 0 1 92.3997 59.0273)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Endpoint</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
+<text transform="matrix(1 0 0 1 92.3997 52.0273)" enable-background="new    ">
+<tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Endpoint</tspan>
+<tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Event</tspan>
+<tspan x="0" y="19.152" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
 <rect x="198.419" y="68.208" width="1.262" height="0.48"/>
 <rect x="203.459" y="68.208" width="1.86" height="0.48"/>
 <rect x="209.1" y="68.208" width="1.858" height="0.48"/>
@@ -180,5 +183,8 @@
 	269.4,68.267 269.64,68.688 269.28,68.447 269.28,61.367 "/>
 <text transform="matrix(1 0 0 1 273.0603 144.1074)" font-family="'ProductusBook'" font-size="7.98">display</text>
 <text transform="matrix(1 0 0 1 204.6599 66.1074)" font-family="'ProductusOSGiBookc'" font-size="7.98">extends</text>
-<text transform="matrix(1 0 0 1 92.3997 112.7275)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Endpoint</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
+<text transform="matrix(1 0 0 1 92.3997 112.7275)" enable-background="new    ">
+<tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Endpoint</tspan>
+<tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Event</tspan>
+<tspan x="0" y="19.152" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
 </svg>

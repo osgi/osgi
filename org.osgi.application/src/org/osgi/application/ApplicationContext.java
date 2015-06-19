@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public interface ApplicationContext {
 	/**
 	 * Removes the specified
 	 * {@link org.osgi.application.ApplicationServiceListener} object from this
-	 * context application instances's list of listeners.
+	 * context application instance's list of listeners.
 	 * <p>
 	 * If {@code listener} is not contained in this context application
 	 * instance's list of listeners, this method does nothing.
@@ -153,7 +153,7 @@ public interface ApplicationContext {
 	 * service that was registered first is returned.
 	 * 
 	 * @param referenceName The name of a reference as specified in a reference
-	 *        element in this context applications's description. It must not be
+	 *        element in this context application's description. It must not be
 	 *        {@code null}
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the reference cardinality is 0..1 or 0..n and no bound service is
@@ -172,7 +172,7 @@ public interface ApplicationContext {
 	 * {@code referenceName}.
 	 * 
 	 * @param referenceName The name of a reference as specified in a reference
-	 *        element in this context applications's description. It must not be
+	 *        element in this context application's description. It must not be
 	 *        {@code null}.
 	 * @return An array of service object for the referenced service or
 	 *         {@code null} if the reference cardinality is 0..1 or 0..n and no

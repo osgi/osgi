@@ -106,7 +106,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertSame(tr, req.getResource());
     }
 
-    public void testSimpleRequirementExpression() {
+    public void testSimpleRequirementExpression() throws Exception {
         RequirementBuilder builder = getRepo().newRequirementBuilder("osgi.wiring.bundle");
         builder.addDirective("filter", "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(bundle-version=1.0.0.test))");
 
@@ -120,7 +120,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertEquals("org.osgi.test.cases.repository.tb1", identityCaps.get(0).getAttributes().get("osgi.identity"));
     }
 
-    public void testAndExpression() {
+    public void testAndExpression() throws Exception {
         RequirementBuilder builder1 = getRepo().newRequirementBuilder("osgi.wiring.package");
         builder1.addDirective("filter", "(&(osgi.wiring.package=org.osgi.test.cases.repository.tbX)(version>=7)(!(version>=8)))");
         RequirementExpression wiringReq = builder1.buildExpression();
@@ -159,7 +159,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertEquals("org.osgi.test.cases.repository.tb4", id);
     }
 
-    public void testMultiAndExpression() {
+    public void testMultiAndExpression() throws Exception {
         RequirementBuilder b1 = getRepo().newRequirementBuilder("osgi.content");
         b1.addDirective("filter", "(mime=application/vnd.osgi.bundle)");
         IdentityExpression re1 = b1.buildExpression();
@@ -179,7 +179,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertEquals("org.osgi.test.cases.repository.tb3", identityCaps.get(0).getAttributes().get("osgi.identity"));
     }
 
-    public void testNotExpression() {
+    public void testNotExpression() throws Exception {
         ExpressionCombiner ec = getRepo().getExpressionCombiner();
         RequirementBuilder builder = getRepo().newRequirementBuilder("osgi.foo.bar");
         builder.addDirective("filter", "(myattr=myotherval)");
@@ -198,7 +198,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         }
     }
 
-    public void testOrExpression() {
+    public void testOrExpression() throws Exception {
         RequirementBuilder builder1 = getRepo().newRequirementBuilder("osgi.test.namespace");
         builder1.addDirective("filter", "(osgi.test.namespace=*)");
         RequirementExpression req1 = builder1.buildExpression();
@@ -225,7 +225,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertTrue(foundRes);
     }
 
-    public void testMultiOrExpression() {
+    public void testMultiOrExpression() throws Exception {
         RequirementBuilder b1 = getRepo().newRequirementBuilder("osgi.identity");
         b1.addDirective("filter", "(osgi.identity=org.osgi.test.cases.repository.tb1)");
         IdentityExpression re1 = b1.buildExpression();
@@ -259,7 +259,7 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertTrue(foundTB4);
     }
 
-    public void testCombinedExpression() {
+    public void testCombinedExpression() throws Exception {
         RequirementBuilder builder1 = getRepo().newRequirementBuilder("osgi.wiring.package");
         builder1.addDirective("filter", "(osgi.wiring.package=org.osgi.test.cases.repository.tbX)");
         RequirementExpression req1 = builder1.buildExpression();
@@ -293,10 +293,10 @@ public class Respository1_1Test extends RepositoryTestBase {
         assertTrue(foundTB3);
     }
 
-    private Set<Resource> findProvidersAllRepos(RequirementExpression expr) {
+    private Set<Resource> findProvidersAllRepos(RequirementExpression expr) throws Exception {
         Set<Resource> resources = new HashSet<Resource>();
         for (Repository repository : repositoryServices) {
-            resources.addAll(repository.findProviders(expr));
+            resources.addAll(repository.findProviders(expr).getValue());
         }
         return resources;
     }

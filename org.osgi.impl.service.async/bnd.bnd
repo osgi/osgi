@@ -1,0 +1,29 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Activator				= ${p}.Activator
+
+Private-Package 				= ${p}.*
+
+Conditional-Package				= net.sf.cglib.*
+
+Import-Package					= !net.sf.cglib.asm.util, *
+
+Export-Package					= org.osgi.service.async; -split-package:=first; provide:=true,\
+								  org.osgi.service.async.delegate; -split-package:=first,\
+								  org.osgi.util.promise,\
+								  org.osgi.util.function
+
+Include-Resource: OSGI-INF/=permissions
+
+Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.async.Async";uses:="org.osgi.service.async",\
+	osgi.implementation;osgi.implementation="osgi.async";version:Version="1.0.0";uses:="org.osgi.service.async,org.osgi.service.async.delegate"
+
+-buildpath:  \
+	org.osgi.service.async;version=project,\
+	org.osgi.util.promise;version=project,\
+	org.osgi.util.function;version=project,\
+	ee.j2se;version=${javac.compliance},\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	com.springsource.net.sf.cglib

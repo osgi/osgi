@@ -24,6 +24,7 @@
  */
 package org.osgi.test.cases.component.junit;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -32,6 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
@@ -377,14 +379,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// preserve the count of the registered components
 		// after SRC is started again, the same number of components
 		// must be registered
-		refs = bc.getServiceReferences(null, filter);
+		refs = bc.getServiceReferences((String) null, filter);
 		int count = (refs == null) ? 0 : refs.length;
 
 		scr.stop();
 		Sleep.sleep(SLEEP * 2);
 
 		try {
-			refs = bc.getServiceReferences(null, filter);
+			refs = bc.getServiceReferences((String) null, filter);
 			assertNull(
 					"The Service Component Runtime must stop all services if SCR is stopped",
 					refs);
@@ -396,7 +398,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			Sleep.sleep(SLEEP * 2);
 		}
 
-		refs = bc.getServiceReferences(null, filter);
+		refs = bc.getServiceReferences((String) null, filter);
 		assertEquals(
 				"The Service Component Runtime must start all components that are installed prior it",
 				count, (refs == null) ? 0 : refs.length);
@@ -1008,8 +1010,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testActivateDeactivate() throws Exception {
+		log("install tb6");
 		Bundle tb6 = installBundle("tb6.jar", false);
+		log("installed tb6");
+		log("start tb6");
 		tb6.start();
+		log("started tb6");
 		Sleep.sleep(SLEEP * 3);
 
 		final String NOTSET_NS100 = TEST_CASE_ROOT + ".tb6.notsetNS100";
@@ -1027,6 +1033,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String INT_NS110 = TEST_CASE_ROOT + ".tb6.IntNS110";
 		final String CC_BC_MAP_INT_NS110 = TEST_CASE_ROOT
 				+ ".tb6.CcBcMapIntNS110";
+		final String CONT_EXP = TEST_CASE_ROOT + ".tb6.ContExp";
 
 		BaseService bs = getBaseService(NOTSET_NS100);
 		ComponentContext cc = (bs instanceof ComponentContextExposer) ? ((ComponentContextExposer) bs)
@@ -1038,7 +1045,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + NOTSET_NS100 + " should be called",
 				checkDataBits(ActDeactComponent.ACTIVATE_CC,
 						getBaseConfigData(bs)));
+		log("disable " + NOTSET_NS100);
 		cc.disableComponent(NOTSET_NS100);
+		log("disabled " + NOTSET_NS100);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue(
 				"Deactivate method of " + NOTSET_NS100 + " should be called",
@@ -1051,7 +1060,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + NOTSET_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.ACTIVATE_CC,
 						getBaseConfigData(bs)));
+		log("disable " + NOTSET_NS110);
 		cc.disableComponent(NOTSET_NS110);
+		log("disabled " + NOTSET_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue(
 				"Deactivate method of " + NOTSET_NS110 + " should be called",
@@ -1067,7 +1078,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertTrue(
 				"Activate method of " + NOARGS_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.ACT, getBaseConfigData(bs)));
+		log("disable " + NOARGS_NS110);
 		cc.disableComponent(NOARGS_NS110);
+		log("disabled " + NOARGS_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue(
 				"Deactivate method of " + NOARGS_NS110 + " should be called",
@@ -1081,7 +1094,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("bs should not be null", bs);
 		assertTrue("Activate method of " + CC_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.ACT_CC, getBaseConfigData(bs)));
+		log("disable " + CC_NS110);
 		cc.disableComponent(CC_NS110);
+		log("disabled " + CC_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue("Deactivate method of " + CC_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.DEACT_CC, getBaseConfigData(bs)));
@@ -1094,7 +1109,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("bs should not be null", bs);
 		assertTrue("Activate method of " + BC_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.ACT_BC, getBaseConfigData(bs)));
+		log("disable " + BC_NS110);
 		cc.disableComponent(BC_NS110);
+		log("disabled " + BC_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue("Deactivate method of " + BC_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.DEACT_BC, getBaseConfigData(bs)));
@@ -1107,7 +1124,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("bs should not be null", bs);
 		assertTrue("Activate method of " + MAP_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.ACT_MAP, getBaseConfigData(bs)));
+		log("disable " + MAP_NS110);
 		cc.disableComponent(MAP_NS110);
+		log("disabled " + MAP_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue("Deactivate method of " + MAP_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.DEACT_MAP,
@@ -1124,7 +1143,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ " should be called",
 				checkDataBits(ActDeactComponent.ACT_CC_BC_MAP,
 						getBaseConfigData(bs)));
+		log("disable " + CC_BC_MAP_NS110);
 		cc.disableComponent(CC_BC_MAP_NS110);
+		log("disabled " + CC_BC_MAP_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue("Deactivate method of " + CC_BC_MAP_NS110
 				+ " should be called",
@@ -1133,7 +1154,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(INT_NS110);
 		assertNotNull("bs should not be null", bs);
+		log("disable " + INT_NS110);
 		cc.disableComponent(INT_NS110);
+		log("disabled " + INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertTrue("Deactivate method of " + INT_NS110 + " should be called",
 				checkDataBits(ActDeactComponent.DEACT_INT,
@@ -1141,7 +1164,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
+		log("disable " + CC_BC_MAP_INT_NS110);
 		cc.disableComponent(CC_BC_MAP_INT_NS110);
+		log("disabled " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		int data = getBaseConfigData(bs);
 		assertTrue("Deactivate method of " + CC_BC_MAP_INT_NS110
@@ -1154,20 +1179,24 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				ComponentConstants.DEACTIVATION_REASON_DISABLED,
 				0xFF & (data >> 16));
 
-		final String CONT_EXP = TEST_CASE_ROOT + ".tb6.ContExp";
-
+		log("enable " + CC_BC_MAP_INT_NS110);
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
+		log("enabled " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
+		log("disable " + CONT_EXP);
 		cc.disableComponent(CONT_EXP);
+		log("disabled " + CONT_EXP);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_REFERENCE",
 				ComponentConstants.DEACTIVATION_REASON_REFERENCE,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
+		log("enable " + CONT_EXP);
 		cc.enableComponent(CONT_EXP);
+		log("enabled " + CONT_EXP);
 		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
@@ -1180,30 +1209,40 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			properties = new Hashtable();
 		}
 		properties.put("configuration.dummy", "dummy");
+		log("configuration update " + CC_BC_MAP_INT_NS110);
 		config.update(properties);
+		log("configuration updated " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_CONFIGURATION_MODIFIED",
 				ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_MODIFIED,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
+		log("enable " + CC_BC_MAP_INT_NS110);
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
+		log("enabled " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
+		log("configuration delete " + CC_BC_MAP_INT_NS110);
 		config.delete();
+		log("configuration deleted " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_CONFIGURATION_DELETED",
 				ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_DELETED,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
+		log("enable " + CC_BC_MAP_INT_NS110);
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
+		log("enabled " + CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 
+		log("enable " + INT_NS110);
 		cc.enableComponent(INT_NS110);
+		log("enabled " + INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(INT_NS110);
@@ -1213,23 +1252,29 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				: null;
 		assertNotNull("Component context should be available for " + INT_NS110,
 				ccIntNS110);
+		log("dispose " + INT_NS110);
 		ccIntNS110.getComponentInstance().dispose();
+		log("disposed " + INT_NS110);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_DISPOSED",
 				ComponentConstants.DEACTIVATION_REASON_DISPOSED,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
-		bs = getBaseService(CC_BC_MAP_INT_NS110);
+		bs = getBaseService(CONT_EXP);
 		assertNotNull("bs should not be null", bs);
+		log("stop tb6");
 		tb6.stop();
+		log("stopped tb6");
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_BUNDLE_STOPPED",
 				ComponentConstants.DEACTIVATION_REASON_BUNDLE_STOPPED,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
+		log("uninstall tb6");
 		uninstallBundle(tb6);
+		log("uninstalled tb6");
 	}
 
 	public void testBindUnbindParams() throws Exception {
@@ -2337,6 +2382,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			}
 		}
 	}
+
 
 	/**
 	 * Searches for component with name componentName which provides

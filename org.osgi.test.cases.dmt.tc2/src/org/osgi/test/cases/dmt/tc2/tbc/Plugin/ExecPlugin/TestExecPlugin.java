@@ -36,11 +36,20 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
-
 import java.util.Date;
-
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.MountPlugin;
+import org.osgi.service.dmt.spi.MountPoint;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 
 /**
@@ -160,8 +169,11 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
 		checkExistence(nodeUri);
-		if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
+		String uri = tbc.mangleUri(nodeUri);
+		if (TestExecPluginActivator.INTERIOR_NODE.equals(uri)) {
 			return dataComplex;
+		} else if (TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES.equals(uri)) {
+			return null;
 		} else {
 			return dataString;
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 
 /**
- * NotificationService enables sending aynchronous notifications to a management
- * server. The implementation of {@code NotificationService} should register
- * itself in the OSGi service registry as a service.
+ * NotificationService enables sending asynchronous notifications to a
+ * management server. The implementation of {@code NotificationService} should
+ * register itself in the OSGi service registry as a service.
  * 
  * @author $Id$
  */

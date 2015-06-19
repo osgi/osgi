@@ -54,7 +54,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		
 		// read value and perform changes in an atomic session
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 		int rmtStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + STARTLEVEL ).getInt();
 		int rmtInitialBundleStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL ).getInt();
 		
@@ -72,8 +72,13 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 			rmtStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + STARTLEVEL ).getInt();
 			rmtInitialBundleStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL ).getInt();
 			
-			assertEquals("The value of the Framework StartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel + 1);
-			assertEquals("The value of the Framework initialBundleStartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel + 1);
+			assertEquals(
+					"The value of the Framework StartLevel was not set correctly.",
+					initialStartLevel + 1, fwStartLevel.getStartLevel());
+			assertEquals(
+					"The value of the Framework initialBundleStartLevel was not set correctly.",
+					initialBundleStartLevel + 1,
+					fwStartLevel.getInitialBundleStartLevel());
 		}
 		finally {
 			fwStartLevel.setStartLevel(initialStartLevel, (FrameworkListener[]) null);
@@ -92,7 +97,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 
 		String bundleUri = BUNDLE + "/" + BUNDLE_KEY;
 		// --------- Install a bundle -----------
@@ -113,7 +118,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 //		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_TYPE));
 //		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_MESSAGE));
 		assertTrue( "There must be a State node after successfull installation.", session.isNodeUri(bundleUri + "/" + STATE));
-		assertEquals( "ACTIVE", session.getNodeValue(bundleUri + "/" + STATE).getString());
+		assertEquals( bundleUri + "/" + STATE + " node value is not correct!", "ACTIVE", session.getNodeValue(bundleUri + "/" + STATE).getString());
 		assertTrue( "TestBundle must have a bundle id after successfull installation!", session.isNodeUri(bundleUri + "/" + BUNDLEID));
 		assertTrue( "TestBundle must have a bundle-version after successfull installation!", session.isNodeUri(bundleUri + "/" + VERSION));
 		assertTrue( "TestBundle must have a SymbolicName after successfull installation!", session.isNodeUri(bundleUri + "/" + SYMBOLIC_NAME));
@@ -145,10 +150,11 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		testBundle1 = installBundle(TESTBUNDLE_EXPORTPACKAGE, false);
 		
 		// ensure that the bundle is in INSTALLED state
-		assertFalse( "testbundle should not be in 'ACTIVE' state initially", Bundle.ACTIVE == testBundle1.getState() );
+		assertFalse("testbundle should not be in 'ACTIVE' state initially",
+				Bundle.ACTIVE == testBundle1.getState());
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-		assertNotNull(session);
+		assertNotNull("Null DMT session for: " + FRAMEWORK_ROOT, session);
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		
 		// get the corresponding bundle entry in the RMT 
@@ -162,7 +168,9 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertNotNull("Can't find the testBundle in the RMT bundle map!", bundleBaseUri );
 
 		// check initial state of testBundle in the RMT
-		assertEquals( getBundleStateString(testBundle1.getState()), session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
+		assertEquals("testBundle initial state is not correct!",
+				getBundleStateString(testBundle1.getState()), session
+						.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 		// attempt bundle resolving
 		session.setNodeValue(bundleBaseUri + "/" + REQUESTED_STATE, new DmtData("RESOLVED"));
 		session.commit();
@@ -171,10 +179,15 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
 
 		// check for Faults in previous commit
-		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt(), -1);
-		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString(), "");
+		assertEquals("There is an unexpected fault type in: " + bundleBaseUri
+				+ "/" + FAULT_TYPE, -1,
+				session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt());
+		assertEquals("There is an unexpected fault message in: "
+				+ bundleBaseUri + "/" + FAULT_MESSAGE, "", session
+				.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString());
 		// check state of testBundle in the RMT
-		assertEquals( "RESOLVED", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
+		assertEquals("testBundle state is not correct!", "RESOLVED", session
+				.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 		// attempt bundle start
 		session.setNodeValue(bundleBaseUri + "/" + REQUESTED_STATE, new DmtData("ACTIVE"));
 		session.commit();
@@ -184,9 +197,14 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		
 		// check bundle state in RMT now and stop it again via RMT
 		// check for Faults in previous commit
-		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt(), -1);
-		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString(), "");
-		assertEquals( "ACTIVE", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
+		assertEquals("There is an unexpected fault type in: " + bundleBaseUri
+				+ "/" + FAULT_TYPE, -1,
+				session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt());
+		assertEquals("There is an unexpected fault message in: "
+				+ bundleBaseUri + "/" + FAULT_MESSAGE, "", session
+				.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString());
+		assertEquals("testBundle state is not correct!", "ACTIVE", session
+				.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 		session.setNodeValue(bundleBaseUri + "/" + REQUESTED_STATE, new DmtData("RESOLVED"));
 		session.commit();
 		
@@ -194,7 +212,8 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
 
 		// check bundle state in RMT again
-		assertEquals( "RESOLVED", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
+		assertEquals("testBundle state is not correct!", "RESOLVED", session
+				.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 	}
 
 

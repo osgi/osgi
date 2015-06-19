@@ -22,7 +22,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
     memberLevel = JavadocMemberLevel.PROTECTED
     encoding = 'UTF-8'
     title = ''
-    classpath bnd.project.bootclasspath*.file
+    classpath bnd.project.getBootclasspath()*.getFile()
     doclet 'org.osgi.tools.xmldoclet.XmlDoclet'
     docletpath compileJava.destinationDir
   }

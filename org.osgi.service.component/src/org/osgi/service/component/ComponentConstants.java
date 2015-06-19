@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ public interface ComponentConstants {
 	 * configuration. The value of this property must be of type {@code Long}.
 	 * 
 	 * <p>
-	 * The value of this property is assigned by the Service Component Runtime
-	 * when a component configuration is created. The Service Component Runtime
-	 * assigns a unique value that is larger than all previously assigned values
-	 * since the Service Component Runtime was started. These values are NOT
-	 * persistent across restarts of the Service Component Runtime.
+	 * The value of this property is assigned by Service Component Runtime when
+	 * a component configuration is created. Service Component Runtime assigns a
+	 * unique value that is larger than all previously assigned values since
+	 * Service Component Runtime was started. These values are NOT persistent
+	 * across restarts of Service Component Runtime.
 	 */
 	public final static String	COMPONENT_ID								= "component.id";
 
@@ -123,4 +123,20 @@ public interface ComponentConstants {
 	 * @since 1.1
 	 */
 	public static final int		DEACTIVATION_REASON_BUNDLE_STOPPED			= 6;
+
+	/**
+	 * Capability name for Service Component Runtime.
+	 * 
+	 * <p>
+	 * Used in {@code Provide-Capability} and {@code Require-Capability}
+	 * manifest headers with the {@code osgi.extender} namespace. For example:
+	 * 
+	 * <pre>
+	 * Require-Capability: osgi.extender;
+	 *  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3)(!(version&gt;=2.0)))"
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	COMPONENT_CAPABILITY_NAME					= "osgi.component";
 }

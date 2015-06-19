@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import java.lang.annotation.Target;
  * The annotated method is the modified method of the Component.
  * 
  * <p>
- * This annotation is not processed at runtime by a Service Component Runtime
- * implementation. It must be processed by tools and used to add a Component
- * Description to the bundle.
+ * This annotation is not processed at runtime by Service Component Runtime. It
+ * must be processed by tools and used to add a Component Description to the
+ * bundle.
  * 
  * @see "The modified attribute of the component element of a Component Description."
  * @author $Id$

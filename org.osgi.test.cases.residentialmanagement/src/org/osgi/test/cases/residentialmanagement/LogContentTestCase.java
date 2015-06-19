@@ -68,7 +68,9 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	 */
 	public void testLogEntryOrder() throws Exception {
 		int max = 100;
-		assertEquals(0, getLocalLogEntries().size());
+		resetLocalLogs();
+		assertEquals("Log entries are available!", 0, getLocalLogEntries()
+				.size());
 
 		this.enableLog = true;
 		createRandomLogs(max);
@@ -115,7 +117,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	public void testLogEntries() throws Exception {
 		int max = 100;
 		resetLocalLogs();
-		assertEquals(0, getLocalLogEntries().size());
+		assertEquals("Log entries are available!", 0, getLocalLogEntries()
+				.size());
 
 		this.enableLog = true;
 		createRandomLogs(max);
@@ -172,7 +175,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	 */
 	public void testLogEntriesInSharedSession() throws Exception {
 		// ensure that there is at least one log entry
-		assertNotNull(log);
+		assertNotNull("Null LogService.", log);
 		log.log(LogService.LOG_INFO, "Infolog 1");
 		Sleep.sleep(DELAY);
 
@@ -191,7 +194,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		Sleep.sleep(DELAY);
 		Date time = session.getNodeValue(uri).getDateTime();
 
-		assertFalse("The log list must be updated while in a shared session",oldTime.equals(time));
+		assertFalse("The log list must be updated while in a shared session",
+				oldTime.equals(time));
 	}
 
 	/**
@@ -209,7 +213,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	private void assertNoUpdatesDuringExclusiveSession(int sessionType) throws Exception {
 
 		// ensure that there is at least one log entry
-		assertNotNull(log);
+		assertNotNull("Null LogService.", log);
 		log.log(LogService.LOG_INFO, "Infolog 1");
 		Sleep.sleep(DELAY);
 

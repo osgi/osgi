@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,16 +71,17 @@ public interface RemoteServiceAdmin {
 	 *         specified Service Reference and properties. Multiple Export
 	 *         Registrations may be returned because a single service can be
 	 *         exported to multiple Endpoints depending on the available
-	 *         configuration type properties. The result is never {@code null}
-	 *         but may be empty if this Remove Service Admin does not recognize
-	 *         any of the configuration types.
-	 * @throws IllegalArgumentException If any of the properties has a value
-	 *         that is not syntactically correct or if the service properties
-	 *         and the overlaid properties do not contain a
-	 *         {@link RemoteConstants#SERVICE_EXPORTED_INTERFACES} entry.
-	 * @throws UnsupportedOperationException If any of the intents expressed
-	 *         through the properties is not supported by the distribution
-	 *         provider.
+	 *         configuration type properties and the intents that they support.
+	 *         The result is never {@code null} but may be empty if this Remove
+	 *         Service Admin does not recognize any of the configuration types,
+	 *         or if they Remote Service Admin cannot support the relevant
+	 *         intents.
+	 * @throws IllegalArgumentException If any of the properties for this
+	 *         configuration type has a value that is not syntactically correct,
+	 *         or if the service properties and the overlaid properties do not
+	 *         contain a {@link RemoteConstants#SERVICE_EXPORTED_INTERFACES}
+	 *         entry. This means that implementations must not ignore invalid
+	 *         values for property names that they recognize.
 	 */
 	Collection<ExportRegistration> exportService(ServiceReference<?> reference, Map<String, ?> properties);
 

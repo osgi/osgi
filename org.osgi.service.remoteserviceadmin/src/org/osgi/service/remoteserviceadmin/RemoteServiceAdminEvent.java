@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,32 +26,32 @@ import org.osgi.framework.Bundle;
  */
 public class RemoteServiceAdminEvent {
 	/**
-	 * Add an import registration. The Remote Service Admin will call this
-	 * method when it imports a service. When this service is registered, the
-	 * Remote Service Admin must notify the listener of all existing Import
-	 * Registrations.
+	 * Add an import registration. The Remote Service Admin will send this event
+	 * when it imports a service. When the {@link RemoteServiceAdminListener}
+	 * service is registered, the Remote Service Admin must notify the listener
+	 * of all existing Import Registrations.
 	 * 
 	 */
 	public static final int			IMPORT_REGISTRATION		= 1;
 
 	/**
-	 * Add an export registration. The Remote Service Admin will call this
-	 * method when it exports a service. When this service is registered, the
-	 * Remote Service Admin must notify the listener of all existing Export
-	 * Registrations.
+	 * Add an export registration. The Remote Service Admin will send this event
+	 * when it exports a service. When the {@link RemoteServiceAdminListener}
+	 * service is registered, the Remote Service Admin must notify the listener
+	 * of all existing Export Registrations.
 	 */
 	public static final int			EXPORT_REGISTRATION		= 2;
 
 	/**
-	 * Remove an export registration. The Remote Service Admin will call this
-	 * method when it removes the export of a service.
+	 * Remove an export registration. The Remote Service Admin will send this
+	 * event when it removes the export of a service.
 	 * 
 	 */
 	public static final int			EXPORT_UNREGISTRATION	= 3;
 
 	/**
-	 * Remove an import registration. The Remote Service Admin will call this
-	 * method when it removes the import of a service.
+	 * Remove an import registration. The Remote Service Admin will send this
+	 * event when it removes the import of a service.
 	 * 
 	 */
 	public static final int			IMPORT_UNREGISTRATION	= 4;
@@ -76,6 +76,22 @@ public class RemoteServiceAdminEvent {
 	 * A problematic situation occurred, the import is still active.
 	 */
 	public static final int			IMPORT_WARNING			= 8;
+
+	/**
+	 * Update an import registration. The Remote Service Admin will send this
+	 * event when it updates a service.
+	 * 
+	 * @since 1.1
+	 */
+	public static final int			IMPORT_UPDATE			= 9;
+
+	/**
+	 * Update an export registration. The Remote Service Admin will send this
+	 * event when it exports a service.
+	 * 
+	 * @since 1.1
+	 */
+	public static final int			EXPORT_UPDATE			= 10;
 
 	private final ImportReference	importReference;
 	private final ExportReference	exportReference;

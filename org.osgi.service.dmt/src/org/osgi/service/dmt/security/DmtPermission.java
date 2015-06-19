@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import org.osgi.service.dmt.Uri;
  * </pre>
  * 
  * This means that owner of this permission has Get access on every child node
- * of ./OSGi/bundles. The asterix does not necessarily have to follow a '/'
+ * of ./OSGi/bundles. The asterisk does not necessarily have to follow a '/'
  * character. For example the {@code "./OSGi/a*"} target matches the
  * {@code ./OSGi/applications} subtree.
  * <p>
@@ -133,7 +133,7 @@ public class DmtPermission extends Permission {
 	 * Since the {@code *} character is itself a valid URI character, it can
 	 * appear as the last character of a valid absolute URI. To distinguish this
 	 * case from using {@code *} as a wildcard, the {@code *} character at the
-	 * end of the URI must be escaped with the {@code \} charater. For example
+	 * end of the URI must be escaped with the {@code \} character. For example
 	 * the URI {@code "./a*"} matches {@code "./a"}, {@code "./aa"},
 	 * {@code "./a/b"} etc. while {@code "./a\*"} matches {@code "./a*"} only.
 	 * <p>

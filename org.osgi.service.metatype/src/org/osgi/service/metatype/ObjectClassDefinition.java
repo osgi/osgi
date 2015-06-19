@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.metatype;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Description for the data type information of an objectclass.
@@ -25,6 +26,7 @@ import java.io.InputStream;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ObjectClassDefinition {
 	/**
 	 * Argument for {@code getAttributeDefinitions(int)}.
@@ -65,7 +67,7 @@ public interface ObjectClassDefinition {
 	 * They share this aspect with LDAP/X.500 attributes. In these standards the
 	 * OSI Object Identifier (OID) is used to uniquely identify object classes.
 	 * If such an OID exists, (which can be requested at several standard
-	 * organisations and many companies already have a node in the tree) it can
+	 * organizations and many companies already have a node in the tree) it can
 	 * be returned here. Otherwise, a unique id should be returned which can be
 	 * a java class name (reverse domain name) or generated with a GUID
 	 * algorithm. Note that all LDAP defined object classes already have an OID
@@ -110,8 +112,8 @@ public interface ObjectClassDefinition {
 	 * <p>
 	 * The icon may depend on the localization.
 	 * 
-	 * @param size Requested size of an icon, e.g. a 16x16 pixels icon then size
-	 *        = 16
+	 * @param size Requested size of an icon. For example, a 16x16 pixel icon
+	 *        has a size of 16
 	 * @return An InputStream representing an icon or {@code null}
 	 * @throws IOException If the {@code InputStream} cannot be returned.
 	 */

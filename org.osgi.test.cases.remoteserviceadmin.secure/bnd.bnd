@@ -36,19 +36,24 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
     org.osgi.impl.service.log;                version=latest, \
-    org.osgi.impl.service.remoteserviceadmin; version=latest
+    org.osgi.impl.service.cm;                 version=latest, \
+    org.osgi.impl.service.event;              version=latest, \
+	org.osgi.impl.service.metatype;           version=latest, \
+	org.osgi.impl.service.http;               version=latest, \
+	org.osgi.impl.service.remoteserviceadmin; version=latest
 
 -runvm = -Xmx512m, -XX:MaxPermSize=350m
 
 -runproperties = ${runsecureproperties}, \
 	rsa.ct.timeout=300000,\
+	rsa.ct.timeout.factor=3,\
+	amdatu.remote.logging.level=0,\
+	amdatu.remote.console.level=3,\
+	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
 	${p}.system.packages.extra="${junit.package}", \
-    ${p}.serverconfig="service.exported.intents.extra,service.exported.configs,ecf.generic.server.port,ecf.generic.client.keepalive", \
+    ${p}.serverconfig="service.exported.intents.extra,service.exported.configs", \
     service.exported.intents.extra="passByValue", \
-    service.exported.configs="ecf.generic.server", \
-    ecf.generic.server.port="@@FREE_PORT@@", \
-    ecf.generic.client.keepalive="30001", \
-    net.mdns.port=65354, \
-    net.mdns.interface=127.0.0.1, \
-    org.eclipse.ecf.osgi.services.discovery.disableDiscovery=true, \
-    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    service.exported.configs="org.amdatu.remote.admin.http", \
+	org.osgi.service.http.port=9191,\
+    org.osgi.framework.bootdelegation=javax.*,\
+    ${p}.bundles="${uniq;${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"

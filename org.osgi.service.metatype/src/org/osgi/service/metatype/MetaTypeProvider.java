@@ -16,6 +16,8 @@
 
 package org.osgi.service.metatype;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Provides access to metatypes. This interface can be implemented on a Managed
  * Service or Managed Service Factory as well as registered as a service. When
@@ -27,6 +29,7 @@ package org.osgi.service.metatype;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface MetaTypeProvider {
 
 	/**

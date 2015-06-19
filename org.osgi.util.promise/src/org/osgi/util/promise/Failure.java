@@ -26,6 +26,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success, Failure)} method and is called if the Promise is
  * resolved with a failure.
  * 
+ * <p>
+ * This is a functional interface and can be used as the assignment target for a
+ * lambda expression or method reference.
+ * 
  * @ThreadSafe
  * @author $Id$
  */
@@ -44,13 +48,13 @@ public interface Failure {
 	 * callback was registered as the chained Promise.
 	 * 
 	 * <p>
-	 * If this methods completes normally, the chained Promise will be failed
+	 * If this methods completes normally, the chained Promise must be failed
 	 * with the same exception which failed the resolved Promise. If this method
-	 * throws an exception, the chained Promise will be failed with the thrown
+	 * throws an exception, the chained Promise must be failed with the thrown
 	 * exception.
 	 * 
 	 * @param resolved The failed resolved {@link Promise}.
-	 * @throws Exception The chained Promise will be failed with the thrown
+	 * @throws Exception The chained Promise must be failed with the thrown
 	 *         exception.
 	 */
 	void fail(Promise<?> resolved) throws Exception;

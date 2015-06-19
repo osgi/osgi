@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book revision="$Id$"
-      status="draft" version="5" xml:id="enterprise.book"
+      status="final" version="5" xml:id="enterprise.book"
       xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -17,10 +17,10 @@
 
     <releaseinfo xml:id="enterprise.book-release">Release 6</releaseinfo>
 
-    <pubdate>Date TBD</pubdate>
+    <pubdate>July 2015</pubdate>
 
     <copyright>
-      <year>2000, 2013</year>
+      <year>2000, 2015</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
@@ -77,8 +77,14 @@
   <xi:include href="../135/service.namespaces.xml"/>
 
   <xi:include href="../136/service.resolver.xml"/>
-  
+
   <xi:include href="../137/service.rest.xml"/>
 
+  <xi:include href="../138/service.async.xml"/>
+
+  <xi:include href="../140/service.http.whiteboard.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
+
+  <xi:include href="../705/util.promise.xml"/>
 </book>

@@ -1,0 +1,10 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+
+-buildpath = \
+    ee.j2se; version=${javac.compliance}, \
+    osgi.annotation; version=6.0.1

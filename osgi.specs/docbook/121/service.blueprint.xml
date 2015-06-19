@@ -24,7 +24,7 @@
     reuse was still hard. One of the key reasons was
     <emphasis>coupling</emphasis>. Trying to reuse a few classes usually ended
     up in dragging in many more classes, that in their turn dragged in even
-    more classes, ad nauseum.</para>
+    more classes, <emphasis>ad nauseum</emphasis>.</para>
 
     <para>One of the key innovations in the Java language to address this
     coupling issue were <emphasis>interfaces</emphasis>. Interfaces
@@ -309,7 +309,7 @@
 
         <listitem>
           <para><emphasis>Service Reference Managers</emphasis> - Provide
-          proxies to one or more services. there are two sub-types:
+          proxies to one or more services. There are two sub-types:
           reference-list and reference.</para>
         </listitem>
 
@@ -701,7 +701,7 @@ public class EchoImpl implements Echo {
       <code>f</code> created because <code>F</code> is a lazy manager. There
       are three <code>c</code>'s because manager <code>E</code> and
       <code>B</code> have an implicit dependency on <code>C</code> and manager
-      <code>B</code> has an additional explicit dependency, totalling 3
+      <code>B</code> has an additional explicit dependency, totaling 3
       dependencies. One of these <code>c</code>'s is an orphan and will be
       garbage collected over time because it is not referred to by any
       component instance.</para>
@@ -1028,7 +1028,7 @@ return a</programlisting>
 
           <listitem>
             <para>Service reference managers must start tracking their
-            satisfiablity without actually activating. See <xref
+            satisfiability without actually activating. See <xref
             linkend="i2157344"/>.</para>
           </listitem>
 
@@ -1779,8 +1779,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
         <listitem>
           <para><code>default-timeout</code> - The default for the
           <code>reference</code> element <code>timeout</code> attribute, see
-          <xref linkend="i2468749"/>. The default for this attribute is is
-          30000, or 5 minutes.</para>
+          <xref linkend="i2468749"/>. The default for this attribute is 30000,
+          or 5 minutes.</para>
         </listitem>
       </itemizedlist>
 
@@ -2689,7 +2689,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <title>Properties</title>
 
       <para>Dependency injection configures a constructed object with the help
-      of the <code>properties</code>, which is a a List of
+      of the <code>properties</code>, which is a List of
       <code>BeanProperty</code> objects. A Bean Property has the following
       features:</para>
 
@@ -2951,7 +2951,7 @@ registration-listener ::= target</programlisting>
 
               <entry><para>The <code>service.ranking</code> value. The schema
               default is 0, which implies no service property. See <xref
-              linkend="i2392470"/>. </para></entry>
+              linkend="i2392470"/>.</para></entry>
             </row>
 
             <row>
@@ -3071,7 +3071,7 @@ registration-listener ::= target</programlisting>
               <entry><para><code>registrationListener</code></para><para><code>:
               Target</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
 
             <row>
@@ -3681,7 +3681,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
               attribute is defined by the <code>default-availability</code>
               attribute in the <code>blueprint</code> element. If the
               <code>default-availability</code> attribute is not defined, the
-              value is <code>mandatory</code>. </para></entry>
+              value is <code>mandatory</code>.</para></entry>
             </row>
 
             <row>
@@ -3693,7 +3693,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
               String</code></para></entry>
 
               <entry><para>A single name of an interface class. It is allowed
-              to not specify an interface name. </para></entry>
+              to not specify an interface name.</para></entry>
             </row>
 
             <row>
@@ -4266,7 +4266,7 @@ public class FooImpl {
       select a <emphasis>backing</emphasis> service, which can change over
       time. A reference-list provides a list of proxies that have a fixed
       backing service, these proxies are added and removed from the list.
-      based on the selection, they do not have a time-out.</para>
+      Based on the selection, they do not have a time-out.</para>
 
       <para>The backing service for a reference proxy must not be gotten from
       the OSGi service registry until an actual service object is needed, that
@@ -4404,7 +4404,7 @@ collection   ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
               <entry><para><code>componentId</code></para><para><code>:
               String</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4466,7 +4466,7 @@ public class FooImpl implements Foo { }</programlisting>
               <entry><para><code>componentId</code></para><para><code>:
               String</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4638,7 +4638,7 @@ public class FooImpl implements Foo { }</programlisting>
               Object[] &gt;</code></para></entry>
 
               <entry colname="col4"><para>The actual collection class to be
-              used, derived from the appropriate definition. </para></entry>
+              used, derived from the appropriate definition.</para></entry>
             </row>
 
             <row>
@@ -5030,7 +5030,7 @@ p.setProperty( "2", "two");</programlisting>
       </listitem>
 
       <listitem>
-        <para>P<emphasis>roperties</emphasis> - The <code>value</code> of the
+        <para><emphasis>Properties</emphasis> - The <code>value</code> of the
         Bean Property specifies the single parameter for the property's set
         method.</para>
       </listitem>
@@ -5155,7 +5155,7 @@ public class Foo {}</programlisting>
       <itemizedlist>
         <listitem>
           <para><code>(Bar,Foo)</code> - The arguments will be in the given
-          order and the orderd match will succeed. This is the normal
+          order and the ordered match will succeed. This is the normal
           case.</para>
         </listitem>
 

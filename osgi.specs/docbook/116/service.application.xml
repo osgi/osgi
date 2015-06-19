@@ -54,13 +54,13 @@
 
         <listitem>
           <para><emphasis>Schedule</emphasis> - A mechanism that allows the
-          launching of applications at a pre-defined time, interval, or
+          launching of applications at a predefined time, interval, or
           event.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Dynamic</emphasis> - Detects installations and
-          un-installations of applications in real time.</para>
+          uninstallations of applications in real time.</para>
         </listitem>
 
         <listitem>
@@ -162,7 +162,7 @@
       <para>This model leverages the capabilities of the OSGi service
       registry. Installed applications and running applications can be found
       by enumerating the appropriate services, possibly using a filter if a
-      specific application is sought.The service registry provides necessary
+      specific application is sought. The service registry provides necessary
       isolation of the clients of the applications and their implementers.
       Typical clients of this specification are desktop/screen managers that
       provide the end user access to the installed applications.</para>
@@ -315,7 +315,7 @@
               <entry><para><code>false</code></para></entry>
 
               <entry><para>Specifies whether the represented application is
-              locked to prevent launching it. </para></entry>
+              locked to prevent launching it.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -327,7 +327,7 @@
       thereby allowing a MIDLet aware Application Manager to group these
       MIDLets.</para>
 
-      <para>Application Descriptor services must not be declarative. That is.
+      <para>Application Descriptor services must not be declarative. That is,
       they can be obtained from the service registry at any time without
       accidentally initializing a class loader.</para>
 
@@ -704,7 +704,7 @@ nl_NL       sv</programlisting>
 
               <entry><para>Contains the current state of the application
               instance represented by this application handle. These states
-              can be application model specific. </para></entry>
+              can be application model specific.</para></entry>
             </row>
 
             <row>
@@ -1018,7 +1018,7 @@ nl_NL       sv</programlisting>
               changed its state. This specification only specifies the
               <code>STOPPING</code> state but application containers are free
               to add additional states. Transitions between all these states
-              must be signalled with the <code>MODIFIED</code> service
+              must be signaled with the <code>MODIFIED</code> service
               event.</para>
             </listitem>
 
@@ -1730,7 +1730,7 @@ nl_NL       sv</programlisting>
 
       <programlisting>(&amp;(hour_of_day=12)(minute=0))</programlisting>
 
-      <para>Every whole hour, on every sunday:</para>
+      <para>Every whole hour, on every Sunday:</para>
 
       <programlisting>(&amp;(day_of_week=0)(minute=0))</programlisting>
 

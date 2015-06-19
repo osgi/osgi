@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -552,9 +552,9 @@ public class DmtException extends Exception {
 	}
 
 	/**
-	 * Prints the exception and its backtrace to the specified print stream. Any
-	 * causes that were specified for this exception are also printed, together
-	 * with their backtraces.
+	 * Prints the exception and its stacktrace to the specified print stream.
+	 * Any causes that were specified for this exception are also printed,
+	 * together with their stacktraces.
 	 * 
 	 * @param s {@code PrintStream} to use for output
 	 */

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+* Copyright (c) OSGi Alliance (2010, 2014). All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -54,12 +54,16 @@ public class Bug1852Test extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("tb4.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		mti = mts.getMetaTypeInformation(bundle);
 	}
 	
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb4.jar");
+	}
+
 	protected void tearDown() throws Exception {
 		getContext().ungetService(ref);
 		bundle.stop();

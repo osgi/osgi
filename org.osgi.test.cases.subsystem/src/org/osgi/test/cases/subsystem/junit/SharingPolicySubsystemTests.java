@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,18 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.framework.namespace.ExecutionEnvironmentNamespace;
+import org.osgi.framework.namespace.NativeNamespace;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.test.support.wiring.Wiring;
 
@@ -886,6 +892,49 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 
 		Wiring.resolveBundles(getContext(), requirer);
 		assertEquals("Wrong state for bundle: " + bundleRequirer, Bundle.RESOLVED, requirer.getState());
+	}
+
+	// Test that application subsystems get implicit access to osgi.ee and
+	// osgi.native namespaces
+	public void testImplicitAccessToEEandNativeCapability_app() {
+		doTestImplicitAccessToEEandNativeCapability(SUBSYSTEM_EMPTY_A);
+	}
+
+	// Test that composite subsystems get implicit access to osgi.ee and
+	// osgi.native namespaces
+	public void testImplicitAccessToEEandNativeCapability_comp() {
+		doTestImplicitAccessToEEandNativeCapability(SUBSYSTEM_EMPTY_COMPOSITE_A);
+	}
+
+	private void doTestImplicitAccessToEEandNativeCapability(String subsystemName) {
+		Subsystem root = getRootSubsystem();
+
+		Subsystem subsystemApp = doSubsystemInstall(getName(), root, subsystemName, subsystemName, false);
+
+		BundleContext appContext = subsystemApp.getBundleContext();
+		assertNotNull("The subsystem context is null.", appContext);
+
+		doSubsystemOperation("Could not start the subsystem.", subsystemApp, Operation.START, false);
+
+		Bundle b1 = doBundleInstall(getName(), appContext, BUNDLE_REQUIRE_EE_NATIVE + 1, BUNDLE_REQUIRE_EE_NATIVE,
+				false);
+
+		Wiring.resolveBundles(getContext(), b1);
+		assertEquals("Wrong state for bundle: " + b1, Bundle.RESOLVED, b1.getState());
+		BundleWiring b1Wiring = b1.adapt(BundleWiring.class);
+		assertNotNull("No wiring found.", b1Wiring);
+		List<BundleWire> eeWires = b1Wiring
+				.getRequiredWires(ExecutionEnvironmentNamespace.EXECUTION_ENVIRONMENT_NAMESPACE);
+		assertEquals("Wrong number of ee wires.", 2, eeWires.size());
+		List<BundleWire> nativeWires = b1Wiring.getRequiredWires(NativeNamespace.NATIVE_NAMESPACE);
+		assertEquals("Wrong number of native wires.", 1, nativeWires.size());
+		List<BundleWire> wires = eeWires;
+		wires.addAll(nativeWires);
+		BundleRevision systemRevision = getContext().getBundle(Constants.SYSTEM_BUNDLE_LOCATION).adapt(
+				BundleRevision.class);
+		for (BundleWire wire : wires) {
+			assertEquals("Wrong provider of " + wire.getCapability().getNamespace(), systemRevision, wire.getProvider());
+		}
 	}
 
 	private void checkService(BundleContext context, String filter, ServiceReference<?>... references) {

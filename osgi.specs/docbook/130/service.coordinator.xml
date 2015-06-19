@@ -979,10 +979,10 @@ ALLOW {
 
       <para>The Coordinator supports two very different models of usage:
       <emphasis>explicit</emphasis> and <emphasis>implicit</emphasis>. The
-      explicit model is when a a Coordination is created and passed around as
-      a parameter. The second model is the implicit model where the
-      Coordinator maintains a thread local stack of Coordinations. Any
-      collaborator can then decide to use the top of the stack as the
+      explicit model is when a Coordination is created and passed around as a
+      parameter. The second model is the implicit model where the Coordinator
+      maintains a thread local stack of Coordinations. Any collaborator can
+      then decide to use the top of the stack as the
       <emphasis>current</emphasis> Coordination. The <xref
       linkend="org.osgi.service.coordinator.Coordinator.peek--"
       xrefstyle="hyperlink"/> method provides access to the current

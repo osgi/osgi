@@ -1,0 +1,14 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
+
+# Since the packages don't start with the project name, we need to tell javadoc the packages
+org.osgi.service.http.whiteboard.specs = org.osgi.service.http.*
+
+Export-Package:  \
+	org.osgi.service.http.*;-split-package:=first
+
+-buildpath = \
+    ee.j2se; version=${javac.compliance}, \
+    osgi.core; version=6.0, \
+    osgi.annotation; version=6.0.1, \
+    javax.servlet; version=3.0.0

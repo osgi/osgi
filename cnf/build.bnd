@@ -46,7 +46,8 @@ javac.target 			= 1.2
           aQute.bnd.signing.JartoolSigner; \
             keystore="${build}/keystore"; \
             keypass=testtest; \
-            storepass=testtest, \
+            storepass=testtest; \
+            digestalg=SHA-1, \
           Packaging; \
             path:="${build}/${bin}"; \
             command:=-pack, \

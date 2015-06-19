@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -60,17 +61,43 @@ public class Activator implements BundleActivator {
 	 * @throws Exception
 	 */
 	public void test() throws Exception {
-		// lookup RemoteServiceAdmin service 
+		// lookup RemoteServiceAdmin service
+
+		boolean isExportingFramework = "exporter"
+				.equals(context
+						.getProperty("org.osgi.test.cases.remoteserviceadmin.secure.role"));
+
+		// ////////////// DEBUG REMOVE
+		System.out.println("************* Activator in which framework:  "
+				+ isExportingFramework);
+
+		Bundle[] bs = context.getBundles();
+		for (Bundle bundle : bs) {
+			System.out.println("*******  " + bundle.getSymbolicName());
+		}
+		// //////////////DEBUG REMOVE END
+
 		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
 		Assert.assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
 		Assert.assertNotNull(rsa);
 		try {
 			Collection<ExportReference> coll = rsa.getExportedServices();
+			System.out.println("********** " + coll);
 			Assert.assertNotNull(coll);
+			if (isExportingFramework) {
+				Assert.assertTrue(coll.size() > 0);
+			} else {
+				Assert.assertTrue(coll.size() == 0);
+			}
 			
 			Collection<ImportReference> icoll = rsa.getImportedEndpoints();
 			Assert.assertNotNull(icoll);
+			if (!isExportingFramework) {
+				Assert.assertTrue(icoll.size() > 0);
+			} else {
+				Assert.assertTrue(icoll.size() == 0);
+			}
 		} finally {
 			// Make sure the service instance of the RSA can be closed by the RSA Service Factory
 			context.ungetService(rsaRef);

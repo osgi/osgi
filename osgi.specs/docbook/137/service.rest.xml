@@ -26,28 +26,30 @@
     topology, and service availability are the norm rather than the exception.
     One of the possible scenarios for OSGi to be successfully applied to cloud
     computing is using it in a Platform as a Service (PaaS) spirit. Users
-    write their bundles and can deploy them to their own OSGi instance running
-    in the cloud. This, however, requires the platform provider to expose the
-    OSGi management API to the end user and make them available through a
-    network protocol. One of the popular approaches in cloud computing to
-    remote communication is the use of RESTful web services. Representational
-    State Transfer (REST) is the architectural style of the world wide web. It
-    can be described as a set of constraints that govern the interactions
-    between the main components of the Internet. Recently, REST style
-    interaction has gained popularity as a architecture for web services
-    (RESTful web services), mainly to overcome the perceived complexity and
-    verbosity of SOAP-based web services. This specification describes a REST
-    interface for framework management, client-side Java and JavaScript APIs,
-    and an extension mechanism through which other bundles can contribute
-    their own RESTful management APIs and make them discoverable by
-    clients.</para>
+    write their bundles and can deploy them to a provided OSGi instance
+    running in the cloud. This, however, requires the platform provider to
+    expose the OSGi management API to the end user and make them available
+    through a network protocol. One of the popular approaches in cloud
+    computing to remote communication is the use of RESTful web
+    services.</para>
+
+    <para>Representational State Transfer (REST) is the architectural style of
+    the world wide web. It can be described as a set of constraints that
+    govern the interactions between the main components of the Internet.
+    Recently, REST style interaction has gained popularity as a architecture
+    for web services (RESTful web services), mainly to overcome the perceived
+    complexity and verbosity of SOAP-based web services. This specification
+    describes a REST interface for framework management, client-side Java and
+    JavaScript APIs, and an extension mechanism through which other bundles
+    can contribute their own RESTful management APIs and make them
+    discoverable by clients.</para>
 
     <section>
       <title>Essentials</title>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Client-Server</emphasis> A separation of concern
+          <para><emphasis>Client-Server</emphasis> - A separation of concern
           between the entity responsible for the user-interaction (client) and
           the other entity (server) responsible for data storage. For
           instance, in the original world wide web the browser is the client
@@ -57,7 +59,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Stateless</emphasis> State is entirely kept at the
+          <para><emphasis>Stateless</emphasis> - State is entirely kept at the
           client side. Therefore, every request must contain all state
           required for the server to accomplish the transaction and deliver
           content. The main rationale behind this design constraint is to
@@ -69,27 +71,28 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Cacheable</emphasis> Content marked as cacheable can
-          be temporarily stored and used to immediately answer future
+          <para><emphasis>Cacheable</emphasis> - Content marked as cacheable
+          can be temporarily stored and used to immediately answer future
           equivalent requests and improve efficiency and reduce network
           utilization and access latencies. Due to the end-to-end principle,
           caches can be placed where necessary, e.g., at the client
-          (forward-proxy), or at the server side (backward-proxy). Content
-          marked as non-cacheable must be freshly retrieved with every request
-          even in the presence of caches.</para>
+          (forward-proxy), at the server side (backward-proxy), or somewhere
+          in-between for example in a content delivery network. Content marked
+          as non-cacheable must be freshly retrieved with every request even
+          in the presence of caches.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Layered</emphasis> Layering introduces natural
+          <para><emphasis>Layered</emphasis> - Layering introduces natural
           boundaries to coupling since every layer only accesses the services
           provided by the lower layer and provides services to the next higher
           layer.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Uniform Interface</emphasis> Generality of component
-          interfaces provides a natural decoupling of implementation and
-          interface. REST furthermore encourages the separation of
+          <para><emphasis>Uniform Interface</emphasis> - Generality of
+          component interfaces provides a natural decoupling of implementation
+          and interface. REST furthermore encourages the separation of
           identifiable resources (addressing) and their representation
           (content delivery).</para>
         </listitem>
@@ -101,14 +104,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Resource</emphasis> A resource is abstract piece of
-          information that can be addressed by a resource identifier. The
-          mapping of a resource to a concrete set of entities can vary over
-          time.</para>
+          <para><emphasis>Resource</emphasis> - A resource is an abstract
+          piece of information that can be addressed by a resource identifier.
+          The mapping of a resource to a concrete set of entities can vary
+          over time.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Representation</emphasis> A representation is a
+          <para><emphasis>Representation</emphasis> - A representation is a
           sequence of bytes plus associated meta-data that describe the state
           of a resource. The data format of a representation is called the
           media-type. Every concrete representation of a resource is just one
@@ -118,16 +121,16 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>REST Management Service</emphasis> The management
+          <para><emphasis>REST Management Service</emphasis> - The management
           service exposes a REST API for remotely managing an OSGi framework
           through the network in a lightweight and portable fashion.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Client</emphasis> The client is a machine using the
-          management service by issuing REST requests through the network. It
-          can do so either directly or indirectly, i.e., through client-side
-          libraries using the REST calls internally.</para>
+          <para><emphasis>Client</emphasis> - The client is a machine using
+          the management service by issuing REST requests through the network.
+          It can do so either directly or indirectly, i.e., through
+          client-side libraries using the REST calls internally.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -140,236 +143,1483 @@
       relative to the (usually externally accessible) root URL of the
       management service. Clients can either discover this root URL or receive
       it through configuration. Subsequently, a client is able to introspect
-      the state of the framework and perform management operations. The
-      internal state of a framework resource is expressed and transmitted as a
-      representation. The format of the representation is subject to a mutual
-      agreement between client and management service regarding media types
-      commonly supported by both endpoints. This specification describes two
-      possible representation formats: JSON and XML.</para>
+      the state of the framework and perform management operations.</para>
+
+      <para>The internal state of a framework resource is expressed and
+      transmitted as a representation. The format of the representation is
+      subject to a mutual agreement between client and management service
+      regarding media types commonly supported by both endpoints. This
+      specification describes two representation formats: JSON and XML.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Interacting with the REST Management Service</title>
+
+    <para>The REST Management Service is not a traditional OSGi service and it
+    does not appear in the service registry. Its purpose is to expose a
+    management interface to clients which can perform operations on the
+    framework through a network connection. Therefore, it is ideally suited
+    for situations where the user of an OSGi framework does not have direct
+    access to the machine it is running on, a typical situation in
+    Infrastructure as a Service (IaaS) or Platform as a Service (PaaS).
+    However, even in other domains having a lightweight and easily accessible
+    management solution can be of benefit, e.g., for embedded devices. The
+    advantage of REST is that it uses HTTP and therefore does usually not
+    interfere with firewalls. Furthermore, the REST format is easily
+    embeddable into client-side scripting technologies like JavaScript and can
+    be consumed in web browsers.</para>
+
+    <para>Much of the value of the REST Management Service lies in client-side
+    libraries which can use the REST protocol and interact with the OSGi
+    framework through the Management Service. Therefore, this specification
+    contains API for two clients, a <link
+    linkend="org.osgi.service.rest.client">Java Client API</link> and a <link
+    linkend="service.rest-javascript.api">JavaScript Client API</link>.</para>
+
+    <section xml:id="service.rest-resource.identifiers">
+      <title>Resource Identifier Overview</title>
+
+      <para>The REST Management Service comprises of a set of resources that
+      can be retrieved and in some cases also modified through REST requests.
+      These resources need to be made available under well-defined paths so
+      that clients can interact with them. As the initial entry point a client
+      receives a URL to the REST Management Service. This can be done, e.g.,
+      as part of the creation of a cloud-based OSGi framework, and the precise
+      mechanism would be proprietary to the cloud platform used. Relative to
+      this URL the client can access the resources through the following
+      resource identifiers:</para>
+
+      <programlisting>framework
+framework/state
+framework/startlevel
+framework/bundles
+
+framework/bundles/representations
+
+framework/bundle/{bundleid}
+framework/bundle/{bundleid}/state
+framework/bundle/{bundleid}/startlevel
+framework/bundle/{bundleid}/header
+framework/services
+
+framework/services/representations
+
+framework/service/{serviceid}</programlisting>
+
+      <para><code>framework/bundle/0/state</code> is an alias for
+      <code>framework/state</code></para>
+
+      <para>Extensions to the REST Management Service can be discovered by
+      visiting the Extensions Resource at:</para>
+
+      <programlisting>extensions</programlisting>
+
+      <para>For more details on the extension mechanism see <xref
+      linkend="service.rest-extensions"/></para>
+    </section>
+
+    <section xml:id="service.rest-resource.filters">
+      <title>Filtering Results</title>
+
+      <para>The <code>bundles</code>, <code>bundles/representations</code>,
+      <code>services</code>, and <code>services/representations</code>
+      resources allow the use of a query parameter which specifies a filter to
+      restrict the result set. The filter expression follows the Core
+      Specifications <emphasis>Framework Filter Syntax</emphasis>; see <xref
+      linkend="service.rest-corefilter"/>.</para>
+
+      <para>Filters on services are matched against the service attributes.
+      The query parameter is of the form:</para>
+
+      <para><code>framework/services?filter=ldap-filter</code></para>
+
+      <para>Filters on bundles are matched against the attributes of
+      capabilities in the respective namespaces. Filters on bundles have the
+      form:</para>
+
+      <para><code>framework/bundles?namespace1=ldap-filter1&amp;namespace2=ldap-filter2&amp;...</code></para>
+
+      <para>If multiple capabilities for a given namespace are present, then a
+      filter succeeds when one of these capabilities matches. When multiple
+      filter expressions across namespaces are given, these are combined with
+      the <emphasis>and</emphasis> operator.</para>
+    </section>
+
+    <section>
+      <title>Content Type Matching</title>
+
+      <para>Resources can present themselves through different representation
+      variants. An implementation of this specification must support at least
+      the JSON representation and the XML representation of resources. Clients
+      can support a subset of representations. Matching the clients
+      capabilities to understand certain representation formats with the
+      servers supported formats follows the typical HTTP pattern of content
+      negotiation and requires the client to set corresponding HTTP Accept
+      headers for supported formats in the form of their media types. This
+      specification describes the format and media types for representations
+      in JSON and XML format in <xref
+      linkend="service.rest-representation"/>.</para>
+
+      <para>Implementations of the REST Management Service offering different
+      variants of representations must return the best matching variant based
+      on the HTTP accept header. In addition, they must respect the file
+      extensions defined for the different media types as specified in the
+      respective IETF RFC (e.g., ".xml" as specified in IETF RFC 3032 and
+      ".json" as specified in IETF RFC 4627). If a file extension is appended
+      to the resource, an implementation must return the variant mandated by
+      the file extension provided that it supports this content type.</para>
     </section>
   </section>
 
   <section>
     <title>Resources</title>
 
+    <para>The framework and its state is mapped to a set of different
+    resources. Each resource is accessible through a resource identifier, as
+    summarized in <xref linkend="service.rest-resource.identifiers"/>.</para>
+
     <section>
       <title>Framework Startlevel Resource</title>
 
-      <table>
-        <title/>
+      <para><code>framework/startlevel</code></para>
 
-        <tgroup cols="2">
-          <colspec colnum="1" colwidth="1*"/>
-
-          <colspec colnum="2" colwidth="5*"/>
-
-          <thead>
-            <row>
-              <entry>Nethod</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><para><code>[GET]</code></para></entry>
-
-              <entry><para>get the startlevel. Returns a framework startlevel
-              representation</para></entry>
-            </row>
-
-            <row>
-              <entry><para><code>[PUT]</code></para></entry>
-
-              <entry><para>set the startlevel. Expects the body of the message
-              to be a framework startlevel representation</para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-  </section>
-
-  <section>
-    <title>Representations</title>
-
-    <section>
-      <title>Framework Startlevel Representation</title>
-
-      <table>
-        <title/>
-
-        <tgroup cols="2">
-          <colspec colnum="1" colwidth="1*"/>
-
-          <colspec colnum="2" colwidth="5*"/>
-
-          <tbody>
-            <row>
-              <entry><para> <code>JSON</code> </para></entry>
-
-              <entry><para> <emphasis>Content-Type:
-              application/org.osgi.frameworkstartlevel+json</emphasis> <code>{
-              "startLevel":6, "initialBundleStartLevel":4 }</code>
-              </para></entry>
-            </row>
-
-            <row>
-              <entry><para> <code>XML</code> </para></entry>
-
-              <entry><para>
-              <emphasis>application/org.osgi.frameworkstartlevel+xml</emphasis>
-              <code>&lt;frameworkStartLevel&gt;
-              &lt;startLevel&gt;6&lt;/startLevel&gt;
-              &lt;initialBundleStartLevel&gt;4&lt;/initialBundleStartLevel&gt;
-              &lt;/frameworkStartLevel&gt;</code> </para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-  </section>
-
-  <section>
-    <title>Domain A</title>
-
-    <para>This is body text.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Numbered lists:</para>
-
-    <orderedlist>
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-    </orderedlist>
-
-    <para>An <emphasis>emphasized</emphasis> term.</para>
-
-    <para>The following is a Program Listing style:</para>
-
-    <programlisting>Some s = (Some) context.getService(ref);</programlisting>
-
-    <para>A remark:</para>
-
-    <para><remark>This is a discussion remark</remark></para>
-
-    <section>
-      <title>Subsection</title>
+      <para>The startlevel resource represents the active start level of the
+      framework. It supports the GET and PUT requests.</para>
 
       <section>
-        <title>Sub-subsection</title>
+        <title>GET</title>
 
-        <para/>
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-framework.startlevel.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a startlevel representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>PUT</title>
+
+        <para>The PUT request sets the target framework startlevel. The body
+        of the request needs to be a <xref
+        linkend="service.rest-framework.startlevel.representation"
+        xrefstyle="template:%t"/>. The request can return the following status
+        codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>204 (NO CONTENT): the request was received and valid. The
+            framework will asynchronously start to adjust the framework
+            startlevel until the target startlevel has been reached.</para>
+          </listitem>
+
+          <listitem>
+            <para>415 (UNSUPPORTED MEDIA TYPE): the request had a media type
+            that is not supported by the REST management service.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received an
+            IllegalArgumentException when trying to adjust the framework
+            startlevel, e.g., because the requested startlevel was zero or
+            negative.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundles Resource</title>
+
+      <para><code>framework/bundles</code></para>
+
+      <para>The bundles resource represents the list of all bundles installed
+      on the managed framework. It supports the GET request and two
+      syntactically different forms of POST requests which are used to install
+      new bundles to the framework.</para>
+
+      <para>Results for this resource can be filtered as described in <xref
+      linkend="service.rest-resource.filters"/>.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-bundle.list.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle list representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="service.rest-bundles.post.location">
+        <title>POST with Location String</title>
+
+        <para>The POST request installs a new bundle to the managed framework
+        and thereby logically appends it to the bundles resource. The new
+        bundle to be installed is referenced by a location string which is
+        passed as the body of the request. In order to disambiguate the
+        request from the other form of POST, the content type must be set to
+        text/plain. In practice, the location string is usually a URL. Since
+        the framework will use the location retrieving the physical bundle, it
+        needs to be accessible from the remotely managed framework and not
+        necessarily from the managing client.</para>
+
+        <para>The management service implementation must check if the result
+        of the install request matches the requested bundle since the OSGi
+        framework will return an existing bundle object as the return value of
+        an install call if there was already one with the same location string
+        installed. One way of doing it is comparing the last modification
+        timestamp. A detected collision is indicated to the requesting clients
+        through an error code 409.</para>
+
+        <para>The body of the response is <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the newly installed bundle. The following status codes can be
+        returned:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the bundle has been successfully installed and the
+            body of the response contains the URI.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to install. The body of the message is
+            a <xref linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the
+            installation did not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>409 (CONFLICT): there is already a bundle installed with the
+            same location string.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section xml:id="service.rest-bundles.post.bundle">
+        <title>POST with Bundle</title>
+
+        <para>This variant of the POST request uploads the bundle as the body
+        of the request. The media type of the request should be set to
+        application/vnd.osgi.bundle which must be supported by all REST
+        management services. Implementations are free to accept other media
+        types for this request with the exception of text/plain. For instance,
+        they can opt to additionally support application/zip or
+        application/x-jar.</para>
+
+        <para>Clients should use the HTTP Content-Location field to set a
+        bundle location. If no content location is given, REST management
+        service implementations must generate a unique location string in
+        order to avoid unintended collisions between unrelated bundles.</para>
+
+        <para>The body of the response is <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the newly installed bundle. The following status codes can be
+        returned:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the bundle has been successfully installed and the
+            body of the response contains the URI.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to install. The body of the message is
+            a <xref linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the
+            installation did not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>409 (CONFLICT): there is already a bundle installed with the
+            same location string.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundles Representations Resource</title>
+
+      <para><code>framework/bundles/representations</code></para>
+
+      <section>
+        <title>GET of the Representations</title>
+
+        <para>The <code>bundles</code> resource returns a list of the URIs of
+        all bundles installed on the framework. For clients interested in the
+        details of multiple bundles there is also the possibility to retrieve
+        the bundle representation of each installed bundle with a single
+        request through the <emphasis>bundles/representations</emphasis>
+        resource.</para>
+
+        <para>The body of the response is a <xref
+        linkend="service.rest-bundle.representations.list.representation"
+        xrefstyle="template:%t"/>. The request can return the following status
+        codes:</para>
+
+        <para>Results for this resource can be filtered as described in <xref
+        linkend="service.rest-resource.filters"/>.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle list representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundle Resource</title>
+
+      <para><code>framework/bundle/{bundleid}</code></para>
+
+      <para>The bundle resource represents a single, distinct bundle in the
+      system. Hence, it has to be qualified by a bundle id. The resource
+      supports the GET, two variants of PUT, and the DELETE requests.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        from the REST management service. The request can return the following
+        status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>PUT with Location String</title>
+
+        <para>The PUT request updates the bundle with a new version,
+        referenced by a location string which is passed as the body of the
+        request. In order to disambiguate the request from the other form of
+        PUT, the content type must be set to text/plain. The same rationale
+        applies as for <xref linkend="service.rest-bundles.post.location"
+        xrefstyle="template:%t"/> and <xref
+        linkend="service.rest-bundles.post.bundle"/>, if a location string is
+        given it must point to a location reachable by the managed framework.
+        If no location string is passed as the body of the request, the
+        framework will perform an update based on the existing bundle's
+        location string.</para>
+
+        <para>The body of the response is <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the updated bundle. The following status codes can be
+        returned:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>204 (NO CONTENT): the request was received and valid and the
+            framework has issued the update.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to update. The body of the message is
+            a <xref linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the update did
+            not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>PUT with Bundle</title>
+
+        <para>The PUT request updates the bundle with a new version, uploaded
+        as the body of the request. The media type of the request should be
+        set to application/vnd.osgi.bundle which must be supported by all REST
+        management services. Implementations are free to accept other media
+        types for this request with the exception of text/plain. For instance,
+        they can opt to additionally support application/zip or
+        application/x-jar.</para>
+
+        <para>The body of the response is <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the updated bundle. The following status codes can be
+        returned:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>204 (NO CONTENT): the request was received and valid and the
+            framework has issued the update.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to update. The body of the message is
+            a <xref linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the update did
+            not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>DELETE</title>
+
+        <para>The DELETE request uninstalls the bundle from the
+        framework.</para>
+
+        <para>The body of the response is <xref
+        linkend="service.rest-bundle.representation" xrefstyle="template:%t"/>
+        of the uninstalled bundle, where the bundle state will be UNINSTALLED.
+        The following status codes can be returned:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>204 (NO CONTENT): the request was received and valid and the
+            framework has uninstalled the bundle.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to uninstall. The body of the message
+            is a <xref linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the
+            uninstallation did not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundle State Resource</title>
+
+      <para><code>framework/bundle/{bundleid}/state</code></para>
+
+      <para>The bundle state resource represents the internal state of an
+      installed bundle qualified through its bundle id. It supports the GET
+      and PUT requests.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-bundle.state.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle state representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>PUT</title>
+
+        <para>The PUT request sets the target state for the given bundle. This
+        can, e.g., be state=32 for transitioning the bundle to started, or
+        state=4 for stopping the bundle and transitioning it to resolved. The
+        body of the request needs to be a <xref
+        linkend="service.rest-bundle.state.representation"
+        xrefstyle="template:%t"/>. Not all state transitions are valid. The
+        body of the response is the new <xref
+        linkend="service.rest-bundle.state.representation"
+        xrefstyle="template:%t"/>. The request can return the following status
+        codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request was received and valid. The framework
+            has performed a state change and the new bundle state is contained
+            in the body.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the REST management service received a
+            BundleException when trying to perform the state transition. The
+            body of the message is a <xref
+            linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the operation
+            did not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>402 (PRECONDITION FAILED): the requested target state is not
+            reachable from the current bundle state or is not a target state.
+            An example such state is the STOPPING state.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>415 (UNSUPPORTED MEDIA TYPE): the request had a media type
+            that is not supported by the REST management service.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundle Header Resource</title>
+
+      <para><code>framework/bundle/{bundleid}/header</code></para>
+
+      <para>The bundle header resource represents manifest header of a bundle
+      which is qualified by its bundle id. It can only be read through a GET
+      request.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-bundle.header.representation"
+        xrefstyle="template:%t"/> from the REST management service. The raw
+        header value is used unless an <code>Accept-Language</code> header is
+        set on the HTTP request. If multiple accepted languages are set only
+        the first is used to localize the header. The request can return the
+        following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle header representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundle Startlevel Resource</title>
+
+      <para><code>framework/bundle/{bundleid}/startlevel</code></para>
+
+      <para>The bundle startlevel resource represents the start level of the
+      bundle qualified by its bundle id. It supports the GET and PUT
+      requests.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-bundle.startlevel.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a bundle startlevel representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>PUT</title>
+
+        <para>The PUT request sets the target bundle startlevel. The body of
+        the request needs to be a <xref
+        linkend="service.rest-bundle.startlevel.representation"
+        xrefstyle="template:%t"/>, however only the <code>startLevel</code>
+        property is used. The request can return the following status
+        codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request was received and valid. The REST
+            management service has changed the bundle startlevel according to
+            the target value. The body of the response is the new bundle
+            startlevel representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): either the target startlevel state
+            involved invalid values, e.g., a startlevel smaller or equal to
+            zero and the REST management service got an
+            IllegalArgumentException, or the REST management service received
+            a BundleException when trying to perform the startlevel change. In
+            the latter case, the body of the message is a <xref
+            linkend="service.rest-bundle.exception.representation"
+            xrefstyle="template:%t"/> describing the reason why the operation
+            did not succeed.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not bundle with the given bundle
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>415 (UNSUPPORTED MEDIA TYPE): the request had a media type
+            that is not supported by the REST management service.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Services Resource</title>
+
+      <para><code>framework/services</code></para>
+
+      <para>The services resource represents the set of all services available
+      on the framework, optionally constrained by a filter expression. It is
+      read-only and therefore only supports the GET request.</para>
+
+      <para>Results for this resource can be filtered as described in <xref
+      linkend="service.rest-resource.filters"/>.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-service.list.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a service list representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the provided filter expression was not
+            valid.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Services Representations Resource</title>
+
+      <para><code>framework/services/representations</code></para>
+
+      <section>
+        <title>GET of the Representations</title>
+
+        <para>The services resource returns a list of the URIs of all services
+        registered on the framework. For clients interested in the details of
+        multiple services there is also the possibility to retrieve the
+        service representation of each available service with a single request
+        through the <emphasis>services/representations</emphasis> resource.
+        The body of the response is a <xref
+        linkend="service.rest-service.representations.list.representation"
+        xrefstyle="template:%t"/> from the REST management service. The
+        request can return the following status codes:</para>
+
+        <para>Results for this resource can be filtered as described in <xref
+        linkend="service.rest-resource.filters"/>.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a service list representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>400 (BAD REQUEST): the provided filter expression was not
+            valid.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Service Resource</title>
+
+      <para><code>framework/service/{serviceid}</code></para>
+
+      <para>The service resource represents a single, distinct service in the
+      framework. Hence, it has to be qualified by a service id. Services can
+      only be read through the REST Management Service and therefore only
+      support the GET request.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-service.representation"
+        xrefstyle="template:%t"/> . The request can return the following
+        status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a service representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>404 (NOT FOUND): there is not service with the given service
+            id.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="service.rest-representation">
+    <title>Representations</title>
+
+    <section xml:id="service.rest-bundle.representation">
+      <title>Bundle Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundle+json</code></para>
+
+        <programlisting>{
+   "id":0,
+   "lastModified":1314999275542,
+   "state":32,
+   "symbolicName":"org.eclipse.osgi",
+   "version":"3.7.0.v20110613"
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundle+xml</code></para>
+
+        <programlisting>&lt;bundle&gt;
+   &lt;id&gt;0&lt;/id&gt;
+   &lt;lastModified&gt;1314999275542&lt;/lastModified&gt;
+   &lt;state&gt;32&lt;/state&gt;
+   &lt;symbolicName&gt;org.eclipse.osgi&lt;/symbolicName&gt;
+   &lt;version&gt;3.7.0.v20110613&lt;/version&gt;
+&lt;/bundle&gt;</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Bundles Representations</title>
+
+      <section xml:id="service.rest-bundle.list.representation">
+        <title>Bundle List Representation</title>
+
+        <section>
+          <title>JSON</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.bundles+json</code></para>
+
+          <programlisting>{
+   [bundleURI, bundleURI, ..., bundleURI]
+}</programlisting>
+        </section>
+
+        <section>
+          <title>XML</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.bundles+xml</code></para>
+
+          <programlisting>&lt;bundles&gt;
+   &lt;uri&gt;bundleURI&lt;/uri&gt;
+   &lt;uri&gt;bundleURI&lt;/uri&gt;
+   ...
+   &lt;uri&gt;bundleURI&lt;/uri&gt;
+&lt;/bundles&gt;</programlisting>
+        </section>
+      </section>
+
+      <section xml:id="service.rest-bundle.representations.list.representation">
+        <title>Bundle Representations List Representation</title>
+
+        <section>
+          <title>JSON</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.bundles.representations+json</code></para>
+
+          <programlisting>{
+    [BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, ..., BUNDLE REPRESENTATION]
+}</programlisting>
+        </section>
+
+        <section>
+          <title>XML</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.bundles.representations+xml</code></para>
+
+          <programlisting>&lt;bundles&gt;
+   BUNDLE REPRESENTATION
+   BUNDLE REPRESENTATION
+   ...
+   BUNDLE REPRESENTATION
+&lt;/bundles&gt;</programlisting>
+        </section>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-bundle.state.representation">
+      <title>Bundle State Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundlestate+json</code></para>
+
+        <programlisting>{
+   "state":32
+   "options":1
+}</programlisting>
+
+        <para>The options are used in start or stop calls. Valid options
+        include, e.g., Bundle.START_TRANSIENT and
+        Bundle.START_ACTIVATION_POLICY.</para>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundlestate+xml</code></para>
+
+        <programlisting>&lt;bundleState&gt;
+   &lt;state&gt;32&lt;/state&gt;
+   &lt;options&gt;1&lt;/options&gt;
+&lt;/bundleState&gt;</programlisting>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-bundle.header.representation">
+      <title>Bundle Header Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundleheader+json</code></para>
+
+        <programlisting>{
+   key:value,
+   key:value,
+   ...
+   key:value
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundleheader+xml</code></para>
+
+        <programlisting>&lt;bundleHeader&gt;
+   &lt;entry key="key" value="value"/&gt;
+   &lt;entry key="key" value="value"/&gt;
+   ...
+   &lt;entry key="key" value="value"/&gt;
+&lt;bundleHeader&gt;</programlisting>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-framework.startlevel.representation">
+      <title>Framework Startlevel Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.frameworkstartlevel+json</code></para>
+
+        <programlisting>{
+    "startLevel":6,
+    "initialBundleStartLevel":4
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.frameworkstartlevel+xml</code></para>
+
+        <programlisting>&lt;frameworkStartLevel&gt;
+    &lt;startLevel&gt;6&lt;/startLevel&gt;
+    &lt;initialBundleStartLevel&gt;4&lt;/initialBundleStartLevel&gt;
+&lt;/frameworkStartLevel&gt;</programlisting>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-bundle.startlevel.representation">
+      <title>Bundle Startlevel Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundlestartlevel+json</code></para>
+
+        <programlisting>{
+   "startLevel":6
+
+   "activationPolicyUsed":true
+   "persistentlyStarted":false
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundlestartlevel+xml</code></para>
+
+        <programlisting>&lt;bundleStartLevel&gt;
+    &lt;startLevel&gt;6&lt;/startLevel&gt;
+
+    &lt;activationPolicyUsed&gt;true&lt;/actiovationPolicyUsed&gt;
+    &lt;persistentlyStarted&gt;false&lt;/persistentlyStarted&gt;
+&lt;/bundleStartLevel&gt;</programlisting>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-service.representation">
+      <title>Service Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.service+json</code></para>
+
+        <programlisting>{
+   "id":10,
+   "properties":
+   {
+      "prop1":"val1",
+      "prop2":2.82,
+      ...
+      "prop3":true
+   },
+   "bundle":bundleURI,
+   "usingBundles":[bundleURI, bundleURI, ... bundleURI]
+}</programlisting>
+
+        <para><emphasis>Note:</emphasis> service properties are converted to
+        JSON-supported data types where possible: <code>"string"</code>,
+        number or boolean <code>(true|false)</code>. If there is no conversion
+        to JSON data types is possible the <code>toString()</code> result is
+        used as a string value.</para>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.service+xml</code></para>
+
+        <programlisting>&lt;service&gt;
+   &lt;id&gt;10&lt;/id&gt;
+   &lt;properties&gt;
+      &lt;property name="prop1" value="val1"/&gt;
+      &lt;property name="prop2" type="Float" value="2.82"/&gt;
+      ...
+      &lt;property name="prop3" type="Boolean" value="true"/&gt;
+   &lt;/properties&gt;
+   &lt;bundle&gt;bundleURI&lt;/bundle&gt;
+   &lt;usingBundles&gt;
+      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
+      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
+      ...
+      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
+   &lt;/usingBundles&gt;
+&lt;/service&gt;</programlisting>
+
+        <para><emphasis>Note:</emphasis> service properties are represented
+        using the same method as used for the <code>property</code> XML
+        element in the Declarative Services specification, see <xref
+        linkend="service.component-property.properties.elements"/>. Service
+        properties that cannot be represented using the supported data types,
+        will be represented as String values obtained via the
+        <code>toString()</code> method.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Services Representations</title>
+
+      <section xml:id="service.rest-service.list.representation">
+        <title>Service List Representation</title>
+
+        <section>
+          <title>JSON</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.services+json</code></para>
+
+          <programlisting>{
+   [serviceURI, serviceURI, ..., serviceURI]
+}</programlisting>
+        </section>
+
+        <section>
+          <title>XML</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.services+xml</code></para>
+
+          <programlisting>&lt;services&gt;
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+   ...
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+&lt;/services&gt;</programlisting>
+        </section>
+      </section>
+
+      <section xml:id="service.rest-service.representations.list.representation">
+        <title>Service Representations List Representation</title>
+
+        <section>
+          <title>JSON</title>
+
+          <para><code>Content-Type:
+          org.osgi.services.representations+json</code></para>
+
+          <programlisting>{
+   [SERVICE REPRESENTATION, SERVICE REPRESENTATION, ..., SERVICE REPRESENTATION]
+}</programlisting>
+        </section>
+
+        <section>
+          <title>XML</title>
+
+          <para><code>Content-Type:
+          application/org.osgi.services.representations+xml</code></para>
+
+          <programlisting>&lt;services&gt;
+   SERVICE REPRESENTATION
+   SERVICE REPRESENTATION
+   ...
+   SERVICE REPRESENTATION
+&lt;/services&gt;</programlisting>
+        </section>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-bundle.exception.representation">
+      <title>Bundle Exception Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundleexception+json</code></para>
+
+        <programlisting>{
+   "typecode": 5,
+   "message": "BundleException: Bundle activation error"
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.bundleexception+xml</code></para>
+
+        <programlisting>&lt;bundleexception&gt;
+   &lt;typecode&gt;5&lt;/typecode&gt;
+   &lt;message&gt;BundleException: Bundle activation error&lt;/message&gt;
+&lt;/bundleexception&gt;</programlisting>
       </section>
     </section>
   </section>
 
   <section>
-    <title>Domain B</title>
+    <title>Clients</title>
 
-    <para/>
-  </section>
-
-  <section>
-    <title>Domain C</title>
-
-    <para/>
-  </section>
-
-  <section>
-    <title>Life Cycle</title>
-
-    <para/>
-  </section>
-
-  <section>
-    <title>Error Handling</title>
-
-    <para/>
-  </section>
-
-  <section>
-    <title>Events</title>
+    <para>The REST service can be used by a variety of clients directly. In
+    addition this specification describes Client APIs built over this REST
+    protocol to facilitate use from Java and JavaScript clients.</para>
 
     <section>
-      <title>Domain Events</title>
+      <title>Java Client</title>
 
-      <para/>
+      <para>The Java Client provides a Java API over the REST API providing a
+      convenient and portable way to use this API from a Java
+      application.</para>
+
+      <para>To use the Java Client, obtain the <xref
+      linkend="org.osgi.service.rest.client.RestClientFactory"
+      xrefstyle="hyperlink"/> service. Create a client by providing the root
+      URL of the REST service, for example: <programlisting>RestClientFactory restClientFactory = ... // from Service Registry
+RestClient restClient = restClientFactory.createRestClient(
+    new URI("http://localhost:8080/restendpoint"));
+
+// Now we can start interacting
+Collection&lt;String&gt; bundles = restClient.getBundlePaths();
+BundleDTO newBundle = restClient.installBundle(bundleLocation, bundleStream);
+restClient.startBundle(newBundle.id);</programlisting></para>
+
+      <para>The more details on the Java Client can be found in the <xref
+      linkend="org.osgi.service.rest.client" xrefstyle="hyperlink"/> API
+      documentation section.</para>
     </section>
 
     <section>
-      <title>Event Admin Mapping</title>
+      <title>JavaScript Client</title>
 
-      <para/>
+      <para>This specification also describes a JavaScript client to the REST
+      Management service. This client makes it easy to manage an OSGi
+      framework from any JavaScript environment, including Web
+      Browsers.</para>
+
+      <para>The JavaScript client follows the <emphasis>promises</emphasis>
+      programming style; the request is made asynchronously and a
+      <code>success()</code> or <code>failure()</code> callback is made when
+      the response arrives.</para>
+
+      <para>To use the JavaScript client create an instance of
+      <code>OSGiRestClient</code> providing the root URL of the REST service.
+      <programlisting>var client = new OSGiRestClient('http://localhost:8080/restendpoint');
+client.installBundle({
+  success : function(res) {
+    // Start the bundle once the install has finished
+    client.startBundle(res.id);
+  },
+  failure : function(httpCode, res) {
+    // handle failure
+  }
+});</programlisting></para>
+
+      <para>More details on the JavaScript Client can be found in the <xref
+      linkend="service.rest-javascript.api" xrefstyle="hyperlink"/> API
+      documentation section.</para>
     </section>
   </section>
 
-  <section>
-    <title>Class Loading</title>
+  <section xml:id="service.rest-extensions">
+    <title>Extending the REST Management Service</title>
 
-    <para/>
-  </section>
+    <para>This specification describes a REST-based management interface for
+    Core Framework functionality. Other services in the framework might also
+    benefit from management access through REST. This can involve services
+    specified by the OSGi Alliance as part of the Core Framework, Compendium,
+    or Enterprise Specifications but also application-specific functionality
+    provided by the developer. It is desirable to expose such management
+    services as extensions of the REST Management Service.</para>
 
-  <section>
-    <title>Data Transfer Objects</title>
+    <para>This REST service can be implemented by using various technologies
+    such as Java Servlets, Restlet, JAX-RS, and others. Therefore, it might
+    not always be possible to integrate extensions at the implementation level
+    because they might use other underlying technologies to implement their
+    REST interface. Defining a format for delegating requests between the REST
+    Management Service and extensions would furthermore necessarily expose
+    implementation details and is therefore not feasible either. As a
+    consequence, this specification only describes how to logically integrate
+    extensions with the REST Management Service. Implementations of this
+    specification might offer mechanisms for tighter integration for the case
+    that extensions are developed using the same underlying technology.</para>
 
-    <para/>
+    <para>The main purpose of the extension mechanism is to advertise
+    extensions to the core REST implementation, which makes them discoverable
+    for clients. This mechanism can be used to check if a REST interface
+    exists for a specific service. This is done through the <xref
+    linkend="service.rest-extensions.resource" xrefstyle="template:%t"/> which
+    contains a description and a path for every extension currently available.
+    Implementations that want to contribute their extensions to the REST
+    Management Service can do so by registering the <xref
+    linkend="org.osgi.service.rest.RestApiExtension" xrefstyle="hyperlink"/>
+    service using the <xref linkend="service.rest-whiteboard.pattern.ref"/>.
+    The extension interface is only a marker and the relevant information is
+    exposed through the <xref
+    linkend="org.osgi.service.rest.RestApiExtension.NAME"
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.service.rest.RestApiExtension.URI_PATH"
+    xrefstyle="hyperlink"/> and optionally <xref
+    linkend="org.osgi.service.rest.RestApiExtension.SERVICE"
+    xrefstyle="hyperlink"/> properties. Note that it is the responsibility of
+    the extension to ensure that the endpoint announced via the
+    <code>RestApiExtension</code> service is actually present. The Whiteboard
+    service does not realize the extension endpoint; it purely announces it to
+    the main REST implementation for inclusion in the Extensions
+    Resource.</para>
+
+    <para>In order to be discoverable REST interface extensions to OSGi Core,
+    Compendium, or Enterprise services must use their canonical package name
+    as advertised name. E.g., the name of the REST interface for the User
+    Admin must be <code>org.osgi.service.useradmin</code>. This way, a client
+    is able to check if there is a given extension available on a host.
+    User-defined extensions should use the package name of the service they
+    provide management capabilities for.</para>
+
+    <section xml:id="service.rest-extensions.resource">
+      <title>Extensions Resource</title>
+
+      <para><code>extensions</code></para>
+
+      <para>The extensions resource enumerates all extensions currently
+      registered through the Whiteboard Pattern. It is read-only and therefore
+      only supports the GET request.</para>
+
+      <section>
+        <title>GET</title>
+
+        <para>The GET request retrieves a <xref
+        linkend="service.rest-extensions.representation"
+        xrefstyle="template:%t"/> . The request can return the following
+        status codes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>200 (OK): the request has been served successfully and the
+            body of the response is a extension list representation.</para>
+          </listitem>
+
+          <listitem>
+            <para>406 (NOT ACCEPTABLE): the REST management service does not
+            support any of the requested representations.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="service.rest-extensions.representation">
+      <title>Extensions Representation</title>
+
+      <section>
+        <title>JSON</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.extensions+json</code></para>
+
+        <programlisting>{ 
+   [ { "name" : "org.osgi.service.event", "path" : "contributions/eventadmin", 
+       "service" : 12 }, ... ]
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.extensions+xml</code></para>
+
+        <programlisting>&lt;extensions&gt;
+   &lt;extension&gt;
+      &lt;name&gt;org.osgi.service.event&lt;/name&gt;
+      &lt;path&gt;contributions/eventadmin&lt;/path&gt;
+      &lt;service&gt;12&lt;/service&gt;
+   &lt;/extension&gt;
+&lt;/extensions&gt;</programlisting>
+      </section>
+    </section>
   </section>
 
   <section>
     <title>XML Schema</title>
 
-    <para>A wide code example (for use with XML Schema). Note that the XML
-    schema is typically included through <code>xi:include</code> tags rather
-    than embedded directly.</para>
+    <para>The namespace for XML representations is:</para>
 
-    <programlisting role="pgwide">&lt;?xml version="1.0"?&gt;
-&lt;!-- XML Schema --&gt;
-&lt;top&gt; ... &lt;/top&gt;</programlisting>
+    <programlisting>http://www.osgi.org/xmlns/rest/v1.0.0</programlisting>
+
+    <para>The recommended prefix for this namespace is
+    <code>rest</code>.</para>
+
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/rest/v1.0.0/rest.xsd" parse="text"/></programlisting>
+
+    <para>The schema is also available in digital form from <xref
+    linkend="service.rest-reference.xml.schemas"/>.</para>
+  </section>
+
+  <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>An implementation of this specification must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.rest</code>. This capability can be used
+      by provisioning tools and during resolution to ensure that a REST
+      Management implementation is present to handle REST requests defined in
+      this specification. The capability must also declare a uses constraint
+      on the <code>org.osgi.service.rest</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+  osgi.implementation="osgi.rest";
+  uses:="org.osgi.service.rest";
+  version:Version="1.0"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>A bundle providing the <xref
+      linkend="org.osgi.service.rest.client.RestClientFactory"
+      xrefstyle="hyperlink"/> service as described by this specification must
+      inform tools about this service by providing the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      capability representing this service. This capability must also declare
+      a uses constraint for the <code>org.osgi.service.rest.client</code>
+      package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.rest.client.RestClientFactory";
+  uses:="org.osgi.service.rest.client"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
   </section>
 
   <section>
     <title>Security</title>
 
-    <para/>
+    <para>Like any externally visible management interface, the REST interface
+    exposes privileged operations and hence requires access control. Since
+    REST builds upon the HTTP(s) protocol, authentication mechanisms and
+    encryption can be applied the same way as usually done for web servers:
+    they can be layered below the REST protocol. E.g., confidentiality of the
+    transmitted commands can be ensured by using HTTPS as the underlying
+    transport. Authentication can be added by requiring, e.g., basic
+    authentication prior to accepting a REST command. The REST interface
+    should only be implemented by a trusted bundle. Implementations of this
+    specification require all Admin Permissions and all Service
+    Permissions.</para>
   </section>
 
-  <!-- Include javadoc here, once available
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.xml"/>
-  -->
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.client.xml"/>
+
+  <xi:include href="js-client.xml"/>
 
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>Framework Module Layer</title>OSGi Core, Chapter 3
-      Module Layer</bibliomixed>
+      <bibliomixed xml:id="service.rest-corefilter"><title>Framework Filter
+      Syntax</title>OSGi Core, Chapter 3.2.7 Filter Syntax</bibliomixed>
 
-      <bibliomixed><title>XML Schema Part 2: Data types Second
-      Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+      <bibliomixed xml:id="service.rest-webidl"><title>Web
+      IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
+
+      <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
+      Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

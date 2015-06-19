@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="28000"
+   height="21000"
+   preserveAspectRatio="xMidYMid"
+   clip-path="url(#presentation_clip_path)"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="LowerAndUpperThreshold.svg">
+  <metadata
+     id="metadata315">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
+     id="namedview313"
+     showgrid="false"
+     inkscape:zoom="0.031786133"
+     inkscape:cx="7864.0312"
+     inkscape:cy="10944.4"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <clipPath
+       id="presentation_clip_path"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         x="0"
+         y="0"
+         width="28000"
+         height="21000"
+         id="svg_1" />
+    </clipPath>
+  </defs>
+  <defs
+     id="defs8">
+    <g
+       id="svg_2" />
+  </defs>
+  <defs
+     id="defs11">
+    <g
+       id="bullet-char-template(57356)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m580,1141l583,-570l-583,-571l-584,571l584,570z"
+         id="svg_3" />
+    </g>
+    <g
+       id="bullet-char-template(57354)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m8,1128l1129,0l0,-1128l-1129,0l0,1128z"
+         id="svg_4" />
+    </g>
+    <g
+       id="bullet-char-template(10146)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m174,0l428,739l-428,742l1282,-742l-1282,-739zm1184,739l-1049,607l350,-607l699,0z"
+         id="svg_5" />
+    </g>
+    <g
+       id="bullet-char-template(10132)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m2015,739l-739,-739l-559,0l543,543l-1086,0l0,393l1086,0l-543,545l557,0l741,-742z"
+         id="svg_6" />
+    </g>
+    <g
+       id="bullet-char-template(10007)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m0,-2c-7,16 -16,29 -25,39l381,530c-94,256 -141,385 -141,387c0,25 13,38 40,38c9,0 21,-2 34,-5c21,4 42,12 65,25l27,-13l111,-251l280,301l64,-25l24,25c21,-10 41,-24 62,-43c-36,-69 -87,-143 -152,-222c-1,-1 -60,-68 -176,-200l180,-361c0,-27 -21,-55 -63,-84l16,-20c-10,-29 -28,-43 -55,-43c-31,0 -102,102 -215,305l-293,-457c-22,-34 -53,-51 -92,-51c-42,0 -63,17 -64,51c-7,9 -10,24 -10,44c0,9 1,19 2,30z"
+         id="svg_7" />
+    </g>
+    <g
+       id="bullet-char-template(10004)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m285,-33c-103,0 -174,63 -211,189c-22,72 -33,177 -33,315c0,78 14,145 41,201c34,71 87,106 158,106c53,0 88,-31 106,-94l23,-176c8,-64 28,-97 59,-98l735,706c11,11 33,17 66,17c42,0 63,-15 63,-46l0,-122c0,-36 -10,-64 -30,-84l-820,-834c-52,-53 -104,-80 -157,-80z"
+         id="svg_8" />
+    </g>
+    <g
+       id="bullet-char-template(9679)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m813,0c-181,0 -324,54 -430,161c-107,107 -160,250 -160,431c0,181 53,324 160,431c106,107 249,161 430,161c179,0 323,-54 432,-161c108,-107 162,-251 162,-431c0,-180 -54,-324 -162,-431c-109,-107 -253,-161 -432,-161z"
+         id="svg_9" />
+    </g>
+    <g
+       id="bullet-char-template(8226)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m346,457c-73,0 -137,26 -191,78c-54,51 -81,114 -81,188c0,73 27,136 81,188c54,52 118,78 191,78c73,0 134,-26 185,-79c51,-51 77,-114 77,-187c0,-75 -25,-137 -76,-188c-50,-52 -112,-78 -186,-78z"
+         id="svg_10" />
+    </g>
+    <g
+       id="bullet-char-template(8211)"
+       transform="scale(0.00048828125,-0.00048828125)">
+      <path
+         d="m-4,459l1139,0l0,147l-1139,0l0,-147z"
+         id="svg_11" />
+    </g>
+  </defs>
+  <g
+     id="svg_12">
+    <g
+       class="Master_Slide"
+       id="id2">
+      <g
+         class="Background"
+         id="bg-id2" />
+      <g
+         class="BackgroundObjects"
+         id="bo-id2">
+        <g
+           id="svg_13"
+           class="Date/Time">
+          <g
+             id="id3" />
+        </g>
+        <g
+           id="svg_14"
+           class="Footer">
+          <g
+             id="id4" />
+        </g>
+        <g
+           id="svg_15"
+           class="Slide_Number">
+          <g
+             id="id5">
+            <text
+               id="svg_16"
+               class="TextShape">
+              <tspan
+                 style="font-size:494px;font-weight:400;font-family:'Arial Unicode MS'"
+                 id="svg_17"
+                 font-weight="400"
+                 font-size="494px"
+                 class="TextParagraph">
+                <tspan
+                   id="svg_18"
+                   y="19571"
+                   x="24530"
+                   class="TextPosition">
+                  <tspan
+                     style="fill:#000000"
+                     id="svg_19"
+                     class="PlaceholderText"></tspan>
+                </tspan>
+              </tspan>
+            </text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <g
+     id="svg_23"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#ff0000;fill-opacity:0.39215687">
+    <g
+       id="id6"
+       style="fill:#ff0000;fill-opacity:0.39215687">
+      <path
+         style="fill:#ff0000;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_24"
+         d="m 15400,6500 -11500,0 0,-4500 23000,0 0,4500 -11500,0 z" />
+      <path
+         style="fill:#ff0000;stroke:#808080;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_25"
+         d="m 15400,6500 -11500,0 0,-4500 23000,0 0,4500 -11500,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_26"
+     class="com.sun.star.drawing.CustomShape">
+    <g
+       id="id7"
+       style="fill:#ff0000;fill-opacity:0.39215687">
+      <path
+         style="fill:#ff0000;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_27"
+         d="m 15400,16700 -11500,0 0,-2600 23000,0 0,2600 -11500,0 z" />
+      <path
+         style="fill:#ff0000;stroke:#808080;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_28"
+         d="m 15400,16700 -11500,0 0,-2600 23000,0 0,2600 -11500,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_29"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#00ff00;fill-opacity:0.19607843">
+    <g
+       id="id8"
+       style="fill:#00ff00;fill-opacity:0.19607843">
+      <path
+         style="fill:#00ff00;fill-opacity:0.19607843"
+         inkscape:connector-curvature="0"
+         id="svg_30"
+         d="m 15400,12400 -11500,0 0,-4100 23000,0 0,4100 -11500,0 z" />
+      <path
+         style="fill:#00ff00;stroke:#808080;fill-opacity:0.19607843"
+         inkscape:connector-curvature="0"
+         id="svg_31"
+         d="m 15400,12400 -11500,0 0,-4100 23000,0 0,4100 -11500,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_32"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#ff6600;fill-opacity:0.39215687">
+    <g
+       id="id9"
+       style="fill:#ff6600;fill-opacity:0.39215687">
+      <path
+         style="fill:#ff6600;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_33"
+         d="m 15400,8300 -11500,0 0,-1800 23000,0 0,1800 -11500,0 z" />
+      <path
+         style="fill:#ff6600;stroke:#808080;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_34"
+         d="m 15400,8300 -11500,0 0,-1800 23000,0 0,1800 -11500,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_35"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#ff6600;fill-opacity:0.39215687">
+    <g
+       id="id10"
+       style="fill:#ff6600;fill-opacity:0.39215687">
+      <path
+         style="fill:#ff6600;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_36"
+         d="m 15400,14100 -11500,0 0,-1700 23000,0 0,1700 -11500,0 z" />
+      <path
+         style="fill:#ff6600;stroke:#808080;fill-opacity:0.39215687"
+         inkscape:connector-curvature="0"
+         id="svg_37"
+         d="m 15400,14100 -11500,0 0,-1700 23000,0 0,1700 -11500,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_38"
+     class="com.sun.star.drawing.LineShape">
+    <g
+       id="id11">
+      <path
+         style="fill:none;stroke:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_39"
+         d="m 3900,16900 0,-14570" />
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_40"
+         d="m 3900,1900 -150,450 300,0 -150,-450 z" />
+    </g>
+  </g>
+  <g
+     id="svg_41"
+     class="com.sun.star.drawing.LineShape">
+    <g
+       id="id12">
+      <path
+         style="fill:none;stroke:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_42"
+         d="m 2700,16700 23770,0" />
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_43"
+         d="m 26900,16700 -450,-150 0,300 450,-150 z" />
+    </g>
+  </g>
+  <g
+     id="svg_44"
+     class="com.sun.star.drawing.LineShape"
+     style="stroke:#000000">
+    <g
+       id="id13"
+       style="stroke:#000000">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_45"
+         d="m 1700,6500 25200,0" />
+    </g>
+  </g>
+  <g
+     id="svg_46"
+     class="com.sun.star.drawing.LineShape"
+     style="fill:#000000;stroke:#000000">
+    <g
+       id="id14"
+       style="fill:#000000;stroke:#000000">
+      <path
+         style="fill:#000000;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_47"
+         d="m 1700,14100 25200,0" />
+    </g>
+  </g>
+  <g
+     id="svg_48"
+     class="com.sun.star.drawing.LineShape"
+     style="stroke:#000000">
+    <g
+       id="id15"
+       style="stroke:#000000">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_49"
+         d="m 1700,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_50"
+         d="m 2716,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_51"
+         d="m 3732,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_52"
+         d="m 4748,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_53"
+         d="m 5764,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_54"
+         d="m 6780,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_55"
+         d="m 7796,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_56"
+         d="m 8812,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_57"
+         d="m 9828,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_58"
+         d="m 10844,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_59"
+         d="m 11860,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_60"
+         d="m 12876,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_61"
+         d="m 13892,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_62"
+         d="m 14908,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_63"
+         d="m 15924,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_64"
+         d="m 16940,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_65"
+         d="m 17956,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_66"
+         d="m 18972,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_67"
+         d="m 19988,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_68"
+         d="m 21004,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_69"
+         d="m 22020,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_70"
+         d="m 23036,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_71"
+         d="m 24052,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_72"
+         d="m 25068,12400 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_73"
+         d="m 26084,12400 508,0" />
+    </g>
+  </g>
+  <g
+     id="svg_74"
+     class="com.sun.star.drawing.LineShape"
+     style="stroke:#000000">
+    <g
+       id="id16"
+       style="stroke:#000000">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_75"
+         d="m 1700,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_76"
+         d="m 2716,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_77"
+         d="m 3732,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_78"
+         d="m 4748,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_79"
+         d="m 5764,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_80"
+         d="m 6780,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_81"
+         d="m 7796,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_82"
+         d="m 8812,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_83"
+         d="m 9828,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_84"
+         d="m 10844,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_85"
+         d="m 11860,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_86"
+         d="m 12876,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_87"
+         d="m 13892,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_88"
+         d="m 14908,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_89"
+         d="m 15924,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_90"
+         d="m 16940,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_91"
+         d="m 17956,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_92"
+         d="m 18972,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_93"
+         d="m 19988,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_94"
+         d="m 21004,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_95"
+         d="m 22020,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_96"
+         d="m 23036,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_97"
+         d="m 24052,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_98"
+         d="m 25068,8300 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_99"
+         d="m 26084,8300 508,0" />
+    </g>
+  </g>
+  <g
+     id="svg_100"
+     class="com.sun.star.drawing.OpenBezierShape"
+     style="stroke-width:50;stroke-miterlimit:4;stroke-dasharray:none">
+    <g
+       id="id17"
+       style="stroke-width:50;stroke-miterlimit:4;stroke-dasharray:none">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:50;stroke-miterlimit:4;stroke-dasharray:none"
+         inkscape:connector-curvature="0"
+         id="svg_101"
+         d="m 3982,11020 c 318,-277 797,-231 1072,-570 257,-317 538,-634 669,-1038 118,-367 367,-678 570,-1005 202,-328 289,-696 469,-1039 173,-327 283,-686 402,-1037 131,-386 521,-606 904,-704 366,-93 687,89 1005,201 413,146 669,531 837,905 151,338 180,720 302,1071 118,344 213,695 334,1039 130,370 382,674 535,1038 146,342 154,734 368,1038 228,321 209,687 336,1038 127,349 299,682 402,1038 119,413 322,761 503,1139 174,362 308,755 603,1039 285,274 626,551 1038,602 343,43 693,49 1038,-67 387,-130 619,-465 871,-770 281,-340 565,-650 804,-1005 208,-310 240,-687 368,-1038 130,-356 283,-696 435,-1038 153,-343 209,-739 436,-1038 242,-318 599,-583 1005,-670 366,-78 698,158 1038,268 364,118 661,355 1038,402 343,43 651,224 1005,201 345,-22 696,35 1038,-67 346,-103 678,-249 1004,-402 369,-172 690,-424 1072,-570 l 335,-100 0,0" />
+    </g>
+  </g>
+  <g
+     id="svg_102"
+     class="com.sun.star.drawing.TextShape"
+     style="fill:#000000">
+    <g
+       id="id18"
+       style="fill:#000000">
+      <text
+         id="svg_103"
+         class="TextShape"
+         style="fill:#000000">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS';fill:#000000"
+           id="svg_104"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_105"
+             y="7597"
+             x="21750"
+             class="TextPosition"
+             style="fill:#000000">
+            <tspan
+               style="fill:#000000"
+               id="svg_106">Upper Threshold</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_107"
+     class="com.sun.star.drawing.TextShape"
+     style="fill:#000000">
+    <g
+       id="id19"
+       style="fill:#000000">
+      <text
+         id="svg_108"
+         class="TextShape"
+         style="fill:#000000">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS';fill:#000000"
+           id="svg_109"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_110"
+             y="13498"
+             x="21750"
+             class="TextPosition"
+             style="fill:#000000">
+            <tspan
+               style="fill:#000000"
+               id="svg_111">Lower Threshold</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_112"
+     class="com.sun.star.drawing.LineShape">
+    <g
+       id="id20">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_113"
+         d="m 6400,18500 2000,0" />
+    </g>
+  </g>
+  <g
+     id="svg_114"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id21">
+      <text
+         id="svg_115"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_116"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_117"
+             y="18734"
+             x="8550"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_118">: Error threshold</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_119"
+     class="com.sun.star.drawing.LineShape">
+    <g
+       id="id22">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_120"
+         d="m 6464,19700 508,0" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:100"
+         inkscape:connector-curvature="0"
+         id="svg_121"
+         d="m 7480,19700 508,0" />
+    </g>
+  </g>
+  <g
+     id="svg_122"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id23">
+      <text
+         id="svg_123"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_124"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_125"
+             y="19897"
+             x="8550"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_126">: Warning threshold</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_127"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id24">
+      <text
+         id="svg_128"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_129"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_130"
+             y="10597"
+             x="350"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_131">NORMAL</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_132"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id25">
+      <text
+         id="svg_133"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_134"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_135"
+             y="7645"
+             x="134"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_136">WARNING</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_137"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id26">
+      <text
+         id="svg_138"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_139"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_140"
+             y="15697"
+             x="550"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_141">ERROR</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_142"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id27">
+      <text
+         id="svg_143"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_144"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_145"
+             y="13446"
+             x="134"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_146">WARNING</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_147"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id28">
+      <text
+         id="svg_148"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_149"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_150"
+             y="4298"
+             x="550"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_151">ERROR</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_152"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id29">
+      <text
+         id="svg_153"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_154"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_155"
+             y="3097"
+             x="750"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_156">State :</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_157"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id30">
+      <text
+         id="svg_158"
+         class="TextShape">
+        <tspan
+           style="font-size:529px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_159"
+           font-weight="400"
+           font-size="529px"
+           class="TextParagraph">
+          <tspan
+             id="svg_160"
+             y="17799"
+             x="25850"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_161">Time</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_162"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id31">
+      <text
+         id="svg_163"
+         class="TextShape">
+        <tspan
+           style="font-size:529px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_164"
+           font-weight="400"
+           font-size="529px"
+           class="TextParagraph">
+          <tspan
+             id="svg_165"
+             y="1760"
+             x="450"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_166">Number of in-use sockets</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_167"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id32">
+      <text
+         id="svg_168"
+         class="TextShape">
+        <tspan
+           style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_169"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph">
+          <tspan
+             id="svg_170"
+             y="16706"
+             x="3151"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_171">0</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_172"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id33">
+      <text
+         id="svg_173"
+         class="TextShape">
+        <tspan
+           style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_174"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph">
+          <tspan
+             id="svg_175"
+             y="14007"
+             x="3152"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_176">5</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_177"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id34">
+      <text
+         id="svg_178"
+         class="TextShape">
+        <tspan
+           style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_179"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph">
+          <tspan
+             id="svg_180"
+             y="12307"
+             x="3152"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_181">10</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_182"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id35">
+      <text
+         id="svg_183"
+         class="TextShape">
+        <tspan
+           style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_184"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph">
+          <tspan
+             id="svg_185"
+             y="8207"
+             x="2850"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_186">100</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_187"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id36">
+      <text
+         id="svg_188"
+         class="TextShape">
+        <tspan
+           style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_189"
+           font-weight="400"
+           font-size="423px"
+           class="TextParagraph">
+          <tspan
+             id="svg_190"
+             y="6408"
+             x="2650"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_191">1000</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+  <g
+     id="svg_192"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id37"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_193"
+         d="m 6300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_194"
+         d="m 6300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_195"
+         d="m 6100,8100 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_196"
+         d="m 6501,8501 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_197"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id38"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_198"
+         d="m 7100,6300 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_199"
+         d="m 7100,6300 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_200"
+         d="m 6900,6300 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_201"
+         d="m 7301,6701 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_202"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id39"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_203"
+         d="m 9800,6300 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_204"
+         d="m 9800,6300 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_205"
+         d="m 9600,6300 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_206"
+         d="m 10001,6701 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_207"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id40"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_208"
+         d="m 10300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_209"
+         d="m 10300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_210"
+         d="m 10100,8100 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_211"
+         d="m 10501,8501 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_212"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id41"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_213"
+         d="m 12000,12200 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_214"
+         d="m 12000,12200 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_215"
+         d="m 11800,12200 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_216"
+         d="m 12201,12601 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_217"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id42"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_218"
+         d="m 12700,13900 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_219"
+         d="m 12700,13900 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_220"
+         d="m 12500,13900 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_221"
+         d="m 12901,14301 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_222"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id43"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_223"
+         d="m 17000,13900 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_224"
+         d="m 17000,13900 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_225"
+         d="m 16800,13900 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_226"
+         d="m 17201,14301 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_227"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id44"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_228"
+         d="m 17600,12200 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_229"
+         d="m 17600,12200 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_230"
+         d="m 17400,12200 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_231"
+         d="m 17801,12601 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_232"
+     class="com.sun.star.drawing.CustomShape"
+     style="fill:#000000">
+    <g
+       id="id45"
+       style="fill:#000000">
+      <path
+         style="fill:#000000"
+         inkscape:connector-curvature="0"
+         id="svg_233"
+         d="m 15600,18700 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_234"
+         d="m 15600,18700 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_235"
+         d="m 15400,18700 0,0 z" />
+      <path
+         style="fill:#000000;stroke:#808080"
+         inkscape:connector-curvature="0"
+         id="svg_236"
+         d="m 15801,19101 0,0 z" />
+    </g>
+  </g>
+  <g
+     id="svg_237"
+     class="com.sun.star.drawing.TextShape">
+    <g
+       id="id46">
+      <text
+         id="svg_238"
+         class="TextShape">
+        <tspan
+           style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"
+           id="svg_239"
+           font-weight="400"
+           font-size="635px"
+           class="TextParagraph">
+          <tspan
+             id="svg_240"
+             y="19097"
+             x="16050"
+             class="TextPosition">
+            <tspan
+               style="fill:#000000"
+               id="svg_241">: Events are emitted</tspan>
+          </tspan>
+        </tspan>
+      </text>
+    </g>
+  </g>
+</svg>

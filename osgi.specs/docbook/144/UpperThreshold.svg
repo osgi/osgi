@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:ooo="http://xml.openoffice.org/svg/export"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.2"
+   width="280mm"
+   height="210mm"
+   viewBox="0 0 28000 21000"
+   preserveAspectRatio="xMidYMid"
+   fill-rule="evenodd"
+   clip-path="url(#presentation_clip_path)"
+   stroke-width="28.222"
+   stroke-linejoin="round"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="UpperThreshold.svg"><metadata
+   id="metadata449"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1033"
+   id="namedview447"
+   showgrid="false"
+   inkscape:zoom="1.2686561"
+   inkscape:cx="428.0872"
+   inkscape:cy="309.88923"
+   inkscape:window-x="-4"
+   inkscape:window-y="-4"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" />
+ <defs
+   class="ClipPathGroup"
+   id="defs4">
+  <clipPath
+   id="presentation_clip_path"
+   clipPathUnits="userSpaceOnUse">
+   <rect
+   x="0"
+   y="0"
+   width="28000"
+   height="21000"
+   id="rect7" />
+  </clipPath>
+ 
+  
+ 
+   
+  
+    
+   
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+    
+      
+     </defs>
+ <defs
+   class="TextShapeIndex"
+   id="defs9">
+  <g
+   ooo:slide="id1"
+   ooo:id-list="id6 id7 id8 id9 id10 id11 id12 id13 id14 id15 id16 id17 id18 id19 id20 id21 id22 id23 id24 id25 id26 id27 id28 id29 id30 id31 id32 id33 id34 id35 id36 id37"
+   id="g11" />
+ </defs>
+ <defs
+   class="EmbeddedBulletChars"
+   id="defs13">
+  <g
+   id="bullet-char-template(57356)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 580,1141 L 1163,571 580,0 -4,571 580,1141 Z"
+   id="path16" />
+  </g>
+  <g
+   id="bullet-char-template(57354)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 8,1128 L 1137,1128 1137,0 8,0 8,1128 Z"
+   id="path19" />
+  </g>
+  <g
+   id="bullet-char-template(10146)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 174,0 L 602,739 174,1481 1456,739 174,0 Z M 1358,739 L 309,1346 659,739 1358,739 Z"
+   id="path22" />
+  </g>
+  <g
+   id="bullet-char-template(10132)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 2015,739 L 1276,0 717,0 1260,543 174,543 174,936 1260,936 717,1481 1274,1481 2015,739 Z"
+   id="path25" />
+  </g>
+  <g
+   id="bullet-char-template(10007)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 0,-2 C -7,14 -16,27 -25,37 L 356,567 C 262,823 215,952 215,954 215,979 228,992 255,992 264,992 276,990 289,987 310,991 331,999 354,1012 L 381,999 492,748 772,1049 836,1024 860,1049 C 881,1039 901,1025 922,1006 886,937 835,863 770,784 769,783 710,716 594,584 L 774,223 C 774,196 753,168 711,139 L 727,119 C 717,90 699,76 672,76 641,76 570,178 457,381 L 164,-76 C 142,-110 111,-127 72,-127 30,-127 9,-110 8,-76 1,-67 -2,-52 -2,-32 -2,-23 -1,-13 0,-2 Z"
+   id="path28" />
+  </g>
+  <g
+   id="bullet-char-template(10004)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 285,-33 C 182,-33 111,30 74,156 52,228 41,333 41,471 41,549 55,616 82,672 116,743 169,778 240,778 293,778 328,747 346,684 L 369,508 C 377,444 397,411 428,410 L 1163,1116 C 1174,1127 1196,1133 1229,1133 1271,1133 1292,1118 1292,1087 L 1292,965 C 1292,929 1282,901 1262,881 L 442,47 C 390,-6 338,-33 285,-33 Z"
+   id="path31" />
+  </g>
+  <g
+   id="bullet-char-template(9679)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 813,0 C 632,0 489,54 383,161 276,268 223,411 223,592 223,773 276,916 383,1023 489,1130 632,1184 813,1184 992,1184 1136,1130 1245,1023 1353,916 1407,772 1407,592 1407,412 1353,268 1245,161 1136,54 992,0 813,0 Z"
+   id="path34" />
+  </g>
+  <g
+   id="bullet-char-template(8226)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M 346,457 C 273,457 209,483 155,535 101,586 74,649 74,723 74,796 101,859 155,911 209,963 273,989 346,989 419,989 480,963 531,910 582,859 608,796 608,723 608,648 583,586 532,535 482,483 420,457 346,457 Z"
+   id="path37" />
+  </g>
+  <g
+   id="bullet-char-template(8211)"
+   transform="scale(0.00048828125,-0.00048828125)">
+   <path
+   d="M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z"
+   id="path40" />
+  </g>
+ </defs>
+ <defs
+   class="TextEmbeddedBitmaps"
+   id="defs42" />
+ <g
+   id="g44">
+  <g
+   id="id2"
+   class="Master_Slide">
+   <g
+   id="bg-id2"
+   class="Background" />
+   <g
+   id="bo-id2"
+   class="BackgroundObjects">
+    <g
+   class="Date/Time"
+   id="g49">
+     <g
+   id="id3" />
+    </g>
+    <g
+   class="Footer"
+   id="g52">
+     <g
+   id="id4" />
+    </g>
+    <g
+   visibility="hidden"
+   class="Slide_Number"
+   id="g55">
+     <g
+   id="id5">
+      <text
+   class="TextShape"
+   id="text58"><tspan
+     class="TextParagraph"
+     font-family="Arial Unicode MS"
+     font-size="494px"
+     font-weight="400"
+     id="tspan60"><tspan
+       class="TextPosition"
+       x="24530"
+       y="19571"
+       id="tspan62"><tspan
+         class="PlaceholderText"
+         fill="rgb(0,0,0)"
+         stroke="none"
+         id="tspan64">&lt;numéro&gt;</tspan></tspan></tspan></text>
+
+
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+ <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g73"
+   style="fill:#ff0000;fill-opacity:0.39215687">
+      <g
+   id="id6"
+   style="fill:#ff0000;fill-opacity:0.39215687">
+       <path
+   d="m 15400,8300 -11500,0 0,-3100 23000,0 0,3100 -11500,0 z"
+   id="path76"
+   inkscape:connector-curvature="0"
+   style="fill:#ff0000;stroke:none;fill-opacity:0.39215687" />
+       <path
+   d="m 15400,8300 -11500,0 0,-3100 23000,0 0,3100 -11500,0 z"
+   id="path78"
+   inkscape:connector-curvature="0"
+   style="fill:#ff0000;stroke:#808080;fill-opacity:0.39215687" />
+      </g>
+     </g><g
+   id="id7"
+   style="fill:#00ff00;fill-opacity:0.19607843">
+       <path
+   style="fill:#00ff00;stroke:none;fill-opacity:0.19607843"
+   inkscape:connector-curvature="0"
+   id="path83"
+   d="m 15400,16700 -11500,0 0,-5700 23000,0 0,5700 -11500,0 z" />
+       <path
+   style="fill:#00ff00;stroke:#808080;fill-opacity:0.19607843"
+   inkscape:connector-curvature="0"
+   id="path85"
+   d="m 15400,16700 -11500,0 0,-5700 23000,0 0,5700 -11500,0 z" />
+      </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g87"
+   style="fill:#ff6600;fill-opacity:0.39215687">
+      <g
+   id="id8"
+   style="fill:#ff6600;fill-opacity:0.39215687">
+       <path
+   d="m 15400,11000 -11500,0 0,-2700 23000,0 0,2700 -11500,0 z"
+   id="path90"
+   inkscape:connector-curvature="0"
+   style="fill:#ff6600;stroke:none;fill-opacity:0.39215687" />
+       <path
+   d="m 15400,11000 -11500,0 0,-2700 23000,0 0,2700 -11500,0 z"
+   id="path92"
+   inkscape:connector-curvature="0"
+   style="fill:#ff6600;stroke:#808080;fill-opacity:0.39215687" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g94">
+      <g
+   id="id9">
+       <path
+   d="m 3900,16900 0,-12869"
+   id="path97"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000" />
+       <path
+   d="m 3900,3601 -150,450 300,0 -150,-450 z"
+   id="path99"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g101">
+      <g
+   id="id10">
+       <path
+   d="m 2700,16700 23770,0"
+   id="path104"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000" />
+       <path
+   d="m 26900,16700 -450,-150 0,300 450,-150 z"
+   id="path106"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g108"
+   style="fill:#000000;stroke:#000000">
+      <g
+   id="id11"
+   style="fill:#000000;stroke:#000000">
+       <path
+   d="m 1700,8300 25200,0"
+   id="path111"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g113"
+   style="fill:#000000;stroke:#000000">
+      <g
+   id="id12"
+   style="fill:#000000;stroke:#000000">
+       <path
+   d="m 1700,11000 508,0"
+   id="path116"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 2716,11000 508,0"
+   id="path118"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 3732,11000 508,0"
+   id="path120"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 4748,11000 508,0"
+   id="path122"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 5764,11000 508,0"
+   id="path124"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 6780,11000 508,0"
+   id="path126"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 7796,11000 508,0"
+   id="path128"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 8812,11000 508,0"
+   id="path130"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 9828,11000 508,0"
+   id="path132"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 10844,11000 508,0"
+   id="path134"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 11860,11000 508,0"
+   id="path136"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 12876,11000 508,0"
+   id="path138"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 13892,11000 508,0"
+   id="path140"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 14908,11000 508,0"
+   id="path142"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 15924,11000 508,0"
+   id="path144"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 16940,11000 508,0"
+   id="path146"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 17956,11000 508,0"
+   id="path148"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 18972,11000 508,0"
+   id="path150"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 19988,11000 508,0"
+   id="path152"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 21004,11000 508,0"
+   id="path154"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 22020,11000 508,0"
+   id="path156"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 23036,11000 508,0"
+   id="path158"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 24052,11000 508,0"
+   id="path160"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 25068,11000 508,0"
+   id="path162"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 26084,11000 508,0"
+   id="path164"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#000000;stroke-width:100" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g166">
+      <g
+   id="id13">
+       <path
+   d="m 7000,18500 2000,0"
+   id="path169"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000;stroke-width:100" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g171">
+      <g
+   id="id14">
+       <text
+   class="TextShape"
+   id="text174"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan176"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="9150"
+       y="18697"
+       id="tspan178"><tspan
+         id="tspan180"
+         style="fill:#000000;stroke:none">: Error threshold</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g182">
+      <g
+   id="id15">
+       <path
+   d="m 7000,19400 508,0"
+   id="path185"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000;stroke-width:100" />
+       <path
+   d="m 8016,19400 508,0"
+   id="path187"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000;stroke-width:100" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g189">
+      <g
+   id="id16">
+       <text
+   class="TextShape"
+   id="text192"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan194"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="9150"
+       y="19497"
+       id="tspan196"><tspan
+         id="tspan198"
+         style="fill:#000000;stroke:none">: Warning threshold</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g200">
+      <g
+   id="id17">
+       <text
+   class="TextShape"
+   id="text203"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan205"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="350"
+       y="14097"
+       id="tspan207"><tspan
+         id="tspan209"
+         style="fill:#000000;stroke:none">NORMAL</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g211">
+      <g
+   id="id18">
+       <text
+   class="TextShape"
+   id="text214"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan216"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="134"
+       y="9945"
+       id="tspan218"><tspan
+         id="tspan220"
+         style="fill:#000000;stroke:none">WARNING</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g222">
+      <g
+   id="id19">
+       <text
+   class="TextShape"
+   id="text225"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan227"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="550"
+       y="7198"
+       id="tspan229"><tspan
+         id="tspan231"
+         style="fill:#000000;stroke:none">ERROR</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g233">
+      <g
+   id="id20">
+       <text
+   class="TextShape"
+   id="text236"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan238"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="250"
+       y="4734"
+       id="tspan240"><tspan
+         id="tspan242"
+         style="fill:#000000;stroke:none">State :</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g244">
+      <g
+   id="id21">
+       <text
+   class="TextShape"
+   id="text247"><tspan
+     class="TextParagraph"
+     font-size="529px"
+     font-weight="400"
+     id="tspan249"
+     style="font-size:529px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="25850"
+       y="17799"
+       id="tspan251"><tspan
+         id="tspan253"
+         style="fill:#000000;stroke:none">time</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g255">
+      <g
+   id="id22">
+       <text
+   class="TextShape"
+   id="text258"><tspan
+     class="TextParagraph"
+     font-size="529px"
+     font-weight="400"
+     id="tspan260"
+     style="font-size:529px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="294"
+       y="2960"
+       id="tspan262"><tspan
+         id="tspan264"
+         style="fill:#000000;stroke:none">CPU consumption (%)</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g266">
+      <g
+   id="id23">
+       <text
+   class="TextShape"
+   id="text269"><tspan
+     class="TextParagraph"
+     font-size="423px"
+     font-weight="400"
+     id="tspan271"
+     style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="3151"
+       y="16706"
+       id="tspan273"><tspan
+         id="tspan275"
+         style="fill:#000000;stroke:none">0</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g277">
+      <g
+   id="id24">
+       <text
+   class="TextShape"
+   id="text280"><tspan
+     class="TextParagraph"
+     font-size="423px"
+     font-weight="400"
+     id="tspan282"
+     style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="3152"
+       y="14007"
+       id="tspan284"><tspan
+         id="tspan286"
+         style="fill:#000000;stroke:none">25</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g288">
+      <g
+   id="id25">
+       <text
+   class="TextShape"
+   id="text291"><tspan
+     class="TextParagraph"
+     font-size="423px"
+     font-weight="400"
+     id="tspan293"
+     style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="3152"
+       y="11307"
+       id="tspan295"><tspan
+         id="tspan297"
+         style="fill:#000000;stroke:none">50</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g299">
+      <g
+   id="id26">
+       <text
+   class="TextShape"
+   id="text302"><tspan
+     class="TextParagraph"
+     font-size="423px"
+     font-weight="400"
+     id="tspan304"
+     style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="3150"
+       y="8707"
+       id="tspan306"><tspan
+         id="tspan308"
+         style="fill:#000000;stroke:none">75</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g310">
+      <g
+   id="id27">
+       <text
+   class="TextShape"
+   id="text313"><tspan
+     class="TextParagraph"
+     font-size="423px"
+     font-weight="400"
+     id="tspan315"
+     style="font-size:423px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="2850"
+       y="5608"
+       id="tspan317"><tspan
+         id="tspan319"
+         style="fill:#000000;stroke:none">100</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.OpenBezierShape"
+   id="g321"
+   style="stroke-width:56.44444488;stroke-miterlimit:4;stroke-dasharray:none">
+      <g
+   id="id28"
+   style="stroke-width:56.44444488;stroke-miterlimit:4;stroke-dasharray:none">
+       <path
+   d="m 3985,16646 c 178,-428 618,-611 938,-905 293,-269 646,-512 1072,-569 377,-51 669,187 1038,134 378,-55 609,311 1005,268 344,-38 694,-20 1038,32 368,57 763,-81 1005,-400 251,-331 575,-614 971,-804 348,-167 706,-259 1072,-335 341,-70 692,-13 1038,-34 477,-29 482,-578 770,-837 295,-266 271,-674 469,-1005 187,-312 223,-690 234,-1071 10,-360 221,-689 302,-1039 98,-424 524,-578 871,-602 363,-25 773,15 1004,434 215,391 602,622 905,972 268,310 693,443 1038,670 301,199 669,129 1005,100 473,-41 595,-542 870,-870 229,-273 352,-613 369,-1005 16,-376 167,-736 233,-1105 70,-379 247,-724 403,-1072 156,-347 287,-713 536,-1005 l 335,-201 335,-67 268,-67"
+   id="path324"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000;stroke-width:56.44444488;stroke-miterlimit:4;stroke-dasharray:none" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.LineShape"
+   id="g326">
+      <g
+   id="id29">
+       <path
+   d="m 23109,6263 0,10383"
+   id="path329"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#000000" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g331">
+      <g
+   id="id30">
+       <path
+   d="m 23200,5600 -140,459 -460,0 373,286 -140,456 367,-280 367,280 -140,-456 374,-286 -461,0 -140,-459 0,0 z m -600,0 0,0 z m 1201,1201 0,0 z"
+   id="path334"
+   inkscape:connector-curvature="0"
+   style="fill:#cfe7f5;stroke:none" />
+       <path
+   d="m 23200,5600 -140,459 -460,0 373,286 -140,456 367,-280 367,280 -140,-456 374,-286 -461,0 -140,-459 0,0 z"
+   id="path336"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+       <path
+   d="m 22600,5600 0,0 z"
+   id="path338"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+       <path
+   d="m 23801,6801 0,0 z"
+   id="path340"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g342">
+      <g
+   id="id31">
+       <path
+   d="m 22463,400 c -532,0 -1063,299 -1063,598 l 0,448 0,449 0,610 0,449 0,448 c 0,299 531,598 1063,598 l 841,1951 754,-1951 1084,0 797,0 798,0 c 532,0 1064,-299 1064,-598 l 0,-448 0,-449 0,-610 0,-449 0,-448 c 0,-299 -532,-598 -1064,-598 l -798,0 -797,0 -1084,0 -797,0 -798,0 z m -1063,0 0,0 z m 6401,3601 0,0 z"
+   id="path345"
+   inkscape:connector-curvature="0"
+   style="fill:#cfe7f5;stroke:none" />
+       <path
+   d="m 22463,400 c -532,0 -1063,299 -1063,598 l 0,448 0,449 0,610 0,449 0,448 c 0,299 531,598 1063,598 l 841,1951 754,-1951 1084,0 797,0 798,0 c 532,0 1064,-299 1064,-598 l 0,-448 0,-449 0,-610 0,-449 0,-448 c 0,-299 -532,-598 -1064,-598 l -798,0 -797,0 -1084,0 -797,0 -798,0 z"
+   id="path347"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+       <path
+   d="m 21400,400 0,0 z"
+   id="path349"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+       <path
+   d="m 27801,4001 0,0 z"
+   id="path351"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#808080" />
+       <text
+   class="TextShape"
+   id="text353"><tspan
+     class="TextParagraph"
+     font-size="494px"
+     font-weight="400"
+     id="tspan355"
+     style="font-size:494px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="21797"
+       y="1535"
+       id="tspan357"><tspan
+         id="tspan359"
+         style="fill:#000000;stroke:none">An Authority takes action </tspan></tspan></tspan><tspan
+     class="TextParagraph"
+     font-size="494px"
+     font-weight="400"
+     id="tspan361"
+     style="font-size:494px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="21797"
+       y="2090"
+       id="tspan363"><tspan
+         id="tspan365"
+         style="fill:#000000;stroke:none">in order to preserve </tspan></tspan></tspan><tspan
+     class="TextParagraph"
+     font-size="494px"
+     font-weight="400"
+     id="tspan367"
+     style="font-size:494px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="21797"
+       y="2645"
+       id="tspan369"><tspan
+         id="tspan371"
+         style="fill:#000000;stroke:none">the QOS :</tspan></tspan></tspan><tspan
+     class="TextParagraph"
+     font-size="494px"
+     font-weight="400"
+     id="tspan373"
+     style="font-size:494px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="21797"
+       y="3200"
+       id="tspan375"><tspan
+         id="tspan377"
+         style="fill:#000000;stroke:none"> </tspan><tspan
+         id="tspan379"
+         style="fill:#000000;stroke:none">here it stops the bundle.</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g381"
+   style="fill:#000000">
+      <g
+   id="id32"
+   style="fill:#000000">
+       <path
+   d="m 15600,18500 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z"
+   id="path384"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+       <path
+   d="m 15600,18500 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z"
+   id="path386"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 15400,18500 0,0 z"
+   id="path388"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 15801,18901 0,0 z"
+   id="path390"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g392"
+   style="fill:#000000">
+      <g
+   id="id33"
+   style="fill:#000000">
+       <path
+   d="m 14700,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z"
+   id="path395"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+       <path
+   d="m 14700,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z"
+   id="path397"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 14500,10800 0,0 z"
+   id="path399"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 14901,11201 0,0 z"
+   id="path401"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g403"
+   style="fill:#000000">
+      <g
+   id="id34"
+   style="fill:#000000">
+       <path
+   d="m 17800,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z"
+   id="path406"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+       <path
+   d="m 17800,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z"
+   id="path408"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 17600,10800 0,0 z"
+   id="path410"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 18001,11201 0,0 z"
+   id="path412"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g414"
+   style="fill:#000000">
+      <g
+   id="id35"
+   style="fill:#000000">
+       <path
+   d="m 20500,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z"
+   id="path417"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+       <path
+   d="m 20500,10800 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z"
+   id="path419"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 20300,10800 0,0 z"
+   id="path421"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 20701,11201 0,0 z"
+   id="path423"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.CustomShape"
+   id="g425"
+   style="fill:#000000">
+      <g
+   id="id36"
+   style="fill:#000000">
+       <path
+   d="m 21300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z m -200,0 0,0 z m 401,401 0,0 z"
+   id="path428"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:none" />
+       <path
+   d="m 21300,8100 c 113,0 200,87 200,200 0,113 -87,200 -200,200 -113,0 -200,-87 -200,-200 0,-113 87,-200 200,-200 z"
+   id="path430"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 21100,8100 0,0 z"
+   id="path432"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+       <path
+   d="m 21501,8501 0,0 z"
+   id="path434"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;stroke:#808080" />
+      </g>
+     </g><g
+   class="com.sun.star.drawing.TextShape"
+   id="g436">
+      <g
+   id="id37">
+       <text
+   class="TextShape"
+   id="text439"><tspan
+     class="TextParagraph"
+     font-size="635px"
+     font-weight="400"
+     id="tspan441"
+     style="font-size:635px;font-weight:400;font-family:'Arial Unicode MS'"><tspan
+       class="TextPosition"
+       x="16051"
+       y="18898"
+       id="tspan443"><tspan
+         id="tspan445"
+         style="fill:#000000;stroke:none">: Events are emitted</tspan></tspan></tspan></text>
+
+
+      </g>
+     </g>
+</svg>

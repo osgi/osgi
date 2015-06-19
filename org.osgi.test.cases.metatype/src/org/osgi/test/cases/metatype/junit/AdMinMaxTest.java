@@ -1,5 +1,5 @@
 /*
-* Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+* Copyright (c) OSGi Alliance (2010, 2014). All Rights Reserved.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -170,17 +170,21 @@ public class AdMinMaxTest extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("tb3.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
 		ObjectClassDefinition ocd = mti.getObjectClassDefinition("minMax", null);
-		AttributeDefinition[] ads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
-		for (int i = 0; i < ads.length; i++) {
-			this.ads.put(ads[i].getID(), ads[i]);
+		AttributeDefinition[] lads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		for (int i = 0; i < lads.length; i++) {
+			this.ads.put(lads[i].getID(), lads[i]);
 		}
 	}
 	
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb3.jar");
+	}
+
 	protected void tearDown() throws Exception {
 		getContext().ungetService(ref);
 		bundle.stop();

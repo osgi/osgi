@@ -19,7 +19,7 @@
   <section>
     <title>Introduction</title>
 
-    <para>Many bundles need to save some data persistently--in other words,
+    <para>Many bundles need to save some data persistently - in other words,
     the data is required to survive the stopping and restarting of the bundle
     and OSGi Framework. In some cases, the data is specific to a particular
     user. For example, imagine a bundle that implements some kind of game.
@@ -87,7 +87,7 @@
       <code>BackingStoreException</code>.</para>
 
       <para><emphasis>This service only supports the storage of scalar values
-      and byte arrays. </emphasis>It is not intended for storing large data
+      and byte arrays</emphasis>. It is not intended for storing large data
       objects like documents or images. No standard limits are placed on the
       size of data objects which can be stored, but implementations are
       expected to be optimized for the handling of small objects.</para>
@@ -533,7 +533,7 @@
     </itemizedlist>
 
     <para>The <code>sync</code> method will first flush, and then ensure that
-    any changes that have been made to the current node and its descendents in
+    any changes that have been made to the current node and its descendants in
     the back-end store (by some other process) take effect. For example, it
     could fetch all the descendants into a local cache, or it could clear all
     the descendants from the cache so that they will be read from the back-end

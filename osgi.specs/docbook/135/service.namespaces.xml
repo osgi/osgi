@@ -12,7 +12,7 @@
   <title>Common Namespaces Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.namespaces-version">Version 1.0</releaseinfo>
+    <releaseinfo xml:id="service.namespaces-version">Version 1.1</releaseinfo>
   </info>
 
   <section>
@@ -75,9 +75,24 @@
         linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>Versioning</title>
+
+      <para>In general, capabilities in a Namespace are versioned using
+      Semantic Versioning. See <xref
+      linkend="service.namespaces-coresemver"/>. Therefore, a capability will
+      specify a single version and a requirement will specify a version range.
+      See <xref linkend="service.namespaces-osgi.extender.namespace"
+      xrefstyle="template:%t"/> for an example.</para>
+
+      <para>For some Namespaces, capabilities are not versioned using Semantic
+      Versioning. The versioning scheme used in those Namespaces will be
+      described in the specification for the Namespace.</para>
+    </section>
   </section>
 
-  <section xml:id="i1772810">
+  <section xml:id="service.namespaces-osgi.extender.namespace">
     <title>osgi.extender Namespace</title>
 
     <para>An <emphasis>Extender</emphasis> is a bundle that uses the life
@@ -85,8 +100,8 @@
     extend that bundle's functionality when that bundle is active. It can use
     metadata (headers, or files inside the extendee) to control its
     functionality. Extendees therefore have a dependency on the Extender that
-    can be modeled with the <code>osgi.extender</code> namespace. The
-    definition for this namespace can be found in the following table and the
+    can be modeled with the <code>osgi.extender</code> Namespace. The
+    definition for this Namespace can be found in the following table and the
     <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"
     xrefstyle="hyperlink"/> class.</para>
 
@@ -138,7 +153,7 @@
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
             <code>org.acme.foo</code>. The OSGi Alliance reserves names that
-            start with <code>osgi.</code>.</para></entry>
+            start with "<code>osgi.</code>".</para></entry>
           </row>
 
           <row>
@@ -163,25 +178,63 @@
     should specify the values for these attributes. Extenders that provide
     such a capability should list the packages that they use in their
     specification in the <code>uses</code> directive of that capability to
-    ensure class space consistency. Extenders can extend an extendee bundle
-    even if that bundle does not require the extender unless the specification
-    explicitly forbids this. For example an OSGi Blueprint Container could
-    declare its capability with the following manifest header:</para>
+    ensure class space consistency. For example a Declarative Services
+    implementation could declare its capability with the following manifest
+    header:</para>
 
     <programlisting>Provide-Capability: osgi.extender; 
-   osgi.extender="osgi.blueprint";
-   uses:=
-     "org.osgi.service.blueprint.container,org.osgi.service.blueprint.reflect";
-   version:Version="1.0"</programlisting>
+   osgi.extender="osgi.component";
+   uses:="org.osgi.service.component";
+   version:Version="1.3"</programlisting>
 
-    <para>A bundle that depends on a Blueprint Container could require such an
-    extender with the following manifest header:</para>
+    <para>A bundle that depends on a Declarative Services implementation
+    should require such an extender with the following manifest header:</para>
 
     <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.blueprint)(version&gt;=1.0))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3)(!(version&gt;=2.0)))"</programlisting>
+
+    <para>Extenders can extend an extendee bundle even if that bundle does not
+    require the extender, unless the extender's specification explicitly
+    forbids this. It is recommended that an extender should only extend a
+    bundle if one of the following is true:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The bundle's wiring has a required wire for at least one
+        <code>osgi.extender</code> capability with the name of the extender
+        and the first of these required wires is wired to the extender.</para>
+      </listitem>
+
+      <listitem>
+        <para>The bundle's wiring has no required wire for an
+        <code>osgi.extender</code> capability with the name of the
+        extender.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Otherwise, the extender should not extend the bundle.</para>
+
+    <section>
+      <title>Extenders and Framework Hooks</title>
+
+      <para>The Framework provides a number of hooks that allow groups of
+      bundles to be scoped. For example, the <emphasis>Subsystem Service
+      Specification</emphasis>. An extender may want to extend the complete
+      set of bundles installed in the Framework even when extendee bundles are
+      hidden from the extender. The system bundle context provides a complete
+      view of the bundles and services available in the Framework even if
+      Framework hooks are used to scope groups of bundles. The system bundle
+      context can be used by an extender to track all bundles installed in the
+      Framework regardless of how Framework hooks are used to scope groups of
+      bundles. This is useful in scenarios where several scoped groups contain
+      bundles that require an extender. Instead of requiring an extender to be
+      installed in each scoped group of bundles, a single extender that uses
+      the system bundle context to track extendees can be installed to extend
+      all scoped groups of bundles.</para>
+    </section>
   </section>
 
-  <section>
+  <section xml:id="service.namespaces-osgi.contract.namespace">
     <title>osgi.contract Namespace</title>
 
     <para>Products or technologies often have a number of related APIs
@@ -201,7 +254,24 @@
     binds it to a set of packages with the uses constraint. The bundle that
     declares this contract must then import or export each of the listed
     packages with the correct versioning. Such a bundle is called a
-    <emphasis>contract bundle</emphasis>.</para>
+    <emphasis>contract bundle</emphasis>. The contract bundle must ensure that
+    it is bound to the correct versions of the packages contained within the
+    contract it is providing. If the contract bundle imports the packages
+    which are specified as part of the contract then proper matching
+    attributes must be used to make sure it is bound to the correct versions
+    of the packages.</para>
+
+    <para>Additionally, the <code>osgi.contract</code> Namespace can be used
+    in cases where API is defined by parties that do not use Semantic
+    Versioning. In those cases, the version of the exported package can be
+    unclear and so it is difficult to specify a meaningful version range for
+    the package import. In such cases, importing the package
+    <emphasis>without</emphasis> specifying a version range and specifying a
+    requirement in the <code>osgi.contract</code> Namespace can provide a way
+    to create portable bundles that use the API. OSGi has defined contract
+    names for a number of such APIs. See <xref
+    linkend="service.namespaces-portable.java.contracts.ref"/> for more
+    information.</para>
 
     <para>An <code>osgi.contract</code> capability can then be used in the
     following ways:</para>
@@ -236,15 +306,35 @@
     osgi.contract=JavaServlet;
     version:Version=2.5;
     uses:="javax.servlet,javax.servlet.http"
-Import-Package:
-    javax.servlet;      version="[1.0,2)",
-    javax.servlet.http; version="[1.0,2)"</programlisting>
+Export-Package:
+    javax.servlet;      version="2.5",
+    javax.servlet.http; version="2.5"</programlisting>
+
+    <para>A contract may support multiple versions of a named contract. Such a
+    contract must use a single capability for the contract name that specifies
+    a list of all the versions that are supported. For example, the
+    JavaServlet 3.1 contract capability would be specified with the
+    following:</para>
+
+    <programlisting>Provide-Capability: osgi.contract;
+    osgi.contract=JavaServlet;
+    version:List&lt;Version&gt;="2.5,3.0,3.1";
+    uses:=
+        "javax.servlet,
+        javax.servlet.annotation,
+        javax.servlet.descriptor,
+        javax.servlet.http"
+Export-Package:
+    javax.servlet;            version="3.1",
+    javax.servlet.annotation; version="3.1",
+    javax.servlet.descriptor; version="3.1",
+    javax.servlet.http;       version="3.1"</programlisting>
 
     <para>A client bundle that requires the Servlet 2.5 contract can then have
     the following manifest:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))",
+    filter:="(&amp;(osgi.contract=JavaServlet)(version=2.5))",
 Import-Package:
     javax.servlet, javax.servlet.http</programlisting>
 
@@ -262,7 +352,7 @@ Import-Package:
     include an attribute on the exports. For example:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))"
+    filter:="(&amp;(osgi.contract=JavaServlet)(version=2.5))"
 DynamicImport-Package: 
     *;JavaServlet=contract</programlisting>
 
@@ -274,11 +364,8 @@ DynamicImport-Package:
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
     linkend="org.osgi.namespace.contract.ContractNamespace"
-    xrefstyle="hyperlink"/> class.</para>
-
-    <para>
-        <remark>Provide a pointer to the RFC180-defined contracts on the website.</remark>    
-    </para>
+    xrefstyle="hyperlink"/> class. See <xref
+    linkend="service.namespaces-portable.java.contracts.ref"/>.</para>
 
     <table pgwide="1">
       <title>osgi.contract Namespace</title>
@@ -324,7 +411,7 @@ DynamicImport-Package:
 
             <entry><code>symbolic-name</code></entry>
 
-            <entry><para>A symbolic name for the contract. </para></entry>
+            <entry><para>A symbolic name for the contract.</para></entry>
           </row>
 
           <row>
@@ -334,11 +421,14 @@ DynamicImport-Package:
 
             <entry><code>O</code></entry>
 
-            <entry><code>Version</code></entry>
+            <entry><code>Version+</code></entry>
 
             <entry><code>version</code></entry>
 
-            <entry><para>A version for the contract</para></entry>
+            <entry><para>A list of versions for the contract. A contract that
+            supports multiple versions must use a single capability with a
+            version attribute that lists all versions
+            supported.</para></entry>
           </row>
 
           <row>
@@ -361,6 +451,24 @@ DynamicImport-Package:
         </tbody>
       </tgroup>
     </table>
+
+    <section>
+      <title>Versioning</title>
+
+      <para>As the <code>osgi.contract</code> Namespace follows the versioning
+      of the associated contract, capabilities in this Namespace are
+      <emphasis>not</emphasis> semantically versioned. The associated
+      contracts are often versioned using marketing or other versioning
+      schemes and therefore the version number cannot be used as an indication
+      of backwards compatibility.</para>
+
+      <para>As a result, capabilities in the <code>osgi.contract</code>
+      Namespace use a <emphasis>discrete</emphasis> versioning scheme. In such
+      a versioning scheme, each version is treated as separate without any
+      implied relation to another version. A capability lists
+      <emphasis>all</emphasis> compatible versions. A requirement only selects
+      a single version.</para>
+    </section>
   </section>
 
   <section xml:id="service.namespaces-osgi.service.namespace">
@@ -382,8 +490,8 @@ DynamicImport-Package:
       <listitem>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
-        in the Repository model, see <xref
-        linkend="service.repository"/>.</para>
+        in the Repository model, see the <emphasis>Repository Service
+        Specification</emphasis>.</para>
       </listitem>
     </itemizedlist>
 
@@ -396,7 +504,7 @@ DynamicImport-Package:
 
     <para>See the following table and the <xref
     linkend="org.osgi.namespace.service.ServiceNamespace"
-    xrefstyle="hyperlink"/> class for this namespace definition.</para>
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
 
     <table pgwide="1">
       <title>osgi.service Namespace</title>
@@ -444,7 +552,7 @@ DynamicImport-Package:
             qname)*</code></para></entry>
 
             <entry><para>The fully qualified name of the object class of the
-            service. </para></entry>
+            service.</para></entry>
           </row>
 
           <row>
@@ -460,8 +568,145 @@ DynamicImport-Package:
 
             <entry><para>Custom attributes that will be provided as service
             properties if they do not conflict with the service properties
-            rules and are not private service properties (start with a full
+            rules and are not private service properties. Private properties
+            start with a full
             stop (<code>'.' \u002E</code>).</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <section>
+      <title>Versioning</title>
+
+      <para>Capabilities in the <code>osgi.service</code> Namespace are
+      <emphasis>not</emphasis> versioned. The package of a service's object
+      class is generally versioned and the package can be associated with the
+      capability via the <code>uses</code> directive.</para>
+    </section>
+  </section>
+
+  <section xml:id="service.namespaces-osgi.implementation.namespace">
+    <title>osgi.implementation Namespace</title>
+
+    <para>The Implementation Namespace is intended to be used for:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Preventing a bundle from resolving if there is not at least one
+        bundle that provides an implementation of the specified specification
+        or contract.</para>
+      </listitem>
+
+      <listitem>
+        <para>Providing uses constraints to ensure that bundles which require
+        an implementation of a specification or contract will be wired
+        appropriately by the framework.</para>
+      </listitem>
+
+      <listitem>
+        <para>Providing a hint to the provisioning agent that the bundle
+        requires a given specification or contract implementation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Used as a general capability Namespace for specifications or
+        contracts to express their provided function in the Repository model,
+        see the <emphasis>Repository Service Specification</emphasis>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A bundle providing this capability indicates that it implements a
+    specification or contract with the specified name and version. For
+    example, the <emphasis>Asynchronous Service Specification</emphasis> would
+    provide the following capability:</para>
+
+    <programlisting>Provide-Capability: osgi.implementation;
+    osgi.implementation="osgi.async";
+    version:Version="1.0";
+    uses:="org.osgi.service.async"</programlisting>
+
+    <para>See the following table and the <xref
+    linkend="org.osgi.namespace.implementation.ImplementationNamespace"
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
+
+    <table pgwide="1">
+      <title>osgi.implementation Namespace</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="3.5*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="2.5*"/>
+
+        <colspec colnum="6" colwidth="7*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.implementation</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>String</code></para></entry>
+
+            <entry><para><code>symbolic-name</code></para></entry>
+
+            <entry><para>The symbolic name of the specification or contract.
+            The OSGi Alliance reserves names that start with
+            "<code>osgi.</code>".</para></entry>
+          </row>
+
+          <row>
+            <entry><code>version</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>Version</code></para></entry>
+
+            <entry><para><code>version</code></para></entry>
+
+            <entry><para>The version of the implemented specification or
+            contract. </para></entry>
+          </row>
+
+          <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>O</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Custom attributes that can be used to further
+            identify the implementation</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -474,12 +719,19 @@ DynamicImport-Package:
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.service.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.implementation.xml"/>
+
   <section>
     <title>References</title>
 
     <bibliolist>
       <bibliomixed xml:id="i1772882"><title>Specification
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.namespaces-portable.java.contracts.ref"><title>Portable
+      Java Contract
+      Definitions</title>http://www.osgi.org/Specifications/ReferenceContract</bibliomixed>
 
       <bibliomixed xml:id="i1777721"><title>Resources API
       Specification</title>OSGi Core, Chapter 6 Resource API
@@ -494,6 +746,34 @@ DynamicImport-Package:
 
       <bibliomixed xml:id="i1777884"><title>Common Headers</title>OSGi Core,
       Chapter 3, Common Header Syntax</bibliomixed>
+
+      <bibliomixed xml:id="service.namespaces-coresemver"><title>Semantic
+      Versioning</title>OSGi Core, Chapter 3, Semantic
+      Versioning</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified osgi.extender Namespace and added a section on the
+        relationship with framework hooks.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified osgi.contract Namespace and examples.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref
+        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified versioning of capabilities in a namespace.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

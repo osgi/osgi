@@ -333,7 +333,7 @@
               </itemizedlist><para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
-            qualified intents. See <xref linkend="i1693415"/>. this property
+            qualified intents. See <xref linkend="i1693415"/>. This property
             is optional for registering bundles.</para></entry>
           </row>
 
@@ -490,7 +490,7 @@
       starting with a full stop (<code>'.' \u002E</code>)) must be listed on
       the imported service if they use the basic service property types. If
       the service property cannot be communicated because, for example, it
-      uses a type that can not be marshalled by the distribution provider then
+      uses a type that can not be marshaled by the distribution provider then
       the distribution provider must ignore this property.</para>
 
       <para>The <code>service.imported</code> property indicates that a
@@ -625,13 +625,12 @@ tracker.open();</programlisting>
     <section>
       <title>Remote Services Life Cycle</title>
 
-      <para>If a distribution provider has distributed a service, it must
-      closely track any modifications on the exported service. If there is a
-      corresponding imported service, it must closely match any modified
-      service properties in the way that was specified for the registration.
-      If the exported service is unregistered, the endpoint must be withdrawn
-      as soon as possible. If there is a corresponding imported service, then
-      this imported service must also be unregistered expediently.</para>
+      <para>A distributed service must closely track any modifications on the
+      corresponding service registration. If service properties are modified,
+      these modifications should be propagated to the distributed service and
+      associated service proxies. If the exported service is unregistered, the
+      endpoint must be withdrawn as soon as possible and any imported service
+      proxies unregistered.</para>
     </section>
 
     <section>

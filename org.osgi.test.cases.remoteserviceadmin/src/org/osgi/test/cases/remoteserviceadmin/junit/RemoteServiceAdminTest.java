@@ -15,9 +15,6 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +46,8 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
+import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
@@ -127,7 +126,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 		try {
 			// reconstruct the endpoint description in version 1.0.0
-			EndpointDescription endpoint = reconstructEndpoint("1.0.0");
+			EndpointDescription endpoint = Utils.reconstructEndpoint("1.0.0",
+					this);
 			// gather all the service and exporting intents
 			List<String> endpointIntents = endpoint.getIntents();
 			assertNotNull(endpointIntents);
@@ -162,7 +162,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 					"org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION",
 					"org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION",
 			"org/osgi/service/remoteserviceadmin/IMPORT_ERROR"});
-			TestEventHandler eventHandler = new TestEventHandler();
+			TestEventHandler eventHandler = new TestEventHandler(timeout);
 			registerService(EventHandler.class.getName(), eventHandler, props);
 
 			//
@@ -234,7 +234,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			//
 			// 122.8.1 verify that import notification was sent to EventHandler
 			//
-			Event event = eventHandler.getNextEvent();
+			Event event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 
@@ -276,9 +277,13 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertNotNull(importRef2);
 			ServiceReference sref2 = importRef.getImportedService();
 			assertNotNull(sref2);
-			assertSame("122.4.2: ImportRegistration has to point to the same proxy service", sref, sref2);
+			// Bug 2642, It is not required anymore that proxy services are
+			// shared among multiple imports
+			// assertSame("122.4.2: ImportRegistration has to point to the same proxy service",
+			// sref, sref2);
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -342,7 +347,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			assertNull(importReference.getImportedEndpoint());
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -372,7 +378,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			assertNull(importReference.getImportedEndpoint());
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -440,7 +447,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 		try {
 			// reconstruct the endpoint description in version 1.0.0
-			EndpointDescription endpoint = reconstructEndpoint("1.0.0");
+			EndpointDescription endpoint = Utils.reconstructEndpoint("1.0.0",
+					this);
 			assertNotNull(endpoint);
 
 			// import version 1.0.0
@@ -449,7 +457,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertNull(importReg1.getException());
 
 			// now import version 2.0.0
-			endpoint = reconstructEndpoint("2.0.0");
+			endpoint = Utils.reconstructEndpoint("2.0.0", this);
 			assertNotNull(endpoint);
 
 			ImportRegistration importReg2 = rsa.importService(endpoint);
@@ -493,39 +501,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		}
 	}
 
-	/**
-	 * @return EndpointDescription reconstructed from a HEX string passed
-	 *         by the exporting bundle in the child framework
-	 * @throws IOException 
-	 */
-	private EndpointDescription reconstructEndpoint(String version) throws IOException {
-		String propstr = getProperty("RSA_TCK.EndpointDescription_" + version
-				+ "_0");
-		
-		// see org.osgi.test.cases.remoteserviceadmin.tb2.Activator#exportEndpointDescription()
-		// decode byte[] from hex
-		byte[] ba = new byte[propstr.length()/2];
-		
-		for (int x=0; x < ba.length; ++x) {
-            int sp = x*2;
-            int a = Integer.parseInt(""+propstr.charAt(sp),16);
-            int b = Integer.parseInt(""+propstr.charAt(sp+1),16);
-            ba[x] = (byte)(a*16 + b);
-		}
-		
-		ByteArrayInputStream bis = new ByteArrayInputStream(ba);
-		ObjectInputStream ois = new ObjectInputStream(bis);
-		
-		Map<String,Object> props = null;
-		try {
-			props = (Map<String, Object>)ois.readObject();
-		} catch (ClassNotFoundException e) {e.printStackTrace();}
-		
-		assert(props!=null);
-		
-		return new EndpointDescription(props);
-	}
 	
+
 	class TestService implements A, B, Serializable {
 		/**
 		 * 
@@ -549,11 +526,11 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	}
 
 	/**
-	 * RemoteServiceAdminListener implementation, which collects and
-	 * returns the received events in order.
+	 * RemoteServiceAdminListener implementation, which collects and returns the
+	 * received events in order.
 	 * 
 	 * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
-	 *
+	 * 
 	 */
 	class TestRemoteServiceAdminListener implements RemoteServiceAdminListener {
 		private final LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
@@ -566,56 +543,26 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			eventlist.add(event);
 			sem.signal();
 		}
-		
+
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
 				sem.waitForSignal(timeout);
 			} catch (InterruptedException e1) {
 				return null;
 			}
-			
+
 			try {
 				return eventlist.removeFirst();
 			} catch (NoSuchElementException e) {
 				return null;
 			}
 		}
-		
+
 		int getEventCount() {
 			return eventlist.size();
 		}
 	}
 	
-	class TestEventHandler implements EventHandler {
-		private final LinkedList<Event> eventlist = new LinkedList<Event>();
-		private final Semaphore sem = new Semaphore(0);
 
-
-		/**
-		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
-		 */
-		public void handleEvent(Event event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-		
-		Event getNextEvent() {
-			try {
-				sem.waitForSignal(timeout);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-			
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-		
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
 
 }

@@ -20,7 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.ServerSocket;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +45,19 @@ import org.osgi.test.support.OSGiTestCase;
  *
  */
 public abstract class MultiFrameworkTestCase extends OSGiTestCase {
+
+	/**
+	 * Project name. Used as a namespace for CT (child) framework specific run
+	 * properties.
+	 */
+	private static final String PROJECT_NAME = "org.osgi.test.cases.remoteservices";
+
+	/**
+	 * Magic value. Properties with this value will be replaced by a socket port
+	 * number that is currently free.
+	 */
+	private static final String FREE_PORT = "@@FREE_PORT@@";
+
 	private static final String STORAGEROOT = "org.osgi.test.cases.remoteservices.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
@@ -66,8 +83,10 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
-		Map configuration = getConfiguration();
+		Map<String, Object> configuration = getFrameworkConfiguration();
+		configuration.putAll(getConfiguration());
 		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
+		processFreePortProperties(configuration);
 		
 		framework = createFramework(configuration);
 		initFramework();
@@ -76,6 +95,66 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 		installFramework();
 	}
 
+	/**
+	 * Load the default framework properties
+	 * 
+	 * @return The map
+	 */
+	private Map<String, Object> getFrameworkConfiguration() {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		String fwproperties = System.getProperty(PROJECT_NAME
+				+ ".framework.properties");
+		if (fwproperties != null) {
+			for (StringTokenizer tok = new StringTokenizer(fwproperties, ","); tok
+					.hasMoreTokens();) {
+				String fwproperty = tok.nextToken();
+				StringTokenizer equaltok = new StringTokenizer(
+						fwproperty.trim(), "=");
+				String name = equaltok.nextToken().trim();
+				String value = null;
+				try {
+					value = URLDecoder.decode(equaltok.nextToken().trim(),
+							"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// Valid Java implementations must support UTF-8
+					throw new AssertionError();
+				}
+				properties.put(name, value);
+			}
+		}
+		return properties;
+	}
+
+	/**
+	 * Substitute the free port placeholder for a free port
+	 * 
+	 * @param properties
+	 */
+	private void processFreePortProperties(Map<String, Object> properties) {
+		String freePort = getFreePort();
+		for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+				entry.setValue(freePort);
+			}
+		}
+	}
+
+	/**
+	 * @return a free socket port
+	 */
+	private String getFreePort() {
+		try {
+			ServerSocket ss = new ServerSocket(0);
+			String port = "" + ss.getLocalPort();
+			ss.close();
+			System.out.println("Found free port " + port);
+			return port;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * @see junit.framework.TestCase#tearDown()

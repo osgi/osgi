@@ -1,0 +1,14 @@
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Name: tb1
+Bundle-Activator: ${p}.tb.Activator
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Import-Package: *
+Private-Package						= \
+	${p}.tb.*
+
+Include-Resource: {OSGI-INF/permissions.perm=perms/tb1.perm}
+ 

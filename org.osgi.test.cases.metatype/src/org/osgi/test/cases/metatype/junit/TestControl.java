@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -69,7 +69,11 @@ public class TestControl extends DefaultTestBundleControl {
 				ref);
 		mts = (MetaTypeService) getContext().getService(ref);
 		
-		bundle = installBundle("tb1.jar");
+		bundle = getTestBundle();
+	}
+
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb1.jar");
 	}
 
 	/**
@@ -789,7 +793,8 @@ public class TestControl extends DefaultTestBundleControl {
 		return result;
 	}
 
-	private static class ManagedServiceMetaTypeProvider implements ManagedService, MetaTypeProvider {
+	static class ManagedServiceMetaTypeProvider implements ManagedService,
+			MetaTypeProvider {
 		public ObjectClassDefinition getObjectClassDefinition(String id,
 				String locale) {
 			return null;
@@ -805,7 +810,8 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 	
-	private static class ManagedServiceFactoryMetaTypeProvider implements ManagedServiceFactory, MetaTypeProvider {
+	static class ManagedServiceFactoryMetaTypeProvider implements
+			ManagedServiceFactory, MetaTypeProvider {
 		public ObjectClassDefinition getObjectClassDefinition(String id,
 				String locale) {
 			return null;

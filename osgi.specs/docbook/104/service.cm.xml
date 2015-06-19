@@ -355,7 +355,7 @@
     between multiple targets (both Managed Service and Managed Service Factory
     targets) to receive the same information. If PIDs are to be shared between
     Bundles then the location of the Configuration must be a multi-location,
-    see <xref linkend="i1573084"/>.</para>
+    see <xref linkend="service.cm-location.binding"/>.</para>
 
     <para>The Configuration Admin must track the configuration targets on
     their actual PID. That is, if the <code>service.pid</code> service
@@ -488,7 +488,7 @@
       </section>
     </section>
 
-    <section xml:id="i1891430">
+    <section xml:id="service.cm-targeted.pids">
       <title>Targeted PIDs</title>
 
       <para>PIDs are defined as primary keys for the configuration object; any
@@ -564,7 +564,7 @@
       PID.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-extenders.targeted.pids">
       <title>Extenders and Targeted PIDs</title>
 
       <para>Extenders like Declarative Services use Configurations but bypass
@@ -580,33 +580,26 @@
       targeted PID. For example, the following code gets the most targeted PID
       for a given bundle.</para>
 
-      <programlisting>    String mostTargeted(String pid, Bundle bundle,String key) throws Exception {
-        String p = escape(pid); // make sure does not control filter
-        String bsn = bundle.getSymbolicName();
-        String version = bundle.getVersion().toString();
-        String location = bundle.getLocation();
-        String f = String.format(
-                "(|(%s=%s)(%s=%s|%s)(%s=%s|%s|%s)(%s=%s|%s|%s|%s))", //
-                key, p, //
-                key, p, bsn, //
-                key, p, bsn, version, //
-                key, p, bsn, version, location );
+      <programlisting>String mostTargeted(String key, String pid, Bundle bundle) throws Exception {
+    String bsn = bundle.getSymbolicName();
+    Version version = bundle.getVersion();
+    String location = bundle.getLocation();
+    String f = String.format("(|(%1$s=%2$s)(%1$s=%2$s|%3$s)" +
+        "(%1$s=%2$s|%3$s|%4$s)(%1$s=%2$s|%3$s|%4$s|%5$s))",
+        key, pid, bsn, version, location );
 
-        Configuration[] configurations = cm.listConfigurations(f);
-        if (configurations == null)
-            return null;
+    Configuration[] configurations = cm.listConfigurations(f);
+    if (configurations == null)
+        return null;
 
-        String largest = null;
-        for (Configuration c : configurations) {
-            String s = (String) c.getProperties().get(key);
-            if (largest == null)
-                largest = s;
-            else
-                if (largest.length() &lt; s.length())
-                    largest = s;
-        }
-        return largest;
-    }</programlisting>
+    String largest = null;
+    for (Configuration c : configurations) {
+        String s = (String) c.getProperties().get(key);
+        if ((largest == null) || (largest.length() &lt; s.length()))
+            largest = s;
+    }
+    return largest;
+}</programlisting>
     </section>
   </section>
 
@@ -637,7 +630,7 @@
     Managed Service Factory with a PID that is the same as the PID given to a
     Managed Service.</para>
 
-    <section xml:id="i1573084">
+    <section xml:id="service.cm-location.binding">
       <title>Location Binding</title>
 
       <para>When a <xref linkend="org.osgi.service.cm.Configuration"
@@ -771,8 +764,8 @@
       possible to use <code>ConfigurationPermission[ ?*,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
       xrefstyle="hyperlink"/> <code> ]</code> to not limit the management
-      agent. See <xref linkend="i1848302"/> for some examples of using the
-      locations in isolation scenarios.</para>
+      agent. See <xref linkend="service.cm-regions"/> for some examples of
+      using the locations in isolation scenarios.</para>
 
       <para>A <code>null</code> location parameter can be used to create
       <code>Configuration</code> objects that are not yet bound. In this case,
@@ -810,7 +803,7 @@ private       ::= '.' symbolic-name</programlisting>
       on the character set that can be used. The <code>symbolic-name</code>
       production uses a very minimal character set.</para>
 
-      <para>Bundles must not use nested vectors or arrays, nor must they use
+      <para>Bundles must not use nested lists or arrays, nor must they use
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <xref
       linkend="service.metatype"/>.</para>
@@ -870,7 +863,8 @@ private       ::= '.' symbolic-name</programlisting>
         <listitem>
           <para><code>service.pid</code> - Set to the PID of the associated
           <code>Configuration</code> object. This is the full the targeted PID
-          if a targeted PID is used, see <xref linkend="i1891430"/>.</para>
+          if a targeted PID is used, see <xref
+          linkend="service.cm-targeted.pids"/>.</para>
         </listitem>
 
         <listitem>
@@ -1049,7 +1043,13 @@ private       ::= '.' symbolic-name</programlisting>
 
       <para>Multiple Managed Services can register with the same PID, they are
       all updated as long as they have visibility to the configuration as
-      defined by the location, see <xref linkend="i1573084"/>.</para>
+      defined by the location, see <xref
+      linkend="service.cm-location.binding"/>.</para>
+
+      <para>If the Managed Service is registered with more than one PID and
+      more than one PID has no configuration information available, then
+      <code>updated(Dictionary)</code> will be called multiple times with a
+      <code>null</code> parameter.</para>
 
       <para>The <xref
       linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-"
@@ -1619,7 +1619,7 @@ private       ::= '.' symbolic-name</programlisting>
 
       <para>The Configuration Admin service must only return Configurations
       that are visible to the calling bundle, see <xref
-      linkend="i1573084"/>.</para>
+      linkend="service.cm-location.binding"/>.</para>
 
       <para>A single <code>Configuration</code> object is identified with a
       PID, and can be obtained with <xref
@@ -1629,7 +1629,7 @@ private       ::= '.' symbolic-name</programlisting>
       objects.</para>
 
       <para>The PIDs that are filtered on can be targeted PIDs, see <xref
-      linkend="i1891430"/>.</para>
+      linkend="service.cm-targeted.pids"/>.</para>
     </section>
 
     <section>
@@ -1678,15 +1678,16 @@ private       ::= '.' symbolic-name</programlisting>
       Listeners.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-multi.locations">
       <title>Using Multi-Locations</title>
 
       <para>Sharing configuration between different bundles can be done using
-      multi-locations, see <xref linkend="i1573084"/>. A multi-location for a
-      Configuration enables this Configuration to be delivered to any bundle
-      that has visibility to that configuration. It is also possible that
-      Bundles are interested in multiple PIDs for one target service, for this
-      reason they can register multiple PIDs for one service.</para>
+      multi-locations, see <xref linkend="service.cm-location.binding"/>. A
+      multi-location for a Configuration enables this Configuration to be
+      delivered to any bundle that has visibility to that configuration. It is
+      also possible that Bundles are interested in multiple PIDs for one
+      target service, for this reason they can register multiple PIDs for one
+      service.</para>
 
       <para>For example, a number of bundles require access to the URL of a
       remote host, associated with the PID <code>com.acme.host</code>. A
@@ -1695,9 +1696,9 @@ private       ::= '.' symbolic-name</programlisting>
       bundle. A multi-location, any location starting with a question mark
       achieves this. The part after the question mark has only use if the
       system runs with security, it allows the implementation of regions, see
-      <xref linkend="i1848302"/>. In this example a single question mark is
-      used because any Bundle can receive this Configuration. The manager's
-      code could look like:</para>
+      <xref linkend="service.cm-regions"/>. In this example a single question
+      mark is used because any Bundle can receive this Configuration. The
+      manager's code could look like:</para>
 
       <programlisting>Configuration c = admin.getConfiguration("com.acme.host", "?" );
 Hashtable ht = new Hashtable();
@@ -1722,7 +1723,7 @@ public void updated( Dictionary d ) {
 }</programlisting>
     </section>
 
-    <section xml:id="i1848302">
+    <section xml:id="service.cm-regions">
       <title>Regions</title>
 
       <para>In certain cases it is necessary to isolate bundles from each
@@ -1737,10 +1738,11 @@ public void updated( Dictionary d ) {
 
       <para>Regions are groups of bundles that share location information
       among each other but are not willing to share this information with
-      others. Using the multi-locations, see <xref linkend="i1573084"/>, and
-      security it is possible to limit access to a Configuration by using a
-      location name. A Bundle can only receive a Configuration when it has
-      <xref linkend="org.osgi.service.cm.ConfigurationPermission"
+      others. Using the multi-locations, see <xref
+      linkend="service.cm-location.binding"/>, and security it is possible to
+      limit access to a Configuration by using a location name. A Bundle can
+      only receive a Configuration when it has <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission"
       xrefstyle="hyperlink"/> <code>[location name,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
       xrefstyle="hyperlink"/> <code>]</code>. It is therefore possible to
@@ -2261,7 +2263,7 @@ ConfigurationPermission[?application,<xref
     <itemizedlist>
       <listitem>
         <para>The metatype specification cannot describe nested arrays and
-        vectors or arrays/vectors of mixed type.</para>
+        lists or arrays/lists of mixed type.</para>
       </listitem>
     </itemizedlist>
 
@@ -2448,6 +2450,17 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <listitem>
         <para>Clarified that collection property values may have an ordering
         that must be preserved.</para>
+      </listitem>
+
+      <listitem>
+        <para>Changed vector references to list.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified that a if Managed Service is registered with more than
+        one PID and more than one PID has no configuration information
+        available, then <code>updated(Dictionary)</code> can be called
+        multiple time with a <code>null</code> parameter.</para>
       </listitem>
     </itemizedlist>
   </section>
