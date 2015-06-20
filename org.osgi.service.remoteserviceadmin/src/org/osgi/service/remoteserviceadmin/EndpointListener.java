@@ -19,10 +19,15 @@ package org.osgi.service.remoteserviceadmin;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * A white board service that represents a listener for endpoints.
+ * Deprecated white board service that represents a listener for endpoints.
  * 
  * An Endpoint Listener represents a participant in the distributed model that
  * is interested in Endpoint Descriptions.
+ * 
+ * The Endpoint Listener is called back when matching endpoints are added or
+ * removed. Consumers interested in the modification of endpoints, when
+ * associated service properties are changed, should use an
+ * {@link EndpointEventListener} instead.
  * 
  * This white board service can be used in many different scenarios. However,
  * the primary use case is to allow a remote manager to be informed of Endpoint
@@ -81,6 +86,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * discovery processes.
  * 
  * @ThreadSafe
+ * @deprecated As of 1.1. Replaced by EndpointEventListener.
  * @author $Id$
  */
 @ConsumerType

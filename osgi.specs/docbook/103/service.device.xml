@@ -274,9 +274,9 @@
     services.</para>
 
     <para>A device category specifies the methods for communicating with a
-    Device service, and enables inter-operability between bundles that are
+    Device service, and enables interoperability between bundles that are
     based on the same underlying technology. Generic Device services will
-    allow inter-operability between bundles that are not coupled to specific
+    allow interoperability between bundles that are not coupled to specific
     device technologies.</para>
 
     <para>For example, a device category is required for the USB, so that
@@ -295,7 +295,7 @@
     from using Framework mechanisms for services that are not related to
     physical devices.</para>
 
-    <section xml:id="i1262671">
+    <section xml:id="service.device-device.service.registration">
       <title>Device Service Registration</title>
 
       <para>A Device service is defined as a normal service registered with
@@ -424,7 +424,7 @@
     </section>
   </section>
 
-  <section xml:id="i1279208">
+  <section xml:id="service.device-device.category">
     <title>Device Category Specifications</title>
 
     <para>A device category specifies the rules and interfaces needed for the
@@ -724,7 +724,8 @@
     more refined form of the device.</para>
 
     <para>Both refined Device services as well as generic services should be
-    defined in a Device Category. See <xref linkend="i1279208"/>.</para>
+    defined in a Device Category. See <xref
+    linkend="service.device-device.category"/>.</para>
 
     <section>
       <title>Driver Bundles</title>
@@ -1228,7 +1229,8 @@
     <para>Driver services are identified by the <code>DRIVER_ID</code>
     property. Driver Locator services use this particular ID to identify the
     bundles that can be installed. Driver ID properties have uniqueness
-    requirements as specified in <xref linkend="i1262671"/>. This uniqueness
+    requirements as specified in <xref
+    linkend="service.device-device.service.registration"/>. This uniqueness
     allows the device manager to maintain a list of Driver services and
     prevent unnecessary installs.</para>
 
@@ -1542,7 +1544,7 @@ class SerialWidget extends ServiceTracker
               <entry><para>For each Driver service, except those on the
               exclusion list, call its <code>Driver.match</code> method,
               passing the <code>ServiceReference</code> object to the Device
-              service. </para><para>Collect all successful matches - that is,
+              service.</para><para>Collect all successful matches - that is,
               those whose return values are greater than
               <code>Device.MATCH_NONE</code> - in a list of active matches. A
               match call that throws an exception is considered unsuccessful
@@ -1560,7 +1562,7 @@ class SerialWidget extends ServiceTracker
               its associated Driver service is selected for attaching the
               Device service. If the Driver Selector service returns
               <code>DriverSelector.SELECT_NONE</code>, no Driver service must
-              be considered for attaching the Device service. </para><para>If
+              be considered for attaching the Device service.</para><para>If
               the Driver Selector service throws an exception or returns an
               invalid result, the default selection algorithm is used.
               </para><para>Only one Driver Selector service is used, even if

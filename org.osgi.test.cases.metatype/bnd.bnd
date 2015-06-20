@@ -10,10 +10,15 @@ Import-Package: ${-signaturetest}, *
 	
 Include-Resource					= \
 	tb1.jar, \
+	tb1-r6.jar, \
 	tb2.jar, \
+	tb2-r6.jar, \
 	tb3.jar, \
+	tb3-r6.jar, \
 	tb4.jar, \
-	bug2487.jar
+	tb4-r6.jar, \
+	bug2487.jar, \
+	bug2487-r6.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.metatype

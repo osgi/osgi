@@ -29,16 +29,20 @@ Include-Resource					= \
 	tb14.jar, \
 	tb15.jar, \
 	tb16.jar, \
-	tb17.jar
+	tb17.jar, \
+	tbf1.jar
 	
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.component
+-signaturetest = \
+ org.osgi.service.component, \
+ org.osgi.service.component.runtime, \
+ org.osgi.service.component.runtime.dto
 
 -buildpath							= \
     org.osgi.test.support;                  version=project, \
     org.osgi.service.component;             version=project, \
-	osgi.core;								version=4.3.1, \
-	osgi.cmpn;								version=4.3.1, \
+	osgi.core;version=6.0.0,\
+	osgi.cmpn;version=5.0.0,\
 	${junit}
 
 -runbundles							= \

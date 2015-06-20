@@ -28,7 +28,6 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -668,7 +667,8 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	/**
 	 * Checks that the number of entries in resultUriList can be limited
 	 *
-	 * The test is performed against the LogEntries in the RDMT
+	 * The test is performed against the LogEntries in the RMT
+	 *
 	 * @throws Exception
 	 */
 	public void testLimit() throws Exception {
@@ -677,24 +677,26 @@ public class FilterOperationsTestCase extends RMTTestBase {
 		createRandomLogs(100);
 		Sleep.sleep(DELAY);
 
-		String uri = FILTER_ROOT + "/" + "LimitedLogSearch";
+		String uri = FILTER_ROOT + "/LimitedLogSearch";
 		session = dmtAdmin.getSession(RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		session.createInteriorNode( uri );
 		session.commit();
 
 		try {
+			String limitUri = uri + '/' + LIMIT;
+			assertEquals("The limit default value is not correct.", -1, session.getNodeValue(limitUri).getInt());
 			// set target to all LogEntries
-			session.setNodeValue(uri + "/" + TARGET, new DmtData(LOG_ROOT + "/LogEntries/*/"));
-			session.setNodeValue(uri + "/" + LIMIT, new DmtData(limit));
+			session.setNodeValue(uri + '/' + TARGET, new DmtData(LOG_ROOT + "/LogEntries/*/"));
+			session.setNodeValue(limitUri, new DmtData(limit));
 			session.commit();
 
 			// check resultUriList
-			String[] resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
+			String[] resultUriList = session.getChildNodeNames(uri + '/' + RESULT_URI_LIST);
 			assertEquals( "The resultUriList must have exactly "+ limit +" entries for this limited search.", limit, resultUriList.length );
 
 			// check results
-			String[] results = session.getChildNodeNames(uri + "/" + RESULT + "/" + LOG + "/" + LOG_ENTRIES );
-			assertTrue( "The result must have children under: " + uri + "/" + RESULT + "/" + LOG + "/" + LOG_ENTRIES, results.length > 0);
+			String[] results = session.getChildNodeNames(uri + '/' + RESULT + '/' + LOG + '/' + LOG_ENTRIES);
+			assertTrue("The result must have children under: " + uri + '/' + RESULT + '/' + LOG + '/' + LOG_ENTRIES, results.length > 0);
 			assertEquals( "The result must have exactly "+ limit +" matching entries for this limited search.", limit, results.length );
 		}
 		finally {

@@ -6,20 +6,24 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.async.Async;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class AsyncServiceFactory implements ServiceFactory<Async> {
 
 	private final ExecutorService executor;
 	
-	public AsyncServiceFactory(ExecutorService executor) {
-		super();
+	private final ServiceTracker<LogService, LogService> logServiceTracker;
+	
+	public AsyncServiceFactory(ExecutorService executor, ServiceTracker<LogService, LogService> logServiceTracker) {
+		this.logServiceTracker = logServiceTracker;
 		this.executor = executor;
 	}
 
 	public Async getService(Bundle bundle,
 			ServiceRegistration<Async> registration) {
 		
-		return new AsyncService(bundle, executor);
+		return new AsyncService(bundle, executor, logServiceTracker);
 	}
 
 	public void ungetService(Bundle bundle,

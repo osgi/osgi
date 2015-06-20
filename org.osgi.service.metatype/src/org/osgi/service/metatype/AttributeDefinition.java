@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.osgi.service.metatype;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * An interface to describe an attribute.
  * 
@@ -26,109 +28,110 @@ package org.osgi.service.metatype;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface AttributeDefinition {
 	/**
-	 * The {@code STRING} (1) type.
+	 * The {@code STRING} type.
 	 * 
 	 * <p>
 	 * Attributes of this type should be stored as {@code String},
-	 * {@code Vector} with {@code String} or {@code String[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<String>} or {@code String[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	STRING		= 1;
 	/**
-	 * The {@code LONG} (2) type.
+	 * The {@code LONG} type.
 	 * 
-	 * Attributes of this type should be stored as {@code Long}, {@code Vector}
-	 * with {@code Long} or {@code long[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Long},
+	 * {@code List<Long>} or {@code long[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	LONG		= 2;
 	/**
-	 * The {@code INTEGER} (3) type.
+	 * The {@code INTEGER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Integer},
-	 * {@code Vector} with {@code Integer} or {@code int[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<Integer>} or {@code int[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	INTEGER		= 3;
 	/**
-	 * The {@code SHORT} (4) type.
+	 * The {@code SHORT} type.
 	 * 
-	 * Attributes of this type should be stored as {@code Short}, {@code Vector}
-	 * with {@code Short} or {@code short[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Short},
+	 * {@code List<Short>} or {@code short[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	SHORT		= 4;
 	/**
-	 * The {@code CHARACTER} (5) type.
+	 * The {@code CHARACTER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Character},
-	 * {@code Vector} with {@code Character} or {@code char[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * {@code List<Character>} or {@code char[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	CHARACTER	= 5;
 	/**
-	 * The {@code BYTE} (6) type.
+	 * The {@code BYTE} type.
 	 * 
-	 * Attributes of this type should be stored as {@code Byte}, {@code Vector}
-	 * with {@code Byte} or {@code byte[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Byte},
+	 * {@code List<Byte>} or {@code byte[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	BYTE		= 6;
 	/**
-	 * The {@code DOUBLE} (7) type.
+	 * The {@code DOUBLE} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Double},
-	 * {@code Vector} with {@code Double} or {@code double[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<Double>} or {@code double[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	DOUBLE		= 7;
 	/**
-	 * The {@code FLOAT} (8) type.
+	 * The {@code FLOAT} type.
 	 * 
-	 * Attributes of this type should be stored as {@code Float}, {@code Vector}
-	 * with {@code Float} or {@code float[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Float},
+	 * {@code List<Float>} or {@code float[]} objects, depending on the
+	 * {@link #getCardinality()} value.
 	 */
 	int	FLOAT		= 8;
 	/**
-	 * The {@code BIGINTEGER} (9) type.
+	 * The {@code BIGINTEGER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigInteger},
-	 * {@code Vector} with {@code BigInteger} or {@code BigInteger[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * {@code List<BigInteger>} or {@code BigInteger[]} objects, depending on
+	 * the {@link #getCardinality()} value.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
 	int	BIGINTEGER	= 9;
 	/**
-	 * The {@code BIGDECIMAL} (10) type.
+	 * The {@code BIGDECIMAL} type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigDecimal},
-	 * {@code Vector} with {@code BigDecimal} or {@code BigDecimal[]} objects
-	 * depending on {@code getCardinality()}.
+	 * {@code List<BigDecimal>} or {@code BigDecimal[]} objects depending on
+	 * {@link #getCardinality()}.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
 	int	BIGDECIMAL	= 10;
 	/**
-	 * The {@code BOOLEAN} (11) type.
+	 * The {@code BOOLEAN} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Boolean},
-	 * {@code Vector} with {@code Boolean} or {@code boolean[]} objects
-	 * depending on {@code getCardinality()}.
+	 * {@code List<Boolean>} or {@code boolean[]} objects depending on
+	 * {@link #getCardinality()}.
 	 */
 	int	BOOLEAN		= 11;
 
 	/**
-	 * The {@code PASSWORD} (12) type.
+	 * The {@code PASSWORD} type.
 	 * 
-	 * Attributes of this type must be stored as {@code String}, {@code Vector}
-	 * with {@code String} or {@code String[]} objects depending on {link
-	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the
-	 * type can be used to disguise the information when displayed to a user to
-	 * prevent others from seeing it.
+	 * Attributes of this type must be stored as {@code String},
+	 * {@code List<String>} or {@code String[]} objects depending on
+	 * {@link #getCardinality()}. A {@code PASSWORD} must be treated as a string
+	 * but the type can be used to disguise the information when displayed to a
+	 * user to prevent others from seeing it.
 	 * 
 	 * @since 1.2
 	 */
@@ -144,18 +147,19 @@ public interface AttributeDefinition {
 	/**
 	 * Unique identity for this attribute.
 	 * 
-	 * Attributes share a global namespace in the registry. E.g. an attribute
-	 * {@code cn} or {@code commonName} must always be a {@code String} and the
-	 * semantics are always a name of some object. They share this aspect with
-	 * LDAP/X.500 attributes. In these standards the OSI Object Identifier (OID)
-	 * is used to uniquely identify an attribute. If such an OID exists, (which
-	 * can be requested at several standard organisations and many companies
-	 * already have a node in the tree) it can be returned here. Otherwise, a
-	 * unique id should be returned which can be a Java class name (reverse
-	 * domain name) or generated with a GUID algorithm. Note that all LDAP
-	 * defined attributes already have an OID. It is strongly advised to define
-	 * the attributes from existing LDAP schemes which will give the OID. Many
-	 * such schemes exist ranging from postal addresses to DHCP parameters.
+	 * Attributes share a global namespace in the registry. For example, an
+	 * attribute {@code cn} or {@code commonName} must always be a
+	 * {@code String} and the semantics are always a name of some object. They
+	 * share this aspect with LDAP/X.500 attributes. In these standards the OSI
+	 * Object Identifier (OID) is used to uniquely identify an attribute. If
+	 * such an OID exists, (which can be requested at several standard
+	 * organizations and many companies already have a node in the tree) it can
+	 * be returned here. Otherwise, a unique id should be returned which can be
+	 * a Java class name (reverse domain name) or generated with a GUID
+	 * algorithm. Note that all LDAP defined attributes already have an OID. It
+	 * is strongly advised to define the attributes from existing LDAP schemes
+	 * which will give the OID. Many such schemes exist ranging from postal
+	 * addresses to DHCP parameters.
 	 * 
 	 * @return The id or oid
 	 */
@@ -175,12 +179,12 @@ public interface AttributeDefinition {
 	 * Return the cardinality of this attribute.
 	 * 
 	 * The OSGi environment handles multi valued attributes in arrays ([]) or in
-	 * {@code Vector} objects. The return value is defined as follows:
+	 * {@code List} objects. The return value is defined as follows:
 	 * 
 	 * <pre>
 	 * 
-	 *    x = Integer.MIN_VALUE    no limit, but use Vector
-	 *    x &lt; 0                    -x = max occurrences, store in Vector
+	 *    x = Integer.MIN_VALUE    no limit, but use List
+	 *    x &lt; 0                    -x = max occurrences, store in List
 	 *    x &gt; 0                     x = max occurrences, store in array []
 	 *    x = Integer.MAX_VALUE    no limit, but use array []
 	 *    x = 0                     1 occurrence required
@@ -196,8 +200,9 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
-	 * type. {@code STRING},{@code LONG},{@code INTEGER}, {@code CHAR},
-	 * {@code BYTE},{@code DOUBLE},{@code FLOAT}, {@code BOOLEAN}.
+	 * type. {@link #STRING},{@link #LONG},{@link #INTEGER}, {@link #SHORT},
+	 * {@link #CHARACTER}, {@link #BYTE},{@link #DOUBLE},{@link #FLOAT},
+	 * {@link #BOOLEAN}, {@link #PASSWORD}.
 	 * 
 	 * @return The type for this attribute.
 	 */
@@ -216,8 +221,8 @@ public interface AttributeDefinition {
 	 * getType() for this attribute.
 	 * 
 	 * <p>
-	 * This list must be in the same sequence as {@code getOptionLabels()}. I.e.
-	 * for each index i in {@code getOptionValues}, i in
+	 * This list must be in the same sequence as {@code getOptionLabels()}. That
+	 * is, for each index i in {@code getOptionValues}, i in
 	 * {@code getOptionLabels()} should be the label.
 	 * 
 	 * <p>
@@ -242,7 +247,7 @@ public interface AttributeDefinition {
 	 * available.
 	 * <p>
 	 * This list must be in the same sequence as the {@code getOptionValues()}
-	 * method. I.e. for each index i in {@code getOptionLabels}, i in
+	 * method. That is, for each index i in {@code getOptionLabels}, i in
 	 * {@code getOptionValues()} should be the associated value.
 	 * 
 	 * <p>
@@ -291,12 +296,12 @@ public interface AttributeDefinition {
 	 * The object must be of the appropriate type as defined by the cardinality
 	 * and {@code getType()}. The return type is a list of {@code String}
 	 * objects that can be converted to the appropriate type. The cardinality of
-	 * the return array must follow the absolute cardinality of this type. E.g.
-	 * if the cardinality = 0, the array must contain 1 element. If the
+	 * the return array must follow the absolute cardinality of this type. For
+	 * example, if the cardinality = 0, the array must contain 1 element. If the
 	 * cardinality is 1, it must contain 0 or 1 elements. If it is -5, it must
 	 * contain from 0 to max 5 elements. Note that the special case of a 0
-	 * cardinality, meaning a single value, does not allow arrays or vectors of
-	 * 0 elements.
+	 * cardinality, meaning a single value, does not allow arrays or lists of 0
+	 * elements.
 	 * 
 	 * @return Return a default value or {@code null} if no default exists.
 	 */

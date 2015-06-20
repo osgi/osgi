@@ -1,0 +1,54 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description					: Rest Service test cases.
+
+Conditional-Package          = org.osgi.test.support.*
+Private-Package            =  \
+  ${p}.junit.*
+
+# Export-Package            = \
+#  ${p}.services.*
+
+Import-Package: ${-signaturetest}, *
+
+Bundle-Category: osgi,test
+
+Include-Resource          = \
+  tb1.jar=tb1.jar, \
+  tb11.jar=tb11.jar, \
+  tb2.jar=tb2.jar, \
+  tb21.jar=tb21.jar, \
+  tb3.jar=tb3.jar, \
+  tb4.jar=tb4.jar, \
+
+Test-Cases              = ${testcases}
+-signaturetest          = org.osgi.service.rest
+
+-buildpath: org.osgi.test.support;version=project,\
+  org.osgi.service.rest;version=project,\
+  osgi.core;version=6.0.0,\
+  osgi.cmpn;version=5.0.0,\
+  org.json;version=1.0.0, \
+  org.restlet;version=2.1.7,\
+  net.sourceforge.htmlunit;version=2.15.0,\
+  ${junit}
+
+-runbundles            = \
+  org.osgi.impl.service.rest; version=latest, \
+  org.osgi.impl.service.rest.client; version=latest, \
+  org.json; version=1.0.0, \
+  org.restlet; version=2.1.7, \
+  org.restlet.ext.json; version=2.1.7, \
+  org.restlet.ext.xml; version=2.1.7, \
+  net.sourceforge.htmlunit;version=2.15.0
+
+-runproperties = ${runproperties}, \
+    org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
+    rest.ct.debug=false
+#  rest.ct.not_acceptable.check=false,\
+#  rest.ct.base.uri="http://localhost:8888,\
+#  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+
+
+

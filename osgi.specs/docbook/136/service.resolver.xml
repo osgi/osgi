@@ -1197,7 +1197,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       to find a solution that will work, however, there are a number of
       caveats.</para>
 
-      <para>Resolving is an NP-complete problem.For these problems there
+      <para>Resolving is an NP-complete problem. For these problems there
       exists no algorithm that can infer a solution from the desired outcome.
       Therefore, the Resolver tries a potential solution and if that solution
       does not match the constraints it will backtrack and attempt another

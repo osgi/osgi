@@ -77,12 +77,12 @@
     such Distribution becomes a final specification.</para>
 
     <para>The OSGi Alliance is willing to receive input, suggestions and other
-    feedback ("Feedback") on the Distribution.  By providing such Feedback to
+    feedback ("Feedback") on the Distribution. By providing such Feedback to
     the OSGi Alliance, you grant to the OSGi Alliance and all its Members a
     non-exclusive, non-transferable, worldwide, perpetual, irrevocable,
     royalty-free copyright license to copy, publish, license, modify,
     sublicense or otherwise distribute and exploit your Feedback for any
-    purpose.  Likewise, if incorporation of your Feedback would cause an
+    purpose. Likewise, if incorporation of your Feedback would cause an
     implementation of the Distribution, including as it may be modified,
     amended, or published at any point in the future ("Future Specification"),
     to necessarily infringe a patent or patent application that you own or
@@ -91,15 +91,15 @@
     sublicenseable, royalty free license under such patent or patent
     application to make, have made, use, sell, offer for sale, import and
     export products or services that implement such Distribution or Future
-    Specification.  You warrant that (a) to the best of your knowledge you
-    have the right to provide this Feedback, and if you are providing Feedback
-    on behalf of a company, you have the rights to provide Feedback on behalf
-    of your company; (b) the Feedback is not confidential to you and does not
+    Specification. You warrant that (a) to the best of your knowledge you have
+    the right to provide this Feedback, and if you are providing Feedback on
+    behalf of a company, you have the rights to provide Feedback on behalf of
+    your company; (b) the Feedback is not confidential to you and does not
     violate the copyright or trade secret interests of another; and (c) to the
     best of your knowledge, use of the Feedback would not cause an
-    implementation of the Distribution or a Future Specification
-    to necessarily infringe any third-party patent or patent application known
-    to you.  You also acknowledge that the OSGi Alliance is not required to
+    implementation of the Distribution or a Future Specification to
+    necessarily infringe any third-party patent or patent application known to
+    you. You also acknowledge that the OSGi Alliance is not required to
     incorporate your Feedback into any version of the Distribution or a Future
     Specification.</para>
 
@@ -128,6 +128,6 @@
 
     <para>Comments about this specification can be raised at:</para>
 
-    <programlisting>https://www.osgi.org/bugzilla/</programlisting>
+    <programlisting>https://osgi.org/bugzilla/</programlisting>
   </section>
 </preface>

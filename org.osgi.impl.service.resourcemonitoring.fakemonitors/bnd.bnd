@@ -1,0 +1,14 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Vendor				= Orange
+Bundle-Activator: org.osgi.impl.service.resourcemonitoring.fakemonitors.Activator
+Bundle-Description: Fake Monitors
+
+Private-Package: ${p}.*
+
+-buildpath:  \
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	org.osgi.service.resourcemonitoring;version=latest,\
+	org.osgi.impl.service.resourcemonitoring.util;version=latest

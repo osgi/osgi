@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import java.lang.annotation.Target;
  * The annotated class is the implementation class of the Component.
  * 
  * <p>
- * This annotation is not processed at runtime by a Service Component Runtime
- * implementation. It must be processed by tools and used to add a Component
- * Description to the bundle.
+ * This annotation is not processed at runtime by Service Component Runtime. It
+ * must be processed by tools and used to add a Component Description to the
+ * bundle.
  * 
  * @see "The component element of a Component Description."
  * @author $Id$
@@ -82,11 +82,16 @@ public @interface Component {
 	 * component instance.
 	 * 
 	 * <p>
-	 * If {@code true}, this Component uses the OSGi ServiceFactory concept. If
-	 * {@code false} or not specified, this Component does not use the OSGi
-	 * ServiceFactory concept.
+	 * This element is ignored when the {@link #scope()} element does not have
+	 * the default value. If {@code true}, this Component uses
+	 * {@link ServiceScope#BUNDLE bundle} service scope. If {@code false} or not
+	 * specified, this Component uses {@link ServiceScope#SINGLETON singleton}
+	 * service scope. If the {@link #factory()} element is specified or the
+	 * {@link #immediate()} element is specified with {@code true}, this element
+	 * can only be specified with {@code false}.
 	 * 
-	 * @see "The servicefactory attribute of the service element of a Component Description."
+	 * @see "The scope attribute of the service element of a Component Description."
+	 * @deprecated Since 1.3. Replaced by {@link #scope()}.
 	 */
 	boolean servicefactory() default false;
 
@@ -95,8 +100,8 @@ public @interface Component {
 	 * is started.
 	 * 
 	 * <p>
-	 * If {@code true}, this Component is enabled. If {@code false} or not
-	 * specified, this Component is disabled.
+	 * If {@code true} or not specified, this Component is enabled. If
+	 * {@code false}, this Component is disabled.
 	 * 
 	 * @see "The enabled attribute of the component element of a Component Description."
 	 */
@@ -110,13 +115,13 @@ public @interface Component {
 	 * If {@code true}, this Component must be immediately activated upon
 	 * becoming satisfied. If {@code false}, activation of this Component is
 	 * delayed. If this property is specified, its value must be {@code false}
-	 * if the {@link #factory} property is also specified or must be
-	 * {@code true} if the {@link #service} property is specified with an empty
-	 * value.
+	 * if the {@link #factory()} property is also specified or must be
+	 * {@code true} if the {@link #service()} property is specified with an
+	 * empty value.
 	 * 
 	 * <p>
-	 * If not specified, the default is {@code false} if the {@link #factory}
-	 * property is specified or the {@link #service} property is not specified
+	 * If not specified, the default is {@code false} if the {@link #factory()}
+	 * property is specified or the {@link #service()} property is not specified
 	 * or specified with a non-empty value and {@code true} otherwise.
 	 * 
 	 * @see "The immediate attribute of the component element of a Component Description."
@@ -127,13 +132,14 @@ public @interface Component {
 	 * Properties for this Component.
 	 * 
 	 * <p>
-	 * Each property string is specified as {@code "key=value"}. The type of the
-	 * property value can be specified in the key as {@code key:type=value}. The
-	 * type must be one of the property types supported by the type attribute of
-	 * the property element of a Component Description.
+	 * Each property string is specified as {@code "name=value"}. The type of
+	 * the property value can be specified in the name as
+	 * {@code name:type=value}. The type must be one of the property types
+	 * supported by the type attribute of the property element of a Component
+	 * Description.
 	 * 
 	 * <p>
-	 * To specify a property with multiple values, use multiple key, value
+	 * To specify a property with multiple values, use multiple name, value
 	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
 	 * 
 	 * @see "The property element of a Component Description."
@@ -174,8 +180,18 @@ public @interface Component {
 	 * Configuration object where the PID equals the name of the component.
 	 * 
 	 * <p>
-	 * If not specified, the {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
-	 * configuration policy is used.
+	 * If not specified, the configuration policy is based upon whether the
+	 * component is also annotated with the Meta Type
+	 * {@link org.osgi.service.metatype.annotations.Designate Designate}
+	 * annotation.
+	 * <ul>
+	 * <li>Not annotated with {@code Designate} - The configuration policy is
+	 * {@link ConfigurationPolicy#OPTIONAL OPTIONAL}.</li>
+	 * <li>Annotated with {@code Designate(factory=false)} - The configuration
+	 * policy is {@link ConfigurationPolicy#OPTIONAL OPTIONAL}.</li>
+	 * <li>Annotated with {@code Designate(factory=true)} - The configuration
+	 * policy is {@link ConfigurationPolicy#REQUIRE REQUIRE}.</li>
+	 * </ul>
 	 * 
 	 * @see "The configuration-policy attribute of the component element of a Component Description."
 	 * @since 1.1
@@ -183,18 +199,82 @@ public @interface Component {
 	ConfigurationPolicy configurationPolicy() default ConfigurationPolicy.OPTIONAL;
 
 	/**
-	 * The configuration PID for the configuration of this Component.
+	 * The configuration PIDs for the configuration of this Component.
 	 * 
 	 * <p>
-	 * Allows the configuration PID for this Component to be different than the
-	 * name of this Component.
+	 * Each value specifies a configuration PID for this Component.
 	 * 
 	 * <p>
-	 * If not specified, the name of this Component is used as the configuration
-	 * PID of this Component.
+	 * If no value is specified, the name of this Component is used as the
+	 * configuration PID of this Component.
+	 * 
+	 * <p>
+	 * A special string (<code>{@value #NAME}</code>) can be used to specify the
+	 * name of the component as a configuration PID. The {@code NAME} constant
+	 * holds this special string. For example:
+	 * 
+	 * <pre>
+	 * &#64;Component(configurationPid={"com.acme.system", Component.NAME})
+	 * </pre>
+	 * 
+	 * Tools creating a Component Description from this annotation must replace
+	 * the special string with the actual name of this Component.
 	 * 
 	 * @see "The configuration-pid attribute of the component element of a Component Description."
 	 * @since 1.2
 	 */
-	String configurationPid() default "";
+	String[] configurationPid() default NAME;
+
+	/**
+	 * Special string representing the name of this Component.
+	 * 
+	 * <p>
+	 * This string can be used in {@link #configurationPid()} to specify the
+	 * name of the component as a configuration PID. For example:
+	 * 
+	 * <pre>
+	 * &#64;Component(configurationPid={"com.acme.system", Component.NAME})
+	 * </pre>
+	 * 
+	 * Tools creating a Component Description from this annotation must replace
+	 * the special string with the actual name of this Component.
+	 * 
+	 * @since 1.3
+	 */
+	String	NAME	= "$";
+
+	/**
+	 * The service scope for the service of this Component.
+	 * 
+	 * <p>
+	 * If not specified (and the deprecated {@link #servicefactory()} element is
+	 * not specified), the {@link ServiceScope#SINGLETON singleton} service
+	 * scope is used. If the {@link #factory()} element is specified or the
+	 * {@link #immediate()} element is specified with {@code true}, this element
+	 * can only be specified with the {@link ServiceScope#SINGLETON singleton}
+	 * service scope.
+	 * 
+	 * @see "The scope attribute of the service element of a Component Description."
+	 * @since 1.3
+	 */
+	ServiceScope scope() default ServiceScope.DEFAULT;
+
+	/**
+	 * The lookup strategy references of this Component.
+	 * 
+	 * <p>
+	 * To access references using the lookup strategy, {@link Reference}
+	 * annotations are specified naming the reference and declaring the type of
+	 * the referenced service. The referenced service can be accessed using one
+	 * of the {@code locateService} methods of {@code ComponentContext}.
+	 * 
+	 * <p>
+	 * To access references using the event strategy, bind methods are annotated
+	 * with {@link Reference}. To access references using the field strategy,
+	 * fields are annotated with {@link Reference}.
+	 * 
+	 * @see "The reference element of a Component Description."
+	 * @since 1.3
+	 */
+	Reference[] reference() default {};
 }

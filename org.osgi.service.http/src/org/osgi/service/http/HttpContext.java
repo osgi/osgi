@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This interface defines methods that the Http Service may call to get
- * information about a registration.
+ * Context for HTTP Requests.
  * 
  * <p>
- * Servlets and resources may be registered with an {@code HttpContext} object;
- * if no {@code HttpContext} object is specified, a default {@code HttpContext}
- * object is used. Servlets that are registered using the same
- * {@code HttpContext} object will share the same {@code ServletContext} object.
+ * This service defines methods that the Http Service may call to get
+ * information for a request.
  * 
  * <p>
- * This interface is implemented by users of the {@code HttpService}.
+ * Servlets may be associated with an {@code HttpContext} service. Servlets that
+ * are associated using the same {@code HttpContext} object will share the same
+ * {@code ServletContext} object.
+ * 
+ * <p>
+ * If no {@code HttpContext} service is associated, a default
+ * {@code HttpContext} is used. The behavior of the methods on the default
+ * {@code HttpContext} is defined as follows:
+ * <ul>
+ * <li>{@code getMimeType} - Does not define any customized MIME types for the
+ * {@code Content-Type} header in the response, and always returns {@code null}.
+ * </li>
+ * <li>{@code handleSecurity} - Performs implementation-defined authentication
+ * on the request.</li>
+ * <li>{@code getResource} - Assumes the named resource is in the bundle of the
+ * servlet service. This method calls the servlet bundle's
+ * {@code Bundle.getResource} method, and returns the appropriate URL to access
+ * the resource. On a Java runtime environment that supports permissions, the
+ * Http Service needs to be granted
+ * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
+ * </ul>
+ * 
  * 
  * @author $Id$
  */
@@ -114,8 +132,8 @@ public interface HttpContext {
 	 * {@code getAuthType} and {@code getRemoteUser} methods, respectively, on
 	 * the request.
 	 * 
-	 * @param request the HTTP request
-	 * @param response the HTTP response
+	 * @param request The HTTP request.
+	 * @param response The HTTP response.
 	 * @return {@code true} if the request should be serviced, {@code false} if
 	 *         the request should not be serviced and Http Service will send the
 	 *         response back to the client.
@@ -147,16 +165,17 @@ public interface HttpContext {
 	/**
 	 * Maps a name to a MIME type.
 	 * 
-	 * Called by the Http Service to determine the MIME type for the name. For
-	 * servlet registrations, the Http Service will call this method to support
-	 * the {@code ServletContext} method {@code getMimeType}. For resource
-	 * registrations, the Http Service will call this method to determine the
-	 * MIME type for the Content-Type header in the response.
+	 * <p>
+	 * Called by the Http Service to determine the MIME type for the specified
+	 * name. For servlets, the Http Service will call this method to support the
+	 * {@code ServletContext} method {@code getMimeType}. For resources, the
+	 * Http Service will call this method to determine the MIME type for the
+	 * {@code Content-Type} header in the response.
 	 * 
-	 * @param name determine the MIME type for this name.
-	 * @return MIME type (e.g. text/html) of the name or {@code null} to
-	 *         indicate that the Http Service should determine the MIME type
-	 *         itself.
+	 * @param name The name for which to determine the MIME type.
+	 * @return The MIME type (e.g. text/html) of the specified name or
+	 *         {@code null} to indicate that the Http Service should determine
+	 *         the MIME type itself.
 	 */
 	public String getMimeType(String name);
 }

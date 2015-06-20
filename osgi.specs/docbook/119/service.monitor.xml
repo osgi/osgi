@@ -39,8 +39,8 @@
         <listitem>
           <para><emphasis>Status Variable</emphasis> - Application specific
           variables that a <emphasis>Status Variable Provider</emphasis>
-          publishes with a Monitorable service to the Monitor Admin
-          service.Status Variable values can be <code>long</code>,
+          publishes with a Monitorable service to the Monitor Admin service.
+          Status Variable values can be <code>long</code>,
           <code>double</code>, <code>boolean</code> or <code>String</code>
           objects.</para>
         </listitem>

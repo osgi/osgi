@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * When a component is declared with the {@code factory} attribute on its
- * {@code component} element, the Service Component Runtime will register a
+ * {@code component} element, Service Component Runtime will register a
  * Component Factory service to allow new component configurations to be created
  * and activated rather than automatically creating and activating component
  * configuration as necessary.
@@ -42,7 +42,7 @@ public interface ComponentFactory {
 	 *         configuration has been activated and, if the component specifies
 	 *         a {@code service} element, the component instance has been
 	 *         registered as a service.
-	 * @throws ComponentException If the Service Component Runtime is unable to
+	 * @throws ComponentException If Service Component Runtime is unable to
 	 *         activate the component configuration.
 	 */
 	public ComponentInstance newInstance(Dictionary<String, ?> properties);

@@ -1,0 +1,19 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Vendor				= Orange
+Bundle-Activator			= org.osgi.impl.service.zigbee.ZigBeeBundleActivator
+Bundle-Description			= The ZigBee bundle with Control Point stack
+
+Export-Package				= \
+	org.osgi.service.zigbee.*; -split-package:=first; provide:=true, \
+  	org.osgi.impl.service.zigbee.util;-split-package:=first
+
+Bundle-RequiredExecutionEnvironment = J2SE-1.4 
+
+Private-Package 			= ${p}.*;-split-package:=first
+
+-buildpath = \
+	org.osgi.service.zigbee; 	version=project, \
+	osgi.core;					version=4.3.1, \
+	osgi.cmpn;					version=4.3.1

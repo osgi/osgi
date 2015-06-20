@@ -115,6 +115,11 @@
           provided that can leverage the type information to create the XML
           descriptor.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis>Introspection</emphasis> - It must be possible to
+          introspect the service components.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -133,6 +138,12 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
+          actor that manages the components and their life cycle and allows
+          introspection of the components.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Component Description</emphasis> - The declaration
           of a service component. It is contained within an XML document in a
           bundle.</para>
@@ -142,6 +153,13 @@
           <para><emphasis>Component Properties</emphasis> - A set of
           properties which can be specified by the component description,
           Configuration Admin service and from the component factory.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Component Property Type</emphasis> - A user defined
+          annotation type which defines component properties and is
+          implemented by SCR to provide type safe access to the defined
+          component properties.</para>
         </listitem>
 
         <listitem>
@@ -181,11 +199,6 @@
         <listitem>
           <para><emphasis>Reference</emphasis> - A specified dependency of a
           component on a set of target services.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
-          actor that manages the components and their life cycle.</para>
         </listitem>
 
         <listitem>
@@ -246,12 +259,17 @@
           without activating the component configuration. If this service is
           requested, SCR must activate the component configuration creating an
           instance of the component implementation class that will be returned
-          as the service object. If the <code>servicefactory</code> attribute
-          of the <code>service</code> element is <code>true</code>, then, for
-          each distinct bundle that requests the service, a different
+          as the service object. If the <code>scope</code> attribute of the
+          <code>service</code> element is <code>bundle</code>, then, for each
+          distinct bundle that requests the service object, a different
           component configuration is created and activated and a new instance
           of the component implementation class is returned as the service
-          object.</para>
+          object. If the <code>scope</code> attribute of the
+          <code>service</code> element is <code>prototype</code>, then, for
+          each distinct request for the service object, such as via
+          <code>ServiceObjects</code>, a different component configuration is
+          created and activated and a new instance of the component
+          implementation class is returned as the service object.</para>
         </listitem>
 
         <listitem>
@@ -289,7 +307,7 @@
 
         <listitem>
           <para><emphasis>Deployers</emphasis> - Deployers should consult
-          <xref linkend="i1479915"/>.</para>
+          <xref linkend="service.component-deployment"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -320,8 +338,10 @@
     longer needed.</para>
 
     <para>If an activated component configuration's configuration properties
-    change, SCR must deactivate the component configuration and then attempt
-    to reactivate the component configuration using the new configuration
+    change, SCR must either notify the component configuration of the change,
+    if the component description specifies a method to be notified of such
+    changes, or deactivate the component configuration and then attempt to
+    reactivate the component configuration using the new configuration
     information.</para>
 
     <section>
@@ -369,8 +389,8 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.activator"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.Activator"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.Activator"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The manifest header <code>Service-Component</code> must also be
@@ -420,12 +440,11 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.handler"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.HandlerImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.HandlerImpl"/&gt;
     &lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
     &lt;service&gt; 
-        &lt;provide interface= 
-            "org.osgi.service.event.EventHandler"/&gt; 
+        &lt;provide interface="org.osgi.service.event.EventHandler"/&gt; 
     &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -481,10 +500,11 @@
       linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"
       xrefstyle="hyperlink"/> method has a <code>Dictionary</code> object as
       argument. This Dictionary object is merged with the component properties
-      as described in <xref linkend="i1407478"/>. If the component specifies a
-      service, then the service is registered after the created component
-      configuration is satisfied with the component properties. Then the
-      component configuration is activated.</para>
+      as described in <xref
+      linkend="service.component-component.properties"/>. If the component
+      specifies a service, then the service is registered after the created
+      component configuration is satisfied with the component properties. Then
+      the component configuration is activated.</para>
 
       <para>For example, a component can provide a connection to a USB device.
       Such a connection should normally not be shared and should be created
@@ -494,14 +514,14 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The component class looks like:</para>
 
-      <programlisting>public class USBConnectionImpl implementsUSBConnection {
-    private void activate(Map properties) {
+      <programlisting>public class USBConnectionImpl implements USBConnection {
+    private void activate(Map&lt;String, ?&gt; properties) {
      ...
     }
 }</programlisting>
@@ -514,17 +534,17 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"    
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
     <emphasis role="underline">&lt;service&gt;</emphasis>
-        &lt;provide interface="com.acme.USBConnection"/&gt;
+        &lt;provide interface="com.acme.usb.USBConnection"/&gt;
     &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The associated component class looks like:</para>
 
-      <programlisting>public class USBConnectionImpl implementsUSBConnection {
-    private void activate(Map properties) {...}
+      <programlisting>public class USBConnectionImpl implements USBConnection {
+    private void activate(Map&lt;String, ?&gt; properties) {...}
     public void connect() { ... }
     ...
     public void close() { ... }
@@ -556,9 +576,9 @@
     <para>A component configuration becomes <emphasis>satisfied</emphasis>
     when each specified reference is satisfied. A reference is
     <emphasis>satisfied</emphasis> if it specifies optional cardinality or
-    when the target services contains at least one member. An activated
-    component configuration that becomes <emphasis>unsatisfied</emphasis> must
-    be deactivated.</para>
+    when the number of target services is equal to or more than the minimum
+    cardinality of the reference. An activated component configuration that
+    becomes <emphasis>unsatisfied</emphasis> must be deactivated.</para>
 
     <para>During the activation of a component configuration, SCR must bind
     some or all of the target services of a reference to the component
@@ -571,8 +591,8 @@
 
       <para>A component instance must be able to use the services that are
       referenced by the component configuration, that is, the bound services
-      of the references. There are two strategies for a component instance to
-      acquire these bound services:</para>
+      of the references. The following strategies are available for a
+      component instance to acquire these bound services:</para>
 
       <itemizedlist>
         <listitem>
@@ -586,101 +606,125 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Lookup strategy</emphasis> - A component instance
+          <para><emphasis>Field strategy</emphasis> - SCR modifies a field in
+          the component instance when a service becomes bound, when a service
+          becomes unbound, or when its properties are updated.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Lookup strategy</emphasis> - The component instance
           can use one of the <code>locateService</code> methods of <xref
           linkend="org.osgi.service.component.ComponentContext"
           xrefstyle="hyperlink"/> to locate a bound service. These methods
           take the <code>name</code> of the reference as a parameter. If the
-          reference has a dynamic policy, it is important to not store the
-          returned service object(s) but look it up every time it is
+          reference has a dynamic policy, it is important to not store
+          returned service objects but look them up every time they are
           needed.</para>
         </listitem>
       </itemizedlist>
 
-      <para>A component may use either or both strategies to access bound
-      services.</para>
+      <para>A component may use multiple strategies to access the bound
+      services of a reference.</para>
     </section>
 
-    <section>
+    <section xml:id="service.component-event.methods">
       <title>Event Methods</title>
 
-      <para>When using the event strategy the SCR must callback the components
-      at the appropriate time. The SCR must callback on the following
+      <para>When using the event strategy, SCR must callback the component
+      instance at the appropriate time. SCR must callback on the following
       events:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>bind</code> - The bind method is called to bind a new
-          service to the component that matches the selection criteria. If the
-          <code>policy</code> is <code>dynamic</code> then the bind method of
-          a replacement service can be called before its corresponding unbind
-          method.</para>
+          <para><code>bind</code> - The bind method, if specified, is called
+          to bind a new service to the component that matches the selection
+          criteria. If the <code>policy</code> is <code>dynamic</code> then
+          the bind method of a replacement service can be called before its
+          corresponding unbind method.</para>
         </listitem>
 
         <listitem>
-          <para><code>updated</code> - The updated method is called when the
-          service properties of a bound services are modified and the
-          resulting properties do not cause the service to become unbound
-          because it is no longer selected by the <code>target</code>
-          filter.</para>
+          <para><code>updated</code> - The updated method, if specified, is
+          called when the service properties of a bound services are modified
+          and the resulting properties do not cause the service to become
+          unbound because it is no longer selected by the target
+          property.</para>
         </listitem>
 
         <listitem>
-          <para><code>unbind</code> - The unbind method is called when the SCR
-          needs to unbind the service.</para>
+          <para><code>unbind</code> - The unbind method, if specified, is
+          called when SCR needs to unbind the service.</para>
         </listitem>
       </itemizedlist>
 
-      <para>Together these methods are called the <emphasis>event
-      methods</emphasis>. Event methods must have one of the following
-      prototypes:</para>
+      <para>Each event is associated with an <emphasis>event
+      method</emphasis>. The prototype of the event methods is:</para>
 
-      <programlisting>void &lt;method-name&gt;(ServiceReference);
-void &lt;method-name&gt;(&lt;parameter-type&gt;);
-void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
+      <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
-      <para>If an event method has the first prototype, then a Service
-      Reference to the bound service will be passed to the method. This
-      Service Reference may later be passed to the <xref
-      linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
-      xrefstyle="hyperlink"/> method to obtain the actual service object. This
-      approach is useful when the service properties need to be examined
-      before accessing the service object. It also allows for the delayed
-      activation of bound services when using the event strategy.</para>
+      <para>An event method can take one or more arguments. Each argument must
+      be of one of the following types:</para>
 
-      <para>If an event method has the second prototype, then the service
-      object of the bound service is passed to the method. The method's
-      parameter type must be assignable from the type specified by the
-      reference's <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method's parameter
-      type.</para>
+      <itemizedlist>
+        <listitem>
+          <para><code>&lt;service-type&gt;</code> - The bound service
+          object.</para>
+        </listitem>
 
-      <para>If an event method has the third prototype, then the service
-      object of the bound service is passed to the method as the first
-      argument and an unmodifiable Map containing the service properties of
-      the bound service is passed as the second argument. The method's first
-      parameter type must be assignable from the type specified by the
-      reference's <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method's first
-      parameter type.</para>
+        <listitem>
+          <para><code>ServiceReference</code> - A Service Reference for the
+          bound service. This Service Reference may later be passed to the
+          <xref
+          linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
+          xrefstyle="hyperlink"/> method to obtain the actual service object.
+          This approach is useful when the service properties need to be
+          examined before accessing the service object. It also allows for the
+          delayed activation of bound services when using the event
+          strategy.</para>
+        </listitem>
 
-      <para>The bind and unbind methods must be called once for each bound
-      service. This implies that if the reference has multiple cardinality,
-      then the methods may be called multiple times. The updated method can be
-      called multiple times per service.</para>
+        <listitem>
+          <para><code>ComponentServiceObjects</code> - A Component Service
+          Objects for the bound service. This Component Service Objects can be
+          used to obtain the actual service object or objects. This approach
+          is useful when the referenced service has prototype service scope
+          and the component instance needs multiple service objects for the
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - An unmodifiable Map containing the service
+          properties of the bound service. This Map must additionally
+          implement <code>Comparable</code> with the <code>compareTo</code>
+          method comparing service property maps using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
+        </listitem>
+      </itemizedlist>
 
       <para>A suitable method is selected using the following priority:</para>
 
       <orderedlist>
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.ServiceReference</code>.</para>
+          argument is <code>org.osgi.framework.ServiceReference</code>. This
+          method will receive a Service Reference for the bound
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>. This method will receive a Component
+          Service Objects for the bound service.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
           argument is the type specified by the reference's
-          <code>interface</code> attribute.</para>
+          <code>interface</code> attribute. This method will receive the bound
+          service object.</para>
         </listitem>
 
         <listitem>
@@ -688,23 +732,37 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
           argument is assignable from the type specified by the reference's
           <code>interface</code> attribute. If multiple methods match this
           rule, this implies the method name is overloaded and SCR may choose
-          any of the methods to call.</para>
+          any of the methods to call. This method will receive the bound
+          service object.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two argument and the type of the first
-          argument is the type specified by the reference's
-          <code>interface</code> attribute and the type of the second argument
-          is <code>java.util.Map</code>.</para>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.util.Map</code>. This method will receive an
+          unmodifiable Map containing the service properties of the bound
+          service.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two argument and the type of the first
-          argument is assignable from the type specified by the reference's
-          <code>interface</code> attribute and the type of the second argument
-          is <code>java.util.Map</code>. If multiple methods match this rule,
-          this implies the method name is overloaded and SCR may choose any of
-          the methods to call.</para>
+          <para>The method takes two or more arguments and the types of the
+          arguments must be one of: the type specified by the reference's
+          <code>interface</code> attribute, a type assignable from the type
+          specified by the reference's <code>interface</code> attribute,
+          <code>org.osgi.framework.ServiceReference</code>, <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>, or <code>java.util.Map</code>. If multiple
+          methods match this rule, this implies the method name is overloaded
+          and SCR may choose any of the methods to call. In the case where the
+          type specified by the reference's <code>interface</code> attribute
+          is <code>org.osgi.framework.ServiceReference</code>, <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>, or <code>java.util.Map</code>, the first
+          argument of that type will receive the bound service object. If
+          selected event method has more than one argument of that type, the
+          remaining arguments of that type will receive a Service Reference
+          for the bound service, a Service Objects for the bound service, or
+          an unmodifiable Map containing the service properties of the bound
+          service.</para>
         </listitem>
       </orderedlist>
 
@@ -714,24 +772,19 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       Service, if present, and there will be no bind, updated, or unbind
       notification.</para>
 
-      <para>When the service object for a bound service is first provided to a
-      component instance, that is passed to an event method or returned by a
-      locate service method, SCR must get the service object from the OSGi
-      Framework's service registry using the <code>getService</code> method on
-      the component's Bundle Context. If the service object for a bound
-      service has been obtained and the service becomes unbound, SCR must
-      unget the service object using the <code>ungetService</code> method on
-      the component's Bundle Context and discard all references to the service
-      object.</para>
+      <para>The bind and unbind methods must be called once for each bound
+      service. This implies that if the reference has multiple cardinality,
+      then the methods may be called multiple times. The updated method can be
+      called multiple times per service.</para>
 
-      <para>For example, a component requires the Log Service and uses the
-      lookup strategy. The reference is declared without any bind, updated,
-      and unbind methods:</para>
+      <para>In the following examples, a component requires the Log Service.
+      The first example uses the lookup strategy. The reference is declared
+      without any bind, updated, and unbind methods:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.LogLookupImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.LogLookupImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"/&gt;
 &lt;/scr:component&gt;</programlisting>
@@ -753,8 +806,8 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.LogEventImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
         bind="setLog"
@@ -787,18 +840,196 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       public, or have default access. See <xref linkend="i1641644"/>.</para>
     </section>
 
-    <section xml:id="i1440459">
+    <section xml:id="service.component-field.strategy">
+      <title>Field Strategy</title>
+
+      <para>When using the field strategy, SCR must modify fields in the
+      component instance at the appropriate time. SCR must modify the fields
+      on the following events:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>bind</code> - The field is modified to bind a new
+          service to the component that matches the selection criteria.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>updated</code> - For certain field types, the field is
+          modified when the service properties of a bound services are
+          modified and the resulting properties do not cause the service to
+          become unbound because it is no longer selected by the target
+          property.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>unbind</code> - The field is modified when SCR needs to
+          unbind the service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a reference with unary cardinality, a field must be of one of
+      the following types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>&lt;service-type&gt;</code> - The bound service object.
+          The type of the field can be the actual service type or it can be a
+          type that is assignable from the actual service type.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>ServiceReference</code> - A Service Reference for the
+          bound service. This Service Reference may later be passed to the
+          <xref
+          linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
+          xrefstyle="hyperlink"/> method to obtain the actual service object.
+          This approach is useful when the service properties need to be
+          examined before accessing the service object. It also allows for the
+          delayed activation of bound services when using field
+          strategy.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>ComponentServiceObjects</code> - A Component Service
+          Objects for the bound service. This Component Service Objects can be
+          used to obtain the actual service object or objects. This approach
+          is useful when the referenced service has prototype service scope
+          and the component instance needs multiple service objects for the
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - An unmodifiable Map containing the service
+          properties of the bound service. This Map must additionally
+          implement <code>Comparable</code> with the <code>compareTo</code>
+          method comparing service property maps using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map.Entry</code> - An unmodifiable Map.Entry whose key
+          is an unmodifiable Map containing the service properties of the
+          bound service, as above, and whose value is the bound service
+          object. This Map.Entry must additionally implement
+          <code>Comparable</code> with the <code>compareTo</code> method
+          comparing the service property map key using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the actual service type is one of
+      <code>ServiceReference</code>, <code>ComponentServiceObjects</code>,
+      <code>Map</code>, or <code>Map.Entry</code>, the field will be set to
+      the service object rather than the object about the service.</para>
+
+      <para>For a reference with multiple cardinality, a field must be a
+      collection of one of the following types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>Collection</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>List</code></para>
+        </listitem>
+
+        <listitem>
+          <para>A subtype of <code>Collection</code> - This type can only be
+          used for dynamic references using the <code>update</code> reference
+          field option. The component instance must initialize the field to a
+          collection object in its constructor.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The type of objects set in the collection are specified by the
+      <code>field-collection-type</code> attribute in the component
+      description:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service</code> - The bound service object. This is the
+          default field collection type.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>reference</code> - A Service Reference for the bound
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>serviceobjects</code> - A Component Service Objects for
+          the bound service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>properties</code> - An unmodifiable Map containing the
+          service properties of the bound service. This Map must implement
+          <code>Comparable</code>, as above.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>tuple</code> - An unmodifiable Map.Entry whose key is an
+          unmodifiable Map containing the service properties of the bound
+          service, as above, and whose value is the bound service object. This
+          Map.Entry must implement <code>Comparable</code>, as above.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Only instance fields of the field types above are supported. If a
+      referenced field is declared with the <code>static</code> modifier or
+      has a type other than one of the above, SCR must log an error message
+      with the Log Service, if present, and the field must not be
+      modified.</para>
+
+      <para>Care must be taken by the component implementation regarding the
+      field. SCR has no way to know if the component implementation itself may
+      alter the field value. The component implementation should not alter the
+      field value and allow SCR to manage it. SCR must treat the field as if
+      the component implementation does not alter the field value so SCR may
+      retain its own copy of the value set in the field.</para>
+
+      <para>In the following examples, a component requires the Log
+      Service.</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;scr:component name="example.listen"
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
+    &lt;reference name="LOG"
+        interface="org.osgi.service.log.LogService"
+        field="log"
+    /&gt;
+&lt;/scr:component&gt;</programlisting>
+
+      <para>The component implementation class looks like:</para>
+
+      <programlisting>public class LogEventImpl {
+    LogService log;
+    private void activate() {
+        log.log(LogService.LOG_INFO, "Hello Components!"));
+    }
+}</programlisting>
+
+      <para>Fields can be declared private in the component class but are only
+      looked up in the inheritance chain when they are protected, public, or
+      have default access. See <xref linkend="i1641644"/>.</para>
+    </section>
+
+    <section xml:id="service.component-reference.cardinality">
       <title>Reference Cardinality</title>
 
       <para>A component implementation is always written with a certain
-      <emphasis>cardinality</emphasis> in mind. The cardinality represents two
-      important concepts:</para>
+      <emphasis>cardinality</emphasis> for each reference in mind. The
+      cardinality represents two important concepts:</para>
 
       <itemizedlist>
         <listitem>
           <para><emphasis>Multiplicity</emphasis> - Does the component
           implementation assume a single service or does it explicitly handle
-          multiple occurrences For example, when a component uses the Log
+          multiple services? For example, when a component uses the Log
           Service, it only needs to bind to one Log Service to function
           correctly. Alternatively, when the Configuration Admin uses the
           Configuration Listener services it needs to bind to all target
@@ -808,15 +1039,15 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
         <listitem>
           <para><emphasis>Optionality</emphasis> - Can the component function
-          without any bound service present Some components can still perform
-          useful tasks even when no target service is available, other
-          components must bind to at least one target service before they can
-          be useful. For example, the Configuration Admin in the previous
-          example must still provide its functionality even if there are no
-          Configuration Listener services present. Alternatively, an
-          application that solely presents a Servlet page has little to do
-          when the Http Service is not present, it should therefore use a
-          reference with a mandatory cardinality.</para>
+          without any bound service present? Some components can still perform
+          useful tasks even when no service is available; other components
+          must bind to at least one service before they can be useful. For
+          example, the Configuration Admin in the previous example must still
+          provide its functionality even if there are no Configuration
+          Listener services present. Alternatively, an application that
+          registers a Servlet with the Http Service has little to do when the
+          Http Service is not present, it should therefore use a reference
+          with a mandatory cardinality.</para>
         </listitem>
       </itemizedlist>
 
@@ -825,14 +1056,6 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       <programlisting>cardinality  ::= optionality '..' multiplicity
 optionality  ::= '0' | '1'
 multiplicity ::= '1' | 'n'</programlisting>
-
-      <para>A reference is <emphasis>satisfied</emphasis> if the number of
-      target services is equal to or more than the <code>optionality</code>.
-      The <code>multiplicity</code> is irrelevant for the satisfaction of the
-      reference. The <code>multiplicity</code> only specifies if the component
-      implementation is written to handle being bound to multiple services
-      (<code>n</code>) or requires SCR to select and bind to a single service
-      (<code>1</code>).</para>
 
       <para>The cardinality for a reference can be specified as one of four
       choices:</para>
@@ -855,10 +1078,31 @@ multiplicity ::= '1' | 'n'</programlisting>
         </listitem>
       </itemizedlist>
 
+      <para>The <emphasis>minimum cardinality</emphasis> is specified by the
+      optionality part of the cardinality. This is either <code>0</code> or
+      <code>1</code>. A minimum cardinality property can be used to raise the
+      minimum cardinality of a reference from this initial value. For example,
+      a <code>0..n</code> cardinality in the component description can be
+      raised into a <code>3..n</code> cardinality at runtime by setting the
+      minimum cardinality property for the reference to <code>3</code>. This
+      would typically be done by a deployer setting the minimum cardinality
+      property in a configuration for the component. The minimum cardinality
+      for a unary cardinality cannot exceed <code>1</code>. See <xref
+      linkend="service.component-minimum.cardinality.property"/> for more
+      information.</para>
+
+      <para>A reference is <emphasis>satisfied</emphasis> if the number of
+      target services is equal to or more than the minimum cardinality. The
+      <code>multiplicity</code> is irrelevant for the satisfaction of the
+      reference. The <code>multiplicity</code> only specifies if the component
+      implementation is written to handle being bound to multiple services
+      (<code>n</code>) or requires SCR to select and bind to a single service
+      (<code>1</code>).</para>
+
       <para>When a satisfied component configuration is activated, there must
       be at most one bound service for each reference with a unary cardinality
-      and at least one bound service for each reference with a mandatory
-      cardinality. If the cardinality constraints cannot be maintained after a
+      and at least as many bound services as the minimum cardinality for each
+      reference. If the cardinality constraints cannot be maintained after a
       component configuration is activated, that is the reference becomes
       unsatisfied, the component configuration must be deactivated. If the
       reference has a unary cardinality and there is more than one target
@@ -869,17 +1113,17 @@ multiplicity ::= '1' | 'n'</programlisting>
       the target service with the highest service ranking and the lowest
       service id as specified by the <code>service.id</code> property.</para>
 
-      <para>For example, a component wants to register a resource with all
-      Http Services that are available. Such a scenario has the cardinality of
-      <code>0..n</code>. The code must be prepared to handle multiple calls to
-      the bind method for each Http Service in such a case. In this example,
-      the code uses the <code>registerResources</code> method to register a
-      directory for external access.</para>
+      <para>In the following example, a component wants to register a resource
+      with all Http Services that are available. Such a scenario has the
+      cardinality of <code>0..n</code>. The code must be prepared to handle
+      multiple calls to the bind method for each Http Service in such a case.
+      In this example, the code uses the <code>registerResources</code> method
+      to register a directory for external access.</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
         cardinality="0..n"
@@ -898,6 +1142,78 @@ public class HttpResourceImpl {
 }</programlisting>
     </section>
 
+    <section xml:id="service.component-reference.scope">
+      <title>Reference Scope</title>
+
+      <para>A component implementation must be written to understand the
+      service scope of referenced services. The <emphasis>reference
+      scope</emphasis> defines whether the component expects the bundle to be
+      exposed to a single service object for a bound service or to potentially
+      multiple services objects. The following reference scopes are
+      available:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>bundle</emphasis> - For all references to a given
+          bound service, all activated component instances within a bundle
+          must use the same service object. That is, for a given bound
+          service, all component instances within a bundle will be using the
+          same service object. This is the default reference scope.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>prototype</emphasis> - For all references to a given
+          bound service, each activated component instance may use a single,
+          distinct service object. That is, for a given bound service, each
+          component instance may use a distinct service object but within a
+          component instance all references to the bound service will use the
+          same service object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>prototype_required</emphasis> - For all references
+          to a given bound service, each activated component instance must use
+          a single, distinct service object. That is, for a given bound
+          service, each component instance will use a distinct service object
+          but within a component instance all references to the bound service
+          will use the same service object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a bound service of a reference with bundle reference scope,
+      SCR must get the service object from the OSGi Framework's service
+      registry using the <code>getService</code> method on the component's
+      Bundle Context. If the service object for a bound service has been
+      obtained and the service becomes unbound, SCR must unget the service
+      object using the <code>ungetService</code> method on the component's
+      Bundle Context and discard all references to the service object. This
+      ensures that the bundle will only be exposed to a single instance of the
+      service object at any given time.</para>
+
+      <para>For a bound service of a reference with prototype or prototype
+      required reference scope, SCR must use a Service Objects object obtained
+      from the OSGi Framework's service registry using the component's Bundle
+      Context to get any service objects. If service objects for a bound
+      service have been obtained and the service becomes unbound, SCR must
+      unget any unreleased service objects using the Service Objects object
+      obtained from the OSGi Framework's service registry using the
+      component's Bundle Context. This means that if a component instance used
+      a Component Service Objects object to obtain service objects, SCR must
+      track those service objects so that when the service becomes unbound,
+      SCR can unget any unreleased service objects.</para>
+
+      <para>Additionally, for a bound service of a reference with prototype
+      required reference scope, only services registered with prototype
+      service scope can be considered as target services. This ensures that
+      each component instance can be exposed to a single, distinct instance of
+      the service object. Using prototype required reference scope effectively
+      adds <code>service.scope=prototype</code> to the target property for the
+      reference. A service that does not use prototype service scope cannot be
+      used as a bound service for a reference with prototype required
+      reference scope since the service cannot provide a distinct service
+      object for each component instance.</para>
+    </section>
+
     <section xml:id="i1440474">
       <title>Reference Policy</title>
 
@@ -913,60 +1229,72 @@ public class HttpResourceImpl {
       <emphasis>policy-option</emphasis> can further refine how changes affect
       bound services.</para>
 
-      <para>The <emphasis>static policy</emphasis> is the most simple policy
-      and is the default policy. A component instance never sees any of the
-      dynamics. Component configurations are deactivated before any bound
-      service for a reference having a static policy becomes unavailable. If a
-      target service is available to replace the bound service which became
-      unavailable, the component configuration must be reactivated and bound
-      to the replacement service.</para>
+      <section>
+        <title>Static Reference Policy</title>
 
-      <para>If the <code>policy-option</code> is <code>reluctant</code> then
-      the registration of an additional target service for a reference must
-      not result in deactivating and reactivating a component configuration.
-      If the <code>policy-option</code> is <code>greedy</code> then the
-      component must be reactivated when new applicable services become
-      available, see <xref linkend="service.component-policy.option.action"
-      xrefstyle="template:Table %n on page %p"/>. A reference with a static
-      policy is called a <emphasis>static reference</emphasis>. A static
-      reference can still be updated dynamically if it specifies an updated
-      method.</para>
+        <para>The <emphasis>static policy</emphasis> is the most simple policy
+        and is the default policy. A reference with a static policy is called
+        a <emphasis>static reference</emphasis>. A component instance never
+        sees any of the dynamics of the static reference. The bind method is
+        called and/or the field is set before the component instance is
+        activated. Component configurations are deactivated before any bound
+        service for the static reference becomes unavailable. If a target
+        service is available to replace the bound service which became
+        unavailable, the component configuration must be reactivated and the
+        replacement service is bound to the new component instance.</para>
 
-      <para>The static policy can be very expensive if it depends on services
-      that frequently unregister and re-register or if the cost of activating
-      and deactivating a component configuration is high. Static policy is
-      usually also not applicable if the cardinality specifies multiple bound
-      services.</para>
+        <para>If the <code>policy-option</code> is <code>reluctant</code> then
+        the registration of an additional target service for a reference must
+        not result in deactivating and reactivating a component configuration.
+        If the <code>policy-option</code> is <code>greedy</code> then the
+        component configuration must be reactivated when new applicable
+        services become available. See <xref
+        linkend="service.component-policy.option.action"
+        xrefstyle="template:Table %n on page %p"/>.</para>
 
-      <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
-      since the component implementation must properly handle changes in the
-      set of bound services that can occur on any thread. With the dynamic
-      policy, SCR can change the set of bound services without deactivating a
-      component configuration. If the component uses the event strategy to
-      access services, then the component instance will be notified of changes
-      in the set of bound services by calls to the bind, and unbind
-      methods.</para>
+        <para>If a static reference specifies an updated method and the bound
+        service's properties change, SCR must call the updated method.</para>
 
-      <para>If the <code>policy-option</code> is <code>reluctant</code> then a
-      bound reference is not rebound even if a more suitable service becomes
-      available for a 1..1 or 0..1 reference. If the
-      <code>policy-option</code> is <code>greedy</code> then the component
-      must be unbound and rebound for that reference.</para>
+        <para>The static policy can be very expensive if it depends on
+        services that frequently unregister and re-register or if the cost of
+        activating and deactivating a component configuration is high. Static
+        policy is usually also not applicable if the cardinality specifies
+        multiple bound services.</para>
+      </section>
 
-      <para>A reference with a dynamic policy is called a <emphasis>dynamic
-      reference</emphasis>.</para>
+      <section>
+        <title>Dynamic Reference Policy</title>
 
-      <para>The previous example with the registering of a resource directory
-      used a static policy. This implied that the component configurations are
-      deactivated when there is a change in the bound set of Http Services.
-      The code in the example can be seen to easily handle the dynamics of
-      Http Services that come and go. The component description can therefore
-      be updated to:</para>
+        <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
+        since the component implementation must properly handle changes in the
+        set of bound services that can occur on any thread at any time after
+        the component instance is created. A reference with a dynamic policy
+        is called a <emphasis>dynamic reference</emphasis>. With the dynamic
+        policy, SCR can change the set of bound services without deactivating
+        a component configuration. If the component uses the event strategy to
+        access services, then the component instance will be notified of
+        changes in the set of bound services by calls to the bind, updated,
+        and unbind methods.</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+        <para>If the <code>policy-option</code> is <code>reluctant</code> then
+        a bound reference is not rebound even if a more suitable service
+        becomes available for a 1..1 or 0..1 reference. If the
+        <code>policy-option</code> is <code>greedy</code> then the component
+        must be unbound and rebound for that reference. See <xref
+        linkend="service.component-policy.option.action"
+        xrefstyle="template:Table %n on page %p"/>.</para>
+
+        <para>The previous example with the registering of a resource
+        directory used a static policy. This implied that the component
+        configurations are deactivated when there is a change in the bound set
+        of Http Services. The code in the example can be seen to easily handle
+        the dynamics of Http Services that come and go. The component
+        description can therefore be updated to:</para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
         cardinality="0..n"
@@ -976,20 +1304,22 @@ public class HttpResourceImpl {
     /&gt;
 &lt;/scr:component&gt;</programlisting>
 
-      <para>The code is identical to the previous example.</para>
+        <para>The code is identical to the previous example.</para>
+      </section>
     </section>
 
     <section>
-      <title>Policy Option</title>
+      <title>Reference Policy Option</title>
 
-      <para>The <code>policy-option</code> defines how eager the reference is
-      to rebind when a new, potentially with a higher ranking, target service
-      becomes available. It can have the following values:</para>
+      <para>The reference policy option defines how eager the reference is to
+      rebind when a new, potentially a higher ranking, target service becomes
+      available. The reference policy option can have the following
+      values:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>reluctant</code> - Minimize rebinding and
-          reactivating.</para>
+          <para><code>reluctant</code> - Minimize rebinding and reactivating.
+          This is the default reference policy option.</para>
         </listitem>
 
         <listitem>
@@ -1093,7 +1423,150 @@ public class HttpResourceImpl {
       </table>
     </section>
 
-    <section xml:id="i1547893">
+    <section xml:id="service.component-reference.field.option">
+      <title>Reference Field Option</title>
+
+      <para>For a reference using field strategy, the reference field option
+      defines how SCR must manage the field value. The reference field option
+      can have the following values:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>replace</code> - SCR must set the field value. Any field
+          value set by the constructor of the component instance is
+          overwritten. This is the default reference field option.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>update</code> - SCR must update the collection set in
+          the field. This collection can be set by the constructor of the
+          component instance. This reference field option can only be used for
+          a dynamic reference with multiple cardinality.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a static reference, the replace option must be used.</para>
+
+      <para>For a dynamic reference, the choice of reference field option is
+      influenced by the cardinality of the reference. For unary cardinality,
+      the replace option must be used. For multiple cardinality, either the
+      replace or update option can be used.</para>
+
+      <para>If the update option is used when not permitted, SCR must log an
+      error message with the Log Service, if present, and the field must not
+      be modified.</para>
+
+      <section>
+        <title>Replace Field Option</title>
+
+        <para>If the field is declared with the <code>final</code> modifier,
+        SCR must log an error message with the Log Service, if present, and
+        the field must not be modified.</para>
+
+        <para>For a static reference, SCR must set the value of the field
+        before the component instance is activated and must not change the
+        field while the component is active. This means there is a
+        <emphasis>happens-before</emphasis> relationship between setting the
+        field and activating the component instance, so the active component
+        can safely read the field.</para>
+
+        <para>For a dynamic reference, the field must be declared with the
+        <code>volatile</code> modifier so that field value changes made by SCR
+        are visible to other threads. If the field is not declared with the
+        <code>volatile</code> modifier, SCR must log an error message with the
+        Log Service, if present, and the field must not be modified.</para>
+
+        <para>For a dynamic reference with unary cardinality, SCR must set the
+        field with initial bound service, if any, before the component
+        instance is activated. When there is a new bound service or the
+        service properties of the bound service are modified and the field
+        holds service properties, SCR must replace the field value. If the
+        reference has optional cardinality and there is no bound service, SCR
+        must set the field value to <code>null</code>.</para>
+
+        <para>For a dynamic reference with multiple cardinality, the type of
+        the field must be <code>Collection</code> or <code>List</code>. If the
+        field has a different type, SCR must log an error message with the Log
+        Service, if present, and the field must not be modified. Before the
+        component instance is activated, SCR must set the field with a new
+        mutable collection that must contain the initial set of bound services
+        sorted using the same ordering as
+        <code>ServiceReference.compareTo</code> based upon service ranking and
+        service id. The new collection may be empty if the reference has
+        optional cardinality and there are no bound services. When there is a
+        change in the set of bound services or the service properties of a
+        bound service are modified and the collection holds service
+        properties, SCR must replace the field value with a new mutable
+        collection that must contain the updated set of bound services sorted
+        using the same ordering as <code>ServiceReference.compareTo</code>
+        based upon service ranking and service id. The new collection may be
+        empty if the reference has optional cardinality and there are no bound
+        services.</para>
+      </section>
+
+      <section>
+        <title>Update Field Option</title>
+
+        <para>The update option can only be used for a dynamic reference with
+        multiple cardinality. The component's constructor can set the field
+        with its choice of collection implementation. In this case, the field
+        can be declared with the <code>final</code> modifier. The collection
+        implementation used by the component should use identity rather than
+        <code>equals</code> or <code>hashCode</code> to manage the elements of
+        the collection. The collection implementation should also be
+        thread-safe since SCR may update the collection from threads different
+        than those used by the component instance.</para>
+
+        <para>After constructing the component instance, if the field value is
+        <code>null</code>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If the type of the field is <code>Collection</code> or
+            <code>List</code>, SCR will set the field to a new mutable empty
+            collection or list object, respectively. If the field is declared
+            with the <code>final</code> modifier, SCR must log an error
+            message with the Log Service, if present, and the field must not
+            be modified.</para>
+          </listitem>
+
+          <listitem>
+            <para>Otherwise, SCR must log an error message with the Log
+            Service, if present, and the field must not be modified.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>SCR must not change the field value while the component is
+        active and only update the contents of the collection. SCR must update
+        the collection before the component instance is activated by calling
+        <code>Collection.add</code> for each bound service. When there is a
+        change to the set of bound services:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>SCR must call <code>Collection.add</code> for a newly bound
+            service.</para>
+          </listitem>
+
+          <listitem>
+            <para>SCR must call <code>Collection.remove</code> for an unbound
+            service.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the service properties of a bound service are modified
+            and the collection holds service properties, SCR must call
+            <code>Collection.add</code> for the replacement element followed
+            by <code>Collection.remove</code> for the old element.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The collection may be empty if the reference has optional
+        cardinality and there are no bound services.</para>
+      </section>
+    </section>
+
+    <section xml:id="service.component-selecting.target.services">
       <title>Selecting Target Services</title>
 
       <para>The target services for a reference are constrained by the
@@ -1108,8 +1581,8 @@ public class HttpResourceImpl {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="com.acme.FactoryTracker"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.FactoryTracker"/&gt;
     &lt;reference name="FACTORY"
         interface=
             "org.osgi.service.component.ComponentFactory"
@@ -1120,11 +1593,13 @@ public class HttpResourceImpl {
       <para>The filter is manifested as a component property called the
       <emphasis>target property</emphasis>. The target property can also be
       set by <code>property</code> and <code>properties</code> elements, see
-      <xref linkend="i1544128"/>. The deployer can also set the target
-      property by establishing a configuration for the component which sets
-      the value of the target property. This allows the deployer to override
-      the target property in the component description. See <xref
-      linkend="i1407478"/> for more information.</para>
+      <xref linkend="service.component-property.properties.elements"/>. The
+      deployer can also set the target property by establishing a
+      configuration for the component which sets the value of the target
+      property. This allows the deployer to override the target property in
+      the component description. See <xref
+      linkend="service.component-target.property"/> for more
+      information.</para>
     </section>
 
     <section xml:id="i1540789">
@@ -1167,28 +1642,19 @@ public class HttpResourceImpl {
       <title>Annotations</title>
 
       <para>A number of <code>CLASS</code> retention annotations have been
-      provided to allow tools to construct the XML from the Java class files.
-      These annotations will be discussed with the appropriate elements an
-      attributes. Since the naming rules between XML and Java differ, some
-      name changes are necessary.</para>
+      provided to allow tools to construct the component description XML from
+      the Java class files. These annotations will be discussed with the
+      appropriate elements and attributes. Since the naming rules between XML
+      and Java differ, some name changes are necessary.</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Elements</emphasis> - The annotation class that
-          corresponds to an element starts with an upper case. For example the
-          <code>component</code> element is represented by the
-          <code>@Component</code> annotation.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Attributes</emphasis> - Multi word attributes that
-          use a minus sign (<code>'-' \u002D</code>) are changed to camel
-          case. For example, the <code>component</code> element
-          <code>configuration-pid</code> attribute is the
-          <code>configurationPid</code> member in the <code>@Component</code>
-          annotation.</para>
-        </listitem>
-      </itemizedlist>
+      <para>Multi-word element and attribute names that use a minus sign
+      (<code>'-' \u002D</code>) are changed to camel case. For example, the
+      <code>configuration-pid</code> attribute in the <code>component</code>
+      element is the <code>configurationPid</code> member in the
+      <code>@Component</code> annotation. The annotation class that
+      corresponds to an element starts with an upper case letter. For example
+      the <code>component</code> element is represented by the
+      <code>@Component</code> annotation.</para>
 
       <para>Some elements do not have a corresponding annotation since the
       annotations can be parameterized by the type information in the Java
@@ -1196,8 +1662,8 @@ public class HttpResourceImpl {
       the <code>implement</code> element's <code>class</code> attribute from
       the type it is applied to.</para>
 
-      <para>These annotations are intended to be used during build time to
-      generate the XML and are not recognized by SCR at runtime.</para>
+      <para>See <xref linkend="service.component-component.annotations"/> for
+      more information.</para>
     </section>
 
     <section>
@@ -1238,7 +1704,7 @@ public class HttpResourceImpl {
       <xref linkend="i1636361"/>, stored in a <code>UTF-8</code> encoded
       bundle entry. The namespace for component descriptions is:</para>
 
-      <programlisting>http://www.osgi.org/xmlns/scr/v1.2.0</programlisting>
+      <programlisting>http://www.osgi.org/xmlns/scr/v1.3.0</programlisting>
 
       <para>The recommended prefix for this namespace is <code>scr</code>.
       This prefix is used by examples in this specification. XML documents
@@ -1266,7 +1732,7 @@ public class HttpResourceImpl {
       schema.</para>
     </section>
 
-    <section xml:id="i1441045">
+    <section xml:id="service.component-component.element">
       <title>Component Element</title>
 
       <para>The component element specifies the component description. The
@@ -1274,17 +1740,18 @@ public class HttpResourceImpl {
       that is similar to the normal grammar used in OSGi specifications. In
       this case the grammar should be mapped to XML elements:</para>
 
-      <programlisting>&lt;component&gt; ::= &lt;implementation&gt; 
-                (&lt;properties&gt; | &lt;property&gt;)* 
-                &lt;service&gt;  
-                &lt;reference&gt; *</programlisting>
+      <programlisting>&lt;component&gt; ::= (&lt;property&gt; | &lt;properties&gt;)*
+                &lt;service&gt;?
+                &lt;reference&gt;*
+                &lt;implementation&gt;</programlisting>
 
       <para>SCR must not require component descriptions to specify the
       elements in the order listed above and as required by the XML schema.
       SCR must allow other orderings since arbitrary orderings of these
       elements do not affect the meaning of the component description. Only
       the relative ordering of <code>property</code> and
-      <code>properties</code> element have meaning.</para>
+      <code>properties</code> elements and of <code>reference</code> elements
+      have meaning.</para>
 
       <para>The <code>component</code> element has the attributes and
       <code>@Component</code> annotations defined in the following
@@ -1323,21 +1790,21 @@ public class HttpResourceImpl {
               to retrieve component properties from the OSGi Configuration
               Admin service if present, unless a
               <code>configuration-pid</code> attribute has been defined. See
-              <xref linkend="i1479915"/> for more information. If the
-              component name is used as a PID then it should be unique within
-              the framework. The XML schema allows the use of component names
-              which are not valid PIDs. Care must be taken to use a valid PID
-              for a component name if the component should be configured by
-              the Configuration Admin service. This attribute is optional. The
-              default value of this attribute is the value of the
-              <code>class</code> attribute of the nested
+              <xref linkend="service.component-deployment"/> for more
+              information. If the component name is used as a PID then it
+              should be unique within the framework. The XML schema allows the
+              use of component names which are not valid PIDs. Care must be
+              taken to use a valid PID for a component name if the component
+              should be configured by the Configuration Admin service. This
+              attribute is optional. The default value of this attribute is
+              the value of the <code>class</code> attribute of the nested
               <code>implementation</code> element. If multiple
               <code>component</code> elements in a bundle use the same value
               for the <code>class</code> attribute of their nested
               <code>implementation</code> element, then using the default
               value for this attribute will result in duplicate component
               names. In this case, this attribute must be specified with a
-              unique value. </para></entry>
+              unique value.</para></entry>
             </row>
 
             <row>
@@ -1393,15 +1860,15 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><xref
+              <entry><para><xref
               linkend="org.osgi.service.component.annotations.Component.configurationPolicy--"
-              xrefstyle="hyperlink"/> (<xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.OPTIONAL"
-              xrefstyle="hyperlink"/>, <xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.REQUIRE"
-              xrefstyle="hyperlink"/>, or <xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.IGNORE"
-              xrefstyle="hyperlink"/>)</entry>
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
@@ -1439,11 +1906,20 @@ public class HttpResourceImpl {
               linkend="org.osgi.service.component.annotations.Component.configurationPid--"
               xrefstyle="hyperlink"/></entry>
 
-              <entry><para>The configuration PID to be used for the component
-              in conjunction with Configuration Admin. The default value for
-              this attribute is the <code>name</code> of the component, or if
-              this is also not specified, the implementation class
-              name.</para></entry>
+              <entry><para>The configuration PIDs to be used for the component
+              in conjunction with Configuration Admin. Multiple configuration
+              PIDs can be specified by using a whitespace separated list in
+              the attribute. The default value for this attribute is the name
+              of the component.</para><para>The annotation uses a
+              <code>String[]</code> to specify multiple configuration PIDs.
+              The order in which configuration PIDs are specified must be
+              preserved in the generated component description. The annotation
+              can also use the special configuration PID name <link
+              linkend="org.osgi.service.component.annotations.Component.NAME"
+              xrefstyle="hyperlink">"$"</link> to specify the name of the
+              component. This special name must be replaced with the actual
+              name of the component in the generated component
+              description.</para></entry>
             </row>
 
             <row>
@@ -1556,8 +2032,8 @@ public class HttpResourceImpl {
       implement all interfaces that are provided by the service.</para>
     </section>
 
-    <section xml:id="i1544128">
-      <title>Property Element</title>
+    <section xml:id="service.component-property.properties.elements">
+      <title>Property and Properties Elements</title>
 
       <para>A component description can define a number of properties. These
       can defined inline or from a resource in the bundle. The
@@ -1569,7 +2045,8 @@ public class HttpResourceImpl {
       <para>Properties can also be overridden by a Configuration Admin
       service's <code>Configuration</code> object before they are exposed to
       the component or used as service properties. This is described in <xref
-      linkend="i1407478"/> and <xref linkend="i1479915"/>.</para>
+      linkend="service.component-component.properties"/> and <xref
+      linkend="service.component-deployment"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
       annotations defined in the following table.</para>
@@ -1716,8 +2193,7 @@ public class HttpResourceImpl {
       <para>In this case <code>name</code>, <code>type</code>, and
       <code>value</code> parts map to the attributes of the
       <code>property</code> element. If multiple values must be specified then
-      the same name can be repeated multiple times. The annotation does not
-      support ordering of properties. For example:</para>
+      the same name can be repeated multiple times. For example:</para>
 
       <programlisting>@Component(property={"foo:Integer=1","foo:Integer=2","foo:Integer=3"})
 public class FooImpl {
@@ -1728,7 +2204,7 @@ public class FooImpl {
       bundle whose contents conform to a standard <xref
       linkend="i1567926"/>.</para>
 
-      <para>The entry is read and processed to obtain the properties and their
+      <para>At runtime, SCR reads the entry to obtain the properties and their
       values. The properties element attributes are defined in the following
       table.</para>
 
@@ -1782,15 +2258,21 @@ public class FooImpl {
       xrefstyle="hyperlink"/></code> element can be used to provide the same
       information, this element consists of an array of strings where each
       string defines an entry. The order within the array is the order that
-      must be used for the XML. However, the annotations do not allow mixing
-      of the property and properties element.</para>
+      must be used for the XML. However, the annotations do not support
+      interleaving of the generated <code>property</code> and
+      <code>properties</code> elements.</para>
 
       <para>For example:</para>
 
       <programlisting>@Component(properties="OSGI-INF/vendor.properties")</programlisting>
+
+      <para>See <xref
+      linkend="service.component-ordering.generated.properties"/> for more
+      information on the ordering of generated properties when using
+      annotations.</para>
     </section>
 
-    <section>
+    <section xml:id="service.component-service.element">
       <title>Service Element</title>
 
       <para>The <code>service</code> element is optional. It describes the
@@ -1822,37 +2304,49 @@ public class FooImpl {
 
           <tbody>
             <row>
-              <entry><code>servicefactory</code></entry>
+              <entry><code>scope</code></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.component.annotations.Component"
               xrefstyle="hyperlink"/> <xref
-              linkend="org.osgi.service.component.annotations.Component.servicefactory--"
+              linkend="org.osgi.service.component.annotations.Component.scope--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.SINGLETON"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.BUNDLE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.PROTOTYPE"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para>Controls whether the service uses the
-              <code>ServiceFactory</code> concept of the OSGi Framework. The
-              default value is <code>false</code>. If
-              <code>servicefactory</code> is set to <code>true</code>, a
-              different component configuration is created, activated and its
-              component instance returned as the service object for each
-              distinct bundle that requests the service. Each of these
-              component configurations has the same component properties.
-              Otherwise, the same component instance from the single component
-              configuration is returned as the service object for all bundles
-              that request the service.</para></entry>
+              <entry><para>Controls the scope of the provided service. If set
+              to <code>singleton</code>, when the component is registered as a
+              service, it must be registered as a bundle scope service but
+              only a single component configuration must be created and
+              activated and a new instance of the component implementation
+              class of the component must be used for all bundles using the
+              service. If set to <code>bundle</code>, when the component is
+              registered as a service, it must be registered as a bundle scope
+              service and a different component configuration is created and
+              activated and a new instance of the component implementation
+              class must be created for each bundle using the service. If set
+              to <code>prototype</code>, when the component is registered as a
+              service, it must be registered as a prototype scope service and
+              a different component configuration is created and activated and
+              a new instance of the component implementation class must be
+              created for each distinct request for the service, such as via
+              <code>ServiceObjects</code>.</para></entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
-      <para>The <code>servicefactory</code> attribute must not be
-      <code>true</code> if the component is a factory component or an
-      immediate component. This is because SCR is not free to create component
-      configurations as necessary to support <code>servicefactory</code>. A
-      component description is ill-formed if it specifies that the component
-      is a factory component or an immediate component and
-      <code>servicefactory</code> is set to <code>true</code>.</para>
+      <para>The <code>scope</code> attribute must be <code>singleton</code> if
+      the component is a factory component or an immediate component. This is
+      because SCR is not free to create component configurations as necessary
+      to support non-singleton scoped services. A component description is
+      ill-formed if it specifies that the component is a factory component or
+      an immediate component and <code>scope</code> is not
+      <code>singleton</code>.</para>
 
       <para>The <code>service</code> element must have one or more
       <code>provide</code> elements that define the service interfaces. The
@@ -1921,14 +2415,14 @@ public class FooImpl {
 public class Foo implements EventHandler { ... }</programlisting>
     </section>
 
-    <section>
+    <section xml:id="service.component-reference.element">
       <title>Reference Element</title>
 
       <para>A <emphasis>reference</emphasis> declares a dependency that a
       component has on a<emphasis> </emphasis>set of target services. A
       component configuration is not satisfied, unless all its references are
       satisfied. A reference specifies target services by specifying their
-      interface and an optional target filter.</para>
+      interface and an optional target property.</para>
 
       <para>A <code>reference</code> element has the attributes defined in the
       following table.</para>
@@ -1975,10 +2469,10 @@ public class Foo implements EventHandler { ... }</programlisting>
               duplicate reference names. In this case, this attribute must be
               specified with a unique name for the reference to avoid an
               error.</para><para>The <code>Reference</code> annotation will
-              use the name of the annotated method as the default reference
-              name. If the method name begins with <code>bind</code>,
-              <code>set</code> or <code>add</code>, that prefix is
-              removed.</para></entry>
+              use the name of the annotated method or field as the default
+              reference name. If the method name begins with
+              <code>bind</code>, <code>set</code> or <code>add</code>, that
+              prefix is removed.</para></entry>
             </row>
 
             <row>
@@ -1995,8 +2489,9 @@ public class Foo implements EventHandler { ... }</programlisting>
               A service must be registered under this name to be considered
               for the set of target services.</para><para>The
               <code>Reference</code> annotation will use the type of the first
-              argument of the method it is applied for the
-              <code>service</code> value.</para></entry>
+              argument of the annotated method or the type of the annotated
+              field to determine the <code>service</code>
+              value.</para></entry>
             </row>
 
             <row>
@@ -2017,7 +2512,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
               multiple bound services. See <xref
-              linkend="i1440459"/>.</para></entry>
+              linkend="service.component-reference.cardinality"/>.</para></entry>
             </row>
 
             <row>
@@ -2061,8 +2556,28 @@ public class Foo implements EventHandler { ... }</programlisting>
               further constrains the set of target services. The default is no
               filter, limiting the set of matched services to all service
               registered under the given reference interface. The value of
-              this attribute is used to set a target property. See <xref
-              linkend="i1547893"/>.</para></entry>
+              this attribute is used for the value of the target property of
+              the reference. See <xref
+              linkend="service.component-target.property"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>scope</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.scope--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ReferenceScope.BUNDLE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE"
+              xrefstyle="hyperlink"/></para><para><link
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE_REQUIRED"
+              xrefstyle="hyperlink">PROTOTYPE_</link></para><para>&#160;<link
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE_REQUIRED"
+              xrefstyle="hyperlink">REQUIRED</link></para></entry>
+
+              <entry><para>The reference scope for this reference. See <xref
+              linkend="service.component-reference.scope"/>.</para></entry>
             </row>
 
             <row>
@@ -2070,6 +2585,8 @@ public class Foo implements EventHandler { ... }</programlisting>
 
               <entry><para><xref
               linkend="org.osgi.service.component.annotations.Reference"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.bind--"
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The name of a method in the component
@@ -2079,8 +2596,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               method. For dynamic references, this method can also be called
               while the component configuration is active. See <xref
               linkend="i1548427"/>.</para><para>The <code>Reference</code>
-              annotation will use the method it is applied to as the bind
-              method.</para></entry>
+              annotation will use the name of the method it is applied to as
+              the bind method name.</para></entry>
             </row>
 
             <row>
@@ -2109,28 +2626,136 @@ public class Foo implements EventHandler { ... }</programlisting>
               method can also be called while the component configuration is
               active. See <xref linkend="i1548427"/>.</para></entry>
             </row>
+
+            <row>
+              <entry><code>field</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.field--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The name of a field in the component implementation
+              class that is used to hold service(s) that are bound to the
+              component configuration. For static references, this field is
+              only set before the <code>activate</code> method. For dynamic
+              references, this field can modified while the component
+              configuration is active. See <xref
+              linkend="i1548427"/>.</para><para>The <code>Reference</code>
+              annotation will use the name of the field it is applied to as
+              the field name.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>field-option</code></entry>
+
+              <entry><para> <xref
+              linkend="org.osgi.service.component.annotations.Reference.fieldOption--"
+              xrefstyle="hyperlink"/></para><para> <xref
+              linkend="org.osgi.service.component.annotations.FieldOption.REPLACE"
+              xrefstyle="hyperlink"/></para><para> <xref
+              linkend="org.osgi.service.component.annotations.FieldOption.UPDATE"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>Defines how the field value must be managed. This
+              is ignored if the <code>field</code> attribute is not set. See
+              <xref
+              linkend="service.component-reference.field.option"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>field-collection-type</code></entry>
+
+              <entry/>
+
+              <entry><para>Defines the types of elements in the collection
+              referenced by the field value. This is ignored if the
+              <code>field</code> attribute is not set or the cardinality is
+              unary. See <xref linkend="service.component-field.strategy"/>
+              for more information.</para><para>The <code>Reference</code>
+              annotation can infer the value of the collection elements from
+              the generic type information of the annotated
+              field.</para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
 
+      <para>In the generated component description, the reference elements
+      must be ordered in ascending lexicographical order, using
+      <code>String.compareTo</code>, of the <xref
+      linkend="org.osgi.service.component.annotations.Reference.name--"
+      xrefstyle="hyperlink"/>s of the references.</para>
+
       <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation.</para>
+      xrefstyle="hyperlink"/> annotation for the event strategy.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
+  @Reference( 
+    policy = DYNAMIC, 
+    policyOption = GREEDY,
+    cardinality = MANDATORY )
+  void setLog( LogService log ) { ... }
+  void unsetLog( LogService log ) { ... }
+  void updatedLog( Map&lt;String,?&gt; ref ) { ... }
+
   @Activate
   void open() { ... }
   @Deactivate
   void close() { ... }
+}</programlisting>
 
+      <para>The following code demonstrates the use of the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation for the field strategy.</para>
+
+      <programlisting>@Component
+public class FooImpl implements Foo {
   @Reference( 
     policy = DYNAMIC, 
-    policyOption=GREEDY,
-    cardinality=MANDATORY )
-  void setLog( LogService log) { ... }
-  void unsetLog( LogService log) { ... }
-  void updatedLog( Map&lt;String,?&gt; ref ) { ... }
+    policyOption = GREEDY,
+    cardinality = MANDATORY )
+  volatile LogService log;
+
+  @Activate
+  void open() { log.log(LOG_INFO, "activated"); }
+  @Deactivate
+  void close() { log.log(LOG_INFO, "deactivated"); }
+}</programlisting>
+
+      <para>For a reference to be used with the lookup strategy, there are no
+      bind methods or fields to annotate with the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation. Instead <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotations can be specified in the <xref
+      linkend="org.osgi.service.component.annotations.Component.reference--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation. When used in this way, the <xref
+      linkend="org.osgi.service.component.annotations.Reference.name--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Reference.service--"
+      xrefstyle="hyperlink"/> elements must be specified since there is no
+      annotated member from which the name or service can be determined. The
+      following code demonstrates the use of the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation for the lookup strategy.</para>
+
+      <programlisting>@Component( reference = 
+  @Reference( name = "log", service = LogService.class )
+)
+public class FooImpl implements Foo {
+  @Activate
+  void open( ComponentContext context ) {
+    LogService log = (LogService) context.locateService( "log" );
+    ...
+  }
+  @Deactivate
+  void close() { ... }
 }</programlisting>
     </section>
   </section>
@@ -2152,8 +2777,9 @@ public class FooImpl implements Foo {
       <para>Every component can be enabled or disabled. The initial enabled
       state of a component is specified in the component description via the
       <code>enabled</code> attribute of the <code>component</code> element.
-      See <xref linkend="i1441045"/>. Component configurations can be created,
-      satisfied and activated only when the component is enabled.</para>
+      See <xref linkend="service.component-component.element"/>. Component
+      configurations can be created, satisfied and activated only when the
+      component is enabled.</para>
 
       <para>The enabled state of a component can be controlled with the
       Component Context <xref
@@ -2204,8 +2830,9 @@ public class FooImpl implements Foo {
         <listitem>
           <para>Using the component properties of the component configuration,
           all the component's references are satisfied. A reference is
-          satisfied when the reference specifies optional cardinality or there
-          is at least one target service for the reference.</para>
+          satisfied when the reference specifies optional cardinality or the
+          number of target services is equal to or more than the minimum
+          cardinality of the reference.</para>
         </listitem>
       </itemizedlist>
 
@@ -2273,20 +2900,24 @@ public class FooImpl implements Foo {
 
       <para>The activation of a component configuration must be delayed until
       its service is requested. When the service is requested, if the service
-      has the <code>servicefactory</code> attribute set to <code>true</code>,
-      SCR must create and activate a unique component configuration for each
-      bundle requesting the service. Otherwise, SCR must activate a single
-      component configuration which is used by all bundles requesting the
-      service. A component instance can determine the bundle it was activated
-      for by calling the <xref
+      has the <code>scope</code> attribute set to <code>bundle</code>, SCR
+      must create and activate a unique component configuration for each
+      bundle requesting the service. If the service has the <code>scope</code>
+      attribute set to <code>prototype</code>, SCR must create and activate a
+      unique component configuration for each distinct request for the
+      service. Otherwise, if the service has the <code>scope</code> attribute
+      set to <code>singleton</code>, SCR must activate a single component
+      configuration which is used by all requests for the service. A component
+      instance can determine the bundle it was activated for by calling the
+      <xref
       linkend="org.osgi.service.component.ComponentContext.getUsingBundle--"
       xrefstyle="hyperlink"/> method on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
       diagram in <xref linkend="i1462979"/>. Notice that multiple component
       configurations can be created from the <code>REGISTERED</code> state if
-      a delayed component specifies <code>servicefactory</code> set to
-      <code>true</code>.</para>
+      a delayed component specifies a service <code>scope</code> set to a
+      value other than <code>singleton</code>.</para>
 
       <para>If the service registered by a component configuration becomes
       unused because there are no more bundles using it, then SCR should
@@ -2457,23 +3088,27 @@ public class FooImpl implements Foo {
       component configuration is activated, a subset of the target services
       for each reference are bound to the component configuration. The subset
       is chosen by the cardinality of the reference. See <xref
-      linkend="i1440459"/>.</para>
+      linkend="service.component-reference.cardinality"/>.</para>
 
       <para>When binding services, the references are processed in the order
       in which they are specified in the component description. That is,
       target services from the first specified reference are bound before
       services from the next specified reference.</para>
 
-      <para>For each reference using the event strategy, the bind method must
-      be called for each bound service of that reference. This may result in
+      <para>Obtaining the service object for a bound service may result in
       activating a component configuration of the bound service which could
       result in an exception. If the loss of the bound service due to the
       exception causes the reference's cardinality constraint to be violated,
       then activation of this component configuration will fail. Otherwise the
-      bound service which failed to activate will be considered unbound. If a
-      bind method throws an exception, SCR must log an error message
-      containing the exception with the Log Service, if present, but the
-      activation of the component configuration does not fail.</para>
+      bound service which failed to activate will be considered
+      unbound.</para>
+
+      <para>If the reference uses the field strategy, the field must be set.
+      Then, if the reference uses the event strategy, the bind method must be
+      called for each bound service of that reference. If a bind method throws
+      an exception, SCR must log an error message containing the exception
+      with the Log Service, if present, but the activation of the component
+      configuration does not fail.</para>
     </section>
 
     <section xml:id="i1539155">
@@ -2481,9 +3116,10 @@ public class FooImpl implements Foo {
 
       <para>A component instance can have an activate method. The name of the
       activate method can be specified by the <code>activate</code> attribute.
-      See <xref linkend="i1441045"/>. If the <code>activate</code> attribute
-      is not specified, the default method name of <code>activate</code> is
-      used. The prototype of the activate method is:</para>
+      See <xref linkend="service.component-component.element"/>. If the
+      <code>activate</code> attribute is not specified, the default method
+      name of <code>activate</code> is used. The prototype of the activate
+      method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2505,6 +3141,14 @@ public class FooImpl implements Foo {
           <para><code>Map</code> - The component instance will be passed an
           unmodifiable Map containing the component properties.</para>
         </listitem>
+
+        <listitem>
+          <para>A component property type - The component instance will be
+          passed an instance of the component property type which allows type
+          safe access to component properties defined by the component
+          property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
+        </listitem>
       </itemizedlist>
 
       <para>A suitable method is selected using the following priority:</para>
@@ -2523,17 +3167,22 @@ public class FooImpl implements Foo {
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.util.Map</code>.</para>
+          argument is a component property type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes two or more arguments and the type of each
           argument must be
           <code>org.osgi.service.component.ComponentContext</code>,
-          <code>org.osgi.framework.BundleContext</code> or
-          <code>java.util.Map</code>. If multiple methods match this rule,
-          this implies the method name is overloaded and SCR may choose any of
-          the methods to call.</para>
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type or <code>java.util.Map</code>. If multiple methods match this
+          rule, this implies the method name is overloaded and SCR may choose
+          any of the methods to call.</para>
         </listitem>
 
         <listitem>
@@ -2576,28 +3225,31 @@ public class FooImpl implements Foo {
       unary cardinality and the bound service is modified or unregistered and
       ceases to be a target service, or the <code>policy-option</code> is
       <code>greedy</code> and a better target service becomes available then
-      SCR must attempt to replace the bound service with a new target service.
-      SCR must first bind a replacement target service and then unbind the
-      outgoing service. This reversed order allows the component to not having
+      SCR must attempt to replace the bound service with a new bound
+      service.</para>
+
+      <para>If the reference uses the field strategy, the field must be set
+      for the replacement bound service. Then, if the reference uses the event
+      strategy, SCR must first bind the new bound service and then unbind the
+      outgoing service. This reversed order allows the component to not have
       to handle the inevitable gap between the unbind and bind methods.
       However, this means that in the unbind method care must be taken to not
       overwrite the newly bound service. For example, the following code
       handles the associated concurrency issues and simplify handling the
       reverse order.</para>
 
-      <programlisting>final AtomicReference&lt;LogService&gt; log =new AtomicReference&lt;LogService&gt;();
+      <programlisting>final AtomicReference&lt;LogService&gt; log = new AtomicReference&lt;LogService&gt;();
 
 void setLogService( LogService log ) {
     this.log.set(log);
 }
 void unsetLogService( LogService log ) {
-    this.log.compareAndSet(log,null);
+    this.log.compareAndSet(log, null);
 }</programlisting>
 
-      <para>If the dynamic reference has a mandatory cardinality and no
-      replacement target service is available, the component configuration
-      must be deactivated because the cardinality constraints will be
-      violated.</para>
+      <para>If the dynamic reference falls below the minimum cardinality, the
+      component configuration must be deactivated because the cardinality
+      constraints will be violated.</para>
 
       <para>If a component configuration has a static reference and a bound
       service is modified or unregistered and ceases to be a target service,
@@ -2609,13 +3261,14 @@ void unsetLogService( LogService log ) {
     </section>
 
     <section>
-      <title>Updated method</title>
+      <title>Updated</title>
 
-      <para>If an active component is bound to a service that modifies it
-      properties then the component can be notified with the update method
-      specified on the <code>reference</code> element. This method can be
-      called with a Service Reference or a Map to supply the updated service
-      properties.</para>
+      <para>If an active component is bound to a service that modifies its
+      service properties then the component can be updated. If the reference
+      uses the field strategy and the field holds the service properties, the
+      field must be set for the updated bound service. Then, if the reference
+      uses the event strategy and specifies an updated method, the updated
+      method must be called.</para>
     </section>
 
     <section xml:id="i1652198">
@@ -2671,9 +3324,10 @@ void unsetLogService( LogService log ) {
       <title>Modified Method</title>
 
       <para>The name of the modified method is specified by the
-      <code>modified</code> attribute. See <xref linkend="i1441045"/>. The
-      prototype and selection priority of the modified method is identical to
-      that of the activate method. See <xref linkend="i1539155"/>.</para>
+      <code>modified</code> attribute. See <xref
+      linkend="service.component-component.element"/>. The prototype and
+      selection priority of the modified method is identical to that of the
+      activate method. See <xref linkend="i1539155"/>.</para>
 
       <para>SCR must locate a suitable method as specified in <xref
       linkend="i1641644"/>. If the <code>modified</code> attribute is
@@ -2758,10 +3412,10 @@ void unsetLogService( LogService log ) {
 
       <para>A component instance can have a deactivate method. The name of the
       deactivate method can be specified by the <code>deactivate</code>
-      attribute. See <xref linkend="i1441045"/>. If the
-      <code>deactivate</code> attribute is not specified, the default method
-      name of <code>deactivate</code> is used. The prototype of the deactivate
-      method is:</para>
+      attribute. See <xref linkend="service.component-component.element"/>. If
+      the <code>deactivate</code> attribute is not specified, the default
+      method name of <code>deactivate</code> is used. The prototype of the
+      deactivate method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2782,6 +3436,14 @@ void unsetLogService( LogService log ) {
         <listitem>
           <para><code>Map</code> - The component instance will be passed an
           unmodifiable Map containing the component properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>A component property type - The component instance will be
+          passed an instance of the component property type which allows type
+          safe access to component properties defined by the component
+          property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
         </listitem>
 
         <listitem>
@@ -2807,25 +3469,30 @@ void unsetLogService( LogService log ) {
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.util.Map</code>.</para>
+          argument is a component property type.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>int</code>.</para>
+          argument is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.lang.Integer</code>.</para>
+          argument is <code>int</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.lang.Integer</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes two or more arguments and the type of each
           argument must be
           <code>org.osgi.service.component.ComponentContext</code>,
-          <code>org.osgi.framework.BundleContext</code>,
-          <code>java.util.Map</code>, <code>int</code> or
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type, <code>java.util.Map</code>, <code>int</code> or
           <code>java.lang.Integer</code>. If multiple methods match this rule,
           this implies the method name is overloaded and SCR may choose any of
           the methods to call.</para>
@@ -2861,11 +3528,12 @@ void unsetLogService( LogService log ) {
       That is, target services from the last specified reference are unbound
       before services from the previous specified reference.</para>
 
-      <para>For each reference using the event strategy, the unbind method
-      must be called for each bound service of that reference. If an unbind
-      method throws an exception, SCR must log an error message containing the
+      <para>If the reference uses the event strategy, the unbind method must
+      be called for each bound service of that reference. If an unbind method
+      throws an exception, SCR must log an error message containing the
       exception with the Log Service, if present, and the deactivation of the
-      component configuration will continue.</para>
+      component configuration will continue. Then, if the reference uses the
+      field strategy, the field must be set to <code>null</code>.</para>
     </section>
 
     <section>
@@ -2876,8 +3544,8 @@ void unsetLogService( LogService log ) {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.binding"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-    &lt;implementation class="example.Binding"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.impl.Binding"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
         cardinality="1..1"
@@ -2898,22 +3566,23 @@ void unsetLogService( LogService log ) {
     LogService  log;
     HttpService http;
 
-    private void setHttp(HttpService h) { 
-        this.http = h; 
+    private void setHttp(HttpService h) {
+        http = h;
         // register servlet
     }
-    private void unsetHttp(HttpService h){ 
-        this.h = null;
-        // unregister servlet 
+    private void unsetHttp(HttpService h){
+        if (http == h)
+            http = null;
+        // unregister servlet
     }
-    private void activate(ComponentContext context ) {.
-     log = (LogService) context.locateService("LOG");
+    private void activate(ComponentContext context ) {
+        log = (LogService) context.locateService("LOG");
     }
-    private void deactivate(ComponentContext context ){...}
+    private void deactivate(ComponentContext context ) {...}
 }</programlisting>
 
       <para>This example is depicted in a sequence diagram in <xref
-      linkend="i1567615"/>. with the following scenario:</para>
+      linkend="i1567615"/> with the following scenario:</para>
 
       <orderedlist>
         <listitem>
@@ -2948,26 +3617,34 @@ void unsetLogService( LogService log ) {
     </section>
   </section>
 
-  <section xml:id="i1407478">
+  <section xml:id="service.component-component.properties">
     <title>Component Properties</title>
 
     <para>Each component configuration is associated with a set of component
-    properties. The component properties are specified in the following places
-    (in order of precedence):</para>
+    properties. The component properties are specified in the following
+    <emphasis>configuration sources</emphasis> (in order of
+    precedence):</para>
 
     <orderedlist>
       <listitem>
-        <para>Properties specified in the argument of
+        <para>Properties specified in the argument of the
         <code>ComponentFactory.newInstance</code> method. This is only
         applicable for factory components.</para>
       </listitem>
 
       <listitem>
         <para>Properties retrieved from the OSGi Configuration Admin service
-        with a Configuration object that has a PID equal to the
-        <emphasis>configuration PID</emphasis>. The configuration PID is the
-        component name, or when specified, the <code>configuration-pid</code>
-        attribute.</para>
+        in Configuration objects whose PID matches a <emphasis>configuration
+        PID</emphasis>. The configuration PIDs are specified by the
+        <code>configuration-pid</code> attribute of the <code>component</code>
+        element. See <xref linkend="service.component-component.element"/>. If
+        no <code>configuration-pid</code> attribute is specified, the
+        component name is used as the default configuration PID. If multiple
+        configuration PIDs are specified, the order of precedence follows the
+        order the configuration PIDs are specified in the component
+        description. That is, the precedence for the configuration for an
+        earlier specified configuration PID is lower than the precedence for
+        the configurations for a later specified configuration PID.</para>
       </listitem>
 
       <listitem>
@@ -2979,22 +3656,16 @@ void unsetLogService( LogService log ) {
         <itemizedlist>
           <listitem>
             <para><code>target</code> attribute of <code>reference</code>
-            elements - Sets a component property called the <emphasis>target
-            property</emphasis> of the reference. The key of a target property
-            is the name of the reference appended with <code>.target</code>.
-            The value of a target property is the value of the
-            <code>target</code> attribute. For example, a reference with the
-            name <code>http</code> whose <code>target</code> attribute has the
-            value "<code>(http.port=80)</code>" results in the component
-            property having the name <code>http.target</code> and value
-            "<code>(http.port=80)</code>". See <xref linkend="i1547893"/>. The
-            target property can also be set wherever component properties can
-            be set.</para>
+            elements - Sets the target property of the reference. See <xref
+            linkend="service.component-target.property"/>. The value of the
+            <code>target</code> attribute is used for the value of a target
+            property.</para>
           </listitem>
 
           <listitem>
             <para><code>property</code> and <code>properties</code> elements -
-            See <xref linkend="i1544128"/>.</para>
+            See <xref
+            linkend="service.component-property.properties.elements"/>.</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -3010,10 +3681,29 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para>The argument to <code>ComponentFactory.newInstance</code>
+        <para>The argument to the <code>ComponentFactory.newInstance</code>
         method</para>
       </listitem>
     </itemizedlist>
+
+    <para>Normally, a property value from a higher precedence configuration
+    source replace a property value from a lower precedence configuration
+    source. However, the <code>service.pid</code> property values receive
+    different treatment. For the <code>service.pid</code> property, if the
+    property appears multiple times in the configuration sources, SCR must
+    aggregate all the values found into a
+    <code>Collection&lt;String&gt;</code> having an iteration order such that
+    the first item in the iteration is the property value from the lowest
+    precedence configuration source and the last item in the iteration is the
+    property value from the highest precedence configuration source. If the
+    component description specifies multiple configuration PIDs, then the
+    order of the <code>service.pid</code> property values from the
+    corresponding configurations matches the order the configuration PIDs are
+    specified in the component description. The values of the
+    <code>service.pid</code> component property are the values as they come
+    from the configuration sources which, for Configuration objects, may be
+    more detailed than the configuration PIDs specified in the component
+    description.</para>
 
     <para>SCR always adds the following component properties, which cannot be
     overridden:</para>
@@ -3045,9 +3735,89 @@ void unsetLogService( LogService log ) {
       available to the component instance but are not available as service
       properties of the registered service.</para>
     </section>
+
+    <section>
+      <title>Reference Properties</title>
+
+      <para>This specification defines some component properties which are
+      associated with specific component references. These are called
+      <emphasis>reference properties</emphasis>. The name of a reference
+      property for a reference is the name of the reference appended with a
+      full stop (<code>'.' \u002E</code>) and a suffix unique to the reference
+      property. Reference properties can be set wherever component properties
+      can be set.</para>
+
+      <para>All component property names starting with a reference name
+      followed by a full stop (<code>'.' \u002E</code>) are reserved for use
+      by this specification.</para>
+
+      <para>Following are the reference properties defined by this
+      specification.</para>
+
+      <section xml:id="service.component-target.property">
+        <title>Target Property</title>
+
+        <para>The <emphasis>target property</emphasis> is a reference property
+        which aids in the selection of target services for the reference. See
+        <xref linkend="service.component-selecting.target.services"/>. The
+        name of a target property is the name of a reference appended with
+        <code>.target</code>. For example, the target property for a reference
+        with the name <code>http</code> would have the name
+        <code>http.target</code>. The value of a target property is a filter
+        string used to select targets services for the reference.</para>
+
+        <para>The target property for a reference can also be set by the
+        <code>target</code> attribute of the <code>reference</code> element.
+        See <xref linkend="service.component-reference.element"/>.</para>
+      </section>
+
+      <section xml:id="service.component-minimum.cardinality.property">
+        <title>Minimum Cardinality Property</title>
+
+        <para>The initial minimum cardinality of a reference is specified by
+        the optionality: the first part of the cardinality. It is either
+        <code>0</code> or <code>1</code>. The minimum cardinality of a
+        reference cannot exceed the multiplicity: the second part of the
+        cardinality. See <xref
+        linkend="service.component-reference.cardinality"/> for more
+        information on the cardinality of a reference.</para>
+
+        <para>The <emphasis>minimum cardinality property</emphasis> is a
+        reference property which can be used to raise the minimum cardinality
+        of a reference from its initial value. That is, a <code>0..1</code>
+        cardinality can be raised to a <code>1..1</code> cardinality by
+        setting the reference's minimum cardinality property to
+        <code>1</code>, and a <code>0..n</code> or <code>1..n</code>
+        cardinality can be raised to a <code>m..n</code> cardinality by
+        setting the reference's minimum cardinality property to <code>m</code>
+        such that <code>m</code> is a positive integer. The minimum
+        cardinality of a reference cannot be lowered. That is, a
+        <code>1..1</code> or <code>1..n</code> cardinality can be lowered to a
+        <code>0..1</code> or <code>0..n</code> cardinality because the
+        component was coded to expect at least one bound service.</para>
+
+        <para>The name of a minimum cardinality property is the name of a
+        reference appended with <code>.cardinality.minimum</code>. For
+        example, the minimum cardinality property for a reference with the
+        name <code>http</code> would have the name
+        <code>http.cardinality.minimum</code>. The value of a minimum
+        cardinality property must be a positive integer or a value that can be
+        coerced into a positive integer. See <xref
+        linkend="service.component-component.property.value.coercion"/> for
+        information on coercing property values. If the numerical value of the
+        minimum cardinality property is not valid for the reference's
+        cardinality or the minimum cardinality property value cannot be
+        coerced into a numerical value, then the minimum cardinality property
+        must be ignored.</para>
+
+        <para>SCR must support the minimum cardinality property for all
+        components even those with component descriptions in older
+        namespaces.</para>
+      </section>
+    </section>
   </section>
 
-  <section xml:id="i1479915">
+  <section xml:id="service.component-deployment">
     <title>Deployment</title>
 
     <para>A component description contains default information to select
@@ -3059,16 +3829,26 @@ void unsetLogService( LogService log ) {
     through Configuration Admin, a deployer can configure component
     properties.</para>
 
-    <para>The configuration PID is used as the key for obtaining additional
-    component properties from Configuration Admin. The following situations
-    can arise:</para>
+    <para>A component's configuration PIDs are used as keys for obtaining
+    additional component properties from Configuration Admin. When
+    <emphasis>matching</emphasis> a configuration PID to a
+    <code>Configuration</code> object, SCR must use the
+    <code>Configuration</code> object with the best matching PID for the
+    component's bundle. See <xref linkend="service.cm-targeted.pids"/> for
+    more information on targeted PIDs and <xref
+    linkend="service.cm-extenders.targeted.pids"/> for more information on
+    selecting the <code>Configuration</code> object with the best matching
+    PID.</para>
+
+    <para>The following situations can arise when looking for
+    <code>Configuration</code> objects:</para>
 
     <itemizedlist>
       <listitem>
         <para><emphasis>No Configuration</emphasis> - If the component's
         <code>configuration-policy</code> is set to <code>ignore</code> or
-        there is no Configuration with a PID or factory PID equal to the
-        configuration PID, then component configurations will not obtain
+        there are no Configurations with a PID or factory PID matching any of
+        the configuration PIDs, then component configurations will not obtain
         component properties from Configuration Admin. Only component
         properties specified in the component description or via the
         <code>ComponentFactory.newInstance</code> method will be used.</para>
@@ -3076,34 +3856,43 @@ void unsetLogService( LogService log ) {
 
       <listitem>
         <para><emphasis>Not Satisfied</emphasis> - If the component's
-        <code>configuration-policy</code> is set to <code>require</code> and
-        there is no Configuration with a PID or factory PID equal to the
-        configuration PID, then the component configuration is not satisfied
+        <code>configuration-policy</code> is set to <code>require</code> and,
+        for each configuration PID, there is no Configuration with a matching
+        PID or factory PID, then the component configuration is not satisfied
         and will not be activated.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Single Configuration</emphasis> - If there exists a
-        Configuration with a PID equal to the configuration PID, then
-        component configurations will obtain additional component properties
-        from Configuration Admin.</para>
+        <para><emphasis>Single Configuration</emphasis>s - If none of the
+        configuration PIDs matches a factory PID, then component
+        configurations will obtain additional component properties from
+        Configuration Admin.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Factory Configuration</emphasis> - If a factory PID
-        exists, with zero or more Configurations, that is equal to the
-        configuration PID, then for each Configuration, a component
-        configuration must be created that will obtain additional component
-        properties from Configuration Admin.</para>
+        <para><emphasis>Factory Configuration</emphasis> - If one of the
+        configuration PIDs matches a factory PID, with zero or more
+        Configurations, then for each Configuration of the factory PID, a
+        component configuration must be created that will obtain additional
+        component properties from Configuration Admin.</para>
+
+        <para>It is a configuration error if more than one of the
+        configuration PIDs match a factory PID and SCR must log an error
+        message with the Log Service, if present. If the
+        <code>configuration-policy</code> is set to <code>optional</code>, the
+        component configuration must be satisfied without the configurations
+        PIDs which match a factory PID. If the
+        <code>configuration-policy</code> is set to <code>require</code>, the
+        component configuration is not satisfied and will not be
+        activated.</para>
+
+        <para>A factory configuration must not be used if the component is a
+        factory component. This is because SCR is not free to create component
+        configurations as necessary to support multiple Configurations. When
+        SCR detects this condition, it must log an error message with the Log
+        Service, if present, and ignore the component description.</para>
       </listitem>
     </itemizedlist>
-
-    <para>A factory configuration must not be used if the component is a
-    factory component. This is because SCR is not free to create component
-    configurations as necessary to support multiple
-    <code>Configuration</code>s. When SCR detects this condition, it must log
-    an error message with the Log Service, if present, and ignore the
-    component description.</para>
 
     <para>SCR must obtain the <code>Configuration</code> objects from the
     Configuration Admin service using the Bundle Context of the bundle
@@ -3122,15 +3911,30 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       <title>Configuration Changes</title>
 
       <para>SCR must track changes in the <code>Configuration</code> objects
-      <emphasis>matching</emphasis> the configuration PID of the component
-      description. Changes include the creating, updating and deleting of
-      matching <code>Configuration</code> objects. The actions SCR must take
-      when a configuration change for a component description occurs are based
-      upon how the <code>configuration-policy</code> and <code>modified</code>
-      attributes are specified in the component description, whether a
-      component configuration becomes satisfied, remains satisfied or becomes
+      matching the configuration PIDs of a component description. Changes
+      include the creating, updating and deleting of
+      <code>Configuration</code> objects matching the configuration PIDs. The
+      actions SCR must take when a configuration change for a component
+      configuration occurs are based upon how the
+      <code>configuration-policy</code> and <code>modified</code> attributes
+      are specified in the component description, whether a component
+      configuration becomes satisfied, remains satisfied or becomes
       unsatisfied and the type and number of matching
       <code>Configuration</code> objects.</para>
+
+      <para>With targeted PIDs, multiple <code>Configuration</code> objects
+      can exist which can match a configuration PID. Creation of a
+      <code>Configuration</code> object with a better matching PID than a
+      <code>Configuration</code> object currently being used by a component
+      configuration results in a configuration change for the component
+      configuration with the new <code>Configuration</code> object replacing
+      the currently used <code>Configuration</code> object. Deletion of a
+      <code>Configuration</code> object currently being used by a component
+      configuration when there is another <code>Configuration</code> object
+      matching the configuration PID also results in a configuration change
+      for the component configuration with the <code>Configuration</code>
+      object having the best matching PID replacing the currently used, and
+      now deleted, <code>Configuration</code> object.</para>
 
       <section>
         <title>Ignore Configuration Policy</title>
@@ -3145,20 +3949,23 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
         <title>Require Configuration Policy</title>
 
         <para>For <code>configuration-policy</code> of <code>require</code>,
-        component configurations require a <code>Configuration</code> object.
-        With a factory configuration, there can be zero or more matching
-        <code>Configuration</code> objects which will result in a component
-        configuration for each <code>Configuration</code> object. With a
+        component configurations require a <code>Configuration</code> object
+        for each specified configuration PID. With a factory configuration,
+        there can be zero or more matching <code>Configuration</code> objects
+        which will result in a component configuration for each
+        <code>Configuration</code> object of the factory configuration. With a
         factory component, multiple component configurations can be created
-        all using a single matching <code>Configuration</code> object.</para>
+        all using the matching <code>Configuration</code> objects.</para>
 
-        <para>Deleting a <code>Configuration</code> object will cause the
-        component configurations using it to become unsatisfied. Updating a
-        <code>Configuration</code> object can cause the component
-        configurations using it to become unsatisfied if any of the following
-        occur:</para>
+        <para>A configuration change can cause a component configuration to
+        become unsatisfied if any of the following occur:</para>
 
         <itemizedlist>
+          <listitem>
+            <para>Each configuration PID of the component description does not
+            have a matching <code>Configuration</code> object.</para>
+          </listitem>
+
           <listitem>
             <para>A target property change results in a bound service of a
             static reference ceasing to be a target service.</para>
@@ -3171,8 +3978,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in there being zero target
-            services for a mandatory dynamic reference.</para>
+            <para>A target property change or minimum cardinality property
+            change results in a reference falling below the minimum
+            cardinality.</para>
           </listitem>
 
           <listitem>
@@ -3180,45 +3988,32 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
             <code>modified</code> attribute.</para>
           </listitem>
         </itemizedlist>
-
-        <para>If a component configuration becomes unsatisfied, SCR must
-        deactivate the component configuration. If the component configuration
-        was not created from a factory component, SCR must attempt to satisfy
-        the component configuration with the updated component
-        properties.</para>
-
-        <para>If a component configuration remains satisfied and had been
-        activated, the modified method is called. See <xref
-        linkend="i1652198"/> for more information. If a component
-        configuration remains satisfied but has not been activated, then, if
-        the component configuration is registered as a service, SCR must
-        modify the service properties.</para>
       </section>
 
       <section>
         <title>Optional Configuration Policy</title>
 
         <para>For <code>configuration-policy</code> of <code>optional</code>,
-        component configurations do not require a <code>Configuration</code>
-        object. Since a matching <code>Configuration</code> object is
-        optional, component configurations can be satisfied when there is no
-        matching <code>Configuration</code> object. If a matching
-        <code>Configuration</code> object is then created, this is a
+        component configurations do not require <code>Configuration</code>
+        objects. Since matching <code>Configuration</code> objects are
+        optional, component configurations can be satisfied with zero or more
+        matched configuration PIDs. If a <code>Configuration</code> object is
+        then created which matches a configuration PID, this is a
         configuration change for the component configurations that are not
-        using a <code>Configuration</code> object. When there is only a single
-        matching <code>Configuration</code> object which is then deleted, this
-        is a configuration change for the component configurations using the
-        deleted <code>Configuration</code> object.</para>
+        using the created <code>Configuration</code> object. If a
+        <code>Configuration</code> object is deleted which matches a
+        configuration PID, this is a configuration change for the component
+        configurations using the deleted <code>Configuration</code>
+        object.</para>
 
-        <para>With a factory configuration, there can be zero or more matching
+        <para>Furthermore, with a factory configuration matching a
+        configuration PID, the factory configuration can provide zero or more
         <code>Configuration</code> objects which will result in a component
-        configuration for each <code>Configuration</code> object as well as a
-        single component configuration when there are zero matching
-        <code>Configuration</code> objects. With a factory component, multiple
-        component configurations can be created all using either a single
-        matching <code>Configuration</code> object or no
-        <code>Configuration</code> object when there is no matching
-        <code>Configuration</code> object.</para>
+        configuration for each <code>Configuration</code> object or a single
+        component configuration when zero matching <code>Configuration</code>
+        objects are provided. With a factory component, multiple component
+        configurations can be created all using the <code>Configuration</code>
+        objects matching the configuration PIDs.</para>
 
         <para>A configuration change can cause a component configuration to
         become unsatisfied if any of the following occur:</para>
@@ -3236,8 +4031,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in there being zero target
-            services for a mandatory dynamic reference.</para>
+            <para>A target property change or minimum cardinality property
+            change results in a reference falling below the minimum
+            cardinality.</para>
           </listitem>
 
           <listitem>
@@ -3245,83 +4041,118 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
             <code>modified</code> attribute.</para>
           </listitem>
         </itemizedlist>
+      </section>
 
-        <para>If a component configuration becomes unsatisfied, SCR must
-        deactivate the component configuration. If the component configuration
-        was not created from a factory component, SCR must attempt to satisfy
-        the component configuration with the updated component
-        properties.</para>
+      <section xml:id="service.component-configuration.change.actions">
+        <title>Configuration Change Actions</title>
 
-        <para>If a component configuration remains satisfied and had been
-        activated, the modified method is called. See <xref
-        linkend="i1652198"/> for more information. If a component
-        configuration remains satisfied but has not been activated, then, if
-        the component configuration is registered as a service, SCR must
-        modify the service properties.</para>
+        <para>If a component configuration becomes unsatisfied:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>SCR must deactivate the component configuration.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the component configuration was not created from a
+            factory component, SCR must attempt to satisfy the component
+            configuration with the current configuration state.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If a component configuration remains satisfied:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If the component configuration has been activated, the
+            modified method is called to provide the updated component
+            properties. See <xref linkend="i1652198"/> for more
+            information.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the component configuration is registered as a service,
+            SCR must modify the service properties.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
   </section>
 
-  <section>
-    <title>Use of the Annotations</title>
+  <section xml:id="service.component-annotations">
+    <title>Annotations</title>
 
-    <para>The Declarative Services Annotations provide a convenient way to
-    create the component description XML during build time. Since annotations
-    are placed in the source file and can use types, fields, and methods they
-    can significantly simplify the use of Declarative Services.</para>
+    <para>A number of <code>CLASS</code> retention annotations have been
+    provided to allow tools to construct the component description XML from
+    the Java class files. The Component Annotations are intended to be used
+    during build time to generate the component description XML.</para>
 
-    <para>The Declarative Services Annotations are build time annotations
-    because one of the key aspect of Declarative Services is its laziness.
-    Implementations can easily read the component description XML from the
-    bundle, pre-process it, and cache the results between framework
-    invocations. This is way it is unnecessary to create a class on the bundle
-    when the bundle is started and/or scan the classes for annotations.</para>
+    <para>Component Property Types, which are user defined annotations, can be
+    used to describe component properties in the component description XML and
+    to access those component properties at runtime in a type safe
+    manner.</para>
 
-    <para>The Declarative Services Annotations are not inherited, they can
-    only be used on a given class, annotations on its super class hierarchy or
-    interfaces are not taken into account.</para>
+    <section xml:id="service.component-component.annotations">
+      <title>Component Annotations</title>
 
-    <para>The primary annotation is the <xref
-    linkend="org.osgi.service.component.annotations.Component"
-    xrefstyle="hyperlink"/> annotation. It indicates that a class is a
-    component. It's defaults create the easiest to use component:</para>
+      <para>The Component Annotations provide a convenient way to create the
+      component description XML during build time. Since annotations are
+      placed in the source file and can use types, fields, and methods, they
+      can significantly simplify the use of Declarative Services.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>Its name is the class name</para>
-      </listitem>
+      <para>The Component Annotations are build time annotations because one
+      of the key aspects of Declarative Services is its laziness. SCR can
+      easily read the component description XML from the bundle, preprocess
+      it, and cache the results between framework invocations. This way it is
+      unnecessary to load a class from the bundle when the bundle is started
+      and/or scan the classes for annotations. Component Annotations are not
+      recognized by SCR at runtime.</para>
 
-      <listitem>
-        <para>It registers all directly implemented interfaces as
-        services</para>
-      </listitem>
+      <para>The Component Annotations are not inherited, they can only be used
+      on a given class, annotations on its super class hierarchy or interfaces
+      are not taken into account.</para>
 
-      <listitem>
-        <para>The instance will be shared by all bundles</para>
-      </listitem>
+      <para>The primary annotation is the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation. It indicates that a class is a
+      component. Its defaults create the easiest to use component:</para>
 
-      <listitem>
-        <para>It is enabled</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>Its name is the class name</para>
+        </listitem>
 
-      <listitem>
-        <para>It is immediate if it has no services, otherwise it is
-        delayed</para>
-      </listitem>
+        <listitem>
+          <para>It registers all of the class's directly implemented
+          interfaces as services</para>
+        </listitem>
 
-      <listitem>
-        <para>It has an optional configuration policy</para>
-      </listitem>
+        <listitem>
+          <para>The instance will be shared by all bundles</para>
+        </listitem>
 
-      <listitem>
-        <para>The configuration PID is the class name</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>It is enabled</para>
+        </listitem>
 
-    <para>For example, the following class registers a Speech service that can
-    run on a Macintosh:</para>
+        <listitem>
+          <para>It is immediate if it has no services, otherwise it is
+          delayed</para>
+        </listitem>
 
-    <programlisting>pubic interface Speech {
+        <listitem>
+          <para>It has an optional configuration policy</para>
+        </listitem>
+
+        <listitem>
+          <para>The configuration PID is the class name</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example, the following class registers a Speech service that
+      can run on a Macintosh:</para>
+
+      <programlisting>pubic interface Speech {
   void say(String what) throws Exception;
 }
 
@@ -3335,27 +4166,29 @@ public class MacSpeech implements Speech {
     }
 }</programlisting>
 
-    <para>The previous example must generate the following XML:</para>
+      <para>The previous example would be processed at build time into a
+      component description similar to the following XML:</para>
 
-    <programlisting>&lt;scr:component name='com.example.MacSpeech'&gt;
-  &lt;implementation class='com.example.MacSpeech'/&gt;
+      <programlisting>&lt;scr:component name="com.example.MacSpeech"
+  xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+  &lt;implementation class="com.acme.impl.MacSpeech"/&gt;
   &lt;service&gt;
-    &lt;provide interface='com.example.service.speech.Speech'/&gt;
+    &lt;provide interface="com.acme.service.speech.Speech"/&gt;
   &lt;/service&gt;
-&lt;/component&gt;</programlisting>
+&lt;/scr:component&gt;</programlisting>
 
-    <para>It is possible to add activate and deactivate methods on the
-    component with the <xref
-    linkend="org.osgi.service.component.annotations.Activate"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.service.component.annotations.Deactivate"
-    xrefstyle="hyperlink"/> annotations. If the component wants to be updated
-    for changes in the configuration properties than it can also indicated the
-    modified method with the <xref
-    linkend="org.osgi.service.component.annotations.Modified"
-    xrefstyle="hyperlink"/> annotation. For example:</para>
+      <para>It is possible to add activate and deactivate methods on the
+      component with the <xref
+      linkend="org.osgi.service.component.annotations.Activate"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Deactivate"
+      xrefstyle="hyperlink"/> annotations. If the component wants to be
+      updated for changes in the configuration properties than it can also
+      indicated the modified method with the <xref
+      linkend="org.osgi.service.component.annotations.Modified"
+      xrefstyle="hyperlink"/> annotation. For example:</para>
 
-    <programlisting>@Activate
+      <programlisting>@Activate
 void open(Map&lt;String,?&gt; properties) { ... }
 
 @Deactivate
@@ -3364,55 +4197,608 @@ void close() { ... }
 @Modified
 void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
-    <para>If a component has dependencies on other services then they can be
-    referenced with the <xref
-    linkend="org.osgi.service.component.annotations.Reference"
-    xrefstyle="hyperlink"/> annotation that is applied to the bind method. The
-    defaults for the reference annotations are:</para>
+      <para>If a component has dependencies on other services then they can be
+      referenced with the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation that can be applied to a bind method
+      or a field. For a bind method, the defaults for the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation are:</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>The name of the bind method is used for the name of the
-        reference.</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>The name of the bind method or field is used for the name of
+          the reference.</para>
+        </listitem>
 
-      <listitem>
-        <para>1:1 Cardinality.</para>
-      </listitem>
+        <listitem>
+          <para>1:1 cardinality.</para>
+        </listitem>
 
-      <listitem>
-        <para>Static reluctant policy.</para>
-      </listitem>
+        <listitem>
+          <para>Static reluctant policy.</para>
+        </listitem>
 
-      <listitem>
-        <para>The requested service is the type of the first argument of the
-        method the <xref
-        linkend="org.osgi.service.component.annotations.Reference"
-        xrefstyle="hyperlink"/> annotation is applied to.</para>
-      </listitem>
+        <listitem>
+          <para>The requested service is the type of the first argument of the
+          bind method.</para>
+        </listitem>
 
-      <listitem>
-        <para>It will infer a default unset method and updated method based on
-        the method name it is applied to.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>It will infer a default unset method and updated method based
+          on the name of the bind method.</para>
+        </listitem>
+      </itemizedlist>
 
-    <para>For example:</para>
+      <para>For example:</para>
 
-    <programlisting>@Reference(cardinality=MULTIPLE, policy=DYNAMIC)
+      <programlisting>@Reference(cardinality=MULTIPLE, policy=DYNAMIC)
 void setLogService( LogService log, Map&lt;String,?&gt; props) { ... }
 void unsetLogService( LogService log ) {  ... }
 void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
+
+      <para>For a field, the defaults for the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The name of the bind method or field is used for the name of
+          the reference.</para>
+        </listitem>
+
+        <listitem>
+          <para>1:1 cardinality if the field is not a collection. 0..n
+          cardinality if the field is a collection.</para>
+        </listitem>
+
+        <listitem>
+          <para>Static reluctant policy if the field is not declared volatile.
+          Dynamic reluctant policy if the field is declared volatile.</para>
+        </listitem>
+
+        <listitem>
+          <para>The requested service is the type of the field.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example:</para>
+
+      <programlisting>@Reference
+volatile Collection&lt;LogService&gt; log;</programlisting>
+    </section>
+
+    <section xml:id="service.component-component.property.types">
+      <title>Component Property Types</title>
+
+      <para>Component properties can be defined and accessed through a user
+      defined annotation type, called a <emphasis>component property
+      type</emphasis>, containing the property names, property types and
+      default values. A component property type allows properties to be
+      defined and accessed in a type safe manner. The following example shows
+      the definition of a component property type called <code>Config</code>
+      which defines three properties where the name of the property is the
+      name of the method, the type of the property is the return type of the
+      method and the default value for the property is the default value of
+      the method.</para>
+
+      <programlisting>@interface Config {
+  boolean enabled() default true;
+  String[] names() default {"a", "b"};
+  String topic() default "default/topic";
+}</programlisting>
+
+      <para>Component property types can be referenced as argument types in
+      the component's life cycle methods, activate, deactivate, and modified,
+      and used in the method implementation to access component property
+      values in a type safe manner. The following example shows the activate
+      method taking the example <code>Config</code> component property type as
+      an argument type and the method implementation accesses component
+      property values by invoking methods on the component property type
+      argument.</para>
+
+      <programlisting>@Component
+public class MyComponent {
+  void activate(Config config) {
+    if (config.enabled()) {
+      // do something
+    }
+    for (String name:config.names()) {
+      // do something with each name
+    }
+  }
+}</programlisting>
+
+      <para>If a component implementation needs to access component properties
+      which are not represented by a component property type, it can use a
+      life cycle method signature which also receives the properties map in
+      addition to component property types. For example:</para>
+
+      <programlisting>@Component
+public class MyComponent {
+  void activate(Config config, Map&lt;String, ?&gt; allProperties) {
+    if (config.enabled()) {
+      // do something
+    }
+    if (allProperties.get("other.prop") != null) {
+      // do something
+    }
+  }
+}</programlisting>
+
+      <para>Component property types must be defined as annotation types even
+      though they are not applied as annotations but are rather used as life
+      cycle method argument types. This is done for two reasons. First, the
+      limitations on annotation type definitions make them well suited for
+      component property types. The methods must have no arguments and the
+      return types supported are limited to a set which is well suited for
+      component properties. Second, annotation types support default values
+      which is useful for defining the default value of a component
+      property.</para>
+
+      <para>At build time, the component property types must be processed to
+      potentially generate <code>property</code> elements in the component
+      description. See <xref
+      linkend="service.component-ordering.generated.properties"/>.</para>
+
+      <para>At runtime, when SCR needs to call a lifecycle method on a
+      component instance which takes an argument whose type is a component
+      property type, SCR must construct an instance of the component property
+      type whose methods are backed by the values of the component properties
+      for the component instance. This object is then passed to the life cycle
+      method which can use the object to obtain the property values in a type
+      safe manner.</para>
+
+      <section xml:id="service.component-component.property.mapping">
+        <title>Component Property Mapping</title>
+
+        <para>Each method of a configuration property type is mapped to a
+        component property. The property name is derived from the method name.
+        Certain common property name characters, such as full stop (<code>'.'
+        \u002E</code>) are not valid in Java identifiers. So the name of a
+        method must be converted to its corresponding property name as
+        follows:<itemizedlist>
+            <listitem>
+              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
+              unless it is followed by another dollar sign in which case the
+              two consecutive dollar signs (<code>"$$"</code>) are converted
+              to a single dollar sign.</para>
+            </listitem>
+
+            <listitem>
+              <para>A single low line (<code>'_' \u005F</code>) is converted
+              into a full stop (<code>'.' \u002E</code>) unless is it followed
+              by another low line in which case the two consecutive low lines
+              (<code>"__"</code>) are converted to a single low line.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref
+        linkend="service.component-component.property.name.mapping"/> contains
+        some name mapping examples.</para>
+
+        <table xml:id="service.component-component.property.name.mapping">
+          <title>Component Property Name Mapping Examples</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Component Property Type Method Name</entry>
+
+                <entry>Component Property Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>myProperty143</code></entry>
+
+                <entry><code>myProperty143</code></entry>
+              </row>
+
+              <row>
+                <entry><code>$new</code></entry>
+
+                <entry><code>new</code></entry>
+              </row>
+
+              <row>
+                <entry><code>my$$prop</code></entry>
+
+                <entry><code>my$prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>dot_prop</code></entry>
+
+                <entry><code>dot.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>_secret</code></entry>
+
+                <entry><code>.secret</code></entry>
+              </row>
+
+              <row>
+                <entry><code>another__prop</code></entry>
+
+                <entry><code>another_prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>three___prop</code></entry>
+
+                <entry><code>three_.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>four_$__prop</code></entry>
+
+                <entry><code>four._prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>five_$_prop</code></entry>
+
+                <entry><code>five..prop</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The property type can be directly derived from the type of the
+        method. All types supported for annotation elements can be used except
+        for annotation types. Method types of an annotation type or array
+        thereof are not supported. A tool processing the component property
+        types must declare an error during processing in this case.</para>
+
+        <para>If the method type is <code>Class</code> or
+        <code>Class[]</code>, then the property type must be
+        <code>String</code> or <code>String[]</code>, respectively, whose
+        values are fully qualified class names in the form returned by the
+        <code>Class.getName()</code> method.</para>
+
+        <para>If the method type is an enumeration type or an array thereof,
+        then the property type must be <code>String</code> or
+        <code>String[]</code>, respectively, whose values are the names of the
+        enum constants in the form returned by the <code>Enum.name()</code>
+        method.</para>
+      </section>
+
+      <section xml:id="service.component-component.property.value.coercion">
+        <title>Coercing Component Property Values</title>
+
+        <para>When a component property type is used as an argument for a life
+        cycle method, SCR must create an object that implements the component
+        property type and maps the methods of the component property type to
+        component properties. The name of the method is converted to the
+        property name as described in <xref
+        linkend="service.component-component.property.mapping"/>. The property
+        value may need to be coerced to the type of the method. In <xref
+        linkend="service.component-coercion.table"/>, the columns are source
+        types, that is, the type of the component property value, and the rows
+        are target types, that is, the method types. The property value is
+        <emphasis>v</emphasis>; <emphasis>number</emphasis> is a primitive
+        numerical type and <emphasis>Number</emphasis> is a wrapper numerical
+        type. An invalid coercion is represented by <code>throw</code>. Such a
+        coercion attempt must result in throwing a Component Exception when
+        the component property type method is called. Any other coercion
+        error, such as parsing a non-numerical string to a number or the
+        inability to coerce a string into a Class or enum object, must be
+        wrapped in a Component Exception and thrown when the component
+        property type method is called.</para>
+
+        <table pgwide="1" rowheader="firstcol"
+               xml:id="service.component-coercion.table">
+          <title>Coercion From Property Value to Method Type</title>
+
+          <tgroup cols="6">
+            <colspec colname="col1" colnum="1" colwidth="1*"/>
+
+            <colspec colname="col2" colnum="2" colwidth="1*"/>
+
+            <colspec colname="col3" colnum="3" colwidth="1*"/>
+
+            <colspec colname="col4" colnum="4" colwidth="1*"/>
+
+            <colspec colname="col5" colnum="5" colwidth="1*"/>
+
+            <colspec colname="col6" colnum="6" colwidth="2*"/>
+
+            <thead>
+              <row>
+                <entry><subscript>target</subscript> \
+                <superscript>source</superscript></entry>
+
+                <entry>String</entry>
+
+                <entry>Boolean</entry>
+
+                <entry>Character</entry>
+
+                <entry><emphasis>Number</emphasis></entry>
+
+                <entry>Collection/array</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>String</entry>
+
+                <entry><emphasis>v</emphasis></entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>boolean</entry>
+
+                <entry>Boolean. parseBoolean( <emphasis>v</emphasis> )</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue()</entry>
+
+                <entry><emphasis>v</emphasis>. charValue() != 0</entry>
+
+                <entry><emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value() != 0</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>false</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>char</entry>
+
+                <entry><emphasis>v</emphasis>. length() &gt; 0 ?
+                <emphasis>v</emphasis>. charAt(0) : 0</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+                <entry><emphasis>v</emphasis>. charValue()</entry>
+
+                <entry>(char) <emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+                the first element of <emphasis>v</emphasis> is
+                coerced.</entry>
+              </row>
+
+              <row>
+                <entry><emphasis>number</emphasis></entry>
+
+                <entry><emphasis>Number</emphasis>.
+                parse<emphasis>Number</emphasis>( <emphasis>v</emphasis>
+                )</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+                <entry>(<emphasis>number</emphasis>) <emphasis>v</emphasis>.
+                charValue()</entry>
+
+                <entry><emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+                the first element of <emphasis>v</emphasis> is
+                coerced.</entry>
+              </row>
+
+              <row>
+                <entry>Class</entry>
+
+                <entry>Bundle. loadClass( <emphasis>v</emphasis> )</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry><emphasis>EnumType</emphasis></entry>
+
+                <entry><emphasis>EnumType</emphasis>. valueOf(
+                <emphasis>v</emphasis> )</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>annotation type</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+              </row>
+
+              <row>
+                <entry>array</entry>
+
+                <entry nameend="col5" namest="col2">A single element array is
+                created and <emphasis>v</emphasis> is coerced into the single
+                element of the new array.</entry>
+
+                <entry colname="col6">An array the size of
+                <emphasis>v</emphasis> is created and each element of
+                <emphasis>v</emphasis> is coerced into the corresponding
+                element of the new array.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Component properties whose names do not map to component
+        property type methods are ignored. If there is no corresponding
+        component property for a component property type method, the component
+        property type method must:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Return 0 for numerical and char method types.</para>
+          </listitem>
+
+          <listitem>
+            <para>Return <code>false</code> for boolean method type.</para>
+          </listitem>
+
+          <listitem>
+            <para>Return <code>null</code> for String, Class, enum and array
+            method types.</para>
+          </listitem>
+
+          <listitem>
+            <para>Throw a ComponentException for annotation method
+            types.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="service.component-ordering.generated.properties">
+      <title>Ordering of Generated Properties</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation contains two ways to define component
+      properties via the <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> elements. See <xref
+      linkend="service.component-property.properties.elements"/>. If Component
+      Annotations are used to describe the component, then any component
+      property types referenced in the signatures of the component's life
+      cycle methods must also be processed since component property types can
+      be used to define component property values as well. See <xref
+      linkend="service.component-component.property.types"/>. A tool
+      processing the Component Annotations and the component property types
+      must write the defined component properties into the generated component
+      description in the following order.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Properties defined through component property types used in
+          the signatures of the life cycle methods.</para>
+
+          <para>If any of the referenced component property types have methods
+          with defaults, then the generated component description must include
+          a <code>property</code> element for each such method with the
+          property name mapped from the method name, the property type mapped
+          from the method type, and the property value set to the method's
+          default value. See <xref
+          linkend="service.component-component.property.mapping"/>. The
+          generated <code>property</code> elements must be added to the
+          component description by processing the component property types in
+          the following order. First, the component property types used as
+          arguments to the activate method, followed by the component property
+          types used as arguments to the modified method and finally the
+          component property types used as arguments to the deactivate method.
+          If a method has more than one component property type argument, the
+          component property types are processed in the order of the method
+          arguments.</para>
+
+          <para>For component property type methods without a default value, a
+          <code>property</code> element must not be generated.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.property--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.properties--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>This means that the properties defined through component property
+      types are declared first in the generated component description,
+      followed by all properties defined through the <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation and finally the properties entries
+      defined through the <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation.</para>
+
+      <para>Since property values defined later in the component description
+      override property values defined earlier in the component description,
+      this means that property values defined in <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation can override property values defined
+      in <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation which can override values defined by
+      default values in the component property types used in life cycle method
+      signatures.</para>
+    </section>
   </section>
 
   <section xml:id="i1578406">
     <title>Service Component Runtime</title>
 
+    <para>Service Component Runtime (SCR) is the actor that manages the
+    components and their life cycle and allows introspection of the
+    components.</para>
+
     <section xml:id="i1616910">
       <title>Relationship to OSGi Framework</title>
 
-      <para>The SCR must have access to the Bundle Context of any bundle that
-      contains a component. The SCR needs access to the Bundle Context for the
+      <para>SCR must have access to the Bundle Context of any bundle that
+      contains a component. SCR needs access to the Bundle Context for the
       following reasons:</para>
 
       <itemizedlist>
@@ -3432,8 +4818,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The SCR should use the <code>Bundle.getBundleContext()</code>
-      method to obtain the Bundle Context reference.</para>
+      <para>SCR should use the <code>Bundle.getBundleContext()</code> method
+      to obtain the Bundle Context reference.</para>
     </section>
 
     <section>
@@ -3460,39 +4846,40 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     </section>
 
     <section xml:id="i1641644">
-      <title>Locating Component Methods</title>
+      <title>Locating Component Methods and Fields</title>
 
       <para>SCR will need to locate activate, deactivate, modified, bind,
-      updated, and unbind methods for a component instance. These methods will
-      be located, and called, using reflection. The declared methods of each
-      class in the component implementation class' hierarchy are examined for
-      a suitable method. If a suitable method is found in a class, and it is
-      accessible to the component implementation class, then that method must
-      be used. If suitable methods are found in a class but none of the
-      suitable methods are accessible by the component implementation class,
-      then the search for suitable methods terminates with no suitable method
-      having been located. If no suitable methods are found in a class, the
-      search continues in the superclass.</para>
+      updated, and unbind methods as well as fields in a component instance.
+      These members will be located, and called or modified, using reflection.
+      The declared members of each class in the component implementation
+      class's hierarchy are examined for a suitable member. If a suitable
+      member is found in a class, and it is accessible to the component
+      implementation class, then that member must be used. If suitable members
+      are found in a class but none of the suitable members are accessible by
+      the component implementation class, then the search for suitable members
+      terminates with no suitable member having been located. If no suitable
+      members are found in a class, the search continues in the
+      superclass.</para>
 
-      <para>Only methods that are accessible to the component implementation
-      class will be used. If the method has the <code>public</code> or
+      <para>Only members that are accessible to the component implementation
+      class will be used. If the member has the <code>public</code> or
       <code>protected</code> access modifier, then access is permitted.
-      Otherwise, if the method has the <code>private</code> access modifier,
-      then access is permitted only if the method is declared in the component
-      implementation class. Otherwise, if the method has default access, also
+      Otherwise, if the member has the <code>private</code> access modifier,
+      then access is permitted only if the member is declared in the component
+      implementation class. Otherwise, if the member has default access, also
       known as package private access, then access is permitted only if the
-      method is declared in the component implementation class or if the
-      method is declared in a superclass and all classes in the hierarchy from
+      member is declared in the component implementation class or if the
+      member is declared in a superclass and all classes in the hierarchy from
       the component implementation class to the superclass, inclusive, are in
       the same package and loaded by the same class loader.</para>
 
-      <para>It is recommended that these methods should not be declared with
+      <para>It is recommended that these members should not be declared with
       the <code>public</code> access modifier so that they do not appear as
-      public methods on the component instance when it is used as a service
-      object. Having these methods declared <code>public</code> allows any
-      code to call the methods with reflection, even if a Security Manager is
-      installed. These methods are generally intended to only be called by
-      SCR.</para>
+      public members on the component instance when it is used as a service
+      object. Having these members declared <code>public</code> allows any
+      code to call or access the members with reflection, even if a Security
+      Manager is installed. These members are generally intended to only be
+      called or modified by SCR.</para>
     </section>
 
     <section>
@@ -3509,10 +4896,227 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       relationship between the Bundle Activator's start method being run and
       the components being activated.</para>
     </section>
+
+    <section xml:id="service.component-introspection">
+      <title>Introspection</title>
+
+      <para>SCR provides an introspection API for examining the runtime state
+      of the components in bundles processed by SCR. SCR must register a <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service upon startup. The Service Component
+      Runtime service provides methods to inspect the component descriptions
+      and component configurations as well as inspect and modify the enabled
+      state of components. The service uses <emphasis>Data Transfer Objects
+      (DTO)</emphasis> as arguments and return values. The rules for Data
+      Transfer Objects are specified in <xref linkend="intro.core.release"
+      xrefstyle="template:%t"/>.</para>
+
+      <para>The Service Component Runtime service provides the following
+      methods.</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentDescriptionDTOs-Bundle...-"
+            xrefstyle="hyperlink"/> - For each specified bundle, if the bundle
+            is active and processed by SCR, the returned collection will
+            contain a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> for each valid component description in
+            the bundle.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentDescriptionDTO-Bundle-String-"
+            xrefstyle="hyperlink"/> - If the specified bundle is active and
+            processed by SCR, and the specified bundle contains a valid
+            component description with the specified name, the method will
+            return a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> for the component description.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentConfigurationDTOs-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> represents a valid component description
+            from an active bundle processed by SCR, the returned collection
+            will contain a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
+            xrefstyle="hyperlink"/> for each component configuration of the
+            component.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.isComponentEnabled-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - Returns <code>true</code> if the
+            specified Component Description DTO represents a valid component
+            description from an active bundle processed by SCR, and the
+            component is enabled. Otherwise, the method returns
+            <code>false</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.enableComponent-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified Component Description
+            DTO represents a valid component description from an active bundle
+            processed by SCR, the component is enabled. This method must
+            return after changing the enabled state of the specified
+            component. Any actions that result from this, such as activating
+            or deactivating a component configuration, must occur
+            asynchronously to this method call. The method returns a <xref
+            linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
+            that will be resolved when the actions that result from changing
+            the enabled state of the specified component have
+            completed.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.disableComponent-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified Component Description
+            DTO represents a valid component description from an active bundle
+            processed by SCR, the component is disabled. This method must
+            return after changing the enabled state of the specified
+            component. Any actions that result from this, such as activating
+            or deactivating a component configuration, must occur
+            asynchronously to this method call. The method returns a <xref
+            linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
+            that will be resolved when the actions that result from changing
+            the enabled state of the specified component have
+            completed.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The runtime state of the components can change at any time. So any
+      information returned by these methods only provides a snapshot of the
+      state at the time of the method call.</para>
+
+      <para>There are a number of DTOs available via the Service Component
+      Runtime service.</para>
+
+      <figure>
+        <title>Service Component Runtime DTOs</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.500in"
+                       contentwidth="7.000in" fileref="dto-structure.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The two main DTOs are <xref
+      linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+      xrefstyle="hyperlink"/>, which represents a component description, and
+      <xref
+      linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
+      xrefstyle="hyperlink"/>, which represents a component configuration. The
+      Component Description DTO contains an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.ReferenceDTO"
+      xrefstyle="hyperlink"/> objects which represent each declared reference
+      in the component description. The Component Configuration DTO contains
+      an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.SatisfiedReferenceDTO"
+      xrefstyle="hyperlink"/> objects and an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.UnsatisfiedReferenceDTO"
+      xrefstyle="hyperlink"/> objects. A Satisfied Reference DTO represents a
+      satisfied reference of the component configuration and an Unsatisfied
+      Reference DTO represents an unsatisfied reference of the component
+      configuration. The Component Configuration DTO for a satisfied component
+      configuration must contain no Unsatisfied Reference DTOs. The Component
+      Configuration DTO for an unsatisfied component configuration may contain
+      some Satisfied Reference DTOs and some Unsatisfied Reference DTOs. This
+      information can be used to diagnose why the component configuration is
+      not satisfied.</para>
+    </section>
+
+    <section xml:id="service.component-capabilities">
+      <title>Capabilities</title>
+
+      <para>SCR must provide the following capabilities.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A capability in the <link
+          linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
+          namespace declaring an extender with the name <xref
+          linkend="org.osgi.service.component.ComponentConstants.COMPONENT_CAPABILITY_NAME"
+          xrefstyle="hyperlink"/>. This capability must also declare a uses
+          constraint for the <code>org.osgi.service.component</code> package.
+          For example:</para>
+
+          <programlisting>Provide-Capability: osgi.extender;
+    osgi.extender="osgi.component";
+    version:Version="1.3";
+    uses:="org.osgi.service.component"</programlisting>
+
+          <para>This capability must follow the rules defined for the <xref
+          linkend="service.namespaces-osgi.extender.namespace"/>.</para>
+
+          <para>A bundle that contains service components should require the
+          <code>osgi.extender</code> capability from SCR. This requirement
+          will wire the bundle to the SCR implementation and ensure that SCR
+          is using the same <code>org.osgi.service.component</code> package as
+          the bundle if the bundle uses that package.</para>
+
+          <programlisting>Require-Capability: osgi.extender;
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3)(!(version&gt;=2.0)))"</programlisting>
+
+          <para>SCR must only process a bundle's service components if one of
+          the following is true:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The bundle's wiring has a required wire for at least one
+              <code>osgi.extender</code> capability with the name
+              <code>osgi.component</code> and the first of these required
+              wires is wired to SCR.</para>
+            </listitem>
+
+            <listitem>
+              <para>The bundle's wiring has no required wire for an
+              <code>osgi.extender</code> capability with the name
+              <code>osgi.component</code>.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Otherwise, SCR must not process the bundle's service
+          components.</para>
+        </listitem>
+
+        <listitem>
+          <para>A capability in the <link
+          linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+          namespace representing the <xref
+          linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+          xrefstyle="hyperlink"/> service. This capability must also declare a
+          uses constraint for the
+          <code>org.osgi.service.component.runtime</code> package. For
+          example:</para>
+
+          <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;=
+      "org.osgi.service.component.runtime.ServiceComponentRuntime";
+    uses:="org.osgi.service.component.runtime"</programlisting>
+
+          <para>This capability must follow the rules defined for the <xref
+          linkend="service.namespaces-osgi.service.namespace"/>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <section>
     <title>Security</title>
+
+    <para>When Java permissions are enabled, SCR must perform the following
+    security procedures.</para>
 
     <section>
       <title>Service Permissions</title>
@@ -3540,13 +5144,25 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       required to have <code>ServicePermission[ComponentFactory,
       REGISTER]</code> as the Component Factory service is registered by
       SCR.</para>
+
+      <para>SCR must have <code>ServicePermission[ServiceComponentRuntime,
+      REGISTER]</code> permission to register the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service. Administrative bundles wishing to use
+      the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service must have
+      <code>ServicePermission[ServiceComponentRuntime, GET]</code> permission.
+      In general, this permission should only be granted to administrative
+      bundles to limit access to the potentially intrusive methods provided by
+      this service.</para>
     </section>
 
     <section xml:id="i1617328">
       <title>Required Admin Permission</title>
 
-      <para>The SCR requires <code>AdminPermission[*,CONTEXT]</code> because
-      it needs access to the bundle's Bundle Context object with the
+      <para>SCR requires <code>AdminPermission[*,CONTEXT]</code> because it
+      needs access to the bundle's Bundle Context object with the
       <code>Bundle.getBundleContext()</code> method.</para>
     </section>
 
@@ -3561,6 +5177,19 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <code>Bundle.hasPermission</code> method to validate that a component's
       bundle has the necessary permission to register or get a service.</para>
     </section>
+
+    <section xml:id="service.component-multi.location.regions">
+      <title>Configuration Multi-Locations and Regions</title>
+
+      <para>SCR must ensure a bundle has the proper
+      <code>ConfigurationPermission</code> for a Configuration used by its
+      components when the Configuration has a multi-location. See <xref
+      linkend="service.cm-multi.locations"/> for more information on
+      multi-locations and <xref linkend="service.cm-regions"/> for more
+      information on regions. If a bundle does not have the necessary
+      permission for a multi-location Configuration, then SCR must act as if
+      the Configuration does not exist for the bundle.</para>
+    </section>
   </section>
 
   <section xml:id="i1523991">
@@ -3569,7 +5198,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     <para>This XML Schema defines the component description grammar.</para>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
-        href="../../generated/xmlns/scr/v1.2.0/scr.xsd" parse="text"/></programlisting>
+        href="../../generated/xmlns/scr/v1.3.0/scr.xsd" parse="text"/></programlisting>
 
     <para>SCR must not require component descriptions to specify the elements
     in the order required by the schema. SCR must allow other orderings since
@@ -3587,6 +5216,10 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.annotations.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.runtime.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.runtime.dto.xml"/>
+
   <section>
     <title>References</title>
 
@@ -3600,7 +5233,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       Hall<?line-break ?>http://gravity.sourceforge.net/servicebinder</bibliomixed>
 
       <bibliomixed xml:id="i1567926"><title>Java Properties
-      File</title>http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html</bibliomixed>
+      File</title>http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html</bibliomixed>
 
       <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
       1.0</title>http://www.w3.org/TR/REC-xml/</bibliomixed>
@@ -3618,6 +5251,88 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para><xref linkend="i1649746"/> has been rewritten to more accurately
         state the effects of configuration changes on component
         configurations.</para>
+      </listitem>
+
+      <listitem>
+        <para>New introspection API. See <xref
+        linkend="service.component-introspection"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Defined capabilities SCR must provide. See <xref
+        linkend="service.component-capabilities"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Expanded the allowed signatures and argument types for Event
+        Methods. See <xref linkend="service.component-event.methods"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New scope attribute for the service element. See <xref
+        linkend="service.component-service.element"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New scope attribute for the reference element. See <xref
+        linkend="service.component-reference.scope"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New reference element for Component annotation. See <xref
+        linkend="service.component-reference.element"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New minimum cardinality property. See <xref
+        linkend="service.component-minimum.cardinality.property"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for a component using multiple configuration PIDs.
+        See <xref linkend="service.component-component.element"/>, <xref
+        linkend="service.component-component.properties"/>, and <xref
+        linkend="service.component-deployment"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>service.pid</code> property values are aggregated across
+        configuration sources. See <xref
+        linkend="service.component-component.properties"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>SCR must check ConfigurationPermission for multi-location
+        Configurations. See <xref
+        linkend="service.component-multi.location.regions"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for targeted PIDs for Configurations. See <xref
+        linkend="service.component-deployment"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New component property types can be used for type safe component
+        property definition and access. See <xref
+        linkend="service.component-component.property.types"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Specified the ordering of property information component
+        descriptions generated from annotations. See <xref
+        linkend="service.component-ordering.generated.properties"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Maps of service properties must also implement Comparable. See
+        <xref linkend="service.component-event.methods"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Support for field strategy is added. See <xref
+        linkend="service.component-field.strategy"/>. This change affects many
+        areas of this specification.</para>
       </listitem>
     </itemizedlist>
   </section>

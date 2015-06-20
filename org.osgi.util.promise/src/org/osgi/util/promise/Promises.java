@@ -70,13 +70,14 @@ public class Promises {
 	 * @param <S> A subtype of the value type of the List value associated with
 	 *        the returned Promise.
 	 * @param promises The Promises which must be resolved before the returned
-	 *        Promise must be resolved. Must not be {@code null}.
+	 *        Promise must be resolved. Must not be {@code null} and all of the
+	 *        elements in the collection must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
-	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with a List of the values in the order of the specified Promises,
+	 *         are resolved. The returned Promise must be successfully resolved
+	 *         with a List of the values in the order of the specified Promises
 	 *         if all the specified Promises are successfully resolved. The List
 	 *         in the returned Promise is the property of the caller and is
-	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         modifiable. The returned Promise must be resolved with a failure
 	 *         of {@link FailedPromisesException} if any of the specified
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
@@ -107,13 +108,14 @@ public class Promises {
 	 * 
 	 * @param <T> The value type associated with the specified Promises.
 	 * @param promises The Promises which must be resolved before the returned
-	 *        Promise must be resolved. Must not be {@code null}.
+	 *        Promise must be resolved. Must not be {@code null} and all of the
+	 *        arguments must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
-	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with a List of the values in the order of the specified Promises,
+	 *         are resolved. The returned Promise must be successfully resolved
+	 *         with a List of the values in the order of the specified Promises
 	 *         if all the specified Promises are successfully resolved. The List
 	 *         in the returned Promise is the property of the caller and is
-	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         modifiable. The returned Promise must be resolved with a failure
 	 *         of {@link FailedPromisesException} if any of the specified
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
@@ -148,18 +150,22 @@ public class Promises {
 			}
 			List<T> result = new ArrayList<T>(promises.size());
 			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
+			Throwable cause = null;
 			for (Promise<? extends T> promise : promises) {
-				boolean failure;
+				Throwable failure;
 				T value;
 				try {
-					failure = promise.getFailure() != null;
-					value = failure ? null : promise.getValue();
+					failure = promise.getFailure();
+					value = (failure != null) ? null : promise.getValue();
 				} catch (Throwable e) {
 					chained.resolve(null, e);
 					return;
 				}
-				if (failure) {
+				if (failure != null) {
 					failed.add(promise);
+					if (cause == null) {
+						cause = failure;
+					}
 				} else {
 					result.add(value);
 				}
@@ -167,7 +173,7 @@ public class Promises {
 			if (failed.isEmpty()) {
 				chained.resolve(result, null);
 			} else {
-				chained.resolve(null, new FailedPromisesException(failed));
+				chained.resolve(null, new FailedPromisesException(failed, cause));
 			}
 		}
 	}

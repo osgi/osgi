@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public interface ConnectionFactory {
 	 *        {@code ConnectorService.open} method
 	 * @return A new {@code javax.microedition.io.Connection} object.
 	 * @throws IOException If a {@code javax.microedition.io.Connection} object
-	 *         can not not be created.
+	 *         cannot be created.
 	 */
 	public Connection createConnection(String name, int mode, boolean timeouts) throws IOException;
 }

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter label="146"
+         revision="$Id$"
+         version="5" xml:id="service.serial"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Serial Device Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.serial-version"
+    linkend="org.osgi.service.serial"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Recently, OSGi is gaining popularity as an enabling technology for
+    building embedded systems in the residential market as well as other
+    Internet-of-Things (IoT) domains. It is expected that communication with
+    various devices attached to OSGi enabled gateways will be
+    necessary.</para>
+
+    <para>Such communication can be implemented by means of serial connection
+    when using non-IP devices based on ZigBee and Z-wave protocols. The most
+    typical case arises when a USB dongle that supports such protocols is
+    connected to the USB port of such a device, for example, residential
+    gateway. The Operating System on the gateways will recognize the dongle as
+    a virtual serial device and initiate a serial communication with the
+    application process.</para>
+
+    <para>The Serial Device Service specification defines an API for
+    establishing communications between an OSGi bundle and a serial device,
+    such as a ZigBee coordinator or Z-Wave controller.</para>
+
+    <para><xref linkend="service.device-device.category"/> defines the concept
+    of device categories. <xref linkend="service.usbinfo"/> defines a device
+    category for USB devices. This specification and <xref
+    linkend="service.usbinfo"/> provide a solution for the USB serial use
+    case.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>SerialDevice</emphasis> - This is an OSGi service
+          that is used to represent a serial device. This OSGi service stores
+          information regarding serial device and its status as service
+          properties and provides communication function with the
+          device.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SerialEventListener</emphasis> - A listener to
+          events coming from Serial Devices.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Serial base driver bundle</emphasis> - The bundle
+          that implements <xref linkend="org.osgi.service.serial.SerialDevice"
+          xrefstyle="hyperlink"/>. Serial base driver bundle registers
+          SerialDevice services with the Framework. It provides communication
+          function with the (physical) serial devices.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Refining driver bundle</emphasis> - Refining drivers
+          provide a refined view of a physical device that is already
+          represented by another Device service registered with the Framework
+          (see the details for Device Access Specification).</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure xml:id="service.serial-figure-146-1">
+        <title>Serial Device Service class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.750in"
+                       contentwidth="5.000in"
+                       fileref="service_serial_classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>SerialDevice Service</title>
+
+    <para><xref linkend="org.osgi.service.serial.SerialDevice"
+    xrefstyle="hyperlink"/> is the interface expressing a serial device. It
+    maintains information and state of the serial device as a service
+    property. It provides the communication facility with the serial device.
+    Each <code>SerialDevice</code> expresses each serial device.</para>
+
+    <para><code>SerialDevice</code> service is registered with the service
+    registry with service properties as shown in the following table.</para>
+
+    <table>
+      <title>Service properties of SerialDevice service</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="4*"/>
+
+        <thead>
+          <row>
+            <entry>The key of service property</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>DEVICE_CATEGORY</code></entry>
+
+            <entry><code>String[]</code></entry>
+
+            <entry><para>Constant for the value of the service property
+            DEVICE_CATEGORY used for all Serial devices. Value is
+            "Serial".</para></entry>
+          </row>
+
+          <row>
+            <entry><code>serial.comport</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>MANDATORY property key. Represents the name of the
+            port. </para><para>Examples: "/dev/ttyUSB0", "COM5",
+            "/dev/tty.usbserial-XXXXXX"</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The Serial base driver may need native libraries. This document has
+    a precondition that there are native libraries. It is out of scope how to
+    install native libraries.</para>
+  </section>
+
+  <section>
+    <title>SerialEventListener Service</title>
+
+    <para>Serial events are sent using the white board model, in which a
+    bundle interested in receiving the Serial events registers an object
+    implementing the <xref
+    linkend="org.osgi.service.serial.SerialEventListener"
+    xrefstyle="hyperlink"/> interface. A COM port name can be set to limit the
+    events for which a bundle is notified.</para>
+  </section>
+
+  <section>
+    <title>USB Serial Example</title>
+
+    <para>The Serial base driver registers a <xref
+    linkend="org.osgi.service.serial.SerialDevice" xrefstyle="hyperlink"/>
+    service that represents a (physical) Serial device. If the device is USB
+    Serial device, then it is recommended that the base driver implements
+    <xref linkend="org.osgi.service.usbinfo.USBInfoDevice"
+    xrefstyle="hyperlink"/> and <code>SerialDevice</code> concurrently, and
+    registers the service under <xref
+    linkend="org.osgi.service.usbinfo.USBInfoDevice" xrefstyle="hyperlink"/>
+    and <xref linkend="org.osgi.service.serial.SerialDevice"
+    xrefstyle="hyperlink"/> interfaces.</para>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>To acquire the Serial device service, the refining bundle need that
+    <code>ServicePermission[SerialDevice, GET]</code> are assigned.</para>
+
+    <para>To receive the Serial events, the bundles need that
+    <code>ServicePermission[SerialEventListener, REGISTER]</code> are
+    assigned.</para>
+
+    <para><code>SerialDevice</code> service should only be implemented by
+    trusted bundles. This bundle requires
+    <code>ServicePermission[SerialDevice, REGISTER]</code> and
+    <code>ServicePermission[SerialEventListener, GET]</code>.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.serial.xml"/>
+</chapter>

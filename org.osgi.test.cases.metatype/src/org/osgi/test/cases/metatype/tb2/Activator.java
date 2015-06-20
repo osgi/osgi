@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,7 +27,6 @@ package org.osgi.test.cases.metatype.tb2;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,33 @@ public interface ImportRegistration {
 	/**
 	 * Return the Import Reference for the imported service.
 	 * 
-	 * @return The Import Reference for this registration.
+	 * @return The Import Reference for this registration, or <code>null</code>
+	 *         if this Import Registration is closed.
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 */
 	ImportReference getImportReference();
+
+	/**
+	 * Update the local service represented by this {@link ImportRegistration}.
+	 * After this method returns the {@link EndpointDescription} returned via
+	 * {@link #getImportReference()} must have been updated.
+	 * 
+	 * @param endpoint The updated endpoint
+	 * 
+	 * @return <code>true</code> if the endpoint was successfully updated,
+	 *         <code>false</code> otherwise. If the update fails then the
+	 *         failure can be retrieved from {@link #getException()}.
+	 * 
+	 * @throws IllegalStateException When this registration is closed, or if it
+	 *         was not properly initialized. See {@link #getException()}.
+	 * @throws IllegalArgumentException When the supplied
+	 *         {@link EndpointDescription} does not represent the same endpoint
+	 *         as this {@link ImportRegistration}.
+	 * 
+	 * @since 1.1
+	 */
+	boolean update(EndpointDescription endpoint);
 
 	/**
 	 * Close this Import Registration. This must close the connection to the

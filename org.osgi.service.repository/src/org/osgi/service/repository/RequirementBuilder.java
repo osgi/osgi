@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public interface RequirementBuilder {
 	 * set in this requirement builder.
 	 * 
 	 * @return A requirement expression created for a requirement based upon the
-	 *         the values set in this requirement builder.
+	 *         values set in this requirement builder.
 	 */
 	IdentityExpression buildExpression();
 }

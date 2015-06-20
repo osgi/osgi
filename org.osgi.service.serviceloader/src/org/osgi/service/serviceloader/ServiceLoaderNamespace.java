@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import org.osgi.resource.Namespace;
  * 
  * <p>
  * All unspecified capability attributes, unless the attribute name starts with
- * dot ({@code '.'} &#92;u002E), are also used as service properties when
+ * full stop ({@code '.'} &#92;u002E), are also used as service properties when
  * registering a Service Provider as a service.
  * 
  * @Immutable

@@ -126,7 +126,10 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			expected.add(AUTOSTART);
 
 			children = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey);
-			assertTrue("These objects must exist.", children != null && children.length > 0 );
+			assertNotNull("The bundle children must not be null for: "
+					+ bundleKey, children);
+			assertTrue("The bundle children must exist for: " + bundleKey,
+					children.length > 0);
 			for (String child : children) {
 				if ( ! expected.contains(child) && ! optional.contains(child) )
 					undefined.add(child);
@@ -211,7 +214,10 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
 					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + REQUIREMENT);
-					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
+					assertNotNull("The requirement children must not be null.",
+							children2);
+					assertTrue("The requirement children must exist.",
+							children2.length > 0);
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	
@@ -224,7 +230,10 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
 					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + CAPABILITY);
-					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
+					assertNotNull("The capability children must not be null.",
+							children2);
+					assertTrue("The capability children must exist.",
+							children2.length > 0);
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	

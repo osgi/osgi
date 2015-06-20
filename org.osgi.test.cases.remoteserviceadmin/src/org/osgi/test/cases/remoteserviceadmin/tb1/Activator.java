@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,7 @@ package org.osgi.test.cases.remoteserviceadmin.tb1;
 
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import junit.framework.Assert;
 
@@ -34,10 +31,11 @@ import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
- *
+ * @deprecated
  */
 public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;
@@ -113,7 +111,7 @@ public class Activator implements BundleActivator, A, B {
 			EndpointListener listener = (EndpointListener) context.getService(sr);
 			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
 			
-			String matchedFilter = isInterested(scope, endpoint);
+			String matchedFilter = Utils.isInterested(scope, endpoint);
 			
 			if (matchedFilter != null) {
 				foundListener = true;
@@ -139,7 +137,7 @@ public class Activator implements BundleActivator, A, B {
 			EndpointListener listener = (EndpointListener) context.getService(sr);
 			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
 			
-			String matchedFilter = isInterested(scope, endpoint);
+			String matchedFilter = Utils.isInterested(scope, endpoint);
 			
 			if (matchedFilter != null) {
 				foundListener = true;
@@ -149,38 +147,6 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertTrue("no interested EndpointListener found", foundListener);
 	}
 	
-	/**
-	 * @param scope
-	 * @param description
-	 * @return
-	 */
-	private String isInterested(Object scopeobj, EndpointDescription description) {
-		if (scopeobj instanceof List<?>) {
-			List<String> scope = (List<String>) scopeobj;
-			for (Iterator<String> it = scope.iterator(); it.hasNext();) {
-				String filter = it.next();
 
-				if (description.matches(filter)) {
-					return filter;
-				}
-			}
-		} else if (scopeobj instanceof String[]) {
-			String[] scope = (String[]) scopeobj;
-			for (String filter : scope) {
-				if (description.matches(filter)) {
-					return filter;
-				}
-			}
-		} else if (scopeobj instanceof String) {
-			StringTokenizer st = new StringTokenizer((String)scopeobj, " ");
-			for (; st.hasMoreTokens();) {
-				String filter = st.nextToken();
-				if (description.matches(filter)) {
-					return filter;
-				}
-			}
-		}
-		return null;
-	}
 
 }

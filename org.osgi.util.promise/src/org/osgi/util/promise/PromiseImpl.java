@@ -307,13 +307,13 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * Promise is resolved with a failure, this Promise is resolved with the
 	 * failure of the specified Promise.
 	 * 
-	 * @param with A Promise whose value or failure will be used to resolve this
+	 * @param with A Promise whose value or failure must be used to resolve this
 	 *        Promise. Must not be {@code null}.
 	 * @return A Promise that is resolved only when this Promise is resolved by
-	 *         the specified Promise. The returned Promise will be successfully
-	 *         resolved, with the value {@code null}, if this Promise was
-	 *         resolved by the specified Promise. The returned Promise will be
-	 *         resolved with a failure of {@link IllegalStateException} if this
+	 *         the specified Promise. The returned Promise must be successfully
+	 *         resolved with the value {@code null}, if this Promise was
+	 *         resolved by the specified Promise. The returned Promise must be
+	 *         resolved with a failure of {@link IllegalStateException}, if this
 	 *         Promise was already resolved when the specified Promise was
 	 *         resolved.
 	 */

@@ -4,6 +4,7 @@
 
 -dependson = \
     osgi.annotation, \
+    osgi.promise, \
     osgi.core, \
     osgi.cmpn, \
     osgi.enterprise, \

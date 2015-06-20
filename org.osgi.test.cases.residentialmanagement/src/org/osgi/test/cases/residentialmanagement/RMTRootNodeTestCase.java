@@ -2,7 +2,6 @@ package org.osgi.test.cases.residentialmanagement;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.Uri;
 
@@ -61,14 +60,14 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 			mandatory.remove(child);
 		}
 		
-		assertTrue( "Mandatory child-nodes are missing for the root node: " + mandatory, mandatory.size() == 0 );
-		assertTrue( "There are undefined child-nodes under thee root node: " + undefined, undefined.size() == 0 );
+		assertEquals("Mandatory child-nodes are missing for the root node: " + mandatory, 0, mandatory.size());
+		assertEquals("There are undefined child-nodes under thee root node: " + undefined, 0, undefined.size());
 		session.close();
 		
 		// try to open session on each child
 		for (String child : children) {
 			session = dmtAdmin.getSession(root + "/" + child, DmtSession.LOCK_TYPE_SHARED);
-			assertNotNull(session);
+			assertNotNull("Null DMT session for: " + root + "/" + child, session);
 			session.close();
 		}
 	}

@@ -46,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
@@ -70,6 +71,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
     protected void setUp() throws Exception {
+
 		super.setUp();
 
 		timeout = getLongProperty("rsa.ct.timeout", 300000L);
@@ -80,8 +82,29 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
     protected void tearDown() throws Exception {
+
 		super.tearDown();
 		ungetAllServices();
+
+		// wait until all remaining exports / imports are gone
+		remoteServiceAdmin = getService(RemoteServiceAdmin.class);
+		int x = (int) (timeout / 500L);
+		while (remoteServiceAdmin.getExportedServices().size() > 0
+				|| remoteServiceAdmin.getImportedEndpoints().size() > 0) {
+			--x;
+
+			System.out
+					.println("Teardown: Waiting for remaining exports / imports to be closed");
+
+			if (x < 0)
+				throw new Exception(
+						"there are exported or imported services left after the test ended");
+			Thread.sleep(500);
+		}
+		ungetAllServices();
+		// wait for a little while so that no events remain queued somewhere
+		Thread.sleep(3000);
+
 	}
 
 	/**
@@ -245,11 +268,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 	/**
 	 * 122.4.1 Exporting
-	 *
-	 * Tests the export of a service with negative edge cases according to
-	 * the spec.
-	 * Register a service an make sure that an event is sent to a registered
-	 * RemoteServiceAdminListener
+	 * 
+	 * Tests the export of a service with negative edge cases according to the
+	 * spec. Register a service and make sure that an event is sent to a
+	 * registered RemoteServiceAdminListener
 	 */
 	public void testExportRSAListenerNotification() throws Exception {
 		// create an register a service
@@ -329,6 +351,18 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 
+			// gather all export references so that we can check if calls
+			// against them are really null once the ExportRegistrations where
+			// closed. Need to gather them here as later there will be no chance
+			// to get them anympore.
+			List<ExportReference> oldExportReferences = new LinkedList<ExportReference>();
+			for (Iterator<ExportRegistration> regIt = exportRegistrations
+					.iterator(); regIt.hasNext();) {
+				ExportRegistration exportRegistration = regIt.next();
+				oldExportReferences
+						.add(exportRegistration.getExportReference());
+			}
+
 			// ungetting the RSA service will also close the ExportRegistration and therefore
 			// emit an event
 			ungetService(remoteServiceAdmin);
@@ -337,14 +371,25 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 								// events.
 
 			if (!exportFailed) {
+
+				for (ExportReference exRef : oldExportReferences) {
+					assertNull(
+							"122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
+							exRef.getExportedEndpoint());
+					assertNull(
+							"122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
+							exRef.getExportedService());
+				}
+				oldExportReferences.clear();
+
+
 				for (Iterator<ExportRegistration> registrationiterator = exportRegistrations.iterator(); registrationiterator.hasNext();) {
 					ExportRegistration exportregistration = registrationiterator.next();
-					ExportReference reference = exportregistration.getExportReference();
 
-					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							reference.getExportedEndpoint());
-					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							reference.getExportedService());
+					ExportReference reference = exportregistration.getExportReference();
+					assertNull(
+							"After closing the ExportRegistration, all calls against the ExportRegistration must return null",
+							reference);
 				}
 
 				event = remoteServiceAdminListener.getNextEvent();
@@ -395,14 +440,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
 					"org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION",
 					"org/osgi/service/remoteserviceadmin/EXPORT_ERROR"});
-			TestEventHandler eventHandler = new TestEventHandler();
+			TestEventHandler eventHandler = new TestEventHandler(timeout);
 
 			registerService(EventHandler.class.getName(), eventHandler, props);
 
 			props = new Hashtable<String, Object>();
 			props.put(EventConstants.EVENT_TOPIC, new String[]{
 					"org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION"});
-			TestEventHandler unregistrationEventHandler = new TestEventHandler();
+			TestEventHandler unregistrationEventHandler = new TestEventHandler(
+					timeout);
 
 			registerService(EventHandler.class.getName(), unregistrationEventHandler, props);
 
@@ -431,17 +477,13 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			ServiceReference sref = getServiceReference(remoteServiceAdmin);
 
-			Event event = eventHandler.getNextEvent();
+			Event event = eventHandler.getNextEventForTopic(
+					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
+					"org/osgi/service/remoteserviceadmin/EXPORT_ERROR");
 			assertNotNull("no Event received", event);
-            // David B: there is a race condition in that the registration of the remote service above will generate an event
-            // that can potentially be picked up by the eventHandler, even though it was registered later. Therefore we're emptying
-            // the eventList here to reach a consistent state before continuing with the test.
-			// commented out the next line
-			// assertEquals(0, eventHandler.getEventCount());
 
 			assertEquals(sref.getBundle(), event.getProperty("bundle"));
 			assertEquals(sref.getBundle().getSymbolicName(), event.getProperty("bundle.symbolicname"));
-			assertEquals(description, event.getProperty("export.registration"));
 			assertEquals(sref.getBundle().getBundleId(), event.getProperty("bundle.id"));
 			assertEquals(sref.getBundle().getVersion(), event.getProperty("bundle.version"));
 			assertNotNull(event.getProperty("timestamp"));
@@ -464,7 +506,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			ungetService(remoteServiceAdmin);
 
 			if (!exportFailed) {
-				event = unregistrationEventHandler.getNextEvent();
+				event = unregistrationEventHandler
+						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION");
 				assertNotNull("no EXPORT_UNREGISTRATION event received", event);
 				// David B: you should be getting 2 unregistration events, one for each service?
 				// commented out the next line
@@ -473,8 +516,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				assertEquals("org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION", event.getTopic());
 				assertEquals(sref.getBundle(), event.getProperty("bundle"));
 				assertEquals(sref.getBundle().getSymbolicName(), event.getProperty("bundle.symbolicname"));
-				// Marc Schaaf: changed from export.unregistration to export.registration
-				assertEquals(description, event.getProperty("export.registration"));
 				rsaevent = (RemoteServiceAdminEvent) event.getProperty("event");
 				assertNotNull(rsaevent);
 				assertEquals(RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, rsaevent.getType());
@@ -496,7 +537,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * a new ExportRegistration
 	 */
 	public void testExportMultipleRegistrations() throws Exception {
-		// create an register a service
+		// create and register a service
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
@@ -540,6 +581,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 				Collection<ExportReference> exportrefs = rsa.getExportedServices();
 
+				for (ExportReference eRef : exportrefs) {
+					System.out.println("Exported Endpoint: "
+							+ eRef.getExportedEndpoint());
+				}
+				
 				assertNotNull(exportrefs);
 				assertEquals(exportRegistrations.size() + exportRegistrations2.size(), exportrefs.size());
 
@@ -584,7 +630,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					assertNotNull(ref);
 
 					assertEquals(registration.getReference(), ref.getExportedService());
-					assertTrue(endpoints.contains(ref.getExportedEndpoint()));
+					// As of RSA 1.1 endpoints are not required to be shared so
+					// we don't test for it anymore
+					// assertTrue(endpoints.contains(ref.getExportedEndpoint()));
 
                     assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(ref));
 				}
@@ -594,6 +642,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 
+					ExportReference exref = er.getExportReference();
 					er.close();
 					try {
 						er.close(); // must
@@ -602,14 +651,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					}
 
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							er.getExportReference().getExportedEndpoint());
+							exref.getExportedEndpoint());
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							er.getExportReference().getExportedService());
+							exref.getExportedService());
 				}
 				assertEquals(exportRegistrations.size(), rsa.getExportedServices().size());
 				for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 
+					ExportReference exref = er.getExportReference();
 					er.close();
 					try {
 						er.close(); // must
@@ -618,9 +668,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					}
 
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							er.getExportReference().getExportedEndpoint());
+							exref.getExportedEndpoint());
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							er.getExportReference().getExportedService());
+							exref.getExportedService());
 				}
 				assertNotNull(rsa.getExportedServices());
 				assertEquals(0, rsa.getExportedServices().size());
@@ -878,7 +928,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 			// unexport the service
-			registration.unregister();
+			exportRegistrations.iterator().next().close();
 
 			Sleep.sleep(2000); // give the system the chance to deliver all
 								// events.
@@ -906,26 +956,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 			// export the service again
-			exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
-			assertNotNull(exportRegistrations);
-			assertEquals("only one export registration was expected since only one config type was requested", 1, exportRegistrations.size());
+			// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=2591
+			try {
+				exportRegistrations = remoteServiceAdmin.exportService(
+						registration.getReference(), properties);
+				fail("Expected an illegal argumnet exception for garbage input");
+			} catch (IllegalArgumentException e) {
+				// as expected
 
-			// expect ERROR event
-			event = remoteServiceAdminListener.getNextEvent();
-			assertNotNull("no RemoteServiceAdminEvent received", event);
-			// David B: There can be an additional event, as the registerService and the exportService both emit the event...
-            assertEquals(0, remoteServiceAdminListener.getEventCount());
-			assertNotNull("122.10.11: source must not be null", event.getSource());
-			assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, event.getType());
-			assertNotNull(event.getException());
-
-			//Marc: Based on the API the getReference should simply return null
-			assertNull(event.getExportReference());
-//			try {
-//				event.getExportReference();
-//				fail("IllegalStateException expected");
-//			} catch (IllegalStateException ie) {}
-
+			}
 
 			// ungetting the RSA service will also close the ExportRegistration and therefore
 			// emit an event
@@ -1187,35 +1226,4 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		}
 	}
 
-	class TestEventHandler implements EventHandler {
-		private final LinkedList<Event> eventlist = new LinkedList<Event>();
-		private final Semaphore sem = new Semaphore(0);
-
-
-		/**
-		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
-		 */
-		public void handleEvent(Event event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-
-		Event getNextEvent() {
-			try {
-				sem.waitForSignal(timeout);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
 }

@@ -15,12 +15,12 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo xml:id="residential.book-release">Release 5</releaseinfo>
+    <releaseinfo xml:id="residential.book-release">Release 6</releaseinfo>
 
-    <pubdate>TBD</pubdate>
+    <pubdate>July 2015</pubdate>
 
     <copyright>
-      <year>2000, 2013</year>
+      <year>2000, 2015</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
@@ -60,5 +60,23 @@
 
   <xi:include href="../131/service.tr069todmt.xml"/>
 
+  <xi:include href="../135/service.namespaces.xml"/>
+
+  <xi:include href="../139/service.enocean.xml"/>
+
+  <xi:include href="../141/service.dal.xml"/>
+
+  <xi:include href="../142/service.dal.functions.xml"/>
+
+  <xi:include href="../143/service.network.xml"/>
+
+  <xi:include href="../144/service.resourcemonitoring.xml"/>
+
+  <xi:include href="../145/service.usbinfo.xml"/>
+
+  <xi:include href="../146/service.serial.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
+
+  <xi:include href="../705/util.promise.xml"/>
 </book>

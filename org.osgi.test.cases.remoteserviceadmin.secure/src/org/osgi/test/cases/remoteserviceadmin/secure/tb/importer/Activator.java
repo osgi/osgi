@@ -50,11 +50,12 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class Activator implements BundleActivator {
-	ServiceRegistration            registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
-	TestRemoteServiceAdminListener remoteServiceAdminListener;
 	long timeout;
+
+	ServiceReference rsaRef;
+	ImportRegistration importReg;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -75,7 +76,8 @@ public class Activator implements BundleActivator {
 
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service 
-		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
+		rsaRef = context
+				.getServiceReference(RemoteServiceAdmin.class.getName());
 		Assert.assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
 		Assert.assertNotNull(rsa);
@@ -84,7 +86,7 @@ public class Activator implements BundleActivator {
 		// register a RemoteServiceAdminListener to receive the export
 		// notification
 		//
-		remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+		TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
 		ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
 		Assert.assertNotNull(sr);
 
@@ -97,21 +99,10 @@ public class Activator implements BundleActivator {
 			Assert.assertFalse(endpointIntents.isEmpty());
 
 			//
-			// 122.4.8: Events
-			// add a RemoteServiceAdminLister and an EventHandler and check for import events
-
-			//
-			// register a RemoteServiceAdminListener to receive the import
-			// notification
-			//
-			TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
-			context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
-
-			//
 			// 122.4.2: Importing
 			// positive test: import the service
 			//
-			ImportRegistration importReg = rsa.importService(endpoint);
+			importReg = rsa.importService(endpoint);
 			Assert.assertNotNull(importReg);
 			Assert.assertNull(importReg.getException());
 
@@ -179,35 +170,52 @@ public class Activator implements BundleActivator {
 				context.ungetService(ref);
 			}
 
-			importReg.close();
-			importReg.close(); // calling this multiple times must not cause a problem
-
-			//
-			// 122.4.8 on close of the ImportRegistration expect another event
-			//
-			rsaevent = remoteServiceAdminListener.getNextEvent();
-			Assert.assertNotNull("no RemoteServiceAdminEvent received", rsaevent);
-			Assert.assertNotNull("122.10.11: source must not be null", rsaevent.getSource());
-			Assert.assertNull(rsaevent.getException());
-			Assert.assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.IMPORT_UNREGISTRATION, rsaevent.getType());
-
-			importReference = rsaevent.getImportReference();
-			Assert.assertNotNull("ImportReference expected in event", importReference);
-
-			Assert.assertNull(importReference.getImportedEndpoint());
-
 		} finally {
-			// Make sure the service instance of the RSA can be closed by the RSA Service Factory
-			context.ungetService(rsaRef);
+			sr.unregister();
 		}
 	}
 
 	/**
-	 * 122.4.1 Exporting
-	 * Once the ExportRegistration is closed, a notification is expected to be sent
-	 * to the RemoteServiceAdminListener that the service is no longer exported.
+	 * 122.4.1 Exporting Once the ExportRegistration is closed, a notification
+	 * is expected to be sent to the RemoteServiceAdminListener that the service
+	 * is no longer exported.
 	 */
 	private void teststop() throws Exception {
+
+		TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+		ServiceRegistration sr = context.registerService(
+				RemoteServiceAdminListener.class.getName(),
+				remoteServiceAdminListener, null);
+		Assert.assertNotNull(sr);
+		try {
+			importReg.close();
+			importReg.close(); // calling this multiple times must not cause a
+								// problem
+
+			//
+			// 122.4.8 on close of the ImportRegistration expect another event
+			//
+			RemoteServiceAdminEvent rsaevent = remoteServiceAdminListener
+					.getNextEvent();
+			Assert.assertNotNull("no RemoteServiceAdminEvent received",
+					rsaevent);
+			Assert.assertNotNull("122.10.11: source must not be null",
+					rsaevent.getSource());
+			Assert.assertNull(rsaevent.getException());
+			Assert.assertEquals("122.10.11: event type is wrong",
+					RemoteServiceAdminEvent.IMPORT_UNREGISTRATION,
+					rsaevent.getType());
+
+			ImportReference importReference = rsaevent.getImportReference();
+			Assert.assertNotNull("ImportReference expected in event",
+					importReference);
+
+			Assert.assertNull(importReference.getImportedEndpoint());
+
+		} finally {
+			sr.unregister();
+			context.ungetService(rsaRef);
+		}
 	}
 
 	/**

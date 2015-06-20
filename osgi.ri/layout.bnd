@@ -11,6 +11,7 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
+    org.osgi.impl.service.async, \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
@@ -39,6 +40,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.coordinator;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
+	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
@@ -53,6 +55,7 @@ build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
+	org.osgi.impl.service.async, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
@@ -72,6 +75,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.coordinator;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
+	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
@@ -84,14 +88,25 @@ build.residential.impls = \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.jaxp, \
+	org.osgi.impl.service.dal, \
+	org.osgi.impl.service.dal.step, \
 	org.osgi.impl.service.device.manager, \
 	org.osgi.impl.service.dmt, \
+	org.osgi.impl.service.enocean, \
 	org.osgi.impl.service.log, \
+	org.osgi.impl.service.networkadapter, \
 	org.osgi.impl.service.residentialmanagement, \
+	org.osgi.impl.service.resourcemonitoring, \
+	org.osgi.impl.service.resourcemonitoring.fakemonitors, \
+	org.osgi.impl.service.resourcemonitoring.util, \
+	org.osgi.impl.service.serial, \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp, \
 	org.osgi.impl.service.upnp.cd, \
+	org.osgi.impl.service.usbinfo, \
 	org.osgi.impl.service.useradmin, \
+    org.osgi.util.function, \
+    org.osgi.util.promise, \
     org.osgi.util.xml
 
 jar.residential.impls = \

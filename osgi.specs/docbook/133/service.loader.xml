@@ -159,7 +159,7 @@
       <para>A Service Provider bundle can provide access to all its Service
       Providers through OSGi services by declaring a requirement on the
       <code>osgi.serviceloader.registrar</code> extender. This requirement
-      activates a Meditator to inspect the <code>osgi.serviceloader</code>
+      activates a Mediator to inspect the <code>osgi.serviceloader</code>
       capabilities. If no <code>register</code> directive is used then all
       Service Providers for the given Service Type must be registered.
       Otherwise, each capability can select one Service Provider with the
@@ -347,7 +347,7 @@ if ( it.hasNext() ) {
       <programlisting>Require-Capability:
     osgi.extender;
         filter:="(&amp;(osgi.extender=osgi.serviceloader.processor)
-                 (version>=1.0)(!(version>=2.0)))"</programlisting>
+                 (version&gt;=1.0)(!(version&gt;=2.0)))"</programlisting>
 
       <para>If the extender <code>osgi.serviceloader.processor</code>
       requirement is satisfied then the wired Mediator must process the
@@ -448,7 +448,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <programlisting>Require-Capability:                                         
   osgi.extender;
     filter:="(&amp;(osgi.extender=osgi.serviceloader.processor)
-             (version>=1.0)(!(version>=2.0)))"</programlisting>
+             (version&gt;=1.0)(!(version&gt;=2.0)))"</programlisting>
 
       <para>With this manifest, the Consumer bundle has full visibility to all
       Service Provider bundles that are published. The following lines can be
@@ -543,7 +543,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <programlisting>Require-Capability:
     osgi.extender;
         filter:="(&amp;(osgi.extender=osgi.serviceloader.registrar)
-                 (version>=1.0)(!(version>=2.0)))"</programlisting>
+                 (version&gt;=1.0)(!(version&gt;=2.0)))"</programlisting>
 
       <para>The registrar must then inspect each
       <code>osgi.serviceloader</code> capability and register an associated
@@ -627,7 +627,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       <programlisting>Require-Capability:                                         
     osgi.extender; 
         filter:="(&amp;(osgi.extender=osgi.serviceloader.registrar)
-                 (version>=1.0)(!(version>=2.0)))"</programlisting>
+                 (version&gt;=1.0)(!(version&gt;=2.0)))"</programlisting>
 
       <para>To publish two Service Providers for the same type, two
       capabilities must be declared:</para>
@@ -864,7 +864,7 @@ Import-Package:         com.example; version=3.45</programlisting>
         </listitem>
 
         <listitem>
-          <para>Are not type space incompatible with the requestor for the
+          <para>Are not type space incompatible with the requester for the
           given Service Type, and</para>
         </listitem>
 

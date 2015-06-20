@@ -32,10 +32,13 @@ public class FailedPromisesException extends RuntimeException {
 	 * Create a new FailedPromisesException with the specified Promises.
 	 * 
 	 * @param failed A collection of Promises that have been resolved with a
-	 *        failure. Must not be {@code null}.
+	 *        failure. Must not be {@code null}, must not be empty and all of
+	 *        the elements in the collection must not be {@code null}.
+	 * @param cause The cause of this exception. This is typically the failure
+	 *        of the first Promise in the specified collection.
 	 */
-	public FailedPromisesException(Collection<Promise<?>> failed) {
-		super();
+	public FailedPromisesException(Collection<Promise<?>> failed, Throwable cause) {
+		super(cause);
 		this.failed = Collections.unmodifiableCollection(failed);
 	}
 

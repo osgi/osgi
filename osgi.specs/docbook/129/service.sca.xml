@@ -342,7 +342,7 @@
       <code>confidentiality</code> Intent.</para>
 
       <para>The <emphasis>implementation</emphasis> of an Intent is provided
-      by a <emphasis>Policy Set. </emphasis>A Policy Set uses a policy
+      by a <emphasis>Policy Set</emphasis>. A Policy Set uses a policy
       language to define this implementation. A Policy Set can apply to all
       Binding Types or it can apply to a specific Binding Type. For example,
       an SCA service could be configured with the SCA web services Binding
@@ -1413,7 +1413,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
               Can be either a specific Binding (e.g.
               <code>acme:binding.rmi</code>) or all Binding Types
               (<code>sca:binding</code>). This attribute is an XPath
-              expression in SCA. </para></entry>
+              expression in SCA.</para></entry>
             </row>
 
             <row>

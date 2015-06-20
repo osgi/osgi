@@ -15,21 +15,14 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb2;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import junit.framework.Assert;
 
@@ -46,19 +39,17 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.cases.remoteserviceadmin.common.TestRemoteServiceAdminListener;
+import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @version 1.0.0
  */
 public class Activator implements BundleActivator, A, B {
-	/**
-	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free.
-	 */
-    private static final String FREE_PORT = "@@FREE_PORT@@";
+
 
 	ServiceRegistration            registration;
 	BundleContext                  context;
@@ -68,6 +59,12 @@ public class Activator implements BundleActivator, A, B {
 	long timeout;
 	String version;
 	ServiceReference rsaRef;
+
+	/**
+	 * Used for writing the endpoint description to a system property to be used
+	 * by parent framework @see {@link Utils.exportEndpointDescription}
+	 */
+	private int registrationCounter = 0;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -139,7 +136,8 @@ public class Activator implements BundleActivator, A, B {
 			// register a RemoteServiceAdminListener to receive the export
 			// notification
 			//
-			remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+			remoteServiceAdminListener = new TestRemoteServiceAdminListener(
+					timeout);
 			ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
 			Assert.assertNotNull(sr);
 
@@ -148,11 +146,12 @@ public class Activator implements BundleActivator, A, B {
 			// 122.4.1 export the service, positive tests
 			//
 			// load the external properties file with the config types for the server side service
-			Map<String, Object> properties = loadServerTCKProperties();
+			Map<String, Object> properties = Utils
+					.loadServerTCKProperties(context);
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
-			processFreePortProperties(properties);
+			Utils.processFreePortProperties(properties);
 
 			// export the service
 			exportRegistrations = rsa.exportService(registration.getReference(), properties);
@@ -186,7 +185,8 @@ public class Activator implements BundleActivator, A, B {
 						ed.getFrameworkUUID());
 				Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
 
-				exportEndpointDescription(ed);
+				Utils.exportEndpointDescription(ed, version,
+						registrationCounter++);
 			}
 
 			//
@@ -214,8 +214,6 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
 					.getFrameworkUUID());
 
-			// David B There could be an additional event as we've remoted the service twice.
-			// Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
 		} finally {
 			// as the exported services are now required to be exported after this method returns
 			// the rsaRef can't be released as this also causes the services to be unexported
@@ -233,6 +231,7 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertNotNull(exportRegistrations);
 		Assert.assertFalse(exportRegistrations.isEmpty());
 
+
 		// close ExportRegistrations
 		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 			ExportRegistration er = it.next();
@@ -240,8 +239,6 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertNull(er.getException());
 			er.close();
 		}
-
-		Assert.assertEquals(0, rsa.getExportedServices().size());
 
 		//
 		// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
@@ -257,7 +254,6 @@ public class Activator implements BundleActivator, A, B {
 
 		Assert.assertNull(exportReference.getExportedEndpoint());
 
-		Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
 		} finally {
 			// the release of the rsa service will also trigger the unexport of the services of this bundle
 			if(rsaRef!=null)
@@ -265,123 +261,9 @@ public class Activator implements BundleActivator, A, B {
 		}
 	}
 
-    private void processFreePortProperties(Map<String, Object> properties) {
-        String freePort = getFreePort();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
-            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
-                entry.setValue(freePort);
-            }
-        }
-    }
-
-    private String getFreePort() {
-        try {
-            ServerSocket ss = new ServerSocket(0);
-            String port = "" + ss.getLocalPort();
-            ss.close();
-            return port;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-	 * @return
-	 */
-	private Map<String, Object> loadServerTCKProperties() {
-		String serverconfig = context
-				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
-		Assert.assertNotNull(
-				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
-				serverconfig);
-		Map<String, Object> properties = new HashMap<String, Object>();
-
-		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
-				.hasMoreTokens();) {
-			String propertyName = tok.nextToken();
-			String value = context.getProperty(propertyName);
-			Assert.assertNotNull("system property not found: " + propertyName, value);
-			properties.put(propertyName, value);
-		}
-
-		return properties;
-	}
-
-	/**
-	 * Write the contents of the EndpointDescription into System properties for the parent framework to
-	 * read and then import.
-	 *
-	 * @param ed
-	 * @throws IOException
-	 */
-	private void exportEndpointDescription(EndpointDescription ed) throws IOException {
-		// Marc Schaaf: I switched to Java serialization to support String[] and lists as
-		// EndpointDescription Properties. The Byte Array is encoded as a HEX string to save
-		// it as a system property
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(bos);
 
 
-		Map<String, Object> props = new HashMap<String, Object>();
-		for (Iterator<String> it = ed.getProperties().keySet().iterator(); it.hasNext();) {
-			String key = it.next();
-			props.put(key, ed.getProperties().get(key));
-		}
-
-		oos.writeObject(props);
-
-		// encode byte[] as hex
-		byte[] ba = bos.toByteArray();
-		String out = "";
-		for (int x=0; x < ba.length; ++x) {
-			out += Integer.toString( ( ba[x] & 0xff ) + 0x100, 16).substring( 1 );
-		}
 
 
-		System.getProperties().put("RSA_TCK.EndpointDescription_" + this.version + "_" + registrationCounter++, out);
 
-	}
-
-	private int registrationCounter = 0;
-
-	/**
-	 * RemoteServiceAdminListener implementation, which collects and
-	 * returns the received events in order.
-	 *
-	 * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
-	 *
-	 */
-	class TestRemoteServiceAdminListener implements RemoteServiceAdminListener {
-		private LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
-		private Semaphore sem = new Semaphore(0);
-
-		/**
-		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
-		 */
-		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-
-		RemoteServiceAdminEvent getNextEvent() {
-			try {
-				sem.waitForSignal(timeout);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
 }

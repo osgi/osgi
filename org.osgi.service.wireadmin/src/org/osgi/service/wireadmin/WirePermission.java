@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -238,7 +238,7 @@ final public class WirePermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines the equalty of two {@code WirePermission} objects.
+	 * Determines the equality of two {@code WirePermission} objects.
 	 * 
 	 * Checks that specified object has the same name and actions as this
 	 * {@code WirePermission} object.

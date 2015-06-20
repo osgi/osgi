@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,8 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
  * {@link DeploymentSession}). After the session ends the FilePermissions are
  * withdrawn. The Resource Processor will have {@code FilePermission} with
  * "read", "write" and "delete" actions for the returned {@link java.io.File}
- * that represents the the base directory of the persistent storage area and for
- * its subdirectories.
+ * that represents the base directory of the persistent storage area and for its
+ * subdirectories.
  * <p>
  * 
  * The actions string is converted to lowercase before processing.

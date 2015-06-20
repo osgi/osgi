@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+    /*
+    * $Id$
+    * 
+    * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *      http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+    -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:rest="http://www.osgi.org/xmlns/rest/v1.0.0"
+    targetNamespace="http://www.osgi.org/xmlns/rest/v1.0.0"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified"
+    version="1.0.0">
+
+    <annotation>
+        <documentation xml:lang="en">
+            This is the XML Schema for
+            XML representations used by
+            the REST Management Service
+            Specification.
+        </documentation>
+    </annotation>
+
+    <element name="bundle" type="rest:Tbundle">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundle+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Tbundle">
+        <all>
+            <element name="id" type="long" />
+            <element name="lastModified" type="long" />
+            <element name="state" type="integer" />
+            <element name="symbolicName" type="string" />
+            <element name="version" type="string" />
+        </all>
+    </complexType>
+
+    <element name="bundles" type="rest:Tbundles">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundles+xml and
+                application/org.osgi.bundles.representations+xml content
+                types.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Tbundles">
+        <choice>
+            <element name="uri" type="string" minOccurs="0"
+                maxOccurs="unbounded">
+                <annotation>
+                    <documentation xml:lang="en">
+                        Representation for the
+                        application/org.osgi.bundles+xml content type.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="bundle" type="rest:Tbundle"
+                minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation xml:lang="en">
+                        Representation for the
+                        application/org.osgi.bundles.representations+xml
+                        content type.
+                    </documentation>
+                </annotation>
+            </element>
+        </choice>
+    </complexType>
+
+    <element name="bundleState" type="rest:TbundleState">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundlestate+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="TbundleState">
+        <all>
+            <element name="state" type="integer" />
+            <element name="options" type="integer" />
+        </all>
+    </complexType>
+
+    <element name="bundleHeader" type="rest:TbundleHeader">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundleheader+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="TbundleHeader">
+        <sequence>
+            <element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <attribute name="key" type="string" use="required" />
+                    <attribute name="value" type="string" use="required" />
+                </complexType>
+            </element>
+        </sequence>
+    </complexType>
+
+    <element name="frameworkStartLevel" type="rest:TframeworkStartLevel">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.frameworkstartlevel+xml content
+                type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="TframeworkStartLevel">
+        <all>
+            <element name="startLevel" type="integer" />
+            <element name="initialBundleStartLevel" type="integer" />
+        </all>
+    </complexType>
+
+    <element name="bundleStartLevel" type="rest:TbundleStartLevel">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundlestartlevel+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="TbundleStartLevel">
+        <all>
+            <element name="startLevel" type="integer" />
+            <element name="activationPolicyUsed" type="boolean" />
+            <element name="persistentlyStarted" type="boolean" />
+        </all>
+    </complexType>
+
+    <element name="service" type="rest:Tservice">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.service+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Tservice">
+        <all>
+            <element name="id" type="long" />
+            <element name="properties">
+                <complexType>
+                    <sequence>
+                        <element name="property" minOccurs="0"
+                            maxOccurs="unbounded">
+                            <complexType>
+                                <simpleContent>
+                                    <extension base="string">
+                                        <attribute name="name"
+                                            type="string" use="required" />
+                                        <attribute name="value"
+                                            type="string" use="optional" />
+                                        <attribute name="type"
+                                            default="String" use="optional">
+                                            <simpleType>
+                                                <restriction
+                                                    base="string">
+                                                    <enumeration
+                                                        value="String" />
+                                                    <enumeration
+                                                        value="Long" />
+                                                    <enumeration
+                                                        value="Double" />
+                                                    <enumeration
+                                                        value="Float" />
+                                                    <enumeration
+                                                        value="Integer" />
+                                                    <enumeration
+                                                        value="Byte" />
+                                                    <enumeration
+                                                        value="Character" />
+                                                    <enumeration
+                                                        value="Boolean" />
+                                                    <enumeration
+                                                        value="Short" />
+                                                </restriction>
+                                            </simpleType>
+                                        </attribute>
+                                    </extension>
+                                </simpleContent>
+                            </complexType>
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="bundle" type="string" />
+            <element name="usingBundles">
+                <complexType>
+                    <sequence>
+                        <element name="bundle" type="string"
+                            minOccurs="0" maxOccurs="unbounded" />
+                    </sequence>
+                </complexType>
+            </element>
+        </all>
+    </complexType>
+
+    <element name="services" type="rest:Tservices">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.services+xml and
+                application/org.osgi.services.representations+xml
+                content types.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Tservices">
+        <choice>
+            <element name="uri" type="string" minOccurs="0"
+                maxOccurs="unbounded">
+                <annotation>
+                    <documentation xml:lang="en">
+                        Representation for the
+                        application/org.osgi.services+xml content type.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="service" type="rest:Tservice"
+                minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation xml:lang="en">
+                        Representation for the
+                        application/org.osgi.services.representations+xml
+                        content type.
+                    </documentation>
+                </annotation>
+            </element>
+        </choice>
+    </complexType>
+
+    <element name="bundleexception" type="rest:Tbundleexception">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.bundleexception+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Tbundleexception">
+        <all>
+            <element name="typecode" type="integer" />
+            <element name="message" type="string" />
+        </all>
+    </complexType>
+
+    <element name="extensions" type="rest:Textensions">
+        <annotation>
+            <documentation xml:lang="en">
+                Representation for the
+                application/org.osgi.extensions+xml content type.
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="Textensions">
+        <sequence>
+            <element name="extension" minOccurs="0" maxOccurs="unbounded">
+                <complexType>
+                    <all>
+                        <element name="name" type="string" />
+                        <element name="path" type="string" />
+                        <element name="service" type="long" minOccurs="0" />
+                    </all>
+                </complexType>
+            </element>
+        </sequence>
+    </complexType>
+</schema>

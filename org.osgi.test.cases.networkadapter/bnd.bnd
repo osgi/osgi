@@ -1,0 +1,25 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+    ${p}.junit.*, \
+    ${p}.util.*
+Import-Package: ${-signaturetest}, *
+
+-buildpath:  \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.networkadapter;version=project,\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	${junit}
+
+Test-Cases							= ${testcases}
+-signaturetest						= org.osgi.service.networkadapter
+
+-runbundles:  \
+	org.osgi.impl.service.networkadapter;version=latest,\
+	org.osgi.impl.service.event;version=latest
+
+Export-Package:  \
+	org.osgi.test.support.step

@@ -1,0 +1,1924 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="141" version="5" xml:id="service.dal"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Device Abstraction Layer Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.dal-version"
+    linkend="org.osgi.service.dal"/></releaseinfo>
+  </info>
+
+  <section xml:id="service.dal-introduction">
+    <title>Introduction</title>
+
+    <para>The Internet-of-Things (IoT) has a major impact in the IT industry.
+    It requires backend systems to receive information from sensors,
+    actuators, and appliances in various vertical markets such as Smart Home,
+    eHealth, industrial automation, logistics, and automotive telematics.
+    Application developers have to face the still increasing amount of
+    communication protocols which are the major hurdle for
+    interoperability.</para>
+
+    <para>The Device Abstraction Layer specification provides a unified
+    interface for application developers to interact with sensor, devices,
+    etc. connected to a gateway. Application developers don't have to deal
+    with protocol specific details which simplifies the development of their
+    applications.</para>
+
+    <para>The remote device control provides an opportunity to save energy, to
+    support better security, to save your time during daily tasks and more.
+    The devices can play different roles in their networks as event reporters,
+    controllers, etc. That dynamic behavior is well mappable to the dynamic
+    OSGi service registry. When a new device is available in the network,
+    there is a registration of a <code>Device</code> service. It realizes
+    basic set of management operations and provides a rich set of properties.
+    The applications can track the device status, read descriptive information
+    and follow the device relations. A set of functions can belong to a single
+    device. They represent the device operations and related properties in an
+    atomic way. The device functions can be found in the OSGi service
+    registry. The applications are allowed to get directly the required
+    functions if they don't need information about the device. For example,
+    light device is registered as <code>Device</code> service and there is
+    <code>Function</code> service to turn on and turn off the light. The
+    application can operate with the light control service without access to
+    the device service.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Device</emphasis> - represents the device in the
+          OSGi service registry. It's described with a set of service
+          properties and provides basic management operations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Function</emphasis> - atomic functional entity like
+          switch or sensor. The function can belong to a device. The function
+          provides a set of properties and operations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>FunctionEvent</emphasis> - asynchronous event. It's
+          posted through <code>EventAdmin</code> service and notifies for
+          <code>Function</code> property change.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>FunctionData</emphasis> - data structure which
+          carries <code>Function</code> property value with extra
+          metadata.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>PropertyMetadata</emphasis> and
+          <emphasis>OperationMetadata</emphasis> - contain metadata about the
+          <code>Function</code> properties and operations.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>Device Abstraction Layer Overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="service.dal.overview.diagram.svg" width="80%"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section xml:id="service.dal-device.access.category">
+    <title>Device Category</title>
+
+    <para>The device category defined in the scope of the Device Access
+    service specification is called <code>DAL</code>. <xref
+    linkend="org.osgi.service.dal.Device.DEVICE_CATEGORY"
+    xrefstyle="hyperlink"/> constant contains the category name.</para>
+  </section>
+
+  <section xml:id="service.dal-device.service">
+    <title>Device Service</title>
+
+    <para>The <xref linkend="org.osgi.service.dal.Device"
+    xrefstyle="hyperlink"/> interface is dedicated to a common access to the
+    devices provided by different protocols. It can be mapped one to one with
+    the physical device, but can be mapped only with a given functional part
+    of the device. Another mapping can be a device realized with a set of
+    <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+    services and different relations between them. <xref
+    linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> service can
+    represent pure software unit. For example, it can simulate the real device
+    work. There are basic management operations for removal and property
+    access. New protocol devices can be supported with the registration of new
+    <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+    services.</para>
+
+    <para>If the underlying protocol and the implementation allow, the <xref
+    linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> services
+    must be registered again after the OSGi framework restarts. The service
+    properties must be restored, the supported functions must be registered
+    and <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+    relations must be visible to the applications.</para>
+
+    <section>
+      <title>Device Service Properties</title>
+
+      <para>The OSGi service registry has the advantage of being easily
+      accessible. The services can be filtered and accessed with their
+      properties. The <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service has a rich set of such properties:
+      <itemizedlist>
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_UID"
+            xrefstyle="hyperlink"/> – Specifies the device unique identifier.
+            It's a mandatory property. The value type is
+            <code>java.lang.String</code>. To simplify the unique identifier
+            generation, the property value must follow the rule:</para>
+
+            <programlisting>UID ::= driver-name ':' device-id</programlisting>
+
+            <itemizedlist>
+              <listitem>
+                <para>UID – device unique identifier</para>
+              </listitem>
+
+              <listitem>
+                <para>driver-name – the value of the
+                <code>Device.SERVICE_DRIVER</code> service property</para>
+              </listitem>
+
+              <listitem>
+                <para>device-id – device unique identifier in the scope of the
+                driver</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_REFERENCE_UIDS"
+            xrefstyle="hyperlink"/> – Specifies the reference device unique
+            identifiers. It's an optional property. The value type is
+            <code>java.lang.String[]</code>. It can be used to represent
+            different relationships between the devices. For example, The
+            EnOcean controller can have a reference to the USB dongle.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_DRIVER"
+            xrefstyle="hyperlink"/> – Specifies the device driver name. For
+            example, EnOcean, Z-Wave, Bluetooth, etc. It's a mandatory
+            property. The value type is <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_NAME"
+            xrefstyle="hyperlink"/> – Specifies the device name. It's an
+            optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_STATUS"
+            xrefstyle="hyperlink"/> – Specifies the current device status.
+            It's a mandatory property. The value type
+            <code>java.lang.Integer</code>. The possible values are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+                xrefstyle="hyperlink"/> – Indicates that the device has been
+                removed from the network. That status must be set as the last
+                device status and after that the device service can be
+                unregistered from the service registry. The status is
+                available for stale device services too. All transitions to
+                this status are described in <xref
+                linkend="service.dal-status.transitions.removed"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/> – Indicates that the device is
+                currently not available for operations. The end device is
+                available in the network and can become online later. The
+                controller is unplugged or there is no connection. All
+                transitions to and from this status are described in detail in
+                <xref
+                linkend="service.dal-status.transitions.offline"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_ONLINE"
+                xrefstyle="hyperlink"/> – Indicates that the device is
+                currently available for operations. The recent communication
+                with the device has been passed through. All transitions to
+                and from this status are described in detail in <xref
+                linkend="service.dal-status.transitions.online"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/> – Indicates that the device is
+                currently busy with an operation. All transitions to and from
+                this status are described in detail in <xref
+                linkend="service.dal-status.transitions.processing"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+                xrefstyle="hyperlink"/> – Indicates that the device is
+                currently not initialized. Some protocols don't provide device
+                information right after the device is connected. The device
+                can be initialized later when it's awakened. All transitions
+                to and from this status are described in detail in <xref
+                linkend="service.dal-status.transitions.not.initialized"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_CONFIGURED"
+                xrefstyle="hyperlink"/> – Indicates that the device is
+                currently not configured. The device can require additional
+                actions to become completely connected to the network. All
+                transitions to and from this status are described in detail in
+                <xref
+                linkend="service.dal-status.transitions.not.configured"/>.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_STATUS_DETAIL"
+            xrefstyle="hyperlink"/> – Provides the reason for the current
+            device status. It's an optional property. The property value
+            cannot be externally set or modified. The value type is
+            <code>java.lang.Integer</code>. There are two value categories.
+            Positive values indicate the reason for the current status like
+            <xref
+            linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONNECTING"
+            xrefstyle="hyperlink"/>. Negative values indicate errors related
+            to the current device status like <xref
+            linkend="org.osgi.service.dal.Device.STATUS_DETAIL_BROKEN"
+            xrefstyle="hyperlink"/>. The list with defined status details
+            is:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONNECTING"
+                xrefstyle="hyperlink"/> – The device is currently connecting
+                to the network. The status detail indicates the reason with a
+                positive value <code>1</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_INITIALIZING"
+                xrefstyle="hyperlink"/> – The device is currently in process
+                of initialization. The status detail indicates the reason with
+                a positive value <code>2</code>. The network controller
+                initializing means that information about the network is
+                currently read. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_REMOVING"
+                xrefstyle="hyperlink"/> – The device is leaving the network.
+                The status detail indicates the reason with positive value
+                <code>3</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_FIRMWARE_UPDATING"
+                xrefstyle="hyperlink"/> – The device firmware is updating. The
+                status detail indicates the reason with positive value
+                <code>4</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONFIGURATION_UNAPPLIED"
+                xrefstyle="hyperlink"/> – The device configuration is not
+                applied. The status detail indicates an error with a negative
+                value <code>-1</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_CONFIGURED"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_BROKEN"
+                xrefstyle="hyperlink"/> – The device is broken. The status
+                detail indicates an error with a negative value
+                <code>-2</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_COMMUNICATION_ERROR"
+                xrefstyle="hyperlink"/> – The device communication is
+                problematic. The status detail indicates an error with a
+                negative value <code>-3</code>. The device status must be
+                <xref linkend="org.osgi.service.dal.Device.STATUS_ONLINE"
+                xrefstyle="hyperlink"/> or <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_DATA_INSUFFICIENT"
+                xrefstyle="hyperlink"/> – The device doesn't provide enough
+                information and cannot be determined. The status detail
+                indicates an error with a negative value <code>-4</code>. The
+                device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_INACCESSIBLE"
+                xrefstyle="hyperlink"/> – The device is not accessible and
+                further communication is not possible. The status detail
+                indicates an error with a negative value <code>-5</code>. The
+                device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_CONFIGURATION_ERROR"
+                xrefstyle="hyperlink"/> – The device cannot be configured. The
+                status detail indicates an error with a negative value
+                <code>-6</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_NOT_CONFIGURED"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.Device.STATUS_DETAIL_DUTY_CYCLE"
+                xrefstyle="hyperlink"/> – The device is in duty cycle. The
+                status detail indicates an error with a negative value
+                <code>-7</code>. The device status must be <xref
+                linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+                xrefstyle="hyperlink"/>.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>Custom status details are allowed, but they must not overlap
+            the specified codes. To prevent possible collisions with further
+            updates, custom codes must be greater than <code>100</code> and
+            less than <code>-100</code>. <xref
+            linkend="service.dal-table.status.detail.mapping"/> contains the
+            mapping of the status details to the statuses.</para>
+
+            <table xml:id="service.dal-table.status.detail.mapping">
+              <title>Status detail to status mapping.</title>
+
+              <tgroup cols="2">
+                <thead>
+                  <row>
+                    <entry>Status Detail</entry>
+
+                    <entry>Status</entry>
+                  </row>
+                </thead>
+
+                <tbody>
+                  <row>
+                    <entry><code>CONNECTING</code></entry>
+
+                    <entry><code>PROCESSING</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>INITIALIZING</code></entry>
+
+                    <entry><code>PROCESSING</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>REMOVING</code></entry>
+
+                    <entry><code>PROCESSING</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>FIRMWARE_UPDATING</code></entry>
+
+                    <entry><code>PROCESSING</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>CONFIGURATION_UNAPPLIED</code></entry>
+
+                    <entry><code>NOT_CONFIGURED</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>BROKEN</code></entry>
+
+                    <entry><code>OFFLINE</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>COMMUNICATION_ERROR</code></entry>
+
+                    <entry><code>ONLINE, NOT_INITIALIZED</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>DATA_INSUFFICIENT</code></entry>
+
+                    <entry><code>NOT_INITIALIZED</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>INACCESSIBLE</code></entry>
+
+                    <entry><code>OFFLINE</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>CONFIGURATION_ERROR</code></entry>
+
+                    <entry><code>NOT_CONFIGURED</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>DUTY_CYCLE</code></entry>
+
+                    <entry><code>OFFLINE</code></entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </table>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_HARDWARE_VENDOR"
+            xrefstyle="hyperlink"/> – Specifies the device hardware vendor.
+            It's an optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_HARDWARE_VERSION"
+            xrefstyle="hyperlink"/> – Specifies the device hardware version.
+            It's an optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_FIRMWARE_VENDOR"
+            xrefstyle="hyperlink"/> – Specifies the device firmware vendor.
+            It's an optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_FIRMWARE_VERSION"
+            xrefstyle="hyperlink"/> – Specifies the device firmware version.
+            It's an optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_TYPES"
+            xrefstyle="hyperlink"/> – Specifies the device types. It's an
+            optional property. The value type is
+            <code>java.lang.String[]</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Device.SERVICE_MODEL"
+            xrefstyle="hyperlink"/> – Specifies the device model. It's an
+            optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.SERVICE_SERIAL_NUMBER"
+            xrefstyle="hyperlink"/> – Specifies the device serial number. It's
+            an optional property. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The next code snippet prints all online devices. <programlisting>ServiceReference[] deviceSRefs = context.getServiceReferences(
+    Device.class.getName(),
+    '(' + Device.SERVICE_STATUS + '=' + Device.STATUS_ONLINE + ')');
+if (deviceSRefs != null) {
+    for (int i = 0; i &lt; deviceSRefs.length; i++) {
+        printDevice(deviceSRefs[i]);
+    }
+}</programlisting></para>
+
+      <para>Applications need to have an access to the device properties. For
+      convenience, there are helper methods: <itemizedlist>
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.getServiceProperty-String-"
+            xrefstyle="hyperlink"/> – Returns the current value of the
+            specified property. The method will return the same value as
+            <code>org.osgi.framework.ServiceReference.getProperty(String)</code>
+            for the service reference of this device.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Device.getServicePropertyKeys--"
+            xrefstyle="hyperlink"/> – Returns an array with all device service
+            property keys. The method will return the same value as
+            <code>org.osgi.framework.ServiceReference.getPropertyKeys()</code>
+            for the service reference of this device.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section xml:id="service.dal-device.registration">
+      <title>Device Registration</title>
+
+      <para>The devices are registered as services in the OSGi service
+      registry. The service interface is
+      <code>org.osgi.service.dal.Device</code>. There is a registration order.
+      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+      services are registered last on start up. Before their registration,
+      there is <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> service registration. The function registration
+      procedure is described in <xref
+      linkend="service.dal-function.registration"/>.</para>
+
+      <para>The OSGi service registry provides an access to the services, but
+      there are no management operations like remove a given service. The
+      service provider is responsible to register and unregister own services.
+      That design doesn't provide an option to remove the device services. The
+      <xref linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/>
+      interface fills this gap with <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method. It's a callback to the service provider to remove the device
+      from the network. The method can be optionally implemented.
+      <code>java.lang.UnsupportedOperationException</code> can be thrown if
+      the method is not supported. When the <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      is called: <itemizedlist>
+          <listitem>
+            <para>An appropriate command will be synchronously send to the
+            device. As a result it can leave the network.</para>
+          </listitem>
+
+          <listitem>
+            <para>The device status will be set to <xref
+            linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+            xrefstyle="hyperlink"/>.</para>
+          </listitem>
+
+          <listitem>
+            <para>The related device service will be unregistered from the
+            OSGi service registry.</para>
+          </listitem>
+        </itemizedlist> There is an unregistration order. The registration
+      reverse order is used when the services are unregistered. <xref
+      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> services
+      are unregistered first before <xref
+      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+      services.</para>
+    </section>
+
+    <section>
+      <title>Reference Devices</title>
+
+      <para><xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service can have a reference to other devices.
+      That link can be used to represent different relationships between
+      devices. For example, the EnOcean dongle can be used as USB Device and
+      EnOcean network controller <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/>. The network controller device can have a
+      reference to the physical USB device as it's depicted on the next
+      diagram.</para>
+
+      <figure pgwide="1">
+        <title>Device Reference</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="service.dal.device.reference.svg" width="15%"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The related service property is <xref
+      linkend="org.osgi.service.dal.Device.SERVICE_REFERENCE_UIDS"
+      xrefstyle="hyperlink"/>.</para>
+    </section>
+
+    <section xml:id="service.dal-status.transitions">
+      <title>Device Status Transitions</title>
+
+      <para>The device status reveals the device availability. It can
+      demonstrate that device is currently not available for operations or
+      that the device requires some additional configuration steps. The status
+      can move between the different values according to the rules defined in
+      this section. The status transitions are summarized in <xref
+      linkend="service.dal-table.device.status.transitions"/>, visualized on
+      <xref linkend="service.dal-figure.device.status.transitions"/> and
+      described in detail in the next sections. The initial device status is
+      always <xref linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+      xrefstyle="hyperlink"/>. When device info is processed, the device can
+      go to another status. The last possible device status is <xref
+      linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+      xrefstyle="hyperlink"/>. The status must be set when the device is
+      removed from the network. After that status, the device service will be
+      unregistered.</para>
+
+      <figure pgwide="1" xml:id="service.dal-figure.device.status.transitions">
+        <title>Device Status Transitions</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="service.dal.status.transitions.svg"
+                       width="80%"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <table xml:id="service.dal-table.device.status.transitions">
+        <title>Device Status Transitions</title>
+
+        <tgroup cols="7">
+          <thead>
+            <row>
+              <entry>From\To Status</entry>
+
+              <entry><code>PROCESSING</code></entry>
+
+              <entry><code>ONLINE</code></entry>
+
+              <entry><code>OFFLINE</code></entry>
+
+              <entry><code>NOT INITIALIZED</code></entry>
+
+              <entry><code>NOT CONFIGURED</code></entry>
+
+              <entry><code>REMOVED</code></entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>PROCESSING</code></entry>
+
+              <entry>-</entry>
+
+              <entry>Initial device data has been read.</entry>
+
+              <entry>Device is not accessible.</entry>
+
+              <entry>Initial device data has been partially read.</entry>
+
+              <entry>Device has a pending configuration.</entry>
+
+              <entry>Device has been removed.</entry>
+            </row>
+
+            <row>
+              <entry><code>ONLINE</code></entry>
+
+              <entry>Device data is processing.</entry>
+
+              <entry>-</entry>
+
+              <entry>Device is not accessible.</entry>
+
+              <entry>-</entry>
+
+              <entry>Device has a new pending configuration.</entry>
+
+              <entry>Device has been removed.</entry>
+            </row>
+
+            <row>
+              <entry><code>OFFLINE</code></entry>
+
+              <entry>Device data is processing.</entry>
+
+              <entry>Device data has been read.</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>Device has a pending configuration.</entry>
+
+              <entry>Device has been removed.</entry>
+            </row>
+
+            <row>
+              <entry><code>NOT INITIALIZED</code></entry>
+
+              <entry>Device data is processing.</entry>
+
+              <entry>-</entry>
+
+              <entry>Device is not accessible.</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>Device has been removed.</entry>
+            </row>
+
+            <row>
+              <entry><code>NOT CONFIGURED</code></entry>
+
+              <entry>Device data is processing.</entry>
+
+              <entry>Device pending configuration is satisfied.</entry>
+
+              <entry>Device is not accessible.</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>Device has been removed.</entry>
+            </row>
+
+            <row>
+              <entry><code>REMOVED</code></entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+
+              <entry>-</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <section xml:id="service.dal-status.transitions.removed">
+        <title>Removed</title>
+
+        <para>The device can go to <xref
+        linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+        xrefstyle="hyperlink"/> from any other status. Once reached, the
+        device status cannot be updated any more. The device has been removed
+        from the network and the device service is unregistered from the OSGi
+        service registry. If there are stale references to the <xref
+        linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> service,
+        their status will be set to <xref
+        linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+        xrefstyle="hyperlink"/>.</para>
+
+        <para>The common way for a given device to be removed is <xref
+        linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+        method. When the method returns, the device status will be <xref
+        linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+        xrefstyle="hyperlink"/>. It requires a synchronous execution of the
+        operation.</para>
+      </section>
+
+      <section xml:id="service.dal-status.transitions.offline">
+        <title>Offline</title>
+
+        <para>The <xref linkend="org.osgi.service.dal.Device.STATUS_OFFLINE"
+        xrefstyle="hyperlink"/> indicates that the device is currently not
+        available for operations. That status can be set, because of different
+        reasons. The network controller has been unplugged, the connection to
+        the device has been lost, etc. The device can move to this status from
+        any other status with the exception of <xref
+        linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+        xrefstyle="hyperlink"/>. Transitions to and from this status are:
+        <itemizedlist>
+            <listitem>
+              <para>From <code>STATUS_OFFLINE</code> to
+              <code>STATUS_REMOVED</code> – The device has been removed. The
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_OFFLINE</code> to
+              <code>STATUS_PROCESSING</code> – Device data is
+              processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_OFFLINE</code> to
+              <code>STATUS_NOT_CONFIGURED</code> – The device has a pending
+              configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_OFFLINE</code> to
+              <code>STATUS_ONLINE</code> – Device data has been read and the
+              device is currently available for operations.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_OFFLINE</code> to
+              <code>STATUS_NOT_INITIALIZED</code> – That transition is not
+              possible, because the status have to go through
+              <code>STATUS_PROCESSING</code>. If the processing is
+              unsuccessful, <code>STATUS_NOT_INITIALIZED</code> will be
+              set.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_OFFLINE</code> from
+              <code>STATUS_REMOVED</code> – That transition is not possible.
+              If the device has been removed, the service will be unregistered
+              from the service registry.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_OFFLINE</code> from
+              <code>STATUS_PROCESSING</code> – The device is not accessible
+              any more while device data is processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_OFFLINE</code> from
+              <code>STATUS_NOT_CONFIGURED</code> – The device with pending
+              configuration is not accessible any more.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_OFFLINE</code> from
+              <code>STATUS_ONLINE</code> – The online device is not accessible
+              any more.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_OFFLINE</code> from
+              <code>STATUS_NOT_INITIALIZED</code> – The not initialized device
+              is not accessible any more.</para>
+            </listitem>
+          </itemizedlist> The possible transitions are summarized on <xref
+        linkend="service.dal-figure.device.status.transitions.offline"/>.
+        <figure pgwide="1"
+            xml:id="service.dal-figure.device.status.transitions.offline">
+            <title>Transitions to and from STATUS_OFFLINE</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="service.dal.status.transitions.offline.svg"
+                           width="70%"/>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section xml:id="service.dal-status.transitions.online">
+        <title>Online</title>
+
+        <para>The <xref linkend="org.osgi.service.dal.Device.STATUS_ONLINE"
+        xrefstyle="hyperlink"/> indicates that the device is currently
+        available for operations. The online devices are initialized and ready
+        for use. Transitions to and from this status are: <itemizedlist>
+            <listitem>
+              <para>From <code>STATUS_ONLINE</code> to
+              <code>STATUS_REMOVED</code> – The device has been removed. The
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_ONLINE</code> to
+              <code>STATUS_PROCESSING</code> – The device data is
+              processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_ONLINE</code> to
+              <code>STATUS_NOT_CONFIGURED</code> – The device has a pending
+              configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_ONLINE</code> to
+              <code>STATUS_OFFLINE</code> – The online device is not
+              accessible any more.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_ONLINE</code> to
+              <code>STATUS_NOT_INITIALIZED</code> – That transition is not
+              possible. Online devices are initialized.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_ONLINE</code> from
+              <code>STATUS_REMOVED</code> – That transition is not possible.
+              If the device has been removed, the service will be unregistered
+              from the service registry.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_ONLINE</code> from
+              <code>STATUS_PROCESSING</code> – Initial device data has been
+              read. The device is available for operations.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_ONLINE</code> from
+              <code>STATUS_NOT_CONFIGURED</code> – The device pending
+              configuration is satisfied.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_ONLINE</code> from
+              <code>STATUS_OFFLINE</code> – The device is accessible for
+              operations.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_ONLINE</code> from
+              <code>STATUS_NOT_INITIALIZED</code> – That transition is not
+              possible. The device data has to be processed and then the
+              device can become online. Intermediate status
+              <code>STATUS_PROCESSING</code> will be used.</para>
+            </listitem>
+          </itemizedlist> The possible transitions are summarized on <xref
+        linkend="service.dal-figure.device.status.transitions.online"/>.
+        <figure pgwide="1"
+            xml:id="service.dal-figure.device.status.transitions.online">
+            <title>Transitions to and from STATUS_ONLINE</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="service.dal.status.transitions.online.svg"
+                           width="90%"/>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section xml:id="service.dal-status.transitions.processing">
+        <title>Processing</title>
+
+        <para>The status indicates that the device is currently busy with an
+        operation. It can be time consuming operation and can result to any
+        other status. The operation processing can be reached by any other
+        status except <xref
+        linkend="org.osgi.service.dal.Device.STATUS_REMOVED"
+        xrefstyle="hyperlink"/>. For example, offline device requires some
+        data processing to become online. It will apply this status sequence:
+        <code>STATUS_OFFLINE</code>, <code>STATUS_PROCESSING</code> and
+        <code>STATUS_ONLINE</code>. Transitions to and from this status are:
+        <itemizedlist>
+            <listitem>
+              <para>From <code>STATUS_PROCESSING</code> to
+              <code>STATUS_REMOVED</code> – The device has been removed. The
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_PROCESSING</code> to
+              <code>STATUS_ONLINE</code> – Initial device data has been read.
+              The device is available for operations.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_PROCESSING</code> to
+              <code>STATUS_NOT_CONFIGURED</code> – The device has a pending
+              configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_PROCESSING</code> to
+              <code>STATUS_OFFLINE</code> – The device is not accessible any
+              more.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_PROCESSING</code> to
+              <code>STATUS_NOT_INITIALIZED</code> – The device initial data is
+              partially read.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_PROCESSING</code> from
+              <code>STATUS_REMOVED</code> – That transition is not possible.
+              If the device has been removed, the service will be unregistered
+              from the service registry.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_PROCESSING</code> from
+              <code>STATUS_ONLINE</code> – The device is busy with an
+              operation.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_PROCESSING</code> from
+              <code>STATUS_NOT_CONFIGURED</code> – The device pending
+              configuration is satisfied and the device is busy with an
+              operation.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_PROCESSING</code> from
+              <code>STATUS_OFFLINE</code> – The device is busy with an
+              operation.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_PROCESSING</code> from
+              <code>STATUS_NOT_INITIALIZED</code> – The device initial data is
+              processing.</para>
+            </listitem>
+          </itemizedlist> The possible transitions are summarized on <xref
+        linkend="service.dal-figure.device.status.transitions.processing"/>.
+        <figure pgwide="1"
+            xml:id="service.dal-figure.device.status.transitions.processing">
+            <title>Transitions to and from STATUS_PROCESSING</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="service.dal.status.transitions.processing.svg"
+                           width="90%"/>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section xml:id="service.dal-status.transitions.not.initialized">
+        <title>Not Initialized</title>
+
+        <para>The status indicates that the device is currently not
+        initialized. Some protocols don't provide device information right
+        after the device is connected. The device can be initialized later
+        when it's awakened. The not initialized device requires some data
+        processing to become online. <xref
+        linkend="org.osgi.service.dal.Device.STATUS_PROCESSING"
+        xrefstyle="hyperlink"/> is used as an intermediate status. Transitions
+        to and from this status are: <itemizedlist>
+            <listitem>
+              <para>From <code>STATUS_NOT_INITIALIZED</code> to
+              <code>STATUS_REMOVED</code> – The device has been removed. The
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_INITIALIZED</code> to
+              <code>STATUS_PROCESSING</code> – The device data is
+              processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_INITIALIZED</code> to
+              <code>STATUS_NOT_CONFIGURED</code> – That transition is not
+              possible. Device requires some data processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_INITIALIZED</code> to
+              <code>STATUS_OFFLINE</code> – The device is not accessible any
+              more.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_INITIALIZED</code> to
+              <code>STATUS_ONLINE</code> – That transition is not possible.
+              Device requires some data processing to become online.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_INITIALIZED</code> from
+              <code>STATUS_REMOVED</code> – That transition is not possible.
+              If the device has been removed, the service will be unregistered
+              from the service registry.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_INITIALIZED</code> from
+              <code>STATUS_PROCESSING</code> – Device data is partially
+              read.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_INITIALIZED</code> from
+              <code>STATUS_NOT_CONFIGURED</code> – That transition is not
+              possible. When device pending configuration is satisfied, the
+              device requires additional data processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_INITIALIZED</code> from
+              <code>STATUS_OFFLINE</code> – That transition is not possible.
+              Device requires some data processing and then can become not
+              initialized.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_INITIALIZED</code> from
+              <code>STATUS_ONLINE</code> – That transition is not possible.
+              The online device is initialized.</para>
+            </listitem>
+          </itemizedlist> The possible transitions are summarized on <xref
+        linkend="service.dal-figure.device.status.transitions.not.initialized"/>.
+        <figure pgwide="1"
+            xml:id="service.dal-figure.device.status.transitions.not.initialized">
+            <title>Transitions to and from STATUS_NOT_INITIALIZED</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="service.dal.status.transitions.not.initialized.svg"
+                           width="70%"/>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section xml:id="service.dal-status.transitions.not.configured">
+        <title>Not Configured</title>
+
+        <para>Indicates that the device is currently not configured. The
+        device can require additional actions to become completely connected
+        to the network. For example, a given device button has to be pushed.
+        That status doesn't have transitions with <xref
+        linkend="org.osgi.service.dal.Device.STATUS_NOT_INITIALIZED"
+        xrefstyle="hyperlink"/>, because some data processing is required.
+        Transitions to and from this status are: <itemizedlist>
+            <listitem>
+              <para>From <code>STATUS_NOT_CONFIGURED</code> to
+              <code>STATUS_REMOVED</code> – The device has been removed. The
+              status can be set as a result of <xref
+              linkend="org.osgi.service.dal.Device.remove--"
+              xrefstyle="hyperlink"/> method call.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_CONFIGURED</code> to
+              <code>STATUS_PROCESSING</code> – The device pending
+              configuration is satisfied and some additional data processing
+              is required.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_CONFIGURED</code> to
+              <code>STATUS_ONLINE</code> – The device pending configuration is
+              satisfied.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_CONFIGURED</code> to
+              <code>STATUS_OFFLINE</code> – The device is not accessible any
+              more.</para>
+            </listitem>
+
+            <listitem>
+              <para>From <code>STATUS_NOT_CONFIGURED</code> to
+              <code>STATUS_NOT_INITIALIZED</code> – That transition is not
+              possible. When device pending configuration is satisfied, the
+              device requires additional data processing.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_CONFIGURED</code> from
+              <code>STATUS_REMOVED</code> – That transition is not possible.
+              If the device has been removed, the service will be unregistered
+              from the service registry.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_CONFIGURED</code> from
+              <code>STATUS_PROCESSING</code> – Initial device data has been
+              read but there is a pending configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_CONFIGURED</code> from
+              <code>STATUS_ONLINE</code> – The device has a pending
+              configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_CONFIGURED</code> from
+              <code>STATUS_OFFLINE</code> – The device is going to be online,
+              but has a pending configuration.</para>
+            </listitem>
+
+            <listitem>
+              <para>To <code>STATUS_NOT_CONFIGURED</code> from
+              <code>STATUS_NOT_INITIALIZED</code> – That transition is not
+              possible. Device requires some data processing.</para>
+            </listitem>
+          </itemizedlist> The possible transitions are summarized on <xref
+        linkend="service.dal-figure.device.status.transitions.not.configured"/>.
+        <figure pgwide="1"
+            xml:id="service.dal-figure.device.status.transitions.not.configured">
+            <title>Transitions to and from STATUS_NOT_CONFIGURED</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="service.dal.status.transitions.not.configured.svg"
+                           width="100%"/>
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="service.dal-function">
+    <title>Function Service</title>
+
+    <para>The user applications have full control over the device with the
+    <xref linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+    services. Synchronous or asynchronous operations can trigger different
+    actions. For example, turn on or off the light, can change the room
+    temperature, send an user notification, etc. The action result can be
+    reported immediately or later in case of concurrent execution. As a
+    result, a <xref linkend="org.osgi.service.dal.Function"
+    xrefstyle="hyperlink"/> property can be updated. The property is the
+    device value container. It can provide, sensor information, meter data,
+    the switch current position, etc. Different property access types allow
+    the applications to read, write or receive events.</para>
+
+    <section>
+      <title>Function Service Properties</title>
+
+      <para>The OSGi service registry has the advantage of being easily
+      accessible. The services can be filtered and accessed with their
+      properties. The function service has a rich set of such properties:
+      <itemizedlist>
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Function.SERVICE_UID"
+            xrefstyle="hyperlink"/> – mandatory service property. The property
+            value is the function unique identifier. The value type is
+            <code>java.lang.String</code>. To simplify the unique identifier
+            generation, the property value must follow the rule:</para>
+
+            <programlisting>function UID ::= device-id ':' function-id</programlisting>
+
+            <itemizedlist>
+              <listitem>
+                <para>function UID – function unique identifier</para>
+              </listitem>
+
+              <listitem>
+                <para>device-id – the value of the Device.SERVICE_UID Device
+                service property</para>
+              </listitem>
+
+              <listitem>
+                <para>function-id – function identifier in the scope of the
+                device</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>If the function is not bound to a device, the function
+            unique identifier can be device independent.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref linkend="org.osgi.service.dal.Function.SERVICE_TYPE"
+            xrefstyle="hyperlink"/> – optional service property. The service
+            property value contains the function type. For example, the sensor
+            function can have different types like temperature, pressure, etc.
+            The value type is <code>java.lang.String</code>.</para>
+
+            <para>Organizations that want to use function types that do not
+            clash with OSGi Alliance defined types should prefix their types
+            in own namespace.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_VERSION"
+            xrefstyle="hyperlink"/> – optional service property. The service
+            property value contains the function version. That version can
+            point to specific implementation version and vary in the different
+            vendor implementations. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_DEVICE_UID"
+            xrefstyle="hyperlink"/> – optional service property. The property
+            value is the device identifier. The function belongs to this
+            device. The value type is <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_REFERENCE_UIDS"
+            xrefstyle="hyperlink"/> – optional service property. The service
+            property value contains the reference function unique identifiers.
+            The value type is <code>java.lang.String[]</code>. It can be used
+            to represent different relationships between the functions.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_DESCRIPTION"
+            xrefstyle="hyperlink"/> – optional service property. The property
+            value is the function description. The value type is
+            <code>java.lang.String</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_OPERATION_NAMES"
+            xrefstyle="hyperlink"/> – optional service property. The property
+            is missing when there are no function operations and property must
+            be set when there are function operations. The property value is
+            the function operation names. The value type is
+            <code>java.lang.String[]</code>. It's not possible to exist two or
+            more function operations with the same name i.e. the operation
+            overloading is not allowed.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.Function.SERVICE_PROPERTY_NAMES"
+            xrefstyle="hyperlink"/> – optional service property. The property
+            is missing when there are no function properties and property must
+            be set when there are function properties. The property value is
+            the function property names. The value type is
+            <code>java.lang.String[]</code>. It's not possible to exist two or
+            more function properties with the same name.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section xml:id="service.dal-function.registration">
+      <title>Function Registration</title>
+
+      <para>On start up, the <code>Function</code> services are registered
+      before the <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service. It's possible that <xref
+      linkend="org.osgi.service.dal.Function.SERVICE_DEVICE_UID"
+      xrefstyle="hyperlink"/> points to missing service at the moment of the
+      registration. The reverse order is used when the services are
+      unregistered. <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service is unregistered before the <xref
+      linkend="org.osgi.service.dal.Function" xrefstyle="hyperlink"/>
+      services. The device registration procedure is available in <xref
+      linkend="service.dal-device.registration"/>.</para>
+
+      <para>The <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> service should be registered only under the
+      function class hierarchy. Other classes can be used if there are no
+      ambiguous representations. For example, an ambiguous representation can
+      be a function registered under two independent function classes like
+      <code>BinarySwitch</code> and <code>Meter</code>. In this example, both
+      functions support the same property “state” with different meaning.
+      <code>getPropertyMetadata(String propertyName)</code> method cannot
+      determinate which property is requested. It can be
+      <code>BinarySwitch</code> “state” or <code>Meter</code> “state”.</para>
+
+      <para>To simplify the generic function discovery, the
+      <code>Function</code> interface must be used for the service
+      registration. In this way, the generic applications can easily find all
+      services, which are functions in the service registry. Because of this
+      rule, this registration is not allowed: <programlisting>context.registerService(MeterV1.class.getName(), this, regProps);</programlisting></para>
+
+      <para>If the implementation would like to mark that there is a function,
+      but no specific function interface exists, the registration can be:
+      <programlisting>context.registerService(Function.class.getName(), this, regProps);</programlisting>
+      Note that such functions usually don't have operations and
+      properties.</para>
+    </section>
+
+    <section>
+      <title>Function Interface</title>
+
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> is built by a set of properties and operations.
+      The function can have unique identifier, type, version, description,
+      link to the <xref linkend="org.osgi.service.dal.Device"
+      xrefstyle="hyperlink"/> service and information about the referenced
+      functions. <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> interface must be the base interface for all
+      functions. If the device provider defines custom functions, all of them
+      must extend <xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> interface. It provides a common access to the
+      operations and properties metadata.</para>
+
+      <para>There are some general type rules, which unify the access to the
+      function data. They make easier the transfer over different protocols.
+      All properties and operation arguments must use one of: <itemizedlist>
+          <listitem>
+            <para>Java primitive type or corresponding reference type.</para>
+          </listitem>
+
+          <listitem>
+            <para>Numerical type i.e. the type which extends
+            <code>java.lang.Number</code>. The numerical type must follow
+            these conventions:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The type must provide a public static method called
+                <code>valueOf</code> that returns an instance of the given
+                type and takes a single <code>String</code> argument or a
+                public constructor which takes a single <code>String</code>
+                argument.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para><itemizedlist>
+                <listitem>
+                  <para>The <code>String</code> argument from the previous
+                  bullet can be provided by <code>toString()</code> method of
+                  the instance.</para>
+                </listitem>
+              </itemizedlist></para>
+          </listitem>
+
+          <listitem>
+            <para><code>java.lang.String</code></para>
+          </listitem>
+
+          <listitem>
+            <para>Java Bean, but its properties must use those rules. Java
+            Bean is defined in <xref
+            linkend="service.dal-ref.bean.spec"/>.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>java.util.Map</code> instance. The map keys can be
+            <code>java.lang.String</code>. The values of a single type follow
+            these rules.</para>
+          </listitem>
+
+          <listitem>
+            <para>Array of defined types.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>In order to provide common behavior, all functions must follow a
+      set of common rules related to the implementation of their setters,
+      getters, operations and events: <itemizedlist>
+          <listitem>
+            <para>The setter method must be executed synchronously. If the
+            underlying protocol can return response to the setter call, it
+            must be awaited. It simplifies the property value modification and
+            doesn't require asynchronous callback.</para>
+          </listitem>
+
+          <listitem>
+            <para>The operation method must be executed synchronously. If the
+            underlying protocol can return an operation confirmation or
+            response, it must be awaited. It simplifies the operation
+            execution and doesn't require asynchronous callback.</para>
+          </listitem>
+
+          <listitem>
+            <para>The getter must return the last know cached property value.
+            The device implementation is responsible to keep that value up to
+            date. It'll speed up the applications when the function property
+            values are collected. The same cached value can be shared between
+            a few requests instead of a few calls to the real device.</para>
+          </listitem>
+
+          <listitem>
+            <para>The function operations, getters and setters must not
+            override <code>java.lang.Object</code> and this interface methods.
+            For example:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><code>hashCode()</code> – it's
+                <code>java.lang.Object</code> method and invalid function
+                operation;</para>
+              </listitem>
+
+              <listitem>
+                <para><code>wait()</code> – it's <code>java.lang.Object</code>
+                method and invalid function operation;</para>
+              </listitem>
+
+              <listitem>
+                <para><code>getClass()</code> – it's
+                <code>java.lang.Object</code> method and invalid function
+                getter;</para>
+              </listitem>
+
+              <listitem>
+                <para><code>getPropertyMetadata(String propertyName)</code> –
+                it's <code>org.osgi.service.dal.Function</code> method and
+                invalid function getter.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Function Operations</title>
+
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> operations are the main callable units. They can
+      perform a specific task on the device like turn on or turn off. They can
+      be used by the applications to control the device. Operation names are
+      available as a value of the service property <xref
+      linkend="org.osgi.service.dal.Function.SERVICE_OPERATION_NAMES"
+      xrefstyle="hyperlink"/>. The operations are identified by their names.
+      It's not possible to exist two operations with the same name i.e.
+      overloaded operations are not allowed. They cannot override the property
+      accessor methods. The operations are regular java methods. That implies
+      that they have zero or more arguments and zero or one return value. The
+      operation arguments and return value must follow the general type
+      rules.</para>
+
+      <para>The operations can be optionally described with metadata. Metadata
+      is accessible with <xref
+      linkend="org.osgi.service.dal.Function.getOperationMetadata-String-"
+      xrefstyle="hyperlink"/> method. The result provides metadata about the
+      operation, operation arguments and result value. Operation arguments and
+      result value are using the same metadata as the function properties. The
+      full details are defined in the next section.</para>
+    </section>
+
+    <section xml:id="service.dal-function.properties">
+      <title>Function Properties</title>
+
+      <para><xref linkend="org.osgi.service.dal.Function"
+      xrefstyle="hyperlink"/> properties are class fields. Their values can be
+      read with getter methods and can be set with setter methods. The
+      property names are available as a value of the service property <xref
+      linkend="org.osgi.service.dal.Function.SERVICE_PROPERTY_NAMES"
+      xrefstyle="hyperlink"/>. The properties are identified by their names.
+      It's not possible to exist two properties with the same name.</para>
+
+      <para>The function properties must be integrated according to these
+      rules: <itemizedlist>
+          <listitem>
+            <para>Getter methods must be available for all properties with
+            <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_READABLE"
+            xrefstyle="hyperlink"/> access.</para>
+          </listitem>
+
+          <listitem>
+            <para>Getter method must return a subclass of <xref
+            linkend="org.osgi.service.dal.FunctionData"
+            xrefstyle="hyperlink"/>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Setter methods must be available for all properties with
+            <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_WRITABLE"
+            xrefstyle="hyperlink"/> access.</para>
+          </listitem>
+
+          <listitem>
+            <para>Setter methods can be any combination of: <itemizedlist>
+                <listitem>
+                  <para>Setter method which accepts a subclass of <xref
+                  linkend="org.osgi.service.dal.FunctionData"
+                  xrefstyle="hyperlink"/>.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Setter method which accepts the values used by the
+                  <xref linkend="org.osgi.service.dal.FunctionData"
+                  xrefstyle="hyperlink"/> subclass, if there are no equal
+                  types.</para>
+                </listitem>
+              </itemizedlist> It's possible to have only one or both of them.
+            Examples: <itemizedlist>
+                <listitem>
+                  <para>There is <code>MyFunctionData</code> bean with
+                  <code>BigDecimal</code> value for a <code>data</code>
+                  property. Valid setters are <code>setData(MyFunctionData
+                  data)</code> and <code>setData(BigDecimal
+                  data)</code>.</para>
+                </listitem>
+
+                <listitem>
+                  <para>There is <code>MySecondFunctionData</code> bean with
+                  <code>BigDecimal</code> prefix and <code>BigDecimal</code>
+                  suffix for a <code>data</code> property. The prefix and
+                  suffix are using equal types and we cannot have a setter
+                  with the values used by <code>MySecondFunctionData</code>.
+                  The only one possible setter is
+                  <code>setData(MySecondFunctionData data)</code>.</para>
+                </listitem>
+              </itemizedlist></para>
+          </listitem>
+
+          <listitem>
+            <para>No methods are required for properties with <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_EVENTABLE"
+            xrefstyle="hyperlink"/> access.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The accessor method names must be defined according to <xref
+      linkend="service.dal-ref.bean.spec"/>.</para>
+
+      <para>The properties can be optionally described with a set of metadata
+      properties. The property values can be collected with <xref
+      linkend="org.osgi.service.dal.Function.getPropertyMetadata-String-"
+      xrefstyle="hyperlink"/> method. The method result is <xref
+      linkend="org.osgi.service.dal.PropertyMetadata" xrefstyle="hyperlink"/>
+      with: <itemizedlist>
+          <listitem>
+            <para>Minimum value – available through <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMinValue-String-"
+            xrefstyle="hyperlink"/>. The minimum value can be different for
+            the different units.</para>
+          </listitem>
+
+          <listitem>
+            <para>Maximum value – available through <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMaxValue-String-"
+            xrefstyle="hyperlink"/>. The maximum value can be different for
+            the different units.</para>
+          </listitem>
+
+          <listitem>
+            <para>Enumeration of values – available through <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getEnumValues-String-"
+            xrefstyle="hyperlink"/>. The array of the possible values is
+            sorted in increasing order according to the given unit.</para>
+          </listitem>
+
+          <listitem>
+            <para>Step – available through <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getStep-String-"
+            xrefstyle="hyperlink"/>. The difference between two values in
+            series. For example, if the range is <code>[0, 100]</code>, the
+            step can be <code>10</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Property access – available as a value in <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
+            xrefstyle="hyperlink"/> result map. It's a bitmap of
+            <code>java.lang.Integer</code> type and doesn't depend on the
+            given unit. The access is available only for the function
+            properties and it's missing for the operation arguments and result
+            metadata. The bitmap can be any combination of:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_READABLE"
+                xrefstyle="hyperlink"/> – Marks the property as a readable.
+                Function must provide a getter method for this property
+                according to <xref linkend="service.dal-ref.bean.spec"/>.
+                Function operations must not be overridden by this getter
+                method.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_WRITABLE"
+                xrefstyle="hyperlink"/> – Marks the property as writable.
+                Function must provide a setter method for this property
+                according to <xref linkend="service.dal-ref.bean.spec"/>.
+                Function operations must not be overridden by this setter
+                method.</para>
+              </listitem>
+
+              <listitem>
+                <para><xref
+                linkend="org.osgi.service.dal.PropertyMetadata.ACCESS_EVENTABLE"
+                xrefstyle="hyperlink"/> – Marks the property as eventable.
+                Function must not provide special methods because of this
+                access type. <code>FunctionEvent</code> is sent on property
+                change. Note that the event can be sent when there is no value
+                change.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para>Units - available as a value in <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
+            xrefstyle="hyperlink"/> result map. They can be requested with key
+            <xref linkend="org.osgi.service.dal.PropertyMetadata.UNITS"
+            xrefstyle="hyperlink"/>. The value contains the property supported
+            units. The property value type is <code>java.lang.String[]</code>.
+            The array first element at index <code>0</code> represents the
+            default unit. Each unit must follow those rules:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The International System of Units must be used where
+                it's applicable. For example, kg for kilogram and km for
+                kilometer.</para>
+              </listitem>
+
+              <listitem>
+                <para>If the unit name matches to a Unicode symbol name, the
+                Unicode symbol must be used. For example, the degree unit
+                matches to the Unicode degree sign (<code>°</code>).</para>
+              </listitem>
+
+              <listitem>
+                <para>If the unit name doesn't match to a Unicode symbol, the
+                unit symbol must be built by Unicode Basic Latin block of
+                characters, superscript and subscript characters. For example,
+                watt per square meter steradian is built by <code>W/(m²
+                sr)</code>.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>If those rules cannot be applied to the unit symbol, custom
+            rules are allowed.</para>
+
+            <para>A set of predefined unit symbols are available in
+            <code>SIUnits</code> interface.</para>
+          </listitem>
+
+          <listitem>
+            <para>Description – available as a value in <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
+            xrefstyle="hyperlink"/> result map. It can be requested with key
+            <xref linkend="org.osgi.service.dal.PropertyMetadata.DESCRIPTION"
+            xrefstyle="hyperlink"/>. The property value type is
+            <code>java.lang.String</code> and specifies a user readable
+            description. It doesn't depend on the given unit.</para>
+          </listitem>
+
+          <listitem>
+            <para>Vendor custom properties – available as a value in <xref
+            linkend="org.osgi.service.dal.PropertyMetadata.getMetadata-String-"
+            xrefstyle="hyperlink"/> result map and can depend on the given
+            unit. Organizations that want to use custom keys that do not clash
+            with OSGi Alliance defined should prefix their keys in own
+            namespace.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section xml:id="service.dal-function.event">
+      <title>Function Property Events</title>
+
+      <para>The eventable function properties can trigger a new event on each
+      property value modification. It doesn't require a modification of the
+      value. For example, the motion sensor can send a few events with no
+      property value change when motion is detected and continued to be
+      detected. The event must use <xref
+      linkend="org.osgi.service.dal.FunctionEvent" xrefstyle="hyperlink"/>
+      class. The event properties are: <itemizedlist>
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.FUNCTION_UID"
+            xrefstyle="hyperlink"/> – the event source function unique
+            identifier.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.PROPERTY_NAME"
+            xrefstyle="hyperlink"/> – the property name.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.dal.FunctionEvent.PROPERTY_VALUE"
+            xrefstyle="hyperlink"/> – the property value.</para>
+          </listitem>
+        </itemizedlist> For example, there is function with an eventable
+      boolean property called “state”. When “state” value is changed to
+      <code>false</code>, function implementation can post: <programlisting>FunctionEvent {
+    dal.function.UID=acme.function
+    dal.function.property.name=”state”
+    dal.function.property.value=ACMEFuntionData(java.lang.Boolean.FALSE...)
+}</programlisting></para>
+    </section>
+  </section>
+
+  <section xml:id="service.dal-security">
+    <title>Security</title>
+
+    <section>
+      <title>Device Permission</title>
+
+      <para>The <xref linkend="org.osgi.service.dal.DevicePermission"
+      xrefstyle="hyperlink"/> controls the bundle's authority to perform
+      specific privileged administrative operations on the devices. There is
+      only one action for this permission <xref
+      linkend="org.osgi.service.dal.DevicePermission.REMOVE"
+      xrefstyle="hyperlink"/> to protect <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method.</para>
+
+      <para>The name of the permission is a filter based. For more details
+      about filter based permissions, see OSGi Core Specification, Filter
+      Based Permissions. The filter provides an access to all device service
+      properties. Filter attribute names are processed in a case sensitive
+      manner. For example, the operator can give a bundle the permission to
+      only manage devices of vendor "acme": <programlisting>org.osgi.service.dal.DevicePermission("dal.device.hardware.vendor=acme", "remove")</programlisting></para>
+
+      <para>The permission action allows the operator to assign only the
+      necessary permissions to the bundle. For example, the management bundle
+      can have permission to remove all registered devices: <programlisting>org.osgi.service.dal.DevicePermission("*", "remove")</programlisting></para>
+
+      <para>The code that needs to check the device permission must always use
+      the constructor that takes the device as a parameter <xref
+      linkend="org.osgi.service.dal.Device" xrefstyle="hyperlink"/> with a
+      single action. For example, the implementation of <xref
+      linkend="org.osgi.service.dal.Device.remove--" xrefstyle="hyperlink"/>
+      method must check that the caller has an access to the operation:
+      <programlisting>public class DeviceImpl implements Device {
+  ...
+  public void remove() {
+    securityManager.checkPermission(
+      new DevicePermission(this, DevicePermission.REMOVE));
+  }
+  ...
+}</programlisting></para>
+    </section>
+
+    <section>
+      <title>Required Permissions</title>
+
+      <para>The <code>Device</code> implementation must check the caller for
+      the appropriate <code>DevicePermission</code> before execution of the
+      remove operation. Once the <code>DevicePermission</code> is checked
+      against the caller the implementation will proceed with the actual
+      operation. The operation can require a number of other permissions to
+      complete. The implementation must isolate the caller from such
+      permission checks by use of proper privileged blocks.</para>
+
+      <para><code>DevicePermission</code> check will keep the
+      <code>Device</code> implementation in the call stack. This requires the
+      implementation to have this permission to perform the operation. The
+      security policy should be aware of this and should grant the correct
+      permissions. Note that the <code>DevicePermission</code> is a filter
+      based permission, see OSGi Core Specification, Filter Based Permissions.
+      It provides flexibility and fine control based on the
+      <code>Device</code> service properties.</para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.xml"/>
+
+  <section xml:id="service.dal-references">
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="service.dal-ref.bean.spec"><title>JavaBeans
+      Spec</title>
+      http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

@@ -83,7 +83,7 @@ public class LogStructureTestCase extends RMTTestBase {
 		HashSet<String> optional = new HashSet<String>(); 
 		
 		// ensure that there is at least one log entry
-		assertNotNull(log);
+		assertNotNull("Null LogService.", log);
 		log.log(LogService.LOG_INFO, "This is a testlog!");
 
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -104,7 +104,10 @@ public class LogStructureTestCase extends RMTTestBase {
 			expected.add(MESSAGE);
 
 			children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES + "/" + entry);
-			assertTrue("These objects must exist.", children != null && children.length > 0 );
+			assertNotNull("Log entry children must not be null for: " + entry,
+					children);
+			assertTrue("Log entry children must exist for: " + entry,
+					children.length > 0);
 			for (String child : children) {
 				if ( ! expected.contains(child) && ! optional.contains(child) )
 					undefined.add(child);
@@ -128,7 +131,7 @@ public class LogStructureTestCase extends RMTTestBase {
 	public void testMetaDataAndType() throws Exception {
 		try {
 			session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_SHARED);
-			assertNotNull(session);
+			assertNotNull("Null DMT session.", session);
 			assertMetaData( LOG_ROOT, false, "_G__", "0,1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
 			assertMetaData( LOG_ROOT + "/" + LOG_ENTRIES, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 			assertEquals( "The nodeType of the Log.LogEntries node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(LOG_ROOT + "/" + LOG_ENTRIES));

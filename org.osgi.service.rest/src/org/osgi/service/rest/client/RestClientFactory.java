@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,60 +16,32 @@
 
 package org.osgi.service.rest.client;
 
-import java.net.URL;
-import java.util.Map;
+import java.net.URI;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The RestClientFactory is used to create a new Java REST client instance
- * connected to a specific remote framework.
+ * Factory to construct new REST client instances. Each instance is specific to
+ * a REST service endpoint.
  * 
- * @author
+ * <p>
+ * Implementations can choose to extend this interface to add additional
+ * creation methods, where additional arguments are needed for request signing,
+ * etc.
+ * 
+ * <p>
+ * In OSGi environments, this factory is registered as a service.
+ * 
+ * @author $Id$
  */
+@ProviderType
 public interface RestClientFactory {
 
 	/**
-	 * Create a new Java REST client instance for a framework addressed by its
-	 * URL.
+	 * Create a new REST client instance.
 	 * 
-	 * @param url Addresses the REST interface of a remote OSGi framework to be
-	 *        managed.
-	 * @return Returns a new RestClient instance.
+	 * @param uri The URI to the REST service endpoint.
+	 * @return A new REST client instance for the specified REST service
+	 *         endpoint.
 	 */
-	RestClient createRestClient(URL url);
-
-	/**
-	 * Create a new Java REST client instance for a framework addressed by its
-	 * URL.
-	 * 
-	 * @param url Addresses the REST interface of a remote OSGi framework to be
-	 *        managed.
-	 * @param signer Passes a Signer instance that is called back for every REST
-	 *        request that the client makes so that the Signer can pass
-	 *        additional headers for the Http request.
-	 * @return Returns a new RestClient instance.
-	 */
-	RestClient createRestClient(URL url, Signer signer);
-
-	/**
-	 * A Signer is used as a callback to give users the possibility to sign
-	 * requests according to the specifications of their cloud provider.
-	 * 
-	 * @author
-	 */
-	public interface Signer {
-
-		/**
-		 * Passes a request url to the user and expects a map of header elements
-		 * and values to be added to the Http request.
-		 * 
-		 * @param url Passes the URL string that the client wants to send to the
-		 *        REST API.
-		 * @return Can return a Map of Header element and value pairs that
-		 *         should be added to the Http request to sign it. Can be
-		 *         <code>null</code>.
-		 */
-		Map<String, String> sign(String url);
-
-	}
-
+	RestClient createRestClient(URI uri);
 }

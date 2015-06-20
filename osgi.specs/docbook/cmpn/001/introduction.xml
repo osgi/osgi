@@ -102,6 +102,16 @@
 
           <tbody>
             <row>
+              <entry><xref linkend="service.remoteservices"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code><xref endterm="service.remoteservices-version"
+              linkend="service.remoteservices"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.log"
               xrefstyle="template:%n %t"/></entry>
 
@@ -149,8 +159,9 @@
               <entry><xref linkend="service.metatype"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.metatype"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.metatype"/></code></para><para><code><xref
+              linkend="org.osgi.service.metatype.annotations"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.metatype-version"
               linkend="service.metatype"/></code></entry>
@@ -229,7 +240,9 @@
 
               <entry><para><code><xref
               linkend="org.osgi.service.component"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.annotations"/></code></para></entry>
+              linkend="org.osgi.service.component.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime.dto"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.component-version"
               linkend="service.component"/></code></entry>
@@ -449,6 +462,7 @@
               <entry><para><code><xref
               linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
               linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.implementation"/></code></para><para><code><xref
               linkend="org.osgi.namespace.service"/></code></para></entry>
 
               <entry><code><xref endterm="service.namespaces-version"
@@ -464,6 +478,44 @@
 
               <entry><code><xref endterm="org.osgi.service.resolver-version"
               linkend="service.resolver"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.rest"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.rest"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.rest-version"
+              linkend="service.rest"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.async"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.async"/></code></para><para><code><xref
+              linkend="org.osgi.service.async.delegate"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.async-version"
+              linkend="service.async"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.http.whiteboard"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.http.whiteboard"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.context"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime.dto"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.http.whiteboard-version"
+              linkend="service.http.whiteboard"/></code></entry>
             </row>
 
             <row>
@@ -497,6 +549,18 @@
               <entry><code><xref endterm="org.osgi.util.measurement-version"
               linkend="util.measurement"/></code></entry>
             </row>
+
+            <row>
+              <entry><xref linkend="util.promise"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.util.promise"/></code></para><para><code><xref
+              linkend="org.osgi.util.function"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.util.promise-version"
+              linkend="util.promise"/></code></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -521,7 +585,43 @@
 
     <itemizedlist>
       <listitem>
-        <remark>BJH Need to write change list.</remark>
+        <para>Updated <xref linkend="service.metatype"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.component"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.remoteserviceadmin"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.repository"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.subsystem"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.namespaces"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.rest"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.async"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.http.whiteboard"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="util.promise"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

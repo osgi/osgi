@@ -22,7 +22,7 @@
     <para>OSGi frameworks are often used in places where end users or devices
     initiate actions. These kinds of actions inevitably create a need for
     authenticating the initiator. Authenticating can be done in many different
-    ways, including with passwords, one-time token cards, bio-metrics, and
+    ways, including with passwords, one-time token cards, biometrics, and
     certificates.</para>
 
     <para>Once the initiator is authenticated, it is necessary to verify that
@@ -866,7 +866,7 @@ public class MyActivator
     <section>
       <title>Event Admin and User Admin Change Events</title>
 
-      <para>User admin events must be delivered asynchronously to the Event
+      <para>User Admin events must be delivered asynchronously to the Event
       Admin service by the implementation, if present. The topic of a User
       Admin Event is:</para>
 
@@ -1018,7 +1018,7 @@ ROLE_REMOVED</programlisting>
       servlet or resource. This way, the registering bundle has complete
       control on a per-servlet and per-resource basis over which
       authentication protocol to use, how the credentials presented by the
-      remote requestor are to be validated, and who should be granted access
+      remote requester are to be validated, and who should be granted access
       to the servlet or resource.</para>
     </section>
 

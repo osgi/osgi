@@ -22,6 +22,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
+import org.osgi.util.promise.Promise;
 
 /**
  * A repository service that contains {@link Resource resources}.
@@ -69,14 +70,15 @@ public interface Repository {
 	 * 
 	 * @param expression The {@code RequirementExpression} for which matching
 	 *        capabilities should be returned. Must not be {@code null}.
-	 * @return A collection of matching {@code Resource}s. If there are no
-	 *         matching resources, an empty collection is returned. The returned
-	 *         collection is the property of the caller and can be modified by
-	 *         the caller. The returned collection may be lazily populated, so
-	 *         calling {@code size()} may result in a long running operation.
+	 * @return A promise to a collection of matching {@code Resource}s. If there
+	 *         are no matching resources, an empty collection is returned. The
+	 *         returned collection is the property of the caller and can be
+	 *         modified by the caller. The returned collection may be lazily
+	 *         populated, so calling {@code size()} may result in a long running
+	 *         operation.
 	 * @since 1.1
 	 */
-	Collection<Resource> findProviders(RequirementExpression expression);
+	Promise<Collection<Resource>> findProviders(RequirementExpression expression);
 
 	/**
 	 * Return an expression combiner. An expression combiner can be used to

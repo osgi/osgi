@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
-class TrackingInvocationHandler implements InvocationHandler {
+class TrackingInvocationHandler implements InvocationHandler, net.sf.cglib.proxy.InvocationHandler {
 
 	private static final Map<Class<?>, Object> RETURN_VALUES;
 	
@@ -31,25 +34,34 @@ class TrackingInvocationHandler implements InvocationHandler {
 	 * 
 	 */
 	private final AsyncService asyncService;
+	private final ServiceTracker<LogService, LogService> logServiceTracker;
+	private final Bundle clientBundle;
 	private final ServiceReference<?> ref;
 	private final Object delegate;
 	
-	public TrackingInvocationHandler(AsyncService asyncService, ServiceReference<?> ref) {
-		super();
+	public TrackingInvocationHandler(AsyncService asyncService, 
+			Bundle clientBundle, ServiceTracker<LogService, LogService> logServiceTracker, 
+			ServiceReference<?> ref) {
 		this.asyncService = asyncService;
+		this.logServiceTracker = logServiceTracker;
+		this.clientBundle = clientBundle;
 		this.ref = ref;
 		this.delegate = null;
 	}
-	public TrackingInvocationHandler(AsyncService asyncService, Object service) {
-		super();
+	public TrackingInvocationHandler(AsyncService asyncService, 
+			Bundle clientBundle,ServiceTracker<LogService, LogService> logServiceTracker, 
+			Object service) {
 		this.asyncService = asyncService;
+		this.logServiceTracker = logServiceTracker;
+		this.clientBundle = clientBundle;
 		this.delegate = service;
 		this.ref = null;
 	}
 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
-		asyncService.registerInvocation(new MethodCall(ref, delegate, method, args));
+		asyncService.registerInvocation(new MethodCall(clientBundle, logServiceTracker, 
+				ref, delegate, method, args));
 		Class<?> returnType = method.getReturnType();
 		return RETURN_VALUES.get(returnType);
 	}

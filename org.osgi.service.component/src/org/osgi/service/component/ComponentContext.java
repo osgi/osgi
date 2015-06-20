@@ -28,26 +28,8 @@ import org.osgi.framework.ServiceReference;
  * component instance has a unique Component Context.
  * 
  * <p>
- * A component instance may have an activate method. If a component instance has
- * a suitable and accessible activate method, this method will be called when a
- * component configuration is activated. If the activate method takes a
- * {@code ComponentContext} argument, it will be passed the component instance's
- * Component Context object. If the activate method takes a
- * {@code BundleContext} argument, it will be passed the component instance's
- * Bundle Context object. If the activate method takes a {@code Map} argument,
- * it will be passed an unmodifiable Map containing the component properties.
- * 
- * <p>
- * A component instance may have a deactivate method. If a component instance
- * has a suitable and accessible deactivate method, this method will be called
- * when the component configuration is deactivated. If the deactivate method
- * takes a {@code ComponentContext} argument, it will be passed the component
- * instance's Component Context object. If the deactivate method takes a
- * {@code BundleContext} argument, it will be passed the component instance's
- * Bundle Context object. If the deactivate method takes a {@code Map} argument,
- * it will be passed an unmodifiable Map containing the component properties. If
- * the deactivate method takes an {@code int} or {@code Integer} argument, it
- * will be passed the reason code for the component instance's deactivation.
+ * A component instance may obtain its Component Context object through its
+ * activate, modified, and deactivate methods.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -78,7 +60,7 @@ public interface ComponentContext {
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the reference cardinality is {@code 0..1} or {@code 0..n} and no
 	 *         bound service is available.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
 	public Object locateService(String name);
@@ -87,6 +69,7 @@ public interface ComponentContext {
 	 * Returns the service object for the specified reference name and
 	 * {@code ServiceReference}.
 	 * 
+	 * @param <S> Type of Service.
 	 * @param name The name of a reference as specified in a {@code reference}
 	 *        element in this component's description.
 	 * @param reference The {@code ServiceReference} to a bound service. This
@@ -95,10 +78,10 @@ public interface ComponentContext {
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the specified {@code ServiceReference} is not a bound service for
 	 *         the specified reference name.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name, ServiceReference<?> reference);
+	public <S> S locateService(String name, ServiceReference<S> reference);
 
 	/**
 	 * Returns the service objects for the specified reference name.
@@ -110,7 +93,7 @@ public interface ComponentContext {
 	 *         {@code 0..n} and no bound service is available. If the reference
 	 *         cardinality is {@code 0..1} or {@code 1..1} and a bound service
 	 *         is available, the array will have exactly one element.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating a bound service.
 	 */
 	public Object[] locateServices(String name);
@@ -126,17 +109,18 @@ public interface ComponentContext {
 
 	/**
 	 * If the component instance is registered as a service using the
-	 * {@code servicefactory="true"} attribute, then this method returns the
-	 * bundle using the service provided by the component instance.
+	 * {@code servicescope="bundle"} or {@code servicescope="prototype"}
+	 * attribute, then this method returns the bundle using the service provided
+	 * by the component instance.
 	 * <p>
 	 * This method will return {@code null} if:
 	 * <ul>
 	 * <li>The component instance is not a service, then no bundle can be using
 	 * it as a service.</li>
 	 * <li>The component instance is a service but did not specify the
-	 * {@code servicefactory="true"} attribute, then all bundles using the
-	 * service provided by the component instance will share the same component
-	 * instance.</li>
+	 * {@code servicescope="bundle"} or {@code servicescope="prototype"}
+	 * attribute, then all bundles using the service provided by the component
+	 * instance will share the same component instance.</li>
 	 * <li>The service provided by the component instance is not currently being
 	 * used by any bundle.</li>
 	 * </ul>
@@ -158,6 +142,12 @@ public interface ComponentContext {
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component name. Any actions that result from this, such as activating or
+	 * deactivating a component configuration, must occur asynchronously to this
+	 * method call.
+	 * 
 	 * @param name The name of a component or {@code null} to indicate all
 	 *        components in the bundle.
 	 */
@@ -166,6 +156,12 @@ public interface ComponentContext {
 	/**
 	 * Disables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
+	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component name. Any actions that result from this, such as activating or
+	 * deactivating a component configuration, must occur asynchronously to this
+	 * method call.
 	 * 
 	 * @param name The name of a component.
 	 */

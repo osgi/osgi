@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,10 +101,11 @@ public class EndpointDescription {
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID).trim();
-		if (id == null) {
+		String endpointId = verifyStringProperty(ENDPOINT_ID);
+		if (endpointId == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
+		id = endpointId.trim();
 		if (getConfigurationTypes().isEmpty()) {
 			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
@@ -181,10 +182,11 @@ public class EndpointDescription {
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID).trim();
-		if (id == null) {
+		String endpointId = verifyStringProperty(ENDPOINT_ID);
+		if (endpointId == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
+		id = endpointId.trim();
 		if (getConfigurationTypes().isEmpty()) {
 			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
@@ -465,11 +467,11 @@ public class EndpointDescription {
 	/**
 	 * Return the framework UUID for the remote service, if present.
 	 * 
-	 * The value of the remote framework uuid is stored in the
+	 * The value of the remote framework UUID is stored in the
 	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
 	 * 
 	 * @return Remote Framework UUID, or {@code null} if this endpoint is not
-	 *         associated with an OSGi framework having a framework uuid.
+	 *         associated with an OSGi framework having a framework UUID.
 	 */
 	public String getFrameworkUUID() {
 		return frameworkUUID;

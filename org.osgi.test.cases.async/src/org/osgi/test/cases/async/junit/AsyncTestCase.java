@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,55 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.osgi.test.cases.async.junit;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.service.async.Async;
-import org.osgi.test.cases.async.junit.services.MyService;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.test.cases.async.junit.impl.AsyncErrorListener;
+import org.osgi.test.cases.async.junit.impl.MyServiceImpl;
+import org.osgi.test.cases.async.services.MyService;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.promise.Success;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class AsyncTestCase extends OSGiTestCase {
 	
 	private ServiceTracker<Async, Async>	asyncTracker;
 	private Async	async;
+
+	private ServiceTracker<LogReaderService, LogReaderService> logReaderTracker;
+	private LogReaderService logReader;
+	private AsyncErrorListener asyncErrors;
 	
-	private ServiceRegistration<MyService> registration;
+	private MyServiceImpl myServiceImpl;
+
+	private ServiceRegistration<MyService> normalReg;
 	
-	private class MyServiceImpl implements MyService {
-		private final long timeToSleep = 500;
-
-		public void doSlowStuff() throws Exception  {
-			Thread.sleep(timeToSleep);
-		}
-
-		public int countSlowly(int times) throws Exception {
-			for(int i = 0; i < times; i++) {
-				Thread.sleep(timeToSleep);
-			}
-			return times;
-		}
-	}
-
 	protected void setUp() throws InterruptedException {
-		registration = getContext().registerService(MyService.class, new MyServiceImpl(), null);
-		asyncTracker = new ServiceTracker<>(getContext(), Async.class, null);
+		myServiceImpl = new MyServiceImpl();
+		normalReg = getContext().registerService(MyService.class, myServiceImpl, null);
+
+		asyncTracker = new ServiceTracker<Async, Async>(getContext(), Async.class, null);
 		asyncTracker.open();
 		async = asyncTracker.waitForService(5000);
-		
+
 		assertNotNull("No Async service available within 5 seconds", async);
+
+		logReaderTracker = new ServiceTracker<LogReaderService, LogReaderService>(getContext(), LogReaderService.class, null);
+		logReaderTracker.open();
+		logReader = logReaderTracker.waitForService(5000);
+		assertNotNull("No LogReaderService available within 5 seconds", logReader);
+		logReader.addLogListener(asyncErrors  = new AsyncErrorListener());
 	}
 	
 	protected void tearDown() {
+		normalReg.unregister();
+
 		asyncTracker.close();
-		registration.unregister();
+		logReader.removeLogListener(asyncErrors);
+		logReaderTracker.close();
 	}
 	
 	/**
@@ -70,7 +78,7 @@ public class AsyncTestCase extends OSGiTestCase {
 	 */
 	public void testAsyncCall() throws Exception {
 		
-		MyService service = async.mediate(registration.getReference());
+		MyService service = async.mediate(normalReg.getReference(), MyService.class);
 		
 		// This call waits for a second
 		Promise<Integer> p = async.call(service.countSlowly(2));
@@ -80,20 +88,73 @@ public class AsyncTestCase extends OSGiTestCase {
 		// previous statement.
 		assertFalse(p.isDone());
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
-		p.then(new Success<Integer, Void>() {
-			public Promise<Void> call(Promise<Integer> resolved)
-					throws Exception {
-				latch.countDown();
-				return null;
-			}
-		});
-		
-		// Wait for up to three seconds for the asynchronous completion callback to be called. This
-		// should happen after approximately one second, so three seconds should be plenty.
-		assertTrue("Did not complete within a reasonable time", latch.await(3000, TimeUnit.MILLISECONDS));
-		
+		assertEquals("Wrong value.", 2, AsyncTestUtils.awaitResolve(p).intValue());
+		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myServiceImpl.lastMethodCalled());
 	}
 
+	/**
+	 * A basic test that ensures the provider of the Async service advertises
+	 * the Async service capability
+	 * 
+	 * @throws Exception
+	 */
+	public void testAsyncServiceCapability() throws Exception {
+
+		List<BundleCapability> capabilities = asyncTracker.getServiceReference().getBundle()
+				.adapt(BundleWiring.class).getCapabilities("osgi.service");
+
+		boolean hasCapability = false;
+		boolean uses = false;
+
+		for (Capability cap : capabilities) {
+			@SuppressWarnings("unchecked")
+			List<String> objectClass = (List<String>) cap.getAttributes().get("objectClass");
+
+			if (objectClass.contains(Async.class.getName())) {
+				hasCapability = true;
+				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					Set<String> packages = new HashSet<String>(Arrays.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.async");
+				}
+				break;
+			}
+		}
+		assertTrue("No osgi.service capability for the Async service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.service capability", uses);
+	}
+
+	/**
+	 * A basic test that ensures the provider of the Async service advertises
+	 * the osgi.implementation capability
+	 * 
+	 * @throws Exception
+	 */
+	public void testAsyncImplementationCapability() throws Exception {
+
+		List<BundleCapability> capabilities = asyncTracker.getServiceReference().getBundle()
+				.adapt(BundleWiring.class).getCapabilities("osgi.implementation");
+
+		boolean hasCapability = false;
+		boolean uses = false;
+		Version version = null;
+
+		for (Capability cap : capabilities) {
+			String objectClass = (String) cap.getAttributes().get("osgi.implementation");
+
+			if ("osgi.async".equals(objectClass)) {
+				hasCapability = true;
+				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					Set<String> packages = new HashSet<String>(Arrays.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.async") && packages.contains("org.osgi.service.async.delegate");
+				}
+				version = (Version) cap.getAttributes().get("version");
+				break;
+			}
+		}
+		assertTrue("No osgi.implementation capability for the Async service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.implementation capability", uses);
+		assertEquals(Version.parseVersion("1.0.0"), version);
+	}
 }

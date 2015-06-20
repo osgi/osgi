@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,9 +118,9 @@ public interface WireConstants {
 	 * same rate that the Producer service can generate data. This property can
 	 * be used to control the delivery rate.
 	 * <p>
-	 * The filter can use a number of pre-defined attributes that can be used to
+	 * The filter can use a number of predefined attributes that can be used to
 	 * control the delivery of new data values. If the filter produces a match
-	 * upon the wire filter attributes, the Consumer service should be notifed
+	 * upon the wire filter attributes, the Consumer service should be notified
 	 * of the updated data value.
 	 * <p>
 	 * If the Producer service was registered with the

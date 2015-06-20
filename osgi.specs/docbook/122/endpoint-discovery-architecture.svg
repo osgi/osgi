@@ -2,7 +2,7 @@
 <!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="340.672px" height="188.812px" viewBox="0 0 340.672 188.812" enable-background="new 0 0 340.672 188.812"
+	 width="350px" height="188.812px" viewBox="0 0 350 188.812" enable-background="new 0 0 350 188.812"
 	 xml:space="preserve">
 <rect x="141.72" y="1.906" fill="#E6E6E6" width="42.54" height="106.02"/>
 <rect y="135.885" fill="#E6E6E6" width="121.32" height="43.2"/>
@@ -399,7 +399,7 @@
 <text transform="matrix(1 0 0 1 48.1812 159.6472)" font-family="'ProductusBook'" font-size="7.98">T</text>
 <text transform="matrix(1 0 0 1 262.2017 6.6472)" font-family="'ProductusBook'" font-size="7.98">Framework</text>
 <text transform="matrix(1 0 0 1 262.2017 20.8669)" font-family="'ProductusBook'" font-size="7.98">Bundle</text>
-<text transform="matrix(1 0 0 1 262.2017 35.0271)" font-family="'ProductusBook'" font-size="7.98">Endpoint Listener Service</text>
+<text transform="matrix(1 0 0 1 262.2017 35.0271)" font-family="'ProductusBook'" font-size="7.98">EndpointEventListener Service</text>
 <text transform="matrix(1 0 0 1 262.2017 49.1873)" font-family="'ProductusBook'" font-size="7.98">Endpoint</text>
 <text transform="matrix(1 0 0 1 262.2017 63.3464)" font-family="'ProductusBook'" font-size="7.98">Endpoint connection</text>
 <text transform="matrix(1 0 0 1 262.2017 77.5662)" font-family="'ProductusBook'" font-size="7.98">Service connection</text>

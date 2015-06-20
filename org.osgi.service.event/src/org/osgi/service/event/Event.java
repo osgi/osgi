@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,9 @@ public class Event {
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
 	 *        property whose key is not of type {@code String} will be ignored.
+	 *        If the specified properties is an {@link EventProperties} object,
+	 *        then it will be directly used. Otherwise, a copy of the specified
+	 *        properties is made.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 * @since 1.2
 	 */
@@ -68,6 +71,7 @@ public class Event {
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
 	 *        property whose key is not of type {@code String} will be ignored.
+	 *        A copy of the specified properties is made.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
 	public Event(String topic, Dictionary<String, ?> properties) {
@@ -189,7 +193,7 @@ public class Event {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + " [topic=" + topic + "]";
+		return getClass().getName() + " [topic=" + topic + "] " + properties.toString();
 	}
 
 	/**

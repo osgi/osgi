@@ -1,0 +1,17 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Vendor				= Orange
+Bundle-Activator			= org.osgi.impl.service.resourcemonitoring.Activator
+Bundle-Description			= The Resource Monitoring reference implementation bundle.
+
+Export-Service				= org.osgi.service.resourcemonitoring.ResourceMonitoringService
+
+Export-Package              = \
+    org.osgi.service.resourcemonitoring.*; -split-package:=first; provide:=true
+Private-Package: ${p}.*
+
+-buildpath:  \
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	org.osgi.service.resourcemonitoring;version=latest
