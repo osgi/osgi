@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,6 +144,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDone() {
 		return resolved.getCount() == 0;
 	}
@@ -151,6 +152,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public T getValue() throws InvocationTargetException, InterruptedException {
 		resolved.await();
 		if (fail == null) {
@@ -162,6 +164,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Throwable getFailure() throws InterruptedException {
 		resolved.await();
 		return fail;
@@ -170,6 +173,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Promise<T> onResolve(Runnable callback) {
 		callbacks.offer(callback);
 		notifyCallbacks(); // call any registered callbacks
@@ -179,6 +183,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
 		PromiseImpl<R> chained = new PromiseImpl<R>();
 		onResolve(new Then<R>(chained, success, failure));
@@ -188,6 +193,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success) {
 		return then(success, null);
 	}
@@ -210,6 +216,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.failure = failure;
 		}
 
+		@Override
 		public void run() {
 			Throwable f;
 			final boolean interrupted = Thread.interrupted();
@@ -276,6 +283,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.failure = failure;
 		}
 
+		@Override
 		public void run() {
 			R value = null;
 			Throwable f;
@@ -337,6 +345,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.chained = chained;
 		}
 
+		@Override
 		public Promise<Void> call(Promise<T> with) throws Exception {
 			try {
 				resolve(with.getValue(), null);
@@ -348,6 +357,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			return null;
 		}
 
+		@Override
 		public void fail(Promise<?> with) throws Exception {
 			try {
 				resolve(null, with.getFailure());
@@ -362,6 +372,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
 		return then(new Filter<T>(predicate));
 	}
@@ -378,6 +389,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.predicate = requireNonNull(predicate);
 		}
 
+		@Override
 		public Promise<T> call(Promise<T> resolved) throws Exception {
 			if (predicate.test(resolved.getValue())) {
 				return resolved;
@@ -389,6 +401,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
 		return then(new Map<T, R>(mapper));
 	}
@@ -405,6 +418,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.mapper = requireNonNull(mapper);
 		}
 
+		@Override
 		public Promise<R> call(Promise<T> resolved) throws Exception {
 			return new PromiseImpl<R>(mapper.apply(resolved.getValue()), null);
 		}
@@ -413,6 +427,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
 		return then(new FlatMap<T, R>(mapper));
 	}
@@ -429,6 +444,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.mapper = requireNonNull(mapper);
 		}
 
+		@Override
 		@SuppressWarnings("unchecked")
 		public Promise<R> call(Promise<T> resolved) throws Exception {
 			return (Promise<R>) mapper.apply(resolved.getValue());
@@ -438,6 +454,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
 		Recover<T> recover = new Recover<T>(chained, recovery);
@@ -459,6 +476,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.recovery = requireNonNull(recovery);
 		}
 
+		@Override
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
 			T value;
 			try {
@@ -471,6 +489,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			return null;
 		}
 
+		@Override
 		public void fail(Promise<?> resolved) throws Exception {
 			T recovered;
 			Throwable failure;
@@ -492,6 +511,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
 		RecoverWith<T> recoverWith = new RecoverWith<T>(chained, recovery);
@@ -513,6 +533,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.recovery = requireNonNull(recovery);
 		}
 
+		@Override
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
 			T value;
 			try {
@@ -525,6 +546,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			return null;
 		}
 
+		@Override
 		public void fail(Promise<?> resolved) throws Exception {
 			Promise<? extends T> recovered;
 			Throwable failure;
@@ -546,6 +568,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
 		FallbackTo<T> fallbackTo = new FallbackTo<T>(chained, fallback);
@@ -567,6 +590,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			this.fallback = requireNonNull(fallback);
 		}
 
+		@Override
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
 			T value;
 			try {
@@ -579,6 +603,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			return null;
 		}
 
+		@Override
 		public void fail(Promise<?> resolved) throws Exception {
 			Throwable failure;
 			try {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,6 +121,7 @@ public class Promises {
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 */
+	@SafeVarargs
 	public static <T> Promise<List<T>> all(Promise<? extends T>... promises) {
 		@SuppressWarnings("unchecked")
 		List<Promise<T>> list = Arrays.asList((Promise<T>[]) promises);
@@ -144,6 +145,7 @@ public class Promises {
 			this.promiseCount = new AtomicInteger(promises.size());
 		}
 
+		@Override
 		public void run() {
 			if (promiseCount.decrementAndGet() != 0) {
 				return;
