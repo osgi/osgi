@@ -91,9 +91,9 @@ import org.osgi.framework.ServiceRegistration;
  * @ThreadSafe
  * @author $Id$
  */
-public class XMLParserActivator implements BundleActivator, ServiceFactory {
+public class XMLParserActivator implements BundleActivator, ServiceFactory<Object> {
 	/** Context of this bundle */
-	private volatile BundleContext	context;
+	private volatile BundleContext	bundleContext;
 	/**
 	 * Filename containing the SAX Parser Factory Class name. Also used as the
 	 * basis for the {@code SERVICE_PID} registration property.
@@ -151,7 +151,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *         bundle, and release all services used by this bundle.
 	 */
 	public void start(BundleContext context) throws Exception {
-		this.context = context;
+		this.bundleContext = context;
 		Bundle parserBundle = context.getBundle();
 		// check for sax parsers
 		registerSAXParsers(getParserFactoryClassNames(parserBundle.getResource(SAXCLASSFILE)));
@@ -183,11 +183,11 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @return A List of strings containing the parser class names.
 	 * @throws IOException if there is a problem reading the URL input stream
 	 */
-	private List getParserFactoryClassNames(URL parserUrl) throws IOException {
+	private List<String> getParserFactoryClassNames(URL parserUrl) throws IOException {
 		if (parserUrl == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
-		List v = new ArrayList(1);
+		List<String> v = new ArrayList<String>(1);
 		String parserFactoryClassName = null;
 		InputStream is = parserUrl.openStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -220,17 +220,17 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *        containing the names of the parser Factory Classes
 	 * @throws FactoryConfigurationError if thrown from {@code getFactory}
 	 */
-	private void registerSAXParsers(List parserFactoryClassNames) throws FactoryConfigurationError {
-		Iterator e = parserFactoryClassNames.iterator();
+	private void registerSAXParsers(List<String> parserFactoryClassNames) throws FactoryConfigurationError {
+		Iterator<String> e = parserFactoryClassNames.iterator();
 		int index = 0;
 		while (e.hasNext()) {
-			String parserFactoryClassName = (String) e.next();
+			String parserFactoryClassName = e.next();
 			// create a sax parser factory just to get it's default
 			// properties. It will never be used since
 			// this class will operate as a service factory and give each
 			// service requestor it's own SaxParserFactory
 			SAXParserFactory factory = (SAXParserFactory) getFactory(parserFactoryClassName);
-			Hashtable properties = new Hashtable(7);
+			Hashtable<String, Object> properties = new Hashtable<String, Object>(7);
 			// figure out the default properties of the parser
 			setDefaultSAXProperties(factory, properties, index);
 			// store the parser factory class name in the properties so that
@@ -238,7 +238,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 			// to return a parser factory
 			properties.put(FACTORYNAMEKEY, parserFactoryClassName);
 			// register the factory as a service
-			context.registerService(SAXFACTORYNAME, this, properties);
+			bundleContext.registerService(SAXFACTORYNAME, this, properties);
 			index++;
 		}
 	}
@@ -259,9 +259,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param factory The {@code SAXParserFactory} object
 	 * @param props {@code Hashtable} of service properties.
 	 */
-	private void setDefaultSAXProperties(SAXParserFactory factory, Hashtable props, int index) {
+	private void setDefaultSAXProperties(SAXParserFactory factory, Hashtable<String, Object> props, int index) {
 		props.put(Constants.SERVICE_DESCRIPTION, SAXFACTORYDESCRIPTION);
-		props.put(Constants.SERVICE_PID, SAXFACTORYNAME + "." + context.getBundle().getBundleId() + "." + index);
+		props.put(Constants.SERVICE_PID, SAXFACTORYNAME + "." + bundleContext.getBundle().getBundleId() + "." + index);
 		setSAXProperties(factory, props);
 	}
 
@@ -285,7 +285,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param factory - the SAXParserFactory object
 	 * @param properties - the properties object for the service
 	 */
-	public void setSAXProperties(SAXParserFactory factory, Hashtable properties) {
+	public void setSAXProperties(SAXParserFactory factory, Hashtable<String, Object> properties) {
 		// check if this parser can be configured to validate
 		boolean validating = true;
 		factory.setValidating(true);
@@ -319,17 +319,17 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *        containing the names of the parser Factory Classes
 	 * @throws FactoryConfigurationError if thrown from {@code getFactory}
 	 */
-	private void registerDOMParsers(List parserFactoryClassNames) throws FactoryConfigurationError {
-		Iterator e = parserFactoryClassNames.iterator();
+	private void registerDOMParsers(List<String> parserFactoryClassNames) throws FactoryConfigurationError {
+		Iterator<String> e = parserFactoryClassNames.iterator();
 		int index = 0;
 		while (e.hasNext()) {
-			String parserFactoryClassName = (String) e.next();
+			String parserFactoryClassName = e.next();
 			// create a dom parser factory just to get it's default
 			// properties. It will never be used since
 			// this class will operate as a service factory and give each
 			// service requestor it's own DocumentBuilderFactory
 			DocumentBuilderFactory factory = (DocumentBuilderFactory) getFactory(parserFactoryClassName);
-			Hashtable properties = new Hashtable(7);
+			Hashtable<String, Object> properties = new Hashtable<String, Object>(7);
 			// figure out the default properties of the parser
 			setDefaultDOMProperties(factory, properties, index);
 			// store the parser factory class name in the properties so that
@@ -337,7 +337,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 			// to return a parser factory
 			properties.put(FACTORYNAMEKEY, parserFactoryClassName);
 			// register the factory as a service
-			context.registerService(DOMFACTORYNAME, this, properties);
+			bundleContext.registerService(DOMFACTORYNAME, this, properties);
 			index++;
 		}
 	}
@@ -356,9 +356,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param factory The {@code DocumentBuilderFactory} object
 	 * @param props {@code Hashtable} of service properties.
 	 */
-	private void setDefaultDOMProperties(DocumentBuilderFactory factory, Hashtable props, int index) {
+	private void setDefaultDOMProperties(DocumentBuilderFactory factory, Hashtable<String, Object> props, int index) {
 		props.put(Constants.SERVICE_DESCRIPTION, DOMFACTORYDESCRIPTION);
-		props.put(Constants.SERVICE_PID, DOMFACTORYNAME + "." + context.getBundle().getBundleId() + "." + index);
+		props.put(Constants.SERVICE_PID, DOMFACTORYNAME + "." + bundleContext.getBundle().getBundleId() + "." + index);
 		setDOMProperties(factory, props);
 	}
 
@@ -382,7 +382,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param factory - the DocumentBuilderFactory object
 	 * @param props - Hashtable of service properties.
 	 */
-	public void setDOMProperties(DocumentBuilderFactory factory, Hashtable props) {
+	public void setDOMProperties(DocumentBuilderFactory factory, Hashtable<String, Object> props) {
 		// check if this parser can be configured to validate
 		boolean validating = true;
 		factory.setValidating(true);
@@ -419,7 +419,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 */
 	private Object getFactory(String parserFactoryClassName) throws FactoryConfigurationError {
 		try {
-			return context.getBundle().loadClass(parserFactoryClassName).newInstance();
+			return bundleContext.getBundle().loadClass(parserFactoryClassName).newInstance();
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
@@ -448,8 +448,8 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @return A new, configured XML Parser Factory object or null if a
 	 *         configuration error was encountered
 	 */
-	public Object getService(Bundle bundle, ServiceRegistration registration) {
-		ServiceReference sref = registration.getReference();
+	public Object getService(Bundle bundle, ServiceRegistration<Object> registration) {
+		ServiceReference<Object> sref = registration.getReference();
 		String parserFactoryClassName = (String) sref.getProperty(FACTORYNAMEKEY);
 		// need to set factory properties
 		Object factory = getFactory(parserFactoryClassName);
@@ -474,6 +474,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param service The XML Parser Factory object returned by a previous call
 	 *        to the {@code getService} method.
 	 */
-	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+	public void ungetService(Bundle bundle, ServiceRegistration<Object> registration, Object service) {
+		// nothing to do
 	}
 }
