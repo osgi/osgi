@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -308,8 +308,8 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 		factory.setValidating(validating);
 		factory.setNamespaceAware(namespaceaware);
 		// set the OSGi service properties
-		properties.put(PARSER_NAMESPACEAWARE, new Boolean(namespaceaware));
-		properties.put(PARSER_VALIDATING, new Boolean(validating));
+		properties.put(PARSER_NAMESPACEAWARE, Boolean.valueOf(namespaceaware));
+		properties.put(PARSER_VALIDATING, Boolean.valueOf(validating));
 	}
 
 	/**
@@ -405,8 +405,8 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 		factory.setValidating(validating);
 		factory.setNamespaceAware(namespaceaware);
 		// set the OSGi service properties
-		props.put(PARSER_VALIDATING, new Boolean(validating));
-		props.put(PARSER_NAMESPACEAWARE, new Boolean(namespaceaware));
+		props.put(PARSER_VALIDATING, Boolean.valueOf(validating));
+		props.put(PARSER_NAMESPACEAWARE, Boolean.valueOf(namespaceaware));
 	}
 
 	/**
