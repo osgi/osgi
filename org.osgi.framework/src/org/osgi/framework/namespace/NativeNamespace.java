@@ -30,6 +30,7 @@ import org.osgi.resource.Namespace;
  * {@code String}, unless otherwise indicated.
  * 
  * @Immutable
+ * @since 1.1
  * @author $Id$
  */
 public final class NativeNamespace extends Namespace {
