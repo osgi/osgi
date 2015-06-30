@@ -37,6 +37,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.dmt.tc3, \
     org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
     org.osgi.test.cases.io, \
@@ -83,6 +84,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
 	org.osgi.test.cases.jdbc, \
@@ -129,6 +131,7 @@ build.residential.tests = \
     org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.enocean, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
