@@ -25,6 +25,7 @@
 package org.osgi.test.cases.component.junit;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -35,6 +36,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
@@ -58,6 +60,7 @@ import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 import org.osgi.test.cases.component.service.ComponentEnabler;
 import org.osgi.test.cases.component.service.DSTestConstants;
+import org.osgi.test.cases.component.service.ServiceReceiver;
 import org.osgi.test.cases.component.service.TBCService;
 import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb13.ModifyRegistrator;
@@ -2776,6 +2779,133 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private void waitBundleStart() {
 		if (!synchronousBuild) {
 			sleep0(2 * SLEEP);
+		}
+	}
+
+	public void testScopedServiceSingleton130() throws Exception {
+		Bundle tb19 = installBundle("tb19.jar", false);
+		assertNotNull("tb19 failed to install", tb19);
+		
+		try {
+			tb19.start();
+
+			Filter baseFilter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName()
+					+ ")(" + ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb19.Singleton))");
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb19.SingletonReceiver))");
+			ServiceTracker<BaseService, BaseService> baseTracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), baseFilter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiverTracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiverFilter, null);
+			try {
+				baseTracker.open();
+				receiverTracker.open();
+				BaseService s = baseTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing service", s);
+				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				assertSame("singleton service is not the same object", s, r.getService());
+			}
+			finally {
+				baseTracker.close();
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb19);
+		}
+	}
+
+	public void testScopedServiceBundle130() throws Exception {
+		Bundle tb19 = installBundle("tb19.jar", false);
+		assertNotNull("tb19 failed to install", tb19);
+
+		try {
+			tb19.start();
+
+			Filter baseFilter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName()
+					+ ")(" + ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb19.Bundle))");
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb19.BundleReceiver))");
+			ServiceTracker<BaseService, BaseService> baseTracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), baseFilter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiverTracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiverFilter, null);
+			try {
+				baseTracker.open();
+				receiverTracker.open();
+				BaseService s = baseTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing service", s);
+				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				assertNotSame("bundle service is the same object", s, r.getService());
+				assertEquals("scope not bundle", Constants.SCOPE_BUNDLE,
+						r.getServiceProperies().get(Constants.SERVICE_SCOPE));
+				assertEquals("scope not bundle", Constants.SCOPE_BUNDLE,
+						baseTracker.getServiceReference().getProperty(Constants.SERVICE_SCOPE));
+			}
+			finally {
+				baseTracker.close();
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb19);
+		}
+	}
+
+	public void testScopedServicePrototype130() throws Exception {
+		Bundle tb19 = installBundle("tb19.jar", false);
+		assertNotNull("tb19 failed to install", tb19);
+
+		try {
+			tb19.start();
+
+			Filter baseFilter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb19.Prototype))");
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb19.PrototypeReceiver))");
+			ServiceTracker<BaseService, BaseService> baseTracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), baseFilter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiverTracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiverFilter, null);
+			try {
+				baseTracker.open();
+				receiverTracker.open();
+				BaseService s = baseTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing service", s);
+				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				assertNotSame("bundle service is the same object", s, r.getService());
+				assertEquals("scope not prototype", Constants.SCOPE_PROTOTYPE,
+						r.getServiceProperies().get(Constants.SERVICE_SCOPE));
+				assertEquals("scope not prototype", Constants.SCOPE_PROTOTYPE,
+						baseTracker.getServiceReference().getProperty(Constants.SERVICE_SCOPE));
+				ServiceObjects<BaseService> so = getContext().getServiceObjects(baseTracker.getServiceReference());
+				List<BaseService> list = new ArrayList<BaseService>(20);
+				for (int i = 0; i < 20; i++) {
+					BaseService o = so.getService();
+					assertNotSame("prototype same as tracked service", s, o);
+					assertNotSame("prototype same as bound service", r.getService(), o);
+					for (int j = 0; j < list.size(); j++) {
+						assertNotSame("duplicate prototype service object", list.get(j), o);
+					}
+					list.add(o);
+				}
+			}
+			finally {
+				baseTracker.close();
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb19);
 		}
 	}
 
