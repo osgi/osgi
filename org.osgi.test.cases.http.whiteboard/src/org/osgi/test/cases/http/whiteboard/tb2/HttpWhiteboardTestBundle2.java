@@ -4,11 +4,15 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
+import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 
 public class HttpWhiteboardTestBundle2 implements BundleActivator {
 
@@ -74,6 +78,16 @@ public class HttpWhiteboardTestBundle2 implements BundleActivator {
 				context.registerService(
 						ServletContextHelper.class, new ServletContextHelperFactory(),
 						properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=sc1)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put("test.name", "sc1scl");
+		serviceRegistrations.add(
+				context.registerService(
+						new String[] {ServletContextListener.class.getName(), MockSCL.class.getName()},
+						new MockSCL(sc1), properties));
 	}
 
 	public void stop(BundleContext context) throws Exception {

@@ -40,12 +40,6 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		Assert.assertEquals("/sc1", request("/sc1/TestServlet2"));
 	}
 
-	// public void test_Servlet5() throws Exception {
-	// String expected = "Equinox Jetty-based Http Service";
-	// String actual = request("TestServlet5");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
 	// public void test_Servlet6() throws Exception {
 	// String expected = "a";
 	// String actual = request("something/a.TestServlet6");

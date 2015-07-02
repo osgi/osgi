@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
@@ -29,6 +32,12 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	}
 
 	protected void tearDown() throws Exception {
+		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
+			serviceRegistration.unregister();
+		}
+
+		serviceRegistrations.clear();
+
 		for (Bundle bundle : bundles) {
 			bundle.uninstall();
 		}
@@ -149,6 +158,7 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 				getIntegerProperty("org.osgi.service.http.port", 8080), path);
 	}
 
-	protected List<Bundle>	bundles	= new ArrayList<Bundle>();
+	protected List<Bundle> bundles = new ArrayList<Bundle>();
+	protected Set<ServiceRegistration<?>> serviceRegistrations = new HashSet<ServiceRegistration<?>>();
 
 }
