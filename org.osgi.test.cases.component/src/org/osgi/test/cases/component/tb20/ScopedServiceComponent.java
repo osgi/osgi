@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
+package org.osgi.test.cases.component.tb20;
 
-package org.osgi.test.cases.component.service;
+import java.util.Dictionary;
 
-import java.util.List;
-import java.util.Map;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.test.cases.component.service.BaseService;
 
-public interface ServiceReceiver<T> {
-	public List<T> getServices();
+public class ScopedServiceComponent implements BaseService {
+	private Dictionary<String, Object> properties;
 
-	public List<Map<String, Object>> getServicesProperies();
+	void activate(ComponentContext context) {
+		properties = context.getProperties();
+	}
+
+	public Dictionary getProperties() {
+		return properties;
+	}
 }

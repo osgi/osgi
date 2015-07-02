@@ -15,9 +15,9 @@
  */
 
 
-package org.osgi.test.cases.component.tb19;
+package org.osgi.test.cases.component.tb20;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,19 +25,24 @@ import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ServiceReceiver;
 
 public class ScopedServiceReceiver implements ServiceReceiver<BaseService> {
-	private BaseService			service;
-	private Map<String, Object>	properies;
+	private List<BaseService>			services	= new ArrayList<BaseService>();
+	private List<Map<String, Object>>	properies	= new ArrayList<Map<String, Object>>();
 
-	void bind(BaseService s, Map<String, Object> p) {
-		service = s;
-		properies = p;
+	void bind1(BaseService s, Map<String, Object> p) {
+		services.add(s);
+		properies.add(p);
+	}
+
+	void bind2(BaseService s, Map<String, Object> p) {
+		services.add(s);
+		properies.add(p);
 	}
 
 	public List<BaseService> getServices() {
-		return Collections.singletonList(service);
+		return services;
 	}
 
 	public List<Map<String, Object>> getServicesProperies() {
-		return Collections.singletonList(properies);
+		return properies;
 	}
 }

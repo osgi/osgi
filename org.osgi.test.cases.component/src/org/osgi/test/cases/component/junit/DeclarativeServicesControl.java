@@ -2806,7 +2806,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing service", s);
 				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
 				assertNotNull("missing receiver", r);
-				assertSame("singleton service is not the same object", s, r.getService());
+				assertSame("singleton service is not the same object", s, r.getServices().get(0));
 			}
 			finally {
 				baseTracker.close();
@@ -2842,9 +2842,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing service", s);
 				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
 				assertNotNull("missing receiver", r);
-				assertNotSame("bundle service is the same object", s, r.getService());
+				assertNotSame("bundle service is the same object", s, r.getServices().get(0));
 				assertEquals("scope not bundle", Constants.SCOPE_BUNDLE,
-						r.getServiceProperies().get(Constants.SERVICE_SCOPE));
+						r.getServicesProperies().get(0).get(Constants.SERVICE_SCOPE));
 				assertEquals("scope not bundle", Constants.SCOPE_BUNDLE,
 						baseTracker.getServiceReference().getProperty(Constants.SERVICE_SCOPE));
 			}
@@ -2882,9 +2882,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing service", s);
 				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
 				assertNotNull("missing receiver", r);
-				assertNotSame("bundle service is the same object", s, r.getService());
+				assertNotSame("bundle service is the same object", s, r.getServices().get(0));
 				assertEquals("scope not prototype", Constants.SCOPE_PROTOTYPE,
-						r.getServiceProperies().get(Constants.SERVICE_SCOPE));
+						r.getServicesProperies().get(0).get(Constants.SERVICE_SCOPE));
 				assertEquals("scope not prototype", Constants.SCOPE_PROTOTYPE,
 						baseTracker.getServiceReference().getProperty(Constants.SERVICE_SCOPE));
 				ServiceObjects<BaseService> so = getContext().getServiceObjects(baseTracker.getServiceReference());
@@ -2892,7 +2892,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				for (int i = 0; i < 20; i++) {
 					BaseService o = so.getService();
 					assertNotSame("prototype same as tracked service", s, o);
-					assertNotSame("prototype same as bound service", r.getService(), o);
+					assertNotSame("prototype same as bound service", r.getServices().get(0), o);
 					for (int j = 0; j < list.size(); j++) {
 						assertNotSame("duplicate prototype service object", list.get(j), o);
 					}
@@ -2906,6 +2906,234 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		finally {
 			uninstallBundle(tb19);
+		}
+	}
+
+	public void testScopedReferenceBundle130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.BundleReceiverPrototype1))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.BundleReceiverPrototype2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertNotSame(r1, r2);
+				BaseService s = r1.getServices().get(0);
+				for (BaseService o : r1.getServices()) {
+					assertSame("service not same", s, o);
+				}
+				for (BaseService o : r2.getServices()) {
+					assertSame("service not same", s, o);
+				}
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
+		}
+	}
+
+	public void testScopedReferencePrototypeBundle130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeReceiverBundle1))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeReceiverBundle2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertNotSame(r1, r2);
+				BaseService s = r1.getServices().get(0);
+				for (BaseService o : r1.getServices()) {
+					assertSame("service not same", s, o);
+				}
+				for (BaseService o : r2.getServices()) {
+					assertSame("service not same", s, o);
+				}
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
+		}
+	}
+
+	public void testScopedReferencePrototypePrototype130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeReceiverPrototype1))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeReceiverPrototype2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertNotSame(r1, r2);
+				BaseService s1 = r1.getServices().get(0);
+				BaseService s2 = r2.getServices().get(0);
+				assertNotSame("two components share same instance", s1, s2);
+				for (BaseService o : r1.getServices()) {
+					assertSame("component does not share same instance", s1, o);
+				}
+				for (BaseService o : r2.getServices()) {
+					assertSame("component does not share same instance", s2, o);
+				}
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
+		}
+	}
+
+	public void testScopedReferencePrototypeRequiredPrototype130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverPrototype1))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverPrototype2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertNotSame(r1, r2);
+				BaseService s1 = r1.getServices().get(0);
+				BaseService s2 = r2.getServices().get(0);
+				assertNotSame("two components share same instance", s1, s2);
+				for (BaseService o : r1.getServices()) {
+					assertSame("component does not share same instance", s1, o);
+				}
+				for (BaseService o : r2.getServices()) {
+					assertSame("component does not share same instance", s2, o);
+				}
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
+		}
+	}
+
+	public void testScopedReferencePrototypeRequiredSingleton130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverSingleton))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiverTracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiverFilter, null);
+			try {
+				receiverTracker.open();
+				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNull("receiver should not have been registered", r);
+			}
+			finally {
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
+		}
+	}
+
+	public void testScopedReferencePrototypeRequiredBundle130() throws Exception {
+		Bundle tb20 = installBundle("tb20.jar", false);
+		assertNotNull("tb20 failed to install", tb20);
+
+		try {
+			tb20.start();
+
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverBundle))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiverTracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiverFilter, null);
+			try {
+				receiverTracker.open();
+				ServiceReceiver<BaseService> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNull("receiver should not have been registered", r);
+			}
+			finally {
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb20);
 		}
 	}
 
