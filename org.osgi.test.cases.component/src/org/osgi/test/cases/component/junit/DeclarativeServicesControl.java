@@ -27,9 +27,13 @@ package org.osgi.test.cases.component.junit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -40,6 +44,7 @@ import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
+import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.namespace.extender.ExtenderNamespace;
@@ -52,6 +57,9 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.component.runtime.ServiceComponentRuntime;
+import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
+import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
+import org.osgi.service.component.runtime.dto.ReferenceDTO;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
@@ -68,6 +76,7 @@ import org.osgi.test.cases.component.tb13a.ModifyRegistrator2;
 import org.osgi.test.cases.component.tb6.ActDeactComponent;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
+import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -146,8 +155,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private ServiceTracker		trackerConsumerEvent;
 	private ServiceTracker		trackerNamedService;
 	private ServiceTracker		trackerNamedServiceFactory;
-	private ServiceTracker		trackerCM;
-	private ServiceTracker    	trackerBaseService;
+	private ServiceTracker<ConfigurationAdmin, ConfigurationAdmin>	trackerCM;
+	private ServiceTracker<BaseService, BaseService>	trackerBaseService;
+	private ServiceTracker<ServiceComponentRuntime, ServiceComponentRuntime>	scrTracker;
 
 	protected void setUp() throws Exception {
 		String sleepTimeString = getProperty("osgi.tc.component.sleeptime");
@@ -172,12 +182,15 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 
 		BundleContext bc = getContext();
-		trackerCM = new ServiceTracker(bc, ConfigurationAdmin.class.getName(),
+		trackerCM = new ServiceTracker<ConfigurationAdmin, ConfigurationAdmin>(bc, ConfigurationAdmin.class,
 				null);
 		trackerCM.open();
 	    // clear component configurations
  	    clearConfigurations();
 
+		scrTracker = new ServiceTracker<ServiceComponentRuntime, ServiceComponentRuntime>(bc,
+				ServiceComponentRuntime.class, null);
+		scrTracker.open();
 
 		// install test cases
 		tb1 = installBundle("tb1.jar", false);
@@ -200,7 +213,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ ")(" + Constants.OBJECTCLASS + '='
 				+ ComponentFactory.class.getName() + "))");
 		trackerNamedServiceFactory = new ServiceTracker(bc, filter, null);
-		trackerBaseService = new ServiceTracker(bc, BaseService.class.getName(), null);
+		trackerBaseService = new ServiceTracker<BaseService, BaseService>(bc, BaseService.class, null);
 
 		// start listening
 		trackerProvider.open(true);
@@ -236,6 +249,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		clearConfigurations();
 		trackerCM.close();
+		scrTracker.close();
 	}
 
 	/**
@@ -246,7 +260,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * @throws InterruptedException
 	 */
 	private void clearConfigurations() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		// clean configurations from previous tests
 		// clean factory configs for named service
@@ -700,7 +714,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testCMUpdate() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		ServiceReference ref;
 		Object service;
@@ -767,7 +781,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"The event service should be registered even if no properties are set!",
 				1, length);
 
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		Configuration config1;
 		Configuration config2;
@@ -836,7 +850,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationPolicy() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		Bundle tb5 = installBundle("tb5.jar", false);
@@ -966,7 +980,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	// tests configuration-policy for factory configuration objects
 	public void testConfigurationPolicyFactoryConf() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		Bundle tb5 = installBundle("tb5.jar", false);
@@ -1286,7 +1300,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		Configuration config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
 		Dictionary properties = config.getProperties();
@@ -1808,7 +1822,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	// Testing modified attribute for XML NS 1.0.0
 	public void testModified100() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		Bundle tb13 = installBundle("tb13.jar", false);
@@ -1876,7 +1890,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	// Testing modified attribute for XML NS 1.1.0
 	public void testModified110() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		Bundle tb13a = installBundle("tb13a.jar", false);
@@ -2049,7 +2063,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	// Testing modified attribute - special cases
 	public void testModifiedSpecialCases() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		Bundle tb13a = installBundle("tb13a.jar", false);
@@ -2284,7 +2298,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationPID() throws Exception {
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		final String PID = TEST_CASE_ROOT + ".tb16.pid1";
@@ -3137,4 +3151,236 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testServiceComponentRuntimeDescription() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Collection<ComponentDescriptionDTO> descriptions = scr.getComponentDescriptionDTOs(tb1, tb2, tb3);
+		assertNotNull("null descriptions", descriptions);
+		assertFalse("descriptions empty", descriptions.isEmpty());
+		assertEquals("no args result size mismatch", descriptions.size(), scr.getComponentDescriptionDTOs().size());
+		ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb1,
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl");
+		assertNotNull("null description1", description1);
+		ComponentDescriptionDTO expected1 = newComponentDescriptionDTO(
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", newBundleDTO(tb1), null, "bundle",
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", true, false,
+				new String[] {"org.osgi.test.cases.component.service.ServiceProvider"}, Collections.EMPTY_MAP,
+				new ReferenceDTO[] {}, "activate", "deactivate", null, "optional",
+				new String[] {"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"});
+		assertEquals("DTO wrong", expected1, description1);
+		boolean found = false;
+		for (ComponentDescriptionDTO d : descriptions) {
+			if (d.bundle.id != description1.bundle.id)
+				continue;
+			if (!d.name.equals(description1.name))
+				continue;
+			assertEquals("DTO wrong", description1, d);
+			found = true;
+			break;
+		}
+		assertTrue("description1 not found", found);
+
+		ComponentDescriptionDTO description3 = scr.getComponentDescriptionDTO(tb3,
+				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent");
+		assertNotNull("null description3", description3);
+		Map<String, Object> properties3 = new HashMap<String, Object>();
+		properties3.put("serviceProvider.target",
+				"(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)");
+		ComponentDescriptionDTO expected3 = newComponentDescriptionDTO(
+				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent", newBundleDTO(tb3), null, "singleton",
+				"org.osgi.test.cases.component.tb3.impl.ServiceConsumerEventImpl", true, false,
+				new String[] {"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"}, properties3,
+				new ReferenceDTO[] {
+						newReferenceDTO("serviceProvider", "org.osgi.test.cases.component.service.ServiceProvider",
+								"1..1", "static", "reluctant",
+								"(component.name=org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl)",
+								"bindServiceProvider", "unbindServiceProvider", null, null, null, "bundle"),
+						newReferenceDTO("namedService", "org.osgi.test.cases.component.tb4.NamedService", "0..n",
+								"dynamic", "reluctant", null, "bindObject", "unbindObject", null, null, null,
+								"bundle")},
+				"activate", "deactivate", null, "optional",
+				new String[] {"org.osgi.test.cases.component.tb3.ServiceConsumerEvent"});
+		assertEquals("DTO wrong", expected3, description3);
+		found = false;
+		for (ComponentDescriptionDTO d : descriptions) {
+			if (d.bundle.id != description3.bundle.id)
+				continue;
+			if (!d.name.equals(description3.name))
+				continue;
+			assertEquals("DTO wrong", description3, d);
+			found = true;
+			break;
+		}
+		assertTrue("description1 not found", found);
+	}
+
+	public void testServiceComponentRuntimeConfiguration() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb1,
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl");
+		assertNotNull("null description1", description1);
+		Collection<ComponentConfigurationDTO> configurations1 = scr.getComponentConfigurationDTOs(description1);
+		assertNotNull("null configurations1", configurations1);
+		assertEquals("wrong number of configurations", 1, configurations1.size());
+		ComponentConfigurationDTO configuration1 = configurations1.iterator().next();
+		assertNotNull("null configuration", configuration1);
+		assertEquals("wrong description in configuration", description1, configuration1.description);
+		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
+		assertEquals("wrong number of satisfiedReferences", 0, configuration1.satisfiedReferences.length);
+		assertEquals("wrong number of unsatisfiedReferences", 0, configuration1.unsatisfiedReferences.length);
+		assertEquals("wrong component name", description1.name,
+				configuration1.properties.get(ComponentConstants.COMPONENT_NAME));
+		assertTrue("configuration missing component.id property",
+				configuration1.properties.containsKey(ComponentConstants.COMPONENT_ID));
+
+		ComponentDescriptionDTO description3 = scr.getComponentDescriptionDTO(tb3,
+				"org.osgi.test.cases.component.tb3.ServiceConsumerEvent");
+		assertNotNull("null description3", description3);
+		Collection<ComponentConfigurationDTO> configurations3 = scr.getComponentConfigurationDTOs(description3);
+		assertNotNull("null configurations3", configurations3);
+		assertEquals("wrong number of configurations", 1, configurations3.size());
+		ComponentConfigurationDTO configuration3 = configurations3.iterator().next();
+		assertNotNull("null configuration", configuration3);
+		assertEquals("wrong description in configuration", description3, configuration3.description);
+		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration3.state);
+		assertEquals("wrong number of satisfiedReferences", 2, configuration3.satisfiedReferences.length);
+		assertEquals("wrong number of unsatisfiedReferences", 0, configuration3.unsatisfiedReferences.length);
+		assertEquals("wrong component name", description3.name,
+				configuration3.properties.get(ComponentConstants.COMPONENT_NAME));
+		assertTrue("configuration missing component.id property",
+				configuration3.properties.containsKey(ComponentConstants.COMPONENT_ID));
+	}
+
+	public void testServiceComponentRuntimeEnablement() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb1,
+				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl");
+		assertNotNull("null description1", description1);
+
+		Collection<ComponentConfigurationDTO> configurations1 = scr.getComponentConfigurationDTOs(description1);
+		assertNotNull("null configurations1", configurations1);
+		assertEquals("wrong number of configurations", 1, configurations1.size());
+		ComponentConfigurationDTO configuration1 = configurations1.iterator().next();
+		assertNotNull("null configuration", configuration1);
+		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
+
+		assertTrue("description is not enabled", scr.isComponentEnabled(description1));
+		Promise<Void> p = scr.disableComponent(description1);
+		assertFalse("description is enabled", scr.isComponentEnabled(description1));
+		p.getValue(); // wait for state change to complete
+		configurations1 = scr.getComponentConfigurationDTOs(description1);
+		assertNotNull("null configurations1", configurations1);
+		assertEquals("wrong number of configurations", 0, configurations1.size());
+
+		p = scr.enableComponent(description1);
+		assertTrue("description is not enabled", scr.isComponentEnabled(description1));
+		p.getValue(); // wait for state change to complete
+		configurations1 = scr.getComponentConfigurationDTOs(description1);
+		assertNotNull("null configurations1", configurations1);
+		assertEquals("wrong number of configurations", 1, configurations1.size());
+		assertEquals("wrong state in configuration", ComponentConfigurationDTO.ACTIVE, configuration1.state);
+	}
+
+	private static void assertEquals(String message, ComponentDescriptionDTO expected, ComponentDescriptionDTO actual) {
+		assertEquals(message, expected.activate, actual.activate);
+		assertEquals(message, expected.bundle, actual.bundle);
+		assertEquals(message, expected.configurationPid, actual.configurationPid);
+		assertEquals(message, expected.configurationPolicy, actual.configurationPolicy);
+		assertEquals(message, expected.deactivate, actual.deactivate);
+		assertEquals(message, expected.defaultEnabled, actual.defaultEnabled);
+		assertEquals(message, expected.factory, actual.factory);
+		assertEquals(message, expected.immediate, actual.immediate);
+		assertEquals(message, expected.implementationClass, actual.implementationClass);
+		assertEquals(message, expected.modified, actual.modified);
+		assertEquals(message, expected.name, actual.name);
+		assertEquals(message, expected.scope, actual.scope);
+		assertEquals(message, expected.serviceInterfaces, actual.serviceInterfaces);
+		assertEquals(message, expected.properties, actual.properties);
+		assertEquals(message, expected.references, actual.references);
+	}
+
+	private static void assertEquals(String message, BundleDTO expected, BundleDTO actual) {
+		assertEquals(message, expected.id, actual.id);
+		assertEquals(message, expected.lastModified, actual.lastModified);
+		assertEquals(message, expected.state, actual.state);
+		assertEquals(message, expected.symbolicName, actual.symbolicName);
+		assertEquals(message, expected.version, actual.version);
+	}
+
+	private static void assertEquals(String message, ReferenceDTO expected, ReferenceDTO actual) {
+		assertEquals(message, expected.bind, actual.bind);
+		assertEquals(message, expected.cardinality, actual.cardinality);
+		assertEquals(message, expected.field, actual.field);
+		assertEquals(message, expected.fieldOption, actual.fieldOption);
+		assertEquals(message, expected.interfaceName, actual.interfaceName);
+		assertEquals(message, expected.name, actual.name);
+		assertEquals(message, expected.policy, actual.policy);
+		assertEquals(message, expected.policyOption, actual.policyOption);
+		assertEquals(message, expected.scope, actual.scope);
+		assertEquals(message, expected.target, actual.target);
+		assertEquals(message, expected.unbind, actual.unbind);
+		assertEquals(message, expected.updated, actual.updated);
+	}
+
+	private static void assertEquals(String message, String[] expected, String[] actual) {
+		assertEquals(message, expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(message, expected[i], actual[i]);
+		}
+	}
+
+	private static void assertEquals(String message, ReferenceDTO[] expected, ReferenceDTO[] actual) {
+		assertEquals(message, expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(message, expected[i], actual[i]);
+		}
+	}
+
+	private static ComponentDescriptionDTO newComponentDescriptionDTO(String name, BundleDTO bundle, String factory,
+			String scope, String implementationClass, boolean defaultEnabled, boolean immediate,
+			String[] serviceInterfaces, Map<String, Object> properties, ReferenceDTO[] references, String activate,
+			String deactivate, String modified, String configurationPolicy, String[] configurationPid) {
+		ComponentDescriptionDTO dto = new ComponentDescriptionDTO();
+		dto.name = name;
+		dto.bundle = bundle;
+		dto.factory = factory;
+		dto.scope = scope;
+		dto.implementationClass = implementationClass;
+		dto.defaultEnabled = defaultEnabled;
+		dto.immediate = immediate;
+		dto.serviceInterfaces = serviceInterfaces;
+		dto.properties = properties;
+		dto.references = references;
+		dto.activate = activate;
+		dto.deactivate = deactivate;
+		dto.modified = modified;
+		dto.configurationPolicy = configurationPolicy;
+		dto.configurationPid = configurationPid;
+		return dto;
+	}
+
+	private static BundleDTO newBundleDTO(Bundle b) {
+		return b.adapt(BundleDTO.class);
+	}
+
+	private static ReferenceDTO newReferenceDTO(String name, String interfaceName, String cardinality, String policy,
+			String policyOption, String target, String bind, String unbind, String updated, String field,
+			String fieldOption, String scope) {
+		ReferenceDTO dto = new ReferenceDTO();
+		dto.name = name;
+		dto.interfaceName = interfaceName;
+		dto.cardinality = cardinality;
+		dto.policy = policy;
+		dto.policyOption = policyOption;
+		dto.target = target;
+		dto.bind = bind;
+		dto.unbind = unbind;
+		dto.updated = updated;
+		dto.field = field;
+		dto.fieldOption = fieldOption;
+		dto.scope = scope;
+		return dto;
+	}
 }
