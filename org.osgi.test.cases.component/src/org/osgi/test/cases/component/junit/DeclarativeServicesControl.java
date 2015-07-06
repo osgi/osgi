@@ -2353,6 +2353,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					.getProperties().get(KEY));
 			assertEquals("component property wrong", "xml3", bsIgnored
 					.getProperties().get(KEY));
+			assertEquals("service.pid property wrong", PID, bsRequired.getProperties().get(Constants.SERVICE_PID));
 
 		}
 		finally {
@@ -3879,6 +3880,202 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		finally {
 			uninstallBundle(tb22);
+		}
+	}
+
+	public void testConfigurationSinglePID130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID = PID_ROOT + ".SinglePID";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Dictionary<String, Object> props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config");
+		config.update(props);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb23.SinglePID))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				BaseService b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID, props.get(Constants.SERVICE_PID));
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationSinglePIDFactory130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID = PID_ROOT + ".SinglePID";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Dictionary<String, Object> props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config");
+		config.update(props);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
+					+ "=org.osgi.test.cases.component.tb23.SinglePIDFactory))");
+			ServiceTracker<ComponentFactory, ComponentFactory> base1Tracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				ComponentFactory f1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing factory1", f1);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "factory");
+				ComponentInstance i1 = f1.newInstance(props);
+				assertNotNull("missing ComponentInstance", i1);
+				BaseService b1 = (BaseService) i1.getInstance();
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "factory", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID, props.get(Constants.SERVICE_PID));
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationMultiplePIDs130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID1 = PID_ROOT + ".MultiplePID1";
+		final String PID2 = PID_ROOT + ".MultiplePID2";
+
+		Configuration config = cm.getConfiguration(PID1, null);
+		Dictionary<String, Object> props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config1");
+		config.update(props);
+		config = cm.getConfiguration(PID2, null);
+		props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config2");
+		config.update(props);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb23.MultiplePIDs))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				BaseService b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
+				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationMultiplePIDsFactory130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String PID1 = PID_ROOT + ".MultiplePID1";
+		final String PID2 = PID_ROOT + ".MultiplePID2";
+
+		Configuration config = cm.getConfiguration(PID1, null);
+		Dictionary<String, Object> props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config1");
+		config.update(props);
+		config = cm.getConfiguration(PID2, null);
+		props = new Hashtable<String, Object>();
+		props.put(PID_ROOT, "config2");
+		config.update(props);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
+					+ "=org.osgi.test.cases.component.tb23.MultiplePIDsFactory))");
+			ServiceTracker<ComponentFactory, ComponentFactory> base1Tracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
+					getContext(), base1Filter, null);
+			try {
+				base1Tracker.open();
+				ComponentFactory f1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing factory1", f1);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "factory");
+				ComponentInstance i1 = f1.newInstance(props);
+				assertNotNull("missing ComponentInstance", i1);
+				BaseService b1 = (BaseService) i1.getInstance();
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "factory", props.get(PID_ROOT));
+				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
+				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
 		}
 	}
 
