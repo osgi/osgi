@@ -3824,4 +3824,62 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testComparableMap130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb22 = installBundle("tb22.jar", false);
+		assertNotNull("tb22 failed to install", tb22);
+
+		try {
+			tb22.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb22,
+					"org.osgi.test.cases.component.tb22.Ranking10");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+			Filter receiver1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ServiceReceiver.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb22.MapReceiver))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			try {
+				receiver1Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				List<Map<String, Object>> props = r1.getServicesProperies();
+				assertFalse("props empty", props.isEmpty());
+				assertEquals("props size not 1", 1, props.size());
+				Map<String, Object> p1 = props.get(0);
+				assertNotNull("p1 null", p1);
+				assertTrue("p1 not Comparable", p1 instanceof Comparable);
+				assertEquals("wrong ranking", Integer.valueOf(1), p1.get(Constants.SERVICE_RANKING));
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				props = r1.getServicesProperies();
+				assertFalse("props empty", props.isEmpty());
+				assertEquals("props size not 2", 2, props.size());
+				p1 = props.get(0);
+				assertNotNull("p1 null", p1);
+				assertTrue("p1 not Comparable", p1 instanceof Comparable);
+				assertEquals("wrong ranking", Integer.valueOf(10), p1.get(Constants.SERVICE_RANKING));
+				Map<String, Object> p2 = props.get(1);
+				assertNotNull("p2 null", p2);
+				assertTrue("p2 not Comparable", p2 instanceof Comparable);
+				assertEquals("wrong ranking", Integer.valueOf(1), p2.get(Constants.SERVICE_RANKING));
+			}
+			finally {
+				receiver1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb22);
+		}
+	}
+
 }
