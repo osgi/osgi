@@ -252,4 +252,20 @@
     <property name="ref.cardinality.minimum" value="2"/>
 </scr:component>
 
+<scr:component name="org.osgi.test.cases.component.tb21.Receiverv11"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        cardinality="0..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="2"/>
+</scr:component>
+
 </root>
