@@ -29,20 +29,28 @@ public class ScopedServiceReceiver implements ServiceReceiver<BaseService> {
 	private List<Map<String, Object>>	properies	= new ArrayList<Map<String, Object>>();
 
 	void bind1(BaseService s, Map<String, Object> p) {
-		services.add(s);
-		properies.add(p);
+		synchronized (services) {
+			services.add(s);
+			properies.add(p);
+		}
 	}
 
 	void bind2(BaseService s, Map<String, Object> p) {
-		services.add(s);
-		properies.add(p);
+		synchronized (services) {
+			services.add(s);
+			properies.add(p);
+		}
 	}
 
 	public List<BaseService> getServices() {
-		return services;
+		synchronized (services) {
+			return new ArrayList<BaseService>(services);
+		}
 	}
 
 	public List<Map<String, Object>> getServicesProperies() {
-		return properies;
+		synchronized (services) {
+			return new ArrayList<Map<String, Object>>(properies);
+		}
 	}
 }

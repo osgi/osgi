@@ -29,20 +29,28 @@ public class MinimumCardinalityServiceReceiver implements ServiceReceiver<BaseSe
 	private List<Map<String, Object>>	properies	= new ArrayList<Map<String, Object>>();
 
 	void bind(BaseService s, Map<String, Object> p) {
-		services.add(s);
-		properies.add(p);
+		synchronized (services) {
+			services.add(s);
+			properies.add(p);
+		}
 	}
 
 	void unbind(BaseService s, Map<String, Object> p) {
-		services.remove(s);
-		properies.remove(p);
+		synchronized (services) {
+			services.remove(s);
+			properies.remove(p);
+		}
 	}
 
 	public List<BaseService> getServices() {
-		return services;
+		synchronized (services) {
+			return new ArrayList<BaseService>(services);
+		}
 	}
 
 	public List<Map<String, Object>> getServicesProperies() {
-		return properies;
+		synchronized (services) {
+			return new ArrayList<Map<String, Object>>(properies);
+		}
 	}
 }
