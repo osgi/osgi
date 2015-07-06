@@ -3383,4 +3383,445 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		dto.scope = scope;
 		return dto;
 	}
+
+	public void testMinimumCardinality01130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb21 = installBundle("tb21.jar", false);
+		assertNotNull("tb21 failed to install", tb21);
+
+		try {
+			tb21.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent1");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+			ComponentDescriptionDTO description2 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent2");
+			assertNotNull("null description2", description2);
+			assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver01NoMinimum))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver01Minimum1))");
+			Filter receiver3Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver01Minimum2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver3Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver3Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				receiver3Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertTrue("receiver1 has services", r1.getServices().isEmpty());
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver2 available", r2);
+				ServiceReceiver<BaseService> r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertTrue("receiver3 has services", r3.getServices().isEmpty());
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+
+				p = scr.enableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description2 is not enabled", scr.isComponentEnabled(description2));
+
+				r1 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+
+				p = scr.disableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+				r1 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+
+				p = scr.disableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertTrue("receiver1 has services", r1.getServices().isEmpty());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver2 available", r2);
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertTrue("receiver3 has services", r3.getServices().isEmpty());
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+				receiver3Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb21);
+		}
+	}
+
+	public void testMinimumCardinality0n130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb21 = installBundle("tb21.jar", false);
+		assertNotNull("tb21 failed to install", tb21);
+
+		try {
+			tb21.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent1");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+			ComponentDescriptionDTO description2 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent2");
+			assertNotNull("null description2", description2);
+			assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver0nNoMinimum))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver0nMinimum1))");
+			Filter receiver3Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver0nMinimum2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver3Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver3Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				receiver3Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertTrue("receiver1 has services", r1.getServices().isEmpty());
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver2 available", r2);
+				ServiceReceiver<BaseService> r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver3 available", r3);
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver3 available", r3);
+
+				p = scr.enableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description2 is not enabled", scr.isComponentEnabled(description2));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has noservices", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 2 service", 2, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 2 service", 2, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 2 service", 2, r3.getServices().size());
+
+				p = scr.disableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has noservices", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver3 available", r3);
+
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+				receiver3Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb21);
+		}
+	}
+
+	public void testMinimumCardinality11130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb21 = installBundle("tb21.jar", false);
+		assertNotNull("tb21 failed to install", tb21);
+
+		try {
+			tb21.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent1");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+			ComponentDescriptionDTO description2 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent2");
+			assertNotNull("null description2", description2);
+			assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver11NoMinimum))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver11Minimum0))");
+			Filter receiver3Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver11Minimum1))");
+			Filter receiver4Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver11Minimum2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver3Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver3Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver4Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver4Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				receiver3Tracker.open();
+				receiver4Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver1 available", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver2 available", r2);
+				ServiceReceiver<BaseService> r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver3 available", r3);
+				ServiceReceiver<BaseService> r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver4 available", r4);
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+				r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver4", r4);
+				assertFalse("receiver4 has no services", r4.getServices().isEmpty());
+				assertEquals("receiver4 does not have exactly 1 service", 1, r4.getServices().size());
+
+				p = scr.enableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description2 is not enabled", scr.isComponentEnabled(description2));
+				r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver4", r4);
+				assertFalse("receiver4 has no services", r4.getServices().isEmpty());
+				assertEquals("receiver4 does not have exactly 1 service", 1, r4.getServices().size());
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+				receiver3Tracker.close();
+				receiver4Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb21);
+		}
+	}
+
+	public void testMinimumCardinality1n130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb21 = installBundle("tb21.jar", false);
+		assertNotNull("tb21 failed to install", tb21);
+
+		try {
+			tb21.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent1");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+			ComponentDescriptionDTO description2 = scr.getComponentDescriptionDTO(tb21,
+					"org.osgi.test.cases.component.tb21.ServiceComponent2");
+			assertNotNull("null description2", description2);
+			assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+			Filter receiver1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver1nNoMinimum))");
+			Filter receiver2Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver1nMinimum0))");
+			Filter receiver3Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver1nMinimum1))");
+			Filter receiver4Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb21.Receiver1nMinimum2))");
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver1Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver1Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver2Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver2Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver3Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver3Filter, null);
+			ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>> receiver4Tracker = new ServiceTracker<ServiceReceiver<BaseService>, ServiceReceiver<BaseService>>(
+					getContext(), receiver4Filter, null);
+			try {
+				receiver1Tracker.open();
+				receiver2Tracker.open();
+				receiver3Tracker.open();
+				receiver4Tracker.open();
+				ServiceReceiver<BaseService> r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver1 available", r1);
+				ServiceReceiver<BaseService> r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver2 available", r2);
+				ServiceReceiver<BaseService> r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver3 available", r3);
+				ServiceReceiver<BaseService> r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver4 available", r4);
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+				r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver4 available", r4);
+
+				p = scr.enableComponent(description2);
+				p.getValue(); // wait for state change to complete
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 2 service", 2, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 2 service", 2, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 2 service", 2, r3.getServices().size());
+				r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver4", r4);
+				assertFalse("receiver4 has no services", r4.getServices().isEmpty());
+				assertEquals("receiver4 does not have exactly 2 service", 2, r4.getServices().size());
+
+				p = scr.disableComponent(description2);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description2 is enabled", scr.isComponentEnabled(description2));
+
+				r1 = receiver1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver1", r1);
+				assertFalse("receiver1 has no services", r1.getServices().isEmpty());
+				assertEquals("receiver1 does not have exactly 1 service", 1, r1.getServices().size());
+				r2 = receiver2Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver2", r2);
+				assertFalse("receiver2 has no services", r2.getServices().isEmpty());
+				assertEquals("receiver2 does not have exactly 1 service", 1, r2.getServices().size());
+				r3 = receiver3Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver3", r3);
+				assertFalse("receiver3 has no services", r3.getServices().isEmpty());
+				assertEquals("receiver3 does not have exactly 1 service", 1, r3.getServices().size());
+				r4 = receiver4Tracker.waitForService(SLEEP * 3);
+				assertNull("receiver4 available", r4);
+			}
+			finally {
+				receiver1Tracker.close();
+				receiver2Tracker.close();
+				receiver3Tracker.close();
+				receiver4Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb21);
+		}
+	}
+
 }

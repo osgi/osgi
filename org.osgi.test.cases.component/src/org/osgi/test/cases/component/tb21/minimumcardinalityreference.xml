@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb21.ServiceComponent1"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            enabled="false">
+	<implementation class="org.osgi.test.cases.component.tb21.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.ServiceComponent2"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            enabled="false">
+	<implementation class="org.osgi.test.cases.component.tb21.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver01NoMinimum"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver01Minimum1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="1"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver01Minimum2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="2"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver0nNoMinimum"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver0nMinimum1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="1"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver0nMinimum2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="0..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="2"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver11NoMinimum"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver11Minimum0"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="0"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver11Minimum1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="1"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver11Minimum2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="2"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver1nNoMinimum"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver1nMinimum0"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="0"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver1nMinimum1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="1"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb21.Receiver1nMinimum2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb21.MinimumCardinalityServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        name="ref"
+        bind="bind"
+        unbind="unbind"
+        policy-option="greedy"
+        cardinality="1..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb21.ServiceComponent*)"/>
+    <property name="ref.cardinality.minimum" value="2"/>
+</scr:component>
+
+</root>
