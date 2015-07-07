@@ -3945,8 +3945,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationSinglePID130() throws Exception {
-		ServiceComponentRuntime scr = scrTracker.getService();
-		assertNotNull("failed to find ServiceComponentRuntime service", scr);
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
@@ -3988,17 +3986,17 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationSinglePIDFactory130() throws Exception {
-		ServiceComponentRuntime scr = scrTracker.getService();
-		assertNotNull("failed to find ServiceComponentRuntime service", scr);
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
-		final String PID = PID_ROOT + ".SinglePID";
+		final String PID1 = PID_ROOT + ".SinglePID";
+		final String PID2 = PID_ROOT + ".SinglePIDFactory";
 
-		Configuration config = cm.getConfiguration(PID, null);
+		Configuration config = cm.getConfiguration(PID1, null);
 		Dictionary<String, Object> props = new Hashtable<String, Object>();
-		props.put(PID_ROOT, "config");
+		props.put(PID_ROOT, "config1");
+		props.put(PID1, "config1");
 		config.update(props);
 
 		Bundle tb23 = installBundle("tb23.jar", false);
@@ -4018,6 +4016,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing factory1", f1);
 				props = new Hashtable<String, Object>();
 				props.put(PID_ROOT, "factory");
+				props.put(PID2, "factory");
 				ComponentInstance i1 = f1.newInstance(props);
 				assertNotNull("missing ComponentInstance", i1);
 				BaseService b1 = (BaseService) i1.getInstance();
@@ -4025,7 +4024,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				props = b1.getProperties();
 				assertNotNull("props null", props);
 				assertEquals("wrong configuration precedence", "factory", props.get(PID_ROOT));
-				assertEquals("wrong service.pid", PID, props.get(Constants.SERVICE_PID));
+				assertEquals("configurations not merged", "config1", props.get(PID1));
+				assertEquals("configurations not merged", "factory", props.get(PID2));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
 			}
 			finally {
 				base1Tracker.close();
@@ -4037,8 +4038,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationMultiplePIDs130() throws Exception {
-		ServiceComponentRuntime scr = scrTracker.getService();
-		assertNotNull("failed to find ServiceComponentRuntime service", scr);
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
@@ -4049,10 +4048,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Configuration config = cm.getConfiguration(PID1, null);
 		Dictionary<String, Object> props = new Hashtable<String, Object>();
 		props.put(PID_ROOT, "config1");
+		props.put(PID1, "config1");
 		config.update(props);
 		config = cm.getConfiguration(PID2, null);
 		props = new Hashtable<String, Object>();
 		props.put(PID_ROOT, "config2");
+		props.put(PID2, "config2");
 		config.update(props);
 
 		Bundle tb23 = installBundle("tb23.jar", false);
@@ -4073,6 +4074,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				props = b1.getProperties();
 				assertNotNull("props null", props);
 				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("configurations not merged", "config1", props.get(PID1));
+				assertEquals("configurations not merged", "config2", props.get(PID2));
 				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
 				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
 			}
@@ -4086,22 +4089,23 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testConfigurationMultiplePIDsFactory130() throws Exception {
-		ServiceComponentRuntime scr = scrTracker.getService();
-		assertNotNull("failed to find ServiceComponentRuntime service", scr);
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
 		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
 		final String PID1 = PID_ROOT + ".MultiplePID1";
 		final String PID2 = PID_ROOT + ".MultiplePID2";
+		final String PID3 = PID_ROOT + ".MultiplePIDFactory";
 
 		Configuration config = cm.getConfiguration(PID1, null);
 		Dictionary<String, Object> props = new Hashtable<String, Object>();
 		props.put(PID_ROOT, "config1");
+		props.put(PID1, "config1");
 		config.update(props);
 		config = cm.getConfiguration(PID2, null);
 		props = new Hashtable<String, Object>();
 		props.put(PID_ROOT, "config2");
+		props.put(PID2, "config2");
 		config.update(props);
 
 		Bundle tb23 = installBundle("tb23.jar", false);
@@ -4121,6 +4125,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing factory1", f1);
 				props = new Hashtable<String, Object>();
 				props.put(PID_ROOT, "factory");
+				props.put(PID3, "factory");
 				ComponentInstance i1 = f1.newInstance(props);
 				assertNotNull("missing ComponentInstance", i1);
 				BaseService b1 = (BaseService) i1.getInstance();
@@ -4128,6 +4133,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				props = b1.getProperties();
 				assertNotNull("props null", props);
 				assertEquals("wrong configuration precedence", "factory", props.get(PID_ROOT));
+				assertEquals("configurations not merged", "config1", props.get(PID1));
+				assertEquals("configurations not merged", "config2", props.get(PID2));
+				assertEquals("configurations not merged", "factory", props.get(PID3));
 				Collection<String> pids = (Collection<String>) props.get(Constants.SERVICE_PID);
 				assertEquals("pids collection wrong", Arrays.asList(PID1, PID2), pids);
 			}
