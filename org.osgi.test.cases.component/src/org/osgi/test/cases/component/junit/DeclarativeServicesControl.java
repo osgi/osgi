@@ -4148,4 +4148,524 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testConfigurationTargetedPIDRequiredNoModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		final String bsn = tb23.getSymbolicName();
+		final String version = tb23.getVersion().toString();
+		final String location = tb23.getLocation();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String NAME = PID_ROOT + ".TargetedPIDRequiredNoModified";
+		final String PID1 = NAME;
+		final String PID2 = String.format("%s|%s", PID1, bsn);
+		final String PID3 = String.format("%s|%s|%s", PID1, bsn, version);
+		final String PID4 = String.format("%s|%s|%s|%s", PID1, bsn, version, location);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ BaseService.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				Dictionary<String, Object> props;
+				base1Tracker.open();
+				BaseService b1;
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNull("base1 available", b1);
+
+				Configuration config1 = cm.getConfiguration(PID1, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config1");
+				props.put(PID1, "config1");
+				config1.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				Configuration config2 = cm.getConfiguration(PID2, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config2");
+				props.put(PID2, "config2");
+				config2.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				Configuration config3 = cm.getConfiguration(PID3, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config3");
+				props.put(PID3, "config3");
+				config3.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				Configuration config4 = cm.getConfiguration(PID4, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config4");
+				props.put(PID4, "config4");
+				config4.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config4", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID4, props.get(Constants.SERVICE_PID));
+
+				config4.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				config3.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				config2.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				config1.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNull("base1 available", b1);
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationTargetedPIDRequiredModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		final String bsn = tb23.getSymbolicName();
+		final String version = tb23.getVersion().toString();
+		final String location = tb23.getLocation();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String NAME = PID_ROOT + ".TargetedPIDRequiredModified";
+		final String PID1 = NAME;
+		final String PID2 = String.format("%s|%s", PID1, bsn);
+		final String PID3 = String.format("%s|%s|%s", PID1, bsn, version);
+		final String PID4 = String.format("%s|%s|%s|%s", PID1, bsn, version, location);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ BaseService.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				Dictionary<String, Object> props;
+				base1Tracker.open();
+				BaseService b1;
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNull("base1 available", b1);
+
+				Configuration config1 = cm.getConfiguration(PID1, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config1");
+				props.put(PID1, "config1");
+				config1.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				Configuration config2 = cm.getConfiguration(PID2, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config2");
+				props.put(PID2, "config2");
+				config2.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				Configuration config3 = cm.getConfiguration(PID3, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config3");
+				props.put(PID3, "config3");
+				config3.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				Configuration config4 = cm.getConfiguration(PID4, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config4");
+				props.put(PID4, "config4");
+				config4.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config4", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID4, props.get(Constants.SERVICE_PID));
+
+				config4.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				config3.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				config2.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				config1.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNull("base1 available", b1);
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationTargetedPIDOptionalNoModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		final String bsn = tb23.getSymbolicName();
+		final String version = tb23.getVersion().toString();
+		final String location = tb23.getLocation();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String NAME = PID_ROOT + ".TargetedPIDOptionalNoModified";
+		final String PID1 = NAME;
+		final String PID2 = String.format("%s|%s", PID1, bsn);
+		final String PID3 = String.format("%s|%s|%s", PID1, bsn, version);
+		final String PID4 = String.format("%s|%s|%s|%s", PID1, bsn, version, location);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ BaseService.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				Dictionary<String, Object> props;
+				base1Tracker.open();
+				BaseService b1;
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "xml", props.get(PID_ROOT));
+				assertNull("wrong service.pid", props.get(Constants.SERVICE_PID));
+
+				Configuration config1 = cm.getConfiguration(PID1, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config1");
+				props.put(PID1, "config1");
+				config1.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				Configuration config2 = cm.getConfiguration(PID2, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config2");
+				props.put(PID2, "config2");
+				config2.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				Configuration config3 = cm.getConfiguration(PID3, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config3");
+				props.put(PID3, "config3");
+				config3.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				Configuration config4 = cm.getConfiguration(PID4, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config4");
+				props.put(PID4, "config4");
+				config4.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config4", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID4, props.get(Constants.SERVICE_PID));
+
+				config4.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				config3.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				config2.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				config1.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "xml", props.get(PID_ROOT));
+				assertNull("wrong service.pid", props.get(Constants.SERVICE_PID));
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
+	public void testConfigurationTargetedPIDOptionalModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		Bundle tb23 = installBundle("tb23.jar", false);
+		assertNotNull("tb23 failed to install", tb23);
+
+		final String bsn = tb23.getSymbolicName();
+		final String version = tb23.getVersion().toString();
+		final String location = tb23.getLocation();
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb23";
+		final String NAME = PID_ROOT + ".TargetedPIDOptionalModified";
+		final String PID1 = NAME;
+		final String PID2 = String.format("%s|%s", PID1, bsn);
+		final String PID3 = String.format("%s|%s|%s", PID1, bsn, version);
+		final String PID4 = String.format("%s|%s|%s|%s", PID1, bsn, version, location);
+
+		try {
+			tb23.start();
+
+			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ BaseService.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> base1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), base1Filter, null);
+			try {
+				Dictionary<String, Object> props;
+				base1Tracker.open();
+				BaseService b1;
+				b1 = base1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing base1", b1);
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "xml", props.get(PID_ROOT));
+				assertNull("wrong service.pid", props.get(Constants.SERVICE_PID));
+
+				Configuration config1 = cm.getConfiguration(PID1, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config1");
+				props.put(PID1, "config1");
+				config1.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				Configuration config2 = cm.getConfiguration(PID2, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config2");
+				props.put(PID2, "config2");
+				config2.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				Configuration config3 = cm.getConfiguration(PID3, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config3");
+				props.put(PID3, "config3");
+				config3.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				Configuration config4 = cm.getConfiguration(PID4, null);
+				props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config4");
+				props.put(PID4, "config4");
+				config4.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config4", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID4, props.get(Constants.SERVICE_PID));
+
+				config4.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config3", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID3, props.get(Constants.SERVICE_PID));
+
+				config3.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config2", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID2, props.get(Constants.SERVICE_PID));
+
+				config2.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "config1", props.get(PID_ROOT));
+				assertEquals("wrong service.pid", PID1, props.get(Constants.SERVICE_PID));
+
+				config1.delete();
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				props = b1.getProperties();
+				assertNotNull("props null", props);
+				assertEquals("wrong configuration precedence", "xml", props.get(PID_ROOT));
+				assertNull("wrong service.pid", props.get(Constants.SERVICE_PID));
+			}
+			finally {
+				base1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb23);
+		}
+	}
+
 }

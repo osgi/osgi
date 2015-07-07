@@ -19,6 +19,7 @@ package org.osgi.test.cases.component.tb23;
 
 import java.util.Dictionary;
 
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
 
@@ -27,6 +28,20 @@ public class ConfigurableComponent implements BaseService {
 
 	void activate(ComponentContext context) {
 		properties = context.getProperties();
+		System.out.printf("activate: %s[%X]\n", properties.get(ComponentConstants.COMPONENT_NAME),
+				System.identityHashCode(this));
+	}
+
+	void modified(ComponentContext context) {
+		properties = context.getProperties();
+		System.out.printf("modified: %s[%X]\n", properties.get(ComponentConstants.COMPONENT_NAME),
+				System.identityHashCode(this));
+	}
+
+	void deactivate(ComponentContext context) {
+		System.out.printf("deactivate: %s[%X]\n", properties.get(ComponentConstants.COMPONENT_NAME),
+				System.identityHashCode(this));
+		properties = null;
 	}
 
 	public Dictionary<String, Object> getProperties() {

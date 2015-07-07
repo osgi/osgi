@@ -46,4 +46,49 @@
     <property name="org.osgi.test.cases.component.tb23" value="xml"/>
 </scr:component>
 
+<scr:component name="org.osgi.test.cases.component.tb23.TargetedPIDRequiredNoModified"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            configuration-policy="require"
+            configuration-pid="org.osgi.test.cases.component.tb23.TargetedPIDRequiredNoModified">
+    <implementation class="org.osgi.test.cases.component.tb23.ConfigurableComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.BaseService"/>
+    </service>
+    <property name="org.osgi.test.cases.component.tb23" value="xml"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb23.TargetedPIDRequiredModified"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            configuration-policy="require"
+            configuration-pid="org.osgi.test.cases.component.tb23.TargetedPIDRequiredModified"
+            modified="modified">
+    <implementation class="org.osgi.test.cases.component.tb23.ConfigurableComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.BaseService"/>
+    </service>
+    <property name="org.osgi.test.cases.component.tb23" value="xml"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb23.TargetedPIDOptionalNoModified"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            configuration-policy="optional"
+            configuration-pid="org.osgi.test.cases.component.tb23.TargetedPIDOptionalNoModified">
+    <implementation class="org.osgi.test.cases.component.tb23.ConfigurableComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.BaseService"/>
+    </service>
+    <property name="org.osgi.test.cases.component.tb23" value="xml"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb23.TargetedPIDOptionalModified"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            configuration-policy="optional"
+            configuration-pid="org.osgi.test.cases.component.tb23.TargetedPIDOptionalModified"
+            modified="modified">
+    <implementation class="org.osgi.test.cases.component.tb23.ConfigurableComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.BaseService"/>
+    </service>
+    <property name="org.osgi.test.cases.component.tb23" value="xml"/>
+</scr:component>
 </root>
