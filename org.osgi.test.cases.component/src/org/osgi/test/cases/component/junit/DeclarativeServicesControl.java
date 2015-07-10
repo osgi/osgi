@@ -68,6 +68,7 @@ import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 import org.osgi.test.cases.component.service.ComponentEnabler;
 import org.osgi.test.cases.component.service.DSTestConstants;
+import org.osgi.test.cases.component.service.ScalarFieldTestService;
 import org.osgi.test.cases.component.service.ServiceReceiver;
 import org.osgi.test.cases.component.service.TBCService;
 import org.osgi.test.cases.component.service.TestObject;
@@ -4665,6 +4666,594 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		finally {
 			uninstallBundle(tb23);
+		}
+	}
+
+	public void testStaticScalarFieldReference130() throws Exception {
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.StaticScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNotNull("no service injected", t1.getService());
+				assertSame("wrong service injected", c1, t1.getService());
+				assertNotNull("no service injected", t1.getAssignable());
+				assertSame("wrong service injected", c1, t1.getAssignable());
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong reference injected", comp1Tracker.getServiceReference(), t1.getReference());
+				assertNotNull("no serviceobjects injected", t1.getServiceObjects());
+				assertEquals("wrong serviceobjects injected", comp1Tracker.getServiceReference(),
+						t1.getServiceObjects().getServiceReference());
+				assertSame("serviceobjects produced wrong service", c1, t1.getServiceObjects().getService());
+				Map<String, Object> properties = t1.getProperties();
+				assertNotNull("no properties injected", properties);
+				assertEquals("wrong properties injected", c1.getProperties().get(ComponentConstants.COMPONENT_ID),
+						properties.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("properties not Comparable", properties instanceof Comparable);
+				try {
+					properties.remove(ComponentConstants.COMPONENT_ID);
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					properties.put("foo", "bar");
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertNotNull("no tuple injected", t1.getTuple());
+				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
+						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple key not Comparable", key instanceof Comparable);
+				try {
+					key.remove(ComponentConstants.COMPONENT_ID);
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					key.put("foo", "bar");
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertEquals("properties not equal to tuple key", 0,
+						((Comparable<Map<String, Object>>) properties).compareTo(key));
+				assertEquals("tuple keys not equal to properties", 0,
+						((Comparable<Map<String, Object>>) key).compareTo(properties));
+				assertNotNull("tuple value null", t1.getTuple().getValue());
+				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testStaticScalarFieldReferenceModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb24";
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.StaticScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong property value", "xml", t1.getReference().getProperty(PID_ROOT));
+				assertNotNull("no properties injected", t1.getProperties());
+				assertEquals("wrong property value", "xml", t1.getProperties().get(PID_ROOT));
+				assertNotNull("no tuple injected", t1.getTuple());
+				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("wrong property value", "xml", key.get(PID_ROOT));
+
+				Configuration config = cm.getConfiguration("org.osgi.test.cases.component.tb24.Ranking1", null);
+				Dictionary<String, Object> props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config");
+				config.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				assertEquals("wrong service property value", "config", c1.getProperties().get(PID_ROOT));
+				assertNotSame("test service not reactivated", t1, test1Tracker.waitForService(SLEEP * 3));
+				t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong property value", "config", t1.getReference().getProperty(PID_ROOT));
+				assertNotNull("no properties injected", t1.getProperties());
+				assertEquals("wrong property value", "config", t1.getProperties().get(PID_ROOT));
+				assertNotNull("no tuple injected", t1.getTuple());
+				key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("wrong property value", "config", key.get(PID_ROOT));
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testDynamicScalarFieldReferenceModified130() throws Exception {
+		ConfigurationAdmin cm = trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID_ROOT = TEST_CASE_ROOT + ".tb24";
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.DynamicScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong property value", "xml", t1.getReference().getProperty(PID_ROOT));
+				assertNotNull("no properties injected", t1.getProperties());
+				assertEquals("wrong property value", "xml", t1.getProperties().get(PID_ROOT));
+				assertNotNull("no tuple injected", t1.getTuple());
+				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("wrong property value", "xml", key.get(PID_ROOT));
+
+				Configuration config = cm.getConfiguration("org.osgi.test.cases.component.tb24.Ranking1", null);
+				Dictionary<String, Object> props = new Hashtable<String, Object>();
+				props.put(PID_ROOT, "config");
+				config.update(props);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+
+				assertEquals("wrong service property value", "config", c1.getProperties().get(PID_ROOT));
+				assertSame("test service reactivated", t1, test1Tracker.waitForService(SLEEP * 3));
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong property value", "config", t1.getReference().getProperty(PID_ROOT));
+				assertNotNull("no properties injected", t1.getProperties());
+				assertEquals("wrong property value", "config", t1.getProperties().get(PID_ROOT));
+				assertNotNull("no tuple injected", t1.getTuple());
+				key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("wrong property value", "config", key.get(PID_ROOT));
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testDynamicNonVoltaileScalarFieldReference130() throws Exception {
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.DynamicNonVolatileScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNull("service injected", t1.getService());
+				assertNull("service injected", t1.getAssignable());
+				assertNull("reference injected", t1.getReference());
+				assertNull("serviceobjects injected", t1.getServiceObjects());
+				assertNull("properties injected", t1.getProperties());
+				assertNull("tuple injected", t1.getTuple());
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testFinalScalarFieldReference130() throws Exception {
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.FinalScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNull("service injected", t1.getService());
+				assertNull("service injected", t1.getAssignable());
+				assertNull("reference injected", t1.getReference());
+				assertNull("serviceobjects injected", t1.getServiceObjects());
+				assertNull("properties injected", t1.getProperties());
+				assertNull("tuple injected", t1.getTuple());
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testOptionalScalarFieldReference130() throws Exception {
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.OptionalScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNotNull("no service injected", t1.getService());
+				assertSame("wrong service injected", c1, t1.getService());
+				assertNotNull("no service injected", t1.getAssignable());
+				assertSame("wrong service injected", c1, t1.getAssignable());
+
+				assertNull("field not nulled", t1.getReference());
+				assertNull("field not nulled", t1.getServiceObjects());
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testDynamicScalarFieldReference130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.DynamicScalarFieldReceiver";
+
+		try {
+			tb24.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb24,
+					"org.osgi.test.cases.component.tb24.Ranking10");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking*))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + ScalarFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+
+				assertNotNull("no service injected", t1.getService());
+				assertSame("wrong service injected", c1, t1.getService());
+				assertNotNull("no service injected", t1.getAssignable());
+				assertSame("wrong service injected", c1, t1.getAssignable());
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong reference injected", comp1Tracker.getServiceReference(), t1.getReference());
+				assertNotNull("no serviceobjects injected", t1.getServiceObjects());
+				assertEquals("wrong serviceobjects injected", comp1Tracker.getServiceReference(),
+						t1.getServiceObjects().getServiceReference());
+				assertSame("serviceobjects produced wrong service", c1, t1.getServiceObjects().getService());
+				Map<String, Object> properties = t1.getProperties();
+				assertNotNull("no properties injected", properties);
+				assertEquals("wrong properties injected", c1.getProperties().get(ComponentConstants.COMPONENT_ID),
+						properties.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("properties not Comparable", properties instanceof Comparable);
+				try {
+					properties.remove(ComponentConstants.COMPONENT_ID);
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					properties.put("foo", "bar");
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertNotNull("no tuple injected", t1.getTuple());
+				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
+						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple key not Comparable", key instanceof Comparable);
+				try {
+					key.remove(ComponentConstants.COMPONENT_ID);
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					key.put("foo", "bar");
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertEquals("properties not equal to tuple key", 0,
+						((Comparable<Map<String, Object>>) properties).compareTo(key));
+				assertEquals("tuple keys not equal to properties", 0,
+						((Comparable<Map<String, Object>>) key).compareTo(properties));
+				assertNotNull("tuple value null", t1.getTuple().getValue());
+				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+				BaseService c10 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp10", c10);
+				assertNotSame("did not get higher ranked service", c1, c10);
+
+				assertNotNull("no service injected", t1.getService());
+				assertSame("wrong service injected", c10, t1.getService());
+				assertNotNull("no service injected", t1.getAssignable());
+				assertSame("wrong service injected", c10, t1.getAssignable());
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong reference injected", comp1Tracker.getServiceReference(), t1.getReference());
+				assertNotNull("no serviceobjects injected", t1.getServiceObjects());
+				assertEquals("wrong serviceobjects injected", comp1Tracker.getServiceReference(),
+						t1.getServiceObjects().getServiceReference());
+				assertSame("serviceobjects produced wrong service", c10, t1.getServiceObjects().getService());
+				properties = t1.getProperties();
+				assertNotNull("no properties injected", properties);
+				assertEquals("wrong properties injected", c10.getProperties().get(ComponentConstants.COMPONENT_ID),
+						properties.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("properties not Comparable", properties instanceof Comparable);
+				try {
+					properties.remove(ComponentConstants.COMPONENT_ID);
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					properties.put("foo", "bar");
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertNotNull("no tuple injected", t1.getTuple());
+				key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
+						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple key not Comparable", key instanceof Comparable);
+				try {
+					key.remove(ComponentConstants.COMPONENT_ID);
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					key.put("foo", "bar");
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertEquals("properties not equal to tuple key", 0,
+						((Comparable<Map<String, Object>>) properties).compareTo(key));
+				assertEquals("tuple keys not equal to properties", 0,
+						((Comparable<Map<String, Object>>) key).compareTo(properties));
+				assertNotNull("tuple value null", t1.getTuple().getValue());
+				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
+
+				p = scr.disableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description1 is not enabled", scr.isComponentEnabled(description1));
+				assertSame("not back to comp1", c1, comp1Tracker.waitForService(SLEEP * 3));
+
+				assertNotNull("no service injected", t1.getService());
+				assertSame("wrong service injected", c1, t1.getService());
+				assertNotNull("no service injected", t1.getAssignable());
+				assertSame("wrong service injected", c1, t1.getAssignable());
+				assertNotNull("no reference injected", t1.getReference());
+				assertEquals("wrong reference injected", comp1Tracker.getServiceReference(), t1.getReference());
+				assertNotNull("no serviceobjects injected", t1.getServiceObjects());
+				assertEquals("wrong serviceobjects injected", comp1Tracker.getServiceReference(),
+						t1.getServiceObjects().getServiceReference());
+				assertSame("serviceobjects produced wrong service", c1, t1.getServiceObjects().getService());
+				properties = t1.getProperties();
+				assertNotNull("no properties injected", properties);
+				assertEquals("wrong properties injected", c1.getProperties().get(ComponentConstants.COMPONENT_ID),
+						properties.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("properties not Comparable", properties instanceof Comparable);
+				try {
+					properties.remove(ComponentConstants.COMPONENT_ID);
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					properties.put("foo", "bar");
+					failException("properties is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertNotNull("no tuple injected", t1.getTuple());
+				key = (Map<String, Object>) t1.getTuple().getKey();
+				assertNotNull("tuple key null", key);
+				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
+						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple key not Comparable", key instanceof Comparable);
+				try {
+					key.remove(ComponentConstants.COMPONENT_ID);
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				try {
+					key.put("foo", "bar");
+					failException("tuple key is not unmodifiable", UnsupportedOperationException.class);
+				}
+				catch (UnsupportedOperationException expected) {
+					// map must be unmodifiable
+				}
+				assertEquals("properties not equal to tuple key", 0,
+						((Comparable<Map<String, Object>>) properties).compareTo(key));
+				assertEquals("tuple keys not equal to properties", 0,
+						((Comparable<Map<String, Object>>) key).compareTo(properties));
+				assertNotNull("tuple value null", t1.getTuple().getValue());
+				assertSame("tuple value wrong", t1.getService(), t1.getTuple().getValue());
+
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
 		}
 	}
 

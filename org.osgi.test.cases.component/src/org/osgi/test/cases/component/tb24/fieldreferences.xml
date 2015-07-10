@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb24.Ranking1"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            modified="modified">
+	<implementation class="org.osgi.test.cases.component.tb24.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+    <property name="service.ranking" type="Integer" value="1"/>
+    <property name="org.osgi.test.cases.component.tb24" value="xml"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.Ranking10"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            enabled="false"
+            modified="modified">
+	<implementation class="org.osgi.test.cases.component.tb24.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+    <property name="service.ranking" type="Integer" value="10"/>
+    <property name="org.osgi.test.cases.component.tb24" value="xml"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.StaticScalarFieldReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb24.StaticScalarFieldReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
+    </service>
+    <reference
+        name="service"
+        field="service"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="assignable"
+        field="assignable"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="reference"
+        field="reference"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="serviceobjects"
+        field="serviceobjects"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="properties"
+        field="properties"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="tuple"
+        field="tuple"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.DynamicNonVolatileScalarFieldReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb24.DynamicNonVolatileScalarFieldReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
+    </service>
+    <reference
+        name="service"
+        field="service"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="assignable"
+        field="assignable"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="reference"
+        field="reference"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="serviceobjects"
+        field="serviceobjects"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="properties"
+        field="properties"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="tuple"
+        field="tuple"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.FinalScalarFieldReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb24.FinalScalarFieldReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
+    </service>
+    <reference
+        name="service"
+        field="service"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="assignable"
+        field="assignable"
+        policy="static"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="reference"
+        field="reference"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="serviceobjects"
+        field="serviceobjects"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="properties"
+        field="properties"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="tuple"
+        field="tuple"
+        policy="dynamic"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.DynamicScalarFieldReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb24.DynamicScalarFieldReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
+    </service>
+    <reference
+        name="service"
+        field="service"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+    <reference
+        name="assignable"
+        field="assignable"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+    <reference
+        name="reference"
+        field="reference"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+    <reference
+        name="serviceobjects"
+        field="serviceobjects"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+    <reference
+        name="properties"
+        field="properties"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+    <reference
+        name="tuple"
+        field="tuple"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="1..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking*)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb24.OptionalScalarFieldReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb24.DynamicScalarFieldReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
+    </service>
+    <reference
+        name="service"
+        field="service"
+        policy="static"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="assignable"
+        field="assignable"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="reference"
+        field="reference"
+        policy="static"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking10)"/>
+    <reference
+        name="serviceobjects"
+        field="serviceobjects"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking10)"/>
+</scr:component>
+</root>

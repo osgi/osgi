@@ -1,0 +1,2 @@
+Private-Package: ${p}.tb24.*
+Service-Component: org/osgi/test/cases/component/tb24/fieldreferences.xml
