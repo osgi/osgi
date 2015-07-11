@@ -87,7 +87,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 
 			tb.start();
 
-			final BaseService bs = (BaseService) this.getService(
+			final BaseService bs = this.getService(
 					BaseService.class, "(type=static)");
 			assertNotNull(bs.getProperties());
 			assertEquals(service, bs.getProperties().get("service"));
@@ -116,7 +116,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			final TestObject service = new TestObject();
 
 			// ref not available
-			BaseService bs = (BaseService) this.getService(
+			BaseService bs = this.getService(
 					BaseService.class, "(type=dynamic)");
 			assertNotNull(bs.getProperties());
 			assertNull(bs.getProperties().get("service"));
@@ -126,7 +126,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			this.registerService(TestObject.class.getName(), service, null);
 			Sleep.sleep(SLEEP * 3);
 
-			bs = (BaseService) this.getService(BaseService.class,
+			bs = this.getService(BaseService.class,
 					"(type=dynamic)");
 			assertNotNull(bs.getProperties());
 			assertEquals(service, bs.getProperties().get("service"));
@@ -147,6 +147,10 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	 * Simple field injection test.
 	 *
 	 * Dynamic unary reference where field is not marked volatile
+	 * 
+	 * TODO I think we can remove this test as
+	 * {@link DeclarativeServicesControl#testDynamicNonVoltaileScalarFieldReference130}
+	 * checks the same
 	 */
 	public void testFIFailingUnaryReference() throws Exception {
 		final Bundle tb = installBundle("tbf1.jar", true);
@@ -155,13 +159,13 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			// component.xml is processed
 			getService(BaseService.class, "(type=dynamic)");
 
-			// we get the reference but not the service as it's not activated
+			// we get the reference and the service as it's not activated
 			// due to a non volatile field
 			final ServiceReference[] refs = getContext().getServiceReferences(
 					BaseService.class.getName(), "(type=failed)");
 			assertNotNull(refs);
 			final Object service = getContext().getService(refs[0]);
-			assertNull(service);
+			assertNotNull(service);
 		} finally {
 			ungetAllServices();
 			uninstallBundle(tb);
@@ -183,7 +187,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 
 			tb.start();
 
-			final BaseService bs = (BaseService) this.getService(
+			final BaseService bs = this.getService(
 					BaseService.class, "(type=type)");
 			assertNotNull(bs.getProperties());
 
@@ -234,7 +238,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 
 			tb.start();
 
-			final BaseService bs = (BaseService) this.getService(
+			final BaseService bs = this.getService(
 					BaseService.class, "(type=multiple-required)");
 			assertNotNull(bs.getProperties());
 			assertNotNull(bs.getProperties().get("services"));
@@ -277,7 +281,7 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 		try {
 			tb.start();
 
-			final BaseService bs = (BaseService) this.getService(
+			final BaseService bs = this.getService(
 					BaseService.class, "(type=multiple-dynamic)");
 			assertNotNull(bs.getProperties());
 			assertNotNull(bs.getProperties().get("services"));
