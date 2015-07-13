@@ -233,7 +233,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * unprepare is never reached.
 	 *
 	 * @throws Exception is the bundles are not installed
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#unprepare()
 	 */
 	protected void tearDown() throws Exception {
 		uninstallBundle(tb1);
@@ -4686,14 +4685,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
 				test1Tracker.open();
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNotNull("no service injected", t1.getService());
@@ -4726,7 +4725,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertNotNull("no tuple injected", t1.getTuple());
-				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				Map<String, Object> key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
@@ -4783,7 +4782,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
@@ -4791,7 +4790,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
 				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNotNull("no reference injected", t1.getReference());
@@ -4799,7 +4798,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no properties injected", t1.getProperties());
 				assertEquals("wrong property value", "xml", t1.getProperties().get(PID_ROOT));
 				assertNotNull("no tuple injected", t1.getTuple());
-				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				Map<String, Object> key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("wrong property value", "xml", key.get(PID_ROOT));
 
@@ -4817,7 +4816,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no properties injected", t1.getProperties());
 				assertEquals("wrong property value", "config", t1.getProperties().get(PID_ROOT));
 				assertNotNull("no tuple injected", t1.getTuple());
-				key = (Map<String, Object>) t1.getTuple().getKey();
+				key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("wrong property value", "config", key.get(PID_ROOT));
 			}
@@ -4852,7 +4851,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
@@ -4860,7 +4859,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
 				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNotNull("no reference injected", t1.getReference());
@@ -4868,7 +4867,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no properties injected", t1.getProperties());
 				assertEquals("wrong property value", "xml", t1.getProperties().get(PID_ROOT));
 				assertNotNull("no tuple injected", t1.getTuple());
-				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				Map<String, Object> key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("wrong property value", "xml", key.get(PID_ROOT));
 
@@ -4885,7 +4884,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no properties injected", t1.getProperties());
 				assertEquals("wrong property value", "config", t1.getProperties().get(PID_ROOT));
 				assertNotNull("no tuple injected", t1.getTuple());
-				key = (Map<String, Object>) t1.getTuple().getKey();
+				key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("wrong property value", "config", key.get(PID_ROOT));
 			}
@@ -4916,14 +4915,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
 				test1Tracker.open();
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNull("service injected", t1.getService());
@@ -4960,14 +4959,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
 				test1Tracker.open();
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNull("service injected", t1.getService());
@@ -5004,14 +5003,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
 				test1Tracker.open();
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNotNull("no service injected", t1.getService());
@@ -5056,14 +5055,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
 			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
 					getContext(), comp1Filter, null);
-			ServiceTracker<ScalarFieldTestService, ScalarFieldTestService> test1Tracker = new ServiceTracker<ScalarFieldTestService, ScalarFieldTestService>(
+			ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>> test1Tracker = new ServiceTracker<ScalarFieldTestService<BaseService>, ScalarFieldTestService<BaseService>>(
 					getContext(), test1Filter, null);
 			try {
 				comp1Tracker.open();
 				test1Tracker.open();
 				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp1", c1);
-				ScalarFieldTestService t1 = test1Tracker.waitForService(SLEEP * 3);
+				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
 
 				assertNotNull("no service injected", t1.getService());
@@ -5096,7 +5095,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertNotNull("no tuple injected", t1.getTuple());
-				Map<String, Object> key = (Map<String, Object>) t1.getTuple().getKey();
+				Map<String, Object> key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
@@ -5159,7 +5158,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertNotNull("no tuple injected", t1.getTuple());
-				key = (Map<String, Object>) t1.getTuple().getKey();
+				key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
@@ -5220,7 +5219,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					// map must be unmodifiable
 				}
 				assertNotNull("no tuple injected", t1.getTuple());
-				key = (Map<String, Object>) t1.getTuple().getKey();
+				key = t1.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
