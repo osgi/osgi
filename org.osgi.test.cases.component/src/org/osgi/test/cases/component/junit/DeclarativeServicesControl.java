@@ -4729,6 +4729,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple not Comparable", t1.getTuple() instanceof Comparable);
 				assertTrue("tuple key not Comparable", key instanceof Comparable);
 				try {
 					key.remove(ComponentConstants.COMPONENT_ID);
@@ -5099,6 +5100,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple not Comparable", t1.getTuple() instanceof Comparable);
 				assertTrue("tuple key not Comparable", key instanceof Comparable);
 				try {
 					key.remove(ComponentConstants.COMPONENT_ID);
@@ -5162,6 +5164,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple not Comparable", t1.getTuple() instanceof Comparable);
 				assertTrue("tuple key not Comparable", key instanceof Comparable);
 				try {
 					key.remove(ComponentConstants.COMPONENT_ID);
@@ -5223,6 +5226,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("tuple key null", key);
 				assertEquals("tuple key wrong", properties.get(ComponentConstants.COMPONENT_ID),
 						key.get(ComponentConstants.COMPONENT_ID));
+				assertTrue("tuple not Comparable", t1.getTuple() instanceof Comparable);
 				assertTrue("tuple key not Comparable", key instanceof Comparable);
 				try {
 					key.remove(ComponentConstants.COMPONENT_ID);
