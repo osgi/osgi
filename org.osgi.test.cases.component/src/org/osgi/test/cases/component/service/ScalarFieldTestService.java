@@ -34,5 +34,10 @@ public interface ScalarFieldTestService<T> {
 
 	Map.Entry<Map<String, Object>, T> getTuple();
 
-	
+	int getActivationCount();
+
+	int getModificationCount();
+
+	int getDeactivationCount();
+
 }

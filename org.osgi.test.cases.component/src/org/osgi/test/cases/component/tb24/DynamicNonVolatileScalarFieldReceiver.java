@@ -21,13 +21,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentConstants;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
 
-public class DynamicNonVolatileScalarFieldReceiver implements ScalarFieldTestService<BaseService> {
+public class DynamicNonVolatileScalarFieldReceiver extends AbstractFieldReceiver
+		implements ScalarFieldTestService<BaseService> {
 	private BaseService									service;
 	private Object										assignable;
 	private ServiceReference<BaseService>				reference;
@@ -36,21 +35,6 @@ public class DynamicNonVolatileScalarFieldReceiver implements ScalarFieldTestSer
 	private Map.Entry<Map<String, Object>, BaseService>	tuple;
 	
 	public DynamicNonVolatileScalarFieldReceiver() {
-	}
-
-	void activate(ComponentContext context) {
-		System.out.printf("activate: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
-	}
-
-	void modified(ComponentContext context) {
-		System.out.printf("modified: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
-	}
-
-	void deactivate(ComponentContext context) {
-		System.out.printf("deactivate: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
 	}
 
 	public BaseService getService() {

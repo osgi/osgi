@@ -4694,6 +4694,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing comp1", c1);
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no service injected", t1.getService());
 				assertSame("wrong service injected", c1, t1.getService());
@@ -4793,6 +4796,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no reference injected", t1.getReference());
 				assertEquals("wrong property value", "xml", t1.getReference().getProperty(PID_ROOT));
@@ -4810,14 +4816,17 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
 
 				assertEquals("wrong service property value", "config", c1.getProperties().get(PID_ROOT));
-				assertNotSame("test service not reactivated", t1, test1Tracker.waitForService(SLEEP * 3));
-				t1 = test1Tracker.waitForService(SLEEP * 3);
-				assertNotNull("no reference injected", t1.getReference());
-				assertEquals("wrong property value", "config", t1.getReference().getProperty(PID_ROOT));
-				assertNotNull("no properties injected", t1.getProperties());
-				assertEquals("wrong property value", "config", t1.getProperties().get(PID_ROOT));
-				assertNotNull("no tuple injected", t1.getTuple());
-				key = t1.getTuple().getKey();
+				ScalarFieldTestService<BaseService> t2 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotSame("test service not reactivated", t1, t2);
+				assertEquals("wrong activation count", 2, t2.getActivationCount());
+				assertEquals("wrong modification count", 0, t2.getModificationCount());
+				assertEquals("wrong deactivation count", 1, t2.getDeactivationCount());
+				assertNotNull("no reference injected", t2.getReference());
+				assertEquals("wrong property value", "config", t2.getReference().getProperty(PID_ROOT));
+				assertNotNull("no properties injected", t2.getProperties());
+				assertEquals("wrong property value", "config", t2.getProperties().get(PID_ROOT));
+				assertNotNull("no tuple injected", t2.getTuple());
+				key = t2.getTuple().getKey();
 				assertNotNull("tuple key null", key);
 				assertEquals("wrong property value", "config", key.get(PID_ROOT));
 			}
@@ -4862,6 +4871,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertEquals("wrong service property value", "xml", c1.getProperties().get(PID_ROOT));
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no reference injected", t1.getReference());
 				assertEquals("wrong property value", "xml", t1.getReference().getProperty(PID_ROOT));
@@ -4880,6 +4892,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 				assertEquals("wrong service property value", "config", c1.getProperties().get(PID_ROOT));
 				assertSame("test service reactivated", t1, test1Tracker.waitForService(SLEEP * 3));
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 				assertNotNull("no reference injected", t1.getReference());
 				assertEquals("wrong property value", "config", t1.getReference().getProperty(PID_ROOT));
 				assertNotNull("no properties injected", t1.getProperties());
@@ -4925,6 +4940,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing comp1", c1);
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNull("service injected", t1.getService());
 				assertNull("service injected", t1.getAssignable());
@@ -4969,6 +4987,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing comp1", c1);
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNull("service injected", t1.getService());
 				assertNull("service injected", t1.getAssignable());
@@ -5013,6 +5034,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing comp1", c1);
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no service injected", t1.getService());
 				assertSame("wrong service injected", c1, t1.getService());
@@ -5065,6 +5089,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("missing comp1", c1);
 				ScalarFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no service injected", t1.getService());
 				assertSame("wrong service injected", c1, t1.getService());
@@ -5129,6 +5156,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				BaseService c10 = comp1Tracker.waitForService(SLEEP * 3);
 				assertNotNull("missing comp10", c10);
 				assertNotSame("did not get higher ranked service", c1, c10);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
 
 				assertNotNull("no service injected", t1.getService());
 				assertSame("wrong service injected", c10, t1.getService());

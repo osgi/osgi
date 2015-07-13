@@ -21,14 +21,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentConstants;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
 import org.osgi.test.support.MockFactory;
 
-public class StaticScalarFieldReceiver implements ScalarFieldTestService<BaseService> {
+public class StaticScalarFieldReceiver extends AbstractFieldReceiver implements ScalarFieldTestService<BaseService> {
 	private BaseService									service;
 	private Object										assignable;
 	private ServiceReference<BaseService>				reference;
@@ -43,21 +41,6 @@ public class StaticScalarFieldReceiver implements ScalarFieldTestService<BaseSer
 		serviceobjects = MockFactory.newMock(ComponentServiceObjects.class, null);
 		properties = MockFactory.newMock(Map.class, null);
 		tuple = MockFactory.newMock(Map.Entry.class, null);
-	}
-
-	void activate(ComponentContext context) {
-		System.out.printf("activate: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
-	}
-
-	void modified(ComponentContext context) {
-		System.out.printf("modified: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
-	}
-
-	void deactivate(ComponentContext context) {
-		System.out.printf("deactivate: %s[%X]\n", context.getProperties().get(ComponentConstants.COMPONENT_NAME),
-				System.identityHashCode(this));
 	}
 
 	public BaseService getService() {
