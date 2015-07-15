@@ -15,15 +15,25 @@
  */
 package org.osgi.test.cases.http.whiteboard.junit;
 
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import junit.framework.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.runtime.dto.RuntimeDTO;
 import org.osgi.service.http.runtime.dto.ServletContextDTO;
+import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
@@ -37,6 +47,29 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 	}
 
 	public void test_servletInContext() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "sc1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/sc1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelperFactory(), properties));
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				response.getWriter().write(getServletContext().getContextPath());
+			}
+
+		};
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=sc1)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/TestServlet2");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
 		Assert.assertEquals("/sc1", request("/sc1/TestServlet2"));
 	}
 
