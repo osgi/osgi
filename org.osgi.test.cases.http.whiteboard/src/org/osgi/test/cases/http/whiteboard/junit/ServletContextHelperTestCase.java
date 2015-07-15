@@ -693,6 +693,240 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertNull(servletContextHelper.getMimeType("index.html"));
 	}
 
+	public void test_140_2_2() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+
+		assertNotNull(serviceReference);
+
+		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+
+		assertNotNull(servletContextHelper);
+
+		assertNull(servletContextHelper.getRealPath("META-INF/MANIFEST.MF"));
+	}
+
+	public void test_140_2_3() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+
+		assertNotNull(serviceReference);
+
+		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+
+		assertNotNull(servletContextHelper);
+
+		assertNotNull(servletContextHelper.getResource("META-INF/MANIFEST.MF"));
+	}
+
+	public void test_140_2_4() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+
+		assertNotNull(serviceReference);
+
+		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+
+		assertNotNull(servletContextHelper);
+
+		assertNotNull(servletContextHelper.getResourcePaths("META-INF/"));
+	}
+
+	public void test_140_2_5() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+
+		assertNotNull(serviceReference);
+
+		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+
+		assertNotNull(servletContextHelper);
+
+		assertTrue(servletContextHelper.handleSecurity(null, null));
+	}
+
+	public void test_140_2_6_addFilter() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.addFilter((String) null, (Class<? extends javax.servlet.Filter>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addFilter((String) null, (javax.servlet.Filter) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addFilter((String) null, (String) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_addListener() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.addListener((Class<? extends java.util.EventListener>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addListener((java.util.EventListener) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addListener((String) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_addServlet() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.addServlet((String) null, (Class<? extends javax.servlet.Servlet>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addServlet((String) null, (javax.servlet.Servlet) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+
+		try {
+			servletContext.addServlet((String) null, (String) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_createFilter() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.createFilter((Class<? extends javax.servlet.Filter>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_createListener() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.createListener((Class<? extends java.util.EventListener>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_createServlet() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.createServlet((Class<? extends javax.servlet.Servlet>) null);
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
+	public void test_140_2_6_declareRoles() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.declareRoles("user");
+
+			fail();
+		} catch (UnsupportedOperationException uoe) {
+		}
+	}
+
 	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
 		FailedServletContextDTO[] failedServletContextDTOs = httpServiceRuntime.getRuntimeDTO().failedServletContextDTOs;
 
