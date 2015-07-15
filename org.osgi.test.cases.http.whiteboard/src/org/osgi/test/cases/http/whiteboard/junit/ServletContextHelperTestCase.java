@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.Manifest;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
@@ -981,6 +982,81 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 	public void test_140_2_6_getClassLoader() throws Exception {
 		test_140_2_10to12();
+	}
+
+	public void test_140_2_6_getContextPath() throws Exception {
+		BundleContext context = getContext();
+		String contextPath = "/context1";
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context1)");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		assertEquals(contextPath, sc1.get().getContextPath());
+	}
+
+	public void test_140_2_6_initParameters() throws Exception {
+		test_table_140_1_INIT_PARAMs();
+	}
+
+	public void test_140_2_6_getJspConfigdescriptor() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		assertNull(servletContext.getJspConfigDescriptor());
+	}
+
+	public void test_140_2_6_getMimeType() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		assertNull(servletContext.getMimeType("index.html"));
+	}
+
+	public void test_140_2_6_getNamedDispatcher() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		RequestDispatcher requestDispatcher = servletContext.getNamedDispatcher("first");
+
+		assertNotNull(requestDispatcher);
 	}
 
 	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
