@@ -911,9 +911,9 @@
         target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
 </scr:component>
 
-<scr:component name="org.osgi.test.cases.component.tb24.BadTypeFieldReceiver"
+<scr:component name="org.osgi.test.cases.component.tb24.BadFieldReceiver"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-    <implementation class="org.osgi.test.cases.component.tb24.BadTypeFieldReceiver"/>
+    <implementation class="org.osgi.test.cases.component.tb24.BadFieldReceiver"/>
     <service>
         <provide interface="org.osgi.test.cases.component.service.ScalarFieldTestService"/>
         <provide interface="org.osgi.test.cases.component.service.MultipleFieldTestService"/>
@@ -962,6 +962,16 @@
         field="badMultipleTupleType"
         field-collection-type="tuple"
         policy="dynamic"
+        cardinality="1..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>
+    <reference
+        name="badUpdate"
+        field="badUpdate"
+        field-option="update"
+        field-collection-type="service"
+        policy="dynamic"
+        policy-option="greedy"
         cardinality="1..n"
         interface="org.osgi.test.cases.component.service.BaseService"
         target="(component.name=org.osgi.test.cases.component.tb24.Ranking1)"/>

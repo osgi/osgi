@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
@@ -30,7 +31,7 @@ import org.osgi.test.cases.component.service.MultipleFieldTestService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
 import org.osgi.test.cases.component.service.TestObject;
 
-public class BadTypeFieldReceiver extends AbstractFieldReceiver
+public class BadFieldReceiver extends AbstractFieldReceiver
 		implements ScalarFieldTestService<BaseService>, MultipleFieldTestService<BaseService> {
 	private static final TestObject	SENTINEL	= new TestObject();
 	private volatile TestObject		badScalarType;
@@ -39,14 +40,16 @@ public class BadTypeFieldReceiver extends AbstractFieldReceiver
 	private volatile TestObject		badMultipleServiceObjectsType;
 	private volatile TestObject		badMultiplePropertiesType;
 	private volatile TestObject		badMultipleTupleType;
+	private volatile Set<BaseService>	badUpdate;
 
-	public BadTypeFieldReceiver() {
+	public BadFieldReceiver() {
 		badScalarType = SENTINEL;
 		badMultipleServiceType = SENTINEL;
 		badMultipleReferenceType = SENTINEL;
 		badMultipleServiceObjectsType = SENTINEL;
 		badMultiplePropertiesType = SENTINEL;
 		badMultipleTupleType = SENTINEL;
+		badUpdate = null;
 	}
 
 	public BaseService getService() {
@@ -82,7 +85,7 @@ public class BadTypeFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<BaseService> getCollectionSubtypeService() {
-		return null;
+		return badUpdate;
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionReference() {

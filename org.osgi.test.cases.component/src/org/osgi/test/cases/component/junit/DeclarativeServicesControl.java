@@ -6362,11 +6362,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
-	public void testBadTypeFieldReference130() throws Exception {
+	public void testBadFieldReference130() throws Exception {
 		Bundle tb24 = installBundle("tb24.jar", false);
 		assertNotNull("tb24 failed to install", tb24);
 
-		final String NAME = TEST_CASE_ROOT + ".tb24.BadTypeFieldReceiver";
+		final String NAME = TEST_CASE_ROOT + ".tb24.BadFieldReceiver";
 
 		try {
 			tb24.start();
@@ -6405,6 +6405,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNull("service properties collection injected", cp1);
 				Collection<Entry<Map<String, Object>, BaseService>> ct1 = t1.getCollectionTuple();
 				assertNull("service tuple collection injected", ct1);
+				Collection<BaseService> ss1 = t1.getCollectionSubtypeService();
+				assertNull("service collection subtype should not be modified", ss1);
 			}
 			finally {
 				comp1Tracker.close();
