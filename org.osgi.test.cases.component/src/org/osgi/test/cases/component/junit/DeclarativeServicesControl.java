@@ -7187,4 +7187,170 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testSortingDynamicMultipleFieldReference130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.DynamicMultipleFieldReceiver";
+
+		try {
+			tb24.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb24,
+					"org.osgi.test.cases.component.tb24.Ranking10");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking1))");
+			Filter comp10Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking10))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + MultipleFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<BaseService, BaseService> comp10Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp10Filter, null);
+			ServiceTracker<MultipleFieldTestService<BaseService>, MultipleFieldTestService<BaseService>> test1Tracker = new ServiceTracker<MultipleFieldTestService<BaseService>, MultipleFieldTestService<BaseService>>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				comp10Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				BaseService c10 = comp10Tracker.waitForService(SLEEP * 3);
+				assertNull("found comp10", c10);
+				MultipleFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
+
+				Collection<BaseService> cs1 = t1.getCollectionService();
+				assertNotNull("no service collection", cs1);
+				assertEquals("wrong number of elements in service collection", 1, cs1.size());
+				Collection<ServiceReference<BaseService>> cr1 = t1.getCollectionReference();
+				assertNotNull("no service reference collection", cr1);
+				assertEquals("wrong number of elements in service reference collection", 1, cr1.size());
+				Collection<ComponentServiceObjects<BaseService>> co1 = t1.getCollectionServiceObjects();
+				assertNotNull("no service objects collection", co1);
+				assertEquals("wrong number of elements in service objects collection", 1, co1.size());
+				Collection<Map<String, Object>> cp1 = t1.getCollectionProperties();
+				assertNotNull("no service properties collection", cp1);
+				assertEquals("wrong number of elements in service properties collection", 1, cp1.size());
+				Collection<Entry<Map<String, Object>, BaseService>> ct1 = t1.getCollectionTuple();
+				assertNotNull("no service tuple collection", ct1);
+				assertEquals("wrong number of elements in service tuple collection", 1, ct1.size());
+
+				List<BaseService> ls1 = t1.getListService();
+				assertNotNull("no service list", ls1);
+				assertEquals("wrong number of elements in service list", 1, ls1.size());
+				List<ServiceReference<BaseService>> lr1 = t1.getListReference();
+				assertNotNull("no service reference list", lr1);
+				assertEquals("wrong number of elements in service reference list", 1, lr1.size());
+				List<ComponentServiceObjects<BaseService>> lo1 = t1.getListServiceObjects();
+				assertNotNull("no service objects list", lo1);
+				assertEquals("wrong number of elements in service objects list", 1, lo1.size());
+				List<Map<String, Object>> lp1 = t1.getListProperties();
+				assertNotNull("no service properties list", lp1);
+				assertEquals("wrong number of elements in service properties list", 1, lp1.size());
+				List<Entry<Map<String, Object>, BaseService>> lt1 = t1.getListTuple();
+				assertNotNull("no service tuple list", lt1);
+				assertEquals("wrong number of elements in service tuple list", 1, lt1.size());
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				c10 = comp10Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp10", c10);
+				MultipleFieldTestService<BaseService> t2 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t2);
+				assertSame("reactivated", t1, t2);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
+
+				Collection<BaseService> cs2 = t1.getCollectionService();
+				assertNotNull("no service collection", cs2);
+				assertNotSame("service collection not replaced", cs1, cs2);
+				assertEquals("wrong number of elements in service collection", 2, cs2.size());
+				assertEquals("wrong order in service collection", Arrays.asList(c1, c10), cs2);
+				Collection<ServiceReference<BaseService>> cr2 = t1.getCollectionReference();
+				assertNotNull("no service reference collection", cr2);
+				assertNotSame("service reference collection not replaced", cr1, cr2);
+				assertEquals("wrong number of elements in service reference collection", 2, cr2.size());
+				assertEquals("wrong order in service reference collection",
+						Arrays.asList(comp1Tracker.getServiceReference(), comp10Tracker.getServiceReference()), cr2);
+				Collection<ComponentServiceObjects<BaseService>> co2 = t1.getCollectionServiceObjects();
+				assertNotNull("no service objects collection", co2);
+				assertNotSame("service objects collection not replaced", co1, co2);
+				assertEquals("wrong number of elements in service objects collection", 2, co2.size());
+				Iterator<ComponentServiceObjects<BaseService>> co2i = co2.iterator();
+				assertEquals("wrong order in service objects collection",
+						Arrays.asList(comp1Tracker.getServiceReference(), comp10Tracker.getServiceReference()),
+						Arrays.asList(co2i.next().getServiceReference(), co2i.next().getServiceReference()));
+				Collection<Map<String, Object>> cp2 = t1.getCollectionProperties();
+				assertNotNull("no service properties collection", cp2);
+				assertNotSame("service properties collection not replaced", cp1, cp2);
+				assertEquals("wrong number of elements in service properties collection", 2, cp2.size());
+				Iterator<Map<String, Object>> cp2i = cp2.iterator();
+				assertTrue("wrong order in service properties collection",
+						((Comparable<Map<String, Object>>) cp2i.next()).compareTo(cp2i.next()) < 0);
+				Collection<Entry<Map<String, Object>, BaseService>> ct2 = t1.getCollectionTuple();
+				assertNotNull("no service tuple collection", ct2);
+				assertNotSame("service tuple collection not replaced", ct1, ct2);
+				assertEquals("wrong number of elements in service tuple collection", 2, ct2.size());
+				Iterator<Entry<Map<String, Object>, BaseService>> ct2i = ct2.iterator();
+				assertTrue("wrong order in service tuple collection",
+						((Comparable<Entry<Map<String, Object>, BaseService>>) ct2i.next()).compareTo(ct2i.next()) < 0);
+
+				List<BaseService> ls2 = t1.getListService();
+				assertNotNull("no service list", ls2);
+				assertNotSame("service list not replaced", ls1, ls2);
+				assertEquals("wrong number of elements in service list", 2, ls2.size());
+				assertEquals("wrong order in service list", Arrays.asList(c1, c10), ls2);
+				List<ServiceReference<BaseService>> lr2 = t1.getListReference();
+				assertNotNull("no service reference list", lr2);
+				assertNotSame("service reference list not replaced", lr1, lr2);
+				assertEquals("wrong number of elements in service reference list", 2, lr2.size());
+				assertEquals("wrong order in service reference list",
+						Arrays.asList(comp1Tracker.getServiceReference(), comp10Tracker.getServiceReference()), lr2);
+				List<ComponentServiceObjects<BaseService>> lo2 = t1.getListServiceObjects();
+				assertNotNull("no service objects list", lo2);
+				assertNotSame("service objects list not replaced", lo1, lo2);
+				assertEquals("wrong number of elements in service objects list", 2, lo2.size());
+				assertEquals("wrong order in service objects list",
+						Arrays.asList(comp1Tracker.getServiceReference(), comp10Tracker.getServiceReference()),
+						Arrays.asList(lo2.get(0).getServiceReference(), lo2.get(1).getServiceReference()));
+				List<Map<String, Object>> lp2 = t1.getListProperties();
+				assertNotNull("no service properties list", lp2);
+				assertNotSame("service properties list not replaced", lp1, lp2);
+				assertEquals("wrong number of elements in service properties list", 2, lp2.size());
+				assertTrue("wrong order in service properties list",
+						((Comparable<Map<String, Object>>) lp2.get(0)).compareTo(lp2.get(1)) < 0);
+				List<Entry<Map<String, Object>, BaseService>> lt2 = t1.getListTuple();
+				assertNotNull("no service tuple list", lt2);
+				assertNotSame("service tuple list not replaced", lt1, lt2);
+				assertEquals("wrong number of elements in service tuple list", 2, lt2.size());
+				assertTrue("wrong order in service tuple list",
+						((Comparable<Entry<Map<String, Object>, BaseService>>) lt2.get(0)).compareTo(lt2.get(1)) < 0);
+			}
+			finally {
+				comp1Tracker.close();
+				comp10Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
 }
