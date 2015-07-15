@@ -25,6 +25,7 @@ import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.RuntimeDTO;
+import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 
@@ -473,7 +474,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("v2", sc1.get().getInitParameter("p2"));
 	}
 
-	public void test_140_2_23to16() throws Exception {
+	public void test_140_2_23to25() throws Exception {
 		BundleContext context = getContext();
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -500,11 +501,208 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foobar");
+
+		assertNotNull(servletContextDTO);
+
 		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
 
 		assertNotNull(requestInfoDTO);
 		assertNotNull(requestInfoDTO.servletDTO);
+		assertEquals(servletContextDTO.serviceId, requestInfoDTO.servletDTO.servletContextId);
 		assertEquals("second", requestInfoDTO.servletDTO.name);
+	}
+
+	public void test_140_2_26to27() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foobar");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		properties.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foobar");
+
+		assertNotNull(servletContextDTO);
+
+		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertEquals(servletContextDTO.serviceId, requestInfoDTO.servletDTO.servletContextId);
+		assertEquals("second", requestInfoDTO.servletDTO.name);
+	}
+
+	public void test_140_2_27() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foobar");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foo");
+
+		assertNotNull(servletContextDTO);
+
+		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertEquals(servletContextDTO.serviceId, requestInfoDTO.servletDTO.servletContextId);
+		assertEquals("first", requestInfoDTO.servletDTO.name);
+	}
+
+	public void test_140_2_34to36() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foobar");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo/bar");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foobar)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "second");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foo");
+
+		assertNotNull(servletContextDTO);
+
+		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bars/someServlet");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertEquals(servletContextDTO.serviceId, requestInfoDTO.servletDTO.servletContextId);
+		assertEquals("first", requestInfoDTO.servletDTO.name);
+	}
+
+	public void test_140_2_39to41() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo/bar");
+		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName(httpServiceRuntime, "foo");
+
+		assertNotNull(failedServletContextDTO);
+		assertEquals(
+				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
+				failedServletContextDTO.failureReason);
+	}
+
+	public void test_140_2_41to43() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
+		ServiceRegistration<ServletContextHelper> serviceRegistration = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
+		serviceRegistrations.add(serviceRegistration);
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName(httpServiceRuntime, "default");
+
+		assertNotNull(failedServletContextDTO);
+		assertEquals(
+				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
+				failedServletContextDTO.failureReason);
+		assertEquals("/", failedServletContextDTO.contextPath);
+		assertNotSame(
+				serviceRegistration.getReference().getProperty(Constants.SERVICE_ID),
+				failedServletContextDTO.serviceId);
+	}
+
+	public void test_140_2_1() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<ServletContextHelper> serviceReference = context.getServiceReference(ServletContextHelper.class);
+
+		assertNotNull(serviceReference);
+
+		ServletContextHelper servletContextHelper = context.getService(serviceReference);
+
+		assertNotNull(servletContextHelper);
+
+		assertNull(servletContextHelper.getMimeType("index.html"));
+	}
+
+	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
+		FailedServletContextDTO[] failedServletContextDTOs = httpServiceRuntime.getRuntimeDTO().failedServletContextDTOs;
+
+		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
+			if (failedServletContextDTO.name.equals(name)) {
+				return failedServletContextDTO;
+			}
+		}
+
+		return null;
 	}
 
 	private HttpServiceRuntime getHttpServiceRuntime() {
@@ -515,6 +713,18 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(serviceReference);
 
 		return context.getService(serviceReference);
+	}
+
+	private ServletContextDTO getServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
+		ServletContextDTO[] servletContextDTOs = httpServiceRuntime.getRuntimeDTO().servletContextDTOs;
+
+		for (ServletContextDTO servletContextDTO : servletContextDTOs) {
+			if (servletContextDTO.name.equals(name)) {
+				return servletContextDTO;
+			}
+		}
+
+		return null;
 	}
 
 	private String getSymbolicName(ClassLoader classLoader) throws IOException {
