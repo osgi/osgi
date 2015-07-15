@@ -27,48 +27,48 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.MultipleFieldTestService;
+import org.osgi.test.cases.component.service.TestIdentitySet;
 import org.osgi.test.cases.component.service.TestList;
 import org.osgi.test.cases.component.service.TestSet;
-import org.osgi.test.cases.component.service.TestSortedSet;
 
 public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 		implements MultipleFieldTestService<BaseService> {
 	private Collection<BaseService>									collectionService;
 	private List<BaseService>										listService;
-	private Set<BaseService>										setService;
+	private Set<BaseService>										updateService;
 	private Collection<ServiceReference<BaseService>>				collectionReference;
 	private List<ServiceReference<BaseService>>						listReference;
-	private Set<ServiceReference<BaseService>>						setReference;
+	private Set<ServiceReference<BaseService>>						updateReference;
 	private Collection<ComponentServiceObjects<BaseService>>		collectionServiceObjects;
 	private List<ComponentServiceObjects<BaseService>>				listServiceObjects;
-	private Set<ComponentServiceObjects<BaseService>>				setServiceObjects;
+	private Set<ComponentServiceObjects<BaseService>>				updateServiceObjects;
 	private Collection<Map<String, Object>>							collectionProperties;
 	private List<Map<String, Object>>								listProperties;
-	private Set<Map<String, Object>>								setProperties;
+	private Set<Map<String, Object>>								updateProperties;
 	private Collection<Map.Entry<Map<String, Object>, BaseService>>	collectionTuple;
 	private List<Map.Entry<Map<String, Object>, BaseService>>		listTuple;
-	private Set<Map.Entry<Map<String, Object>, BaseService>>		setTuple;
+	private Set<Map.Entry<Map<String, Object>, BaseService>>		updateTuple;
 	
 	public StaticMultipleFieldReceiver() {
 		collectionService = new TestList<BaseService>();
 		listService = new TestList<BaseService>();
-		setService = new TestSet<BaseService>();
+		updateService = new TestSet<BaseService>();
 
 		collectionReference = new TestList<ServiceReference<BaseService>>();
 		listReference = new TestList<ServiceReference<BaseService>>();
-		setReference = new TestSortedSet<ServiceReference<BaseService>>();
+		updateReference = new TestIdentitySet<ServiceReference<BaseService>>();
 
 		collectionServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
 		listServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
-		setServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
+		updateServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
 
 		collectionProperties = new TestList<Map<String, Object>>();
 		listProperties = new TestList<Map<String, Object>>();
-		setProperties = new TestSortedSet<Map<String, Object>>();
+		updateProperties = new TestIdentitySet<Map<String, Object>>();
 
 		collectionTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
 		listTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
-		setTuple = new TestSortedSet<Map.Entry<Map<String, Object>, BaseService>>();
+		updateTuple = new TestIdentitySet<Map.Entry<Map<String, Object>, BaseService>>();
 	}
 
 	public Collection<BaseService> getCollectionService() {
@@ -80,7 +80,7 @@ public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<BaseService> getCollectionSubtypeService() {
-		return setService;
+		return updateService;
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionReference() {
@@ -92,7 +92,7 @@ public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionSubtypeReference() {
-		return setReference;
+		return updateReference;
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionServiceObjects() {
@@ -104,7 +104,7 @@ public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionSubtypeServiceObjects() {
-		return setServiceObjects;
+		return updateServiceObjects;
 	}
 
 	public Collection<Map<String, Object>> getCollectionProperties() {
@@ -116,7 +116,7 @@ public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Map<String, Object>> getCollectionSubtypeProperties() {
-		return setProperties;
+		return updateProperties;
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionTuple() {
@@ -128,6 +128,6 @@ public class StaticMultipleFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionSubtypeTuple() {
-		return setTuple;
+		return updateTuple;
 	}
 }

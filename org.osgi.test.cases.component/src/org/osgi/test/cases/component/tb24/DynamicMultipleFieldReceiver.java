@@ -27,47 +27,40 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.MultipleFieldTestService;
-import org.osgi.test.cases.component.service.ScalarFieldTestService;
 import org.osgi.test.cases.component.service.TestIdentitySet;
 import org.osgi.test.cases.component.service.TestList;
 import org.osgi.test.cases.component.service.TestSet;
 
-public class DynamicNonVolatileFieldReceiver extends AbstractFieldReceiver
-		implements ScalarFieldTestService<BaseService>, MultipleFieldTestService<BaseService> {
-	private BaseService												service;
-	private Object													assignable;
-	private ServiceReference<BaseService>							reference;
-	private ComponentServiceObjects<BaseService>					serviceobjects;
-	private Map<String, Object>										properties;
-	private Map.Entry<Map<String, Object>, BaseService>				tuple;
-	private Collection<BaseService>									collectionService;
-	private List<BaseService>										listService;
-	private Set<BaseService>										updateService;
-	private Collection<ServiceReference<BaseService>>				collectionReference;
-	private List<ServiceReference<BaseService>>						listReference;
-	private Set<ServiceReference<BaseService>>						updateReference;
-	private Collection<ComponentServiceObjects<BaseService>>		collectionServiceObjects;
-	private List<ComponentServiceObjects<BaseService>>				listServiceObjects;
-	private Set<ComponentServiceObjects<BaseService>>				updateServiceObjects;
-	private Collection<Map<String, Object>>							collectionProperties;
-	private List<Map<String, Object>>								listProperties;
-	private Set<Map<String, Object>>								updateProperties;
-	private Collection<Map.Entry<Map<String, Object>, BaseService>>	collectionTuple;
-	private List<Map.Entry<Map<String, Object>, BaseService>>		listTuple;
-	private Set<Map.Entry<Map<String, Object>, BaseService>>		updateTuple;
+public class DynamicMultipleFieldReceiver extends AbstractFieldReceiver
+		implements MultipleFieldTestService<BaseService> {
+	private volatile Collection<BaseService>									collectionService;
+	private volatile List<BaseService>											listService;
+	private final Set<BaseService>												updateService;
+	private volatile Collection<ServiceReference<BaseService>>					collectionReference;
+	private volatile List<ServiceReference<BaseService>>						listReference;
+	private volatile Collection<ServiceReference<BaseService>>					updateReference;
+	private volatile Collection<ComponentServiceObjects<BaseService>>			collectionServiceObjects;
+	private volatile List<ComponentServiceObjects<BaseService>>					listServiceObjects;
+	private volatile List<ComponentServiceObjects<BaseService>>					updateServiceObjects;
+	private volatile Collection<Map<String, Object>>							collectionProperties;
+	private volatile List<Map<String, Object>>									listProperties;
+	private final Set<Map<String, Object>>										updateProperties;
+	private volatile Collection<Map.Entry<Map<String, Object>, BaseService>>	collectionTuple;
+	private volatile List<Map.Entry<Map<String, Object>, BaseService>>			listTuple;
+	private final Set<Map.Entry<Map<String, Object>, BaseService>>				updateTuple;
 	
-	public DynamicNonVolatileFieldReceiver() {
+	public DynamicMultipleFieldReceiver() {
 		collectionService = new TestList<BaseService>();
 		listService = new TestList<BaseService>();
 		updateService = new TestSet<BaseService>();
 
 		collectionReference = new TestList<ServiceReference<BaseService>>();
 		listReference = new TestList<ServiceReference<BaseService>>();
-		updateReference = new TestIdentitySet<ServiceReference<BaseService>>();
+		updateReference = null;
 
 		collectionServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
 		listServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
-		updateServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
+		updateServiceObjects = null;
 
 		collectionProperties = new TestList<Map<String, Object>>();
 		listProperties = new TestList<Map<String, Object>>();
@@ -76,30 +69,6 @@ public class DynamicNonVolatileFieldReceiver extends AbstractFieldReceiver
 		collectionTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
 		listTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
 		updateTuple = new TestIdentitySet<Map.Entry<Map<String, Object>, BaseService>>();
-	}
-
-	public BaseService getService() {
-		return service;
-	}
-
-	public Object getAssignable() {
-		return assignable;
-	}
-
-	public ServiceReference<BaseService> getReference() {
-		return reference;
-	}
-
-	public ComponentServiceObjects<BaseService> getServiceObjects() {
-		return serviceobjects;
-	}
-
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
-
-	public Entry<Map<String, Object>, BaseService> getTuple() {
-		return tuple;
 	}
 
 	public Collection<BaseService> getCollectionService() {

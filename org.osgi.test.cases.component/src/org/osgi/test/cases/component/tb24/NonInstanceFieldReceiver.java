@@ -28,9 +28,9 @@ import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.MultipleFieldTestService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
+import org.osgi.test.cases.component.service.TestIdentitySet;
 import org.osgi.test.cases.component.service.TestList;
 import org.osgi.test.cases.component.service.TestSet;
-import org.osgi.test.cases.component.service.TestSortedSet;
 
 public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 		implements ScalarFieldTestService<BaseService>, MultipleFieldTestService<BaseService> {
@@ -42,40 +42,40 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	private static Map.Entry<Map<String, Object>, BaseService>				tuple;
 	private static Collection<BaseService>									collectionService;
 	private static List<BaseService>										listService;
-	private static Set<BaseService>											setService;
+	private static Set<BaseService>											updateService;
 	private static Collection<ServiceReference<BaseService>>				collectionReference;
 	private static List<ServiceReference<BaseService>>						listReference;
-	private static Set<ServiceReference<BaseService>>						setReference;
+	private static Set<ServiceReference<BaseService>>						updateReference;
 	private static Collection<ComponentServiceObjects<BaseService>>			collectionServiceObjects;
 	private static List<ComponentServiceObjects<BaseService>>				listServiceObjects;
-	private static Set<ComponentServiceObjects<BaseService>>				setServiceObjects;
+	private static Set<ComponentServiceObjects<BaseService>>				updateServiceObjects;
 	private static Collection<Map<String, Object>>							collectionProperties;
 	private static List<Map<String, Object>>								listProperties;
-	private static Set<Map<String, Object>>									setProperties;
+	private static Set<Map<String, Object>>									updateProperties;
 	private static Collection<Map.Entry<Map<String, Object>, BaseService>>	collectionTuple;
 	private static List<Map.Entry<Map<String, Object>, BaseService>>		listTuple;
-	private static Set<Map.Entry<Map<String, Object>, BaseService>>			setTuple;
+	private static Set<Map.Entry<Map<String, Object>, BaseService>>			updateTuple;
 	
 	public NonInstanceFieldReceiver() {
 		collectionService = new TestList<BaseService>();
 		listService = new TestList<BaseService>();
-		setService = new TestSet<BaseService>();
+		updateService = new TestSet<BaseService>();
 
 		collectionReference = new TestList<ServiceReference<BaseService>>();
 		listReference = new TestList<ServiceReference<BaseService>>();
-		setReference = new TestSortedSet<ServiceReference<BaseService>>();
+		updateReference = new TestIdentitySet<ServiceReference<BaseService>>();
 
 		collectionServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
 		listServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
-		setServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
+		updateServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
 
 		collectionProperties = new TestList<Map<String, Object>>();
 		listProperties = new TestList<Map<String, Object>>();
-		setProperties = new TestSortedSet<Map<String, Object>>();
+		updateProperties = new TestIdentitySet<Map<String, Object>>();
 
 		collectionTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
 		listTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
-		setTuple = new TestSortedSet<Map.Entry<Map<String, Object>, BaseService>>();
+		updateTuple = new TestIdentitySet<Map.Entry<Map<String, Object>, BaseService>>();
 	}
 
 	public BaseService getService() {
@@ -111,7 +111,7 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<BaseService> getCollectionSubtypeService() {
-		return setService;
+		return updateService;
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionReference() {
@@ -123,7 +123,7 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionSubtypeReference() {
-		return setReference;
+		return updateReference;
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionServiceObjects() {
@@ -135,7 +135,7 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionSubtypeServiceObjects() {
-		return setServiceObjects;
+		return updateServiceObjects;
 	}
 
 	public Collection<Map<String, Object>> getCollectionProperties() {
@@ -147,7 +147,7 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Map<String, Object>> getCollectionSubtypeProperties() {
-		return setProperties;
+		return updateProperties;
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionTuple() {
@@ -159,6 +159,6 @@ public class NonInstanceFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionSubtypeTuple() {
-		return setTuple;
+		return updateTuple;
 	}
 }

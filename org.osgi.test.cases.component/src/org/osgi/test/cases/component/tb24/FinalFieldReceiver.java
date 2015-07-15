@@ -28,9 +28,9 @@ import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.MultipleFieldTestService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
+import org.osgi.test.cases.component.service.TestIdentitySet;
 import org.osgi.test.cases.component.service.TestList;
 import org.osgi.test.cases.component.service.TestSet;
-import org.osgi.test.cases.component.service.TestSortedSet;
 
 public class FinalFieldReceiver extends AbstractFieldReceiver
 		implements ScalarFieldTestService<BaseService>, MultipleFieldTestService<BaseService> {
@@ -42,40 +42,40 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	private final Map.Entry<Map<String, Object>, BaseService>	tuple			= null;
 	private final Collection<BaseService>									collectionService;
 	private final List<BaseService>											listService;
-	private final Set<BaseService>											setService;
+	private final Set<BaseService>											updateService;
 	private final Collection<ServiceReference<BaseService>>					collectionReference;
 	private final List<ServiceReference<BaseService>>						listReference;
-	private final Set<ServiceReference<BaseService>>						setReference;
+	private final Set<ServiceReference<BaseService>>						updateReference;
 	private final Collection<ComponentServiceObjects<BaseService>>			collectionServiceObjects;
 	private final List<ComponentServiceObjects<BaseService>>				listServiceObjects;
-	private final Set<ComponentServiceObjects<BaseService>>					setServiceObjects;
+	private final Set<ComponentServiceObjects<BaseService>>					updateServiceObjects;
 	private final Collection<Map<String, Object>>							collectionProperties;
 	private final List<Map<String, Object>>									listProperties;
-	private final Set<Map<String, Object>>									setProperties;
+	private final Set<Map<String, Object>>									updateProperties;
 	private final Collection<Map.Entry<Map<String, Object>, BaseService>>	collectionTuple;
 	private final List<Map.Entry<Map<String, Object>, BaseService>>			listTuple;
-	private final Set<Map.Entry<Map<String, Object>, BaseService>>			setTuple;
+	private final Set<Map.Entry<Map<String, Object>, BaseService>>			updateTuple;
 	
 	public FinalFieldReceiver() {
 		collectionService = new TestList<BaseService>();
 		listService = new TestList<BaseService>();
-		setService = new TestSet<BaseService>();
+		updateService = new TestSet<BaseService>();
 
 		collectionReference = new TestList<ServiceReference<BaseService>>();
 		listReference = new TestList<ServiceReference<BaseService>>();
-		setReference = new TestSortedSet<ServiceReference<BaseService>>();
+		updateReference = new TestIdentitySet<ServiceReference<BaseService>>();
 
 		collectionServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
 		listServiceObjects = new TestList<ComponentServiceObjects<BaseService>>();
-		setServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
+		updateServiceObjects = new TestSet<ComponentServiceObjects<BaseService>>();
 
 		collectionProperties = new TestList<Map<String, Object>>();
 		listProperties = new TestList<Map<String, Object>>();
-		setProperties = new TestSortedSet<Map<String, Object>>();
+		updateProperties = new TestIdentitySet<Map<String, Object>>();
 
 		collectionTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
 		listTuple = new TestList<Map.Entry<Map<String, Object>, BaseService>>();
-		setTuple = new TestSortedSet<Map.Entry<Map<String, Object>, BaseService>>();
+		updateTuple = new TestIdentitySet<Map.Entry<Map<String, Object>, BaseService>>();
 	}
 
 	public BaseService getService() {
@@ -111,7 +111,7 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<BaseService> getCollectionSubtypeService() {
-		return setService;
+		return updateService;
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionReference() {
@@ -123,7 +123,7 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ServiceReference<BaseService>> getCollectionSubtypeReference() {
-		return setReference;
+		return updateReference;
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionServiceObjects() {
@@ -135,7 +135,7 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<ComponentServiceObjects<BaseService>> getCollectionSubtypeServiceObjects() {
-		return setServiceObjects;
+		return updateServiceObjects;
 	}
 
 	public Collection<Map<String, Object>> getCollectionProperties() {
@@ -147,7 +147,7 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Map<String, Object>> getCollectionSubtypeProperties() {
-		return setProperties;
+		return updateProperties;
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionTuple() {
@@ -159,6 +159,6 @@ public class FinalFieldReceiver extends AbstractFieldReceiver
 	}
 
 	public Collection<Entry<Map<String, Object>, BaseService>> getCollectionSubtypeTuple() {
-		return setTuple;
+		return updateTuple;
 	}
 }

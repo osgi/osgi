@@ -20,20 +20,23 @@ package org.osgi.test.cases.component.service;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
-public class TestSet<E> extends AbstractSet<E> /**/ implements Set<E> {
-	private final Set<E> set;
-	private final StringBuffer	ops;
+public class TestIdentitySet<E> extends AbstractSet<E> /**/ implements Set<E> {
+	private final Map<E, Boolean>	map;
+	private final Set<E>			set;
+	private final StringBuffer		ops;
 
-	public TestSet() {
-		set = Collections.synchronizedSet(new LinkedHashSet<E>());
+	public TestIdentitySet() {
+		map = Collections.synchronizedMap(new IdentityHashMap<E, Boolean>());
+		set = map.keySet();
 		ops = new StringBuffer();
 	}
 
-	public TestSet(Collection< ? extends E> var0) {
+	public TestIdentitySet(Collection< ? extends E> var0) {
 		this();
 		addAll(var0);
 	}
@@ -44,28 +47,28 @@ public class TestSet<E> extends AbstractSet<E> /**/ implements Set<E> {
 
 	public boolean add(E var0) {
 		ops.append("add");
-		boolean result = set.add(var0);
-//		System.out.printf("TestSet[%X].add(%s) = %b\n", System.identityHashCode(this), var0, result);
+		boolean result = map.put(var0, Boolean.TRUE) == null;
+//		System.out.printf("TestIdentitySet[%X].add(%s) = %b\n", System.identityHashCode(this), var0, result);
 		return result;
 	}
 
 	public boolean remove(Object var0) {
 		ops.append("remove");
-		boolean result = set.remove(var0);
-//		System.out.printf("TestSet[%X].remove(%s) = %b\n", System.identityHashCode(this), var0, result);
+		boolean result = map.remove(var0) != null;
+//		System.out.printf("TestIdentitySet[%X].remove(%s) = %b\n", System.identityHashCode(this), var0, result);
 		return result;
 	}
 
 	public boolean isEmpty() {
-		return set.isEmpty();
+		return map.isEmpty();
 	}
 
 	public int size() {
-		return set.size();
+		return map.size();
 	}
 
 	public boolean contains(Object var0) {
-		return set.contains(var0);
+		return map.containsKey(var0);
 	}
 
 	public Iterator<E> iterator() {
@@ -85,7 +88,7 @@ public class TestSet<E> extends AbstractSet<E> /**/ implements Set<E> {
 	}
 
 	public void clear() {
-		set.clear();
+		map.clear();
 	}
 
 	public Object[] toArray() {
