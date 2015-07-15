@@ -5874,7 +5874,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no service collection", cs1);
 				assertEquals("wrong number of elements in service collection", 0, cs1.size());
 				assertFalse("service collection not replaced", cs1 instanceof TestList);
-				assertTrue("service collection not mutable", cs1.add(c1));
+				assertTrue("service collection not mutable", cs1.add(MockFactory.newMock(BaseService.class, null)));
 				Collection<ServiceReference<BaseService>> cr1 = t1.getCollectionReference();
 				assertNotNull("no service reference collection", cr1);
 				assertEquals("wrong number of elements in service reference collection", 0, cr1.size());
@@ -5901,7 +5901,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no service list", ls1);
 				assertEquals("wrong number of elements in service list", 0, ls1.size());
 				assertFalse("service list not replaced", ls1 instanceof TestList);
-				assertTrue("service list not mutable", ls1.add(c1));
+				assertTrue("service list not mutable", ls1.add(MockFactory.newMock(BaseService.class, null)));
 				List<ServiceReference<BaseService>> lr1 = t1.getListReference();
 				assertNotNull("no service reference list", lr1);
 				assertEquals("wrong number of elements in service reference list", 0, lr1.size());
@@ -5917,7 +5917,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				assertNotNull("no service properties list", lp1);
 				assertEquals("wrong number of elements in service properties list", 0, lp1.size());
 				assertFalse("service properties list not replaced", lp1 instanceof TestList);
-				assertTrue("service properties list not mutable", cp1.add(MockFactory.newMock(Map.class, null)));
+				assertTrue("service properties list not mutable", lp1.add(MockFactory.newMock(Map.class, null)));
 				List<Entry<Map<String, Object>, BaseService>> lt1 = t1.getListTuple();
 				assertNotNull("no service tuple list", lt1);
 				assertEquals("wrong number of elements in service tuple list", 0, lt1.size());
@@ -6675,6 +6675,277 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 						((Comparable<Map<String, Object>>) key).compareTo(properties));
 				assertNotNull("tuple value null", tuple.getValue());
 				assertSame("tuple value wrong", c1, tuple.getValue());
+
+			}
+			finally {
+				comp1Tracker.close();
+				test1Tracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb24);
+		}
+	}
+
+	public void testOptionalDynamicMultipleFieldReference130() throws Exception {
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb24 = installBundle("tb24.jar", false);
+		assertNotNull("tb24 failed to install", tb24);
+
+		final String NAME = TEST_CASE_ROOT + ".tb24.OptionalDynamicMultipleFieldReceiver";
+
+		try {
+			tb24.start();
+
+			ComponentDescriptionDTO description1 = scr.getComponentDescriptionDTO(tb24,
+					"org.osgi.test.cases.component.tb24.Ranking10");
+			assertNotNull("null description1", description1);
+			assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+			Filter comp1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + BaseService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=org.osgi.test.cases.component.tb24.Ranking10))");
+			Filter test1Filter = getContext()
+					.createFilter("(&(" + Constants.OBJECTCLASS + "=" + MultipleFieldTestService.class.getName() + ")("
+							+ ComponentConstants.COMPONENT_NAME + "=" + NAME + "))");
+			ServiceTracker<BaseService, BaseService> comp1Tracker = new ServiceTracker<BaseService, BaseService>(
+					getContext(), comp1Filter, null);
+			ServiceTracker<MultipleFieldTestService<BaseService>, MultipleFieldTestService<BaseService>> test1Tracker = new ServiceTracker<MultipleFieldTestService<BaseService>, MultipleFieldTestService<BaseService>>(
+					getContext(), test1Filter, null);
+			try {
+				comp1Tracker.open();
+				test1Tracker.open();
+				BaseService c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNull("found comp1", c1);
+				MultipleFieldTestService<BaseService> t1 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t1);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
+
+				Collection<BaseService> cs1 = t1.getCollectionService();
+				assertNotNull("no service collection", cs1);
+				assertFalse("service collection not replaced", cs1 instanceof TestList);
+				assertEquals("wrong number of elements in service collection", 0, cs1.size());
+				Collection<ServiceReference<BaseService>> cr1 = t1.getCollectionReference();
+				assertNotNull("no service reference collection", cr1);
+				assertFalse("service reference collection not replaced", cr1 instanceof TestList);
+				assertEquals("wrong number of elements in service reference collection", 0, cr1.size());
+				Collection<ComponentServiceObjects<BaseService>> co1 = t1.getCollectionServiceObjects();
+				assertNotNull("no service objects collection", co1);
+				assertFalse("service objects collection not replaced", co1 instanceof TestList);
+				assertEquals("wrong number of elements in service objects collection", 0, co1.size());
+				Collection<Map<String, Object>> cp1 = t1.getCollectionProperties();
+				assertNotNull("no service properties collection", cp1);
+				assertFalse("service properties collection not replaced", cp1 instanceof TestList);
+				assertEquals("wrong number of elements in service properties collection", 0, cp1.size());
+				Collection<Entry<Map<String, Object>, BaseService>> ct1 = t1.getCollectionTuple();
+				assertNotNull("no service tuple collection", ct1);
+				assertFalse("service tuple collection not replaced", ct1 instanceof TestList);
+				assertEquals("wrong number of elements in service tuple collection", 0, ct1.size());
+
+				List<BaseService> ls1 = t1.getListService();
+				assertNotNull("no service list", ls1);
+				assertFalse("service list not replaced", ls1 instanceof TestList);
+				assertEquals("wrong number of elements in service list", 0, ls1.size());
+				List<ServiceReference<BaseService>> lr1 = t1.getListReference();
+				assertNotNull("no service reference list", lr1);
+				assertFalse("service reference list not replaced", lr1 instanceof TestList);
+				assertEquals("wrong number of elements in service reference list", 0, lr1.size());
+				List<ComponentServiceObjects<BaseService>> lo1 = t1.getListServiceObjects();
+				assertNotNull("no service objects list", lo1);
+				assertFalse("service objects list not replaced", lo1 instanceof TestList);
+				assertEquals("wrong number of elements in service objects list", 0, lo1.size());
+				List<Map<String, Object>> lp1 = t1.getListProperties();
+				assertNotNull("no service properties list", lp1);
+				assertFalse("service properties list not replaced", lp1 instanceof TestList);
+				assertEquals("wrong number of elements in service properties list", 0, lp1.size());
+				List<Entry<Map<String, Object>, BaseService>> lt1 = t1.getListTuple();
+				assertNotNull("no service tuple list", lt1);
+				assertFalse("service tuple list not replaced", lt1 instanceof TestList);
+				assertEquals("wrong number of elements in service tuple list", 0, lt1.size());
+
+				Collection<BaseService> ss1 = t1.getCollectionSubtypeService();
+				assertNotNull("no service collection subtype", ss1);
+				assertTrue("service collection subtype replaced", ss1 instanceof TestSet);
+				assertEquals("wrong number of elements in service collection subtype", 0, ss1.size());
+				Collection<ServiceReference<BaseService>> sr1 = t1.getCollectionSubtypeReference();
+				assertNotNull("no service reference collection subtype", sr1);
+				assertEquals("wrong number of elements in service reference collection subtype", 0, sr1.size());
+				Collection<ComponentServiceObjects<BaseService>> so1 = t1.getCollectionSubtypeServiceObjects();
+				assertNotNull("no service objects collection subtype", so1);
+				assertEquals("wrong number of elements in service objects collection subtype", 0, so1.size());
+				Collection<Map<String, Object>> sp1 = t1.getCollectionSubtypeProperties();
+				assertNotNull("no service properties collection subtype", sp1);
+				assertTrue("service properties collection subtype not replaced", sp1 instanceof TestIdentitySet);
+				assertEquals("wrong number of elements in service properties collection subtype", 0, sp1.size());
+				Collection<Entry<Map<String, Object>, BaseService>> st1 = t1.getCollectionSubtypeTuple();
+				assertNotNull("no service tuple collection subtype", st1);
+				assertTrue("service tuple collection subtype not replaced", st1 instanceof TestIdentitySet);
+				assertEquals("wrong number of elements in service tuple collection subtype", 0, st1.size());
+
+				Promise<Void> p = scr.enableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertTrue("description1 is not enabled", scr.isComponentEnabled(description1));
+
+				c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing comp1", c1);
+				MultipleFieldTestService<BaseService> t2 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t2);
+				assertSame("reactivated", t1, t2);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
+
+				Collection<BaseService> cs2 = t1.getCollectionService();
+				assertNotNull("no service collection", cs2);
+				assertNotSame("service collection same", cs1, cs2);
+				assertEquals("wrong number of elements in service collection", 1, cs2.size());
+				Collection<ServiceReference<BaseService>> cr2 = t1.getCollectionReference();
+				assertNotNull("no service reference collection", cr2);
+				assertNotSame("service reference collection same", cr1, cr2);
+				assertEquals("wrong number of elements in service reference collection", 1, cr2.size());
+				Collection<ComponentServiceObjects<BaseService>> co2 = t1.getCollectionServiceObjects();
+				assertNotNull("no service objects collection", co2);
+				assertNotSame("service objects collection same", co1, co2);
+				assertEquals("wrong number of elements in service objects collection", 1, co2.size());
+				Collection<Map<String, Object>> cp2 = t1.getCollectionProperties();
+				assertNotNull("no service properties collection", cp2);
+				assertNotSame("service properties collection same", cp1, cp2);
+				assertEquals("wrong number of elements in service properties collection", 1, cp2.size());
+				Collection<Entry<Map<String, Object>, BaseService>> ct2 = t1.getCollectionTuple();
+				assertNotNull("no service tuple collection", ct2);
+				assertNotSame("service tuple collection same", ct1, ct2);
+				assertEquals("wrong number of elements in service tuple collection", 1, ct2.size());
+
+				List<BaseService> ls2 = t1.getListService();
+				assertNotNull("no service list", ls2);
+				assertNotSame("service list same", ls1, ls2);
+				assertEquals("wrong number of elements in service list", 1, ls2.size());
+				List<ServiceReference<BaseService>> lr2 = t1.getListReference();
+				assertNotNull("no service reference list", lr2);
+				assertNotSame("service reference list same", lr1, lr2);
+				assertEquals("wrong number of elements in service reference list", 1, lr2.size());
+				List<ComponentServiceObjects<BaseService>> lo2 = t1.getListServiceObjects();
+				assertNotNull("no service objects list", lo2);
+				assertNotSame("service objects list same", lo1, lo2);
+				assertEquals("wrong number of elements in service objects list", 1, lo2.size());
+				List<Map<String, Object>> lp2 = t1.getListProperties();
+				assertNotNull("no service properties list", lp2);
+				assertNotSame("service properties list same", lp1, lp2);
+				assertEquals("wrong number of elements in service properties list", 1, lp2.size());
+				List<Entry<Map<String, Object>, BaseService>> lt2 = t1.getListTuple();
+				assertNotNull("no service tuple list", lt2);
+				assertNotSame("service tuple list same", lt1, lt2);
+				assertEquals("wrong number of elements in service tuple list", 1, lt2.size());
+
+				Collection<BaseService> ss2 = t1.getCollectionSubtypeService();
+				assertNotNull("no service collection subtype", ss2);
+				assertSame("service collection subtype not same", ss1, ss2);
+				assertEquals("wrong number of elements in service collection subtype", 1, ss2.size());
+				Collection<ServiceReference<BaseService>> sr2 = t1.getCollectionSubtypeReference();
+				assertNotNull("no service reference collection subtype", sr2);
+				assertSame("service reference collection subtype not same", sr1, sr2);
+				assertEquals("wrong number of elements in service reference collection subtype", 1, sr2.size());
+				Collection<ComponentServiceObjects<BaseService>> so2 = t1.getCollectionSubtypeServiceObjects();
+				assertNotNull("no service objects collection subtype", so2);
+				assertSame("service objects collection subtype not same", so1, so2);
+				assertEquals("wrong number of elements in service objects collection subtype", 1, so2.size());
+				Collection<Map<String, Object>> sp2 = t1.getCollectionSubtypeProperties();
+				assertNotNull("no service properties collection subtype", sp2);
+				assertSame("service properties collection subtype not same", sp1, sp2);
+				assertEquals("wrong number of elements in service properties collection subtype", 1, sp2.size());
+				Collection<Entry<Map<String, Object>, BaseService>> st2 = t1.getCollectionSubtypeTuple();
+				assertNotNull("no service tuple collection subtype", st2);
+				assertSame("service tuple collection subtype not same", st1, st2);
+				assertEquals("wrong number of elements in service tuple collection subtype", 1, st2.size());
+
+				p = scr.disableComponent(description1);
+				p.getValue(); // wait for state change to complete
+				assertFalse("description1 is enabled", scr.isComponentEnabled(description1));
+
+				c1 = comp1Tracker.waitForService(SLEEP * 3);
+				assertNull("found comp1", c1);
+				MultipleFieldTestService<BaseService> t3 = test1Tracker.waitForService(SLEEP * 3);
+				assertNotNull("missing test1", t3);
+				assertSame("reactivated", t1, t3);
+				assertEquals("wrong activation count", 1, t1.getActivationCount());
+				assertEquals("wrong modification count", 0, t1.getModificationCount());
+				assertEquals("wrong deactivation count", 0, t1.getDeactivationCount());
+
+				Collection<BaseService> cs3 = t1.getCollectionService();
+				assertNotNull("no service collection", cs3);
+				assertNotSame("service collection same", cs1, cs3);
+				assertNotSame("service collection same", cs2, cs3);
+				assertEquals("wrong number of elements in service collection", 0, cs3.size());
+				Collection<ServiceReference<BaseService>> cr3 = t1.getCollectionReference();
+				assertNotNull("no service reference collection", cr3);
+				assertNotSame("service reference collection same", cr1, cr3);
+				assertNotSame("service reference collection same", cr2, cr3);
+				assertEquals("wrong number of elements in service reference collection", 0, cr3.size());
+				Collection<ComponentServiceObjects<BaseService>> co3 = t1.getCollectionServiceObjects();
+				assertNotNull("no service objects collection", co3);
+				assertNotSame("service objects collection same", co1, co3);
+				assertNotSame("service objects collection same", co2, co3);
+				assertEquals("wrong number of elements in service objects collection", 0, co3.size());
+				Collection<Map<String, Object>> cp3 = t1.getCollectionProperties();
+				assertNotNull("no service properties collection", cp3);
+				assertNotSame("service properties collection same", cp1, cp3);
+				assertNotSame("service properties collection same", cp2, cp3);
+				assertEquals("wrong number of elements in service properties collection", 0, cp3.size());
+				Collection<Entry<Map<String, Object>, BaseService>> ct3 = t1.getCollectionTuple();
+				assertNotNull("no service tuple collection", ct3);
+				assertNotSame("service tuple collection same", ct1, ct3);
+				assertNotSame("service tuple collection same", ct2, ct3);
+				assertEquals("wrong number of elements in service tuple collection", 0, ct3.size());
+
+				List<BaseService> ls3 = t1.getListService();
+				assertNotNull("no service list", ls3);
+				assertNotSame("service list same", ls1, ls3);
+				assertNotSame("service list same", ls2, ls3);
+				assertEquals("wrong number of elements in service list", 0, ls3.size());
+				List<ServiceReference<BaseService>> lr3 = t1.getListReference();
+				assertNotNull("no service reference list", lr3);
+				assertNotSame("service reference list same", lr1, lr3);
+				assertNotSame("service reference list same", lr2, lr3);
+				assertEquals("wrong number of elements in service reference list", 0, lr3.size());
+				List<ComponentServiceObjects<BaseService>> lo3 = t1.getListServiceObjects();
+				assertNotNull("no service objects list", lo3);
+				assertNotSame("service objects list same", lo1, lo3);
+				assertNotSame("service objects list same", lo2, lo3);
+				assertEquals("wrong number of elements in service objects list", 0, lo3.size());
+				List<Map<String, Object>> lp3 = t1.getListProperties();
+				assertNotNull("no service properties list", lp3);
+				assertNotSame("service properties list same", lp1, lp3);
+				assertNotSame("service properties list same", lp2, lp3);
+				assertEquals("wrong number of elements in service properties list", 0, lp3.size());
+				List<Entry<Map<String, Object>, BaseService>> lt3 = t1.getListTuple();
+				assertNotNull("no service tuple list", lt3);
+				assertNotSame("service tuple list same", lt1, lt3);
+				assertNotSame("service tuple list same", lt2, lt3);
+				assertEquals("wrong number of elements in service tuple list", 0, lt3.size());
+
+				Collection<BaseService> ss3 = t1.getCollectionSubtypeService();
+				assertNotNull("no service collection subtype", ss3);
+				assertSame("service collection subtype not same", ss1, ss3);
+				assertEquals("wrong number of elements in service collection subtype", 0, ss3.size());
+				Collection<ServiceReference<BaseService>> sr3 = t1.getCollectionSubtypeReference();
+				assertNotNull("no service reference collection subtype", sr3);
+				assertSame("service reference collection subtype not same", sr1, sr3);
+				assertEquals("wrong number of elements in service reference collection subtype", 0, sr3.size());
+				Collection<ComponentServiceObjects<BaseService>> so3 = t1.getCollectionSubtypeServiceObjects();
+				assertNotNull("no service objects collection subtype", so3);
+				assertSame("service objects collection subtype not same", so1, so3);
+				assertEquals("wrong number of elements in service objects collection subtype", 0, so3.size());
+				Collection<Map<String, Object>> sp3 = t1.getCollectionSubtypeProperties();
+				assertNotNull("no service properties collection subtype", sp3);
+				assertSame("service properties collection subtype not same", sp1, sp3);
+				assertEquals("wrong number of elements in service properties collection subtype", 0, sp3.size());
+				Collection<Entry<Map<String, Object>, BaseService>> st3 = t1.getCollectionSubtypeTuple();
+				assertNotNull("no service tuple collection subtype", st3);
+				assertSame("service tuple collection subtype not same", st1, st3);
+				assertEquals("wrong number of elements in service tuple collection subtype", 0, st3.size());
 
 			}
 			finally {
