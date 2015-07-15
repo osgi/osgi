@@ -1,4 +1,4 @@
-package org.osgi.test.cases.http.whiteboard.tb2;
+package org.osgi.test.cases.http.whiteboard.junit;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
