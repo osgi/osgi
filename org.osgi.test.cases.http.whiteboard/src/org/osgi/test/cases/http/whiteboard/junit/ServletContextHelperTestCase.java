@@ -17,6 +17,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
+import javax.servlet.SessionCookieConfig;
 import javax.servlet.http.HttpServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -977,10 +978,14 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		servletContext1.setAttribute("attribute1", "value1");
 		assertTrue(Collections.list(servletContext1.getAttributeNames()).contains("attribute1"));
 		assertNull(servletContext2.getAttribute("attribute1"));
+		servletContext1.removeAttribute("attribute1");
+		assertNull(servletContext1.getAttribute("attribute1"));
 
 		servletContext2.setAttribute("attribute2", "value2");
 		assertTrue(Collections.list(servletContext2.getAttributeNames()).contains("attribute2"));
 		assertNull(servletContext1.getAttribute("attribute2"));
+		servletContext2.removeAttribute("attribute2");
+		assertNull(servletContext2.getAttribute("attribute2"));
 	}
 
 	public void test_140_2_6_getClassLoader() throws Exception {
@@ -1259,6 +1264,124 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		servletContext.getResourcePaths("META-INF/");
 
 		assertTrue(invoked.get());
+	}
+
+	public void test_140_2_6_getServletContextName() throws Exception {
+		test_140_2_7to8();
+	}
+
+	public void test_140_2_6_getSessionCookieConfig() throws Exception {
+		BundleContext context = getContext();
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		SessionCookieConfig sessionCookieConfig = servletContext.getSessionCookieConfig();
+
+		assertNotNull(sessionCookieConfig);
+
+		try {
+			sessionCookieConfig.setComment("test");
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setComment("test");
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setDomain("test");
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setHttpOnly(true);
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setMaxAge(0);
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setName("test");
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setPath("test");
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+
+		try {
+			sessionCookieConfig.setSecure(false);
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+	}
+
+	public void test_140_2_6_setInitParameter() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.setInitParameter(null, null);
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
+	}
+
+	public void test_140_2_6_setSessionTrackingModes() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		try {
+			servletContext.setSessionTrackingModes(null);
+
+			fail();
+		} catch (IllegalStateException ise) {
+		}
 	}
 
 	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
