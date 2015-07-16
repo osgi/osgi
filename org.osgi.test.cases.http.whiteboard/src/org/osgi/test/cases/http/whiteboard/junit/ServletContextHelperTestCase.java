@@ -1,7 +1,9 @@
+
 package org.osgi.test.cases.http.whiteboard.junit;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -1024,17 +1026,39 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 	public void test_140_2_6_getMimeType() throws Exception {
 		BundleContext context = getContext();
-		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+
+		ServletContextHelper servletContextHelper = new ServletContextHelper() {
+
+			@Override
+			public String getMimeType(String name) {
+				invoked.set(Boolean.TRUE);
+
+				return null;
+			}
+
+		};
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context1)");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
 		ServletContext servletContext = sc1.get();
 
 		assertNotNull(servletContext);
 
-		assertNull(servletContext.getMimeType("index.html"));
+		servletContext.getMimeType("index.html");
+
+		assertTrue(invoked.get());
 	}
 
 	public void test_140_2_6_getNamedDispatcher() throws Exception {
@@ -1055,6 +1079,102 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(servletContext);
 
 		RequestDispatcher requestDispatcher = servletContext.getNamedDispatcher("first");
+
+		assertNotNull(requestDispatcher);
+	}
+
+	public void test_140_2_6_getRealPath() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+
+		ServletContextHelper servletContextHelper = new ServletContextHelper() {
+
+			@Override
+			public String getRealPath(String path) {
+				invoked.set(Boolean.TRUE);
+
+				return null;
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context1)");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		servletContext.getRealPath("META-INF/MANIFEST.MF");
+
+		assertTrue(invoked.get());
+	}
+
+	public void test_140_2_6_getResource() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+
+		ServletContextHelper servletContextHelper = new ServletContextHelper() {
+
+			@Override
+			public URL getResource(String path) {
+				invoked.set(Boolean.TRUE);
+
+				return null;
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context1)");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		servletContext.getResource("META-INF/MANIFEST.MF");
+
+		assertTrue(invoked.get());
+	}
+
+	public void test_140_2_6_getRequestDispatcher() throws Exception {
+		BundleContext context = getContext();
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "first");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/bar/someServlet");
 
 		assertNotNull(requestDispatcher);
 	}
@@ -1095,7 +1215,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 	private String getSymbolicName(ClassLoader classLoader) throws IOException {
 		InputStream inputStream = classLoader.getResourceAsStream(
-			"META-INF/MANIFEST.MF");
+				"META-INF/MANIFEST.MF");
 
 		Manifest manifest = new Manifest(inputStream);
 
