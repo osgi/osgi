@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.Manifest;
 import javax.servlet.RequestDispatcher;
@@ -1036,13 +1037,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_6_getMimeType() throws Exception {
 		BundleContext context = getContext();
 
-		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		ServletContextHelper servletContextHelper = new ServletContextHelper() {
 
 			@Override
 			public String getMimeType(String name) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}
@@ -1095,13 +1096,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_6_getRealPath() throws Exception {
 		BundleContext context = getContext();
 
-		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		ServletContextHelper servletContextHelper = new ServletContextHelper() {
 
 			@Override
 			public String getRealPath(String path) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}
@@ -1132,13 +1133,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_6_getResource() throws Exception {
 		BundleContext context = getContext();
 
-		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		ServletContextHelper servletContextHelper = new ServletContextHelper() {
 
 			@Override
 			public URL getResource(String path) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}
@@ -1191,20 +1192,20 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_6_getResourceAsStream() throws Exception {
 		BundleContext context = getContext();
 
-		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		ServletContextHelper servletContextHelper = new ServletContextHelper() {
 
 			@Override
 			public Set<String> getResourcePaths(String path) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}
 
 			@Override
 			public URL getResource(String path) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}
@@ -1235,13 +1236,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 	public void test_140_2_6_getResourcePaths() throws Exception {
 		BundleContext context = getContext();
 
-		final AtomicReference<Boolean> invoked = new AtomicReference<Boolean>(Boolean.FALSE);
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
 		ServletContextHelper servletContextHelper = new ServletContextHelper() {
 
 			@Override
 			public Set<String> getResourcePaths(String path) {
-				invoked.set(Boolean.TRUE);
+				invoked.set(true);
 
 				return null;
 			}

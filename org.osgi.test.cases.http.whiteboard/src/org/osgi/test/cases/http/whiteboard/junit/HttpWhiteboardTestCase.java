@@ -16,10 +16,12 @@
 package org.osgi.test.cases.http.whiteboard.junit;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,6 +42,172 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 	@Override
 	protected String[] getBundlePaths() {
 		return new String[] {"/tb1.jar", "/tb2.jar"};
+	}
+
+	public void test_140_4_4to5() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				response.getWriter().write("a");
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] {"/a", "/b"});
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals("a", request("a"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals("a", request("b"));
+		assertTrue(invoked.get());
+	}
+
+	public void test_140_4_9() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				response.getWriter().write("a");
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals("a", request("a"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals("a", request("b.html"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals("a", request("some/path/b.html"));
+		assertTrue(invoked.get());
+		assertEquals("404", request("", null).get("responseCode").get(0));
+	}
+
+	public void test_140_4_10() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				response.getWriter().write("a");
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "*.html");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals("a", request("a.html"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals("a", request("b.html"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals("a", request("some/path/b.html"));
+		assertTrue(invoked.get());
+		assertEquals("404", request("a.xhtml", null).get("responseCode").get(0));
+		assertEquals("404", request("some/path/a.xhtml", null).get("responseCode").get(0));
+	}
+
+	public void test_140_4_11to13() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				PrintWriter writer = response.getWriter();
+				writer.write(request.getContextPath());
+				writer.write(":");
+				writer.write(request.getServletPath());
+				writer.write(":");
+				writer.write(request.getPathInfo());
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals("::/", request(""));
+		assertTrue(invoked.get());
+		assertEquals("404", request("a.xhtml", null).get("responseCode").get(0));
+		assertEquals("404", request("some/path/a.xhtml", null).get("responseCode").get(0));
+	}
+
+	public void test_140_4_14to15() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				PrintWriter writer = response.getWriter();
+				writer.write(request.getContextPath());
+				writer.write(":");
+				writer.write(request.getServletPath());
+				writer.write(":");
+				writer.write(request.getPathInfo());
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals(":/a.html:", request("a.html"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals(":/a.xhtml:", request("a.xhtml"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals(":/some/path/a.xhtml:", request("some/path/a.xhtml"));
+		assertTrue(invoked.get());
 	}
 
 	public void test_basicServlet() throws Exception {
