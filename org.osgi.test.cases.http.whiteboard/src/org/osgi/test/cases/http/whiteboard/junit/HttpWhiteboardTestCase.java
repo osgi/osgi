@@ -154,11 +154,11 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 				invoked.set(true);
 
 				PrintWriter writer = response.getWriter();
-				writer.write(request.getContextPath());
+				writer.write((request.getContextPath() == null) ? "" : request.getContextPath());
 				writer.write(":");
-				writer.write(request.getServletPath());
+				writer.write((request.getServletPath() == null) ? "" : request.getServletPath());
 				writer.write(":");
-				writer.write(request.getPathInfo());
+				writer.write((request.getPathInfo() == null) ? "" : request.getPathInfo());
 			}
 
 		};
@@ -187,11 +187,11 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 				invoked.set(true);
 
 				PrintWriter writer = response.getWriter();
-				writer.write(request.getContextPath());
+				writer.write((request.getContextPath() == null) ? "" : request.getContextPath());
 				writer.write(":");
-				writer.write(request.getServletPath());
+				writer.write((request.getServletPath() == null) ? "" : request.getServletPath());
 				writer.write(":");
-				writer.write(request.getPathInfo());
+				writer.write((request.getPathInfo() == null) ? "" : request.getPathInfo());
 			}
 
 		};
@@ -207,6 +207,44 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invoked.get());
 		invoked.set(false);
 		assertEquals(":/some/path/a.xhtml:", request("some/path/a.xhtml"));
+		assertTrue(invoked.get());
+	}
+
+	public void test_140_4_16() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		Servlet servlet = new HttpServlet() {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				invoked.set(true);
+
+				PrintWriter writer = response.getWriter();
+				writer.write((request.getContextPath() == null) ? "" : request.getContextPath());
+				writer.write(":");
+				writer.write((request.getServletPath() == null) ? "" : request.getServletPath());
+				writer.write(":");
+				writer.write((request.getPathInfo() == null) ? "" : request.getPathInfo());
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/fee/fi/foo/fum");
+		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+
+		assertEquals(":/a:", request("a"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		assertEquals(":/fee/fi/foo/fum:", request("fee/fi/foo/fum"));
 		assertTrue(invoked.get());
 	}
 
