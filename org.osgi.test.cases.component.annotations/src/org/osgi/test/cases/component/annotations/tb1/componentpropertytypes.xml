@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.annotations.tb1.NameMappingComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.annotations.tb1.NameMappingComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+    </service>
+    <property name="myProperty143" value="xml/myProperty143"/>
+    <property name="new" value="xml/new"/>
+    <property name="my$prop" value="xml/my$prop"/>
+    <property name="dot.prop" value="xml/dot.prop"/>
+    <property name=".secret" value="xml/.secret"/>
+    <property name="another_prop" value="xml/another_prop"/>
+    <property name="three_.prop" value="xml/three_.prop"/>
+    <property name="four._prop" value="xml/four._prop"/>
+    <property name="five..prop" value="xml/five..prop"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.annotations.tb1.AnnotationMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.annotations.tb1.AnnotationMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+    </service>
+    <property name="error" value="xml/error"/>
+    <property name="errors" value="xml/errors"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+    </service>
+    <property name="single" value="org.osgi.test.cases.component.annotations.types.ClassMember"/>
+    <property name="multiple">
+org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent
+org.osgi.test.cases.component.annotations.types.ClassMember
+    </property>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.annotations.tb1.EnumMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.annotations.tb1.EnumMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+    </service>
+    <property name="single" value="ITEM1"/>
+    <property name="multiple">
+AnotherItem
+ITEM1
+    </property>
+</scr:component>
+</root>
