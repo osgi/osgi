@@ -42,6 +42,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.PrototypeServiceFactory;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -84,6 +86,7 @@ import org.osgi.test.cases.component.tb13a.ModifyRegistrator2;
 import org.osgi.test.cases.component.tb6.ActDeactComponent;
 import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
@@ -7350,6 +7353,316 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		finally {
 			uninstallBundle(tb24);
+		}
+	}
+
+	static class BaseServiceImpl implements BaseService {
+		public Dictionary<String, Object> getProperties() {
+			return null;
+		}
+	}
+
+	public void testComponentServiceObjectsSingleton130() throws Exception {
+		trackerBaseService.close(); // Don't mess up BaseService count!
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb25 = installBundle("tb25.jar", false);
+		assertNotNull("tb25 failed to install", tb25);
+
+		Dictionary<String, Object> baseProps = new Hashtable<String, Object>();
+		baseProps.put(ComponentConstants.COMPONENT_NAME, "org.osgi.test.cases.component.tb25.BaseService");
+		BaseService b1 = new BaseServiceImpl();
+		ServiceRegistration<BaseService> baseReg = getContext().registerService(BaseService.class, b1, baseProps);
+		try {
+			tb25.start();
+
+			ComponentDescriptionDTO receiverDesc = scr.getComponentDescriptionDTO(tb25,
+					"org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver");
+			assertNotNull("null receiverDesc", receiverDesc);
+			assertTrue("receiverDesc is not enabled", scr.isComponentEnabled(receiverDesc));
+
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver))");
+			ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>> receiverTracker = new ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>>(
+					getContext(), receiverFilter, null);
+			try {
+				assertNull("wrong number of services", baseReg.getReference().getUsingBundles());
+
+				receiverTracker.open();
+				ServiceReceiver<ComponentServiceObjects<BaseService>> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				ComponentServiceObjects<BaseService> cso = r.getServices().get(0);
+				assertNotNull("missing ComponentServiceObjects", cso);
+				assertEquals("wrong service reference", baseReg.getReference(), cso.getServiceReference());
+
+				assertNotNull("missing base", b1);
+				for (int i = 0; i < 12; i++) {
+					assertSame("wrong service", b1, cso.getService());
+				}
+				assertEquals("wrong number of services", 1, baseReg.getReference().getUsingBundles().length);
+
+				try {
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					failException("unget of invalid service succeeded", IllegalArgumentException.class);
+				}
+				catch (IllegalArgumentException e) {
+					// expected
+				}
+				for (int i = 0; i < 12; i++) {
+					cso.ungetService(b1);
+				}
+				assertNull("wrong number of services", baseReg.getReference().getUsingBundles());
+				b1 = cso.getService();
+				assertNotNull("missing base", b1);
+				for (int i = 0; i < 11; i++) {
+					assertSame("wrong service", b1, cso.getService());
+				}
+				assertEquals("wrong number of services", 1, baseReg.getReference().getUsingBundles().length);
+
+				baseProps.put(ComponentConstants.COMPONENT_NAME, "unbind");
+				baseReg.setProperties(baseProps);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+				assertNull("base not unbound", r.getServices().get(0));
+				assertNull("wrong number of services", baseReg.getReference().getUsingBundles());
+
+				assertNull("returned service object for unbound service", cso.getService());
+
+				Promise<Void> p = scr.disableComponent(receiverDesc);
+				p.getValue(); // wait for state change to complete
+				assertFalse("receiverDesc is enabled", scr.isComponentEnabled(receiverDesc));
+				try {
+					cso.getService();
+					failException("get on deactivated component succeeded", IllegalStateException.class);
+				}
+				catch (IllegalStateException e) {
+					// expected
+				}
+			}
+			finally {
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb25);
+			baseReg.unregister();
+		}
+	}
+
+	static class BaseServiceServiceFactory implements ServiceFactory<BaseService> {
+		final AtomicInteger counter;
+
+		public BaseServiceServiceFactory(AtomicInteger counter) {
+			this.counter = counter;
+		}
+
+		public BaseService getService(Bundle bundle, ServiceRegistration<BaseService> registration) {
+			counter.incrementAndGet();
+			BaseService service = new BaseServiceImpl();
+			System.out.printf("getService: %s[%X]\n",
+					registration.getReference().getProperty(ComponentConstants.COMPONENT_NAME),
+					System.identityHashCode(service));
+			return service;
+		}
+
+		public void ungetService(Bundle bundle, ServiceRegistration<BaseService> registration, BaseService service) {
+			if (service instanceof BaseServiceImpl) {
+				System.out.printf("ungetService: %s[%X]\n",
+						registration.getReference().getProperty(ComponentConstants.COMPONENT_NAME),
+						System.identityHashCode(service));
+				counter.decrementAndGet();
+			}
+		}
+	}
+
+	public void testComponentServiceObjectsBundle130() throws Exception {
+		trackerBaseService.close(); // Don't mess up BaseService count!
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb25 = installBundle("tb25.jar", false);
+		assertNotNull("tb25 failed to install", tb25);
+
+		Dictionary<String, Object> baseProps = new Hashtable<String, Object>();
+		baseProps.put(ComponentConstants.COMPONENT_NAME, "org.osgi.test.cases.component.tb25.BaseService");
+		AtomicInteger counter = new AtomicInteger();
+		BaseServiceServiceFactory f1 = new BaseServiceServiceFactory(counter);
+		ServiceRegistration<BaseService> baseReg = getContext().registerService(BaseService.class, f1, baseProps);
+		try {
+			tb25.start();
+
+			ComponentDescriptionDTO receiverDesc = scr.getComponentDescriptionDTO(tb25,
+					"org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver");
+			assertNotNull("null receiverDesc", receiverDesc);
+			assertTrue("receiverDesc is not enabled", scr.isComponentEnabled(receiverDesc));
+
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver))");
+			ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>> receiverTracker = new ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>>(
+					getContext(), receiverFilter, null);
+			try {
+				assertEquals("wrong number of services", 0, counter.get());
+
+				receiverTracker.open();
+				ServiceReceiver<ComponentServiceObjects<BaseService>> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				ComponentServiceObjects<BaseService> cso = r.getServices().get(0);
+				assertNotNull("missing ComponentServiceObjects", cso);
+				assertEquals("wrong service reference", baseReg.getReference(), cso.getServiceReference());
+
+				BaseService b1 = cso.getService();
+				assertNotNull("missing base", b1);
+				for (int i = 0; i < 11; i++) {
+					assertSame("wrong service", b1, cso.getService());
+				}
+				assertEquals("wrong number of services", 1, counter.get());
+				try {
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					failException("unget of invalid service succeeded", IllegalArgumentException.class);
+				}
+				catch (IllegalArgumentException e) {
+					// expected
+				}
+				for (int i = 0; i < 12; i++) {
+					cso.ungetService(b1);
+				}
+
+				assertEquals("wrong number of services", 0, counter.get());
+				b1 = cso.getService();
+				assertNotNull("missing base", b1);
+				for (int i = 0; i < 11; i++) {
+					assertSame("wrong service", b1, cso.getService());
+				}
+				assertEquals("wrong number of services", 1, counter.get());
+
+				baseProps.put(ComponentConstants.COMPONENT_NAME, "unbind");
+				baseReg.setProperties(baseProps);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+				assertNull("base not unbound", r.getServices().get(0));
+				assertEquals("wrong number of services", 0, counter.get());
+
+				assertNull("returned service object for unbound service", cso.getService());
+
+				Promise<Void> p = scr.disableComponent(receiverDesc);
+				p.getValue(); // wait for state change to complete
+				assertFalse("receiverDesc is enabled", scr.isComponentEnabled(receiverDesc));
+
+				try {
+					cso.getService();
+					failException("get on deactivated component succeeded", IllegalStateException.class);
+				}
+				catch (IllegalStateException e) {
+					// expected
+				}
+			}
+			finally {
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb25);
+			baseReg.unregister();
+		}
+	}
+
+	static class BaseServicePrototypeServiceFactory extends BaseServiceServiceFactory
+			implements PrototypeServiceFactory<BaseService> {
+		public BaseServicePrototypeServiceFactory(AtomicInteger counter) {
+			super(counter);
+		}
+	}
+
+	public void testComponentServiceObjectsPrototype130() throws Exception {
+		trackerBaseService.close(); // Don't mess up BaseService count!
+		ServiceComponentRuntime scr = scrTracker.getService();
+		assertNotNull("failed to find ServiceComponentRuntime service", scr);
+		Bundle tb25 = installBundle("tb25.jar", false);
+		assertNotNull("tb25 failed to install", tb25);
+
+		Dictionary<String, Object> baseProps = new Hashtable<String, Object>();
+		baseProps.put(ComponentConstants.COMPONENT_NAME, "org.osgi.test.cases.component.tb25.BaseService");
+		AtomicInteger counter = new AtomicInteger();
+		BaseServicePrototypeServiceFactory f1 = new BaseServicePrototypeServiceFactory(counter);
+		ServiceRegistration<BaseService> baseReg = getContext().registerService(BaseService.class, f1, baseProps);
+		try {
+			tb25.start();
+
+			ComponentDescriptionDTO receiverDesc = scr.getComponentDescriptionDTO(tb25,
+					"org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver");
+			assertNotNull("null receiverDesc", receiverDesc);
+			assertTrue("receiverDesc is not enabled", scr.isComponentEnabled(receiverDesc));
+
+			Filter receiverFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
+					+ ServiceReceiver.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
+					+ "=org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver))");
+			ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>> receiverTracker = new ServiceTracker<ServiceReceiver<ComponentServiceObjects<BaseService>>, ServiceReceiver<ComponentServiceObjects<BaseService>>>(
+					getContext(), receiverFilter, null);
+			try {
+				assertEquals("wrong number of services", 0, counter.get());
+
+				receiverTracker.open();
+				ServiceReceiver<ComponentServiceObjects<BaseService>> r = receiverTracker.waitForService(SLEEP * 3);
+				assertNotNull("missing receiver", r);
+				ComponentServiceObjects<BaseService> cso = r.getServices().get(0);
+				assertNotNull("missing ComponentServiceObjects", cso);
+				assertEquals("wrong service reference", baseReg.getReference(), cso.getServiceReference());
+
+				List<BaseService> services = new ArrayList<BaseService>(12);
+				for (int i = 0; i < 12; i++) {
+					BaseService b1 = cso.getService();
+					assertNotNull("missing base", b1);
+					assertFalse("wrong service", services.contains(b1));
+					services.add(b1);
+				}
+				assertEquals("wrong number of services", 12, counter.get());
+				try {
+					cso.ungetService(MockFactory.newMock(BaseService.class, new Object()));
+					failException("unget of invalid service succeeded", IllegalArgumentException.class);
+				}
+				catch (IllegalArgumentException e) {
+					// expected
+				}
+				for (BaseService b1 : services) {
+					cso.ungetService(b1);
+				}
+
+				assertEquals("wrong number of services", 0, counter.get());
+				services = new ArrayList<BaseService>(12);
+				for (int i = 0; i < 12; i++) {
+					BaseService b1 = cso.getService();
+					assertNotNull("missing base", b1);
+					assertFalse("wrong service", services.contains(b1));
+					services.add(b1);
+				}
+				assertEquals("wrong number of services", 12, counter.get());
+
+				baseProps.put(ComponentConstants.COMPONENT_NAME, "unbind");
+				baseReg.setProperties(baseProps);
+				Sleep.sleep(SLEEP * 3); // wait for SCR to react to change
+				assertNull("base not unbound", r.getServices().get(0));
+				assertEquals("wrong number of services", 0, counter.get());
+
+				assertNull("returned service object for unbound service", cso.getService());
+
+				Promise<Void> p = scr.disableComponent(receiverDesc);
+				p.getValue(); // wait for state change to complete
+				assertFalse("receiverDesc is enabled", scr.isComponentEnabled(receiverDesc));
+
+				try {
+					cso.getService();
+					failException("get on deactivated component succeeded", IllegalStateException.class);
+				}
+				catch (IllegalStateException e) {
+					// expected
+				}
+			}
+			finally {
+				receiverTracker.close();
+			}
+		}
+		finally {
+			uninstallBundle(tb25);
+			baseReg.unregister();
 		}
 	}
 
