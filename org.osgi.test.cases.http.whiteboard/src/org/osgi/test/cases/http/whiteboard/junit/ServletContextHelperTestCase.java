@@ -7,10 +7,12 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.Manifest;
 import javax.servlet.RequestDispatcher;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.service.FindHook;
@@ -1382,6 +1385,96 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 			fail();
 		} catch (IllegalStateException ise) {
 		}
+	}
+
+	public void test_table_140_3_HTTP_WHITEBOARD_CONTEXT_SELECT() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		properties.put("some.property", "some.value");
+		properties.put("foo.property", "foo.value");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context2");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context2");
+		properties.put("some.property", "some.value");
+		properties.put("fum.property", "fum.value");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(&(some.property=some.value)(fum.property=fum.value))");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNotNull(servletContext);
+		assertEquals("context2", servletContext.getServletContextName());
+	}
+
+	public void test_table_140_3_HTTP_WHITEBOARD_TARGET() throws Exception {
+		BundleContext context = getContext();
+
+		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
+
+		ServletContext servletContext = sc1.get();
+
+		assertNull(servletContext);
+	}
+
+	public void test_140_3_4to5() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context2");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context2");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context*)");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+
+		final Stack<AtomicReference<ServletContext>> scs = new Stack<AtomicReference<ServletContext>>();
+
+		PrototypeServiceFactory<ServletContextListener> factory = new PrototypeServiceFactory<ServletContextListener>() {
+
+			public ServletContextListener getService(Bundle bundle, ServiceRegistration<ServletContextListener> registration) {
+				return new MockSCL(scs.push(new AtomicReference<ServletContext>()));
+			}
+
+			public void ungetService(Bundle bundle, ServiceRegistration<ServletContextListener> registration, ServletContextListener service) {
+			}
+
+		};
+
+		serviceRegistrations.add(context.registerService(ServletContextListener.class, factory, properties));
+
+		Set<String> names = new HashSet<String>();
+
+		for (AtomicReference<ServletContext> scr : scs) {
+			assertNotNull(scr);
+			ServletContext servletContext = scr.get();
+			assertNotNull(servletContext);
+			names.add(servletContext.getServletContextName());
+		}
+
+		assertTrue(names.contains("context1"));
+		assertTrue(names.contains("context2"));
 	}
 
 	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
