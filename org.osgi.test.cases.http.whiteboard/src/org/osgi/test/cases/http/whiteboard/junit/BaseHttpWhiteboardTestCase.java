@@ -13,36 +13,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.HttpService;
+import org.osgi.service.http.runtime.HttpServiceRuntime;
+import org.osgi.service.http.runtime.dto.ErrorPageDTO;
+import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
+import org.osgi.service.http.runtime.dto.FailedServletDTO;
+import org.osgi.service.http.runtime.dto.RequestInfoDTO;
+import org.osgi.service.http.runtime.dto.ServletContextDTO;
+import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
-	protected abstract String[] getBundlePaths();
+	protected RequestInfoDTO calculateRequestInfoDTO(String string) {
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
-	protected void setUp() throws Exception {
-		for (String bundlePath : getBundlePaths()) {
-			Bundle bundle = install(bundlePath);
-
-			bundle.start();
-
-			bundles.add(bundle);
-		}
-	}
-
-	protected void tearDown() throws Exception {
-		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
-			serviceRegistration.unregister();
-		}
-
-		serviceRegistrations.clear();
-
-		for (Bundle bundle : bundles) {
-			bundle.uninstall();
-		}
-
-		bundles.clear();
+		return httpServiceRuntime.calculateRequestInfoDTO(string);
 	}
 
 	protected String drainInputStream(InputStream is) throws IOException {
@@ -56,6 +48,127 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 			buffer.append(chunk);
 		}
 		return buffer.toString().trim();
+	}
+
+	protected abstract String[] getBundlePaths();
+
+	protected ErrorPageDTO getErrorPageDTOByName(String context, String name) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(context);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (ErrorPageDTO errorPageDTO : servletContextDTO.errorPageDTOs) {
+			if (name.equals(errorPageDTO.name)) {
+				return errorPageDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedServletContextDTO getFailedServletContextDTOByName(String name) {
+		FailedServletContextDTO[] failedServletContextDTOs = getHttpServiceRuntime().getRuntimeDTO().failedServletContextDTOs;
+
+		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
+			if (failedServletContextDTO.name.equals(name)) {
+				return failedServletContextDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedServletDTO getFailedServletDTOByName(String name) {
+		for (FailedServletDTO failedServletDTO : getFailedServletDTOs()) {
+			if (name.equals(failedServletDTO.name)) {
+				return failedServletDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedServletDTO[] getFailedServletDTOs() {
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		return httpServiceRuntime.getRuntimeDTO().failedServletDTOs;
+	}
+
+	protected HttpService getHttpService() {
+		BundleContext context = getContext();
+
+		ServiceReference<HttpService> serviceReference =
+				context.getServiceReference(HttpService.class);
+
+		assertNotNull(serviceReference);
+
+		return context.getService(serviceReference);
+	}
+
+	protected HttpServiceRuntime getHttpServiceRuntime() {
+		BundleContext context = getContext();
+
+		ServiceReference<HttpServiceRuntime> serviceReference =
+				context.getServiceReference(HttpServiceRuntime.class);
+
+		assertNotNull(serviceReference);
+
+		return context.getService(serviceReference);
+	}
+
+	protected ServletContextDTO getServletContextDTOByName(String name) {
+		for (ServletContextDTO servletContextDTO : getServletContextDTOs()) {
+			if (name.equals(servletContextDTO.name)) {
+				return servletContextDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected ServletContextDTO[] getServletContextDTOs() {
+		return getHttpServiceRuntime().getRuntimeDTO().servletContextDTOs;
+	}
+
+	protected ServletDTO getServletDTOByName(String context, String name) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(context);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (ServletDTO servletDTO : servletContextDTO.servletDTOs) {
+			if (name.equals(servletDTO.name)) {
+				return servletDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected URL getServerURL(String path) throws MalformedURLException {
+		if (!path.startsWith("/")) {
+			path = "/" + path;
+		}
+
+		return new URL(
+				"http", getProperty("org.apache.felix.http.host"),
+				getIntegerProperty("org.osgi.service.http.port", 8080), path);
+	}
+
+	protected String getSymbolicName(ClassLoader classLoader) throws IOException {
+		InputStream inputStream = classLoader.getResourceAsStream(
+				"META-INF/MANIFEST.MF");
+
+		Manifest manifest = new Manifest(inputStream);
+
+		return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME);
+	}
+
+	protected void log(String message) {
+		System.out.println(message);
 	}
 
 	protected String request(String path) throws InterruptedException, IOException {
@@ -144,18 +257,28 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		}
 	}
 
-	protected void log(String message) {
-		System.out.println(message);
+	protected void setUp() throws Exception {
+		for (String bundlePath : getBundlePaths()) {
+			Bundle bundle = install(bundlePath);
+
+			bundle.start();
+
+			bundles.add(bundle);
+		}
 	}
 
-	protected URL getServerURL(String path) throws MalformedURLException {
-		if (!path.startsWith("/")) {
-			path = "/" + path;
+	protected void tearDown() throws Exception {
+		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
+			serviceRegistration.unregister();
 		}
 
-		return new URL(
-				"http", getProperty("org.apache.felix.http.host"),
-				getIntegerProperty("org.osgi.service.http.port", 8080), path);
+		serviceRegistrations.clear();
+
+		for (Bundle bundle : bundles) {
+			bundle.uninstall();
+		}
+
+		bundles.clear();
 	}
 
 	protected List<Bundle> bundles = new ArrayList<Bundle>();

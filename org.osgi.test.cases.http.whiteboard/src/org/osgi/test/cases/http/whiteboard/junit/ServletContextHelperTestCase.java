@@ -1,8 +1,6 @@
 
 package org.osgi.test.cases.http.whiteboard.junit;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +13,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.jar.Manifest;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -519,11 +516,11 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/someServlet");
 		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foobar");
+		ServletContextDTO servletContextDTO = getServletContextDTOByName("foobar");
 
 		assertNotNull(servletContextDTO);
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
 		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
 
@@ -559,11 +556,11 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
 		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foobar");
+		ServletContextDTO servletContextDTO = getServletContextDTOByName("foobar");
 
 		assertNotNull(servletContextDTO);
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
 		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
 
@@ -600,13 +597,11 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/bar/someServlet");
 		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foo");
+		ServletContextDTO servletContextDTO = getServletContextDTOByName("foo");
 
 		assertNotNull(servletContextDTO);
 
-		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bar/someServlet");
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/foo/bar/someServlet");
 
 		assertNotNull(requestInfoDTO);
 		assertNotNull(requestInfoDTO.servletDTO);
@@ -639,11 +634,11 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/*");
 		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		ServletContextDTO servletContextDTO = getServletContextDTOByName(httpServiceRuntime, "foo");
+		ServletContextDTO servletContextDTO = getServletContextDTOByName("foo");
 
 		assertNotNull(servletContextDTO);
+
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
 		RequestInfoDTO requestInfoDTO = httpServiceRuntime.calculateRequestInfoDTO("/foo/bars/someServlet");
 
@@ -667,9 +662,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName(httpServiceRuntime, "foo");
+		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName("foo");
 
 		assertNotNull(failedServletContextDTO);
 		assertEquals(
@@ -686,9 +679,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<ServletContextHelper> serviceRegistration = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
 		serviceRegistrations.add(serviceRegistration);
 
-		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
-
-		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName(httpServiceRuntime, "default");
+		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName("default");
 
 		assertNotNull(failedServletContextDTO);
 		assertEquals(
@@ -1476,49 +1467,6 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		assertTrue(names.contains("context1"));
 		assertTrue(names.contains("context2"));
-	}
-
-	private FailedServletContextDTO getFailedServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
-		FailedServletContextDTO[] failedServletContextDTOs = httpServiceRuntime.getRuntimeDTO().failedServletContextDTOs;
-
-		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
-			if (failedServletContextDTO.name.equals(name)) {
-				return failedServletContextDTO;
-			}
-		}
-
-		return null;
-	}
-
-	private HttpServiceRuntime getHttpServiceRuntime() {
-		BundleContext context = getContext();
-
-		ServiceReference<HttpServiceRuntime> serviceReference = context.getServiceReference(HttpServiceRuntime.class);
-
-		assertNotNull(serviceReference);
-
-		return context.getService(serviceReference);
-	}
-
-	private ServletContextDTO getServletContextDTOByName(HttpServiceRuntime httpServiceRuntime, String name) {
-		ServletContextDTO[] servletContextDTOs = httpServiceRuntime.getRuntimeDTO().servletContextDTOs;
-
-		for (ServletContextDTO servletContextDTO : servletContextDTOs) {
-			if (servletContextDTO.name.equals(name)) {
-				return servletContextDTO;
-			}
-		}
-
-		return null;
-	}
-
-	private String getSymbolicName(ClassLoader classLoader) throws IOException {
-		InputStream inputStream = classLoader.getResourceAsStream(
-				"META-INF/MANIFEST.MF");
-
-		Manifest manifest = new Manifest(inputStream);
-
-		return manifest.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME);
 	}
 
 }

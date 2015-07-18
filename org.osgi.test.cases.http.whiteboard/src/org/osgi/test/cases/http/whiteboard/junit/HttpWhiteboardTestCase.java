@@ -17,11 +17,17 @@ package org.osgi.test.cases.http.whiteboard.junit;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.servlet.AsyncContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,12 +35,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.Assert;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.HttpService;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
+import org.osgi.service.http.runtime.dto.DTOConstants;
+import org.osgi.service.http.runtime.dto.ErrorPageDTO;
+import org.osgi.service.http.runtime.dto.FailedServletDTO;
+import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.runtime.dto.RuntimeDTO;
 import org.osgi.service.http.runtime.dto.ServletContextDTO;
+import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
@@ -246,6 +260,349 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		invoked.set(false);
 		assertEquals(":/fee/fi/foo/fum:", request("fee/fi/foo/fum"));
 		assertTrue(invoked.get());
+	}
+
+	public void test_140_4_17to22() throws Exception {
+		BundleContext context = getContext();
+
+		class AServlet extends HttpServlet {
+
+			public AServlet(String content) {
+				this.content = content;
+			}
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				response.getWriter().write(content);
+			}
+
+			private final String	content;
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet("a"), properties);
+		serviceRegistrations.add(srA);
+
+		assertEquals("a", request("a"));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new AServlet("b"), properties);
+		serviceRegistrations.add(srB);
+
+		assertEquals("a", request("a"));
+
+		FailedServletDTO failedServletDTO = getFailedServletDTOByName("b");
+
+		assertNotNull(failedServletDTO);
+		assertEquals(
+				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
+				failedServletDTO.failureReason);
+		assertEquals(
+				srB.getReference().getProperty(Constants.SERVICE_ID),
+				failedServletDTO.serviceId);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "c");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		properties.put(Constants.SERVICE_RANKING, 1000);
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet("c"), properties));
+
+		assertEquals("c", request("a"));
+
+		failedServletDTO = getFailedServletDTOByName("a");
+
+		assertNotNull(failedServletDTO);
+		assertEquals(
+				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
+				failedServletDTO.failureReason);
+		assertEquals(
+				srA.getReference().getProperty(Constants.SERVICE_ID),
+				failedServletDTO.serviceId);
+	}
+
+	public void test_140_4_23to25() throws Exception {
+		BundleContext context = getContext();
+
+		class AServlet extends HttpServlet {
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(srA);
+
+		ServletDTO servletDTO = getServletDTOByName(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				AServlet.class.getName());
+
+		assertNotNull(servletDTO);
+		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+	}
+
+	public void test_140_4_26to31() throws Exception {
+		BundleContext context = getContext();
+
+		class AServlet extends HttpServlet {
+
+			public AServlet(String content) {
+				this.content = content;
+			}
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response)
+					throws ServletException, IOException {
+
+				response.getWriter().write(content);
+			}
+
+			private final String	content;
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		properties.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet("a"), properties);
+		serviceRegistrations.add(srA);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertEquals("a", requestInfoDTO.servletDTO.name);
+		assertEquals(
+				srA.getReference().getProperty(Constants.SERVICE_ID),
+				requestInfoDTO.servletDTO.serviceId);
+		assertEquals("a", request("a"));
+
+		HttpService httpService = getHttpService();
+
+		if (httpService == null) {
+			return;
+		}
+
+		httpService.registerServlet("/a", new AServlet("b"), null, null);
+
+		requestInfoDTO = calculateRequestInfoDTO("/a");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertFalse((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
+		assertEquals("b", request("a"));
+	}
+
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			final ExecutorService	executor	= Executors.newCachedThreadPool();
+
+			protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+				doGetAsync(req.startAsync());
+			}
+
+			private void doGetAsync(final AsyncContext asyncContext) {
+				executor.submit(new Callable<Void>() {
+					public Void call() throws Exception {
+						try {
+							invoked.set(true);
+
+							PrintWriter writer = asyncContext.getResponse().getWriter();
+
+							writer.print("a");
+						} finally {
+							asyncContext.complete();
+						}
+
+						return null;
+					}
+				});
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(srA);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertTrue(requestInfoDTO.servletDTO.asyncSupported);
+		assertTrue((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
+		assertEquals("a", requestInfoDTO.servletDTO.name);
+		assertEquals("a", request("a"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "false");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
+		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(srB);
+
+		assertEquals("500", request("b", null).get("responseCode").get(0));
+		assertFalse(invoked.get());
+	}
+
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
+			}
+
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				invoked.set(true);
+				String message = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+				response.getWriter().write((message == null) ? "" : message);
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, HttpServletResponse.SC_BAD_GATEWAY + "");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(servletDTO);
+
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(errorPageDTO);
+		assertEquals(HttpServletResponse.SC_BAD_GATEWAY, errorPageDTO.errorCodes[0]);
+
+		Map<String, List<String>> response = request("a", null);
+		assertEquals("a", response.get("responseBody").get(0));
+		assertTrue(invoked.get());
+		assertEquals(HttpServletResponse.SC_BAD_GATEWAY + "", response.get("responseCode").get(0));
+	}
+
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE_4xx() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "a");
+			}
+
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				invoked.set(true);
+				String message = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+				response.getWriter().write((message == null) ? "" : message);
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "4xx");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(servletDTO);
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(errorPageDTO);
+		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_FORBIDDEN) >= 0);
+
+		Map<String, List<String>> response = request("a", null);
+		assertEquals("a", response.get("responseBody").get(0));
+		assertTrue(invoked.get());
+		assertEquals(HttpServletResponse.SC_FORBIDDEN + "", response.get("responseCode").get(0));
+	}
+
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE_5xx() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
+			}
+
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				invoked.set(true);
+				String message = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+				response.getWriter().write((message == null) ? "" : message);
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "5xx");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(servletDTO);
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(errorPageDTO);
+		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_BAD_GATEWAY) >= 0);
+
+		Map<String, List<String>> response = request("a", null);
+		assertEquals("a", response.get("responseBody").get(0));
+		assertTrue(invoked.get());
+		assertEquals(HttpServletResponse.SC_BAD_GATEWAY + "", response.get("responseCode").get(0));
 	}
 
 	public void test_basicServlet() throws Exception {
