@@ -1064,4 +1064,45 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertNull(failedServletDTO);
 	}
 
+	public void test_140_4_1_22to23() throws Exception {
+		BundleContext context = getContext();
+
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "a");
+			}
+
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				invoked.set(true);
+				throw new ServletException();
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, HttpServletResponse.SC_BAD_GATEWAY + "");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		Map<String, List<String>> response = request("a", null);
+		assertTrue(!"a".equals(response.get("responseBody").get(0)));
+		assertTrue(invoked.get());
+		assertEquals(HttpServletResponse.SC_BAD_GATEWAY + "", response.get("responseCode").get(0));
+	}
+
 }
