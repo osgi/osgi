@@ -29,25 +29,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.servlet.AsyncContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import junit.framework.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
-import org.osgi.service.http.context.ServletContextHelper;
-import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
-import org.osgi.service.http.runtime.dto.ResourceDTO;
-import org.osgi.service.http.runtime.dto.RuntimeDTO;
-import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
@@ -55,7 +49,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 	@Override
 	protected String[] getBundlePaths() {
-		return new String[] {"/tb1.jar", "/tb2.jar"};
+		return new String[0];// {"/tb1.jar", "/tb2.jar"};
 	}
 
 	public void test_140_4_4to5() throws Exception {
@@ -391,12 +385,74 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 		httpService.registerServlet("/a", new AServlet("b"), null, null);
 
-		requestInfoDTO = calculateRequestInfoDTO("/a");
+		try {
+			requestInfoDTO = calculateRequestInfoDTO("/a");
+
+			assertNotNull(requestInfoDTO);
+			assertNotNull(requestInfoDTO.servletDTO);
+			assertFalse((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
+			assertEquals("b", request("a"));
+		} finally {
+			httpService.unregister("/a");
+		}
+	}
+
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED_validate() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "blah");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
 
 		assertNotNull(requestInfoDTO);
 		assertNotNull(requestInfoDTO.servletDTO);
-		assertFalse((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
-		assertEquals("b", request("a"));
+		assertFalse(requestInfoDTO.servletDTO.asyncSupported);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		requestInfoDTO = calculateRequestInfoDTO("/b");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertTrue(requestInfoDTO.servletDTO.asyncSupported);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, "false");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/c");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		requestInfoDTO = calculateRequestInfoDTO("/c");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertFalse(requestInfoDTO.servletDTO.asyncSupported);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED, 234l);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/d");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		requestInfoDTO = calculateRequestInfoDTO("/d");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertFalse(requestInfoDTO.servletDTO.asyncSupported);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/e");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		requestInfoDTO = calculateRequestInfoDTO("/e");
+
+		assertNotNull(requestInfoDTO);
+		assertNotNull(requestInfoDTO.servletDTO);
+		assertFalse(requestInfoDTO.servletDTO.asyncSupported);
 	}
 
 	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED() throws Exception {
@@ -460,6 +516,54 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertFalse(invoked.get());
 	}
 
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE_validate() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "400");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new HttpServlet() {}, properties);
+		serviceRegistrations.add(srA);
+
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(errorPageDTO);
+		assertEquals(1, errorPageDTO.errorCodes.length);
+		assertEquals(400, errorPageDTO.errorCodes[0]);
+		assertEquals(0, errorPageDTO.exceptions.length);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, new String[] {"400", ServletException.class.getName()});
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new HttpServlet() {}, properties);
+		serviceRegistrations.add(srB);
+
+		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(errorPageDTO);
+		assertEquals(1, errorPageDTO.errorCodes.length);
+		assertEquals(400, errorPageDTO.errorCodes[0]);
+		assertEquals(0, errorPageDTO.exceptions.length);
+
+		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");
+		assertNotNull(failedServletDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedServletDTO.failureReason);
+		assertEquals(srB.getReference().getProperty(Constants.SERVICE_ID), failedServletDTO.serviceId);
+
+		properties.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
+		srB.setProperties(properties);
+
+		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(errorPageDTO);
+		assertEquals(400, errorPageDTO.errorCodes[0]);
+		assertEquals(ServletException.class.getName(), errorPageDTO.exceptions[0]);
+
+		failedServletDTO = getFailedServletDTOByName("a");
+		assertNotNull(failedServletDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedServletDTO.failureReason);
+		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), failedServletDTO.serviceId);
+	}
+
 	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE() throws Exception {
 		BundleContext context = getContext();
 
@@ -492,7 +596,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, HttpServletResponse.SC_BAD_GATEWAY + "");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, new String[] {HttpServletResponse.SC_BAD_GATEWAY + "", HttpServletResponse.SC_FORBIDDEN + ""});
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
@@ -501,7 +605,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
 		assertNotNull(errorPageDTO);
-		assertEquals(HttpServletResponse.SC_BAD_GATEWAY, errorPageDTO.errorCodes[0]);
+		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_BAD_GATEWAY) >= 0);
 
 		Map<String, List<String>> response = request("a", null);
 		assertEquals("a", response.get("responseBody").get(0));
@@ -605,295 +709,204 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals(HttpServletResponse.SC_BAD_GATEWAY + "", response.get("responseCode").get(0));
 	}
 
-	public void test_basicServlet() throws Exception {
-		Assert.assertEquals("a", request("TestServlet1"));
-	}
-
-	public void test_servletInContext() throws Exception {
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE_exception() throws Exception {
 		BundleContext context = getContext();
 
-		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "sc1");
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/sc1");
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelperFactory(), properties));
+		final AtomicBoolean invoked = new AtomicBoolean(false);
 
-		Servlet servlet = new HttpServlet() {
+		class AException extends ServletException {
+		}
+
+		class AServlet extends HttpServlet {
 
 			@Override
-			protected void service(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
-
-				response.getWriter().write(getServletContext().getContextPath());
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				throw new AException();
 			}
 
-		};
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				invoked.set(true);
+				String exception = (String) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE);
+				response.getWriter().write((exception == null) ? "" : exception);
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
 
 		properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=sc1)");
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/TestServlet2");
-		serviceRegistrations.add(context.registerService(Servlet.class, servlet, properties));
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, ServletException.class.getName());
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
-		Assert.assertEquals("/sc1", request("/sc1/TestServlet2"));
+		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(servletDTO);
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		assertNotNull(errorPageDTO);
+		assertTrue(Arrays.binarySearch(errorPageDTO.exceptions, ServletException.class.getName()) >= 0);
+
+		Map<String, List<String>> response = request("a", null);
+		assertEquals(AException.class.getName(), response.get("responseBody").get(0));
+		assertTrue(invoked.get());
+		assertEquals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR + "", response.get("responseCode").get(0));
 	}
 
-	// public void test_Servlet6() throws Exception {
-	// String expected = "a";
-	// String actual = request("something/a.TestServlet6");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Servlet7() throws Exception {
-	// String expected = "a";
-	// String actual = request("TestServlet7/a");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Servlet8() throws Exception {
-	// String expected = "Equinox Jetty-based Http Service";
-	// String actual = request("TestServlet8");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Servlet9() throws Exception {
-	// String expected = "Equinox Jetty-based Http Service";
-	// String actual = request("TestServlet9");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Servlet10() throws Exception {
-	// String expected = "a";
-	// String actual = request("TestServlet10");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Servlet11() throws Exception {
-	// String expected = "a";
-	// String actual = request("TestServlet11");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
+	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_NAME() throws Exception {
+		BundleContext context = getContext();
 
-	public void test_ErrorPage1() throws Exception {
-		Map<String, List<String>> response = request("TestErrorPage1/a", null);
-		String responseCode = response.get("responseCode").get(0);
-		String actual = response.get("responseBody").get(0);
+		class AServlet extends HttpServlet {
 
-		Assert.assertEquals("403", responseCode);
-		Assert.assertEquals("403 ERROR", actual);
-	}
-
-	public void test_ErrorPage2() throws Exception {
-		Map<String, List<String>> response = request("TestErrorPage2/a", null);
-		String responseCode = response.get("responseCode").get(0);
-		String actual = response.get("responseBody").get(0);
-
-		Assert.assertEquals("500", responseCode);
-		Assert.assertEquals("500 ERROR", actual);
-	}
-
-	public void test_basicFilter() throws Exception {
-		Assert.assertEquals("bab", request("TestFilter1/bab"));
-	}
-
-	public void test_twoFiltersOrderedByRegistration() throws Exception {
-		Assert.assertEquals("bcacb", request("TestFilter2/bcacb"));
-	}
-
-	public void test_threeFiltersOrderedByRegistration() throws Exception {
-		Assert.assertEquals("bcdadcb", request("TestFilter3/bcdadcb"));
-	}
-
-	public void test_threeFiltersOrderedByRanking() throws Exception {
-		Assert.assertEquals("dbcacbd", request("TestFilter4/dbcacbd"));
-	}
-
-	public void test_basicExtensionFilter() throws Exception {
-		Assert.assertEquals("bab", request("something/bab.TestFilter5"));
-	}
-
-	public void test_twoExtensionFiltersOrderedByRegistration() throws Exception {
-		Assert.assertEquals("bcacb", request("something/bcacb.TestFilter6"));
-	}
-
-	public void test_threeExtensionFiltersOrderedByRegistration() throws Exception {
-		Assert.assertEquals("bcdadcb", request("something/bcdadcb.TestFilter7"));
-	}
-
-	public void test_threeExtensionFiltersOrderedByRanking() throws Exception {
-		Assert.assertEquals("dbcacbd", request("something/dbcacbd.TestFilter8"));
-	}
-
-	// public void test_Filter9() throws Exception {
-	// String expected = "bab";
-	// String actual = request("TestFilter9/bab");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter10() throws Exception {
-	// String expected = "cbabc";
-	// String actual = request("TestFilter10/cbabc");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter11() throws Exception {
-	// String expected = "cbdadbc";
-	// String actual = request("TestFilter11/cbdadbc");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter12() throws Exception {
-	// String expected = "dcbabcd";
-	// String actual = request("TestFilter12/dcbabcd");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter13() throws Exception {
-	// String expected = "bab";
-	// String actual = request("something/a.TestFilter13");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter14() throws Exception {
-	// String expected = "cbabc";
-	// String actual = request("something/a.TestFilter14");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter15() throws Exception {
-	// String expected = "cbdadbc";
-	// String actual = request("something/a.TestFilter15");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Filter16() throws Exception {
-	// String expected = "dcbabcd";
-	// String actual = request("something/a.TestFilter16");
-	// Assert.assertEquals(expected, actual);
-	// }
-
-	public void test_Registration11() throws Exception {
-		BundleContext bundleContext = getContext();
-		ServiceReference<HttpServiceRuntime> serviceReference =
-				bundleContext.getServiceReference(HttpServiceRuntime.class);
-
-		Assert.assertNotNull(serviceReference);
-
-		HttpServiceRuntime runtime = bundleContext.getService(serviceReference);
-		RuntimeDTO runtimeDTO = runtime.getRuntimeDTO();
-		ServletContextDTO[] servletContextDTOs = runtimeDTO.servletContextDTOs;
-
-		Assert.assertTrue(servletContextDTOs.length > 0);
-	}
-
-	public void test_resourceDTO() throws Exception {
-		BundleContext bundleContext = getContext();
-		ServiceReference<HttpServiceRuntime> serviceReference =
-				bundleContext.getServiceReference(HttpServiceRuntime.class);
-
-		Assert.assertNotNull(serviceReference);
-
-		HttpServiceRuntime runtime = bundleContext.getService(serviceReference);
-		RuntimeDTO runtimeDTO = runtime.getRuntimeDTO();
-		ServletContextDTO[] servletContextDTOs = runtimeDTO.servletContextDTOs;
-
-		ServletContextDTO servletContextDTO = null;
-
-		for (ServletContextDTO curServletContextDTO : servletContextDTOs) {
-			if (curServletContextDTO.name.equals("default")) {
-				servletContextDTO = curServletContextDTO;
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.getWriter().write(getServletName());
 			}
+
 		}
 
-		Assert.assertNotNull(servletContextDTO);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(srA);
 
-		Assert.assertEquals(2, servletContextDTO.resourceDTOs.length);
-		final int index;
-		if (servletContextDTO.resourceDTOs[0].patterns[0].equals("/TestResource1/*"))
-		{
-			index = 0;
+		ServletDTO servletDTO = getServletDTOByName(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				AServlet.class.getName());
+
+		assertNotNull(servletDTO);
+		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+		assertEquals(AServlet.class.getName(), request("a"));
+	}
+
+	public void test_table_140_4_initParams() throws Exception {
+		BundleContext context = getContext();
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				String initParameter = getServletConfig().getInitParameter(request.getParameter("p"));
+
+				response.getWriter().write((initParameter == null) ? "" : initParameter);
+			}
+
 		}
-		else
-		{
-			index = 1;
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX + "param1", "value1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX + "param2", "value2");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX + "param3", 345l);
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(srA);
+
+		ServletDTO servletDTO = getServletDTOByName(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				AServlet.class.getName());
+
+		assertNotNull(servletDTO);
+		assertTrue(servletDTO.initParams.containsKey("param1"));
+		assertTrue(servletDTO.initParams.containsKey("param2"));
+		assertFalse(servletDTO.initParams.containsKey("param3"));
+		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+		assertEquals("value1", request("a?p=param1"));
+		assertEquals("value2", request("a?p=param2"));
+		assertEquals("", request("a?p=param3"));
+	}
+
+	public void test_140_4_38to42() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			public void destroy() {
+				invoked.set(true);
+
+				super.destroy();
+			}
+
+			@Override
+			public void init(ServletConfig config) throws ServletException {
+				invoked.set(true);
+
+				super.init(config);
+			}
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.getWriter().write("a");
+			}
+
 		}
-		ResourceDTO resourceDTO = servletContextDTO.resourceDTOs[index];
 
-		Assert.assertEquals("/TestResource1/*", resourceDTO.patterns[0]);
-		Assert.assertEquals("/org/osgi/test/cases/http/whiteboard/tb1/resources", resourceDTO.prefix);
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new AServlet(), properties);
 
-		resourceDTO = servletContextDTO.resourceDTOs[index == 0 ? 1 : 0];
-		Assert.assertEquals("/TestResource2/a", resourceDTO.patterns[0]);
-		Assert.assertEquals("/org/osgi/test/cases/http/whiteboard/tb1/resources/resource1.txt", resourceDTO.prefix);
+		assertEquals("a", request("a"));
+		assertTrue(invoked.get());
+		invoked.set(false);
+		srA.unregister();
+		assertTrue(invoked.get());
 	}
 
-	public void test_resourceMatchByRegexMatch() throws Exception {
-		Assert.assertEquals("a", request("TestResource1/resource1.txt"));
+	public void test_140_4_42to44() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			public void init(ServletConfig config) throws ServletException {
+				invoked.set(true);
+
+				throw new ServletException();
+			}
+
+		}
+
+		class BServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.getWriter().write("failed");
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+
+		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");
+		assertNotNull(failedServletDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_EXCEPTION_ON_INIT, failedServletDTO.failureReason);
+		assertTrue(invoked.get());
+
+		Map<String, List<String>> response = request("a", null);
+		// Not sure what the appropriate behavior should be here!!! Should it be
+		// 500?
+		assertEquals("404", response.get("responseCode").get(0));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		response = request("a", null);
+		// Not sure what the appropriate behavior should be here!!! Should it be
+		// 500?
+		assertEquals("500", response.get("responseCode").get(0));
 	}
-
-	public void test_resourceMatchByExactMatch() throws Exception {
-		Assert.assertEquals("a", request("TestResource2/a"));
-	}
-
-	// public void test_Resource3() throws Exception {
-	// String expected = "a";
-	// String actual = request("TestResource3/resource1.txt");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Resource4() throws Exception {
-	// String expected = "dcbabcd";
-	// String actual = request("TestResource4/resource1.txt");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Resource5_1() throws Exception {
-	// String expected = "dcbabcd";
-	// String actual = request("TestResource4/resource1.txt");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_Runtime() throws Exception {
-	// BundleContext bundleContext = getContext();
-	// ServiceReference<HttpServiceRuntime> serviceReference =
-	// bundleContext.getServiceReference(HttpServiceRuntime.class);
-	// Assert.assertNotNull(serviceReference);
-	//
-	// if (serviceReference == null) {
-	// return;
-	// }
-	//
-	// HttpServiceRuntime runtime = bundleContext.getService(serviceReference);
-	// Assert.assertNotNull(runtime);
-	// RuntimeDTO runtimeDTO = runtime.getRuntimeDTO();
-	// ServletContextDTO[] servletContextDTOs = runtimeDTO.servletContextDTOs;
-	// Assert.assertTrue(servletContextDTOs.length > 0);
-	// ServletContextDTO servletContextDTO = servletContextDTOs[0];
-	// Assert.assertNotNull(servletContextDTO.contextName);
-	// }
-
-	// public void test_ServletContext1() throws Exception {
-	// String expected =
-	// "/org/eclipse/equinox/http/servlet/tests/tb1/resource1.txt";
-	// String actual = request("TestServletContext1");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_ServletContextHelper10() throws Exception {
-	// String expected = "cac";
-	// String actual = request("a/TestServletContextHelper10/a");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_WBServlet1() throws Exception {
-	// String expected = "a";
-	// String actual = request("WBServlet1/a");
-	// Assert.assertEquals(expected, actual);
-	// }
-	//
-	// public void test_WBServlet2() throws Exception {
-	// String expected = "bab";
-	// String actual = request("WBServlet2/a");
-	// Assert.assertEquals(expected, actual);
-	// }
 
 }
