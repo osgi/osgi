@@ -22,6 +22,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
+import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
@@ -66,6 +67,22 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		}
 
 		return null;
+	}
+
+	protected FailedErrorPageDTO getFailedErrorPageDTOByName(String name) {
+		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
+			if (name.equals(failedErrorPageDTO.name)) {
+				return failedErrorPageDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedErrorPageDTO[] getFailedErrorPageDTOs() {
+		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
+
+		return httpServiceRuntime.getRuntimeDTO().failedErrorPageDTOs;
 	}
 
 	protected FailedServletContextDTO getFailedServletContextDTOByName(String name) {

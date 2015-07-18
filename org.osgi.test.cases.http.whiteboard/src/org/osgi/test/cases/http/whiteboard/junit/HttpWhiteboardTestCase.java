@@ -34,12 +34,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
+import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
@@ -643,10 +646,11 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
 		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
 
+		// Register the 4xx (b)
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "4xx");
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
 		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
@@ -659,6 +663,33 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("a", response.get("responseBody").get(0));
 		assertTrue(invoked.get());
 		assertEquals(HttpServletResponse.SC_FORBIDDEN + "", response.get("responseCode").get(0));
+
+		// register a 4xx which will be shadowed (c)
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "c");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "4xx");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/c");
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		FailedErrorPageDTO failedErrorPageDTO = getFailedErrorPageDTOByName("c");
+		assertNotNull(failedErrorPageDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedErrorPageDTO.failureReason);
+
+		// register a specific 404 which shouldn't shadow 4xx (b)
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "d");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE, "404");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/d");
+		properties.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
+		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
+
+		failedErrorPageDTO = getFailedErrorPageDTOByName("b");
+		assertNull(failedErrorPageDTO);
+		failedErrorPageDTO = getFailedErrorPageDTOByName("d");
+		assertNull(failedErrorPageDTO);
+		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "d");
+		assertNotNull(errorPageDTO);
+		assertEquals(404, errorPageDTO.errorCodes[0]);
 	}
 
 	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE_5xx() throws Exception {
@@ -895,8 +926,8 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invoked.get());
 
 		Map<String, List<String>> response = request("a", null);
-		// Not sure what the appropriate behavior should be here!!! Should it be
-		// 500?
+		// TODO Not sure what the appropriate behavior should be here!!! Should
+		// it be 500?
 		assertEquals("404", response.get("responseCode").get(0));
 
 		properties = new Hashtable<String, Object>();
@@ -904,9 +935,133 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
 		response = request("a", null);
-		// Not sure what the appropriate behavior should be here!!! Should it be
-		// 500?
+		// TODO Not sure what the appropriate behavior should be here!!! Should
+		// it be 500?
 		assertEquals("500", response.get("responseCode").get(0));
+	}
+
+	public void test_140_4_45to46() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invokedInit = new AtomicBoolean(false);
+		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			public void destroy() {
+				invokedDestroy.set(true);
+
+				super.destroy();
+			}
+
+			@Override
+			public void init(ServletConfig config) throws ServletException {
+				invokedInit.set(true);
+
+				super.init(config);
+			}
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.getWriter().write("a");
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> sr = context.registerService(Servlet.class, new AServlet(), properties);
+		serviceRegistrations.add(sr);
+
+		assertEquals("a", request("a"));
+		assertTrue(invokedInit.get());
+		assertFalse(invokedDestroy.get());
+		invokedInit.set(false);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
+		sr.setProperties(properties);
+		assertTrue(invokedDestroy.get());
+		assertEquals("a", request("b"));
+		assertTrue(invokedInit.get());
+	}
+
+	public void test_140_4_46to47() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invokedGetService = new AtomicBoolean(false);
+		final AtomicBoolean invokedInit = new AtomicBoolean(false);
+		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			public void destroy() {
+				invokedDestroy.set(true);
+
+				super.destroy();
+			}
+
+			@Override
+			public void init(ServletConfig config) throws ServletException {
+				invokedInit.set(true);
+
+				super.init(config);
+			}
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				response.getWriter().write("a");
+			}
+
+		}
+
+		PrototypeServiceFactory<Servlet> factory = new PrototypeServiceFactory<Servlet>() {
+
+			public void ungetService(Bundle bundle, ServiceRegistration<Servlet> registration, Servlet service) {
+			}
+
+			public Servlet getService(Bundle bundle, ServiceRegistration<Servlet> registration) {
+				invokedGetService.set(true);
+				return new AServlet();
+			}
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		ServiceRegistration<Servlet> sr = context.registerService(Servlet.class, factory, properties);
+		serviceRegistrations.add(sr);
+
+		assertEquals("a", request("a"));
+		assertTrue(invokedGetService.get());
+		assertTrue(invokedInit.get());
+		assertFalse(invokedDestroy.get());
+		invokedInit.set(false);
+		invokedGetService.set(false);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
+		sr.setProperties(properties);
+		assertTrue(invokedDestroy.get());
+		assertTrue(invokedGetService.get());
+		assertEquals("a", request("b"));
+		assertTrue(invokedInit.get());
+	}
+
+	public void test_140_4_48to51() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
+		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
+
+		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNull(servletDTO);
+
+		// TODO Is this correct?
+		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");
+		assertNull(failedServletDTO);
 	}
 
 }
