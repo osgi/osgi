@@ -50,11 +50,6 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
-	@Override
-	protected String[] getBundlePaths() {
-		return new String[0];// {"/tb1.jar", "/tb2.jar"};
-	}
-
 	public void test_140_4_4to5() throws Exception {
 		BundleContext context = getContext();
 

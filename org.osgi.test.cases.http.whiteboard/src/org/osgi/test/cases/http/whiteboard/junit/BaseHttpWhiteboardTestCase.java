@@ -25,6 +25,7 @@ import org.osgi.service.http.runtime.dto.ErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
+import org.osgi.service.http.runtime.dto.FilterDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
@@ -51,7 +52,9 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return buffer.toString().trim();
 	}
 
-	protected abstract String[] getBundlePaths();
+	protected String[] getBundlePaths() {
+		return new String[0];
+	}
 
 	protected ErrorPageDTO getErrorPageDTOByName(String context, String name) {
 		ServletContextDTO servletContextDTO = getServletContextDTOByName(context);
@@ -111,6 +114,22 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
 		return httpServiceRuntime.getRuntimeDTO().failedServletDTOs;
+	}
+
+	protected FilterDTO getFilterDTOByName(String contextName, String name) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(contextName);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (FilterDTO filterDTO : servletContextDTO.filterDTOs) {
+			if (name.equals(filterDTO.name)) {
+				return filterDTO;
+			}
+		}
+
+		return null;
 	}
 
 	protected HttpService getHttpService() {

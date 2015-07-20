@@ -38,11 +38,6 @@ import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 
 public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
-	@Override
-	protected String[] getBundlePaths() {
-		return new String[0];
-	}
-
 	public void test_140_2_6to7() throws Exception {
 		BundleContext context = getContext();
 
