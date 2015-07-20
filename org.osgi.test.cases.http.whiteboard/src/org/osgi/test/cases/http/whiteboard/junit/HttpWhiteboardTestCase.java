@@ -926,8 +926,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invoked.get());
 
 		Map<String, List<String>> response = request("a", null);
-		// TODO Not sure what the appropriate behavior should be here!!! Should
-		// it be 500?
+		// init failed, no servlet
 		assertEquals("404", response.get("responseCode").get(0));
 
 		properties = new Hashtable<String, Object>();
@@ -935,9 +934,8 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
 		response = request("a", null);
-		// TODO Not sure what the appropriate behavior should be here!!! Should
-		// it be 500?
-		assertEquals("500", response.get("responseCode").get(0));
+		// BServlet handles the request
+		assertEquals("200", response.get("responseCode").get(0));
 	}
 
 	public void test_140_4_45to46() throws Exception {
