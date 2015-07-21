@@ -85,8 +85,8 @@ false
     <property name="booleanShort" type="Short" value="1024"/>
     <property name="booleanInteger" type="Integer" value="123456"/>
     <property name="booleanLong" type="Long" value="9876543210"/>
-    <property name="booleanFloat" type="Float" value="0"/>
-    <property name="booleanDouble" type="Double" value="0"/>
+    <property name="booleanFloat" type="Float" value="0.5"/>
+    <property name="booleanDouble" type="Double" value="-0.0"/>
     <property name="booleanCollection" type="String">
 false
 true
