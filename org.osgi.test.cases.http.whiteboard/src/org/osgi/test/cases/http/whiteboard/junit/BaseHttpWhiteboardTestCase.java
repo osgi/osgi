@@ -90,6 +90,16 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return null;
 	}
 
+	protected FailedErrorPageDTO getFailedErrorPageDTOByServiceId(long serviceId) {
+		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
+			if (serviceId == failedErrorPageDTO.serviceId) {
+				return failedErrorPageDTO;
+			}
+		}
+
+		return null;
+	}
+
 	protected FailedErrorPageDTO[] getFailedErrorPageDTOs() {
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
 
@@ -99,6 +109,16 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	protected FailedFilterDTO getFailedFilterDTOByName(String name) {
 		for (FailedFilterDTO failedFilterDTO : getFailedFilterDTOs()) {
 			if (name.equals(failedFilterDTO.name)) {
+				return failedFilterDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedFilterDTO getFailedFilterDTOByServiceId(long serviceId) {
+		for (FailedFilterDTO failedFilterDTO : getFailedFilterDTOs()) {
+			if (serviceId == failedFilterDTO.serviceId) {
 				return failedFilterDTO;
 			}
 		}
@@ -148,6 +168,16 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return null;
 	}
 
+	protected FailedServletContextDTO getFailedServletContextDTOByServiceId(long serviceId) {
+		for (FailedServletContextDTO failedServletContextDTO : getFailedServletContextDTOs()) {
+			if (serviceId == failedServletContextDTO.serviceId) {
+				return failedServletContextDTO;
+			}
+		}
+
+		return null;
+	}
+
 	protected FailedServletContextDTO[] getFailedServletContextDTOs() {
 		return getHttpServiceRuntime().getRuntimeDTO().failedServletContextDTOs;
 	}
@@ -155,6 +185,16 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	protected FailedServletDTO getFailedServletDTOByName(String name) {
 		for (FailedServletDTO failedServletDTO : getFailedServletDTOs()) {
 			if (name.equals(failedServletDTO.name)) {
+				return failedServletDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedServletDTO getFailedServletDTOByServiceId(long serviceId) {
+		for (FailedServletDTO failedServletDTO : getFailedServletDTOs()) {
+			if (serviceId == failedServletDTO.serviceId) {
 				return failedServletDTO;
 			}
 		}

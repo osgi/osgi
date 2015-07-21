@@ -48,7 +48,7 @@ import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
-public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
+public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
 	public void test_140_4_4to5() throws Exception {
 		BundleContext context = getContext();
