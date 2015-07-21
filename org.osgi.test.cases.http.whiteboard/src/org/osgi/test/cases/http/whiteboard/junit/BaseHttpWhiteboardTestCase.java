@@ -24,10 +24,12 @@ import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedFilterDTO;
+import org.osgi.service.http.runtime.dto.FailedResourceDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.FilterDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
+import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.test.support.OSGiTestCase;
@@ -103,6 +105,20 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return getHttpServiceRuntime().getRuntimeDTO().failedFilterDTOs;
 	}
 
+	protected FailedResourceDTO getFailedResourceDTOByServiceId(long serviceId) {
+		for (FailedResourceDTO failedResourceDTO : getFailedResourceDTOs()) {
+			if (serviceId == failedResourceDTO.serviceId) {
+				return failedResourceDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedResourceDTO[] getFailedResourceDTOs() {
+		return getHttpServiceRuntime().getRuntimeDTO().failedResourceDTOs;
+	}
+
 	protected FailedServletContextDTO getFailedServletContextDTOByName(String name) {
 		for (FailedServletContextDTO failedServletContextDTO : getFailedServletContextDTOs()) {
 			if (name.equals(failedServletContextDTO.name)) {
@@ -169,6 +185,22 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		assertNotNull(serviceReference);
 
 		return context.getService(serviceReference);
+	}
+
+	protected ResourceDTO getResourceDTOByServiceId(String contextName, long serviceId) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(contextName);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (ResourceDTO resourceDTO : servletContextDTO.resourceDTOs) {
+			if (serviceId == resourceDTO.serviceId) {
+				return resourceDTO;
+			}
+		}
+
+		return null;
 	}
 
 	protected ServletContextDTO getServletContextDTOByName(String name) {
