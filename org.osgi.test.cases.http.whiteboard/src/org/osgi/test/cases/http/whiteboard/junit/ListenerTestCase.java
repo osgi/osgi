@@ -26,11 +26,42 @@ import javax.servlet.http.HttpSessionListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.context.ServletContextHelper;
+import org.osgi.service.http.runtime.dto.DTOConstants;
+import org.osgi.service.http.runtime.dto.FailedListenerDTO;
 import org.osgi.service.http.runtime.dto.ListenerDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
+import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockServlet;
 
 public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
+
+	public void test_140_7_validation() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		ServiceRegistration<?> sr = context.registerService(ServletContextListener.class, new MockSCL(null), properties);
+		serviceRegistrations.add(sr);
+
+		ListenerDTO listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
+		assertNotNull(listenerDTO);
+
+		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER);
+		sr.setProperties(properties);
+
+		listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
+		assertNull(listenerDTO);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "blah");
+		sr.setProperties(properties);
+
+		FailedListenerDTO failedListenerDTO = getFailedListenerDTOByServiceId(getServiceId(sr));
+		assertNotNull(failedListenerDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedListenerDTO.failureReason);
+
+		listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
+		assertNull(listenerDTO);
+	}
 
 	public void test_140_7_ServletContextListener() throws Exception {
 		BundleContext context = getContext();
@@ -65,8 +96,6 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		assertTrue(invokedDestroy.get());
 		assertFalse(invokedInit.get());
-		listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
-		assertNull(listenerDTO);
 	}
 
 	public void test_140_7_ServletContextAttributeListener() throws Exception {
@@ -230,6 +259,7 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/");
 		ServiceRegistration<ServletContextHelper> srA = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
+		serviceRegistrations.add(srA);
 
 		final AtomicBoolean invokedCreate = new AtomicBoolean(false);
 		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
@@ -329,8 +359,8 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invokedReplaced.get());
 	}
 
-	public void test_140_7_HttpSessionIdListener() throws Exception {
+	// public void test_140_7_HttpSessionIdListener() throws Exception {
 		// TODO can't test until Servlet 3.1 is in the cnf repo
-	}
+	// }
 
 }

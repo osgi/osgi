@@ -24,6 +24,7 @@ import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedFilterDTO;
+import org.osgi.service.http.runtime.dto.FailedListenerDTO;
 import org.osgi.service.http.runtime.dto.FailedResourceDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
@@ -107,6 +108,20 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
 	protected FailedFilterDTO[] getFailedFilterDTOs() {
 		return getHttpServiceRuntime().getRuntimeDTO().failedFilterDTOs;
+	}
+
+	protected FailedListenerDTO getFailedListenerDTOByServiceId(long serviceId) {
+		for (FailedListenerDTO failedListenerDTO : getFailedListenerDTOs()) {
+			if (serviceId == failedListenerDTO.serviceId) {
+				return failedListenerDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedListenerDTO[] getFailedListenerDTOs() {
+		return getHttpServiceRuntime().getRuntimeDTO().failedListenerDTOs;
 	}
 
 	protected FailedResourceDTO getFailedResourceDTOByServiceId(long serviceId) {
