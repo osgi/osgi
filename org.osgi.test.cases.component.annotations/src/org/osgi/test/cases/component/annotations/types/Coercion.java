@@ -67,7 +67,11 @@ public @interface Coercion {
 
 	char charString();
 
-	char charBoolean();
+	char charStringEmpty();
+
+	char charBooleanTrue();
+
+	char charBooleanFalse();
 
 	char charCharacter();
 
@@ -91,7 +95,9 @@ public @interface Coercion {
 
 	byte byteString();
 
-	byte byteBoolean();
+	byte byteBooleanTrue();
+
+	byte byteBooleanFalse();
 
 	byte byteCharacter();
 
@@ -115,7 +121,9 @@ public @interface Coercion {
 
 	short shortString();
 
-	short shortBoolean();
+	short shortBooleanTrue();
+
+	short shortBooleanFalse();
 
 	short shortCharacter();
 
@@ -139,7 +147,9 @@ public @interface Coercion {
 
 	int intString();
 
-	int intBoolean();
+	int intBooleanTrue();
+
+	int intBooleanFalse();
 
 	int intCharacter();
 
@@ -163,7 +173,9 @@ public @interface Coercion {
 
 	long longString();
 
-	long longBoolean();
+	long longBooleanTrue();
+
+	long longBooleanFalse();
 
 	long longCharacter();
 
@@ -187,7 +199,9 @@ public @interface Coercion {
 
 	float floatString();
 
-	float floatBoolean();
+	float floatBooleanTrue();
+
+	float floatBooleanFalse();
 
 	float floatCharacter();
 
@@ -211,7 +225,9 @@ public @interface Coercion {
 
 	double doubleString();
 
-	double doubleBoolean();
+	double doubleBooleanTrue();
+
+	double doubleBooleanFalse();
 
 	double doubleCharacter();
 

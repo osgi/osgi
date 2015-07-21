@@ -254,7 +254,9 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertFalse("property has wrong value", config.booleanNone());
 
 				assertEquals("property has wrong value", '6', config.charString());
-				assertEquals("property has wrong value", (char) 1, config.charBoolean());
+				assertEquals("property has wrong value", (char) 0, config.charStringEmpty());
+				assertEquals("property has wrong value", (char) 1, config.charBooleanTrue());
+				assertEquals("property has wrong value", (char) 0, config.charBooleanFalse());
 				assertEquals("property has wrong value", '@', config.charCharacter());
 				assertEquals("property has wrong value", (char) 2, config.charByte());
 				assertEquals("property has wrong value", (char) 1034, config.charShort());
@@ -267,7 +269,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("property has wrong value", (char) 0, config.charNone());
 
 				assertEquals("property has wrong value", (byte) 64, config.byteString());
-				assertEquals("property has wrong value", (byte) 1, config.byteBoolean());
+				assertEquals("property has wrong value", (byte) 1, config.byteBooleanTrue());
+				assertEquals("property has wrong value", (byte) 0, config.byteBooleanFalse());
 				assertEquals("property has wrong value", (byte) 64, config.byteCharacter());
 				assertEquals("property has wrong value", (byte) 2, config.byteByte());
 				assertEquals("property has wrong value", (byte) 1034, config.byteShort());
@@ -280,7 +283,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("property has wrong value", (byte) 0, config.byteNone());
 
 				assertEquals("property has wrong value", (short) 64, config.shortString());
-				assertEquals("property has wrong value", (short) 1, config.shortBoolean());
+				assertEquals("property has wrong value", (short) 1, config.shortBooleanTrue());
+				assertEquals("property has wrong value", (short) 0, config.shortBooleanFalse());
 				assertEquals("property has wrong value", (short) 64, config.shortCharacter());
 				assertEquals("property has wrong value", (short) 2, config.shortByte());
 				assertEquals("property has wrong value", (short) 1034, config.shortShort());
@@ -293,7 +297,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("property has wrong value", (short) 0, config.shortNone());
 
 				assertEquals("property has wrong value", 64, config.intString());
-				assertEquals("property has wrong value", 1, config.intBoolean());
+				assertEquals("property has wrong value", 1, config.intBooleanTrue());
+				assertEquals("property has wrong value", 0, config.intBooleanFalse());
 				assertEquals("property has wrong value", 64, config.intCharacter());
 				assertEquals("property has wrong value", 2, config.intByte());
 				assertEquals("property has wrong value", 1034, config.intShort());
@@ -306,7 +311,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("property has wrong value", 0, config.intNone());
 
 				assertEquals("property has wrong value", 64, config.longString());
-				assertEquals("property has wrong value", 1, config.longBoolean());
+				assertEquals("property has wrong value", 1, config.longBooleanTrue());
+				assertEquals("property has wrong value", 0, config.longBooleanFalse());
 				assertEquals("property has wrong value", 64, config.longCharacter());
 				assertEquals("property has wrong value", 2, config.longByte());
 				assertEquals("property has wrong value", 1034, config.longShort());
@@ -320,7 +326,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 
 				final float deltaFloat = 0x1.0p-126f;
 				assertEquals("property has wrong value", 64.3F, config.floatString(), deltaFloat);
-				assertEquals("property has wrong value", 1, config.floatBoolean(), deltaFloat);
+				assertEquals("property has wrong value", 1, config.floatBooleanTrue(), deltaFloat);
+				assertEquals("property has wrong value", 0, config.floatBooleanFalse(), deltaFloat);
 				assertEquals("property has wrong value", 64, config.floatCharacter(), deltaFloat);
 				assertEquals("property has wrong value", 2, config.floatByte(), deltaFloat);
 				assertEquals("property has wrong value", 1034, config.floatShort(), deltaFloat);
@@ -334,7 +341,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 
 				final double deltaDouble = 0x1.0p-1022;
 				assertEquals("property has wrong value", 64.3D, config.doubleString(), deltaDouble);
-				assertEquals("property has wrong value", 1, config.doubleBoolean(), deltaDouble);
+				assertEquals("property has wrong value", 1, config.doubleBooleanTrue(), deltaDouble);
+				assertEquals("property has wrong value", 0, config.doubleBooleanFalse(), deltaDouble);
 				assertEquals("property has wrong value", 64, config.doubleCharacter(), deltaDouble);
 				assertEquals("property has wrong value", 2, config.doubleByte(), deltaDouble);
 				assertEquals("property has wrong value", 1034, config.doubleShort(), deltaDouble);

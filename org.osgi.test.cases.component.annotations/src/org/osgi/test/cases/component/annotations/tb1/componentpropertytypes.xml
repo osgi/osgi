@@ -97,7 +97,9 @@ false
     </property>
 
     <property name="charString" type="String" value="64"/>
-    <property name="charBoolean" type="Boolean" value="true"/>
+    <property name="charStringEmpty" type="String" value=""/>
+    <property name="charBooleanTrue" type="Boolean" value="true"/>
+    <property name="charBooleanFalse" type="Boolean" value="false"/>
     <property name="charCharacter" type="Character" value="64"/>
     <property name="charByte" type="Byte" value="2"/>
     <property name="charShort" type="Short" value="1034"/>
@@ -115,7 +117,8 @@ false
     </property>
 
     <property name="byteString" type="String" value="64"/>
-    <property name="byteBoolean" type="Boolean" value="true"/>
+    <property name="byteBooleanTrue" type="Boolean" value="true"/>
+    <property name="byteBooleanFalse" type="Boolean" value="false"/>
     <property name="byteCharacter" type="Character" value="64"/>
     <property name="byteByte" type="Byte" value="2"/>
     <property name="byteShort" type="Short" value="1034"/>
@@ -133,7 +136,8 @@ false
     </property>
 
     <property name="shortString" type="String" value="64"/>
-    <property name="shortBoolean" type="Boolean" value="true"/>
+    <property name="shortBooleanTrue" type="Boolean" value="true"/>
+    <property name="shortBooleanFalse" type="Boolean" value="false"/>
     <property name="shortCharacter" type="Character" value="64"/>
     <property name="shortByte" type="Byte" value="2"/>
     <property name="shortShort" type="Short" value="1034"/>
@@ -151,7 +155,8 @@ false
     </property>
 
     <property name="intString" type="String" value="64"/>
-    <property name="intBoolean" type="Boolean" value="true"/>
+    <property name="intBooleanTrue" type="Boolean" value="true"/>
+    <property name="intBooleanFalse" type="Boolean" value="false"/>
     <property name="intCharacter" type="Character" value="64"/>
     <property name="intByte" type="Byte" value="2"/>
     <property name="intShort" type="Short" value="1034"/>
@@ -169,7 +174,8 @@ false
     </property>
 
     <property name="longString" type="String" value="64"/>
-    <property name="longBoolean" type="Boolean" value="true"/>
+    <property name="longBooleanTrue" type="Boolean" value="true"/>
+    <property name="longBooleanFalse" type="Boolean" value="false"/>
     <property name="longCharacter" type="Character" value="64"/>
     <property name="longByte" type="Byte" value="2"/>
     <property name="longShort" type="Short" value="1034"/>
@@ -187,7 +193,8 @@ false
     </property>
 
     <property name="floatString" type="String" value="64.3"/>
-    <property name="floatBoolean" type="Boolean" value="true"/>
+    <property name="floatBooleanTrue" type="Boolean" value="true"/>
+    <property name="floatBooleanFalse" type="Boolean" value="false"/>
     <property name="floatCharacter" type="Character" value="64"/>
     <property name="floatByte" type="Byte" value="2"/>
     <property name="floatShort" type="Short" value="1034"/>
@@ -205,7 +212,8 @@ false
     </property>
 
     <property name="doubleString" type="String" value="64.3"/>
-    <property name="doubleBoolean" type="Boolean" value="true"/>
+    <property name="doubleBooleanTrue" type="Boolean" value="true"/>
+    <property name="doubleBooleanFalse" type="Boolean" value="false"/>
     <property name="doubleCharacter" type="Character" value="64"/>
     <property name="doubleByte" type="Byte" value="2"/>
     <property name="doubleShort" type="Short" value="1034"/>
