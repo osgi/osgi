@@ -19,8 +19,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedFilterDTO;
@@ -631,6 +633,182 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
 		assertNotNull(filterDTO);
 		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+	}
+
+	public void test_140_5_11to17() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
+		final AtomicBoolean invokedInit = new AtomicBoolean(false);
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		MockFilter mockFilter = new MockFilter() {
+
+			@Override
+			public void destroy() {
+				invokedDestroy.set(true);
+			}
+
+			@Override
+			public void init(FilterConfig config) throws ServletException {
+				invokedInit.set(true);
+			}
+
+		};
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, mockFilter.around("b"), properties);
+		serviceRegistrations.add(sr);
+
+		assertEquals("bab", request("a"));
+		assertTrue(invokedInit.get());
+		invokedInit.set(false);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "b");
+		sr.setProperties(properties);
+		assertTrue(invokedDestroy.get());
+		assertEquals("bab", request("a"));
+		assertTrue(invokedInit.get());
+	}
+
+	public void test_140_5_17to20() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
+		serviceRegistrations.add(context.registerService(Filter.class, new MockFilter(), properties));
+
+		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNull(filterDTO);
+
+		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+	}
+
+	public void test_140_5_21to25() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invokedGetService = new AtomicBoolean(false);
+		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
+		final AtomicBoolean invokedInit = new AtomicBoolean(false);
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		class AFilter extends MockFilter {
+
+			@Override
+			public void destroy() {
+				invokedDestroy.set(true);
+			}
+
+			@Override
+			public void init(FilterConfig config) throws ServletException {
+				invokedInit.set(true);
+			}
+
+		}
+
+		PrototypeServiceFactory<Filter> factory = new PrototypeServiceFactory<Filter>() {
+
+			public void ungetService(Bundle bundle, ServiceRegistration<Filter> registration, Filter service) {
+			}
+
+			public Filter getService(Bundle bundle, ServiceRegistration<Filter> registration) {
+				invokedGetService.set(true);
+				return new AFilter().around("b");
+			}
+
+		};
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, factory, properties);
+		serviceRegistrations.add(sr);
+
+		assertEquals("bab", request("a"));
+		assertTrue(invokedGetService.get());
+		assertTrue(invokedInit.get());
+		invokedGetService.set(false);
+		invokedInit.set(false);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "b");
+		sr.setProperties(properties);
+		assertTrue(invokedDestroy.get());
+		assertTrue(invokedGetService.get());
+		assertEquals("bab", request("a"));
+		assertTrue(invokedInit.get());
+	}
+
+	public void test_140_5_26to31() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(Constants.SERVICE_RANKING, 1000);
+		ServiceRegistration<?> srB = context.registerService(Filter.class, new MockFilter().around("b"), properties);
+		serviceRegistrations.add(srB);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "c");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(Constants.SERVICE_RANKING, 1000);
+		ServiceRegistration<?> srC = context.registerService(Filter.class, new MockFilter().around("c"), properties);
+		serviceRegistrations.add(srC);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+		assertNotNull(requestInfoDTO);
+		assertEquals(2, requestInfoDTO.filterDTOs.length);
+		assertEquals("bcacb", request("a"));
+
+		properties.put(Constants.SERVICE_RANKING, 2000);
+		srC.setProperties(properties);
+		assertEquals("cbabc", request("a"));
+	}
+
+	public void test_140_5_32to33() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=foo)");
+		ServiceRegistration<?> srB = context.registerService(Filter.class, new MockFilter().around("b"), properties);
+		serviceRegistrations.add(srB);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "c");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		ServiceRegistration<?> srC = context.registerService(Filter.class, new MockFilter().around("c"), properties);
+		serviceRegistrations.add(srC);
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "d");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(something=foo)");
+		ServiceRegistration<?> srD = context.registerService(Filter.class, new MockFilter().around("d"), properties);
+		serviceRegistrations.add(srD);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+		assertNotNull(requestInfoDTO);
+		assertEquals(1, requestInfoDTO.filterDTOs.length);
+		assertEquals("cac", request("a"));
 	}
 
 }

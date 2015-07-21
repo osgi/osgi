@@ -1052,7 +1052,6 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
 		assertNull(servletDTO);
 
-		// TODO Is this correct?
 		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");
 		assertNull(failedServletDTO);
 	}
