@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.runtime.dto.DTOConstants;
+import org.osgi.service.http.runtime.dto.FailedFilterDTO;
 import org.osgi.service.http.runtime.dto.FilterDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
@@ -391,7 +393,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("ba", request("a"));
 	}
 
-	public void test_table_140_5_HTTP_WHITEBOARD_SERVLET_PATTERN() throws Exception {
+	public void test_table_140_5_HTTP_WHITEBOARD_FILTER_PATTERN() throws Exception {
 		BundleContext context = getContext();
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -400,9 +402,20 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
 
 		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/**");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, new MockFilter().around("b"), properties);
+		serviceRegistrations.add(sr);
+
+		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNotNull(failedFilterDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedFilterDTO.failureReason);
+
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/*");
-		ServiceRegistration<?> srA = context.registerService(Filter.class, new MockFilter().around("b"), properties);
-		serviceRegistrations.add(srA);
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
 
 		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
 		assertNotNull(requestInfoDTO);
@@ -413,7 +426,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("a", request(""));
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "");
-		srA.setProperties(properties);
+		sr.setProperties(properties);
 
 		requestInfoDTO = calculateRequestInfoDTO("/");
 		assertNotNull(requestInfoDTO);
@@ -424,22 +437,199 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("bab", request(""));
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "*.html");
-		srA.setProperties(properties);
+		sr.setProperties(properties);
 
 		requestInfoDTO = calculateRequestInfoDTO("/a.html");
+		assertNotNull(requestInfoDTO);
 		assertEquals(1, requestInfoDTO.filterDTOs.length);
 		assertEquals("a", request("a"));
 		assertEquals("bab", request("a.html"));
 		assertEquals("bab", request("some/path/b.html"));
 		assertEquals("a", request(""));
+	}
+
+	public void test_table_140_5_HTTP_WHITEBOARD_FILTER_REGEX() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] {"", "/"});
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, "**");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, new MockFilter().around("b"), properties);
+		serviceRegistrations.add(sr);
+
+		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNotNull(failedFilterDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedFilterDTO.failureReason);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, "/.*");
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+		assertNotNull(requestInfoDTO);
+		assertEquals(1, requestInfoDTO.filterDTOs.length);
+		assertEquals("bab", request("a"));
+		assertEquals("bab", request("a.html"));
+		assertEquals("bab", request("some/path/b.html"));
+		assertEquals("a", request(""));
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, "/?");
+		sr.setProperties(properties);
+
+		requestInfoDTO = calculateRequestInfoDTO("/");
+		assertNotNull(requestInfoDTO);
+		assertEquals(1, requestInfoDTO.filterDTOs.length);
+		assertEquals("a", request("a"));
+		assertEquals("a", request("a.html"));
+		assertEquals("a", request("some/path/b.html"));
+		assertEquals("bab", request(""));
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, ".*\\.html");
+		sr.setProperties(properties);
 
 		requestInfoDTO = calculateRequestInfoDTO("/a.html");
+		assertNotNull(requestInfoDTO);
 		assertEquals(1, requestInfoDTO.filterDTOs.length);
-		assertEquals("bab", request("/a.html"));
+		assertEquals("a", request("a"));
+		assertEquals("bab", request("a.html"));
+		assertEquals("bab", request("some/path/b.html"));
+		assertEquals("a", request(""));
+	}
 
-		requestInfoDTO = calculateRequestInfoDTO("/some/path/a.html");
+	public void test_table_140_5_HTTP_WHITEBOARD_FILTER_SERVLET() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] {"", "/"});
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "b");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] {"/b"});
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("b"), properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "**");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, new MockFilter().around("b"), properties);
+		serviceRegistrations.add(sr);
+
+		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "a");
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
+		assertNotNull(requestInfoDTO);
 		assertEquals(1, requestInfoDTO.filterDTOs.length);
-		assertEquals("bab", request("some/path/a.html"));
+		assertEquals("bab", request("a"));
+		assertEquals("bab", request("a.html"));
+		assertEquals("bab", request("some/path/b.html"));
+		assertEquals("bab", request(""));
+		assertEquals("b", request("b"));
+	}
+
+	public void test_table_140_5_initParams() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new MockServlet().content("a"), properties));
+
+		MockFilter mockFilter = new MockFilter() {
+
+			@Override
+			public void init(FilterConfig config) throws ServletException {
+				this.config = config;
+			}
+
+			@Override
+			public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+				String initParameter = config.getInitParameter(request.getParameter("p"));
+
+				response.getWriter().write((initParameter == null) ? "" : initParameter);
+			}
+
+			private FilterConfig	config;
+
+		};
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX + "param1", "value1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX + "param2", "value2");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX + "param3", 345l);
+		ServiceRegistration<?> sr = context.registerService(Filter.class, mockFilter, properties);
+		serviceRegistrations.add(sr);
+
+		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+
+		assertNotNull(filterDTO);
+		assertTrue(filterDTO.initParams.containsKey("param1"));
+		assertTrue(filterDTO.initParams.containsKey("param2"));
+		assertFalse(filterDTO.initParams.containsKey("param3"));
+		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals("value1", request("a?p=param1"));
+		assertEquals("value2", request("a?p=param2"));
+		assertEquals("", request("a?p=param3"));
+	}
+
+	public void test_140_5_7to10() throws Exception {
+		BundleContext context = getContext();
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME, "a");
+		ServiceRegistration<?> sr = context.registerService(Filter.class, new MockFilter(), properties);
+		serviceRegistrations.add(sr);
+
+		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNotNull(failedFilterDTO);
+		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedFilterDTO.failureReason);
+
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(filterDTO);
+		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+
+		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, ".*");
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(filterDTO);
+		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+
+		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "a");
+		sr.setProperties(properties);
+
+		failedFilterDTO = getFailedFilterDTOByName("a");
+		assertNull(failedFilterDTO);
+
+		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		assertNotNull(filterDTO);
+		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
 	}
 
 }
