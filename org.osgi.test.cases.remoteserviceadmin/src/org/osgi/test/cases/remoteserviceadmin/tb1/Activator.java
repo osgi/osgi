@@ -23,6 +23,8 @@ import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
@@ -32,6 +34,8 @@ import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
+import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -41,6 +45,10 @@ public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;
 	BundleContext       context;
 	EndpointDescription endpoint;
+
+	Semaphore semaphore = new Semaphore();
+
+	ServiceTracker<EndpointListener, EndpointListener> tracker;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -65,6 +73,9 @@ public class Activator implements BundleActivator, A, B {
 		registration.unregister();
 		
 		stoptest();
+
+		if (tracker != null)
+			tracker.close();
 	}
 
 	/**
@@ -102,23 +113,40 @@ public class Activator implements BundleActivator, A, B {
 		// 
 		// find the EndpointListeners and call them with the endpoint description
 		//
-		String filter = "(" + EndpointListener.ENDPOINT_LISTENER_SCOPE + "=*)"; // see 122.6.1
-		ServiceReference[] listeners = context.getServiceReferences(EndpointListener.class.getName(), filter);
-		Assert.assertNotNull("no EndpointListeners found", listeners);
-		
-		boolean foundListener = false;
-		for (ServiceReference sr : listeners) {
-			EndpointListener listener = (EndpointListener) context.getService(sr);
-			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
-			
-			String matchedFilter = Utils.isInterested(scope, endpoint);
-			
-			if (matchedFilter != null) {
-				foundListener = true;
-				listener.endpointAdded(endpoint, matchedFilter);
+		String filter = "(&(" + Constants.OBJECTCLASS + "="
+				+ EndpointListener.class.getName() + ")("
+				+ EndpointListener.ENDPOINT_LISTENER_SCOPE + "=*))"; // see
+																		// 122.6.1
+
+		tracker = new ServiceTracker<EndpointListener, EndpointListener>(
+				context, FrameworkUtil.createFilter(filter), null) {
+
+			@Override
+			public EndpointListener addingService(
+					ServiceReference<EndpointListener> reference) {
+				EndpointListener listener = super.addingService(reference);
+
+				Object scope = reference
+						.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
+
+				String matchedFilter = Utils.isInterested(scope, endpoint);
+
+				if (matchedFilter != null) {
+					listener.endpointAdded(endpoint, matchedFilter);
+					semaphore.signal();
+				}
+
+				return listener;
 			}
-		}
-		Assert.assertTrue("no interested EndpointListener found", foundListener);
+		};
+
+		tracker.open();
+		
+		String timeout = context.getProperty("rsa.ct.timeout");
+		
+		Assert.assertTrue("no interested EndpointListener found", semaphore
+				.waitForSignal(Long.parseLong(timeout != null ? timeout
+						: "30000")));
 	}
 
 	/**
@@ -128,8 +156,7 @@ public class Activator implements BundleActivator, A, B {
 		// 
 		// find the EndpointListeners and call them with the endpoint description
 		//
-		String filter = "(" + EndpointListener.ENDPOINT_LISTENER_SCOPE + "=*)"; // see 122.6.1
-		ServiceReference[] listeners = context.getServiceReferences(EndpointListener.class.getName(), filter);
+		ServiceReference[] listeners = tracker.getServiceReferences();
 		Assert.assertNotNull("no EndpointListeners found", listeners);
 		
 		boolean foundListener = false;

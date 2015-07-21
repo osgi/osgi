@@ -1,6 +1,5 @@
 package org.osgi.test.cases.remoteserviceadmin.tb7;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -9,6 +8,8 @@ import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -20,6 +21,8 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
+import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.util.tracker.ServiceTracker;
 
 /*
  * Copyright (c) OSGi Alliance (2008, 2014). All Rights Reserved.
@@ -57,6 +60,10 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	private EndpointDescription endpoint;
 	private BundleContext bctx;
 	private Map<String, Object> endpointProperties;
+
+	Semaphore semaphore = new Semaphore();
+
+	ServiceTracker<EndpointEventListener, EndpointEventListener> tracker;
 
 	public void start(BundleContext context) throws Exception {
 		this.bctx = context;
@@ -123,6 +130,9 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
 		stoptest();
+		if (tracker != null) {
+			tracker.close();
+		}
 	}
 
 	public String getB() {
@@ -175,34 +185,72 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	}
 
 	private void notifyEndpointEventListeners(BundleContext context,
-			EndpointEvent endpointEvent) throws InvalidSyntaxException {
+			final EndpointEvent endpointEvent) throws InvalidSyntaxException {
+
 		// FIXME: should I also filter for framework UUID == my UUID as
 		// suggested in 122.6.1?
-		String filter = "(" + EndpointEventListener.ENDPOINT_LISTENER_SCOPE
-				+ "=*)";
-		Collection<ServiceReference<EndpointEventListener>> listeners = context
-				.getServiceReferences(
-				EndpointEventListener.class, filter);
-		Assert.assertNotNull("no EndpointEventListeners found", listeners);
-
-		boolean foundListener = false;
-		for (ServiceReference<EndpointEventListener> sr : listeners) {
-			EndpointEventListener listener = context.getService(sr);
-			Object scope = sr
-					.getProperty(EndpointEventListener.ENDPOINT_LISTENER_SCOPE);
-
-			String matchedFilter = Utils.isInterested(scope, endpoint);
-
-			if (matchedFilter != null) {
-				foundListener = true;
-				listener.endpointChanged(endpointEvent, matchedFilter);
-				System.out
-						.println("TestBundle7: ******************** Propagated EndpointChanged Event to endpointEventListener: "
-								+ listener + " <<  " + endpointEvent.getType());
+		if (tracker == null) {
+			createTracker(context, endpointEvent);
+		} else {
+			ServiceReference<EndpointEventListener>[] refs = tracker
+					.getServiceReferences();
+			if (refs != null) {
+				for (ServiceReference<EndpointEventListener> ref : refs) {
+					sendEventIfMatches(endpointEvent, context, ref);
+				}
 			}
 		}
-		Assert.assertTrue("no interested EndpointEventListener found",
-				foundListener);
+
+		String timeout = context.getProperty("rsa.ct.timeout");
+
+		try {
+			Assert.assertTrue("no interested EndpointEventListener found",
+					semaphore.waitForSignal(Long
+							.parseLong(timeout != null ? timeout : "30000")));
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private EndpointEventListener sendEventIfMatches(
+			final EndpointEvent endpointEvent, BundleContext context,
+			ServiceReference<EndpointEventListener> reference) {
+		EndpointEventListener listener = context.getService(reference);
+
+		Object scope = reference
+				.getProperty(EndpointEventListener.ENDPOINT_LISTENER_SCOPE);
+
+		String matchedFilter = Utils.isInterested(scope, endpoint);
+
+		if (matchedFilter != null) {
+			listener.endpointChanged(endpointEvent, matchedFilter);
+			System.out
+					.println("TestBundle7: ******************** Propagated EndpointChanged Event to endpointEventListener: "
+							+ listener + " <<  " + endpointEvent.getType());
+			semaphore.signal();
+		}
+
+		return listener;
+	}
+
+	private void createTracker(final BundleContext context,
+			final EndpointEvent endpointEvent) throws InvalidSyntaxException {
+		String filter = "(&(" + Constants.OBJECTCLASS + "="
+				+ EndpointEventListener.class.getName() + ")("
+				+ EndpointEventListener.ENDPOINT_LISTENER_SCOPE + "=*))"; // see
+																			// 122.6.1
+
+		tracker = new ServiceTracker<EndpointEventListener, EndpointEventListener>(
+				context, FrameworkUtil.createFilter(filter), null) {
+
+			@Override
+			public EndpointEventListener addingService(
+					ServiceReference<EndpointEventListener> reference) {
+				return sendEventIfMatches(endpointEvent, context, reference);
+			}
+		};
+
+		tracker.open();
 	}
 
 }
