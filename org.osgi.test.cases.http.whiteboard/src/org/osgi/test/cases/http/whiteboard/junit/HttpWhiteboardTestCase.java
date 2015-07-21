@@ -297,7 +297,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
 				failedServletDTO.failureReason);
 		assertEquals(
-				srB.getReference().getProperty(Constants.SERVICE_ID),
+				getServiceId(srB),
 				failedServletDTO.serviceId);
 
 		properties = new Hashtable<String, Object>();
@@ -315,7 +315,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 				DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE,
 				failedServletDTO.failureReason);
 		assertEquals(
-				srA.getReference().getProperty(Constants.SERVICE_ID),
+				getServiceId(srA),
 				failedServletDTO.serviceId);
 	}
 
@@ -331,11 +331,11 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(srA);
 
 		ServletDTO servletDTO = getServletDTOByName(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				DEFAULT,
 				AServlet.class.getName());
 
 		assertNotNull(servletDTO);
-		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+		assertEquals(getServiceId(srA), servletDTO.serviceId);
 	}
 
 	public void test_140_4_26to31() throws Exception {
@@ -371,7 +371,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(requestInfoDTO.servletDTO);
 		assertEquals("a", requestInfoDTO.servletDTO.name);
 		assertEquals(
-				srA.getReference().getProperty(Constants.SERVICE_ID),
+				getServiceId(srA),
 				requestInfoDTO.servletDTO.serviceId);
 		assertEquals("a", request("a"));
 
@@ -388,7 +388,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 			assertNotNull(requestInfoDTO);
 			assertNotNull(requestInfoDTO.servletDTO);
-			assertFalse((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
+			assertFalse(getServiceId(srA) == requestInfoDTO.servletDTO.serviceId);
 			assertEquals("b", request("a"));
 		} finally {
 			httpService.unregister("/a");
@@ -497,7 +497,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(requestInfoDTO);
 		assertNotNull(requestInfoDTO.servletDTO);
 		assertTrue(requestInfoDTO.servletDTO.asyncSupported);
-		assertTrue((Long) srA.getReference().getProperty(Constants.SERVICE_ID) == requestInfoDTO.servletDTO.serviceId);
+		assertTrue(getServiceId(srA) == requestInfoDTO.servletDTO.serviceId);
 		assertEquals("a", requestInfoDTO.servletDTO.name);
 		assertEquals("a", request("a"));
 		assertTrue(invoked.get());
@@ -524,7 +524,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Servlet> srA = context.registerService(Servlet.class, new HttpServlet() {}, properties);
 		serviceRegistrations.add(srA);
 
-		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "a");
 		assertNotNull(errorPageDTO);
 		assertEquals(1, errorPageDTO.errorCodes.length);
 		assertEquals(400, errorPageDTO.errorCodes[0]);
@@ -537,7 +537,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Servlet> srB = context.registerService(Servlet.class, new HttpServlet() {}, properties);
 		serviceRegistrations.add(srB);
 
-		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		errorPageDTO = getErrorPageDTOByName(DEFAULT, "a");
 		assertNotNull(errorPageDTO);
 		assertEquals(1, errorPageDTO.errorCodes.length);
 		assertEquals(400, errorPageDTO.errorCodes[0]);
@@ -546,12 +546,12 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");
 		assertNotNull(failedServletDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedServletDTO.failureReason);
-		assertEquals(srB.getReference().getProperty(Constants.SERVICE_ID), failedServletDTO.serviceId);
+		assertEquals(getServiceId(srB), failedServletDTO.serviceId);
 
 		properties.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
 		srB.setProperties(properties);
 
-		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		errorPageDTO = getErrorPageDTOByName(DEFAULT, "a");
 		assertNotNull(errorPageDTO);
 		assertEquals(400, errorPageDTO.errorCodes[0]);
 		assertEquals(ServletException.class.getName(), errorPageDTO.exceptions[0]);
@@ -559,7 +559,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		failedServletDTO = getFailedServletDTOByName("a");
 		assertNotNull(failedServletDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedServletDTO.failureReason);
-		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), failedServletDTO.serviceId);
+		assertEquals(getServiceId(srA), failedServletDTO.serviceId);
 	}
 
 	public void test_table_140_4_HTTP_WHITEBOARD_SERVLET_ERROR_PAGE() throws Exception {
@@ -598,10 +598,10 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
-		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "b");
 		assertNotNull(servletDTO);
 
-		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "b");
 		assertNotNull(errorPageDTO);
 		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_BAD_GATEWAY) >= 0);
 
@@ -648,9 +648,9 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/b");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
-		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "b");
 		assertNotNull(servletDTO);
-		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "b");
 		assertNotNull(errorPageDTO);
 		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_FORBIDDEN) >= 0);
 
@@ -682,7 +682,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		assertNull(failedErrorPageDTO);
 		failedErrorPageDTO = getFailedErrorPageDTOByName("d");
 		assertNull(failedErrorPageDTO);
-		errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "d");
+		errorPageDTO = getErrorPageDTOByName(DEFAULT, "d");
 		assertNotNull(errorPageDTO);
 		assertEquals(404, errorPageDTO.errorCodes[0]);
 	}
@@ -723,9 +723,9 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
-		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "b");
 		assertNotNull(servletDTO);
-		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "b");
 		assertNotNull(errorPageDTO);
 		assertTrue(Arrays.binarySearch(errorPageDTO.errorCodes, HttpServletResponse.SC_BAD_GATEWAY) >= 0);
 
@@ -774,9 +774,9 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/error");
 		serviceRegistrations.add(context.registerService(Servlet.class, new BServlet(), properties));
 
-		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "b");
 		assertNotNull(servletDTO);
-		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "b");
+		ErrorPageDTO errorPageDTO = getErrorPageDTOByName(DEFAULT, "b");
 		assertNotNull(errorPageDTO);
 		assertTrue(Arrays.binarySearch(errorPageDTO.exceptions, ServletException.class.getName()) >= 0);
 
@@ -804,11 +804,11 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(srA);
 
 		ServletDTO servletDTO = getServletDTOByName(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				DEFAULT,
 				AServlet.class.getName());
 
 		assertNotNull(servletDTO);
-		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+		assertEquals(getServiceId(srA), servletDTO.serviceId);
 		assertEquals(AServlet.class.getName(), request("a"));
 	}
 
@@ -835,14 +835,14 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(srA);
 
 		ServletDTO servletDTO = getServletDTOByName(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				DEFAULT,
 				AServlet.class.getName());
 
 		assertNotNull(servletDTO);
 		assertTrue(servletDTO.initParams.containsKey("param1"));
 		assertTrue(servletDTO.initParams.containsKey("param2"));
 		assertFalse(servletDTO.initParams.containsKey("param3"));
-		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), servletDTO.serviceId);
+		assertEquals(getServiceId(srA), servletDTO.serviceId);
 		assertEquals("value1", request("a?p=param1"));
 		assertEquals("value2", request("a?p=param2"));
 		assertEquals("", request("a?p=param3"));
@@ -1049,7 +1049,7 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
 		serviceRegistrations.add(context.registerService(Servlet.class, new HttpServlet() {}, properties));
 
-		ServletDTO servletDTO = getServletDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		ServletDTO servletDTO = getServletDTOByName(DEFAULT, "a");
 		assertNull(servletDTO);
 
 		FailedServletDTO failedServletDTO = getFailedServletDTOByName("a");

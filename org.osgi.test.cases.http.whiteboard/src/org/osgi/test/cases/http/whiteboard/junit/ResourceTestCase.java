@@ -1,15 +1,19 @@
 package org.osgi.test.cases.http.whiteboard.junit;
 
+import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import javax.servlet.Servlet;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedResourceDTO;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
+import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCHFactory;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockServlet;
 
 public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
@@ -23,7 +27,7 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Object> sr = context.registerService(Object.class, new Object(), properties);
 		serviceRegistrations.add(sr);
 
-		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNotNull(failedResourceDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedResourceDTO.failureReason);
 
@@ -31,7 +35,7 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, 45);
 		sr.setProperties(properties);
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNotNull(failedResourceDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedResourceDTO.failureReason);
 
@@ -39,7 +43,7 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, new String[] {"/a", "/b"});
 		sr.setProperties(properties);
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNotNull(failedResourceDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_VALIDATION_FAILED, failedResourceDTO.failureReason);
 
@@ -47,12 +51,12 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, "/org/osgi/test/cases/http/whiteboard/junit/res/index.txt");
 		sr.setProperties(properties);
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals(2, resourceDTO.patterns.length);
 	}
@@ -65,22 +69,22 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Object> sr = context.registerService(Object.class, new Object(), properties);
 		serviceRegistrations.add(sr);
 
-		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNull(resourceDTO);
 
 		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, "/");
 		sr.setProperties(properties);
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 		resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNull(resourceDTO);
 	}
 
@@ -94,8 +98,8 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(sr);
 
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals("a", request("index.txt"));
 
@@ -104,8 +108,8 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		sr.setProperties(properties);
 
 		resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals("404", request("index.txt", null).get("responseCode").get(0));
 		assertEquals("a", request("http/whiteboard/junit/res/index.txt"));
@@ -115,8 +119,8 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		sr.setProperties(properties);
 
 		resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals("404", request("http/whiteboard/junit/res/index.txt", null).get("responseCode").get(0));
 		assertEquals("a", request("res/index.txt"));
@@ -132,8 +136,8 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		serviceRegistrations.add(sr);
 
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals("a", request("other.txt"));
 		assertEquals("404", request("index.txt", null).get("responseCode").get(0));
@@ -150,13 +154,13 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Object> sr = context.registerService(Object.class, new Object(), properties);
 		serviceRegistrations.add(sr);
 
-		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNotNull(failedResourceDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_NO_SERVLET_CONTEXT_MATCHING, failedResourceDTO.failureReason);
 
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNull(resourceDTO);
 		assertEquals("404", request("other.txt", null).get("responseCode").get(0));
 
@@ -164,14 +168,59 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some=foo)");
 		sr.setProperties(properties);
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 
 		resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNull(resourceDTO);
 		assertEquals("404", request("other.txt", null).get("responseCode").get(0));
+	}
+
+	public void test_140_6_28to29() throws Exception {
+		BundleContext context = getContext();
+
+		class AServletContextHelper extends ServletContextHelper {
+
+			public AServletContextHelper(Bundle bundle) {
+				super(bundle);
+			}
+
+			@Override
+			public URL getResource(String name) {
+				if (!name.startsWith("/org/osgi/test/cases/http/whiteboard/junit/res")) {
+					name = "/org/osgi/test/cases/http/whiteboard/junit/res" + name;
+				}
+				name = name.replaceAll("//", "/");
+				return super.getResource(name);
+			}
+
+		};
+
+		MockSCHFactory factory = new MockSCHFactory() {
+
+			@Override
+			public ServletContextHelper getService(Bundle bundle, ServiceRegistration<ServletContextHelper> registration) {
+				return new AServletContextHelper(bundle);
+			}
+
+		};
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "context1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, factory, properties));
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN, "/*");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, "/");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "(osgi.http.whiteboard.context.name=context1)");
+		ServiceRegistration<Object> sr = context.registerService(Object.class, new Object(), properties);
+		serviceRegistrations.add(sr);
+
+		assertEquals("404", request("context1/other.txt", null).get("responseCode").get(0));
+		assertEquals("a", request("context1/index.txt"));
 	}
 
 	public void test_140_6_1() throws Exception {
@@ -187,13 +236,13 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Object> sr = context.registerService(Object.class, new Object(), properties);
 		serviceRegistrations.add(sr);
 
-		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		FailedResourceDTO failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNotNull(failedResourceDTO);
 		assertEquals(DTOConstants.FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE, failedResourceDTO.failureReason);
 
 		ResourceDTO resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNull(resourceDTO);
 		assertEquals("b", request("index.txt"));
 
@@ -201,12 +250,12 @@ public class ResourceTestCase extends BaseHttpWhiteboardTestCase {
 		sr.setProperties(properties);
 
 		resourceDTO = getResourceDTOByServiceId(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-				(Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+				DEFAULT,
+				getServiceId(sr));
 		assertNotNull(resourceDTO);
 		assertEquals("a", request("index.txt"));
 
-		failedResourceDTO = getFailedResourceDTOByServiceId((Long) sr.getReference().getProperty(Constants.SERVICE_ID));
+		failedResourceDTO = getFailedResourceDTOByServiceId(getServiceId(sr));
 		assertNull(failedResourceDTO);
 	}
 

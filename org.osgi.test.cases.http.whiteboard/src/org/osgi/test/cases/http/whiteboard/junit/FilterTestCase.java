@@ -44,28 +44,28 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<Filter> sr = context.registerService(Filter.class, new MockFilter(), properties);
 		serviceRegistrations.add(sr);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertTrue(filterDTO.asyncSupported);
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED, "false");
 		sr.setProperties(properties);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertFalse(filterDTO.asyncSupported);
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED, 234l);
 		sr.setProperties(properties);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertFalse(filterDTO.asyncSupported);
 
 		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED);
 		sr.setProperties(properties);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertFalse(filterDTO.asyncSupported);
 	}
@@ -124,7 +124,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		RequestInfoDTO requestInfoDTO = calculateRequestInfoDTO("/a");
 		assertNotNull(requestInfoDTO);
 		assertEquals(0, requestInfoDTO.filterDTOs.length);
-		assertEquals(srC.getReference().getProperty(Constants.SERVICE_ID), requestInfoDTO.servletDTO.serviceId);
+		assertEquals(getServiceId(srC), requestInfoDTO.servletDTO.serviceId);
 
 		assertEquals("bab", request("a"));
 		assertTrue(invoked.get());
@@ -149,7 +149,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(requestInfoDTO);
 		assertEquals(1, requestInfoDTO.filterDTOs.length);
 		FilterDTO filterDTO = requestInfoDTO.filterDTOs[0];
-		assertEquals(srA.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals(getServiceId(srA), filterDTO.serviceId);
 		assertEquals(1, filterDTO.dispatcher.length);
 		assertEquals("REQUEST", filterDTO.dispatcher[0]);
 
@@ -174,7 +174,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<?> srA = context.registerService(Filter.class, new MockFilter().around("b"), properties);
 		serviceRegistrations.add(srA);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertEquals(1, filterDTO.dispatcher.length);
 		assertEquals("INCLUDE", filterDTO.dispatcher[0]);
@@ -220,7 +220,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<?> srA = context.registerService(Filter.class, new MockFilter().around("b"), properties);
 		serviceRegistrations.add(srA);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertEquals(1, filterDTO.dispatcher.length);
 		assertEquals("FORWARD", filterDTO.dispatcher[0]);
@@ -266,7 +266,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<?> srA = context.registerService(Filter.class, new MockFilter().around("b"), properties);
 		serviceRegistrations.add(srA);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertEquals(1, filterDTO.dispatcher.length);
 		assertEquals("ERROR", filterDTO.dispatcher[0]);
@@ -311,7 +311,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<?> srA = context.registerService(Filter.class, new MockFilter().around("b"), properties);
 		serviceRegistrations.add(srA);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
 		assertEquals(2, filterDTO.dispatcher.length);
 		Arrays.sort(filterDTO.dispatcher);
@@ -577,13 +577,13 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		ServiceRegistration<?> sr = context.registerService(Filter.class, mockFilter, properties);
 		serviceRegistrations.add(sr);
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 
 		assertNotNull(filterDTO);
 		assertTrue(filterDTO.initParams.containsKey("param1"));
 		assertTrue(filterDTO.initParams.containsKey("param2"));
 		assertFalse(filterDTO.initParams.containsKey("param3"));
-		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals(getServiceId(sr), filterDTO.serviceId);
 		assertEquals("value1", request("a?p=param1"));
 		assertEquals("value2", request("a?p=param2"));
 		assertEquals("", request("a?p=param3"));
@@ -599,7 +599,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 
 		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");
 		assertNull(failedFilterDTO);
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNull(filterDTO);
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/a");
@@ -608,9 +608,9 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		failedFilterDTO = getFailedFilterDTOByName("a");
 		assertNull(failedFilterDTO);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
-		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals(getServiceId(sr), filterDTO.serviceId);
 
 		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX, ".*");
@@ -619,9 +619,9 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		failedFilterDTO = getFailedFilterDTOByName("a");
 		assertNull(failedFilterDTO);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
-		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals(getServiceId(sr), filterDTO.serviceId);
 
 		properties.remove(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET, "a");
@@ -630,9 +630,9 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		failedFilterDTO = getFailedFilterDTOByName("a");
 		assertNull(failedFilterDTO);
 
-		filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNotNull(filterDTO);
-		assertEquals(sr.getReference().getProperty(Constants.SERVICE_ID), filterDTO.serviceId);
+		assertEquals(getServiceId(sr), filterDTO.serviceId);
 	}
 
 	public void test_140_5_11to17() throws Exception {
@@ -684,7 +684,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET, "(some.property=some.value)");
 		serviceRegistrations.add(context.registerService(Filter.class, new MockFilter(), properties));
 
-		FilterDTO filterDTO = getFilterDTOByName(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, "a");
+		FilterDTO filterDTO = getFilterDTOByName(DEFAULT, "a");
 		assertNull(filterDTO);
 
 		FailedFilterDTO failedFilterDTO = getFailedFilterDTOByName("a");

@@ -94,7 +94,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertEquals("default", sc1.get().getServletContextName());
+		assertEquals(DEFAULT, sc1.get().getServletContextName());
 	}
 
 	public void test_140_2_10to12() throws Exception {
@@ -144,7 +144,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(serviceReference);
 		assertEquals(Constants.SCOPE_BUNDLE, serviceReference.getProperty(Constants.SERVICE_SCOPE));
 		assertEquals(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				DEFAULT,
 				serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME));
 	}
 
@@ -176,7 +176,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 				for (Iterator<ServiceReference<?>> iterator = references.iterator(); iterator.hasNext();) {
 					ServiceReference<?> sr = iterator.next();
 
-					if ("default".equals(sr.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME))) {
+					if (DEFAULT.equals(sr.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME))) {
 						iterator.remove();
 					}
 				}
@@ -284,7 +284,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		assertNotNull(serviceReference);
 		assertEquals(Constants.SCOPE_BUNDLE, serviceReference.getProperty(Constants.SERVICE_SCOPE));
 		assertEquals(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				DEFAULT,
 				serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME));
 	}
 
@@ -292,12 +292,10 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 		String contextPath = "/context1";
 
-		ServletContextHelper servletContextHelper = new ServletContextHelper() {};
-
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
@@ -305,7 +303,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertEquals(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, sc1.get().getServletContextName());
+		assertEquals(DEFAULT, sc1.get().getServletContextName());
 		assertEquals(contextPath, sc1.get().getContextPath());
 	}
 
@@ -313,18 +311,16 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 		String contextPath = "/otherContext";
 
-		ServletContextHelper servletContextHelper = new ServletContextHelper() {};
-
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/context1");
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
@@ -332,7 +328,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertEquals(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, sc1.get().getServletContextName());
+		assertEquals(DEFAULT, sc1.get().getServletContextName());
 		assertEquals(contextPath, sc1.get().getContextPath());
 	}
 
@@ -340,19 +336,17 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 		String contextPath = "/context1";
 
-		ServletContextHelper servletContextHelper = new ServletContextHelper() {};
-
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
 		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/otherContext");
 		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
-		serviceRegistrations.add(context.registerService(ServletContextHelper.class, servletContextHelper, properties));
+		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
 
@@ -360,7 +354,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertEquals(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, sc1.get().getServletContextName());
+		assertEquals(DEFAULT, sc1.get().getServletContextName());
 		assertEquals(contextPath, sc1.get().getContextPath());
 	}
 
@@ -444,7 +438,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		String contextPath = "/context1";
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
@@ -454,7 +448,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
 		serviceRegistrations.add(context.registerService(ServletContextListener.class, new MockSCL(sc1), properties));
 
-		assertEquals(HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME, sc1.get().getServletContextName());
+		assertEquals(DEFAULT, sc1.get().getServletContextName());
 		assertEquals(contextPath, sc1.get().getContextPath());
 	}
 
@@ -669,12 +663,12 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		BundleContext context = getContext();
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
-		ServiceRegistration<ServletContextHelper> serviceRegistration = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
-		serviceRegistrations.add(serviceRegistration);
+		ServiceRegistration<ServletContextHelper> sr = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
+		serviceRegistrations.add(sr);
 
-		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName("default");
+		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName(DEFAULT);
 
 		assertNotNull(failedServletContextDTO);
 		assertEquals(
@@ -682,7 +676,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 				failedServletContextDTO.failureReason);
 		assertEquals("/", failedServletContextDTO.contextPath);
 		assertNotSame(
-				serviceRegistration.getReference().getProperty(Constants.SERVICE_ID),
+				getServiceId(sr),
 				failedServletContextDTO.serviceId);
 	}
 

@@ -28,13 +28,17 @@ import org.osgi.service.http.runtime.dto.FailedResourceDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.FilterDTO;
+import org.osgi.service.http.runtime.dto.ListenerDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
+import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
+
+	public static final String	DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
 
 	protected RequestInfoDTO calculateRequestInfoDTO(String string) {
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
@@ -187,6 +191,22 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return context.getService(serviceReference);
 	}
 
+	protected ListenerDTO getListenerDTOByServiceId(String contextName, long serviceId) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(contextName);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (ListenerDTO listenerDTO : servletContextDTO.listenerDTOs) {
+			if (serviceId == listenerDTO.serviceId) {
+				return listenerDTO;
+			}
+		}
+
+		return null;
+	}
+
 	protected ResourceDTO getResourceDTOByServiceId(String contextName, long serviceId) {
 		ServletContextDTO servletContextDTO = getServletContextDTOByName(contextName);
 
@@ -201,6 +221,10 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		}
 
 		return null;
+	}
+
+	protected long getServiceId(ServiceRegistration<?> sr) {
+		return (Long) sr.getReference().getProperty(Constants.SERVICE_ID);
 	}
 
 	protected ServletContextDTO getServletContextDTOByName(String name) {
