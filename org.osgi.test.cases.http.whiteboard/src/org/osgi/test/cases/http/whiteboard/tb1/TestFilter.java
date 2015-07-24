@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -63,8 +64,17 @@ public class TestFilter implements Filter {
 			return new ServletOutputStream() {
 
 				@Override
+				public boolean isReady() {
+					return true;
+				}
+
+				@Override
 				public void write(int b) throws IOException {
 					output.write(b);
+				}
+
+				@Override
+				public void setWriteListener(WriteListener arg0) {
 				}
 
 			};
