@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
@@ -40,7 +42,8 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
-		ServiceRegistration<?> sr = context.registerService(ServletContextListener.class, new MockSCL(null), properties);
+		ServiceRegistration<?> sr = context.registerService(
+				ServletContextListener.class, new MockSCL(new AtomicReference<ServletContext>()), properties);
 		serviceRegistrations.add(sr);
 
 		ListenerDTO listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
