@@ -19,10 +19,13 @@ import org.osgi.framework.Version;
 import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.namespace.contract.ContractNamespace;
+import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.namespace.service.ServiceNamespace;
 import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
@@ -418,14 +421,14 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 		BundleWiring bundleWiring = srA.getBundle().adapt(BundleWiring.class);
 
-		List<BundleCapability> capabilities = bundleWiring.getCapabilities("osgi.implementation");
+		List<BundleCapability> capabilities = bundleWiring.getCapabilities(ImplementationNamespace.IMPLEMENTATION_NAMESPACE);
 
 		assertTrue(capabilities.size() > 0);
 		boolean found = false;
 
 		for (Capability capability : capabilities) {
 			Map<String, Object> attributes = capability.getAttributes();
-			String name = (String) attributes.get("osgi.implementation");
+			String name = (String) attributes.get(ImplementationNamespace.IMPLEMENTATION_NAMESPACE);
 
 			if (name != null) {
 				Version version = (Version)attributes.get("version");
@@ -433,9 +436,9 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 				if (name.equals("osgi.http") && (version != null) && (version.equals(new Version("1.0.0")))) {
 					Map<String, String> directives = capability.getDirectives();
 
-					String uses = directives.get("uses");
+					String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
 
-					List<String> packages = Arrays.asList(uses.split(","));
+					List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
 
 					assertTrue(packages.contains("javax.servlet"));
 					assertTrue(packages.contains("javax.servlet.http"));
@@ -481,14 +484,14 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 				String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
 				if (name != null) {
-					Version version = (Version) attributes.get("version");
+					Version version = (Version) attributes.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE);
 
 					if (name.equals("JavaServlet") && (version != null) && (version.equals(new Version("3.1.0")))) {
 						Map<String, String> directives = capability.getDirectives();
 
-						String uses = directives.get("uses");
+						String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
 
-						List<String> packages = Arrays.asList(uses.split(","));
+						List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
 
 						assertTrue(packages.contains("javax.servlet"));
 						assertTrue(packages.contains("javax.servlet.annotation"));
@@ -507,27 +510,32 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 
 			boolean foundContract = false;
 
-			for (BundleRequirement requirement : requirements) {
-				Map<String, Object> attributes = requirement.getAttributes();
+			if (!requirements.isEmpty()) {
+				List<BundleWire> wires = bundleWiring.getRequiredWires(ContractNamespace.CONTRACT_NAMESPACE);
 
-				String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
+				for (BundleWire wire : wires) {
+					BundleCapability capability = wire.getCapability();
+					Map<String, Object> attributes = capability.getAttributes();
 
-				if (name != null) {
-					Version version = (Version) attributes.get("version");
+					String name = (String) attributes.get(ContractNamespace.CONTRACT_NAMESPACE);
 
-					if (name.equals("JavaServlet") && (version != null) && (version.equals(new Version("3.1.0")))) {
-						Map<String, String> directives = requirement.getDirectives();
+					if (name != null) {
+						Version version = (Version) attributes.get(ContractNamespace.CAPABILITY_VERSION_ATTRIBUTE);
 
-						String uses = directives.get("uses");
+						if (name.equals("JavaServlet") && (version != null) && (version.equals(new Version("3.1.0")))) {
+							Map<String, String> directives = capability.getDirectives();
 
-						List<String> packages = Arrays.asList(uses.split(","));
+							String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);
 
-						assertTrue(packages.contains("javax.servlet"));
-						assertTrue(packages.contains("javax.servlet.annotation"));
-						assertTrue(packages.contains("javax.servlet.descriptor"));
-						assertTrue(packages.contains("javax.servlet.http"));
+							List<String> packages = Arrays.asList(uses.split("\\s*,\\s*"));
 
-						foundContract = true;
+							assertTrue(packages.contains("javax.servlet"));
+							assertTrue(packages.contains("javax.servlet.annotation"));
+							assertTrue(packages.contains("javax.servlet.descriptor"));
+							assertTrue(packages.contains("javax.servlet.http"));
+
+							foundContract = true;
+						}
 					}
 				}
 			}
