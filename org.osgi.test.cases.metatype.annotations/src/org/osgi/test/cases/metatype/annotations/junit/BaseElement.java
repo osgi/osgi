@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.metatype.annotations.junit;
 
 import org.w3c.dom.Element;
@@ -24,14 +23,38 @@ import org.w3c.dom.Element;
  * 
  * @author $Id$
  */
-public class OCD extends BaseElement {
+public class BaseElement {
+	private final String				id;
+	private final NamespaceContextImpl	context;
+	private final Element				element;
 
 	/**
-	 * @param id
-	 * @param context
-	 * @param ocd
+	 * @param id @param context @param element
 	 */
-	public OCD(String id, NamespaceContextImpl context, Element ocd) {
-		super(id, context, ocd);
+	public BaseElement(String id, NamespaceContextImpl context, Element ocd) {
+		this.id = id;
+		this.context = context;
+		this.element = ocd;
+	}
+
+	/**
+	 * @return result
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @return result
+	 */
+	public Element getElement() {
+		return element;
+	}
+
+	/**
+	 * @return result
+	 */
+	public NamespaceContextImpl getNamespaceContext() {
+		return context;
 	}
 }

@@ -24,14 +24,14 @@ import org.w3c.dom.Element;
  * 
  * @author $Id$
  */
-public class OCD extends BaseElement {
+public class Designate extends BaseElement {
 
 	/**
 	 * @param id
 	 * @param context
-	 * @param ocd
+	 * @param designate
 	 */
-	public OCD(String id, NamespaceContextImpl context, Element ocd) {
+	public Designate(String id, NamespaceContextImpl context, Element ocd) {
 		super(id, context, ocd);
 	}
 }

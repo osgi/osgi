@@ -18,6 +18,7 @@ package org.osgi.test.cases.metatype.annotations.junit;
 
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,8 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	private final DocumentBuilder	db;
 	private final XPath				xpath;
 	private final Map<String, OCD>	ocds;
+	private final Map<String, Designate>	designatePids;
+	private final Map<String, Designate>	designateFactoryPids;
 
 	/**
 	 * @throws Exception
@@ -64,6 +67,8 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		xpath = xpf.newXPath();
 
 		ocds = new HashMap<String, OCD>();
+		designatePids = new HashMap<String, Designate>();
+		designateFactoryPids = new HashMap<String, Designate>();
 	}
 
 	protected void setUp() throws Exception {
@@ -107,9 +112,26 @@ public class AnnotationsTestCase extends OSGiTestCase {
 				for (int j = 0; j < elements.getLength(); j++) {
 					Element element = (Element) elements.item(j);
 					// System.out.println(toString(element));
-					String id = getOCDName(element);
+					String id = getOCDId(element);
 					assertNull("multiple OCD with the same id",
 							ocds.put(id, new OCD(id, context, element)));
+				}
+				elements = (NodeList) xpath.evaluate("//"
+						+ namespace.getLocalName() + ":MetaData/Designate",
+						namespace.getOwnerElement(),
+						XPathConstants.NODESET);
+				for (int j = 0; j < elements.getLength(); j++) {
+					Element element = (Element) elements.item(j);
+					// System.out.println(toString(element));
+					String factoryPid = getDesignateFactoryPid(element);
+					if (factoryPid.length() > 0) {
+						assertNull("multiple Designate with the same factoryPid",
+								designateFactoryPids.put(factoryPid, new Designate(factoryPid, context, element)));
+						continue;
+					}
+					String pid = getDesignatePid(element);
+					assertNull("multiple Designate with the same pid",
+							designatePids.put(pid, new Designate(pid, context, element)));
 				}
 			}
 		}
@@ -283,11 +305,18 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathCount(ocd, "Icon", 2);
 		assertXPathValue(ocd, "Icon[@resource='icon/member-32.png']/@size", "32");
 		assertXPathValue(ocd, "Icon[@resource='icon/member-64.png']/@size", "64");
-		assertXPathCount(ocd, "../Designate", 4);
-		assertXPathValue(ocd, "../Designate[@pid='pid1']/Object/@ocdref", "testNoDefaults");
-		assertXPathValue(ocd, "../Designate[@pid='pid2']/Object/@ocdref", "testNoDefaults");
-		assertXPathValue(ocd, "../Designate[@factoryPid='factoryPid1']/Object/@ocdref", "testNoDefaults");
-		assertXPathValue(ocd, "../Designate[@factoryPid='factoryPid2']/Object/@ocdref", "testNoDefaults");
+		for (String pid : Arrays.asList("pid1", "pid2")) {
+			Designate designate = designatePids.get(pid);
+			assertNotNull("Unable to find pid " + pid + " Designate", designate);
+			assertXPathValue(designate, "Object/@ocdref", "testNoDefaults");
+			assertXPathCount(designate, "@factoryPid", 0);
+		}
+		for (String factoryPid : Arrays.asList("factoryPid1", "factoryPid2")) {
+			Designate designate = designateFactoryPids.get(factoryPid);
+			assertNotNull("Unable to find factoryPid " + factoryPid + " Designate", designate);
+			assertXPathValue(designate, "Object/@ocdref", "testNoDefaults");
+			assertXPathCount(designate, "@pid", 0);
+		}
 	}
 
 	// TODO add @Designate tests
@@ -330,12 +359,10 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @return result
 	 * @throws Exception
 	 */
-	public Node getXPathValue(OCD ocd, String expr)
+	public Node getXPathValue(BaseElement element, String expr)
 			throws Exception {
-		xpath.setNamespaceContext(ocd.getNamespaceContext());
-		Node result = (Node) xpath.evaluate(expr,
-				ocd.getOCD(),
-				XPathConstants.NODE);
+		xpath.setNamespaceContext(element.getNamespaceContext());
+		Node result = (Node) xpath.evaluate(expr, element.getElement(), XPathConstants.NODE);
 		return result;
 	}
 
@@ -345,19 +372,19 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @param value
 	 * @throws Exception
 	 */
-	public void assertXPathValue(OCD ocd, String expr,
+	public void assertXPathValue(BaseElement element, String expr,
 			String value) throws Exception {
-		Node result = getXPathValue(ocd, expr);
+		Node result = getXPathValue(element, expr);
 		if (value == null) {
 			assertNull(expr + " evaluated to a non-null value for component "
-					+ ocd.getId(), result);
+					+ element.getId(), result);
 			return;
 		}
 		assertNotNull(expr + " evaluated to a null value on component "
-				+ ocd.getId(), result);
-		assertEquals(expr + " evaluated on component " + ocd.getId(),
+				+ element.getId(), result);
+		assertEquals(expr + " evaluated on component " + element.getId(),
 				value, result.getNodeValue());
-		xpath.setNamespaceContext(ocd.getNamespaceContext());
+		xpath.setNamespaceContext(element.getNamespaceContext());
 	}
 
 	/**
@@ -366,13 +393,13 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @param value
 	 * @throws Exception
 	 */
-	public boolean assertXPathValueIfSet(OCD ocd, String expr,
+	public boolean assertXPathValueIfSet(BaseElement element, String expr,
 			String value) throws Exception {
-		Node result = getXPathValue(ocd, expr);
+		Node result = getXPathValue(element, expr);
 		if (result == null) {
 			return false;
 		}
-		assertEquals(expr + " evaluated on component " + ocd.getId(),
+		assertEquals(expr + " evaluated on component " + element.getId(),
 				value, result.getNodeValue());
 		return true;
 	}
@@ -383,24 +410,30 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @param value
 	 * @throws Exception
 	 */
-	public void assertXPathCount(OCD ocd, String expr, int value)
+	public void assertXPathCount(BaseElement element, String expr, int value)
 			throws Exception {
-		xpath.setNamespaceContext(ocd.getNamespaceContext());
+		xpath.setNamespaceContext(element.getNamespaceContext());
 		expr = "count(" + expr + ")";
-		String result = (String) xpath.evaluate(expr,
-				ocd.getOCD(),
-				XPathConstants.STRING);
+		String result = (String) xpath.evaluate(expr, element.getElement(), XPathConstants.STRING);
 		assertNotNull(expr + " evaluated to a null value on component "
-				+ ocd.getId(), result);
-		assertEquals(expr + " evaluated on component " + ocd.getId(),
+				+ element.getId(), result);
+		assertEquals(expr + " evaluated on component " + element.getId(),
 				value, Integer.valueOf(result).intValue());
 	}
 
-	private String getOCDName(Element ocd) throws Exception {
-		String name = (String) xpath.evaluate("@id",
-				ocd,
-				XPathConstants.STRING);
-		return name;
+	private String getOCDId(Element ocd) throws Exception {
+		String id = (String) xpath.evaluate("@id", ocd, XPathConstants.STRING);
+		return id;
+	}
+
+	private String getDesignatePid(Element designate) throws Exception {
+		String pid = (String) xpath.evaluate("@pid", designate, XPathConstants.STRING);
+		return pid;
+	}
+
+	private String getDesignateFactoryPid(Element designate) throws Exception {
+		String factoryPid = (String) xpath.evaluate("@factoryPid", designate, XPathConstants.STRING);
+		return factoryPid;
 	}
 
 	/* For test debugging use */
