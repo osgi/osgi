@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionIdListener;
 import javax.servlet.http.HttpSessionListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -361,8 +362,42 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invokedReplaced.get());
 	}
 
-	// public void test_140_7_HttpSessionIdListener() throws Exception {
-		// TODO can't test until Servlet 3.1 is in the cnf repo
-	// }
+	public void test_140_7_HttpSessionIdListener() throws Exception {
+		BundleContext context = getContext();
+		final AtomicBoolean invoked = new AtomicBoolean(false);
+
+		class AHttpSessionIdListener implements HttpSessionIdListener {
+
+			public void sessionIdChanged(HttpSessionEvent event, String previousId) {
+				invoked.set(true);
+			}
+
+		}
+
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER, "true");
+		ServiceRegistration<?> sr = context.registerService(HttpSessionIdListener.class, new AHttpSessionIdListener(), properties);
+		serviceRegistrations.add(sr);
+
+		ListenerDTO listenerDTO = getListenerDTOByServiceId(DEFAULT, getServiceId(sr));
+		assertNotNull(listenerDTO);
+
+		class AServlet extends HttpServlet {
+
+			@Override
+			protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				request.getSession(true);
+				request.changeSessionId();
+				response.getWriter().write("a");
+			}
+
+		}
+
+		properties = new Hashtable<String, Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/a");
+		serviceRegistrations.add(context.registerService(Servlet.class, new AServlet(), properties));
+		assertEquals("a", request("a"));
+		assertTrue(invoked.get());
+	}
 
 }
