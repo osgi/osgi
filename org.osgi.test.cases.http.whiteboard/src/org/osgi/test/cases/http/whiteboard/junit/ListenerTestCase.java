@@ -259,7 +259,6 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "a");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/");
 		ServiceRegistration<ServletContextHelper> srA = context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties);
-		serviceRegistrations.add(srA);
 
 		final AtomicBoolean invokedCreate = new AtomicBoolean(false);
 		final AtomicBoolean invokedDestroy = new AtomicBoolean(false);
@@ -304,7 +303,7 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("", request("a"));
 		assertTrue(invokedCreate.get());
 		srA.unregister();
-		assertFalse(invokedDestroy.get());
+		assertTrue(invokedDestroy.get());
 	}
 
 	public void test_140_7_HttpSessionAttributeListener() throws Exception {
