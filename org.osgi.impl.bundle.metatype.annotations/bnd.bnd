@@ -1,0 +1,25 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description			= Metatype Annotations Test Bundle
+
+Private-Package 			= ${p}.*
+
+-dsannotations: ${p}.*
+-metatypeannotations: ${p}.*
+
+-buildpath 					= \
+	org.osgi.service.component.annotations; 	version=project, \
+	org.osgi.service.metatype.annotations; 	version=project, \
+	osgi.core;					version=6.0, \
+	osgi.cmpn;					version=6.0, \
+	ee.j2se;					version=${javac.compliance}
+
+-runbundles							= \
+	org.osgi.impl.service.component; version=latest, \
+	org.osgi.impl.service.metatype; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.log; version=latest
+	
+-runproperties = ${runproperties}
+
