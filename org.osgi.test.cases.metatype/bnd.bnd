@@ -26,9 +26,9 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.metatype;              version=project , \
-	osgi.core;								version=4.0	, \
-	osgi.cmpn;								version=4.0	, \
-	ee.minimum;								version=1.2		, \
+	osgi.core;								version=6.0	, \
+	osgi.cmpn;								version=6.0	, \
+	ee.minimum;								version=1.3.0		, \
 	${junit}
 
 -runbundles							= \
