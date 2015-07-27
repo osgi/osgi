@@ -319,7 +319,43 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		}
 	}
 
-	// TODO add @Designate tests
+	public void testDesignateConfig() throws Exception {
+		String name = getName();
+		OCD ocd = ocds.get(name);
+		assertNotNull("Unable to find " + name + " OCD", ocd);
+		Node result = getXPathValue(ocd, "text()");
+		if (result != null) {
+			assertEquals("text() evaluated on OCD[@id='" + ocd.getId() + "']", "", result.getNodeValue().trim());
+		}
+
+		assertXPathValue(ocd, "@description", "");
+		assertAD(ocd, "string1", "String", 0, "config/string1");
+
+		String pid = "testDesignateComponent";
+		Designate designate = designatePids.get(pid);
+		assertNotNull("Unable to find pid " + pid + " Designate", designate);
+		assertXPathValue(designate, "Object/@ocdref", name);
+		assertXPathCount(designate, "@factoryPid", 0);
+	}
+
+	public void testDesignateFactoryConfig() throws Exception {
+		String name = getName();
+		OCD ocd = ocds.get(name);
+		assertNotNull("Unable to find " + name + " OCD", ocd);
+		Node result = getXPathValue(ocd, "text()");
+		if (result != null) {
+			assertEquals("text() evaluated on OCD[@id='" + ocd.getId() + "']", "", result.getNodeValue().trim());
+		}
+
+		assertXPathValue(ocd, "@description", "");
+		assertAD(ocd, "string1", "String", 0, "config/string1");
+
+		String factoryPid = "testDesignateFactoryComponent";
+		Designate designate = designateFactoryPids.get(factoryPid);
+		assertNotNull("Unable to find factoryPid " + factoryPid + " Designate", designate);
+		assertXPathValue(designate, "Object/@ocdref", name);
+		assertXPathCount(designate, "@pid", 0);
+	}
 
 	public void assertOption(OCD ocd, String ad, String label, String value) throws Exception {
 		assertXPathValue(ocd, "AD[@id='" + ad + "']/Option[@label='" + label + "']/@value", value);
