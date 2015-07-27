@@ -15,10 +15,10 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.service;
+package org.osgi.test.cases.component.types;
 
-import java.util.Map;
+public @interface EnumMember {
+	TestEnum /**/ single();
 
-public interface ObjectProviderBase {
-	Map<String, Object> getProperties();
+	TestEnum[] /**/ multiple();
 }

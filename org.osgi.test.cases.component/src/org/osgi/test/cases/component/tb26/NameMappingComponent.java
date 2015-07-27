@@ -15,21 +15,21 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.tb1;
+package org.osgi.test.cases.component.tb26;
 
 import java.util.Map;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.cases.component.annotations.service.ObjectProvider1;
-import org.osgi.test.cases.component.annotations.types.Coercion;
+import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.cases.component.types.NameMapping;
 
-public class CoercionComponent implements ObjectProvider1<Coercion> {
-	private volatile Coercion				config;
+public class NameMappingComponent implements ObjectProvider1<NameMapping> {
+	private volatile NameMapping			config;
 	private volatile Map<String, Object>	properties;
 
-	public CoercionComponent() {
+	public NameMappingComponent() {
 	}
 
-	void activate(Coercion c, Map<String, Object> p) {
+	void activate(NameMapping c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("activate: %s[%X]\n",
@@ -37,7 +37,7 @@ public class CoercionComponent implements ObjectProvider1<Coercion> {
 				System.identityHashCode(this));
 	}
 
-	void modified(Coercion c, Map<String, Object> p) {
+	void modified(NameMapping c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("modified: %s[%X]\n",
@@ -45,13 +45,13 @@ public class CoercionComponent implements ObjectProvider1<Coercion> {
 				System.identityHashCode(this));
 	}
 
-	void deactivate(Coercion c, Map<String, Object> p) {
+	void deactivate(NameMapping c, Map<String, Object> p) {
 		System.out.printf("deactivate: %s[%X]\n",
 				properties.get(ComponentConstants.COMPONENT_NAME),
 				System.identityHashCode(this));
 	}
 
-	public Coercion get1() {
+	public NameMapping get1() {
 		return config;
 	}
 

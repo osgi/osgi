@@ -4,18 +4,14 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
-Export-Package                      = \
-    ${p}.service, \
-    ${p}.types
 -includeresource					= resources, \
- tb1.jar, \
  OSGI-INF/impl-src=${project.workspace}/org.osgi.impl.bundle.component.annotations/src
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.service.component.annotations;					version=project	, \
-	osgi.core;									version=4.3.1	, \
-	osgi.cmpn;									version=4.3.1	, \
+	osgi.core;									version=6.0.0, \
+	osgi.cmpn;									version=6.0.0, \
 	ee.j2se;									version=${javac.compliance}	, \
 	${junit}
 
@@ -26,8 +22,7 @@ Export-Package                      = \
     org.osgi.impl.service.log; version=latest
 
 -runproperties = ${runproperties}, \
-	${p}.bundle.symbolic.name=org.osgi.impl.bundle.component.annotations, \
-	org.osgi.test.testcase.timeout=1000
+	${p}.bundle.symbolic.name=org.osgi.impl.bundle.component.annotations
 
 Test-Cases							= ${testcases}
 	

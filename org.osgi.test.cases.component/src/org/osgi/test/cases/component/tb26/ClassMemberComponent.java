@@ -15,21 +15,21 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.tb1;
+package org.osgi.test.cases.component.tb26;
 
 import java.util.Map;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.cases.component.annotations.service.ObjectProvider1;
-import org.osgi.test.cases.component.annotations.types.NameMapping;
+import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.cases.component.types.ClassMember;
 
-public class NameMappingComponent implements ObjectProvider1<NameMapping> {
-	private volatile NameMapping			config;
+public class ClassMemberComponent implements ObjectProvider1<ClassMember> {
+	private volatile ClassMember			config;
 	private volatile Map<String, Object>	properties;
 
-	public NameMappingComponent() {
+	public ClassMemberComponent() {
 	}
 
-	void activate(NameMapping c, Map<String, Object> p) {
+	void activate(ClassMember c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("activate: %s[%X]\n",
@@ -37,7 +37,7 @@ public class NameMappingComponent implements ObjectProvider1<NameMapping> {
 				System.identityHashCode(this));
 	}
 
-	void modified(NameMapping c, Map<String, Object> p) {
+	void modified(ClassMember c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("modified: %s[%X]\n",
@@ -45,13 +45,13 @@ public class NameMappingComponent implements ObjectProvider1<NameMapping> {
 				System.identityHashCode(this));
 	}
 
-	void deactivate(NameMapping c, Map<String, Object> p) {
+	void deactivate(ClassMember c, Map<String, Object> p) {
 		System.out.printf("deactivate: %s[%X]\n",
 				properties.get(ComponentConstants.COMPONENT_NAME),
 				System.identityHashCode(this));
 	}
 
-	public NameMapping get1() {
+	public ClassMember get1() {
 		return config;
 	}
 

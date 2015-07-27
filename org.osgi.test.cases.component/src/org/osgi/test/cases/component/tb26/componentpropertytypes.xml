@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-<scr:component name="org.osgi.test.cases.component.annotations.tb1.NameMappingComponent"
+<scr:component name="org.osgi.test.cases.component.tb26.NameMappingComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-    <implementation class="org.osgi.test.cases.component.annotations.tb1.NameMappingComponent"/>
+    <implementation class="org.osgi.test.cases.component.tb26.NameMappingComponent"/>
     <service>
-        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
     </service>
     <property name="myProperty143" value="xml/myProperty143"/>
     <property name="new" value="xml/new"/>
@@ -17,34 +17,34 @@
     <property name="five..prop" value="xml/five..prop"/>
 </scr:component>
 
-<scr:component name="org.osgi.test.cases.component.annotations.tb1.AnnotationMemberComponent"
+<scr:component name="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-    <implementation class="org.osgi.test.cases.component.annotations.tb1.AnnotationMemberComponent"/>
+    <implementation class="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"/>
     <service>
-        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
     </service>
     <property name="error" value="xml/error"/>
     <property name="errors" value="xml/errors"/>
 </scr:component>
 
-<scr:component name="org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent"
+<scr:component name="org.osgi.test.cases.component.tb26.ClassMemberComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-    <implementation class="org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent"/>
+    <implementation class="org.osgi.test.cases.component.tb26.ClassMemberComponent"/>
     <service>
-        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
     </service>
-    <property name="single" value="org.osgi.test.cases.component.annotations.types.ClassMember"/>
+    <property name="single" value="org.osgi.test.cases.component.types.ClassMember"/>
     <property name="multiple">
-org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent
-org.osgi.test.cases.component.annotations.types.ClassMember
+org.osgi.test.cases.component.tb26.ClassMemberComponent
+org.osgi.test.cases.component.types.ClassMember
     </property>
 </scr:component>
 
-<scr:component name="org.osgi.test.cases.component.annotations.tb1.EnumMemberComponent"
+<scr:component name="org.osgi.test.cases.component.tb26.EnumMemberComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-    <implementation class="org.osgi.test.cases.component.annotations.tb1.EnumMemberComponent"/>
+    <implementation class="org.osgi.test.cases.component.tb26.EnumMemberComponent"/>
     <service>
-        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
     </service>
     <property name="single" value="ITEM1"/>
     <property name="multiple">
@@ -53,12 +53,12 @@ ITEM1
     </property>
 </scr:component>
 
-<scr:component name="org.osgi.test.cases.component.annotations.tb1.CoercionComponent"
+<scr:component name="org.osgi.test.cases.component.tb26.CoercionComponent"
             xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
-            factory="org.osgi.test.cases.component.annotations.tb1.CoercionComponent">
-    <implementation class="org.osgi.test.cases.component.annotations.tb1.CoercionComponent"/>
+            factory="org.osgi.test.cases.component.tb26.CoercionComponent">
+    <implementation class="org.osgi.test.cases.component.tb26.CoercionComponent"/>
     <service>
-        <provide interface="org.osgi.test.cases.component.annotations.service.ObjectProvider1"/>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
     </service>
     <property name="stringString" type="String" value="xml/stringString"/>
     <property name="stringBoolean" type="Boolean" value="true"/>
@@ -243,8 +243,8 @@ false
 64.3
     </property>
     <property name="classArray" type="String">
-org.osgi.test.cases.component.annotations.tb1.CoercionComponent
-org.osgi.test.cases.component.annotations.types.Coercion
+org.osgi.test.cases.component.tb26.CoercionComponent
+org.osgi.test.cases.component.types.Coercion
     </property>
 
     <property name="enumBoolean" type="Boolean" value="true"/>

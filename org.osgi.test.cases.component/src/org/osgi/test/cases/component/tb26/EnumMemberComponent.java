@@ -15,12 +15,12 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.tb1;
+package org.osgi.test.cases.component.tb26;
 
 import java.util.Map;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.cases.component.annotations.service.ObjectProvider1;
-import org.osgi.test.cases.component.annotations.types.EnumMember;
+import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.cases.component.types.EnumMember;
 
 public class EnumMemberComponent implements ObjectProvider1<EnumMember> {
 	private volatile EnumMember				config;

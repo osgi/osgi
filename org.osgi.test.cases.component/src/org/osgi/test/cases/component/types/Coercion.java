@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.component.annotations.types;
+package org.osgi.test.cases.component.types;
 
 public @interface Coercion {
 	String stringString();

@@ -15,8 +15,10 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.service;
+package org.osgi.test.cases.component.types;
 
-public interface ObjectProvider1<T> extends ObjectProviderBase {
-	T get1();
+public @interface AnnotationMember {
+	NameMapping error();
+
+	NameMapping[]errors();
 }

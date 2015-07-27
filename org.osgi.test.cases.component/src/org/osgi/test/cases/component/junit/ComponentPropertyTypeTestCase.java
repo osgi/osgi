@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.component.annotations.junit;
+package org.osgi.test.cases.component.junit;
 
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -25,19 +25,18 @@ import org.osgi.framework.Filter;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentFactory;
-import org.osgi.test.cases.component.annotations.service.ObjectProvider1;
-import org.osgi.test.cases.component.annotations.types.AnnotationMember;
-import org.osgi.test.cases.component.annotations.types.ClassMember;
-import org.osgi.test.cases.component.annotations.types.Coercion;
-import org.osgi.test.cases.component.annotations.types.EnumMember;
-import org.osgi.test.cases.component.annotations.types.NameMapping;
-import org.osgi.test.cases.component.annotations.types.TestEnum;
+import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.cases.component.types.AnnotationMember;
+import org.osgi.test.cases.component.types.ClassMember;
+import org.osgi.test.cases.component.types.Coercion;
+import org.osgi.test.cases.component.types.EnumMember;
+import org.osgi.test.cases.component.types.NameMapping;
+import org.osgi.test.cases.component.types.TestEnum;
 import org.osgi.test.support.OSGiTestCase;
-import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ComponentPropertyTypeTestCase extends OSGiTestCase {
-	private static long SLEEP = OSGiTestCaseProperties.getTimeout() * OSGiTestCaseProperties.getScaling();
+	private static int SLEEP = 1000;
 
 	public ComponentPropertyTypeTestCase() {
 	}
@@ -45,6 +44,24 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		String sleepTimeString = getProperty("osgi.tc.component.sleeptime");
+		int sleepTime = SLEEP;
+		if (sleepTimeString != null) {
+			try {
+				sleepTime = Integer.parseInt(sleepTimeString);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out
+						.println("Error while parsing sleep value! The default one will be used : "
+								+ SLEEP);
+			}
+			if (sleepTime < 100) {
+				System.out.println("The sleep value is too low : " + sleepTime
+						+ " ! The default one will be used : " + SLEEP);
+			} else {
+				SLEEP = sleepTime;
+			}
+		}
 	}
 
 	@Override
@@ -53,14 +70,14 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 	}
 
 	public void testNameMapping130() throws Exception {
-		Bundle tb1 = install("tb1.jar");
-		assertNotNull("tb1 failed to install", tb1);
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
 		try {
-			tb1.start();
+			tb26.start();
 
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ObjectProvider1.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
-					+ "=org.osgi.test.cases.component.annotations.tb1.NameMappingComponent))");
+					+ "=org.osgi.test.cases.component.tb26.NameMappingComponent))");
 			ServiceTracker<ObjectProvider1<NameMapping>, ObjectProvider1<NameMapping>> providerTracker = new ServiceTracker<ObjectProvider1<NameMapping>, ObjectProvider1<NameMapping>>(
 					getContext(), providerFilter, null);
 			try {
@@ -84,19 +101,19 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				providerTracker.close();
 			}
 		} finally {
-			tb1.uninstall();
+			tb26.uninstall();
 		}
 	}
 
 	public void testAnnotationMember130() throws Exception {
-		Bundle tb1 = install("tb1.jar");
-		assertNotNull("tb1 failed to install", tb1);
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
 		try {
-			tb1.start();
+			tb26.start();
 
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ObjectProvider1.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
-					+ "=org.osgi.test.cases.component.annotations.tb1.AnnotationMemberComponent))");
+					+ "=org.osgi.test.cases.component.tb26.AnnotationMemberComponent))");
 			ServiceTracker<ObjectProvider1<AnnotationMember>, ObjectProvider1<AnnotationMember>> providerTracker = new ServiceTracker<ObjectProvider1<AnnotationMember>, ObjectProvider1<AnnotationMember>>(
 					getContext(), providerFilter, null);
 			try {
@@ -121,19 +138,19 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				providerTracker.close();
 			}
 		} finally {
-			tb1.uninstall();
+			tb26.uninstall();
 		}
 	}
 
 	public void testClassMember130() throws Exception {
-		Bundle tb1 = install("tb1.jar");
-		assertNotNull("tb1 failed to install", tb1);
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
 		try {
-			tb1.start();
+			tb26.start();
 
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ObjectProvider1.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
-					+ "=org.osgi.test.cases.component.annotations.tb1.ClassMemberComponent))");
+					+ "=org.osgi.test.cases.component.tb26.ClassMemberComponent))");
 			ServiceTracker<ObjectProvider1<ClassMember>, ObjectProvider1<ClassMember>> providerTracker = new ServiceTracker<ObjectProvider1<ClassMember>, ObjectProvider1<ClassMember>>(
 					getContext(), providerFilter, null);
 			try {
@@ -154,19 +171,19 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				providerTracker.close();
 			}
 		} finally {
-			tb1.uninstall();
+			tb26.uninstall();
 		}
 	}
 
 	public void testEnumMember130() throws Exception {
-		Bundle tb1 = install("tb1.jar");
-		assertNotNull("tb1 failed to install", tb1);
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
 		try {
-			tb1.start();
+			tb26.start();
 
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ObjectProvider1.class.getName() + ")(" + ComponentConstants.COMPONENT_NAME
-					+ "=org.osgi.test.cases.component.annotations.tb1.EnumMemberComponent))");
+					+ "=org.osgi.test.cases.component.tb26.EnumMemberComponent))");
 			ServiceTracker<ObjectProvider1<EnumMember>, ObjectProvider1<EnumMember>> providerTracker = new ServiceTracker<ObjectProvider1<EnumMember>, ObjectProvider1<EnumMember>>(
 					getContext(), providerFilter, null);
 			try {
@@ -187,19 +204,19 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				providerTracker.close();
 			}
 		} finally {
-			tb1.uninstall();
+			tb26.uninstall();
 		}
 	}
 
 	public void testCoercion130() throws Exception {
-		Bundle tb1 = install("tb1.jar");
-		assertNotNull("tb1 failed to install", tb1);
+		Bundle tb26 = install("tb26.jar");
+		assertNotNull("tb26 failed to install", tb26);
 		try {
-			tb1.start();
+			tb26.start();
 
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
-					+ "=org.osgi.test.cases.component.annotations.tb1.CoercionComponent))");
+					+ "=org.osgi.test.cases.component.tb26.CoercionComponent))");
 			ServiceTracker<ComponentFactory, ComponentFactory> providerTracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
 					getContext(), providerFilter, null);
 			try {
@@ -217,8 +234,8 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				props.put("floatCollection", Arrays.asList(Float.valueOf(64.3F), Float.valueOf(0.3F)));
 				props.put("doubleCollection", Arrays.asList(Double.valueOf(64.3D), Double.valueOf(0.3D)));
 				props.put("classCollection",
-						Arrays.asList("org.osgi.test.cases.component.annotations.types.Coercion",
-								"org.osgi.test.cases.component.annotations.tb1.CoercionComponent"));
+						Arrays.asList("org.osgi.test.cases.component.types.Coercion",
+								"org.osgi.test.cases.component.tb26.CoercionComponent"));
 				props.put("enumCollection", Arrays.asList(TestEnum.ITEM1.name(),
 						TestEnum.AnotherItem.name()));
 				props.put("int$Collection", Arrays.asList(Integer.valueOf(64), Integer.valueOf(0)));
@@ -483,7 +500,7 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				providerTracker.close();
 			}
 		} finally {
-			tb1.uninstall();
+			tb26.uninstall();
 		}
 	}
 

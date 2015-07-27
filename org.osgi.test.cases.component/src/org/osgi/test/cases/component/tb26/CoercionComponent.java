@@ -15,21 +15,21 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.tb1;
+package org.osgi.test.cases.component.tb26;
 
 import java.util.Map;
 import org.osgi.service.component.ComponentConstants;
-import org.osgi.test.cases.component.annotations.service.ObjectProvider1;
-import org.osgi.test.cases.component.annotations.types.ClassMember;
+import org.osgi.test.cases.component.service.ObjectProvider1;
+import org.osgi.test.cases.component.types.Coercion;
 
-public class ClassMemberComponent implements ObjectProvider1<ClassMember> {
-	private volatile ClassMember			config;
+public class CoercionComponent implements ObjectProvider1<Coercion> {
+	private volatile Coercion				config;
 	private volatile Map<String, Object>	properties;
 
-	public ClassMemberComponent() {
+	public CoercionComponent() {
 	}
 
-	void activate(ClassMember c, Map<String, Object> p) {
+	void activate(Coercion c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("activate: %s[%X]\n",
@@ -37,7 +37,7 @@ public class ClassMemberComponent implements ObjectProvider1<ClassMember> {
 				System.identityHashCode(this));
 	}
 
-	void modified(ClassMember c, Map<String, Object> p) {
+	void modified(Coercion c, Map<String, Object> p) {
 		config = c;
 		properties = p;
 		System.out.printf("modified: %s[%X]\n",
@@ -45,13 +45,13 @@ public class ClassMemberComponent implements ObjectProvider1<ClassMember> {
 				System.identityHashCode(this));
 	}
 
-	void deactivate(ClassMember c, Map<String, Object> p) {
+	void deactivate(Coercion c, Map<String, Object> p) {
 		System.out.printf("deactivate: %s[%X]\n",
 				properties.get(ComponentConstants.COMPONENT_NAME),
 				System.identityHashCode(this));
 	}
 
-	public ClassMember get1() {
+	public Coercion get1() {
 		return config;
 	}
 

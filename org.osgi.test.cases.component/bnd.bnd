@@ -8,7 +8,8 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
 Export-Package						= \
-	${p}.service
+	${p}.service, \
+	${p}.types
 Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
@@ -38,6 +39,7 @@ Include-Resource					= \
 	tb23.jar, \
 	tb24.jar, \
 	tb25.jar, \
+	tb26.jar, \
 	tbf1.jar
 	
 Test-Cases							= ${testcases}

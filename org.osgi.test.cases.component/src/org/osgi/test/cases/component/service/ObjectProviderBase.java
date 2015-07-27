@@ -15,10 +15,10 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.types;
+package org.osgi.test.cases.component.service;
 
-public @interface AnnotationMember {
-	NameMapping error();
+import java.util.Map;
 
-	NameMapping[]errors();
+public interface ObjectProviderBase {
+	Map<String, Object> getProperties();
 }

@@ -15,24 +15,8 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.types;
+package org.osgi.test.cases.component.service;
 
-public @interface NameMapping {
-	String myProperty143();
-
-	String $new();
-
-	String my$$prop();
-
-	String dot_prop();
-
-	String _secret();
-
-	String another__prop();
-
-	String three___prop();
-
-	String four_$__prop();
-
-	String five_$_prop();
+public interface ObjectProvider1<T> extends ObjectProviderBase {
+	T get1();
 }

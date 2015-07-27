@@ -15,10 +15,9 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.types;
+package org.osgi.test.cases.component.types;
 
-public @interface ClassMember {
-	Class<?> /**/ single();
-
-	Class<?>[] /**/ multiple();
+public enum TestEnum {
+	ITEM1,
+	AnotherItem
 }

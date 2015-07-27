@@ -15,10 +15,24 @@
  */
 
 
-package org.osgi.test.cases.component.annotations.types;
+package org.osgi.test.cases.component.types;
 
-public @interface EnumMember {
-	TestEnum /**/ single();
+public @interface NameMapping {
+	String myProperty143();
 
-	TestEnum[] /**/ multiple();
+	String $new();
+
+	String my$$prop();
+
+	String dot_prop();
+
+	String _secret();
+
+	String another__prop();
+
+	String three___prop();
+
+	String four_$__prop();
+
+	String five_$_prop();
 }

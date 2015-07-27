@@ -1,2 +1,0 @@
-Private-Package: ${p}.tb1.*
-Service-Component: org/osgi/test/cases/component/annotations/tb1/componentpropertytypes.xml
