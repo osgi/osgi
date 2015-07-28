@@ -1,0 +1,24 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+
+-buildpath: org.osgi.test.support;version=project,\
+	org.osgi.service.http.whiteboard;version=project,\
+	org.apache.felix.http.servlet-api;version=1.1.1,\
+	osgi.core;version=6.0.0,\
+	osgi.cmpn;version=6.0.0,\
+	ee.j2se;version=${javac.compliance},\
+	${junit}
+
+-runbundles						= \
+    org.osgi.impl.service.http.whiteboard;version=latest
+
+-runproperties = ${runsecureproperties}, \
+	org.apache.felix.http.host=127.0.0.1, \
+	org.osgi.service.http.port=8080
+
+Test-Cases							= ${testcases}
+
