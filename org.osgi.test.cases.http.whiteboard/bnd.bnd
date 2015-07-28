@@ -5,7 +5,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
-Export-Package: org.osgi.test.cases.http.whiteboard.junit.mock
+Export-Package: ${p}.junit.mock
 
 Include-Resource					= \
 	tb1.jar,\
