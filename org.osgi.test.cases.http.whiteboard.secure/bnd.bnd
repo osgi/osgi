@@ -5,6 +5,10 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 
+Include-Resource					= \
+	tb1.jar,\
+	tb2.jar
+
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
 	org.apache.felix.http.servlet-api;version=1.1.1,\
