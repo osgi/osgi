@@ -1,0 +1,7 @@
+Bundle-Version: 1.0
+Bundle-Activator: $(p).tb1.HttpWhiteboardSecurityTestBundle1
+Bundle-Description: Test Bundle for Http Whiteboard security tests
+
+Private-Package	: $(p).tb1.*
+
+Include-Resource: {OSGI-INF/permissions.perm=perms/tb1.perm}

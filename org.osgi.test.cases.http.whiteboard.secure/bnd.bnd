@@ -4,8 +4,6 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
-Import-Package: ${-signaturetest}, *
-Export-Package: ${p}.junit.mock
 
 Include-Resource					= \
 	tb1.jar,\
@@ -22,14 +20,9 @@ Include-Resource					= \
 -runbundles						= \
     org.osgi.impl.service.http.whiteboard;version=latest
 
--runproperties = ${runproperties}, \
+-runproperties = ${runsecureproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
 	org.osgi.service.http.port=8080
 
 Test-Cases							= ${testcases}
--signaturetest = \
-  org.osgi.service.http.whiteboard, \
-  org.osgi.service.http.context, \
-  org.osgi.service.http.runtime, \
-  org.osgi.service.http.runtime.dto
 
