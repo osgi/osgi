@@ -16,11 +16,14 @@
 
 package org.osgi.impl.service.rest.pojos;
 
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
+
 /**
  * Pojo for the bundle state.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "bundleState")
 public final class BundleStatePojo {
 
 	private int	state;

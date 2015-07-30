@@ -16,19 +16,31 @@
 
 package org.osgi.impl.service.rest;
 
+import java.io.StringWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
 import org.json.JSONObject;
+import org.osgi.impl.service.rest.pojos.BundleExceptionPojo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Reflector to create pojos from JSON Object representations and vice versa.
@@ -46,6 +58,18 @@ public class PojoReflector<B> {
 
 	private final HashMap<String, Method>				getterMethodTable;
 
+	private static final DocumentBuilderFactory			factory;
+
+	static {
+		final SchemaFactory sfact = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		factory = DocumentBuilderFactory.newInstance();
+		try {
+			factory.setSchema(sfact.newSchema(new StreamSource("file:../xmlns/rest/v1.0.0/rest.xsd")));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static <T> PojoReflector<T> getReflector(final Class<T> clazz) {
 		@SuppressWarnings("unchecked")
 		PojoReflector<T> r = (PojoReflector<T>) reflectorCache.get(clazz);
@@ -59,8 +83,6 @@ public class PojoReflector<B> {
 	private PojoReflector(final Class<B> clazz) {
 		this.clazz = clazz;
 		final Field[] fields = clazz.getDeclaredFields();
-
-		System.err.println("FIELDS ARE " + Arrays.toString(fields));
 
 		setterMethodTable = new HashMap<String, Method>(fields.length);
 		getterMethodTable = new HashMap<String, Method>(fields.length);
@@ -106,27 +128,93 @@ public class PojoReflector<B> {
 		return instance;
 	}
 
+	public B beanFromXml(final Document doc) throws Exception {
+		final B instance = clazz.newInstance();
+		final Node rootNode = doc.getFirstChild();
+		final NodeList elems = rootNode.getChildNodes();
+		for (int i = 0; i < elems.getLength(); i++) {
+			final String key = elems.item(i).getNodeName();
+			final Method setter = setterMethodTable.get(key);
+			if (setter == null) {
+				System.err.println("Warning: unknown value " + key);
+				continue;
+			}
+			final String value = elems.item(i).getTextContent();
+			final Object o;
+			final Class<?> type = setter.getParameterTypes()[0];
+			if (int.class == type) {
+				o = Integer.valueOf(value);
+			} else if (long.class == type) {
+				o = Long.valueOf(value);
+			} else if (boolean.class == type) {
+				o = Boolean.valueOf(value);
+			} else {
+				o = value;
+			}
+
+			setter.invoke(instance, o);
+		}
+
+		return instance;
+	}
+
 	public Document xmlFromBean(final B bean) throws Exception {
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = builder.newDocument();
+		final DocumentBuilder builder = factory.newDocumentBuilder();
+		final Document doc = builder.newDocument();
 
 		final Element rootNode = doc.createElement(bean.getClass().getAnnotation(RootNode.class).name());
 		doc.appendChild(rootNode);
 
-		for (final Map.Entry<String, Method> entry : getterMethodTable.entrySet()) {
-			final String field = entry.getKey();
-			final Object o = entry.getValue().invoke(bean);
-			rootNode.appendChild(toXml(o, field, doc));
+		if (bean instanceof Collection) {
+			String elemName = null;
 
+			final ElementNode a = bean.getClass().getAnnotation(ElementNode.class);
+			if (a != null) {
+				elemName = a.name();
+			}
+
+			for (final Object o : (Collection<?>) bean) {
+				if (elemName == null) {
+					elemName = o.getClass().getAnnotation(RootNode.class).name();
+				}
+				rootNode.appendChild(toXml(o, elemName, doc));
+			}
+		} else if (bean instanceof BundleExceptionPojo) {
+			final BundleExceptionPojo p = (BundleExceptionPojo) bean;
+
+			final Element tc = doc.createElement("typecode");
+			tc.setTextContent(Integer.toString(p.getTypecode()));
+			rootNode.appendChild(tc);
+			final Element msg = doc.createElement("message");
+			msg.setTextContent(p.getMessage());
+			rootNode.appendChild(msg);
+		} else {
+			for (final Map.Entry<String, Method> entry : getterMethodTable.entrySet()) {
+				final String field = entry.getKey();
+				final Object o = entry.getValue().invoke(bean);
+				rootNode.appendChild(toXml(o, field, doc));
+			}
 		}
 
-		System.err.println("DOCUMENT " + doc.toString());
+		System.err.println("DOCUMENT " + printDoc(doc));
 
 		return doc;
 	}
 
-	private Element toXml(final Object o, final String name, final Document doc) {
+	private final String printDoc(final Document doc) throws Exception {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer transformer = tf.newTransformer();
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		StringWriter writer = new StringWriter();
+		transformer.transform(new DOMSource(doc), new StreamResult(writer));
+		// return writer.getBuffer().toString().replaceAll("\n|\r", "");
+		return writer.getBuffer().toString();
+	}
+
+	private static Element toXml(final Object o, final String name, final Document doc) {
 		final Element e = doc.createElement(name);
+
+		System.out.println("++++++++++++" + name + "+++++++" + o.getClass().getName());
 
 		if ("usingBundles".equals(name)) {
 			for (final String bundle : (String[]) o) {
@@ -136,15 +224,15 @@ public class PojoReflector<B> {
 			@SuppressWarnings("unchecked")
 			final Map<Object, Object> map = (Map<Object, Object>) o;
 			for (final Map.Entry<Object, Object> entry : map.entrySet()) {
-				final Element elem = doc.createElement("entry");
-				elem.setAttribute("key", entry.getKey().toString());
+				final Element elem = doc.createElement("property");
+				elem.setAttribute("name", entry.getKey().toString());
 				final Object val = entry.getValue();
 				if (val instanceof String) {
 					elem.setAttribute("value", val.toString());
 				} else {
 					final Element valElement = toXml(val, "value", doc);
-					valElement.setAttribute("type", val.getClass().getName());
-					elem.appendChild(valElement);
+					elem.setAttribute("type", val.getClass().getName());
+					elem.setAttribute("value", valElement.getTextContent());
 				}
 				e.appendChild(elem);
 			}
@@ -162,8 +250,30 @@ public class PojoReflector<B> {
 		return e;
 	}
 
+	public static Document mapToXml(final Map<String, String> map) throws Exception {
+		final DocumentBuilder builder = factory.newDocumentBuilder();
+		final Document doc = builder.newDocument();
+
+		final Element rootNode = doc.createElement("bundleHeader");
+		doc.appendChild(rootNode);
+		
+		for (final String key : map.keySet()) {
+			final Element entry = doc.createElement("entry");
+			entry.setAttribute("key", key);
+			entry.setAttribute("value", map.get(key));
+			rootNode.appendChild(entry);
+		}
+
+		return doc;
+	}
+
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface RootNode {
+		String name();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface ElementNode {
 		String name();
 	}
 

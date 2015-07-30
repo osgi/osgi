@@ -50,6 +50,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ServerResource;
+import org.w3c.dom.Document;
 
 /**
  * Abstract OSGi resource with the functionality to translate OSGi entities to
@@ -98,8 +99,6 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		getVariants().add(new Variant(MediaType.TEXT_XML));
 
 		getVariants().add(new Variant(MediaType.TEXT_PLAIN));
-
-		System.err.println("VARIANTS ARE " + this.getVariants());
 	}
 
 	protected BundleContext getBundleContext() {
@@ -235,7 +234,13 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				MediaType.TEXT_XML.includes(variant.getMediaType())) {
 			mt = xmlMediaType;
 
-			rep = toRepresentation(reflector.xmlFromBean((T) bean), new Variant(MediaType.APPLICATION_ALL_XML));
+			if (bean instanceof Map) {
+				// special case: bundle header is a plain map and has no
+				// reflector
+				rep = toRepresentation(PojoReflector.mapToXml((Map<String, String>) bean), new Variant(MediaType.APPLICATION_ALL_XML));
+			} else {
+				rep = toRepresentation(reflector.xmlFromBean((T) bean), new Variant(MediaType.APPLICATION_ALL_XML));
+			}
 		} else if (jsonMediaType.includes(variant.getMediaType())
 				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())
 				|| MediaType.TEXT_PLAIN.includes(variant.getMediaType())) {
@@ -288,12 +293,18 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected T fromRepresentation(final Representation r, final Variant variant)
 			throws Exception {
-		if (jsonMediaType.includes(variant.getMediaType())
-				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
-			return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
-		}
-		throw new UnsupportedOperationException(variant.getMediaType()
-				.toString());
+		System.err.println("VARIANT IS " + variant);
+		System.err.println("REPRE IS " + r.getClass());
+		// if (xmlMediaType.includes(variant.getMediaType()) ||
+		// MediaType.APPLICATION_XML.includes(variant.getMediaType()) ||
+		// MediaType.TEXT_XML.includes(variant.getMediaType())) {
+			return reflector.beanFromXml(toObject(r, Document.class));
+		// } else if (jsonMediaType.includes(variant.getMediaType())
+		// || MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
+		// return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
+		// }
+		// throw new UnsupportedOperationException(variant.getMediaType()
+		// .toString());
 	}
 
 	protected Map<String, String> mapFromDict(
@@ -319,8 +330,8 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				if (MediaType.APPLICATION_ALL_XML.includes(variant.getMediaType())) {
 					mt = MT_BE_XML;
 
-					throw new UnsupportedOperationException("TODO: "
-							+ variant.getMediaType().toString());
+					rep = getRepresentation(new BundleExceptionPojo(
+							(BundleException) t), new Variant(MediaType.TEXT_XML));
 				} else {
 					mt = MT_BE_JSON;
 					rep = getRepresentation(new BundleExceptionPojo(

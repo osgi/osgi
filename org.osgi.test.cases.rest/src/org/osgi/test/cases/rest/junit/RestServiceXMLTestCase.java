@@ -339,10 +339,11 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         Object value = serviceRef.getProperty(key);
 
         Element propertyElement = xmlProps.get(key);
-        assertNotNull("Service property " + key, propertyElement);
+        assertNotNull("Service property " + key, propertyElement.getAttributes());
         if (value.getClass().isArray()) {
           // TODO
         } else if (value instanceof Number) {
+					System.err.println("key " + key + " elem " + propertyElement);
           assertEquals("Service number property " + key, ((Number)value).intValue(),
               Integer.parseInt(propertyElement.getAttribute("value")));
         } else {

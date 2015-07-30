@@ -17,12 +17,14 @@
 package org.osgi.impl.service.rest.pojos;
 
 import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * Pojo for the framework start level.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "frameworkStartLevel")
 public final class FrameworkStartLevelPojo {
 
 	private int	startLevel;

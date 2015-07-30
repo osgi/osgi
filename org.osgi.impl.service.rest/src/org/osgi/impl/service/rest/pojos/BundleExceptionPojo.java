@@ -17,12 +17,14 @@
 package org.osgi.impl.service.rest.pojos;
 
 import org.osgi.framework.BundleException;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * Pojo for bundle exceptions.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "bundleException")
 public class BundleExceptionPojo {
 
 	private int		typecode;

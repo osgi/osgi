@@ -18,12 +18,16 @@ package org.osgi.impl.service.rest.pojos;
 
 import java.util.ArrayList;
 import org.osgi.framework.Bundle;
+import org.osgi.impl.service.rest.PojoReflector.ElementNode;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * List of bundle pojos.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "bundles")
+@ElementNode(name = "uri")
 @SuppressWarnings("serial")
 public final class BundlePojoList extends ArrayList<String> {
 

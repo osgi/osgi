@@ -17,12 +17,14 @@
 package org.osgi.impl.service.rest.pojos;
 
 import org.osgi.framework.Bundle;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * Pojo for bundles.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "bundle")
 public final class BundlePojo {
 
 	private long	id;
