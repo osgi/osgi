@@ -258,9 +258,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 					}
 				}
 				final JSONArray arr = new JSONArray(reprList);
-				System.err.println("JSON ARRAY IS " + arr);
 				rep = toRepresentation(arr, variant);
-				System.err.println("JSON REP IS " + rep.getText());
 			} else if (bean instanceof Map) {
 				rep = toRepresentation(new JSONObject((Map<?, ?>) bean),
 						variant);
@@ -295,16 +293,16 @@ public class AbstractOSGiResource<T> extends ServerResource {
 			throws Exception {
 		System.err.println("VARIANT IS " + variant);
 		System.err.println("REPRE IS " + r.getClass());
-		// if (xmlMediaType.includes(variant.getMediaType()) ||
-		// MediaType.APPLICATION_XML.includes(variant.getMediaType()) ||
-		// MediaType.TEXT_XML.includes(variant.getMediaType())) {
+		if (xmlMediaType.includes(variant.getMediaType()) ||
+				MediaType.APPLICATION_XML.includes(variant.getMediaType()) ||
+				MediaType.TEXT_XML.includes(variant.getMediaType())) {
 			return reflector.beanFromXml(toObject(r, Document.class));
-		// } else if (jsonMediaType.includes(variant.getMediaType())
-		// || MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
-		// return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
-		// }
-		// throw new UnsupportedOperationException(variant.getMediaType()
-		// .toString());
+		} else if (jsonMediaType.includes(variant.getMediaType())
+				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
+			return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
+		}
+		throw new UnsupportedOperationException(variant.getMediaType()
+				.toString());
 	}
 
 	protected Map<String, String> mapFromDict(

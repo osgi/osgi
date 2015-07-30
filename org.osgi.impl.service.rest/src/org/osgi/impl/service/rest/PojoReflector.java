@@ -60,6 +60,8 @@ public class PojoReflector<B> {
 
 	private static final DocumentBuilderFactory			factory;
 
+	private static final Map<Class<?>, String>			typeCache		= new HashMap<Class<?>, String>();
+
 	static {
 		final SchemaFactory sfact = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		factory = DocumentBuilderFactory.newInstance();
@@ -68,6 +70,16 @@ public class PojoReflector<B> {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
+
+		typeCache.put(String.class, "String");
+		typeCache.put(Long.class, "Long");
+		typeCache.put(Double.class, "Double");
+		typeCache.put(Float.class, "Float");
+		typeCache.put(Integer.class, "Integer");
+		typeCache.put(Byte.class, "Byte");
+		typeCache.put(Character.class, "Character");
+		typeCache.put(Boolean.class, "Boolean");
+		typeCache.put(Short.class, "Short");
 	}
 
 	public static <T> PojoReflector<T> getReflector(final Class<T> clazz) {
@@ -162,11 +174,19 @@ public class PojoReflector<B> {
 		final DocumentBuilder builder = factory.newDocumentBuilder();
 		final Document doc = builder.newDocument();
 
-		final Element rootNode = doc.createElement(bean.getClass().getAnnotation(RootNode.class).name());
+		final Element rootNode = xmlFromBean(bean, doc);
 		doc.appendChild(rootNode);
+		
+		System.err.println("DOCUMENT " + printDoc(doc));
 
+		return doc;
+	}
+
+	public Element xmlFromBean(final Object bean, final Document doc) throws Exception {
+		final Element rootNode = doc.createElement(bean.getClass().getAnnotation(RootNode.class).name());
 		if (bean instanceof Collection) {
 			String elemName = null;
+			boolean complex = false;
 
 			final ElementNode a = bean.getClass().getAnnotation(ElementNode.class);
 			if (a != null) {
@@ -176,8 +196,14 @@ public class PojoReflector<B> {
 			for (final Object o : (Collection<?>) bean) {
 				if (elemName == null) {
 					elemName = o.getClass().getAnnotation(RootNode.class).name();
+					complex = true;
 				}
-				rootNode.appendChild(toXml(o, elemName, doc));
+
+				if (complex) {
+					rootNode.appendChild(getReflector(o.getClass()).xmlFromBean(o, doc));
+				} else {
+					rootNode.appendChild(toXml(o, elemName, doc));
+				}
 			}
 		} else if (bean instanceof BundleExceptionPojo) {
 			final BundleExceptionPojo p = (BundleExceptionPojo) bean;
@@ -196,25 +222,21 @@ public class PojoReflector<B> {
 			}
 		}
 
-		System.err.println("DOCUMENT " + printDoc(doc));
-
-		return doc;
+		return rootNode;
 	}
 
+	// for debugging only
 	private final String printDoc(final Document doc) throws Exception {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		StringWriter writer = new StringWriter();
 		transformer.transform(new DOMSource(doc), new StreamResult(writer));
-		// return writer.getBuffer().toString().replaceAll("\n|\r", "");
 		return writer.getBuffer().toString();
 	}
 
 	private static Element toXml(final Object o, final String name, final Document doc) {
 		final Element e = doc.createElement(name);
-
-		System.out.println("++++++++++++" + name + "+++++++" + o.getClass().getName());
 
 		if ("usingBundles".equals(name)) {
 			for (final String bundle : (String[]) o) {
@@ -231,7 +253,10 @@ public class PojoReflector<B> {
 					elem.setAttribute("value", val.toString());
 				} else {
 					final Element valElement = toXml(val, "value", doc);
-					elem.setAttribute("type", val.getClass().getName());
+					final String type = getType(val.getClass());
+					if (type != null) {
+						elem.setAttribute("type", type);
+					}
 					elem.setAttribute("value", valElement.getTextContent());
 				}
 				e.appendChild(elem);
@@ -248,6 +273,10 @@ public class PojoReflector<B> {
 		}
 
 		return e;
+	}
+
+	private static String getType(Class<? extends Object> cls) {
+		return typeCache.get(cls);
 	}
 
 	public static Document mapToXml(final Map<String, String> map) throws Exception {

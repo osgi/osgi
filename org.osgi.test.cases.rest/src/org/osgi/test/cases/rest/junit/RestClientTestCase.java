@@ -161,7 +161,7 @@ public class RestClientTestCase extends RestTestUtils {
     tb2Bundle = getBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
     assertNotNull("Test bundle TB2 is installed", tb2Bundle);
 
-    assertEquals("Bundle location", getBundleURI(tb2Bundle), result);
+	assertEquals("Bundle location", getBundleURI(tb2Bundle), getBundleURI(result.id));
 
     // same bundle location
     receiveError = false;

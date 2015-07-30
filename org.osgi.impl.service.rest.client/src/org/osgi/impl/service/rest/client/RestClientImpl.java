@@ -337,7 +337,8 @@ public class RestClientImpl implements RestClient {
 		final ClientResource res = new ClientResource(Method.POST,
 				baseUri.resolve("framework/bundles"));
 		final Representation repr = res.post(url, MediaType.TEXT_PLAIN);
-		return DTOReflector.getDTO(BundleDTO.class, repr);
+
+		return getBundle(repr.getText());
 	}
 
 	/**
@@ -362,7 +363,7 @@ public class RestClientImpl implements RestClient {
 		 */
 		final Representation repr = res.post(in);
 
-		return DTOReflector.getDTO(BundleDTO.class, repr);
+		return getBundle(repr.getText());
 	}
 
 	/**
