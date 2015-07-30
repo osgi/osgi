@@ -2059,6 +2059,10 @@ public class AnnotationsTestCase extends OSGiTestCase {
 
 		assertPropertyValue(description, "enum1", "String", "ITEM1");
 		assertPropertyArrayValue(description, "enumarray1", "String", "ITEM1", "ITEM2");
+
+		assertXPathValue(description, "@activate", "activate1");
+		assertXPathValue(description, "@modified", "modified2");
+		assertXPathValue(description, "@deactivate", "deactivate3");
 	}
 
 	public void assertPropertyValue(Description description, String name, String type, String value)

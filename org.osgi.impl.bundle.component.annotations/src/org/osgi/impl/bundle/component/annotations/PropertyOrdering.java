@@ -73,21 +73,21 @@ public class PropertyOrdering {
 	/**
 	 */
 	@Activate
-	private void activate(Config1 c) {
+	private void activate1(Config1 c) {
 		System.out.println("Hello World!");
 	}
 
 	/**
 	 */
 	@Modified
-	private void modified(Config2 c) {
+	private void modified2(Config2 c) {
 		System.out.println("Modified World!");
 	}
 
 	/**
 	 */
 	@Deactivate
-	private void deactivate(Config3 c) {
+	private void deactivate3(Config3 c) {
 		System.out.println("Goodbye World!");
 	}
 
