@@ -176,7 +176,7 @@ public class PojoReflector<B> {
 
 		final Element rootNode = xmlFromBean(bean, doc);
 		doc.appendChild(rootNode);
-		
+
 		System.err.println("DOCUMENT " + printDoc(doc));
 
 		return doc;
@@ -285,7 +285,7 @@ public class PojoReflector<B> {
 
 		final Element rootNode = doc.createElement("bundleHeader");
 		doc.appendChild(rootNode);
-		
+
 		for (final String key : map.keySet()) {
 			final Element entry = doc.createElement("entry");
 			entry.setAttribute("key", key);

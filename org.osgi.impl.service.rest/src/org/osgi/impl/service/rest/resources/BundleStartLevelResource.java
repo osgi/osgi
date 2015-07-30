@@ -63,7 +63,7 @@ public class BundleStartLevelResource extends
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
-			final BundleStartLevelPojo sl = fromRepresentation(value, variant);
+			final BundleStartLevelPojo sl = fromRepresentation(value, value.getMediaType());
 			final BundleStartLevel bsl = bundle.adapt(BundleStartLevel.class);
 			bsl.setStartLevel(sl.getStartLevel());
 

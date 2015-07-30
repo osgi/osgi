@@ -225,7 +225,6 @@ public class AbstractOSGiResource<T> extends ServerResource {
 	protected Representation getRepresentation(final Object bean,
 			final Variant variant) throws Exception {
 		final Representation rep;
-		System.err.println("VARIANT MEDIA TYPE " + variant.getMediaType());
 
 		final MediaType mt;
 
@@ -289,19 +288,17 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		}
 	}
 
-	protected T fromRepresentation(final Representation r, final Variant variant)
+	protected T fromRepresentation(final Representation r, final MediaType mediaType)
 			throws Exception {
-		System.err.println("VARIANT IS " + variant);
-		System.err.println("REPRE IS " + r.getClass());
-		if (xmlMediaType.includes(variant.getMediaType()) ||
-				MediaType.APPLICATION_XML.includes(variant.getMediaType()) ||
-				MediaType.TEXT_XML.includes(variant.getMediaType())) {
+		if (xmlMediaType.includes(mediaType) ||
+				MediaType.APPLICATION_XML.includes(mediaType) ||
+				MediaType.TEXT_XML.includes(mediaType)) {
 			return reflector.beanFromXml(toObject(r, Document.class));
-		} else if (jsonMediaType.includes(variant.getMediaType())
-				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
+		} else if (jsonMediaType.includes(mediaType)
+				|| MediaType.APPLICATION_JSON.includes(mediaType) || MediaType.TEXT_PLAIN.includes(mediaType)) {
 			return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
 		}
-		throw new UnsupportedOperationException(variant.getMediaType()
+		throw new UnsupportedOperationException(mediaType
 				.toString());
 	}
 
