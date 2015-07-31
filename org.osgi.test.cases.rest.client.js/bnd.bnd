@@ -10,6 +10,7 @@ Private-Package            =  \
 Bundle-Category: osgi,test
 
 -includeresource = \
+  ${project.workspace}/org.osgi.impl.service.rest.client.js/src/rest_client.js, \
   tb1.jar, \
   tb11.jar, \
   tb2.jar

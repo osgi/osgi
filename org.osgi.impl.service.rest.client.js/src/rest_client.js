@@ -26,8 +26,6 @@
  * callbacks that are not declared by the user are substituted with default
  * functions which print to the console.
  * 
- * @author Jan S. Rellermeyer, IBM Research
- * 
  * @param baseUrl
  *            the base URL to the REST API.
  * @returns the OSGi REST API client object

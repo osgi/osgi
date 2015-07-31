@@ -26,6 +26,7 @@ package org.osgi.test.cases.rest.client.js.junit;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -37,14 +38,34 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class RestJSClientTestCase extends RestTestUtils {
+	private static final int BUFFER_SIZE = 4096 * 16;
+
 	private static final String	SUCCESS	= "success";
 	private String	jsclient;
+	private File				dataArea;
 
 	public void setUp() throws Exception {
 		super.setUp();
+		dataArea = getContext().getDataFile("");
 
-		System.out.println("Current directory: " + System.getProperty("user.dir"));
-		File restJSClient = new File(System.getProperty("user.dir") + "/../org.osgi.impl.service.rest.client.js/src/rest_client.js");
+		InputStream in = entryStream("rest_client.js");
+		File restJSClient = File.createTempFile("rest_client-", ".js", dataArea);
+		FileOutputStream out = new FileOutputStream(restJSClient);
+		try {
+			byte[] buffer = new byte[BUFFER_SIZE];
+			try {
+				int size = in.read(buffer);
+				while (size > 0) {
+					out.write(buffer, 0, size);
+					size = in.read(buffer);
+				}
+			} finally {
+				in.close();
+			}
+		} finally {
+			out.close();
+		}
+
 		jsclient = restJSClient.getCanonicalFile().toURI().toURL().toString();
 	}
 
@@ -590,30 +611,26 @@ public class RestJSClientTestCase extends RestTestUtils {
                 + "</body>"
                 + "</html>");
 
-        File f = File.createTempFile("jstest-", ".tmp");
+		File f = File.createTempFile("jstest-", ".html", dataArea);
 
-        try {
-			OutputStream fos = new FileOutputStream(f);
-            try {
-                fos.write(html.toString().getBytes());
-            } finally {
-            	fos.close();
-            }
+		OutputStream fos = new FileOutputStream(f);
+		try {
+			fos.write(html.toString().getBytes());
+		} finally {
+			fos.close();
+		}
 
-			WebClient wc = new WebClient();
-            HtmlPage page = wc.getPage(f.toURI().toURL());
+		WebClient wc = new WebClient();
+		HtmlPage page = wc.getPage(f.toURI().toURL());
 
-            String result = page.getHtmlElementById("test_result").asText();
-			int count = 30;
-            while (count-- > 0 && "undefined".equals(result)) {
-                // Maybe the result arrives asynchronously
-                Thread.sleep(500);
-                result = page.getHtmlElementById("test_result").asText();
-            }
-			if (!SUCCESS.equals(result))
-				fail(result);
-        } finally {
-            f.delete();
-        }
+		String result = page.getHtmlElementById("test_result").asText();
+		int count = 30;
+		while (count-- > 0 && "undefined".equals(result)) {
+			// Maybe the result arrives asynchronously
+			Thread.sleep(500);
+			result = page.getHtmlElementById("test_result").asText();
+		}
+		if (!SUCCESS.equals(result))
+			fail(result);
     }
 }
