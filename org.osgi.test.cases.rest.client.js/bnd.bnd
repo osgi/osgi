@@ -1,12 +1,11 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-Description					: Rest Service test cases.
+Bundle-Description					: Rest JavaScript Client Service test cases.
 
 Conditional-Package          = org.osgi.test.support.*
 Private-Package            =  \
-  org.osgi.test.cases.rest.client.js.junit.*
-#  ${p}.junit.*
+  ${p}.junit.*
 
 Import-Package: ${-signaturetest}, *
 
