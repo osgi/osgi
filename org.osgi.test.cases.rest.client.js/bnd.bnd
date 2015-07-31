@@ -9,7 +9,11 @@ Private-Package            =  \
 
 Bundle-Category: osgi,test
 
+Bundle-ClassPath: .,lib/net.sourceforge.htmlunit.jar
+# There are a lot of references in htmlunit, so we need to make them optional
+Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;sun.io.*;resolution:=optional, *
 -includeresource = \
+  lib/net.sourceforge.htmlunit.jar=${repo;net.sourceforge.htmlunit;2.15.0}, \
   ${project.workspace}/org.osgi.impl.service.rest.client.js/src/rest_client.js, \
   tb1.jar, \
   tb11.jar, \
@@ -27,7 +31,6 @@ Test-Cases              = ${testcases}
 
 -runbundles            = \
   org.osgi.impl.service.rest; version=latest, \
-  net.sourceforge.htmlunit;version=2.15.0, \
   org.osgi.impl.service.rest.support; version=latest
 
 -runproperties = ${runproperties}, \
