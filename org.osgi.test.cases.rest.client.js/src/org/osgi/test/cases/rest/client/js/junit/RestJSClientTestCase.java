@@ -22,7 +22,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.rest.junit;
+package org.osgi.test.cases.rest.client.js.junit;
 
 import java.io.File;
 import java.io.FileOutputStream;
