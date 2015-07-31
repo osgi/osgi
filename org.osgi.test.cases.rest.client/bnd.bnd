@@ -31,11 +31,8 @@ Test-Cases              = ${testcases}
 
 -runbundles            = \
   org.osgi.impl.service.rest; version=latest, \
-  org.osgi.impl.service.rest.client; version=latest, \
-  org.json; version=1.0.0, \
-  org.restlet; version=2.1.7, \
-  org.restlet.ext.json; version=2.1.7, \
-  org.restlet.ext.xml; version=2.1.7
+  org.osgi.impl.service.rest.support; version=latest, \
+  org.osgi.impl.service.rest.client; version=latest
 
 -runproperties = ${runproperties}, \
     org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
