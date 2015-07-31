@@ -6,7 +6,7 @@
  * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
  * Amended and Restated as of May 23, 2011.
  */
-package org.osgi.test.cases.rest.junit;
+package org.osgi.test.cases.rest.client.junit;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
