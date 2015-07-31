@@ -91,7 +91,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     xmlStartLevel = getXMLObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
     assertFWStartLevel(frameworkStartLevel, xmlStartLevel);
 
-    frameworkStartLevel.setStartLevel(originalStartLevel, this);
+		frameworkStartLevel.setStartLevel(originalStartLevel);
     frameworkStartLevel.setInitialBundleStartLevel(originalInitialBundleStartLevel);
 
     // Updated frameworkStartLevel
@@ -127,7 +127,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle representations list.", xmlBundleRepresentationsList);
 
-    // TODO
+		fail("TODO"); // TODO
+
   }
 
   // 5.1.3
@@ -138,7 +139,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     Element xmlBundleRepresentation = getXMLObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle representation : " + bundle.getBundleId() + " :", xmlBundleRepresentation);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   // 5.1.4
@@ -150,7 +151,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle state " + bundle.getBundleId() + " :", xmlBundleStateRepresentation);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   // 5.1.5
@@ -162,7 +163,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle header " + bundle.getBundleId() + ": ", xmlBundleHeaderRepresentation);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   // 5.1.6
@@ -174,7 +175,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         BUNDLE_START_LEVEL_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle start level " + bundle.getBundleId() + " :", xmlBundleStartLevelRepresentation);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   // 5.1.7.1
@@ -185,7 +186,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     Element xmlServiceList = getXMLObject(getServiceListURI(filter), SERVICE_LIST_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   // 5.1.7.2
@@ -253,7 +254,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   protected void assertBundleListRepresentation(Bundle[] bundles, Element xmlBundleList) {
     assertNotNull("Bundle list not null.", xmlBundleList);
 
-    // TODO
+		fail("TODO"); // TODO
   }
 
   protected void assertBundleException(Element xmlBundleException, String assertMessage) {
@@ -341,7 +342,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         Element propertyElement = xmlProps.get(key);
         assertNotNull("Service property " + key, propertyElement.getAttributes());
         if (value.getClass().isArray()) {
-          // TODO
+					fail("TODO"); // TODO
         } else if (value instanceof Number) {
 					System.err.println("key " + key + " elem " + propertyElement);
           assertEquals("Service number property " + key, ((Number)value).intValue(),
@@ -486,7 +487,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
           } finally {
             try {
               is.close();
-            } catch (Throwable _) {}
+						} catch (Throwable _) {
+							/**/}
           }
         }
         out.flush();

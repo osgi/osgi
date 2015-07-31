@@ -265,7 +265,8 @@ public class RestJSClientTestCase extends RestTestUtils {
 		assertNotNull("Updated bundle not null", tb11Bundle);
 		assertEquals("Updated bundle version", TB11_TEST_BUNDLE_VERSION, tb11Bundle.getVersion().toString());
 
-		// TODO continue with this test as soon as the update is working...
+		fail("TODO"); // TODO continue with this test as soon as the update is
+						 // working...
 	}
 
 	

@@ -20,15 +20,13 @@ import java.util.Random;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
-public abstract class RestTestUtils extends OSGiTestCase implements FrameworkListener {
+public abstract class RestTestUtils extends OSGiTestCase {
 
   protected Random random;
 
@@ -124,11 +122,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     unisntallIfInstalled(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
   }
 
-  public void frameworkEvent(FrameworkEvent event) {
-    // TODO Auto-generated method stub
-
-  }
-
   protected String getBundleURI(long bundleId) {
     return BUNDLE_URI + bundleId;
   }
@@ -166,7 +159,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getServicePath(ServiceReference<?> service) {
-    // TODO
     return getServiceURI(service);
   }
 
@@ -188,7 +180,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
   // for RestClient
   protected String getBundlePath(Bundle bundle) {
-    // TODO
     return getBundleURI(bundle);
   }
 
@@ -233,8 +224,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getNotExistingBundlePath() {
-    // TODO
-    return "" + getNotExistingBundleId();
+		return String.valueOf(getNotExistingBundleId());
   }
 
   protected String getFilter(String bundleSymbolicName) {
@@ -269,7 +259,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
         bundle.uninstall();
       }
     } catch (Exception e) {
-      // TODO
+			// ignored
     }
   }
 

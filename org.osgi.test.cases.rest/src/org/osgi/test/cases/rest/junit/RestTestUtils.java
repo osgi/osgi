@@ -8,35 +8,25 @@
  */
 package org.osgi.test.cases.rest.junit;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.rest.RestApiExtension;
 import org.osgi.test.support.OSGiTestCase;
 
-public abstract class RestTestUtils extends OSGiTestCase implements FrameworkListener {
+public abstract class RestTestUtils extends OSGiTestCase {
 
   protected Random random;
 
@@ -145,11 +135,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     unisntallIfInstalled(TB4_TEST_BUNDLE_SYMBOLIC_NAME);
   }
 
-  public void frameworkEvent(FrameworkEvent event) {
-    // TODO Auto-generated method stub
-
-  }
-
   protected String getBundleURI(long bundleId) {
     return BUNDLE_URI + bundleId;
   }
@@ -187,7 +172,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getServicePath(ServiceReference<?> service) {
-    // TODO
     return getServiceURI(service);
   }
 
@@ -209,7 +193,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
   // for RestClient
   protected String getBundlePath(Bundle bundle) {
-    // TODO
     return getBundleURI(bundle);
   }
 
@@ -254,8 +237,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getNotExistingBundlePath() {
-    // TODO
-    return "" + getNotExistingBundleId();
+		return String.valueOf(getNotExistingBundleId());
   }
 
   protected String getFilter(String bundleSymbolicName) {
@@ -290,7 +272,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
         bundle.uninstall();
       }
     } catch (Exception e) {
-      // TODO
+			// ignored
     }
   }
 

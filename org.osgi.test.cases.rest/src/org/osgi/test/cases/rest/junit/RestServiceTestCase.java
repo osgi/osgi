@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
@@ -36,7 +37,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import java.lang.reflect.Array;
 
 /**
  * Tests REST Management Service JSON Representations.
@@ -72,7 +72,7 @@ public class RestServiceTestCase extends RestTestUtils {
     assertEquals("startLevel", frameworkStartLevel.getStartLevel(), jsonStartLevel.getInt("startLevel"));
     assertEquals("initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), jsonStartLevel.getInt("initialBundleStartLevel"));
 
-    frameworkStartLevel.setStartLevel(originalStartLevel, this);
+		frameworkStartLevel.setStartLevel(originalStartLevel);
     frameworkStartLevel.setInitialBundleStartLevel(originalInitialBundleStartLevel);
 
     jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
@@ -791,7 +791,8 @@ public class RestServiceTestCase extends RestTestUtils {
           } finally {
             try {
               is.close();
-            } catch (Throwable _) {}
+						} catch (Throwable _) {
+							/**/}
           }
         }
         out.flush();
@@ -831,7 +832,8 @@ public class RestServiceTestCase extends RestTestUtils {
       if (in != null) {
         try {
           in.close();
-        } catch (Throwable _) {}
+				} catch (Throwable _) {
+					/**/}
       }
     }
 

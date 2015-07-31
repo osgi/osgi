@@ -86,7 +86,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("startLevel", frameworkStartLevel.getStartLevel(), frameworkStartLevelDTO.startLevel);
     assertEquals("initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), frameworkStartLevelDTO.initialBundleStartLevel);
 
-    frameworkStartLevel.setStartLevel(originalStartLevel, this);
+		frameworkStartLevel.setStartLevel(originalStartLevel);
     frameworkStartLevel.setInitialBundleStartLevel(originalInitialBundleStartLevel);
 
     frameworkStartLevelDTO = getRestClient().getFrameworkStartLevel();
