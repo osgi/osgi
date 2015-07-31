@@ -94,8 +94,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String TB21_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb2";
   public static String TB3_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb3";
   public static String TB4_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb4";
-  public static String TB5_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb5";
-  public static String TB6_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb6";
 
   public static String TB11_TEST_BUNDLE_VERSION = "1.0.1";
   public static String TB21_TEST_BUNDLE_VERSION = "1.0.1";
@@ -106,8 +104,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String TB21 = "/tb21.jar";
   public static String TB3 = "/tb3.jar";
   public static String TB4 = "/tb4.jar";
-  public static String TB5 = "/tb5.jar";
-  public static String TB6 = "/tb6.jar";
 
   @Override
   public void setUp() throws Exception {

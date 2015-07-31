@@ -8,32 +8,24 @@
  */
 package org.osgi.test.cases.rest.client.js.junit;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.rest.RestApiExtension;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class RestTestUtils extends OSGiTestCase implements FrameworkListener {
@@ -99,23 +91,12 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String TB1_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb1";
   public static String TB11_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb1";
   public static String TB2_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb2";
-  public static String TB21_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb2";
-  public static String TB3_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb3";
-  public static String TB4_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb4";
-  public static String TB5_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb5";
-  public static String TB6_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb6";
 
   public static String TB11_TEST_BUNDLE_VERSION = "1.0.1";
-  public static String TB21_TEST_BUNDLE_VERSION = "1.0.1";
 
   public static String TB1 = "/tb1.jar";
   public static String TB11 = "/tb11.jar";
   public static String TB2 = "/tb2.jar";
-  public static String TB21 = "/tb21.jar";
-  public static String TB3 = "/tb3.jar";
-  public static String TB4 = "/tb4.jar";
-  public static String TB5 = "/tb5.jar";
-  public static String TB6 = "/tb6.jar";
 
   @Override
   public void setUp() throws Exception {
@@ -141,8 +122,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
     unisntallIfInstalled(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     unisntallIfInstalled(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
-    unisntallIfInstalled(TB3_TEST_BUNDLE_SYMBOLIC_NAME);
-    unisntallIfInstalled(TB4_TEST_BUNDLE_SYMBOLIC_NAME);
   }
 
   public void frameworkEvent(FrameworkEvent event) {
