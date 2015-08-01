@@ -17,13 +17,13 @@ Require-Bundle: com.acme.launchpad;
  foo=bar;
  visibility:=reexport;
  resolution:=optional;
- filter:=(x=y);
+ filter:="(x=y)";
  foo:=bar
 Require-Capability: com.acme.countdown;
  foo=bar;
  bar=foo;
  resolution:=optional;
- filter:=(&(foo=bar)(bar=foo));
+ filter:="(&(foo=bar)(bar=foo))";
  foo:=bar,
  com.acme.lifesupport;
  foo=bar;
