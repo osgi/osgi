@@ -66,7 +66,7 @@ public class PojoReflector<B> {
 		final SchemaFactory sfact = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		factory = DocumentBuilderFactory.newInstance();
 		try {
-			factory.setSchema(sfact.newSchema(new StreamSource("file:../xmlns/rest/v1.0.0/rest.xsd")));
+			factory.setSchema(sfact.newSchema(new StreamSource(PojoReflector.class.getResourceAsStream("/rest.xsd"))));
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
