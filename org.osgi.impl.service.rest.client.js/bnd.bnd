@@ -1,4 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
--nobundles: true
+-resourceonly       : true
+-includeresource: script/OSGiRestClient.js=src/OSGiRestClient.js
+Provide-Capability: osgi.implementation; \
+  osgi.implementation="osgi.rest.client.js"; \
+  version:Version="1.0"; \
+  script="script/OSGiRestClient.js"

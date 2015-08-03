@@ -28,12 +28,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Map;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.namespace.implementation.ImplementationNamespace;
+import org.osgi.resource.Capability;
+import org.osgi.util.tracker.BundleTracker;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -41,14 +48,36 @@ public class RestJSClientTestCase extends RestTestUtils {
 	private static final int BUFFER_SIZE = 4096 * 16;
 
 	private static final String	SUCCESS	= "success";
+	private BundleTracker<String>	tracker;
 	private String	jsclient;
 	private File				dataArea;
 
-	public void setUp() throws Exception {
+	protected void setUp() throws Exception {
 		super.setUp();
 		dataArea = getContext().getDataFile("");
 
-		InputStream in = entryStream("OSGiRestClient.js");
+		tracker = new BundleTracker<String>(getContext(), Bundle.ACTIVE, null) {
+			@Override
+			public String addingBundle(Bundle bundle, BundleEvent event) {
+				BundleWiring wiring = bundle.adapt(BundleWiring.class);
+				for (Capability cap : wiring.getCapabilities(ImplementationNamespace.IMPLEMENTATION_NAMESPACE)) {
+					Map<String, Object> attrs = cap.getAttributes();
+					if ("osgi.rest.client.js".equals(attrs.get(ImplementationNamespace.IMPLEMENTATION_NAMESPACE))) {
+						return (String) attrs.get("script");
+					}
+				}
+				return null;
+			}
+		};
+		tracker.open();
+		assertEquals("Not exactly one bundle providing javascript client", 1, tracker.size());
+		Bundle impl = tracker.getBundles()[0];
+		String script = tracker.getObject(impl);
+
+		URL url = impl.getEntry(script);
+		assertNotNull("Can not find resource: " + script, url);
+		InputStream in = url.openStream();
+
 		File restJSClient = File.createTempFile("OSGiRestClient-", ".js", dataArea);
 		FileOutputStream out = new FileOutputStream(restJSClient);
 		try {
@@ -67,6 +96,12 @@ public class RestJSClientTestCase extends RestTestUtils {
 		}
 
 		jsclient = restJSClient.getCanonicalFile().toURI().toURL().toString();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		tracker.close();
+		super.tearDown();
 	}
 
 	public void testFrameworkStartLevelRestClient() throws Exception {
@@ -563,7 +598,7 @@ public class RestJSClientTestCase extends RestTestUtils {
  
 	}
 
-	public void jsTest(String script) throws Exception {
+	private void jsTest(String script) throws Exception {
         StringBuilder html = new StringBuilder();
         html.append("<!DOCTYPE html><html>"
 				+ "<body onload='executeTest()'>"
@@ -611,7 +646,7 @@ public class RestJSClientTestCase extends RestTestUtils {
                 + "</body>"
                 + "</html>");
 
-		File f = File.createTempFile("jstest-", ".html", dataArea);
+		File f = File.createTempFile(getName(), ".html", dataArea);
 
 		OutputStream fos = new FileOutputStream(f);
 		try {

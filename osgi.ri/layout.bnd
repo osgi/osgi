@@ -24,6 +24,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.prefs , \
 	org.osgi.impl.service.rest , \
 	org.osgi.impl.service.rest.client , \
+	org.osgi.impl.service.rest.client.js , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin, \
@@ -66,6 +67,7 @@ build.enterprise.impls = \
 	org.osgi.impl.service.log , \
     org.osgi.impl.service.rest , \
     org.osgi.impl.service.rest.client , \
+    org.osgi.impl.service.rest.client.js , \
 	org.osgi.impl.service.useradmin, \
     org.osgi.util.function, \
     org.osgi.util.promise, \

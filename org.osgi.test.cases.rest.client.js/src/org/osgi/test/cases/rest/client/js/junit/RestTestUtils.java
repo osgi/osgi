@@ -97,7 +97,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   public static String TB2 = "/tb2.jar";
 
   @Override
-  public void setUp() throws Exception {
+	protected void setUp() throws Exception {
     super.setUp();
 
     baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
@@ -114,7 +114,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   }
 
   @Override
-  public void tearDown() throws Exception {
+	protected void tearDown() throws Exception {
     super.tearDown();
     //ungetAllServices();
 
