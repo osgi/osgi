@@ -98,6 +98,8 @@ Git-SHA:          ${system-allow-fail;git rev-list -1 HEAD}
 
 -removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
+# For bnd 3.0 to use the old style with junit on the classpath
+-tester=biz.aQute.junit
 junit.package			= junit.framework;version=3.8
 junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 
