@@ -18,11 +18,8 @@ package org.osgi.impl.service.rest.client;
 
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
@@ -137,8 +134,10 @@ public class RestClientImpl implements RestClient {
 		final ClientResource res = new ClientResource(Method.GET,
 				baseUri.resolve("framework/bundles"));
 		final Representation repr = res.get(BUNDLES);
-		// FIXME: hardcoded to JSON
-		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
+
+		System.err.println("HAVING MEDIA TYPE " + repr.getMediaType());
+
+		return DTOReflector.getStrings(repr);
 	}
 
 	/**
@@ -432,8 +431,7 @@ public class RestClientImpl implements RestClient {
 
 		final Representation repr = res.get(SERVICES);
 
-		// FIXME::::
-		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
+		return DTOReflector.getStrings(repr);
 	}
 
 	/**
@@ -480,13 +478,5 @@ public class RestClientImpl implements RestClient {
 				repr);
 	}
 
-	private Collection<String> jsonArrayToStrings(final JSONArray array)
-			throws JSONException {
-		final Collection<String> result = new ArrayList<String>();
-		for (int i = 0; i < array.length(); i++) {
-			result.add(array.getString(i));
-		}
-		return result;
-	}
 
 }

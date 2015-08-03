@@ -168,7 +168,6 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				// no match, remove
 				iter.remove();
 			}
-
 		}
 
 		if (workingSet.isEmpty()) {

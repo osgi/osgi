@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -61,12 +62,20 @@ public class PojoReflector<B> {
 	private static final DocumentBuilderFactory			factory;
 
 	private static final Map<Class<?>, String>			typeCache		= new HashMap<Class<?>, String>();
+	
+	private static final String							SCHEMA_LOCATION	= "file:../xmlns/rest/v1.0.0/rest.xsd";
+	// should be "http://www.osgi.org/xmlns/rest/v1.0.0/rest.xsd"
+
+	private static final String							REST_NS			= "rest";
 
 	static {
-		final SchemaFactory sfact = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		final SchemaFactory sfact = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		factory = DocumentBuilderFactory.newInstance();
 		try {
-			factory.setSchema(sfact.newSchema(new StreamSource(PojoReflector.class.getResourceAsStream("/rest.xsd"))));
+		// factory.setSchema(sfact.newSchema(new StreamSource(PojoReflector.class.getResourceAsStream("/rest.xsd"))));
+			factory.setNamespaceAware(true);
+			factory.setValidating(true);
+			factory.setSchema(sfact.newSchema(new StreamSource(SCHEMA_LOCATION)));
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
@@ -175,6 +184,8 @@ public class PojoReflector<B> {
 		final Document doc = builder.newDocument();
 
 		final Element rootNode = xmlFromBean(bean, doc);
+		rootNode.setAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI,
+				"xs:schemaLocation", SCHEMA_LOCATION);
 		doc.appendChild(rootNode);
 
 		System.err.println("DOCUMENT " + printDoc(doc));
@@ -183,7 +194,7 @@ public class PojoReflector<B> {
 	}
 
 	public Element xmlFromBean(final Object bean, final Document doc) throws Exception {
-		final Element rootNode = doc.createElement(bean.getClass().getAnnotation(RootNode.class).name());
+		final Element rootNode = doc.createElementNS(REST_NS, bean.getClass().getAnnotation(RootNode.class).name());
 		if (bean instanceof Collection) {
 			String elemName = null;
 			boolean complex = false;
@@ -208,10 +219,10 @@ public class PojoReflector<B> {
 		} else if (bean instanceof BundleExceptionPojo) {
 			final BundleExceptionPojo p = (BundleExceptionPojo) bean;
 
-			final Element tc = doc.createElement("typecode");
+			final Element tc = doc.createElementNS(REST_NS, "typecode");
 			tc.setTextContent(Integer.toString(p.getTypecode()));
 			rootNode.appendChild(tc);
-			final Element msg = doc.createElement("message");
+			final Element msg = doc.createElementNS(REST_NS, "message");
 			msg.setTextContent(p.getMessage());
 			rootNode.appendChild(msg);
 		} else {
@@ -236,7 +247,7 @@ public class PojoReflector<B> {
 	}
 
 	private static Element toXml(final Object o, final String name, final Document doc) {
-		final Element e = doc.createElement(name);
+		final Element e = doc.createElementNS(REST_NS, name);
 
 		if ("usingBundles".equals(name)) {
 			for (final String bundle : (String[]) o) {
@@ -246,7 +257,7 @@ public class PojoReflector<B> {
 			@SuppressWarnings("unchecked")
 			final Map<Object, Object> map = (Map<Object, Object>) o;
 			for (final Map.Entry<Object, Object> entry : map.entrySet()) {
-				final Element elem = doc.createElement("property");
+				final Element elem = doc.createElementNS(REST_NS, "property");
 				elem.setAttribute("name", entry.getKey().toString());
 				final Object val = entry.getValue();
 				if (val instanceof String) {
@@ -262,13 +273,14 @@ public class PojoReflector<B> {
 				e.appendChild(elem);
 			}
 		} else if (o.getClass().isArray()) {
-			final Element elem = doc.createElement("array");
+			final Element elem = doc.createElementNS(REST_NS, "array");
 			elem.setAttribute("value-type", o.getClass().getComponentType().getName());
 			for (int i = 0; i < Array.getLength(o); i++) {
 				elem.appendChild(toXml(Array.get(o, i), "value", doc));
 			}
 			e.appendChild(elem);
 		} else {
+			System.err.println("TYPE IS " + o.getClass().toString());
 			e.setTextContent(o.toString());
 		}
 
@@ -283,11 +295,11 @@ public class PojoReflector<B> {
 		final DocumentBuilder builder = factory.newDocumentBuilder();
 		final Document doc = builder.newDocument();
 
-		final Element rootNode = doc.createElement("bundleHeader");
+		final Element rootNode = doc.createElementNS(REST_NS, "bundleHeader");
 		doc.appendChild(rootNode);
 
 		for (final String key : map.keySet()) {
-			final Element entry = doc.createElement("entry");
+			final Element entry = doc.createElementNS(REST_NS, "entry");
 			entry.setAttribute("key", key);
 			entry.setAttribute("value", map.get(key));
 			rootNode.appendChild(entry);

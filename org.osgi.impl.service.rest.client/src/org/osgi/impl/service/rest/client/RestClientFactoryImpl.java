@@ -31,7 +31,7 @@ public class RestClientFactoryImpl implements RestClientFactory {
 	 * @see org.osgi.service.rest.client.RestClientFactory#createRestClient(java.net.URI)
 	 */
 	public RestClient createRestClient(final URI uri) {
-		return new RestClientImpl(uri, false);
+		return new RestClientImpl(uri, true);
 	}
 
 }
