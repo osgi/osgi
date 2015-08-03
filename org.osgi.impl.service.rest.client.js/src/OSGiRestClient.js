@@ -30,7 +30,7 @@
  *            the base URL to the REST API.
  * @returns the OSGi REST API client object
  */
-function OsgiRestClient(baseUrl) {
+function OSGiRestClient(baseUrl) {
 	this.baseUrl = baseUrl || "";
 
 	function checkParam(f) {

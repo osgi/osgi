@@ -14,7 +14,7 @@ Bundle-ClassPath: .,lib/net.sourceforge.htmlunit.jar
 Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;sun.io.*;resolution:=optional, *
 -includeresource = \
   lib/net.sourceforge.htmlunit.jar=${repo;net.sourceforge.htmlunit;2.15.0}, \
-  ${project.workspace}/org.osgi.impl.service.rest.client.js/src/rest_client.js, \
+  ${project.workspace}/org.osgi.impl.service.rest.client.js/src/OSGiRestClient.js, \
   tb1.jar, \
   tb11.jar, \
   tb2.jar
