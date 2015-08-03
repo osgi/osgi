@@ -27,11 +27,26 @@ import org.osgi.service.rest.client.RestClientFactory;
  */
 public class RestClientFactoryImpl implements RestClientFactory {
 
+	public static final String	MSG_FORMAT		= "msg.format";
+	public static final String	MSG_FORMAT_JSON	= "json";
+	public static final String	MSG_FORMAT_XML	= "xml";
+
+	private final boolean		useXml;
+
+	/**
+	 * creates a new rest client factory implementation
+	 * 
+	 * @param useXml use XML as the message format (if false, use JSON)
+	 */
+	public RestClientFactoryImpl(final boolean useXml) {
+		this.useXml = useXml;
+	}
+
 	/**
 	 * @see org.osgi.service.rest.client.RestClientFactory#createRestClient(java.net.URI)
 	 */
 	public RestClient createRestClient(final URI uri) {
-		return new RestClientImpl(uri, true);
+		return new RestClientImpl(uri, useXml);
 	}
 
 }

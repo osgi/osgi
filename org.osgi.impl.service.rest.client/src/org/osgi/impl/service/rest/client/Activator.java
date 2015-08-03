@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.client;
 
+import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.rest.client.RestClientFactory;
@@ -28,7 +29,12 @@ public class Activator implements BundleActivator {
 	 * @author Jan S. Rellermeyer, IBM Research
 	 */
 	public void start(final BundleContext context) throws Exception {
-		context.registerService(RestClientFactory.class, new RestClientFactoryImpl(), null);
+		final Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put(RestClientFactoryImpl.MSG_FORMAT, RestClientFactoryImpl.MSG_FORMAT_JSON);
+		context.registerService(RestClientFactory.class, new RestClientFactoryImpl(false), props);
+
+		props.put(RestClientFactoryImpl.MSG_FORMAT, RestClientFactoryImpl.MSG_FORMAT_XML);
+		context.registerService(RestClientFactory.class, new RestClientFactoryImpl(true), props);
 	}
 
 	public void stop(final BundleContext context) throws Exception {
