@@ -315,14 +315,10 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done();"
 				+ ""
 				+ "}})");
-		// TODO the js client update above fails!
 
 		Bundle tb11Bundle = getBundle(TB11_TEST_BUNDLE_SYMBOLIC_NAME);
 		assertNotNull("Updated bundle not null", tb11Bundle);
 		assertEquals("Updated bundle version", TB11_TEST_BUNDLE_VERSION, tb11Bundle.getVersion().toString());
-
-		fail("TODO"); // TODO continue with this test as soon as the update is
-						 // working...
 	}
 
 	
