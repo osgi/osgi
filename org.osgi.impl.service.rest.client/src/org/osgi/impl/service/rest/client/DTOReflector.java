@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.client;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.dto.DTO;
-import org.osgi.framework.Constants;
 import org.restlet.data.MediaType;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.ext.xml.DomRepresentation;
@@ -139,20 +139,18 @@ public final class DTOReflector {
 				final Node node = elem.getElementsByTagName("usingBundles").item(0);
 				final NodeList nodes = node.getChildNodes();
 
-				final long[] using = new long[nodes.getLength()];
-				for (int i = 0; i < nodes.getLength(); i++) {
-					using[i] = getBundleIdFromPath(nodes.item(i).getTextContent());
+				if (nodes.getLength() > 0) {
+					final long[] using = new long[nodes.getLength()];
+					for (int i = 0; i < nodes.getLength(); i++) {
+						using[i] = getBundleIdFromPath(nodes.item(i).getTextContent());
+						field.set(dto, using);
+					}
 				}
-
-				field.set(dto, using);
 			} else if ("id".equals(field.getName()) || "lastModified".equals(field.getName())) {
 				field.set(dto, Long.valueOf(elem.getElementsByTagName(field.getName()).item(0).getTextContent()));
 			} else if ("state".equals(field.getName())) {
 				field.set(dto, Integer.valueOf(elem.getElementsByTagName(field.getName()).item(0).getTextContent()));
 			} else if (field.getType().equals(Map.class)) {
-				System.err.println("need map for " + field.getName());
-				System.err.println("element is " + elem.getNodeName());
-
 				final Node props = elem.getElementsByTagName("properties").item(0);
 
 				final Map<String, Object> properties = new HashMap<String, Object>();
@@ -174,36 +172,69 @@ public final class DTOReflector {
 		final String name = node.getAttributes().getNamedItem("name").getTextContent();
 		final Node tNode = node.getAttributes().getNamedItem("type");
 		final String type = tNode == null ? null : tNode.getTextContent();
-		final String value = node.getAttributes().getNamedItem("value").getTextContent();
+		final Node vNode = node.getAttributes().getNamedItem("value");
 
-		final Object val;
-		if (Constants.OBJECTCLASS.equals(name)) {
-			final String[] o = new String[1];
-			o[0] = value;
-			val = o;
-		} else if (type == null || "String".equals(type)) {
-			val = value;
-		} else if ("Long".equals(type)) {
-			val = Long.valueOf(value);
-		} else if ("Double".equals(type)) {
-			val = Double.valueOf(value);
-		} else if ("Float".equals(type)) {
-			val = Float.valueOf(value);
-		} else if ("Integer".equals(type)) {
-			val = Integer.valueOf(value);
-		} else if ("Byte".equals(type)) {
-			val = Byte.valueOf(value);
-		} else if ("Character".equals(type)) {
-			val = new Character(value.trim().charAt(0));
-		} else if ("Boolean".equals(type)) {
-			val = Boolean.valueOf(value);
-		} else if ("Short".equals(type)) {
-			val = Short.valueOf(value);
+		final Object value;
+		if (vNode != null) {
+			value = fromXml(type, vNode.getTextContent());
 		} else {
-			val = value;
+			final String[] vals = node.getTextContent().split("\n");
+			final int len = vals.length;
+			value = getArray(type, len);
+			for (int i = 0; i < len; i++) {
+				Array.set(value, i, fromXml(type, vals[i]));
+			}
 		}
 
-		map.put(name, val);
+		map.put(name, value);
+	}
+
+	private static Object fromXml(final String type, final String value) {
+		if (type == null || "String".equals(type)) {
+			return value;
+		} else if ("Long".equals(type)) {
+			return Long.valueOf(value);
+		} else if ("Double".equals(type)) {
+			return Double.valueOf(value);
+		} else if ("Float".equals(type)) {
+			return Float.valueOf(value);
+		} else if ("Integer".equals(type)) {
+			return Integer.valueOf(value);
+		} else if ("Byte".equals(type)) {
+			return Byte.valueOf(value);
+		} else if ("Character".equals(type)) {
+			return new Character(value.trim().charAt(0));
+		} else if ("Boolean".equals(type)) {
+			return Boolean.valueOf(value);
+		} else if ("Short".equals(type)) {
+			return Short.valueOf(value);
+		} else {
+			return value;
+		}
+	}
+
+	private static Object getArray(final String type, final int len) {
+		if (type == null || "String".equals(type)) {
+			return new String[len];
+		} else if ("Long".equals(type)) {
+			return new long[len];
+		} else if ("Double".equals(type)) {
+			return new double[len];
+		} else if ("Float".equals(type)) {
+			return new float[len];
+		} else if ("Integer".equals(type)) {
+			return new int[len];
+		} else if ("Byte".equals(type)) {
+			return new byte[len];
+		} else if ("Character".equals(type)) {
+			return new char[len];
+		} else if ("Boolean".equals(type)) {
+			return new boolean[len];
+		} else if ("Short".equals(type)) {
+			return new short[len];
+		} else {
+			return new Object[len];
+		}
 	}
 
 	private static final Pattern	p	= Pattern.compile("\\/(\\d+)\\/*");

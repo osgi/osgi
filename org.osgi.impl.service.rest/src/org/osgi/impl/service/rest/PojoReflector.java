@@ -62,9 +62,8 @@ public class PojoReflector<B> {
 	private static final DocumentBuilderFactory			factory;
 
 	private static final Map<Class<?>, String>			typeCache		= new HashMap<Class<?>, String>();
-	
-	private static final String							SCHEMA_LOCATION	= "file:../xmlns/rest/v1.0.0/rest.xsd";
-	// should be "http://www.osgi.org/xmlns/rest/v1.0.0/rest.xsd"
+
+	private static final String							SCHEMA_LOCATION	= "http://www.osgi.org/xmlns/rest/v1.0.0 rest.xsd";
 
 	private static final String							REST_NS			= "rest";
 
@@ -72,10 +71,9 @@ public class PojoReflector<B> {
 		final SchemaFactory sfact = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		factory = DocumentBuilderFactory.newInstance();
 		try {
-		// factory.setSchema(sfact.newSchema(new StreamSource(PojoReflector.class.getResourceAsStream("/rest.xsd"))));
+			factory.setSchema(sfact.newSchema(new StreamSource(PojoReflector.class.getResourceAsStream("/rest.xsd"))));
 			factory.setNamespaceAware(true);
 			factory.setValidating(true);
-			factory.setSchema(sfact.newSchema(new StreamSource(SCHEMA_LOCATION)));
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
@@ -185,10 +183,8 @@ public class PojoReflector<B> {
 
 		final Element rootNode = xmlFromBean(bean, doc);
 		rootNode.setAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI,
-				"xs:schemaLocation", SCHEMA_LOCATION);
+				"xsi:schemaLocation", SCHEMA_LOCATION);
 		doc.appendChild(rootNode);
-
-		System.err.println("DOCUMENT " + printDoc(doc));
 
 		return doc;
 	}
@@ -237,6 +233,7 @@ public class PojoReflector<B> {
 	}
 
 	// for debugging only
+	@SuppressWarnings("unused")
 	private final String printDoc(final Document doc) throws Exception {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
@@ -260,27 +257,30 @@ public class PojoReflector<B> {
 				final Element elem = doc.createElementNS(REST_NS, "property");
 				elem.setAttribute("name", entry.getKey().toString());
 				final Object val = entry.getValue();
-				if (val instanceof String) {
-					elem.setAttribute("value", val.toString());
+				if (val.getClass().isArray()) {
+					final String type = getType(o.getClass().getComponentType());
+					if (type != null) {
+						e.setAttribute("type", type);
+					}
+					final int len = Array.getLength(val);
+					final StringBuilder sb = new StringBuilder();
+					for (int i = 0; i < len; i++) {
+						sb.append(Array.get(val, i).toString());
+						if (i < len - 1) {
+							sb.append('\n');
+						}
+					}
+					elem.setTextContent(sb.toString());
 				} else {
-					final Element valElement = toXml(val, "value", doc);
 					final String type = getType(val.getClass());
 					if (type != null) {
 						elem.setAttribute("type", type);
 					}
-					elem.setAttribute("value", valElement.getTextContent());
+					elem.setAttribute("value", val.toString());
 				}
 				e.appendChild(elem);
 			}
-		} else if (o.getClass().isArray()) {
-			final Element elem = doc.createElementNS(REST_NS, "array");
-			elem.setAttribute("value-type", o.getClass().getComponentType().getName());
-			for (int i = 0; i < Array.getLength(o); i++) {
-				elem.appendChild(toXml(Array.get(o, i), "value", doc));
-			}
-			e.appendChild(elem);
 		} else {
-			System.err.println("TYPE IS " + o.getClass().toString());
 			e.setTextContent(o.toString());
 		}
 
