@@ -209,35 +209,24 @@ function OSGiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @param callbacks
-	 *            an optional object containing callback functions for status
-	 *            updates. On success, the callback will have the updated bundle
-	 *            state object.
-	 */
-	this.startBundle = function startBundle(b, callbacks) {
-		this.setBundleState(b, {
-			state : 32
-		}, callbacks);
-	}
-
-	/**
-	 * Start a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path.
 	 * @param options
-	 *            the options passed to the bundle's start method as an integer.
+	 *            the options passed to the bundle's start method as an integer. (optional)
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
 	 *            updates. On success, the callback will have the updated bundle
 	 *            state object.
 	 */
-	this.startBundle = function startBundle(b, options, callbacks) {
-		this.setBundleState(b, {
-			state : 32,
-			options : options
-		}, callbacks);
+	this.startBundle = function startBundle(b, arg1, arg2) {
+		if (!(isNaN(arg1 - 0))) {
+			this.setBundleState(b, {
+				state : 32,
+				options : arg1
+			}, arg2);
+		} else {
+			this.setBundleState(b, {
+				state : 32,				
+			}, arg1);
+		}		
 	}
 
 	/**
