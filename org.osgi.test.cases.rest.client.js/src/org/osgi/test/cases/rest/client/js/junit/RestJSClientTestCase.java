@@ -203,8 +203,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
 				+ "client.installBundle('" + url + "', {"
 				+ "  success : function(res) {"
-				// + "    assert('installBundle', 'framework/bundle/" +
-				// getContext().getBundles().length + "', res);"
 				+ "    done();"
 				+ ""
 				+ "}})");
@@ -363,10 +361,12 @@ public class RestJSClientTestCase extends RestTestUtils {
   
 		assertTrue("Precondition", tb1Bundle.getState() != Bundle.ACTIVE);
 		// Start by bundle ID
+
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
-				+ "client.startBundle(" + tb1Bundle.getBundleId() + ",{"
-				+ "  success : function(res) {"
-				+ "    done();"
+				+ "client.startBundle(" + tb1Bundle.getBundleId()
+				+ ", 0, {"
+				+ " success : function(res) {"
+				+ "   done();"
 				+ "}})");
 		assertEquals(Bundle.ACTIVE, tb1Bundle.getState());
 	  
@@ -378,18 +378,16 @@ public class RestJSClientTestCase extends RestTestUtils {
 	    assertTrue("Precondition", tb2Bundle.getState() != Bundle.ACTIVE); 
 	    // Start by bundle ID 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
-	    		+ "client.startBundle('" + getBundlePath(tb2Bundle) + "',{" 
+				+ "client.startBundle('" + getBundlePath(tb2Bundle) + "',0,{"
 	    		+ "  success : function(res) {" 
 	    		+ "    done();" + "" + "}})");
 	    assertEquals(Bundle.ACTIVE, tb2Bundle.getState());
 	  
 	    // Start nonexisting bundle 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
-	    		+ "client.startBundle(12345678,{" 
+				+ "client.startBundle(12345678,0,{"
 	    		+ "  failure : function(res) {" 
 	    		+ "    done();" + "" + "}})");
-	  
-		fail("Javascript client does not support bundle activation policy");
 	}
 
 	public void testBundleHeaderRestClient() throws Exception {
