@@ -363,8 +363,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		// Start by bundle ID
 
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
-				+ "client.startBundle(" + tb1Bundle.getBundleId()
-				+ ", 0, {"
+				+ "client.startBundle(" + tb1Bundle.getBundleId() + ", {"
 				+ " success : function(res) {"
 				+ "   done();"
 				+ "}})");
