@@ -266,7 +266,7 @@ public class PojoReflector<B> {
 					final StringBuilder sb = new StringBuilder();
 					for (int i = 0; i < len; i++) {
 						sb.append(Array.get(val, i).toString());
-						if (i < len - 1) {
+						if (i < len) {
 							sb.append('\n');
 						}
 					}
