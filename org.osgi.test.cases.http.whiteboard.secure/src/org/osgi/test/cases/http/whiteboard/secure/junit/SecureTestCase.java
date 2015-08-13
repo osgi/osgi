@@ -148,11 +148,6 @@ public class SecureTestCase extends BaseHttpWhiteboardTestCase {
 			Map<String, List<String>> result = request("/etc/passwd", null);
 
 			assertEquals("500", result.get("responseCode").get(0));
-
-			String responseBody = result.get("responseBody").get(0);
-
-			assertTrue(responseBody.contains("java.security.AccessControlException"));
-			assertTrue(responseBody.contains("access denied (\"java.io.FilePermission\" \"/etc/passwd\" \"read\")"));
 		} finally {
 			bundle.uninstall();
 		}
