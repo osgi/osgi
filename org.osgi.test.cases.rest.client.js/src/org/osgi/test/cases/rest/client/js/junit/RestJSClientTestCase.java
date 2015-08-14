@@ -204,7 +204,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "client.installBundle('" + url + "', {"
 				+ "  success : function(res) {"
 				+ "    done();"
-				+ ""
 				+ "}})");
 		tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
 		assertNotNull("Test bundle TB1 is installed", tb1Bundle);
@@ -216,7 +215,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    assert('Should have returned CONFLICT as the bundle is already installed at the location', "
 				+ "      409, res);"
 				+ "    done(); "
-				+ ""
 				+ "}})");
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
 				+ "client.installBundle('invalid bundle location', {"
@@ -224,7 +222,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    assert('Should have returned BAD REQUEST as the bundle location is invalid', "
 				+ "      400, res);"
 				+ "    done(); "
-				+ ""
 				+ "}})");
 
 		// Test getBundles() again with the newly installed bundle
@@ -247,7 +244,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  success : function(res) {"
 				+ "    assert('getBundles', " + sb2.toString() + ", res);"
 				+ "    done();"
-				+ ""
 				+ "}})");
 	}
 
@@ -283,7 +279,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  success : function(res) {"
 				+ jsAssertBundleRepresentation(bundle, "res")
 				+ "    done();"
-				+ ""
 				+ "}})");
 
 		// Get nonexistent bundle
@@ -300,7 +295,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  success : function(res) {"
 				+ jsAssertBundleRepresentation(bundle, "res")
 				+ "    done();"
-				+ ""
 				+ "}})");
 
 		String url = getContext().getBundle().getEntry(TB11).toString();
@@ -311,7 +305,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "client.updateBundle(" + tb1Bundle.getBundleId() + ", '" + url + "',{"
 				+ "  success : function(res) {"
 				+ "    done();"
-				+ ""
 				+ "}})");
 
 		Bundle tb11Bundle = getBundle(TB11_TEST_BUNDLE_SYMBOLIC_NAME);
@@ -328,28 +321,32 @@ public class RestJSClientTestCase extends RestTestUtils {
 			  + "client.getBundleState(" + bundle.getBundleId() + ",{"
 			  + "  success : function(res) {" 
 			  + "    assert('Bundle state by ID', " + bundle.getState() + ", res.state);" 
-			  + "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
   
 	    // Bundle state by path 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 			  + "client.getBundleState('" + getBundlePath(bundle) + "',{" 
 			  + "  success : function(res) {" 
 			  + "    assert('Bundle state by ID', " + bundle.getState() + ", res.state);"
-			  + "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
   
 	    // Bundle state for non-existent bundle
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 			  + "client.getBundleState(12345678,{" 
 			  + "  failure : function(res) {" 
 			  + "    assert('Bundle state for nonexistent bundle', 404, res);" 
-			  + "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
 	  
 	    // Bundle state for illegal bundle path
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 			  + "client.getBundleState('Illegal bundle path',{" 
 			  + "  failure : function(res) {" 
 			  + "    assert('Bundle state for nonexistent bundle', 404, res);" 
-			  + "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
   
 	    // start by bundle id 
 	    Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
@@ -361,32 +358,56 @@ public class RestJSClientTestCase extends RestTestUtils {
   
 		assertTrue("Precondition", tb1Bundle.getState() != Bundle.ACTIVE);
 		// Start by bundle ID
-
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
 				+ "client.startBundle(" + tb1Bundle.getBundleId() + ", {"
 				+ " success : function(res) {"
 				+ "   done();"
 				+ "}})");
 		assertEquals(Bundle.ACTIVE, tb1Bundle.getState());
-	  
+
+		// Stop by bundle ID
+		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
+				+ "client.stopBundle(" + tb1Bundle.getBundleId() + ", {"
+				+ " success : function(res) {"
+				+ "   done();"
+				+ "}})");
+		assertTrue(tb1Bundle.getState() != Bundle.ACTIVE);
+
 	    Bundle tb2Bundle = getTestBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME, TB2); 
 	    if (tb2Bundle.getState() == Bundle.ACTIVE) { 
 	    	tb2Bundle.stop(); 
 	    }
-	  
+
 	    assertTrue("Precondition", tb2Bundle.getState() != Bundle.ACTIVE); 
 	    // Start by bundle ID 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 				+ "client.startBundle('" + getBundlePath(tb2Bundle) + "',0,{"
 	    		+ "  success : function(res) {" 
-	    		+ "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
 	    assertEquals(Bundle.ACTIVE, tb2Bundle.getState());
-	  
+
+		// Stop by bundle ID
+		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
+				+ "client.stopBundle('" + getBundlePath(tb2Bundle) + "',0,{"
+				+ "  success : function(res) {"
+				+ "    done();"
+				+ "}})");
+		assertTrue(tb2Bundle.getState() != Bundle.ACTIVE);
+
 	    // Start nonexisting bundle 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 				+ "client.startBundle(12345678,0,{"
 	    		+ "  failure : function(res) {" 
-	    		+ "    done();" + "" + "}})");
+				+ "    done();"
+				+ "}})");
+
+		// Stop nonexisting bundle
+		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
+				+ "client.stopBundle(12345678,0,{"
+				+ "  failure : function(res) {"
+				+ "    done();"
+				+ "}})");
 	}
 
 	public void testBundleHeaderRestClient() throws Exception {
@@ -403,7 +424,6 @@ public class RestJSClientTestCase extends RestTestUtils {
 		}
 				
 		sb.append("    done();"
-				+ ""
 				+ "}})");
 		jsTest(sb.toString());
 	}
