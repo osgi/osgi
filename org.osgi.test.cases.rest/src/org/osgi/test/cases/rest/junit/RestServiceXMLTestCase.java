@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -676,18 +675,20 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         List<String> val = new ArrayList<String>();
         xmlProps.put(name, val);
 
-        String valueAttribute = propertyElement.getAttribute("value");
-        if (valueAttribute != null && (valueAttribute.trim().length() > 0)) {
-          val.add(valueAttribute);
-        } else {
-          String valueContent = propertyElement.getTextContent();
-          if (valueContent != null) {
-            StringTokenizer st = new StringTokenizer(valueContent, System.getProperty("line.separator"));
-            while (st.hasMoreElements()) {
-              val.add(st.nextToken());
-            }
-          }
-        }
+				if (propertyElement.hasAttribute("value")) {
+					String valueAttribute = propertyElement.getAttribute("value");
+					val.add(valueAttribute);
+				} else {
+					String valueContent = propertyElement.getTextContent();
+					if (valueContent != null) {
+						String[] values = valueContent.split("\\n");
+						for (String value : values) {
+							String v = value.trim();
+							if (v.length() > 0)
+								val.add(v);
+						}
+					}
+				}
       }
 
       assertEquals("Properties size.", propKeys.length, xmlProps.size());
