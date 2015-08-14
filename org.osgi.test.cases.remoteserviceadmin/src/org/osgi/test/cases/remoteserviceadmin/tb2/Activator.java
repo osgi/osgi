@@ -24,11 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.ExportReference;
@@ -43,6 +40,9 @@ import org.osgi.test.cases.remoteserviceadmin.common.TestRemoteServiceAdminListe
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
+
+import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -58,7 +58,7 @@ public class Activator implements BundleActivator, A, B {
 	TestRemoteServiceAdminListener remoteServiceAdminListener;
 	long timeout;
 	String version;
-	ServiceReference rsaRef;
+	ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin> rsaTracker;
 
 	/**
 	 * Used for writing the endpoint description to a system property to be used
@@ -73,6 +73,9 @@ public class Activator implements BundleActivator, A, B {
 		this.context = context;
 		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
 				300000L);
+		rsaTracker = new ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin>(context, RemoteServiceAdmin.class,
+				null);
+		rsaTracker.open();
 
 		// read my version from the bundle header
 		version = context.getBundle().getHeaders().get("RSA-Version");
@@ -126,9 +129,7 @@ public class Activator implements BundleActivator, A, B {
 
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service
-		rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
-		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
+		rsa = rsaTracker.waitForService(timeout);
 		Assert.assertNotNull(rsa);
 
 		try {
@@ -256,8 +257,8 @@ public class Activator implements BundleActivator, A, B {
 
 		} finally {
 			// the release of the rsa service will also trigger the unexport of the services of this bundle
-			if(rsaRef!=null)
-				context.ungetService(rsaRef);
+			if (rsaTracker != null)
+				rsaTracker.close();
 		}
 	}
 
