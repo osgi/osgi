@@ -74,7 +74,7 @@ public interface RemoteServiceAdmin {
 	 *         configuration type properties and the intents that they support.
 	 *         The result is never {@code null} but may be empty if this Remove
 	 *         Service Admin does not recognize any of the configuration types,
-	 *         or if they Remote Service Admin cannot support the relevant
+	 *         or if the Remote Service Admin cannot support the relevant
 	 *         intents.
 	 * @throws IllegalArgumentException If any of the properties for this
 	 *         configuration type has a value that is not syntactically correct,
