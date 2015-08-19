@@ -5,6 +5,11 @@ Bundle-Activator				= ${p}.Activator
 
 Private-Package 				= ${p}.*
 Export-Package					= org.osgi.service.rest; -split-package:=first
+Provide-Capability: osgi.implementation; \
+  osgi.implementation="osgi.rest"; \
+  version:Version="1.0.0"; \
+  uses:="org.osgi.service.rest"
+
 -includeresource = \
   ${project.workspace}/xmlns/rest/v1.0.0/rest.xsd
 

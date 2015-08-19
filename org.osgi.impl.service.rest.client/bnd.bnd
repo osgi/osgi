@@ -4,6 +4,9 @@
 Private-Package 				= ${p}.*
 Export-Package					= org.osgi.service.rest.client; -split-package:=first
 Bundle-Activator: org.osgi.impl.service.rest.client.Activator
+Provide-Capability: osgi.service; \
+  objectClass:List<String>="org.osgi.service.rest.client.RestClientFactory"; \
+  uses:="org.osgi.service.rest.client"
 
 -buildpath						= \
 	org.osgi.service.rest;		version=project, \
