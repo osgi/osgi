@@ -104,7 +104,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   public static String TB4 = "/tb4.jar";
 
   @Override
-  public void setUp() throws Exception {
+	protected void setUp() throws Exception {
     super.setUp();
 
     baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
@@ -121,14 +121,14 @@ public abstract class RestTestUtils extends OSGiTestCase {
   }
 
   @Override
-  public void tearDown() throws Exception {
-    super.tearDown();
+	protected void tearDown() throws Exception {
     //ungetAllServices();
 
     unisntallIfInstalled(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     unisntallIfInstalled(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
     unisntallIfInstalled(TB3_TEST_BUNDLE_SYMBOLIC_NAME);
     unisntallIfInstalled(TB4_TEST_BUNDLE_SYMBOLIC_NAME);
+		super.tearDown();
   }
 
   protected String getBundleURI(long bundleId) {
