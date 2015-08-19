@@ -809,7 +809,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -835,7 +835,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -853,7 +853,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -889,7 +889,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -920,7 +920,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -941,7 +941,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       if (is != null) {
         try {
           is.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
@@ -973,7 +973,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
           } finally {
             try {
               is.close();
-            } catch (Throwable _) {
+						} catch (Throwable i) {
+							/**/
             }
           }
         }

@@ -853,7 +853,7 @@ public class RestServiceJSONTestCase extends RestTestUtils {
           } finally {
             try {
               is.close();
-            } catch (Throwable _) {
+						} catch (Throwable i) {
               /**/
             }
           }
@@ -900,7 +900,7 @@ public class RestServiceJSONTestCase extends RestTestUtils {
       if (in != null) {
         try {
           in.close();
-        } catch (Throwable _) {
+				} catch (Throwable i) {
           /**/
         }
       }
