@@ -43,7 +43,7 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
  *
  * @author Petia Sotirova
  */
-public class RestServiceTestCase extends RestTestUtils {
+public class RestServiceJSONTestCase extends RestTestUtils {
 
   // 5.1.1
   public void testFrameworkStartLevel() throws JSONException, IOException {

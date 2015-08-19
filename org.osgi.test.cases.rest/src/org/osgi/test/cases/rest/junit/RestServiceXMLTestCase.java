@@ -105,7 +105,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   // tests list bundles and install bundle from invalid location/content.
-  // successful install is covered by RestServiceTestCase
+  // successful install is covered by RestServiceJSONTestCase
   public void testBundleList() throws BundleException, IOException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     Element xmlBundleList = getXMLObject(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
