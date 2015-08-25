@@ -7,7 +7,8 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
-  	org.osgi.impl.bundle.midletcontainer, \
+	org.osgi.impl.bundle.metatype.annotations, \
+	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
@@ -21,6 +22,9 @@ build.cmpn.impls = \
 	org.osgi.impl.service.log , \
 	org.osgi.impl.service.monitor , \
 	org.osgi.impl.service.prefs , \
+	org.osgi.impl.service.rest , \
+	org.osgi.impl.service.rest.client , \
+	org.osgi.impl.service.rest.client.js , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin, \
@@ -46,6 +50,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
     ${repo;org.osgi.impl.service.resolver;latest}, \
+    ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.impl.service.repository;latest}, \
     ${repo;org.osgi.impl.service.subsystem;latest}, \
 	${repo;org.osgi.impl.service.wireadmin;latest}
@@ -53,12 +58,16 @@ jar.cmpn.impls = \
 build.enterprise.impls = \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
+    org.osgi.impl.bundle.metatype.annotations, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.async, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
+    org.osgi.impl.service.rest , \
+    org.osgi.impl.service.rest.client , \
+    org.osgi.impl.service.rest.client.js , \
 	org.osgi.impl.service.useradmin, \
     org.osgi.util.function, \
     org.osgi.util.promise, \
@@ -81,6 +90,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
 	${repo;org.osgi.impl.service.resolver;latest}, \
+    ${repo;org.osgi.impl.service.rest.support;latest}, \
 	${repo;org.osgi.impl.service.repository;latest}, \
 	${repo;org.osgi.impl.service.subsystem;latest}
 
@@ -88,6 +98,7 @@ build.residential.impls = \
 	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.jaxp, \
+    org.osgi.impl.bundle.metatype.annotations, \
 	org.osgi.impl.service.dal, \
 	org.osgi.impl.service.dal.step, \
 	org.osgi.impl.service.device.manager, \

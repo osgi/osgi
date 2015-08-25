@@ -6,8 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -30,6 +28,9 @@ import org.osgi.test.cases.remoteserviceadmin.common.TestRemoteServiceAdminListe
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
+
+import junit.framework.Assert;
 
 /*
  * Copyright (c) OSGi Alliance (2008, 2014). All Rights Reserved.
@@ -118,7 +119,15 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				props);
 
 		// lookup RemoteServiceAdmin service
-		rsaRef = bctx.getServiceReference(RemoteServiceAdmin.class.getName());
+		ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin> tracker = new ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin>(
+				bctx, RemoteServiceAdmin.class, null);
+		tracker.open();
+		tracker.waitForService(timeout);
+
+		rsaRef = tracker.getServiceReference();
+
+		tracker.close();
+
 		Assert.assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) bctx.getService(rsaRef);
 		Assert.assertNotNull(rsa);

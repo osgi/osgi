@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb26.NameMappingComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb26.NameMappingComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="myProperty143" value="xml/myProperty143"/>
+    <property name="new" value="xml/new"/>
+    <property name="my$prop" value="xml/my$prop"/>
+    <property name="dot.prop" value="xml/dot.prop"/>
+    <property name=".secret" value="xml/.secret"/>
+    <property name="another_prop" value="xml/another_prop"/>
+    <property name="three_.prop" value="xml/three_.prop"/>
+    <property name="four._prop" value="xml/four._prop"/>
+    <property name="five..prop" value="xml/five..prop"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb26.AnnotationMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="error" value="xml/error"/>
+    <property name="errors" value="xml/errors"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb26.ClassMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb26.ClassMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="single" value="org.osgi.test.cases.component.types.ClassMember"/>
+    <property name="multiple">
+org.osgi.test.cases.component.tb26.ClassMemberComponent
+org.osgi.test.cases.component.types.ClassMember
+    </property>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb26.EnumMemberComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb26.EnumMemberComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="single" value="ITEM1"/>
+    <property name="multiple">
+AnotherItem
+ITEM1
+    </property>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb26.CoercionComponent"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            factory="org.osgi.test.cases.component.tb26.CoercionComponent">
+    <implementation class="org.osgi.test.cases.component.tb26.CoercionComponent"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ObjectProvider1"/>
+    </service>
+    <property name="stringString" type="String" value="xml/stringString"/>
+    <property name="stringBoolean" type="Boolean" value="true"/>
+    <property name="stringCharacter" type="Character" value="64"/>
+    <property name="stringByte" type="Byte" value="2"/>
+    <property name="stringShort" type="Short" value="1024"/>
+    <property name="stringInteger" type="Integer" value="123456"/>
+    <property name="stringLong" type="Long" value="9876543210"/>
+    <property name="stringFloat" type="Float" value="3.14"/>
+    <property name="stringDouble" type="Double" value="2.1"/>
+    <property name="stringCollection" type="String">
+xml
+list
+    </property>
+    <property name="stringArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="booleanString" type="String" value="true"/>
+    <property name="booleanBoolean" type="Boolean" value="true"/>
+    <property name="booleanCharacter" type="Character" value="0"/>
+    <property name="booleanByte" type="Byte" value="2"/>
+    <property name="booleanShort" type="Short" value="1024"/>
+    <property name="booleanInteger" type="Integer" value="123456"/>
+    <property name="booleanLong" type="Long" value="9876543210"/>
+    <property name="booleanFloat" type="Float" value="0.5"/>
+    <property name="booleanDouble" type="Double" value="-0.0"/>
+    <property name="booleanCollection" type="String">
+false
+true
+    </property>
+    <property name="booleanArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="charString" type="String" value="64"/>
+    <property name="charStringEmpty" type="String" value=""/>
+    <property name="charBooleanTrue" type="Boolean" value="true"/>
+    <property name="charBooleanFalse" type="Boolean" value="false"/>
+    <property name="charCharacter" type="Character" value="64"/>
+    <property name="charByte" type="Byte" value="2"/>
+    <property name="charShort" type="Short" value="1034"/>
+    <property name="charInteger" type="Integer" value="123456"/>
+    <property name="charLong" type="Long" value="9876543210"/>
+    <property name="charFloat" type="Float" value="3.14"/>
+    <property name="charDouble" type="Double" value="2.1"/>
+    <property name="charCollection" type="String">
+0
+64
+    </property>
+    <property name="charArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="byteString" type="String" value="64"/>
+    <property name="byteBooleanTrue" type="Boolean" value="true"/>
+    <property name="byteBooleanFalse" type="Boolean" value="false"/>
+    <property name="byteCharacter" type="Character" value="64"/>
+    <property name="byteByte" type="Byte" value="2"/>
+    <property name="byteShort" type="Short" value="1034"/>
+    <property name="byteInteger" type="Integer" value="123456"/>
+    <property name="byteLong" type="Long" value="9876543210"/>
+    <property name="byteFloat" type="Float" value="3.14"/>
+    <property name="byteDouble" type="Double" value="2.1"/>
+    <property name="byteCollection" type="String">
+0
+64
+    </property>
+    <property name="byteArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="shortString" type="String" value="64"/>
+    <property name="shortBooleanTrue" type="Boolean" value="true"/>
+    <property name="shortBooleanFalse" type="Boolean" value="false"/>
+    <property name="shortCharacter" type="Character" value="64"/>
+    <property name="shortByte" type="Byte" value="2"/>
+    <property name="shortShort" type="Short" value="1034"/>
+    <property name="shortInteger" type="Integer" value="123456"/>
+    <property name="shortLong" type="Long" value="9876543210"/>
+    <property name="shortFloat" type="Float" value="3.14"/>
+    <property name="shortDouble" type="Double" value="2.1"/>
+    <property name="shortCollection" type="String">
+0
+64
+    </property>
+    <property name="shortArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="intString" type="String" value="64"/>
+    <property name="intBooleanTrue" type="Boolean" value="true"/>
+    <property name="intBooleanFalse" type="Boolean" value="false"/>
+    <property name="intCharacter" type="Character" value="64"/>
+    <property name="intByte" type="Byte" value="2"/>
+    <property name="intShort" type="Short" value="1034"/>
+    <property name="intInteger" type="Integer" value="123456"/>
+    <property name="intLong" type="Long" value="9876543210"/>
+    <property name="intFloat" type="Float" value="3.14"/>
+    <property name="intDouble" type="Double" value="2.1"/>
+    <property name="intCollection" type="String">
+0
+64
+    </property>
+    <property name="intArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="longString" type="String" value="64"/>
+    <property name="longBooleanTrue" type="Boolean" value="true"/>
+    <property name="longBooleanFalse" type="Boolean" value="false"/>
+    <property name="longCharacter" type="Character" value="64"/>
+    <property name="longByte" type="Byte" value="2"/>
+    <property name="longShort" type="Short" value="1034"/>
+    <property name="longInteger" type="Integer" value="123456"/>
+    <property name="longLong" type="Long" value="9876543210"/>
+    <property name="longFloat" type="Float" value="3.14"/>
+    <property name="longDouble" type="Double" value="2.1"/>
+    <property name="longCollection" type="String">
+0
+64
+    </property>
+    <property name="longArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="floatString" type="String" value="64.3"/>
+    <property name="floatBooleanTrue" type="Boolean" value="true"/>
+    <property name="floatBooleanFalse" type="Boolean" value="false"/>
+    <property name="floatCharacter" type="Character" value="64"/>
+    <property name="floatByte" type="Byte" value="2"/>
+    <property name="floatShort" type="Short" value="1034"/>
+    <property name="floatInteger" type="Integer" value="123456"/>
+    <property name="floatLong" type="Long" value="9876543210"/>
+    <property name="floatFloat" type="Float" value="3.14"/>
+    <property name="floatDouble" type="Double" value="2.1"/>
+    <property name="floatCollection" type="String">
+0.3
+64.3
+    </property>
+    <property name="floatArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="doubleString" type="String" value="64.3"/>
+    <property name="doubleBooleanTrue" type="Boolean" value="true"/>
+    <property name="doubleBooleanFalse" type="Boolean" value="false"/>
+    <property name="doubleCharacter" type="Character" value="64"/>
+    <property name="doubleByte" type="Byte" value="2"/>
+    <property name="doubleShort" type="Short" value="1034"/>
+    <property name="doubleInteger" type="Integer" value="123456"/>
+    <property name="doubleLong" type="Long" value="9876543210"/>
+    <property name="doubleFloat" type="Float" value="3.14"/>
+    <property name="doubleDouble" type="Double" value="2.1"/>
+    <property name="doubleCollection" type="String">
+0.3
+64.3
+    </property>
+    <property name="doubleArray" type="Boolean">
+true
+false
+    </property>
+
+    <property name="classBoolean" type="Boolean" value="true"/>
+    <property name="classCharacter" type="Character" value="64"/>
+    <property name="classByte" type="Byte" value="2"/>
+    <property name="classShort" type="Short" value="1034"/>
+    <property name="classInteger" type="Integer" value="123456"/>
+    <property name="classLong" type="Long" value="9876543210"/>
+    <property name="classFloat" type="Float" value="3.14"/>
+    <property name="classDouble" type="Double" value="2.1"/>
+    <property name="classCollection" type="String">
+0.3
+64.3
+    </property>
+    <property name="classArray" type="String">
+org.osgi.test.cases.component.tb26.CoercionComponent
+org.osgi.test.cases.component.types.Coercion
+    </property>
+
+    <property name="enumBoolean" type="Boolean" value="true"/>
+    <property name="enumCharacter" type="Character" value="64"/>
+    <property name="enumByte" type="Byte" value="2"/>
+    <property name="enumShort" type="Short" value="1034"/>
+    <property name="enumInteger" type="Integer" value="123456"/>
+    <property name="enumLong" type="Long" value="9876543210"/>
+    <property name="enumFloat" type="Float" value="3.14"/>
+    <property name="enumDouble" type="Double" value="2.1"/>
+    <property name="enumCollection" type="String">
+0.3
+64.3
+    </property>
+    <property name="enumArray" type="String">
+AnotherItem
+ITEM1
+    </property>
+
+    <property name="string$String" type="String" value="xml/stringString"/>
+    <property name="boolean$Boolean" type="Boolean" value="true"/>
+    <property name="char$Character" type="Character" value="64"/>
+    <property name="byte$Byte" type="Byte" value="2"/>
+    <property name="short$Short" type="Short" value="1034"/>
+    <property name="int$Integer" type="Integer" value="123456"/>
+    <property name="long$Long" type="Long" value="9876543210"/>
+    <property name="float$Float" type="Float" value="3.14"/>
+    <property name="double$Double" type="Double" value="2.1"/>
+    <property name="int$Collection" type="String">
+0
+64
+    </property>
+    <property name="long$Array" type="String">
+9876543210
+123456
+    </property>
+</scr:component>
+</root>

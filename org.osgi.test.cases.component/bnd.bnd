@@ -8,7 +8,8 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
 Export-Package						= \
-	${p}.service
+	${p}.service, \
+	${p}.types
 Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
@@ -30,6 +31,15 @@ Include-Resource					= \
 	tb15.jar, \
 	tb16.jar, \
 	tb17.jar, \
+	tb18.jar, \
+	tb19.jar, \
+	tb20.jar, \
+	tb21.jar, \
+	tb22.jar, \
+	tb23.jar, \
+	tb24.jar, \
+	tb25.jar, \
+	tb26.jar, \
 	tbf1.jar
 	
 Test-Cases							= ${testcases}
@@ -42,7 +52,7 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project, \
     org.osgi.service.component;             version=project, \
 	osgi.core;version=6.0.0,\
-	osgi.cmpn;version=5.0.0,\
+	osgi.cmpn;version=6.0.0,\
 	${junit}
 
 -runbundles							= \

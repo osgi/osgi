@@ -22,6 +22,7 @@ import org.osgi.test.cases.enocean.messages.MessageExample2;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
+import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
  * ManualRegistrationTestCase:
@@ -36,48 +37,48 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  */
 public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Tests initial device registration from a raw Radio teach-in packet.
-	 * 
-	 * @throws Exception
-	 */
-	public void testManualDeviceRegistration() throws Exception {
+    /**
+     * Tests initial device registration from a raw Radio teach-in packet.
+     * 
+     * @throws Exception
+     */
+    public void testManualDeviceRegistration() throws Exception {
 
-		/* Insert a device */
-		MessageExample2 teachIn = new MessageExample2(1, true, 1, true);
-		teachIn.setSenderId(Fixtures.HOST_ID_2);
-		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		// Push everything in the command...
-		String params = new String(pkt.serialize());
-		super.testStepProxy.execute("MessageExample2_" + params, "Insert a device.");
+	/* Insert a device */
+	MessageExample2 teachIn = new MessageExample2(1, true, 1, true);
+	teachIn.setSenderId(Fixtures.HOST_ID_2);
+	EspRadioPacket pkt = new EspRadioPacket(teachIn);
+	// Push everything in the command...
+	String params = Utils.bytesToHex(pkt.serialize());
+	super.testStepProxy.execute(MSG_EXAMPLE_2 + params, "Insert a device.");
 
-		String lastServiceEvent = devices.waitForService();
-		log("DEBUG: lastServiceEvent: " + lastServiceEvent);
-		assertNotNull("Timeout reached.", lastServiceEvent);
-		ServiceReference ref = devices.getServiceReference();
-		log("DEBUG: ref: " + ref);
+	String lastServiceEvent = devices.waitForService();
+	tlog("lastServiceEvent: " + lastServiceEvent);
+	assertNotNull("Timeout reached.", lastServiceEvent);
+	ServiceReference ref = devices.getServiceReference();
+	tlog("ref: " + ref);
 
-		assertEquals("Event mismatch", ServiceListener.SERVICE_ADDED, lastServiceEvent);
-		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID_2, ref.getProperty(EnOceanDevice.CHIP_ID));
-		assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
-		assertNull("ref.getProperty(EnOceanDevice.FUNC) must not be null.", ref.getProperty(EnOceanDevice.FUNC));
+	assertEquals("Event mismatch", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+	assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID_2, ref.getProperty(EnOceanDevice.CHIP_ID));
+	assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
+	assertNull("ref.getProperty(EnOceanDevice.FUNC) must not be null.", ref.getProperty(EnOceanDevice.FUNC));
 
-		EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
-		dev.setFunc(Fixtures.FUNC);
-		lastServiceEvent = devices.waitForService();
-		assertNotNull("Timeout reached.", lastServiceEvent);
-		assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+	EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
+	dev.setFunc(Fixtures.FUNC);
+	lastServiceEvent = devices.waitForService();
+	assertNotNull("Timeout reached.", lastServiceEvent);
+	assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 
-		dev.setType(Fixtures.TYPE_1);
-		lastServiceEvent = devices.waitForService();
-		assertNotNull("Timeout reached.", lastServiceEvent);
-		assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+	dev.setType(Fixtures.TYPE_1);
+	lastServiceEvent = devices.waitForService();
+	assertNotNull("Timeout reached.", lastServiceEvent);
+	assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 
-		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+	assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+	assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 
-		log("Unget service with service reference: " + ref);
-		getContext().ungetService(ref);
-	}
+	tlog("Unget service with service reference: " + ref);
+	getContext().ungetService(ref);
+    }
 
 }

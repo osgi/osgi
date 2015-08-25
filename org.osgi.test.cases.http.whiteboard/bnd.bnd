@@ -5,6 +5,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
+Export-Package: ${p}.junit.mock
 
 Include-Resource					= \
 	tb1.jar,\
@@ -12,9 +13,9 @@ Include-Resource					= \
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
-	javax.servlet;version=3.0.0,\
+	org.apache.felix.http.servlet-api;version=1.1.1,\
 	osgi.core;version=6.0.0,\
-	osgi.cmpn;version=5.0.0,\
+	osgi.cmpn;version=6.0.0,\
 	${junit}
 
 -runbundles						= \

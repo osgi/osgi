@@ -19,12 +19,16 @@ package org.osgi.impl.service.rest.pojos;
 import java.util.ArrayList;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.rest.PojoReflector.ElementNode;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * List of service pojos.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "services")
+@ElementNode(name = "uri")
 @SuppressWarnings("serial")
 public final class ServicePojoList extends ArrayList<String> {
 

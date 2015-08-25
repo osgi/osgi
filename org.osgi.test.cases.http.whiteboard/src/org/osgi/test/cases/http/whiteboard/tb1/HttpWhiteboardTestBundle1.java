@@ -209,7 +209,7 @@ public class HttpWhiteboardTestBundle1 implements BundleActivator {
 
 		// test_resourceDTO &
 		// test_resourceMatchByRegexMatch
-		
+
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN, "/TestResource1/*");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX, "/org/osgi/test/cases/http/whiteboard/tb1/resources");

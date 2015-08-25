@@ -5,7 +5,8 @@ Authors:
 - Victor PERRON, Orange.
 - Maïlys ROBIN, Orange.
 - Antonin CHAZALET, Orange.
-Date (last edited): 16th September 2014.
+- Cyrille BAREAU, Orange.
+Date (last edited): 17th June 2015.
 
 1) Introduction
 
@@ -22,16 +23,16 @@ build.xml file located in org.osgi.test.cases.enocean.
 
 2) org.osgi.test.cases.enocean project
 
-The org.osgi.test.cases.enocean project contains several test cases. They are 
-named:
+The org.osgi.test.cases.enocean project contains several test cases. They are named:
 - org.osgi.test.cases.enocean.EnOceanBasicTestCase,
+- org.osgi.test.cases.enocean.EnOceanBroadcastRPCTestCase.
 - org.osgi.test.cases.enocean.EnOceanHostTestCase,
 - org.osgi.test.cases.enocean.EventTestCase,
 - org.osgi.test.cases.enocean.ExportTestCase,
 - org.osgi.test.cases.enocean.ManualRegistrationTestCase,
 - org.osgi.test.cases.enocean.PersistencyTestCase,
 - org.osgi.test.cases.enocean.RegistrationTestCase,
-- and org.osgi.test.cases.enocean.SignatureTestCase.
+- org.osgi.test.cases.enocean.SignatureTestCase.
 
 EnOceanBasicTestCase contains the following tests:
 - testInterfaceExceptions, tests that common errors cases are properly handled 
@@ -41,6 +42,13 @@ and test a RPC invocation on this device.
 - testUseOfDescriptions, tests that a properly set profile ID in a raw 
 EnOceanMessage is enough to extract all the needed information, provided the 
 necessary descriptions are known.
+
+EnOceanBroadcastRPCTestCase:
+- testExportBroadcastRPC, tests broadcast RPC exportation: creates a RPC,
+sends it as a TOPIC_RPC_BROADCAST event, checks that the message has been
+sent, received by the base driver, and checked through the step service, and
+that the payload of the received event, processed as a SYS_EX message, is
+equal to the payload of the original RPC.
 
 EnOceanHostTestCase is intented to contain the tests related to EnOceanHost:
 - testEnOceanHostServiceAvailability, tests that at least one EnOceanHost 

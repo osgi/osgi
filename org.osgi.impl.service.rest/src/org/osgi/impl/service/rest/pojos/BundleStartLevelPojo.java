@@ -17,12 +17,14 @@
 package org.osgi.impl.service.rest.pojos;
 
 import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * Pojo for the bundle start level.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "bundleStartLevel")
 public final class BundleStartLevelPojo {
 
 	private int		startLevel;

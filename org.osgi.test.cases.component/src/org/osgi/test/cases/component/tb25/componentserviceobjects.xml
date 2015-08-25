@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb25.ComponentServiceObjectsReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        field="cso"
+        policy="dynamic"
+        policy-option="greedy"
+        cardinality="0..1"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb25.BaseService)"/>
+</scr:component>
+</root>

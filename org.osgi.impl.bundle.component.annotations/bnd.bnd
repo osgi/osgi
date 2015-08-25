@@ -10,15 +10,13 @@ Private-Package 			= ${p}.*
 
 -buildpath 					= \
 	org.osgi.service.component.annotations; 	version=project, \
-	osgi.core;					version=4.3.1, \
-	osgi.cmpn;					version=4.3.1
+	osgi.core;					version=6.0, \
+	osgi.cmpn;					version=6.0, \
 
 -runbundles							= \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest
 	
--runproperties = ${runproperties}, \
-	equinox.ds.print=true, \
-	equinox.ds.debug=true
+-runproperties = ${runproperties}
 

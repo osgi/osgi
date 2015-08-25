@@ -36,42 +36,43 @@ import org.osgi.test.support.sleep.Sleep;
  */
 public class PersistencyTestCase extends AbstractEnOceanTestCase {
 
-	/**
-	 * Tests device export persistency.
-	 * 
-	 * @throws Exception
-	 */
-	public void testDeviceExportPersistency() throws Exception {
-		ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+    /**
+     * Tests device export persistency.
+     * 
+     * @throws Exception
+     */
+    public void testDeviceExportPersistency() throws Exception {
+	ServiceRegistration sReg = Fixtures.registerDevice(getContext());
 
-		/* Get CHIP_ID attributed by the driver from the given service PID. */
-		ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
-		int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+	/* Get CHIP_ID attributed by the driver from the given service PID. */
+	ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+	int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
-		Bundle baseDriver = hostRef.getBundle();
-		assertNotNull("baseDriver must not be null.", baseDriver);
+	Bundle baseDriver = hostRef.getBundle();
+	assertNotNull("baseDriver must not be null.", baseDriver);
 
-		baseDriver.stop();
-		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
+	baseDriver.stop();
+	Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
 
-		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		assertNull("hostRef must be null, once the base driver is stopped.", hostRef);
+	hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	assertNull("hostRef must be null, once the base driver is stopped.", hostRef);
 
-		baseDriver.start();
-		String lastServiceEvent = enOceanHostServiceListener.waitForService();
-		assertNotNull("Timeout reached.", lastServiceEvent);
+	baseDriver.start();
+	String lastServiceEvent = enOceanHostServiceListener.waitForService();
+	assertNotNull("Timeout reached.", lastServiceEvent);
 
-		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		assertNotNull("One EnOceanHost service must be registered (hostRef must not be null), once the base driver is started.", hostRef);
-		defaultHost = (EnOceanHost) getContext().getService(hostRef);
-		int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+	hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+	assertNotNull("One EnOceanHost service must be registered (hostRef must not be null), once the base driver is started.",
+		hostRef);
+	defaultHost = (EnOceanHost) getContext().getService(hostRef);
+	int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
-		assertEquals("Original, and new chip ids mismatch.", originalChipId, newChipId);
+	assertEquals("Original, and new chip ids mismatch.", originalChipId, newChipId);
 
-		sReg.unregister();
-		log("Unget service with service reference: " + hostRef);
-		getContext().ungetService(hostRef);
-	}
+	sReg.unregister();
+	tlog("Unget service with service reference: " + hostRef);
+	getContext().ungetService(hostRef);
+    }
 
 }

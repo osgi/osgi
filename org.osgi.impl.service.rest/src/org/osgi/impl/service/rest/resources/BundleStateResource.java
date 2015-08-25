@@ -64,7 +64,7 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 			}
 
 			final BundleStatePojo targetState = fromRepresentation(value,
-					variant);
+					value.getMediaType());
 
 			if (bundle.getState() == Bundle.UNINSTALLED) {
 				return ERROR(Status.CLIENT_ERROR_PRECONDITION_FAILED, "target state "

@@ -9,58 +9,81 @@
 package org.osgi.test.cases.rest.junit;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
-public abstract class RestTestUtils extends OSGiTestCase implements FrameworkListener {
+public abstract class RestTestUtils extends OSGiTestCase {
 
   protected Random random;
 
   public static String APPLICATION_JSON = "application/json";
+  public static String APPLICATION_XML = "application/xml";
 
   public static String FW_START_LEVEL_URI = "framework/startlevel";
   public static String FW_START_LEVEL_CONTENT_TYPE_JSON = "application/org.osgi.frameworkstartlevel+json";
+  public static String FW_START_LEVEL_CONTENT_TYPE_XML = "application/org.osgi.frameworkstartlevel+xml";
 
   public static String BUNDLE_LIST_URI = "framework/bundles";
   public static String BUNDLE_LIST_CONTENT_TYPE_JSON = "application/org.osgi.bundles+json";
+  public static String BUNDLE_LIST_CONTENT_TYPE_XML = "application/org.osgi.bundles+xml";
 
   public static String BUNDLE_REPRESENTATIONS_LIST_URI = "framework/bundles/representations";
   public static String BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON = "application/org.osgi.bundles.representations+json";
+  public static String BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_XML = "application/org.osgi.bundles.representations+xml";
 
   public static String BUNDLE_URI = "framework/bundle/";
   public static String BUNDLE_CONTENT_TYPE_JSON = "application/org.osgi.bundle+json";
+  public static String BUNDLE_CONTENT_TYPE_XML = "application/org.osgi.bundle+xml";
 
   public static String BUNDLE_STATE_CONTENT_TYPE_JSON = "application/org.osgi.bundlestate+json";
+  public static String BUNDLE_STATE_CONTENT_TYPE_XML = "application/org.osgi.bundlestate+xml";
 
   public static String BUNDLE_START_LEVEL_CONTENT_TYPE_JSON = "application/org.osgi.bundlestartlevel+json";
+  public static String BUNDLE_START_LEVEL_CONTENT_TYPE_XML = "application/org.osgi.bundlestartlevel+xml";
 
   public static String BUNDLE_HEADER_CONTENT_TYPE_JSON = "application/org.osgi.bundleheader+json";
+  public static String BUNDLE_HEADER_CONTENT_TYPE_XML = "application/org.osgi.bundleheader+xml";
 
   public static String SERVICE_CONTENT_TYPE_JSON = "application/org.osgi.service+json";
+  public static String SERVICE_CONTENT_TYPE_XML = "application/org.osgi.service+xml";
 
   public static String SERVICE_LIST_URI = "framework/services";
   public static String SERVICE_LIST_CONTENT_TYPE_JSON = "application/org.osgi.services+json";
+  public static String SERVICE_LIST_CONTENT_TYPE_XML = "application/org.osgi.services+xml";
 
   public static String SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON = "application/org.osgi.services.representations+json";
+  public static String SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_XML = "application/org.osgi.services.representations+xml";
+
+  public static String EXTENSIONS_CONTENT_TYPE_JSON = "application/org.osgi.extensions+json";
+  public static String EXTENSIONS_CONTENT_TYPE_XML = "application/org.osgi.extensions+xml";
+
+  public static String BUNDLE_EXCEPTION_CONTENT_TYPE_JSON = "application/org.osgi.bundleexception+json";
+  public static String BUNDLE_EXCEPTION_CONTENT_TYPE_XML = "application/org.osgi.bundleexception+xml";
 
   public static String NON_SUPPORTED_MEDIA_TYPE = "application/vnd.oasis.opendocument.chart";
+
+  public static String EXTENSIONS_URI = "extensions";
 
   protected String baseURI;
   protected String user;
   protected String pass;
   protected boolean debugOn;
   protected boolean notAcceptableCheck;
+  protected boolean validateXMLRepresentations;
 
   public static String TEST_BUNDLE_SYMBOLIC_NAME = "org.osgi.test.cases.rest";
   public static String TB1_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb1";
@@ -69,6 +92,8 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String TB21_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb2";
   public static String TB3_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb3";
   public static String TB4_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb4";
+  public static String TB5_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb5";
+  public static String TB6_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb6";
 
   public static String TB11_TEST_BUNDLE_VERSION = "1.0.1";
   public static String TB21_TEST_BUNDLE_VERSION = "1.0.1";
@@ -79,6 +104,8 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public static String TB21 = "/tb21.jar";
   public static String TB3 = "/tb3.jar";
   public static String TB4 = "/tb4.jar";
+  public static String TB5 = "/tb5.jar";
+  public static String TB6 = "/tb6.jar";
 
   @Override
   public void setUp() throws Exception {
@@ -87,13 +114,14 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
     debugOn = getBooleanProperty("rest.ct.debug", true);
     notAcceptableCheck = getBooleanProperty("rest.ct.not_acceptable.check", false);
+    validateXMLRepresentations = getBooleanProperty("rest.ct.validate.xmls", false);
 
     String mediaType = getProperty("rest.ct.non.supported.media.type");
     if (mediaType != null) {
       NON_SUPPORTED_MEDIA_TYPE = mediaType;
     }
 
-		random = new Random(System.nanoTime());
+    random = new Random(System.nanoTime());
   }
 
   @Override
@@ -107,17 +135,12 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     unisntallIfInstalled(TB4_TEST_BUNDLE_SYMBOLIC_NAME);
   }
 
-  public void frameworkEvent(FrameworkEvent event) {
-    // TODO Auto-generated method stub
-
-  }
-
   protected String getBundleURI(long bundleId) {
     return BUNDLE_URI + bundleId;
   }
 
   protected String getBundleListURI(String filter) throws UnsupportedEncodingException {
-		return BUNDLE_LIST_URI + (filter == null ? "" : "?osgi.identity=" + URLEncoder.encode(filter, "UTF-8"));
+    return BUNDLE_LIST_URI + (filter == null ? "" : "?osgi.identity=" + URLEncoder.encode(filter, "UTF-8"));
   }
 
   protected String getBundleRepresentationListURI(String filter) throws UnsupportedEncodingException {
@@ -149,7 +172,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getServicePath(ServiceReference<?> service) {
-    // TODO
     return getServiceURI(service);
   }
 
@@ -171,7 +193,6 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
   // for RestClient
   protected String getBundlePath(Bundle bundle) {
-    // TODO
     return getBundleURI(bundle);
   }
 
@@ -216,13 +237,12 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getNotExistingBundlePath() {
-    // TODO
-    return "" + getNotExistingBundleId();
+		return String.valueOf(getNotExistingBundleId());
   }
 
   protected String getFilter(String bundleSymbolicName) {
     //return "osgi.identity=(&(type=\"osgi.bundle\")(bundle-symbolic-name=\"" + bundleSymbolicName + "\"))";
-		return "(&(type=osgi.bundle)(osgi.identity=" + bundleSymbolicName + "))";
+    return "(&(type=osgi.bundle)(osgi.identity=" + bundleSymbolicName + "))";
   }
 
   protected Bundle getBundle(String bundleSymbolicName) {
@@ -252,7 +272,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
         bundle.uninstall();
       }
     } catch (Exception e) {
-      // TODO
+			// ignored
     }
   }
 
@@ -266,6 +286,66 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
         cause.printStackTrace();
       }
     }
+  }
+
+  protected byte[] toByteArray(InputStream is) {
+    if (is == null) return null;
+
+    try {
+      byte[] res = new byte[4096];
+      byte[] b;
+
+      byte[] buffer = new byte[1024];
+      int bytesRead = 0;
+      int pos = 0;
+
+      while ((bytesRead = is.read(buffer, 0, 1024)) != -1) {
+        if ((pos + bytesRead) > res.length) {
+          b = new byte[2 * res.length];
+          System.arraycopy(res, 0, b, 0, res.length);
+          res = b;
+        }
+
+        System.arraycopy(buffer, 0, res, pos, bytesRead);
+        pos += bytesRead;
+      }
+
+      byte[] result = new byte[pos];
+      System.arraycopy(res, 0, result, 0, pos);
+      return result;
+    } catch (IOException ioe) {
+      throw new IllegalStateException("Error encountered while reading stream: "+ioe.getMessage());
+    }
+  }
+
+  protected HttpURLConnection getHttpConnection(String url, String method, String acceptType, String contentType, Map<String, String> additionalProps) throws IOException {
+    debug(method + " " + url, null);
+
+    URL uri = new URL(url);
+    HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+    connection.setRequestMethod(method); //type: POST, PUT, DELETE, GET
+    connection.setDoOutput(true);
+    connection.setConnectTimeout(60000); //60 secs
+    connection.setReadTimeout(60000); //60 secs
+    if (acceptType != null) {
+      connection.setRequestProperty("Accept", acceptType);
+      debug("Accept:" + acceptType, null);
+    } else {
+      connection.setRequestProperty("Accept", "*/*");
+    }
+    if (contentType != null) {
+      connection.setRequestProperty("Content-Type", contentType);
+      debug("Content-Type:" + contentType, null);
+    }
+
+    if (additionalProps != null) {
+      for (Iterator<String> iterator = additionalProps.keySet().iterator(); iterator.hasNext();) {
+        String key = iterator.next();
+        connection.setRequestProperty(key, additionalProps.get(key));
+      }
+    }
+
+    return connection;
   }
 
 }

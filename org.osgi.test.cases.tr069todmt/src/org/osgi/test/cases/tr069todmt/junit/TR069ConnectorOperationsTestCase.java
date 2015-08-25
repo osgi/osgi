@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -501,7 +500,10 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		expected = new ArrayList<String>();
 		fillPathSubtree(expected, LISTNODE, LISTNODE, false);
 		assertCorrectParameterNames(expected, LISTNODE + ".", false);
-		
+
+		assertNumberOfEntries(SINGLETON, SINGLETON);
+		assertNumberOfEntries(MAPNODE, MAPNODE);
+		assertNumberOfEntries(LISTNODE, LISTNODE);
 	}
 	
 	/**
@@ -1194,6 +1196,21 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	// ############ UTILITIES / HELPERS ########################################## 
 	
 
+	private void assertNumberOfEntries(String uri, String prefix) throws DmtException {
+		String type = session.getNodeType(uri);
+		Collection<ParameterInfo> infos = connector.getParameterNames("", true);
+		assertNotNull("Missing parameter names for: " + session.getRootUri(), infos);
+		String paramNumberOfEntries = prefix + "NumberOfEntries";
+		boolean numberOfEntriesExist = false;
+		for (ParameterInfo paramInfo : infos) {
+			if (paramNumberOfEntries.equals(paramInfo.getPath())) {
+				numberOfEntriesExist = true;
+				break;
+			}
+		}
+		boolean checkNumberOfEntries = DmtConstants.DDF_MAP.equals(type) || DmtConstants.DDF_LIST.equals(type);
+		assertEquals(paramNumberOfEntries + " is incorrectly supported.", checkNumberOfEntries, numberOfEntriesExist);
+	}
 	
 	/**
 	 * Asserts that the object at the given path has the expected Parameters.
@@ -1240,11 +1257,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		String type = session.getNodeType(uri);
 		boolean uriIsMap = DmtConstants.DDF_MAP.equals(type);
 		boolean uriIsList = DmtConstants.DDF_LIST.equals(type);
-		
-		// if current uri is a list or Map and not the subtree-root, then it needs the synthetic XNumberOfEntries parameter
-		if ( uriIsList || uriIsMap )
-			subtree.add(prefix + "." + prefix + "NumberOfEntries");
-		
+
 		if ( !nextLevel )
 			subtree.add(prefix + ".");
 		
@@ -1253,17 +1266,19 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 				continue;
 			// if child is a list/map entry, then the name must be replaced by the corresponding InstanceId value
 			String id = child;
+			String instanceIdUri = uri + "/" + child + "/InstanceId";
 			boolean isLeaf = session.isLeafNode(uri + "/" + child);
-			if ( uriIsList || uriIsMap ) {
-				id = "" + session.getNodeValue(uri + "/" + child + "/InstanceId" ).getLong();
-				// if parent is a Map, then child is a map-key and needs a synthetic Alias parameter
-				if ( uriIsMap )
-					subtree.add(prefix + "." + id + ".Alias");
+			if ((uriIsList || uriIsMap) && !isLeaf && (session.isNodeUri(instanceIdUri))) {
+				id = String.valueOf(session.getNodeValue(instanceIdUri).getLong());
 			}
-
-			if ( ! nextLevel && ! isLeaf )
+			if (!nextLevel && !isLeaf) {
+				if (uriIsMap) {
+					// if parent is a Map, then child is a map-key and needs a
+					// synthetic Alias parameter
+					subtree.add(prefix + "." + id + ".Alias");
+				}
 				fillPathSubtree(subtree, uri + "/" + child, prefix + "." + id, nextLevel);
-			else {
+			} else {
 				if ( isLeaf )
 					subtree.add( prefix + "." + id );
 				else 

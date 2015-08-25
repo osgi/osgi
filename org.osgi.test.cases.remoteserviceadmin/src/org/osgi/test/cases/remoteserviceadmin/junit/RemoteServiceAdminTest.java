@@ -18,6 +18,7 @@ package org.osgi.test.cases.remoteserviceadmin.junit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -487,6 +488,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	private List<String> getPropertyAsList(Object property) throws Exception {
 		if (property instanceof List) {
 			return (List<String>) property;
+		} else if (property instanceof Collection) {
+			return new ArrayList<String>((Collection<String>) property);
 		} else if (property instanceof String[]) {
 			return Arrays.asList((String[])property);
 		} else if (property instanceof String) {

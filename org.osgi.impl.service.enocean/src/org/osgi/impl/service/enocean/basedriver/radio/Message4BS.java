@@ -30,46 +30,47 @@ package org.osgi.impl.service.enocean.basedriver.radio;
  */
 public class Message4BS extends Message {
 
-	/**
-	 * @param data
-	 */
-	public Message4BS(byte[] data) {
-		super(data);
-	}
+    /**
+     * @param data
+     */
+    public Message4BS(byte[] data) {
+	super(data);
+    }
 
-	public boolean isTeachin() {
-		return (((getPayloadBytes()[3] & 0x08)) == 0);
-	}
+    public boolean isTeachin() {
+	return ((getPayloadByte(3) & 0x08) == 0);
+    }
 
-	/**
-	 * @return true if the message teach-in embeds profile & manufacturer info.
-	 */
-	public boolean hasTeachInInfo() {
-		return (getPayloadBytes()[3] & 0x80) != 0;
-	}
+    /**
+     * @return true if the message teach-in embeds profile & manufacturer info.
+     */
+    public boolean hasTeachInInfo() {
+	return (getPayloadByte(3) & 0x80) != 0;
+    }
 
-	/**
-	 * @return the FUNC in the case of a teach-in message with information.
-	 */
-	public int teachInFunc() {
-		return (getPayloadBytes()[0] >> 2) & 0xff;
-	}
+    /**
+     * @return the FUNC in the case of a teach-in message with information.
+     */
+    public int teachInFunc() {
+	return (getPayloadByte(0) >> 2) & 0xff;
+    }
 
-	/**
-	 * @return the TYPE in the case of a teach-in message with information.
-	 */
-	public int teachInType() {
-		byte b0 = getPayloadBytes()[0];
-		byte b1 = getPayloadBytes()[1];
-		return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
-	}
+    /**
+     * @return the TYPE in the case of a teach-in message with information.
+     */
+    public int teachInType() {
+	byte b0 = getPayloadByte(0);
+	byte b1 = getPayloadByte(1);
+	return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
+    }
 
-	/**
-	 * @return the MANUF in the case of a teach-in message with information.
-	 */
-	public int teachInManuf() {
-		byte b0 = (byte) ((getPayloadBytes()[1]) & 0x07);
-		byte b1 = getPayloadBytes()[2];
-		return ((b0 & 0xff) << 8) + (b1 & 0xff);
-	}
+    /**
+     * @return the MANUF in the case of a teach-in message with information.
+     */
+    public int teachInManuf() {
+	byte b0 = (byte) ((getPayloadByte(1)) & 0x07);
+	byte b1 = getPayloadByte(2);
+	return ((b0 & 0xff) << 8) + (b1 & 0xff);
+    }
+
 }

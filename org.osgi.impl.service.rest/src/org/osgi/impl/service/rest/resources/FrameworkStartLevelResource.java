@@ -52,7 +52,7 @@ public class FrameworkStartLevelResource extends
 	public Representation put(final Representation r,
 			final Variant variant) {
 		try {
-			final FrameworkStartLevelPojo sl = fromRepresentation(r, variant);
+			final FrameworkStartLevelPojo sl = fromRepresentation(r, r.getMediaType());
 			final FrameworkStartLevel fsl = getFrameworkStartLevel();
 
 			if (sl.getStartLevel() != 0) {

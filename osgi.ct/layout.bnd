@@ -14,6 +14,7 @@ build.core.tests = \
     org.osgi.test.cases.tracker
 
 jar.cmpn.tests = \
+    ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.test.filter;latest}
 
 build.cmpn.tests = \
@@ -36,8 +37,10 @@ build.cmpn.tests = \
     org.osgi.test.cases.dmt.tc3, \
     org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
+    org.osgi.test.cases.http.whiteboard.secure, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jndi, \
@@ -46,6 +49,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.measurement, \
     org.osgi.test.cases.metatype, \
+    org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.monitor, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
@@ -55,6 +59,9 @@ build.cmpn.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.resolver, \
+    org.osgi.test.cases.rest, \
+    org.osgi.test.cases.rest.client, \
+    org.osgi.test.cases.rest.client.js, \
     org.osgi.test.cases.repository, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.serviceloader.secure, \
@@ -68,6 +75,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.xml
 
 jar.enterprise.tests = \
+    ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.test.filter;latest}
 
 build.enterprise.tests = \
@@ -81,8 +89,10 @@ build.enterprise.tests = \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
+    org.osgi.test.cases.http.whiteboard.secure, \
 	org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jmx.cm, \
     org.osgi.test.cases.jmx.framework, \
@@ -94,12 +104,16 @@ build.enterprise.tests = \
     org.osgi.test.cases.jpa, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
+    org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.promise, \
     org.osgi.test.cases.provisioning, \
     org.osgi.test.cases.remoteserviceadmin, \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.resolver, \
+    org.osgi.test.cases.rest, \
+    org.osgi.test.cases.rest.client, \
+    org.osgi.test.cases.rest.client.js, \
     org.osgi.test.cases.repository, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.serviceloader.secure, \
@@ -127,9 +141,11 @@ build.residential.tests = \
     org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.enocean, \
     org.osgi.test.cases.event, \
+    org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
+    org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.networkadapter, \
     org.osgi.test.cases.promise, \
     org.osgi.test.cases.provisioning, \

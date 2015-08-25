@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.client;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +34,8 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.TypeInfo;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * A reflector for turning DTOs into JSON representations and vice versa.
@@ -52,7 +54,7 @@ public final class DTOReflector {
 			return getDTOfromJson(clazz, data, repr.getLocationRef().getPath());
 		} else if (XML_BASED.includes(repr.getMediaType())) {
 			final Document doc = new DomRepresentation(repr).getDocument();
-			return getDTOfromXml(clazz, doc, repr.getLocationRef().getPath());
+			return getDTOfromXml(clazz, (Element) doc.getFirstChild(), repr.getLocationRef().getPath());
 		} else {
 			throw new UnsupportedOperationException(repr.getMediaType().toString());
 		}
@@ -60,8 +62,10 @@ public final class DTOReflector {
 
 	public static <T extends DTO> Collection<T> getDTOs(Class<T> clazz, Representation repr) throws Exception {
 		if (JSON_BASED.includes(repr.getMediaType())) {
-			final JSONArray data = new JsonRepresentation(repr).getJsonArray();
-			return getDTOsFromJson(clazz, data);
+			return getDTOsFromJson(clazz, new JsonRepresentation(repr).getJsonArray());
+		} else if (XML_BASED.includes(repr.getMediaType())) {
+			System.out.println("content: " + repr.getText());
+			return getDTOsFromXml(clazz, new DomRepresentation(repr).getDocument());
 		} else {
 			throw new UnsupportedOperationException(repr.getMediaType().toString());
 		}
@@ -74,6 +78,27 @@ public final class DTOReflector {
 		} else {
 			throw new UnsupportedOperationException(repr.getMediaType().toString());
 		}
+	}
+
+	public static Collection<String> getStrings(final Representation repr) throws Exception {
+		final Collection<String> result = new ArrayList<String>();
+		if (JSON_BASED.includes(repr.getMediaType())) {
+			final JSONArray array = new JsonRepresentation(repr).getJsonArray();
+			for (int i = 0; i < array.length(); i++) {
+				result.add(array.getString(i));
+			}
+		} else if (XML_BASED.includes(repr.getMediaType())) {
+			final Document doc = new DomRepresentation(repr).getDocument();
+			final Node rootNode = doc.getFirstChild();
+			final NodeList nodes = rootNode.getChildNodes();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				result.add(nodes.item(i).getTextContent());
+			}
+		} else {
+			throw new UnsupportedOperationException(repr.getMediaType().toString());
+		}
+
+		return result;
 	}
 
 	private static <T extends DTO> T getDTOfromJson(final Class<T> clazz, final JSONObject data, final String path) throws Exception {
@@ -99,28 +124,117 @@ public final class DTOReflector {
 		return dto;
 	}
 
-	private static <T extends DTO> T getDTOfromXml(final Class<T> clazz, final Document doc, final String path) throws Exception {
+	private static <T extends DTO> T getDTOfromXml(final Class<T> clazz, final Element elem, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
 		final T dto = clazz.newInstance();
 
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
-				if (doc.getElementsByTagName("bundle") != null) {
-					field.set(dto, new Long(getBundleIdFromPath(doc.getElementsByTagName("bundle").item(0).getTextContent())));
+				if (elem.getElementsByTagName("bundle") != null) {
+					field.set(dto, new Long(getBundleIdFromPath(elem.getElementsByTagName("bundle").item(0).getTextContent())));
 				} else {
 					field.set(dto, new Long(getBundleIdFromPath(path)));
 				}
 			} else if ("usingBundles".equals(field.getName())) {
-				// FIXME: implement
+				final Node node = elem.getElementsByTagName("usingBundles").item(0);
+				final NodeList nodes = node.getChildNodes();
+
+				if (nodes.getLength() > 0) {
+					final long[] using = new long[nodes.getLength()];
+					for (int i = 0; i < nodes.getLength(); i++) {
+						using[i] = getBundleIdFromPath(nodes.item(i).getTextContent());
+						field.set(dto, using);
+					}
+				}
+			} else if ("id".equals(field.getName()) || "lastModified".equals(field.getName())) {
+				field.set(dto, Long.valueOf(elem.getElementsByTagName(field.getName()).item(0).getTextContent()));
+			} else if ("state".equals(field.getName())) {
+				field.set(dto, Integer.valueOf(elem.getElementsByTagName(field.getName()).item(0).getTextContent()));
 			} else if (field.getType().equals(Map.class)) {
-				// FIXME: implement
+				final Node props = elem.getElementsByTagName("properties").item(0);
+
+				final Map<String, Object> properties = new HashMap<String, Object>();
+				final NodeList prop = props.getChildNodes();
+				for (int i = 0; i < prop.getLength(); i++) {
+					propertyFromXml(properties, prop.item(i));
+				}
+
+				field.set(dto, properties);
 			} else {
-				Element elem = (Element) doc.getElementsByTagName(field.getName()).item(0);
-				final TypeInfo info = elem.getSchemaTypeInfo();
-				// field.set(dto, data.get(field.getName()));
+				// default is string
+				field.set(dto, elem.getElementsByTagName(field.getName()).item(0).getTextContent());
 			}
 		}
 		return dto;
+	}
+
+	private static void propertyFromXml(final Map<String, Object> map, final Node node) {
+		final String name = node.getAttributes().getNamedItem("name").getTextContent();
+		final Node tNode = node.getAttributes().getNamedItem("type");
+		final String type = tNode == null ? null : tNode.getTextContent();
+		final Node vNode = node.getAttributes().getNamedItem("value");
+
+		final Object value;
+		if (vNode != null) {
+			value = fromXml(type, vNode.getTextContent());
+		} else {
+			final String[] vals = node.getTextContent().split("\n");
+			final int len = vals.length;
+			value = getArray(type, len);
+			for (int i = 0; i < len; i++) {
+				Array.set(value, i, fromXml(type, vals[i]));
+			}
+		}
+
+		map.put(name, value);
+	}
+
+	private static Object fromXml(final String type, final String value) {
+		if (type == null || "String".equals(type)) {
+			return value;
+		} else if ("Long".equals(type)) {
+			return Long.valueOf(value);
+		} else if ("Double".equals(type)) {
+			return Double.valueOf(value);
+		} else if ("Float".equals(type)) {
+			return Float.valueOf(value);
+		} else if ("Integer".equals(type)) {
+			return Integer.valueOf(value);
+		} else if ("Byte".equals(type)) {
+			return Byte.valueOf(value);
+		} else if ("Character".equals(type)) {
+			return new Character(value.trim().charAt(0));
+		} else if ("Boolean".equals(type)) {
+			return Boolean.valueOf(value);
+		} else if ("Short".equals(type)) {
+			return Short.valueOf(value);
+		} else {
+			return value;
+		}
+	}
+
+	private static Object getArray(final String type, final int len) {
+		if (type == null || "String".equals(type)) {
+			return new String[len];
+		} else if ("Long".equals(type)) {
+			return new long[len];
+		} else if ("Double".equals(type)) {
+			return new double[len];
+		} else if ("Float".equals(type)) {
+			return new float[len];
+		} else if ("Integer".equals(type)) {
+			return new int[len];
+		} else if ("Byte".equals(type)) {
+			return new byte[len];
+		} else if ("Character".equals(type)) {
+			return new char[len];
+		} else if ("Boolean".equals(type)) {
+			return new boolean[len];
+		} else if ("Short".equals(type)) {
+			return new short[len];
+		} else {
+			return new Object[len];
+		}
 	}
 
 	private static final Pattern	p	= Pattern.compile("\\/(\\d+)\\/*");
@@ -165,7 +279,6 @@ public final class DTOReflector {
 				result.put((K) keys[i], (V) o);
 			}
 		}
-
 		return result;
 	}
 
@@ -181,6 +294,15 @@ public final class DTOReflector {
 		final Collection<T> result = new ArrayList<T>();
 		for (int i = 0; i < array.length(); i++) {
 			result.add(DTOReflector.getDTOfromJson(clazz, array.getJSONObject(i), null));
+		}
+		return result;
+	}
+
+	private static <T extends DTO> Collection<T> getDTOsFromXml(final Class<T> clazz, final Node rootNode) throws Exception {
+		final Collection<T> result = new ArrayList<T>();
+		final NodeList nodes = rootNode.getChildNodes();
+		for (int i = 0; i < nodes.getLength(); i++) {
+			result.add(DTOReflector.getDTOfromXml(clazz, (Element) nodes.item(i), null));
 		}
 		return result;
 	}
@@ -205,4 +327,5 @@ public final class DTOReflector {
 	private static String getBundlePathFromId(final Long id) {
 		return "framework/bundle/" + id.toString();
 	}
+
 }

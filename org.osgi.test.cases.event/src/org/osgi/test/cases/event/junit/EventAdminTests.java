@@ -32,15 +32,10 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
-import org.osgi.service.event.TopicPermission;
-import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.event.service.TBCService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
@@ -86,11 +81,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		uninstallBundle(tb1);
 		tb2.stop();
 		uninstallBundle(tb2);
-		if (System.getSecurityManager() != null) {
-			PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-			permissionAdmin.setPermissions(tb1.getLocation(), null);
-			permissionAdmin.setPermissions(tb2.getLocation(), null);
-		}
 		ungetAllServices();
 	}
 
@@ -122,10 +112,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 				tbcService2);
 		trackerProvider2.close();
 
-		Bundle system = getContext().getBundle(0);
-		if (System.getSecurityManager() != null)
-			assertBundle(PermissionAdmin.class.getName(), system);
-
 		ServiceReference[] eventAdminSRs = getContext().getServiceReferences(
 				EventAdmin.class.getName(), null);
 		if (eventAdminSRs != null) {
@@ -134,125 +120,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 							+ EventAdmin.class.getName() + "]", 1,
 					eventAdminSRs.length);
 		}
-	}
-
-	/**
-	 * Tests if the permissions are set correctly and the exceptions that are
-	 * thrown if they are not.
-	 */
-	public void testSetPermissions() {// TB4
-		// If security is not enabled, there is nothing to test.
-		if (System.getSecurityManager() == null) return;
-		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-
-		PermissionInfo regInfo = new PermissionInfo(ServicePermission.class
-				.getName(), "org.osgi.service.event.EventHandler",
-				ServicePermission.REGISTER);
-		// set permissions to tb1
-		PermissionInfo topInfo1 = new PermissionInfo(TopicPermission.class
-				.getName(), "org/*", TopicPermission.SUBSCRIBE);
-		PermissionInfo topInfo3 = new PermissionInfo(TopicPermission.class
-				.getName(), "test/*", TopicPermission.SUBSCRIBE);
-		addPermissions(permissionAdmin, tb1, new PermissionInfo[] { regInfo,
-				topInfo1 });
-		addPermissions(permissionAdmin, tb1, new PermissionInfo[] { regInfo,
-				topInfo3 });
-
-		// set permissions to tb2
-		PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class
-				.getName(), "org/osgi/*", TopicPermission.SUBSCRIBE);
-		PermissionInfo topInfo4 = new PermissionInfo(TopicPermission.class
-				.getName(), "org/osgi2/*", TopicPermission.SUBSCRIBE);
-
-		addPermissions(permissionAdmin, tb2, new PermissionInfo[] { regInfo,
-				topInfo2 });
-		addPermissions(permissionAdmin, tb2, new PermissionInfo[] { regInfo,
-				topInfo3 });
-		addPermissions(permissionAdmin, tb2, new PermissionInfo[] { regInfo,
-				topInfo4 });
-
-		// try to send event and PUBLISH TopicPermission
-		Hashtable properties = new Hashtable();
-		Hashtable ht = new Hashtable();
-		ht.put("topic", "org/osgi/test/cases/event");
-		Event event1 = new Event("org/osgi/test/cases/event/ACTION1",
-				(Dictionary) properties);
-		checkTestingPermissions(event1);
-
-		PermissionInfo[] perm1 = permissionAdmin.getPermissions(tb1
-				.getLocation());
-		assertNotNull("Permissions of [" + tb1.getLocation() + "]", perm1);
-		for (int i = 0; i < perm1.length; i++) {
-			pass("permission [" + i + "]: " + perm1[i]);
-		}
-
-		PermissionInfo[] perm2 = permissionAdmin.getPermissions(tb2
-				.getLocation());
-		assertNotNull("Permissions of [" + tb2.getLocation() + "]", perm2);
-		for (int i = 0; i < perm2.length; i++) {
-			pass("permission [" + i + "]: " + perm2[i]);
-		}
-
-	}
-
-	/**
-	 * Checks if the SecurityException is got if the caller bundle does not
-	 * right <tt>publish</tt> TopicPermision.
-	 *
-	 * @param event
-	 *            the event used for testing
-	 */
-	private void checkTestingPermissions(Event event) {// TB5
-		boolean hasTopicPermission = hasTopicPermissionForEvent(event);
-		String message;
-		if (hasTopicPermission) {
-			message = "The caller has TopicPermission[topic,PUBLISH] for the topic: [";
-		} else {
-			message = "The caller does not have TopicPermission[topic,PUBLISH] for the topic: [";
-		}
-		try {
-			eventAdmin.sendEvent(event);
-			if (hasTopicPermission) {
-				pass(message + event.getTopic() + "] and got no "
-						+ SecurityException.class.getName());
-			} else {
-				failException(message + event.getTopic() + "]",
-						SecurityException.class);
-			}
-		} catch (Throwable e) {
-			if (hasTopicPermission) {
-				fail(message + event.getTopic() + "] but got exception ["
-						+ e.getClass().getName() + " ]");
-			} else {
-				failException(message + event.getTopic() + "]",
-						SecurityException.class);
-			}
-		}
-	}
-
-	/**
-	 * Checks if the caller bundle has right <tt>publish</tt> TopicPermision.
-	 *
-	 * @param event
-	 *            the event to be checked
-	 * @return <tt>true</tt> if the caller has the right permission,
-	 *         <tt>false</tt> otherwise.
-	 */
-	private boolean hasTopicPermissionForEvent(Event event) {
-		String topic = event.getTopic();
-		if (topic == null)
-			return false;
-		SecurityManager sMngr = System.getSecurityManager();
-		if (sMngr != null) {
-			TopicPermission topicPermission = new TopicPermission(topic,
-					TopicPermission.PUBLISH);
-			try {
-				sMngr.checkPermission(topicPermission);
-			} catch (SecurityException e) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -601,27 +468,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		trackerProvider2.close();
 	}
 
-	/**
-	 * Verify that the service with name is exported by the bundle b.
-	 *
-	 * @param name fqn of the service, e.g. com.acme.foo.Foo
-	 * @param b the bundle to be asserted
-	 */
-	private void assertBundle(String name, Bundle b) {
-		ServiceReference[] ref = null;
-		try {
-			ref = getContext().getServiceReferences(name, null);
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-		assertNotNull(name + "  service must be registered ", ref);
-		for (int i = 0; i < ref.length; i++) {
-			ServiceReference reference = ref[i];
-			assertEquals("Invalid exporter for " + name, b, reference
-					.getBundle());
-		}
-	}
-
 	private void assertEvent(Event eventPassed, Bundle bundle,
 			TBCService tbcService, boolean recieved) {
 		pass(">>>Passed event: " + eventPassed);
@@ -638,32 +484,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 				eventReceived.getProperty(property);
 			}
 		}
-	}
-
-	private void addPermissions(PermissionAdmin permissionAdmin, Bundle bundle,
-			PermissionInfo[] toAdd) {
-		PermissionInfo[] oldPerm = permissionAdmin.getPermissions(bundle
-				.getLocation());
-		PermissionInfo[] defPerm = permissionAdmin.getDefaultPermissions();
-		int oldLen = 0;
-		int defLen = 0;
-		if (oldPerm != null)
-			oldLen = oldPerm.length;
-		if (defPerm != null)
-			defLen = defPerm.length;
-		PermissionInfo[] newPerm = new PermissionInfo[oldLen + defLen
-				+ toAdd.length];
-		int i = 0;
-		for (; i < oldLen; i++) {
-			newPerm[i] = oldPerm[i];
-		}
-		for (i = 0; i < defLen; ++i) {
-			newPerm[oldLen + i] = defPerm[i];
-		}
-		for (int j = 0; j < toAdd.length; j++) {
-			newPerm[oldLen + defLen + j] = toAdd[j];
-		}
-		permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
 	}
 
 	/**

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb20.Singleton"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<implementation class="org.osgi.test.cases.component.tb20.ScopedServiceComponent"/>
+	<service scope="singleton">
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.Bundle"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<implementation class="org.osgi.test.cases.component.tb20.ScopedServiceComponent"/>
+	<service scope="bundle">
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.Prototype"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<implementation class="org.osgi.test.cases.component.tb20.ScopedServiceComponent"/>
+	<service scope="prototype">
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.BundleReceiverPrototype1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="bundle"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="bundle"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.BundleReceiverPrototype2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="bundle"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="bundle"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeReceiverBundle1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeReceiverBundle2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeReceiverPrototype1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeReceiverPrototype2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverPrototype1"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverPrototype2"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Prototype)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverSingleton"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Singleton)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Singleton)"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb20.PrototypeRequiredReceiverBundle"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb20.ScopedServiceReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind1"
+        name="bind1"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+    <reference
+        bind="bind2"
+        name="bind2"
+        scope="prototype_required"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb20.Bundle)"/>
+</scr:component>
+
+</root>

@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.pojos;
 
 import java.util.ArrayList;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * List of service representation pojos.
@@ -25,6 +26,7 @@ import org.osgi.framework.ServiceReference;
  * @author Jan S. Rellermeyer, IBM Research
  *
  */
+@RootNode(name = "services")
 @SuppressWarnings("serial")
 public final class ServiceRepresentationList extends ArrayList<ServicePojo> {
 

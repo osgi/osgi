@@ -17,6 +17,7 @@
 package org.osgi.impl.service.rest.pojos;
 
 import java.util.ArrayList;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * List of bundle representation pojos.
@@ -24,6 +25,7 @@ import java.util.ArrayList;
  * @author Jan S. Rellermeyer, IBM Research
  */
 @SuppressWarnings("serial")
+@RootNode(name = "bundles")
 public final class BundleRepresentationsList extends ArrayList<BundlePojo> {
 
 	public BundleRepresentationsList(final org.osgi.framework.Bundle[] bundles) {

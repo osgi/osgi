@@ -24,6 +24,6 @@ import java.util.Dictionary;
  */
 public interface BaseService {
 
-  public Dictionary getProperties();
+	public Dictionary<String, Object> getProperties();
   
 }

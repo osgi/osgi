@@ -18,11 +18,8 @@ package org.osgi.test.cases.component.annotations.junit;
 
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -33,7 +30,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.test.support.OSGiTestCase;
@@ -52,6 +48,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	public static final String				xmlns_scr100	= "http://www.osgi.org/xmlns/scr/v1.0.0";
 	public static final String				xmlns_scr110	= "http://www.osgi.org/xmlns/scr/v1.1.0";
 	public static final String				xmlns_scr120	= "http://www.osgi.org/xmlns/scr/v1.2.0";
+	public static final String				xmlns_scr130	= "http://www.osgi.org/xmlns/scr/v1.3.0";
 	private final DocumentBuilder			db;
 	private final XPath						xpath;
 	private final Map<String, Description>	descriptions;
@@ -97,7 +94,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 				clauses.length == 0);
 		XPathExpression expr = xpath.compile("//namespace::*[.='"
 				+ xmlns_scr100 + "' or .='" + xmlns_scr110 + "' or .='"
-				+ xmlns_scr120 + "']");
+				+ xmlns_scr120 + "' or .='" + xmlns_scr130 + "']");
 		for (String clause : clauses) {
 			// System.out.println(clause);
 
@@ -229,6 +226,36 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValueIfSet(description, "@configuration-pid", name);
 	}
 
+	public void testHelloWorld13() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		assertEquals("incorrect namespace", xmlns_scr130, description
+				.getNamespaceContext().getUri());
+		// v1.0.0
+		assertXPathValueIfSet(description, "@immediate", "true");
+		assertXPathValueIfSet(description, "@enabled", "true");
+		assertXPathValue(description, "@factory", null);
+		assertXPathValue(
+				description,
+				"implementation/@class",
+				"org.osgi.impl.bundle.component.annotations."
+						+ name.substring(4));
+		assertXPathCount(description, "implementation", 1);
+		assertXPathCount(description, "service", 0);
+		assertXPathCount(description, "reference", 0);
+		// v1.1.0
+		assertXPathValueIfSet(description, "@configuration-policy", "optional");
+		assertXPathValueIfSet(description, "@activate", "activate");
+		assertXPathValueIfSet(description, "@deactivate", "deactivate");
+		assertXPathValue(description, "@modified", "modified");
+		// v1.2.0
+		assertXPathValueIfSet(description, "@configuration-pid", name);
+		// v1.3.0
+		assertXPathValueIfSet(description, "@scope", "singleton");
+	}
+
 	// assertXPathValue(description,
 	// "service/provide[@interface='java.util.EventListener']/@interface",
 	// "java.util.EventListener");
@@ -273,6 +300,62 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValueIfSet(description, "reference/@policy-option",
 				"reluctant");
 		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValueIfSet(description, "@scope", "singleton");
+	}
+
+	public void testComponentReferences() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathValueIfSet(description, "@immediate", "false");
+		assertXPathValueIfSet(description, "@enabled", "true");
+		assertXPathValue(description, "@factory", null);
+		assertXPathCount(description, "implementation", 1);
+		assertXPathValue(
+				description,
+				"implementation/@class",
+				"org.osgi.impl.bundle.component.annotations."
+						+ name.substring(4));
+		assertXPathCount(description, "service/provide", 1);
+		assertXPathValue(description,
+				"service/provide/@interface",
+				"java.util.EventListener");
+		assertXPathValueIfSet(description, "service/@servicefactory", "false");
+		assertXPathCount(description, "reference", 2);
+		assertXPathValue(description, "reference[@name='log1']/@interface", "org.osgi.service.log.LogService");
+		assertXPathValue(description, "reference[@name='log1']/@bind", null);
+		assertXPathValue(description, "reference[@name='log1']/@unbind", null);
+		assertXPathValueIfSet(description, "reference[@name='log1']/@cardinality", "1..1");
+		assertXPathValueIfSet(description, "reference[@name='log1']/@policy", "static");
+		assertXPathValue(description, "reference[@name='log1']/@target", null);
+		assertXPathValue(description, "reference[@name='log2']/@interface", "org.osgi.service.log.LogService");
+		assertXPathValue(description, "reference[@name='log2']/@bind", "bindLog");
+		assertXPathValue(description, "reference[@name='log2']/@unbind", "unbindLog");
+		assertXPathValueIfSet(description, "reference[@name='log2']/@cardinality", "1..1");
+		assertXPathValueIfSet(description, "reference[@name='log2']/@policy", "static");
+		assertXPathValue(description, "reference[@name='log2']/@target", null);
+		// v1.1.0
+		assertXPathValueIfSet(description, "@configuration-policy", "optional");
+		assertXPathValueIfSet(description, "@activate", "activate");
+		assertXPathValueIfSet(description, "@deactivate", "deactivate");
+		assertXPathValue(description, "@modified", null);
+		// v1.2.0
+		assertXPathValueIfSet(description, "@configuration-pid", name);
+		assertXPathValueIfSet(description,
+				"reference/@policy-option",
+				"reluctant");
+		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValueIfSet(description, "@scope", "singleton");
+		assertXPathValue(description, "reference[@name='log1']/@field", "logfield");
+		assertXPathValueIfSet(description, "reference[@name='log1']/@field-option", "replace");
+		assertXPathValueIfSet(description, "reference[@name='log1']/@scope", "bundle");
+		assertXPathValue(description, "reference[@name='log2']/@field", null);
+		assertXPathValue(description, "reference[@name='log2']/@field-option", null);
+		assertXPathValueIfSet(description, "reference[@name='log2']/@scope", "bundle");
 	}
 
 	/**
@@ -547,6 +630,978 @@ public class AnnotationsTestCase extends OSGiTestCase {
 				null);
 	}
 
+	public void testFieldReferences() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathCount(description, "reference", 22);
+
+		assertXPathValue(description,
+				"reference[@name='static']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='static']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='static']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='static']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='static']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='static']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='dynamic']/@cardinality",
+				"1..1");
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@policy",
+				"dynamic");
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='mandatory']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='mandatory']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='optional']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='optional']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='optional']/@unbind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='optional']/@cardinality",
+				"0..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='optional']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='optional']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='multiple']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='multiple']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='multiple']/@unbind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='multiple']/@cardinality",
+				"0..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='multiple']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='multiple']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@unbind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@cardinality",
+				"1..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='atleastone']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='greedy']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='greedy']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='greedy']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='greedy']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='greedy']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='greedy']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='reluctant']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='reluctant']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='update']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='update']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='update']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='update']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='update']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='update']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='replace']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='replace']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='replace']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='replace']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='replace']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='replace']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='target']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='target']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='target']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='target']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='target']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='target']/@target",
+				"(test.attr=foo)");
+
+		assertXPathValue(description,
+				"reference[@name='bundle']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='bundle']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@cardinality",
+				"1..1");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@policy",
+				"dynamic");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='prototype']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@policy",
+				"static");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@target",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='reference']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='reference']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='reference']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='reference']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='reference']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='reference']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='serviceobjects']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='serviceobjects']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='serviceobjects']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='properties']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='properties']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='properties']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='properties']/@cardinality",
+				"1..1");
+		assertXPathValue(description,
+				"reference[@name='properties']/@policy",
+				"dynamic");
+		assertXPathValue(description, "reference[@name='properties']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='tuple']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='tuple']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='tuple']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='tuple']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='tuple']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='tuple']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_reference']/@cardinality",
+				"0..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_reference']/@policy",
+				"dynamic");
+		assertXPathValue(description, "reference[@name='collection_reference']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_serviceobjects']/@cardinality",
+				"0..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_serviceobjects']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='collection_serviceobjects']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_properties']/@cardinality",
+				"0..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_properties']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='collection_properties']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@bind",
+				null);
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@unbind",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_tuple']/@cardinality",
+				"0..n");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_tuple']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='collection_tuple']/@target", null);
+
+		// v1.2.0
+		assertXPathValueIfSet(description,
+				"reference[@name='static']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='static']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='dynamic']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='mandatory']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='optional']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='optional']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='multiple']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='multiple']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='atleastone']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@updated",
+				null);
+
+		assertXPathValue(description,
+				"reference[@name='greedy']/@policy-option",
+				"greedy");
+		assertXPathValue(description,
+				"reference[@name='greedy']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='reluctant']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='update']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='update']/@update",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='replace']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='replace']/@update",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='target']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='target']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='reference']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='reference']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='serviceobjects']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='properties']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='properties']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='tuple']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='tuple']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_reference']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_serviceobjects']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_properties']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_tuple']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@updated",
+				null);
+
+		// v1.3.0
+		assertXPathValue(description,
+				"reference[@name='static']/@field",
+				"fieldStatic");
+		assertXPathValueIfSet(description,
+				"reference[@name='static']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='static']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='static']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@field",
+				"fieldDynamic");
+		assertXPathValueIfSet(description,
+				"reference[@name='dynamic']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='dynamic']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='dynamic']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@field",
+				"fieldMandatory");
+		assertXPathValueIfSet(description,
+				"reference[@name='mandatory']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='mandatory']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='mandatory']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='optional']/@field",
+				"fieldOptional");
+		assertXPathValueIfSet(description,
+				"reference[@name='optional']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='optional']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='optional']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='multiple']/@field",
+				"fieldMultiple");
+		assertXPathValueIfSet(description,
+				"reference[@name='multiple']/@field-option",
+				"replace");
+		assertXPathValueIfSet(description,
+				"reference[@name='multiple']/@field-collection-type",
+				"service");
+		assertXPathValueIfSet(description,
+				"reference[@name='multiple']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='atleastone']/@field",
+				"fieldAtLeastOne");
+		assertXPathValueIfSet(description,
+				"reference[@name='atleastone']/@field-option",
+				"replace");
+		assertXPathValueIfSet(description,
+				"reference[@name='atleastone']/@field-collection-type",
+				"service");
+		assertXPathValueIfSet(description,
+				"reference[@name='atleastone']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='greedy']/@field",
+				"fieldGreedy");
+		assertXPathValueIfSet(description,
+				"reference[@name='greedy']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='greedy']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='greedy']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@field",
+				"fieldReluctant");
+		assertXPathValueIfSet(description,
+				"reference[@name='reluctant']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='reluctant']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='reluctant']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='update']/@field",
+				"fieldUpdate");
+		assertXPathValue(description,
+				"reference[@name='update']/@field-option",
+				"update");
+		assertXPathValue(description,
+				"reference[@name='update']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='update']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='replace']/@field",
+				"fieldReplace");
+		assertXPathValueIfSet(description,
+				"reference[@name='replace']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='replace']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='replace']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='target']/@field",
+				"fieldTarget");
+		assertXPathValueIfSet(description,
+				"reference[@name='target']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='target']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='target']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='bundle']/@field",
+				"fieldBundle");
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='prototype']/@field",
+				"fieldPrototype");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@field-collection-type",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype']/@scope",
+				"prototype");
+
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@field",
+				"fieldPrototypeRequired");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@field-collection-type",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@scope",
+				"prototype_required");
+
+		assertXPathValue(description,
+				"reference[@name='reference']/@field",
+				"fieldReference");
+		assertXPathValueIfSet(description,
+				"reference[@name='reference']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='reference']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='reference']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@field",
+				"fieldServiceObjects");
+		assertXPathValueIfSet(description,
+				"reference[@name='serviceobjects']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='serviceobjects']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='serviceobjects']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='properties']/@field",
+				"fieldProperties");
+		assertXPathValueIfSet(description,
+				"reference[@name='properties']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='properties']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='properties']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='tuple']/@field",
+				"fieldTuple");
+		assertXPathValueIfSet(description,
+				"reference[@name='tuple']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='tuple']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='tuple']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@field",
+				"fieldReferenceM");
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@field-option",
+				"update");
+		assertXPathValue(description,
+				"reference[@name='collection_reference']/@field-collection-type",
+				"reference");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_reference']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@field",
+				"fieldServiceObjectsM");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_serviceobjects']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='collection_serviceobjects']/@field-collection-type",
+				"serviceobjects");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_serviceobjects']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@field",
+				"fieldPropertiesM");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_properties']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='collection_properties']/@field-collection-type",
+				"properties");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_properties']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@field",
+				"fieldTupleM");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_tuple']/@field-option",
+				"replace");
+		assertXPathValue(description,
+				"reference[@name='collection_tuple']/@field-collection-type",
+				"tuple");
+		assertXPathValueIfSet(description,
+				"reference[@name='collection_tuple']/@scope",
+				"bundle");
+	}
+
+	public void testReferenceScopes() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathCount(description, "reference", 3);
+
+		assertXPathValue(description,
+				"reference[@name='bundle']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@bind",
+				"bindBundle");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@unbind",
+				"unbindBundle");
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='bundle']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='prototype']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@bind",
+				"bindPrototype");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@unbind",
+				"unbindPrototype");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='prototype']/@target", null);
+
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@interface",
+				"java.util.EventListener");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@bind",
+				"bindPrototypeRequired");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@unbind",
+				"unbindPrototypeRequired");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@cardinality",
+				"1..1");
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@policy",
+				"static");
+		assertXPathValue(description, "reference[@name='prototype_required']/@target", null);
+
+		// v1.2.0
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='bundle']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='prototype']/@updated",
+				null);
+
+		assertXPathValueIfSet(description,
+				"reference[@name='prototype_required']/@policy-option",
+				"reluctant");
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@updated",
+				null);
+
+		// v1.3.0
+		assertXPathValue(description,
+				"reference[@name='bundle']/@field",
+				null);
+		assertXPathValue(description,
+				"reference[@name='bundle']/@field-option",
+				null);
+		assertXPathValue(description,
+				"reference[@name='bundle']/@field-collection-type",
+				null);
+		assertXPathValueIfSet(description,
+				"reference[@name='bundle']/@scope",
+				"bundle");
+
+		assertXPathValue(description,
+				"reference[@name='prototype']/@field",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype']/@field-option",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype']/@field-collection-type",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype']/@scope",
+				"prototype");
+
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@field",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@field-option",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@field-collection-type",
+				null);
+		assertXPathValue(description,
+				"reference[@name='prototype_required']/@scope",
+				"prototype_required");
+
+	}
+
 	/**
 	 * @throws Exception
 	 */
@@ -613,7 +1668,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathCount(description, "service/provide", 1);
 		assertXPathValue(description, "service/provide/@interface",
 				"java.util.EventListener");
-		assertXPathValue(description, "service/@servicefactory", "true");
+		boolean servicefactory = assertXPathValueIfSet(description, "service/@servicefactory", "true");
 		assertXPathCount(description, "reference", 0);
 		// v1.1.0
 		assertXPathValueIfSet(description, "@configuration-policy", "optional");
@@ -625,6 +1680,11 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValueIfSet(description, "reference/@policy-option",
 				"reluctant");
 		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		boolean scope = assertXPathValueIfSet(description, "service/@scope", "bundle");
+		if (!servicefactory && !scope) {
+			fail("neither servicefactory=\"true\" nor scope=\"bundle\" were specified");
+		}
 	}
 
 	/**
@@ -660,6 +1720,119 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValueIfSet(description, "reference/@policy-option",
 				"reluctant");
 		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValueIfSet(description, "service/@scope", "singleton");
+	}
+
+	public void testServiceSingleton() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathValueIfSet(description, "@immediate", "false");
+		assertXPathValueIfSet(description, "@enabled", "true");
+		assertXPathValue(description, "@factory", null);
+		assertXPathCount(description, "implementation", 1);
+		assertXPathValue(
+				description,
+				"implementation/@class",
+				"org.osgi.impl.bundle.component.annotations."
+						+ name.substring(4));
+		assertXPathCount(description, "service/provide", 1);
+		assertXPathValue(description,
+				"service/provide/@interface",
+				"java.util.EventListener");
+		assertXPathValueIfSet(description, "service/@servicefactory", "false");
+		assertXPathCount(description, "reference", 0);
+		// v1.1.0
+		assertXPathValueIfSet(description, "@configuration-policy", "optional");
+		assertXPathValueIfSet(description, "@activate", "activate");
+		assertXPathValueIfSet(description, "@deactivate", "deactivate");
+		assertXPathValue(description, "@modified", null);
+		// v1.2.0
+		assertXPathValueIfSet(description, "@configuration-pid", name);
+		assertXPathValueIfSet(description,
+				"reference/@policy-option",
+				"reluctant");
+		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValueIfSet(description, "service/@scope", "singleton");
+	}
+
+	public void testServiceBundle() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathValueIfSet(description, "@immediate", "false");
+		assertXPathValueIfSet(description, "@enabled", "true");
+		assertXPathValue(description, "@factory", null);
+		assertXPathCount(description, "implementation", 1);
+		assertXPathValue(
+				description,
+				"implementation/@class",
+				"org.osgi.impl.bundle.component.annotations."
+						+ name.substring(4));
+		assertXPathCount(description, "service/provide", 1);
+		assertXPathValue(description,
+				"service/provide/@interface",
+				"java.util.EventListener");
+		boolean servicefactory = assertXPathValueIfSet(description, "service/@servicefactory", "true");
+		assertXPathCount(description, "reference", 0);
+		// v1.1.0
+		assertXPathValueIfSet(description, "@configuration-policy", "optional");
+		assertXPathValueIfSet(description, "@activate", "activate");
+		assertXPathValueIfSet(description, "@deactivate", "deactivate");
+		assertXPathValue(description, "@modified", null);
+		// v1.2.0
+		assertXPathValueIfSet(description, "@configuration-pid", name);
+		assertXPathValueIfSet(description,
+				"reference/@policy-option",
+				"reluctant");
+		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		boolean scope = assertXPathValueIfSet(description, "service/@scope", "bundle");
+		if (!servicefactory && !scope) {
+			fail("neither servicefactory=\"true\" nor scope=\"bundle\" were specified");
+		}
+	}
+
+	public void testServicePrototype() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathValueIfSet(description, "@immediate", "false");
+		assertXPathValueIfSet(description, "@enabled", "true");
+		assertXPathValue(description, "@factory", null);
+		assertXPathCount(description, "implementation", 1);
+		assertXPathValue(
+				description,
+				"implementation/@class",
+				"org.osgi.impl.bundle.component.annotations."
+						+ name.substring(4));
+		assertXPathCount(description, "service/provide", 1);
+		assertXPathValue(description,
+				"service/provide/@interface",
+				"java.util.EventListener");
+		assertXPathValueIfSet(description, "service/@servicefactory", "false");
+		assertXPathCount(description, "reference", 0);
+		// v1.1.0
+		assertXPathValueIfSet(description, "@configuration-policy", "optional");
+		assertXPathValueIfSet(description, "@activate", "activate");
+		assertXPathValueIfSet(description, "@deactivate", "deactivate");
+		assertXPathValue(description, "@modified", null);
+		// v1.2.0
+		assertXPathValueIfSet(description, "@configuration-pid", name);
+		assertXPathValueIfSet(description,
+				"reference/@policy-option",
+				"reluctant");
+		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValue(description, "service/@scope", "prototype");
 	}
 
 	/**
@@ -695,6 +1868,8 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValueIfSet(description, "reference/@policy-option",
 				"reluctant");
 		assertXPathValue(description, "reference/@updated", null);
+		// v1.3.0
+		assertXPathValueIfSet(description, "service/@scope", "singleton");
 	}
 
 	/**
@@ -797,6 +1972,15 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValue(description, "@configuration-pid", "test.config.pid");
 	}
 
+	public void testConfigPidMultiple() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.3.0
+		assertXPathValue(description, "@configuration-pid[normalize-space()]", "test.config.pid " + name);
+	}
+
 	/**
 	 * @throws Exception
 	 */
@@ -810,46 +1994,113 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValue(description, "properties/@entry",
 				"OSGI-INF/vendor.properties");
 		assertXPathCount(description, "property", 10);
-		assertXPathValueIfSet(description, "property[@name='a']/@type",
-				"String");
-		assertXPathValue(description, "property[@name='b']/@type", "Integer");
-		assertXPathValue(description, "property[@name='c']/@type", "Boolean");
-		assertXPathValue(description, "property[@name='d']/@type", "Long");
-		assertXPathValue(description, "property[@name='e']/@type", "Double");
-		assertXPathValue(description, "property[@name='f']/@type", "Float");
-		assertXPathValue(description, "property[@name='g']/@type", "Byte");
-		assertXPathValue(description, "property[@name='h']/@type", "Character");
-		assertXPathValue(description, "property[@name='i']/@type", "Short");
-		assertXPathValueIfSet(description, "property[@name='j']/@type",
-				"String");
-		assertXPathValue(description, "property[@name='a']/@value", "foo");
-		assertXPathValue(description, "property[@name='c']/@value", "true");
-		assertXPathValue(description, "property[@name='d']/@value", "4");
-		assertXPathValue(description, "property[@name='e']/@value", "5.0");
-		assertXPathValue(description, "property[@name='f']/@value", "6.0");
-		assertXPathValue(description, "property[@name='g']/@value", "7");
-		assertXPathValue(description, "property[@name='h']/@value", "8");
-		assertXPathValue(description, "property[@name='i']/@value", "9");
-		assertXPathValue(description, "property[@name='j']/@value", "bar");
-		assertXPathTextEmpty(description, "property[@name='a']");
-		assertXPathTextEmpty(description, "property[@name='c']");
-		assertXPathTextEmpty(description, "property[@name='d']");
-		assertXPathTextEmpty(description, "property[@name='e']");
-		assertXPathTextEmpty(description, "property[@name='f']");
-		assertXPathTextEmpty(description, "property[@name='g']");
-		assertXPathTextEmpty(description, "property[@name='h']");
-		assertXPathTextEmpty(description, "property[@name='i']");
-		assertXPathTextEmpty(description, "property[@name='j']");
-		assertXPathValue(description, "property[@name='b']/@value", null);
-		String expr = "property[@name='b']/text()";
-		Node node = getXPathValue(description, expr);
-		assertNotNull(expr + " evaluated to a null value on component "
-				+ description.getName(), node);
-		String result = node.getNodeValue();
-		List<String> values = Arrays.asList(result.trim().split("\\s*\\n\\s*"));
-		assertEquals("incorrect number of values: " + result, 2, values.size());
-		assertTrue("missing value", values.contains("2"));
-		assertTrue("missing value", values.contains("3"));
+		assertPropertyValue(description, "a", "String", "foo");
+		assertPropertyArrayValue(description, "b", "Integer", "2", "3");
+		assertPropertyValue(description, "c", "Boolean", "true");
+		assertPropertyValue(description, "d", "Long", "4");
+		assertPropertyValue(description, "e", "Double", "5.0");
+		assertPropertyValue(description, "f", "Float", "6.0");
+		assertPropertyValue(description, "g", "Byte", "7");
+		assertPropertyValue(description, "h", "Character", "8");
+		assertPropertyValue(description, "i", "Short", "9");
+		assertPropertyValue(description, "j", "String", "bar");
+	}
+
+	public void testPropertyOrdering() throws Exception {
+		String name = getName();
+		Description description = descriptions.get(name);
+		assertNotNull("Unable to find " + name + " component description",
+				description);
+		// v1.0.0
+		assertXPathCount(description, "properties", 1);
+		assertXPathValue(description,
+				"properties/@entry",
+				"OSGI-INF/vendor.properties");
+		assertXPathCount(description, "property", 29);
+
+		assertPropertyValue(description, "config1", "String", "config1");
+		assertPropertyValue(description, "config2", "String", "config2");
+		assertPropertyValue(description, "config3", "String", "config3");
+		assertPropertyValue(description, "config4", "String", "config4");
+
+		assertPropertyValue(description, "string1", "String", "config/string1");
+		assertPropertyValue(description, "string2", "String", "config/string2");
+		assertPropertyValue(description, "string3", "String", "config/string3");
+		assertPropertyValue(description, "string4", "String", "config/string4");
+
+		assertPropertyArrayValue(description, "stringarray1", "String", "config/1stringarray1", "config/2stringarray1");
+
+		assertPropertyValue(description, "boolean1", "Boolean", "true");
+		assertPropertyArrayValue(description, "booleanarray1", "Boolean", "true", "false");
+
+		assertPropertyValue(description, "char1", "Character", "64");
+		assertPropertyArrayValue(description, "chararray1", "Character", "64", "43");
+
+		assertPropertyValue(description, "byte1", "Byte", "2");
+		assertPropertyArrayValue(description, "bytearray1", "Byte", "2", "-3");
+
+		assertPropertyValue(description, "short1", "Short", "1034");
+		assertPropertyArrayValue(description, "shortarray1", "Short", "1034", "-1043");
+
+		assertPropertyValue(description, "int1", "Integer", "123456");
+		assertPropertyArrayValue(description, "intarray1", "Integer", "123456", "-234567");
+
+		assertPropertyValue(description, "long1", "Long", "9876543210");
+		assertPropertyArrayValue(description, "longarray1", "Long", "9876543210", "-987654321");
+
+		assertPropertyValue(description, "float1", "Float", "3.14");
+		assertPropertyArrayValue(description, "floatarray1", "Float", "3.14", "-4.56");
+
+		assertPropertyValue(description, "double1", "Double", "2.1");
+		assertPropertyArrayValue(description, "doublearray1", "Double", "2.1", "-1.2");
+
+		assertPropertyValue(description, "class1", "String", "org.osgi.impl.bundle.component.annotations.TestEnum");
+		assertPropertyArrayValue(description, "classarray1", "String", "org.osgi.impl.bundle.component.annotations.TestEnum", "java.lang.Object");
+
+		assertPropertyValue(description, "enum1", "String", "ITEM1");
+		assertPropertyArrayValue(description, "enumarray1", "String", "ITEM1", "ITEM2");
+
+		assertXPathValue(description, "@activate", "activate1");
+		assertXPathValue(description, "@modified", "modified2");
+		assertXPathValue(description, "@deactivate", "deactivate3");
+	}
+
+	public void assertPropertyValue(Description description, String name, String type, String value)
+			throws Exception {
+		final String expr = "property[@name='" + name + "']";
+		assertXPathValue(description, expr + "/@value", value);
+		if (type.equals("String")) {
+			assertXPathValueIfSet(description, expr + "/@type", "String");
+		} else {
+			assertXPathValue(description, expr + "/@type", type);
+		}
+		Node result = getXPathValue(description, expr + "/text()");
+		if (result == null) {
+			return;
+		}
+		assertEquals(expr + "/text() evaluated on component " + description.getName(), "", result.getNodeValue().trim());
+	}
+
+	public void assertPropertyArrayValue(Description description, String name, String type, String... list)
+			throws Exception {
+		final String expr = "property[@name='" + name + "']";
+		assertXPathValue(description, expr + "/@value", null);
+		if (type.equals("String")) {
+			assertXPathValueIfSet(description, expr + "/@type", "String");
+		} else {
+			assertXPathValue(description, expr + "/@type", type);
+		}
+		Node result = getXPathValue(description, expr + "/text()");
+		assertNotNull(expr + "/text() evaluated to a null value on component "
+				+ description.getName(), result);
+		String[] values = result.getNodeValue().trim().split("\\s*\\n\\s*");
+		final int size = list.length;
+		assertEquals("incorrect number of values: " + result, size, values.length);
+		for (int i = 0; i < size; i++) {
+			assertEquals(expr + "/text() item[" + i + "] evaluated on component " + description.getName(),
+					list[i],
+					values[i]);
+		}
 	}
 
 	/**
@@ -866,23 +2117,6 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		return result;
 	}
 
-	/**
-	 * @param description
-	 * @param expr
-	 * @throws Exception
-	 */
-	public void assertXPathTextEmpty(Description description, String expr)
-			throws Exception {
-		xpath.setNamespaceContext(description.getNamespaceContext());
-		expr = expr + "/text()";
-		Node result = (Node) xpath.evaluate(expr, description.getComponent(),
-				XPathConstants.NODE);
-		if (result == null) {
-			return;
-		}
-		assertEquals(expr + " evaluated on component " + description.getName(),
-				"", result.getNodeValue().trim());
-	}
 
 	/**
 	 * @param description
@@ -892,9 +2126,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 */
 	public void assertXPathValue(Description description, String expr,
 			String value) throws Exception {
-		xpath.setNamespaceContext(description.getNamespaceContext());
-		Node result = (Node) xpath.evaluate(expr, description.getComponent(),
-				XPathConstants.NODE);
+		Node result = getXPathValue(description, expr);
 		if (value == null) {
 			assertNull(expr + " evaluated to a non-null value for component "
 					+ description.getName(), result);
@@ -912,16 +2144,15 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @param value
 	 * @throws Exception
 	 */
-	public void assertXPathValueIfSet(Description description, String expr,
+	public boolean assertXPathValueIfSet(Description description, String expr,
 			String value) throws Exception {
-		xpath.setNamespaceContext(description.getNamespaceContext());
-		Node result = (Node) xpath.evaluate(expr, description.getComponent(),
-				XPathConstants.NODE);
+		Node result = getXPathValue(description, expr);
 		if (result == null) {
-			return;
+			return false;
 		}
 		assertEquals(expr + " evaluated on component " + description.getName(),
 				value, result.getNodeValue());
+		return true;
 	}
 
 	/**
@@ -952,6 +2183,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		return name;
 	}
 
+	/* For test debugging use */
 	private static String toString(Node node) throws Exception {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb22.Ranking1"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<implementation class="org.osgi.test.cases.component.tb22.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+    <property name="service.ranking" type="Integer" value="1"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb22.Ranking10"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"
+            enabled="false">
+	<implementation class="org.osgi.test.cases.component.tb22.ServiceComponent"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+	</service>
+    <property name="service.ranking" type="Integer" value="10"/>
+</scr:component>
+
+<scr:component name="org.osgi.test.cases.component.tb22.MapReceiver"
+            xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+    <implementation class="org.osgi.test.cases.component.tb22.MapReceiver"/>
+    <service>
+        <provide interface="org.osgi.test.cases.component.service.ServiceReceiver"/>
+    </service>
+    <reference
+        bind="bind"
+        policy-option="greedy"
+        cardinality="0..n"
+        interface="org.osgi.test.cases.component.service.BaseService"
+        target="(component.name=org.osgi.test.cases.component.tb22.Ranking*)"/>
+</scr:component>
+</root>

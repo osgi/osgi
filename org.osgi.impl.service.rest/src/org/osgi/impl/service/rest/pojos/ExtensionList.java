@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.pojos;
 
 import java.util.ArrayList;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 import org.osgi.service.rest.RestApiExtension;
 import org.osgi.util.tracker.ServiceTracker;
 import org.restlet.resource.ServerResource;
@@ -27,6 +28,7 @@ import org.restlet.resource.ServerResource;
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "extensions")
 @SuppressWarnings("serial")
 public class ExtensionList extends ArrayList<ExtensionList.ExtensionPojo> {
 
@@ -34,16 +36,19 @@ public class ExtensionList extends ArrayList<ExtensionList.ExtensionPojo> {
 			ServiceTracker<RestApiExtension, Class<? extends ServerResource>> tracker) {
 		final ServiceReference<RestApiExtension>[] refs = tracker
 				.getServiceReferences();
-		for (final ServiceReference<RestApiExtension> ref : refs) {
-			add(new ExtensionPojo(
-					(String) ref.getProperty(RestApiExtension.NAME),
-					(String) ref.getProperty(RestApiExtension.URI_PATH)));
+		if (refs != null) {
+			for (final ServiceReference<RestApiExtension> ref : refs) {
+				add(new ExtensionPojo(
+						(String) ref.getProperty(RestApiExtension.NAME),
+						(String) ref.getProperty(RestApiExtension.URI_PATH)));
+			}
 		}
 	}
 
 	/**
 	 * Pojo for extensions to the REST service.
 	 */
+	@RootNode(name = "extension")
 	public static class ExtensionPojo {
 
 		private String	name;

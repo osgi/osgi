@@ -1,0 +1,30 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description					: A security test case for the event generic mechanism implementation.
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
+Export-Package						= \
+	${p}.service
+
+Include-Resource					= \
+	tb1.jar, \
+	tb2.jar
+
+Test-Cases							= ${testcases}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.event;                 version=project , \
+	osgi.core;									version=6.0	, \
+	osgi.cmpn;									version=5.0	, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.event; version=latest, \
+	org.osgi.impl.service.log; version=latest
+
+-runproperties = ${runsecureproperties}

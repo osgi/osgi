@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
@@ -50,6 +48,9 @@ import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
+import org.osgi.util.tracker.ServiceTracker;
+
+import junit.framework.Assert;
 
 /**
  * RSA 122.4.1 Exporting test cases
@@ -75,6 +76,13 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		super.setUp();
 
 		timeout = getLongProperty("rsa.ct.timeout", 300000L);
+
+		// Wait for the RSA service to be registered before beginning
+		ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin> tracker = new ServiceTracker<RemoteServiceAdmin, RemoteServiceAdmin>(
+				getContext(), RemoteServiceAdmin.class, null);
+		tracker.open();
+		tracker.waitForService(timeout);
+		tracker.close();
 
 		remoteServiceAdmin = getService(RemoteServiceAdmin.class);
 	}
@@ -259,8 +267,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 			properties.put(RemoteConstants.SERVICE_EXPORTED_INTERFACES, "something.else.Interface");
 
-			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
-			assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
+			try {
+				remoteServiceAdmin.exportService(registration.getReference(), properties);
+				fail("122.5.1: syntactically incorrect exported interfaces must result in an IllegalArgumentException");
+			} catch (IllegalArgumentException iae) {
+			}
 		} finally {
 			registration.unregister();
 		}

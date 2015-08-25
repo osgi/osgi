@@ -36,6 +36,7 @@ import aQute.libg.generics.Create;
 public class CTPackaging extends Packaging implements AnalyzerPlugin {
 
 	private final static String	PACK	= "-ctpack";
+	private final static String	TESTER	= "-tester";
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
 		if (!(analyzer instanceof ProjectBuilder))
@@ -69,7 +70,15 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		sb.append(Constants.RUNPATH);
 		sb.append(" = ");
 		flatten(analyzer, sb, jar, runpath, false, fileToPath);
-		sb.append("\n\n-runtrace = true\n");
+		sb.append("\n\n-runtrace = true\n\n");
+		String tester = analyzer.getProperty(TESTER);
+		if (tester != null) {
+			sb.append(TESTER);
+			sb.append(" = ");
+			sb.append(tester);
+			sb.append("\n\n");
+		}
+
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
 
