@@ -206,16 +206,18 @@ public class DevicePermission extends BasicPermission {
 	 * Called when the permission state is saved to a stream. Permissions with
 	 * device instance cannot be serialized.
 	 */
-	private void writeObject(java.io.ObjectOutputStream s) throws NotSerializableException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		if (null != this.device) {
 			throw new NotSerializableException("Device permission with a device instance cannot be serialized.");
 		}
+		s.defaultWriteObject();
 	}
 
 	/**
 	 * Called to restore the permission state from the stream.
 	 */
-	private void readObject(java.io.ObjectInputStream s) {
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
 		this.filter = parseFilter(getName());
 	}
 
@@ -401,7 +403,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 		out.writeFields();
 	}
 
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
 		this.permissions = (HashMap) gfields.get("permissions", null);
 		this.implyAll = gfields.get("implyAll", false);

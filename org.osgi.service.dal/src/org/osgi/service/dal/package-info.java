@@ -32,7 +32,7 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.dal; version="[1.0,1.1)"}
  * 
- * @version 1.0
+ * @version 1.0.1
  * @author $Id$
  */
 
