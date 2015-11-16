@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.component.annotations.junit;
 
 import java.util.Collections;
 import java.util.Iterator;
-
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
-
 import org.w3c.dom.Attr;
 
 /**
- * 
  * 
  * @author $Id$
  */
@@ -35,6 +32,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 
 	/**
 	 * @param uri
+	 * 
 	 * @param prefix
 	 */
 	public NamespaceContextImpl(String prefix, String uri) {
@@ -64,37 +62,52 @@ public class NamespaceContextImpl implements NamespaceContext {
 		return prefix;
 	}
 
-	public String getNamespaceURI(String namespacePrefix) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getNamespaceURI(final String namespacePrefix) {
 		if (namespacePrefix == null)
 			throw new IllegalArgumentException();
-		if (prefix.equals(namespacePrefix))
+		if (namespacePrefix.equals(prefix))
 			return uri;
-		if ("xml".equals(namespacePrefix))
-			return "http://www.w3.org/XML/1998/namespace";
-		if ("xmlns".equals(namespacePrefix))
-			return "http://www.w3.org/2000/xmlns/";
-		return "";
+		switch (namespacePrefix) {
+			case XMLConstants.XML_NS_PREFIX :
+				return XMLConstants.XML_NS_URI;
+			case XMLConstants.XMLNS_ATTRIBUTE :
+				return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+			default :
+				return XMLConstants.NULL_NS_URI;
+		}
 	}
 
-	public String getPrefix(String namespaceURI) {
-		if (uri.equals(namespaceURI))
-			return prefix;
-		if ("http://www.w3.org/XML/1998/namespace".equals(namespaceURI))
-			return "xml";
-		if ("http://www.w3.org/2000/xmlns/".equals(namespaceURI))
-			return "xmlns";
-		return null;
-	}
-
-	public Iterator<String> getPrefixes(String namespaceURI) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getPrefix(final String namespaceURI) {
 		if (namespaceURI == null)
 			throw new IllegalArgumentException();
-		if (uri.equals(namespaceURI))
-			return Collections.singletonList(prefix).iterator();
-		if ("http://www.w3.org/XML/1998/namespace".equals(namespaceURI))
-			return Collections.singletonList("xml").iterator();
-		if ("http://www.w3.org/2000/xmlns/".equals(namespaceURI))
-			return Collections.singletonList("xmlns").iterator();
+		if (namespaceURI.equals(uri))
+			return prefix;
+		switch (namespaceURI) {
+			case XMLConstants.XML_NS_URI :
+				return XMLConstants.XML_NS_PREFIX;
+			case XMLConstants.XMLNS_ATTRIBUTE_NS_URI :
+				return XMLConstants.XMLNS_ATTRIBUTE;
+			default :
+				return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Iterator<String> getPrefixes(final String namespaceURI) {
+		String p = getPrefix(namespaceURI);
+		if (p != null)
+			return Collections.singletonList(p).iterator();
 		return Collections.<String> emptyList().iterator();
 	}
 }
