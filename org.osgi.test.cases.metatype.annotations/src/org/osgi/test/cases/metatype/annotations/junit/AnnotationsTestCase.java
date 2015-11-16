@@ -47,6 +47,7 @@ import org.w3c.dom.NodeList;
  * @author $Id$
  */
 public class AnnotationsTestCase extends OSGiTestCase {
+	public static final String				xmlns_metatype120	= "http://www.osgi.org/xmlns/metatype/v1.2.0";
 	public static final String		xmlns_metatype130	= "http://www.osgi.org/xmlns/metatype/v1.3.0";
 	static final float				deltaFloat			= 0x1.0p-126f;
 	private final DocumentBuilder	db;
@@ -93,7 +94,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertTrue(MetaTypeService.METATYPE_DOCUMENTS_LOCATION + " folder has no metatype documents",
 				documents.hasMoreElements());
 		XPathExpression expr = xpath.compile("//namespace::*[.='"
-				+ xmlns_metatype130 + "']");
+				+ xmlns_metatype120 + "' or .='" + xmlns_metatype130 + "']");
 		while (documents.hasMoreElements()) {
 			URL url = documents.nextElement();
 			// System.out.println(url);
@@ -156,8 +157,9 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertAD(ocd, "boolean1", "Boolean", 0, "true");
 		assertAD(ocd, "booleanarray1", "Boolean", 1, "true", "false");
 
-		assertAD(ocd, "char1", "Character", 0, "64");
-		assertAD(ocd, "chararray1", "Character", 1, "64", "43");
+		final String CHARACTER = xmlns_metatype120.equals(ocd.getNamespaceContext().getUri()) ? "Char" : "Character";
+		assertAD(ocd, "char1", CHARACTER, 0, "64");
+		assertAD(ocd, "chararray1", CHARACTER, 1, "64", "43");
 
 		assertAD(ocd, "byte1", "Byte", 0, "2");
 		assertAD(ocd, "bytearray1", "Byte", 1, "2", "-3");
@@ -207,7 +209,8 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertAD(ocd, "string1", "String", 0);
 		assertAD(ocd, "string2", "String", 0);
 		assertAD(ocd, "boolean1", "Boolean", 0);
-		assertAD(ocd, "char1", "Character", 0);
+		final String CHARACTER = xmlns_metatype120.equals(ocd.getNamespaceContext().getUri()) ? "Char" : "Character";
+		assertAD(ocd, "char1", CHARACTER, 0);
 		assertAD(ocd, "byte1", "Byte", 0);
 		assertAD(ocd, "short1", "Short", 0);
 		assertAD(ocd, "int1", "Integer", 0);
