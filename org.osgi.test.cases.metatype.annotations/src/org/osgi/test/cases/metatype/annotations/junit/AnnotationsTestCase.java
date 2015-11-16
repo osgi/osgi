@@ -195,6 +195,9 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertOption(ocd, "enumarray1", "ITEM2", "ITEM2");
 		assertOption(ocd, "enumarray1", "ITEM3", "ITEM3");
 		assertOption(ocd, "enumarray1", "ITEM4", "ITEM4");
+
+		assertAD(ocd, ".password1", "Password", 0, "config/password1");
+		assertAD(ocd, ".passwordarray1", "Password", 1, "config/1passwordarray1", "config/2passwordarray1");
 	}
 
 	public void testSubInterface() throws Exception {

@@ -17,6 +17,8 @@
 
 package org.osgi.impl.bundle.metatype.annotations;
 
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition(id = "testConfigurationPropertyType")
@@ -44,4 +46,10 @@ public @interface ConfigurationPropertyType {
 	Class<?>[]classarray1() default {TestEnum.class, Object.class};
 	TestEnum enum1() default TestEnum.ITEM1;
 	TestEnum[]enumarray1() default {TestEnum.ITEM1, TestEnum.ITEM2};
+
+	@AttributeDefinition(type = AttributeType.PASSWORD)
+	String _password1() default "config/password1";
+
+	@AttributeDefinition(type = AttributeType.PASSWORD)
+	String[] _passwordarray1() default {"config/1passwordarray1", "config/2passwordarray1"};
 }
