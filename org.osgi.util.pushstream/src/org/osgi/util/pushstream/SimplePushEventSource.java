@@ -1,0 +1,58 @@
+package org.osgi.util.pushstream;
+
+import java.io.Closeable;
+
+import org.osgi.annotation.versioning.ProviderType;
+
+@ProviderType
+public interface SimplePushEventSource<T> extends PushEventSource<T>, Closeable {
+	/**
+	 * Close this source. Calling this method indicates that there will never
+	 * be any more events published by it. Calling this method sends a close
+	 * event to all connected consumers. After calling this method any 
+	 * {@link PushEventConsumer} that tries to {@link #open(PushEventConsumer)} 
+	 * this source will immediately receive a close event.
+	 */
+	void close();
+	
+	/**
+	 * Asynchronously publish an event to this stream and all connected {@link PushEventConsumer}
+	 * instances. When this method returns there is no guarantee that all consumers have been 
+	 * notified. Events published by a single thread will maintain their relative ordering, however
+	 * they may be interleaved with events from other threads.
+	 * 
+	 * @param t
+	 * @throws IllegalStateException if the source is closed
+	 */
+	void publish(T t);
+	
+	/**
+	 * Close this source for now, but potentially reopen it later. 
+	 * Calling this method asynchronously sends a close event to all 
+	 * connected consumers. After calling this method any 
+	 * {@link PushEventConsumer} that wishes may {@link #open(PushEventConsumer)} 
+	 * this source, and will receive subsequent events.
+	 * 
+	 */
+	void endOfStream();
+	
+	/**
+	 * Close this source for now, but potentially reopen it later. 
+	 * Calling this method asynchronously sends an error event to 
+	 * all connected consumers. After calling this method any 
+	 * {@link PushEventConsumer} that wishes may {@link #open(PushEventConsumer)} 
+	 * this source, and will receive subsequent events.
+	 * 
+	 */
+	void error(Exception e);
+	
+	/**
+	 * Determine whether there are any {@link PushEventConsumer}s for this 
+	 * {@link PushEventSource}. This can be used to skip expensive event 
+	 * creation logic when there are no listeners. 
+	 * 
+	 * @return
+	 */
+	boolean isConnected();
+
+}
