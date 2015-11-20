@@ -739,6 +739,9 @@ public class FrameworkUtil {
 			if (value1 instanceof String) {
 				return compare_String(operation, (String) value1, value2);
 			}
+			if (value1 instanceof Version) {
+				return compare_Version(operation, (Version) value1, value2);
+			}
 
 			Class<?> clazz = value1.getClass();
 			if (clazz.isArray()) {
@@ -1213,6 +1216,31 @@ public class FrameworkUtil {
 				}
 			} catch (Exception e) {
 				// if the compareTo method throws an exception; return false
+				return false;
+			}
+			return false;
+		}
+
+		private boolean compare_Version(int operation, Version value1, Object value2) {
+			if (operation == SUBSTRING) {
+				return false;
+			}
+			try {
+				Version version2 = Version.valueOf((String) value2);
+				switch (operation) {
+					case APPROX :
+					case EQUAL : {
+						return value1.compareTo(version2) == 0;
+					}
+					case GREATER : {
+						return value1.compareTo(version2) >= 0;
+					}
+					case LESS : {
+						return value1.compareTo(version2) <= 0;
+					}
+				}
+			} catch (Exception e) {
+				// if the valueOf or compareTo method throws an exception
 				return false;
 			}
 			return false;

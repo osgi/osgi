@@ -26,10 +26,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -439,6 +439,83 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		Filter f1 = createFilter("(comparable=exception)");
 
 		hash.put("comparable", compbad);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public void testVersion() throws InvalidSyntaxException {
+		Version v42 = new Version("4.2");
+		Version v43 = new Version("4.3");
+		Hashtable<String, Object> hash = new Hashtable<>();
+
+		Filter f1 = createFilter("(version=4.2)");
+
+		hash.put("version", v42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("version", v43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(version<=4.2)");
+
+		hash.put("version", v42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("version", v43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(version>=4.2)");
+
+		hash.put("version", v42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("version", v43);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(version=4*2)");
+
+		hash.put("version", v42);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public void testVersionException() throws InvalidSyntaxException {
+		Version v = Version.emptyVersion;
+		Hashtable<String, Object> hash = new Hashtable<>();
+
+		Filter f1 = createFilter("(version=exception)");
+
+		hash.put("version", v);
 		assertFalse("does match filter", f1.match(hash));
 		assertFalse("does match filter", f1.matchCase(hash));
 		assertFalse("does match filter", f1.matches(hash));
