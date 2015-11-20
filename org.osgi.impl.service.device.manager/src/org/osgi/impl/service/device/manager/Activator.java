@@ -21,7 +21,6 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -168,7 +167,7 @@ public class Activator extends Thread implements BundleActivator,
 
     private void startService(String filter) throws Exception {
         bc.addServiceListener(this, filter);
-        ServiceReference[] sra = bc.getServiceReferences(null, filter);
+        ServiceReference[] sra = bc.getServiceReferences((String) null, filter);
         if (sra != null) {
             for (int i = 0; i < sra.length; i++) {
                 try {
@@ -577,7 +576,7 @@ public class Activator extends Thread implements BundleActivator,
     private void touchAllDevices() {
         boolean added = false;
         try {
-            ServiceReference[] sra = bc.getServiceReferences(null,
+            ServiceReference[] sra = bc.getServiceReferences((String) null,
                     DEVICE_FILTER);
             if (sra != null) {
                 for (int i = 0; i < sra.length; i++) {
