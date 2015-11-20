@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -414,6 +414,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         ordering defined between capabilities in different namespaces.
 	 * @since 1.1
 	 */
+	@Override
 	List<Capability> getResourceCapabilities(String namespace);
 
 	/**
@@ -446,6 +447,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         between requirements in different namespaces.
 	 * @since 1.1
 	 */
+	@Override
 	List<Requirement> getResourceRequirements(String namespace);
 
 	/**
@@ -468,6 +470,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         capabilities in different namespaces.
 	 * @since 1.1
 	 */
+	@Override
 	List<Wire> getProvidedResourceWires(String namespace);
 
 	/**
@@ -490,6 +493,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         requirements in different namespaces.
 	 * @since 1.1
 	 */
+	@Override
 	List<Wire> getRequiredResourceWires(String namespace);
 
 	/**
@@ -501,5 +505,6 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * @return The resource associated with this wiring.
 	 * @since 1.1
 	 */
+	@Override
 	BundleRevision getResource();
 }

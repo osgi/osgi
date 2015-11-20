@@ -69,8 +69,9 @@ import org.osgi.framework.ServiceListener;
  * 
  * @version 1.0
  * @author $Id$
+ * @param <T> The type for the Resource.
  */
-public interface ResourceListener {
+public interface ResourceListener<T> {
 
 	/**
 	 * Mandatory property specifying the Resource Context associated with the
@@ -109,7 +110,7 @@ public interface ResourceListener {
 	 * 
 	 * @param event The {@link ResourceEvent} object
 	 */
-	public void notify(ResourceEvent event);
+	public void notify(ResourceEvent<T> event);
 
 	/**
 	 * Retrieves the lower warning threshold value set by the listener. If the
@@ -119,7 +120,7 @@ public interface ResourceListener {
 	 * 
 	 * @return a comparable object or null if no threshold is set.
 	 */
-	public Comparable getLowerWarningThreshold();
+	public Comparable<T> getLowerWarningThreshold();
 
 	/**
 	 * Retrieves the lower error threshold value set by the listener. If the
@@ -129,7 +130,7 @@ public interface ResourceListener {
 	 * 
 	 * @return a comparable object or null if no threshold is set.
 	 */
-	public Comparable getLowerErrorThreshold();
+	public Comparable<T> getLowerErrorThreshold();
 
 	/**
 	 * Retrieves the upper warning threshold value set by this listener. If the
@@ -139,7 +140,7 @@ public interface ResourceListener {
 	 * 
 	 * @return a comparable object or null if no threshold is reached.
 	 */
-	public Comparable getUpperWarningThreshold();
+	public Comparable<T> getUpperWarningThreshold();
 
 	/**
 	 * Retrieves the upper error threshold value set by this listener. If the
@@ -149,6 +150,5 @@ public interface ResourceListener {
 	 * 
 	 * @return a comparable object or null if no threshold is reached.
 	 */
-	public Comparable getUpperErrorThreshold();
-
+	public Comparable<T> getUpperErrorThreshold();
 }

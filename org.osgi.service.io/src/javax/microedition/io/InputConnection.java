@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface InputConnection extends javax.microedition.io.Connection {
 	public abstract java.io.DataInputStream openDataInputStream() throws java.io.IOException;
 	public abstract java.io.InputStream openInputStream() throws java.io.IOException;

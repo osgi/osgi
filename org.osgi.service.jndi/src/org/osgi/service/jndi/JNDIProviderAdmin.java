@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public interface JNDIProviderAdmin {
 	 * @throws Exception in the event that an error occurs while attempting to
 	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws Exception;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map<String, ?> environment) throws Exception;
 
 	/**
 	 * Resolve the object from the given reference.
@@ -66,5 +66,5 @@ public interface JNDIProviderAdmin {
 	 * @throws Exception in the event that an error occurs while attempting to
 	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws Exception;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map<String, ?> environment, Attributes attributes) throws Exception;
 }

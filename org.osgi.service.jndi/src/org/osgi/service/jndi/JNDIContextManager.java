@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public interface JNDIContextManager {
 	 * @throws NamingException upon any error that occurs during context
 	 *         creation
 	 */
-	public Context newInitialContext(Map environment) throws NamingException;
+	public Context newInitialContext(Map<String, ?> environment) throws NamingException;
 
 	/**
 	 * Creates a new initial DirContext with the default JNDI environment
@@ -72,5 +72,5 @@ public interface JNDIContextManager {
 	 * @throws NamingException upon any error that occurs during context
 	 *         creation
 	 */
-	public DirContext newInitialDirContext(Map environment) throws NamingException;
+	public DirContext newInitialDirContext(Map<String, ?> environment) throws NamingException;
 }

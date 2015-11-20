@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -562,6 +562,7 @@ public final class ServicePermission extends BasicPermission {
 		final Bundle bundle = service.getBundle();
 		if (bundle != null) {
 			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				@Override
 				public Void run() {
 					props.put("id", new Long(bundle.getBundleId()));
 					props.put("location", bundle.getLocation());
@@ -607,6 +608,7 @@ public final class ServicePermission extends BasicPermission {
 			return service.getProperty(key);
 		}
 
+		@Override
 		public Set<Map.Entry<String, Object>> entrySet() {
 			if (entries != null) {
 				return entries;
@@ -632,14 +634,17 @@ public final class ServicePermission extends BasicPermission {
 				this.v = value;
 			}
 
+			@Override
 			public String getKey() {
 				return k;
 			}
 
+			@Override
 			public Object getValue() {
 				return v;
 			}
 
+			@Override
 			public Object setValue(Object value) {
 				throw new UnsupportedOperationException();
 			}

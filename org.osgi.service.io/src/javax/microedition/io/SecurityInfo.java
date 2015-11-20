@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface SecurityInfo {
 	public abstract java.lang.String getCipherSuite();
 	public abstract java.lang.String getProtocolName();

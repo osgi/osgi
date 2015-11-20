@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface SecureConnection extends javax.microedition.io.SocketConnection {
 	public abstract javax.microedition.io.SecurityInfo getSecurityInfo() throws java.io.IOException;
 }

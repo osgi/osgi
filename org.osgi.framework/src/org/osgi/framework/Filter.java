@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,6 +82,7 @@ public interface Filter {
 	 * 
 	 * @return This {@code Filter}'s filter string.
 	 */
+	@Override
 	String toString();
 
 	/**
@@ -96,6 +97,7 @@ public interface Filter {
 	 *         result of calling {@code this.toString().equals(obj.toString())};
 	 *         {@code false} otherwise.
 	 */
+	@Override
 	boolean equals(Object obj);
 
 	/**
@@ -107,6 +109,7 @@ public interface Filter {
 	 * 
 	 * @return The hashCode of this {@code Filter}.
 	 */
+	@Override
 	int hashCode();
 
 	/**

@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface CommConnection extends javax.microedition.io.StreamConnection {
 	public abstract int getBaudRate();
 	public abstract int setBaudRate(int var0);

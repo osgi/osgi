@@ -16,7 +16,7 @@ public @interface Scope {
 		P,
 		D,
 		A
-	};
+	}
 
 	SCOPE value();
 }

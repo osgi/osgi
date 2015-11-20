@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -585,6 +585,7 @@ public final class SubsystemPermission extends BasicPermission {
 		try {
 			final Map<String, Object> map = new HashMap<String, Object>(4);
 			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				@Override
 				public Void run() {
 					map.put("id", new Long(subsystem.getSubsystemId()));
 					map.put("location", subsystem.getLocation());

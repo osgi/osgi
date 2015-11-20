@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface DatagramConnection extends javax.microedition.io.Connection {
 	public abstract int getMaximumLength() throws java.io.IOException;
 	public abstract int getNominalLength() throws java.io.IOException;

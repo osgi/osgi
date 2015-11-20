@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.pki;
+
+@SuppressWarnings("all")
 public class CertificateException extends java.io.IOException {
 	public CertificateException(java.lang.String var0, javax.microedition.pki.Certificate var1, byte var2) { }
 	public CertificateException(javax.microedition.pki.Certificate var0, byte var1) { }

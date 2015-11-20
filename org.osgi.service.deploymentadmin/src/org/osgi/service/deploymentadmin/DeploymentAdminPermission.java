@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -210,16 +210,18 @@ public final class DeploymentAdminPermission extends Permission {
 	public static final String			METADATA			= "metadata";
 
 	private static final String			delegateProperty	= "org.osgi.vendor.deploymentadmin";
-	private static final Constructor	constructor;
+	private static final Constructor<? extends Permission>	constructor;
 	private final Permission			delegate;
 	static {
-		constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
+		constructor = AccessController.doPrivileged(new PrivilegedAction<Constructor<? extends Permission>>() {
+			@Override
+			public Constructor<? extends Permission> run() {
 				String pckg = System.getProperty(delegateProperty);
 				if (null == pckg)
 					throw new RuntimeException("Property '" + delegateProperty + "' is not set");
 				try {
-					Class c = Class.forName(pckg + ".DeploymentAdminPermission");
+					@SuppressWarnings("unchecked")
+					Class<? extends Permission> c = (Class<? extends Permission>) Class.forName(pckg + ".DeploymentAdminPermission");
 					return c.getConstructor(new Class[] {String.class, String.class});
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -247,7 +249,7 @@ public final class DeploymentAdminPermission extends Permission {
 		super(name);
 		try {
 			try {
-				delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+				delegate = constructor.newInstance(new Object[] {name, actions});
 			} catch (InvocationTargetException e) {
 				throw e.getTargetException();
 			}
@@ -274,6 +276,7 @@ public final class DeploymentAdminPermission extends Permission {
 	 * @return true if the two objects are equal.
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -289,6 +292,7 @@ public final class DeploymentAdminPermission extends Permission {
 	 * @return Hash code for this permission object.
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return delegate.hashCode();
 	}
@@ -305,6 +309,7 @@ public final class DeploymentAdminPermission extends Permission {
 	 *         constructor.
 	 * @see java.security.Permission#getActions()
 	 */
+	@Override
 	public String getActions() {
 		return delegate.getActions();
 	}
@@ -350,6 +355,7 @@ public final class DeploymentAdminPermission extends Permission {
 	 * @see java.security.Permission#implies(java.security.Permission)
 	 * @see org.osgi.framework.Filter
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof DeploymentAdminPermission))
 			return false;
@@ -366,6 +372,7 @@ public final class DeploymentAdminPermission extends Permission {
 	 * @return The new PermissionCollection.
 	 * @see java.security.Permission#newPermissionCollection()
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return delegate.newPermissionCollection();
 	}

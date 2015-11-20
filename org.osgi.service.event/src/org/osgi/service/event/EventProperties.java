@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @throws UnsupportedOperationException if called.
 	 */
+	@Override
 	public void clear() {
 		properties.clear();
 	}
@@ -119,6 +120,7 @@ public class EventProperties implements Map<String, Object> {
 	 * @param name The property name.
 	 * @return {@code true} If the property is present, {@code false} otherwise.
 	 */
+	@Override
 	public boolean containsKey(Object name) {
 		return properties.containsKey(name);
 	}
@@ -129,6 +131,7 @@ public class EventProperties implements Map<String, Object> {
 	 * @param value The property value.
 	 * @return {@code true} If the value is present, {@code false} otherwise.
 	 */
+	@Override
 	public boolean containsValue(Object value) {
 		return properties.containsValue(value);
 	}
@@ -138,6 +141,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return A set containing the property name/value pairs.
 	 */
+	@Override
 	public Set<java.util.Map.Entry<String, Object>> entrySet() {
 		return properties.entrySet();
 	}
@@ -148,6 +152,7 @@ public class EventProperties implements Map<String, Object> {
 	 * @param name The name of the specified property.
 	 * @return The value of the specified property.
 	 */
+	@Override
 	public Object get(Object name) {
 		return properties.get(name);
 	}
@@ -158,6 +163,7 @@ public class EventProperties implements Map<String, Object> {
 	 * @return {@code true} If this properties is empty, {@code false}
 	 *         otherwise.
 	 */
+	@Override
 	public boolean isEmpty() {
 		return properties.isEmpty();
 	}
@@ -167,6 +173,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return The names of the properties.
 	 */
+	@Override
 	public Set<String> keySet() {
 		return properties.keySet();
 	}
@@ -176,6 +183,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @throws UnsupportedOperationException if called.
 	 */
+	@Override
 	public Object put(String key, Object value) {
 		return properties.put(key, value);
 	}
@@ -185,6 +193,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @throws UnsupportedOperationException if called.
 	 */
+	@Override
 	public void putAll(Map<? extends String, ? extends Object> map) {
 		properties.putAll(map);
 	}
@@ -194,6 +203,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @throws UnsupportedOperationException if called.
 	 */
+	@Override
 	public Object remove(Object key) {
 		return properties.remove(key);
 	}
@@ -203,6 +213,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return The number of properties.
 	 */
+	@Override
 	public int size() {
 		return properties.size();
 	}
@@ -212,6 +223,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return The values of the properties.
 	 */
+	@Override
 	public Collection<Object> values() {
 		return properties.values();
 	}

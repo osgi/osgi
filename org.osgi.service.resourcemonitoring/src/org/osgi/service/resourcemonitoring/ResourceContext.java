@@ -121,7 +121,7 @@ public interface ResourceContext {
 	 * @throws ResourceContextException For example, when the monitor(s) can't
 	 *         be retrieved from the ResourceContext.
 	 */
-	public ResourceMonitor getMonitor(String resourceType) throws ResourceContextException;
+	public ResourceMonitor<?> getMonitor(String resourceType) throws ResourceContextException;
 
 	/**
 	 * Retrieves all the existing ResourceMonitor belonging to this context.
@@ -130,7 +130,7 @@ public interface ResourceContext {
 	 * @throws ResourceContextException For example, when the monitor(s) can't
 	 *         be retrieved from the ResourceContext.
 	 */
-	public ResourceMonitor[] getMonitors() throws ResourceContextException;
+	public ResourceMonitor<?>[] getMonitors() throws ResourceContextException;
 
 	/**
 	 * Adds a new ResourceMonitor instance monitoring resource for this resource
@@ -141,7 +141,7 @@ public interface ResourceContext {
 	 * @throws ResourceContextException For example, when the monitor can't be
 	 *         added to the ResourceContext.
 	 */
-	public void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
+	public void addResourceMonitor(ResourceMonitor<?> resourceMonitor) throws ResourceContextException;
 
 	/**
 	 * Removes a ResourceMonitor instance from the context.
@@ -150,7 +150,7 @@ public interface ResourceContext {
 	 * @throws ResourceContextException For example, when the monitor can't be
 	 *         removed from the ResourceContext.
 	 */
-	public void removeResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
+	public void removeResourceMonitor(ResourceMonitor<?> resourceMonitor) throws ResourceContextException;
 
 	/**
 	 * Removes a resource context. All resources allocated in this resource
@@ -175,6 +175,7 @@ public interface ResourceContext {
 	 * @param resourceContext resource context
 	 * @return true if getName().equals(resourceContext.getName()
 	 */
+	@Override
 	public boolean equals(Object resourceContext);
 
 	/**
@@ -184,5 +185,6 @@ public interface ResourceContext {
 	 * 
 	 * @return hashcode
 	 */
+	@Override
 	public int hashCode();
 }

@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface StreamConnection extends javax.microedition.io.InputConnection, javax.microedition.io.OutputConnection {
 }
 

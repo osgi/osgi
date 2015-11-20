@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -241,6 +241,7 @@ public class MonitorPermission extends Permission {
 	 * 
 	 * @return the hash of the object
 	 */
+	@Override
 	public int hashCode() {
 		return new Integer(mask).hashCode() ^ new Integer(minJobInterval).hashCode() ^ monId.hashCode() ^ new Boolean(prefixMonId).hashCode() ^ varId.hashCode() ^ new Boolean(prefixVarId).hashCode();
 	}
@@ -253,6 +254,7 @@ public class MonitorPermission extends Permission {
 	 * @param o the object being compared for equality with this object
 	 * @return {@code true} if the two permissions are equal
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof MonitorPermission))
 			return false;
@@ -270,6 +272,7 @@ public class MonitorPermission extends Permission {
 	 * 
 	 * @return the allowed actions separated by commas, cannot be {@code null}
 	 */
+	@Override
 	public String getActions() {
 		StringBuffer sb = new StringBuffer();
 
@@ -313,6 +316,7 @@ public class MonitorPermission extends Permission {
 	 * @return {@code true} if the given permission is implied by this
 	 *         permission
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof MonitorPermission))
 			return false;

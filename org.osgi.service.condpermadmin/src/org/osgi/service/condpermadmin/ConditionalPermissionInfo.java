@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +159,7 @@ public interface ConditionalPermissionInfo {
 	 *         {@code ConditionalPermissionInfo}.
 	 * @since 1.1
 	 */
+	@Override
 	String toString();
 
 	/**
@@ -177,6 +178,7 @@ public interface ConditionalPermissionInfo {
 	 *         otherwise.
 	 * @since 1.1
 	 */
+	@Override
 	boolean equals(Object obj);
 
 	/**
@@ -185,5 +187,6 @@ public interface ConditionalPermissionInfo {
 	 * @return A hash code value for this object.
 	 * @since 1.1
 	 */
+	@Override
 	int hashCode();
 }

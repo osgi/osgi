@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public class ConnectionNotFoundException extends java.io.IOException {
 	public ConnectionNotFoundException() { }
 	public ConnectionNotFoundException(java.lang.String var0) { }

@@ -164,6 +164,7 @@ public class AlertItem {
 	 * 
 	 * @return the string representation of this alert item
 	 */
+	@Override
 	public String toString() {
 		return "AlertItem(" + source + ", " + type + ", " + mark + ", " + data + ")";
 	}

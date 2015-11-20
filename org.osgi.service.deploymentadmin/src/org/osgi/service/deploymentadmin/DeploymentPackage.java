@@ -20,6 +20,7 @@ import java.net.URL;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 /**
  * The {@code DeploymentPackage} object represents a deployment package (already
@@ -239,7 +240,7 @@ public interface DeploymentPackage {
 	 *         {@link DeploymentAdminPermission} with "metadata" action
 	 * @throws IllegalStateException if the package is stale
 	 */
-	ServiceReference getResourceProcessor(String resource);
+	ServiceReference<ResourceProcessor> getResourceProcessor(String resource);
 
 	/**
 	 * Returns the requested deployment package manifest header from the main
@@ -325,6 +326,7 @@ public interface DeploymentPackage {
 	 * 
 	 * @return a hash code value for this object
 	 */
+	@Override
 	int hashCode();
 
 	/**
@@ -336,6 +338,7 @@ public interface DeploymentPackage {
 	 * @return true if this object is the same as the {@code other} argument;
 	 *         false otherwise.
 	 */
+	@Override
 	boolean equals(Object other);
-
 }
+

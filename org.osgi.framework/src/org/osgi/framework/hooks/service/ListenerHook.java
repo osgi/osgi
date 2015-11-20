@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,6 +119,7 @@ public interface ListenerHook {
 		 *         object and both objects refer to the same listener for a
 		 *         given addition and removal life cycle.
 		 */
+		@Override
 		boolean equals(Object obj);
 
 		/**
@@ -126,6 +127,7 @@ public interface ListenerHook {
 		 * 
 		 * @return The hash code of this {@code ListenerInfo}.
 		 */
+		@Override
 		int hashCode();
 	}
 }

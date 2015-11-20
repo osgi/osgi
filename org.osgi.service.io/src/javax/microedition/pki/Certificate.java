@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.pki;
+
+@SuppressWarnings("all")
 public abstract interface Certificate {
 	public abstract java.lang.String getIssuer();
 	public abstract long getNotAfter();

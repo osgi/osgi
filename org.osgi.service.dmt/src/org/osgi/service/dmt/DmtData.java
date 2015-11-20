@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -145,21 +145,21 @@ public final class DmtData {
 	public static final int		FORMAT_DATE_TIME	= 0x4000;
 
 	// FORMAT_NAMES must be initialized before any constructor is called.
-	private static final Map	FORMAT_NAMES		= new HashMap();
+	private static final Map<Integer, String>	FORMAT_NAMES		= new HashMap<>();
 	static {
-		FORMAT_NAMES.put(new Integer(FORMAT_BASE64), "base64");
-		FORMAT_NAMES.put(new Integer(FORMAT_BINARY), "binary");
-		FORMAT_NAMES.put(new Integer(FORMAT_BOOLEAN), "boolean");
-		FORMAT_NAMES.put(new Integer(FORMAT_DATE), "date");
-		FORMAT_NAMES.put(new Integer(FORMAT_FLOAT), "float");
-		FORMAT_NAMES.put(new Integer(FORMAT_INTEGER), "integer");
-		FORMAT_NAMES.put(new Integer(FORMAT_NODE), "NODE");
-		FORMAT_NAMES.put(new Integer(FORMAT_NULL), "null");
-		FORMAT_NAMES.put(new Integer(FORMAT_STRING), "string");
-		FORMAT_NAMES.put(new Integer(FORMAT_TIME), "time");
-		FORMAT_NAMES.put(new Integer(FORMAT_XML), "xml");
-		FORMAT_NAMES.put(new Integer(FORMAT_LONG), "long");
-		FORMAT_NAMES.put(new Integer(FORMAT_DATE_TIME), "dateTime");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_BASE64), "base64");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_BINARY), "binary");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_BOOLEAN), "boolean");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_DATE), "date");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_FLOAT), "float");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_INTEGER), "integer");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_NODE), "NODE");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_NULL), "null");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_STRING), "string");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_TIME), "time");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_XML), "xml");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_LONG), "long");
+		FORMAT_NAMES.put(Integer.valueOf(FORMAT_DATE_TIME), "dateTime");
 	}
 
 	/**
@@ -284,7 +284,7 @@ public final class DmtData {
 	 * @param integer the integer value to set
 	 */
 	public DmtData(int integer) {
-		this(new Integer(integer), FORMAT_INTEGER, null);
+		this(Integer.valueOf(integer), FORMAT_INTEGER, null);
 	}
 
 	/**
@@ -294,7 +294,7 @@ public final class DmtData {
 	 * @param flt the float value to set
 	 */
 	public DmtData(float flt) {
-		this(new Float(flt), FORMAT_FLOAT, null);
+		this(Float.valueOf(flt), FORMAT_FLOAT, null);
 	}
 
 	/**
@@ -305,7 +305,7 @@ public final class DmtData {
 	 * @since 2.0
 	 */
 	public DmtData(long lng) {
-		this(new Long(lng), FORMAT_LONG, null);
+		this(Long.valueOf(lng), FORMAT_LONG, null);
 	}
 
 	/**
@@ -424,7 +424,7 @@ public final class DmtData {
 	 * Validate the setup
 	 */
 	private void validate() {
-		Class c;
+		Class<?> c;
 		switch (format) {
 			case FORMAT_INTEGER :
 				c = Integer.class;
@@ -803,6 +803,7 @@ public final class DmtData {
 	 * 
 	 * @return the string representation of this {@code DmtData} instance
 	 */
+	@Override
 	public String toString() {
 		switch (format) {
 			case FORMAT_STRING :
@@ -855,6 +856,7 @@ public final class DmtData {
 	 * @return true if the argument represents the same {@code DmtData} as this
 	 *         object
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof DmtData))
 			return false;
@@ -897,6 +899,7 @@ public final class DmtData {
 	 * 
 	 * @return the hash code value for this object
 	 */
+	@Override
 	public int hashCode() {
 		if (value == null)
 			return 42;
@@ -980,6 +983,6 @@ public final class DmtData {
 	}
 
 	private static String getFormatName(int format) {
-		return (String) FORMAT_NAMES.get(new Integer(format));
+		return FORMAT_NAMES.get(Integer.valueOf(format));
 	}
 }

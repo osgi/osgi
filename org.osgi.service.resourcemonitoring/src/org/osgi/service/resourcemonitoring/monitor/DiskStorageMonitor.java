@@ -29,7 +29,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * @version 1.0
  * @author $Id$
  */
-public interface DiskStorageMonitor extends ResourceMonitor {
+public interface DiskStorageMonitor extends ResourceMonitor<Long> {
 
 	/**
 	 * Returns the sum of the size of the persistent storage areas of the

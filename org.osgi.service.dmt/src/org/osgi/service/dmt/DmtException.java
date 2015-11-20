@@ -403,7 +403,7 @@ public class DmtException extends Exception {
 	 *        {@code null} if there are no originating exceptions
 	 * @param fatal whether the exception is fatal
 	 */
-	public DmtException(String uri, int code, String message, Vector causes, boolean fatal) {
+	public DmtException(String uri, int code, String message, Vector<? extends Throwable> causes, boolean fatal) {
 		this(uri, code, message, (causes == null) ? new Throwable[0] : (Throwable[]) causes.toArray(new Throwable[causes.size()]), fatal);
 	}
 
@@ -469,7 +469,7 @@ public class DmtException extends Exception {
 	 * @param fatal whether the exception is fatal
 	 * @see #DmtException(String, int, String, Vector, boolean)
 	 */
-	public DmtException(String[] path, int code, String message, Vector causes, boolean fatal) {
+	public DmtException(String[] path, int code, String message, Vector<? extends Throwable> causes, boolean fatal) {
 		this(pathToUri(path), code, message, causes, fatal);
 	}
 
@@ -508,6 +508,7 @@ public class DmtException extends Exception {
 	 * 
 	 * @return the error message in the format described above
 	 */
+	@Override
 	public String getMessage() {
 		StringBuffer sb = new StringBuffer(getCodeText(code));
 		if (uri != null)
@@ -527,6 +528,7 @@ public class DmtException extends Exception {
 	 * @return the cause of this exception, or {@code null} if no cause was
 	 *         given
 	 */
+	@Override
 	public Throwable getCause() {
 		return causes.length == 0 ? null : causes[0];
 	}
@@ -538,7 +540,7 @@ public class DmtException extends Exception {
 	 * @return the list of causes of this exception
 	 */
 	public Throwable[] getCauses() {
-		return (Throwable[]) causes.clone();
+		return causes.clone();
 	}
 
 	/**
@@ -558,6 +560,7 @@ public class DmtException extends Exception {
 	 * 
 	 * @param s {@code PrintStream} to use for output
 	 */
+	@Override
 	public void printStackTrace(PrintStream s) {
 		super.printStackTrace(s);
 		for (int i = 0; i < causes.length; i++) {

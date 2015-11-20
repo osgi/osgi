@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ public interface WireAdmin {
 	 * @throws java.lang.IllegalArgumentException If {@code properties} contains
 	 *         invalid wire types or case variants of the same key name.
 	 */
-	public Wire createWire(String producerPID, String consumerPID, Dictionary properties);
+	public Wire createWire(String producerPID, String consumerPID, Dictionary<String, ?> properties);
 
 	/**
 	 * Delete a {@code Wire} object.
@@ -132,7 +132,7 @@ public interface WireAdmin {
 	 * @throws java.lang.IllegalArgumentException If {@code properties} contains
 	 *         invalid wire types or case variants of the same key name.
 	 */
-	public void updateWire(Wire wire, Dictionary properties);
+	public void updateWire(Wire wire, Dictionary<String, ?> properties);
 
 	/**
 	 * Return the {@code Wire} objects that match the given {@code filter}.

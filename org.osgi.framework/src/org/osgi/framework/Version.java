@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -402,6 +402,7 @@ public class Version implements Comparable<Version> {
 	 * @throws ClassCastException If the specified object is not a
 	 *         {@code Version} object.
 	 */
+	@Override
 	public int compareTo(Version other) {
 		if (other == this) { // quicktest
 			return 0;

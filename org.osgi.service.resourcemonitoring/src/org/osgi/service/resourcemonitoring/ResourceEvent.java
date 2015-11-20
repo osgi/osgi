@@ -30,8 +30,9 @@ package org.osgi.service.resourcemonitoring;
  * 
  * @version 1.0
  * @author $Id$
+ * @param <T> The type for the Resource.
  */
-public class ResourceEvent {
+public class ResourceEvent<T> {
 
 	/**
 	 * Type of ResourceEvent indicating a threshold goes to the NORMAL state.
@@ -51,7 +52,7 @@ public class ResourceEvent {
 	private final int				type;
 	private final boolean			isUpperThreshold;
 	private final ResourceContext	resourceContext;
-	private final Comparable		value;
+	private final Comparable<T>		value;
 
 	/**
 	 * Creates a new ResourceEvent.
@@ -61,7 +62,7 @@ public class ResourceEvent {
 	 * @param pIsUpperThreshold whether it is an upper threshold
 	 * @param pValue the value
 	 */
-	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Comparable pValue) {
+	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Comparable<T> pValue) {
 		type = pType;
 		resourceContext = pContext;
 		isUpperThreshold = pIsUpperThreshold;
@@ -89,7 +90,7 @@ public class ResourceEvent {
 	 * @return the resource consumption value, or null if a resource monitor is
 	 *         not relevant.
 	 */
-	public Comparable getValue() {
+	public Comparable<T> getValue() {
 		return value;
 	}
 
@@ -114,14 +115,17 @@ public class ResourceEvent {
 		return isUpperThreshold;
 	}
 
+	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object var0) {
 		return super.equals(var0);
 	}
 
+	@Override
 	public String toString() {
 		return super.toString();
 	}

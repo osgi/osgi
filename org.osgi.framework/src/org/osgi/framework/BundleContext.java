@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,6 +116,7 @@ public interface BundleContext extends BundleReference {
 	 *         {@code BundleContext}.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
+	@Override
 	Bundle getBundle();
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package org.osgi.util.measurement;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A unit system for measurements.
@@ -250,8 +251,8 @@ public class Unit {
 	 */
 	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol, cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb, T, lx, Gy, kat, unity};
 
-	/* @GuardedBy("this") */
-	private static Hashtable	base;
+	/* @GuardedBy("Unit.class") */
+	private static Map<Unit, Unit>	base;
 	private final String		name;
 	private final long			type;
 
@@ -289,6 +290,7 @@ public class Unit {
 	 * @return true if the specified {@code Unit} object is equal to this
 	 *         {@code Unit} object.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -304,6 +306,7 @@ public class Unit {
 	 * 
 	 * @return This object's hash code.
 	 */
+	@Override
 	public int hashCode() {
 		return 31 * 17 + (int) (type ^ (type >>> 32));
 	}
@@ -399,13 +402,13 @@ public class Unit {
 	static synchronized Unit find(long type) {
 		if (base == null) {
 			int size = allUnits.length;
-			base = new Hashtable(size << 1);
+			base = new HashMap<>(size << 1);
 			for (int i = 0; i < size; i++) {
 				base.put(allUnits[i], allUnits[i]);
 			}
 		}
 		Unit unit = new Unit(null, type);
-		Unit out = (Unit) base.get(unit);
+		Unit out = base.get(unit);
 		if (out == null) {
 			base.put(unit, unit);
 			out = unit;
@@ -418,6 +421,7 @@ public class Unit {
 	 * 
 	 * @return A {@code String} object representing the {@code Unit}
 	 */
+	@Override
 	public String toString() {
 		return name;
 	}

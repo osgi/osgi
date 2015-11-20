@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public interface User extends Role {
 	 * @return {@code Dictionary} object containing the credentials of this
 	 *         {@code User} object.
 	 */
-	public Dictionary getCredentials();
+	public Dictionary<String, Object> getCredentials();
 
 	/**
 	 * Checks to see if this {@code User} object has a credential with the

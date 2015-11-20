@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,7 @@ public interface Capability {
 	 * @return {@code true} if this {@code Capability} is equal to the other
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	boolean equals(Object obj);
 
 	/**
@@ -84,5 +85,6 @@ public interface Capability {
 	 * 
 	 * @return The hashCode of this {@code Capability}.
 	 */
+	@Override
 	int hashCode();
 }

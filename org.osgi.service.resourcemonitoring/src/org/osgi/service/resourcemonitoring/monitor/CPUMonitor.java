@@ -28,7 +28,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * @version 1.0
  * @author $Id$
  */
-public interface CPUMonitor extends ResourceMonitor {
+public interface CPUMonitor extends ResourceMonitor<Long> {
 
 	/**
 	 * Returns the CPU usage as a cumulative number of nanoseconds

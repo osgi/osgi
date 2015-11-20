@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ public class BasicEnvelope implements Envelope {
 	/**
 	 * @see org.osgi.service.wireadmin.Envelope#getValue()
 	 */
+	@Override
 	public Object getValue() {
 		return value;
 	}
@@ -52,6 +53,7 @@ public class BasicEnvelope implements Envelope {
 	/**
 	 * @see org.osgi.service.wireadmin.Envelope#getIdentification()
 	 */
+	@Override
 	public Object getIdentification() {
 		return identification;
 	}
@@ -59,6 +61,7 @@ public class BasicEnvelope implements Envelope {
 	/**
 	 * @see org.osgi.service.wireadmin.Envelope#getScope()
 	 */
+	@Override
 	public String getScope() {
 		return scope;
 	}

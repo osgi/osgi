@@ -150,6 +150,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 	 *         bundle's listeners, unregister all services registered by this
 	 *         bundle, and release all services used by this bundle.
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		this.bundleContext = context;
 		Bundle parserBundle = context.getBundle();
@@ -169,6 +170,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 	 *         the bundle's listeners, unregister all services registered by the
 	 *         bundle, and release all services used by the bundle.
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		// framework will automatically unregister the parser services
 	}
@@ -448,6 +450,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 	 * @return A new, configured XML Parser Factory object or null if a
 	 *         configuration error was encountered
 	 */
+	@Override
 	public Object getService(Bundle bundle, ServiceRegistration<Object> registration) {
 		ServiceReference<Object> sref = registration.getReference();
 		String parserFactoryClassName = (String) sref.getProperty(FACTORYNAMEKEY);
@@ -474,6 +477,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 	 * @param service The XML Parser Factory object returned by a previous call
 	 *        to the {@code getService} method.
 	 */
+	@Override
 	public void ungetService(Bundle bundle, ServiceRegistration<Object> registration, Object service) {
 		// nothing to do
 	}

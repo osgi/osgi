@@ -42,7 +42,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * @version 1.0
  * @author $Id$
  */
-public interface SocketMonitor extends ResourceMonitor {
+public interface SocketMonitor extends ResourceMonitor<Long> {
 
 	/**
 	 * Returns the number of existing socket created by a

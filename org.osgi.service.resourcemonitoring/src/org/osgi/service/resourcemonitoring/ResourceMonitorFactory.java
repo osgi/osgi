@@ -30,8 +30,9 @@ package org.osgi.service.resourcemonitoring;
  * 
  * @version 1.0
  * @author $Id$
+ * @param <T> The type for the Resource.
  */
-public interface ResourceMonitorFactory {
+public interface ResourceMonitorFactory<T> {
 
 	/**
 	 * Resource type property. The value is of type {@link String}. For example,
@@ -61,6 +62,6 @@ public interface ResourceMonitorFactory {
 	 *         ResourceMonitor For example, when a ResourceMonitor of this type
 	 *         already exists for this ResourceContext
 	 */
-	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException;
+	public ResourceMonitor<T> createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException;
 
 }

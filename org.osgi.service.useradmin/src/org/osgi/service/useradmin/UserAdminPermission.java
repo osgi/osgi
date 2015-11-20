@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Permission to configure and access the {@link Role} objects managed by a User
@@ -323,6 +326,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (p instanceof UserAdminPermission) {
 			UserAdminPermission requested = (UserAdminPermission) p;
@@ -345,6 +349,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * 
 	 * @return the canonical string representation of the actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -378,6 +383,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * @return a new {@code PermissionCollection} object suitable for storing
 	 *         {@code UserAdminPermission} objects.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new UserAdminPermissionCollection();
 	}
@@ -393,6 +399,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 *         object, and has the same name and actions as this
 	 *         {@code UserAdminPermission} object.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -411,6 +418,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -446,6 +454,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 *         {@code UserAdminPermission} object.
 	 * @see "org.osgi.service.permissionadmin.PermissionInfo.getEncoded()"
 	 */
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append('(');
@@ -475,7 +484,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	permissions;
+	private final Hashtable<String, UserAdminPermission>	permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
@@ -488,7 +497,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * Creates an empty {@code UserAdminPermissionCollection} object.
 	 */
 	public UserAdminPermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new Hashtable<>();
 		all_allowed = false;
 	}
 
@@ -503,6 +512,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this {@code UserAdminPermissionCollection}
 	 *         object has been marked readonly
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof UserAdminPermission))
 			throw new IllegalArgumentException("Invalid permission: " + permission);
@@ -512,7 +522,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 		final UserAdminPermission uap = (UserAdminPermission) permission;
 		final String name = uap.getName();
 		synchronized (this) {
-			final UserAdminPermission existing = (UserAdminPermission) permissions.get(name);
+			final UserAdminPermission existing = permissions.get(name);
 			if (existing != null) {
 				int oldMask = existing.getActionsMask();
 				int newMask = uap.getActionsMask();
@@ -539,6 +549,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * @return true if the given permission is implied by this
 	 *         {@code PermissionCollection}, false otherwise.
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof UserAdminPermission)) {
 			return false;
@@ -552,7 +563,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 			// Short circuit if the "*" Permission was added.
 			// desired can only be ACTION_NONE when name is "admin".
 			if (all_allowed && (desired != UserAdminPermission.ACTION_NONE)) {
-				x = (UserAdminPermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -564,7 +575,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 			// Check for full match first. Then work our way up the
 			// name looking for matches on a.b.*
 
-			x = (UserAdminPermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		if (x != null) {
 			// we have a direct hit!
@@ -579,7 +590,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (UserAdminPermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -600,7 +611,9 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return an enumeration of all the {@code UserAdminPermission} objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	@Override
+	public Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 }

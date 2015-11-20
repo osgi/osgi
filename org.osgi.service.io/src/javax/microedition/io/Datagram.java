@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface Datagram extends java.io.DataInput, java.io.DataOutput {
 	public abstract java.lang.String getAddress();
 	public abstract byte[] getData();

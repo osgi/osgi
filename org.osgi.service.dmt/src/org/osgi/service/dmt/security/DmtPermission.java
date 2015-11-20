@@ -207,6 +207,7 @@ public class DmtPermission extends Permission {
 	 * @return {@code true} if the parameter represents the same permissions as
 	 *         this instance
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -227,6 +228,7 @@ public class DmtPermission extends Permission {
 	 * 
 	 * @return canonical action list for this permission object
 	 */
+	@Override
 	public String getActions() {
 		return actions;
 	}
@@ -239,6 +241,7 @@ public class DmtPermission extends Permission {
 	 * 
 	 * @return hash code for this permission object
 	 */
+	@Override
 	public int hashCode() {
 		return new Integer(mask).hashCode() ^ new Boolean(prefixPath).hashCode() ^ path.hashCode();
 	}
@@ -258,6 +261,7 @@ public class DmtPermission extends Permission {
 	 * @return true if this DmtPermission instance implies the specified
 	 *         permission
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof DmtPermission))
 			return false;
@@ -276,6 +280,7 @@ public class DmtPermission extends Permission {
 	 * 
 	 * @return the new PermissionCollection
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new DmtPermissionCollection();
 	}
@@ -360,13 +365,13 @@ final class DmtPermissionCollection extends PermissionCollection {
 
 	// OPTIMIZE keep a special flag for permissions of "*" path
 
-	private ArrayList			perms;
+	private ArrayList<Permission>	perms;
 
 	/**
 	 * Create an empty DmtPermissionCollection object.
 	 */
 	public DmtPermissionCollection() {
-		perms = new ArrayList();
+		perms = new ArrayList<>();
 	}
 
 	/**
@@ -378,6 +383,7 @@ final class DmtPermissionCollection extends PermissionCollection {
 	 * @exception SecurityException if this DmtPermissionCollection object has
 	 *            been marked readonly
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof DmtPermission))
 			throw new IllegalArgumentException("Cannot add permission, invalid permission type: " + permission);
@@ -397,6 +403,7 @@ final class DmtPermissionCollection extends PermissionCollection {
 	 * @return true if the parameter permission is a proper subset of the
 	 *         permissions in the collection, false otherwise
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof DmtPermission))
 			return false;
@@ -407,7 +414,7 @@ final class DmtPermissionCollection extends PermissionCollection {
 		int available = 0;
 		int needed = required;
 
-		Iterator i = perms.iterator();
+		Iterator<Permission> i = perms.iterator();
 		while (i.hasNext()) {
 			DmtPermission p = (DmtPermission) i.next();
 			if (((needed & p.getMask()) != 0) && p.impliesPath(other)) {
@@ -427,7 +434,8 @@ final class DmtPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return an enumeration of all the DmtPermission objects
 	 */
-	public Enumeration elements() {
+	@Override
+	public Enumeration<Permission> elements() {
 		// Convert Iterator into Enumeration
 		return Collections.enumeration(perms);
 	}

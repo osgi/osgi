@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface UDPDatagramConnection extends javax.microedition.io.DatagramConnection {
 	public abstract java.lang.String getLocalAddress() throws java.io.IOException;
 	public abstract int getLocalPort() throws java.io.IOException;

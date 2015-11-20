@@ -165,6 +165,7 @@ public class EndpointDescription {
 			String uuid = null;
 			try {
 				uuid = AccessController.doPrivileged(new PrivilegedAction<String>() {
+					@Override
 					public String run() {
 						return reference.getBundle().getBundleContext().getProperty("org.osgi.framework.uuid");
 					}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ public interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public void log(ServiceReference sr, int level, String message);
+										public void log(ServiceReference<?> sr, int level, String message);
 
 	/**
 	 * Logs a message with an exception associated and a
@@ -152,5 +152,5 @@ public interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public void log(ServiceReference sr, int level, String message, Throwable exception);
+										public void log(ServiceReference<?> sr, int level, String message, Throwable exception);
 }

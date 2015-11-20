@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -206,6 +206,7 @@ public class FrameworkUtil {
 		// We use doPriv since the caller may not have permission
 		// to call getClassLoader.
 		Object cl = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+			@Override
 			public Object run() {
 				return classFromBundle.getClassLoader();
 			}
@@ -397,6 +398,7 @@ public class FrameworkUtil {
 		 * @return {@code true} if the service's properties match this
 		 *         {@code Filter}; {@code false} otherwise.
 		 */
+		@Override
 		public boolean match(ServiceReference<?> reference) {
 			return matches(new ServiceReferenceMap(reference));
 		}
@@ -414,6 +416,7 @@ public class FrameworkUtil {
 		 * @throws IllegalArgumentException If {@code dictionary} contains case
 		 *         variants of the same key name.
 		 */
+		@Override
 		public boolean match(Dictionary<String, ?> dictionary) {
 			return matches(new CaseInsensitiveMap(dictionary));
 		}
@@ -429,6 +432,7 @@ public class FrameworkUtil {
 		 *         filter; {@code false} otherwise.
 		 * @since 1.3
 		 */
+		@Override
 		public boolean matchCase(Dictionary<String, ?> dictionary) {
 			switch (op) {
 				case AND : {
@@ -486,6 +490,7 @@ public class FrameworkUtil {
 		 *         {@code false} otherwise.
 		 * @since 1.6
 		 */
+		@Override
 		public boolean matches(Map<String, ?> map) {
 			switch (op) {
 				case AND : {
@@ -1630,6 +1635,7 @@ public class FrameworkUtil {
 			return null;
 		}
 
+		@Override
 		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
@@ -1656,6 +1662,7 @@ public class FrameworkUtil {
 			return reference.getProperty((String) key);
 		}
 
+		@Override
 		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
@@ -1668,6 +1675,7 @@ public class FrameworkUtil {
 			this.accessible = accessible;
 		}
 
+		@Override
 		public Void run() {
 			accessible.setAccessible(true);
 			return null;

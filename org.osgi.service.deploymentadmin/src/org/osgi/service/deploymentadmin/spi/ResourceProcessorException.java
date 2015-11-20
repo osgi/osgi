@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,6 +107,7 @@ public class ResourceProcessorException extends Exception {
 	 * 
 	 * @return The cause of this exception or {@code null} if no cause was set.
 	 */
+	@Override
 	public Throwable getCause() {
 		return super.getCause();
 	}
@@ -122,6 +123,7 @@ public class ResourceProcessorException extends Exception {
 	 *         been set.
 	 * @since 1.0.1
 	 */
+	@Override
 	public Throwable initCause(Throwable cause) {
 		return super.initCause(cause);
 	}

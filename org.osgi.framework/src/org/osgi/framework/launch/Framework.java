@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,6 +182,7 @@ public interface Framework extends Bundle {
 	 *         Environment supports permissions.
 	 * @see "Start Level Specification"
 	 */
+	@Override
 	void start() throws BundleException;
 
 	/**
@@ -198,6 +199,7 @@ public interface Framework extends Bundle {
 	 *         Environment supports permissions.
 	 * @see #start()
 	 */
+	@Override
 	void start(int options) throws BundleException;
 
 	/**
@@ -233,6 +235,7 @@ public interface Framework extends Bundle {
 	 *         Environment supports permissions.
 	 * @see "Start Level Specification"
 	 */
+	@Override
 	void stop() throws BundleException;
 
 	/**
@@ -250,6 +253,7 @@ public interface Framework extends Bundle {
 	 *         Environment supports permissions.
 	 * @see #stop()
 	 */
+	@Override
 	void stop(int options) throws BundleException;
 
 	/**
@@ -263,6 +267,7 @@ public interface Framework extends Bundle {
 	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 */
+	@Override
 	void uninstall() throws BundleException;
 
 	/**
@@ -284,6 +289,7 @@ public interface Framework extends Bundle {
 	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 */
+	@Override
 	void update() throws BundleException;
 
 	/**
@@ -301,6 +307,7 @@ public interface Framework extends Bundle {
 	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 */
+	@Override
 	void update(InputStream in) throws BundleException;
 
 	/**
@@ -310,6 +317,7 @@ public interface Framework extends Bundle {
 	 * @return 0.
 	 * @see Bundle#getBundleId()
 	 */
+	@Override
 	long getBundleId();
 
 	/**
@@ -324,6 +332,7 @@ public interface Framework extends Bundle {
 	 * @see Bundle#getLocation()
 	 * @see Constants#SYSTEM_BUNDLE_LOCATION
 	 */
+	@Override
 	String getLocation();
 
 	/**
@@ -337,6 +346,7 @@ public interface Framework extends Bundle {
 	 * @see Bundle#getSymbolicName()
 	 * @see Constants#SYSTEM_BUNDLE_SYMBOLICNAME
 	 */
+	@Override
 	String getSymbolicName();
 
 	/**
@@ -347,6 +357,7 @@ public interface Framework extends Bundle {
 	 * @return {@code null} as a framework implementation does not have a proper
 	 *         bundle from which to return entry paths.
 	 */
+	@Override
 	Enumeration<String> getEntryPaths(String path);
 
 	/**
@@ -357,6 +368,7 @@ public interface Framework extends Bundle {
 	 * @return {@code null} as a framework implementation does not have a proper
 	 *         bundle from which to return an entry.
 	 */
+	@Override
 	URL getEntry(String path);
 
 	/**
@@ -371,6 +383,7 @@ public interface Framework extends Bundle {
 	 * @return The time when the set of bundles in this framework was last
 	 *         modified.
 	 */
+	@Override
 	long getLastModified();
 
 	/**
@@ -383,6 +396,7 @@ public interface Framework extends Bundle {
 	 * @return {@code null} as a framework implementation does not have a proper
 	 *         bundle from which to return entries.
 	 */
+	@Override
 	Enumeration<URL> findEntries(String path, String filePattern, boolean recurse);
 
 	/**
@@ -402,5 +416,6 @@ public interface Framework extends Bundle {
 	 * @return The object, of the specified type, to which this Framework has
 	 *         been adapted or {@code null} if this Framework cannot be adapted
 	 */
+	@Override
 	<A> A adapt(Class<A> type);
 }

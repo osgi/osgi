@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,6 +102,7 @@ public class AlertPermission extends Permission {
 	 * @return {@code true} if the parameter represents the same permissions as
 	 *         this instance
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -119,6 +120,7 @@ public class AlertPermission extends Permission {
 	 * 
 	 * @return the action string &quot;*&quot;
 	 */
+	@Override
 	public String getActions() {
 		return "*";
 	}
@@ -131,6 +133,7 @@ public class AlertPermission extends Permission {
 	 * 
 	 * @return hash code for this permission object
 	 */
+	@Override
 	public int hashCode() {
 		return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
 	}
@@ -146,6 +149,7 @@ public class AlertPermission extends Permission {
 	 * @return true if this AlertPermission instance implies the specified
 	 *         permission
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof AlertPermission))
 			return false;
@@ -161,6 +165,7 @@ public class AlertPermission extends Permission {
 	 * 
 	 * @return the new PermissionCollection
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new DmtAlertPermissionCollection();
 	}
@@ -182,13 +187,13 @@ public class AlertPermission extends Permission {
 final class DmtAlertPermissionCollection extends PermissionCollection {
 	private static final long	serialVersionUID	= 2288462124510043429L;
 
-	private ArrayList			perms;
+	private ArrayList<Permission>	perms;
 
 	/**
 	 * Create an empty DmtAlertPermissionCollection object.
 	 */
 	public DmtAlertPermissionCollection() {
-		perms = new ArrayList();
+		perms = new ArrayList<>();
 	}
 
 	/**
@@ -200,6 +205,7 @@ final class DmtAlertPermissionCollection extends PermissionCollection {
 	 * @exception SecurityException if this DmtAlertPermissionCollection object
 	 *            has been marked readonly
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof AlertPermission))
 			throw new IllegalArgumentException("Cannot add permission, invalid permission type: " + permission);
@@ -210,9 +216,9 @@ final class DmtAlertPermissionCollection extends PermissionCollection {
 		// permissions in the collection
 		if (!implies(permission)) {
 			// remove all permissions that are implied by the new one
-			Iterator i = perms.iterator();
+			Iterator<Permission> i = perms.iterator();
 			while (i.hasNext())
-				if (permission.implies((AlertPermission) i.next()))
+				if (permission.implies(i.next()))
 					i.remove();
 
 			// no need to synchronize because all adds are done sequentially
@@ -230,13 +236,14 @@ final class DmtAlertPermissionCollection extends PermissionCollection {
 	 * @return true if the parameter permission is a proper subset of the
 	 *         permissions in the collection, false otherwise
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof AlertPermission))
 			return false;
 
 		AlertPermission other = (AlertPermission) permission;
 
-		Iterator i = perms.iterator();
+		Iterator<Permission> i = perms.iterator();
 		while (i.hasNext())
 			if (((AlertPermission) i.next()).impliesServer(other))
 				return true;
@@ -250,7 +257,8 @@ final class DmtAlertPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return an enumeration of all the AlertPermission objects
 	 */
-	public Enumeration elements() {
+	@Override
+	public Enumeration<Permission> elements() {
 		// Convert Iterator into Enumeration
 		return Collections.enumeration(perms);
 	}

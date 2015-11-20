@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface ServerSocketConnection extends javax.microedition.io.StreamConnectionNotifier {
 	public abstract java.lang.String getLocalAddress() throws java.io.IOException;
 	public abstract int getLocalPort() throws java.io.IOException;

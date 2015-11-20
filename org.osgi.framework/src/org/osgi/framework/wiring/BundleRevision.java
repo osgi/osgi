@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -283,6 +283,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 *         namespace.
 	 * @since 1.1
 	 */
+	@Override
 	List<Capability> getCapabilities(String namespace);
 
 	/**
@@ -301,5 +302,6 @@ public interface BundleRevision extends BundleReference, Resource {
 	 *         namespace.
 	 * @since 1.1
 	 */
+	@Override
 	List<Requirement> getRequirements(String namespace);
 }

@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface Connection {
 	public abstract void close() throws java.io.IOException;
 }

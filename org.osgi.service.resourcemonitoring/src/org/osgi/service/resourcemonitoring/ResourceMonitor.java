@@ -39,8 +39,9 @@ package org.osgi.service.resourcemonitoring;
  * 
  * @version 1.0
  * @author $Id$
+ * @param <T> The type for the Resource.
  */
-public interface ResourceMonitor {
+public interface ResourceMonitor<T> {
 
 	/**
 	 * Returns the resource context that this monitor belongs to
@@ -118,7 +119,7 @@ public interface ResourceMonitor {
 	 * @throws ResourceMonitorException if the ResourceMonitor instance is not
 	 *         enabled.
 	 */
-	public Comparable getUsage() throws ResourceMonitorException;
+	public Comparable<T> getUsage() throws ResourceMonitorException;
 
 	/**
 	 * Returns the sampling period for this resource type.
@@ -147,6 +148,7 @@ public interface ResourceMonitor {
 	 * @return true if the current instance is equals to the provided
 	 *         resourceMonitor
 	 */
+	@Override
 	public boolean equals(Object resourceMonitor);
 
 	/**
@@ -156,5 +158,6 @@ public interface ResourceMonitor {
 	 * 
 	 * @return hashcode
 	 */
+	@Override
 	public int hashCode();
 }

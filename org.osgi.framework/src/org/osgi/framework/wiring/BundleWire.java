@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public interface BundleWire extends Wire {
 	 * 
 	 * @return The {@link BundleCapability} for this wire.
 	 */
+	@Override
 	BundleCapability getCapability();
 
 	/**
@@ -39,6 +40,7 @@ public interface BundleWire extends Wire {
 	 * 
 	 * @return The {@link BundleRequirement} for this wire.
 	 */
+	@Override
 	BundleRequirement getRequirement();
 
 	/**
@@ -87,6 +89,7 @@ public interface BundleWire extends Wire {
 	 * @return The resource providing the capability.
 	 * @since 1.1
 	 */
+	@Override
 	BundleRevision getProvider();
 
 	/**
@@ -104,6 +107,6 @@ public interface BundleWire extends Wire {
 	 * @return The resource who requires the capability.
 	 * @since 1.1
 	 */
+	@Override
 	BundleRevision getRequirer();
-
 }

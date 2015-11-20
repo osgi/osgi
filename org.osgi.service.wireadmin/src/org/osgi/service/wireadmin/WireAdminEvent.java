@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class WireAdminEvent {
 	/**
 	 * The WireAdmin service which created this event.
 	 */
-	private final ServiceReference	reference;
+	private final ServiceReference<WireAdmin>	reference;
 	/**
 	 * The {@code Wire} object associated with this event.
 	 */
@@ -205,7 +205,7 @@ public class WireAdminEvent {
 	 * @param exception An exception associated with this event. This may be
 	 *        {@code null} if no exception is associated with this event.
 	 */
-	public WireAdminEvent(ServiceReference reference, int type, Wire wire, Throwable exception) {
+	public WireAdminEvent(ServiceReference<WireAdmin> reference, int type, Wire wire, Throwable exception) {
 		this.reference = reference;
 		this.wire = wire;
 		this.type = type;
@@ -219,7 +219,7 @@ public class WireAdminEvent {
 	 * @return The {@code ServiceReference} object for the Wire Admin service
 	 *         that created this event.
 	 */
-	public ServiceReference getServiceReference() {
+	public ServiceReference<WireAdmin> getServiceReference() {
 		return reference;
 	}
 

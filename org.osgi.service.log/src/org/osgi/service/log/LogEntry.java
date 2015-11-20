@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public interface LogEntry {
 	 *         this {@code LogEntry} object; {@code null} if no
 	 *         {@code ServiceReference} object was provided.
 	 */
-	public ServiceReference getServiceReference();
+	public ServiceReference<?> getServiceReference();
 
 	/**
 	 * Returns the severity level of this {@code LogEntry} object.

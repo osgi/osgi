@@ -241,7 +241,7 @@ public final class Uri {
 		if (uri.length() == 0)
 			return new String[] {};
 
-		List segments = new ArrayList();
+		List<String> segments = new ArrayList<>();
 		StringBuffer segment = new StringBuffer();
 
 		boolean escape = false;
@@ -267,7 +267,7 @@ public final class Uri {
 			segments.add(segment.toString());
 		}
 
-		return (String[]) segments.toArray(new String[segments.size()]);
+		return segments.toArray(new String[segments.size()]);
 	}
 
 	/**

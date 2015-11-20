@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,6 +103,7 @@ public class DmtPrincipalPermission extends Permission {
 	 * @return {@code true} if the parameter represents the same permissions as
 	 *         this instance
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -120,6 +121,7 @@ public class DmtPrincipalPermission extends Permission {
 	 * 
 	 * @return the action string &quot;*&quot;
 	 */
+	@Override
 	public String getActions() {
 		return "*";
 	}
@@ -132,6 +134,7 @@ public class DmtPrincipalPermission extends Permission {
 	 * 
 	 * @return hash code for this permission object
 	 */
+	@Override
 	public int hashCode() {
 		return new Boolean(isPrefix).hashCode() ^ principal.hashCode();
 	}
@@ -147,6 +150,7 @@ public class DmtPrincipalPermission extends Permission {
 	 * @return true if this DmtPrincipalPermission instance implies the
 	 *         specified permission
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof DmtPrincipalPermission))
 			return false;
@@ -162,6 +166,7 @@ public class DmtPrincipalPermission extends Permission {
 	 * 
 	 * @return the new PermissionCollection
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new DmtPrincipalPermissionCollection();
 	}
@@ -183,13 +188,13 @@ public class DmtPrincipalPermission extends Permission {
 final class DmtPrincipalPermissionCollection extends PermissionCollection {
 	private static final long	serialVersionUID	= -6692103535775802684L;
 
-	private ArrayList			perms;
+	private ArrayList<Permission>	perms;
 
 	/**
 	 * Create an empty DmtPrincipalPermissionCollection object.
 	 */
 	public DmtPrincipalPermissionCollection() {
-		perms = new ArrayList();
+		perms = new ArrayList<>();
 	}
 
 	/**
@@ -201,6 +206,7 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
 	 * @exception SecurityException if this DmtPrincipalPermissionCollection
 	 *            object has been marked readonly
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof DmtPrincipalPermission))
 			throw new IllegalArgumentException("Cannot add permission, invalid permission type: " + permission);
@@ -211,9 +217,9 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
 		// permissions in the collection
 		if (!implies(permission)) {
 			// remove all permissions that are implied by the new one
-			Iterator i = perms.iterator();
+			Iterator<Permission> i = perms.iterator();
 			while (i.hasNext())
-				if (permission.implies((DmtPrincipalPermission) i.next()))
+				if (permission.implies(i.next()))
 					i.remove();
 
 			// no need to synchronize because all adds are done sequentially
@@ -231,13 +237,14 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
 	 * @return true if the parameter permission is a proper subset of the
 	 *         permissions in the collection, false otherwise
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof DmtPrincipalPermission))
 			return false;
 
 		DmtPrincipalPermission other = (DmtPrincipalPermission) permission;
 
-		Iterator i = perms.iterator();
+		Iterator<Permission> i = perms.iterator();
 		while (i.hasNext())
 			if (((DmtPrincipalPermission) i.next()).impliesPrincipal(other))
 				return true;
@@ -251,7 +258,8 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return an enumeration of all the DmtPrincipalPermission objects
 	 */
-	public Enumeration elements() {
+	@Override
+	public Enumeration<Permission> elements() {
 		// Convert Iterator into Enumeration
 		return Collections.enumeration(perms);
 	}

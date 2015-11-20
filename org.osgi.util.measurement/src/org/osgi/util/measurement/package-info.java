@@ -26,7 +26,7 @@
  * <p>
  * {@code  Import-Package: org.osgi.util.measurement; version="[1.0,2.0)"}
  * 
- * @version 1.0.1
+ * @version 1.0.2
  * @author $Id$
  */
 

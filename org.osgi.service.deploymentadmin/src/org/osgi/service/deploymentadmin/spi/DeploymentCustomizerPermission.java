@@ -57,16 +57,18 @@ public class DeploymentCustomizerPermission extends Permission {
 	public static final String			PRIVATEAREA			= "privatearea";
 
 	private static final String			delegateProperty	= "org.osgi.vendor.deploymentadmin";
-	private static final Constructor	constructor;
+	private static final Constructor<? extends Permission>	constructor;
 	private final Permission			delegate;
 	static {
-		constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
+		constructor = AccessController.doPrivileged(new PrivilegedAction<Constructor<? extends Permission>>() {
+			@Override
+			public Constructor<? extends Permission> run() {
 				String pckg = System.getProperty(delegateProperty);
 				if (null == pckg)
 					throw new RuntimeException("Property '" + delegateProperty + "' is not set");
 				try {
-					Class c = Class.forName(pckg + ".DeploymentCustomizerPermission");
+					@SuppressWarnings("unchecked")
+					Class<? extends Permission> c = (Class<? extends Permission>) Class.forName(pckg + ".DeploymentCustomizerPermission");
 					return c.getConstructor(new Class[] {String.class, String.class});
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -110,7 +112,7 @@ public class DeploymentCustomizerPermission extends Permission {
 		super(name);
 		try {
 			try {
-				delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+				delegate = constructor.newInstance(new Object[] {name, actions});
 			} catch (InvocationTargetException e) {
 				throw e.getTargetException();
 			}
@@ -138,6 +140,7 @@ public class DeploymentCustomizerPermission extends Permission {
 	 * @return true if the two objects are equal.
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -153,6 +156,7 @@ public class DeploymentCustomizerPermission extends Permission {
 	 * @return Hash code for this permission object.
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return delegate.hashCode();
 	}
@@ -164,6 +168,7 @@ public class DeploymentCustomizerPermission extends Permission {
 	 *         "privatearea".
 	 * @see java.security.Permission#getActions()
 	 */
+	@Override
 	public String getActions() {
 		return delegate.getActions();
 	}
@@ -189,6 +194,7 @@ public class DeploymentCustomizerPermission extends Permission {
 	 *         specified permission.
 	 * @see java.security.Permission#implies(java.security.Permission)
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof DeploymentCustomizerPermission))
 			return false;
@@ -205,8 +211,8 @@ public class DeploymentCustomizerPermission extends Permission {
 	 * @return The new PermissionCollection.
 	 * @see java.security.Permission#newPermissionCollection()
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return delegate.newPermissionCollection();
 	}
-
 }

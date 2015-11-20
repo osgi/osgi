@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public class Connector {
 	public static javax.microedition.io.Connection open(java.lang.String var0) throws java.io.IOException { return null; }
 	public static javax.microedition.io.Connection open(java.lang.String var0, int var1) throws java.io.IOException { return null; }

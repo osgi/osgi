@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ package org.osgi.util.measurement;
  * @Immutable
  * @author $Id$
  */
-public class Measurement implements Comparable {
+public class Measurement implements Comparable<Object> {
 	private final double		value;
 	private final double		error;
 	private final long			time;
@@ -362,6 +362,7 @@ public class Measurement implements Comparable {
 	 * @return a {@code String} object representing this {@code Measurement}
 	 *         object.
 	 */
+	@Override
 	public String toString() {
 		String result = name;
 		if (result == null) {
@@ -408,6 +409,7 @@ public class Measurement implements Comparable {
 	 *         {@code Measurement} object is not equal to the {@code Unit}
 	 *         object of this object.
 	 */
+	@Override
 	public int compareTo(Object obj) {
 		if (this == obj) {
 			return 0;
@@ -437,6 +439,7 @@ public class Measurement implements Comparable {
 	 * 
 	 * @return A hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = hashCode;
 		if (h == 0) {
@@ -463,6 +466,7 @@ public class Measurement implements Comparable {
 	 * @return {@code true} if this object is equal to the specified object;
 	 *         {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;

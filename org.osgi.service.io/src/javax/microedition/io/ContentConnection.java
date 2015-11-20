@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface ContentConnection extends javax.microedition.io.StreamConnection {
 	public abstract java.lang.String getEncoding();
 	public abstract long getLength();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -285,7 +285,7 @@ public interface UPnPStateVariable {
 	 * 
 	 * @return A class object corresponding to the Java type of this argument.
 	 */
-	Class getJavaDataType();
+	Class<?> getJavaDataType();
 
 	/**
 	 * Returns the UPnP type of this state variable. Valid types are defined as

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -409,6 +409,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *         {@code ServiceTracker}.
 	 * @see ServiceTrackerCustomizer#addingService(ServiceReference)
 	 */
+	@Override
 	public T addingService(ServiceReference<S> reference) {
 		@SuppressWarnings("unchecked")
 		T result = (T) context.getService(reference);
@@ -430,6 +431,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @param service The service object for the modified service.
 	 * @see ServiceTrackerCustomizer#modifiedService(ServiceReference, Object)
 	 */
+	@Override
 	public void modifiedService(ServiceReference<S> reference, T service) {
 		/* do nothing */
 	}
@@ -455,6 +457,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @param service The service object for the removed service.
 	 * @see ServiceTrackerCustomizer#removedService(ServiceReference, Object)
 	 */
+	@Override
 	public void removedService(ServiceReference<S> reference, T service) {
 		context.ungetService(reference);
 	}
@@ -881,6 +884,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * 
 		 * @param event {@code ServiceEvent} object from the framework.
 		 */
+		@Override
 		final public void serviceChanged(final ServiceEvent event) {
 			/*
 			 * Check if we had a delayed call (which could happen when we

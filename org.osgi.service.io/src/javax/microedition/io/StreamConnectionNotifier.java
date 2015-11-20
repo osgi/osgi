@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface StreamConnectionNotifier extends javax.microedition.io.Connection {
 	public abstract javax.microedition.io.StreamConnection acceptAndOpen() throws java.io.IOException;
 }

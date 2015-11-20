@@ -29,7 +29,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * @version 1.0
  * @author $Id$
  */
-public interface ThreadMonitor extends ResourceMonitor {
+public interface ThreadMonitor extends ResourceMonitor<Integer> {
 
 	/**
 	 * Returns the number of alive threads created by the bundles in this

@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Permission for the scope of a {@code Wire} object. When a {@code Envelope}
@@ -190,6 +193,7 @@ final public class WirePermission extends BasicPermission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (p instanceof WirePermission) {
 			WirePermission requested = (WirePermission) p;
@@ -206,6 +210,7 @@ final public class WirePermission extends BasicPermission {
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -233,6 +238,7 @@ final public class WirePermission extends BasicPermission {
 	 * @return A new {@code PermissionCollection} object suitable for storing
 	 *         {@code WirePermission} objects.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new WirePermissionCollection();
 	}
@@ -248,6 +254,7 @@ final public class WirePermission extends BasicPermission {
 	 *         name and actions as this {@code WirePermission} object;
 	 *         {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -264,6 +271,7 @@ final public class WirePermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -278,6 +286,7 @@ final public class WirePermission extends BasicPermission {
 	 * 
 	 * @return information about this {@code Permission} object.
 	 */
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append('(');
@@ -330,7 +339,7 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * @GuardedBy this
 	 * @serial
 	 */
-	private final Hashtable	permissions;
+																		private final Hashtable<String, WirePermission>permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
@@ -344,7 +353,7 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public WirePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new Hashtable<>();
 		all_allowed = false;
 	}
 
@@ -359,6 +368,7 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this PermissionCollection has been marked
 	 *         read-only.
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof WirePermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -369,7 +379,7 @@ final class WirePermissionCollection extends PermissionCollection {
 		WirePermission wp = (WirePermission) permission;
 		String name = wp.getName();
 		synchronized (this) {
-			WirePermission existing = (WirePermission) permissions.get(name);
+			WirePermission existing = permissions.get(name);
 			if (existing != null) {
 				int oldMask = existing.getActionsMask();
 				int newMask = wp.getActionsMask();
@@ -396,6 +406,7 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * @return {@code true} if {@code permission} is a proper subset of a
 	 *         permission in the set; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof WirePermission)) {
 			return false;
@@ -408,7 +419,7 @@ final class WirePermissionCollection extends PermissionCollection {
 		synchronized (this) {
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				x = (WirePermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired)
@@ -418,7 +429,7 @@ final class WirePermissionCollection extends PermissionCollection {
 			// strategy:
 			// Check for full match first. Then work our way up the
 			// name looking for matches on a.b.*
-			x = (WirePermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		if (x != null) {
 			// we have a direct hit!
@@ -433,7 +444,7 @@ final class WirePermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (WirePermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -453,7 +464,9 @@ final class WirePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the Permission objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	@Override
+	public Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 }

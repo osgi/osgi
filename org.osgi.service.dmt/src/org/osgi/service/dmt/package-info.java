@@ -39,7 +39,7 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.dmt; version="[2.0,2.1)"}
  * 
- * @version 2.0.1
+ * @version 2.0.2
  * @author $Id$
  */
 

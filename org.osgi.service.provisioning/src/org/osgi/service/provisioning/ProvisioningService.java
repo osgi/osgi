@@ -166,7 +166,7 @@ public interface ProvisioningService {
 	 * 
 	 * @return A reference to the Provisioning Dictionary.
 	 */
-	public Dictionary getInformation();
+	public Dictionary<String, Object> getInformation();
 
 	/**
 	 * Replaces the Provisioning Information dictionary with the key/value pairs
@@ -178,7 +178,7 @@ public interface ProvisioningService {
 	 *        keys are values that are of an invalid type will be silently
 	 *        ignored.
 	 */
-	public void setInformation(Dictionary info);
+	public void setInformation(Dictionary<String, ?> info);
 
 	/**
 	 * Adds the key/value pairs contained in {@code info} to the Provisioning
@@ -189,7 +189,7 @@ public interface ProvisioningService {
 	 *        the Provisioning Information dictionary. Any keys are values that
 	 *        are of an invalid type will be silently ignored.
 	 */
-	public void addInformation(Dictionary info);
+	public void addInformation(Dictionary<String, ?> info);
 
 	/**
 	 * Processes the {@code ZipInputStream} and extracts information to add to

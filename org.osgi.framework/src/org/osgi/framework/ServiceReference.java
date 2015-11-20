@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,5 +179,6 @@ public interface ServiceReference<S> extends Comparable<Object> {
 	 *         instance as this {@code ServiceReference}.
 	 * @since 1.4
 	 */
+	@Override
 	public int compareTo(Object reference);
 }

@@ -29,7 +29,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * @version 1.0
  * @author $Id$
  */
-public interface MemoryMonitor extends ResourceMonitor {
+public interface MemoryMonitor extends ResourceMonitor<Long> {
 
 	/**
 	 * Returns the size of the java heap used by the bundles in this resource

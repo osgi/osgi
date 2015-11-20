@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import org.osgi.framework.ServiceReference;
  * @author $Id$
  */
 public class UserAdminEvent {
-	private ServiceReference	ref;
+	private ServiceReference<UserAdmin>	ref;
 	private int					type;
 	private Role				role;
 	/**
@@ -71,7 +71,7 @@ public class UserAdminEvent {
 	 * @param type The event type.
 	 * @param role The {@code Role} object on which this event occurred.
 	 */
-	public UserAdminEvent(ServiceReference ref, int type, Role role) {
+	public UserAdminEvent(ServiceReference<UserAdmin> ref, int type, Role role) {
 		this.ref = ref;
 		this.type = type;
 		this.role = role;
@@ -83,7 +83,7 @@ public class UserAdminEvent {
 	 * 
 	 * @return The User Admin service's {@code ServiceReference} object.
 	 */
-	public ServiceReference getServiceReference() {
+	public ServiceReference<UserAdmin> getServiceReference() {
 		return ref;
 	}
 

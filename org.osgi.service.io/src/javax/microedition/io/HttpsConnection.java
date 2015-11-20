@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface HttpsConnection extends javax.microedition.io.HttpConnection {
 	public abstract javax.microedition.io.SecurityInfo getSecurityInfo() throws java.io.IOException;
 }

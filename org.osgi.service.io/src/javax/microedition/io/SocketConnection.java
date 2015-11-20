@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface SocketConnection extends javax.microedition.io.StreamConnection {
 	public abstract java.lang.String getAddress() throws java.io.IOException;
 	public abstract java.lang.String getLocalAddress() throws java.io.IOException;

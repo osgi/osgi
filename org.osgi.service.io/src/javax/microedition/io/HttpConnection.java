@@ -16,6 +16,8 @@
  */
 
 package javax.microedition.io;
+
+@SuppressWarnings("all")
 public abstract interface HttpConnection extends javax.microedition.io.ContentConnection {
 	public abstract long getDate() throws java.io.IOException;
 	public abstract long getExpiration() throws java.io.IOException;

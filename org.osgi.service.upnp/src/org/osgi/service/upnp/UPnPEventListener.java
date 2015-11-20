@@ -81,5 +81,5 @@ public interface UPnPEventListener {
 	 * 
 	 * 
 	 */
-	void notifyUPnPEvent(String deviceId, String serviceId, Dictionary events);
+	void notifyUPnPEvent(String deviceId, String serviceId, Dictionary<String, ?> events);
 }

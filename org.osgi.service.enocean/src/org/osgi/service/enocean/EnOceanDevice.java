@@ -167,7 +167,7 @@ public interface EnOceanDevice {
      * @return A list of the available RPCs, in a Map< Integer, Integer[] >
      *         form.
      */
-    public Map getRPCs();
+    public Map<Integer, Integer[]> getRPCs();
 
     /**
      * Sends an RPC to the remote device.

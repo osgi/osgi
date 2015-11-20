@@ -158,14 +158,17 @@ public class ResourceContextEvent {
 		return bundleId;
 	}
 
+	@Override
 	public String toString() {
 		return super.toString();
 	}
 
+	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object var0) {
 		if (var0 == null) {
 			return false;
