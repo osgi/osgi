@@ -7,7 +7,8 @@ org.osgi.service.http.whiteboard.specs = org.osgi.service.http.*
 Export-Package:  \
 	org.osgi.service.http.*;-split-package:=first
 
+-contract: JavaServlet
 -buildpath = \
     osgi.core; version=6.0, \
     osgi.annotation; version=6.0.1, \
-    javax.servlet; version=3.0.0
+    org.apache.felix.http.servlet-api; version=1.1.2
