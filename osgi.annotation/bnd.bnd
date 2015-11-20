@@ -14,7 +14,8 @@ Export-Package: ${osgi.annotation.packages}
 
 Include-Resource: ${osgi.annotation.resources}
 
-Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+Provide-Capability: osgi.unresolvable
+Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 

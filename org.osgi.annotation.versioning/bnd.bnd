@@ -3,6 +3,7 @@
 
 Export-Package: ${p}.*; -split-package:=first
 
-Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+Provide-Capability: osgi.unresolvable
+Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -buildpath =
