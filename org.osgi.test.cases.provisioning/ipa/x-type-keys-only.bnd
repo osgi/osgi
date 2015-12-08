@@ -8,8 +8,8 @@ Include-Resource: \
  some.key.4;literal='some.value.4'
 
 InitialProvisioning-Entries: \
- x-type-keys-only.ipa;type=text,
- load-status;type=text,
- some.key.1;type=text,
- some.key.2;type=text,
+ x-type-keys-only.ipa;type=text, \
+ load-status;type=text, \
+ some.key.1;type=text, \
+ some.key.2;type=text, \
  some.key.4;type=text
