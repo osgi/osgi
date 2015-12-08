@@ -3,8 +3,7 @@ Bundle-Name: ${p}.fragments.tb18
 Bundle-SymbolicName: ${p}.fragments.tb18
 Bundle-Version: 1.0
 Bundle-Activator: ${p}.fragments.tb18.Activator
-Private-Package: ${p}.fragments.tb18,
-	resources
+Private-Package: ${p}.fragments.tb18
 
 Include-Resource: \
 	{OSGI-INF/permissions.perm=perms/fragments.tb18.perm}
