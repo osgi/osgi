@@ -109,7 +109,7 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		invoked.set(false);
 		assertEquals("a", request("some/path/b.html"));
 		assertTrue(invoked.get());
-		assertEquals("404", request("", null).get("responseCode").get(0));
+		assertEquals("a", request(""));
 	}
 
 	public void test_140_4_10() throws Exception {

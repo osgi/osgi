@@ -425,7 +425,7 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("bab", request("a"));
 		assertEquals("bab", request("a.html"));
 		assertEquals("bab", request("some/path/b.html"));
-		assertEquals("a", request(""));
+		assertEquals("bab", request(""));
 
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "");
 		sr.setProperties(properties);
