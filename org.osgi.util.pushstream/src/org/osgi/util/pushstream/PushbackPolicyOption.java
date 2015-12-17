@@ -19,24 +19,46 @@ package org.osgi.util.pushstream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public enum PushbackPolicyOption { 
-	
+/**
+ * {@link PushbackPolicyOption} provides a standard set of simple
+ * {@link PushbackPolicy} implementations.
+ * 
+ * @see PushbackPolicy
+ */
+public enum PushbackPolicyOption {
+
+	/**
+	 * Returns a fixed amount of back pressure, independent of how full the
+	 * buffer is
+	 */
 	FIXED {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value) {
 			return q -> value;
 		}
-	}, ON_FULL_FIXED {
+	},
+	/**
+	 * Returns zero back pressure until the buffer is full, then it returns a
+	 * fixed value
+	 */
+	ON_FULL_FIXED {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value) {
 			return q -> q.remainingCapacity() == 0 ? value : 0;
 		}
-	}, ON_FULL_EXPONENTIAL {
+	},
+	/**
+	 * Returns zero back pressure until the buffer is full, then it returns an
+	 * exponentially increasing amount, starting with the supplied value and
+	 * doubling it each time. Once the buffer is no longer full the back
+	 * pressure returns to zero.
+	 */
+	ON_FULL_EXPONENTIAL {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value) {
 			AtomicInteger backoffCount = new AtomicInteger(0);
 			return q -> {
-				if(q.remainingCapacity() == 0) { 
+				if (q.remainingCapacity() == 0) {
 					return value << backoffCount.getAndIncrement();
 				}
 				backoffCount.set(0);
@@ -44,13 +66,13 @@ public enum PushbackPolicyOption {
 			};
 
 		}
-	}, ON_FULL_CLOSE {
-		@Override
-		public
-		<T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value) {
-			return q -> q.remainingCapacity() == 0 ? -1 : 0;
-		}
-	}, LINEAR {
+	},
+	/**
+	 * Returns zero back pressure when the buffer is empty, then it returns a
+	 * linearly increasing amount of back pressure based on how full the buffer
+	 * is. The maximum value will be returned when the buffer is full.
+	 */
+	LINEAR {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value) {
 			return q -> {
@@ -60,7 +82,17 @@ public enum PushbackPolicyOption {
 			};
 		}
 	};
-	
+
+	/**
+	 * Create a {@link PushbackPolicy} instance configured with a base back
+	 * pressure time in nanoseconds
+	 * 
+	 * The actual backpressure returned will vary based on the selected
+	 * implementation, the base value, and the state of the buffer.
+	 * 
+	 * @param value
+	 * @return A {@link PushbackPolicy} to use
+	 */
 	public abstract <T, U extends BlockingQueue<PushEvent<? extends T>>> PushbackPolicy<T, U> getPolicy(long value);
-	
+
 }

@@ -19,6 +19,13 @@ package org.osgi.util.pushstream;
 import java.io.Closeable;
 import org.osgi.annotation.versioning.ProviderType;
 
+/**
+ * A {@link SimplePushEventSource} is a helper that makes it simpler to write a
+ * {@link PushEventSource}. Users do not need to manage multiple registrations
+ * to the stream, nor do they have to be concerned with back pressure.
+ *
+ * @param <T> The type of the events produced by this source
+ */
 @ProviderType
 public interface SimplePushEventSource<T> extends PushEventSource<T>, Closeable {
 	/**
@@ -53,21 +60,23 @@ public interface SimplePushEventSource<T> extends PushEventSource<T>, Closeable 
 	void endOfStream();
 	
 	/**
-	 * Close this source for now, but potentially reopen it later. 
-	 * Calling this method asynchronously sends an error event to 
-	 * all connected consumers. After calling this method any 
-	 * {@link PushEventConsumer} that wishes may {@link #open(PushEventConsumer)} 
-	 * this source, and will receive subsequent events.
+	 * Close this source for now, but potentially reopen it later. Calling this
+	 * method asynchronously sends an error event to all connected consumers.
+	 * After calling this method any {@link PushEventConsumer} that wishes may
+	 * {@link #open(PushEventConsumer)} this source, and will receive subsequent
+	 * events.
+	 *
+	 * @param e the error
 	 * 
 	 */
 	void error(Exception e);
 	
 	/**
-	 * Determine whether there are any {@link PushEventConsumer}s for this 
-	 * {@link PushEventSource}. This can be used to skip expensive event 
-	 * creation logic when there are no listeners. 
+	 * Determine whether there are any {@link PushEventConsumer}s for this
+	 * {@link PushEventSource}. This can be used to skip expensive event
+	 * creation logic when there are no listeners.
 	 * 
-	 * @return
+	 * @return true if any consumers are currently connected
 	 */
 	boolean isConnected();
 

@@ -19,7 +19,7 @@ package org.osgi.util.pushstream;
 import static org.osgi.util.pushstream.PushEvent.EventType.*;
 
 /**
- * An AsyncEvent is an immutable object that is transferred through a
+ * A {@link PushEvent} is an immutable object that is transferred through a
  * communication channel to push information to a downstream consumer. The event
  * has three different subtypes:
  * <ul>
@@ -30,21 +30,33 @@ import static org.osgi.util.pushstream.PushEvent.EventType.*;
  * reason downstream. No more events will follow after this event
  * </ul>
  *
- * @param <T>
- *            The associated Data type
+ * @param <T> The associated Data type
  */
 public final class PushEvent<T> {
 
+	/**
+	 * The type of the event
+	 */
 	public static enum EventType {
+		/**
+		 * A data event forming part of the stream
+		 */
 		DATA,
+		/**
+		 * An error event that indicates streaming has failed and that no more
+		 * events will arrive
+		 */
 		ERROR,
+		/**
+		 * An event that indicates that the stream has terminated normally
+		 */
 		CLOSE
 	}
-	
-	private final T data;
-	private final Exception failure;
-	private final EventType type;
-	
+
+	private final T			data;
+	private final Exception	failure;
+	private final EventType	type;
+
 	private PushEvent(T data, Exception failure, EventType type) {
 		this.data = data;
 		this.failure = failure;
@@ -53,55 +65,65 @@ public final class PushEvent<T> {
 
 	/**
 	 * Get the type of this event
-	 * @return
+	 * 
+	 * @return the type of the event
 	 */
 	public EventType getType() {
 		return type;
 	}
-	
+
 	/**
-	 * Return the data for this event
-	 * or throw an exception
+	 * Return the data for this event or throw an exception
 	 * 
 	 * @return the data payload
+	 * @throws IllegalStateException if the event is not an
+	 *         {@link EventType#DATA} event
 	 */
 	public T getData() throws IllegalStateException {
-		switch(type) {
-			case DATA : return data;
-			default : throw new IllegalStateException("Not a data event: " + type);
+		switch (type) {
+			case DATA :
+				return data;
+			default :
+				throw new IllegalStateException("Not a data event: " + type);
 		}
 	}
 
 	/**
-	 * Return the error or throw an exception if this is not an error type
+	 * Return the error that terminated the stream
 	 * 
 	 * @return the exception
+	 * 
+	 * @throws IllegalStateException if the event is not an
+	 *         {@link EventType#ERROR} event
 	 */
-	public Exception getFailure() {
-		switch(type) {
-			case ERROR : return failure;
-			default : throw new IllegalStateException("Not a failure event: " + type);
+	public Exception getFailure() throws IllegalStateException {
+		switch (type) {
+			case ERROR :
+				return failure;
+			default :
+				throw new IllegalStateException("Not a failure event: " + type);
 		}
 	}
 
 	/**
 	 * Answer if no more events will follow after this event.
 	 * 
-	 * @return true if a data event, otherwise false.
+	 * @return false if this is a data event, otherwise true.
 	 */
 	public boolean isTerminal() {
-		switch(type) {
-			case DATA : return false;
-			default : return true;
+		switch (type) {
+			case DATA :
+				return false;
+			default :
+				return true;
 		}
 	}
 
 	/**
 	 * Create a new data event
 	 * 
-	 * @param payload
-	 *            The payload
-	 * @return
+	 * @param payload The payload
+	 * @return A new data event wrapping the supplied payload
 	 */
 	public static <T> PushEvent<T> data(T payload) {
 		return new PushEvent<T>(payload, null, DATA);
@@ -110,8 +132,7 @@ public final class PushEvent<T> {
 	/**
 	 * Create a new error event
 	 * 
-	 * @param e
-	 *            The error
+	 * @param e The error
 	 * @return a new error event with the given error
 	 */
 	public static <T> PushEvent<T> error(Exception e) {
@@ -133,13 +154,17 @@ public final class PushEvent<T> {
 	 * therefore allows you to forward the close/error event downstream without
 	 * creating anew event.
 	 * 
-	 * @return
+	 * @return the current error or close event mapped to a new type
+	 * @throws IllegalStateException if the event is an {@link EventType#DATA}
+	 *         event
 	 */
 	@SuppressWarnings("unchecked")
-	public <X> PushEvent<X> nodata() {
-		switch(type) {
-			case DATA : throw new IllegalStateException("This is a data event");
-			default : return (PushEvent<X>) this;
+	public <X> PushEvent<X> nodata() throws IllegalStateException {
+		switch (type) {
+			case DATA :
+				throw new IllegalStateException("This is a data event");
+			default :
+				return (PushEvent<X>) this;
 		}
 	}
 }

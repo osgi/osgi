@@ -18,20 +18,36 @@ package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
 
-public enum QueuePolicyOption { 
+/**
+ * {@link QueuePolicyOption} provides a standard set of simple
+ * {@link QueuePolicy} implementations.
+ * 
+ * @see QueuePolicy
+ */
+public enum QueuePolicyOption {
+	/**
+	 * Attempt to add the supplied event to the queue. If the queue is unable to
+	 * immediately accept the value then discard the value at the head of the
+	 * queue and try again. Repeat this process until the event is enqueued.
+	 */
 	DISCARD_OLDEST {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> QueuePolicy<T, U> getPolicy() {
-			return (queue,event) -> {
-				while(!queue.offer(event)) {
+			return (queue, event) -> {
+				while (!queue.offer(event)) {
 					queue.poll();
 				}
 			};
 		}
-	}, BLOCK {
+	},
+	/**
+	 * Attempt to add the supplied event to the queue, blocking until the
+	 * enqueue is successful.
+	 */
+	BLOCK {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> QueuePolicy<T, U> getPolicy() {
-			return (queue,event) -> {
+			return (queue, event) -> {
 				try {
 					queue.put(event);
 				} catch (InterruptedException e) {
@@ -40,13 +56,21 @@ public enum QueuePolicyOption {
 				}
 			};
 		}
-	}, FAIL {
+	},
+	/**
+	 * Attempt to add the supplied event to the queue, throwing an exception if
+	 * the queue is full.
+	 */
+	FAIL {
 		@Override
 		public <T, U extends BlockingQueue<PushEvent<? extends T>>> QueuePolicy<T, U> getPolicy() {
-			return (queue,event) -> queue.add(event);
+			return (queue, event) -> queue.add(event);
 		}
 	};
-	
+
+	/**
+	 * @return a {@link QueuePolicy} implementation
+	 */
 	public abstract <T, U extends BlockingQueue<PushEvent<? extends T>>> QueuePolicy<T, U> getPolicy();
 
 }

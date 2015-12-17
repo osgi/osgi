@@ -57,10 +57,12 @@ public interface PushEventConsumer<T> {
 	 * threads simultaneously. However, Close and Error events are the last
 	 * events received, no more events must be sent after them.
 	 * 
-	 * @param event
-	 *            The event
+	 * @param event The event
 	 * @return less than 0 means abort, 0 means continue, more than 0 means
 	 *         delay ms
+	 * @throws Exception to indicate that an error has occured and that no
+	 *         further events should be delivered to this
+	 *         {@link PushEventConsumer}
 	 */
 	long accept(PushEvent<? extends T> event) throws Exception;
 
