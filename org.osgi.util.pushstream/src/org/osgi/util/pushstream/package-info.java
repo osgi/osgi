@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
  * 
