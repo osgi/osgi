@@ -391,6 +391,7 @@ public class Version implements Comparable<Version> {
 	 * @throws ClassCastException If the specified object is not a
 	 *         {@code Version} object.
 	 */
+	@Override
 	public int compareTo(Version other) {
 		if (other == this) { // quicktest
 			return 0;

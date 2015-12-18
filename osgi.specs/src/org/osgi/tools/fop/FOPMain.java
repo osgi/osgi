@@ -86,6 +86,7 @@ public class FOPMain {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		List<String> availableFonts = Arrays.asList(ge.getAvailableFontFamilyNames());
 		File[] fontFiles = fontDir.listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".ttf");
 			}
