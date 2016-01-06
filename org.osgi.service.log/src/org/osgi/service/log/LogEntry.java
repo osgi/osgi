@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.osgi.service.log;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
@@ -29,11 +30,9 @@ import org.osgi.framework.ServiceReference;
  * {@code LogListener} object.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
- * @see LogReaderService#getLog
- * @see LogListener
  */
+@ProviderType
 public interface LogEntry {
 	/**
 	 * Returns the bundle that created this {@code LogEntry} object.
@@ -42,7 +41,7 @@ public interface LogEntry {
 	 *         {@code null} if no bundle is associated with this
 	 *         {@code LogEntry} object.
 	 */
-	public Bundle getBundle();
+	Bundle getBundle();
 
 	/**
 	 * Returns the {@code ServiceReference} object for the service associated
@@ -52,23 +51,18 @@ public interface LogEntry {
 	 *         this {@code LogEntry} object; {@code null} if no
 	 *         {@code ServiceReference} object was provided.
 	 */
-	public ServiceReference<?> getServiceReference();
+	ServiceReference< ? > getServiceReference();
 
 	/**
-	 * Returns the severity level of this {@code LogEntry} object.
-	 * 
+	 * Returns the level of this {@code LogEntry} object.
 	 * <p>
 	 * This is one of the severity levels defined by the {@code LogService}
 	 * interface.
 	 * 
-	 * @return Severity level of this {@code LogEntry} object.
-	 * 
-	 * @see LogService#LOG_ERROR
-	 * @see LogService#LOG_WARNING
-	 * @see LogService#LOG_INFO
-	 * @see LogService#LOG_DEBUG
+	 * @return Level of this {@code LogEntry} object.
+	 * @deprecated Since 1.4. Replaced by {@link #getLogLevel()}.
 	 */
-	public int getLevel();
+	int getLevel();
 
 	/**
 	 * Returns the human readable message associated with this {@code LogEntry}
@@ -77,7 +71,7 @@ public interface LogEntry {
 	 * @return {@code String} containing the message associated with this
 	 *         {@code LogEntry} object.
 	 */
-	public String getMessage();
+	String getMessage();
 
 	/**
 	 * Returns the exception object associated with this {@code LogEntry}
@@ -96,7 +90,7 @@ public interface LogEntry {
 	 *         {@code LogEntry};{@code null} if no exception is associated with
 	 *         this {@code LogEntry} object.
 	 */
-	public Throwable getException();
+	Throwable getException();
 
 	/**
 	 * Returns the value of {@code currentTimeMillis()} at the time this
@@ -106,5 +100,60 @@ public interface LogEntry {
 	 *         was created.
 	 * @see "System.currentTimeMillis()"
 	 */
-	public long getTime();
+	long getTime();
+
+	/**
+	 * Returns the level of this {@code LogEntry} object.
+	 * 
+	 * @return The level of this {@code LogEntry} object.
+	 * @since 1.4
+	 */
+	LogLevel getLogLevel();
+
+	/**
+	 * Returns the name of the {@link Logger} object used to create this
+	 * {@code LogEntry} object.
+	 * 
+	 * @return The name of the {@link Logger} object used to create this
+	 *         {@code LogEntry} object or {@code ""} if this {@code LogEntry}
+	 *         object was created using one of the original {@link LogService}
+	 *         {@code log} methods.
+	 * @since 1.4
+	 */
+	String getLoggerName();
+
+	/**
+	 * Returns the sequence number for this {@code LogEntry} object.
+	 * <p>
+	 * The {@link LogService} assigns a unique, non-negative value that is
+	 * larger than all previously assigned values since the {@link LogService}
+	 * was started. These values are transient and are reused upon restart of
+	 * the {@link LogService}.
+	 * 
+	 * @return The sequence number for this {@code LogEntry} object.
+	 * @since 1.4
+	 */
+	long getSequence();
+
+	/**
+	 * Returns a string representing the thread which created this
+	 * {@code LogEntry} object.
+	 * <p>
+	 * This string contains the name of the thread.
+	 * 
+	 * @return A string representing the thread which created this
+	 *         {@code LogEntry} object.
+	 * @since 1.4
+	 */
+	String getThreadInfo();
+
+	/**
+	 * Returns the location information of the creation of this {@code LogEntry}
+	 * object.
+	 * 
+	 * @return The location information of the creation of this {@code LogEntry}
+	 *         object.
+	 * @since 1.4
+	 */
+	StackTraceElement getLocation();
 }
