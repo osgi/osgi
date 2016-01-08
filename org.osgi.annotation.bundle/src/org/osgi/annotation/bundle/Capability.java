@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.annotation.bundle;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.osgi.resource.Namespace;
+
+/**
+ * Define a capability for a bundle.
+ * <p>
+ * For example:
+ * 
+ * <pre>
+ * &#64;Capability(namespace=ExtenderNamespace.EXTENDER_NAMESPACE,
+ *             name="osgi.component", version="1.3.0")
+ * </pre>
+ * <p>
+ * This annotation is not retained at runtime. It is for use by tools to
+ * generate bundle manifests or otherwise process the type or package.
+ * 
+ * @author $Id$
+ */
+@Documented
+@Retention(RetentionPolicy.CLASS)
+@Target({
+		ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.PACKAGE
+})
+@Repeatable(Capabilities.class)
+public @interface Capability {
+
+	/**
+	 * The namespace of this capability.
+	 */
+	String namespace();
+
+	/**
+	 * The name of this capability within the namespace.
+	 * <p>
+	 * If specified, adds an attribute with the name of the namespace and the
+	 * value of the specified name to the capability clause.
+	 */
+	String name() default "";
+
+	/**
+	 * The version of this capability.
+	 * <p>
+	 * If specified, adds an attribute with the name and type of
+	 * {@code version:Version} and the value of the specified version to the
+	 * capability clause.
+	 * <p>
+	 * The specified version must be a valid OSGi version string.
+	 */
+	String version() default "";
+
+	/**
+	 * A list of package names that are used by this capability.
+	 * <p>
+	 * If not specified, the {@code uses} directive is omitted from the
+	 * capability clause.
+	 */
+	String[] uses() default {};
+
+	/**
+	 * The effective time of this capability.
+	 * <p>
+	 * Specifies the time the capability is available. The OSGi framework
+	 * resolver only considers capabilities without an effective directive or
+	 * effective:=resolve. Capabilities with other values for the effective
+	 * directive can be considered by an external agent.
+	 * <p>
+	 * If not specified, the {@code effective} directive is omitted from the
+	 * capability clause.
+	 */
+	String effective() default Namespace.EFFECTIVE_RESOLVE;
+
+	/**
+	 * A list of attribute names and values.
+	 * <p>
+	 * Each string should be specified in the form: {@code "name=value"}. These
+	 * are added, separated by semicolons to the capability clause.
+	 */
+	String[] attribute() default {};
+}
