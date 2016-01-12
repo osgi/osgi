@@ -54,37 +54,15 @@ public @interface Export {
 	String[] uses() default {};
 
 	/**
-	 * A list of mandatory attribute names.
+	 * A list of attribute or directive names and values.
 	 * <p>
-	 * A bundle importing this package must specify the mandatory attributes,
-	 * with a value that matches, to resolve to this package.
-	 * <p>
-	 * If not specified, the {@code mandatory} directive is omitted from the
-	 * export package clause for this package.
-	 */
-	String[] mandatory() default {};
-
-	/**
-	 * A list of classes in this package that must be visible to an importer.
-	 * <p>
-	 * If not specified, the {@code include} directive is omitted from the
-	 * export package clause for this package.
-	 */
-	Class< ? >[] include() default {};
-
-	/**
-	 * A list of classes in this package that must be invisible to an importer.
-	 * <p>
-	 * If not specified, the {@code exclude} directive is omitted from the
-	 * export package clause for this package.
-	 */
-	Class< ? >[] exclude() default {};
-
-	/**
-	 * A list of attribute names and values.
-	 * <p>
-	 * Each string should be specified in the form: {@code "name=value"}. These
-	 * are added, separated by semicolons to the export package clause.
+	 * Each string should be specified in the form:
+	 * <ul>
+	 * <li>{@code "name=value"} for attributes.</li>
+	 * <li>{@code "name:type=value"} for typed attributes.</li>
+	 * <li>{@code "name:=value"} for directives.</li>
+	 * </ul>
+	 * These are added, separated by semicolons, to the export package clause.
 	 */
 	String[] attribute() default {};
 

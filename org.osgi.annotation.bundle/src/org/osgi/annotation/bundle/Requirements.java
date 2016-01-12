@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
-		ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.PACKAGE
+		ElementType.TYPE, ElementType.PACKAGE
 })
 public @interface Requirements {
 	/**

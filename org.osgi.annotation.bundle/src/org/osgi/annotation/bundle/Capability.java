@@ -43,7 +43,7 @@ import org.osgi.resource.Namespace;
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({
-		ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.PACKAGE
+		ElementType.TYPE, ElementType.PACKAGE
 })
 @Repeatable(Capabilities.class)
 public @interface Capability {
@@ -73,12 +73,13 @@ public @interface Capability {
 	String version() default "";
 
 	/**
-	 * A list of package names that are used by this capability.
+	 * A list of classes whose packages are inspected to calculate the
+	 * {@code uses} directive for this capability.
 	 * <p>
 	 * If not specified, the {@code uses} directive is omitted from the
 	 * capability clause.
 	 */
-	String[] uses() default {};
+	Class< ? >[] uses() default {};
 
 	/**
 	 * The effective time of this capability.
@@ -94,10 +95,15 @@ public @interface Capability {
 	String effective() default Namespace.EFFECTIVE_RESOLVE;
 
 	/**
-	 * A list of attribute names and values.
+	 * A list of attribute or directive names and values.
 	 * <p>
-	 * Each string should be specified in the form: {@code "name=value"}. These
-	 * are added, separated by semicolons to the capability clause.
+	 * Each string should be specified in the form:
+	 * <ul>
+	 * <li>{@code "name=value"} for attributes.</li>
+	 * <li>{@code "name:type=value"} for typed attributes.</li>
+	 * <li>{@code "name:=value"} for directives.</li>
+	 * </ul>
+	 * These are added, separated by semicolons, to the export package clause.
 	 */
 	String[] attribute() default {};
 }
