@@ -32,4 +32,5 @@ Include-Resource				= \
 	tb2.jar, \
 	tb3.jar, \
 	tb4.jar, \
-	tb5.jar
+	tb5.jar, \
+	tb6.jar

@@ -28,6 +28,7 @@ package org.osgi.test.cases.tracker.junit;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.SortedMap;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -1092,7 +1093,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
     public void testAllServiceTracker01() throws Exception {
     	Bundle tb1;
         Bundle tb5;
-    	Object[] services;
     	ServiceTracker serviceTracker;
 
         tb1 = installBundle("tb1.jar");
@@ -1124,7 +1124,36 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
     	}
     }
 
-    static class Service implements Runnable {
+    /**
+	 * Make sure different ServiceTrackers get different service objects for a
+	 * prototype scoped service.
+	 * 
+	 * @throws Exception
+	 */
+	public void testPrototypeService() throws Exception {
+		Bundle tb6 = installBundle("tb6.jar");
+
+		ServiceTracker<TestService1, TestService1> serviceTracker1 = new ServiceTracker<>(getContext(),
+				TestService1.class, null);
+		ServiceTracker<TestService1, TestService1> serviceTracker2 = new ServiceTracker<>(getContext(),
+				TestService1.class, null);
+		serviceTracker1.open();
+		serviceTracker2.open();
+
+		try {
+			assertEquals("wrong size", 1, serviceTracker1.size());
+			assertEquals("wrong size", 1, serviceTracker2.size());
+			TestService1 s1 = serviceTracker1.getService();
+			TestService1 s2 = serviceTracker2.getService();
+			assertNotSame("same service", s1, s2);
+		} finally {
+			serviceTracker1.close();
+			serviceTracker2.close();
+			tb6.uninstall();
+		}
+	}
+
+	static class Service implements Runnable {
 		public void run() {
 			// nothing
 		}
