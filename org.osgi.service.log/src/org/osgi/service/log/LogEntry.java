@@ -62,6 +62,7 @@ public interface LogEntry {
 	 * @return Level of this {@code LogEntry} object.
 	 * @deprecated Since 1.4. Replaced by {@link #getLogLevel()}.
 	 */
+	@Deprecated
 	int getLevel();
 
 	/**
@@ -116,7 +117,7 @@ public interface LogEntry {
 	 * 
 	 * @return The name of the {@link Logger} object used to create this
 	 *         {@code LogEntry} object or {@code ""} if this {@code LogEntry}
-	 *         object was created using one of the original {@link LogService}
+	 *         object was created using one of the original {@code LogService}
 	 *         {@code log} methods.
 	 * @since 1.4
 	 */
@@ -125,10 +126,10 @@ public interface LogEntry {
 	/**
 	 * Returns the sequence number for this {@code LogEntry} object.
 	 * <p>
-	 * The {@link LogService} assigns a unique, non-negative value that is
-	 * larger than all previously assigned values since the {@link LogService}
+	 * The {@code LogService} assigns a unique, non-negative value that is
+	 * larger than all previously assigned values since the {@code LogService}
 	 * was started. These values are transient and are reused upon restart of
-	 * the {@link LogService}.
+	 * the {@code LogService}.
 	 * 
 	 * @return The sequence number for this {@code LogEntry} object.
 	 * @since 1.4

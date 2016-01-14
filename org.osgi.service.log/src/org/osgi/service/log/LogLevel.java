@@ -23,29 +23,44 @@ package org.osgi.service.log;
  * @author $Id$
  */
 public enum LogLevel {
-	/* The ordering of the elements is deliberate and must be kept. */
+	/*
+	 * The ordering of the elements is deliberate and must be kept. See {@link
+	 * #implies(LogLevel)}.
+	 */
 	/**
-	 * Audit – Legal reasons, should never be suppressed
+	 * Audit – Information that must always be logged.
 	 */
 	AUDIT,
 	/**
-	 * Error – An error situation
+	 * Error – Information about an error situation.
 	 */
 	ERROR,
 	/**
-	 * Warning – A failure or unwanted situation that is not blocking
+	 * Warning – Information about a failure or unwanted situation that is not
+	 * blocking.
 	 */
 	WARN,
 	/**
-	 * Info – Provide information about processes that go ok
+	 * Info – Information about normal operation.
 	 */
 	INFO,
 	/**
-	 * Debug level – Very large output
+	 * Debug – Detailed output for debugging operations.
 	 */
 	DEBUG,
 	/**
-	 * Trace level – Huge output
+	 * Trace level – Large volume of output for tracing operations.
 	 */
-	TRACE
+	TRACE;
+
+	/**
+	 * Returns whether this log level implies the specified log level.
+	 * 
+	 * @param other The other log level.
+	 * @return {@code true} If this log level implies the specified log level;
+	 *         {@code false} otherwise.
+	 */
+	public boolean implies(LogLevel other) {
+		return ordinal() <= other.ordinal();
+	}
 }

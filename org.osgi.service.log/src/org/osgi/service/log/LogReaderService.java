@@ -18,24 +18,24 @@ package org.osgi.service.log;
 
 import java.util.Enumeration;
 
-import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * LogReaderService for obtaining logging information.
  * <p>
- * There are two ways to retrieve {@link LogEntry} objects:
+ * There are two ways to obtain {@link LogEntry} objects:
  * <ul>
- * <li>The primary way to retrieve {@link LogEntry} objects is to register a
- * {@code LogListener} object as a service.</li>
- * <li>To retrieve past {@link LogEntry} objects, the {@link #getLog()} method
- * can be called which will return an {@code Enumeration} of the
- * {@link LogEntry} objects in the log.</li>
+ * <li>The primary way to obtain {@link LogEntry} objects is to get a
+ * {@link LogStream} object from the service registry.</li>
+ * <li>To obtain past {@link LogEntry} objects, the {@link #getLog()} method can
+ * be called which will return an {@code Enumeration} of the {@link LogEntry}
+ * objects in the log.</li>
  * </ul>
  * 
  * @ThreadSafe
  * @author $Id$
  */
-@ConsumerType
+@ProviderType
 public interface LogReaderService {
 	/**
 	 * Subscribes to {@link LogEntry} objects.
@@ -55,9 +55,9 @@ public interface LogReaderService {
 	 * @param listener A {@link LogListener} object to register; the
 	 *            {@link LogListener} object is used to receive {@link LogEntry}
 	 *            objects.
-	 * @deprecated Since 1.4. The {@link LogListener} object should be
-	 *             registered as a service.
+	 * @deprecated Since 1.4. Replaced by {@link LogStream}.
 	 */
+	@Deprecated
 	void addLogListener(LogListener listener);
 
 	/**
@@ -70,9 +70,9 @@ public interface LogReaderService {
 	 * listeners, this method does nothing.
 	 * 
 	 * @param listener A {@link LogListener} object to unregister.
-	 * @deprecated Since 1.4. The {@link LogListener} object should be
-	 *             registered as a service.
+	 * @deprecated Since 1.4. Replaced by {@link LogStream}.
 	 */
+	@Deprecated
 	void removeLogListener(LogListener listener);
 
 	/**

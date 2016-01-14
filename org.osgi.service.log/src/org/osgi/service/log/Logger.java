@@ -19,18 +19,20 @@ package org.osgi.service.log;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Provides methods for bundles to write messages to the log.
+ * Provides methods for bundles to write messages to the log using SLF4J-style
+ * format strings.
  * <p>
  * Messages can be formatted by the Logger once the Logger determines the log
  * level is enabled. Use <code>"{}"</code> as a place holder for an argument. If
  * you need to use the literal <code>"{}"</code> in the formatted message,
- * precede with a backslash: <code>"\\{}"</code>. If you need to place a
- * backslash before the place holder, precede the backslash with a backslash:
- * <code>"\\\\{}"</code>.
+ * precede the place holder with a backslash: <code>"\\{}"</code>. If you need
+ * to place a backslash before the place holder, precede the backslash with a
+ * backslash: <code>"\\\\{}"</code>.
  * <p>
- * You can also log a Throwable and/or a ServiceReference using the formatting
- * logging methods by passing them as an additional argument which does not have
- * a corresponding place holder. For example:
+ * You can also add a {@code Throwable} and/or {@code ServiceReference} to the
+ * generated {@link LogEntry} by passing them to the logging methods as
+ * additional arguments which do not have a corresponding place holder. For
+ * example:
  * 
  * <pre>
  * logger.info("Found service {}.", serviceReference, serviceReference);
@@ -89,12 +91,9 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#TRACE} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void trace(String format, Object arg1, Object arg2, Object... arguments);
+	void trace(String format, Object... arguments);
 
 	/**
 	 * Is logging enabled for the {@link LogLevel#DEBUG} level?
@@ -132,12 +131,9 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#DEBUG} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void debug(String format, Object arg1, Object arg2, Object... arguments);
+	void debug(String format, Object... arguments);
 
 	/**
 	 * Is logging enabled for the {@link LogLevel#INFO} level?
@@ -175,12 +171,9 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#INFO} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void info(String format, Object arg1, Object arg2, Object... arguments);
+	void info(String format, Object... arguments);
 
 	/**
 	 * Is logging enabled for the {@link LogLevel#WARN} level?
@@ -218,12 +211,9 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#WARN} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void warn(String format, Object arg1, Object arg2, Object... arguments);
+	void warn(String format, Object... arguments);
 
 	/**
 	 * Is logging enabled for the {@link LogLevel#ERROR} level?
@@ -261,12 +251,9 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#ERROR} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void error(String format, Object arg1, Object arg2, Object... arguments);
+	void error(String format, Object... arguments);
 
 	/**
 	 * Log a message at the {@link LogLevel#AUDIT} level.
@@ -296,11 +283,7 @@ public interface Logger {
 	 * Log a formatted message at the {@link LogLevel#AUDIT} level.
 	 * 
 	 * @param format The format of the message to log.
-	 * @param arg1 The first argument to format into the message.
-	 * @param arg2 The second argument to format into the message.
-	 * @param arguments The third and further arguments to format into the
-	 *            message.
+	 * @param arguments The arguments to format into the message.
 	 */
-	void audit(String format, Object arg1, Object arg2, Object... arguments);
-
+	void audit(String format, Object... arguments);
 }

@@ -22,14 +22,13 @@ import org.osgi.framework.ServiceReference;
 /**
  * LogService for logging information.
  * <p>
- * Provides methods for bundles to obtain named {@link Logger}s that can be used
- * to write messages to the log.
+ * Replaced by {@link LoggerFactory}.
  * 
  * @ThreadSafe
  * @author $Id$
  */
 @ProviderType
-public interface LogService {
+public interface LogService extends LoggerFactory {
 	/**
 	 * An error message (Value 1).
 	 * <p>
@@ -37,6 +36,7 @@ public interface LogService {
 	 * 
 	 * @deprecated Since 1.4. Replaced by {@link LogLevel#ERROR}.
 	 */
+	@Deprecated
 	int	LOG_ERROR	= 1;
 	/**
 	 * A warning message (Value 2).
@@ -46,6 +46,7 @@ public interface LogService {
 	 * 
 	 * @deprecated Since 1.4. Replaced by {@link LogLevel#WARN}.
 	 */
+	@Deprecated
 	int	LOG_WARNING	= 2;
 	/**
 	 * An informational message (Value 3).
@@ -55,6 +56,7 @@ public interface LogService {
 	 * 
 	 * @deprecated Since 1.4. Replaced by {@link LogLevel#INFO}.
 	 */
+	@Deprecated
 	int	LOG_INFO	= 3;
 	/**
 	 * A debugging message (Value 4).
@@ -64,6 +66,7 @@ public interface LogService {
 	 * 
 	 * @deprecated Since 1.4. Replaced by {@link LogLevel#DEBUG}.
 	 */
+	@Deprecated
 	int	LOG_DEBUG	= 4;
 
 	/**
@@ -77,9 +80,10 @@ public interface LogService {
 	 *            in a user defined way.
 	 * @param message Human readable string describing the condition or
 	 *            {@code null}.
-	 * @deprecated Since 1.4. Replaced by {@link #getLogger(Class)} or
-	 *             {@link #getLogger(String)}.
+	 * @deprecated Since 1.4. Replaced by {@link Logger}. See
+	 *             {@link LoggerFactory}.
 	 */
+	@Deprecated
 	void log(int level, String message);
 
 	/**
@@ -95,9 +99,10 @@ public interface LogService {
 	 *            {@code null}.
 	 * @param exception The exception that reflects the condition or
 	 *            {@code null}.
-	 * @deprecated Since 1.4. Replaced by {@link #getLogger(Class)} or
-	 *             {@link #getLogger(String)}.
+	 * @deprecated Since 1.4. Replaced by {@link Logger}. See
+	 *             {@link LoggerFactory}.
 	 */
+	@Deprecated
 	void log(int level, String message, Throwable exception);
 
 	/**
@@ -114,9 +119,10 @@ public interface LogService {
 	 *            in a user defined way.
 	 * @param message Human readable string describing the condition or
 	 *            {@code null}.
-	 * @deprecated Since 1.4. Replaced by {@link #getLogger(Class)} or
-	 *             {@link #getLogger(String)}.
+	 * @deprecated Since 1.4. Replaced by {@link Logger}. See
+	 *             {@link LoggerFactory}.
 	 */
+	@Deprecated
 	void log(ServiceReference< ? > sr, int level, String message);
 
 	/**
@@ -132,27 +138,10 @@ public interface LogService {
 	 *            {@code null}.
 	 * @param exception The exception that reflects the condition or
 	 *            {@code null}.
-	 * @deprecated Since 1.4. Replaced by {@link #getLogger(Class)} or
-	 *             {@link #getLogger(String)}.
+	 * @deprecated Since 1.4. Replaced by {@link Logger}. See
+	 *             {@link LoggerFactory}.
 	 */
+	@Deprecated
 	void log(ServiceReference< ? > sr, int level, String message,
 			Throwable exception);
-
-	/**
-	 * Return a {@link Logger} named with the specified name.
-	 * 
-	 * @param name The name to use for the logger name.
-	 * @return A {@link Logger} named with the specified name.
-	 * @since 1.4
-	 */
-	Logger getLogger(String name);
-
-	/**
-	 * Return a {@link Logger} named with the specified class.
-	 * 
-	 * @param clazz The class to use for the logger name.
-	 * @return A {@link Logger} named with the specified class.
-	 * @since 1.4
-	 */
-	Logger getLogger(Class< ? > clazz);
 }
