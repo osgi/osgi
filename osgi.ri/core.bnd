@@ -2,4 +2,4 @@ Bundle-Description: OSGi Core Release ${version;=;${build.version}} Reference Im
 
 -includeresource: {legal}
 
--pack: ${jar.core.impls}
+-pack: ${build.core.impls},${jar.core.impls}

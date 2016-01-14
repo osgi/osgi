@@ -1,4 +1,7 @@
-build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
+build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
+
+build.core.impls = \
+    org.osgi.util.tracker
 
 jar.core.impls = \
 	${repo;org.osgi.impl.framework;latest}
