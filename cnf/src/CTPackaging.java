@@ -62,14 +62,22 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 
 		// Do the shared stuff, we use our project as a template
 		Project us = pb.getProject();
+		Collection<Container> runfw = us.getRunFw();
 		Collection<Container> runpath = us.getRunpath();
 
 		StringBuilder sb = new StringBuilder();
 		addNotice(sb);
 		sb.append("# Workspace information\n");
-		sb.append(Constants.RUNPATH);
+		sb.append(Constants.RUNFW);
 		sb.append(" = ");
-		flatten(analyzer, sb, jar, runpath, false, fileToPath);
+		flatten(analyzer, sb, jar, runfw, false, fileToPath);
+		if (!runpath.isEmpty()) {
+			sb.append("\n");
+			sb.append("\n");
+			sb.append(Constants.RUNPATH);
+			sb.append(" = ");
+			flatten(analyzer, sb, jar, runpath, false, fileToPath);
+		}
 		sb.append("\n\n-runtrace = true\n\n");
 		String tester = analyzer.getProperty(TESTER);
 		if (tester != null) {

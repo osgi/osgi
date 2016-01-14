@@ -104,8 +104,7 @@ Git-SHA:          ${system-allow-fail;git rev-list -1 HEAD}
 junit.package			= junit.framework;version=3.8
 junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 
--runpath							= \
-	org.osgi.impl.framework;		version=latest
+-runfw = org.osgi.impl.framework; version=latest
 
 -runtrace=true
 runproperties = report=true

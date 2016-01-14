@@ -8,4 +8,4 @@ Export-Package: ${p}.*; -split-package:=first; -noimport:=true
 	org.osgi.dto; version=project, \
 	org.osgi.resource; version=project
 
--runpath =
+-runfw =
