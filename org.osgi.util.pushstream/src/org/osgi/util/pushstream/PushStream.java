@@ -36,21 +36,20 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.promise.Promise;
 
 /**
- * An Async Stream fullfils the same role as the Java 8 stream but it reverses
- * the control direction. The Java 8 stream is pull based and this is push
- * based. An Async Stream makes it possible to build a pipeline of
- * transformations using a builder kind of model. Just like streams, it provides
- * a number of terminating methods that will actually open the channel and
- * perform the processing until the channel is closed (The source sends a Close
- * event). The results of the processing will be send to a Promise, just like
- * any error events.
+ * A Push Stream fulfills the same role as the Java 8 stream but it reverses the
+ * control direction. The Java 8 stream is pull based and this is push based. A
+ * Push Stream makes it possible to build a pipeline of transformations using a
+ * builder kind of model. Just like streams, it provides a number of terminating
+ * methods that will actually open the channel and perform the processing until
+ * the channel is closed (The source sends a Close event). The results of the
+ * processing will be send to a Promise, just like any error events.
  * 
  * A stream can be used multiple times.
  * 
- * The Async Stream represents a pipeline. Upstream is in the direction of the
+ * The Push Stream represents a pipeline. Upstream is in the direction of the
  * source, downstream is in the direction of the terminating method.
  * 
- * Events are send downstream asynchronously with no guarantee for ordering or
+ * Events are sent downstream asynchronously with no guarantee for ordering or
  * concurrency. Methods are available to provide serialization of the events and
  * splitting in background threads.
  * 
