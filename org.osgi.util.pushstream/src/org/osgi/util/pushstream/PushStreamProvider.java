@@ -17,7 +17,11 @@
 package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
+
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.util.pushstream.build.BufferBuilder;
+import org.osgi.util.pushstream.build.PushStreamBuilder;
+import org.osgi.util.pushstream.build.QueuePolicyOption;
 
 /**
  * A factory for {@link PushStream} instances, and utility methods for handling

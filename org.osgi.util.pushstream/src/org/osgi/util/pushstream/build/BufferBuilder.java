@@ -1,7 +1,9 @@
-package org.osgi.util.pushstream;
+package org.osgi.util.pushstream.build;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+
+import org.osgi.util.pushstream.PushEvent;
 
 /**
  * Create a buffered section of a Push-based stream
@@ -10,7 +12,7 @@ import java.util.concurrent.Executor;
  * @param <T> The type of objects in the {@link PushEvent}
  * @param <U> The type of the Queue used in the user specified buffer
  */
-public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends T>>> extends Createable<R> {
+public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends T>>> {
 
 	/**
 	 * The BlockingQueue implementation to use as a buffer
@@ -70,5 +72,10 @@ public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends
 	 * @return this builder
 	 */
 	BufferBuilder<R, T, U> withExecutor(Executor executor);
+	
+	/**
+	 * @return the object being built
+	 */
+	R create();
 
 }

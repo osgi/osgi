@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.util.pushstream;
+package org.osgi.util.pushstream.build;
 
 import java.util.concurrent.BlockingQueue;
+
+import org.osgi.util.pushstream.PushEvent;
 
 /**
  * {@link QueuePolicyOption} provides a standard set of simple

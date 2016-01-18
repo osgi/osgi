@@ -32,8 +32,11 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.pushstream.build.BufferBuilder;
+import org.osgi.util.pushstream.build.QueuePolicyOption;
 
 /**
  * A Push Stream fulfills the same role as the Java 8 stream but it reverses the
@@ -42,16 +45,12 @@ import org.osgi.util.promise.Promise;
  * builder kind of model. Just like streams, it provides a number of terminating
  * methods that will actually open the channel and perform the processing until
  * the channel is closed (The source sends a Close event). The results of the
- * processing will be send to a Promise, just like any error events.
- * 
- * A stream can be used multiple times.
- * 
- * The Push Stream represents a pipeline. Upstream is in the direction of the
- * source, downstream is in the direction of the terminating method.
- * 
- * Events are sent downstream asynchronously with no guarantee for ordering or
- * concurrency. Methods are available to provide serialization of the events and
- * splitting in background threads.
+ * processing will be send to a Promise, just like any error events. A stream
+ * can be used multiple times. The Push Stream represents a pipeline. Upstream
+ * is in the direction of the source, downstream is in the direction of the
+ * terminating method. Events are sent downstream asynchronously with no
+ * guarantee for ordering or concurrency. Methods are available to provide
+ * serialization of the events and splitting in background threads.
  * 
  * @param <T> The Payload type
  */
@@ -76,7 +75,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param closeHandler Will be called on close
 	 * @return This stream
 	 */
-	PushStream<T> onError(Consumer<? super Throwable> closeHandler);
+	PushStream<T> onError(Consumer< ? super Throwable> closeHandler);
 
 	/**
 	 * Only pass events downstream when the predicate tests true.
@@ -84,7 +83,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param predicate The predicate that is tested (not null)
 	 * @return Builder style (can be a new or the same object)
 	 */
-	PushStream<T> filter(Predicate<? super T> predicate);
+	PushStream<T> filter(Predicate< ? super T> predicate);
 
 	/**
 	 * Map a payload value.
@@ -92,7 +91,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param mapper The map function
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> map(Function<? super T, ? extends R> mapper);
+	<R> PushStream<R> map(Function< ? super T, ? extends R> mapper);
 
 	/**
 	 * Flat map the payload value (turn one event into 0..n events of
@@ -101,7 +100,8 @@ public interface PushStream<T> extends Closeable {
 	 * @param mapper The flat map function
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> flatMap(Function<? super T, ? extends PushStream<? extends R>> mapper);
+	<R> PushStream<R> flatMap(
+			Function< ? super T, ? extends PushStream< ? extends R>> mapper);
 
 	/**
 	 * Remove any duplicates. Notice that this can be expensive in a large
@@ -126,10 +126,9 @@ public interface PushStream<T> extends Closeable {
 	 * stream until close.
 	 * 
 	 * @param comparator
-	 * 
 	 * @return Builder style (can be a new or the same object)
 	 */
-	PushStream<T> sorted(Comparator<? super T> comparator);
+	PushStream<T> sorted(Comparator< ? super T> comparator);
 
 	/**
 	 * Automatically close the channel after the maxSize number of elements is
@@ -159,10 +158,11 @@ public interface PushStream<T> extends Closeable {
 	 * @param e an executor to use for the background threads.
 	 * @return Builder style (can be a new or the same object)
 	 * @throws IllegalArgumentException if the number of threads is < 1 or the
-	 *         delay is < 0
+	 *             delay is < 0
 	 * @throws NullPointerException if the Executor is null
 	 */
-	PushStream<T> fork(int n, int delay, Executor e) throws IllegalArgumentException, NullPointerException;
+	PushStream<T> fork(int n, int delay, Executor e)
+			throws IllegalArgumentException, NullPointerException;
 
 	/**
 	 * Buffer the events in a queue using default values for the queue size and
@@ -170,7 +170,6 @@ public interface PushStream<T> extends Closeable {
 	 * rest of the chain. Buffering also blocks the transmission of back
 	 * pressure to previous elements in the chain, although back pressure is
 	 * honoured by the buffer.
-	 * 
 	 * <p>
 	 * Buffers are useful for "bursty" event sources which produce a number of
 	 * events close together, then none for some time. These bursts can
@@ -179,19 +178,17 @@ public interface PushStream<T> extends Closeable {
 	 * events faster than they can be consumed. For fast sources
 	 * {@link #filter(Predicate)} and {@link #coalesce(int, Function)}
 	 * {@link #fork(int, int, Executor)} are better choices.
-	 * 
 	 * 
 	 * @return Builder style (can be a new or the same object)
 	 */
 	PushStream<T> buffer();
 
 	/**
-	 * Buffer the events in a queue using default values for the queue size and
-	 * other behaviours. Buffered work will be processed asynchronously in the
-	 * rest of the chain. Buffering also blocks the transmission of back
-	 * pressure to previous elements in the chain, although back pressure is
-	 * honoured by the buffer.
-	 * 
+	 * Build a buffer to enqueue events in a queue using custom values for the
+	 * queue size and other behaviours. Buffered work will be processed
+	 * asynchronously in the rest of the chain. Buffering also blocks the
+	 * transmission of back pressure to previous elements in the chain, although
+	 * back pressure is honoured by the buffer.
 	 * <p>
 	 * Buffers are useful for "bursty" event sources which produce a number of
 	 * events close together, then none for some time. These bursts can
@@ -200,7 +197,6 @@ public interface PushStream<T> extends Closeable {
 	 * events faster than they can be consumed. For fast sources
 	 * {@link #filter(Predicate)} and {@link #coalesce(int, Function)}
 	 * {@link #fork(int, int, Executor)} are better choices.
-	 * 
 	 * <p>
 	 * Buffers are also useful as "circuit breakers" in the pipeline. If a
 	 * {@link QueuePolicyOption#FAIL} is used then a full buffer will trigger
@@ -211,11 +207,9 @@ public interface PushStream<T> extends Closeable {
 	 * @param queue
 	 * @param queuePolicy
 	 * @param pushbackPolicy
-	 * 
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<U extends BlockingQueue<PushEvent<? extends T>>> PushStream<T> buffer(int parallelism, Executor executor,
-			U queue, QueuePolicy<T, U> queuePolicy, PushbackPolicy<T, U> pushbackPolicy);
+	<U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushStream<T>,T,U> buildBuffer();
 
 	/**
 	 * Merge in the events from another source. The resulting channel is not
@@ -224,17 +218,15 @@ public interface PushStream<T> extends Closeable {
 	 * @param source The source to merge in.
 	 * @return Builder style (can be a new or the same object)
 	 */
-	PushStream<? extends T> merge(PushEventSource<? extends T> source);
+	PushStream< ? extends T> merge(PushEventSource< ? extends T> source);
 
 	/**
 	 * Split the events to different streams based on a predicate. If the
 	 * predicate is true, the event is dispatched to that channel on the same
 	 * position. All predicates are tested for every event.
-	 * 
 	 * <p>
 	 * This method differs from other methods of AsyncStream in three
 	 * significant ways:
-	 * 
 	 * <ul>
 	 * <li>The return value contains multiple streams.</li>
 	 * <li>This stream will only close when all of these child streams have
@@ -247,7 +239,7 @@ public interface PushStream<T> extends Closeable {
 	 * @return streams that map to the predicates
 	 */
 	@SuppressWarnings("unchecked")
-	PushStream<T>[] split(Predicate<? super T>... predicates);
+	PushStream<T>[] split(Predicate< ? super T>... predicates);
 
 	/**
 	 * Ensure that any events are delivered sequentially. That is, no
@@ -268,7 +260,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> coalesce(Function<? super T, Optional<R>> f);
+	<R> PushStream<R> coalesce(Function< ? super T,Optional<R>> f);
 
 	/**
 	 * Coalesces a number of events into a new type of event. A fixed number of
@@ -279,7 +271,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	public <R> PushStream<R> coalesce(int count, Function<Collection<T>, R> f);
+	public <R> PushStream<R> coalesce(int count, Function<Collection<T>,R> f);
 
 	/**
 	 * Coalesces a number of events into a new type of event. A variable number
@@ -291,14 +283,13 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	public <R> PushStream<R> coalesce(IntSupplier count, Function<Collection<T>, R> f);
+	public <R> PushStream<R> coalesce(IntSupplier count,
+			Function<Collection<T>,R> f);
 
 	/**
 	 * Buffers a number of events over a fixed time interval and then forwards
 	 * the events to an accumulator function. This function returns new event
-	 * data to be forwarded on.
-	 * 
-	 * Note that:
+	 * data to be forwarded on. Note that:
 	 * <ul>
 	 * <li>The collection forwarded to the accumulator function will be empty if
 	 * no events arrived during the time interval.</li>
@@ -312,17 +303,14 @@ public interface PushStream<T> extends Closeable {
 	 * 
 	 * @param d
 	 * @param f
-	 * 
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> window(Duration d, Function<Collection<T>, R> f);
+	<R> PushStream<R> window(Duration d, Function<Collection<T>,R> f);
 
 	/**
 	 * Buffers a number of events over a fixed time interval and then forwards
 	 * the events to an accumulator function. This function returns new event
-	 * data to be forwarded on.
-	 * 
-	 * Note that:
+	 * data to be forwarded on. Note that:
 	 * <ul>
 	 * <li>The collection forwarded to the accumulator function will be empty if
 	 * no events arrived during the time interval.</li>
@@ -337,7 +325,8 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> window(Duration d, Executor executor, Function<Collection<T>, R> f);
+	<R> PushStream<R> window(Duration d, Executor executor,
+			Function<Collection<T>,R> f);
 
 	/**
 	 * Buffers a number of events over a variable time interval and then
@@ -348,9 +337,7 @@ public interface PushStream<T> extends Closeable {
 	 * function returns new event data to be forwarded on. It is also given the
 	 * length of time for which the buffer accumulated data. This may be less
 	 * than the requested interval if the buffer reached the maximum number of
-	 * requested events early.
-	 * 
-	 * Note that:
+	 * requested events early. Note that:
 	 * <ul>
 	 * <li>The collection forwarded to the accumulator function will be empty if
 	 * no events arrived during the time interval.</li>
@@ -371,7 +358,8 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> window(Supplier<Duration> timeSupplier, IntSupplier maxEvents, BiFunction<Long, Collection<T>, R> f);
+	<R> PushStream<R> window(Supplier<Duration> timeSupplier,
+			IntSupplier maxEvents, BiFunction<Long,Collection<T>,R> f);
 
 	/**
 	 * Buffers a number of events over a variable time interval and then
@@ -382,9 +370,7 @@ public interface PushStream<T> extends Closeable {
 	 * function returns new event data to be forwarded on. It is also given the
 	 * length of time for which the buffer accumulated data. This may be less
 	 * than the requested interval if the buffer reached the maximum number of
-	 * requested events early.
-	 * 
-	 * Note that:
+	 * requested events early. Note that:
 	 * <ul>
 	 * <li>The collection forwarded to the accumulator function will be empty if
 	 * no events arrived during the time interval.</li>
@@ -404,26 +390,26 @@ public interface PushStream<T> extends Closeable {
 	 * @param f
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<R> PushStream<R> window(Supplier<Duration> timeSupplier, IntSupplier maxEvents, Executor executor, BiFunction<Long, Collection<T>, R> f);
+	<R> PushStream<R> window(Supplier<Duration> timeSupplier,
+			IntSupplier maxEvents, Executor executor,
+			BiFunction<Long,Collection<T>,R> f);
 
 	/**
 	 * Execute the action for each event received until the channel is closed.
 	 * This is a terminating method, the returned promise is resolved when the
 	 * channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
 	 * @param action The action to perform
 	 * @return A promise that is resolved when the channel closes.
 	 */
-	Promise<Void> forEach(Consumer<? super T> action);
+	Promise<Void> forEach(Consumer< ? super T> action);
 
 	/**
 	 * Collect the payloads in an Object array after the channel is closed. This
 	 * is a terminating method, the returned promise is resolved when the
 	 * channel is closed.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -437,12 +423,10 @@ public interface PushStream<T> extends Closeable {
 	 * is a terminating method, the returned promise is resolved when the
 	 * channel is closed. The type of the array is handled by the caller using a
 	 * generator function that gets the length of the desired array.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
 	 * @param generator
-	 * 
 	 * @return A promise that is resolved with all the payloads received over
 	 *         the channel
 	 */
@@ -451,7 +435,6 @@ public interface PushStream<T> extends Closeable {
 	/**
 	 * Standard reduce, see Stream. The returned promise will be resolved when
 	 * the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -464,7 +447,6 @@ public interface PushStream<T> extends Closeable {
 	/**
 	 * Standard reduce without identity, so the return is an Optional. The
 	 * returned promise will be resolved when the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -476,7 +458,6 @@ public interface PushStream<T> extends Closeable {
 	/**
 	 * Standard reduce with identity, accumulator and combiner. The returned
 	 * promise will be resolved when the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -485,22 +466,21 @@ public interface PushStream<T> extends Closeable {
 	 * @param combiner combines to U's into one U (e.g. how combine two lists)
 	 * @return The promise
 	 */
-	<U> Promise<U> reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);
+	<U> Promise<U> reduce(U identity, BiFunction<U, ? super T,U> accumulator,
+			BinaryOperator<U> combiner);
 
 	/**
 	 * See Stream. Will resolve onces the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
 	 * @param collector
 	 * @return A Promise representing the collected results
 	 */
-	<R, A> Promise<R> collect(Collector<? super T, A, R> collector);
+	<R, A> Promise<R> collect(Collector< ? super T,A,R> collector);
 
 	/**
 	 * See Stream. Will resolve onces the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -508,11 +488,10 @@ public interface PushStream<T> extends Closeable {
 	 * @return A Promise representing the minimum value, or null if no values
 	 *         are seen before the end of the stream
 	 */
-	Promise<Optional<T>> min(Comparator<? super T> comparator);
+	Promise<Optional<T>> min(Comparator< ? super T> comparator);
 
 	/**
 	 * See Stream. Will resolve onces the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -520,11 +499,10 @@ public interface PushStream<T> extends Closeable {
 	 * @return A Promise representing the maximum value, or null if no values
 	 *         are seen before the end of the stream
 	 */
-	Promise<Optional<T>> max(Comparator<? super T> comparator);
+	Promise<Optional<T>> max(Comparator< ? super T> comparator);
 
 	/**
 	 * See Stream. Will resolve onces the channel closes.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -536,7 +514,6 @@ public interface PushStream<T> extends Closeable {
 	 * Close the channel and resolve the promise with true when the predicate
 	 * matches a payload. If the channel is closed before the predicate matches,
 	 * the promise is resolved with false.
-	 * 
 	 * <p>
 	 * This is a <strong>short circuiting terminal operation</strong>
 	 * 
@@ -544,13 +521,12 @@ public interface PushStream<T> extends Closeable {
 	 * @return A Promise that will resolve when an event matches the predicate,
 	 *         or the end of the stream is reached
 	 */
-	Promise<Boolean> anyMatch(Predicate<? super T> predicate);
+	Promise<Boolean> anyMatch(Predicate< ? super T> predicate);
 
 	/**
 	 * Closes the channel and resolve the promise with false when the predicate
 	 * does not matches a pay load.If the channel is closed before, the promise
 	 * is resolved with true.
-	 * 
 	 * <p>
 	 * This is a <strong>short circuiting terminal operation</strong>
 	 * 
@@ -558,13 +534,12 @@ public interface PushStream<T> extends Closeable {
 	 * @return A Promise that will resolve when an event fails to match the
 	 *         predicate, or the end of the stream is reached
 	 */
-	Promise<Boolean> allMatch(Predicate<? super T> predicate);
+	Promise<Boolean> allMatch(Predicate< ? super T> predicate);
 
 	/**
 	 * Closes the channel and resolve the promise with false when the predicate
 	 * matches any pay load. If the channel is closed before, the promise is
 	 * resolved with true.
-	 * 
 	 * <p>
 	 * This is a <strong>short circuiting terminal operation</strong>
 	 * 
@@ -572,7 +547,7 @@ public interface PushStream<T> extends Closeable {
 	 * @return A Promise that will resolve when an event matches the predicate,
 	 *         or the end of the stream is reached
 	 */
-	Promise<Boolean> noneMatch(Predicate<? super T> predicate);
+	Promise<Boolean> noneMatch(Predicate< ? super T> predicate);
 
 	/**
 	 * Close the channel and resolve the promise with the first element. If the
@@ -585,7 +560,6 @@ public interface PushStream<T> extends Closeable {
 	/**
 	 * Close the channel and resolve the promise with the first element. If the
 	 * channel is closed before, the Optional will have no value.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -595,14 +569,12 @@ public interface PushStream<T> extends Closeable {
 
 	/**
 	 * Pass on each event to another consumer until the stream is closed.
-	 * 
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
 	 * @param action
-	 * 
 	 * @return a promise
 	 */
-	Promise<Long> forEachEvent(PushEventConsumer<? super T> action);
+	Promise<Long> forEachEvent(PushEventConsumer< ? super T> action);
 
 }

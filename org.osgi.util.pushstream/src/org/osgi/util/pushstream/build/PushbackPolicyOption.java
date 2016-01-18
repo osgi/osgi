@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.util.pushstream;
+package org.osgi.util.pushstream.build;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.osgi.util.pushstream.PushEvent;
 
 /**
  * {@link PushbackPolicyOption} provides a standard set of simple

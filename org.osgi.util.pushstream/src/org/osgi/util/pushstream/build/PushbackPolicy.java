@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.util.pushstream;
+package org.osgi.util.pushstream.build;
 
 import java.util.concurrent.BlockingQueue;
 import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.util.pushstream.PushEvent;
 
 /**
  * A {@link PushbackPolicy} is used to calculate how much back pressure to apply

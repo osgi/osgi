@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.util.pushstream;
+package org.osgi.util.pushstream.build;
 
 import java.util.concurrent.BlockingQueue;
 import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.util.pushstream.PushEvent;
+import org.osgi.util.pushstream.PushEventConsumer;
+import org.osgi.util.pushstream.PushEventSource;
 import org.osgi.util.pushstream.PushEvent.EventType;
 
 /**
