@@ -1,0 +1,13 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
+
+# Since the packages don't start with the project name, we need to tell javadoc the packages
+org.osgi.service.jaxrs.whiteboard.specs = org.osgi.service.jaxrs.*
+
+Export-Package:  \
+	org.osgi.service.jaxrs.*
+
+-contract: JavaJAXRS
+-buildpath: \
+	osgi.core;version=6.0,\
+	osgi.annotation;version=6.0.1
