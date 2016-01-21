@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.service.log;
+package org.osgi.service.log.stream;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceObjects;
+import org.osgi.service.log.LogEntry;
 import org.osgi.util.pushstream.PushStream;
 
 /**
@@ -30,6 +31,7 @@ import org.osgi.util.pushstream.PushStream;
  * obtain this service using {@link ServiceObjects} to get a new, distinct
  * {@link PushStream}. For example, to inject a {@code LogStream} service into a
  * Declarative Services component:
+ * 
  * <pre>
  * &#64;Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
  * private LogStream logs;
@@ -41,7 +43,6 @@ import org.osgi.util.pushstream.PushStream;
  * the stream is closed.
  * 
  * @ThreadSafe
- * @since 1.4
  * @author $Id$
  */
 @ProviderType

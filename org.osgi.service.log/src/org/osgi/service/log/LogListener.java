@@ -29,20 +29,19 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@code LogEntry} object created. The {@code LogListener} object may be
  * unregistered by calling the {@code LogReaderService.removeLogListener}
  * method.
+ * <p>
+ * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred way
+ * to obtain {@link LogEntry} objects.
  * 
  * @ThreadSafe
  * @author $Id$
- * @deprecated Since 1.4. Replaced by {@link LogStream}.
  */
 @ConsumerType
-@Deprecated
 public interface LogListener extends EventListener {
 	/**
 	 * Listener method called for each LogEntry object created.
 	 * 
 	 * @param entry A {@link LogEntry} object containing log information.
-	 * @deprecated Since 1.4. Replaced by {@link LogStream}.
 	 */
-	@Deprecated
 	void logged(LogEntry entry);
 }

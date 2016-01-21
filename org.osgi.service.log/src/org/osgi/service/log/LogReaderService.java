@@ -26,7 +26,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * There are two ways to obtain {@link LogEntry} objects:
  * <ul>
  * <li>The primary way to obtain {@link LogEntry} objects is to get a
- * {@link LogStream} object from the service registry.</li>
+ * {@link org.osgi.service.log.stream.LogStream} object from the service
+ * registry. This replaces adding a {@link LogListener} object.</li>
  * <li>To obtain past {@link LogEntry} objects, the {@link #getLog()} method can
  * be called which will return an {@code Enumeration} of the {@link LogEntry}
  * objects in the log.</li>
@@ -51,13 +52,14 @@ public interface LogReaderService {
 	 * If this Log Reader Service's list of listeners already contains a
 	 * listener {@code l} such that {@code (l==listener)}, this method does
 	 * nothing.
+	 * <p>
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
+	 * way to obtain {@link LogEntry} objects.
 	 * 
 	 * @param listener A {@link LogListener} object to register; the
 	 *            {@link LogListener} object is used to receive {@link LogEntry}
 	 *            objects.
-	 * @deprecated Since 1.4. Replaced by {@link LogStream}.
 	 */
-	@Deprecated
 	void addLogListener(LogListener listener);
 
 	/**
@@ -68,11 +70,12 @@ public interface LogReaderService {
 	 * <p>
 	 * If {@code listener} is not contained in this Log Reader Service's list of
 	 * listeners, this method does nothing.
+	 * <p>
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
+	 * way to obtain {@link LogEntry} objects.
 	 * 
 	 * @param listener A {@link LogListener} object to unregister.
-	 * @deprecated Since 1.4. Replaced by {@link LogStream}.
 	 */
-	@Deprecated
 	void removeLogListener(LogListener listener);
 
 	/**
