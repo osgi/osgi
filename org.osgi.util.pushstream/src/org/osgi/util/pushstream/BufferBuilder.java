@@ -1,9 +1,7 @@
-package org.osgi.util.pushstream.build;
+package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-
-import org.osgi.util.pushstream.PushEvent;
 
 /**
  * Create a buffered section of a Push-based stream

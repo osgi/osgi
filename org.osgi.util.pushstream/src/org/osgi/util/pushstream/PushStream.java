@@ -35,8 +35,6 @@ import java.util.stream.Collector;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.pushstream.build.BufferBuilder;
-import org.osgi.util.pushstream.build.QueuePolicyOption;
 
 /**
  * A Push Stream fulfills the same role as the Java 8 stream but it reverses the
