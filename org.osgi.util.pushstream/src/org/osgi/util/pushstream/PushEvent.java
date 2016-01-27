@@ -32,7 +32,7 @@ import static org.osgi.util.pushstream.PushEvent.EventType.*;
  *
  * @param <T> The associated Data type
  */
-public final class PushEvent<T> {
+public abstract class PushEvent<T> {
 
 	/**
 	 * The type of the event
@@ -53,24 +53,12 @@ public final class PushEvent<T> {
 		CLOSE
 	}
 
-	private final T			data;
-	private final Exception	failure;
-	private final EventType	type;
-
-	private PushEvent(T data, Exception failure, EventType type) {
-		this.data = data;
-		this.failure = failure;
-		this.type = type;
-	}
-
 	/**
 	 * Get the type of this event
 	 * 
 	 * @return the type of the event
 	 */
-	public EventType getType() {
-		return type;
-	}
+	public abstract EventType getType();
 
 	/**
 	 * Return the data for this event or throw an exception
@@ -80,12 +68,8 @@ public final class PushEvent<T> {
 	 *         {@link EventType#DATA} event
 	 */
 	public T getData() throws IllegalStateException {
-		switch (type) {
-			case DATA :
-				return data;
-			default :
-				throw new IllegalStateException("Not a data event: " + type);
-		}
+		throw new IllegalStateException(
+				"Not a data event, the event type is " + getType());
 	}
 
 	/**
@@ -97,12 +81,8 @@ public final class PushEvent<T> {
 	 *         {@link EventType#ERROR} event
 	 */
 	public Exception getFailure() throws IllegalStateException {
-		switch (type) {
-			case ERROR :
-				return failure;
-			default :
-				throw new IllegalStateException("Not a failure event: " + type);
-		}
+		throw new IllegalStateException(
+				"Not a failure event, the event type is " + getType());
 	}
 
 	/**
@@ -111,12 +91,7 @@ public final class PushEvent<T> {
 	 * @return false if this is a data event, otherwise true.
 	 */
 	public boolean isTerminal() {
-		switch (type) {
-			case DATA :
-				return false;
-			default :
-				return true;
-		}
+		return true;
 	}
 
 	/**
@@ -126,7 +101,7 @@ public final class PushEvent<T> {
 	 * @return A new data event wrapping the supplied payload
 	 */
 	public static <T> PushEvent<T> data(T payload) {
-		return new PushEvent<T>(payload, null, DATA);
+		return new DataEvent<T>(payload);
 	}
 
 	/**
@@ -136,7 +111,7 @@ public final class PushEvent<T> {
 	 * @return a new error event with the given error
 	 */
 	public static <T> PushEvent<T> error(Exception e) {
-		return new PushEvent<T>(null, e, ERROR);
+		return new ErrorEvent<T>(e);
 	}
 
 	/**
@@ -145,7 +120,7 @@ public final class PushEvent<T> {
 	 * @return A close event
 	 */
 	public static <T> PushEvent<T> close() {
-		return new PushEvent<T>(null, null, CLOSE);
+		return new CloseEvent<T>();
 	}
 
 	/**
@@ -160,11 +135,65 @@ public final class PushEvent<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <X> PushEvent<X> nodata() throws IllegalStateException {
-		switch (type) {
-			case DATA :
-				throw new IllegalStateException("This is a data event");
-			default :
 				return (PushEvent<X>) this;
+	}
+
+	static final class DataEvent<T> extends PushEvent<T> {
+
+		private T data;
+
+		DataEvent(T data) {
+			this.data = data;
 		}
+
+		@Override
+		public T getData() throws IllegalStateException {
+			return data;
+		}
+
+		@Override
+		public EventType getType() {
+			return DATA;
+		}
+
+		@Override
+		public boolean isTerminal() {
+			return false;
+		}
+
+		@Override
+		public <X> PushEvent<X> nodata() throws IllegalStateException {
+			throw new IllegalStateException("This event is a Data event");
+		}
+
+	}
+
+	static final class ErrorEvent<T> extends PushEvent<T> {
+
+		private Exception error;
+
+		ErrorEvent(Exception error) {
+			this.error = error;
+		}
+
+		@Override
+		public Exception getFailure() {
+			return error;
+		}
+
+		@Override
+		public EventType getType() {
+			return ERROR;
+		}
+
+	}
+
+	static final class CloseEvent<T> extends PushEvent<T> {
+
+		@Override
+		public EventType getType() {
+			return CLOSE;
+		}
+
 	}
 }
