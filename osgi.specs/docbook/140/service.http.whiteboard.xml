@@ -2103,8 +2103,8 @@ public class MyServletRequestListener implements ServletRequestListener {
       linkend="service.namespaces-osgi.contract.namespace"/>.</para>
 
       <para>If the Servlet API is provided by another bundle, the Http
-      Whiteboard implementation should be a consumer of the API and require
-      the contract.</para>
+      Whiteboard implementation must be a consumer of the API and require the
+      contract.</para>
     </section>
 
     <section>
