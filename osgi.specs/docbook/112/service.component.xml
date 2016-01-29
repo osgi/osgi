@@ -4557,8 +4557,7 @@ public class MyComponent {
 
                 <entry><emphasis>v</emphasis>. charValue() != 0</entry>
 
-                <entry><emphasis>v</emphasis>.
-                <emphasis>number</emphasis>Value() != 0</entry>
+                <entry><emphasis>v</emphasis>. doubleValue() != 0</entry>
 
                 <entry>If <emphasis>v</emphasis> has no elements,
                 <code>false</code>; otherwise the first element of
@@ -4575,8 +4574,7 @@ public class MyComponent {
 
                 <entry><emphasis>v</emphasis>. charValue()</entry>
 
-                <entry>(char) <emphasis>v</emphasis>.
-                <emphasis>number</emphasis>Value()</entry>
+                <entry>(char) <emphasis>v</emphasis>. intValue()</entry>
 
                 <entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
                 the first element of <emphasis>v</emphasis> is
