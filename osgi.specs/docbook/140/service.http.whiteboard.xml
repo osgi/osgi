@@ -1202,9 +1202,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
     Once the servlet is no longer used by the Http Whiteboard implementation
     the <code>destroy()</code> method is called. Failure during
     <code>Servlet.init()</code> will prevent the servlet from being used,
-    which is reflected using a failure DTO. In such a case the system does
-    <emphasis>not</emphasis> attempt to find an alternative servlet which
-    might be present in the system with a lower ranking.</para>
+    which is reflected using a failure DTO. In such a case the system treats
+    the servlet as unusable and attempts to find an alternative servlet
+    matching the request.</para>
 
     <para>If the service properties of the servlet Whiteboard service are
     modified, the <code>destroy()</code> method is called. Subsequently the
