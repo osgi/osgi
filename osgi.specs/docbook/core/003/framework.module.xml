@@ -4251,7 +4251,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
       </listitem>
 
       <listitem>
-        <para>The manifest lists a <code>OSGI-INF/permission.perm</code> file
+        <para>The manifest lists a <code>OSGI-INF/permissions.perm</code> file
         but no such file is present.</para>
       </listitem>
 
