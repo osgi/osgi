@@ -355,29 +355,6 @@
     </section>
 
     <section role="method">
-      <title>void startBundle((DOMString or long long) bundle,
-      OSGiRestCallback cb)</title>
-
-      <formalpara role="parameter">
-        <title>bundle</title>
-
-        <para>The bundle, either the numeric bundle ID or the bundle URI
-        path.</para>
-      </formalpara>
-
-      <formalpara role="parameter">
-        <title>cb</title>
-
-        <para>The callbacks invoked on completion of the remote invocation. On
-        success the <code>success()</code> callback is invoked with the Bundle
-        State representation as JavaScript object. This parameter is
-        optional.</para>
-      </formalpara>
-
-      <para role="description">Start a bundle.</para>
-    </section>
-
-    <section role="method">
       <title>void startBundle((DOMString or long long) bundle, long options,
       OSGiRestCallback cb)</title>
 
@@ -391,8 +368,8 @@
       <formalpara role="parameter">
         <title>options</title>
 
-        <para>The options passed to the bundle's start method as a
-        number.</para>
+        <para>The options passed to the bundle's start method as a number.
+        This parameter is optional.</para>
       </formalpara>
 
       <formalpara role="parameter">
@@ -405,29 +382,6 @@
       </formalpara>
 
       <para role="description">Start a bundle.</para>
-    </section>
-
-    <section role="method">
-      <title>void stopBundle((DOMString or long long) bundle, OSGiRestCallback
-      cb)</title>
-
-      <formalpara role="parameter">
-        <title>bundle</title>
-
-        <para>The bundle, either the numeric bundle ID or the bundle URI
-        path.</para>
-      </formalpara>
-
-      <formalpara role="parameter">
-        <title>cb</title>
-
-        <para>The callbacks invoked on completion of the remote invocation. On
-        success the <code>success()</code> callback is invoked with the Bundle
-        State representation as JavaScript object. This parameter is
-        optional.</para>
-      </formalpara>
-
-      <para role="description">Stop a bundle.</para>
     </section>
 
     <section role="method">
@@ -444,8 +398,8 @@
       <formalpara role="parameter">
         <title>options</title>
 
-        <para>The options passed to the bundle's start method as a
-        number.</para>
+        <para>The options passed to the bundle's start method as a number.
+        This parameter is optional.</para>
       </formalpara>
 
       <formalpara role="parameter">
