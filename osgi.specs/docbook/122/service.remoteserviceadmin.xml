@@ -1066,9 +1066,11 @@
       <para>The Remote Service Admin returns a collection of
       <code>ExportRegistration</code> objects. This collection must contain an
       entry for each configuration type the Remote Service Admin has
-      recognized. Unrecognized configuration types must be ignored. However,
-      it is possible that this list contains <emphasis>invalid
-      registrations</emphasis>, see <xref linkend="i1791501"/>.</para>
+      recognized. Unrecognized configuration types must be ignored. Recognized
+      configuration types which require intents that are not supported by the
+      Remote Service Admin must also be ignored. However, it is possible that
+      this list contains <emphasis>invalid registrations</emphasis>, see <xref
+      linkend="i1791501"/>.</para>
 
       <para>If a Service was already exported then the Remote Service Admin
       must still return a new <code>ExportRegistration</code> object that is
