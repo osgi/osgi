@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -37,7 +39,8 @@ public class ServiceScopesTests extends OSGiTestCase {
     private BundleContext context;
     private Bundle        self;
 
-    protected void setUp() {
+	@Override
+	protected void setUp() {
         context = getContext();
         self = context.getBundle();
     }
@@ -677,6 +680,118 @@ public class ServiceScopesTests extends OSGiTestCase {
         }
     }
 
+	public void testPrototypeConsumerWithPrototypeScopeOneService()
+			throws Exception {
+		Bundle tb1 = install("serviceregistry.tb1.jar");
+		assertNotNull(tb1);
+		try {
+			tb1.start();
+			assertTrue((tb1.getState() & Bundle.ACTIVE) != 0);
+			BundleContext tb1Context = tb1.getBundleContext();
+			assertNotNull(tb1Context);
+
+			Hashtable<String,String> properties = new Hashtable<String,String>();
+			properties.put("test", "yes");
+			TestPrototypeServiceFactoryOneObject factory = new TestPrototypeServiceFactoryOneObject();
+			ServiceRegistration<TestService> registration = tb1Context
+					.registerService(TestService.class, factory, properties);
+			assertNotNull(registration);
+			ServiceReference<TestService> reference1 = context
+					.getServiceReference(TestService.class);
+			assertNotNull(reference1);
+			ServiceReference<TestService> reference2 = tb1Context
+					.getServiceReference(TestService.class);
+			assertNotNull(reference2);
+
+			ServiceObjects<TestService> objects1 = context
+					.getServiceObjects(reference1);
+			assertNotNull(objects1);
+			assertEquals(reference1, objects1.getServiceReference());
+			ServiceObjects<TestService> objects2 = tb1Context
+					.getServiceObjects(reference2);
+			assertNotNull(objects2);
+			assertEquals(reference2, objects2.getServiceReference());
+
+			assertEquals(0, factory.services.size());
+
+			TestService service1 = objects1.getService();
+			assertNotNull(service1);
+			assertEquals(1, factory.services.size());
+			assertEquals(factory.services.get(self), service1);
+			assertEquals(self.getBundleId(), service1.getId());
+
+			TestService service2 = objects2.getService();
+			assertNotNull(service2);
+			assertEquals(2, factory.services.size());
+			assertEquals(factory.services.get(tb1), service2);
+			assertEquals(tb1.getBundleId(), service2.getId());
+
+			assertNotSame(service1, service2);
+			assertEquals(1, service1.getCount().get());
+			assertEquals(1, service2.getCount().get());
+
+			TestService service11 = objects1.getService();
+			assertSame("service object not same", service1, service11);
+			assertEquals(2, service1.getCount().get());
+			TestService service12 = objects1.getService();
+			assertSame("service object not same", service1, service12);
+			assertEquals(3, service1.getCount().get());
+			assertSame("service object not same", service11, service12);
+
+			TestService service21 = objects2.getService();
+			assertSame("service object not same", service2, service21);
+			assertEquals(2, service2.getCount().get());
+			TestService service22 = objects2.getService();
+			assertSame("service object not same", service2, service22);
+			assertEquals(3, service2.getCount().get());
+			assertSame("service object not same", service21, service22);
+
+
+			objects1.ungetService(service1);
+			assertEquals(factory.services.get(self), service1);
+			assertEquals(3, service1.getCount().get());
+			objects1.ungetService(service1);
+			assertEquals(factory.services.get(self), service1);
+			assertEquals(3, service1.getCount().get());
+			objects1.ungetService(service1);
+			assertNull(factory.services.get(self));
+			try {
+				objects1.ungetService(service1);
+				fail("expected exception");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+
+			objects2.ungetService(service2);
+			assertEquals(factory.services.get(tb1), service2);
+			assertEquals(3, service2.getCount().get());
+			objects2.ungetService(service2);
+			assertEquals(factory.services.get(tb1), service2);
+			assertEquals(3, service2.getCount().get());
+			objects2.ungetService(service2);
+			assertNull(factory.services.get(tb1));
+			try {
+				objects2.ungetService(service2);
+				fail("expected exception");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+
+			registration.unregister();
+			assertNull(tb1Context.getServiceObjects(reference1));
+			tb1.stop();
+			try {
+				tb1Context.getServiceObjects(reference1);
+				fail("expected exception");
+			} catch (IllegalStateException e) {
+				// expected
+			}
+
+		} finally {
+			tb1.uninstall();
+		}
+	}
+
     public void testPrototypeScopeCleanup() throws Exception {
         Bundle tb1 = install("serviceregistry.tb1.jar");
         assertNotNull(tb1);
@@ -783,31 +898,46 @@ public class ServiceScopesTests extends OSGiTestCase {
 
     public interface TestService {
         public long getId();
+
+		public AtomicInteger getCount();
     }
 
     static class TestServiceImpl implements TestService {
         private final long id;
+		private final AtomicInteger	count;
 
         TestServiceImpl(long id) {
             this.id = id;
+			count = new AtomicInteger();
         }
 
-        public long getId() {
+		@Override
+		public long getId() {
             return id;
         }
+
+		@Override
+		public AtomicInteger getCount() {
+			return count;
+		}
     }
 
     static class TestServiceFactory implements ServiceFactory<TestService> {
         Map<Bundle, TestService> services = Collections.synchronizedMap(new HashMap<Bundle, TestService>());
 
-        public TestService getService(Bundle bundle, ServiceRegistration<TestService> registration) {
+		@Override
+		public TestService getService(Bundle bundle,
+				ServiceRegistration<TestService> registration) {
             TestService service = new TestServiceImpl(bundle.getBundleId());
             assertNull(services.get(bundle));
             services.put(bundle, service);
             return service;
         }
 
-        public void ungetService(Bundle bundle, ServiceRegistration<TestService> registration, TestService service) {
+		@Override
+		public void ungetService(Bundle bundle,
+				ServiceRegistration<TestService> registration,
+				TestService service) {
             assertEquals(services.get(bundle), service);
             assertEquals(bundle.getBundleId(), service.getId());
             services.remove(bundle);
@@ -817,7 +947,9 @@ public class ServiceScopesTests extends OSGiTestCase {
     static class TestPrototypeServiceFactory implements PrototypeServiceFactory<TestService> {
         Map<Bundle, List<TestService>> services = Collections.synchronizedMap(new HashMap<Bundle, List<TestService>>());
 
-        public TestService getService(Bundle bundle, ServiceRegistration<TestService> registration) {
+		@Override
+		public TestService getService(Bundle bundle,
+				ServiceRegistration<TestService> registration) {
             List<TestService> bundleServices = services.get(bundle);
             if (bundleServices == null) {
                 bundleServices = new ArrayList<TestService>();
@@ -828,7 +960,10 @@ public class ServiceScopesTests extends OSGiTestCase {
             return service;
         }
 
-        public void ungetService(Bundle bundle, ServiceRegistration<TestService> registration, TestService service) {
+		@Override
+		public void ungetService(Bundle bundle,
+				ServiceRegistration<TestService> registration,
+				TestService service) {
             List<TestService> bundleServices = services.get(bundle);
             assertNotNull(bundleServices);
             assertTrue(bundleServices.contains(service));
@@ -842,4 +977,33 @@ public class ServiceScopesTests extends OSGiTestCase {
             }
         }
     }
+
+	static class TestPrototypeServiceFactoryOneObject
+			implements PrototypeServiceFactory<TestService> {
+		Map<Bundle,TestService> services = Collections
+				.synchronizedMap(new HashMap<>());
+
+		@Override
+		public TestService getService(Bundle bundle,
+				ServiceRegistration<TestService> registration) {
+			TestService service = services.get(bundle);
+			if (service == null) {
+				service = new TestServiceImpl(bundle.getBundleId());
+				services.put(bundle, service);
+			}
+			service.getCount().getAndIncrement();
+			return service;
+		}
+
+		@Override
+		public void ungetService(Bundle bundle,
+				ServiceRegistration<TestService> registration,
+				TestService service) {
+			TestService bundleService = services.get(bundle);
+			assertNotNull(bundleService);
+			assertSame(bundleService, service);
+			assertEquals(bundle.getBundleId(), service.getId());
+			services.remove(bundle);
+		}
+	}
 }
