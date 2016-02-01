@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ public interface ComponentServiceObjects<S> {
 	/**
 	 * Returns a service object for the {@link #getServiceReference()
 	 * associated} service.
-	 * 
 	 * <p>
 	 * This method will always return {@code null} when the associated service
 	 * has been become unbound.
@@ -60,8 +59,9 @@ public interface ComponentServiceObjects<S> {
 	 *         a {@code ServiceFactory} does not implement the classes under
 	 *         which it was registered or the {@code ServiceFactory} threw an
 	 *         exception.
-	 * @throws IllegalStateException If the associated service has been become
-	 *         unbound.
+	 * @throws IllegalStateException If the component instance that received
+	 *             this {@code ComponentServiceObjects} object has been
+	 *             deactivated.
 	 * @see #ungetService(Object)
 	 */
 	public S getService();
@@ -69,15 +69,15 @@ public interface ComponentServiceObjects<S> {
 	/**
 	 * Releases a service object for the {@link #getServiceReference()
 	 * associated} service.
-	 * 
 	 * <p>
 	 * The specified service object must no longer be used and all references to
 	 * it should be destroyed after calling this method.
 	 * 
 	 * @param service A service object previously provided by this
 	 *        {@code ComponentServiceObjects} object.
-	 * @throws IllegalStateException If the associated service has been become
-	 *         unbound.
+	 * @throws IllegalStateException If the component instance that received
+	 *             this {@code ComponentServiceObjects} object has been
+	 *             deactivated.
 	 * @throws IllegalArgumentException If the specified service object was not
 	 *         provided by this {@code ComponentServiceObjects} object.
 	 * @see #getService()
