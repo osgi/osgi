@@ -998,8 +998,11 @@
       single service and is obtained by calling the <xref
       linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>.<xref
       linkend="org.osgi.framework.BundleContext.getServiceObjects-ServiceReference-"
-      xrefstyle="hyperlink"/> method. The <xref
-      linkend="org.osgi.framework.ServiceObjects"
+      xrefstyle="hyperlink"/> method. The caller must have
+      <code>ServicePermission[ServiceReference,GET]</code>, to get a
+      <code>ServiceObjects</code> object for a service.</para>
+
+      <para>The <xref linkend="org.osgi.framework.ServiceObjects"
       xrefstyle="hyperlink"/>.<xref
       linkend="org.osgi.framework.ServiceObjects.getService--"
       xrefstyle="hyperlink"/> method can be used to obtain multiple service
@@ -1018,23 +1021,24 @@
         </listitem>
 
         <listitem>
-          <para>Determines if the caller has
-          <code>ServicePermission[ServiceReference,GET]</code>, to get a
-          service object for the associated service. This permission check is
-          necessary so that <code>ServiceReference</code> objects can be
-          passed around freely without compromising security.</para>
-        </listitem>
-
-        <listitem>
           <para>The registered service object is cast to a <xref
           linkend="org.osgi.framework.PrototypeServiceFactory"
           xrefstyle="hyperlink"/> object and the <xref
           linkend="org.osgi.framework.PrototypeServiceFactory.getService-Bundle-ServiceRegistration-"
           xrefstyle="hyperlink"/> method is called to create a customized
-          service object which is then returned. See <xref
+          service object. See <xref
           linkend="framework.service.prototypeServiceFactory"
           xrefstyle="hyperlink"/> for more information about
           <code>PrototypeServiceFactory</code> objects.</para>
+        </listitem>
+
+        <listitem>
+          <para>The usage count for the customized service object is
+          incremented.</para>
+        </listitem>
+
+        <listitem>
+          <para>The customized service object is returned.</para>
         </listitem>
       </itemizedlist>
 
@@ -1165,15 +1169,21 @@
         </listitem>
 
         <listitem>
-          <para>If the specified service object was not provided by a
-          <code>ServiceObjects</code> for the <link
+          <para>If the specified service object is <code>null</code> or was
+          not provided by a <code>ServiceObjects</code> for the <link
           linkend="org.osgi.framework.ServiceObjects.getServiceReference--"
           xrefstyle="hyperlink">associated</link> service, then an
           <code>IllegalArgumentException</code> is thrown.</para>
         </listitem>
 
         <listitem>
-          <para>The registered service object is cast to a <xref
+          <para>The usage count for the specified service object is
+          decremented.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the usage count for the specified service object is now
+          zero, the registered service object is cast to a <xref
           linkend="org.osgi.framework.PrototypeServiceFactory"
           xrefstyle="hyperlink"/> object and the <xref
           linkend="org.osgi.framework.PrototypeServiceFactory.ungetService-Bundle-ServiceRegistration-S-"
@@ -1587,6 +1597,11 @@
         necessary so the Framework can release all unused and unreleased
         customized service objects - for example, when a requesting bundle is
         stopped or the service object is unregistered.</para>
+
+        <para>Since this method can return the same service object repeatedly,
+        the framework must maintain a usage count for each customized service
+        object so that it is only released when its usage count returns to
+        zero.</para>
       </listitem>
 
       <listitem>
@@ -1829,19 +1844,9 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added <xref linkend="framework.service.scope"/> and <xref
-        linkend="framework.service.prototypeServiceFactory"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <code>service.id</code> description in <xref
-        linkend="framework.service.serviceproperties"/> to state that the
-        values are non-negative.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>service.bundleid</code> service property in <xref
-        linkend="framework.service.serviceproperties"/>.</para>
+        <para>Updated <xref
+        linkend="framework.service.prototypeServiceFactory"/> to specify that
+        customized service objects must be use counted.</para>
       </listitem>
     </itemizedlist>
   </section>
