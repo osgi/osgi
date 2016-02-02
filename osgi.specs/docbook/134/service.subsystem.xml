@@ -427,7 +427,8 @@
       </section>
 
       <section>
-        <title>Require-Bundle: com.acme.chess; version= "[1.0, 2.0)"</title>
+        <title>Require-Bundle: com.acme.chess;
+        bundle-version="[1.0,2.0)"</title>
 
         <para>The Require-Bundle header declares the required bundles for a
         Scoped Subsystem. See <xref linkend="i3321711"/>.</para>
@@ -4007,7 +4008,8 @@ Subsystem-Content:
       </section>
 
       <section>
-        <title>Require-Bundle: com.acme.logging;version="[1.0, 1.1)"</title>
+        <title>Require-Bundle: com.acme.logging;
+        bundle-version="[1.0,1.1)"</title>
 
         <para>The Require-Bundle header lists bundle requirements for bundle
         capabilities that are to be imported into a Scoped Subsystem. See
