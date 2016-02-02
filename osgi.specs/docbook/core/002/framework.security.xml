@@ -889,7 +889,12 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
         <listitem>
           <para>Capability Permission <code>REQUIRE</code> for the
-          <code>osgi.ee</code> capability.</para>
+          <code>osgi.ee</code> namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para>Capability Permission <code>REQUIRE</code> for the
+          <code>osgi.native</code> namespace.</para>
         </listitem>
       </itemizedlist>
     </section>
