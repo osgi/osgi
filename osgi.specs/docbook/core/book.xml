@@ -15,12 +15,12 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo xml:id="core.book-release">Release 6</releaseinfo>
+    <releaseinfo xml:id="core.book-release">Release 7</releaseinfo>
 
-    <pubdate>June 2014</pubdate>
+    <pubdate>TBD</pubdate>
 
     <copyright>
-      <year>2000, 2014</year>
+      <year>2000, 2016</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
