@@ -8,7 +8,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>ConditionalPermission Admin Service Specification</title>
+  <title>Conditional Permission Admin Service Specification</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.condpermadmin-version"
