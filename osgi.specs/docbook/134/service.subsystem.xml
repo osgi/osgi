@@ -1134,9 +1134,13 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
 
       <listitem>
         <para>The Root Subsystem has a symbolic name of
-        <code>org.osgi.service.subsystem.root</code>, version 1.0.0, Subsystem
-        identifier of 0, and a location of <programlisting>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; «
-    Subsystem-Version=1.0.0</programlisting></para>
+        <code>org.osgi.service.subsystem.root</code>, version <xref
+        endterm="org.osgi.service.subsystem-version.number"
+        linkend="org.osgi.service.subsystem"/>, Subsystem identifier of 0, and
+        a location of <programlisting>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; «
+    Subsystem-Version=<xref
+              endterm="org.osgi.service.subsystem-version.number"
+              linkend="org.osgi.service.subsystem"/></programlisting></para>
       </listitem>
     </itemizedlist>
 
@@ -2927,12 +2931,15 @@ Subsystem-Content:
       <orderedlist>
         <listitem>
           <para>The Root Subsystem has a symbolic name
-          <code>org.osgi.service.subsystem.root</code>, <code>version
-          1.0.0</code> (the version of the Subsystems specification), a
-          Subsystem <code>id</code> of 0 and a location of</para>
+          <code>org.osgi.service.subsystem.root</code>, version <code><xref
+          endterm="org.osgi.service.subsystem-version.number"
+          linkend="org.osgi.service.subsystem"/></code> (the version of the
+          Subsystems specification), a Subsystem <code>id</code> of 0 and a
+          location of</para>
 
           <programlisting>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; «
- Subsystem-Version=1.0.0</programlisting>
+ Subsystem-Version=<xref endterm="org.osgi.service.subsystem-version.number"
+              linkend="org.osgi.service.subsystem"/></programlisting>
         </listitem>
 
         <listitem>
