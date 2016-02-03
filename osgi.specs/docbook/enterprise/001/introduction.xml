@@ -813,7 +813,8 @@
               linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
               linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
               linkend="org.osgi.namespace.implementation"/></code></para><para><code><xref
-              linkend="org.osgi.namespace.service"/></code></para></entry>
+              linkend="org.osgi.namespace.service"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.unresolvable"/></code></para></entry>
 
               <entry><code><xref endterm="service.namespaces-version"
               linkend="service.namespaces"/></code></entry>
@@ -919,5 +920,15 @@
       xml:id="enterprise.intro-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Updated <xref linkend="service.namespaces"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

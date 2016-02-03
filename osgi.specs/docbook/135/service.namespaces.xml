@@ -12,7 +12,7 @@
   <title>Common Namespaces Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.namespaces-version">Version 1.1</releaseinfo>
+    <releaseinfo xml:id="service.namespaces-version">Version 1.2</releaseinfo>
   </info>
 
   <section>
@@ -569,8 +569,7 @@ DynamicImport-Package:
             <entry><para>Custom attributes that will be provided as service
             properties if they do not conflict with the service properties
             rules and are not private service properties. Private properties
-            start with a full
-            stop (<code>'.' \u002E</code>).</para></entry>
+            start with a full stop (<code>'.' \u002E</code>).</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -713,6 +712,38 @@ DynamicImport-Package:
     </table>
   </section>
 
+  <section xml:id="service.namespaces-osgi.unresolvable.namespace">
+    <title>osgi.unresolvable Namespace</title>
+
+    <para>The Unresolvable Namespace is intended to be used to mark a bundle
+    as unresolvable:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Preventing the bundle from resolving since it is intended for
+        compilation use only and is not intended for runtime use.</para>
+      </listitem>
+
+      <listitem>
+        <para>Providing a hint to the provisioning agent that the bundle must
+        not be included in a provisioning solution.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>For example, a bundle that must be unresolvable at runtime can
+    include the following requirement:</para>
+
+    <programlisting>Require-Capability: osgi.unresolvable;
+  filter:="(&amp;(must.not.resolve=*)(!(must.not.resolve=*)))"</programlisting>
+
+    <para>The filter expression in the example above always evaluates to
+    <code>false</code>.</para>
+
+    <para>See the <xref
+    linkend="org.osgi.namespace.unresolvable.UnresolvableNamespace"
+    xrefstyle="hyperlink"/> class for this Namespace definition.</para>
+  </section>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.contract.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.extender.xml"/>
@@ -720,6 +751,8 @@ DynamicImport-Package:
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.service.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.implementation.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.unresolvable.xml"/>
 
   <section>
     <title>References</title>
@@ -751,5 +784,16 @@ DynamicImport-Package:
       Versioning</title>OSGi Core, Chapter 3, Semantic
       Versioning</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added <xref
+        linkend="service.namespaces-osgi.unresolvable.namespace"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

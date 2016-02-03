@@ -4,6 +4,7 @@ osgi.enterprise.specs = \
      org.osgi.namespace.extender, \
      org.osgi.namespace.implementation, \
      org.osgi.namespace.service, \
+     org.osgi.namespace.unresolvable, \
 	 org.osgi.service.async, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \

@@ -3,6 +3,7 @@ osgi.residential.specs = \
      org.osgi.namespace.extender, \
      org.osgi.namespace.implementation, \
      org.osgi.namespace.service, \
+     org.osgi.namespace.unresolvable, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.component.annotations, \
