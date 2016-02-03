@@ -5009,45 +5009,15 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     </bibliolist>
   </section>
 
+  <!--
   <section>
     <title>Changes</title>
 
     <itemizedlist>
       <listitem>
-        <para>Specified the translation of subsystem manifest headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added more informational subsystem manifest headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Specified the interaction between Subsystems and Weaving Hooks
-        for the purposes of supporting dynamically added import
-        packages.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added the ability to override the archive's deployment manifest
-        at install time.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added the ability to retrieve deployment manifest
-        headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Specified a means for declaratively identifying the services a
-        bundle provides.</para>
-      </listitem>
-
-      <listitem>
-        <para>Modified the procedure for determining dependencies to include
-        the capabilities, in a specified order, from all repositories in order
-        to increase the likelihood that a resolution will be found such as
-        when a uses constraint violation would otherwise result.</para>
+        <para/>
       </listitem>
     </itemizedlist>
   </section>
+  -->
 </chapter>
