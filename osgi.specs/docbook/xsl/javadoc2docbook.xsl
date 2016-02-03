@@ -471,7 +471,7 @@ version="1.1">
 <xsl:template match="a[@href]" mode="html">
   <xsl:choose>
     <!-- external link -->
-    <xsl:when test="starts-with(@href, 'http:')">
+    <xsl:when test="starts-with(@href, 'http:') or starts-with(@href, 'https:')">
       <xsl:element name="link" namespace="{$ns}">
         <xsl:attribute name="xlink:href">
           <xsl:value-of select="@href"/>
