@@ -2995,8 +2995,8 @@ D: Export-Package: s</programlisting>
     itself is represented as a bundle. The bundle representing the Framework
     is referred to as the <emphasis>system bundle</emphasis>. Through the
     system bundle, the Framework may register services that can be used by
-    other bundles. Examples of such a service is the Permission Admin
-    service.</para>
+    other bundles. Examples of such a service is the Conditional Permission
+    Admin service.</para>
 
     <para>The system bundle resembles the framework object when a framework is
     launched, but implementations are not required to use the same object for
@@ -3058,13 +3058,19 @@ D: Export-Package: s</programlisting>
     </itemizedlist>
 
     <section xml:id="i3293513">
-      <title>System Bundle Headers</title>
+      <title>System Bundle Information</title>
 
-      <para xml:id="i3291840">The system bundle's
-      <code>Bundle.getHeaders</code> method returns a <code>Dictionary</code>
-      object with implementation-specific manifest headers. The following
-      headers of this OSGi specification can be returned in this dictionary.
-      Headers not mentioned in this table should not be used.</para>
+      <para>The capabilities of the system bundle are obtained by adapting the
+      system bundle to a <xref
+      linkend="org.osgi.framework.wiring.BundleWiring" xrefstyle="hyperlink"/>
+      as described in <xref linkend="framework.lifecycle.adaptations"/>. This
+      is in preference to parsing the system bundle's headers.</para>
+
+      <para>The system bundle's <code>Bundle.getHeaders</code> method returns
+      a <code>Dictionary</code> object with implementation-specific manifest
+      headers. The following headers of this OSGi specification can be
+      returned in this dictionary. Headers not mentioned in this table should
+      not be used.</para>
 
       <table>
         <title>Supported headers in the system bundle getHeaders
@@ -3896,34 +3902,15 @@ D: Export-Package: s</programlisting>
     </bibliolist>
   </section>
 
+  <!-- 
   <section>
     <title>Changes</title>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="framework.lifecycle.launchingproperties"/> is
-        updated to include the Environment Properties.</para>
-      </listitem>
-
-      <listitem>
-        <para>New <xref linkend="org.osgi.framework.launch.Framework"
-        xrefstyle="hyperlink"/>.<xref
-        linkend="org.osgi.framework.launch.Framework.init-FrameworkListener...-"
-        xrefstyle="hyperlink"/> method to allow FrameworkListeners to be
-        specified to observe events during Framework initialization.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for Extension Bundle Activators in <xref
-        linkend="framework.lifecycle.initializing"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that BundleContext may be observable as invalid during
-        delivery of UNREGISTERING event for services registered by the bundle
-        being stopped in <xref
-        linkend="framework.lifecycle-bundlecontext"/>.</para>
+        <para/>
       </listitem>
     </itemizedlist>
   </section>
+  -->
 </chapter>
