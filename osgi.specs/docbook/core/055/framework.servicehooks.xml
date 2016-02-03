@@ -976,15 +976,4 @@ public void removed( Collection lis ) {
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified the relationship of service hooks to the system
-        bundle.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

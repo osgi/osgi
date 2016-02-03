@@ -1339,31 +1339,4 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Introduction of <emphasis>Requirement Expressions</emphasis> to
-        represent combined requirements.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduction of <emphasis>Requirement Builder</emphasis> to
-        facilitate the creation of Requirement objects.</para>
-      </listitem>
-
-      <listitem>
-        <para>Changes to default content for the <emphasis>Repository
-        Content</emphasis> API and <code>osgi.content</code>
-        capability.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduction of <code>osgi.implementation</code> and
-        <code>osgi.service</code> <emphasis>capabilities</emphasis>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

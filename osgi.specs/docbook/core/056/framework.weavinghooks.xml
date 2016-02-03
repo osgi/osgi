@@ -789,18 +789,4 @@
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for <xref
-        linkend="org.osgi.framework.hooks.weaving.WovenClassListener"
-        xrefstyle="hyperlink"/> to be able to observe woven class state
-        transitions in <xref
-        linkend="framework.weavinghooks-wovenclasslistener"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

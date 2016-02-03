@@ -5533,38 +5533,4 @@ URL(String protocol, String host, String file)</programlisting>
       Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified <xref
-        linkend="framework.module-import.export.same.package"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for the new <code>osgi.native</code> namespace in
-        <xref
-        linkend="framework.module-loading.native.code.libraries"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for Extension Bundle Activators in <xref
-        linkend="framework.module.extensionActivator"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref
-        linkend="framework.module-semantic.versioning.type.roles"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated the <code>Bundle-NativeCode</code> grammar in <xref
-        linkend="framework.module-loading.native.code.libraries"/> to not
-        require a <code>parameter</code> on the <code>nativecode</code>
-        clause.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

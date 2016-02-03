@@ -3901,16 +3901,4 @@ D: Export-Package: s</programlisting>
       Namespace</title>http://www.ietf.org/rfc/rfc4122.txt</bibliomixed>
     </bibliolist>
   </section>
-
-  <!-- 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para/>
-      </listitem>
-    </itemizedlist>
-  </section>
-  -->
 </chapter>

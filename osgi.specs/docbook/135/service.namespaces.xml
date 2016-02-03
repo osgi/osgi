@@ -752,28 +752,4 @@ DynamicImport-Package:
       Versioning</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified osgi.extender Namespace and added a section on the
-        relationship with framework hooks.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified osgi.contract Namespace and examples.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref
-        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified versioning of capabilities in a namespace.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

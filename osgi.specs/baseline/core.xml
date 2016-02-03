@@ -965,25 +965,6 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="framework.module-semantic.versioning.type.roles"/> and <link linkend="org.osgi.annotation.versioning">Versioning Annotations</link>
-        to document version and type role information for packages.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.dto" xrefstyle="template:%n %t"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.service.scope"/> and <xref linkend="framework.service.prototypeServiceFactory"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="2" revision="$Id: 2c2841ce579036d35ee5fe509772118d6b77de42 $" version="5" xml:id="framework.security" xml:base="002/framework.security.xml">
@@ -7383,35 +7364,6 @@ URL(String protocol, String host, String file)</programlisting>
       Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified <xref linkend="framework.module-import.export.same.package"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for the new <code>osgi.native</code> namespace in
-        <xref linkend="framework.module-loading.native.code.libraries"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for Extension Bundle Activators in <xref linkend="framework.module.extensionActivator"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.module-semantic.versioning.type.roles"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated the <code>Bundle-NativeCode</code> grammar in <xref linkend="framework.module-loading.native.code.libraries"/> to not
-        require a <code>parameter</code> on the <code>nativecode</code>
-        clause.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="4" revision="$Id: d733b61db0f837397906a5f8ef93b365720f8b04 $" version="5" xml:id="framework.lifecycle" xml:base="004/framework.lifecycle.xml">
@@ -11089,32 +11041,6 @@ D: Export-Package: s</programlisting>
       Namespace</title>http://www.ietf.org/rfc/rfc4122.txt</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="framework.lifecycle.launchingproperties"/> is
-        updated to include the Environment Properties.</para>
-      </listitem>
-
-      <listitem>
-        <para>New <xref linkend="org.osgi.framework.launch.Framework" xrefstyle="hyperlink"/>.<xref linkend="org.osgi.framework.launch.Framework.init-FrameworkListener...-" xrefstyle="hyperlink"/> method to allow FrameworkListeners to be
-        specified to observe events during Framework initialization.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for Extension Bundle Activators in <xref linkend="framework.lifecycle.initializing"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that BundleContext may be observable as invalid during
-        delivery of UNREGISTERING event for services registered by the bundle
-        being stopped in <xref linkend="framework.lifecycle-bundlecontext"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="5" revision="$Id: dc872347400060bc928136d35d697e7100a5df10 $" version="5" xml:id="framework.service" xml:base="005/framework.service.xml">
@@ -12662,25 +12588,6 @@ D: Export-Package: s</programlisting>
       not have permission to access.</para>
     </section>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="framework.service.scope"/> and <xref linkend="framework.service.prototypeServiceFactory"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <code>service.id</code> description in <xref linkend="framework.service.serviceproperties"/> to state that the
-        values are non-negative.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>service.bundleid</code> service property in <xref linkend="framework.service.serviceproperties"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="6" revision="$Id: e7609d3c791400b3a5807eca5edaa9e80888a018 $" version="5" xml:id="framework.resource" xml:base="006/framework.resource.xml">
@@ -13876,21 +13783,6 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <itemizedlist>
       <listitem>
         <para><code>RESOLVE</code> (for the system bundle) - For <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-" xrefstyle="hyperlink"/> and <xref linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-" xrefstyle="hyperlink"/></para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified <code>osgi.identity</code> capabilities and
-        requirements relationship to host bundle wirings in <xref linkend="framework.wiring-fragments"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="org.osgi.framework.wiring.FrameworkWiring" xrefstyle="hyperlink"/>.<xref linkend="org.osgi.framework.wiring.FrameworkWiring.findProviders-Requirement-" xrefstyle="hyperlink"/> method.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -15205,21 +15097,6 @@ Bundle B:
       <bibliomixed xml:id="i1775657"><title>Specification
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified that bundles may not specify an <code>osgi.ee</code>
-        capability in <xref linkend="framework.namespaces.osgi.ee"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.namespaces.osgi.native"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -38584,17 +38461,6 @@ Find hook method. This method is called for the following:
       </section>
    </section>
 </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified the relationship of bundle hooks to the system
-        bundle.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="55" revision="$Id: 0f7f7424150dc7705830604a576c032d24bbd430 $" version="5" xml:id="framework.servicehooks" xml:base="055/framework.servicehooks.xml">
@@ -39883,17 +39749,6 @@ Return the state of the listener for this addition and removal life
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified the relationship of service hooks to the system
-        bundle.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="56" revision="$Id: 63fe5e14b31edaa405c823048de44ac7ef91782f $" version="5" xml:id="framework.weavinghooks" xml:base="056/framework.weavinghooks.xml">
@@ -41095,17 +40950,6 @@ Receives notification that a <link linkend="org.osgi.framework.hooks.weaving.Wov
       <bibliomixed xml:id="framework.weavinghooks-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added support for <xref linkend="org.osgi.framework.hooks.weaving.WovenClassListener" xrefstyle="hyperlink"/> to be able to observe woven class state
-        transitions in <xref linkend="framework.weavinghooks-wovenclasslistener"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 

@@ -2867,41 +2867,4 @@ xml                    ::= &lt;*&gt; *</programlisting>
       (SCA)</title>http://www.osoa.org/display/Main/Home</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Introduced Endpoint Event Listener.</para>
-      </listitem>
-
-      <listitem>
-        <para>Deprecated Endpoint Listener.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added update to Import Registration and Export
-        Registration.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added capability namespace definitions.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed endpoint sharing.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed text around setting of Framework UUID property (not
-        needed for Core Frameworks version 4.3 or newer).</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified the rules concerning Remote Service Endpoint
-        identifier uniqueness.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

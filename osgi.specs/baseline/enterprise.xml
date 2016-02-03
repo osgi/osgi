@@ -1039,52 +1039,6 @@
       Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Updated <xref linkend="service.metatype"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.component"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.remoteserviceadmin"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.repository"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.subsystem"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.namespaces"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.rest"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.async"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.http.whiteboard"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="util.promise"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="100" revision="$Id: ee983de18ea9cc5da27201d84878e35809cf31b7 $" version="5" xml:id="service.remoteservices" xml:base="../100/service.remoteservices.xml">
@@ -9432,28 +9386,6 @@ Synchronous Listener for Configuration Events. When a
       </formalpara>
    </section>
 </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified that collection property values may have an ordering
-        that must be preserved.</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed vector references to list.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that a if Managed Service is registered with more than
-        one PID and more than one PID has no configuration information
-        available, then <code>updated(Dictionary)</code> can be called
-        multiple time with a <code>null</code> parameter.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter xmlns:ns5="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1998/Math/MathML" xmlns:ns3="http://www.w3.org/1999/xhtml" label="105" revision="$Id: eaa505902a8a3387dcf3dec89d3421587fe458f5 $" version="5" xml:id="service.metatype" xml:base="../105/service.metatype.xml">
@@ -12794,52 +12726,6 @@ The value of this Option.
       Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,
       MacMillan Technical publishing.</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Changed vector references to list.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updates schema to 1.3.0. This includes changing
-        <code>Char</code> to <code>Character</code> to conform with other OSGi
-        schema and allowing some more flexibility in ordering of
-        elements.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that Meta Type Service will only search for
-        ManagedService and ManagedServiceFactory service objects that
-        implement MetaTypeProvider if no meta type resources are found in the
-        bundle.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarify that if multiple sources define the same Object Class
-        Definition, that Meta Type Provider services must take precedence over
-        Managed Service [Factory] objects implementing
-        <code>MetaTypeProvider</code> or Meta Type Resources.</para>
-      </listitem>
-
-      <listitem>
-        <para>The Meta Type Resource schema is updated to allow an
-        <code>OCD</code> element to contain zero <code>AD</code>
-        elements.</para>
-      </listitem>
-
-      <listitem>
-        <para>New Meta Type Annotations. See <xref linkend="service.metatype-metatype.annotations"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added capabilities that Metatype Service specification
-        implementations must provide. See <xref linkend="service.metatype-capabilities"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -24853,86 +24739,6 @@ The target services.
       <bibliomixed xml:id="i1655737"><title>OSGi XML
       Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="i1649746"/> has been rewritten to more accurately
-        state the effects of configuration changes on component
-        configurations.</para>
-      </listitem>
-
-      <listitem>
-        <para>New introspection API. See <xref linkend="service.component-introspection"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Defined capabilities SCR must provide. See <xref linkend="service.component-capabilities"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Expanded the allowed signatures and argument types for Event
-        Methods. See <xref linkend="service.component-event.methods"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New scope attribute for the service element. See <xref linkend="service.component-service.element"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New scope attribute for the reference element. See <xref linkend="service.component-reference.scope"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New reference element for Component annotation. See <xref linkend="service.component-reference.element"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New minimum cardinality property. See <xref linkend="service.component-minimum.cardinality.property"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for a component using multiple configuration PIDs.
-        See <xref linkend="service.component-component.element"/>, <xref linkend="service.component-component.properties"/>, and <xref linkend="service.component-deployment"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para><code>service.pid</code> property values are aggregated across
-        configuration sources. See <xref linkend="service.component-component.properties"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>SCR must check ConfigurationPermission for multi-location
-        Configurations. See <xref linkend="service.component-multi.location.regions"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for targeted PIDs for Configurations. See <xref linkend="service.component-deployment"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>New component property types can be used for type safe component
-        property definition and access. See <xref linkend="service.component-component.property.types"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Specified the ordering of property information component
-        descriptions generated from annotations. See <xref linkend="service.component-ordering.generated.properties"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Maps of service properties must also implement Comparable. See
-        <xref linkend="service.component-event.methods"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Support for field strategy is added. See <xref linkend="service.component-field.strategy"/>. This change affects many
-        areas of this specification.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -42475,43 +42281,6 @@ Namespace name for Remote Services topology manager capabilities and
       <bibliomixed xml:id="i1789031"><title>Service Component Architecture
       (SCA)</title>http://www.osoa.org/display/Main/Home</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Introduced Endpoint Event Listener.</para>
-      </listitem>
-
-      <listitem>
-        <para>Deprecated Endpoint Listener.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added update to Import Registration and Export
-        Registration.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added capability namespace definitions.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed endpoint sharing.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed text around setting of Framework UUID property (not
-        needed for Core Frameworks version 4.3 or newer).</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified the rules concerning Remote Service Endpoint
-        identifier uniqueness.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 
@@ -60746,33 +60515,6 @@ The super interface for all requirement expressions. All requirement
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Introduction of <emphasis>Requirement Expressions</emphasis> to
-        represent combined requirements.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduction of <emphasis>Requirement Builder</emphasis> to
-        facilitate the creation of Requirement objects.</para>
-      </listitem>
-
-      <listitem>
-        <para>Changes to default content for the <emphasis>Repository
-        Content</emphasis> API and <code>osgi.content</code>
-        capability.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduction of <code>osgi.implementation</code> and
-        <code>osgi.service</code> <emphasis>capabilities</emphasis>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="133" revision="$Id: d84d864df112e7102cf3099a6573171c2a4e584e $" version="5" xml:id="service.loader" xml:base="../133/service.loader.xml">
@@ -68863,48 +68605,6 @@ Returns a new <code>PermissionCollection</code> object suitable for storing
       initiative</title> http://www.opensource.org/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Specified the translation of subsystem manifest headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added more informational subsystem manifest headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Specified the interaction between Subsystems and Weaving Hooks
-        for the purposes of supporting dynamically added import
-        packages.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added the ability to override the archive's deployment manifest
-        at install time.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added the ability to retrieve deployment manifest
-        headers.</para>
-      </listitem>
-
-      <listitem>
-        <para>Specified a means for declaratively identifying the services a
-        bundle provides.</para>
-      </listitem>
-
-      <listitem>
-        <para>Modified the procedure for determining dependencies to include
-        the capabilities, in a specified order, from all repositories in order
-        to increase the likelihood that a resolution will be found such as
-        when a uses constraint violation would otherwise result.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="135" revision="$Id: 45c3744f05790eff8f996dbec881006066ad1afb $" version="5" xml:id="service.namespaces" xml:base="../135/service.namespaces.xml">
@@ -69939,29 +69639,6 @@ Namespace name for "implementation" capabilities and requirements.
       Versioning</title>OSGi Core, Chapter 3, Semantic
       Versioning</bibliomixed>
     </bibliolist>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified osgi.extender Namespace and added a section on the
-        relationship with framework hooks.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified osgi.contract Namespace and examples.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified versioning of capabilities in a namespace.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
 

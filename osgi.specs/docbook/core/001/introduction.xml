@@ -799,27 +799,4 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref
-        linkend="framework.module-semantic.versioning.type.roles"/> and <link
-        linkend="org.osgi.annotation.versioning">Versioning Annotations</link>
-        to document version and type role information for packages.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.dto"
-        xrefstyle="template:%n %t"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.service.scope"/> and <xref
-        linkend="framework.service.prototypeServiceFactory"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

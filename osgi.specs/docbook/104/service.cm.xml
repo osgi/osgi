@@ -2442,26 +2442,4 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Clarified that collection property values may have an ordering
-        that must be preserved.</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed vector references to list.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified that a if Managed Service is registered with more than
-        one PID and more than one PID has no configuration information
-        available, then <code>updated(Dictionary)</code> can be called
-        multiple time with a <code>null</code> parameter.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

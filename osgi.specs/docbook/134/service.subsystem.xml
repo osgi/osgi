@@ -5015,16 +5015,4 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       initiative</title> http://www.opensource.org/</bibliomixed>
     </bibliolist>
   </section>
-
-  <!--
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para/>
-      </listitem>
-    </itemizedlist>
-  </section>
-  -->
 </chapter>
