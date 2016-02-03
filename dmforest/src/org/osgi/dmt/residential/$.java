@@ -2,6 +2,7 @@
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.P;
+
 import org.osgi.dmt.ddf.MutableMAP;
 import org.osgi.dmt.ddf.Opt;
 import org.osgi.dmt.ddf.Scope;
@@ -22,9 +23,9 @@ public interface $ {
 	Framework Framework();
 
 	/**
-	 * The Filters node searches the nodes in a tree that correspond to a target
+	 * The Filter node searches the nodes in a tree that correspond to a target
 	 * URI and an optional filter expression. A new {@link Filter} is created by
-	 * adding a node to the Filters node. The name of the node is chosen by the
+	 * adding a node to the Filter node. The name of the node is chosen by the
 	 * remote manager. If multiple managers are active they must agree on a
 	 * scheme to avoid conflicts or an atomic sessions must be used to claim
 	 * exclusiveness.
