@@ -5504,11 +5504,11 @@ URL(String protocol, String host, String file)</programlisting>
       Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
 
       <bibliomixed xml:id="i3215677"><title>OSGi Header
-      Registry</title>http://www.osgi.org/Specifications/ReferenceHeaders</bibliomixed>
+      Registry</title>https://www.osgi.org/bundle-headers-reference/</bibliomixed>
 
       <bibliomixed xml:id="framework.module.namespace-registry"><title>OSGi
       Namespace
-      Registry</title>http://www.osgi.org/Specifications/ReferenceNamespaces</bibliomixed>
+      Registry</title>https://www.osgi.org/capability-namespaces-reference/</bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
       Specification (Second
@@ -5518,10 +5518,10 @@ URL(String protocol, String host, String file)</programlisting>
       Initiative</title>http://www.opensource.org/</bibliomixed>
 
       <bibliomixed><title>OSGi Semantic
-      Versioning</title>http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf</bibliomixed>
+      Versioning</title>https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf</bibliomixed>
 
       <bibliomixed xml:id="i3242547"><title>Specification
-      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
+      References</title>https://www.osgi.org/developer/specifications/reference/</bibliomixed>
 
       <bibliomixed xml:id="i3246261"><title>Google
       Android</title>http://developer.android.com/index.html</bibliomixed>

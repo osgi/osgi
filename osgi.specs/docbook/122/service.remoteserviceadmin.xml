@@ -2849,7 +2849,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i1693238"><title>OSGi Service Property
-      Namespace</title>http://www.osgi.org/Specifications/ServicePropertyNamespace</bibliomixed>
+      Namespace</title>https://www.osgi.org/service-property-namespace/</bibliomixed>
 
       <bibliomixed
       xml:id="i1709441"><title>UUIDs</title>http://en.wikipedia.org/wiki/Universally_Unique_Identifier</bibliomixed>

@@ -1615,11 +1615,11 @@ client.installBundle({
       IDL</title>http://www.w3.org/TR/WebIDL/</bibliomixed>
 
       <bibliomixed xml:id="service.rest-reference.xml.schemas"><title>OSGi XML
-      Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
+      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
 
       <bibliomixed
       xml:id="service.rest-whiteboard.pattern.ref"><title>Whiteboard
-      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

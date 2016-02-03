@@ -794,7 +794,7 @@ try {
     <bibliolist>
       <bibliomixed xml:id="dmtree.residential.extref.1"><title><xref
       linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

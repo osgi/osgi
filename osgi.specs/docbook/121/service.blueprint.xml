@@ -6809,7 +6809,7 @@ country ::= &lt;java country-code&gt; ('_' &lt;java variant-code&gt;)+</programl
       Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
 
       <bibliomixed xml:id="i2930811"><title>OSGi XML
-      Schemas</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

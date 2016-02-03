@@ -2666,7 +2666,7 @@ PackagePermission    ..deployment           IMPORT</programlisting>
       Specification</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
 
       <bibliomixed xml:id="i1516004"><title><xref linkend="intro.core.release"
-      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

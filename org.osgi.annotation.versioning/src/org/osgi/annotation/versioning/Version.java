@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@ import java.lang.annotation.Target;
 
 /**
  * Specify the version of a package.
- * 
  * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * generate bundle manifests or otherwise process the version of a package.
  * 
- * @see <a href="http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf"
- *      >Semantic Versioning</a>
+ * @see <a href=
+ *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ *      Semantic Versioning</a>
  * @author $Id$
  */
 @Documented

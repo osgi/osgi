@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,16 @@ import java.lang.annotation.Target;
 
 /**
  * A type implemented by the Consumer Role.
- * 
  * <p>
  * A non-binary compatible change to a consumer type normally requires
  * incrementing the major version of the type's package. This change will
  * require all providers and all consumers to be updated to handle the change
  * since consumers implement the consumer type and all providers must understand
  * the change in the consumer type.
- * 
  * <p>
  * A type can be marked {@link ConsumerType} or {@link ProviderType} but not
  * both. A type is assumed to be {@link ConsumerType} if it is not marked either
  * {@link ConsumerType} or {@link ProviderType}.
- * 
  * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * understand the semantic version of a package. When a bundle implements a
@@ -44,8 +41,9 @@ import java.lang.annotation.Target;
  * that package must require the exact major version and a minor version greater
  * than or equal to the package's version.
  * 
- * @see <a href="http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf"
- *      >Semantic Versioning</a>
+ * @see <a href=
+ *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ *      Semantic Versioning</a>
  * @author $Id$
  */
 @Documented

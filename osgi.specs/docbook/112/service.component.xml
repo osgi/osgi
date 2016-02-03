@@ -5237,7 +5237,7 @@ public class MyComponent {
       1.0</title>http://www.w3.org/TR/REC-xml/</bibliomixed>
 
       <bibliomixed xml:id="i1655737"><title>OSGi XML
-      Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
+      Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  * <p>
  * This package is not used at runtime.
  *
- * @see <a href="http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf"
+ * @see <a href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"
  *      >Semantic Versioning</a>
  * @version 1.0
  * @author $Id$
