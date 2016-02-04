@@ -20,7 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,14 +43,61 @@ import org.osgi.test.support.OSGiTestCase;
 public abstract class LaunchTest extends OSGiTestCase {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String	STORAGEROOT	= "org.osgi.test.cases.framework.launch.storageroot";
-	
-	private FrameworkFactory frameworkFactory;
-	private String frameworkFactoryClassName;
-	private List<String> rootBundles = new LinkedList<String>();
-	protected String	rootStorageArea;
-	
+
+	static private class FrameworkClassLoader extends URLClassLoader {
+		// All java.* and org.osgi.* packages need to be parent only delegation
+		private static final String[] PARENT_ONLY_DELEGATION = {
+				"java.", "org.osgi."
+		};
+
+		public FrameworkClassLoader(URL[] urls, ClassLoader parent) {
+			super(urls, parent);
+			assertNotNull("Cannot have null parent.", parent);
+		}
+
+		@Override
+		protected Class< ? > loadClass(String name, boolean resolve)
+				throws ClassNotFoundException {
+			Class< ? > clazz = findLoadedClass(name);
+			if (clazz != null)
+				return clazz;
+
+			if (childFirst(name)) {
+				try {
+					clazz = findClass(name);
+				} catch (ClassNotFoundException e) {
+					// continue to parent
+				}
+			}
+			clazz = getParent().loadClass(name);
+
+			if (resolve) {
+				resolveClass(clazz);
+			}
+			return clazz;
+		}
+
+		private static boolean childFirst(String name) {
+			for (int i = PARENT_ONLY_DELEGATION.length - 1; i >= 0; i--) {
+				if (name.startsWith(PARENT_ONLY_DELEGATION[i])) {
+					return false;
+				}
+			}
+			// all other packages are considered child first
+			return true;
+
+		}
+	}
+
+	private FrameworkClassLoader	frameworkClassLoader;
+	private FrameworkFactory		frameworkFactory;
+	private String					frameworkFactoryClassName;
+	private List<String>			rootBundles	= new LinkedList<String>();
+	protected String				rootStorageArea;
+
 	protected void setUp() throws Exception {
 		super.setUp();
+		frameworkClassLoader = createFrameworkClassLoader();
 		rootStorageArea = getStorageAreaRoot();
 		assertNotNull("No storage area root found", rootStorageArea);
 		File rootFile = new File(rootStorageArea);
@@ -69,6 +119,26 @@ public abstract class LaunchTest extends OSGiTestCase {
 			assertNotNull(bundle);
 			rootBundles.add(bundle);
 		}
+	}
+
+	private static FrameworkClassLoader createFrameworkClassLoader()
+			throws MalformedURLException {
+		String classpathProp = System.getProperty("java.class.path");
+		String[] classpaths = classpathProp.split(File.pathSeparator);
+		List<URL> frameworkImpl = new ArrayList<>();
+		for (String classpath : classpaths) {
+			File file = new File(classpath);
+			if (!file.getName().startsWith("biz.aQute")) {
+				frameworkImpl.add(file.toURI().toURL());
+			}
+		}
+		return new FrameworkClassLoader(frameworkImpl.toArray(new URL[0]),
+				LaunchTest.class.getClassLoader());
+	}
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		frameworkClassLoader.close();
 	}
 
 	protected Framework createFramework(Map<String, String> configuration) {
@@ -232,7 +302,8 @@ public abstract class LaunchTest extends OSGiTestCase {
 	
 	private Class<FrameworkFactory> loadFrameworkFactoryClass(String className)
 			throws ClassNotFoundException {
-		return (Class<FrameworkFactory>) getClass().getClassLoader().loadClass(
+		return (Class<FrameworkFactory>) frameworkClassLoader
+				.loadClass(
 				className);
 	}
 

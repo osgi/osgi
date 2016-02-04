@@ -20,7 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,52 @@ public abstract class LaunchTest extends OSGiTestCase {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String	STORAGEROOT	= "org.osgi.test.cases.framework.launch.secure.storageroot";
 
+	static private class FrameworkClassLoader extends URLClassLoader {
+		// All java.* and org.osgi.* packages need to be parent only delegation
+		private static final String[] PARENT_ONLY_DELEGATION = {
+				"java.", "org.osgi."
+		};
+
+		public FrameworkClassLoader(URL[] urls, ClassLoader parent) {
+			super(urls, parent);
+			assertNotNull("Cannot have null parent.", parent);
+		}
+
+		@Override
+		protected Class< ? > loadClass(String name, boolean resolve)
+				throws ClassNotFoundException {
+			Class< ? > clazz = findLoadedClass(name);
+			if (clazz != null)
+				return clazz;
+
+			if (childFirst(name)) {
+				try {
+					clazz = findClass(name);
+				} catch (ClassNotFoundException e) {
+					// continue to parent
+				}
+			}
+			clazz = getParent().loadClass(name);
+
+			if (resolve) {
+				resolveClass(clazz);
+			}
+			return clazz;
+		}
+
+		private static boolean childFirst(String name) {
+			for (int i = PARENT_ONLY_DELEGATION.length - 1; i >= 0; i--) {
+				if (name.startsWith(PARENT_ONLY_DELEGATION[i])) {
+					return false;
+				}
+			}
+			// all other packages are considered child first
+			return true;
+
+		}
+	}
+
+	private FrameworkClassLoader	frameworkClassLoader;
 	private String				rootStorageArea;
 	private FrameworkFactory frameworkFactory;
 	private String frameworkFactoryClassName;
@@ -46,6 +95,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		frameworkClassLoader = createFrameworkClassLoader();
 		rootStorageArea = getStorageAreaRoot();
 		assertNotNull("No storage area root found", rootStorageArea);
 		File rootFile = new File(rootStorageArea);
@@ -70,6 +120,26 @@ public abstract class LaunchTest extends OSGiTestCase {
 		}
 	}
 
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		frameworkClassLoader.close();
+	}
+
+	private static FrameworkClassLoader createFrameworkClassLoader()
+			throws MalformedURLException {
+		String classpathProp = System.getProperty("java.class.path");
+		String[] classpaths = classpathProp.split(File.pathSeparator);
+		List<URL> frameworkImpl = new ArrayList<>();
+		for (String classpath : classpaths) {
+			File file = new File(classpath);
+			if (!file.getName().startsWith("biz.aQute")) {
+				frameworkImpl.add(file.toURI().toURL());
+			}
+		}
+		return new FrameworkClassLoader(frameworkImpl.toArray(new URL[0]),
+				LaunchTest.class.getClassLoader());
+	}
+
 	protected Framework createFramework(Map<String, String> configuration) {
 		Framework framework = null;
 		try {
@@ -82,19 +152,9 @@ public abstract class LaunchTest extends OSGiTestCase {
 		return framework;
 	}
 	
-	protected BundleContext getBundleContextWithoutFail() {
-		try {
-			if ("true".equals(getProperty("noframework")))
-				return null;
-			return getContext();
-		} catch (Throwable t) {
-			return null; // don't fail
-		}
-	}
 	
 	protected URL getBundleInput(String bundle) {
-		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
+		return this.getClass().getResource(bundle);
 	}
 	
 	protected void initFramework(Framework framework) {
@@ -197,8 +257,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	}
 	
 	private String getFrameworkFactoryClassName() throws IOException {
-		BundleContext context = getBundleContextWithoutFail();
-		URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
+		URL factoryService = this.getClass().getResource(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
 
@@ -237,10 +296,8 @@ public abstract class LaunchTest extends OSGiTestCase {
 	
 	private Class<FrameworkFactory> loadFrameworkFactoryClass(String className)
 			throws ClassNotFoundException {
-		BundleContext context = getBundleContextWithoutFail();
-		return (Class<FrameworkFactory>) (context == null ? Class
-				.forName(className) : getContext().getBundle(0).loadClass(
-				className));
+		return (Class<FrameworkFactory>) frameworkClassLoader
+				.loadClass(className);
 	}
 
 	private String getStorageAreaRoot() {
