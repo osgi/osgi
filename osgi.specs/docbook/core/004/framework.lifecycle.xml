@@ -505,7 +505,8 @@
               must fail with an exception being thrown. The framework is free
               to use this directory as it sees fit, for example, completely
               erase all files and directories in it. If this property is not
-              set, it must use a reasonable platform default.</para></entry>
+              set, the framework must set this property to a reasonable
+              platform default.</para></entry>
             </row>
 
             <row>
@@ -3900,5 +3901,16 @@ D: Export-Package: s</programlisting>
       IDentifier (UUID) URN
       Namespace</title>http://www.ietf.org/rfc/rfc4122.txt</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Launching property <code>org.osgi.framework.storage</code> must
+        be set when default value used.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
