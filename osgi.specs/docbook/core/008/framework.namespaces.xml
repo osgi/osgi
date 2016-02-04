@@ -1211,9 +1211,10 @@ Bundle B:
         osgi.native.processor:List&lt;String&gt;="x86-64,amd64,em64t,x86_64"; «
         osgi.native.language="en"</programlisting>
 
-    <para>Bundles can require an <code>osgi.native</code> capability which
-    matches the native environment required for the bundle to function
-    properly, for example:</para>
+    <para>Provide-Capability headers in the <code>osgi.native</code> namespace
+    must not be used in a bundle's manifest. Bundles can require an
+    <code>osgi.native</code> capability which matches the native environment
+    required for the bundle to function properly, for example:</para>
 
     <programlisting>Require-Capability: «
      osgi.native; «
