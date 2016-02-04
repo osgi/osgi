@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.framework.wiring;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
@@ -124,22 +125,20 @@ public interface BundleWiring extends BundleReference, Wiring {
 
 	/**
 	 * Returns the requirements of this bundle wiring.
-	 * 
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE
 	 * effective} directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision has a subset of the declared
 	 * requirements from the bundle revision and all attached fragment
 	 * revisions. Not all declared requirements may be present since some may be
-	 * discarded. For example, if a package is declared to be optionally
-	 * imported and is not actually imported, the requirement must be discarded.
+	 * discarded. For example, if a package is declared to be both exported and
+	 * imported, only one is selected and the other is discarded.
 	 * 
 	 * @param namespace The namespace of the requirements to return or
-	 *        {@code null} to return the requirements from all namespaces.
+	 *            {@code null} to return the requirements from all namespaces.
 	 * @return A list containing a snapshot of the {@link BundleRequirement}s,
 	 *         or an empty list if this bundle wiring uses no requirements in
 	 *         the specified namespace. If this bundle wiring is not
