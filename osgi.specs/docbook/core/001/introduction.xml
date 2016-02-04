@@ -542,6 +542,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
         </listitem>
       </itemizedlist>
     </section>
+
+    <section xml:id="framework.numbered.lists">
+      <title>Numbered Lists</title>
+
+      <para>When a specification uses a numbered list, unless otherwise
+      specified, the intention is that the actions described by the items in
+      the list happen in the numerical order of the items. From a Java
+      concurrency point-of-view, this means that the actions described in
+      lower numbered items <emphasis>happens-before</emphasis> the actions
+      described in higher numbered items.</para>
+    </section>
   </section>
 
   <section>
@@ -798,5 +809,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <bibliomixed xml:id="i487605"><title>Java Language Specification Third
       Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added <xref linkend="framework.numbered.lists"/> to specify the
+        <emphasis>happens-before</emphasis> relationship between items in
+        numbered lists.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
