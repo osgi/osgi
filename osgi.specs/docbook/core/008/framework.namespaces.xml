@@ -355,8 +355,8 @@
 
     <para>Provide-Capability headers in the <code>osgi.ee</code> namespace
     must not be used in a bundle's manifest; Require-Capability with this
-    namespace is allowed. An <code>osgi.ee</code> requirement is an
-    alternative to the Bundle-RequiredExecutionEnvironment header in <xref
+    namespace is allowed. An <code>osgi.ee</code> requirement is the
+    replacement for the Bundle-RequiredExecutionEnvironment header in <xref
     linkend="framework.module.bree"/>.</para>
 
     <para>The names for the execution environments are not normatively defined

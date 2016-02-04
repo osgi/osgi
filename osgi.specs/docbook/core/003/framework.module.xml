@@ -1297,12 +1297,12 @@ requirement        ::= name-space ( ';' directive | typed-attr )*</programlistin
       <title>Bundle-RequiredExecutionEnvironment</title>
 
       <para>The Bundle-RequiredExecutionEnvironment manifest header provides
-      the same function as the generic <code>osgi.ee</code> capability, it
-      allows a bundle to depend on the execution environment. This header is
-      deprecated but must be fully supported by a compliant framework. Bundles
-      should not mix these headers but use either the <code>osgi.ee</code>
-      capability or this header. If both are used, both constraints must be
-      met to resolve.</para>
+      the same function as the <xref linkend="framework.namespaces.osgi.ee"/>.
+      It allows a bundle to depend on the execution environment. This header
+      is deprecated but must be fully supported by a compliant framework.
+      Bundles should not mix these headers but use either an
+      <code>osgi.ee</code> requirement or this header. If both are used, both
+      constraints must be met to resolve.</para>
 
       <para>The syntax of this header is a list of comma-separated names of
       execution environments.</para>
