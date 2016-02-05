@@ -204,9 +204,9 @@
         (PNG) format, see <xref linkend="i3219167"/>.</para>
       </section>
 
-      <section>
-        <title>Bundle-License:
-        http://www.opensource.org/licenses/jabberpl.php</title>
+      <section xml:id="framework.module-bundle-license">
+        <title>Bundle-License: Apache-2.0;
+        link="http://opensource.org/licenses/apache2.0.php"</title>
 
         <para>The Bundle-License header provides an optional machine readable
         form of license information. The purpose of this header is to automate
@@ -222,7 +222,7 @@
 
         <programlisting>Bundle-License ::= '&lt;&lt;EXTERNAL&gt;&gt;' | 
                       ( license ( ',' license ) * )
-license        ::= name ( ';' license-attr ) *
+license        ::= license-identifier ( ';' license-attr ) *
 license-attr   ::= description | link
 description    ::= 'description' '=' string
 link           ::= 'link' '=' &lt;url&gt;</programlisting>
@@ -231,29 +231,31 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para><code>name</code> - Provides a globally unique name for this
-            license, preferably world wide, but it should at least be unique
-            with respect to the other clauses. The magic name
-            <code>&lt;&lt;EXTERNAL&gt;&gt;</code> is used to indicate that
-            this artifact does not contain any license information but that
-            licensing information is provided in some other way. This is also
-            the default contents of this header.</para>
+            <para><code>license-identifier</code> - Provides a globally unique
+            identifier for this license, preferably world wide, but it should
+            at least be unique with respect to the other clauses. The magic
+            identifier <code>&lt;&lt;EXTERNAL&gt;&gt;</code> is used to
+            indicate that this artifact does not specify any license
+            information but that licensing information is provided in some
+            other way. This is also the default value of this header.</para>
 
-            <para>Clients of this bundle can assume that licenses with the
-            same name refer to the same license. This can for example be used
-            to minimize the click through licenses. This name should be the
-            canonical URL of the license, it must not be localized by the
-            translator. This URL does not have to exist but must not be used
-            for later versions of the license. It is recommended to use URLs
-            from <xref linkend="i3222193"/>. Other licenses should use the
-            following structure, but this is not mandated:</para>
+            <para>This identifier should be one of the identifiers defined by
+            <xref linkend="framework.module-spdx.license.list"/>. Clients of
+            this bundle can assume that licenses with the same identifier
+            refer to the same license. This can for example be used to
+            minimize the click through licenses.</para>
+
+            <para>Alternatively, the identifier can be the canonical URL of
+            the license, it must not be localized by the translator. This URL
+            does not have to exist but must not be used for later versions of
+            the license. It is recommended to use URLs from <xref
+            linkend="i3222193"/>. Other licenses should use the following
+            structure, but this is not mandated:</para>
+
+            <programlisting>http://&lt;domain-name&gt;/licenses/
+          &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;</programlisting>
           </listitem>
-        </itemizedlist>
 
-        <programlisting>  http://&lt;domain-name&gt;/licenses/
-            &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;</programlisting>
-
-        <itemizedlist>
           <listitem>
             <para><code>description</code> - (optional) Provide the
             description of the license. This is a short description that is
@@ -5531,6 +5533,22 @@ URL(String protocol, String host, String file)</programlisting>
 
       <bibliomixed xml:id="i3246284"><title>Google Web
       Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
+
+      <bibliomixed xml:id="framework.module-spdx.license.list"><title>Software
+      Package Data Exchange (SPDX) License
+      List</title>https://spdx.org/licenses/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Updated <xref linkend="framework.module-bundle-license"/> to
+        recommend using license identifiers from <xref
+        linkend="framework.module-spdx.license.list"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

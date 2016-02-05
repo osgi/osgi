@@ -2,7 +2,7 @@
 spec.version = ${version;===;${replace;${cat;${project.dir}/${src}/${replace;${def;spec.package;${p}};\\.;/}/packageinfo};version (.+);$1}}
 build.version = ${spec.version}.${project.build}
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
-Bundle-License: http://opensource.org/licenses/apache2.0.php; \
+Bundle-License: Apache-2.0; \
                 link="http://www.apache.org/licenses/LICENSE-2.0"; \
                 description="Apache License, Version 2.0"
 Bundle-Description: OSGi Companion Code for ${p} Version ${spec.version}.
