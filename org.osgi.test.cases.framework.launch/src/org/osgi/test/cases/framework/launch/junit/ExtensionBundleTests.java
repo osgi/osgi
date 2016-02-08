@@ -220,36 +220,6 @@ public class ExtensionBundleTests extends LaunchTest {
 	}
 
 	/**
-	 * Tests if a framework extension bundle is not able to import packages.
-	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
-	 * equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionImportPackage() throws Exception {
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			String message = "expected extension bundle with Import-Package to fail to install";
-			try {
-				installBundle(framework, "/fragments.tb9.jar");
-				// should fail, since extension bundles are not able to
-				// import packages
-				DefaultTestBundleControl.failException(message, 
-						BundleException.class);
-			}
-			catch (Exception e) {
-				DefaultTestBundleControl.assertException(message, 
-						BundleException.class, e);
-			}
-		}
-		else {
-			DefaultTestBundleControl.trace(
-					"framework extension bundles not supported");
-		}
-	}
-
-	/**
 	 * Tests if a framework extension bundle is not able to require bundles.
 	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
 	 * equals <code>true</code>.

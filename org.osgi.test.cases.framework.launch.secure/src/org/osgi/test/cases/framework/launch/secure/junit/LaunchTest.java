@@ -67,7 +67,16 @@ public abstract class LaunchTest extends OSGiTestCase {
 					// continue to parent
 				}
 			}
-			clazz = getParent().loadClass(name);
+			if (clazz == null) {
+				try {
+					clazz = getParent().loadClass(name);
+				} catch (ClassNotFoundException e) {
+					// it may be a class from an extension; need to look locally
+					if (!childFirst(name)) {
+						clazz = findClass(name);
+					}
+				}
+			}
 
 			if (resolve) {
 				resolveClass(clazz);

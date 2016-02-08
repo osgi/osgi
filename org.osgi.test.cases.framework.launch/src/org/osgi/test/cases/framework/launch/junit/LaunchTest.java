@@ -39,6 +39,7 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public abstract class LaunchTest extends OSGiTestCase {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
@@ -69,7 +70,16 @@ public abstract class LaunchTest extends OSGiTestCase {
 					// continue to parent
 				}
 			}
-			clazz = getParent().loadClass(name);
+			if (clazz == null) {
+				try {
+					clazz = getParent().loadClass(name);
+				} catch (ClassNotFoundException e) {
+					// it may be a class from an extension; need to look locally
+					if (!childFirst(name)) {
+						clazz = findClass(name);
+					}
+				}
+			}
 
 			if (resolve) {
 				resolveClass(clazz);
@@ -89,15 +99,59 @@ public abstract class LaunchTest extends OSGiTestCase {
 		}
 	}
 
-	private FrameworkClassLoader	frameworkClassLoader;
-	private FrameworkFactory		frameworkFactory;
-	private String					frameworkFactoryClassName;
+	static protected class LaunchFrameworkFactory implements FrameworkFactory {
+		private final String			frameworkFactoryClassName;
+		private FrameworkClassLoader	frameworkClassLoader;
+		private FrameworkFactory		frameworkFactory;
+
+		public LaunchFrameworkFactory(String frameworkFactoryClassName) {
+			this.frameworkFactoryClassName = frameworkFactoryClassName;
+		}
+		@Override
+		public Framework newFramework(Map<String,String> configuration) {
+			return getFrameworkFactory().newFramework(configuration);
+		}
+
+		public void close() {
+			if (frameworkClassLoader != null) {
+				try {
+					frameworkClassLoader.close();
+				} catch (IOException e) {
+					DefaultTestBundleControl
+							.trace("Error closing framework class loader: "
+									+ e.getMessage());
+					e.printStackTrace();
+				}
+				frameworkClassLoader = null;
+				frameworkFactory = null;
+			}
+		}
+
+		private FrameworkFactory getFrameworkFactory() {
+			if (frameworkFactory != null) {
+				return frameworkFactory;
+			}
+			try {
+				if (frameworkClassLoader == null) {
+					frameworkClassLoader = createFrameworkClassLoader();
+				}
+				@SuppressWarnings("unchecked")
+				Class<FrameworkFactory> clazz = (Class<FrameworkFactory>) frameworkClassLoader
+						.loadClass(frameworkFactoryClassName);
+				frameworkFactory = clazz.newInstance();
+			} catch (Exception e) {
+				fail("Failed to get the framework constructor", e);
+			}
+			return frameworkFactory;
+		}
+	}
+
+	protected LaunchFrameworkFactory	frameworkFactory;
 	private List<String>			rootBundles	= new LinkedList<String>();
 	protected String				rootStorageArea;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		frameworkClassLoader = createFrameworkClassLoader();
 		rootStorageArea = getStorageAreaRoot();
 		assertNotNull("No storage area root found", rootStorageArea);
 		File rootFile = new File(rootStorageArea);
@@ -108,9 +162,10 @@ public abstract class LaunchTest extends OSGiTestCase {
 			assertTrue(
 					"Could not create root directory: " + rootFile.getPath(),
 					rootFile.mkdirs());
-		frameworkFactoryClassName = getFrameworkFactoryClassName();
+		String frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
-		frameworkFactory = getFrameworkFactory();
+		frameworkFactory = new LaunchFrameworkFactory(
+				frameworkFactoryClassName);
 		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.framework.launch.bundles", ""), ",");
 		rootBundles.clear();
@@ -121,7 +176,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 		}
 	}
 
-	private static FrameworkClassLoader createFrameworkClassLoader()
+	static FrameworkClassLoader createFrameworkClassLoader()
 			throws MalformedURLException {
 		String classpathProp = System.getProperty("java.class.path");
 		String[] classpaths = classpathProp.split(File.pathSeparator);
@@ -138,7 +193,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		frameworkClassLoader.close();
+		frameworkFactory.close();
 	}
 
 	protected Framework createFramework(Map<String, String> configuration) {
@@ -227,16 +282,6 @@ public abstract class LaunchTest extends OSGiTestCase {
 				framework.getState());
 	}
 	
-	private FrameworkFactory getFrameworkFactory() {
-		try {
-			Class<FrameworkFactory> clazz = loadFrameworkFactoryClass(frameworkFactoryClassName);
-			return clazz.newInstance();
-		} catch (Exception e) {
-			fail("Failed to get the framework constructor", e);
-		}
-		return null;
-	}
-	
 	private String getClassName(URL factoryService) throws IOException {
 		InputStream in = factoryService.openStream();
 		BufferedReader br = null;
@@ -298,13 +343,6 @@ public abstract class LaunchTest extends OSGiTestCase {
 				System.out.println("started bundle " + b.getSymbolicName());
 			}
 		}
-	}
-	
-	private Class<FrameworkFactory> loadFrameworkFactoryClass(String className)
-			throws ClassNotFoundException {
-		return (Class<FrameworkFactory>) frameworkClassLoader
-				.loadClass(
-				className);
 	}
 
 	private String getStorageAreaRoot() {

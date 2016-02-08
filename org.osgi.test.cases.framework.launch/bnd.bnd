@@ -11,7 +11,6 @@ Import-Package: ${-signaturetest}, *
 Include-Resource = \
     fragments.tb4.jar, \
 	fragments.tb6.jar, \
-	fragments.tb9.jar, \
 	fragments.tb10.jar, \
 	fragments.tb20.jar, \
 	fragments.tb21.jar, \
@@ -22,7 +21,8 @@ Include-Resource = \
     launch.tb4.jar, \
     extensions.tb1.jar, \
     extensions.tb2.jar, \
-    extensions.tb3.jar
+    extensions.tb3.jar, \
+    dependency.tba.v1.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.launch

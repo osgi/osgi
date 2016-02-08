@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.dependency.tb1
+Bundle-SymbolicName: ${p}.dependency.tb1
+Bundle-Version: 1.0
+Private-Package: ${p}.dependency.tb1
+Fragment-Host: system.bundle
+Bundle-Description: This is a framework extension with some capabilities
+Import-Package: !*
+
