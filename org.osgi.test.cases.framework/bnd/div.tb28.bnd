@@ -1,0 +1,7 @@
+Bundle-Name: ${p}.div.tb28
+Bundle-Description: TB28 is part of the DIV test case. This bundle will \
+ fail to install because it defines a capability in the execution \
+ environment namespace, this is only allowed by the system bundle.
+Bundle-Version: 1.0
+Provide-Capability: osgi.ee; osgi.ee=TestEE
+

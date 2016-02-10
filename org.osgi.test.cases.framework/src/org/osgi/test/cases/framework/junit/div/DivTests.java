@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -646,6 +647,23 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			tb = getContext().installBundle(getWebServer() + "div.tb27.jar");
 			fail("Expected to fail installation of bundle that declares a native capability.");
+		} catch (BundleException e) {
+			// expected, check the error type
+			assertEquals("Wrong error code.", BundleException.MANIFEST_ERROR,
+					e.getType());
+		} finally {
+			if (tb != null) {
+				tb.uninstall();
+			}
+		}
+	}
+
+	public void testExecutionEnvironmentNamespaceCapability()
+			throws BundleException {
+		Bundle tb = null;
+		try {
+			tb = getContext().installBundle(getWebServer() + "div.tb28.jar");
+			fail("Expected to fail installation of bundle that declares an execution environment capability.");
 		} catch (BundleException e) {
 			// expected, check the error type
 			assertEquals("Wrong error code.", BundleException.MANIFEST_ERROR,
