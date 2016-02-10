@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.dependency.tb1
+Bundle-SymbolicName: ${p}.dependency.tb4
+ExtensionBundle-Activator: ${p}.dependency.tb4.Activator
+Bundle-Version: 1.0
+Fragment-Host: system.bundle
+Bundle-Description: This is a framework extension that depends on another identity
+Require-Capability: osgi.identity; filter:="(osgi.identity=${p}.dependency.tb1)"
+-fixupmessages.identity: "osgi.wiring.* namespaces must not be specified with generic requirements/capabilities"
+

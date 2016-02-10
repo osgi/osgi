@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.dependency.tb1
+Bundle-SymbolicName: ${p}.dependency.tb2
+ExtensionBundle-Activator: ${p}.dependency.tb2.Activator
+Bundle-Version: 1.0
+Private-Package: ${p}.dependency.tb2
+Fragment-Host: system.bundle
+Bundle-Description: This is a framework extension with some capabilities
+Provide-Capability: extension.test; extension.test=tb2

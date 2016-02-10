@@ -79,8 +79,11 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 		stopFramework(framework);
 
 		// save the post init results for testing
-		POST_INIT_RESULTS = (Map<String, List<String>>) System.getProperties()
+		@SuppressWarnings("unchecked")
+		Map<String,List<String>> castResults = (Map<String,List<String>>) System
+				.getProperties()
 				.remove(RESULTS);
+		POST_INIT_RESULTS = castResults;
 		return;
 	}
 
@@ -90,6 +93,7 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 	}
 
 	private static List<String> getResults(String test) {
+		@SuppressWarnings("unchecked")
 		Map<String, List<String>> resultMap = (Map<String, List<String>>) System
 				.getProperties().get(RESULTS);
 		if (resultMap == null) {
@@ -189,7 +193,7 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 		stopFramework(framework);
 
 		assertTestResults(expectedTests, testResults2);
-		assertTestResults(expectedTests, testResults2);
+		assertTestResults(expectedTests, testResults3);
 	}
 
 	static class ListenerEvent {

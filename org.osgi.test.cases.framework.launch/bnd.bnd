@@ -22,7 +22,12 @@ Include-Resource = \
     extensions.tb1.jar, \
     extensions.tb2.jar, \
     extensions.tb3.jar, \
-    dependency.tba.v1.jar
+    dependency.tb1.v1.jar, \
+    dependency.tb1.v2.jar, \
+    dependency.tb1.v3.jar, \
+    dependency.tb2.v1.jar, \
+    dependency.tb3.v1.jar, \
+    dependency.tb4.v1.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.launch
