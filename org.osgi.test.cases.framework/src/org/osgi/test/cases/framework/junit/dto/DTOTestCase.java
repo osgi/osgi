@@ -18,6 +18,7 @@ package org.osgi.test.cases.framework.junit.dto;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+
 import org.osgi.dto.DTO;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -46,15 +48,18 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleRevisions;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.framework.wiring.dto.BundleRevisionDTO;
 import org.osgi.framework.wiring.dto.BundleWireDTO;
 import org.osgi.framework.wiring.dto.BundleWiringDTO;
+import org.osgi.framework.wiring.dto.FrameworkWiringDTO;
 import org.osgi.resource.dto.CapabilityDTO;
 import org.osgi.resource.dto.CapabilityRefDTO;
 import org.osgi.resource.dto.RequirementDTO;
 import org.osgi.resource.dto.RequirementRefDTO;
 import org.osgi.resource.dto.WireDTO;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class DTOTestCase extends OSGiTestCase {
 
@@ -83,6 +88,7 @@ public class DTOTestCase extends OSGiTestCase {
 		if ((tb2.getState() & Bundle.UNINSTALLED) != Bundle.UNINSTALLED) {
 			tb2.uninstall();
 		}
+		Wiring.synchronousRefreshBundles(getContext(), tb1, tb2);
     }
 
     public void testBundleDTO() throws Exception {
@@ -98,7 +104,6 @@ public class DTOTestCase extends OSGiTestCase {
 		assertNotNull("dto is null", dto);
         assertEquals("Bundle id does not match", bundle.getBundleId(), dto.id);
         assertEquals("Bundle lastModified does not match", bundle.getLastModified(), dto.lastModified);
-        assertEquals("Bundle state does not match", bundle.getState(), dto.state);
         assertEquals("Bundle state does not match", bundle.getState(), dto.state);
         assertEquals("Bundle symbolicName does not match", bundle.getSymbolicName(), dto.symbolicName);
         assertEquals("Bundle version does not match", bundle.getVersion(), Version.parseVersion(dto.version));
@@ -311,6 +316,41 @@ public class DTOTestCase extends OSGiTestCase {
 		assertBundleWiringNodeDTO(wiring, getBundleWiringNodeDTObyId(dto.root));
 		assertEquals("Too many resources", Collections.EMPTY_SET, resourcesUntested);
 		assertEquals("Too many wiring nodes", Collections.EMPTY_SET, nodesUntested);
+	}
+
+	private void assertFrameworkWiringDTO(Set<BundleWiring> allWirings,
+			FrameworkWiringDTO dto, Map<BundleRevision,Integer> revisionIds)
+			throws Exception {
+		assertNotNull("dto is null", dto);
+		assertEquals("Wrong number of dto nodes", allWirings.size(),
+				dto.wirings.size());
+
+		resources = Collections.unmodifiableSet(new HashSet<>(dto.resources));
+		resourcesUntested = new HashSet<>(resources);
+		nodes = Collections.unmodifiableSet(new HashSet<>(dto.wirings));
+		nodesUntested = new HashSet<>(nodes);
+
+		for (BundleWiringDTO.NodeDTO node : nodes) {
+			BundleWiring wiring = findWiring(node, allWirings, revisionIds);
+			assertBundleWiringNodeDTO(wiring, node);
+		}
+		assertEquals("Too many resources", Collections.EMPTY_SET, resourcesUntested);
+		assertEquals("Too many wiring nodes", Collections.EMPTY_SET, nodesUntested);
+    }
+
+	private BundleWiring findWiring(BundleWiringDTO.NodeDTO node,
+			Collection<BundleWiring> wirings,
+			Map<BundleRevision,Integer> revisionIds) throws Exception {
+		for (BundleWiring wiring : wirings) {
+			Integer wiringRevisionId = revisionIds.get(wiring.getRevision());
+			assertNotNull("Could not find revision id for wiring: "
+					+ wiring.getRevision(), wiringRevisionId);
+			if (node.resource == wiringRevisionId.intValue()) {
+				return wiring;
+			}
+		}
+		fail("No wiring found for node: " + node);
+		return null;
 	}
 
 	private BundleWiringDTO.NodeDTO getBundleWiringNodeDTObyId(int id) {
@@ -543,4 +583,93 @@ public class DTOTestCase extends OSGiTestCase {
     public static class TestDTO extends DTO {
         public String field;
     }
+
+	private Set<BundleWiring> getAllWirings() {
+		Set<Bundle> allBundles = new HashSet<>(
+				Arrays.asList(getContext().getBundles()));
+		FrameworkWiring fwkWiring = getContext()
+				.getBundle(Constants.SYSTEM_BUNDLE_LOCATION)
+				.adapt(FrameworkWiring.class);
+		allBundles.addAll(fwkWiring.getRemovalPendingBundles());
+
+		Set<BundleWiring> allWirings = new HashSet<>();
+		for (Bundle bundle : allBundles) {
+			BundleRevisions revisions = bundle.adapt(BundleRevisions.class);
+			for (BundleRevision revision : revisions.getRevisions()) {
+				BundleWiring wiring = revision.getWiring();
+				if (wiring != null) {
+					allWirings.add(wiring);
+				}
+			}
+		}
+		return allWirings;
+	}
+
+	public void testFrameworkWiringDTO() throws Exception {
+		Bundle systemBundle = getContext().getBundle(0);
+
+		tb1.start();
+		tb2.start();
+		int initialWiringCount = getAllWirings().size();
+
+		Map<BundleRevision,Integer> revisionIds = getRevisionIDs(
+				new HashMap<>());
+		FrameworkWiringDTO dto = systemBundle.adapt(FrameworkWiringDTO.class);
+		assertEquals("Wrong number of wirings", initialWiringCount,
+				dto.wirings.size());
+		assertFrameworkWiringDTO(getAllWirings(), dto, revisionIds);
+
+		tb1.update(entryStream("dto.tb1.jar"));
+
+		// get the latest revision ids now to pick up the new revision
+		revisionIds = getRevisionIDs(revisionIds);
+
+		dto = systemBundle.adapt(FrameworkWiringDTO.class);
+		assertEquals("Wrong number of wirings", initialWiringCount + 1,
+				dto.wirings.size());
+		assertFrameworkWiringDTO(getAllWirings(), dto, revisionIds);
+
+		Wiring.synchronousRefreshBundles(getContext(), tb1);
+
+		dto = systemBundle.adapt(FrameworkWiringDTO.class);
+		assertEquals("Wrong number of wirings", initialWiringCount,
+				dto.wirings.size());
+		assertFrameworkWiringDTO(getAllWirings(), dto, revisionIds);
+
+		tb1.uninstall();
+
+		assertEquals(Bundle.UNINSTALLED, tb1.getState());
+
+		dto = systemBundle.adapt(FrameworkWiringDTO.class);
+		assertEquals("Wrong number of wirings", initialWiringCount,
+				dto.wirings.size());
+		assertFrameworkWiringDTO(getAllWirings(), dto, revisionIds);
+
+		// Refreshing will remove the removal pending wiring
+		// The tb2 wiring will not exist because it cannot resolve
+		Wiring.synchronousRefreshBundles(getContext(), tb1);
+		dto = systemBundle.adapt(FrameworkWiringDTO.class);
+		assertEquals("Wrong number of wirings", initialWiringCount - 2,
+				dto.wirings.size());
+		assertFrameworkWiringDTO(getAllWirings(), dto, revisionIds);
+	}
+
+	private Map<BundleRevision,Integer> getRevisionIDs(
+			Map<BundleRevision,Integer> revisionIDs) {
+		// Get every revision's DTO ID so we can easily look it up later
+		// This must to be done while the bundles are installed
+		for (Bundle bundle : getContext().getBundles()) {
+			BundleRevisions revisions = bundle.adapt(BundleRevisions.class);
+			List<BundleRevision> revisionList = revisions.getRevisions();
+			BundleRevisionDTO[] revisionDTOs = bundle
+					.adapt(BundleRevisionDTO[].class);
+			assertEquals("Unexpected number of dtos",
+					revisions.getRevisions().size(), revisionDTOs.length);
+			for (int i = 0; i < revisionDTOs.length; i++) {
+				revisionIDs.put(revisionList.get(i),
+						Integer.valueOf(revisionDTOs[i].id));
+			}
+		}
+		return revisionIDs;
+	}
 }
