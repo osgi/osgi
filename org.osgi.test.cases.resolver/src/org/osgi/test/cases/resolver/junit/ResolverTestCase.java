@@ -40,6 +40,7 @@ import org.osgi.resource.Resource;
 import org.osgi.resource.Wire;
 import org.osgi.resource.Wiring;
 import org.osgi.service.resolver.HostedCapability;
+import org.osgi.service.resolver.ResolutionException;
 import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
 import org.osgi.test.cases.resolver.junit.AbstractResolverTestCase.TestResource.TestCapability;
@@ -790,7 +791,10 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 
 		final TestResolveContext context = new TestResolveContext(
 				Arrays.<Resource> asList(r1), null, null);
-		final Collection<Requirement> unresolvable = shouldNotResolve(context);
+		final ResolutionException re = shouldNotResolve(context);
+		assertNotNull(re);
+		final Collection<Requirement> unresolvable = re
+				.getUnresolvedRequirements();
 		assertNotNull(unresolvable);
 		assertTrue(unresolvable.size() == 1);
 		assertTrue(unresolvable.toArray()[0].equals(req));

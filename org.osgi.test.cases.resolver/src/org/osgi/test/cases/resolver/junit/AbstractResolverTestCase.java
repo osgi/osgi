@@ -32,9 +32,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.Version;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.HostNamespace;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
@@ -86,13 +96,13 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		}		
 	}
 
-	protected Collection<Requirement> shouldNotResolve(
+	protected ResolutionException shouldNotResolve(
 			final TestResolveContext context) {
 		final Resolver resolver = getResolverService();
 		try {
 			resolver.resolve(context);
 		} catch (final ResolutionException re) {
-			return re.getUnresolvedRequirements();
+			return re;
 		}
 		fail();
 		return null;
@@ -142,6 +152,11 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected Requirement addRequirement(final String namespace,
 				final String filter) {
 			final Requirement req = new TestRequirement(namespace, filter);
+			addRequirement(req);
+			return req;
+		}
+
+		protected Requirement addRequirement(final Requirement req) {
 			final String ns = req.getNamespace();
 			List<Requirement> reqs = requirements.get(ns);
 			if (reqs == null) {
@@ -174,6 +189,43 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			}
 			return ts != null ? Collections.unmodifiableList(ts) : Collections
 					.<T> emptyList();
+		}
+
+		protected void addIdentity(String symbolicName, Version version,
+				String type) {
+			if (version == null) {
+				version = Version.emptyVersion;
+			}
+			if (type == null) {
+				type = IdentityNamespace.TYPE_BUNDLE;
+			}
+			Map<String,Object> attrsTemp = new HashMap<>();
+			attrsTemp.put(IdentityNamespace.IDENTITY_NAMESPACE, symbolicName);
+			attrsTemp.put(IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE,
+					version);
+			if (type != null) {
+				attrsTemp.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE,
+						type);
+			}
+			addCapability(IdentityNamespace.IDENTITY_NAMESPACE,
+					new HashMap<>(attrsTemp));
+
+			if (type == null || IdentityNamespace.TYPE_BUNDLE.equals(type)) {
+				attrsTemp.clear();
+				attrsTemp.put(BundleNamespace.BUNDLE_NAMESPACE, symbolicName);
+				attrsTemp.put(
+						BundleNamespace.CAPABILITY_BUNDLE_VERSION_ATTRIBUTE,
+						version);
+				addCapability(BundleNamespace.BUNDLE_NAMESPACE,
+						new HashMap<>(attrsTemp));
+
+				attrsTemp.clear();
+				attrsTemp.put(HostNamespace.HOST_NAMESPACE, symbolicName);
+				attrsTemp.put(HostNamespace.CAPABILITY_BUNDLE_VERSION_ATTRIBUTE,
+						version);
+				addCapability(HostNamespace.HOST_NAMESPACE,
+						new HashMap<>(attrsTemp));
+			}
 		}
 
 		protected class TestRequirement implements Requirement {
@@ -216,6 +268,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			private final String namespace;
 
 			private final Map<String, Object> attributes;
+			private final Map<String,String>	directives	= new HashMap<>();
 
 			protected TestCapability(final String namespace,
 					final Map<String, Object> attributes) {
@@ -228,7 +281,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			}
 
 			public Map<String, String> getDirectives() {
-				return Collections.<String, String> emptyMap();
+				return directives;
 			}
 
 			public Map<String, Object> getAttributes() {
@@ -268,26 +321,76 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 
 		}
 
+		protected class TestWiring implements Wiring {
+			final List<Wire>	providedWires	= new ArrayList<>();
+			final List<Wire>	requiredWires	= new ArrayList<>();
+
+			@Override
+			public List<Capability> getResourceCapabilities(String namespace) {
+				return TestResource.this.getCapabilities(namespace);
+			}
+
+			@Override
+			public List<Requirement> getResourceRequirements(String namespace) {
+				return TestResource.this.getRequirements(namespace);
+			}
+
+			@Override
+			public List<Wire> getProvidedResourceWires(String namespace) {
+				return Collections.unmodifiableList(providedWires);
+			}
+
+			@Override
+			public List<Wire> getRequiredResourceWires(String namespace) {
+				return Collections.unmodifiableList(requiredWires);
+			}
+
+			@Override
+			public Resource getResource() {
+				return TestResource.this;
+			}
+
+		}
+	}
+
+	protected static enum ResolveContextMethod {
+		findProviders, findRelatedResources, getMandatoryResources, getOptionalResources, getWirings, insertHostedCapability, isEffective, onCancel
 	}
 
 	protected class TestResolveContext extends ResolveContext {
 
+
 		protected final Collection<Resource> mandatoryResources;
 		protected final Collection<Resource> optionalResources;
 		protected final Collection<Resource> allResources;
-
+		protected final Map<Resource,Wiring>	wirings;
+		protected final Map<Requirement,List<Capability>>	matchingCapabilities	= new HashMap<>();
+		protected final Map<Resource,Collection<Resource>>	relatedResources		= new HashMap<>();
 		protected final Set<Requirement> callbackMemory = new HashSet<Requirement>();
-
 		protected boolean insertHostedCapabilityCalled;
+
+		protected final AtomicReference<ResolveContextMethod>	firstCalled				= new AtomicReference<>();
+		protected final BlockingQueue<Runnable>					onCancel				= new ArrayBlockingQueue<>(
+				20000);
+		private final ReentrantLock								waiter					= new ReentrantLock();
+		private final AtomicBoolean								makeWait				= new AtomicBoolean();
 
 		protected TestResolveContext(
 				final Collection<Resource> mandatoryResources,
 				final Collection<Resource> optionalResources,
 				final Collection<Resource> passiveResources) {
-			this.mandatoryResources = mandatoryResources == null ? Collections
-					.<Resource> emptyList() : mandatoryResources;
-			this.optionalResources = optionalResources == null ? Collections
-					.<Resource> emptyList() : optionalResources;
+			this(mandatoryResources, optionalResources, passiveResources, null);
+		}
+
+		protected TestResolveContext(
+				final Collection<Resource> mandatoryResources,
+				final Collection<Resource> optionalResources,
+				final Collection<Resource> passiveResources,
+				final Map<Resource,Wiring> wirings) {
+			this.mandatoryResources = mandatoryResources == null
+					? new ArrayList<>() : mandatoryResources;
+			this.optionalResources = optionalResources == null
+					? new ArrayList<>() : optionalResources;
 
 			this.allResources = new ArrayList<Resource>();
 			this.allResources.addAll(this.mandatoryResources);
@@ -295,12 +398,20 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			if (passiveResources != null) {
 				this.allResources.addAll(passiveResources);
 			}
+			this.wirings = wirings == null ? new HashMap<>() : wirings;
 		}
 
 		protected TestResolveContext() {
-			this.mandatoryResources = new ArrayList<Resource>();
-			this.optionalResources = new ArrayList<Resource>();
-			this.allResources = new ArrayList<Resource>();
+			this(null, null, null);
+		}
+
+		protected void startWaiting() {
+			makeWait.set(true);
+			waiter.lock();
+		}
+
+		protected void stopWaiting() {
+			waiter.unlock();
 		}
 
 		/*
@@ -333,6 +444,13 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 
 		protected void checkInsertHostedCapabilityCalled() {
 			assertTrue(insertHostedCapabilityCalled);
+		}
+
+		protected void checkEmptyWires(final Map<Resource,List<Wire>> result,
+				Resource resource) {
+			List<Wire> wires = result.get(resource);
+			assertNotNull("No wires found.", wires);
+			assertTrue("Wires are not empty.", wires.isEmpty());
 		}
 
 		protected void checkWires(final Map<Resource, List<Wire>> result,
@@ -371,17 +489,30 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		}
 
 		public Collection<Resource> getMandatoryResources() {
+			if (makeWait.compareAndSet(false, true)) {
+				waiter.lock();
+				waiter.unlock();
+			}
+			firstCalled.compareAndSet(null,
+					ResolveContextMethod.getMandatoryResources);
 			return mandatoryResources;
 		}
 
 		public Collection<Resource> getOptionalResources() {
+			firstCalled.compareAndSet(null,
+					ResolveContextMethod.getOptionalResources);
 			return optionalResources;
 		}
 
 		@Override
 		public List<Capability> findProviders(final Requirement requirement) {
+			firstCalled.compareAndSet(null, ResolveContextMethod.findProviders);
 			callbackMemory.add(requirement);
 
+			List<Capability> matching = matchingCapabilities.get(requirement);
+			if (matching != null) {
+				return matching;
+			}
 			final List<Capability> result = new ArrayList<Capability>();
 			final String namespace = requirement.getNamespace();
 
@@ -432,20 +563,56 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		@Override
 		public int insertHostedCapability(final List<Capability> capabilities,
 				HostedCapability hostedCapability) {
+			firstCalled.compareAndSet(null,
+					ResolveContextMethod.insertHostedCapability);
 			insertHostedCapabilityCalled = true;
 			return 0;
 		}
 
 		@Override
 		public boolean isEffective(final Requirement requirement) {
+			firstCalled.compareAndSet(null, ResolveContextMethod.isEffective);
 			return true;
 		}
 
 		@Override
 		public Map<Resource, Wiring> getWirings() {
-			return Collections.<Resource, Wiring> emptyMap();
+			firstCalled.compareAndSet(null, ResolveContextMethod.getWirings);
+			return wirings;
 		}
 
+		@Override
+		public Collection<Resource> findRelatedResources(Resource resource) {
+			firstCalled.compareAndSet(null,
+					ResolveContextMethod.findRelatedResources);
+			Collection<Resource> result = relatedResources.get(resource);
+			if (result == null) {
+				result = Collections.emptyList();
+			}
+			return result;
+		}
+
+		@Override
+		public void onCancel(Runnable callback) {
+			if (firstCalled.compareAndSet(null, ResolveContextMethod.onCancel))
+				;
+			onCancel.offer(callback);
+		}
+
+		protected void cancel() {
+			try {
+				onCancel.poll(1, TimeUnit.HOURS).run();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		void checkOnCancelCalled() {
+			assertEquals("Wrong method called first.",
+					ResolveContextMethod.onCancel, firstCalled.get());
+			assertEquals("The onCancel method was called more than once.", 1,
+					onCancel.size());
+		}
 	};
 
 	protected class TestWire implements Wire {

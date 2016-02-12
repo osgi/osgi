@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
@@ -30,7 +32,6 @@ import org.osgi.resource.Wiring;
  * A resolve context provides resources, options and constraints to the
  * potential solution of a {@link Resolver#resolve(ResolveContext) resolve}
  * operation.
- * 
  * <p>
  * Resolve Contexts:
  * <ul>
@@ -46,17 +47,16 @@ import org.osgi.resource.Wiring;
  * <li>Filter requirements that are part of a resolve operation via the
  * {@link #isEffective(Requirement)}.</li>
  * </ul>
- * 
  * <p>
  * A resolver may call the methods on the resolve context any number of times
  * during a resolve operation using any thread. Implementors should ensure that
  * this class is properly thread safe.
- * 
  * <p>
- * Except for {@link #insertHostedCapability(List, HostedCapability)}, the
- * resolve context methods must be <i>idempotent</i>. This means that resources
- * must have constant capabilities and requirements and the resolve context must
- * return a consistent set of capabilities, wires and effective requirements.
+ * Except for {@link #insertHostedCapability(List, HostedCapability)} and
+ * {@link #onCancel(Runnable)}, the resolve context methods must be
+ * <i>idempotent</i>. This means that resources must have constant capabilities
+ * and requirements and the resolve context must return a consistent set of
+ * capabilities, wires and effective requirements.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -185,4 +185,63 @@ public abstract class ResolveContext {
 	 *         unmodifiable.
 	 */
 	public abstract Map<Resource, Wiring> getWirings();
+
+	/**
+	 * Find resources that are related to the given resource.
+	 * <p>
+	 * The resolver attempts to resolve related resources during the current
+	 * resolve operation. Failing to resolve one of the related resources will
+	 * not result in a resolution exception unless the related resource is also
+	 * a {@link #getMandatoryResources() mandatory} resource.
+	 * <p>
+	 * The resolve context is asked to return related resources for each
+	 * resource that is pulled into a resolve operation. This includes the
+	 * {@link #getMandatoryResources() mandatory} and
+	 * {@link #getOptionalResources() optional} resources and each related
+	 * resource returned by this method.
+	 * <p>
+	 * For example, a fragment can be considered a related resource for a host
+	 * bundle. When a host is being resolved the resolve context will be asked
+	 * if any related resources should be added to the resolve operation. The
+	 * resolve context may decide that the potential fragments of the host
+	 * should be resolved along with the host.
+	 * 
+	 * @param resource The Resource that a resolver is attempting to find
+	 *            related resources for. Must not be {@code null}.
+	 * @return A collection of the resources that the resolver should attempt to
+	 *         resolve for this resolve context. May be empty if there are no
+	 *         related resources. The returned collection may be unmodifiable.
+	 * @since 1.1
+	 */
+	public Collection<Resource> findRelatedResources(Resource resource) {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Registers a callback with the resolve context that is associated with the
+	 * currently running resolve operation. The callback can be executed in
+	 * order to cancel the currently running resolve operation.
+	 * <p>
+	 * When a resolve operation begins, the resolver must call this method once
+	 * and only once for the duration of the resolve operation and that call
+	 * must happen before calling any other method on this resolve context. If
+	 * the specified callback is executed then the resolver must cancel the
+	 * currently running resolve operation and throw a
+	 * {@link ResolutionException} with a cause of type
+	 * {@link CancellationException}.
+	 * <p>
+	 * The callback allows a resolve context to cancel a long running resolve
+	 * operation that appears to be running endlessly or at risk of running out
+	 * of resources. The resolve context may then decide to give up on resolve
+	 * operation or attempt to try another resolve operation with a smaller set
+	 * of resources which may allow the resolve operation to complete normally.
+	 * 
+	 * @param callback the callback to execute in order to cancel the resolve
+	 *            operation
+	 * @throws IllegalStateException if the resolver attempts to register more
+	 *             than one callback for a resolve operation
+	 */
+	public void onCancel(Runnable callback) {
+		// do nothing by default
+	}
 }

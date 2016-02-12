@@ -59,5 +59,4 @@ Test-Cases							= ${testcases}
 	org.osgi.test.filter; version=latest, \
 	org.osgi.impl.service.resolver; version=latest
 	
--runproperties = ${runproperties}, \
-	org.osgi.test.filter.exclude.services="(&(objectClass=org.osgi.service.resolver.*)(service.bundleid=0))"
+-runproperties = ${runproperties}
