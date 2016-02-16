@@ -31,14 +31,18 @@ import org.osgi.annotation.versioning.ProviderType;
  * <p>
  * You can also add a {@code Throwable} and/or {@code ServiceReference} to the
  * generated {@link LogEntry} by passing them to the logging methods as
- * additional arguments which do not have a corresponding place holder. For
- * example:
+ * additional arguments. If the last argument is a {@code Throwable} or
+ * {@code ServiceReference}, it is added to the generated {@link LogEntry} and
+ * then if the next to last argument is a {@code ServiceReference} or
+ * {@code Throwable} and not the same type as the last argument, it is added to
+ * the generated {@link LogEntry}. These arguments will not be used for place
+ * holders. For example:
  * 
  * <pre>
  * logger.info("Found service {}.", serviceReference, serviceReference);
  * logger.warn("Something named {} happened.", name, serviceReference,
  * 		throwable);
- * logger.error("Thing failed.", exception);
+ * logger.error("Failed.", exception);
  * </pre>
  * 
  * @ThreadSafe

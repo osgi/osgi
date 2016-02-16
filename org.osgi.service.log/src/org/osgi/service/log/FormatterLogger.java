@@ -31,14 +31,14 @@ import org.osgi.annotation.versioning.ProviderType;
  * additional arguments. If the last argument is a {@code Throwable} or
  * {@code ServiceReference}, it is added to the generated {@link LogEntry} and
  * then if the next to last argument is a {@code ServiceReference} or
- * {@code Throwable}, it is added to the generated {@link LogEntry}. For
- * example:
+ * {@code Throwable} and not the same type as the last argument, it is added to
+ * the generated {@link LogEntry}. For example:
  * 
  * <pre>
  * logger.info("Found service %s.", serviceReference, serviceReference);
  * logger.warn("Something named %s happened.", name, serviceReference,
  * 		throwable);
- * logger.error("Thing failed.", exception);
+ * logger.error("Failed.", exception);
  * </pre>
  * <p>
  * If an exception occurs formatting the message, the logged message will
