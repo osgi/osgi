@@ -725,7 +725,9 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
     <para>The different elements are discussed in the following sections. All
     types are derived from the XML Schema types, see <xref
-    linkend="i3273347"/>.</para>
+    linkend="i3273347"/>. Any relative URIs in a Repository XML file must be
+    resolved as specified in <xref
+    linkend="service.repository-resolving.relative.uris"/>.</para>
 
     <section>
       <title>Repository Element</title>
@@ -1337,6 +1339,23 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
 
       <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.repository-resolving.relative.uris"><title>XML Base
+      (Second Edition), Resolving Relative
+      URIs</title>https://www.w3.org/TR/xmlbase/#resolution</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified that any relative URIs in a Repository XML file must
+        be resolved as specified in <xref
+        linkend="service.repository-resolving.relative.uris"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
