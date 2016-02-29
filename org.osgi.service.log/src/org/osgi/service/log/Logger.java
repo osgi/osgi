@@ -51,6 +51,10 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface Logger {
+	/**
+	 * Root Logger Name.
+	 */
+	static String ROOT_LOGGER_NAME = "ROOT";
 
 	/**
 	 * Return the name of this Logger.
