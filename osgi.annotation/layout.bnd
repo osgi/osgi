@@ -1,5 +1,6 @@
 osgi.annotation.specs = \
-    org.osgi.annotation.versioning
+    org.osgi.annotation.versioning, \
+    org.osgi.annotation.bundle
 
 osgi.annotation.packages = ${replace;${osgi.annotation.specs};^.*$;$0.*}
 
