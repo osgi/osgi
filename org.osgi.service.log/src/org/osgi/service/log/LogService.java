@@ -74,6 +74,12 @@ public interface LogService extends LoggerFactory {
 	 * <p>
 	 * The {@code ServiceReference} field and the {@code Throwable} field of the
 	 * {@code LogEntry} object will be set to {@code null}.
+	 * <p>
+	 * This method will log to the {@link Logger} named {@code "LogService"} for
+	 * the bundle. If the specified level does not map to a {@link LogLevel}
+	 * value, the {@link LogLevel#TRACE} log level will be used. The specified
+	 * level must be returned by {@link LogEntry#getLevel()} of the generated
+	 * log entry.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *            defined log levels but may be any integer that is interpreted
@@ -91,6 +97,12 @@ public interface LogService extends LoggerFactory {
 	 * <p>
 	 * The {@code ServiceReference} field of the {@code LogEntry} object will be
 	 * set to {@code null}.
+	 * <p>
+	 * This method will log to the {@link Logger} named {@code "LogService"} for
+	 * the bundle. If the specified level does not map to a {@link LogLevel}
+	 * value, the {@link LogLevel#TRACE} log level will be used. The specified
+	 * level must be returned by {@link LogEntry#getLevel()} of the generated
+	 * log entry.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *            defined log levels but may be any integer that is interpreted
@@ -111,6 +123,12 @@ public interface LogService extends LoggerFactory {
 	 * <p>
 	 * The {@code Throwable} field of the {@code LogEntry} will be set to
 	 * {@code null}.
+	 * <p>
+	 * This method will log to the {@link Logger} named {@code "LogService"} for
+	 * the bundle. If the specified level does not map to a {@link LogLevel}
+	 * value, the {@link LogLevel#TRACE} log level will be used. The specified
+	 * level must be returned by {@link LogEntry#getLevel()} of the generated
+	 * log entry.
 	 * 
 	 * @param sr The {@code ServiceReference} object of the service that this
 	 *            message is associated with or {@code null}.
@@ -128,6 +146,12 @@ public interface LogService extends LoggerFactory {
 	/**
 	 * Logs a message with an exception associated and a
 	 * {@code ServiceReference} object.
+	 * <p>
+	 * This method will log to the {@link Logger} named {@code "LogService"} for
+	 * the bundle. If the specified level does not map to a {@link LogLevel}
+	 * value, the {@link LogLevel#TRACE} log level will be used. The specified
+	 * level must be returned by {@link LogEntry#getLevel()} of the generated
+	 * log entry.
 	 * 
 	 * @param sr The {@code ServiceReference} object of the service that this
 	 *            message is associated with.

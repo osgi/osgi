@@ -54,10 +54,11 @@ public interface LogEntry {
 	ServiceReference< ? > getServiceReference();
 
 	/**
-	 * Returns the level of this {@code LogEntry} object.
+	 * Returns the integral level of this {@code LogEntry} object.
 	 * <p>
-	 * This is one of the severity levels defined by the {@code LogService}
-	 * interface.
+	 * This is the {@link LogLevel#ordinal()} value unless one of the
+	 * {@code log} methods of {@link LogService} was used with an integral level
+	 * value which does not map to a {@link LogLevel} value.
 	 * 
 	 * @return Level of this {@code LogEntry} object.
 	 * @deprecated Since 1.4. Replaced by {@link #getLogLevel()}.
@@ -116,9 +117,7 @@ public interface LogEntry {
 	 * {@code LogEntry} object.
 	 * 
 	 * @return The name of the {@link Logger} object used to create this
-	 *         {@code LogEntry} object or {@code ""} if this {@code LogEntry}
-	 *         object was created using one of the original {@code LogService}
-	 *         {@code log} methods.
+	 *         {@code LogEntry} object.
 	 * @since 1.4
 	 */
 	String getLoggerName();
