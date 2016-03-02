@@ -37,6 +37,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @author $Id$
  */
 @ConsumerType
+@FunctionalInterface
 public interface LogListener extends EventListener {
 	/**
 	 * Listener method called for each LogEntry object created.
