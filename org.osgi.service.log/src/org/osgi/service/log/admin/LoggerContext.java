@@ -85,7 +85,8 @@ public interface LoggerContext {
 	/**
 	 * Configure the log levels for this Logger Context.
 	 * <p>
-	 * All previous log levels configured for this Logger Context are replaced.
+	 * All previous log levels configured for this Logger Context are cleared
+	 * and then the log levels in the specified map are configured.
 	 * 
 	 * @param logLevels The log levels to configure for this Logger Context. The
 	 *            keys are the logger names and the values are the log levels.

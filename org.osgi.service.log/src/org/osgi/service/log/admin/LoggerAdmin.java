@@ -17,6 +17,7 @@
 package org.osgi.service.log.admin;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.log.LoggerFactory;
 
 /**
  * LoggerAdmin service for configuring loggers.
@@ -29,8 +30,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * When a bundle logs, the logger implementation must locate the Logger Context
  * for the bundle to determine the
  * {@link LoggerContext#getEffectiveLogLevel(String) effective log level} of the
- * logger. The <i>best matching name</i> for the Logger Context is the longest
- * name, which has a non-empty Logger Context, according to this syntax:
+ * logger name. The <i>best matching name</i> for the Logger Context is the
+ * longest name, which has a non-empty Logger Context, according to this syntax:
  * 
  * <pre>
  * name ::= symbolic-name ( ’|’ version ( ’|’ location )? )?
@@ -55,17 +56,22 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface LoggerAdmin {
 	/**
-	 * Get the Logger Context for the specified name.
+	 * Logger Admin service property to associate the Logger Admin service with
+	 * a {@link LoggerFactory} service.
 	 * <p>
-	 * Configuration changes to a Logger Context must be persisted by the Logger
-	 * Admin service. However, an {@link LoggerContext#isEmpty() empty} Logger
-	 * Context does not need to be persisted and can be removed from persistent
-	 * storage.
+	 * This service property is set to the {@code service.id} for the
+	 * {@link LoggerFactory} service administered by this Logger Admin.
+	 * <p>
+	 * The value of this service property must be of type {@code Long}.
+	 */
+	static String LOG_SERVICE_ID = "osgi.log.service.id";
+
+	/**
+	 * Get the Logger Context for the specified name.
 	 * 
 	 * @param name The name of the Logger Context. Can be {@code null} to
 	 *            specify the root Logger Context.
 	 * @return The Logger Context for the specified name.
 	 */
 	LoggerContext getLoggerContext(String name);
-
 }

@@ -61,6 +61,6 @@ public enum LogLevel {
 	 *         {@code false} otherwise.
 	 */
 	public boolean implies(LogLevel other) {
-		return ordinal() <= other.ordinal();
+		return ordinal() >= other.ordinal();
 	}
 }

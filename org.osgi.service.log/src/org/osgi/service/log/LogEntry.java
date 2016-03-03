@@ -54,13 +54,14 @@ public interface LogEntry {
 	ServiceReference< ? > getServiceReference();
 
 	/**
-	 * Returns the integral level of this {@code LogEntry} object.
+	 * Returns the integer level of this {@code LogEntry} object.
 	 * <p>
-	 * This is the {@link LogLevel#ordinal()} value unless one of the
-	 * {@code log} methods of {@link LogService} was used with an integral level
-	 * value which does not map to a {@link LogLevel} value.
+	 * If one of the {@code log} methods of {@link LogService} was used, this is
+	 * the specified integer level. Otherwise, this is the
+	 * {@link LogLevel#ordinal() ordinal} value of the {@link #getLogLevel() log
+	 * level}.
 	 * 
-	 * @return Level of this {@code LogEntry} object.
+	 * @return Integer level of this {@code LogEntry} object.
 	 * @deprecated Since 1.4. Replaced by {@link #getLogLevel()}.
 	 */
 	@Deprecated
@@ -125,10 +126,9 @@ public interface LogEntry {
 	/**
 	 * Returns the sequence number for this {@code LogEntry} object.
 	 * <p>
-	 * The {@code LogService} assigns a unique, non-negative value that is
-	 * larger than all previously assigned values since the {@code LogService}
-	 * was started. These values are transient and are reused upon restart of
-	 * the {@code LogService}.
+	 * A unique, non-negative value that is larger than all previously assigned
+	 * values since the log implementation was started. These values are
+	 * transient and are reused upon restart of the log implementation.
 	 * 
 	 * @return The sequence number for this {@code LogEntry} object.
 	 * @since 1.4
@@ -139,7 +139,8 @@ public interface LogEntry {
 	 * Returns a string representing the thread which created this
 	 * {@code LogEntry} object.
 	 * <p>
-	 * This string contains the name of the thread.
+	 * This string must contain the name of the thread and may contain other
+	 * information about the thread.
 	 * 
 	 * @return A string representing the thread which created this
 	 *         {@code LogEntry} object.
