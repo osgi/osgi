@@ -17,6 +17,7 @@
 package org.osgi.service.log;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.framework.Bundle;
 
 /**
  * Logger Factory service for logging information.
@@ -100,4 +101,29 @@ public interface LoggerFactory {
 	 *             Logger type.
 	 */
 	<L extends Logger> L getLogger(Class< ? > clazz, Class<L> loggerType);
+
+	/**
+	 * Return the {@link Logger} of the specified type named with the specified
+	 * name for the specified bundle.
+	 * <p>
+	 * This method is not normally used. The other {@code getLogger} methods
+	 * return a {@link Logger} associated with the bundle used to obtain this
+	 * Logger Factory service. This method is used to obtain a {@link Logger}
+	 * for the specified bundle which may be useful to code which is logging on
+	 * behalf of another bundle.
+	 * 
+	 * @param <L> The Logger type.
+	 * @param bundle The bundle associated with the Logger.
+	 * @param name The name to use for the logger name.
+	 * @param loggerType The type of Logger. Can be {@link Logger} or
+	 *            {@link FormatterLogger}.
+	 * @return The {@link Logger} or {@link FormatterLogger} named with the
+	 *         specified name for the specified bundle. If the name parameter is
+	 *         equal to {@link Logger#ROOT_LOGGER_NAME}, then the root logger is
+	 *         returned.
+	 * @throws IllegalArgumentException If the specified type is not a supported
+	 *             Logger type or the specified Bundle is not a resolved bundle.
+	 */
+	<L extends Logger> L getLogger(Bundle bundle, String name,
+			Class<L> loggerType);
 }
