@@ -19,3 +19,6 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.cm;  version=latest
 
 -runproperties					= ${runproperties}
+
+Include-Resource 					= \
+	tb1.jar

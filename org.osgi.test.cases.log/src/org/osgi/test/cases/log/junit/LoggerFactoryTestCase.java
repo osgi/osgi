@@ -15,6 +15,7 @@
  */
 package org.osgi.test.cases.log.junit;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,9 +23,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.hooks.resolver.ResolverHook;
+import org.osgi.framework.hooks.resolver.ResolverHookFactory;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.log.FormatterLogger;
 import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.Logger;
@@ -52,11 +60,12 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 	public void testLogger() {
 		Collection<LogReader> readers = Collections.singletonList(reader);
 		Bundle b = getContext().getBundle();
+
 		Logger logger = logService.getLogger(TEST_LOGGER_NAME);
 		assertEquals("Wrong logger name.", TEST_LOGGER_NAME, logger.getName());
 		doLoggerLogging(LogLevel.TRACE, b, logger, readers);
 
-		logger = logService.getLogger(TEST_LOGGER_NAME, Logger.class);
+		logger = logService.getLogger(b, TEST_LOGGER_NAME, Logger.class);
 		assertEquals("Wrong logger name.", TEST_LOGGER_NAME, logger.getName());
 		doLoggerLogging(LogLevel.TRACE, b, logger, readers);
 
@@ -64,6 +73,92 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		assertEquals("Wrong logger name.", TEST_LOGGER_NAME, logger.getName());
 		doLoggerLogging(LogLevel.TRACE, b, logger, readers);
 	}
+
+	public void testLoggerForBundle() throws BundleException, IOException {
+		Collection<LogReader> readers = Collections.singletonList(reader);
+		// prevent all resolution
+		ServiceRegistration<ResolverHookFactory> preventResolution = getContext()
+				.registerService(ResolverHookFactory.class,
+						new ResolverHookFactory() {
+
+							@Override
+							public ResolverHook begin(
+									Collection<BundleRevision> triggers) {
+								return new ResolverHook() {
+
+									@Override
+									public void filterResolvable(
+											Collection<BundleRevision> candidates) {
+										// prevent all resolution
+										candidates.clear();
+									}
+
+									@Override
+									public void filterSingletonCollisions(
+											BundleCapability singleton,
+											Collection<BundleCapability> collisionCandidates) {
+										// do nothing
+									}
+
+									@Override
+									public void filterMatches(
+											BundleRequirement requirement,
+											Collection<BundleCapability> candidates) {
+										// do nothing
+									}
+
+									@Override
+									public void end() {
+										// do nothing
+									}
+
+								};
+							}
+						}, null);
+		try {
+			tb1 = install("tb1.jar");
+			try {
+				logService.getLogger(tb1, TEST_LOGGER_NAME, Logger.class);
+				fail("Expecting an IllegalStateException for unresolved bundle");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+
+			// allow resolution
+			preventResolution.unregister();
+			preventResolution = null;
+
+			tb1.start();
+
+			Logger logger = logService.getLogger(tb1, TEST_LOGGER_NAME,
+				Logger.class);
+			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
+					logger.getName());
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+
+			logger = logService.getLogger(tb1, TEST_LOGGER_NAME,
+					FormatterLogger.class);
+			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
+					logger.getName());
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+
+			tb1.uninstall();
+			try {
+				logService.getLogger(tb1, TEST_LOGGER_NAME, Logger.class);
+				fail("Expecting an IllegalStateException for uninstalled bundle");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+
+			// expect existing logger to keep working
+			doLoggerLogging(LogLevel.TRACE, tb1, logger, readers);
+		} finally {
+			if (preventResolution != null) {
+				preventResolution.unregister();
+			}
+		}
+	}
+
 
 	private void doLoggerLogging(LogLevel effectiveLevel, Bundle b,
 			Logger logger, Collection<LogReader> readers) {
@@ -145,7 +240,7 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 				readers);
 	}
 
-	void doTestRootContextRootNameEffectiveLogLevel(LogLevel level, Bundle b,
+	private void doTestRootContextRootNameEffectiveLogLevel(LogLevel level, Bundle b,
 			Logger logger, Collection<LogReader> readers) {
 		if (level == null) {
 			rootContext.setLogLevels(Collections.emptyMap());
@@ -290,7 +385,6 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		Collection<LogReader> readers = Collections.singletonList(reader);
 		Bundle b = getContext().getBundle();
 		Logger logger = logService.getLogger(getClass());
-
 		String ancestor = logger.getName();
 
 		do {
@@ -315,7 +409,7 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		} while (!ancestor.isEmpty());
 	}
 
-	void doTestRootContextAncestorsEffectiveLogLevel(String ancestor,
+	private void doTestRootContextAncestorsEffectiveLogLevel(String ancestor,
 			LogLevel level, Bundle b, Logger logger,
 			Collection<LogReader> readers) {
 		rootContext.setLogLevels(Collections.singletonMap(ancestor, level));

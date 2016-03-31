@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogEntry;
@@ -90,6 +91,8 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 	ServiceRegistration<String>			debugRegistration;
 	ServiceRegistration<String>			traceRegistration;
 	ServiceRegistration<String>			unknownRegistration;
+
+	Bundle								tb1					= null;
 
 	protected void setUp() throws Exception {
 		auditRegistration = registerLogLevel(LogLevel.AUDIT);
@@ -161,6 +164,16 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 		getContext().ungetService(logServiceReference);
 		getContext().ungetService(logReaderServiceReference);
 		getContext().ungetService(loggerAdminReference);
+
+		if (tb1 != null) {
+			try {
+				tb1.uninstall();
+			} catch (BundleException e) {
+				// do nothing
+			} catch (IllegalStateException e) {
+				// testcase must have uninstsalled it
+			}
+		}
 	}
 
 	void loggerThenAssertLog(boolean expectEntry, Bundle b, Logger logger,
