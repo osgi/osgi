@@ -143,7 +143,7 @@ public class ConditionInfo {
 					}
 				}
 			}
-			this.args = argsList.toArray(new String[argsList.size()]);
+			this.args = argsList.toArray(new String[0]);
 
 			/* the final character must be ']' */
 			char c = encoded[pos];

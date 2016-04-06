@@ -404,7 +404,10 @@ public class DmtException extends Exception {
 	 * @param fatal whether the exception is fatal
 	 */
 	public DmtException(String uri, int code, String message, Vector<? extends Throwable> causes, boolean fatal) {
-		this(uri, code, message, (causes == null) ? new Throwable[0] : (Throwable[]) causes.toArray(new Throwable[causes.size()]), fatal);
+		this(uri, code, message,
+				(causes == null) ? new Throwable[0]
+						: (Throwable[]) causes.toArray(new Throwable[0]),
+				fatal);
 	}
 
 	private DmtException(String uri, int code, String message, Throwable[] causes, boolean fatal) {

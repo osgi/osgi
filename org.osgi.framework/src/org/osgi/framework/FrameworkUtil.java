@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.security.auth.x500.X500Principal;
 
 /**
@@ -1389,7 +1390,8 @@ public class FrameworkUtil {
 					operands.add(child);
 				}
 
-				return new FilterImpl(FilterImpl.AND, null, operands.toArray(new FilterImpl[operands.size()]));
+				return new FilterImpl(FilterImpl.AND, null,
+						operands.toArray(new FilterImpl[0]));
 			}
 
 			private FilterImpl parse_or() throws InvalidSyntaxException {
@@ -1408,7 +1410,8 @@ public class FrameworkUtil {
 					operands.add(child);
 				}
 
-				return new FilterImpl(FilterImpl.OR, null, operands.toArray(new FilterImpl[operands.size()]));
+				return new FilterImpl(FilterImpl.OR, null,
+						operands.toArray(new FilterImpl[0]));
 			}
 
 			private FilterImpl parse_not() throws InvalidSyntaxException {
@@ -1601,7 +1604,7 @@ public class FrameworkUtil {
 					}
 				}
 
-				return operands.toArray(new String[size]);
+				return operands.toArray(new String[0]);
 			}
 
 			private void skipWhiteSpace() {
@@ -1649,7 +1652,7 @@ public class FrameworkUtil {
 					keyList.add(key);
 				}
 			}
-			this.keys = keyList.toArray(new String[keyList.size()]);
+			this.keys = keyList.toArray(new String[0]);
 		}
 
 		@Override

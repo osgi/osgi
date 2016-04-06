@@ -530,12 +530,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			return null;
 		}
 		synchronized (t) {
-			int length = t.size();
-			if (length == 0) {
+			if (t.isEmpty()) {
 				return null;
 			}
 			@SuppressWarnings("unchecked")
-			ServiceReference<S>[] result = new ServiceReference[length];
+			ServiceReference<S>[] result = new ServiceReference[0];
 			return t.copyKeys(result);
 		}
 	}

@@ -18,6 +18,7 @@ package org.osgi.util.tracker;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -283,11 +284,10 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 			return null;
 		}
 		synchronized (t) {
-			int length = t.size();
-			if (length == 0) {
+			if (t.isEmpty()) {
 				return null;
 			}
-			return t.copyKeys(new Bundle[length]);
+			return t.copyKeys(new Bundle[0]);
 		}
 	}
 

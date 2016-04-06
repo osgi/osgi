@@ -267,7 +267,7 @@ public final class Uri {
 			segments.add(segment.toString());
 		}
 
-		return segments.toArray(new String[segments.size()]);
+		return segments.toArray(new String[0]);
 	}
 
 	/**
