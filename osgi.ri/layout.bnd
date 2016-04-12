@@ -22,7 +22,6 @@ build.cmpn.impls = \
 	org.osgi.impl.service.io , \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
-	org.osgi.impl.service.log , \
 	org.osgi.impl.service.monitor , \
 	org.osgi.impl.service.prefs , \
 	org.osgi.impl.service.rest , \
@@ -49,6 +48,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.http;latest}, \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
+	${repo;org.osgi.impl.service.log;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
@@ -67,7 +67,6 @@ build.enterprise.impls = \
 	org.osgi.impl.service.async, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
-	org.osgi.impl.service.log , \
     org.osgi.impl.service.rest , \
     org.osgi.impl.service.rest.client , \
     org.osgi.impl.service.rest.client.js , \
@@ -89,6 +88,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.http;latest}, \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
+    ${repo;org.osgi.impl.service.log;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
@@ -107,7 +107,6 @@ build.residential.impls = \
 	org.osgi.impl.service.device.manager, \
 	org.osgi.impl.service.dmt, \
 	org.osgi.impl.service.enocean, \
-	org.osgi.impl.service.log, \
 	org.osgi.impl.service.networkadapter, \
 	org.osgi.impl.service.residentialmanagement, \
 	org.osgi.impl.service.resourcemonitoring, \
@@ -128,6 +127,7 @@ jar.residential.impls = \
 	${repo;org.osgi.impl.service.component;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
+    ${repo;org.osgi.impl.service.log;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}
 

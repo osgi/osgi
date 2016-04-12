@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,83 +18,78 @@ package org.osgi.service.log;
 
 import java.util.Enumeration;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
- * Provides methods to retrieve {@code LogEntry} objects from the log.
+ * LogReaderService for obtaining logging information.
  * <p>
- * There are two ways to retrieve {@code LogEntry} objects:
+ * There are two ways to obtain {@link LogEntry} objects:
  * <ul>
- * <li>The primary way to retrieve {@code LogEntry} objects is to register a
- * {@code LogListener} object whose {@code LogListener.logged} method will be
- * called for each entry added to the log.</li>
- * <li>To retrieve past {@code LogEntry} objects, the {@code getLog} method can
- * be called which will return an {@code Enumeration} of all {@code LogEntry}
+ * <li>The primary way to obtain {@link LogEntry} objects is to get a
+ * {@link org.osgi.service.log.stream.LogStream} object from the service
+ * registry. This replaces adding a {@link LogListener} object.</li>
+ * <li>To obtain past {@link LogEntry} objects, the {@link #getLog()} method can
+ * be called which will return an {@code Enumeration} of the {@link LogEntry}
  * objects in the log.</li>
  * </ul>
  * 
  * @ThreadSafe
  * @author $Id$
- * @see LogEntry
- * @see LogListener
- * @see LogListener#logged(LogEntry)
  */
+@ProviderType
 public interface LogReaderService {
 	/**
-	 * Subscribes to {@code LogEntry} objects.
-	 * 
+	 * Subscribes to {@link LogEntry} objects.
 	 * <p>
-	 * This method registers a {@code LogListener} object with the Log Reader
-	 * Service. The {@code LogListener.logged(LogEntry)} method will be called
-	 * for each {@code LogEntry} object placed into the log.
-	 * 
+	 * This method registers a {@link LogListener} object with the Log Reader
+	 * Service. The {@link LogListener#logged(LogEntry)} method will be called
+	 * for each {@link LogEntry} object placed into the log.
 	 * <p>
-	 * When a bundle which registers a {@code LogListener} object is stopped or
+	 * When a bundle which registers a {@link LogListener} object is stopped or
 	 * otherwise releases the Log Reader Service, the Log Reader Service must
 	 * remove all of the bundle's listeners.
-	 * 
 	 * <p>
 	 * If this Log Reader Service's list of listeners already contains a
 	 * listener {@code l} such that {@code (l==listener)}, this method does
 	 * nothing.
+	 * <p>
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
+	 * way to obtain {@link LogEntry} objects.
 	 * 
-	 * @param listener A {@code LogListener} object to register; the
-	 *        {@code LogListener} object is used to receive {@code LogEntry}
-	 *        objects.
-	 * @see LogListener
-	 * @see LogEntry
-	 * @see LogListener#logged(LogEntry)
+	 * @param listener A {@link LogListener} object to register; the
+	 *            {@link LogListener} object is used to receive {@link LogEntry}
+	 *            objects.
 	 */
-	public void addLogListener(LogListener listener);
+	void addLogListener(LogListener listener);
 
 	/**
-	 * Unsubscribes to {@code LogEntry} objects.
-	 * 
+	 * Unsubscribes to {@link LogEntry} objects.
 	 * <p>
-	 * This method unregisters a {@code LogListener} object from the Log Reader
+	 * This method unregisters a {@link LogListener} object from the Log Reader
 	 * Service.
-	 * 
 	 * <p>
 	 * If {@code listener} is not contained in this Log Reader Service's list of
 	 * listeners, this method does nothing.
+	 * <p>
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
+	 * way to obtain {@link LogEntry} objects.
 	 * 
-	 * @param listener A {@code LogListener} object to unregister.
-	 * @see LogListener
+	 * @param listener A {@link LogListener} object to unregister.
 	 */
-	public void removeLogListener(LogListener listener);
+	void removeLogListener(LogListener listener);
 
 	/**
-	 * Returns an {@code Enumeration} of all {@code LogEntry} objects in the
+	 * Returns an {@code Enumeration} of the {@link LogEntry} objects in the
 	 * log.
-	 * 
 	 * <p>
-	 * Each element of the enumeration is a {@code LogEntry} object, ordered
+	 * Each element of the enumeration is a {@link LogEntry} object, ordered
 	 * with the most recent entry first. Whether the enumeration is of all
-	 * {@code LogEntry} objects since the Log Service was started or some recent
-	 * past is implementation-specific. Also implementation-specific is whether
-	 * informational and debug {@code LogEntry} objects are included in the
-	 * enumeration.
+	 * {@link LogEntry} objects since the Log Service was started or some recent
+	 * past is implementation-specific. Also implementation-specific is which
+	 * level {@link LogEntry} objects are included in the enumeration.
 	 * 
-	 * @return An {@code Enumeration} of all {@code LogEntry} objects in the
+	 * @return An {@code Enumeration} of the {@link LogEntry} objects in the
 	 *         log.
 	 */
-	public Enumeration<LogEntry> getLog();
+	Enumeration<LogEntry> getLog();
 }

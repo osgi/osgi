@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package org.osgi.service.log;
 
 import java.util.EventListener;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Subscribes to {@code LogEntry} objects from the {@code LogReaderService}.
- * 
  * <p>
  * A {@code LogListener} object may be registered with the Log Reader Service
  * using the {@code LogReaderService.addLogListener} method. After the listener
@@ -28,24 +29,20 @@ import java.util.EventListener;
  * {@code LogEntry} object created. The {@code LogListener} object may be
  * unregistered by calling the {@code LogReaderService.removeLogListener}
  * method.
+ * <p>
+ * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred way
+ * to obtain {@link LogEntry} objects.
  * 
  * @ThreadSafe
  * @author $Id$
- * @see LogReaderService
- * @see LogEntry
- * @see LogReaderService#addLogListener(LogListener)
- * @see LogReaderService#removeLogListener(LogListener)
  */
+@ConsumerType
+@FunctionalInterface
 public interface LogListener extends EventListener {
 	/**
 	 * Listener method called for each LogEntry object created.
 	 * 
-	 * <p>
-	 * As with all event listeners, this method should return to its caller as
-	 * soon as possible.
-	 * 
-	 * @param entry A {@code LogEntry} object containing log information.
-	 * @see LogEntry
+	 * @param entry A {@link LogEntry} object containing log information.
 	 */
-	public void logged(LogEntry entry);
+	void logged(LogEntry entry);
 }
