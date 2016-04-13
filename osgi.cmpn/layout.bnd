@@ -41,6 +41,7 @@ osgi.cmpn.specs = \
 	 org.osgi.util.measurement, \
 	 org.osgi.util.position, \
      org.osgi.util.promise, \
+     org.osgi.util.pushstream, \
 	 org.osgi.util.xml
 
 osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};^.*$;$0.*}

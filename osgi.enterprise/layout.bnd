@@ -30,6 +30,7 @@ osgi.enterprise.specs = \
 	 org.osgi.service.useradmin, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
+     org.osgi.util.pushstream, \
 	 org.osgi.util.xml
 
 osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};^.*$;$0.*}

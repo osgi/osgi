@@ -27,6 +27,7 @@ osgi.residential.specs = \
 	 org.osgi.service.useradmin, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
+     org.osgi.util.pushstream, \
 	 org.osgi.util.xml
 
 osgi.residential.packages = ${replace;${osgi.residential.specs};^.*$;$0.*}
