@@ -207,7 +207,7 @@ public final class ServicePermission extends BasicPermission {
 		if (reference == null) {
 			throw new IllegalArgumentException("reference must not be null");
 		}
-		StringBuffer sb = new StringBuffer("(" + Constants.SERVICE_ID + "=");
+		StringBuilder sb = new StringBuilder("(" + Constants.SERVICE_ID + "=");
 		sb.append(reference.getProperty(Constants.SERVICE_ID));
 		sb.append(")");
 		return sb.toString();
@@ -443,7 +443,7 @@ public final class ServicePermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 
 			int mask = action_mask;

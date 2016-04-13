@@ -298,7 +298,7 @@ public final class AdminPermission extends BasicPermission {
 		if (bundle == null) {
 			throw new IllegalArgumentException("bundle must not be null");
 		}
-		StringBuffer sb = new StringBuffer("(id=");
+		StringBuilder sb = new StringBuilder("(id=");
 		sb.append(bundle.getBundleId());
 		sb.append(")");
 		return sb.toString();
@@ -672,7 +672,7 @@ public final class AdminPermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 
 			int mask = action_mask;
 			if ((mask & ACTION_CLASS) == ACTION_CLASS) {

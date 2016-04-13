@@ -968,7 +968,7 @@ public final class DmtData {
 		if (bytes.length == 0)
 			return "";
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		String del = "";
 		for (int i = 0; i < bytes.length; i++) {
 			appendHexByte(buf.append(del), bytes[i]);
@@ -978,7 +978,7 @@ public final class DmtData {
 		return buf.toString();
 	}
 
-	private static void appendHexByte(StringBuffer buf, byte b) {
+	private static void appendHexByte(StringBuilder buf, byte b) {
 		buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]);
 	}
 

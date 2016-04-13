@@ -512,7 +512,7 @@ public final class Acl {
 		boolean limited = (limit > 0);
 		int applied = 0;
 		int index = 0;
-		StringBuffer part = new StringBuffer();
+		StringBuilder part = new StringBuilder();
 
 		while (index < input.length()) {
 			char ch = input.charAt(index);
@@ -521,7 +521,7 @@ public final class Acl {
 			else {
 				++applied;
 				v.add(part.toString());
-				part = new StringBuffer();
+				part = new StringBuilder();
 			}
 			++index;
 			if (limited && applied == limit - 1)

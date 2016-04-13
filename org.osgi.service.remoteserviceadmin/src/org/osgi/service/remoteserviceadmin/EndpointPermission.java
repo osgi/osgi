@@ -17,6 +17,7 @@
 package org.osgi.service.remoteserviceadmin;
 
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+
 import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
@@ -34,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -179,7 +181,7 @@ public final class EndpointPermission extends Permission {
 		if (endpoint == null) {
 			throw new IllegalArgumentException("invalid endpoint: null");
 		}
-		StringBuffer sb = new StringBuffer("(" + ENDPOINT_ID + "=");
+		StringBuilder sb = new StringBuilder("(" + ENDPOINT_ID + "=");
 		sb.append(endpoint.getId());
 		sb.append(")");
 		return sb.toString();
@@ -381,7 +383,7 @@ public final class EndpointPermission extends Permission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 
 			int mask = action_mask;

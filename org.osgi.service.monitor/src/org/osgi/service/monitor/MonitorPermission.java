@@ -274,7 +274,7 @@ public class MonitorPermission extends Permission {
 	 */
 	@Override
 	public String getActions() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		appendAction(sb, READ_FLAG, READ);
 		appendAction(sb, RESET_FLAG, RESET);
@@ -285,7 +285,7 @@ public class MonitorPermission extends Permission {
 		return sb.toString();
 	}
 
-	private void appendAction(StringBuffer sb, int flag, String actionName) {
+	private void appendAction(StringBuilder sb, int flag, String actionName) {
 		if ((mask & flag) != 0) {
 			if (sb.length() != 0)
 				sb.append(',');

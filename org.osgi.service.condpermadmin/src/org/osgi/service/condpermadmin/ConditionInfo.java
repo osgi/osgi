@@ -183,7 +183,7 @@ public class ConditionInfo {
 	 * @return The string encoding of this {@code ConditionInfo}.
 	 */
 	public final String getEncoded() {
-		StringBuffer output = new StringBuffer();
+		StringBuilder output = new StringBuilder();
 		output.append('[');
 		output.append(type);
 
@@ -281,9 +281,9 @@ public class ConditionInfo {
 
 	/**
 	 * This escapes the quotes, backslashes, \n, and \r in the string using a
-	 * backslash and appends the newly escaped string to a StringBuffer.
+	 * backslash and appends the newly escaped string to a StringBuilder.
 	 */
-	private static void escapeString(String str, StringBuffer output) {
+	private static void escapeString(String str, StringBuilder output) {
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
 			char c = str.charAt(i);
@@ -310,7 +310,7 @@ public class ConditionInfo {
 	 * Takes an encoded character array and decodes it into a new String.
 	 */
 	private static String unescapeString(char[] str, int begin, int end) {
-		StringBuffer output = new StringBuffer(end - begin);
+		StringBuilder output = new StringBuilder(end - begin);
 		for (int i = begin; i < end; i++) {
 			char c = str[i];
 			if (c == '\\') {

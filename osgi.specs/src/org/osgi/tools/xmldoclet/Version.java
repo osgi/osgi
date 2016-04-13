@@ -295,7 +295,7 @@ public class Version implements Comparable<Version> {
 			return s;
 		}
 		int q = qualifier.length();
-		StringBuffer result = new StringBuffer(20 + q);
+		StringBuilder result = new StringBuilder(20 + q);
 		result.append(major);
 		result.append(SEPARATOR);
 		result.append(minor);
@@ -314,7 +314,7 @@ public class Version implements Comparable<Version> {
 	 * @return The string representation of this version identifier.
 	 */
 	String toSpecificationString() {
-		StringBuffer result = new StringBuffer(20);
+		StringBuilder result = new StringBuilder(20);
 		result.append(major);
 		result.append(SEPARATOR);
 		result.append(minor);

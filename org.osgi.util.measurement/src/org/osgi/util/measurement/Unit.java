@@ -435,8 +435,8 @@ public class Unit {
 		int _mol = (int) (((type >> mol_SHIFT) & MASK) - ZERO);
 		int _cd = (int) (((type >> cd_SHIFT) & MASK) - ZERO);
 		int _rad = (int) (((type >> rad_SHIFT) & MASK) - ZERO);
-		StringBuffer numerator = new StringBuffer();
-		StringBuffer denominator = new StringBuffer();
+		StringBuilder numerator = new StringBuilder();
+		StringBuilder denominator = new StringBuilder();
 		addSIname(_m, "m", numerator, denominator);
 		addSIname(_s, "s", numerator, denominator);
 		addSIname(_kg, "kg", numerator, denominator);
@@ -455,9 +455,10 @@ public class Unit {
 		return numerator.toString();
 	}
 
-	private static void addSIname(int si, String name, StringBuffer numerator, StringBuffer denominator) {
+	private static void addSIname(int si, String name, StringBuilder numerator,
+			StringBuilder denominator) {
 		if (si != 0) {
-			StringBuffer sb = (si > 0) ? numerator : denominator;
+			StringBuilder sb = (si > 0) ? numerator : denominator;
 			if (sb.length() > 0) {
 				sb.append("*");
 			}

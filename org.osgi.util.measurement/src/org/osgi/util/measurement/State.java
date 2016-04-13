@@ -93,7 +93,7 @@ public class State {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(value);
 		if (name != null) {
 			sb.append(" \"");

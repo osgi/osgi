@@ -33,6 +33,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -182,7 +183,7 @@ public final class SubsystemPermission extends BasicPermission {
 		if (subsystem == null) {
 			throw new IllegalArgumentException("subsystem must not be null");
 		}
-		StringBuffer sb = new StringBuffer("(id=");
+		StringBuilder sb = new StringBuilder("(id=");
 		sb.append(subsystem.getSubsystemId());
 		sb.append(")");
 		return sb.toString();
@@ -447,7 +448,7 @@ public final class SubsystemPermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 
 			int mask = action_mask;
 

@@ -289,7 +289,7 @@ public final class TopicPermission extends Permission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 			int mask = getActionsMask();
 			if ((mask & ACTION_PUBLISH) == ACTION_PUBLISH) {

@@ -30,6 +30,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Filter;
 
 /**
@@ -220,7 +221,7 @@ public final class ConfigurationPermission extends BasicPermission {
 			return null;
 		}
 		char[] chars = name.toCharArray();
-		StringBuffer sb = new StringBuffer(chars.length);
+		StringBuilder sb = new StringBuilder(chars.length);
 
 		List<String> sub = new ArrayList<String>(10);
 
@@ -403,7 +404,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 
 			int mask = action_mask;

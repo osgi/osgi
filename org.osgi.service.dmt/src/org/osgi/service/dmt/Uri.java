@@ -158,7 +158,7 @@ public final class Uri {
 			return "";
 		}
 
-		StringBuffer uri = new StringBuffer();
+		StringBuilder uri = new StringBuilder();
 		for (int i = 0; i < path.length; ++i) {
 			if (i > 0) {
 				uri.append('/');
@@ -191,7 +191,7 @@ public final class Uri {
 		if (segment.length() == 0)
 			throw new IllegalArgumentException("URI segment is empty.");
 
-		StringBuffer newsegment = new StringBuffer(segment);
+		StringBuilder newsegment = new StringBuilder(segment);
 		int i = 0;
 		while (i < newsegment.length()) { // length can decrease during the
 											// loop!
@@ -242,7 +242,7 @@ public final class Uri {
 			return new String[] {};
 
 		List<String> segments = new ArrayList<>();
-		StringBuffer segment = new StringBuffer();
+		StringBuilder segment = new StringBuilder();
 
 		boolean escape = false;
 		for (int i = 0; i < uri.length(); i++) {
@@ -256,7 +256,7 @@ public final class Uri {
 			} else
 				if (ch == '/') {
 					segments.add(segment.toString());
-					segment = new StringBuffer();
+				segment = new StringBuilder();
 				} else
 					if (ch == '\\') {
 						escape = true;
@@ -306,7 +306,7 @@ public final class Uri {
 			if (c == '\\' || c == '/') {
 				// We've got an to be escaped character, so now create the
 				// string buffer
-				StringBuffer sb = new StringBuffer(nodeName);
+				StringBuilder sb = new StringBuilder(nodeName);
 				for (; i < sb.length(); i++) {
 					c = sb.charAt(i);
 					if (c == '\\' || c == '/')
@@ -333,7 +333,7 @@ public final class Uri {
 		if (n < 0)
 			return nodeName;
 
-		StringBuffer sb = new StringBuffer(nodeName);
+		StringBuilder sb = new StringBuilder(nodeName);
 		while (n >= 0 && n < sb.length()) {
 			sb.deleteCharAt(n);
 			n++;
@@ -416,7 +416,7 @@ public final class Uri {
 			return getHash(nodeName);
 
 		// escape any '/' and '\' characters in the node name
-		StringBuffer nameBuffer = new StringBuffer(nodeName);
+		StringBuilder nameBuffer = new StringBuilder(nodeName);
 		for (int i = 0; i < nameBuffer.length(); i++)
 			// 'i' can increase in loop
 			if (nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
@@ -444,7 +444,7 @@ public final class Uri {
 		// very dumb base64 encoder code. There is no need for multiple lines
 		// or trailing '='-s....
 		// also, we hardcoded the fact that sha-1 digests are 20 bytes long
-		StringBuffer sb = new StringBuffer(digest.length * 2);
+		StringBuilder sb = new StringBuilder(digest.length * 2);
 		for (int i = 0; i < 6; i++) {
 			int d0 = digest[i * 3] & 0xff;
 			int d1 = digest[i * 3 + 1] & 0xff;

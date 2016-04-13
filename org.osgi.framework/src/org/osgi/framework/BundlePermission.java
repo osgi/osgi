@@ -314,7 +314,7 @@ public final class BundlePermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 
 			if ((action_mask & ACTION_PROVIDE) == ACTION_PROVIDE) {

@@ -214,7 +214,7 @@ final public class WirePermission extends BasicPermission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			boolean comma = false;
 			int mask = getActionsMask();
 			if ((mask & ACTION_PRODUCE) == ACTION_PRODUCE) {
@@ -288,7 +288,7 @@ final public class WirePermission extends BasicPermission {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append('(');
 		sb.append(getClass().getName());
 		sb.append(" \"");

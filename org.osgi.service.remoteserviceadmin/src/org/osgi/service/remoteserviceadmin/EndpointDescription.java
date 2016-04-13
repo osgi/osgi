@@ -17,6 +17,7 @@
 package org.osgi.service.remoteserviceadmin;
 
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
@@ -578,7 +580,7 @@ public class EndpointDescription {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append('{');
 		Iterator<Map.Entry<String, Object>> iter = properties.entrySet().iterator();
 		boolean comma = false;
@@ -606,12 +608,12 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Append the specified Object array to the specified StringBuffer.
+	 * Append the specified Object array to the specified StringBuilder.
 	 * 
-	 * @param sb Receiving StringBuffer.
-	 * @param value Object array to append to the specified StringBuffer.
+	 * @param sb Receiving StringBuilder.
+	 * @param value Object array to append to the specified StringBuilder.
 	 */
-	private static void append(StringBuffer sb, Object[] value) {
+	private static void append(StringBuilder sb, Object[] value) {
 		sb.append('[');
 		boolean comma = false;
 		final int length = value.length;

@@ -513,7 +513,7 @@ public class DmtException extends Exception {
 	 */
 	@Override
 	public String getMessage() {
-		StringBuffer sb = new StringBuffer(getCodeText(code));
+		StringBuilder sb = new StringBuilder(getCodeText(code));
 		if (uri != null)
 			sb.append(": '").append(uri).append('\'');
 		if (message != null)

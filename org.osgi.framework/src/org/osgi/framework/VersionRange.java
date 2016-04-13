@@ -385,12 +385,13 @@ public class VersionRange {
 		}
 		String leftVersion = left.toString();
 		if (right == null) {
-			StringBuffer result = new StringBuffer(leftVersion.length() + 1);
+			StringBuilder result = new StringBuilder(leftVersion.length() + 1);
 			result.append(left.toString0());
 			return versionRangeString = result.toString();
 		}
 		String rightVerion = right.toString();
-		StringBuffer result = new StringBuffer(leftVersion.length() + rightVerion.length() + 5);
+		StringBuilder result = new StringBuilder(
+				leftVersion.length() + rightVerion.length() + 5);
 		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
 		result.append(left.toString0());
 		result.append(ENDPOINT_DELIMITER);
@@ -475,7 +476,7 @@ public class VersionRange {
 			}
 		}
 
-		StringBuffer result = new StringBuffer(128);
+		StringBuilder result = new StringBuilder(128);
 		final boolean needPresence = !leftClosed && ((right == null) || !rightClosed);
 		final boolean multipleTerms = needPresence || (right != null);
 		if (multipleTerms) {

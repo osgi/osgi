@@ -366,7 +366,7 @@ public class Measurement implements Comparable<Object> {
 	public String toString() {
 		String result = name;
 		if (result == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append(value);
 			if (error != 0.0d) {
 				sb.append(" +/- ");

@@ -562,8 +562,8 @@ public class FrameworkUtil {
 		 * 
 		 * @return This {@code Filter}'s filter string.
 		 */
-		private StringBuffer normalize() {
-			StringBuffer sb = new StringBuffer();
+		private StringBuilder normalize() {
+			StringBuilder sb = new StringBuilder();
 			sb.append('(');
 
 			switch (op) {
@@ -1507,7 +1507,7 @@ public class FrameworkUtil {
 			}
 
 			private String parse_value() throws InvalidSyntaxException {
-				StringBuffer sb = new StringBuffer(filterChars.length - pos);
+				StringBuilder sb = new StringBuilder(filterChars.length - pos);
 
 				parseloop: while (true) {
 					char c = filterChars[pos];
@@ -1543,7 +1543,7 @@ public class FrameworkUtil {
 			}
 
 			private Object parse_substring() throws InvalidSyntaxException {
-				StringBuffer sb = new StringBuffer(filterChars.length - pos);
+				StringBuilder sb = new StringBuilder(filterChars.length - pos);
 
 				List<String> operands = new ArrayList<String>(10);
 
@@ -2147,7 +2147,7 @@ public class FrameworkUtil {
 			if (dnChain == null) {
 				return null;
 			}
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for (Iterator<?> iChain = dnChain.iterator(); iChain.hasNext();) {
 				sb.append(iChain.next());
 				if (iChain.hasNext()) {

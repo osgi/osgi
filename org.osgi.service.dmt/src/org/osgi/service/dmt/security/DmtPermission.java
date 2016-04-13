@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.Uri;
 
@@ -173,7 +174,7 @@ public class DmtPermission extends Permission {
 			checkUri(dmtUri);
 
 		// canonicalize URI: remove escapes from non-special characters
-		StringBuffer sb = new StringBuffer(dmtUri);
+		StringBuilder sb = new StringBuilder(dmtUri);
 		int i = 0;
 		while (i < sb.length()) { // length can decrease during the loop!
 			if (sb.charAt(i) == '\\') {
@@ -325,7 +326,7 @@ public class DmtPermission extends Permission {
 
 	// generates the canonical string representation of the action list
 	private static String canonicalActions(int mask) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		addAction(sb, mask, Acl.ADD, ADD);
 		addAction(sb, mask, Acl.DELETE, DELETE);
 		addAction(sb, mask, Acl.EXEC, EXEC);
@@ -336,7 +337,8 @@ public class DmtPermission extends Permission {
 
 	// if 'flag' appears in 'mask', appends the 'action' string to the contents
 	// of 'sb', separated by a comma if needed
-	private static void addAction(StringBuffer sb, int mask, int flag, String action) {
+	private static void addAction(StringBuilder sb, int mask, int flag,
+			String action) {
 		if ((mask & flag) != 0) {
 			if (sb.length() > 0)
 				sb.append(',');
