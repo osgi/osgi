@@ -11,7 +11,7 @@ import org.osgi.service.log.LogService;
 import junit.framework.Assert;
 
 public class LogReader implements LogListener {
-	final List<LogEntry> log = new ArrayList();
+	final List<LogEntry> log = new ArrayList<>();
 
 	/**
 	 * Add any entry that has 4711 in the message to the log list
