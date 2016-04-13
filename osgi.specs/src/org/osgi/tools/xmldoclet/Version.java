@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -295,7 +295,7 @@ public class Version implements Comparable<Version> {
 			return s;
 		}
 		int q = qualifier.length();
-		StringBuffer result = new StringBuffer(20 + q);
+		StringBuilder result = new StringBuilder(20 + q);
 		result.append(major);
 		result.append(SEPARATOR);
 		result.append(minor);
@@ -314,7 +314,7 @@ public class Version implements Comparable<Version> {
 	 * @return The string representation of this version identifier.
 	 */
 	String toSpecificationString() {
-		StringBuffer result = new StringBuffer(20);
+		StringBuilder result = new StringBuilder(20);
 		result.append(major);
 		result.append(SEPARATOR);
 		result.append(minor);
@@ -391,6 +391,7 @@ public class Version implements Comparable<Version> {
 	 * @throws ClassCastException If the specified object is not a
 	 *         {@code Version} object.
 	 */
+	@Override
 	public int compareTo(Version other) {
 		if (other == this) { // quicktest
 			return 0;

@@ -89,7 +89,7 @@ public class HtmlCleaner {
 		descr.put("a", new Integer(CHAR));
 	}
 
-	StringBuffer		result		= new StringBuffer();
+	StringBuilder result = new StringBuilder();
 
 	public HtmlCleaner(String file, String s) {
 		this.file = file;
@@ -99,13 +99,13 @@ public class HtmlCleaner {
 
 	public String clean() {
 		try {
-			result = new StringBuffer();
+			result = new StringBuilder();
 			while (!eof) {
 				next();
 				element(-1);
 				if (!eof) {
 					// wrong!
-					StringBuffer sb = new StringBuffer();
+					StringBuilder sb = new StringBuilder();
 					for (int i = 0; i < tokens.length; i++) {
 						sb.append(" ");
 						String tmp = tokens[(i + rover) % tokens.length];
@@ -129,7 +129,7 @@ public class HtmlCleaner {
 	}
 
 	String escape(String s) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			switch (c) {
@@ -222,8 +222,8 @@ public class HtmlCleaner {
 		result.append("<" + getTag(current) + getRemainder(current) + ">");
 		next();
 		if (t.equalsIgnoreCase("pre")) {
-			StringBuffer previous = result;
-			result = new StringBuffer();
+			StringBuilder previous = result;
+			result = new StringBuilder();
 			element(allowed);
 			previous.append(pre(result.toString()));
 			result = previous;
@@ -341,7 +341,7 @@ public class HtmlCleaner {
 	}
 
 	String pre(String s) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		while (s.startsWith("\n") || s.startsWith("\r"))
 			s = s.substring(1);
 		while (s.endsWith("\n") || s.endsWith("\r") || s.endsWith(" "))
@@ -378,7 +378,7 @@ public class HtmlCleaner {
 	}
 
 	static String tidy(String in) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		in = in.replace('\t', ' ').trim();
 		int n = in.indexOf(' ');
 		if (n < 0)
@@ -447,7 +447,7 @@ public class HtmlCleaner {
 		System.out.println(t5 + " - " + tidy(t5));
 		System.out.println(t6 + " - " + tidy(t6));
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < args.length; i++) {
 			sb.append(args[i]);
 			sb.append(" ");

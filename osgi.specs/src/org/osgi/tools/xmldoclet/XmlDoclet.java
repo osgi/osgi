@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.AnnotationTypeDoc;
 import com.sun.javadoc.AnnotationTypeElementDoc;
@@ -182,7 +183,7 @@ public class XmlDoclet extends Doclet {
 		printComment(clazz);
 
 		ParamTag[] parameters = clazz.typeParamTags();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < parameters.length; i++) {
 			printParamTag(sb, parameters[i]);
 		}
@@ -533,7 +534,7 @@ public class XmlDoclet extends Doclet {
 				+ "' varargs='" + vararg + "'/>");
 	}
 
-	void printThrows(StringBuffer sb, ThrowsTag tag) {
+	void printThrows(StringBuilder sb, ThrowsTag tag) {
 		sb.append("   <throws name='"
 				+ simplify(tag.exceptionName())
 				+ (tag.exception() != null ? "' exception='"
@@ -542,7 +543,7 @@ public class XmlDoclet extends Doclet {
 		sb.append("   </throws>");
 	}
 
-	void printParamTag(StringBuffer sb, ParamTag tag) {
+	void printParamTag(StringBuilder sb, ParamTag tag) {
 		String name = tag.parameterName();
 
 		if (tag.isTypeParameter())
@@ -558,7 +559,7 @@ public class XmlDoclet extends Doclet {
 		}
 	}
 
-	void printSee(StringBuffer sb, SeeTag tag) {
+	void printSee(StringBuilder sb, SeeTag tag) {
 		String ref = "";
 		String file = "";
 		String text = tag.text().trim();
@@ -623,14 +624,14 @@ public class XmlDoclet extends Doclet {
 			return name;
 	}
 
-	void print(StringBuffer sb, Tag tags[]) {
+	void print(StringBuilder sb, Tag tags[]) {
 		for (int i = 0; i < tags.length; i++) {
 			printX(sb, tags[i]);
 		}
 	}
 
 	String toString(Tag tags[]) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		print(sb, tags);
 		return sb.toString().trim();
 	}
@@ -665,7 +666,7 @@ public class XmlDoclet extends Doclet {
 		return cleaner.clean();
 	}
 
-	void printX(StringBuffer sb, Tag tag) {
+	void printX(StringBuilder sb, Tag tag) {
 		if (tag.kind().equals("Text")) {
 			sb.append(tag.text());
 		}
@@ -700,7 +701,7 @@ public class XmlDoclet extends Doclet {
 								}
 								else
 									if (tag.kind().equals("@security")) {
-										StringBuffer sb2 = new StringBuffer();
+					StringBuilder sb2 = new StringBuilder();
 										print(sb2, tag.inlineTags());
 										for (int i = 0; i < sb2.length(); i++)
 											if (sb2.charAt(i) == '\n'
@@ -913,7 +914,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	String escape(String in) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
 			switch (c) {
