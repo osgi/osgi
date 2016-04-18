@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -39,6 +39,8 @@ import org.osgi.framework.hooks.bundle.EventHook;
 import org.osgi.framework.hooks.bundle.FindHook;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.sleep.Sleep;
+
+import junit.framework.AssertionFailedError;
 
 public class BundleHookTests extends OSGiTestCase {
 
@@ -1364,7 +1366,7 @@ public class BundleHookTests extends OSGiTestCase {
 							}
 
 							assertTrue("Should not contain system context.",
-									!contexts.contains(testContext));
+									!contexts.contains(systemContext));
 
 							try {
 								contexts.add(systemContext);
