@@ -142,7 +142,7 @@ public class ExtensionDependencyTests extends LaunchTest {
 				.refreshBundles(Collections.singleton(extensionA_V1));
 
 		// wait for stop
-		assertClasspathModifiedEvent(stopFuture);
+		assertSystemRefreshedEvent(stopFuture);
 
 		reCreateFramework();
 
@@ -179,7 +179,7 @@ public class ExtensionDependencyTests extends LaunchTest {
 		framework.adapt(FrameworkWiring.class)
 				.refreshBundles(Collections.singleton(extensionA_V1));
 		// wait for stop
-		assertClasspathModifiedEvent(stopFuture);
+		assertSystemRefreshedEvent(stopFuture);
 
 		reCreateFramework();
 		currentExtensionCount = getExtensionCount(framework);
@@ -420,14 +420,13 @@ public class ExtensionDependencyTests extends LaunchTest {
 				fragmentReqs.size(), numFound);
 	}
 
-	private static void assertClasspathModifiedEvent(
+	private static void assertSystemRefreshedEvent(
 			Future<FrameworkEvent> stopFuture)
 			throws InterruptedException, ExecutionException {
 		FrameworkEvent stopEvent = stopFuture.get();
 		assertNotNull("No event found.", stopEvent);
-		// TODO currently uses FrameworkEvent#STOPPED_BOOTCLASSPATH_MODIFIED
 		assertEquals("Wrong event: " + stopEvent,
-				FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED,
+				FrameworkEvent.STOPPED_SYSTEM_REFRESHED,
 				stopEvent.getType());
 	}
 
