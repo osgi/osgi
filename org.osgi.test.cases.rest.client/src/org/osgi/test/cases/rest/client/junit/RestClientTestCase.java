@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -677,7 +678,17 @@ public class RestClientTestCase extends RestTestUtils {
 
         assertTrue("Service property " + key, propertiesDTO.containsKey(key));
         if (value instanceof String[]) {
-          assertEquivalent((String[])value, (String[])propertiesDTO.get(key));
+          assertEquivalent((String[]) value, (String[]) propertiesDTO.get(key));
+        } else if (value instanceof Number) {
+          // Need to handle cases where round trip of Long results in
+          // Integer and
+          // round trip of Double results in Float.
+          // But this does not handle cases where round trip of Double
+          // or Float
+          // result in Integer or Long
+          assertEquals("Service property value ",
+            String.valueOf(value),
+            String.valueOf(propertiesDTO.get(key)));
         } else {
           assertEquals("Service property value ", value, propertiesDTO.get(key));
         }
