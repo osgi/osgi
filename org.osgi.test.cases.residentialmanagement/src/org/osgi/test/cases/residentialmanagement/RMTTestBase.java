@@ -3,6 +3,7 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,11 +11,16 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
+import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.admin.LoggerAdmin;
+import org.osgi.service.log.admin.LoggerContext;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
@@ -23,7 +29,10 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		RMTConstants {
 
 	static final int DELAY; 
-	
+	ServiceReference<LoggerAdmin>	loggerAdminReference;
+	LoggerAdmin						loggerAdmin;
+	LoggerContext					rootContext;
+	Map<String,LogLevel>			rootLogLevels;
 	DmtAdmin dmtAdmin;
 	DmtSession session;
 	
@@ -58,9 +67,22 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		loggerAdminReference = getContext()
+				.getServiceReference(LoggerAdmin.class);
+		if (loggerAdminReference != null) {
+			loggerAdmin = getContext().getService(loggerAdminReference);
+
+			// save off original log levels
+			rootContext = loggerAdmin.getLoggerContext(null);
+			rootLogLevels = rootContext.getLogLevels();
+			// enable all log levels for all loggers by default
+			rootContext.setLogLevels(Collections
+					.singletonMap(Logger.ROOT_LOGGER_NAME, LogLevel.TRACE));
+		}
 		System.out.println("setting up");
 		dmtAdmin = getService(DmtAdmin.class);
 	}
+
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -94,6 +116,10 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 			session.close();
 		unregisterAllServices();
 		ungetAllServices();
+
+		if (rootContext != null) {
+			rootContext.setLogLevels(rootLogLevels);
+		}
 	}
 
 	
