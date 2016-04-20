@@ -1,0 +1,4 @@
+org.osgi.service.log; version=latest
+org.osgi.util.pushstream; version=latest
+org.osgi.util.promise; version=latest
+org.osgi.util.function; version=latest
