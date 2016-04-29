@@ -47,5 +47,16 @@ import org.osgi.util.pushstream.PushStream;
  */
 @ProviderType
 public interface LogStream extends PushStream<LogEntry> {
-	// no additional methods
+	/**
+	 * Prime the LogStream with the past {@link LogEntry} objects. The number of
+	 * past {@link LogEntry} objects is implementation specific.
+	 * <p>
+	 * The returned LogStream will supply the past {@link LogEntry} objects
+	 * followed by newly created {@link LogEntry} objects.
+	 * 
+	 * @return A LogStream which will be primed with past {@link LogEntry}
+	 *         objects. The returned LogStream may be this LogStream or a new
+	 *         LogStream.
+	 */
+	LogStream withHistory();
 }
