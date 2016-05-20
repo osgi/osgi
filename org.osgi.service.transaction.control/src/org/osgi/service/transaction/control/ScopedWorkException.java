@@ -15,6 +15,8 @@
  */
 package org.osgi.service.transaction.control;
 
+import java.io.Serializable;
+
 /**
  * An Exception that is thrown when a piece of scoped work exits with an
  * {@link Exception}
@@ -25,7 +27,13 @@ public class ScopedWorkException extends RuntimeException {
 	 */
 	private static final long			serialVersionUID	= 4160254161503114842L;
 
-	private final TransactionContext context;
+	/**
+	 * {@link TransactionContext} instances are not required to 
+	 * be {@link Serializable}, and the ongoing context is very 
+	 * unlikely to be active post deserialization. As a result
+	 * this field is transient.
+	 */
+	private transient final TransactionContext context;
 
 	/**
 	 * Creates a new TransactionException with the supplied message and cause
@@ -40,7 +48,9 @@ public class ScopedWorkException extends RuntimeException {
 	}
 
 	/**
-	 * @return The ongoing transaction context if the scope is still active
+	 * @return The ongoing transaction context if the current scope was still 
+	 *         active when this exception was raised or <code>null</code> otherwise.
+	 *         Note that this property will not be persisted during serialization.
 	 */
 	public TransactionContext ongoingContext() {
 		return context;
