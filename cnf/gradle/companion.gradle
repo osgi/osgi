@@ -2,9 +2,6 @@
  * OSGi companion code Gradle script
  */
 
-group bnd('groupid')
-version bnd('spec.version', bnd('osgi.version'))
-
 ext.javadocSpecs = bnd("${project.name}.specs", project.name)
 ext.javadocTitle = bnd('javadoc.title', project.name)
 
@@ -70,56 +67,6 @@ javadoc {
   }
 }
 
-task(type: Jar, 'javadocJar') {
-  description 'Jar the javadoc.'
-  group 'documentation'
+release {
   dependsOn javadoc
-  from javadoc.destinationDir
-  classifier 'javadoc'
-}
-
-task(type: Jar, 'sourcesJar') {
-  description 'Jar the sources.'
-  group 'documentation'
-  dependsOn jar
-  inputs.file jar.archivePath
-  from zipTree(jar.archivePath).matching {
-    include 'OSGI-OPT/src/**'
-    include '*'
-  }
-  eachFile { FileCopyDetails fcp ->
-    fcp.path = fcp.path - 'OSGI-OPT/src/'
-  }
-  includeEmptyDirs = false
-  classifier = 'sources'
-}
-
-task('pom') {
-  description 'Generate the pom file.'
-  group 'documentation'
-  dependsOn jar
-  def pomname = "${archivesBaseName}-${version}.pom"
-  ext.pomfile = new File(buildDir, pomname)
-  inputs.file jar.archivePath
-  outputs.file pomfile
-  doLast {
-    copy {
-      from zipTree(jar.archivePath).matching {
-        include "META-INF/maven/${project.group}/${archivesBaseName}/pom.xml"
-      }
-      eachFile { FileCopyDetails fcp ->
-        fcp.path = pomname
-      }
-      into buildDir
-      includeEmptyDirs = false
-    }
-  } 
-}
-
-artifacts {
-  archives sourcesJar
-  archives javadocJar
-  archives(pom.pomfile) {
-    builtBy pom
-  }
 }

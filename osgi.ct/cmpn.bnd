@@ -1,4 +1,4 @@
-Bundle-Description: OSGi Compendium Release ${version;=;${build.version}} Compliance Tests
+Bundle-Description: OSGi Compendium Release ${versionmask;=;${build.version}} Compliance Tests
 
 -includeresource: {legal}
 

@@ -6,12 +6,13 @@ def buildProject = project
 
 /* Configure the rootProject */
 configure(rootProject) {
-  defaultTasks += ':' + bnd_defaultTask
+  defaultTasks += ':build'
   buildDir = buildProject.buildDir
 
-  task assemble {
-    dependsOn ":${buildProject.name}:${name}"
-    description 'Assembles all the bundles.'
+  task build {
+    dependsOn ":${buildProject.name}:assemble"
+    dependsOn ":${buildProject.name}:releaseNeeded"
+    description 'Assembles and releases the ${buildProject.name} project.'
     group 'build'
   }
 }

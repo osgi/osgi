@@ -1,4 +1,4 @@
-Bundle-Description: OSGi Residential Release ${version;=;${build.version}} Reference Implementations
+Bundle-Description: OSGi Residential Release ${versionmask;=;${build.version}} Reference Implementations
 
 -includeresource: {legal}
 

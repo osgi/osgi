@@ -1,4 +1,4 @@
-Bundle-Description: OSGi Enterprise Release ${version;=;${build.version}} Reference Implementations
+Bundle-Description: OSGi Enterprise Release ${versionmask;=;${build.version}} Reference Implementations
 
 -includeresource: {legal}
 

@@ -1,13 +1,14 @@
-Bundle-License: http://opensource.org/licenses/apache2.0.php; \
-	link="http://www.apache.org/licenses/LICENSE-2.0"; \
-	description="Apache License, Version 2.0"
+Bundle-License: Apache-2.0; \
+                link="http://www.apache.org/licenses/LICENSE-2.0"; \
+                description="Apache License, Version 2.0"
 Bundle-Description: \
-	OSGi Residential Release ${version;=;${build.version}}, \
+	OSGi Residential Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
-Bundle-Name: ${groupid}:${p}
--pom = \
- groupid=${groupid}, \
- version=${osgi.version}
+Bundle-Name: ${-groupid}:${p}
+-pom: version=${versionmask;===s;${@version}}
+
+-buildrepo: Local
+-releaserepo: Release
 companion.code = true
 
 Import-Package					: *; resolution:=optional
@@ -18,8 +19,6 @@ Include-Resource 				: ${osgi.residential.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
-
--outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson 					=  \
 	${osgi.residential.specs} 

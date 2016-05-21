@@ -1,20 +1,19 @@
-Bundle-License: http://opensource.org/licenses/apache2.0.php; \
-    link="http://www.apache.org/licenses/LICENSE-2.0"; \
-    description="Apache License, Version 2.0"
+Bundle-License: Apache-2.0; \
+                link="http://www.apache.org/licenses/LICENSE-2.0"; \
+                description="Apache License, Version 2.0"
 Bundle-Description: \
-    OSGi Promise API Release ${version;=;${build.version}} \
+    OSGi Promise API Release ${versionmask;=;${build.version}} \
     for use inside and outside of OSGi environments.
-Bundle-Name: ${groupid}:${p}
--pom = \
- groupid=${groupid}, \
- version=${osgi.version}
+Bundle-Name: ${-groupid}:${p}
+-pom: version=${versionmask;===s;${@version}}
+
+-buildrepo: Local
+-releaserepo: Release
 companion.code = true
 
 Export-Package: ${osgi.promise.packages}
 
 -includeresource = ${osgi.promise.resources}
-
--outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson = ${osgi.promise.specs} 
 

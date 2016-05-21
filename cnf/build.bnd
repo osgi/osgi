@@ -17,8 +17,6 @@ target-dir				= generated
 target					= ${project}/${target-dir}
 build					= ${workspace}/cnf
 licensed				= ${workspace}/licensed
-repo					= ${build}/repo
-licensed-repo			= ${licensed}/repo
 project.name            = ${basename;${project}}
 p			            = ${project.name}
 prebuild				= 
@@ -38,14 +36,24 @@ javac.profile           = compact1
 -sources               	= true
 -sourcepath             = ${project}/${src}
 
+mainrepo                = ${build}/repo
+licensedrepo            = ${licensed}/repo
+releaserepo             = ${build}/${target-dir}/repo
+
 -plugin = aQute.lib.deployer.FileRepo; \
             name='Main'; \
-            location="${repo}"; \
+            location="${mainrepo}"; \
             readonly=true, \
           aQute.lib.deployer.FileRepo; \
             name='Licensed'; \
-            location="${licensed-repo}"; \
+            location="${licensedrepo}"; \
             readonly=true, \
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            name='Local',\
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            name='Release';\
+            releaseUrl="${fileuri;${releaserepo}}";\
+            snapshotUrl="${fileuri;${releaserepo}}",\
           aQute.bnd.signing.JartoolSigner; \
             keystore="${build}/keystore"; \
             keypass=testtest; \
@@ -61,6 +69,8 @@ javac.profile           = compact1
             path:="${build}/${bin}"; \
             command:="-signaturetest"
 
+-releaserepo:
+-maven-release: javadoc;path=${target}/docs/javadoc
 
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd"
@@ -85,15 +95,17 @@ osgi.version				= ${osgi.version.major}.${osgi.version.minor}.${osgi.version.mic
 build.version				= ${osgi.version}.${project.build}
 
 # Documentation
+-groupid: org.osgi
 Bundle-Copyright: ${copyright}
 Bundle-Vendor:    OSGi Alliance http://www.osgi.org/
-Bundle-Version:   ${build.version}
+# Uncomment the following line to build the non-snapshot version.
+#-snapshot:
+Bundle-Version:   ${build.version}-SNAPSHOT
 Bundle-DocURL:    http://www.osgi.org/
 Bundle-SCM:       url=https://osgi.org/git/build.git, \
                   connection=scm:git:https://osgi.org/git/build.git, \
                   developerConnection=scm:git:https://osgi.org/git/build.git
 Bundle-Developers: osgi; email=info@osgi.org; name="OSGi Alliance"; organization="OSGi Alliance"
-groupid: org.osgi
 Git-Descriptor:   ${system-allow-fail;git describe --dirty --always}
 Git-SHA:          ${system-allow-fail;git rev-list -1 HEAD}
 

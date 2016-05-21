@@ -1,4 +1,4 @@
-Bundle-Description: OSGi Core Release ${version;=;${build.version}} Compliance Tests
+Bundle-Description: OSGi Core Release ${versionmask;=;${build.version}} Compliance Tests
 
 -includeresource: {legal}
 

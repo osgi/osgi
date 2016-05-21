@@ -1,13 +1,14 @@
-Bundle-License: http://opensource.org/licenses/apache2.0.php; \
-    link="http://www.apache.org/licenses/LICENSE-2.0"; \
-    description="Apache License, Version 2.0"
+Bundle-License: Apache-2.0; \
+                link="http://www.apache.org/licenses/LICENSE-2.0"; \
+                description="Apache License, Version 2.0"
 Bundle-Description: \
-    OSGi Annotation Release ${version;=;${build.version}}, \
+    OSGi Annotation Release ${versionmask;=;${build.version}}, \
     Annotations for use in compiling bundles.
-Bundle-Name: ${groupid}:${p}
--pom = \
- groupid=${groupid}, \
- version=${osgi.version}
+Bundle-Name: ${-groupid}:${p}
+-pom: version=${versionmask;===s;${@version}}
+
+-buildrepo: Local
+-releaserepo: Release
 companion.code = true
 
 Export-Package: ${osgi.annotation.packages}
@@ -16,8 +17,6 @@ Include-Resource: ${osgi.annotation.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
-
--outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson =  \
     ${osgi.annotation.specs} 
