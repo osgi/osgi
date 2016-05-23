@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,9 @@ package org.osgi.service.zigbee;
  * Table 2.137 ZDP Enumerations Description in ZIGBEE SPECIFICATION:
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
- * 
+ * @author $Id$
  */
-public class ZDPException extends RuntimeException {
+public class ZDPException extends ZigBeeException {
 
 	/** generated */
 	private static final long	serialVersionUID	= 2909437185484211441L;
@@ -36,7 +31,7 @@ public class ZDPException extends RuntimeException {
 	/**
 	 * The requested operation or transmission was completed successfully.
 	 */
-	public static final short	SUCCESS				= 0x00;
+	public static final int		SUCCESS				= 0x00;
 
 	/**
 	 * Note that: 0x01-0x7f Reserved.
@@ -45,120 +40,125 @@ public class ZDPException extends RuntimeException {
 	/**
 	 * The supplied request type was invalid.
 	 */
-	public static final short	INV_REQUESTTYPE		= 0x80;
+	public static final int		INV_REQUESTTYPE		= 0x21;
 
 	/**
 	 * The requested device did not exist on a device following a child
 	 * descriptor request to a parent.
 	 */
-	public static final short	DEVICE_NOT_FOUND	= 0x81;
+	public static final int		DEVICE_NOT_FOUND	= 0x22;
 
 	/**
 	 * The supplied endpoint was equal to 0x00 or between 0xf1 and 0xff.
 	 */
-	public static final short	INVALID_EP			= 0x82;
+	public static final int		INVALID_EP			= 0x23;
 
 	/**
 	 * The requested endpoint is not described by a simple descriptor.
 	 */
-	public static final short	NOT_ACTIVE			= 0x83;
+	public static final int		NOT_ACTIVE			= 0x24;
 
 	/**
 	 * The requested optional feature is not supported on the target device.
 	 */
-	public static final short	NOT_SUPPORTED		= 0x84;
+	public static final int		NOT_SUPPORTED		= 0x25;
 
 	/**
 	 * A timeout has occurred with the requested operation.
 	 */
-	public static final short	TIMEOUT				= 0x85;
+	public static final int		TIMEOUT				= 0x26;
 
 	/**
 	 * The end device bind request was unsuccessful due to a failure to match
 	 * any suitable clusters.
 	 */
-	public static final short	NO_MATCH			= 0x86;
-
-	/**
-	 * Note that: 0x87 Reserved.
-	 */
+	public static final int		NO_MATCH			= 0x27;
 
 	/**
 	 * The unbind request was unsuccessful due to the coordinator or source
 	 * device not having an entry in its binding table to unbind.
 	 */
-	public static final short	NO_ENTRY			= 0x88;
+	public static final int		NO_ENTRY			= 0x28;
 
 	/**
 	 * A child descriptor was not available following a discovery request to a
 	 * parent.
 	 */
-	public static final short	NO_DESCRIPTOR		= 0x89;
+	public static final int		NO_DESCRIPTOR		= 0x29;
 
 	/**
 	 * The device does not have storage space to support the requested
 	 * operation.
 	 */
-	public static final short	INSUFFICIENT_SPACE	= 0x8a;
+	public static final int		INSUFFICIENT_SPACE	= 0x2a;
 
 	/**
 	 * The device is not in the proper state to support the requested operation.
 	 */
-	public static final short	NOT_PERMITTED		= 0x8b;
+	public static final int		NOT_PERMITTED		= 0x2b;
 
 	/**
 	 * The device does not have table space to support the operation.
 	 */
-	public static final short	TABLE_FULL			= 0x8c;
+	public static final int		TABLE_FULL			= 0x2c;
 
 	/**
 	 * The permissions configuration table on the target indicates that the
 	 * request is not authorized from this device.
 	 */
-	public static final short	NOT_AUTHORIZED		= 0x8d;
+	public static final int		NOT_AUTHORIZED		= 0x2d;
 
 	/**
-	 * Note that: 0x8e-0xff Reserved.
+	 * Create a {@linkplain ZCLException} containing only a description, but no
+	 * error codes. If issued on this exception the {@link #getErrorCode()} and
+	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
+	 * constant.
+	 * 
+	 * @param errorDesc exception error description
 	 */
-
-	//
-	// Below, the error codes specified by the OSGi Alliance.
-	//
-
-	/** OSGI_EXISTING_ID (16) – another endpoint exists with the same ID. */
-	public static final short	OSGI_EXISTING_ID	= 0x10;
-
-	/**
-	 * OSGI_MULTIPLE_HOSTS (17) – several hosts exist for this PAN ID target or
-	 * HOST_PID target.
-	 */
-	public static final short	OSGI_MULTIPLE_HOSTS	= 0x11;
-
-	private final int			errorCode;
-
-	/**
-	 * @param errordesc exception error description
-	 */
-	public ZDPException(String errordesc) {
-		super(errordesc);
-		errorCode = 0;
+	public ZDPException(String errorDesc) {
+		super(errorDesc);
 	}
 
 	/**
-	 * @param errorCode An error code.
+	 * Create a {@linkplain ZCLException} containing a specific
+	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
+	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #ZDPException(String)}.
+	 * 
+	 * @param errorCode One of the error codes defined in this interface or
+	 *        {@link #UNKNOWN_ERROR} if the actual error is not listed in this
+	 *        interface. In this case if the native ZigBee error code is known,
+	 *        it is preferred to use the
+	 *        {@link #ZDPException(short, short, String)} constructor, passing
+	 *        {@link #UNKNOWN_ERROR} as first parameter and the native ZigBee
+	 *        error as the second.
+	 * 
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
 	public ZDPException(int errorCode, String errorDesc) {
-		super(errorDesc);
-		this.errorCode = errorCode;
+		super(errorCode, errorDesc);
 	}
 
 	/**
-	 * @return A ZigBee error code defined a ZigBee Forum working committee or
-	 *         specified by a ZigBee vendor.
+	 * Create a {@linkplain ZCLException} containing a specific
+	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
+	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
+	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #ZDPException(String)}.
+	 * 
+	 * @param errorCode One of the error codes defined in this interface or
+	 *        {@link #UNKNOWN_ERROR} the actual error is not covered in this
+	 *        interface. In this case the {@code zigBeeErrorCode} parameter must
+	 *        be the actual status code returned by the ZigBe stack.
+	 * 
+	 * @param zigBeeErrorCode The actual ZDP status code or
+	 *        {@link #UNKNOWN_ERROR} if this status is unknown.
+	 * 
+	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public int getZigBeeErrorCode() {
-		return errorCode;
+	public ZDPException(int errorCode, int zigBeeErrorCode, String errorDesc) {
+		super(errorCode, zigBeeErrorCode, errorDesc);
 	}
 
 }

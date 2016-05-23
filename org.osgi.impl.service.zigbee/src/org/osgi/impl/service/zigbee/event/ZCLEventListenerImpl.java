@@ -7,6 +7,8 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 
 /**
  * Mocked impl.
+ * 
+ * @author $Id$
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 

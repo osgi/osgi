@@ -1,42 +1,48 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.math.BigInteger;
+
 import org.osgi.service.zigbee.ZCLCluster;
-import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
  * Mocked impl of ZigBeeEndpoint.
+ * 
+ * @author $Id$
  */
 public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
-	private int						id;
-	private ZigBeeSimpleDescriptor	desc;
-	private ZCLCluster[]			inputs;
-	private ZCLCluster[]			outputs;
+	private short id;
+	private ZigBeeSimpleDescriptor desc;
+	private ZCLCluster[] inputs;
+	private ZCLCluster[] outputs;
 
 	/**
 	 * @param id
-	 * @param inputs i.e. ServerClusters
-	 * @param ouputs i.e. ClientClusters
+	 * @param inputs
+	 *            i.e. ServerClusters
+	 * @param ouputs
+	 *            i.e. ClientClusters
 	 * @param desc
 	 */
-	public ZigBeeEndpointImpl(int id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
+	public ZigBeeEndpointImpl(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
 		this.id = id;
 		this.inputs = inputs;
 		this.outputs = ouputs;
 		this.desc = desc;
 	}
 
-	public int getId() {
+	public short getId() {
 		return this.id;
 	}
 
-	public Long getNodeAddress() {
+	public BigInteger getNodeAddress() {
 		// TODO Auto-generated method stub
-		return Long.valueOf("-1");
+		return BigInteger.valueOf(-1);
 	}
 
 	public void getSimpleDescriptor(ZigBeeHandler handler) {
@@ -70,8 +76,9 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	}
 
-	public void notExported(ZCLException e) {
-		// TODO Auto-generated method stub
+	public void notExported(ZigBeeException e) {
+		System.out.println("### not exported has been called");
+
 	}
 
 	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler) {
@@ -79,7 +86,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[id: " + id + ", desc: " + desc + ", inputs: " + inputs + ", outputs: " + outputs + "]";
+		return "" + this.getClass().getName() + "[id: " + id + ", desc: " + desc + ", inputs: " + inputs + ", outputs: "
+				+ outputs + "]";
 	}
 
 }

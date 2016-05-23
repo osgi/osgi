@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,59 +16,52 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
-
 /**
  * This interface represents a ZCLAttribute
  * 
- * @version 1.0
+ * TODO: documentation
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
-public interface ZCLAttribute {
+public interface ZCLAttribute extends ZCLAttributeInfo {
 
 	/**
 	 * Property key for the optional attribute id of a ZigBee Event Listener.
 	 */
-	public final static String	ID	= "zigbee.attribute.id";
-
-	/**
-	 * @return the attribute identifier (i.e. the attribute's ID)
-	 */
-	public int getId();
+	public final static String ID = "zigbee.attribute.id";
 
 	/**
 	 * Gets the current value of the attribute. <br>
 	 * 
+	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a
+	 * "read attribute" can have the following status: SUCCESS, or
+	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}). <br>
+	 * 
 	 * The response object given to the handler is the attribute's Java data
 	 * type (see {@link #getDataType()} method) that will contain the current
-	 * attribute value. In case of a failure, onFailure is called with a
-	 * ZCLException.
+	 * attribute value (or null if an UNSUPPORTED_ATTRIBUTE occurred or in case
+	 * of an invalid value).
 	 * 
 	 * @param handler the handler
-	 * @throws ZCLException
 	 */
-	public void getValue(ZigBeeHandler handler) throws ZCLException;
+	public void getValue(ZigBeeHandler handler);
 
 	/**
 	 * Sets the current value of the attribute. <br>
 	 * 
-	 * The response object given to the handler is a boolean set to true if the
-	 * attribute value has been written or false otherwise. In case of a
-	 * failure, onFailure is called with a ZCLException.
+	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a
+	 * "write attribute" can have the following status: SUCCESS,
+	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
+	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}). <br>
+	 * 
+	 * The response object given to the handler is a Boolean set to true if the
+	 * attribute value has been written. A null value is processed as an invalid
+	 * number. In case of an error has occurred, onFailure is called with a
+	 * ZCLException.
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
 	 */
 	public void setValue(Object value, ZigBeeHandler handler);
-
-	/**
-	 * @return the Attribute data type. It may be null if the data type is not
-	 *         retrievable (issue with read attribute and discover attributes
-	 *         commands).
-	 */
-	public ZCLDataTypeDescription getDataType();
 
 }

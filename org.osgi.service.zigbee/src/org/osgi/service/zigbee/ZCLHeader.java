@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a ZCL Header.
+ * This interface represents the ZCL Frame Header.
  * 
- * @author <a href="mailto:stefano.lenzi@isti.cnr.it">Stefano "Kismet" Lenzi</a>
- * @author <a href="mailto:francesco.furfari@isti.cnr.it">Francesco Furfari</a>
+ * @author $Id$
  */
 public interface ZCLHeader {
 
@@ -32,21 +31,25 @@ public interface ZCLHeader {
 	int getCommandId();
 
 	/**
-	 * Get manufacturerCode
+	 * Get manufacturerCode of the ZCL Frame Header
 	 * 
-	 * Default value is: -1 (no code)
-	 * 
-	 * @return the manufacturerCode
+	 * @return the manufacturerCode if the ZCL Frame is maufacturer specific,
+	 *         otherwise returns -1
 	 */
 	int getManufacturerCode();
 
 	/**
-	 * @return the isClusterSpecificCommand value
+	 * Returns the Frame Type Sub-field of the Frame Control Field
+	 * 
+	 * @return true if the Frame Control Field states that the command is
+	 *         Cluster Specific. Returns false otherwise
 	 */
 	boolean isClusterSpecificCommand();
 
 	/**
-	 * @return the isManufacturerSpecific value
+	 * @return true if the ZCL frame is manufacturer specific (i.e. the
+	 *         Manufacturer Specific Sub-field of the ZCL Frame Frame Control
+	 *         Field is 1.
 	 */
 	boolean isManufacturerSpecific();
 
@@ -56,8 +59,23 @@ public interface ZCLHeader {
 	boolean isClientServerDirection();
 
 	/**
-	 * @return the isDefaultResponseEnabled value
+	 * @return returns {@code true} if the ZCL Header Frame Control Field
+	 *         "Disable Default Response Sub-field" is 1. Returns {@code false}
+	 *         otherwise.
 	 */
-	boolean isDefaultResponseEnabled();
+	boolean isDefaultResponseDisabled();
 
+	/**
+	 * The ZCL Frame Header Transaction Sequence Number
+	 * 
+	 * @return the transaction sequence number
+	 */
+	byte getSequenceNumber();
+
+	/**
+	 * Returns the Frame Control field of the ZCLHeader
+	 * 
+	 * @return the frame control field.
+	 */
+	short getFrameControlField();
 }

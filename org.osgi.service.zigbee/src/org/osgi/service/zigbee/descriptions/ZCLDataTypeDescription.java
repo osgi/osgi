@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,17 +16,19 @@
 
 package org.osgi.service.zigbee.descriptions;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 /**
- * This interface represents the ZCL data type abstraction.
+ * This interface is used for representing any of the ZigBee Data Types defined
+ * in the ZCL. Each of these data types has a set of associated information that
+ * this interface definition permit to retrieve using the specific methods.
+ * <ul>
+ * <li>The data type identifier
+ * <li>The data type name
+ * <li>The data type is analog or digital
+ * <li>The java class used to represent the data type
+ * </ul>
  * 
- * @version 1.0
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLDataTypeDescription {
 
@@ -41,12 +43,7 @@ public interface ZCLDataTypeDescription {
 	public String getName();
 
 	/**
-	 * @return The data type invalid number if exists, otherwise returns null.
-	 */
-	public Object getInvalidNumber();
-
-	/**
-	 * @return true, if the data type is analog.
+	 * @return true, if the data type is Analog, otherwise is Discrete.
 	 */
 	public boolean isAnalog();
 
@@ -54,19 +51,5 @@ public interface ZCLDataTypeDescription {
 	 * @return The corresponding Java type class.
 	 */
 	public Class getJavaDataType();
-
-	/**
-	 * @param param Object to be serialized using the associated type.
-	 * @param outdata ByteArrayOutputStream in which the array of bytes that
-	 *        represents the serialized value of param will be added.
-	 */
-	public void serialize(Object param, ByteArrayOutputStream outdata);
-
-	/**
-	 * @param data ByteArrayInputStream Array of bytes to be deserialized using
-	 *        associated type.
-	 * @return An object that represents the deserialized value of data.
-	 */
-	public Object deserialize(ByteArrayInputStream data);
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,7 @@ package org.osgi.service.zigbee;
  * NeighborTableList Record Format in ZIGBEE SPECIFICATION:
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeLinkQuality {
 
@@ -33,31 +29,31 @@ public interface ZigBeeLinkQuality {
 	 * * Constant value representing a parent relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
-	public static final int	PARENT_NEIGHBOR			= 0x00;
+	public static final int	PARENT_NEIGHBOR			= 0xf0;
 
 	/**
 	 * Constant value representing a child relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
-	public static final int	CHILD_NEIGHBOR			= 0x01;
+	public static final int	CHILD_NEIGHBOR			= 0xf1;
 
 	/**
 	 * Constant value representing a sibling relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
-	public static final int	SIBLING_NEIGHBOR		= 0x02;
+	public static final int	SIBLING_NEIGHBOR		= 0xf2;
 
 	/**
 	 * Constant value representing a others relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
-	public static final int	OTHERS_NEIGHBOR			= 0x03;
+	public static final int	OTHERS_NEIGHBOR			= 0xf3;
 
 	/**
 	 * Constant value representing a previous child relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
-	public static final int	PREVIOUS_CHILD_NEIGHBOR	= 0x04;
+	public static final int	PREVIOUS_CHILD_NEIGHBOR	= 0xf4;
 
 	/**
 	 * @return the Service.PID refering to the {@link ZigBeeNode} representing

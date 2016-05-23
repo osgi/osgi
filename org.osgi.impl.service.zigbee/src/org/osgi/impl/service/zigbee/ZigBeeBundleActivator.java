@@ -7,10 +7,12 @@ import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 
 /**
  * Activator for mocked ZigBee basedriver.
+ * 
+ * @author $Id$
  */
 public class ZigBeeBundleActivator implements BundleActivator {
 
-	private ZigBeeBaseDriver	basedriver;
+	private ZigBeeBaseDriver basedriver;
 
 	/**
 	 * This method is called when ZigBee Bundle starts, so that the Bundle can

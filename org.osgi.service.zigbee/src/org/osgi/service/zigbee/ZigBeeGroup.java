@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@ package org.osgi.service.zigbee;
 /**
  * This interface represents a ZigBee Group
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeGroup {
 
@@ -31,52 +27,76 @@ public interface ZigBeeGroup {
 	 * Key of the {@link String} containing the Group Address of the device.<br>
 	 * It is a <b>mandatory</b> property for this service.
 	 */
-	public static final String	ID	= "zigbee.group.id";
+	public static final String ID = "zigbee.group.id";
 
 	/**
 	 * @return The 16bit group address.
 	 */
-	short getGroupAddress();
+	int getGroupAddress();
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoint or even on import Endpoint. In the former case, the
-	 * ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API defined
-	 * by the ZigBee Specification, in the former case it will use the proper
-	 * commands of the <i>Groups</i> cluster of the ZigBee Specification
-	 * Library.
+	 * on exported Endpoint or even on imported Endpoint. In the former case,
+	 * the ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API
+	 * defined by the ZigBee Specification, or it will use the proper commands
+	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
 	 * 
 	 * As described in "Table 2.15 APSME-ADD-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * add_group request can have the following status: SUCCESS,
 	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}).
 	 * 
-	 * @param pid {@link String} representing the PID (see
+	 * @param pid {@link String} representing the service PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
-	 *        {@link ZigBeeEndpoint} that we want add to this Group.
+	 *        {@link ZigBeeEndpoint} to add to this Group.
 	 * @param handler the handler that will notified of the result of "joining".
+	 *        The expected object is always a {@link Boolean} indicating a
+	 *        failure or a success
+	 * 
+	 * @throws APSException when the joining is performed locally on an exported
+	 *         {@link ZigBeeEndpoint} and it fails either with error code
+	 *         INVALID_PARAMETER or TABLE_FULL. This exception is also generated
+	 *         when the joining is performed remotely on an imported
+	 *         {@link ZigBeeEndpoint} and the communication with it fails
+	 * 
+	 * @throws ZCLException when the joining is performed remotely on an
+	 *         imported {@link ZigBeeEndpoint} and it fails either because the
+	 *         command is not supported by the remote End Point, or the remote
+	 *         device cannot perform the operation at the moment.
 	 */
-	void joinGroup(String pid, ZCLCommandHandler handler);
+	void joinGroup(String pid, ZigBeeHandler handler);
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoint or even on import Endpoint. In the former case, the
-	 * ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
-	 * defined by the ZigBee Specification, in the former case it will use the
-	 * proper commands of the <i>Groups</i> cluster of the ZigBee Specification
-	 * Library.
+	 * on exported Endpoint or even on imported Endpoint. In the former case,
+	 * the ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
+	 * defined by the ZigBee Specification, or it will use the proper commands
+	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
 	 * 
 	 * As described in "Table 2.17 APSME-REMOVE-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * remove_group request can have the following status: SUCCESS,
 	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}).
 	 * 
-	 * @param pid {@link String} representing the PID (see
+	 * @param pid {@link String} representing the service PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
-	 *        {@link ZigBeeEndpoint} that we want leave to this Group.
-	 * @param handler the handler that will notified of the result of "leaving".
+	 *        {@link ZigBeeEndpoint} to remove from this Group.
+	 * @param handler the handler that will notified of the result of "joining".
+	 *        The expected object is always a {@link Boolean} indicating a
+	 *        failure or a success
+	 * 
+	 * @throws APSException when the joining is performed locally on an exported
+	 *         {@link ZigBeeEndpoint} and it fails either with error code
+	 *         INVALID_PARAMETER or INVALID_GROUP. This exception is also
+	 *         generated when the joining is performed remotely on an imported
+	 *         {@link ZigBeeEndpoint} and the communication with it fails
+	 * 
+	 * @throws ZCLException when the joining is performed remotely on an
+	 *         imported {@link ZigBeeEndpoint} and it fails either because the
+	 *         command is not supported by the remote End Point, or the remote
+	 *         device cannot perform the operation at the moment.
 	 */
-	void leaveGroup(String pid, ZCLCommandHandler handler);
+	void leaveGroup(String pid, ZigBeeHandler handler);
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@ package org.osgi.service.zigbee;
 /**
  * Manage response of a command request to the Base Driver
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLCommandHandler {
 
@@ -45,7 +41,9 @@ public interface ZCLCommandHandler {
 	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
-	 * @param e the exception if any
+	 * @param e the exception if any (As described in
+	 *        "Table 2.17 Enumerated Status Values Used in the ZCL" of the ZCL
+	 *        specification).
 	 */
 	void notifyResponse(ZCLFrame frame, Exception e);
 

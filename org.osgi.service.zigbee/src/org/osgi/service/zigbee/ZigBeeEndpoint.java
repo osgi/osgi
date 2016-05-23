@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee;
 
+import java.math.BigInteger;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
@@ -24,11 +25,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  * A ZigBeeEndpoint must be registered as a OSGi service with
  * ZigBeeNode.IEEE_ADDRESS, and ZigBeeEndpoint.ENDPOINT_ID properties.
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZigBeeEndpoint {
 
@@ -37,14 +34,14 @@ public interface ZigBeeEndpoint {
 	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	ENDPOINT_ID		= "zigbee.endpoint.id";
+	public static final String ENDPOINT_ID = "zigbee.endpoint.id";
 
 	/**
 	 * Key of the {@link String} property containing the profile id implemented
 	 * by the device. <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	PROFILE_ID		= "zigbee.device.profile.id";
+	public static final String PROFILE_ID = "zigbee.device.profile.id";
 
 	/**
 	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.<br>
@@ -54,55 +51,56 @@ public interface ZigBeeEndpoint {
 	 * the associated host number. It is mandatory for imported endpoints,
 	 * optional for exported endpoints.
 	 */
-	public static final String	HOST_PID		= "zigbee.endpoint.host.pid";
+	public static final String HOST_PID = "zigbee.endpoint.host.pid";
 
 	/**
-	 * Key of the {@link String} property containing the DeviceId of the device <br>
+	 * Key of the {@link String} property containing the DeviceId of the device
+	 * <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	DEVICE_ID		= "zigbee.device.id";
+	public static final String DEVICE_ID = "zigbee.device.id";
 
 	/**
 	 * Key of the {@link String} property containing the DeviceVersion of the
 	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	DEVICE_VERSION	= "zigbee.device.version";
+	public static final String DEVICE_VERSION = "zigbee.device.version";
 
 	/**
 	 * Key of the int array of containing the ids of each input cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	INPUT_CLUSTERS	= "zigbee.endpoint.clusters.input";
+	public static final String INPUT_CLUSTERS = "zigbee.endpoint.clusters.input";
 
 	/**
 	 * Key of the int array of containing the ids of each output cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	OUTPUT_CLUSTERS	= "zigbee.endpoint.clusters.output";
+	public static final String OUTPUT_CLUSTERS = "zigbee.endpoint.clusters.output";
 
 	/**
 	 * Key of the {@link String} property mentioning that an endpoint is an
 	 * exported one or not. It is an <b>optional</b> property for this service.
 	 */
-	public static final String	ZIGBEE_EXPORT	= "zigbee.export";
+	public static final String ZIGBEE_EXPORT = "zigbee.export";
 
 	/**
 	 * Constant used by all ZigBee devices indicating the device category. It is
 	 * a <b>mandatory</b> property for this service.
 	 */
-	public static final String	DEVICE_CATEGORY	= "ZigBee";
+	public static final String DEVICE_CATEGORY = "ZigBee";
 
 	/**
 	 * @return identifier of the endpoint represented by this object, value
 	 *         ranges from 1 to 240.
 	 */
-	public int getId();
+	public short getId();
 
 	/**
 	 * @return The IEEE Address of the node containing this endpoint
 	 */
-	public Long getNodeAddress();
+	public BigInteger getNodeAddress();
 
 	/**
 	 * As described in "Table 2.93 Fields of the Simple_Desc_rsp Command" of the
@@ -117,7 +115,7 @@ public interface ZigBeeEndpoint {
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
-	 *         does not provides any servers clusters.
+	 *         it does not provide any server cluster.
 	 */
 	public ZCLCluster[] getServerClusters();
 
@@ -152,8 +150,9 @@ public interface ZigBeeEndpoint {
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
 	 * TABLE_FULL, NOT_SUPPORTED (see {@link APSException}). <br>
 	 * 
-	 * The response object given to the handler is an int that corresponds to
-	 * one of the APSException' codes.
+	 * The response object given to the handler is a Boolean set to true if the
+	 * binding succeeds. In case of an error has occurred, onFailure is called
+	 * with a APSException.
 	 * 
 	 * @param servicePid to bound to
 	 * @param clusterId the cluster identifier to bound to
@@ -172,8 +171,9 @@ public interface ZigBeeEndpoint {
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
 	 * INVALID_BINDING (see {@link APSException}). <br>
 	 * 
-	 * The response object given to the handler is an int that corresponds to
-	 * one of the APSException' codes.
+	 * The response object given to the handler is a Boolean set to true if the
+	 * unbinding succeeds. In case of an error has occurred, onFailure is called
+	 * with a APSException.
 	 * 
 	 * @param servicePid to unbound from
 	 * @param clusterId The cluster identifier to unbound from
@@ -185,9 +185,9 @@ public interface ZigBeeEndpoint {
 	 * This method is used to get details about problems when an error occurs
 	 * during exporting an endpoint
 	 * 
-	 * @param e A device {@link ZCLException} the occurred exception
+	 * @param e A device {@link ZigBeeException} the occurred exception
 	 */
-	public void notExported(ZCLException e);
+	public void notExported(ZigBeeException e);
 
 	/**
 	 * This method is used to get bound endpoints (identified by their service
@@ -205,8 +205,8 @@ public interface ZigBeeEndpoint {
 	 * status code returned from the APSME-GET.confirm primitive (see
 	 * {@link APSException}). <br>
 	 * 
-	 * The response object given to the handler is a List containing the
-	 * service.PIDs.
+	 * The response object given to the handler is a List containing the bound
+	 * endpoint service PIDs.
 	 * 
 	 * @param clusterId
 	 * @param handler

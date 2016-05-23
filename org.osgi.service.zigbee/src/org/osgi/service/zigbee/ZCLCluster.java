@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,14 +16,12 @@
 
 package org.osgi.service.zigbee;
 
+import java.util.Map;
+
 /**
  * This interface represents a ZCL Cluster
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLCluster {
 
@@ -31,20 +29,20 @@ public interface ZCLCluster {
 	 * Property key for the optional cluster id. A ZigBee Event Listener service
 	 * can announce for what ZigBee clusters it wants notifications.
 	 */
-	public final static String	ID		= "zigbee.cluster.id";
+	public final static String ID = "zigbee.cluster.id";
 
 	/**
 	 * Property key for the optional cluster domain. A ZigBee Event Listener
 	 * service can announce for what ZigBee clusters domains it wants
 	 * notifications.
 	 */
-	public final static String	DOMAIN	= "zigbee.cluster.domain";
+	public final static String DOMAIN = "zigbee.cluster.domain";
 
 	/**
 	 * Property key for the optional cluster name. A ZigBee Event Listener
 	 * service can announce for what ZigBee clusters it wants notifications.
 	 */
-	public final static String	NAME	= "zigbee.cluster.name";
+	public final static String NAME = "zigbee.cluster.name";
 
 	/**
 	 * @return the cluster identifier
@@ -56,57 +54,109 @@ public interface ZCLCluster {
 	 * 
 	 * @param attributeId an Attribute identifier
 	 * @param handler the response handler
+	 * 
+	 * @see ZCLCluster#getAttribute(int, int, ZigBeeHandler) To get Manufacturer
+	 *      specific attribute use ZCLCluster#getAttribute(int, int,
+	 *      ZigBeeHandler)
 	 */
 	void getAttribute(int attributeId, ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all this Cluster's Attributes.
+	 * Get the cluster attribute identified corresponding to given attributeId
+	 * of a specific Manufacturer or the standard attribute
+	 * 
+	 * @param attributeId an Attribute identifier
+	 * @param code the int representing the Manufacturer code for getting the
+	 *        vendor specific attribute, use -1 if looking for standard
+	 *        attribute
+	 * @param handler the response handler
+	 */
+	void getAttribute(int attributeId, int code, ZigBeeHandler handler);
+
+	/**
+	 * Get an array of all this Cluster's Attributes. This method returns only
+	 * standard attributes
 	 * 
 	 * @param handler the response handler
+	 * 
+	 * @see ZCLCluster#getAttributes(int, ZigBeeHandler) To get Manufacturer
+	 *      specific attribute use ZCLCluster#getAttributes(int, ZigBeeHandler)
 	 */
 	void getAttributes(ZigBeeHandler handler);
 
 	/**
+	 * Get an array of all this Cluster's Attributes. This method returns only
+	 * standard attributes when using -1 as code or vendor specific attribute
+	 * when invoked with the proper code.
+	 * 
+	 * @param handler the response handler
+	 * @param code the int representing the Manufacturer code for getting the
+	 *        vendor specific attribute, use -1 if looking for standard
+	 *        attribute
+	 */
+	void getAttributes(int code, ZigBeeHandler handler);
+
+	/**
 	 * Read a list of attributes. <br>
 	 * 
-	 * As described in "Table 2.11 APSME-GET.confirm Parameters" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * APSME-GET.confirm can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a
+	 * "read attribute" can have the following status: SUCCESS, or
+	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}). <br>
 	 * 
 	 * The response object given to the handler is a Map. For each Map entry,
 	 * the key is the attribute identifier of Integer type and the value is the
 	 * associated attribute value in the corresponding Java wrapper type (or
-	 * null if an UNSUPPORTED_ATTRIBUTE occurred).
+	 * null if an UNSUPPORTED_ATTRIBUTE occurred or in case of an invalid
+	 * value).<br>
+	 * <br>
+	 * <b>NOTE</b> Considering the ZigBee Specification all the attributes must
+	 * be standard attributes or belong to the same Manufacturer otherwise
+	 * {@link IllegalArgumentException} will be thrown
 	 * 
-	 * @param attributesIds An array of attributes ids
+	 * @param attributes An array of ZCLAttributeInfo
 	 * @param handler the response handler
+	 * @throws NullPointerException the attribute array cannot be null
+	 * 
+	 * @throws IllegalArgumentException if some of {@link ZCLAttributeInfo} are
+	 *         manufacturer specific and other are standard, or even if there
+	 *         are mix of attributes with different manufacturer specific code,
+	 *         Or if the attributes array is empty
 	 */
-	void readAttributes(int[] attributesIds, ZigBeeHandler handler);
+	void readAttributes(ZCLAttributeInfo[] attributes, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes. <br>
 	 * 
-	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * APSME-SET.confirm can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a
+	 * "write attribute" can have the following status: SUCCESS,
+	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
+	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}). <br>
 	 * 
 	 * The response object given to the handler is a Map. For each Map entry,
 	 * the key is the attribute identifier of Integer type and the value is the
-	 * associated attribute status, i.e. SUCCESS, INVALID_VALUE, etc. In case
-	 * undivided equals false, onSuccess() is always called to notify the
-	 * response. In case undivided equals true and an error has occurred,
-	 * onFailure is called with a ZCLException.
+	 * associated attribute status (see above). Every null value in the Map is
+	 * considered as an invalid number. In case undivided equals false,
+	 * onSuccess() is always called to notify the response. In case undivided
+	 * equals true and an error has occurred, onFailure is called with a
+	 * ZCLException.<br>
+	 * <br>
+	 * <b>NOTE</b>Considering the ZigBee Specification all the attributes must
+	 * be standard attributes or belong to the same Manufacturer otherwise
+	 * {@link IllegalArgumentException} will be thrown
 	 * 
 	 * @param undivided The write command is undivided or not
-	 * @param attributesRecords An array of attributes records
+	 * @param attributesAndValues A Map<ZCLAttributeInfo, Object> of attributes,
+	 *        and values to be written.
 	 * @param handler the response handler
+	 * 
+	 * @throws IllegalArgumentException if some of {@link ZCLAttributeInfo} are
+	 *         manufacturer specific and other are standard, or even if there
+	 *         are mix of attributes with different manufacturer specific code
 	 */
-	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeHandler handler);
+	void writeAttributes(boolean undivided, Map attributesAndValues, ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all the commandIds of the ZigBeeCluster. <br>
+	 * Get an array of all the commandIds of the ZCLCluster. <br>
 	 * 
 	 * This method is implemented for devices implementing a version equal or
 	 * later than 1.2 of the Home Automation Profile or other profiles that
@@ -114,8 +164,8 @@ public interface ZCLCluster {
 	 * implements a profile that does not support this feature, the method call
 	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED. <br>
 	 * 
-	 * The response object given to the handler is a List containing the
-	 * commandIds.
+	 * The response object given to the handler is an array containing the
+	 * commandIds. Each commandId is of Integer type.
 	 * 
 	 * @param handler the response handler
 	 */

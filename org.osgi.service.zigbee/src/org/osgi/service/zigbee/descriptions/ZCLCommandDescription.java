@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,7 @@ import org.osgi.service.zigbee.ZCLHeader;
 /**
  * This interface represents a ZCLCommandDescription
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
 public interface ZCLCommandDescription {
 	/**
@@ -56,7 +52,7 @@ public interface ZCLCommandDescription {
 
 	/**
 	 * Serialize javaValues to a ZCLFrame that can them be used in invocations
-	 * (e.g. via ZigBeeCluster, or ZigBeeGroup).
+	 * (e.g. via ZCLCluster, or ZigBeeGroup).
 	 * 
 	 * @param header the ZCLFrame's header
 	 * @param javaValues ordered java values
@@ -66,7 +62,7 @@ public interface ZCLCommandDescription {
 
 	/**
 	 * Deserialize ZCLFrame to javaValues. This ZCLFrame is expected to be a
-	 * result of an invocation. (e.g. via ZigBeeCluster, or ZigBeeGroup).
+	 * result of an invocation. (e.g. via ZCLCluster, or ZigBeeGroup).
 	 * 
 	 * @param frame the ZCLFrame
 	 * @return deserialized Object[] as javaValues
@@ -86,6 +82,12 @@ public interface ZCLCommandDescription {
 	 * @return the manufacturerCode
 	 */
 	int getManufacturerCode();
+
+	/**
+	 * @return {@code true} if end only if {@link #getManufacturerCode()} is not
+	 *         -1
+	 */
+	public boolean isManufacturerSpecific();
 
 	/**
 	 * @return the isClientServerDirection value

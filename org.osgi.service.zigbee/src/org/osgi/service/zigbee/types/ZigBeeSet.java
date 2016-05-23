@@ -1,80 +1,45 @@
-/*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.osgi.service.zigbee.types;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.util.Set;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents a ZigBeeSet as described in the ZigBee
- * Specification.
+ * This interface represents the 'Set' Data Type, as described in the ZigBee
+ * Specification
  * 
- * @version 1.0
+ * @author $Id$
  * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeSet implements ZCLDataTypeDescription {
+public class ZigBeeSet
+		implements ZCLDataTypeDescription {
 
-	private static ZigBeeSet	singletonInstance	= new ZigBeeSet();
-
-	private ZigBeeSet() {
-
-	}
+	private final static ZigBeeSet instance = new ZigBeeSet();
 
 	/**
-	 * @return the singleton instance.
+	 * Get a Singleton instance of this class
+	 * 
+	 * @return the Singleton instance
 	 */
 	public static ZigBeeSet getInstance() {
-		return singletonInstance;
-	}
-
-	public boolean isAnalog() {
-		// TODO Auto-generated method stub
-		return false;
+		return instance;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Set";
+	}
+
+	public boolean isAnalog() {
+		return false;
 	}
 
 	public Class getJavaDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getInvalidNumber() {
-		// TODO Auto-generated method stub
-		return null;
+		return Set.class;
 	}
 
 	public short getId() {
 		return ZigBeeDataTypes.SET;
 	}
 
-	public void serialize(Object param, ByteArrayOutputStream outdata) {
-		ZigBeeDataTypes.encode(ZigBeeDataTypes.SET, param, outdata);
-	}
-
-	public Object deserialize(ByteArrayInputStream data) {
-		return ZigBeeDataTypes.decode(ZigBeeDataTypes.SET, data);
-	}
 }

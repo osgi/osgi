@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,21 +16,14 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.ZCLAttributeInfo;
+
 /**
  * This interface represents a ZCLAttributeDescription
  * 
- * @version 1.0
- * 
- * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
- *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
- *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
+ * @author $Id$
  */
-public interface ZCLAttributeDescription {
-
-	/**
-	 * @return the attribute identifier
-	 */
-	public int getId();
+public interface ZCLAttributeDescription extends ZCLAttributeInfo {
 
 	/**
 	 * @return The attribute name
@@ -59,15 +52,9 @@ public interface ZCLAttributeDescription {
 
 	/**
 	 * @return true if the attribute is read only, false otherwise (i.e. if the
-	 *         attribute is read/write or optionnaly writable (R*W))
+	 *         attribute is read/write or optionally writable (R*W))
 	 */
 	public boolean isReadOnly();
-
-	/**
-	 * @return A {@link ZCLDataTypeDescription} representing the attribute data
-	 *         type
-	 */
-	public ZCLDataTypeDescription getDataTypeDescription();
 
 	/**
 	 * checks whether the value object is conform to the attribute data type

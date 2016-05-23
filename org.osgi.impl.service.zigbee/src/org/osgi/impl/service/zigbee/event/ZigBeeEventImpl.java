@@ -1,18 +1,21 @@
 
 package org.osgi.impl.service.zigbee.event;
 
+import java.math.BigInteger;
 import org.osgi.service.zigbee.ZigBeeEvent;
 
 /**
  * Mocked impl of ZigBeeEvent.
+ * 
+ * @author $Id$
  */
 public class ZigBeeEventImpl implements ZigBeeEvent {
 
-	private Long	ieeeAddress;
-	private int		endpointId;
-	private int		clusterId;
-	private int		attributeId;
-	private Object	value;
+	private BigInteger	ieeeAddress;
+	private short		endpointId;
+	private int			clusterId;
+	private int			attributeId;
+	private Object		value;
 
 	/**
 	 * @param ieeeAddress
@@ -21,7 +24,7 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 	 * @param attributeId
 	 * @param value
 	 */
-	public ZigBeeEventImpl(Long ieeeAddress, int endpointId, int clusterId, int attributeId, Object value) {
+	public ZigBeeEventImpl(BigInteger ieeeAddress, short endpointId, int clusterId, int attributeId, Object value) {
 		this.ieeeAddress = ieeeAddress;
 		this.endpointId = endpointId;
 		this.clusterId = clusterId;
@@ -29,11 +32,11 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 		this.value = value;
 	}
 
-	public Long getIEEEAddress() {
+	public BigInteger getIEEEAddress() {
 		return ieeeAddress;
 	}
 
-	public int getEndpointId() {
+	public short getEndpointId() {
 		return endpointId;
 	}
 
