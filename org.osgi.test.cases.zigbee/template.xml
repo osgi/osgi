@@ -1,0 +1,65 @@
+<!-- This configuration file describes the user device. It must be filled 
+ properly as the example below. Keep in mind that the tests will 
+ fail if this file is not properly filled. -->
+<zigBeeconf discoveryTimeout="100" invokeTimeout="3000">
+ <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" />
+ <nodes>
+  <!-- fill the ieeeAddress userDescription and endpointNb here. No need to explicitly write all the endpoints in this xml file 
+  endpointNb is the expected number of endpoints on the zigbee node for the specified ieeeAddress -->
+  <node ieeeAddress="6628417766" hostPanId="33" userDescription="user description" endpointNb="8" >
+   <!-- All the discovery tests will be done on this Node. Please ensure that the simpleDescriptor is fully filled (the server and client clusters number must be filled) 
+    cluster with an attribute of type EnumerationX or an attribute with a range is needed.
+    At least one attribute must be read only
+   -->
+   <endpoints>
+    
+    <endpoint id="25">
+     <serverClusters>
+      <cluster id="6">
+       <!-- name and domain are optional,they are not tested -->
+       <globalServerDescription id="54" name="basic"
+        domain="general" />
+       <commandIds>
+        <id id="3" />
+       </commandIds>
+       <attributes>
+        <!-- all the attributes must be filled as the exception tests will 
+         try to pick one which does not exist -->
+        <attribute>
+         <!-- for dataTypes see org.osgi.service.zigbee.types -->
+         <attributeDescription id="0" isReadOnly="true"
+          name="ZCLVersion" isReportable="false"
+          dataType="ZigBeeUnsignedInteger16">
+         </attributeDescription>
+        </attribute>
+        <!-- the test needs at leat one attribute which is not read only -->
+        <attribute>
+         <!-- the DataType test will try to get the attribute 7 and set a 
+          value which is not a boolean -->
+         <attributeDescription id="6" isReadOnly="false"
+           name="" isReportable="false" dataType="ZigBeeBoolean">
+         </attributeDescription>
+        </attribute>
+       </attributes>
+      </cluster>
+     </serverClusters>
+     <!-- declare the number of serverCluster and clientCluster -->
+     <simpleDescriptor deviceId="8" version="4"
+      profileId="3" nbServerCluster="4" nbClientCluster="2"/>
+
+    </endpoint>
+   </endpoints>
+   <nodeDescriptor type="1" band="868" manufCode="45"
+    maxBufSize="36" isComplexAv="false" isUserAv="false" />
+   <powerDescriptor powerMode="2" powerSource="1"
+    powerSourceLevel="1" isconstant="true" />
+  </node>
+ </nodes>
+ <!-- please fill the header min size and max size with the right values -->
+ <frame headerMaxSize="5" headerMinSize ="3">
+ 	<payload hex="f1faf1f2f1f2f3f1f2f3f4faf1f2f1f2f3f1f2f3f4f1f2f3f4f5f1f2f3f4f5f6f1f2f3f4f5f6f7f1f2f3f4f5f6f7f805060708000000000100000000000000000000000100000000000000"></payload>
+ 	<header commandId="10" isClusterSpecificCommand="true" isClientServerDirection="false" disableDefaultResponse="true" sequenceNumber="46"/>
+ </frame>
+</zigBeeconf>
+
+ 
