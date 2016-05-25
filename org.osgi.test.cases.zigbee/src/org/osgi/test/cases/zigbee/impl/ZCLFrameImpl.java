@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.test.cases.zigbee.impl;
 
 import java.io.EOFException;
-
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeDataInput;
@@ -35,29 +34,27 @@ public class ZCLFrameImpl implements ZCLFrame {
 
 	// The minimum header size of the ZCL command frame. The value is given by
 	// the configuration file.
-	public static int minHeaderSize;
+	public static int	minHeaderSize;
 
 	/**
 	 * The buffer used to store the ZCLFrame payload.
 	 */
-	protected byte[] data = null;
+	protected byte[]	data		= null;
 
-	boolean isEmpty = true;
+	boolean				isEmpty		= true;
 
-	int index = 0;
+	int					index		= 0;
 
-	private ZCLHeader zclHeader = null;
+	private ZCLHeader	zclHeader	= null;
 
 	/**
 	 * Basic constructor. It creates a default ZCL Frame with the passed
 	 * commandId, with a maxPayloadSize of 30 bytes.
 	 * 
-	 * @param commandId
-	 *            The command identifier of the ZCL Frame.
+	 * @param commandId The command identifier of the ZCL Frame.
 	 */
 	public ZCLFrameImpl(int commandId) {
-		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false,
-				(byte) 0);
+		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false, (byte) 0);
 		this.data = new byte[30];
 		this.isEmpty = true;
 	}
@@ -66,8 +63,7 @@ public class ZCLFrameImpl implements ZCLFrame {
 	 * Basic constructor. It creates a ZCLFrame with the passed ZCLHeader and
 	 * with a maxPayloadZise of 30 bytes.
 	 * 
-	 * @param header
-	 *            a ZCLHeader instance
+	 * @param header a ZCLHeader instance
 	 */
 	public ZCLFrameImpl(ZCLHeader header) {
 		this.zclHeader = header;
@@ -79,11 +75,9 @@ public class ZCLFrameImpl implements ZCLFrame {
 	 * Creates a ZCLFrame and initalize it with the passd ZCLHeader and ZCL
 	 * payload.
 	 * 
-	 * @param header
-	 *            The ZCLHeader
+	 * @param header The ZCLHeader
 	 * 
-	 * @param payload
-	 *            The ZCLFrame payload.
+	 * @param payload The ZCLFrame payload.
 	 */
 
 	public ZCLFrameImpl(ZCLHeader header, byte[] payload) {
@@ -99,18 +93,15 @@ public class ZCLFrameImpl implements ZCLFrame {
 	 * Using this constructor is discuraged since it is not possible to set the
 	 * ZCLFrame sequence number
 	 * 
-	 * @param commandId
-	 *            The commandId to put in the header.
+	 * @param commandId The commandId to put in the header.
 	 * 
-	 * @param payload
-	 *            The ZCLFrame payload.
+	 * @param payload The ZCLFrame payload.
 	 * 
 	 * @deprecated
 	 */
 
 	public ZCLFrameImpl(int commandId, byte[] payload) {
-		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false,
-				(byte) 0);
+		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false, (byte) 0);
 		this.data = payload;
 		this.isEmpty = false;
 	}
@@ -118,12 +109,10 @@ public class ZCLFrameImpl implements ZCLFrame {
 	/**
 	 * Creates
 	 * 
-	 * @param header
-	 *            An instance of ZCLHeader interface
+	 * @param header An instance of ZCLHeader interface
 	 * 
-	 * @param maxPayloadSize
-	 *            The maximum size of the internal buffer used to store the ZCL
-	 *            Frame payload
+	 * @param maxPayloadSize The maximum size of the internal buffer used to
+	 *        store the ZCL Frame payload
 	 */
 	public ZCLFrameImpl(ZCLHeader header, int maxPayloadSize) {
 		this.zclHeader = header;
@@ -141,8 +130,7 @@ public class ZCLFrameImpl implements ZCLFrame {
 	 */
 
 	public byte[] getBytes() {
-		int size = zclHeader.isManufacturerSpecific() ? (minHeaderSize + 2)
-				: minHeaderSize;
+		int size = zclHeader.isManufacturerSpecific() ? (minHeaderSize + 2) : minHeaderSize;
 
 		byte[] d = new byte[size + index];
 		System.arraycopy(data, 0, d, size, index);

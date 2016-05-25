@@ -17,7 +17,6 @@
 package org.osgi.test.cases.zigbee;
 
 import java.math.BigInteger;
-
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.zigbee.ZCLAttribute;
@@ -60,25 +59,25 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class ExportTestCase extends DefaultTestBundleControl {
 
-	private final int desiredCount = 1;
-	private ServicesListener listener;
+	private final int					desiredCount	= 1;
+	private ServicesListener			listener;
 
-	private ZCLAttribute[] attributesServer;
-	private ZCLDataTypeDescription[] attributesType;
-	private ZCLAttributeDescription[] attributesDescription;
-	private ZCLGlobalClusterDescription globalDescription;
-	private ZCLClusterDescription serverClusterDescription;
-	private ZCLClusterDescription clientClusterDescription;
-	private ZCLCluster[] serverClusters;
-	private ZCLCluster[] clientClusters;
-	private ZigBeeSimpleDescriptor simpledesc1;
-	private ZigBeeEndpoint endpoint1;
-	private ZigBeeNode node;
+	private ZCLAttribute[]				attributesServer;
+	private ZCLDataTypeDescription[]	attributesType;
+	private ZCLAttributeDescription[]	attributesDescription;
+	private ZCLGlobalClusterDescription	globalDescription;
+	private ZCLClusterDescription		serverClusterDescription;
+	private ZCLClusterDescription		clientClusterDescription;
+	private ZCLCluster[]				serverClusters;
+	private ZCLCluster[]				clientClusters;
+	private ZigBeeSimpleDescriptor		simpledesc1;
+	private ZigBeeEndpoint				endpoint1;
+	private ZigBeeNode					node;
 
-	private final String HOST_PID = "hardcoded hostPId";
-	private final BigInteger IEEE_ADDRESS = BigInteger.valueOf(6628417744L);
+	private final String				HOST_PID		= "hardcoded hostPId";
+	private final BigInteger			IEEE_ADDRESS	= BigInteger.valueOf(6628417744L);
 
-	static public final String GET_EVENT = "Get_the_event_that_the_base_driver_should_have_received";
+	static public final String			GET_EVENT		= "Get_the_event_that_the_base_driver_should_have_received";
 
 	protected void setUp() throws Exception {
 		// log("Prepare for ZigBee Test Case");
@@ -206,26 +205,76 @@ public class ExportTestCase extends DefaultTestBundleControl {
 		attributesType[3] = ZigBeeBoolean.getInstance();
 
 		attributesDescription = new ZCLAttributeDescription[10];
-		attributesDescription[0] = new ZCLAttributeDescriptionImpl(0x0000, false, new Integer(0x00), "ZCLVersion",
-				false, false, attributesType[0]);
-		attributesDescription[1] = new ZCLAttributeDescriptionImpl(0x0001, false, new Integer(0x00),
-				"ApplicationVersion", false, false, attributesType[0]);
-		attributesDescription[2] = new ZCLAttributeDescriptionImpl(0x0002, false, new Integer(0x00), "StackVersion",
-				false, false, attributesType[0]);
-		attributesDescription[3] = new ZCLAttributeDescriptionImpl(0x0003, false, new Integer(0x00), "HWVersion", false,
-				false, attributesType[0]);
-		attributesDescription[4] = new ZCLAttributeDescriptionImpl(0x0004, false, "", "ManufacturerName", false, false,
+		attributesDescription[0] = new ZCLAttributeDescriptionImpl(0x0000,
+				false,
+				new Integer(0x00),
+				"ZCLVersion",
+				false,
+				false,
+				attributesType[0]);
+		attributesDescription[1] = new ZCLAttributeDescriptionImpl(0x0001,
+				false,
+				new Integer(0x00),
+				"ApplicationVersion",
+				false,
+				false,
+				attributesType[0]);
+		attributesDescription[2] = new ZCLAttributeDescriptionImpl(0x0002,
+				false,
+				new Integer(0x00),
+				"StackVersion",
+				false,
+				false,
+				attributesType[0]);
+		attributesDescription[3] = new ZCLAttributeDescriptionImpl(0x0003,
+				false,
+				new Integer(0x00),
+				"HWVersion",
+				false,
+				false,
+				attributesType[0]);
+		attributesDescription[4] = new ZCLAttributeDescriptionImpl(0x0004,
+				false,
+				"",
+				"ManufacturerName",
+				false,
+				false,
 				attributesType[1]);
-		attributesDescription[5] = new ZCLAttributeDescriptionImpl(0x0005, false, "", "ModelIdentifier", false, false,
+		attributesDescription[5] = new ZCLAttributeDescriptionImpl(0x0005,
+				false,
+				"",
+				"ModelIdentifier",
+				false,
+				false,
 				attributesType[1]);
-		attributesDescription[6] = new ZCLAttributeDescriptionImpl(0x0006, false, "", "DateCode", false, false,
+		attributesDescription[6] = new ZCLAttributeDescriptionImpl(0x0006,
+				false,
+				"",
+				"DateCode",
+				false,
+				false,
 				attributesType[1]);
-		attributesDescription[7] = new ZCLAttributeDescriptionImpl(0x0007, false, "", "PowerSource", false, false,
+		attributesDescription[7] = new ZCLAttributeDescriptionImpl(0x0007,
+				false,
+				"",
+				"PowerSource",
+				false,
+				false,
 				attributesType[2]);
-		attributesDescription[8] = new ZCLAttributeDescriptionImpl(0x0008, false, new Boolean(true), "DeviceEnabled",
-				true, true, attributesType[3]);
-		attributesDescription[9] = new ZCLAttributeDescriptionImpl(0x0008, true, new Boolean(true), "DeviceEnabled",
-				true, true, attributesType[3]);
+		attributesDescription[8] = new ZCLAttributeDescriptionImpl(0x0008,
+				false,
+				new Boolean(true),
+				"DeviceEnabled",
+				true,
+				true,
+				attributesType[3]);
+		attributesDescription[9] = new ZCLAttributeDescriptionImpl(0x0008,
+				true,
+				new Boolean(true),
+				"DeviceEnabled",
+				true,
+				true,
+				attributesType[3]);
 
 		attributesServer = new ZCLAttribute[10];
 		attributesServer[0] = new ZCLAttributeImpl(attributesDescription[0]);
@@ -243,11 +292,15 @@ public class ExportTestCase extends DefaultTestBundleControl {
 		clientClusterDescription = new ZCLClusterDescriptionImpl(67, globalDescription);
 
 		serverClusters = new ZCLClusterImpl[1];
-		serverClusters[0] = new ZCLClusterImpl(new int[] { 0 }, null, serverClusterDescription);
+		serverClusters[0] = new ZCLClusterImpl(new int[] {0}, null, serverClusterDescription);
 
 		// node descriptor
-		ZigBeeNodeDescriptor nodeDesc = new ZigBeeNodeDescriptorImpl(ZigBeeNode.ZED, (short) 868, new Integer(45), 36,
-				false, false);
+		ZigBeeNodeDescriptor nodeDesc = new ZigBeeNodeDescriptorImpl(ZigBeeNode.ZED,
+				(short) 868,
+				new Integer(45),
+				36,
+				false,
+				false);
 		ZigBeePowerDescriptor powerDesc = new ZigBeePowerDescriptorImpl((short) 2, (short) 1, (short) 1, true);
 
 		clientClusters = new ZCLClusterImpl[1];

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.test.cases.zigbee;
 
 import java.io.BufferedReader;
@@ -9,7 +25,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -52,13 +67,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
-	private ServicesListener listener;
-	public static int HANDLER_TIMEOUT = 3000;
-	public static int DISCOVERY_TIMEOUT = 3000;
+	private ServicesListener	listener;
+	public static int			HANDLER_TIMEOUT		= 3000;
+	public static int			DISCOVERY_TIMEOUT	= 3000;
 
-	ConfigurationFileReader conf;
+	ConfigurationFileReader		conf;
 
-	private String confFilePath = "template.xml";
+	private String				confFilePath		= "template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
@@ -72,8 +87,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath,
-				getContext());
+		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath, getContext());
 		conf = launcher.getConfReader();
 		HANDLER_TIMEOUT = conf.getInvokeTimeout();
 		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
@@ -114,18 +128,17 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		// get the endpoint values in the conf file
 		ZigBeeNodeConf devConf = conf.getNode0();
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(devConf)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(devConf)[0];
 		ZigBeeNode dev = getZigBeeNode(devConf.getIEEEAddress());
 		try {
 
 			// check endpoints number
 			int endpointNb = devConf.getEndpointNb();
-			int registeredEnpointNb = getRegisteredEnpoints(devConf
-					.getIEEEAddress());
+			int registeredEnpointNb = getRegisteredEnpoints(devConf.getIEEEAddress());
 			assertEquals(
 					"The number of registered endpoints by the baseDriver is not the same as declared in the configuration file for the node with IEEE Address:"
-							+ devConf.getIEEEAddress(), endpointNb,
+							+ devConf.getIEEEAddress(),
+					endpointNb,
 					registeredEnpointNb);
 			// user description
 			String userConfDescription = devConf.getUserDesc();
@@ -134,8 +147,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			handler.waitForResponse(HANDLER_TIMEOUT);
 			String userDescription = (String) handler.getSuccessResponse();
 			assertNotNull("user description is NULL", userDescription);
-			assertEquals("user description not matched", userConfDescription,
-					userDescription);
+			assertEquals("user description not matched", userConfDescription, userDescription);
 
 			ZigBeeNodeDescriptor zigBeeNodeDescriptor;
 			ZigBeeNodeDescriptor nodeDescConf = devConf.getNodeDescriptor();
@@ -144,41 +156,34 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			zigBeeNodeDescriptor = (org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor) handler
 					.getSuccessResponse();
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode LOGICAL_TYPE: "
-					+ zigBeeNodeDescriptor.getLogicalType());
+			log("ZigBeeNode LOGICAL_TYPE: " + zigBeeNodeDescriptor.getLogicalType());
 			assertEquals("Logical type not matched",
 					nodeDescConf.getLogicalType(),
 					zigBeeNodeDescriptor.getLogicalType());
 
 			dev.getNodeDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
-					.getSuccessResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode MANUFACTURER_CODE: "
-					+ zigBeeNodeDescriptor.getManufacturerCode());
+			log("ZigBeeNode MANUFACTURER_CODE: " + zigBeeNodeDescriptor.getManufacturerCode());
 			assertEquals("Manufacturer code not matched",
 					nodeDescConf.getManufacturerCode(),
 					zigBeeNodeDescriptor.getManufacturerCode());
 
 			dev.getNodeDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
-					.getSuccessResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode MAXIMUM_BUFFER_SIZE: "
-					+ String.valueOf(zigBeeNodeDescriptor.getMaxBufferSize()));
+			log("ZigBeeNode MAXIMUM_BUFFER_SIZE: " + String.valueOf(zigBeeNodeDescriptor.getMaxBufferSize()));
 			assertEquals("Maximum buffer size not matched",
 					nodeDescConf.getMaxBufferSize(),
 					zigBeeNodeDescriptor.getMaxBufferSize());
 
 			dev.getNodeDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
-					.getSuccessResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode MAXIMUM_INCOMING_TRANSFERT_SIZE: "
-					+ zigBeeNodeDescriptor.getMaxIncomingTransferSize());
+			log("ZigBeeNode MAXIMUM_INCOMING_TRANSFERT_SIZE: " + zigBeeNodeDescriptor.getMaxIncomingTransferSize());
 			assertEquals("Maximum incoming transfert size not matched",
 					nodeDescConf.getMaxIncomingTransferSize(),
 					zigBeeNodeDescriptor.getMaxIncomingTransferSize());
@@ -187,33 +192,27 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			ZigBeePowerDescriptor PowerDescConf = devConf.getPowerDescriptor();
 			dev.getPowerDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler
-					.getSuccessResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			assertNotNull("power descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode CURRENT_POWER_MODE: "
-					+ zigBeePowerDescriptor.getCurrentPowerMode());
+			log("ZigBeeNode CURRENT_POWER_MODE: " + zigBeePowerDescriptor.getCurrentPowerMode());
 			assertEquals("Current power mode not matched",
 					PowerDescConf.getCurrentPowerMode(),
 					zigBeePowerDescriptor.getCurrentPowerMode());
 
 			dev.getPowerDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler
-					.getSuccessResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			assertNotNull("power descriptor is NULL", zigBeeNodeDescriptor);
-			log("ZigBeeNode CURRENT_POWER_SOURCE: "
-					+ zigBeePowerDescriptor.getCurrentPowerSource());
+			log("ZigBeeNode CURRENT_POWER_SOURCE: " + zigBeePowerDescriptor.getCurrentPowerSource());
 			assertEquals("Current power source not matched",
 					PowerDescConf.getCurrentPowerSource(),
 					zigBeePowerDescriptor.getCurrentPowerSource());
 
 			dev.getPowerDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler
-					.getSuccessResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			assertNotNull("power descriptor is NULL", zigBeePowerDescriptor);
-			log("ZigBeeNode AVAILABLE_POWER_SOURCE: "
-					+ zigBeePowerDescriptor.isConstantMainsPowerAvailable());
+			log("ZigBeeNode AVAILABLE_POWER_SOURCE: " + zigBeePowerDescriptor.isConstantMainsPowerAvailable());
 			assertEquals("Availability of power source not matched",
 					PowerDescConf.isConstantMainsPowerAvailable(),
 					zigBeePowerDescriptor.isConstantMainsPowerAvailable());
@@ -221,11 +220,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			dev.getPowerDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
 
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler
-					.getSuccessResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			assertNotNull("power descriptor is NULL", zigBeePowerDescriptor);
-			log("ZigBeeNode CURRENT_POWER_SOURCE_LEVEL: "
-					+ zigBeePowerDescriptor.getCurrentPowerSourceLevel());
+			log("ZigBeeNode CURRENT_POWER_SOURCE_LEVEL: " + zigBeePowerDescriptor.getCurrentPowerSourceLevel());
 			assertEquals("Current power source not matched",
 					PowerDescConf.getCurrentPowerSourceLevel(),
 					zigBeePowerDescriptor.getCurrentPowerSourceLevel());
@@ -233,34 +230,28 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			dev.getNodeDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
 
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
-					.getSuccessResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
 			if (zigBeeNodeDescriptor.isComplexDescriptorAvailable()) {
 
 				dev.getComplexDescriptor(handler);
-				ZigBeeComplexDescriptor complexDescConf = devConf
-						.getComplexDescriptor();
+				ZigBeeComplexDescriptor complexDescConf = devConf.getComplexDescriptor();
 				handler.waitForResponse(HANDLER_TIMEOUT);
 
 				ZigBeeComplexDescriptor zigBeeComplexDescriptor = (ZigBeeComplexDescriptor) handler
 						.getSuccessResponse();
-				assertNotNull("complex descriptor is NULL",
-						zigBeeComplexDescriptor);
-				log("ZigBeeNode MODEL_NAME: "
-						+ zigBeeComplexDescriptor.getModelName());
+				assertNotNull("complex descriptor is NULL", zigBeeComplexDescriptor);
+				log("ZigBeeNode MODEL_NAME: " + zigBeeComplexDescriptor.getModelName());
 				assertEquals("Model name not matched",
 						complexDescConf.getModelName(),
 						zigBeeComplexDescriptor.getModelName());
 
-				log("ZigBeeNode SERIAL_NAME: "
-						+ zigBeeComplexDescriptor.getSerialNumber());
+				log("ZigBeeNode SERIAL_NAME: " + zigBeeComplexDescriptor.getSerialNumber());
 				assertEquals("Serial name not matched",
 						complexDescConf.getSerialNumber(),
 						zigBeeComplexDescriptor.getSerialNumber());
 
-				log("ZigBeeNode NODE_URL: "
-						+ zigBeeComplexDescriptor.getDeviceURL());
+				log("ZigBeeNode NODE_URL: " + zigBeeComplexDescriptor.getDeviceURL());
 				assertEquals("Node url not matched",
 						complexDescConf.getDeviceURL(),
 						zigBeeComplexDescriptor.getDeviceURL());
@@ -280,12 +271,10 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeEndpoint endpoint = null;
 		BundleContext bc = getContext();
 		try {
-			ServiceTracker st = new ServiceTracker(
-					bc,
-					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeEndpoint)("
-							+ ZigBeeNode.IEEE_ADDRESS
-							+ "="
-							+ endpointIeeeAddress + "))"), null);
+			ServiceTracker st = new ServiceTracker(bc,
+					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeEndpoint)(" + ZigBeeNode.IEEE_ADDRESS
+							+ "=" + endpointIeeeAddress + "))"),
+					null);
 			st.open();
 
 			Object service = st.waitForService(HANDLER_TIMEOUT);
@@ -311,15 +300,13 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		int result = 0;
 
 		try {
-			ServiceReference[] srs = getContext().getAllServiceReferences(
-					ZigBeeEndpoint.class.getName(), null);
+			ServiceReference[] srs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), null);
 			log("srs: " + srs);
 
 			int srsIndex = 0;
 			while (srsIndex < srs.length) {
 				ServiceReference sr = srs[srsIndex];
-				if (endpointIeeeAddress.equals(sr
-						.getProperty(ZigBeeNode.IEEE_ADDRESS))) {
+				if (endpointIeeeAddress.equals(sr.getProperty(ZigBeeNode.IEEE_ADDRESS))) {
 					// The sr's value associated to ZigBeeEndpoint.PROFILE_ID
 					// may also be checked.
 					result++;
@@ -338,13 +325,10 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeNode node = null;
 		BundleContext bc = getContext();
 		try {
-			ServiceTracker st = new ServiceTracker(
-					bc,
-					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode)("
-							+ ZigBeeNode.IEEE_ADDRESS
-							+ "="
-							+ nodeIeeeAddress
-							+ "))"), null);
+			ServiceTracker st = new ServiceTracker(bc,
+					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode)(" + ZigBeeNode.IEEE_ADDRESS
+							+ "=" + nodeIeeeAddress + "))"),
+					null);
 			st.open();
 
 			Object service = st.waitForService(HANDLER_TIMEOUT);
@@ -369,27 +353,22 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
-		ZigBeeSimpleDescriptor simpleDescConf = endpointConf
-				.getSimpleDescriptor();
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
+		ZigBeeSimpleDescriptor simpleDescConf = endpointConf.getSimpleDescriptor();
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
 
-		assertEquals("Endpoint identifier not matched", endpointConf.getId(),
-				endpoint.getId());
+		assertEquals("Endpoint identifier not matched", endpointConf.getId(), endpoint.getId());
 
 		try {
 			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			ZigBeeSimpleDescriptor zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler
-					.getSuccessResponse();
+			ZigBeeSimpleDescriptor zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getSuccessResponse();
 			assertNotNull("simple descriptor is NULL", zigBeeSimpleDescriptor);
-			log("ZigBeeEndpoint PROFILE_ID: "
-					+ zigBeeSimpleDescriptor.getApplicationProfileId());
+			log("ZigBeeEndpoint PROFILE_ID: " + zigBeeSimpleDescriptor.getApplicationProfileId());
 			assertEquals("Application Profile identifier not matched",
 					simpleDescConf.getApplicationProfileId(),
 					zigBeeSimpleDescriptor.getApplicationProfileId());
@@ -397,44 +376,37 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler
-					.getSuccessResponse();
+			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getSuccessResponse();
 			assertNotNull("simple descriptor is NULL", zigBeeSimpleDescriptor);
-			log("ZigBeeEndpoint DEVICE_ID: "
-					+ zigBeeSimpleDescriptor.getApplicationDeviceId());
+			log("ZigBeeEndpoint DEVICE_ID: " + zigBeeSimpleDescriptor.getApplicationDeviceId());
 			assertEquals("Application Device identifier not matched",
 					String.valueOf(simpleDescConf.getApplicationDeviceId()),
-					String.valueOf(zigBeeSimpleDescriptor
-							.getApplicationDeviceId()));
+					String.valueOf(zigBeeSimpleDescriptor.getApplicationDeviceId()));
 
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			handler.waitForResponse(HANDLER_TIMEOUT);
-			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler
-					.getSuccessResponse();
+			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getSuccessResponse();
 			assertNotNull("simple descriptor is NULL", zigBeeSimpleDescriptor);
-			log("ZigBeeEndpoint DEVICE_VERSION: "
-					+ zigBeeSimpleDescriptor.getApplicationDeviceVersion());
-			assertEquals(
-					"Application device version not matched",
+			log("ZigBeeEndpoint DEVICE_VERSION: " + zigBeeSimpleDescriptor.getApplicationDeviceVersion());
+			assertEquals("Application device version not matched",
 					String.valueOf(simpleDescConf.getApplicationDeviceVersion()),
-					String.valueOf(zigBeeSimpleDescriptor
-							.getApplicationDeviceVersion()));
+					String.valueOf(zigBeeSimpleDescriptor.getApplicationDeviceVersion()));
 
 			// compare server/ clients Clusters Ids
-			int[] serverClustersArray = zigBeeSimpleDescriptor
-					.getInputClusters();
+			int[] serverClustersArray = zigBeeSimpleDescriptor.getInputClusters();
 			int[] serverClustersConfArray = simpleDescConf.getInputClusters();
 
 			assertEquals("number of server clusters is not correct",
-					serverClustersConfArray.length, serverClustersArray.length);
+					serverClustersConfArray.length,
+					serverClustersArray.length);
 
-			int[] clientClustersArray = zigBeeSimpleDescriptor
-					.getOutputClusters();
+			int[] clientClustersArray = zigBeeSimpleDescriptor.getOutputClusters();
 			int[] clientClustersConfArray = simpleDescConf.getOutputClusters();
 
 			assertEquals("number of client clusters is not correct",
-					clientClustersArray.length, clientClustersConfArray.length);
+					clientClustersArray.length,
+					clientClustersConfArray.length);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -454,14 +426,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
-		assertEquals("Endpoint identifier not matched", endpointConf.getId(),
-				endpoint.getId());
+		assertEquals("Endpoint identifier not matched", endpointConf.getId(), endpoint.getId());
 
 		ZCLCluster[] clusters = endpoint.getClientClusters();
 		if (clusters == null || clusters.length == 0) {
@@ -474,8 +444,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeCluster is NULL", cluster);
 
 		log("ZigBeeCluster ID: " + cluster.getId());
-		assertEquals("Clusters identifier not matched",
-				endpointConf.getServerClusters()[0].getId(), cluster.getId());
+		assertEquals("Clusters identifier not matched", endpointConf.getServerClusters()[0].getId(), cluster.getId());
 
 		// Use ZigBeeClusterImpl instead of ZigBeeCluster cluster, in order
 		// to do the tests?
@@ -502,15 +471,13 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
-		assertEquals("Endpoint identifier not matched", endpointConf.getId(),
-				endpoint.getId());
+		assertEquals("Endpoint identifier not matched", endpointConf.getId(), endpoint.getId());
 
 		ZCLCluster[] clusters = endpoint.getServerClusters();
 		if (clusters == null || clusters.length == 0) {
@@ -528,8 +495,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		log("ZCLCommand ID: " + commandId);
 		// assertNotNull("ZCLCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
-				((ZCLClusterConf) endpointConf.getServerClusters()[0])
-						.getCommandIds()[0], commandId);
+				((ZCLClusterConf) endpointConf.getServerClusters()[0]).getCommandIds()[0],
+				commandId);
 	}
 
 	/**
@@ -541,18 +508,15 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
-		assertEquals("Endpoint identifier not matched", endpointConf.getId(),
-				endpoint.getId());
+		assertEquals("Endpoint identifier not matched", endpointConf.getId(), endpoint.getId());
 		ZCLCluster[] clustersConf = endpointConf.getServerClusters();
 		ZCLCluster clusterConf = clustersConf[0];
-		ZCLAttribute attributeConf = ((ZCLClusterConf) clusterConf)
-				.getAttributes()[0];
+		ZCLAttribute attributeConf = ((ZCLClusterConf) clusterConf).getAttributes()[0];
 
 		String name = "";
 		if (attributeConf instanceof ZCLAttributeImpl) {
@@ -568,13 +532,11 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
 		cluster.getAttributes(zigBeeHandler);
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		ZCLAttribute attribute = ((ZCLAttribute[]) zigBeeHandler
-				.getSuccessResponse())[0];
+		ZCLAttribute attribute = ((ZCLAttribute[]) zigBeeHandler.getSuccessResponse())[0];
 		assertNotNull("ZCLAttribute " + name + " is NULL", attribute);
 
 		log("ZCLAttribute ID: " + attribute.getId());
-		assertEquals("Attribute " + name + " identifier not matched",
-				attributeConf.getId(), attribute.getId());
+		assertEquals("Attribute " + name + " identifier not matched", attributeConf.getId(), attribute.getId());
 
 	}
 
@@ -592,14 +554,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
-		assertEquals("Endpoint identifier not matched", endpointConf.getId(),
-				endpoint.getId());
+		assertEquals("Endpoint identifier not matched", endpointConf.getId(), endpoint.getId());
 
 		// clusters
 		ZCLCluster[] clusters = endpoint.getServerClusters();
@@ -612,7 +572,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeCluster.
 
 		// int[] attributesIds = {8};
-		ZCLAttributeInfo[] zclAttributeInfos = { new ZCLAttributeInfo() {
+		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfo() {
 
 			public boolean isManufacturerSpecific() {
 				// TODO Auto-generated method stub
@@ -634,7 +594,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 				return null;
 			}
-		} };
+		}};
 		ZigBeeHandlerImpl handlerCluster = new ZigBeeHandlerImpl();
 		Boolean isSuccess;
 
@@ -644,24 +604,19 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		isSuccess = handlerCluster.isSuccess();
 		assertNotNull("handlerCluster response is NULL", endpoint);
-		assertTrue("isSuccess is expected not to be false. ",
-				isSuccess.booleanValue());
-		log("handlerCluster.getSuccessResponse(): "
-				+ handlerCluster.getSuccessResponse());
+		assertTrue("isSuccess is expected not to be false. ", isSuccess.booleanValue());
+		log("handlerCluster.getSuccessResponse(): " + handlerCluster.getSuccessResponse());
 
 		// cluster.writeAttributes(undivided, attributesRecords,
 		// handlerCluster);
 		boolean undivided = true;
 		Map attributesIdsAndValues = null;
-		cluster.writeAttributes(undivided, attributesIdsAndValues,
-				handlerCluster);
+		cluster.writeAttributes(undivided, attributesIdsAndValues, handlerCluster);
 		handlerCluster.waitForResponse(HANDLER_TIMEOUT);
 		isSuccess = handlerCluster.isSuccess();
 		assertNotNull("handlerCluster response is NULL", endpoint);
-		assertTrue("isSuccess is expected not to be false.",
-				isSuccess.booleanValue());
-		log("handlerCluster.getSuccessResponse(): "
-				+ handlerCluster.getSuccessResponse());
+		assertTrue("isSuccess is expected not to be false.", isSuccess.booleanValue());
+		log("handlerCluster.getSuccessResponse(): " + handlerCluster.getSuccessResponse());
 
 		// Test "control" methods of ZCLAttribute.
 
@@ -669,8 +624,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
 		cluster.getAttributes(zigBeeHandler);
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		ZCLAttribute[] attributes = (ZCLAttribute[]) zigBeeHandler
-				.getSuccessResponse();
+		ZCLAttribute[] attributes = (ZCLAttribute[]) zigBeeHandler.getSuccessResponse();
 		log("attributes: " + attributes);
 
 		ZCLAttribute attribute = attributes[0];
@@ -681,10 +635,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 			isSuccess = handlerAttributeGetValue1.isSuccess();
 			assertNotNull("handlerAttribute response is NULL", endpoint);
-			assertTrue("isSuccess is expected not to be false.",
-					isSuccess.booleanValue());
-			log("handlerAttributeGetValue1.getSuccessResponse(): "
-					+ handlerAttributeGetValue1.getSuccessResponse());
+			assertTrue("isSuccess is expected not to be false.", isSuccess.booleanValue());
+			log("handlerAttributeGetValue1.getSuccessResponse(): " + handlerAttributeGetValue1.getSuccessResponse());
 
 		} catch (ZCLException e) {
 			e.printStackTrace();
@@ -699,7 +651,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 		int[] commandIds = (int[]) (zigBeeHandler.getSuccessResponse());
 		// assertNotNull("ZigBeeCluster has no command", commandIds.length);
-		assertNotSame("ZigBeeCluster has no command", Integer.valueOf("0"),
+		assertNotSame("ZigBeeCluster has no command",
+				Integer.valueOf("0"),
 				Integer.valueOf(Integer.toString(commandIds.length)));
 		int commandId = commandIds[0];
 		log("DEBUG: commandId: " + commandId);
@@ -712,8 +665,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			cluster.invoke(frame, commandHandlerImpl);
 			commandHandlerImpl.waitForResponse(HANDLER_TIMEOUT);
 			ZCLFrame frameResponse = commandHandlerImpl.getResponse();
-			log("commandHandlerImpl.getResponse(): "
-					+ commandHandlerImpl.getResponse());
+			log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponse());
 
 			assertNotNull("Response is NULL", frameResponse);
 
@@ -758,31 +710,24 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		byte[] frame = zclFrame.getBytes();
 
-		ZCLFrame referenceZCLFrame = new ZCLFrameImpl(zclFrame.getHeader(),
-				frame);
+		ZCLFrame referenceZCLFrame = new ZCLFrameImpl(zclFrame.getHeader(), frame);
 
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching CommandID.",
-				referenceZCLFrame.getHeader().getCommandId(), zclFrame
-						.getHeader().getCommandId());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching Frame Control Field.",
-				referenceZCLFrame.getHeader().getFrameControlField(), zclFrame
-						.getHeader().getFrameControlField());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching Manufacturer Code.",
-				referenceZCLFrame.getHeader().getManufacturerCode(), zclFrame
-						.getHeader().getManufacturerCode());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching Transaction Sequence Number.",
-				referenceZCLFrame.getHeader().getSequenceNumber(), zclFrame
-						.getHeader().getSequenceNumber());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching is Client Server field.",
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching CommandID.",
+				referenceZCLFrame.getHeader().getCommandId(),
+				zclFrame.getHeader().getCommandId());
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Frame Control Field.",
+				referenceZCLFrame.getHeader().getFrameControlField(),
+				zclFrame.getHeader().getFrameControlField());
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Manufacturer Code.",
+				referenceZCLFrame.getHeader().getManufacturerCode(),
+				zclFrame.getHeader().getManufacturerCode());
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Transaction Sequence Number.",
+				referenceZCLFrame.getHeader().getSequenceNumber(),
+				zclFrame.getHeader().getSequenceNumber());
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching is Client Server field.",
 				referenceZCLFrame.getHeader().isClientServerDirection(),
 				zclFrame.getHeader().isClientServerDirection());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching Is Manufacturer Specific field.",
+		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Is Manufacturer Specific field.",
 				referenceZCLFrame.getHeader().isManufacturerSpecific(),
 				zclFrame.getHeader().isManufacturerSpecific());
 		assertEquals(
@@ -821,8 +766,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
@@ -843,16 +787,17 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// TODO AAA: Is there an easy way to get attributeId?
 		int attributeId = -1;
 		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(node.getIEEEAddress(),
-				endpoint.getId(), cluster.getId(), attributeId, events);
+				endpoint.getId(),
+				cluster.getId(),
+				attributeId,
+				events);
 
 		// create, and launch a test event source.
-		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(
-				getContext(), aZigbeeEvent);
+		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(getContext(), aZigbeeEvent);
 		aZigBeeEventSourceImpl.start();
 
 		// create, and launch a test event listener.
-		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(
-				getContext());
+		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(getContext());
 		aZCLEventListenerImpl.start();
 
 		// assert that eventing works: the sent, and the received events must be
@@ -868,8 +813,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
-		ZigBeeEvent lastReceivedZigBeeEvent = aZCLEventListenerImpl
-				.getLastReceivedZigBeeEvent();
+		ZigBeeEvent lastReceivedZigBeeEvent = aZCLEventListenerImpl.getLastReceivedZigBeeEvent();
 		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
 		assertNotNull("aZigbeeEvent can not be null", aZigbeeEvent);
 		log("aZigbeeEvent: " + aZigbeeEvent);
@@ -899,8 +843,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
-		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf
-				.getEnpoints(node)[0];
+		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
@@ -918,7 +861,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZCLClusterConf clusterConf = (ZCLClusterConf) clustersConf[0];
 		final int invalidId = getInvalidId(clusterConf);
 
-		ZCLAttributeInfo[] zclAttributeInfos = { new ZCLAttributeInfo() {
+		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfo() {
 
 			public boolean isManufacturerSpecific() {
 				// TODO Auto-generated method stub
@@ -960,31 +903,24 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 				};
 				return dataType;
 			}
-		} };
+		}};
 		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
 		cluster.readAttributes(zclAttributeInfos, zigBeeHandler);
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		assertNull("readAttributes response is not null",
-				zigBeeHandler.getSuccessResponse());
+		assertNull("readAttributes response is not null", zigBeeHandler.getSuccessResponse());
 
-		assertTrue("The response is successfull. A failure is expected",
-				!zigBeeHandler.isSuccess().booleanValue());
+		assertTrue("The response is successfull. A failure is expected", !zigBeeHandler.isSuccess().booleanValue());
 
-		assertTrue("The exception is not a ZCL exception",
-				zigBeeHandler.getFailureResponse() instanceof ZCLException);
+		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
 
-		assertEquals(
-				"The ZCL exception is not an unsupported attribute exception",
+		assertEquals("The ZCL exception is not an unsupported attribute exception",
 				ZCLException.UNSUPPORTED_ATTRIBUTE,
-				((ZCLException) zigBeeHandler.getFailureResponse())
-						.getErrorCode());
+				((ZCLException) zigBeeHandler.getFailureResponse()).getErrorCode());
 
 		// DATATYPE EXCEPTION
 
-		ZCLAttribute booleanDatatypeAttr = conf
-				.getFirstAttributeWithBooleanDatatype();
-		assertNotNull(
-				"No attribute found with the Boolean datatype, please modify the configuration file",
+		ZCLAttribute booleanDatatypeAttr = conf.getFirstAttributeWithBooleanDatatype();
+		assertNotNull("No attribute found with the Boolean datatype, please modify the configuration file",
 				booleanDatatypeAttr);
 
 		zigBeeHandler = new ZigBeeHandlerImpl();
@@ -997,15 +933,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// specification for setValue behaviour
 		attr.setValue(new Float(4), zigBeeHandler);
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		assertTrue("The response was succesfull. a failure is expected",
-				!zigBeeHandler.isSuccess().booleanValue());
+		assertTrue("The response was succesfull. a failure is expected", !zigBeeHandler.isSuccess().booleanValue());
 
-		assertTrue("The exception is not a ZCL exception",
-				zigBeeHandler.getFailureResponse() instanceof ZCLException);
+		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
 		assertEquals("The ZCL exception is not an Invalid data type exception",
 				ZCLException.INVALID_DATA_TYPE,
-				((ZCLException) zigBeeHandler.getFailureResponse())
-						.getErrorCode());
+				((ZCLException) zigBeeHandler.getFailureResponse()).getErrorCode());
 
 		// READ ONLY EXCEPTION
 		zigBeeHandler = new ZigBeeHandlerImpl();
@@ -1020,16 +953,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		attr.setValue(new Integer(0), zigBeeHandler);
 
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		assertTrue("a failure is expected", !zigBeeHandler.isSuccess()
-				.booleanValue());
+		assertTrue("a failure is expected", !zigBeeHandler.isSuccess().booleanValue());
 
-		assertTrue("The exception is not a ZCL exception",
-				zigBeeHandler.getFailureResponse() instanceof ZCLException);
-		assertEquals(
-				"could set a value tagged as read only in the description",
+		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
+		assertEquals("could set a value tagged as read only in the description",
 				ZCLException.READ_ONLY,
-				((ZCLException) zigBeeHandler.getFailureResponse())
-						.getErrorCode());
+				((ZCLException) zigBeeHandler.getFailureResponse()).getErrorCode());
 
 		// INVALID VALUE
 		// value which is not in the enum list/// 2.4.7.3 ZCL spec
@@ -1060,20 +989,18 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeNodeConf devConf = conf.getNode0();
 		ZigBeeEndpoint ep = devConf.getEnpoints()[0];
 		ZigBeeEndpoint testEp = new ZigBeeTestOSGiIdEndpointImpl(ep.getId(),
-				ep.getServerClusters(), ep.getClientClusters(), null);
+				ep.getServerClusters(),
+				ep.getClientClusters(),
+				null);
 
 		Dictionary endpointProperties = new Properties();
-		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS,
-				devConf.getIEEEAddress());
-		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID,
-				String.valueOf(testEp.getId()));
+		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, devConf.getIEEEAddress());
+		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(testEp.getId()));
 		endpointProperties.put(ZigBeeEndpoint.ZIGBEE_EXPORT, "exported");
 		// register test endpoint
-		log(this.getClass().getName() + " - Register  endpoint: " + testEp
-				+ " in the OSGi services registry");
+		log(this.getClass().getName() + " - Register  endpoint: " + testEp + " in the OSGi services registry");
 		// should be already registered with the same ID !!!! ->exception
-		bc.registerService(ZigBeeEndpoint.class.getName(), testEp,
-				endpointProperties);
+		bc.registerService(ZigBeeEndpoint.class.getName(), testEp, endpointProperties);
 
 		try {
 			// It might takes time to register the service
@@ -1085,10 +1012,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
-		boolean notExported = ((ZigBeeTestOSGiIdEndpointImpl) testEp)
-				.notExportedHasBeenCalled();
-		assertTrue("the method notExported should have been called",
-				notExported);
+		boolean notExported = ((ZigBeeTestOSGiIdEndpointImpl) testEp).notExportedHasBeenCalled();
+		assertTrue("the method notExported should have been called", notExported);
 
 		// adding an endpoint
 
@@ -1098,15 +1023,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		int endpointsNb = node.getEndpoints().length;
 
 		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
-		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID,
-				String.valueOf(testEp.getId()));
+		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(testEp.getId()));
 
 		// TODO remove hardcoded numbers
-		ZigBeeEndpoint ep2 = new ZigBeeEndpointImpl(
-				(short) getValidEndpointId(node), null, null, null);
+		ZigBeeEndpoint ep2 = new ZigBeeEndpointImpl((short) getValidEndpointId(node), null, null, null);
 
-		bc.registerService(ZigBeeEndpoint.class.getName(), ep2,
-				endpointProperties);
+		bc.registerService(ZigBeeEndpoint.class.getName(), ep2, endpointProperties);
 
 		try {
 			// It might takes time to register the service
@@ -1120,8 +1042,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		}
 		int newNb = node.getEndpoints().length;
 
-		assertTrue("the nubmber of endpoints for the node " + ieeeAddress
-				+ " did not change", newNb == endpointsNb + 1);
+		assertTrue("the nubmber of endpoints for the node " + ieeeAddress + " did not change",
+				newNb == endpointsNb + 1);
 
 	}
 

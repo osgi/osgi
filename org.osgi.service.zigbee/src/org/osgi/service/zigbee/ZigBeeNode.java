@@ -47,23 +47,23 @@ public interface ZigBeeNode {
 	 * A ZigBee Event Listener service can announce for what ZigBee device nodes
 	 * it wants notifications.
 	 */
-	public static final String IEEE_ADDRESS = "zigbee.node.ieee.address";
+	public static final String	IEEE_ADDRESS			= "zigbee.node.ieee.address";
 
 	/**
 	 * Property key for the device logical type
 	 */
-	public static final String LOGICAL_TYPE = "zigbee.node.description.node.type";
+	public static final String	LOGICAL_TYPE			= "zigbee.node.description.node.type";
 
 	/**
 	 * Property key for a manufacturer code that is allocated by the ZigBee
 	 * Alliance, relating the manufacturer to the device.
 	 */
-	public static final String MANUFACTURER_CODE = "zigbee.node.description.manufacturer.code";
+	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
 	 * Key of {@link String} containing the device node network PAN ID
 	 */
-	public static final String PAN_ID = "zigbee.node.pan.id";
+	public static final String	PAN_ID					= "zigbee.node.pan.id";
 
 	/**
 	 * Key of {@link String} containing the device node network extended PAN ID.
@@ -71,36 +71,36 @@ public interface ZigBeeNode {
 	 * only after the network is started. It means that internally the
 	 * ZigBeeHost interface must update the service properties.
 	 */
-	public static final String EXTENDED_PAN_ID = "zigbee.node.extended.pan.id";
+	public static final String	EXTENDED_PAN_ID			= "zigbee.node.extended.pan.id";
 
 	/**
 	 * ZigBee power source, i.e. 3rd bit of "MAC Capabilities" in Node
 	 * Descriptor. Set to 1 if the current power source is mains power, set to 0
 	 * otherwise.
 	 */
-	public static final String POWER_SOURCE = "zigbee.node.power.source";
+	public static final String	POWER_SOURCE			= "zigbee.node.power.source";
 
 	/**
 	 * ZigBee receiver on when idle, i.e. 4th bit of "MAC Capabilities" in Node
 	 * Descriptor. Set to 1 if the device does not disable its receiver to
 	 * conserve power during idle periods, set to 0 otherwise.
 	 */
-	public static final String RECEIVER_ON_WHEN_IDLE = "zigbee.node.receiver.on.when.idle";
+	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
 
 	/**
 	 * The Node is a ZigBee End Device
 	 */
-	public static final short ZED = 0x01;
+	public static final short	ZED						= 0x01;
 
 	/**
 	 * The Node is a ZigBee Coordinator
 	 */
-	public static final short COORDINATOR = 0x02;
+	public static final short	COORDINATOR				= 0x02;
 
 	/**
 	 * The Node is a ZigBee Router
 	 */
-	public static final short ROUTER = 0x03;
+	public static final short	ROUTER					= 0x03;
 
 	/**
 	 * @return The ZigBee device node IEEE Address.

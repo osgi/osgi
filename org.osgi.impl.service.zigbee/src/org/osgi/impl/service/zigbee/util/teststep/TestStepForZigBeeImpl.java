@@ -28,12 +28,12 @@ import org.osgi.test.support.step.TestStep;
  */
 public class TestStepForZigBeeImpl implements TestStep {
 
-	static public final String CONF_FILE_PATH = "file path";
-	static public final String LOAD_CONF = "load conf";
+	static public final String	CONF_FILE_PATH	= "file path";
+	static public final String	LOAD_CONF		= "load conf";
 
-	static private final String TAG = "TestStepForZigBeeImpl";
-	private String confFilePath = "template.xml";
-	private ZigBeeBaseDriver baseDriver;
+	static private final String	TAG				= "TestStepForZigBeeImpl";
+	private String				confFilePath	= "template.xml";
+	private ZigBeeBaseDriver	baseDriver;
 
 	/**
 	 * It is possible to change this constructor in order to add some parameters

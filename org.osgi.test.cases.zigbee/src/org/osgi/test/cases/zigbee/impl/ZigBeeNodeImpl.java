@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.impl;
 
@@ -36,8 +51,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 * @param hostPId
 	 * @param endpoints
 	 */
-	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId,
-			ZigBeeEndpoint[] endpoints) {
+	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
 		this.IEEEAddress = IEEEAddress;
 		this.hostPId = hostPId;
 		this.endpoints = endpoints;
@@ -52,9 +66,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 * @param powerDesc
 	 * @param userdescription
 	 */
-	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId,
-			ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc,
-			ZigBeePowerDescriptor powerDesc, String userdescription) {
+	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints,
+			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
 		this.IEEEAddress = IEEEAddress;
 		this.hostPId = hostPId;
 		this.endpoints = endpoints;
@@ -116,13 +129,11 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		// TODO Auto-generated method stub
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren,
-			ZigBeeHandler handler) {
+	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void invoke(int clusterIdReq, int expectedClusterIdRsp,
-			ZDPFrame message, ZDPHandler handler) {
+	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
@@ -131,11 +142,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress
-				+ ", nwkAddress: " + nwkAddress + ", hostPId: " + hostPId
-				+ ", endpoints: " + endpoints + ", nodeDescriptor: "
-				+ nodeDescriptor + ", powerDescriptor: " + powerDescriptor
-				+ "]";
+		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
+				+ ", hostPId: " + hostPId + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
+				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
 	public void getUserDescription(ZigBeeHandler handler) {
@@ -146,13 +155,11 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(int clusterID, ZCLFrame frame,
-			ZCLCommandHandler handler) {
+	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(int clusterID, ZCLFrame frame,
-			ZCLCommandHandler handler, String exportedServicePID) {
+	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
 		// TODO Auto-generated method stub
 	}
 

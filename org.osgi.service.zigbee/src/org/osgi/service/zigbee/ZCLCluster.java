@@ -29,20 +29,20 @@ public interface ZCLCluster {
 	 * Property key for the optional cluster id. A ZigBee Event Listener service
 	 * can announce for what ZigBee clusters it wants notifications.
 	 */
-	public final static String ID = "zigbee.cluster.id";
+	public final static String	ID		= "zigbee.cluster.id";
 
 	/**
 	 * Property key for the optional cluster domain. A ZigBee Event Listener
 	 * service can announce for what ZigBee clusters domains it wants
 	 * notifications.
 	 */
-	public final static String DOMAIN = "zigbee.cluster.domain";
+	public final static String	DOMAIN	= "zigbee.cluster.domain";
 
 	/**
 	 * Property key for the optional cluster name. A ZigBee Event Listener
 	 * service can announce for what ZigBee clusters it wants notifications.
 	 */
-	public final static String NAME = "zigbee.cluster.name";
+	public final static String	NAME	= "zigbee.cluster.name";
 
 	/**
 	 * @return the cluster identifier

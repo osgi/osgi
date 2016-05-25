@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.impl;
 
@@ -30,8 +45,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	 * @param IEEEAddress
 	 * @param endpoints
 	 */
-	public ZigBeeHostImpl(String hostPId, int panId, int channel,
-			int securityLevel, BigInteger IEEEAddress,
+	public ZigBeeHostImpl(String hostPId, int panId, int channel, int securityLevel, BigInteger IEEEAddress,
 			ZigBeeEndpoint[] endpoints) {
 		super(IEEEAddress, hostPId, endpoints);
 		this.channelAsInt = channel;
@@ -89,8 +103,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void setChannelMask(int mask) throws IOException,
-			IllegalStateException {
+	public void setChannelMask(int mask) throws IOException, IllegalStateException {
 		// TODO Auto-generated method stub
 	}
 
@@ -102,18 +115,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(int clusterID, ZCLFrame frame,
-			ZCLCommandHandler handler) {
+	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(int clusterID, ZCLFrame frame,
-			ZCLCommandHandler handler, String exportedServicePID) {
+	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
 		// TODO Auto-generated method stub
 	}
 
-	public void updateNetworkChannel(byte channel)
-			throws IllegalStateException, IOException {
+	public void updateNetworkChannel(byte channel) throws IllegalStateException, IOException {
 		// TODO Auto-generated method stub
 	}
 
@@ -122,8 +132,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return 0;
 	}
 
-	public void setBroadcastRadius(short broadcastRadius)
-			throws IllegalArgumentException, IllegalStateException {
+	public void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException {
 		// TODO Auto-generated method stub
 	}
 
@@ -182,14 +191,12 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren,
-			ZigBeeHandler handler) {
+	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void invoke(int clusterIdReq, int expectedClusterIdRsp,
-			ZDPFrame message, ZDPHandler handler) {
+	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler) {
 		// TODO Auto-generated method stub
 
 	}

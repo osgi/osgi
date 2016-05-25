@@ -1,10 +1,25 @@
+/*
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Properties;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
@@ -28,9 +43,9 @@ import org.osgi.test.support.step.TestStep;
  */
 public class ZigBeeBaseDriver implements ZCLEventListener {
 
-	private BundleContext bc;
-	private List Endpoints;
-	EndpointServicesListener listener;
+	private BundleContext		bc;
+	private List				Endpoints;
+	EndpointServicesListener	listener;
 
 	/**
 	 * This constructor creates the ZigBeeBaseDriver object based on the
@@ -48,12 +63,10 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 	 * getting notifications.
 	 */
 	public void start() {
-		System.out.println(this.getClass().getName()
-				+ " - Start the base driver.");
+		System.out.println(this.getClass().getName() + " - Start the base driver.");
 
 		TestStepForZigBeeImpl testStep = new TestStepForZigBeeImpl(this);
-		ServiceRegistration testStepSR = bc.registerService(
-				TestStep.class.getName(), testStep, null);
+		ServiceRegistration testStepSR = bc.registerService(TestStep.class.getName(), testStep, null);
 		try {
 			listener = new EndpointServicesListener(bc);
 			listener.open();
@@ -75,8 +88,7 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 	 */
 	public void stop() {
 		listener.close();
-		System.out.println(this.getClass().getName()
-				+ " - Stop the base driver.");
+		System.out.println(this.getClass().getName() + " - Stop the base driver.");
 		// TODO
 	}
 
@@ -85,8 +97,7 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 	}
 
 	public void loadConfigurationFIle(String filePAth) {
-		ConfigurationFileReader conf = ConfigurationFileReader.getInstance(
-				filePAth, bc);
+		ConfigurationFileReader conf = ConfigurationFileReader.getInstance(filePAth, bc);
 
 		// set the min header size
 		ZCLFrameImpl.minHeaderSize = conf.getHeaderMinSize();
@@ -103,12 +114,9 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 			for (int j = 0; j < endpoints.length; j++) {
 				ZigBeeEndpoint ep = endpoints[j];
 				Dictionary endpointProperties = new Properties();
-				endpointProperties.put(ZigBeeNode.IEEE_ADDRESS,
-						node.getIEEEAddress());
-				endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID,
-						String.valueOf(ep.getId()));
-				bc.registerService(ZigBeeEndpoint.class.getName(), ep,
-						endpointProperties);
+				endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, node.getIEEEAddress());
+				endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(ep.getId()));
+				bc.registerService(ZigBeeEndpoint.class.getName(), ep, endpointProperties);
 				Endpoints.add(ep);
 
 			}

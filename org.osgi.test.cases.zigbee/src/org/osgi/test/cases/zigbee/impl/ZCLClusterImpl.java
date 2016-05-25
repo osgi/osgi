@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.impl;
 
@@ -38,8 +53,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes,
-			ZCLClusterDescription desc) {
+	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
 		this.id = desc.getId();
 		this.commandIds = commandIds;
 		this.attributes = attributes;
@@ -60,8 +74,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			}
 		}
 		if (!hasBeenFound) {
-			handler.onFailure(new ZCLException(
-					ZCLException.UNSUPPORTED_ATTRIBUTE,
+			handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 					ZCLException.FAILURE,
 					"the AttributeId is not valid"));
 		}
@@ -76,8 +89,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.onSuccess(this.commandIds);
 	}
 
-	public void readAttributes(ZCLAttributeInfo[] attributesInfoArray,
-			ZigBeeHandler handler) {
+	public void readAttributes(ZCLAttributeInfo[] attributesInfoArray, ZigBeeHandler handler) {
 		// Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		// FIX Should we check for a null value?
 		/*
@@ -88,8 +100,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		if (attributesInfoArray == null) {
 			throw new NullPointerException("attributes cannot be null");
 		} else if (attributesInfoArray.length == 0) {
-			throw new IllegalArgumentException(
-					"attributes array cannot be empty");
+			throw new IllegalArgumentException("attributes array cannot be empty");
 		}
 		Map response = new HashMap();
 		// if (attributes.length == 0) {
@@ -103,26 +114,21 @@ public class ZCLClusterImpl implements ZCLCluster {
 			code.add(new Integer(attributeInfo.getManufacturerCode()));
 			if (code.size() != 1) {
 				handler.onFailure(new IllegalArgumentException(
-						attributeInfo.getId()
-								+ " has a different manufacturer code compared to the others"));
+						attributeInfo.getId() + " has a different manufacturer code compared to the others"));
 				return;
 			}
 			int attrId = attributeInfo.getId();
 			ZCLAttribute attribute = getAttributeFromId(attrId);
 			if (attribute == null) {
-				handler.onFailure(new ZCLException(
-						ZCLException.UNSUPPORTED_ATTRIBUTE,
+				handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 						ZCLException.FAILURE,
 						"the AttributeId is not valid"));
 				return;
 			}
-			if (attributeInfo.getDataType() != null
-					&& attribute.getDataType() != null) {
+			if (attributeInfo.getDataType() != null && attribute.getDataType() != null) {
 
-				if (attributeInfo.getDataType().getId() != attribute
-						.getDataType().getId()) {
-					handler.onFailure(new ZCLException(
-							ZCLException.UNSUPPORTED_ATTRIBUTE,
+				if (attributeInfo.getDataType().getId() != attribute.getDataType().getId()) {
+					handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 							ZCLException.FAILURE,
 							"the Attribute datatype is not valid"));
 					return;
@@ -137,14 +143,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// for (int i : attributesIds) {
 		ZCLAttributeInfo attribute = attributesInfoArray[i];
 		byte[] attributeValue = {0};
-		response.put(Integer.valueOf(Integer.toString(attribute.getId())),
-				attributeValue);
+		response.put(Integer.valueOf(Integer.toString(attribute.getId())), attributeValue);
 		// }
 		handler.onSuccess(response);
 	}
 
-	public void writeAttributes(boolean undivided, Map attributesIdsAndValues,
-			ZigBeeHandler handler) {
+	public void writeAttributes(boolean undivided, Map attributesIdsAndValues, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 
 	}
@@ -154,8 +158,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.notifyResponse(frame, null);
 	}
 
-	public void invoke(ZCLFrame frame, ZCLCommandHandler handler,
-			String exportedServicePID) {
+	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
 		// mocked invocation.
 		handler.notifyResponse(frame, null);
 	}
@@ -170,8 +173,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			attributesAsAString = "[";
 			int i = 0;
 			while (i < attributes.length) {
-				attributesAsAString = attributesAsAString
-						+ attributes[i].toString();
+				attributesAsAString = attributesAsAString + attributes[i].toString();
 				i = i + 1;
 			}
 			attributesAsAString = attributesAsAString + "]";
@@ -188,17 +190,15 @@ public class ZCLClusterImpl implements ZCLCluster {
 			commandIdsAsAString = commandIdsAsAString + "]";
 		}
 
-		return "" + this.getClass().getName() + "[id: " + id + ", attributes: "
-				+ attributesAsAString + ", commandIds: " + commandIdsAsAString
-				+ ", description: " + description + "]";
+		return "" + this.getClass().getName() + "[id: " + id + ", attributes: " + attributesAsAString + ", commandIds: "
+				+ commandIdsAsAString + ", description: " + description + "]";
 	}
 
 	public void getAttribute(int attributeId, int code, ZigBeeHandler handler) {
 		if (code == -1) {
 			getAttribute(attributeId, handler);
 		}
-		throw new UnsupportedOperationException(
-				"getAttribute:Please implement it");
+		throw new UnsupportedOperationException("getAttribute:Please implement it");
 	}
 
 	public void getAttributes(int code, ZigBeeHandler handler) {
@@ -207,8 +207,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		}
 		// TODO Auto-generated method stub, in the meanwhile it throws runtime
 		// exception
-		throw new UnsupportedOperationException(
-				"getAttributes:Please implement it");
+		throw new UnsupportedOperationException("getAttributes:Please implement it");
 	}
 
 	private ZCLAttribute getAttributeFromId(int attrId) {

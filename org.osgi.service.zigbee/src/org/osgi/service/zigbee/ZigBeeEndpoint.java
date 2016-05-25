@@ -34,14 +34,14 @@ public interface ZigBeeEndpoint {
 	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String ENDPOINT_ID = "zigbee.endpoint.id";
+	public static final String	ENDPOINT_ID		= "zigbee.endpoint.id";
 
 	/**
 	 * Key of the {@link String} property containing the profile id implemented
 	 * by the device. <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String PROFILE_ID = "zigbee.device.profile.id";
+	public static final String	PROFILE_ID		= "zigbee.device.profile.id";
 
 	/**
 	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.<br>
@@ -51,45 +51,45 @@ public interface ZigBeeEndpoint {
 	 * the associated host number. It is mandatory for imported endpoints,
 	 * optional for exported endpoints.
 	 */
-	public static final String HOST_PID = "zigbee.endpoint.host.pid";
+	public static final String	HOST_PID		= "zigbee.endpoint.host.pid";
 
 	/**
 	 * Key of the {@link String} property containing the DeviceId of the device
 	 * <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String DEVICE_ID = "zigbee.device.id";
+	public static final String	DEVICE_ID		= "zigbee.device.id";
 
 	/**
 	 * Key of the {@link String} property containing the DeviceVersion of the
 	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String DEVICE_VERSION = "zigbee.device.version";
+	public static final String	DEVICE_VERSION	= "zigbee.device.version";
 
 	/**
 	 * Key of the int array of containing the ids of each input cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String INPUT_CLUSTERS = "zigbee.endpoint.clusters.input";
+	public static final String	INPUT_CLUSTERS	= "zigbee.endpoint.clusters.input";
 
 	/**
 	 * Key of the int array of containing the ids of each output cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String OUTPUT_CLUSTERS = "zigbee.endpoint.clusters.output";
+	public static final String	OUTPUT_CLUSTERS	= "zigbee.endpoint.clusters.output";
 
 	/**
 	 * Key of the {@link String} property mentioning that an endpoint is an
 	 * exported one or not. It is an <b>optional</b> property for this service.
 	 */
-	public static final String ZIGBEE_EXPORT = "zigbee.export";
+	public static final String	ZIGBEE_EXPORT	= "zigbee.export";
 
 	/**
 	 * Constant used by all ZigBee devices indicating the device category. It is
 	 * a <b>mandatory</b> property for this service.
 	 */
-	public static final String DEVICE_CATEGORY = "ZigBee";
+	public static final String	DEVICE_CATEGORY	= "ZigBee";
 
 	/**
 	 * @return identifier of the endpoint represented by this object, value

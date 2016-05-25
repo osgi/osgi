@@ -17,7 +17,6 @@
 package org.osgi.test.cases.zigbee;
 
 import java.io.EOFException;
-
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeDataInput;
@@ -38,19 +37,14 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	private static int		minHeaderSize;
 	private static int		maxHeaderSize;
 
-	byte[]					payloadTest1	= new byte[] {(byte) 0xf1, (byte) 0xfa, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xfa, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf1, (byte) 0xf2,
-			(byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf1, (byte) 0xf2,
-			(byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6,
-			(byte) 0xf7, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
-			(byte) 0xf5, (byte) 0xf6, (byte) 0xf7, (byte) 0xf8, 0x05, 0x06,
-			0x07, 0x08, 0x00, (byte) 0x00, (byte) 0x00, 0x00, (byte) 0x01,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	byte[]					payloadTest1	= new byte[] {(byte) 0xf1, (byte) 0xfa, (byte) 0xf1, (byte) 0xf2, (byte) 0xf1, (byte) 0xf2,
+			(byte) 0xf3, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xfa, (byte) 0xf1, (byte) 0xf2,
+			(byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf1,
+			(byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
+			(byte) 0xf5, (byte) 0xf6, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6,
+			(byte) 0xf7, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf7,
+			(byte) 0xf8, 0x05, 0x06, 0x07, 0x08, 0x00, (byte) 0x00, (byte) 0x00, 0x00, (byte) 0x01, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	byte[]					bytes1			= new byte[] {0x05, 0x06, 0x07, 0x08};
 
@@ -77,8 +71,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath,
-				getContext());
+		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath, getContext());
 		conf = launcher.getConfReader();
 		minHeaderSize = conf.getHeaderMinSize();
 		maxHeaderSize = conf.getHeaderMaxSize();
@@ -109,27 +102,17 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		ZCLHeader header = frame.getHeader();
 
-		assertNotNull(
-				"the getHeader() method must return a not null ZCLHeader instance",
-				header);
+		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
 		assertEquals("ZCLHeader.isClusterSpecificCommand()",
 				isClusterSpecificCommand,
 				header.isClusterSpecificCommand());
-		assertEquals("ZCLHeader.isClientServerDirection()",
-				isClientServerDirection,
-				header.isClientServerDirection());
+		assertEquals("ZCLHeader.isClientServerDirection()", isClientServerDirection, header.isClientServerDirection());
 		assertEquals("ZCLHeader.isDefaultResponseDisabled()",
 				disableDefaultResponse,
 				header.isDefaultResponseDisabled());
-		assertEquals("ZCLHeader.isManufacturerSpecific()",
-				false,
-				header.isManufacturerSpecific());
-		assertEquals("ZCLHeader.getManufacturerCode()",
-				-1,
-				header.getManufacturerCode());
-		assertEquals("ZCLHeader.getSequenceNumber()",
-				sequenceNumber,
-				header.getSequenceNumber());
+		assertEquals("ZCLHeader.isManufacturerSpecific()", false, header.isManufacturerSpecific());
+		assertEquals("ZCLHeader.getManufacturerCode()", -1, header.getManufacturerCode());
+		assertEquals("ZCLHeader.getSequenceNumber()", sequenceNumber, header.getSequenceNumber());
 
 		commonChecks(frame);
 	}
@@ -163,27 +146,17 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		ZCLHeader header = frame.getHeader();
 
-		assertNotNull(
-				"the getHeader() method must return a not null ZCLHeader instance",
-				header);
+		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
 		assertEquals("ZCLHeader isClusterSpecificCommand()",
 				isClusterSpecificCommand,
 				header.isClusterSpecificCommand());
-		assertEquals("ZCLHeader disableDefaultResponse()",
-				isClientServerDirection,
-				header.isClientServerDirection());
+		assertEquals("ZCLHeader disableDefaultResponse()", isClientServerDirection, header.isClientServerDirection());
 		assertEquals("ZCLHeader isDefaultResponseEnabled()",
 				disableDefaultResponse,
 				header.isDefaultResponseDisabled());
-		assertEquals("ZCLHeader isManufacturerSpecific()",
-				true,
-				header.isManufacturerSpecific());
-		assertEquals("ZCLHeader.getManufacturerCode()",
-				manufacturerCode,
-				header.getManufacturerCode());
-		assertEquals("ZCLHeader.getSequenceNumber()",
-				sequenceNumber,
-				header.getSequenceNumber());
+		assertEquals("ZCLHeader isManufacturerSpecific()", true, header.isManufacturerSpecific());
+		assertEquals("ZCLHeader.getManufacturerCode()", manufacturerCode, header.getManufacturerCode());
+		assertEquals("ZCLHeader.getSequenceNumber()", sequenceNumber, header.getSequenceNumber());
 
 		commonChecks(frame);
 	}
@@ -203,9 +176,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		byte[] otherRawFrame = frame.getBytes();
 
-		assertNotNull(
-				"the getHeader() method must return a not null ZCLHeader instance",
-				header);
+		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
 
 		if (otherRawFrame == rawFrame) {
 			fail("the getBytes() must return a different array each time it is called");
@@ -217,9 +188,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		ZigBeeDataInput isOther = frame.getDataInput();
 
-		assertNotNull(
-				"calling ZCLFrame.getDataInput() twice must not return null",
-				isOther);
+		assertNotNull("calling ZCLFrame.getDataInput() twice must not return null", isOther);
 
 		if (is == isOther) {
 			fail("calling ZCLFrame.getDataInput() twice must not return differenct ZigBeeDataInput instances");
@@ -343,9 +312,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		try {
 			byte[] b = dataInput.readBytes(bytes1.length);
 			assertNotNull("ZigbeeDataInput.getBytes() returned a null array", b);
-			assertEquals("readBytes returned a wrong number of bytes",
-					bytes1.length,
-					b.length);
+			assertEquals("readBytes returned a wrong number of bytes", bytes1.length, b.length);
 
 			boolean differs = false;
 			for (int i = 0; i < b.length; i++) {
@@ -426,8 +393,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		} catch (EOFException e) {
 			// We expect the end of the buffer
 		} catch (Exception e) {
-			fail("got unexpected exception, instead of EOFException: "
-					+ e.getMessage());
+			fail("got unexpected exception, instead of EOFException: " + e.getMessage());
 		}
 	}
 
@@ -453,8 +419,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Creates the frame with no initial payload
 		 */
-		ZCLFrameImpl frame = new ZCLFrameImpl(headerInit,
-				payloadTest1.length + 20);
+		ZCLFrameImpl frame = new ZCLFrameImpl(headerInit, payloadTest1.length + 20);
 
 		/*
 		 * The getDataOutput() method is not present in the ZCLFrame interface.
@@ -508,8 +473,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		try {
 			dataOutput.writeByte(payloadTest1[0]);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/**
@@ -522,8 +486,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeInt(0xf3f2f1, 3);
 			dataOutput.writeInt(0xf4f3f2f1, 4);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/**
@@ -540,8 +503,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeLong(0xf7f6f5f4f3f2f1L, 7);
 			dataOutput.writeLong(0xf8f7f6f5f4f3f2f1L, 8);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/**
@@ -551,8 +513,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		try {
 			dataOutput.writeBytes(bytes1, bytes1.length);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/**
@@ -566,8 +527,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeFloat(0, 4);
 			dataOutput.writeFloat(Float.MIN_VALUE, 4);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/**
@@ -581,8 +541,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeDouble(0);
 			dataOutput.writeDouble(Double.MIN_VALUE);
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: "
-					+ e.getMessage());
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
 		/*
@@ -606,14 +565,11 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		if (!equals) {
 			fail("marshalling failed at index " + i);
 		} else {
-			assertEquals("ZCLFrame.getBytes() size",
-					payloadTest1.length + offs,
-					rawFrame.length);
+			assertEquals("ZCLFrame.getBytes() size", payloadTest1.length + offs, rawFrame.length);
 		}
 	}
 
 	protected int getMinFrameSize(ZCLHeader header) {
-		return header.isManufacturerSpecific() ? (maxHeaderSize)
-				: minHeaderSize;
+		return header.isManufacturerSpecific() ? (maxHeaderSize) : minHeaderSize;
 	}
 }
