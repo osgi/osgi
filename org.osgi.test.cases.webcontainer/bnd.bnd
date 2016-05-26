@@ -7,8 +7,6 @@
   
 Bundle-Description: OSGi Web Application Specification Compliance Test
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.5
-
 Private-Package						= org.osgi.test.support.*, \
 	${p}.handler.*, \
 	${p}.junit.*, \

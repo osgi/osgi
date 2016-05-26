@@ -2,8 +2,6 @@ javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.5
-
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.*
