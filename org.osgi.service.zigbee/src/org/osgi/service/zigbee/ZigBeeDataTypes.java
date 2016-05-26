@@ -376,7 +376,7 @@ public class ZigBeeDataTypes {
 	static final long			zigBeeTimeZero			= 946684800000L;	// 1/1/2000
 
 	/**
-	 * @param os a {@klink ZigBeeDataOutput} stream where to stream the value.
+	 * @param os a {@link ZigBeeDataOutput} stream where to stream the value.
 	 *        This parameter cannot be null.
 	 * 
 	 * @param dataType The data type that have to be marshalled on the output
@@ -388,7 +388,7 @@ public class ZigBeeDataTypes {
 	 * 
 	 * @throws IllegalArgumentException TODO
 	 * 
-	 * @throws {@link NullPointerException} TODO
+	 * @throws NullPointerException TODO
 	 */
 	public static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) {
 
@@ -731,8 +731,8 @@ public class ZigBeeDataTypes {
 	 * @throws IllegalArgumentException if the passed {@code dataType} is not
 	 *         correct.
 	 * 
-	 * @throws {@link NullPointerException} if the passed
-	 *         {@code ZigBeeDataInput} is null
+	 * @throws NullPointerException if the passed {@code ZigBeeDataInput} is
+	 *         null
 	 */
 	public static Object deserializeDataType(ZigBeeDataInput is, short dataType) throws IOException {
 		if (is == null) {
