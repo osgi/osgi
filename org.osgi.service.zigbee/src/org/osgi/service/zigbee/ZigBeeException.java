@@ -41,8 +41,14 @@ public class ZigBeeException extends RuntimeException {
 	 */
 	public static final int		UNKNOWN_ERROR		= -1;
 
+	/**
+	 * TODO
+	 */
 	protected final int			errorCode;
 
+	/**
+	 * TODO
+	 */
 	protected final int			zigBeeErrorCode;
 
 	/**

@@ -111,10 +111,9 @@ public class ZCLException extends ZigBeeException {
 	 * @param errorCode One of the error codes defined in this interface or
 	 *        {@link #UNKNOWN_ERROR} if the actual error is not listed in this
 	 *        interface. In this case if the native ZigBee error code is known,
-	 *        it is preferred to use the
-	 *        {@link #ZCLException(short, short, String)} constructor, passing
-	 *        {@link #UNKNOWN_ERROR} as first parameter and the native ZigBee
-	 *        error as the second.
+	 *        it is preferred to use the {@link #ZCLException(int, int, String)}
+	 *        constructor, passing {@link #UNKNOWN_ERROR} as first parameter and
+	 *        the native ZigBee error as the second.
 	 * 
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
