@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package org.osgi.service.zigbee.descriptions;
+
+import org.osgi.service.zigbee.ZigBeeDataTypes;
 
 /**
  * This interface is used for representing any of the ZigBee Data Types defined
@@ -33,7 +35,8 @@ package org.osgi.service.zigbee.descriptions;
 public interface ZCLDataTypeDescription {
 
 	/**
-	 * @return The data type identifier.
+	 * @return The data type identifier. The currently supported data types ids
+	 *         are in file {@link ZigBeeDataTypes}
 	 */
 	public short getId();
 

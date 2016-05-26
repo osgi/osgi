@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ package org.osgi.service.zigbee;
  */
 public class ZigBeeException extends RuntimeException {
 
-	/**
-	 * Generated
-	 */
 	private static final long	serialVersionUID	= -2147129696681024813L;
 
 	/** OSGI_EXISTING_ID (16) – another endpoint exists with the same ID. */
