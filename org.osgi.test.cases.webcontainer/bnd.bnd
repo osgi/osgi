@@ -50,6 +50,7 @@ Export-Package =\
     org.osgi.impl.bundle.webcontainer; version=latest
 	
 -runproperties = ${runproperties}, \
+    org.osgi.framework.bootdelegation="sun.*,com.sun.*", \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.http.port=8080, \
 	org.osgi.test.testcase.timeout=10000, \
