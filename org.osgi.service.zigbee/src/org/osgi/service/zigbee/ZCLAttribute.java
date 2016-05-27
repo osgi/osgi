@@ -17,9 +17,10 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a ZCLAttribute
- * 
- * TODO: documentation
+ * This interface represents a ZCLAttribute and adds to the ZCLAttributeInfo
+ * interface the methods to read and write the ZCL attribute from and to the
+ * ZigBee node with respectively the {@link #getValue(ZigBeeHandler)} and
+ * {@link #setValue(Object, ZigBeeHandler)} methods
  * 
  * @author $Id$
  */
@@ -31,35 +32,41 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	public final static String ID = "zigbee.attribute.id";
 
 	/**
-	 * Gets the current value of the attribute. <br>
+	 * Gets the current value of the attribute.
 	 * 
+	 * <p>
 	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a
 	 * "read attribute" can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}). <br>
+	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}).
 	 * 
+	 * <p>
 	 * The response object given to the handler is the attribute's Java data
 	 * type (see {@link #getDataType()} method) that will contain the current
 	 * attribute value (or null if an UNSUPPORTED_ATTRIBUTE occurred or in case
 	 * of an invalid value).
 	 * 
 	 * @param handler the handler
+	 * 
 	 */
 	public void getValue(ZigBeeHandler handler);
 
 	/**
-	 * Sets the current value of the attribute. <br>
+	 * Sets the current value of the attribute.
 	 * 
+	 * <p>
 	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a
 	 * "write attribute" can have the following status: SUCCESS,
 	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
-	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}). <br>
+	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
 	 * 
+	 * <p>
 	 * The response object given to the handler is a Boolean set to true if the
 	 * attribute value has been written. A null value is processed as an invalid
 	 * number. In case of an error has occurred, onFailure is called with a
 	 * ZCLException.
 	 * 
 	 * @param value the Java value to set
+	 * 
 	 * @param handler the handler
 	 */
 	public void setValue(Object value, ZigBeeHandler handler);

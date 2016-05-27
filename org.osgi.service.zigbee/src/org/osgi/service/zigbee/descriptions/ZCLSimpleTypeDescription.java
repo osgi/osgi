@@ -26,28 +26,54 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * 
  * <p>
  * The interface extends the {@link ZCLDataTypeDescription} by providing
- * serialize and deserialize methods to marshall and unmarshall the data into
- * the {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
+ * serialize and deserialize methods to marshal and unmarshal the data into the
+ * {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
  * @author $Id$
  */
 public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 
 	/**
-	 * @param param Object to be serialized using the associated type. If the
-	 *        the value is {@code  null}, then the invalid number will be
-	 *        serialized.
+	 * Method for serializing a ZigBee data type into a {@code ZigBeeDataOutput}
+	 * stream. An implementation of this method must throw an
+	 * {@code IllegalArgumentException} if the passed value does not belong to
+	 * the expected class or its value exceeds the possible values allowed (in
+	 * terms of range or length).
 	 * 
-	 * @param os {@link ZigBeeDataOutput}eDataOutput in which the array of bytes
-	 *        that represents the serialized value be appended.
+	 * <p>
+	 * An implementation of this method must interpret (where it makes sense) a
+	 * {@code null} {@code value} as the request to serialize the so called
+	 * <em>Invalid Value</em>.
+	 *
+	 * @param os a {@link ZigBeeDataOutput} stream where to the passed value
+	 *        will be appended. This parameter cannot be {@code null}. If
+	 *        {@code null} a {@link NullPointerException} must be thrown.
+	 * 
+	 * @param value The value that have to be serialized on the output stream.
+	 *        If null is passed this method outputs on the stream the ZigBee
+	 *        invalid value related the specific data type. If the data type do
+	 *        not allow any invalid value and the passed value is null an
+	 *        {@link IllegalArgumentException} is thrown.
+	 * 
+	 * @throws IllegalArgumentException Must be thrown if the passed value does
+	 *         not belong to the expected class or its value exceeds the
+	 *         possible values allowed (range or length).
+	 * 
+	 * @see TODO: put actual ZCL spec document ref
 	 */
-	public void serialize(ZigBeeDataOutput os, Object param);
+
+	public void serialize(ZigBeeDataOutput os, Object value);
 
 	/**
+	 * Method for deserializing a value from the passed {@link ZigBeeDataInput}
+	 * stream.
+	 *
 	 * @param is the {@link ZigBeeDataInput} from where the value of data type
 	 *        is read from.
+	 * 
 	 * @return An object that represents the deserialized value of data. Return
-	 *         {@code  null} if the deserialized value is the invalid number
+	 *         {@code  null} if the read value represents the
+	 *         <em>Invalid Value</em> for the specific ZigBee data type.
 	 * 
 	 * @throws IOException if an I/O error occurs while reading the
 	 *         {@code ZigBeeDataInput}

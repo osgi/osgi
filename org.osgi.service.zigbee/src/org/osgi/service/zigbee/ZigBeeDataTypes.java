@@ -30,16 +30,20 @@ import java.util.GregorianCalendar;
  * follows the rules below:
  * 
  * <p>
- * bit 0-3: if bit 6 is one, these bits represents the size of the data type in
- * bytes.<br>
- * bit 6: if set to 1 bits 0-3 represents the size of the data type in bytes.
- * <br>
- * bit 7: if one the data type represents a unsigned value, otherwise it is
- * signed.
+ * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data
+ * type in bytes.<br>
+ * <em>bit 6</em>: if set to 1 bits 0-3 represents the size of the data type in
+ * bytes. <br>
+ * <em>bit 7</em>: if one the data type represents a unsigned value, otherwise
+ * it is signed.
+ * 
  * 
  * <p>
- * Reference: ZigBee Cluster Library specification, Document 075123r04ZB, May
- * 29, 2012.
+ * <dl>
+ * Related documentation:
+ * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
+ * 2012.
+ * </dl>
  * 
  * @author $Id$
  */
@@ -376,19 +380,33 @@ public class ZigBeeDataTypes {
 	static final long			zigBeeTimeZero			= 946684800000L;	// 1/1/2000
 
 	/**
-	 * @param os a {@link ZigBeeDataOutput} stream where to stream the value.
-	 *        This parameter cannot be null.
+	 * Marshal the passed value into a {@code ZigBeeDataOutput} stream,
+	 * according the {@code dataType} argument. An
+	 * {@code IllegalArgumentException} is thrown when the the passed
+	 * {@code value} does not belong to the class allowed for the
+	 * {@code dataType}.
 	 * 
-	 * @param dataType The data type that have to be marshalled on the output
+	 * <p>
+	 * If the data type allows that, a null value is marshaled into ZCL Invalid
+	 * Value for that data type.
+	 *
+	 * @param os a {@link ZigBeeDataOutput} stream where to stream the value.
+	 *        This parameter cannot be null. If it is nul a
+	 *        {@link NullPointerException} is thrown.
+	 * 
+	 * @param dataType The data type that have to be marshaled on the output
 	 *        stream.
 	 * 
 	 * @param value The value that have to be serialized on the output stream.
 	 *        If null is passed this method outputs on the stream the ZigBee
-	 *        invalid value related to the specified data type.
+	 *        invalid value related to the specified data type. If the data type
+	 *        do not allow any invalid value and the passed value is null an
+	 *        {@link IllegalArgumentException} is thrown.
 	 * 
-	 * @throws IllegalArgumentException TODO
-	 * 
-	 * @throws NullPointerException TODO
+	 * @throws IllegalArgumentException Thrown when the the passed {@code value}
+	 *         does not belong to the allowed class for the {@code dataType} as
+	 *         described in the specification or when the value exceed the range
+	 *         allowed by that type (i.e. length for Octet String data types).
 	 */
 	public static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) {
 
@@ -716,20 +734,23 @@ public class ZigBeeDataTypes {
 	/**
 	 * @param is A valid {@link ZigBeeDataInput} stream instance. This parameter
 	 *        cannot be null.
+	 * 
 	 * @param dataType The data type that have to be deserialized. This value
 	 *        must be one of the valid data types constants defined at the
 	 *        beginning of this interface, otherwise an IllegalArgumentException
 	 *        exception is thrown.
 	 * 
 	 * @return The deserialized object. The returned value is null if the
-	 *         deserialized value is equal to the invalid value for the
+	 *         deserialized value is equal to the <em>Invalid Value</em> for the
 	 *         specified dataType.
 	 * 
 	 * @throws IOException in case of problems while deserializing the
-	 *         {@code ZigBeeDataInput}
+	 *         {@code ZigBeeDataInput}. For instance this could happen if in the
+	 *         stream the remaining bytes are not enough to be able to unmarshal
+	 *         the requested data type.
 	 * 
 	 * @throws IllegalArgumentException if the passed {@code dataType} is not
-	 *         correct.
+	 *         supported.
 	 * 
 	 * @throws NullPointerException if the passed {@code ZigBeeDataInput} is
 	 *         null

@@ -18,10 +18,13 @@ package org.osgi.service.zigbee;
 
 /**
  * This interface represents a ZDP frame (see Figure 2.19 Format of the ZDP
- * Frame ZIGBEE SPECIFICATION: 1_053474r17ZB_TSC-ZigBee-Specification.pdf)<br>
+ * Frame ZIGBEE SPECIFICATION: 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
+ * 
+ * <p>
  * This interface MUST be implemented by the developer invoking the
- * {@link ZigBeeNode#invoke(int, int, ZDPFrame, ZDPHandler)} <br>
- * <br>
+ * {@link ZigBeeNode#invoke(int, int, ZDPFrame, ZDPHandler)}
+ * 
+ * <p>
  * <b>Notes</b>
  * <ul>
  * <li>This interface hides on purpose the Transaction Sequence Number field

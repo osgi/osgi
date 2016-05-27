@@ -27,10 +27,13 @@ public interface ZDPHandler {
 	/**
 	 * Notifies the result (success or failure) of the call. This method is
 	 * invoked by the entity that registered the {@link ZigBeeNode}, and it is
-	 * expected that only the ZigBee Base Driver register it. <br>
+	 * expected that only the ZigBee Base Driver register it.
 	 * 
+	 * <p>
 	 * The {@link ZDPHandler} MUST be invoked with {@code  null} value for the
-	 * Exception parameter in case of success.<br>
+	 * Exception parameter in case of success.
+	 * 
+	 * <p>
 	 * On the contrary, the {@link ZDPFrame} MUST be contain the message
 	 * received from the {@link ZigBeeNode} even in case of failure so that the
 	 * implementor can analyze the content of the message to better understand

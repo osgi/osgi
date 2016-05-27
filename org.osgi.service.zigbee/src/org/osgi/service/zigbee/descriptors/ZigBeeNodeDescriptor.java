@@ -74,8 +74,6 @@ public interface ZigBeeNodeDescriptor {
 
 	/**
 	 * @return the server mask field.
-	 * 
-	 *         TODO: description
 	 */
 	public ZigBeeServerMask getServerMask();
 

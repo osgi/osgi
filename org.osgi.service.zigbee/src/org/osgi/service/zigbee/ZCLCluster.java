@@ -97,18 +97,21 @@ public interface ZCLCluster {
 	void getAttributes(int code, ZigBeeHandler handler);
 
 	/**
-	 * Read a list of attributes. <br>
+	 * Read a list of attributes.
 	 * 
+	 * <p>
 	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a
 	 * "read attribute" can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}). <br>
+	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}).
 	 * 
+	 * <p>
 	 * The response object given to the handler is a Map. For each Map entry,
 	 * the key is the attribute identifier of Integer type and the value is the
 	 * associated attribute value in the corresponding Java wrapper type (or
 	 * null if an UNSUPPORTED_ATTRIBUTE occurred or in case of an invalid
-	 * value).<br>
-	 * <br>
+	 * value).
+	 * 
+	 * <p>
 	 * <b>NOTE</b> Considering the ZigBee Specification all the attributes must
 	 * be standard attributes or belong to the same Manufacturer otherwise
 	 * {@link IllegalArgumentException} will be thrown
@@ -125,21 +128,24 @@ public interface ZCLCluster {
 	void readAttributes(ZCLAttributeInfo[] attributes, ZigBeeHandler handler);
 
 	/**
-	 * Write a list of attributes. <br>
+	 * Write a list of attributes.
 	 * 
+	 * <p>
 	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a
 	 * "write attribute" can have the following status: SUCCESS,
 	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
-	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}). <br>
+	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
 	 * 
+	 * <p>
 	 * The response object given to the handler is a Map. For each Map entry,
 	 * the key is the attribute identifier of Integer type and the value is the
 	 * associated attribute status (see above). Every null value in the Map is
 	 * considered as an invalid number. In case undivided equals false,
 	 * onSuccess() is always called to notify the response. In case undivided
 	 * equals true and an error has occurred, onFailure is called with a
-	 * ZCLException.<br>
-	 * <br>
+	 * ZCLException.
+	 * 
+	 * <p>
 	 * <b>NOTE</b>Considering the ZigBee Specification all the attributes must
 	 * be standard attributes or belong to the same Manufacturer otherwise
 	 * {@link IllegalArgumentException} will be thrown
@@ -156,14 +162,17 @@ public interface ZCLCluster {
 	void writeAttributes(boolean undivided, Map attributesAndValues, ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all the commandIds of the ZCLCluster. <br>
+	 * Get an array of all the commandIds of the ZCLCluster.
 	 * 
-	 * This method is implemented for devices implementing a version equal or
+	 * <p>
+	 * This method is implemented for ZCL devices compliant version equal or
 	 * later than 1.2 of the Home Automation Profile or other profiles that
 	 * enable the discovery of command IDs as a general command. When the device
 	 * implements a profile that does not support this feature, the method call
-	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED. <br>
+	 * throws a {@code ZCLException} with code
+	 * {@code ZCLException.GENERAL_COMMAND_NOT_SUPPORTED}.
 	 * 
+	 * <p>
 	 * The response object given to the handler is an array containing the
 	 * commandIds. Each commandId is of Integer type.
 	 * 
