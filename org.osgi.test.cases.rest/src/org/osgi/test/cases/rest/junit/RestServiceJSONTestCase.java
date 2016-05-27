@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -792,7 +793,7 @@ public class RestServiceJSONTestCase extends RestTestUtils {
     if (result != null) { // Bundle start level representation or BundleException
       try {
         return new JSONObject(result);
-      } catch (JSONException _) {
+			} catch (JSONException e) {
         return null;
       }
     }

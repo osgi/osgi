@@ -10,6 +10,7 @@ package org.osgi.test.cases.rest.tb6;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -23,7 +24,7 @@ import org.restlet.resource.ServerResource;
  */
 public class TBActivator extends ServerResource implements BundleActivator, RestApiExtension {
 
-  private ServiceRegistration sReg;
+	private ServiceRegistration<RestApiExtension> sReg;
 
   public void start(BundleContext context) throws Exception {
     Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -31,7 +32,8 @@ public class TBActivator extends ServerResource implements BundleActivator, Rest
     properties.put(RestApiExtension.NAME, "REST Extension full URI");
     properties.put("restlet", TBActivator.class);
 
-    sReg = context.registerService(RestApiExtension.class.getName(), this, properties);
+		sReg = context.registerService(RestApiExtension.class, this,
+				properties);
   }
 
   public void stop(BundleContext context) throws Exception {
