@@ -30,10 +30,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.transaction.control; version="[1.0,1.1)"}
  * 
- * @version 1.0
- * @author $Id:
+ * @author $Id$
  */
 
-@org.osgi.annotation.versioning.Version("1.0.0")
+@Version("1.0.0")
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.Version;

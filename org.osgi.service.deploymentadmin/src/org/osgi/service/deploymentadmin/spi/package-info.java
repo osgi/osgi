@@ -33,9 +33,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.deploymentadmin.spi; version="[1.0,1.1)"}
  * 
- * @version 1.0.1
  * @author $Id$
  */
 
+@Version("1.0.1")
 package org.osgi.service.deploymentadmin.spi;
 
+import org.osgi.annotation.versioning.Version;

@@ -32,9 +32,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.io; version="[1.0,1.1)", javax.microedition.io}
  * 
- * @version 1.0
  * @author $Id$
  */
 
+@Version("1.0")
 package org.osgi.service.io;
 
+import org.osgi.annotation.versioning.Version;

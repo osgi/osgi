@@ -32,9 +32,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.provisioning; version="[1.2,1.3)"}
  * 
- * @version 1.2
  * @author $Id$
  */
 
+@Version("1.2")
 package org.osgi.service.provisioning;
 
+import org.osgi.annotation.versioning.Version;

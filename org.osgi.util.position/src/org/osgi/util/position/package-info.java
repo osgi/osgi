@@ -26,9 +26,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.util.position; version="[1.0,2.0)"}
  * 
- * @version 1.0.1
  * @author $Id$
  */
 
+@Version("1.0.1")
 package org.osgi.util.position;
 
+import org.osgi.annotation.versioning.Version;

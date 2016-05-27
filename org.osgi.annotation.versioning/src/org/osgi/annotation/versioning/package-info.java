@@ -22,7 +22,6 @@
  *
  * @see <a href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"
  *      >Semantic Versioning</a>
- * @version 1.0
  * @author $Id$
  */
 @Version("1.0")

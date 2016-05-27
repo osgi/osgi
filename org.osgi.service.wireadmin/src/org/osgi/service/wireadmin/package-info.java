@@ -32,9 +32,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.wireadmin; version="[1.0,1.1)"}
  * 
- * @version 1.0.1
  * @author $Id$
  */
 
+@Version("1.0.1")
 package org.osgi.service.wireadmin;
 
+import org.osgi.annotation.versioning.Version;

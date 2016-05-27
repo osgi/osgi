@@ -31,8 +31,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.startlevel; version="[1.1,2.0)"}
  * 
- * @version 1.1
  * @author $Id$
  */
 
+@Version("1.1")
 package org.osgi.service.startlevel;
+
+import org.osgi.annotation.versioning.Version;

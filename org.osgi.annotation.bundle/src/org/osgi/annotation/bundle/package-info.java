@@ -19,7 +19,6 @@
  * <p>
  * This package is not used at runtime.
  *
- * @version 1.0
  * @author $Id$
  */
 @Version("1.0")

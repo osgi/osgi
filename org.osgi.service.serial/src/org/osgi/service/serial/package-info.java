@@ -28,9 +28,10 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.serial; version="[1.0,2.0)"}
  *
- * @version 1.0
  * @author $Id$
  */
 
+@Version("1.0")
 package org.osgi.service.serial;
 
+import org.osgi.annotation.versioning.Version;
