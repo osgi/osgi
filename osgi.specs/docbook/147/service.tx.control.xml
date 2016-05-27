@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="138" revision="$Id:" version="5" xml:id="service.transaction.control"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Transaction Control Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.transaction.control-version"
+    linkend="org.osgi.service.transaction.control"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Software Transactions are an important aspect of most modern applications.
+    The job of a Transaction is to ensure logical consistency for units of work
+    within the application. Any time that the application accesses a persistent 
+    external resource then a Transaction ensures that the set of changes made to 
+    the resource(s) are Atomic, Consistent, Isolated, and Durable (ACID).</para>
+
+    <para>There are a variety of techniques for managing the lifecycle of software 
+    Transactions used in an application. The most primitive mechanisms are for the 
+    application code to directly interact with the Transaction Manager, but higher 
+    level abstractions can automatically manage the lifecycle of Transactions 
+    through the use of Aspect Oriented Programming. Whatever techniques are used
+    to manage the Transaction lifecycle it is also necessary for any resource access 
+    that occurs within the Transaction to be registered with the Transaction manager. 
+    As with managing the Transaction lifecycle, this work may be performed by the 
+    client, or by a an intermediate framework without direct action from the client.</para>
+
+    <para>OSGi applications consist of a set of independent modules which interact
+    via the OSGi service registry; as such there is no single container which can
+    be relied upon to manage the range of tasks needed to successfully use a 
+    Transaction. This leaves OSGi clients with little choice but to depend on
+    specific environments, sacrificing portability, or to directly use Transactions
+    via the <xref linkend="service.jta"/>. The purpose of the Transaction Control 
+    Service is twofold:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>To enable a portable, modular abstraction for Transaction lifecycle
+        management</para>
+      </listitem>
+        
+      <listitem>
+        <para>To allow different resource types to be easily used within a Transaction</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Scoped Work</emphasis> - A function or code block with an
+          associated execution context, known as a Scope. The Scope may be
+          <emphasis>Transactional</emphasis>, i.e. associated with a Transaction, 
+          or a <emphasis>No Transaction Scope</emphasis>, i.e. with no associated 
+          Transaction.</para>          
+        </listitem>
+      
+        <listitem>
+          <para><emphasis>Client</emphasis> - Application code that wishes to
+          invoke one or more pieces of Scoped Work.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Transaction Control Service</emphasis> - The OSGi service
+          representing the Transaction Control Service implementation. Used by the
+          Client to execute pieces of Scoped Work.</para>          
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Resource</emphasis> - A local or remote software component
+          which is stateful and can participate in a transaction.</para>          
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Resource Provider</emphasis> - A service or object which
+          provides managed access to a Scoped Resource, i.e. a managed connection to
+          the Resource which integrates with ongoing Transactions as necessary.</para>          
+        </listitem>
+      
+        <listitem>
+          <para><emphasis>Transaction Context</emphasis> - A Java object representing
+          the state of a Scope</para>          
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Transaction Control Service</emphasis> - A service that can
+          execute pieces of work within a Scope, and be queried to establish the current 
+          Scope.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Client</emphasis> - The code that requests for Work to be run
+          in a particular Scope.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Work</emphasis> - A collection of instructions that interact
+          with zero or more Resources within a Scope</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Scoped Resource</emphasis> - A resource connection with a 
+          managed lifecycle. The connection will automatically participate in 
+          Transactions associated with Transactional Scopes, and its lifecycle is
+          tied to the Scope within which it is used.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Usage</title>
+
+    <para>This section is an introduction in the usage of the Transaction
+    Control Service. It is not the formal specification, the normative part 
+    starts at <xref linkend="service.transaction.control-main.body"/>. This 
+    section leaves out some of the details for clarity.</para>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The Transaction Control Service provides a mechanism for a client 
+      to run work within a defined Scope. Typically a Scope is also associated 
+      with a Transaction. The purpose of a Scope is to simplify the lifecycle 
+      of resources, and to allow those resources to participate in any ongoing
+      Transaction. Any Scoped Resources accessed during a Scope will remain 
+      available throughout the scope, and be automatically cleaned up when the 
+      Scope completes.</para>
+
+      <para>Each Scope is started by the Client by passing piece of work
+      to the Transaction Control Service. The transaction control service will
+      then begin a scope if needed, execute the work, and then complete the 
+      scope if needed. The different methods on the Transaction Control Service 
+      provide different lifecycle semantics for the Scope. Some methods establish
+      a Transactional Scope, others may suspend an active Transactional Scope
+      replacing it with a No Transaction Scope.</para>
+      
+      <para>When a piece of Scoped Work is executing it may access one or 
+      more Scoped Resources. When a Scoped Resource is first accessed within a 
+      Scope it is bound to that Scope so that future accesses use the same 
+      physical resource. At the end of the Scope the resource is detached
+      from the scope and the physical resource is released. If the Scope
+      is Transactional then the Scoped Resource will also participate in
+      the transaction.</para>
+      
+      <para>At the end of a piece of Scoped Work the Scope is finished. For
+      a No Transaction Scope this simply involves calling any registered 
+      callbacks. For a Transactional Scope, however, the Transaction must
+      be completed or rolled back. If the Scoped Work exits normally, and
+      no call has been made to force the Transaction to roll back, then the
+      Transaction will commit. If, however, the Work exits with an Exception
+      or the Transaction has been marked for roll back, then the Transaction
+      will roll back. The result of the Work then flows back to the caller
+      in an appropriate way.</para>
+    </section>
+
+    <section>
+      <title>Running Scoped Work</title>
+
+      <para>The general pattern for a client is to obtain the Transaction
+      Control Service and one or more Resource Provider instances. The
+      Resource Provider(s) may come from the Service Registry, or from
+      a Factory, and are used to create Scoped Resource instances. These
+      instances can then be used in the scoped work. This is demonstrated 
+      in the following example:</para>
+
+      <programlisting id="service.transaction.control-simple-usage">
+      
+@Reference
+TransactionControl control;
+
+Connection connection;
+
+@Reference
+void setResourceProvider(JDBCConnectionProvider provider) {
+    connection = provider.getResrouce(control)
+}
+
+public void addMessage(String message) {
+    control.required(() -> {
+            PreparedStatement ps = connection.prepareStatement(
+                            "Insert into TEST_TABLE values ( ? )");
+                    ps.setString(1, message);
+                    return ps.executeUpdate();
+        });
+}
+
+public List&lt;String&gt; listMessages(String message) {
+    control.notSupported(() -> {
+            List&lt;String&gt; results = new ArrayList&lt;String&gt;();
+            ResultSet rs = connection.createStatement()
+                    .executeQuery("Select * from TEST_TABLE");
+            while(rs.next()) {
+                results.add(rs.getString(1));
+            }
+            return results;
+        });
+}
+
+      </programlisting>
+
+      <para>This example demonstrates how simply clients can execute scoped
+      work using the Transaction Control Service. In this case write
+      operations always occur in a Transactional Scope, but read operations may 
+      occur in a Transactional Scope <emphasis>or</emphasis> a No Transaction
+      Scope. In all cases the lifecycle of the underlying connection is automatically
+      managed, and there is no need to close or commit the connection.</para>
+
+    </section>
+
+    <section>
+      <title>Accessing Scoped Resources</title>
+
+      <para>The Transaction Control Service can be used to manage the Scope of
+      any piece of Work, but Scopes are primarily used to simplify resource
+      lifecycle management when using Scoped Resources. A Scoped Resource is
+      created using a Resource Provider, and the returned object can then be 
+      used in any scope to access the associated Resource.</para>
+      
+      <para>In the <xref linkend="service.transaction.control-simple-usage" /> 
+      the Resource Provider is an instance of <code>JDBCConnectionProvider</code>, 
+      which is a specialization of the generic <code>ResourceProvider</code> 
+      interface that returns JDBC <code>Connection</code> objects. Other 
+      specializations of the Resource Provider exist in this specification, 
+      and third party providers may provide their own specializations for
+      proprietary resource types.</para>
+      
+      <para>Once a Resource Provider has been obtained, a Scoped Resource
+      is created from it by passing the Transaction Control Service to the
+      <code>getResource</code> method. This returns the Scoped Resource
+      object that can then be used in Scoped Work.</para>
+    </section>
+
+    <section>
+      <title>Exception Management</title>
+
+      <para>One of the most significant sources of error in applications
+      that use transactions is caused by incorrect Exception Handling.
+      These errors are the primary reason for using a framework or 
+      container to manage transactions, rather than trying to manage
+      them in the application code.</para>
+
+      <para>Exceptions tend to be more common in code that makes use of
+      transactions because the code is usually performing actions that
+      may fail, for example making updates to a database. Also, many
+      of these exceptions (such as <code>java.sql.SQLException</code>)
+      are checked exceptions. As Scoped Work will typically raise both
+      checked and unchecked exceptions it is defined as a <code>Callable</code>.
+      As the callable interface <code>throws Exception</code> it is not 
+      necessary to catch or wrap any exception generated within Scoped Work.</para>
+
+      <programlisting>
+// An SQLException may be raised by the query, 
+// but we don't need to catch it
+control.required(() -> connection.createStatement()
+    .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
+      </programlisting>
+
+      <para>An exception indicates that a problem has occurred in a piece of
+      code therefore, by default, any exception thrown from inside a Transactional
+      Scope will cause the Transaction to roll back. This means that the Scoped Work
+      can safely ignore any updates that were made in the event of an exception.</para>
+      
+      <section>
+        <title>Handling Exceptions</title>
+        
+        <para>Scoped Work is free to throw checked or unchecked exceptions, however these 
+        exceptions cannot be directly thrown on by the Transaction Control Service. The 
+        primary reason for this is that directly rethrowing the exception would force 
+        users of the Transaction Control Service to either:</para>
+        
+        <itemizedlist>
+          <listitem>
+            Declare <code>throws Exception</code> on the calling method
+          </listitem>
+          <listitem>
+            Add <code>try/catch Exception</code> blocks around the calls to the
+            Transaction Control Service.
+          </listitem>
+        </itemizedlist>
+       
+        <para>Both of these solutions are undesirable, as they force unnecessary
+        boilerplate code, and potentially shadow real checked exceptions in the API.
+        Exceptions generated as part of Scoped Work are therefore wrapped by the 
+        Transaction Control Service in a <code>ScopedWorkException</code>. 
+        <code>ScopedWorkException</code> is an unchecked exception and so can be 
+        ignored if no special handling is required.</para>
+        
+        <para>In the case where the callers API requires the unwrapped exception 
+        type to be thrown a <code>ScopedWorkException</code> can be easily unwrapped
+        using the <code>as</code> method.</para>
+        
+        <programlisting>
+        
+try {
+    control.required(() -> connection.createStatement()
+        .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
+} catch (ScopedWorkException swe) {
+    // This line throws the cause of the ScopedWorkException as
+    // an SQLException or as a RuntimeException if appropriate
+    throw swe.as(SQLException.class);
+}        
+        
+        </programlisting>
+        
+        <para>If there is more than one potential checked Exception type that
+        should be rethrown then the <code>asOneOf</code> method can be used.</para>
+        
+        <programlisting>
+        
+try {
+    control.required(() -> connection.createStatement()
+        .executeQuery("Insert into TEST_TABLE values ( 'Hello World!' )"));
+} catch (ScopedWorkException swe) {
+    // This line throws the cause of the ScopedWorkException as
+    // an SQLException or as a RuntimeException if appropriate
+    throw swe.asOneOf(SQLRecoverableException.class, SQLTransientException.class);
+}        
+        
+        </programlisting>
+      </section>
+      
+      <section>
+        <title>Avoiding Transaction Rollback</title>
+        
+        <para>In general if a piece of Work running in a Transactional Scope
+        exits with an exception the the associated Transaction will roll back.
+        Sometimes, however, certain exception types should not cause the Transaction
+        to roll back. This can be indicated to the Transaction Control Service when 
+        the Scope is being declared.</para>
+
+        <programlisting id="service.transaction.control-no-rollback">
+        
+control.build()
+    .noRollbackFor(URISyntaxException.class)
+    .required(() -> {
+            ...
+        });    
+        
+        </programlisting>        
+        
+        <para>In the <xref linkend="service.transaction.control-no-rollback"/>
+        the Transaction does not roll back for any <code>URISyntaxException</code>.
+        Sometimes this is too coarse grained, and the Transaction should only
+        avoid rolling back for one specific exception instance. In this case
+        the instance can be passed to the Transaction Control Service
+        <code>ignoreException</code> method.</para>
+
+        <programlisting>
+        
+control.required(() -> {
+        try {    
+            // A URISynaxException from here is safe
+            ...
+        } catch (URISyntaxException e) {
+            control.ignoreException(e);
+            throw e;
+        }
+        // A URISynaxException from here is *not* safe
+        ...
+    });    
+        
+        </programlisting>        
+      </section>
+    </section>
+
+    <section>
+      <title>Multi Threading</title>
+
+      <para>By its very definition a Scope is associated with a single
+      piece of Work, and therefore a single thread. If a piece of Scoped
+      Work starts new threads, or submits tasks to other threads, then any
+      code executed on those threads will not occur within the Scope.</para>
+
+      <para>Scoped Resources are always thread-safe, and can be used
+      concurrently in different Scopes. This is true even if the underlying
+      physical resources are not thread safe. It is the responsibility of
+      the Scoped Resource implementation to ensure that the underlying
+      physical resources are protected correctly.</para>
+    </section>
+  </section>
+
+  <section xml:id="service.transaction.control-main.body">
+    <title>Transaction Control Service</title>
+    
+    <itemizedList>
+      <listitem>
+        <para><emphasis>Atomic</emphasis> - An action or group of actions that
+        must occur as a single unit, i.e. either all actions complete successfully
+        or none complete successfully.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Consistent</emphasis> - The actions that make up a 
+        Transaction must not violate any of the constraints within the resource.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Isolated</emphasis> - The actions that make up an
+        ongoing Transaction must not have any impact on other ongoing
+        Transactions, i.e. an ongoing Transaction can only see the results of
+        previously completed Transactions</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Durable</emphasis> - The result of a Transaction must be
+        persisted so that in the event of a failure the results of all committed 
+        transactions can be restored.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>ACID</emphasis> - a Transaction which has Atomic, Consistent,
+        Isolated, Durable behaviour.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>XA Transaction</emphasis> - A Transaction which uses the
+        XA two-phase commit protocol to ensure ACID guarantees across multiple
+        external Resources.</para>
+      </listitem>
+    </itemizedList>
+  </section>
+      
+  
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.xml"/>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.jdbc.xml"/>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.jpa.xml"/>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.recovery.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
