@@ -35,6 +35,10 @@ import java.lang.annotation.Target;
  * both. A type is assumed to be {@link ConsumerType} if it is not marked either
  * {@link ConsumerType} or {@link ProviderType}.
  * <p>
+ * A package can be marked {@link ProviderType}. In this case, all types in the
+ * package are considered to be a provider type regardless of whether they are
+ * marked {@link ConsumerType} or {@link ProviderType}.
+ * <p>
  * This annotation is not retained at runtime. It is for use by tools to
  * understand the semantic version of a package. When a bundle implements a
  * provider type from an imported package, then the bundle's import range for
@@ -47,7 +51,9 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({
+		ElementType.TYPE, ElementType.PACKAGE
+})
 public @interface ProviderType {
 	// marker annotation
 }

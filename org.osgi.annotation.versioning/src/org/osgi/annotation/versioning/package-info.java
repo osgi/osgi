@@ -15,15 +15,15 @@
  */
 
 /**
- * OSGi Versioning Annotations Package Version 1.0.
- *
+ * OSGi Versioning Annotations Package Version 1.1.
  * <p>
  * This package is not used at runtime.
  *
- * @see <a href="https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf"
- *      >Semantic Versioning</a>
+ * @see <a href=
+ *      "https://www.osgi.org/wp-content/uploads/SemanticVersioning1.pdf" >
+ *      Semantic Versioning</a>
  * @author $Id$
  */
-@Version("1.0")
+@Version("1.1")
 package org.osgi.annotation.versioning;
 
