@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,16 @@
  */
 
 /**
- * TODO: description
+ * Utility classes modeling the ZCL data types. Each class provides the static 
+ * instance() method for retrieving a singleton instance of the class itself.
+ * 
+ * <p>
+ * The class contains methods for getting information about the data type like 
+ * its ID and name. It is also possible to know if the data type is analog or 
+ * digital or get the java class it is mapped in.
+ * 
+ * 
+ * @see ZCLDataTypeDescription
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

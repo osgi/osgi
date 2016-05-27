@@ -24,9 +24,10 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * This interface is used for representing any of the simple ZigBee Data Types
  * defined in the ZCL.
  * 
- * The interface extends the {@link ZCLSimpleTypeDescription} by providing
- * serialize and deserialize methods permit to marshall and unmarshall the data
- * into {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.<br>
+ * <p>
+ * The interface extends the {@link ZCLDataTypeDescription} by providing
+ * serialize and deserialize methods to marshall and unmarshall the data into
+ * the {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
  * @author $Id$
  */
