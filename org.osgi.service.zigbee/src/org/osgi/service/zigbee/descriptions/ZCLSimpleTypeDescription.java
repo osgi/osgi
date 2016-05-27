@@ -29,6 +29,12 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * serialize and deserialize methods to marshal and unmarshal the data into the
  * {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
+ * <dl>
+ * Related documentation:
+ * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
+ * 2012.
+ * </dl>
+ * 
  * @author $Id$
  */
 public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
@@ -44,6 +50,7 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 * An implementation of this method must interpret (where it makes sense) a
 	 * {@code null} {@code value} as the request to serialize the so called
 	 * <em>Invalid Value</em>.
+	 * 
 	 *
 	 * @param os a {@link ZigBeeDataOutput} stream where to the passed value
 	 *        will be appended. This parameter cannot be {@code null}. If
@@ -59,7 +66,6 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 *         not belong to the expected class or its value exceeds the
 	 *         possible values allowed (range or length).
 	 * 
-	 * @see TODO: put actual ZCL spec document ref
 	 */
 
 	public void serialize(ZigBeeDataOutput os, Object value);

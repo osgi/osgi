@@ -133,7 +133,7 @@ public class APSException extends ZigBeeException {
 
 	/**
 	 * Create a {@linkplain ZCLException} containing only a description, but no
-	 * error codes. If issued on this exeption the {@link #getErrorCode()} and
+	 * error codes. If issued on this exception the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
 	 * 

@@ -42,5 +42,4 @@ public class ZCLClusterConf extends ZCLClusterImpl {
 	public ZCLAttribute[] getAttributes() {
 		return attributes;
 	}
-
 }
