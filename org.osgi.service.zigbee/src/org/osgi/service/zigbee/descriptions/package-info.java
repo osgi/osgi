@@ -15,7 +15,14 @@
  */
 
 /**
- * TODO: description
+ * This package contains definitions for a the descriptions interfaces that may
+ * be used to embed meta information about the ZigBee devices, and in other words 
+ * a meta description of each device type present in a ZCL profile, or even custom devices.
+ * 
+ * <p>
+ * It is not mandatory to provide this meta model for being able to interact with
+ * a specific device, but the presence of this meta model would make much easier 
+ * to implements, for example user interfaces.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
