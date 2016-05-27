@@ -15,7 +15,7 @@
  */
 
 /**
- * Transaction Control Service Recovery Package Version 1.0.
+ * Transaction Control JDBC Package Version 1.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -24,16 +24,16 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.transaction.control.recovery; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.transaction.control.jdbc; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.transaction.control.recovery; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.transaction.control.jdbc; version="[1.0,1.1)"}
  * 
  * @author $Id$
  */
 
 @Version("1.0.0")
-package org.osgi.service.transaction.control.recovery;
+package org.osgi.service.transaction.control.jdbc;
 
 import org.osgi.annotation.versioning.Version;
