@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
@@ -33,9 +34,9 @@ import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
@@ -63,7 +64,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Contain the ZigBee testcases.
  * 
- * @author $Id$
+ * @author $Id: 15040569ced6e2d236ca05ca3c1c4c53ea8e0aff $
  */
 public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
@@ -71,9 +72,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	public static int			HANDLER_TIMEOUT		= 3000;
 	public static int			DISCOVERY_TIMEOUT	= 3000;
 
-	ConfigurationFileReader		conf;
+	ConfigurationFileReader conf;
 
-	private String				confFilePath		= "template.xml";
+	private String confFilePath = "template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
@@ -343,6 +344,34 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			e1.printStackTrace();
 		}
 		return node;
+	}
+
+	private ZigBeeHost getZigBeeHost(BigInteger nodeIeeeAddress) {
+		ZigBeeHost host = null;
+		BundleContext bc = getContext();
+		try {
+			ServiceTracker st = new ServiceTracker(
+					bc,
+					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeHost)("
+							+ ZigBeeNode.IEEE_ADDRESS
+							+ "="
+							+ nodeIeeeAddress
+							+ "))"),
+					null);
+			st.open();
+
+			Object service = st.waitForService(HANDLER_TIMEOUT);
+			return (ZigBeeHost) service;
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (InvalidSyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return host;
 	}
 
 	/**
@@ -658,21 +687,24 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		log("DEBUG: commandId: " + commandId);
 		// assertNotNull("ZCLCommand ID is NULL", commandId);
 
-		ZCLHeader header = conf.getHeader();
-		ZCLFrame frame = new ZCLFrameImpl(header, conf.getPayload());
+		ZCLFrame frame = new TestZCLFrame(conf.getRequestHeader(),
+				conf.getRequestFullFrame());
 		try {
 			ZCLCommandHandlerImpl commandHandlerImpl = new ZCLCommandHandlerImpl();
 			cluster.invoke(frame, commandHandlerImpl);
 			commandHandlerImpl.waitForResponse(HANDLER_TIMEOUT);
 			ZCLFrame frameResponse = commandHandlerImpl.getResponse();
-			log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponse());
-
-			assertNotNull("Response is NULL", frameResponse);
-
+			log("commandHandlerImpl.getResponse(): "
+					+ commandHandlerImpl.getResponse());
+			assertTrue(
+					"the response frame is not the one expected",
+					Arrays.equals(conf.getResponseFullFrame(),
+							frameResponse.getBytes()));
 			/*
 			 * Issues some checks on the returned ZCLFrame
 			 */
 
+			assertNotNull("Response is NULL", frameResponse);
 			checkZCLFrame(frameResponse);
 
 		} catch (ZCLException e) {
@@ -1077,12 +1109,57 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	/**
-	 * Tests related to Node Discovery.
-	 */
 	public void testHost() {
 		log("---- testHost");
 
+		boolean isCoordinator = false;
+		BigInteger hostieeeAddress = conf.getZigBeeHost().getIEEEAddress();
+		ZigBeeHost host = getZigBeeHost(hostieeeAddress);
+		ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
+		host.getNodeDescriptor(handler);
+		handler.waitForResponse(HANDLER_TIMEOUT);
+		ZigBeeNodeDescriptor zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
+				.getSuccessResponse();
+		assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
+		if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
+			isCoordinator = true;
+		}
+		assertEquals("the host must be a coordinatior",
+				zigBeeNodeDescriptor.getLogicalType(),
+				ZigBeeNode.COORDINATOR);
+
+		// logical type test
+		BundleContext bc = getContext();
+		try {
+			ServiceTracker st = new ServiceTracker(
+					bc,
+
+					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode))"),
+					null);
+			st.open();
+			Object[] services = st.getServices();
+			for (int i = 0; i < services.length; i++) {
+				ZigBeeNode node = (ZigBeeNode) services[i];
+				node.getNodeDescriptor(handler);
+				handler.waitForResponse(HANDLER_TIMEOUT);
+				zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
+						.getSuccessResponse();
+				assertNotNull("the node descriptor shouldn't be null",
+						zigBeeNodeDescriptor);
+				assertNotNull("the logical type shouldn't be null", new Short(
+						zigBeeNodeDescriptor.getLogicalType()));
+				if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
+					isCoordinator = true;
+				}
+			}
+
+			// coordinator test
+			assertTrue("there must be at least one coordinatior", isCoordinator);
+
+		} catch (InvalidSyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }

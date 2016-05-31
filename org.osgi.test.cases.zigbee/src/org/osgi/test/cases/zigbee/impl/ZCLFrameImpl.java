@@ -28,24 +28,24 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * the ZigBee Device Service. It cannot be complete for ZigBee spec licensing
  * problems.
  * 
- * @author $Id$
+ * @author $Id: dac1f801159e835fbc02367d721172a588649289 $
  */
 public class ZCLFrameImpl implements ZCLFrame {
 
 	// The minimum header size of the ZCL command frame. The value is given by
 	// the configuration file.
-	public static int	minHeaderSize;
+	public static int minHeaderSize;
 
 	/**
 	 * The buffer used to store the ZCLFrame payload.
 	 */
-	protected byte[]	data		= null;
+	protected byte[] data = null;
 
-	boolean				isEmpty		= true;
+	protected boolean isEmpty = true;
 
-	int					index		= 0;
+	int index = 0;
 
-	private ZCLHeader	zclHeader	= null;
+	protected ZCLHeader zclHeader = null;
 
 	/**
 	 * Basic constructor. It creates a default ZCL Frame with the passed

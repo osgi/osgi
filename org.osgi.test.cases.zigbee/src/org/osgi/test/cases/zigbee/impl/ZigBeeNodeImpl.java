@@ -32,14 +32,14 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: cb9b76ade2c86ff56bab08cc1efc058d1dcd7d56 $
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 
-	private BigInteger					IEEEAddress;
-	private int							nwkAddress;
-	private String						hostPId;
-	private ZigBeeEndpoint[]			endpoints;
+	protected BigInteger				IEEEAddress;
+	protected int						nwkAddress;
+	protected String					hostPId;
+	protected ZigBeeEndpoint[]			endpoints;
 	protected ZigBeeNodeDescriptor		nodeDescriptor;
 	protected ZigBeePowerDescriptor		powerDescriptor;
 	protected ZigBeeComplexDescriptor	complexDescriptor;

@@ -2,7 +2,9 @@
  properly as the example below. Keep in mind that the tests will 
  fail if this file is not properly filled. -->
 <zigBeeconf discoveryTimeout="100" invokeTimeout="3000">
- <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" />
+ <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" >
+ 	<nodeDescriptor type="2"/>
+ </host>
  <nodes>
   <!-- fill the ieeeAddress userDescription and endpointNb here. No need to explicitly write all the endpoints in this xml file 
   endpointNb is the expected number of endpoints on the zigbee node for the specified ieeeAddress -->
@@ -57,8 +59,8 @@
  </nodes>
  <!-- please fill the header min size and max size with the right values -->
  <frame headerMaxSize="5" headerMinSize ="3">
- 	<payload hex="f1faf1f2f1f2f3f1f2f3f4faf1f2f1f2f3f1f2f3f4f1f2f3f4f5f1f2f3f4f5f6f1f2f3f4f5f6f7f1f2f3f4f5f6f7f805060708000000000100000000000000000000000100000000000000"></payload>
- 	<header commandId="10" isClusterSpecificCommand="true" isClientServerDirection="false" disableDefaultResponse="true" sequenceNumber="46"/>
+ 	<requestFullFrame commandId="10"  isClusterSpecificCommand= "false" isClientServerDirection="true" disableDefaultResponse="false" sequenceNumber="46" hex="34f010"/>
+ 	<responseFullFrame hex="34f010"/>	 	
  </frame>
 </zigBeeconf>
 

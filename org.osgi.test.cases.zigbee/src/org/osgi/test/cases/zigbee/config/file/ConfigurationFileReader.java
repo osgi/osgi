@@ -1,18 +1,3 @@
-/*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.osgi.test.cases.zigbee.config.file;
 
@@ -61,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * TODO Add Javadoc comment for this type.
  * 
- * @author $Id$
+ * @author $Id: 0dfc53699b779989e1c0a2d559b371834f775cd3 $
  */
 public class ConfigurationFileReader {
 
@@ -72,8 +57,9 @@ public class ConfigurationFileReader {
 	private int								headerMaxSize	= 1;
 	private int								discoveryTimeout;
 	private int								invokeTimeout;
-	private byte[]							payload;
-	private ZCLHeader						header;
+	private byte[]							requestFullFrame;
+	private ZCLHeader						requestHeader;
+	private byte[]							responseFullFrame;
 	private ZCLAttribute					firstAttributeWithBooleanDatatype;
 
 	private ConfigurationFileReader(String pathFile) {
@@ -113,9 +99,11 @@ public class ConfigurationFileReader {
 	}
 
 	private void getGeneralParameters(Document doc) {
-		discoveryTimeout = Integer.parseInt(doc.getDocumentElement().getAttribute("discoveryTimeout"));
+		discoveryTimeout = Integer.parseInt(doc.getDocumentElement()
+				.getAttribute("discoveryTimeout"));
 
-		invokeTimeout = Integer.parseInt(doc.getDocumentElement().getAttribute("invokeTimeout"));
+		invokeTimeout = Integer.parseInt(doc.getDocumentElement().getAttribute(
+				"invokeTimeout"));
 
 	}
 
@@ -128,55 +116,41 @@ public class ConfigurationFileReader {
 			String minSize = frameElement.getAttribute("headerMinSize");
 			headerMaxSize = Integer.parseInt(maxSize);
 			headerMinSize = Integer.parseInt(minSize);
-			nList = doc.getElementsByTagName("payload");
+			nList = doc.getElementsByTagName("requestFullFrame");
 			node = nList.item(0);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element payloadElement = (Element) node;
-				String payloadString = payloadElement.getAttribute("hex");
-				payload = hexStringToByteArray(payloadString);
-				// System.out.println(payload);
-				//
-				// byte[] payloadTest1 = new byte[] { (byte) 0xf1, (byte) 0xfa,
-				// (byte) 0xf1, (byte) 0xf2, (byte) 0xf1, (byte) 0xf2,
-				// (byte) 0xf3, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3,
-				// (byte) 0xf4, (byte) 0xfa, (byte) 0xf1, (byte) 0xf2,
-				// (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf1,
-				// (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf1,
-				// (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5,
-				// (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
-				// (byte) 0xf5, (byte) 0xf6, (byte) 0xf1, (byte) 0xf2,
-				// (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6,
-				// (byte) 0xf7, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3,
-				// (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf7,
-				// (byte) 0xf8, 0x05, 0x06, 0x07, 0x08, 0x00, (byte) 0x00,
-				// (byte) 0x00, 0x00, (byte) 0x01, 0x00, 0x00, 0x00, 0x00,
-				// 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
-				// 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-				// boolean isEquals = Arrays.equals(payloadTest1,
-				// hexStringToByteArray(payloadString));
-				// System.out.println(isEquals);
-			}
-			nList = doc.getElementsByTagName("header");
-			node = nList.item(0);
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element headerdElement = (Element) node;
-				String payloadString = headerdElement.getAttribute("hex");
-				int commandId = Integer.parseInt(headerdElement.getAttribute("commandId"));
+				Element requestFullFrameElement = (Element) node;
+				String payloadString = requestFullFrameElement
+						.getAttribute("hex");
+				requestFullFrame = hexStringToByteArray(payloadString);
+				int commandId = Integer.parseInt(requestFullFrameElement
+						.getAttribute("commandId"));
 				boolean isClusterSpecificCommand = Boolean
-						.getBoolean(headerdElement.getAttribute("isClusterSpecificCommand"));
+						.getBoolean(requestFullFrameElement
+								.getAttribute("isClusterSpecificCommand"));
 				boolean isClientServerDirection = Boolean
-						.getBoolean(headerdElement.getAttribute("isClientServerDirection"));
+						.getBoolean(requestFullFrameElement
+								.getAttribute("isClientServerDirection"));
 				boolean disableDefaultResponse = Boolean
-						.getBoolean(headerdElement.getAttribute("disableDefaultResponse"));
-				byte sequenceNumber = Byte.parseByte(headerdElement.getAttribute("sequenceNumber"));
-				header = new ZCLHeaderImpl(commandId,
+						.getBoolean(requestFullFrameElement
+								.getAttribute("false"));
+				byte sequenceNumber = Byte.parseByte(requestFullFrameElement
+						.getAttribute("sequenceNumber"));
+				requestHeader = new ZCLHeaderImpl(commandId,
 						isClusterSpecificCommand,
 						isClientServerDirection,
 						disableDefaultResponse,
 						sequenceNumber);
+
+			}
+			nList = doc.getElementsByTagName("responseFullFrame");
+			node = nList.item(0);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element headerdElement = (Element) node;
+				String payloadString = headerdElement.getAttribute("hex");
+				responseFullFrame = hexStringToByteArray(payloadString);
 			}
 		}
-
 	}
 
 	/**
@@ -205,12 +179,16 @@ public class ConfigurationFileReader {
 		return invokeTimeout;
 	}
 
-	public byte[] getPayload() {
-		return payload;
+	public byte[] getRequestFullFrame() {
+		return requestFullFrame;
 	}
 
-	public ZCLHeader getHeader() {
-		return header;
+	public ZCLHeader getRequestHeader() {
+		return requestHeader;
+	}
+
+	public byte[] getResponseFullFrame() {
+		return responseFullFrame;
 	}
 
 	public ZCLAttribute getFirstAttributeWithBooleanDatatype() {
@@ -263,31 +241,41 @@ public class ConfigurationFileReader {
 					Element nodeElement = (Element) node;
 					// get host infos
 					String hostPId = nodeElement.getAttribute("hostPid");
-					String ieeeAddress = nodeElement.getAttribute("ieeeAddress");
-					String userDescription = nodeElement.getAttribute("userDescription");
+					String ieeeAddress = nodeElement
+							.getAttribute("ieeeAddress");
+					String userDescription = nodeElement
+							.getAttribute("userDescription");
 					String endpointNb = nodeElement.getAttribute("endpointNb");
 					String nwkAddress = nodeElement.getAttribute("nwkAddress");
 
-					NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
+					NodeList enpointsList = nodeElement
+							.getElementsByTagName("endpoints");
 					Node endpoints = enpointsList.item(0);
-					if (endpoints != null && endpoints.getNodeType() == Node.ELEMENT_NODE) {
+					if (endpoints != null
+							&& endpoints.getNodeType() == Node.ELEMENT_NODE) {
 						Element endpointsElement = (Element) endpoints;
-						NodeList enpointList = endpointsElement.getElementsByTagName("endpoint");
+						NodeList enpointList = endpointsElement
+								.getElementsByTagName("endpoint");
 
 						int endpointsLength = enpointList.getLength();
 						ZEnpoints = new ZigBeeEndpoint[endpointsLength];
 						for (int j = 0; j < endpointsLength; j++) {
 							Node enpointNode = enpointList.item(j);
-							if (enpointNode != null && enpointNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (enpointNode != null
+									&& enpointNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element enpointElement = (Element) enpointNode;
-								String endpointId = enpointElement.getAttribute("id");
-								NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
+								String endpointId = enpointElement
+										.getAttribute("id");
+								NodeList serverClusters = enpointElement
+										.getElementsByTagName("serverClusters");
 								ZCLCluster[] clusters = getServerClusters(serverClusters);
 
-								NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
+								NodeList clientClustersNodes = enpointElement
+										.getElementsByTagName("clientClusters");
 								ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
 								ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-								ZEnpoints[i] = new ZigBeeEndpointConf(Short.parseShort(endpointId),
+								ZEnpoints[i] = new ZigBeeEndpointConf(
+										Short.parseShort(endpointId),
 										clusters,
 										clientClusters,
 										desc);
@@ -319,12 +307,21 @@ public class ConfigurationFileReader {
 			Element nodeDescElt = (Element) nodeDesc;
 			short type = Short.parseShort(nodeDescElt.getAttribute("type"));
 			short band = Short.parseShort(nodeDescElt.getAttribute("band"));
-			Integer manufCode = new Integer(nodeDescElt.getAttribute("manufCode"));
-			int maxBufSize = Integer.parseInt(nodeDescElt.getAttribute("maxBufSize"));
-			boolean isComplexAv = new Boolean(nodeDescElt.getAttribute("isComplexAv")).booleanValue();
-			boolean isUserAv = new Boolean(nodeDescElt.getAttribute("isUserAv")).booleanValue();
+			Integer manufCode = new Integer(
+					nodeDescElt.getAttribute("manufCode"));
+			int maxBufSize = Integer.parseInt(nodeDescElt
+					.getAttribute("maxBufSize"));
+			boolean isComplexAv = new Boolean(
+					nodeDescElt.getAttribute("isComplexAv")).booleanValue();
+			boolean isUserAv = new Boolean(nodeDescElt.getAttribute("isUserAv"))
+					.booleanValue();
 
-			result = new ZigBeeNodeDescriptorImpl(type, band, manufCode, maxBufSize, isComplexAv, isUserAv);
+			result = new ZigBeeNodeDescriptorImpl(type,
+					band,
+					manufCode,
+					maxBufSize,
+					isComplexAv,
+					isUserAv);
 		}
 		return result;
 	}
@@ -337,13 +334,20 @@ public class ConfigurationFileReader {
 		if (nodeDesc != null && nodeDesc.getNodeType() == Node.ELEMENT_NODE) {
 			Element powerDescElt = (Element) nodeDesc;
 
-			short powerMode = Short.parseShort(powerDescElt.getAttribute("powerMode"));
-			short powerSource = Short.parseShort(powerDescElt.getAttribute("powerSource"));
-			short powerSourceLevel = Short.parseShort(powerDescElt.getAttribute("powerSourceLevel"));
+			short powerMode = Short.parseShort(powerDescElt
+					.getAttribute("powerMode"));
+			short powerSource = Short.parseShort(powerDescElt
+					.getAttribute("powerSource"));
+			short powerSourceLevel = Short.parseShort(powerDescElt
+					.getAttribute("powerSourceLevel"));
 
-			boolean isconstant = new Boolean(powerDescElt.getAttribute("isconstant")).booleanValue();
+			boolean isconstant = new Boolean(
+					powerDescElt.getAttribute("isconstant")).booleanValue();
 
-			result = new ZigBeePowerDescriptorImpl(powerMode, powerSource, powerSourceLevel, isconstant);
+			result = new ZigBeePowerDescriptorImpl(powerMode,
+					powerSource,
+					powerSourceLevel,
+					isconstant);
 		}
 		return result;
 	}
@@ -354,7 +358,8 @@ public class ConfigurationFileReader {
 		ZCLCluster[] result = null;
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 			Element serverClustersElement = (Element) node;
-			NodeList clusterList = serverClustersElement.getElementsByTagName("cluster");
+			NodeList clusterList = serverClustersElement
+					.getElementsByTagName("cluster");
 
 			int clusterLength = clusterList.getLength();
 			result = new ZCLCluster[clusterLength];
@@ -365,38 +370,51 @@ public class ConfigurationFileReader {
 				ZCLAttribute[] attributes = null;
 
 				Node clusterNode = clusterList.item(i);
-				if (clusterNode != null && node.getNodeType() == Node.ELEMENT_NODE) {
+				if (clusterNode != null
+						&& node.getNodeType() == Node.ELEMENT_NODE) {
 					Element clusterElement = (Element) clusterNode;
 					String clusterId = clusterElement.getAttribute("id");
 
 					// get serverGlobalDescription
-					NodeList globalDescList = clusterElement.getElementsByTagName("globalServerDescription");
+					NodeList globalDescList = clusterElement
+							.getElementsByTagName("globalServerDescription");
 					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null && globalDesc.getNodeType() == Node.ELEMENT_NODE) {
+					if (globalDesc != null
+							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
 						Element desc = (Element) globalDesc;
 						String id = desc.getAttribute("id");
 						String name = desc.getAttribute("name");
 						String domain = desc.getAttribute("domain");
 						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(
-								new Integer(id).intValue(), name, domain, null, null);
-						serverClusterDescription = new ZCLClusterDescriptionImpl(new Integer(clusterId).intValue(),
+								new Integer(id).intValue(),
+								name,
+								domain,
+								null,
+								null);
+						serverClusterDescription = new ZCLClusterDescriptionImpl(
+								new Integer(clusterId).intValue(),
 								ZCLGlobalDesc);
 					}
 
 					// get command ids
-					NodeList commandIdsList = clusterElement.getElementsByTagName("commandIds");
+					NodeList commandIdsList = clusterElement
+							.getElementsByTagName("commandIds");
 					Node commandIds = commandIdsList.item(0);
-					if (commandIds != null && commandIds.getNodeType() == Node.ELEMENT_NODE) {
+					if (commandIds != null
+							&& commandIds.getNodeType() == Node.ELEMENT_NODE) {
 						Element commandIdsElt = (Element) commandIds;
-						NodeList idlist = commandIdsElt.getElementsByTagName("id");
+						NodeList idlist = commandIdsElt
+								.getElementsByTagName("id");
 
 						int length = idlist.getLength();
 						ids = new int[length];
 						for (int j = 0; j < length; j++) {
 							Node commandId = idlist.item(j);
-							if (commandId != null && commandId.getNodeType() == Node.ELEMENT_NODE) {
+							if (commandId != null
+									&& commandId.getNodeType() == Node.ELEMENT_NODE) {
 								Element commandIdElt = (Element) commandId;
-								String idString = commandIdElt.getAttribute("id");
+								String idString = commandIdElt
+										.getAttribute("id");
 								ids[j] = new Integer(idString).intValue();
 							}
 						}
@@ -405,16 +423,19 @@ public class ConfigurationFileReader {
 					// get attributes
 					clusterElement.getElementsByTagName("attributes");
 					Node nodeAttributes = serverClusters.item(0);
-					if (nodeAttributes != null && nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
+					if (nodeAttributes != null
+							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
 						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement.getElementsByTagName("attribute");
+						NodeList attributeList = attributesElement
+								.getElementsByTagName("attribute");
 
 						int length = attributeList.getLength();
 						attributes = new ZCLAttribute[length];
 
 						for (int k = 0; k < length; k++) {
 							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null && attributeNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (attributeNode != null
+									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element attributeElement = (Element) attributeNode;
 								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
 								attributes[k] = ZCLAttr;
@@ -422,7 +443,9 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids, attributes, serverClusterDescription);
+				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
+						attributes,
+						serverClusterDescription);
 				result[i] = clusterImpl;
 			}
 		}
@@ -433,24 +456,33 @@ public class ConfigurationFileReader {
 	private ZCLAttribute getZCLAttribute(Element attrElt) {
 		ZCLAttribute attr = null;
 
-		NodeList attrList = attrElt.getElementsByTagName("attributeDescription");
+		NodeList attrList = attrElt
+				.getElementsByTagName("attributeDescription");
 		Node attributeDescriptionNode = attrList.item(0);
-		if (attributeDescriptionNode != null && attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
+		if (attributeDescriptionNode != null
+				&& attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element attrDescriptionsElement = (Element) attributeDescriptionNode;
 			String id = attrDescriptionsElement.getAttribute("id");
-			String isReadOnly = attrDescriptionsElement.getAttribute("isReadOnly");
-			String defaultValue = attrDescriptionsElement.getAttribute("defaultValue");
+			String isReadOnly = attrDescriptionsElement
+					.getAttribute("isReadOnly");
+			String defaultValue = attrDescriptionsElement
+					.getAttribute("defaultValue");
 			String name = attrDescriptionsElement.getAttribute("name");
-			String isMandatory = attrDescriptionsElement.getAttribute("isMandatory");
-			String isReportable = attrDescriptionsElement.getAttribute("isReportable");
+			String isMandatory = attrDescriptionsElement
+					.getAttribute("isMandatory");
+			String isReportable = attrDescriptionsElement
+					.getAttribute("isReportable");
 			String datatype = attrDescriptionsElement.getAttribute("dataType");
 			Class cls;
 			try {
-				cls = Class.forName("org.osgi.service.zigbee.types." + datatype);
+				cls = Class
+						.forName("org.osgi.service.zigbee.types." + datatype);
 				Class[] classes = {};
 				Method method = cls.getMethod("getInstance", classes);
-				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method.invoke(null, null);
-				ZCLAttributeDescriptionImpl attrDescImpl = new ZCLAttributeDescriptionImpl(new Integer(id).intValue(),
+				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method
+						.invoke(null, null);
+				ZCLAttributeDescriptionImpl attrDescImpl = new ZCLAttributeDescriptionImpl(
+						new Integer(id).intValue(),
 						new Boolean(isReadOnly).booleanValue(),
 						defaultValue,
 						name,
@@ -486,16 +518,19 @@ public class ConfigurationFileReader {
 		// List clientClusterList = new ArrayList();
 
 		ZigBeeSimpleDescriptorImpl result = null;
-		NodeList endpointDescList = endPoint.getElementsByTagName("simpleDescriptor");
+		NodeList endpointDescList = endPoint
+				.getElementsByTagName("simpleDescriptor");
 		Node descriptorNode = endpointDescList.item(0);
-		if (descriptorNode != null && descriptorNode.getNodeType() == Node.ELEMENT_NODE) {
+		if (descriptorNode != null
+				&& descriptorNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element descElt = (Element) descriptorNode;
 			String deviceId = descElt.getAttribute("deviceId");
 			String version = descElt.getAttribute("version");
 			String profileId = descElt.getAttribute("profileId");
 			String nbServerCluster = descElt.getAttribute("nbServerCluster");
 			String nbClientCluster = descElt.getAttribute("nbClientCluster");
-			result = new ZigBeeSimpleDescriptorImpl(new Integer(deviceId).intValue(),
+			result = new ZigBeeSimpleDescriptorImpl(
+					new Integer(deviceId).intValue(),
 					Byte.parseByte(version),
 					new Integer(profileId).intValue());
 			result.setInputClusters(new int[Integer.parseInt(nbServerCluster)]);
@@ -510,7 +545,8 @@ public class ConfigurationFileReader {
 		ZCLCluster[] result = null;
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 			Element serverClustersElement = (Element) node;
-			NodeList clusterList = serverClustersElement.getElementsByTagName("cluster");
+			NodeList clusterList = serverClustersElement
+					.getElementsByTagName("cluster");
 
 			int clusterLength = clusterList.getLength();
 			result = new ZCLCluster[clusterLength];
@@ -521,37 +557,48 @@ public class ConfigurationFileReader {
 				ZCLAttribute[] attributes = null;
 
 				Node clusterNode = clusterList.item(i);
-				if (clusterNode != null && node.getNodeType() == Node.ELEMENT_NODE) {
+				if (clusterNode != null
+						&& node.getNodeType() == Node.ELEMENT_NODE) {
 					Element clusterElement = (Element) clusterNode;
 					String clusterId = clusterElement.getAttribute("id");
 
 					// get serverGlobalDescription
-					NodeList globalDescList = clusterElement.getElementsByTagName("globalServerDescription");
+					NodeList globalDescList = clusterElement
+							.getElementsByTagName("globalServerDescription");
 					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null && globalDesc.getNodeType() == Node.ELEMENT_NODE) {
+					if (globalDesc != null
+							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
 						Element desc = (Element) globalDesc;
 						String id = desc.getAttribute("id");
 						String name = desc.getAttribute("name");
 						String domain = desc.getAttribute("domain");
 						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(
-								new Integer(id).intValue(), name, domain, null, null);
-						serverClusterDescription = new ZCLClusterDescriptionImpl(new Integer(clusterId).intValue(),
+								new Integer(id).intValue(),
+								name,
+								domain,
+								null,
+								null);
+						serverClusterDescription = new ZCLClusterDescriptionImpl(
+								new Integer(clusterId).intValue(),
 								ZCLGlobalDesc);
 					}
 
 					// get attributes
 					clusterElement.getElementsByTagName("attributes");
 					Node nodeAttributes = clientClusters.item(0);
-					if (nodeAttributes != null && nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
+					if (nodeAttributes != null
+							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
 						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement.getElementsByTagName("attribute");
+						NodeList attributeList = attributesElement
+								.getElementsByTagName("attribute");
 
 						int length = attributeList.getLength();
 						attributes = new ZCLAttribute[length];
 
 						for (int k = 0; k < length; k++) {
 							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null && attributeNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (attributeNode != null
+									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element attributeElement = (Element) node;
 								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
 								attributes[k] = ZCLAttr;
@@ -559,7 +606,9 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids, attributes, serverClusterDescription);
+				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
+						attributes,
+						serverClusterDescription);
 				result[i] = clusterImpl;
 			}
 		}
@@ -571,7 +620,8 @@ public class ConfigurationFileReader {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
+					.digit(s.charAt(i + 1), 16));
 		}
 		return data;
 	}

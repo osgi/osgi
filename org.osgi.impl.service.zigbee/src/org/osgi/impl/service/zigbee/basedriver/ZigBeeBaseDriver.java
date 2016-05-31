@@ -39,7 +39,7 @@ import org.osgi.test.support.step.TestStep;
 /**
  * Mocked impl of ZigBeeDeviceNodeListener.
  * 
- * @author $Id$
+ * @author $Id: bf64dce5e65d559684e4f5ed5aae16f1a90f967a $
  */
 public class ZigBeeBaseDriver implements ZCLEventListener {
 
@@ -104,7 +104,9 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 
 		// register host
 		ZigBeeHost host = conf.getZigBeeHost();
-		bc.registerService(ZigBeeHost.class.getName(), host, null);
+		Dictionary hostProperties = new Properties();
+		hostProperties.put(ZigBeeNode.IEEE_ADDRESS, host.getIEEEAddress());
+		bc.registerService(ZigBeeHost.class.getName(), host, hostProperties);
 
 		// register endpoints
 		for (int i = 0; i < conf.nodes.length; i++) {
