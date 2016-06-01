@@ -1976,9 +1976,9 @@ ConfigurationPermission[?application,<xref
     <section>
       <title>Event Admin Service and Configuration Change Events</title>
 
-      <para>Configuration events must be delivered asynchronously by the
-      Configuration Admin implementation, if present. The topic of a
-      configuration event must be:</para>
+      <para>Configuration events must be delivered asynchronously via the
+      Event Admin service, if present. The topic of a configuration event must
+      be:</para>
 
       <programlisting>org/osgi/service/cm/ConfigurationEvent/&lt;eventtype&gt;</programlisting>
 
