@@ -42,12 +42,16 @@ public class ZigBeeException extends RuntimeException {
 	public static final int		UNKNOWN_ERROR		= -1;
 
 	/**
-	 * TODO
+	 * The error code associated to this exception
+	 * 
+	 * @see #getErrorCode()
 	 */
 	protected final int			errorCode;
 
 	/**
-	 * TODO
+	 * The actual error code returned by the ZigBee node.
+	 * 
+	 * @see ZigBeeException#getZigBeeErrorCode()
 	 */
 	protected final int			zigBeeErrorCode;
 

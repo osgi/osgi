@@ -478,7 +478,7 @@ public class ZigBeeDataTypes {
 					case ZigBeeDataTypes.BAG :
 					case ZigBeeDataTypes.SET :
 					case ZigBeeDataTypes.STRUCTURE :
-						// TODO
+						// FIXME: implement this
 						break;
 
 					case ZigBeeDataTypes.TIME_OF_DAY :
@@ -673,7 +673,7 @@ public class ZigBeeDataTypes {
 				case ZigBeeDataTypes.BAG :
 				case ZigBeeDataTypes.SET :
 				case ZigBeeDataTypes.STRUCTURE :
-					// TODO
+					// FIXME: implement this
 					break;
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
@@ -699,8 +699,6 @@ public class ZigBeeDataTypes {
 
 				case ZigBeeDataTypes.UTC_TIME : {
 					Date d = (Date) value;
-					// TODO: the following value is a constant!
-
 					long utc = d.getTime() - zigBeeTimeZero;
 					os.writeInt((int) utc, 4);
 					return;
@@ -722,9 +720,6 @@ public class ZigBeeDataTypes {
 					os.writeBytes(array, array.length);
 					return;
 				}
-
-				default :
-					break;
 			}
 		}
 
@@ -871,15 +866,11 @@ public class ZigBeeDataTypes {
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_64 : {
 				long l = is.readLong(8) & 0xffffffffffffffffL;
-				// BigInteger a = BigInteger.valueOf(l);
-				// a.and(BigInteger.valueOf(0xffffffffffffffffL));
 				if (l == 0xffffffffffffffffL) {
 					return null;
 				}
-				// FIXME find a better way for doing this!!!
 				BigInteger bl = BigInteger.valueOf(l & 0xffffffffL);
 				BigInteger bh = BigInteger.valueOf(l >>> 32).shiftLeft(32);
-
 				BigInteger bi = bh.or(bl);
 
 				return bi;
@@ -1005,13 +996,19 @@ public class ZigBeeDataTypes {
 
 			case ZigBeeDataTypes.FLOATING_SEMI : {
 				float f = is.readFloat(2);
+				/*
+				 * this is the right way to compare d with NaN. The == operator
+				 * doesn't seem to work!
+				 */
+				if (Float.compare(f, Float.NaN) == 0) {
+					return null;
+				}
 				return new Float(f);
 			}
 
 			case ZigBeeDataTypes.FLOATING_SINGLE : {
 				float f = is.readFloat(4);
-				// this is the right way to compare d with NaN. The == operator
-				// doesn't seem to work!
+
 				if (Float.compare(f, Float.NaN) == 0) {
 					return null;
 				}
@@ -1020,8 +1017,10 @@ public class ZigBeeDataTypes {
 
 			case ZigBeeDataTypes.FLOATING_DOUBLE : {
 				double d = is.readDouble();
-				// this is the right way to compare d with NaN. The == operator
-				// doesn't seem to work!
+				/*
+				 * this is the right way to compare d with NaN. The == operator
+				 * doesn't seem to work!
+				 */
 				if (Double.compare(d, Double.NaN) == 0) {
 					return null;
 				}
@@ -1032,20 +1031,17 @@ public class ZigBeeDataTypes {
 			case ZigBeeDataTypes.BAG :
 			case ZigBeeDataTypes.SET :
 			case ZigBeeDataTypes.STRUCTURE :
-				// TODO
+				// FIXME: implement this
 				break;
 
 			case ZigBeeDataTypes.TIME_OF_DAY : {
-				int value = is.readInt(4);
-				if (value == -1) {
+				byte[] value = is.readBytes(4);
+				if (value[0] == 0xff && value[1] == 0xff && value[3] == 0xff && value[4] == 0xff) {
+					// checks for invalid value
 					return null;
 				}
-
-				// FIXSPEC: it is not clear whether or not we have to
-				// map to Date. On marshalling is OK but when we unmarshall
-				// we need to convert the content in an actual date
-				// this is not the meaning of this datatype.
-				return new Date();
+				swap(value);
+				return value;
 			}
 
 			case ZigBeeDataTypes.DATE : {
@@ -1073,10 +1069,6 @@ public class ZigBeeDataTypes {
 			}
 
 			case ZigBeeDataTypes.IEEE_ADDRESS : {
-				// FIXME: attention who is in charge of swapping bytes? Now we
-				// are doing that here or we can add a readBytesSwapped() method
-				// in IS.
-
 				byte[] array = is.readBytes(8);
 				swap(array);
 				BigInteger invalidValue = new BigInteger("-1");
@@ -1092,9 +1084,6 @@ public class ZigBeeDataTypes {
 				swap(array);
 				return array;
 			}
-
-			default :
-				break;
 		}
 
 		throw new IllegalArgumentException();
