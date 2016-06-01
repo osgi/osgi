@@ -134,25 +134,25 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
 configure(tasks.getByPath('core.xml')) {
   [javadoc, xmlns].each {
     dependsOn it
-    inputs.files it.outputs.files
+    inputs.files it
   }
 }
 configure(tasks.getByPath('cmpn.xml')) {
   [javadoc, xmlns].each {
     dependsOn it
-    inputs.files it.outputs.files
+    inputs.files it
   }
 }
 configure(tasks.getByPath('enterprise.xml')) {
   [javadoc, xmlns].each {
     dependsOn it
-    inputs.files it.outputs.files
+    inputs.files it
   }
 }
 configure(tasks.getByPath('residential.xml')) {
   [javadoc, xmlns, rdmtsummary].each {
     dependsOn it
-    inputs.files it.outputs.files
+    inputs.files it
   }
 }
 
@@ -166,8 +166,9 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
       dependsOn booktask
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
+      ext.baselinexml = file("baseline/${book}.xml")
       ext.bookxml = new File(destinationDir, taskName)
-      inputs.files stylesheet, booktask.bookxml
+      inputs.files stylesheet, baselinexml, booktask
       outputs.file bookxml
       doFirst {
         project.mkdir(destinationDir)
@@ -182,7 +183,7 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
           args '--verbose'
           args '1'
           args '--words'
-          args file("baseline/${book}.xml")
+          args baselinexml
           args booktask.bookxml
           args tmpxml
         }.assertNormalExitValue()
@@ -209,7 +210,7 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
       ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
       ext.bookfo = new File(destinationDir, taskName)
       ext.watermark = 'docbook/graphics/draft.svg'
-      inputs.files stylesheet, booktask.bookxml
+      inputs.files stylesheet, booktask
       outputs.file bookfo
       doFirst {
         project.mkdir(destinationDir)
@@ -241,7 +242,7 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       def fontbasedir = file('fonts')
       def fopxconf = file('docbook/fop/fop-osgi.xconf')
       def log4jprops = file('docbook/fop/log4j.properties')
-      inputs.files fopxconf, log4jprops, fotask.bookfo, fileTree('dir': 'docbook', 'include': '**/*.svg')
+      inputs.files fopxconf, log4jprops, fotask, fileTree('dir': 'docbook', 'include': '**/*.svg')
       inputs.dir fontbasedir
       outputs.file bookpdf
       doFirst {
