@@ -19,9 +19,7 @@ package org.osgi.service.zigbee;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents a ZCLAttribute
- * 
- * TODO: documentation
+ * This interface represents ZCLAttribute information.
  * 
  * @author $Id$
  */

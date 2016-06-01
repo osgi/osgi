@@ -19,7 +19,7 @@ package org.osgi.service.zigbee.descriptors;
 /**
  * 
  *
- * TODO Add Javadoc comment for this type.
+ * This interface represents a frequency band.
  * 
  * @author $Id$
  */

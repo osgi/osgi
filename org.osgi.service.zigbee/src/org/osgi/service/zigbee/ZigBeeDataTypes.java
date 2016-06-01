@@ -478,8 +478,7 @@ public class ZigBeeDataTypes {
 					case ZigBeeDataTypes.BAG :
 					case ZigBeeDataTypes.SET :
 					case ZigBeeDataTypes.STRUCTURE :
-						// FIXME: implement this
-						break;
+						throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be serialized with this generic class.");
 
 					case ZigBeeDataTypes.TIME_OF_DAY :
 					case ZigBeeDataTypes.DATE :
@@ -673,8 +672,7 @@ public class ZigBeeDataTypes {
 				case ZigBeeDataTypes.BAG :
 				case ZigBeeDataTypes.SET :
 				case ZigBeeDataTypes.STRUCTURE :
-					// FIXME: implement this
-					break;
+					throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be serialized with this generic class.");
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
 					Date d = (Date) value;
@@ -997,8 +995,7 @@ public class ZigBeeDataTypes {
 			case ZigBeeDataTypes.FLOATING_SEMI : {
 				float f = is.readFloat(2);
 				/*
-				 * this is the right way to compare d with NaN. The == operator
-				 * doesn't seem to work!
+				 * this is the right way to compare d with NaN.
 				 */
 				if (Float.compare(f, Float.NaN) == 0) {
 					return null;
@@ -1018,8 +1015,7 @@ public class ZigBeeDataTypes {
 			case ZigBeeDataTypes.FLOATING_DOUBLE : {
 				double d = is.readDouble();
 				/*
-				 * this is the right way to compare d with NaN. The == operator
-				 * doesn't seem to work!
+				 * this is the right way to compare d with NaN.
 				 */
 				if (Double.compare(d, Double.NaN) == 0) {
 					return null;
@@ -1031,8 +1027,7 @@ public class ZigBeeDataTypes {
 			case ZigBeeDataTypes.BAG :
 			case ZigBeeDataTypes.SET :
 			case ZigBeeDataTypes.STRUCTURE :
-				// FIXME: implement this
-				break;
+				throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be deserialized with this generic class.");
 
 			case ZigBeeDataTypes.TIME_OF_DAY : {
 				byte[] value = is.readBytes(4);
