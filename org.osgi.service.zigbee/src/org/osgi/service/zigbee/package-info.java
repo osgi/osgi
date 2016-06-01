@@ -26,7 +26,7 @@
  * 
  * <p>
  * {@code ZigBeeEndpoint} interface provides the
- * {@link ZigBeeEndpoint.getServerCluster(serverClusterId) } method to get an
+ * {@link ZigBeeEndpoint#getServerCluster(serverClusterId) } method to get an
  * interface reference to a ZCLCluster object.
  * 
  * <p>

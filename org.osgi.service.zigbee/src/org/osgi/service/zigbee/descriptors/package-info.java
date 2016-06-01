@@ -22,8 +22,8 @@
  * An interface for modeling the ZigBee User Descriptor is missing because this
  * descriptor has only one field (the UserDescription). Therefore this field can
  * be read and written using respectively the
- * {@link ZigBeeNode.getUserDescription()} and the
- * {@link ZigBeeNode.setUserDescription()} methods.
+ * {@link ZigBeeNode#getUserDescription()} and the
+ * {@link ZigBeeNode#setUserDescription()} methods.
  * 
  * <p>
  * The {@code ZigBeeNodeDescriptor}, {@code ZigBeePowerDescriptor} and the
