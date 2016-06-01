@@ -15,20 +15,22 @@
  */
 
 /**
- * This package contains the interfaces representing the ZigBee descriptors 
- * and the fields defined inside some of them.
+ * This package contains the interfaces representing the ZigBee descriptors and
+ * the fields defined inside some of them.
  * 
  * <p>
- * An interface for modeling the ZigBee User Descriptor is missing because 
- * this descriptor has only one field (the UserDescription). Therefore this field 
- * can be read and written using respectively the {@link ZigBeeNode.getUserDescription()} 
- * and the {@link ZigBeeNode.setUserDescription()} methods.
+ * An interface for modeling the ZigBee User Descriptor is missing because this
+ * descriptor has only one field (the UserDescription). Therefore this field can
+ * be read and written using respectively the
+ * {@link ZigBeeNode.getUserDescription()} and the
+ * {@link ZigBeeNode.setUserDescription()} methods.
  * 
  * <p>
- * The {@code ZigBeeNodeDescriptor}, {@code ZigBeePowerDescriptor} and the {@codeZigBeeComplexDescriptor}
- * be read using the appropriate methods in the {@link ZigBeeNode} interface, whereas 
- * the ZigBeeSimpleDescriptor can be read using the appropriate method of the {@link ZigBeeEndPoint} 
- * services registered in the framework.
+ * The {@code ZigBeeNodeDescriptor}, {@code ZigBeePowerDescriptor} and the
+ * {@code ZigBeeComplexDescriptor} are read using the appropriate methods in the
+ * {@link ZigBeeNode} interface, whereas the ZigBeeSimpleDescriptor can be read
+ * using the appropriate method of the {@link ZigBeeEndpoint} services
+ * registered in the framework.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

@@ -15,30 +15,35 @@
  */
 
 /**
- * This is the main package of this specification. It defines the interfaces 
- * that models the ZigBee concepts, like the ZigBee node and the ZigBee endpoint.
+ * This is the main package of this specification. It defines the interfaces
+ * that models the ZigBee concepts, like the ZigBee node and the ZigBee
+ * endpoint.
  * 
- * <p> 
- * Each time a new ZigBee node is discovered, the driver will register a 
- * {@link ZigBeeNode} service and then one {@link ZigBeeEndPoint} service for 
+ * <p>
+ * Each time a new ZigBee node is discovered, the driver will register a
+ * {@link ZigBeeNode} service and then one {@link ZigBeeEndpoint} service for
  * each ZigBee endpoint discovered on the node.
  * 
- * <p> 
- * the {@code ZigBeeEndpoint} interface provides the {@link ZigBeeEndpoint.getServerCluster(serverClusterId) }
- * method to get an interface reference to a ZCLCluster object.
+ * <p>
+ * {@code ZigBeeEndpoint} interface provides the
+ * {@link ZigBeeEndpoint.getServerCluster(serverClusterId) } method to get an
+ * interface reference to a ZCLCluster object.
  * 
  * <p>
- * The ZCLCluster interface contains methods that directly maps to the ZCL profile-wide commands, like
- * the Read Attributes and Write Attributes and, of course allow the developer to force its own commands
- * and send them through the invoke() methods.
+ * {@code ZCLCluster} interface contains methods that directly maps to the ZCL
+ * profile-wide commands, like Read Attributes and Write Attributes, and allow
+ * the developer to forge its own commands and send them through the invoke()
+ * methods.
  * 
  * <p>
- * ZCL Attribute reportings are configured, registering a {@link ZigBeeEventListener}, provided 
- * that this service is registered with the right service properties.
+ * ZCL Attribute reportings are configured, registering a
+ * {@link ZigBeeEventListener}, provided that this service is registered with
+ * the right service properties.
  * 
- * <p> 
- * In addition to ZCL frames, the current specification allows also to send ZDP frames.
- * Broadcasting and endpoint broadcasting is also supported for ZCL frames.
+ * <p>
+ * In addition to ZCL frames, the current specification allows also to send ZDP
+ * frames. Broadcasting and endpoint broadcasting is also supported for ZCL
+ * frames.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
