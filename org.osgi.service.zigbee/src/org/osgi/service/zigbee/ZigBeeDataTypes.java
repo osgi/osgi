@@ -478,7 +478,7 @@ public class ZigBeeDataTypes {
 					case ZigBeeDataTypes.BAG :
 					case ZigBeeDataTypes.SET :
 					case ZigBeeDataTypes.STRUCTURE :
-						throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be serialized with this generic class.");
+						throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be serialized with this generic method.");
 
 					case ZigBeeDataTypes.TIME_OF_DAY :
 					case ZigBeeDataTypes.DATE :
@@ -672,7 +672,7 @@ public class ZigBeeDataTypes {
 				case ZigBeeDataTypes.BAG :
 				case ZigBeeDataTypes.SET :
 				case ZigBeeDataTypes.STRUCTURE :
-					throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be serialized with this generic class.");
+					throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be serialized with this generic method.");
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
 					Date d = (Date) value;
@@ -1027,7 +1027,7 @@ public class ZigBeeDataTypes {
 			case ZigBeeDataTypes.BAG :
 			case ZigBeeDataTypes.SET :
 			case ZigBeeDataTypes.STRUCTURE :
-				throw new IllegalArgumentException("ZigBee bag, structure, set, array can not be deserialized with this generic class.");
+				throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be deserialized with this generic method.");
 
 			case ZigBeeDataTypes.TIME_OF_DAY : {
 				byte[] value = is.readBytes(4);
