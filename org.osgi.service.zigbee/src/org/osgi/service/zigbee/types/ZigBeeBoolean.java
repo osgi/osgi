@@ -48,7 +48,7 @@ public class ZigBeeBoolean
 	}
 
 	public boolean isAnalog() {
-		return true;
+		return false;
 	}
 
 	public Class getJavaDataType() {
