@@ -19,7 +19,9 @@ package org.osgi.service.zigbee;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents ZCLAttribute information.
+ * This interface provides information about the attribute, like its ZCL
+ * attribute ID, if it manufacturer specific and about its data type (see
+ * {@link #getDataType}).
  * 
  * @author $Id$
  */
