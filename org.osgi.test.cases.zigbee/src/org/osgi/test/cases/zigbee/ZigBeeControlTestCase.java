@@ -64,7 +64,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Contain the ZigBee testcases.
  * 
- * @author $Id: 15040569ced6e2d236ca05ca3c1c4c53ea8e0aff $
+ * @author $Id$
  */
 public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 

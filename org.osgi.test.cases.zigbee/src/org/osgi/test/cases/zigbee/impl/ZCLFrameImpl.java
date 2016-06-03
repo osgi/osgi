@@ -28,7 +28,7 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * the ZigBee Device Service. It cannot be complete for ZigBee spec licensing
  * problems.
  * 
- * @author $Id: dac1f801159e835fbc02367d721172a588649289 $
+ * @author $Id$
  */
 public class ZCLFrameImpl implements ZCLFrame {
 
