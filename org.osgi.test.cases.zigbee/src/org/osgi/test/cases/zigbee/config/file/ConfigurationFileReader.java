@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * TODO Add Javadoc comment for this type.
  * 
- * @author $Id: 0dfc53699b779989e1c0a2d559b371834f775cd3 $
+ * @author $Id$
  */
 public class ConfigurationFileReader {
 
