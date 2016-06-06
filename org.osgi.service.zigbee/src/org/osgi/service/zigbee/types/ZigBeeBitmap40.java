@@ -60,11 +60,11 @@ public class ZigBeeBitmap40
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) {
-		ZigBeeDataTypes.serializeDataType(os, ZigBeeDataTypes.BITMAP_40, value);
+		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BITMAP_40, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeDataTypes.deserializeDataType(is, ZigBeeDataTypes.BITMAP_40);
+		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BITMAP_40);
 	}
 
 }

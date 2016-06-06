@@ -60,11 +60,11 @@ public class ZigBeeUnsignedInteger16
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) {
-		ZigBeeDataTypes.serializeDataType(os, ZigBeeDataTypes.UNSIGNED_INTEGER_16, value);
+		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UNSIGNED_INTEGER_16, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeDataTypes.deserializeDataType(is, ZigBeeDataTypes.UNSIGNED_INTEGER_16);
+		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UNSIGNED_INTEGER_16);
 	}
 
 }
