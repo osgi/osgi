@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-package org.osgi.impl.service.zigbee.event;
+package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.ZCLEventListener;
-import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 
 /**
  * Mocked impl.
  * 
- * @author $Id: 9447f8c5cba85c1c5a200112dcfe9e0f0fcdfdbe $
+ * @author $Id: d5d26e2f9444166228ded0ad7d4b0561ca12a7f0 $
+ * 
  */
-public class ZCLEventListenerImpl implements ZCLEventListener {
+public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
 
-	public void notifyEvent(ZigBeeEvent event) {
+	private ZCLDataTypeDescription type;
 
+	/**
+	 * @param type
+	 */
+	public ZCLParameterDescriptionImpl(ZCLDataTypeDescription type) {
+		this.type = type;
 	}
 
-	public void onFailure(ZCLException e) {
-
+	public ZCLDataTypeDescription getDataTypeDescription() {
+		return type;
 	}
 
-	public void notifyTimeOut(int timeout) {
-
+	public boolean checkValue(Object value) {
+		return false;
 	}
-
 }

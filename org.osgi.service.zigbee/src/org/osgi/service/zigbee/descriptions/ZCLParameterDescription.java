@@ -27,14 +27,4 @@ public interface ZCLParameterDescription {
 	 * @return the parameter data type
 	 */
 	public ZCLDataTypeDescription getDataTypeDescription();
-
-	/**
-	 * checks whether the value object is conform to the parameter data type
-	 * description
-	 * 
-	 * @param value The value to check
-	 * @return true if value is conform otherwise returns false
-	 */
-	public boolean checkValue(Object value);
-
 }

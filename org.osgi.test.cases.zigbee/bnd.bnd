@@ -8,6 +8,7 @@ Export-Package: \
 
 Conditional-Package					= org.osgi.test.support.*
 Import-Package: \
+  org.osgi.service.zigbee.types, \
   ${-signaturetest}, \
   *
 Private-Package: \

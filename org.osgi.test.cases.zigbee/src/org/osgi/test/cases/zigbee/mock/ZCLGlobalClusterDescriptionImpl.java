@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.test.cases.zigbee.mock;
+
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
+
+/**
+ * Mocked impl.
+ * 
+ * @author $Id: 4569fba7f87086daa93dc0f3923b73609fe5f18e $
+ */
+public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescription {
+
+	private int						id;
+	private String					name;
+	private String					desc;
+	private String					domain;
+	private ZCLClusterDescription	client	= null;
+	private ZCLClusterDescription	server	= null;
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param domain
+	 * @param client
+	 * @param server
+	 */
+	public ZCLGlobalClusterDescriptionImpl(int id, String name, String domain, ZCLClusterDescription client,
+			ZCLClusterDescription server) {
+		this.id = id;
+		this.name = name;
+		this.domain = domain;
+		this.client = client;
+		this.server = server;
+	}
+
+	public String getClusterDescription() {
+		return desc;
+	}
+
+	public int getClusterId() {
+		return id;
+	}
+
+	public String getClusterName() {
+		return name;
+	}
+
+	public String getClusterFunctionalDomain() {
+
+		return domain;
+	}
+
+	public ZCLClusterDescription getClientClusterDescription() {
+		return client;
+	}
+
+	public ZCLClusterDescription getServerClusterDescription() {
+		return server;
+	}
+
+	public String toString() {
+		return "" + this.getClass().getName() + "[id: " + id + ", name: " + name + ", desc: " + desc + ", domain: "
+				+ domain + ", client: " + client + ", server: " + server + "]";
+	}
+
+}
