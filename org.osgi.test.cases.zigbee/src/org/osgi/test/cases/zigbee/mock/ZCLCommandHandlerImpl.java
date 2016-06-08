@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZCLFrame;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 7b665f09fd2e023a885fc679d0cb421102f41536 $
  */
 public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 

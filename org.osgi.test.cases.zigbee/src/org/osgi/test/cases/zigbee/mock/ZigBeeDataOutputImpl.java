@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.security.InvalidParameterException;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 395123d8ddfb18e3a71d022ea6fbad8fbaa4b468 $
  */
 public class ZigBeeDataOutputImpl implements ZigBeeDataOutput {
 

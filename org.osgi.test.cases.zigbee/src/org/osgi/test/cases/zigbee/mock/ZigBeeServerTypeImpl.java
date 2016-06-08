@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
 
 /**
  * Mocked impl of ZigBeeServerType.
  * 
- * @author $Id$
+ * @author $Id: 17776622ff65b13abc767598b85c7f8c19f19044 $
  */
 public class ZigBeeServerTypeImpl implements ZigBeeServerMask {
 

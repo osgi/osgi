@@ -32,14 +32,14 @@ import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
-import org.osgi.test.cases.zigbee.impl.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeConf;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
 import org.osgi.test.support.step.TestStep;
 
 /**
  * Mocked impl of ZigBeeDeviceNodeListener.
  * 
- * @author $Id: bf64dce5e65d559684e4f5ed5aae16f1a90f967a $
+ * @author $Id: df409b2392bc2087d3aaf60e69adb317b08947a9 $
  */
 public class ZigBeeBaseDriver implements ZCLEventListener {
 

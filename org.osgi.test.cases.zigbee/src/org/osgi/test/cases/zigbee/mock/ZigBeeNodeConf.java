@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
  * 
  * TODO Add Javadoc comment for this type.
  * 
- * @author $Id$
+ * @author $Id: 4876829cc2612b92e2848de1deaa2dc065129ad2 $
  */
 public class ZigBeeNodeConf extends ZigBeeNodeImpl {
 

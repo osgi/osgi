@@ -14,36 +14,32 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLCluster;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
-import junit.framework.Assert;
 
 /**
- * for test purpose only.
  * 
+ *
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @author $Id: 7dfcfe97916e5b41964da4bdde5c2141bcc044e4 $
  */
-public class ZigBeeTestOSGiIdEndpointImpl extends ZigBeeEndpointImpl {
+public class ZigBeeEndpointConf extends ZigBeeEndpointImpl {
 
-	private boolean notExportedHasBeenCalled = false;
+	private ZigBeeSimpleDescriptor desc;
 
-	public ZigBeeTestOSGiIdEndpointImpl(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs,
-			ZigBeeSimpleDescriptor desc) {
+	public ZigBeeEndpointConf(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
 		super(id, inputs, ouputs, desc);
+		this.desc = desc;
 
+		// TODO Auto-generated constructor stub
 	}
 
-	public void notExported(ZigBeeException e) {
-		notExportedHasBeenCalled = true;
-		Assert.assertEquals("the Endpoint Not exported is called with the wrong exception",
-				ZigBeeException.OSGI_EXISTING_ID,
-				e.getErrorCode());
-	}
-
-	public boolean notExportedHasBeenCalled() {
-		return notExportedHasBeenCalled;
+	public ZigBeeSimpleDescriptor getSimpleDescriptor() {
+		// TODO Auto-generated method stub
+		return desc;
 	}
 
 }

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZigBeeHandler;
 
 /**
  * Mocked impl of ZigBeeHandler.
  * 
- * @author $Id$
+ * @author $Id: dfdfaaf7098658786a9cf7174d0508bac974267e $
  */
 public class ZigBeeHandlerImpl implements ZigBeeHandler {
 

@@ -34,16 +34,16 @@ import org.osgi.service.zigbee.types.ZigBeeBoolean;
 import org.osgi.service.zigbee.types.ZigBeeCharacterString;
 import org.osgi.service.zigbee.types.ZigBeeEnumeration8;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
-import org.osgi.test.cases.zigbee.impl.ZCLAttributeDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLAttributeImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLClusterImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLGlobalClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEndpointImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeDescriptorImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeePowerDescriptorImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeSimpleDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLGlobalClusterDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeePowerDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeSimpleDescriptorImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -55,7 +55,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * that the message has been sent, received by the base driver, and checked by
  * the CT through the step service.
  *
- * @author $Id$
+ * @author $Id: 71d4585836654c5730db47625981c8faeb6bd7dc $
  */
 public class ExportTestCase extends DefaultTestBundleControl {
 

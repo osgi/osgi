@@ -22,7 +22,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
-import org.osgi.test.cases.zigbee.impl.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class TestStepLauncher {

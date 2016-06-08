@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
@@ -25,7 +25,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Mocked test event source.
  * 
- * @author $Id$
+ * @author $Id: cd76b3e4be43d70ff11f1b2a767576b9630a341a $
  */
 public class ZigBeeEventSourceImpl implements Runnable {
 

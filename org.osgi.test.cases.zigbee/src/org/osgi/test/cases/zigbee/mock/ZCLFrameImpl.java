@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.io.EOFException;
 import org.osgi.service.zigbee.ZCLFrame;
@@ -28,7 +28,7 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * the ZigBee Device Service. It cannot be complete for ZigBee spec licensing
  * problems.
  * 
- * @author $Id$
+ * @author $Id: c284daf951341960fa022037354826227b0d3d89 $
  */
 public class ZCLFrameImpl implements ZCLFrame {
 

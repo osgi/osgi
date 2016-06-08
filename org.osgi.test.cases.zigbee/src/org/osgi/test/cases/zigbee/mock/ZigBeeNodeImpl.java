@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.math.BigInteger;
 import org.osgi.service.zigbee.ZCLCommandHandler;
@@ -32,7 +32,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 2bc610a3e1929e937b084e7fc6e4c9746a730818 $
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 

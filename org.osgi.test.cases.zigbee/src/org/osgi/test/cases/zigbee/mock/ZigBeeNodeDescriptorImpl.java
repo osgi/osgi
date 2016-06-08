@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 import org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags;
@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
 /**
  * Mocked impl of ZigBeeNodeDescriptor.
  * 
- * @author $Id$
+ * @author $Id: e12032d3fcdd059801f5b7cb425f2ed6ef09b64b $
  */
 public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 

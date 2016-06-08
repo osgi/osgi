@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.io.EOFException;
 import org.osgi.service.zigbee.ZigBeeDataInput;
@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeDataInput;
 /**
  * A mock implementation of {@link ZigBeeDataInput} interface.
  * 
- * @author $Id$
+ * @author $Id: fb275709db79c6812d4c914d1ee62070ccb62dcf $
  * 
  */
 public class ZigBeeDataInputImpl implements ZigBeeDataInput {

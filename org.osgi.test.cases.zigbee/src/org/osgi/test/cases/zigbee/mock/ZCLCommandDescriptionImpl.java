@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 4dc47934ffed925dc345e171dd8980872f7e46b4 $
  * 
  */
 public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {

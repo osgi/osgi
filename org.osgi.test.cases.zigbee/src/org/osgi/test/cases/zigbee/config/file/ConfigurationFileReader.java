@@ -22,19 +22,19 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
-import org.osgi.test.cases.zigbee.impl.ZCLAttributeDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLAttributeImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLClusterConf;
-import org.osgi.test.cases.zigbee.impl.ZCLClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLGlobalClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLHeaderImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEndpointConf;
-import org.osgi.test.cases.zigbee.impl.ZigBeeHostImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeConf;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeDescriptorImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeePowerDescriptorImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeSimpleDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLGlobalClusterDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
+import org.osgi.test.cases.zigbee.mock.ZigBeeHostImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeePowerDescriptorImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeSimpleDescriptorImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * TODO Add Javadoc comment for this type.
  * 
- * @author $Id$
+ * @author $Id: 24893b0cd410fbf96ac19cc7c8027423d3b9e1fc $
  */
 public class ConfigurationFileReader {
 

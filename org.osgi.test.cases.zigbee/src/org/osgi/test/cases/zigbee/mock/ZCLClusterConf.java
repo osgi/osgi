@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
-import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
+import org.osgi.service.zigbee.ZCLAttribute;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
 /**
- * Mocked impl.
  * 
- * @author $Id$
+ *
+ * TODO Add Javadoc comment for this type.
  * 
+ * @author $Id: 1d84453d85ed9879dbad614548e2eb4fe5bc0c2b $
  */
-public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
+public class ZCLClusterConf extends ZCLClusterImpl {
 
-	private ZCLDataTypeDescription type;
+	private int[] commandIds;
 
-	/**
-	 * @param type
-	 */
-	public ZCLParameterDescriptionImpl(ZCLDataTypeDescription type) {
-		this.type = type;
+	public ZCLClusterConf(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
+		super(commandIds, attributes, desc);
+		this.commandIds = commandIds;
 	}
 
-	public ZCLDataTypeDescription getDataTypeDescription() {
-		return type;
+	public int[] getCommandIds() {
+		return commandIds;
 	}
 
-	public boolean checkValue(Object value) {
-		return false;
+	public ZCLAttribute[] getAttributes() {
+		return attributes;
 	}
 }

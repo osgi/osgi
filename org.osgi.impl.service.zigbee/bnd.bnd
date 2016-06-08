@@ -9,7 +9,7 @@ Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
 	
 	
-Private-Package = org.osgi.test.cases.zigbee.impl;-noimport:=true, \
+Private-Package = org.osgi.test.cases.zigbee.mock;-noimport:=true, \
 					org.osgi.test.support.compatibility;-noimport:=true, \
 					org.osgi.test.support;-noimport:=true, \
 					org.osgi.test.support.sleep;-noimport:=true, \

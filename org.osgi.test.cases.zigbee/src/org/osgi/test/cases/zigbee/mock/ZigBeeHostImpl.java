@@ -1,5 +1,5 @@
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,7 +16,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 41e7051fd4fa89a209de2a9cc136c59da4d7c649 $
  */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 

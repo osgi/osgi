@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 
 /**
  * Mocked impl of ZigBeeFrequencyBand.
  * 
- * @author $Id$
+ * @author $Id: 94ba5e4cac296cb89055fab4feaa135ea6faabac $
  */
 public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -26,7 +26,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Mocked test.
  * 
- * @author $Id$
+ * @author $Id: fa997c7fe4b792215abb2e241c12377de1761cee $
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 

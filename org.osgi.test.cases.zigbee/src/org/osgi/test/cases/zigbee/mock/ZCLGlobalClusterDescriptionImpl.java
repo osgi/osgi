@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 4569fba7f87086daa93dc0f3923b73609fe5f18e $
  */
 public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescription {
 

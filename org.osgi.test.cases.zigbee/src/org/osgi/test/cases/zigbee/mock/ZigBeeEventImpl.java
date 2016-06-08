@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.math.BigInteger;
 import org.osgi.service.zigbee.ZigBeeEvent;
@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 /**
  * Mocked impl of ZigBeeEvent.
  * 
- * @author $Id$
+ * @author $Id: dc03665c4ae41b6e6a0e60324032cf4bfaf26369 $
  */
 public class ZigBeeEventImpl implements ZigBeeEvent {
 

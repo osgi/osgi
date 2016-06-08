@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.math.BigInteger;
 import org.osgi.service.zigbee.ZCLCluster;
@@ -26,7 +26,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 /**
  * Mocked impl of ZigBeeEndpoint.
  * 
- * @author $Id$
+ * @author $Id: 3e5dd8ae22d3174fca958eae728ba9504a5955ff $
  */
 public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 

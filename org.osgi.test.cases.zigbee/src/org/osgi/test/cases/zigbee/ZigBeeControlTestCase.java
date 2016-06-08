@@ -45,26 +45,26 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.service.zigbee.types.ZigBeeBoolean;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
-import org.osgi.test.cases.zigbee.impl.ZCLAttributeImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLClusterConf;
-import org.osgi.test.cases.zigbee.impl.ZCLCommandHandlerImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLEventListenerImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEndpointConf;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEndpointImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEventImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeEventSourceImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeHandlerImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeConf;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeTestOSGiIdEndpointImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
+import org.osgi.test.cases.zigbee.mock.ZCLCommandHandlerImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEventImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeEventSourceImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeHandlerImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeTestOSGiIdEndpointImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Contain the ZigBee testcases.
  * 
- * @author $Id$
+ * @author $Id: 48854d1f370587d0cfaad23650bd1380ce578eca $
  */
 public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 01248cc3dfca2ad0c7027d7b89694a6199db46dc $
  */
 public class ZCLClusterImpl implements ZCLCluster {
 

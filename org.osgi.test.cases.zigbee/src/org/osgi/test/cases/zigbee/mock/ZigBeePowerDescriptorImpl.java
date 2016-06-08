@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 
 /**
  * Mocked impl of ZigBeePowerDescriptor.
  * 
- * @author $Id$
+ * @author $Id: 66088806ce415346a4f2c7df80649c509a5ad73d $
  */
 public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 

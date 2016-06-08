@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.impl;
+package org.osgi.test.cases.zigbee.mock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id$
+ * @author $Id: 948fd24bef60fa9723eb4c6be5ed62168a175b3b $
  */
 public class ZCLAttributeImpl implements ZCLAttribute {
 
