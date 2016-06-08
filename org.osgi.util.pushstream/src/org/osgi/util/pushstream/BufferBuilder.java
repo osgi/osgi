@@ -26,7 +26,7 @@ public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends
 	 * @param queuePolicy
 	 * @return this builder
 	 */
-	BufferBuilder<R, T, U> withQueuePolicy(QueuePolicy<T, BlockingQueue<PushEvent<? extends T>>> queuePolicy);
+	BufferBuilder<R,T,U> withQueuePolicy(QueuePolicy<T,U> queuePolicy);
 
 	/**
 	 * Set the {@link QueuePolicy} of this Builder

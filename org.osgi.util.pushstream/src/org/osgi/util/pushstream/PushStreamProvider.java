@@ -16,16 +16,68 @@
 
 package org.osgi.util.pushstream;
 
-import java.util.concurrent.BlockingQueue;
+import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
+import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 
-import org.osgi.annotation.versioning.ProviderType;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 /**
  * A factory for {@link PushStream} instances, and utility methods for handling
  * {@link PushEventSource}s and {@link PushEventConsumer}s
  */
-@ProviderType
-public interface PushStreamProvider {
+public final class PushStreamProvider {
+
+	private final Lock					lock	= new ReentrantLock(true);
+
+	private int							schedulerReferences;
+
+	private ScheduledExecutorService	scheduler;
+
+	private ScheduledExecutorService acquireScheduler() {
+		try {
+			lock.lockInterruptibly();
+			try {
+				schedulerReferences += 1;
+
+				if (schedulerReferences == 1) {
+					scheduler = Executors.newSingleThreadScheduledExecutor();
+				}
+				return scheduler;
+			} finally {
+				lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			throw new IllegalStateException("Unable to acquire the Scheduler",
+					e);
+		}
+	}
+
+	private void releaseScheduler() {
+		try {
+			lock.lockInterruptibly();
+			try {
+				schedulerReferences -= 1;
+
+				if (schedulerReferences == 0) {
+					scheduler.shutdown();
+					scheduler = null;
+				}
+			} finally {
+				lock.unlock();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Create a stream with the default configured buffer, executor size, queue,
@@ -54,7 +106,10 @@ public interface PushStreamProvider {
 	 * @param eventSource
 	 * @return A {@link PushStream} with a default initial buffer
 	 */
-	public <T> PushStream<T> createStream(PushEventSource<T> eventSource);
+	public <T> PushStream<T> createStream(PushEventSource<T> eventSource) {
+		return createStream(eventSource, 2, null, new ArrayBlockingQueue<>(32),
+				FAIL.getPolicy(), LINEAR.getPolicy(1000));
+	}
 	
 	/**
 	 * Builds a push stream with custom configuration.
@@ -68,8 +123,104 @@ public interface PushStreamProvider {
 	 * 
 	 * @return A {@link PushStreamBuilder} for the stream
 	 */
-	public <T, U extends BlockingQueue<PushEvent<? extends T>>> PushStreamBuilder<T, U> buildStream(PushEventSource<T> eventSource);
+	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> PushStreamBuilder<T,U> buildStream(
+			PushEventSource<T> eventSource) {
+		return new PushStreamBuilderImpl<T,U>(this, null, eventSource);
+	}
 	
+	@SuppressWarnings({
+			"rawtypes", "unchecked"
+	})
+	<T, U extends BlockingQueue<PushEvent< ? extends T>>> PushStream<T> createStream(
+			PushEventSource<T> eventSource, int parallelism, Executor executor,
+			U queue, QueuePolicy<T,U> queuePolicy,
+			PushbackPolicy<T,U> pushbackPolicy) {
+
+		if (eventSource == null) {
+			throw new NullPointerException("There is no source of events");
+		}
+
+		if (parallelism <= 0) {
+			parallelism = 2;
+		}
+
+		boolean closeExecutorOnClose;
+		Executor toUse;
+		if (executor == null) {
+			toUse = Executors.newFixedThreadPool(2);
+			closeExecutorOnClose = true;
+		} else {
+			toUse = executor;
+			closeExecutorOnClose = false;
+		}
+
+		if (queue == null) {
+			queue = (U) new ArrayBlockingQueue(32);
+		}
+
+		if (queuePolicy == null) {
+			queuePolicy = FAIL.getPolicy();
+		}
+
+		if (pushbackPolicy == null) {
+			pushbackPolicy = LINEAR.getPolicy(1000);
+		}
+
+		@SuppressWarnings("resource")
+		PushStream<T> stream = new BufferedPushStreamImpl<>(this,
+				acquireScheduler(), queue, parallelism, toUse, queuePolicy,
+				pushbackPolicy, aec -> {
+					try {
+						return eventSource.open(aec);
+					} catch (Exception e) {
+						throw new RuntimeException(
+								"Unable to connect to event source", e);
+					}
+				});
+
+		stream = stream.onClose(() -> {
+			if (closeExecutorOnClose) {
+				((ExecutorService) toUse).shutdown();
+			}
+			releaseScheduler();
+		}).map(Function.identity());
+		return stream;
+	}
+
+	<T> PushStream<T> createUnbufferedStream(PushEventSource<T> eventSource,
+			Executor executor) {
+
+		boolean closeExecutorOnClose;
+		Executor toUse;
+		if (executor == null) {
+			toUse = Executors.newFixedThreadPool(2);
+			closeExecutorOnClose = true;
+		} else {
+			toUse = executor;
+			closeExecutorOnClose = false;
+		}
+
+		@SuppressWarnings("resource")
+		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, executor,
+				acquireScheduler(), aec -> {
+					try {
+						return eventSource.open(aec);
+					} catch (Exception e) {
+						throw new RuntimeException(
+								"Unable to connect to event source", e);
+					}
+				});
+
+		stream = stream.onClose(() -> {
+			if (closeExecutorOnClose) {
+				((ExecutorService) toUse).shutdown();
+			}
+			releaseScheduler();
+		}).map(Function.identity());
+
+		return stream;
+	}
+
 	/**
 	 * Convert an {@link PushStream} into an {@link PushEventSource}. The first
 	 * call to {@link PushEventSource#open(PushEventConsumer)} will begin event
@@ -86,7 +237,10 @@ public interface PushStreamProvider {
 	 * @param stream
 	 * @return a {@link PushEventSource} backed by the {@link PushStream}
 	 */
-	public <T> PushEventSource<T> createEventSourceFromStream(PushStream<T> stream);
+	public <T> PushEventSource<T> createEventSourceFromStream(
+			PushStream<T> stream) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 
 	/**
 	 * Convert an {@link PushStream} into an {@link PushEventSource}. The first
@@ -101,7 +255,10 @@ public interface PushStreamProvider {
 	 * 
 	 * @return a {@link PushEventSource} backed by the {@link PushStream}
 	 */
-	public <T, U extends BlockingQueue<PushEvent<? extends T>>> BufferBuilder<PushEventSource<T>, T, U> buildEventSourceFromStream(PushStream<T> stream);
+	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventSource<T>,T,U> buildEventSourceFromStream(
+			PushStream<T> stream) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 	
 
 	/**
@@ -116,7 +273,9 @@ public interface PushStreamProvider {
 	 * @param type
 	 * @return a {@link SimplePushEventSource}
 	 */
-	public <T> SimplePushEventSource<T> createSimpleEventSource(Class<T> type);
+	public <T> SimplePushEventSource<T> createSimpleEventSource(Class<T> type) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 	
 	/**
 	 * 
@@ -129,7 +288,10 @@ public interface PushStreamProvider {
 	 * @return a {@link SimplePushEventSource}
 	 */
 
-	public <T, U extends BlockingQueue<PushEvent<? extends T>>> BufferBuilder<SimplePushEventSource<T>, T, U> buildSimpleEventSource(Class<T> type);
+	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<SimplePushEventSource<T>,T,U> buildSimpleEventSource(
+			Class<T> type) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 	
 	/**
 	 * Create a buffered {@link PushEventConsumer} with the default configured
@@ -155,7 +317,10 @@ public interface PushStreamProvider {
 	 * @param delegate
 	 * @return a {@link PushEventConsumer} with a buffer directly before it
 	 */
-	public <T> PushEventConsumer<T> createBufferedConsumer(PushEventConsumer<T> delegate);
+	public <T> PushEventConsumer<T> createBufferedConsumer(
+			PushEventConsumer<T> delegate) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 	
 	/**
 	 * Build a buffered {@link PushEventConsumer} with custom configuration.
@@ -182,5 +347,8 @@ public interface PushStreamProvider {
 	 * 
 	 * @return a {@link PushEventConsumer} with a buffer directly before it
 	 */
-	public <T, U extends BlockingQueue<PushEvent<? extends T>>> BufferBuilder<PushEventConsumer<T>, T, U> buildBufferedConsumer(PushEventConsumer<T> delegate);
+	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventConsumer<T>,T,U> buildBufferedConsumer(
+			PushEventConsumer<T> delegate) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 }

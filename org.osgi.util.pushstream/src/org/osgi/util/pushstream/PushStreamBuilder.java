@@ -31,8 +31,7 @@ public interface PushStreamBuilder<T, U extends BlockingQueue<PushEvent< ? exten
 	PushStreamBuilder<T,U> withBuffer(U queue);
 
 	@Override
-	PushStreamBuilder<T,U> withQueuePolicy(
-			QueuePolicy<T,BlockingQueue<PushEvent< ? extends T>>> queuePolicy);
+	PushStreamBuilder<T,U> withQueuePolicy(QueuePolicy<T,U> queuePolicy);
 
 	@Override
 	PushStreamBuilder<T,U> withQueuePolicy(QueuePolicyOption queuePolicyOption);

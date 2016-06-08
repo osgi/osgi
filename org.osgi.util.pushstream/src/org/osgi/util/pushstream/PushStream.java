@@ -207,7 +207,7 @@ public interface PushStream<T> extends Closeable {
 	 * @param pushbackPolicy
 	 * @return Builder style (can be a new or the same object)
 	 */
-	<U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushStream<T>,T,U> buildBuffer();
+	<U extends BlockingQueue<PushEvent< ? extends T>>> PushStreamBuilder<T,U> buildBuffer();
 
 	/**
 	 * Merge in the events from another source. The resulting channel is not
