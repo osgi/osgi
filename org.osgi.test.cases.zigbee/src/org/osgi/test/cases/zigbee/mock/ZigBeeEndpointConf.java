@@ -18,11 +18,13 @@ package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
+import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 
 /**
  * 
  *
- * TODO Add Javadoc comment for this type.
+ * Class used by the configuration file reader. see
+ * {@link ConfigurationFileReader}
  * 
  * @author $Id: 7dfcfe97916e5b41964da4bdde5c2141bcc044e4 $
  */
@@ -34,11 +36,10 @@ public class ZigBeeEndpointConf extends ZigBeeEndpointImpl {
 		super(id, inputs, ouputs, desc);
 		this.desc = desc;
 
-		// TODO Auto-generated constructor stub
 	}
 
 	public ZigBeeSimpleDescriptor getSimpleDescriptor() {
-		// TODO Auto-generated method stub
+
 		return desc;
 	}
 

@@ -27,11 +27,13 @@ import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 
 /**
  * 
  * 
- * TODO Add Javadoc comment for this type.
+ * Class used by the configuration file reader. see
+ * {@link ConfigurationFileReader}
  * 
  * @author $Id: 4876829cc2612b92e2848de1deaa2dc065129ad2 $
  */
@@ -67,17 +69,17 @@ public class ZigBeeNodeConf extends ZigBeeNodeImpl {
 	}
 
 	public ZigBeeNodeDescriptor getNodeDescriptor() {
-		// TODO Auto-generated method stub
+
 		return nodeDescriptor;
 	}
 
 	public ZigBeePowerDescriptor getPowerDescriptor() {
-		// TODO Auto-generated method stub
+
 		return powerDescriptor;
 	}
 
 	public ZigBeeComplexDescriptor getComplexDescriptor() {
-		// TODO Auto-generated method stub
+
 		return complexDescriptor;
 	}
 

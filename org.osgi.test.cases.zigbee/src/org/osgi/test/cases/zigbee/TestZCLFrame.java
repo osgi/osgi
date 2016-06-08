@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.zigbee;
 
 import org.osgi.service.zigbee.ZCLHeader;
@@ -16,12 +17,12 @@ public class TestZCLFrame extends ZCLFrameImpl {
 	}
 
 	public byte[] getBytes() {
-		// TODO Auto-generated method stub
+
 		return (byte[]) data.clone();
 	}
 
 	public ZigBeeDataInput getDataInput() {
-		// TODO Auto-generated method stub
+
 		return new ZigBeeDataInputImpl(this);
 	}
 

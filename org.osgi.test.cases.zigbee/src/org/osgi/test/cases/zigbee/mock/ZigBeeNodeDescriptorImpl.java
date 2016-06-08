@@ -200,7 +200,7 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 			}
 
 			public boolean isAddressAllocate() {
-				// TODO Auto-generated method stub
+
 				return false;
 			}
 		};

@@ -26,7 +26,7 @@ import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class TestStepLauncher {
-	private static TestStepLauncher	instance;
+	private static TestStepLauncher instance;
 
 	static public final String		CONF_FILE_PATH	= "file path";
 	static public final String		LOAD_CONF		= "load conf";
@@ -47,7 +47,7 @@ public class TestStepLauncher {
 			tproxy.execute(LOAD_CONF,
 					"please please plug and setup all the devices described in the configuration file: ");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 

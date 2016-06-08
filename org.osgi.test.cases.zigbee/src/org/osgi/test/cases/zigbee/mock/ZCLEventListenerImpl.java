@@ -71,11 +71,11 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 	}
 
 	public void onFailure(ZCLException e) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void notifyTimeOut(int timeout) {
-		// TODO Auto-generated method stub
+
 	}
 
 }

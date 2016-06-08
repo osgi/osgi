@@ -62,7 +62,7 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 	}
 
 	public String getClusterFunctionalDomain() {
-		// TODO Auto-generated method stub
+
 		return domain;
 	}
 

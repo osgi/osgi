@@ -80,32 +80,32 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	}
 
 	public ZCLFrame serialize(ZCLHeader header, Object[] javaValues) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public Object[] deserialize(ZCLFrame frame) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public boolean isClusterSpecificCommand() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public int getManufacturerCode() {
-		// TODO Auto-generated method stub
+
 		return -1;
 	}
 
 	public boolean isClientServerDirection() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isManufacturerSpecific() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 

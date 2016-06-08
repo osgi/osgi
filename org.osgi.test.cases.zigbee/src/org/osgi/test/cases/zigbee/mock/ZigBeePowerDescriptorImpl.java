@@ -68,32 +68,32 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	}
 
 	public boolean isMainsPower() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isDisposableBattery() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isRechargableBattery() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isSyncronizedWithOnIdle() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isPeriodicallyOn() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean isOnWhenStimulated() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 }

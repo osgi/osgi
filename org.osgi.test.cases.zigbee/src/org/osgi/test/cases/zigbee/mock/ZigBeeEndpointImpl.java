@@ -53,12 +53,12 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public BigInteger getNodeAddress() {
-		// TODO Auto-generated method stub
+
 		return BigInteger.valueOf(-1);
 	}
 
 	public void getSimpleDescriptor(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 		handler.onSuccess(desc);
 	}
 
@@ -79,12 +79,10 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public void bind(String servicePid, int clusterId, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void unbind(String servicePid, int clusterId, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -93,7 +91,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public String toString() {

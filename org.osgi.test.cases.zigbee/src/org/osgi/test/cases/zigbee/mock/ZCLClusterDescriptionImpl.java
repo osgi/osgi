@@ -49,17 +49,17 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 	}
 
 	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	public ZCLAttributeDescription[] getAttributeDescriptions() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

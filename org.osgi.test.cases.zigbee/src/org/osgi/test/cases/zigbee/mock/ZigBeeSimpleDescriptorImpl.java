@@ -55,17 +55,17 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	}
 
 	public short getEndpoint() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	public int[] getInputClusters() {
-		// TODO Auto-generated method stub
+
 		return InputClusters;
 	}
 
 	public int[] getOutputClusters() {
-		// TODO Auto-generated method stub
+
 		return outputClusters;
 	}
 
@@ -78,12 +78,12 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	}
 
 	public boolean providesInputCluster(int clusterId) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public boolean providesOutputCluster(int clusterId) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 

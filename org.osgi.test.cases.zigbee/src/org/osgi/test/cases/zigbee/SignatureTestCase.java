@@ -19,9 +19,9 @@ package org.osgi.test.cases.zigbee;
 /**
  * 
  *
- * TODO Add Javadoc comment for this type.
+ * for Sgnature tests purpose
  * 
- * @author $Id$
+ * @author $Id: fe277f05a71f3a674b90bc8a4f75384edcc6fdf9 $
  */
 public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass

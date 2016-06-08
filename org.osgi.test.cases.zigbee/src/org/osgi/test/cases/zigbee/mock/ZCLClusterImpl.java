@@ -85,8 +85,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public void getCommandIds(ZigBeeHandler handler) {
-		// TODO copy the array before
-		handler.onSuccess(this.commandIds);
+
+		handler.onSuccess(this.commandIds.clone());
 	}
 
 	public void readAttributes(ZCLAttributeInfo[] attributesInfoArray, ZigBeeHandler handler) {
@@ -103,10 +103,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			throw new IllegalArgumentException("attributes array cannot be empty");
 		}
 		Map response = new HashMap();
-		// if (attributes.length == 0) {
-		// handler.onSuccess(response);
-		// return;
-		// }
+
 		Set code = new HashSet();
 
 		for (int i = 0; i < attributesInfoArray.length; i++) {
@@ -137,8 +134,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		}
 
-		// FIX We should check values of attributes and if attributes exists or
-		// not
 		int i = 0;
 		// for (int i : attributesIds) {
 		ZCLAttributeInfo attribute = attributesInfoArray[i];
@@ -149,7 +144,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public void writeAttributes(boolean undivided, Map attributesIdsAndValues, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -162,10 +156,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// mocked invocation.
 		handler.notifyResponse(frame, null);
 	}
-
-	// public String toString() {
-	// return description.getGlobalClusterDescription().getClusterName();
-	// }
 
 	public String toString() {
 		String attributesAsAString = null;
@@ -205,8 +195,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 		if (code == -1) {
 			getAttributes(handler);
 		}
-		// TODO Auto-generated method stub, in the meanwhile it throws runtime
-		// exception
 		throw new UnsupportedOperationException("getAttributes:Please implement it");
 	}
 

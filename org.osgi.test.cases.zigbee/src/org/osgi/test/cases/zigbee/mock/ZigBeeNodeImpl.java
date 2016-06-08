@@ -93,52 +93,52 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public int getPanId() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	public BigInteger getExtendedPanId() {
-		// TODO Auto-generated method stub
+
 		return BigInteger.valueOf(-1);
 	}
 
 	public void getNodeDescriptor(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 		handler.onSuccess(nodeDescriptor);
 	}
 
 	public void getPowerDescriptor(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 		handler.onSuccess(powerDescriptor);
 	}
 
 	public void getComplexDescriptor(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 		handler.onSuccess(complexDescriptor);
 	}
 
 	public void getLinksQuality(ZigBeeHandler handler) throws ZDPException {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void getRoutingTable(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void leave(ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void invoke(int clusterIdReq, ZDPFrame message, ZDPHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public String toString() {
@@ -152,19 +152,19 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public void setUserDescription(String userDescriptor, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public ZigBeeEndpoint[] getEndpoints() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

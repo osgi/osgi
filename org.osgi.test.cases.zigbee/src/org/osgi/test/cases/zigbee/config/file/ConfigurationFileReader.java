@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
 /**
  * 
  * 
- * TODO Add Javadoc comment for this type.
+ * This class is used to parse the configuration file
  * 
  * @author $Id: 24893b0cd410fbf96ac19cc7c8027423d3b9e1fc $
  */

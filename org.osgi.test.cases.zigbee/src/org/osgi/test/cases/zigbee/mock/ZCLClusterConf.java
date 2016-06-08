@@ -18,11 +18,13 @@ package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 
 /**
  * 
  *
- * TODO Add Javadoc comment for this type.
+ * Class used by the configuration file reader. see
+ * {@link ConfigurationFileReader}
  * 
  * @author $Id: 1d84453d85ed9879dbad614548e2eb4fe5bc0c2b $
  */

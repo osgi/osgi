@@ -45,7 +45,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	 */
 	public ZCLAttributeDescriptionImpl(int id, boolean isReadOnly, Object defaultvalue, String name,
 			boolean isMandatory, boolean isReportable, ZCLDataTypeDescription datatype) {
-		// TODO Auto-generated constructor stub
+
 		this.id = id;
 		this.isReadOnly = isReadOnly;
 		this.defaultValue = defaultvalue;
@@ -76,7 +76,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public String getShortDescription() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -93,7 +93,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isPartOfAScene() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
@@ -104,17 +104,17 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isManufacturerSpecific() {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	public int getManufacturerCode() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	public ZCLDataTypeDescription getDataType() {
-		// TODO Auto-generated method stub
+
 		return datatype;
 	}
 
