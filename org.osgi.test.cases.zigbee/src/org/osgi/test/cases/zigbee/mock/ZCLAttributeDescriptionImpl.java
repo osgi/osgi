@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id: 7c6ed3da2dc5547d387911b6b4a0cf58f755a1d9 $
+ * @author $Id$
  */
 public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
@@ -86,10 +86,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
 	public boolean isReportable() {
 		return isReportable;
-	}
-
-	public boolean checkValue(Object value) {
-		return false;
 	}
 
 	public boolean isPartOfAScene() {

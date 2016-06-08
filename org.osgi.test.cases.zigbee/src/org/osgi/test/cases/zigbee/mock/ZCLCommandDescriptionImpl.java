@@ -16,15 +16,13 @@
 
 package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 
 /**
  * Mocked impl.
  * 
- * @author $Id: 4dc47934ffed925dc345e171dd8980872f7e46b4 $
+ * @author $Id$
  * 
  */
 public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
@@ -77,16 +75,6 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 
 	public ZCLParameterDescription[] getParameterDescriptions() {
 		return parametersDesc;
-	}
-
-	public ZCLFrame serialize(ZCLHeader header, Object[] javaValues) {
-
-		return null;
-	}
-
-	public Object[] deserialize(ZCLFrame frame) {
-
-		return null;
 	}
 
 	public boolean isClusterSpecificCommand() {

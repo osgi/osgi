@@ -57,15 +57,6 @@ public interface ZCLAttributeDescription extends ZCLAttributeInfo {
 	public boolean isReadOnly();
 
 	/**
-	 * checks whether the value object is conform to the attribute data type
-	 * description
-	 * 
-	 * @param value The value to check
-	 * @return true if value is conform otherwise returns false
-	 */
-	public boolean checkValue(Object value);
-
-	/**
 	 * @return true if the attribute is part of a scene (cluster), false
 	 *         otherwise
 	 */

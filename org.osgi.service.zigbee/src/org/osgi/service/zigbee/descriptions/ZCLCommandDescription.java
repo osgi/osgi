@@ -16,9 +16,6 @@
 
 package org.osgi.service.zigbee.descriptions;
 
-import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
-
 /**
  * This interface represents a ZCLCommandDescription
  * 
@@ -49,25 +46,6 @@ public interface ZCLCommandDescription {
 	 * @return an array of command's parameters description
 	 */
 	ZCLParameterDescription[] getParameterDescriptions();
-
-	/**
-	 * Serialize javaValues to a ZCLFrame that can them be used in invocations
-	 * (e.g. via ZCLCluster, or ZigBeeGroup).
-	 * 
-	 * @param header the ZCLFrame's header
-	 * @param javaValues ordered java values
-	 * @return serialized javaValues as a byte[]
-	 */
-	ZCLFrame serialize(ZCLHeader header, Object[] javaValues);
-
-	/**
-	 * Deserialize ZCLFrame to javaValues. This ZCLFrame is expected to be a
-	 * result of an invocation. (e.g. via ZCLCluster, or ZigBeeGroup).
-	 * 
-	 * @param frame the ZCLFrame
-	 * @return deserialized Object[] as javaValues
-	 */
-	Object[] deserialize(ZCLFrame frame);
 
 	/**
 	 * @return the isClusterSpecificCommand value
