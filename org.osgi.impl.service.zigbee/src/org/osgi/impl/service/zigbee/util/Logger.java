@@ -24,20 +24,20 @@ package org.osgi.impl.service.zigbee.util;
 public final class Logger {
 
 	static final boolean	DEBUG	= Boolean
-			.getBoolean("org.osgi.service.enocean.loglevel.debug");
+			.getBoolean("org.osgi.service.zigbee.loglevel.debug");
 	static final boolean	WARN	= Boolean
-			.getBoolean("org.osgi.service.enocean.loglevel.warn");
+			.getBoolean("org.osgi.service.zigbee.loglevel.warn");
 	static final boolean	INFO	= Boolean
-			.getBoolean("org.osgi.service.enocean.loglevel.info");
+			.getBoolean("org.osgi.service.zigbee.loglevel.info");
 	static final boolean	ERROR	= Boolean
-			.getBoolean("org.osgi.service.enocean.loglevel.error");
+			.getBoolean("org.osgi.service.zigbee.loglevel.error");
 
 	/**
 	 * @return true if at least one of the following options has been set to
-	 *         true: -Dorg.osgi.service.enocean.loglevel.debug
-	 *         -Dorg.osgi.service.enocean.loglevel.warn
-	 *         -Dorg.osgi.service.enocean.loglevel.info
-	 *         -Dorg.osgi.service.enocean.loglevel.error, false otherwise (and
+	 *         true: -Dorg.osgi.service.zigbee.loglevel.debug
+	 *         -Dorg.osgi.service.zigbee.loglevel.warn
+	 *         -Dorg.osgi.service.zigbee.loglevel.info
+	 *         -Dorg.osgi.service.zigbee.loglevel.error, false otherwise (and
 	 *         display a message via System.out.println(...)).
 	 */
 	public static final boolean checkConfig() {
@@ -48,7 +48,7 @@ public final class Logger {
 			display("",
 					"Here, no log option has been set to true. "
 							+ "Feel free to use the following options if relevant: "
-							+ "-Dorg.osgi.service.enocean.loglevel.debug=true -Dorg.osgi.service.enocean.loglevel.warn=true -Dorg.osgi.service.enocean.loglevel.info=true -Dorg.osgi.service.enocean.loglevel.error=true");
+							+ "-Dorg.osgi.service.zigbee.loglevel.debug=true -Dorg.osgi.service.zigbee.loglevel.warn=true -Dorg.osgi.service.zigbee.loglevel.info=true -Dorg.osgi.service.zigbee.loglevel.error=true");
 			return false;
 		}
 	}
