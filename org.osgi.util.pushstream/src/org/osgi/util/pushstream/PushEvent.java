@@ -23,12 +23,13 @@ import static org.osgi.util.pushstream.PushEvent.EventType.*;
  * communication channel to push information to a downstream consumer. The event
  * has three different types:
  * <ul>
- * <li>{@link #DATA} – Provides access to a typed data element in the stream.
- * <li>{@link #CLOSE} – The stream is closed. After receiving this event, no
- * more events will follow.
- * <li>{@link #ERROR} – The stream ran into an unrecoverable problem and is
- * sending the reason downstream. The stream is closed and no more events will
- * follow after this event.
+ * <li>{@link EventType#DATA} – Provides access to a typed data element in the
+ * stream.
+ * <li>{@link EventType#CLOSE} – The stream is closed. After receiving this
+ * event, no more events will follow.
+ * <li>{@link EventType#ERROR} – The stream ran into an unrecoverable problem
+ * and is sending the reason downstream. The stream is closed and no more events
+ * will follow after this event.
  * </ul>
  *
  * @param <T> The payload type of the event.
@@ -71,7 +72,8 @@ public abstract class PushEvent<T> {
 	 * Return the data for this event.
 	 * 
 	 * @return The data payload.
-	 * @throws IllegalStateException if this event is not a {@link #DATA} event.
+	 * @throws IllegalStateException if this event is not a
+	 *             {@link EventType#DATA} event.
 	 */
 	public T getData() throws IllegalStateException {
 		throw new IllegalStateException(
@@ -82,8 +84,8 @@ public abstract class PushEvent<T> {
 	 * Return the error that terminated the stream.
 	 * 
 	 * @return The error that terminated the stream.
-	 * @throws IllegalStateException if this event is not an {@link #ERROR}
-	 *             event.
+	 * @throws IllegalStateException if this event is not an
+	 *             {@link EventType#ERROR} event.
 	 */
 	public Exception getFailure() throws IllegalStateException {
 		throw new IllegalStateException(
@@ -139,7 +141,8 @@ public abstract class PushEvent<T> {
 	 * 
 	 * @param <X> The new payload type.
 	 * @return The current error or close event mapped to a new payload type.
-	 * @throws IllegalStateException if the event is a {@link #DATA} event.
+	 * @throws IllegalStateException if the event is a {@link EventType#DATA}
+	 *             event.
 	 */
 	public <X> PushEvent<X> nodata() throws IllegalStateException {
 		@SuppressWarnings("unchecked")
