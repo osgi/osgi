@@ -569,6 +569,14 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Returns the correct minimum frame size. This size depends on the fact
+	 * that the command is manufacturer specific or not.
+	 * 
+	 * @param header The ZCLHeader, necessary to know if the frame is
+	 *        manufacturer specific or not
+	 * @return The frame size according to the frame type.
+	 */
 	protected int getMinFrameSize(ZCLHeader header) {
 		return header.isManufacturerSpecific() ? (maxHeaderSize) : minHeaderSize;
 	}

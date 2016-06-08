@@ -26,32 +26,14 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 
 /**
- * This class contains the common serialize/deserialize methods for the
- * org.osgi.service.zigbee.types.*
- * 
- * This constants are not the same provided by the ZigBee specification, and
- * follows the rules below:
- * 
- * <p>
- * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data
- * type in bytes.<br>
- * <em>bit 6</em>: if set to 1 bits 0-3 represents the size of the data type in
- * bytes. <br>
- * <em>bit 7</em>: if one the data type represents a unsigned value, otherwise
- * it is signed.
- * 
- * 
- * <p>
- * <dl>
- * Related documentation:
- * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
- * 2012.
- * </dl>
+ * This class contains the common serialize/deserialize methods for all the
+ * org.osgi.service.zigbee.types.* classes. The array, bag, set, structure data
+ * types are not supported.
  * 
  * @author $Id$
  */
 class ZigBeeZCLDefaultSerializer {
-	static final long			zigBeeTimeZero			= 946684800000L;	// 1/1/2000
+	static final long zigBeeTimeZero = 946684800000L;	// 1/1/2000
 
 	/**
 	 * Marshal the passed value into a {@code ZigBeeDataOutput} stream,
@@ -59,6 +41,9 @@ class ZigBeeZCLDefaultSerializer {
 	 * {@code IllegalArgumentException} is thrown when the the passed
 	 * {@code value} does not belong to the class allowed for the
 	 * {@code dataType}.
+	 * 
+	 * <p>
+	 * Array, bag, set and structure data types are not supported.
 	 * 
 	 * <p>
 	 * If the data type allows that, a null value is marshaled into ZCL Invalid
@@ -399,6 +384,14 @@ class ZigBeeZCLDefaultSerializer {
 	}
 
 	/**
+	 * Unarshal {@code ZigBeeDataInput} stream, according the {@code dataType}
+	 * argument. An {@code IllegalArgumentException} is thrown when the the
+	 * passed {@code value} does not belong to the class allowed for the
+	 * {@code dataType}.
+	 * 
+	 * <p>
+	 * Array, bag, set and structure data types are not supported.
+	 * 
 	 * @param is A valid {@link ZigBeeDataInput} stream instance. This parameter
 	 *        cannot be null.
 	 * 
