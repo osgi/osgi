@@ -42,7 +42,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * @author $Id: 2d94385bed40d0db236b94478bfec9d933980ce7 $
+ * @author $Id$
  */
 public class ConfigurationFileReader {
 
