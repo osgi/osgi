@@ -28,24 +28,24 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * the ZigBee Device Service. It cannot be complete for ZigBee spec licensing
  * problems.
  * 
- * @author $Id: c284daf951341960fa022037354826227b0d3d89 $
+ * @author $Id$
  */
 public class ZCLFrameImpl implements ZCLFrame {
 
 	// The minimum header size of the ZCL command frame. The value is given by
 	// the configuration file.
-	public static int minHeaderSize;
+	public static int	minHeaderSize;
 
 	/**
 	 * The buffer used to store the ZCLFrame payload.
 	 */
-	protected byte[] data = null;
+	protected byte[]	data		= null;
 
-	protected boolean isEmpty = true;
+	protected boolean	isEmpty		= true;
 
-	int index = 0;
+	int					index		= 0;
 
-	protected ZCLHeader zclHeader = null;
+	protected ZCLHeader	zclHeader	= null;
 
 	/**
 	 * Basic constructor. It creates a default ZCL Frame with the passed
@@ -185,13 +185,40 @@ public class ZCLFrameImpl implements ZCLFrame {
 		}
 	}
 
+	/**
+	 * @see http://docs.oracle.com/javase/6/docs/api/java/lang/Float.html#
+	 *      intBitsToFloat(int)
+	 */
 	public float readFloat(int pos, int size) throws EOFException {
 		if (size == 4) {
 			int raw = readInt(pos, 4);
 			return Float.intBitsToFloat(raw);
 		} else if (size == 2) {
-			// FIXME: implement 2 bytes float
-			throw new RuntimeException("Not yet implemented: Float semi");
+			int raw = readInt(pos, 2);
+			int sign, exp, manthis = 0;
+			sign = (raw & 0xF0) >> 15 * -1;		// 1000 0000 0000 0000
+			exp = (raw & 0x7C) >> 8;			// 0111 1100 0000 0000
+			manthis = raw & 0x3F; 				// 0000 0011 1111 1111
+			if (exp == 31 && manthis != 0) {
+				// NaN
+				return Float.NaN;
+			} else if (exp == 31 && manthis == 0) {
+				// Infinity
+				if (sign < 0) {
+					return Float.NEGATIVE_INFINITY;
+				} else {
+					return Float.POSITIVE_INFINITY;
+				}
+			} else if (exp == 0 && manthis == 0) {
+				// Zero
+				return 0f;
+			} else {
+				/*
+				 * Storing Semi-Float into Float:<p> Semi-float: 5 bits exp + 11
+				 * bits manthis<p> Float: 8 bits exp + 23 bits manthis
+				 */
+				return Float.intBitsToFloat(((raw & 0xF0) << 16 + (exp << 23) + manthis));
+			}
 		} else {
 			throw new IllegalArgumentException("invalid size");
 		}
