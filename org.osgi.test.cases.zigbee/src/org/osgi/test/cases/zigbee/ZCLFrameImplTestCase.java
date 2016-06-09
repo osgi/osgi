@@ -30,7 +30,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Test Cases to test the internal ZCLFrame and ZCLHeader interfaces
  * implementations
  * 
- * @author $Id: f6978de897bf9a8ce74bad607a4409fcc40686bc $
+ * @author $Id$
  */
 public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
