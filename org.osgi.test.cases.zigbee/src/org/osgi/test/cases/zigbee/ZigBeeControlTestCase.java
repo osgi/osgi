@@ -49,7 +49,6 @@ import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
 import org.osgi.test.cases.zigbee.mock.ZCLCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEventImpl;
@@ -455,7 +454,6 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeNodeImpl node = conf.getNode0();
 
 		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
-
 		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
@@ -681,12 +679,10 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 					"the response frame is not the one expected",
 					Arrays.equals(conf.getResponseFullFrame(),
 							frameResponse.getBytes()));
-			/*
-			 * Issues some checks on the returned ZCLFrame
-			 */
-
-			assertNotNull("Response is NULL", frameResponse);
-			checkZCLFrame(frameResponse);
+			if (!conf.getRequestHeader().isDefaultResponseDisabled()) {
+				assertNotNull("Response is NULL", frameResponse);
+				assertTrue(Arrays.equals(frameResponse.getBytes(), conf.getResponseFullFrame()));
+			}
 
 		} catch (ZCLException e) {
 			e.printStackTrace();
@@ -705,64 +701,6 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
-	}
-
-	/**
-	 * Performs checks on the passed frame.
-	 * 
-	 * @param zclFrame
-	 */
-
-	private void checkZCLFrame(ZCLFrame zclFrame) {
-
-		/*
-		 * Checks if the getBytes() method actually returns a copy of the actual
-		 * internal ZCLFrame array. In order to do that it creates a ZCLFrame
-		 * instance, using the ZCLFrameImpl class provided by this bundle
-		 */
-
-		byte[] frame = zclFrame.getBytes();
-
-		ZCLFrame referenceZCLFrame = new ZCLFrameImpl(zclFrame.getHeader(), frame);
-
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching CommandID.",
-				referenceZCLFrame.getHeader().getCommandId(),
-				zclFrame.getHeader().getCommandId());
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Frame Control Field.",
-				referenceZCLFrame.getHeader().getFrameControlField(),
-				zclFrame.getHeader().getFrameControlField());
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Manufacturer Code.",
-				referenceZCLFrame.getHeader().getManufacturerCode(),
-				zclFrame.getHeader().getManufacturerCode());
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Transaction Sequence Number.",
-				referenceZCLFrame.getHeader().getSequenceNumber(),
-				zclFrame.getHeader().getSequenceNumber());
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching is Client Server field.",
-				referenceZCLFrame.getHeader().isClientServerDirection(),
-				zclFrame.getHeader().isClientServerDirection());
-		assertEquals("the array returned by ZCLFrame.getBytes() contains a mismatching Is Manufacturer Specific field.",
-				referenceZCLFrame.getHeader().isManufacturerSpecific(),
-				zclFrame.getHeader().isManufacturerSpecific());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching 'Is Cluster Specific Command' field.",
-				referenceZCLFrame.getHeader().isClusterSpecificCommand(),
-				zclFrame.getHeader().isClusterSpecificCommand());
-		assertEquals(
-				"the array returned by ZCLFrame.getBytes() contains a mismatching 'Disable Default Response' field.",
-				referenceZCLFrame.getHeader().isDefaultResponseDisabled(),
-				zclFrame.getHeader().isDefaultResponseDisabled());
-
-		// checks if the getBytes returns back a copy of the internal array.
-		if (frame == null) {
-			fail("null byte[] returned by getBytes()");
-		}
-
-		byte[] frame1 = zclFrame.getBytes();
-		if (frame1 == frame) {
-			fail("getBytes() must return a copy of the internal array");
-		}
-
-		// adds other tests.
 	}
 
 	// ====================================================================
@@ -1085,41 +1023,34 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
 			isCoordinator = true;
 		}
-		assertEquals("the host must be a coordinatior",
-				zigBeeNodeDescriptor.getLogicalType(),
-				ZigBeeNode.COORDINATOR);
 
 		// logical type test
 		BundleContext bc = getContext();
-		try {
-			ServiceTracker st = new ServiceTracker(
-					bc,
 
-					bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode))"),
-					null);
-			st.open();
-			Object[] services = st.getServices();
-			for (int i = 0; i < services.length; i++) {
-				ZigBeeNode node = (ZigBeeNode) services[i];
-				node.getNodeDescriptor(handler);
-				handler.waitForResponse(HANDLER_TIMEOUT);
-				zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
-						.getSuccessResponse();
-				assertNotNull("the node descriptor shouldn't be null",
-						zigBeeNodeDescriptor);
-				assertNotNull("the logical type shouldn't be null", new Short(
-						zigBeeNodeDescriptor.getLogicalType()));
-				if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
-					isCoordinator = true;
-				}
+		ServiceTracker st = new ServiceTracker(
+				bc,
+				ZigBeeNode.class.getName(),
+				null);
+		st.open();
+		Object[] services = st.getServices();
+		for (int i = 0; i < services.length; i++) {
+			ZigBeeNode node = (ZigBeeNode) services[i];
+			node.getNodeDescriptor(handler);
+			handler.waitForResponse(HANDLER_TIMEOUT);
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler
+					.getSuccessResponse();
+			assertNotNull("the node descriptor shouldn't be null",
+					zigBeeNodeDescriptor);
+			assertNotNull("the logical type shouldn't be null", new Short(
+					zigBeeNodeDescriptor.getLogicalType()));
+			if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
+				isCoordinator = true;
 			}
-
-			// coordinator test
-			assertTrue("there must be at least one coordinatior", isCoordinator);
-
-		} catch (InvalidSyntaxException e1) {
-			e1.printStackTrace();
 		}
+
+		// coordinator test
+		assertTrue("there must be at least one coordinator", isCoordinator);
+
 	}
 
 }
