@@ -19,7 +19,7 @@ package org.osgi.service.zigbee;
 /**
  * Manage response of a command request to the Base Driver
  * 
- * @author $Id$
+ * @author $Id: ceeebfdfb63842afe4e4b600aa2c682d60838366 $
  */
 public interface ZCLCommandHandler {
 
@@ -28,10 +28,6 @@ public interface ZCLCommandHandler {
 	 * notifyresponse() (i.e., the base driver in the import situation) must not
 	 * parse the ZCL frame payload. Thus, error codes that are conveyed in the
 	 * ZCLFrame payload must not be turned into exceptions.
-	 * 
-	 * The ZigBee Base Driver will release the handler object when he receives a
-	 * null frame in a notifyResponse call or thanks to the an implementation
-	 * specific timeout.
 	 * 
 	 * The ZigBee Base Driver MUST discard the Default Response if the caller
 	 * set the DisableDefaultReponse flag and the status of DefaultResponse
