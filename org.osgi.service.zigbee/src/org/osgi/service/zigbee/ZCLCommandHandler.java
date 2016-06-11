@@ -37,9 +37,9 @@ public interface ZCLCommandHandler {
 	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
-	 * @param e the exception if any (As described in
-	 *        "Table 2.17 Enumerated Status Values Used in the ZCL" of the ZCL
-	 *        specification).
+	 * @param e the exception if any, see {@link ZCLException} constants mapping
+	 *        the names described in "Table 2.17 Enumerated Status Values Used
+	 *        in the ZCL" of the ZCL specification.
 	 */
 	void notifyResponse(ZCLFrame frame, Exception e);
 
