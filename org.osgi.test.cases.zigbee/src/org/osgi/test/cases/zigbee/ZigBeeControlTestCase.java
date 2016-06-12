@@ -294,7 +294,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	/**
 	 * 
 	 * @param endpointIeeeAddress
-	 * @return the number of registered enpoints for the given IEEE address
+	 * @return the number of registered endpoints for the given IEEE address
 	 */
 	private int getRegisteredEnpoints(BigInteger endpointIeeeAddress) {
 		int result = 0;
