@@ -25,7 +25,7 @@ public interface ZCLCommandHandler {
 
 	/**
 	 * Notifies the result (success or failure) of the call. The entity calling
-	 * notifyresponse() (i.e., the base driver in the import situation) must not
+	 * notifyResponse() (i.e., the base driver in the import situation) must not
 	 * parse the ZCL frame payload. Thus, error codes that are conveyed in the
 	 * ZCLFrame payload must not be turned into exceptions.
 	 * 
