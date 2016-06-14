@@ -62,12 +62,14 @@ class ZigBeeZCLDefaultSerializer {
 	 *        do not allow any invalid value and the passed value is null an
 	 *        {@link IllegalArgumentException} is thrown.
 	 * 
+	 * @throws IOException
+	 * 
 	 * @throws IllegalArgumentException Thrown when the the passed {@code value}
 	 *         does not belong to the allowed class for the {@code dataType} as
 	 *         described in the specification or when the value exceed the range
 	 *         allowed by that type (i.e. length for Octet String data types).
 	 */
-	static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) {
+	static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) throws IOException {
 
 		if (os == null) {
 			throw new NullPointerException();

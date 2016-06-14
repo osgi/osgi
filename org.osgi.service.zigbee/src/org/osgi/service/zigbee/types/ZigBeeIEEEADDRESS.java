@@ -59,7 +59,7 @@ public class ZigBeeIEEEADDRESS
 		return ZigBeeDataTypes.IEEE_ADDRESS;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.IEEE_ADDRESS, value);
 	}
 
