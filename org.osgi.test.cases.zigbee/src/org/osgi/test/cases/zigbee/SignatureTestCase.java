@@ -21,7 +21,7 @@ package org.osgi.test.cases.zigbee;
  *
  * for Sgnature tests purpose
  * 
- * @author $Id: fe277f05a71f3a674b90bc8a4f75384edcc6fdf9 $
+ * @author $Id$
  */
 public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass

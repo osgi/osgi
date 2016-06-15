@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  * 
  * This class is used to parse the configuration file
  * 
- * @author $Id: 24893b0cd410fbf96ac19cc7c8027423d3b9e1fc $
+ * @author $Id$
  */
 public class ConfigurationFileReader {
 

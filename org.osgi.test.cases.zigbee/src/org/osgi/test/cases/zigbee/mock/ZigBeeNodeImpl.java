@@ -32,7 +32,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * Mocked impl.
  * 
- * @author $Id: 2bc610a3e1929e937b084e7fc6e4c9746a730818 $
+ * @author $Id$
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 

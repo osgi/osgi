@@ -21,7 +21,7 @@ import org.osgi.service.zigbee.ZigBeeHandler;
 /**
  * Mocked impl of ZigBeeHandler.
  * 
- * @author $Id: dfdfaaf7098658786a9cf7174d0508bac974267e $
+ * @author $Id$
  */
 public class ZigBeeHandlerImpl implements ZigBeeHandler {
 

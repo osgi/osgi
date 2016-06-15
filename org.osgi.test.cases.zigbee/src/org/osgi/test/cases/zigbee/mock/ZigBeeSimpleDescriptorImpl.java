@@ -21,7 +21,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 /**
  * Mocked impl of ZigBeeSimpleDescriptor.
  * 
- * @author $Id: 71f3adde6d33aff3c25e60c0fed4de55413beb69 $
+ * @author $Id$
  */
 public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 
