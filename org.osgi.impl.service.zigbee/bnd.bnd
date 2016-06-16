@@ -15,7 +15,7 @@ Private-Package = org.osgi.test.cases.zigbee.mock;-noimport:=true, \
 					org.osgi.test.support.sleep;-noimport:=true, \
 			      ${p}.*;-split-package:=first	
 	
-Conditional-Package = org.osgi.test.cases.zigbee.impl, \
+Conditional-Package = org.osgi.test.cases.zigbee.mock, \
 						org.osgi.test.support.compatibility, \
 						org.osgi.test.support.sleep, \
 						org.osgi.test.support
