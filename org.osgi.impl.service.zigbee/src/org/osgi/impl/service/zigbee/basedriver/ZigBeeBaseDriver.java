@@ -23,15 +23,13 @@ import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.impl.service.zigbee.util.teststep.ConfigurationFileReader;
+import org.osgi.impl.service.zigbee.basedriver.configuration.ConfigurationFileReader;
 import org.osgi.impl.service.zigbee.util.teststep.EndpointServicesListener;
 import org.osgi.impl.service.zigbee.util.teststep.TestStepForZigBeeImpl;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
-import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
 import org.osgi.test.support.step.TestStep;
 
 /**
@@ -106,7 +104,7 @@ public class ZigBeeBaseDriver {
 		// register endpoints
 		for (int i = 0; i < conf.nodes.length; i++) {
 
-			ZigBeeNodeConf node = conf.nodes[i];
+			ZigBeeNodeImpl node = conf.nodes[i];
 			ZigBeeEndpoint[] endpoints = conf.getEnpoints(node);
 			for (int j = 0; j < endpoints.length; j++) {
 				ZigBeeEndpoint ep = endpoints[j];

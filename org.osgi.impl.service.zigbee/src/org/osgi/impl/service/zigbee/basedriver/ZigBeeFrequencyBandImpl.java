@@ -14,29 +14,32 @@
  * limitations under the License.
  */
 
-package org.osgi.impl.service.zigbee.event;
+package org.osgi.impl.service.zigbee.basedriver;
 
-import org.osgi.service.zigbee.ZCLEventListener;
-import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 
 /**
- * Mocked impl.
+ * Mocked impl of ZigBeeFrequencyBand.
  * 
  * @author $Id$
  */
-public class ZCLEventListenerImpl implements ZCLEventListener {
+public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
 
-	public void notifyEvent(ZigBeeEvent event) {
+	private int value;
 
+	public ZigBeeFrequencyBandImpl(short band) {
+		this.value = band;
 	}
 
-	public void onFailure(ZCLException e) {
-
+	public boolean is868() {
+		return value == 868;
 	}
 
-	public void notifyTimeOut(int timeout) {
-
+	public boolean is915() {
+		return value == 915;
 	}
 
+	public boolean is2400() {
+		return value == 2400;
+	}
 }

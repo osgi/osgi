@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-package org.osgi.impl.service.zigbee.event;
+package org.osgi.impl.service.zigbee.basedriver.configuration;
 
-import org.osgi.service.zigbee.ZCLEventListener;
-import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.impl.service.zigbee.basedriver.ZigBeeEndpointImpl;
+import org.osgi.service.zigbee.ZCLCluster;
+import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
- * Mocked impl.
+ * 
+ *
+ * Class used by the configuration file reader. see
+ * {@link ConfigurationFileReader}
  * 
  * @author $Id$
  */
-public class ZCLEventListenerImpl implements ZCLEventListener {
+public class ZigBeeEndpointConf extends ZigBeeEndpointImpl {
 
-	public void notifyEvent(ZigBeeEvent event) {
+	private ZigBeeSimpleDescriptor desc;
+
+	public ZigBeeEndpointConf(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
+		super(id, inputs, ouputs, desc);
+		this.desc = desc;
 
 	}
 
-	public void onFailure(ZCLException e) {
+	public ZigBeeSimpleDescriptor getSimpleDescriptor() {
 
-	}
-
-	public void notifyTimeOut(int timeout) {
-
+		return desc;
 	}
 
 }
