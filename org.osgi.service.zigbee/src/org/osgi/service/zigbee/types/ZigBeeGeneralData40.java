@@ -59,7 +59,7 @@ public class ZigBeeGeneralData40
 		return ZigBeeDataTypes.GENERAL_DATA_40;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.GENERAL_DATA_40, value);
 	}
 

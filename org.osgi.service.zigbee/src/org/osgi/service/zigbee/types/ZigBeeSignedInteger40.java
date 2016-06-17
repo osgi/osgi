@@ -59,7 +59,7 @@ public class ZigBeeSignedInteger40
 		return ZigBeeDataTypes.SIGNED_INTEGER_40;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.SIGNED_INTEGER_40, value);
 	}
 

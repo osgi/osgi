@@ -59,7 +59,7 @@ public class ZigBeeBitmap40
 		return ZigBeeDataTypes.BITMAP_40;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BITMAP_40, value);
 	}
 

@@ -17,7 +17,6 @@
 package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
-import java.util.Date;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -53,14 +52,14 @@ public class ZigBeeTimeOfDay
 	}
 
 	public Class getJavaDataType() {
-		return Date.class;
+		return byte[].class;
 	}
 
 	public short getId() {
 		return ZigBeeDataTypes.TIME_OF_DAY;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.TIME_OF_DAY, value);
 	}
 
