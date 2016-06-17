@@ -1,0 +1,286 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font: 1em Ubuntu, Arial, Helvetica, sans-serif;
+    margin: 0px;
+}
+
+#fullbody {
+    width: 1200px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header {
+	position: fixed;
+	background-color: grey;
+	width: inherit;
+	height: 120px;
+	top: 0;
+	bottom: auto;
+	z-index: 1000;
+}
+
+#header #shadow-block {
+	position: absolute;
+	background-color: rgb(0, 67, 112);
+	width: inherit;
+	top: 20px;
+	bottom: 0;
+	height: 100px;
+}
+
+#header img {
+	height: auto;
+	position: absolute;
+	left: 0;
+	height: 100px;
+}
+
+#header h1 {
+	margin-left: 340px;
+	margin-bottom: 20px;
+	position: absolute;
+	top: auto;
+	bottom: -7px;
+	left: 0;
+	color: white;
+	font-size: 3em;
+	z-index: 200;
+}
+
+#column-two {
+	position: fixed;
+	top: 120px;
+	width: inherit;
+	bottom: 0;
+}
+
+#sidebar {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: auto;
+	width: 340px;
+	padding-bottom: 20px;
+	z-index: 200;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+#sidebar ul {
+	padding-left: 0;
+	list-style-type: none;
+}
+
+#sidebar li > ul {
+	padding-left: 10px;
+}
+
+#content {
+    position: absolute;
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: 340px;
+    padding-right: 8px;
+    padding-bottom: 20px;
+    padding-left: 8px;
+    width: 860px;
+    z-index: 0;
+    overflow: auto;
+}
+
+#modile-menu-icon {
+	display: none;
+}
+
+:target:before {
+	content: "";
+	display: block;
+	height: 10px;
+	margin: -10px 0 0;
+}
+
+h1.title {
+	color: rgb(0, 67, 112);
+}
+
+img {
+	width: auto;
+}
+
+.navfooter { bottom: 2%; }
+.highlightButton{ font-size: 0; }
+
+.title, div.toc > p{ font-weight: bold; }
+
+td > p {
+    margin: 0px;
+}
+
+table.navLinks {margin-right: 20px;}
+
+table.navLinks td a {
+	text-decoration: none;
+	text-transform: uppercase;
+	color: black;
+	font-size: 11px;
+}
+
+a.navLinkPrevious {
+	padding-left: 12px;
+}
+
+a.navLinkNext {
+	padding-right: 12px;
+}
+
+.legal, .legal *{
+	color: #555;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.internal { color : #0000CC;}
+
+.writeronly {color : red;}
+
+td {
+    padding: 4px;
+}
+
+/* JAVADOC Styles - all must be prefixed by div.section.package */
+
+div.section.package h2.title:before,
+div.section.package div.section.summary h3.title:before,
+div.section.package div.section.class h3.title:before,
+div.section.package div.section.class div.section.field h4.title:before,
+div.section.package div.section.class div.section.method h4.title:before {
+	font-size: 11px;
+    font-weight: bold;
+    color: white;
+    padding: 2px;
+    margin-right: 2px;
+    display: inherit;
+    padding-top: 8px;
+}
+
+div.section.package h2.title:before {
+	content: "[Package]";
+	background-color: rgb(0, 67, 112);
+	font-size: 15px;
+}
+
+div.section.package div.section.summary h3.title:before {
+	content: "[Summary]";
+    background-color: rgba(0, 67, 112, 0.66);
+}
+
+div.section.package div.section.class h3.title:before {
+	content: "[Class]";
+    background-color: rgba(241, 138, 0, 0.66);
+    color: black;
+}
+
+div.section.package div.section.class div.section.field h4.title:before {
+	content: "[Field]";
+    background-color: rgba(0, 67, 112, 0.33);
+}
+
+div.section.package div.section.class div.section.method h4.title:before {
+	content: "[Method]";
+    background-color: rgba(0, 67, 112, 0.66);
+}
+
+@media (min-width: 800px) and (max-width: 1200px) {
+	#fullbody {
+		width: 800px;
+	}
+
+	#header h1 {
+		margin-left: 220px;
+	}
+
+	#sidebar {
+		width: 220px;
+	}
+
+	#content {
+		left: 220px;
+		width: 580px;
+	}
+}
+
+@media (max-width: 800px) {
+	#fullbody {
+		width: 100%;
+	}
+
+	#header {
+		position: absolute;
+	}
+
+	#header h1 {
+		margin-left: 20px;
+		font-size: 1.6em;
+	}
+
+	#header img {
+		height: 50px;
+	}
+
+	#column-two {
+		position: absolute;
+	}
+
+	#sidebar {
+		position: fixed;
+		top: 0;
+		width: 100%;
+		display: none;
+		background-color: white;
+		z-index: 2000;
+		padding-left: 8px;
+		padding-right: 8px;
+	}
+
+	#content {
+		position: initial;
+		left: 0px;
+		width: 100%;
+		overflow: reset;
+	}
+
+	#modile-menu-icon {
+		display: block;
+		position: fixed;
+		top: 50px;
+		font-weight: bolder;
+		font-size: 2.6em;
+		right: 20px;
+		z-index: 2000;
+		color: white;
+		border: solid white 2px;
+		background-color: grey;
+		border-radius: 4px;
+		cursor: pointer;
+		font-family: monospace;
+		width: 40px;
+		text-align: center;
+	}
+
+	#sidebar.menu-open {
+		display: block;
+	}
+
+}

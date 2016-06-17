@@ -12,7 +12,10 @@ javac.profile=
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
     org.eclipse.persistence.jpa_spec; version=latest, \
     com.icl.saxon; version=latest, \
-    org.osgi.service.io; version=project
+    org.osgi.service.io; version=project, \
+    ../licensed/fop/lib/batik-all-1.7.jar; version=file, \
+    ../licensed/fop/lib/xml-apis-1.3.04.jar; version=file, \
+    ../licensed/fop/lib/xml-apis-ext-1.3.04.jar; version=file
 
 javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
 

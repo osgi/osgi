@@ -62,7 +62,7 @@ public class FOPMain {
 	 * Register any TrueType fonts on the JAVA_FONTS path which are not
 	 * currently available.
 	 */
-	private static void registerFonts() {
+	public static void registerFonts() {
 		String[] fontDirNames = System.getProperty("JAVA_FONTS", "").split(File.pathSeparator);
 		for (String fontDirName : fontDirNames) {
 			registerFonts(fontDirName.trim());
