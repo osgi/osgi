@@ -336,6 +336,9 @@ class ZigBeeZCLDefaultSerializer {
 					throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be serialized with this generic method.");
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
+
+					// FIXME: probably there is a mistake here.
+
 					Date d = (Date) value;
 					Calendar c = GregorianCalendar.getInstance();
 					c.setTime(d);
@@ -345,14 +348,20 @@ class ZigBeeZCLDefaultSerializer {
 					os.writeByte((byte) c.get(Calendar.MILLISECOND / 10));
 					return;
 				}
+
 				case ZigBeeDataTypes.DATE : {
-					Date d = (Date) value;
-					Calendar c = GregorianCalendar.getInstance();
-					c.setTime(d);
-					os.writeByte((byte) c.get(Calendar.YEAR));
-					os.writeByte((byte) c.get(Calendar.MONTH));
-					os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
-					os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
+					if (value instanceof Date) {
+						Date d = (Date) value;
+						// FIXME: probably there is a mistake here.
+						Calendar c = GregorianCalendar.getInstance();
+						c.setTime(d);
+						os.writeByte((byte) c.get(Calendar.YEAR));
+						os.writeByte((byte) c.get(Calendar.MONTH));
+						os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
+						os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
+					} else {
+						os.writeBytes((byte[]) value, 4);
+					}
 					return;
 				}
 
@@ -698,7 +707,8 @@ class ZigBeeZCLDefaultSerializer {
 			case ZigBeeDataTypes.STRUCTURE :
 				throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be deserialized with this generic method.");
 
-			case ZigBeeDataTypes.TIME_OF_DAY : {
+			case ZigBeeDataTypes.TIME_OF_DAY :
+			case ZigBeeDataTypes.DATE : {
 				byte[] value = is.readBytes(4);
 				if (value[0] == 0xff && value[1] == 0xff && value[3] == 0xff && value[4] == 0xff) {
 					// checks for invalid value
@@ -706,22 +716,6 @@ class ZigBeeZCLDefaultSerializer {
 				}
 				swap(value);
 				return value;
-			}
-
-			case ZigBeeDataTypes.DATE : {
-				int value = is.readInt(4);
-				if (value == -1) {
-					return null;
-				}
-				Calendar c = GregorianCalendar.getInstance();
-
-				// NOTE: the Year byte contains years since 1900!
-				c.set(Calendar.YEAR, (is.readByte() & 0xff) + 1900);
-				c.set(Calendar.MONTH, is.readByte() & 0xff);
-				c.set(Calendar.DAY_OF_MONTH, is.readByte() & 0xff);
-				c.set(Calendar.DAY_OF_WEEK, is.readByte() & 0xff);
-
-				return c.getTime();
 			}
 
 			case ZigBeeDataTypes.UTC_TIME : {

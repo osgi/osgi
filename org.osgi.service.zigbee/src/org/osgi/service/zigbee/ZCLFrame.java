@@ -52,6 +52,7 @@ public interface ZCLFrame {
 	 * 
 	 * @return a {@link DataInput} for the payload of the {@link ZCLFrame}. This
 	 *         method does not generate a copy of the payload.
+	 * 
 	 * @throws IllegalStateException if the InputStream is not available.
 	 */
 	public ZigBeeDataInput getDataInput();
