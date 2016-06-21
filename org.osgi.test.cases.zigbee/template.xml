@@ -9,8 +9,7 @@
   <!-- fill the ieeeAddress userDescription and endpointNb here. No need to explicitly write all the endpoints in this xml file 
   endpointNb is the expected number of endpoints on the zigbee node for the specified ieeeAddress -->
   <node ieeeAddress="6628417766" hostPanId="33" userDescription="user description" endpointNb="8" >
-   <!-- All the discovery tests will be done on this Node. Please ensure that the simpleDescriptor is fully filled (the server and client clusters number must be filled) 
-    cluster with an attribute of type EnumerationX or an attribute with a range is needed.
+   <!-- All the discovery tests will be done on this Node. Please ensure that the simpleDescriptor is fully filled (the server and client clusters number must be filled)
     At least one attribute must be read only
    -->
    <endpoints>
@@ -19,7 +18,7 @@
      <serverClusters>
       <cluster id="6">
        <!-- name and domain are optional,they are not tested -->
-       <globalServerDescription id="54" name="basic"
+       <globalServerDescription id="54" name="light cluster"
         domain="general" />
        <commandIds>
         <id id="3" />
@@ -36,10 +35,10 @@
         </attribute>
         <!-- the test needs at leat one attribute which is not read only -->
         <attribute>
-         <!-- the DataType test will try to get the attribute 7 and set a 
-          value which is not a boolean -->
+         <!-- At least one attribute must have a boolean dataType -->
+         <!-- At least one attribute must be reportable -->
          <attributeDescription id="6" isReadOnly="false"
-           name="" isReportable="false" dataType="ZigBeeBoolean">
+           name="" isReportable="true" dataType="ZigBeeBoolean">
          </attributeDescription>
         </attribute>
        </attributes>

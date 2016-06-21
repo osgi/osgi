@@ -346,6 +346,33 @@ public class ConfigurationFileReader {
 		return result;
 	}
 
+	public NetworkAttributeIds getFirstReportableAttribute() {
+		BigInteger ieeeAddresss;
+		short endpointId;
+		int clusterId;
+		int attributeId;
+
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
+			ieeeAddresss = nodes[i].getIEEEAddress();
+			for (int j = 0; j < endpoints.length; j++) {
+				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				endpointId = endpoints[j].getId();
+				for (int k = 0; k < serverClusters.length; k++) {
+					ZCLAttribute[] attributes = ((ZCLClusterConf) serverClusters[k]).getAttributes();
+					clusterId = serverClusters[k].getId();
+					for (int l = 0; l < attributes.length; l++) {
+						if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
+							attributeId = attributes[l].getId();
+							return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	private ZigBeePowerDescriptor getZigBeePowerDescriptor(Element nodeElement) {
 		ZigBeePowerDescriptor result = null;
 

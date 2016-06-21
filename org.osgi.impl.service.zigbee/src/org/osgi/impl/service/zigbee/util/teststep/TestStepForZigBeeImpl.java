@@ -28,8 +28,9 @@ import org.osgi.test.support.step.TestStep;
  */
 public class TestStepForZigBeeImpl implements TestStep {
 
-	static public final String	CONF_FILE_PATH	= "file path";
-	static public final String	LOAD_CONF		= "load conf";
+	static public final String	CONF_FILE_PATH		= "file path";
+	static public final String	LOAD_CONF			= "load conf";
+	public static final String	EVENT_REPORTABLE	= "event reportable";
 
 	static private final String	TAG				= "TestStepForZigBeeImpl";
 	private String				confFilePath	= "template.xml";
@@ -58,6 +59,8 @@ public class TestStepForZigBeeImpl implements TestStep {
 		} else if (stepId.equals(LOAD_CONF)) {
 			baseDriver.loadConfigurationFIle(confFilePath);
 			return null;
+		} else if (stepId.equals(EVENT_REPORTABLE)) {
+			baseDriver.startReportableEventing();
 		}
 
 		Logger.e(TAG, "The given command is UNKNOWN.");

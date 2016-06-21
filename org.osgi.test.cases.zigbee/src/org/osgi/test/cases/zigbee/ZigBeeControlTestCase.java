@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 import org.osgi.framework.BundleContext;
@@ -32,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
+import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -45,31 +45,33 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.service.zigbee.types.ZigBeeBoolean;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
+import org.osgi.test.cases.zigbee.config.file.NetworkAttributeIds;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
 import org.osgi.test.cases.zigbee.mock.ZCLCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeEventImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeEventSourceImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeHandlerImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
 import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeTestOSGiIdEndpointImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.step.TestStepProxy;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Contain the ZigBee testcases.
  * 
- * @author $Id: 48854d1f370587d0cfaad23650bd1380ce578eca $
+ * @author $Id$
  */
 public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 	private ServicesListener	listener;
+	private TestStepLauncher	launcher;
 	public static int			HANDLER_TIMEOUT		= 3000;
 	public static int			DISCOVERY_TIMEOUT	= 3000;
+	private static final String	EVENT_REPORTABLE	= "event reportable";
 
 	ConfigurationFileReader conf;
 
@@ -87,7 +89,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath, getContext());
+		launcher = TestStepLauncher.launch(confFilePath, getContext());
 		conf = launcher.getConfReader();
 		HANDLER_TIMEOUT = conf.getInvokeTimeout();
 		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
@@ -582,8 +584,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeCluster is NULL", cluster);
 
 		// Test "control" methods of ZigBeeCluster.
-
-		// int[] attributesIds = {8};
+		final int attrId = ((ZCLClusterConf) endpointConf.getServerClusters()[0]).getAttributes()[0].getId();
 		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfo() {
 
 			public boolean isManufacturerSpecific() {
@@ -595,9 +596,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			}
 
 			public int getId() {
-				// the attribute 0 must be present to test the READ_ONLY ZCL
-				// exception
-				return 0;
+
+				return attrId;
 			}
 
 			public ZCLDataTypeDescription getDataType() {
@@ -729,24 +729,16 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		}
 		assertNotNull("ZigBeeCluster is NULL", cluster);
 
-		Dictionary events = new Hashtable();
-		events.put("eventKey", "eventValue");
-
-		int attributeId = -1;
-		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(node.getIEEEAddress(),
-				endpoint.getId(),
-				cluster.getId(),
-				attributeId,
-				events);
-
-		// create, and launch a test event source.
-		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(getContext(), aZigbeeEvent);
-		aZigBeeEventSourceImpl.start();
-
+		NetworkAttributeIds attrIds = conf.getFirstReportableAttribute();
 		// create, and launch a test event listener.
 		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(getContext());
-		aZCLEventListenerImpl.start();
+		Dictionary properties = new Properties();
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, "3");
+		aZCLEventListenerImpl.start(properties);
 
+		TestStepProxy testStep = launcher.getTeststepProxy();
+
+		testStep.execute(EVENT_REPORTABLE, "ensure that the first device with a reportable attribute defined in the configuration file is plugged and press [ENTER]");
 		// assert that eventing works: the sent, and the received events must be
 		// equal.
 		try {
@@ -755,21 +747,26 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			int sleepinms = DISCOVERY_TIMEOUT;
 			log("Thread.sleep(" + sleepinms + ")");
 			Thread.sleep(sleepinms);
-		} catch (InterruptedException e) {
+		} catch (
+
+		InterruptedException e)
+
+		{
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
 
 		ZigBeeEvent lastReceivedZigBeeEvent = aZCLEventListenerImpl.getLastReceivedZigBeeEvent();
-		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
-		assertNotNull("aZigbeeEvent can not be null", aZigbeeEvent);
-		log("aZigbeeEvent: " + aZigbeeEvent);
 
+		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
+		assertNotNull("aZigbeeEvent can not be null", lastReceivedZigBeeEvent);
+		log("aZigbeeEvent: " + lastReceivedZigBeeEvent);
+
+		assertEquals(lastReceivedZigBeeEvent.getIEEEAddress(), attrIds.getIeeeAddresss());
+		assertEquals(lastReceivedZigBeeEvent.getClusterId(), attrIds.getClusterId());
+		assertEquals(lastReceivedZigBeeEvent.getAttributeId(), attrIds.getAttributeId());
 		// stop/destroy the test event listener.
 		aZCLEventListenerImpl.stop();
-
-		// stop/destroy the test event source.
-		aZigBeeEventSourceImpl.stop();
 	}
 
 	// ====================================================================

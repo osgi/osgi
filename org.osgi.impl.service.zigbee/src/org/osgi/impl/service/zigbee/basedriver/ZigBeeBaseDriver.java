@@ -24,8 +24,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.basedriver.configuration.ConfigurationFileReader;
+import org.osgi.impl.service.zigbee.basedriver.configuration.NetworkAttributeIds;
+import org.osgi.impl.service.zigbee.event.ZigBeeEventImpl;
 import org.osgi.impl.service.zigbee.util.teststep.EndpointServicesListener;
 import org.osgi.impl.service.zigbee.util.teststep.TestStepForZigBeeImpl;
+import org.osgi.impl.service.zigbee.util.teststep.ZigBeeEventSourceImpl;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeHost;
@@ -39,9 +42,10 @@ import org.osgi.test.support.step.TestStep;
  */
 public class ZigBeeBaseDriver {
 
-	private BundleContext		bc;
-	private List				Endpoints;
-	EndpointServicesListener	listener;
+	private BundleContext				bc;
+	private List						Endpoints;
+	private EndpointServicesListener	listener;
+	private ConfigurationFileReader		conf;
 
 	/**
 	 * This constructor creates the ZigBeeBaseDriver object based on the
@@ -90,7 +94,7 @@ public class ZigBeeBaseDriver {
 	}
 
 	public void loadConfigurationFIle(String filePAth) {
-		ConfigurationFileReader conf = ConfigurationFileReader.getInstance(filePAth, bc);
+		conf = ConfigurationFileReader.getInstance(filePAth, bc);
 
 		// set the min header size
 		ZCLFrameImpl.minHeaderSize = conf.getHeaderMinSize();
@@ -123,6 +127,23 @@ public class ZigBeeBaseDriver {
 
 		}
 
+	}
+
+	public void startReportableEventing() {
+
+		NetworkAttributeIds attrId = conf.getFirstReportableAttribute();
+
+		Integer value = new Integer(12);
+
+		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(attrId.getIeeeAddresss(),
+				attrId.getEndpointId(),
+				attrId.getClusterId(),
+				attrId.getAttributeId(),
+				value);
+
+		// create, and launch a test event source.
+		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(bc, aZigbeeEvent);
+		aZigBeeEventSourceImpl.start();
 	}
 
 }
