@@ -19,7 +19,17 @@
   <section>
     <title>Introduction</title>
     
-    <para>This is a paragraph...</para>
+    <para>This is a paragraph...
+      <itemizedlist>
+        <listitem>
+          <para><code>static valueOf(String s)</code></para>
+        </listitem>
+
+        <listitem>
+          <para>String constructor.</para>
+        </listitem>
+      </itemizedlist>
+    </para>
   </section> 
   
   <section>
@@ -33,6 +43,94 @@
     
     <para>...</para>
   </section> 
+
+  <section>
+    <title>Conversions</title>
+    
+    <section>
+      <title>Scalar values</title>
+    
+      <section>
+        <title>Direct conversion between scalars</title>
+        
+        <para>Direct conversion between certain scalar types is supported. For all other 
+        scalar types conversion is done by converting to String and then converting 
+        into the target type.
+        </para>
+
+        <table pgwide="1" rowheader="firstcol">
+          <title>Direct conversions between scalar types</title>
+          
+          <tgroup cols="5">
+            <thead>
+              <row>
+                <entry><subscript>target</subscript> \ <superscript>source</superscript></entry>
+                <entry>Boolean</entry>
+                <entry>Character</entry>
+                <entry><emphasis>Number</emphasis></entry>
+                <entry><code>null</code></entry>
+              </row>
+            </thead>
+            
+            <tbody>
+              <row>
+                <entry>boolean</entry>
+                <entry><code>v.booleanValue()</code></entry>
+                <entry><code>v.charValue() != 0</code></entry>
+                <entry><code>v.</code><emphasis>number</emphasis><code>Value() != 0</code></entry>
+                <entry><code>false</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>   
+        
+        <para>Where conversion is done from corresponding primitive types, these types
+        are boxed before converting. Where conversion is done to corresponding boxed types
+        the types as boxed after converting.</para>     
+      </section>
+
+      <section>
+        <title>Conversion to String</title>
+        
+        <para>Conversion to String is generally done by calling toString()</para>
+        
+      </section>
+      
+      <section>
+        <title>Conversion from String</title>
+        
+        <para>Conversion from String is done by trying to invoke the following methods: 
+        
+          <orderedlist>
+            <listitem>
+              <para><code>static valueOf(String s)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>String constructor.</para>
+            </listitem>
+          </orderedlist>
+        </para>
+      </section>
+    
+    </section>
+    
+    <section>
+      <title>Collections and Arrays</title>
+  
+      <para>...</para>
+    </section>
+    
+    <section>
+      <title>Maps, Classes, Interfaces and Annotations</title>
+      <para>...</para>
+    </section>
+    
+    <section>
+      <title>Special cases</title>
+      <para>...</para>
+    </section>
+  </section>
 
   <section>
     <title>Security</title>
