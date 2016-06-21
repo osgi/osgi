@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="148"
+         revision="$Id$"
+         version="5" xml:id="service.converter"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Converter Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.converter-version"
+    linkend="org.osgi.service.converter"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+    
+    <para>This is a paragraph...</para>
+  </section> 
+  
+  <section>
+    <title>Usage</title>
+    
+    <para>...</para>
+  </section> 
+
+  <section>
+    <title>Converter Service</title>
+    
+    <para>...</para>
+  </section> 
+
+  <section>
+    <title>Security</title>
+    
+    <para>...</para>
+  </section> 
+
+  <!-- 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
+ -->
+ 
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
