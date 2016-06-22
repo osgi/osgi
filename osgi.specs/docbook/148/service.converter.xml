@@ -62,9 +62,12 @@
           <title>Direct conversions between scalar types</title>
           
           <tgroup cols="5">
+            <colspec colnum="1" colwidth="0.5*"/>
+            <colspec colnum="5" colwidth="0.5*"/>
+           
             <thead>
               <row>
-                <entry><subscript>target</subscript> \ <superscript>source</superscript></entry>
+                <entry><subscript>to</subscript> \ <superscript>from</superscript></entry>
                 <entry>Boolean</entry>
                 <entry>Character</entry>
                 <entry><emphasis>Number</emphasis></entry>
@@ -80,20 +83,50 @@
                 <entry><code>v.</code><emphasis>number</emphasis><code>Value() != 0</code></entry>
                 <entry><code>false</code></entry>
               </row>
+            
+              <row>
+                <entry>char</entry>
+                <entry><code>v.booleanValue() ? 1 : 0</code></entry>
+                <entry><code>v.charValue()</code></entry>
+                <entry><code>(char) v.intValue()</code></entry>
+                <entry>0</entry>
+              </row>
+              
+              <row>
+                <entry><emphasis>number</emphasis></entry>
+                <entry><code>v.booleanValue() ? 1 : 0</code></entry>
+                <entry><code>(</code><emphasis>number</emphasis><code>) v.charValue()</code></entry>
+                <entry><code>v.</code><emphasis>number</emphasis><code>Value()</code></entry>
+                <entry><code>null</code></entry>
+              </row>
+              
+              <row>
+                <entry><emphasis>EnumType</emphasis></entry>
+                <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>v.toString.toUpperCase())</code></para></entry>
+                <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>Character.toString(v))</code></para></entry>
+                <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>                
+              </row>
             </tbody>
           </tgroup>
         </table>   
         
+        <!-- 
+        <remark>does v.doubleValue() != 0 actually work? What if the value
+        is slightly off?</remark>
+         -->
+        
         <para>Where conversion is done from corresponding primitive types, these types
         are boxed before converting. Where conversion is done to corresponding boxed types
-        the types as boxed after converting.</para>     
+        the types are boxed after converting.</para>     
       </section>
 
       <section>
         <title>Conversion to String</title>
         
-        <para>Conversion to String is generally done by calling toString()</para>
+        <para>Conversion to String is done by calling <code>toString()</code> on the object to
+        be converted. In the case of a primitive type, the object is boxed first.</para>
         
+        <para>A <code>null</code> object results in a <code>null</code> String value.</para>
       </section>
       
       <section>
@@ -110,9 +143,42 @@
               <para>String constructor.</para>
             </listitem>
           </orderedlist>
+          
+          Many types have special rules for converting from String
+          values. See <xref linkend="service.converter.special.cases"/>.
         </para>
       </section>
-    
+      <section xml:id="service.converter.special.cases">
+        <title>Special cases</title>
+        <para>...</para>
+        <table rowheader="firstcol">
+          <title>Special cases converting from String</title>
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Target</entry>
+                <entry>Method</entry>
+              </row>
+            </thead>         
+            <tbody>
+              <row>
+                <entry>boolean / <code>Boolean</code></entry>
+                <entry><code>Boolean.parseBoolean(v)</code></entry>
+              </row>
+                
+              <row>
+                <entry>char / <code>Character</code></entry>
+                <entry><code>v.lenght() > 0 ? v.charAt(0) : 0</code></entry>
+              </row>
+                
+              <row>
+                <entry><emphasis>number / Number</emphasis></entry>
+                <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
+              </row>
+            </tbody>   
+          </tgroup>
+        </table>
+      </section>
     </section>
     
     <section>
@@ -126,10 +192,6 @@
       <para>...</para>
     </section>
     
-    <section>
-      <title>Special cases</title>
-      <para>...</para>
-    </section>
   </section>
 
   <section>
