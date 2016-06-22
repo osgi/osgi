@@ -105,6 +105,7 @@
                 <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>v.toString.toUpperCase())</code></para></entry>
                 <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>Character.toString(v))</code></para></entry>
                 <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>                
+                <entry><code>null</code></entry>
               </row>
             </tbody>
           </tgroup>
@@ -178,7 +179,7 @@
 
               <row>
                 <entry><emphasis><code>number / Number</code></emphasis></entry>
-                <entry><emphasis>Number</emphasis><code>.parse(v)</code><emphasis>Number</emphasis><code>(v) </code></entry>
+                <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
               </row>
 
               <row>
@@ -213,7 +214,7 @@
 
               <row>
                 <entry><code>java.util.Map.Entry</code></entry>
-                <entry><para><code>v.getKey().toString() + "=" + v.getValue().toString()</code></para>
+                <entry><remark>This should do the reverse of this</remark><para><code>v.getKey().toString() + "=" + v.getValue().toString()</code></para>
                 <para>see also <xref linkend="service.converter.special.cases.map.entry"/></para></entry>
               </row>
               
@@ -241,7 +242,7 @@
 <remark>@@@ TODO UTC</remark>
           </para>
           
-          <para>Converting into other types is by converting to a String as intermediary.</para>
+          <para>Converting into other types is done by converting via a String as intermediary.</para>
 
           <para>Conversions from Calendar objects are done by converting the Calendar
           to a Date via getTime() first. Convertions to a Calendar object are done by 
@@ -261,9 +262,110 @@
       <title>Collections and Arrays</title>
   
       <para>...</para>
+      
+      <section>
+        <title>Converting to a single value</title>
+        <para>The first element is taken and converted into the target type.</para>
+        <para>If the collection or array has no elements, the <code>null</code> value is
+        used to convert into the target type.</para>
+      </section>
+      
+      <section>
+        <title>Converting from a single value</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Converting to an Array or Collection</title>
+        <para>A new object is always created to be returned and owned by the caller.
+        This is true even it the target type is compatible with the source type.</para>
+        
+        <table>
+          <title>Collection / Array resulting object creation</title>
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="0.5*"/>
+            <thead>
+              <row>
+                <entry>Target</entry>
+                <entry>Method</entry>
+              </row>
+            </thead>         
+            <tbody>
+              <row>
+                <entry>Collection interface</entry>
+                <entry>A mutable implementation is created. E.g. if the target type is 
+                <code>java.util.List</code> then the implementation can create a
+                <code>java.util.ArrayList</code>. When converting to a <code>java.util.Set</code>
+                the converter must choose a set implementation that preserves iteration order.</entry>
+              </row>
+              <row>
+                <entry>Collection concrete type</entry>
+                <entry>A new instance is created by calling <code>Class.newInstance()</code> on the 
+                provided type. For example if the target type is <code>LinkedList</code> then the 
+                converter creates a target object by calling <code>LinkedList.class.newInstance()</code>.</entry>
+              </row>
+              <row>
+                <entry><code>T[]</code></entry>
+                <entry><code>Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
+                <code>x</code> is the required size of the target collection.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        
+        <para>Before inserting values into the resulting collection/array they are converted to the desired
+        target type first. In the case of arrays this is the type of the array. When inserting into a 
+        Collection type information about the target type can be made available by using the 
+        <code>Converting.to(TypeReference)</code> or <code>Converting.to(Type)</code> methods. For example, 
+        to convert an array of Strings into a list of Integers:
+        
+        <programlisting>List&lt;Integer&gt; result =
+  converter.convert(Arrays.asList("1","2","3")).
+    to(new TypeReference&lt;List&lt;Integer&gt;&gt;() {});</programlisting>
+    
+        The following example converts an array of <code>int</code>s into a set of Doubles. Note that
+        the resulting set should preserve the same iteration order as the original array:
+        
+        <programlisting>Set&lt;Double&gt; result =
+  converter.convert(new int[] {1,2,3}).
+    to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
+        </programlisting>
+        
+        Values are inserted in the resulting Collection/array as follows:
+        
+          <itemizedlist>
+            <listitem>
+              <para>If the source object if <code>null</code>, an empty collection/array is produced.</para>
+            </listitem>
+            
+            <listitem>
+              <para>If the value is not a Collection, Array or Map-like structure (as described
+              in <xref linkend="service.converter.special.cases.maps"/>) a collection/array with
+              a single element is produced. The value is first converted into the desired
+              target type.</para>
+            </listitem>
+            
+            <listitem>
+              <para>If the value is a Collection or Array, then each of its elements is converted 
+              into desired target type before inserting. Elements are inserted into the target
+              collection in their normal iteration order.</para>
+            </listitem>
+            
+            <listitem>
+              <para>If the value is a Map-like structure (as described
+              in <xref linkend="service.converter.special.cases.maps"/>) then Map.Entry elements 
+              are obtained from it using an iterator that adheres to the normal iteration order. 
+              Each Map.Entry element is then converted into the target type before inserting in the
+              result.</para>
+            </listitem>
+          </itemizedlist> 
+        </para>
+        
+        
+      </section>
     </section>
     
-    <section>
+    <section xml:id="service.converter.special.cases.maps">
       <title>Maps, Classes, Interfaces and Annotations</title>
       <para>...</para>
     </section>
