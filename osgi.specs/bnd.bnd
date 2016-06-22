@@ -6,6 +6,9 @@ javac.profile=
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
+fop_home: ${licensed}/fop
+batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;${fop_home};xml-apis*.jar}};^.*;${fop_home}/$0\\;version=file}
+
 -buildpath: \
     dmforest;        version=project;packages=**, \
     com.sun.tools;   version=1.5.0, \
@@ -13,9 +16,7 @@ javac.profile=
     org.eclipse.persistence.jpa_spec; version=latest, \
     com.icl.saxon; version=latest, \
     org.osgi.service.io; version=project, \
-    ../licensed/fop/lib/batik-all-1.7.jar; version=file, \
-    ../licensed/fop/lib/xml-apis-1.3.04.jar; version=file, \
-    ../licensed/fop/lib/xml-apis-ext-1.3.04.jar; version=file
+    ${batik_buildpath}
 
 javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
 
