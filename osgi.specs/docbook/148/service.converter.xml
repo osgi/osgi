@@ -151,7 +151,7 @@
       <section xml:id="service.converter.special.cases">
         <title>Special cases</title>
         <para>...</para>
-        <table rowheader="firstcol">
+        <table>
           <title>Special cases converting from String</title>
           <tgroup cols="2">
             <thead>
@@ -162,22 +162,98 @@
             </thead>         
             <tbody>
               <row>
-                <entry>boolean / <code>Boolean</code></entry>
+                <entry><code>boolean / Boolean</code></entry>
                 <entry><code>Boolean.parseBoolean(v)</code></entry>
               </row>
                 
               <row>
-                <entry>char / <code>Character</code></entry>
+                <entry><code>char / Character</code></entry>
                 <entry><code>v.lenght() > 0 ? v.charAt(0) : 0</code></entry>
               </row>
                 
               <row>
-                <entry><emphasis>number / Number</emphasis></entry>
-                <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
+                <entry><emphasis>EnumType</emphasis></entry>
+                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><emphasis><code>number / Number</code></emphasis></entry>
+                <entry><emphasis>Number</emphasis><code>.parse(v)</code><emphasis>Number</emphasis><code>(v) </code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.lang.Class</code></entry>
+                <entry><code>Bundle.loadClass(v)</code></entry>
+              </row>
+                            
+              <row>
+                <entry><code>java.time.LocalDate</code></entry>
+                <entry><code>LocalDate.parse(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.time.LocalDateTime</code></entry>
+                <entry><code>LocalDateTime.parse(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.time.LocalTime</code></entry>
+                <entry><code>LocalTime.parse(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.time.OffsetTime</code></entry>
+                <entry><code>OffsetTime.parse(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.time.ZonedDateTime</code></entry>
+                <entry><code>ZonedDateTime.parse(v)</code></entry>
+              </row>
+
+              <row>
+                <entry><code>java.util.Map.Entry</code></entry>
+                <entry><para><code>v.getKey().toString() + "=" + v.getValue().toString()</code></para>
+                <para>see also <xref linkend="service.converter.special.cases.map.entry"/></para></entry>
+              </row>
+              
+              <row>
+                <entry><code>java.util.UUID</code></entry>
+                <entry><code>UUID.fromString(v)</code></entry>
+              </row>              
+
+              <row>
+                <entry><code>java.util.regex.Pattern</code></entry>
+                <entry><code>Pattern.compile(v)</code></entry>
               </row>
             </tbody>   
           </tgroup>
         </table>
+        
+        <section>
+          <title>Date and Calendar</title>
+          <para>A <code>java.util.Date</code> instance is converted to 
+          a <code>long</code> value by calling <code>Date.getTime()</code>.
+          Converting a <code>long</code> into a <code>java.util.Date</code>
+          is done by calling <code>new Date(long)</code>.</para> 
+          
+          <para>Converting a Date to a String is done by
+<remark>@@@ TODO UTC</remark>
+          </para>
+          
+          <para>Converting into other types is by converting to a String as intermediary.</para>
+
+          <para>Conversions from Calendar objects are done by converting the Calendar
+          to a Date via getTime() first. Convertions to a Calendar object are done by 
+          constructing a Date object with the desired time (UTC) and then setting the 
+          time in the Calendar object via setTime().</para>
+        </section>
+        
+        <section xml:id="service.converter.special.cases.map.entry">
+          <title>Map.Entry</title>
+          <para>...</para>
+        </section>
+        
       </section>
     </section>
     
