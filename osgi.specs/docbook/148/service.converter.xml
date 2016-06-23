@@ -378,9 +378,7 @@
     <para>...</para>
   </section> 
 
-  <!-- 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
- -->
  
   <section>
     <title>References</title>

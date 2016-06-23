@@ -1,24 +1,25 @@
 osgi.enterprise.specs = \
-	 org.osgi.jmx, \
+     org.osgi.jmx, \
      org.osgi.namespace.contract, \
      org.osgi.namespace.extender, \
      org.osgi.namespace.implementation, \
      org.osgi.namespace.service, \
      org.osgi.namespace.unresolvable, \
-	 org.osgi.service.async, \
-	 org.osgi.service.blueprint, \
-	 org.osgi.service.cm, \
-	 org.osgi.service.component, \
-	 org.osgi.service.component.annotations, \
-	 org.osgi.service.coordinator, \
-	 org.osgi.service.event, \
-	 org.osgi.service.http, \
-	 org.osgi.service.http.whiteboard, \
-	 org.osgi.service.jdbc, \
-	 org.osgi.service.jndi, \
-	 org.osgi.service.jpa, \
-	 org.osgi.service.log, \
-	 org.osgi.service.metatype, \
+     org.osgi.service.async, \
+     org.osgi.service.blueprint, \
+     org.osgi.service.cm, \
+     org.osgi.service.component, \
+     org.osgi.service.component.annotations, \
+     org.osgi.service.converter, \
+     org.osgi.service.coordinator, \
+     org.osgi.service.event, \
+     org.osgi.service.http, \
+     org.osgi.service.http.whiteboard, \
+     org.osgi.service.jdbc, \
+     org.osgi.service.jndi, \
+     org.osgi.service.jpa, \
+     org.osgi.service.log, \
+     org.osgi.service.metatype, \
      org.osgi.service.metatype.annotations, \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
@@ -27,18 +28,18 @@ osgi.enterprise.specs = \
      org.osgi.service.rest, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
-	 org.osgi.service.useradmin, \
+     org.osgi.service.useradmin, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
      org.osgi.util.pushstream, \
-	 org.osgi.util.xml
+     org.osgi.util.xml
 
 osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};^.*$;$0.*}
 
 osgi.enterprise.resources = {${project.workspace}/osgi.companion/legal/jar}, \
-  						xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
-		  				xmlns/metatype=${project.workspace}/xmlns/metatype, \
-  						xmlns/rsa=${project.workspace}/xmlns/rsa, \
-  						xmlns/repository=${project.workspace}/xmlns/repository, \
-  						xmlns/rest=${project.workspace}/xmlns/rest, \
-  						xmlns/scr=${project.workspace}/xmlns/scr
+                        xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
+                        xmlns/metatype=${project.workspace}/xmlns/metatype, \
+                        xmlns/rsa=${project.workspace}/xmlns/rsa, \
+                        xmlns/repository=${project.workspace}/xmlns/repository, \
+                        xmlns/rest=${project.workspace}/xmlns/rest, \
+                        xmlns/scr=${project.workspace}/xmlns/scr

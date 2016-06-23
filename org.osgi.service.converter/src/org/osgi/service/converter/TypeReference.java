@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
  * this reference up and return it with the getType() call.
  *
  * <pre>
- *  List<String> result =
+ *  List&lt;String&gt; result =
  *      converter.convert(Arrays.asList(1,2,3)).
  *          to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
  * </pre>
