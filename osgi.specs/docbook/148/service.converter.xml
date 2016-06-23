@@ -291,14 +291,26 @@
       
       <section>
         <title>Converting to a single value</title>
-        <para>The first element is taken and converted into the target type.</para>
+        <para>
+        If the target is not a Collection, Array or Map-like structure (as described
+        in <xref linkend="service.converter.special.cases.maps"/>)
+        The first element is taken and converted into the target type.</para>
+        
         <para>If the collection or array has no elements, the <code>null</code> value is
         used to convert into the target type.</para>
-      </section>
-      
-      <section>
-        <title>Converting from a single value</title>
-        <para>...</para>
+        
+        <para>Deviations from this mechanism can be achieved by using an 
+          <xref linkend="org.osgi.service.converter.Adapter" xrefstyle="hyperlink"/>. For example:
+          <programlisting>Converter converter = ...; // from service registry
+          
+Adapter ca = converter.getAdapter();
+ca.rule(String[].class, String.class,
+  v -> Stream.of(v).collect(Collectors.joining(",")),
+  v -> v.split(","));
+
+String s = ca.convert(new String[] {"A", "B"}).to(String.class)); // s="A,B"
+String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlisting> 
+        </para>
       </section>
       
       <section>
@@ -341,8 +353,10 @@
         
         <para>Before inserting values into the resulting collection/array they are converted to the desired
         target type first. In the case of arrays this is the type of the array. When inserting into a 
-        Collection type information about the target type can be made available by using the 
-        <code>Converting.to(TypeReference)</code> or <code>Converting.to(Type)</code> methods. For example, 
+        Collection type information about the target type can be made available by using the
+        <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
+        or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
+        methods. For example, 
         to convert an array of Strings into a list of Integers:
         
         <programlisting>List&lt;Integer&gt; result =
