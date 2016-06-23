@@ -406,8 +406,49 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
     </section>
     
     <section xml:id="service.converter.special.cases.maps">
-      <title>Maps, Classes, Interfaces and Annotations</title>
-      <para>...</para>
+      <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
+      <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
+      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. But also objects that provide a map view
+      can be handled.</para>
+      
+      <para>When converting between map-like types, a map is used as the canonical structure used as an intermediary
+      when converting between types.
+      </para>
+      
+      <section>
+        <title>Map</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Dictionary</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Interface</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Annotation</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Java Beans</title>
+        <para><remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans</remark></para>
+      </section>
+      
+      <section>
+        <title>OSGi DTO</title>
+        <para>...</para>
+      </section>
+      
+      <section>
+        <title>Types with getProperties()</title>
+        <para><remark>Need to describe what happens if something is a JavaBean that also has getProperties()</remark></para>
+      </section>
     </section>
     
     <section>
