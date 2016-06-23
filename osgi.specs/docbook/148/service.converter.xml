@@ -24,9 +24,27 @@
   </section> 
   
   <section>
-    <title>Usage</title>
+    <title>Entities</title>
     
-    <para>...</para>
+    <para>The following entities are used in this specification</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>source</emphasis> - the object to be converted.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>result</emphasis> - the result of the conversion.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>source type</emphasis> - the type of the source to be converted.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>target type</emphasis> - the desired type of the conversion result.</para>
+      </listitem>
+    </itemizedlist>
   </section> 
 
   <section>
@@ -321,7 +339,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         This is true even it the target type is compatible with the source type.</para>
         
         <table>
-          <title>Collection / Array resulting object creation</title>
+          <title>Collection / Array result creation</title>
           <tgroup cols="2">
             <colspec colnum="1" colwidth="0.5*"/>
             <thead>
@@ -408,26 +426,91 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
     <section xml:id="service.converter.special.cases.maps">
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
-      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. But also objects that provide a map view
+      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. Additionally objects that provide a map view
       can be handled.</para>
       
       <para>When converting between map-like types, a map is used as the canonical structure used as an intermediary
-      when converting between types.
+      when converting between types. When converting to other structures, the map is converted into a collection of
+      <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
       
       <section>
         <title>Map</title>
-        <para>...</para>
+        <para>A new object is always created to be returned and owned by the caller.
+        This is true even it the target type is compatible with the source type.
+        <table>
+          <title>Map result creation</title>
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="0.5*"/>
+            <thead>
+              <row>
+                <entry>Target</entry>
+                <entry>Method</entry>
+              </row>
+            </thead>         
+            <tbody>
+              <row>
+                <entry>Map interface</entry>
+                <entry>A mutable implementation is created. E.g. if the target type is 
+                <code>ConcurrentNavigableMap</code> then the implementation can create a 
+                <code>ConcurrentSkipListMap</code>.</entry>
+              </row>
+              <row>
+                <entry>Map concrete type</entry>
+                <entry>A new instance is created by calling <code>Class.newInstance()</code> 
+                on the provided type. For example if the target type is <code>HashMap</code> 
+                then the converter creates a target object by calling
+                <code>HashMap.class.newInstance()</code>.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        
+        Each key-value pair in the source map is converted to desired types of the target map
+        using the generic information if available.
+        
+        Map type information about the target type can be made available by using the
+        <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
+        or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
+        methods.        
+        </para>      
       </section>
       
       <section>
         <title>Dictionary</title>
-        <para>...</para>
+        <para>Converting between a map and a <code>Dictionary</code> is done by iterating over the
+        source and inserting the key value pairs in the result, converting them to the requested target 
+        type. As with other generic types, target type information for Dictionaries can be provided
+        via a <xref linkend="org.osgi.service.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
       </section>
       
       <section>
         <title>Interface</title>
-        <para>...</para>
+        <para>When converting into an interface the converter will create a dynamic proxy to 
+        implement the interface. The name of the method returning the value should match the key 
+        of the map entry, taking into account the mapping rules specified in 
+        table 112.9 of the R6 Declarative Service specification. <remark>proper xref</remark> 
+        The key of the map may need to be converted into a String first.</para>
+        
+        <para>Interfaces can provide methods for default values by providing a single-argument method
+        override in addition to the no-arg method matching the key name. If the type of the default
+        does not match the target type it is converted using the active converter or adapter first. 
+        For example:  
+        <programlisting>interface Config {
+  int my_value(); // no default, used when converting from the interface
+  int my_value(int defVal);
+  int my_value(String defVal); // default value is automatically converted to the target type
+  boolean my_other_value();
+}
+
+// Usage
+Map&lt;String, ?&gt; myMap = ... // an example map
+Config cfg = converter.convert(myMap).to(Config.class);
+int val = cfg.my_value(17); // if not set then use 17
+</programlisting>
+        Default values are used when the key is not present in the map for the method. If a key is 
+        present with a <code>null</code> value, then <code>null</code> is taken as the value and 
+        converted to the target type.</para>
       </section>
       
       <section>
@@ -442,7 +525,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
       
       <section>
         <title>OSGi DTO</title>
-        <para>...</para>
+        <para>Objects that extend (either directly or indirectly) the <code>org.osgi.dto.DTO</code> class ...</para>
       </section>
       
       <section>
@@ -458,8 +541,12 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
   </section>
 
   <section>
+    <title>Codecs</title>
+    <para>...</para>
+  </section> 
+
+  <section>
     <title>Security</title>
-    
     <para>...</para>
   </section> 
 
