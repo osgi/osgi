@@ -19,16 +19,7 @@
   <section>
     <title>Introduction</title>
     
-    <para>This is a paragraph...
-      <itemizedlist>
-        <listitem>
-          <para><code>static valueOf(String s)</code></para>
-        </listitem>
-
-        <listitem>
-          <para>String constructor.</para>
-        </listitem>
-      </itemizedlist>
+    <para>...
     </para>
   </section> 
   
@@ -47,11 +38,20 @@
   <section>
     <title>Conversions</title>
     
+    <para>Unless otherwise noted, conversions are only performed when the target object is not compatible
+    with the source type. For example when requesting to convert a <code>java.math.BigDecimal</code> to a 
+    <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
+    requested target type.</para>
+    
+    <para>Note that in the case of Arrays, Collections and Map-like structures a copy is always returned, 
+    even if the target type is compatible with the source. This copy can be owned and optionally further
+    modified by the caller.</para>
+    
     <section>
       <title>Conversion between scalars</title>
       
       <para>Direct conversion between certain scalar types is supported. For all other 
-      scalar types conversion is done by converting to String and then converting 
+      scalar types conversion is done by converting to <code>String</code> and then converting 
       into the target type.
       </para>
 
@@ -101,14 +101,14 @@
       </table>   
       
       <para>Where conversion is done from corresponding primitive types, these types
-      are boxed before converting. Where conversion is done to corresponding boxed types
+      are boxed before converting. Where conversion is done to corresponding boxed types,
       the types are boxed after converting.</para>     
     </section>
 
     <section>
       <title>Conversion to String</title>
       
-      <para>Conversion to String is done by calling <code>toString()</code> on the object to
+      <para>Conversion to <code>String</code> is done by calling <code>toString()</code> on the object to
       be converted. In the case of a primitive type, the object is boxed first.</para>
       
       <para>A <code>null</code> object results in a <code>null</code> String value.</para>
@@ -227,7 +227,7 @@
         <title>Enums</title>
         <para>Conversions to Enum types are supported as follows.</para>
         <table>
-          <title>Special cases converting to Enum types</title>
+          <title>Converting to Enum types</title>
           <tgroup cols="2">
             <thead>
               <row>
@@ -248,7 +248,7 @@
               
             <row>
               <entry><emphasis>Number</emphasis></entry>
-              <entry><emphasis>EnumType</emphasis><code>.value()[v.intValue()]</code></entry>
+              <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>
             </row>
               
             <row>
@@ -266,6 +266,7 @@
       <title>Map.Entry</title>
       <para>Conversion of <code>Map.Entry</code> to a target type is done by evaluating the compatibility of the 
       target type with both the key and the value in the entry and then using the best match.
+      <remark>Need to make crisp what 'best match' means.</remark>
       If the target type matches the key type, the key type is used. If the target matches 
       the value type then the value type is used.</para>
       
@@ -276,7 +277,7 @@
       <para>Conversion of a <code>Map.Entry</code> to any other type is done by converting the value to 
       <code>String</code> and then converting the result to the target type.</para>
       
-      <para>Converting to a Map.Entry can only be done from Strings which contain an <code>=</code> 
+      <para>Converting to a Map.Entry can only be done from <code>String</code> values which contain an <code>=</code> 
       character. The <emphasis>left hand side</emphasis>  
       is assigned to the key and the <emphasis>right hand side</emphasis> is the value. 
       Key and value must be converted in the requested 
@@ -292,14 +293,15 @@
       <section>
         <title>Converting to a single value</title>
         <para>
-        If the target is not a Collection, Array or Map-like structure (as described
+        If a Collection or array needs to be converted to a target which is not a 
+        Collection, Array or Map-like structure (as described
         in <xref linkend="service.converter.special.cases.maps"/>)
         The first element is taken and converted into the target type.</para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
         used to convert into the target type.</para>
         
-        <para>Deviations from this mechanism can be achieved by using an 
+        <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
           <xref linkend="org.osgi.service.converter.Adapter" xrefstyle="hyperlink"/>. For example:
           <programlisting>Converter converter = ...; // from service registry
           
@@ -357,7 +359,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods. For example, 
-        to convert an array of Strings into a list of Integers:
+        to convert an array of <code>String</code>s into a list of <code>Integer</code>s:
         
         <programlisting>List&lt;Integer&gt; result =
   converter.convert(Arrays.asList("1","2","3")).
@@ -375,12 +377,12 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         
           <itemizedlist>
             <listitem>
-              <para>If the source object if <code>null</code>, an empty collection/array is produced.</para>
+              <para>If the source object is <code>null</code>, an empty collection/array is produced.</para>
             </listitem>
             
             <listitem>
               <para>If the value is not a Collection, Array or Map-like structure (as described
-              in <xref linkend="service.converter.special.cases.maps"/>) a collection/array with
+              in <xref linkend="service.converter.special.cases.maps"/>) a result with
               a single element is produced. The value is first converted into the desired
               target type.</para>
             </listitem>
@@ -393,9 +395,9 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
             
             <listitem>
               <para>If the value is a Map-like structure (as described
-              in <xref linkend="service.converter.special.cases.maps"/>) then Map.Entry elements 
+              in <xref linkend="service.converter.special.cases.maps"/>) then <code>Map.Entry</code> elements 
               are obtained from it using an iterator that adheres to the normal iteration order. 
-              Each Map.Entry element is then converted into the target type before inserting in the
+              Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
               result.</para>
             </listitem>
           </itemizedlist> 
