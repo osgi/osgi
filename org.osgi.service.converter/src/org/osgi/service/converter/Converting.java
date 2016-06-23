@@ -17,13 +17,17 @@ package org.osgi.service.converter;
 
 import java.lang.reflect.Type;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * This interface is used to specify the target that an object should be
  * converted to. A {@link Converting} instance can be obtained via the
  * {@link Converter} service by starting a conversion for a specific object.
  *
  * @author $Id$
+ * @ThreadSafe
  */
+@ProviderType
 public interface Converting {
 	/**
 	 * The default value to use when the object cannot be converted or in case
@@ -50,9 +54,8 @@ public interface Converting {
 	 * information erased. Example use:
 	 *
 	 * <pre>
-	 *  List&lt;String&gt; result =
-	 *      converter.convert(Arrays.asList(1,2,3)).
-	 *          to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
+	 * List&lt;String&gt; result = converter.convert(Arrays.asList(1, 2, 3))
+	 * 		.to(new TypeReference&lt;List&lt;String&gt;&gt;() {});
 	 * </pre>
 	 *
 	 * @param ref A type reference to the object being converted to.
@@ -64,7 +67,7 @@ public interface Converting {
 	 * Specify the target object type as a Java Reflection Type object.
 	 *
 	 * @param type A Type object to represent the target type to be converted
-	 *        to.
+	 *            to.
 	 * @return The converted object.
 	 */
 	Object to(Type type);
@@ -74,6 +77,6 @@ public interface Converting {
 	 * 
 	 * @return The converted object.
 	 */
-    @Override
-    String toString();
+	@Override
+	String toString();
 }

@@ -17,21 +17,27 @@ package org.osgi.service.converter;
 
 import java.util.function.Function;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
- * An {@link Adapter} is used to modify the behaviour of the Converter service,
+ * An {@link Adapter} is used to modify the behavior of the Converter service,
  * which can be useful when some of the conversions should be done different to
  * the Converter Specification.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
+@ProviderType
 public interface Adapter extends Converter {
 	/**
 	 * Specify a conversion rule by providing a rule object.
 	 * 
+	 * @param <F> the type to convert from.
+	 * @param <T> the type to convert to.
 	 * @param rule The conversion rule.
 	 * @return The current adapter, can be used to chain invocations.
 	 */
-    <F, T> Adapter rule(Rule<F, T> rule);
+	<F, T> Adapter rule(Rule<F,T> rule);
 
 	/**
 	 * Specify a rule for the conversion to and from two classes. The rule
@@ -39,9 +45,9 @@ public interface Adapter extends Converter {
 	 * to provide the conversions as lambdas, for example:
 	 * 
 	 * <pre>
-	 *  adapter.rule(String[].class, String.class,
-	 *      v -> Stream.of(v).collect(Collectors.joining(",")),
-	 *      v -> v.split(","));
+	 * adapter.rule(String[].class, String.class,
+	 * 		v -> Stream.of(v).collect(Collectors.joining(",")),
+	 * 		v -> v.split(","));
 	 * </pre>
 	 * 
 	 * @param <F> the type to convert from.
@@ -52,8 +58,8 @@ public interface Adapter extends Converter {
 	 * @param fromFun the function to perform the reverse conversion.
 	 * @return The current adapter, can be used to chain invocations.
 	 */
-    <F, T> Adapter rule(Class<F> fromCls, Class<T> toCls,
-            Function<F, T> toFun, Function<T, F> fromFun);
+	<F, T> Adapter rule(Class<F> fromCls, Class<T> toCls, Function<F,T> toFun,
+			Function<T,F> fromFun);
 
 	/**
 	 * Specify a rule for the conversion to and from two classes. The rule
@@ -66,8 +72,5 @@ public interface Adapter extends Converter {
 	 * @param fromFun the function to perform the reverse conversion.
 	 * @return The current adapter, can be used to chain invocations.
 	 */
-    <F, T> Adapter rule(Function<F, T> toFun, Function<T, F> fromFun);
-
-//    <F, T> Adapter rule(Function<TypeReference<F>, TypeReference<T>> toFun,
-//            Function<TypeReference<T>,TypeReference<F>> fromFun);
+	<F, T> Adapter rule(Function<F,T> toFun, Function<T,F> fromFun);
 }

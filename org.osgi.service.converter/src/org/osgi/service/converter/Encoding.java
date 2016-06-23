@@ -19,11 +19,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Interface to specify the target of the encoding operation.
  *
  * @author $Id$
+ * @ThreadSafe
  */
+@ProviderType
 public interface Encoding {
 	/**
 	 * Specify that the encoded output should be formatted to look 'pretty',
@@ -39,6 +43,7 @@ public interface Encoding {
 	 * be used.
 	 *
 	 * @param out The output stream to use.
+	 * @throws IOException If an I/O error occurred.
 	 */
 	void to(OutputStream out) throws IOException;
 
@@ -47,6 +52,7 @@ public interface Encoding {
 	 *
 	 * @param out The output stream to use.
 	 * @param charset The character set to use.
+	 * @throws IOException If an I/O error occurred.
 	 */
 	void to(OutputStream out, Charset charset) throws IOException;
 

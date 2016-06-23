@@ -24,10 +24,11 @@ import java.util.function.Function;
  * @param <F> The type to convert from.
  * @param <T> The type to convert to.
  * @author $Id$
+ * @Immutable
  */
 public class Rule<F, T> {
-    private final Function<F, T> toFun;
-    private final Function<T, F> fromFun;
+	private final Function<F,T>	toFun;
+	private final Function<T,F>	fromFun;
 
 	/**
 	 * Specify the functions to do the conversions in both directions.
@@ -35,26 +36,26 @@ public class Rule<F, T> {
 	 * @param to The function that performs the conversion.
 	 * @param from The function that performs the reverse conversion.
 	 */
-    public Rule(Function<F, T> to, Function<T, F> from) {
-        toFun = to;
-        fromFun = from;
-    }
+	public Rule(Function<F,T> to, Function<T,F> from) {
+		toFun = to;
+		fromFun = from;
+	}
 
 	/**
 	 * Obtain the conversion function.
 	 * 
 	 * @return The conversion function.
 	 */
-    public Function<F, T> getToFunction() {
-        return toFun;
-    }
+	public Function<F,T> getToFunction() {
+		return toFun;
+	}
 
 	/**
 	 * Obtain the reverse conversion function.
 	 * 
 	 * @return The reverse conversion function.
 	 */
-    public Function<T, F> getFromFunction() {
-        return fromFun;
-    }
+	public Function<T,F> getFromFunction() {
+		return fromFun;
+	}
 }

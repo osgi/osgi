@@ -16,20 +16,21 @@
 package org.osgi.service.converter;
 
 /**
- * This Runtime Exception is thrown when an object is requested to be converted but the conversion
- * cannot be done. For example when the String "test" is to be converted into a Long.
+ * This Runtime Exception is thrown when an object is requested to be converted
+ * but the conversion cannot be done. For example when the String "test" is to
+ * be converted into a Long.
  */
 public class ConversionException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Create a Conversion Exception with a message.
 	 * 
 	 * @param message The message for this exception.
 	 */
-    public ConversionException(String message) {
-        super(message);
-    }
+	public ConversionException(String message) {
+		super(message);
+	}
 
 	/**
 	 * Create a Conversion Exception with a message and a nested cause.
@@ -37,7 +38,7 @@ public class ConversionException extends RuntimeException {
 	 * @param message The message for this exception.
 	 * @param cause The causing exception.
 	 */
-    public ConversionException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ConversionException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
