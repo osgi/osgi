@@ -5,6 +5,10 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 version bnd('osgi.version')
 
+ext.fop_home = new File(bnd.licensed, 'fop')
+ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
+  fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
+
 task javadoc('overwrite': true, 'type': Javadoc) {
   description 'Build the docbook flavored javadoc.'
   group 'documentation'
@@ -45,40 +49,6 @@ task javadoc('overwrite': true, 'type': Javadoc) {
   }
 }
 
-task('copyHtmlResources') {
-  description "Copy the HTML resources for the HTML spec files."
-  group 'documentation'
-  def destinationDir = new File(buildDir, 'html')
-  def cssDir = new File(destinationDir, 'css')
-  def imagesDir = new File(destinationDir, 'images')
-  def jsDir = new File(destinationDir, 'js')
-  def highlightJsJs = fileTree('dir': '../licensed/highlight.js', 'include': 'highlight.pack.js')
-  def highlightJsCss = fileTree('dir': '../licensed/highlight.js/styles', 'include': 'github.css')
-  def htmlResources = fileTree('dir': 'docbook/xsl/html-resources', 'include': '**')
-  inputs.files highlightJsJs, highlightJsCss
-  inputs.dir htmlResources
-  outputs.dir destinationDir
-  doFirst {
-    project.mkdir(cssDir)
-    project.mkdir(imagesDir)
-    project.mkdir(jsDir)
-  }
-  doLast {
-    copy {
-      from htmlResources
-      into destinationDir
-    }
-    copy {
-      from highlightJsJs
-      into jsDir
-    }
-    copy {
-      from highlightJsCss
-      into cssDir
-    }
-  }
-}
-
 task('rdmtsummary') {
   description 'Build the docbook flavored Residential DMT summary.'
   group 'documentation'
@@ -102,35 +72,6 @@ task('rdmtsummary') {
   }
 }
 
-task('svgToPng') {
-  description "Generate PNGs from SVGs for use with HTML spec files."
-  group 'documentation'
-  dependsOn compileJava
-  def destinationDir = new File(buildDir, 'html')
-  def imagesDir = new File(destinationDir, 'images')
-  def fontbasedir = file('fonts')
-  def svgFiles = fileTree('dir': 'docbook', 'include': '**/*.svg').files
-  inputs.files svgFiles
-  inputs.dir fontbasedir
-  outputs.dir imagesDir
-  doFirst {
-    project.mkdir(imagesDir)
-  }
-  doLast {
-    javaexec {
-      systemProperty('scale', '2')
-      systemProperty('dpi', '300')
-      systemProperty('JAVA_FONTS', fontbasedir)
-      classpath compileJava.destinationDir
-      classpath fop_classpath
-      main = 'org.osgi.tools.rasterizer.RasterizerMain'
-      minHeapSize = '512m'
-      maxHeapSize = '1024m'
-      args svgFiles.join(':'), imagesDir
-    }.assertNormalExitValue()
-  }
-}
-
 task('xmlns', 'type': Copy) {
   description 'Build the docbook flavored schemas.'
   group 'documentation'
@@ -147,10 +88,6 @@ task('xmlns', 'type': Copy) {
     }
   }
 }
-
-ext.fop_home = new File(bnd.licensed, 'fop')
-ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
-  fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
 
 tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <name>.') { taskName ->
   if (taskName.endsWith('.xml') && !taskName.endsWith('-diff.xml')) {
@@ -292,50 +229,6 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
   }
 }
 
-tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book <name>.') { taskName ->
-  if (taskName.endsWith('.html')) {
-    task(taskName) {
-      ext.book = taskName - '.html'
-      description "Generate the html files for the book ${book}."
-      group 'documentation'
-      def booktask = tasks.getByPath("${book}.xml")
-      dependsOn booktask, svgToPng, copyHtmlResources
-      def destinationDir = new File(new File(buildDir, 'html'), book)
-      def stylesheet = file('docbook/xsl/custom-html.xsl')
-      def profiler = file('docbook/xsl/custom-html-profile.xsl')
-      def bookhtml = new File(buildDir, taskName)
-      bookhtml.deleteOnExit()
-      def bookhtmlTmp = new File(getTemporaryDir(), "${book}.tmp")
-      bookhtmlTmp.deleteOnExit()
-      def watermark = 'draft.png'
-      inputs.files stylesheet, profiler, booktask.bookxml
-      outputs.dir destinationDir
-      doFirst {
-        project.mkdir(destinationDir)
-      }
-      doLast {
-        ant.xslt('style': profiler,
-          'in': booktask.bookxml,
-          'out': bookhtmlTmp) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-        }
-        ant.xslt('style': stylesheet,
-          'in': bookhtmlTmp,
-          'out': bookhtml) {
-          classpath('location': bnd.saxon)
-          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
-          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
-          param('name': 'draft.watermark.image', 'expression': watermark)
-          param('name': 'webhelp.base.dir', 'expression': destinationDir)
-          param('name': 'chunked.filename.prefix', 'expression': "${book}-")
-          param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
-        }
-      }
-    }
-  }
-}
-
 tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <name>.') { taskName ->
   if (taskName.endsWith('.pdf')) {
     task(taskName) {
@@ -343,8 +236,7 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       description "Generate the docbook pdf file for the book ${book}."
       group 'documentation'
       def fotask = tasks.getByPath("${book}.fo")
-      def htmltask = tasks.getByPath("${book}.html")
-      dependsOn fotask, htmltask
+      dependsOn fotask
       ext.destinationDir = buildDir
       ext.bookpdf = new File(destinationDir, "osgi.${book}-${version}.pdf")
       def fontbasedir = file('fonts')
@@ -380,6 +272,91 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
           args '-fo', fotask.bookfo
           args '-pdf', bookpdf
         }.assertNormalExitValue()
+      }
+    }
+  }
+}
+
+task('htmlresources', 'type': Copy) {
+  description 'Copy resources for the HTML specs.'
+  group 'documentation'
+  from file('docbook/xsl/html-resources')
+  into new File(buildDir, 'html')
+  from (new File(bnd.licensed, 'highlight.js')) {
+    include 'highlight.pack.js'
+    into 'js'
+  }
+  from (new File(bnd.licensed, 'highlight.js/styles')) {
+    include 'github.css'
+    into 'css'
+  }
+  includeEmptyDirs = false
+}
+
+task('rasterize') {
+  description 'Rasterize the SVGs for use with HTML spec files.'
+  group 'documentation'
+  dependsOn compileJava
+  ext.destinationDir = new File(buildDir, 'html/images')
+  def fontbasedir = file('fonts')
+  def svgFiles = fileTree('dir': 'docbook', 'include': '**/*.svg')
+  inputs.files svgFiles
+  inputs.dir fontbasedir
+  outputs.dir destinationDir
+  doFirst {
+    project.mkdir(destinationDir)
+  }
+  doLast {
+    javaexec {
+      systemProperty('scale', '2')
+      systemProperty('dpi', '300')
+      systemProperty('JAVA_FONTS', fontbasedir)
+      classpath configurations.runtime
+      main = 'org.osgi.tools.rasterizer.RasterizerMain'
+      minHeapSize = '512m'
+      maxHeapSize = '1024m'
+      args destinationDir
+      args svgFiles.files
+    }.assertNormalExitValue()
+  }
+}
+
+tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book <name>.') { taskName ->
+  if (taskName.endsWith('.html')) {
+    task(taskName) {
+      ext.book = taskName - '.html'
+      description "Generate the html files for the book ${book}."
+      group 'documentation'
+      def booktask = tasks.getByPath("${book}.xml")
+      dependsOn booktask, rasterize, htmlresources
+      ext.destinationDir = new File(buildDir, "html/${book}")
+      def stylesheet = file('docbook/xsl/custom-html.xsl')
+      def profiler = file('docbook/xsl/custom-html-profile.xsl')
+      def watermark = 'draft.png'
+      inputs.files stylesheet, profiler, booktask
+      outputs.dir destinationDir
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        def tmpxml = new File(temporaryDir, 'book.xml')
+        ant.xslt('style': profiler,
+          'in': booktask.bookxml,
+          'out': tmpxml) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+        }
+        ant.xslt('style': stylesheet,
+          'in': tmpxml,
+          'out': new File(temporaryDir, 'book.txt')) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
+          param('name': 'draft.watermark.image', 'expression': watermark)
+          param('name': 'webhelp.base.dir', 'expression': destinationDir)
+          param('name': 'chunked.filename.prefix', 'expression': "${book}-")
+          param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
+        }
       }
     }
   }

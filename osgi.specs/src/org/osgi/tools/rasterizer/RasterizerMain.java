@@ -36,10 +36,10 @@ public class RasterizerMain {
 	 * @throws Throwable If unable to execute the rasterization process.
 	 */
 	public static void main(String[] args) throws Throwable {
-		if (args.length != 2) {
+		if (args.length < 2) {
 			System.err
 					.println(
-							"Usage: <cmd> [colon separated paths to svg files] [output path]");
+							"Usage: <cmd> [output path] [svg file]... ");
 
 			return;
 		}
@@ -58,12 +58,12 @@ public class RasterizerMain {
 			dpi = Float.valueOf(dpiProperty);
 		}
 
-		Path outputPath = Paths.get(args[1]);
+		Path outputPath = Paths.get(args[0]);
 
-		List<String> svgPaths = Arrays.asList(args[0].split(":"));
+		List<String> svgPaths = Arrays.asList(args).subList(1, args.length);
 
 		if (svgPaths.isEmpty()) {
-			System.err.println("No SVG files were found at " + args[0]);
+			System.err.println("No SVG files were specified");
 
 			return;
 		}
