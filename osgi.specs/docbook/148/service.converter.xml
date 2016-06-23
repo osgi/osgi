@@ -48,214 +48,240 @@
     <title>Conversions</title>
     
     <section>
-      <title>Scalar values</title>
-    
-      <section>
-        <title>Direct conversion between scalars</title>
-        
-        <para>Direct conversion between certain scalar types is supported. For all other 
-        scalar types conversion is done by converting to String and then converting 
-        into the target type.
-        </para>
+      <title>Conversion between scalars</title>
+      
+      <para>Direct conversion between certain scalar types is supported. For all other 
+      scalar types conversion is done by converting to String and then converting 
+      into the target type.
+      </para>
 
-        <table pgwide="1" rowheader="firstcol">
-          <title>Direct conversions between scalar types</title>
+      <table pgwide="1" rowheader="firstcol">
+        <title>Direct conversions between scalar types</title>
+        
+        <tgroup cols="5">
+          <colspec colnum="1" colwidth="0.5*"/>
+          <colspec colnum="5" colwidth="0.5*"/>
+         
+          <thead>
+            <row>
+              <entry><subscript>to</subscript> \ <superscript>from</superscript></entry>
+              <entry>Boolean</entry>
+              <entry>Character</entry>
+              <entry><emphasis>Number</emphasis></entry>
+              <entry><code>null</code></entry>
+            </row>
+          </thead>
           
-          <tgroup cols="5">
-            <colspec colnum="1" colwidth="0.5*"/>
-            <colspec colnum="5" colwidth="0.5*"/>
-           
-            <thead>
-              <row>
-                <entry><subscript>to</subscript> \ <superscript>from</superscript></entry>
-                <entry>Boolean</entry>
-                <entry>Character</entry>
-                <entry><emphasis>Number</emphasis></entry>
-                <entry><code>null</code></entry>
-              </row>
-            </thead>
+          <tbody>
+            <row>
+              <entry>boolean</entry>
+              <entry><code>v.booleanValue()</code></entry>
+              <entry><code>v.charValue() != 0</code></entry>
+              <entry><code>v.</code><emphasis>number</emphasis><code>Value() != 0</code></entry>
+              <entry><code>false</code></entry>
+            </row>
+          
+            <row>
+              <entry>char</entry>
+              <entry><code>v.booleanValue() ? 1 : 0</code></entry>
+              <entry><code>v.charValue()</code></entry>
+              <entry><code>(char) v.intValue()</code></entry>
+              <entry>0</entry>
+            </row>
             
-            <tbody>
-              <row>
-                <entry>boolean</entry>
-                <entry><code>v.booleanValue()</code></entry>
-                <entry><code>v.charValue() != 0</code></entry>
-                <entry><code>v.</code><emphasis>number</emphasis><code>Value() != 0</code></entry>
-                <entry><code>false</code></entry>
-              </row>
-            
-              <row>
-                <entry>char</entry>
-                <entry><code>v.booleanValue() ? 1 : 0</code></entry>
-                <entry><code>v.charValue()</code></entry>
-                <entry><code>(char) v.intValue()</code></entry>
-                <entry>0</entry>
-              </row>
-              
-              <row>
-                <entry><emphasis>number</emphasis></entry>
-                <entry><code>v.booleanValue() ? 1 : 0</code></entry>
-                <entry><code>(</code><emphasis>number</emphasis><code>) v.charValue()</code></entry>
-                <entry><code>v.</code><emphasis>number</emphasis><code>Value()</code></entry>
-                <entry><code>null</code></entry>
-              </row>
-              
-              <row>
-                <entry><emphasis>EnumType</emphasis></entry>
-                <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>v.toString.toUpperCase())</code></para></entry>
-                <entry><para><emphasis>EnumType</emphasis><code>.valueOf(</code></para><para><code>Character.toString(v))</code></para></entry>
-                <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>                
-                <entry><code>null</code></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>   
-        
-        <!-- 
-        <remark>does v.doubleValue() != 0 actually work? What if the value
-        is slightly off?</remark>
-         -->
-        
-        <para>Where conversion is done from corresponding primitive types, these types
-        are boxed before converting. Where conversion is done to corresponding boxed types
-        the types are boxed after converting.</para>     
-      </section>
+            <row>
+              <entry><emphasis>number</emphasis></entry>
+              <entry><code>v.booleanValue() ? 1 : 0</code></entry>
+              <entry><code>(</code><emphasis>number</emphasis><code>) v.charValue()</code></entry>
+              <entry><code>v.</code><emphasis>number</emphasis><code>Value()</code></entry>
+              <entry><code>null</code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>   
+      
+      <para>Where conversion is done from corresponding primitive types, these types
+      are boxed before converting. Where conversion is done to corresponding boxed types
+      the types are boxed after converting.</para>     
+    </section>
 
-      <section>
-        <title>Conversion to String</title>
+    <section>
+      <title>Conversion to String</title>
+      
+      <para>Conversion to String is done by calling <code>toString()</code> on the object to
+      be converted. In the case of a primitive type, the object is boxed first.</para>
+      
+      <para>A <code>null</code> object results in a <code>null</code> String value.</para>
+    </section>
+    
+    <section>
+      <title>Conversion from String</title>
+      
+      <para>Conversion from String is done by trying to invoke the following methods: 
+      
+        <orderedlist>
+          <listitem>
+            <para><code>static valueOf(String s)</code></para>
+          </listitem>
+
+          <listitem>
+            <para>String constructor.</para>
+          </listitem>
+        </orderedlist>
         
-        <para>Conversion to String is done by calling <code>toString()</code> on the object to
-        be converted. In the case of a primitive type, the object is boxed first.</para>
-        
-        <para>A <code>null</code> object results in a <code>null</code> String value.</para>
-      </section>
+        Many types have special rules for converting from String
+        values. See <xref linkend="service.converter.special.cases.string"/>.
+      </para>
+    </section>
+    <section xml:id="service.converter.special.cases.string">
+      <title>Special cases converting from String</title>
+      <table>
+        <title>Special cases converting from String</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Target</entry>
+              <entry>Method</entry>
+            </row>
+          </thead>         
+          <tbody>
+            <row>
+              <entry><code>boolean / Boolean</code></entry>
+              <entry><code>Boolean.parseBoolean(v)</code></entry>
+            </row>
+              
+            <row>
+              <entry><code>char / Character</code></entry>
+              <entry><code>v.lenght() > 0 ? v.charAt(0) : 0</code></entry>
+            </row>
+              
+            <row>
+              <entry><emphasis><code>number / Number</code></emphasis></entry>
+              <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
+            </row>
+
+            <row>
+              <entry><code>java.lang.Class</code></entry>
+              <entry><code>Bundle.loadClass(v)</code></entry>
+            </row>
+                          
+            <row>
+              <entry><code>java.time.LocalDate</code></entry>
+              <entry><code>LocalDate.parse(v)</code></entry>
+            </row>
+
+            <row>
+              <entry><code>java.time.LocalDateTime</code></entry>
+              <entry><code>LocalDateTime.parse(v)</code></entry>
+            </row>
+
+            <row>
+              <entry><code>java.time.LocalTime</code></entry>
+              <entry><code>LocalTime.parse(v)</code></entry>
+            </row>
+
+            <row>
+              <entry><code>java.time.OffsetTime</code></entry>
+              <entry><code>OffsetTime.parse(v)</code></entry>
+            </row>
+
+            <row>
+              <entry><code>java.time.ZonedDateTime</code></entry>
+              <entry><code>ZonedDateTime.parse(v)</code></entry>
+            </row>
+            
+            <row>
+              <entry><code>java.util.UUID</code></entry>
+              <entry><code>UUID.fromString(v)</code></entry>
+            </row>              
+
+            <row>
+              <entry><code>java.util.regex.Pattern</code></entry>
+              <entry><code>Pattern.compile(v)</code></entry>
+            </row>
+          </tbody>   
+        </tgroup>
+      </table>
+    </section>
+    
+    <section>
+      <title>Date and Calendar</title>
+      <para>A <code>java.util.Date</code> instance is converted to 
+      a <code>long</code> value by calling <code>Date.getTime()</code>.
+      Converting a <code>long</code> into a <code>java.util.Date</code>
+      is done by calling <code>new Date(long)</code>.</para> 
+      
+      <para>Converting a Date to a String is done by
+        <remark>@@@ TODO UTC</remark>
+      </para>
+      
+      <para>Converting into other types is done by converting via a String as intermediary.</para>
+
+      <para>Conversions from Calendar objects are done by converting the Calendar
+      to a Date via getTime() first. Convertions to a Calendar object are done by 
+      constructing a Date object with the desired time (UTC) and then setting the 
+      time in the Calendar object via setTime().</para>
+    </section>
       
       <section>
-        <title>Conversion from String</title>
-        
-        <para>Conversion from String is done by trying to invoke the following methods: 
-        
-          <orderedlist>
-            <listitem>
-              <para><code>static valueOf(String s)</code></para>
-            </listitem>
-
-            <listitem>
-              <para>String constructor.</para>
-            </listitem>
-          </orderedlist>
-          
-          Many types have special rules for converting from String
-          values. See <xref linkend="service.converter.special.cases"/>.
-        </para>
-      </section>
-      <section xml:id="service.converter.special.cases">
-        <title>Special cases</title>
-        <para>...</para>
+        <title>Enums</title>
+        <para>Conversions to Enum types are supported as follows.</para>
         <table>
-          <title>Special cases converting from String</title>
+          <title>Special cases converting to Enum types</title>
           <tgroup cols="2">
             <thead>
               <row>
-                <entry>Target</entry>
+                <entry>Source</entry>
                 <entry>Method</entry>
               </row>
             </thead>         
             <tbody>
-              <row>
-                <entry><code>boolean / Boolean</code></entry>
-                <entry><code>Boolean.parseBoolean(v)</code></entry>
-              </row>
-                
-              <row>
-                <entry><code>char / Character</code></entry>
-                <entry><code>v.lenght() > 0 ? v.charAt(0) : 0</code></entry>
-              </row>
-                
-              <row>
-                <entry><emphasis>EnumType</emphasis></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><emphasis><code>number / Number</code></emphasis></entry>
-                <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.lang.Class</code></entry>
-                <entry><code>Bundle.loadClass(v)</code></entry>
-              </row>
-                            
-              <row>
-                <entry><code>java.time.LocalDate</code></entry>
-                <entry><code>LocalDate.parse(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.time.LocalDateTime</code></entry>
-                <entry><code>LocalDateTime.parse(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.time.LocalTime</code></entry>
-                <entry><code>LocalTime.parse(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.time.OffsetTime</code></entry>
-                <entry><code>OffsetTime.parse(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.time.ZonedDateTime</code></entry>
-                <entry><code>ZonedDateTime.parse(v)</code></entry>
-              </row>
-
-              <row>
-                <entry><code>java.util.Map.Entry</code></entry>
-                <entry><remark>This should do the reverse of this</remark><para><code>v.getKey().toString() + "=" + v.getValue().toString()</code></para>
-                <para>see also <xref linkend="service.converter.special.cases.map.entry"/></para></entry>
-              </row>
+            <row>
+              <entry><code>Boolean</code></entry>
+              <entry><emphasis>EnumType</emphasis><code>.valueOf(v.toString().toUpperCase())</code></entry>
+            </row>
               
-              <row>
-                <entry><code>java.util.UUID</code></entry>
-                <entry><code>UUID.fromString(v)</code></entry>
-              </row>              
-
-              <row>
-                <entry><code>java.util.regex.Pattern</code></entry>
-                <entry><code>Pattern.compile(v)</code></entry>
-              </row>
-            </tbody>   
-          </tgroup>
-        </table>
-        
-        <section>
-          <title>Date and Calendar</title>
-          <para>A <code>java.util.Date</code> instance is converted to 
-          a <code>long</code> value by calling <code>Date.getTime()</code>.
-          Converting a <code>long</code> into a <code>java.util.Date</code>
-          is done by calling <code>new Date(long)</code>.</para> 
-          
-          <para>Converting a Date to a String is done by
-<remark>@@@ TODO UTC</remark>
-          </para>
-          
-          <para>Converting into other types is done by converting via a String as intermediary.</para>
-
-          <para>Conversions from Calendar objects are done by converting the Calendar
-          to a Date via getTime() first. Convertions to a Calendar object are done by 
-          constructing a Date object with the desired time (UTC) and then setting the 
-          time in the Calendar object via setTime().</para>
-        </section>
-        
-        <section xml:id="service.converter.special.cases.map.entry">
-          <title>Map.Entry</title>
-          <para>...</para>
-        </section>
-        
-      </section>
+            <row>
+              <entry><code>Character</code></entry>
+              <entry><emphasis>EnumType</emphasis><code>.valueOf(Character.toString(v))</code></entry>
+            </row>
+              
+            <row>
+              <entry><emphasis>Number</emphasis></entry>
+              <entry><emphasis>EnumType</emphasis><code>.value()[v.intValue()]</code></entry>
+            </row>
+              
+            <row>
+              <entry><code>String</code></entry>
+              <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>  
+      <para>Primitives are boxed before conversion is done.
+        Other source types are converted to String before converting to Enum.</para>
+    </section>
+      
+    <section xml:id="service.converter.special.cases.map.entry">
+      <title>Map.Entry</title>
+      <para>Conversion of <code>Map.Entry</code> to a target type is done by evaluating the compatibility of the 
+      target type with both the key and the value in the entry and then using the best match.
+      If the target type matches the key type, the key type is used. If the target matches 
+      the value type then the value type is used.</para>
+      
+      <para>Conversion of <code>Map.Entry</code> to <code>String</code> is be done by converting both key and value to 
+      String and concatenating both with an <code>=</code> character.</para>
+      <remark>does this override the previous rule? What if key is of type String and value is Long?</remark>
+      
+      <para>Conversion of a <code>Map.Entry</code> to any other type is done by converting the value to 
+      <code>String</code> and then converting the result to the target type.</para>
+      
+      <para>Converting to a Map.Entry can only be done from Strings which contain an <code>=</code> 
+      character. The <emphasis>left hand side</emphasis>  
+      is assigned to the key and the <emphasis>right hand side</emphasis> is the value. 
+      Key and value must be converted in the requested 
+      target type where this type information is available. Strings without an <code>=</code> 
+      sign result in a conversion failure.</para>
     </section>
     
     <section>
@@ -360,8 +386,6 @@
             </listitem>
           </itemizedlist> 
         </para>
-        
-        
       </section>
     </section>
     
@@ -370,6 +394,10 @@
       <para>...</para>
     </section>
     
+    <section>
+      <title>Conversion failures</title>
+      <para>...</para>
+    </section>
   </section>
 
   <section>
