@@ -45,24 +45,30 @@
         <para><emphasis>target type</emphasis> - the desired type of the conversion result.</para>
       </listitem>
     </itemizedlist>
+    <remark>Add entity diagram</remark>
   </section> 
 
   <section>
     <title>Converter Service</title>
     
     <para>...</para>
+    
+    <section>
+      <title>Adapting converters</title>
+      <para>...</para>
+    </section>
   </section> 
 
   <section>
     <title>Conversions</title>
     
-    <para>Unless otherwise noted, conversions are only performed when the target object is not compatible
-    with the source type. For example when requesting to convert a <code>java.math.BigDecimal</code> to a 
+    <para>Unless otherwise noted, conversions are only performed when the target type is not compatible
+    with the source type. For example, when requesting to convert a <code>java.math.BigDecimal</code> to a 
     <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
     requested target type.</para>
     
-    <para>Note that in the case of Arrays, Collections and Map-like structures a copy is always returned, 
-    even if the target type is compatible with the source. This copy can be owned and optionally further
+    <para>Note that in the case of Arrays, Collections and Map-like structures a deep copy is always returned, 
+    even if the target type is compatible with the source type. This copy can be owned and optionally further
     modified by the caller.</para>
     
     <section>
@@ -135,7 +141,7 @@
     <section>
       <title>Conversion from String</title>
       
-      <para>Conversion from String is done by trying to invoke the following methods: 
+      <para>Conversion from String is done by attempting to invoke the following methods, in order: 
       
         <orderedlist>
           <listitem>
@@ -148,7 +154,7 @@
         </orderedlist>
         
         Many types have special rules for converting from String
-        values. See <xref linkend="service.converter.special.cases.string"/>.
+        values. See below.
       </para>
     </section>
     <section xml:id="service.converter.special.cases.string">
@@ -284,13 +290,13 @@
       <title>Map.Entry</title>
       <para>Conversion of <code>Map.Entry</code> to a target type is done by evaluating the compatibility of the 
       target type with both the key and the value in the entry and then using the best match.
-      <remark>Need to make crisp what 'best match' means.</remark>
+      <remark>Need to make crisp what 'best match' means. What if they match equally?</remark>
       If the target type matches the key type, the key type is used. If the target matches 
       the value type then the value type is used.</para>
       
       <para>Conversion of <code>Map.Entry</code> to <code>String</code> is be done by converting both key and value to 
       String and concatenating both with an <code>=</code> character.</para>
-      <remark>does this override the previous rule? What if key is of type String and value is Long?</remark>
+      <remark>when does this override the previous rule? What if key is of type String and value is Long?</remark>
       
       <para>Conversion of a <code>Map.Entry</code> to any other type is done by converting the value to 
       <code>String</code> and then converting the result to the target type.</para>
@@ -314,7 +320,7 @@
         If a Collection or array needs to be converted to a target which is not a 
         Collection, Array or Map-like structure (as described
         in <xref linkend="service.converter.special.cases.maps"/>)
-        The first element is taken and converted into the target type.</para>
+        the first element is taken and converted into the target type.</para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
         used to convert into the target type.</para>
@@ -322,13 +328,15 @@
         <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
           <xref linkend="org.osgi.service.converter.Adapter" xrefstyle="hyperlink"/>. For example:
           <programlisting>Converter converter = ...; // from service registry
+String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"
           
+// Use an adapter to modify converter behavior          
 Adapter ca = converter.getAdapter();
 ca.rule(String[].class, String.class,
   v -> Stream.of(v).collect(Collectors.joining(",")),
   v -> v.split(","));
 
-String s = ca.convert(new String[] {"A", "B"}).to(String.class)); // s="A,B"
+String s2 = ca.convert(new String[] {"A","B"}).to(String.class)); // s2="A,B"
 String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlisting> 
         </para>
       </section>
@@ -373,7 +381,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         
         <para>Before inserting values into the resulting collection/array they are converted to the desired
         target type first. In the case of arrays this is the type of the array. When inserting into a 
-        Collection type information about the target type can be made available by using the
+        Collection generic type information about the target type can be made available by using the
         <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods. For example, 
@@ -383,7 +391,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
   converter.convert(Arrays.asList("1","2","3")).
     to(new TypeReference&lt;List&lt;Integer&gt;&gt;() {});</programlisting>
     
-        The following example converts an array of <code>int</code>s into a set of Doubles. Note that
+        The following example converts an array of <code>int</code>s into a set of <code>Double</code>s. Note that
         the resulting set should preserve the same iteration order as the original array:
         
         <programlisting>Set&lt;Double&gt; result =
@@ -414,7 +422,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
             <listitem>
               <para>If the value is a Map-like structure (as described
               in <xref linkend="service.converter.special.cases.maps"/>) then <code>Map.Entry</code> elements 
-              are obtained from it using an iterator that adheres to the normal iteration order. 
+              are obtained from it via <code>Map.entrySet()</code>. 
               Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
               result.</para>
             </listitem>
@@ -427,17 +435,18 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
       include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. Additionally objects that provide a map view
-      can be handled.</para>
+      are supported.</para>
       
-      <para>When converting between map-like types, a map is used as the canonical structure used as an intermediary
-      when converting between types. When converting to other structures, the map is converted into a collection of
+      <para>When converting between map-like types, a map is used as intermediary.
+      When converting to other structures, the map is converted into a collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
       
+      <para>A new object is always created to be returned and owned by the caller.
+      This is true even it the target type is compatible with the source type.</para>
+      
       <section>
         <title>Map</title>
-        <para>A new object is always created to be returned and owned by the caller.
-        This is true even it the target type is compatible with the source type.
         <table>
           <title>Map result creation</title>
           <tgroup cols="2">
@@ -466,7 +475,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
           </tgroup>
         </table>
         
-        Each key-value pair in the source map is converted to desired types of the target map
+        <para>Each key-value pair in the source map is converted to desired types of the target map
         using the generic information if available.
         
         Map type information about the target type can be made available by using the
@@ -490,28 +499,30 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         implement the interface. The name of the method returning the value should match the key 
         of the map entry, taking into account the mapping rules specified in 
         table 112.9 of the R6 Declarative Service specification. <remark>proper xref</remark> 
-        The key of the map may need to be converted into a String first.</para>
+        The key of the map may need to be converted into a <code>String</code> first.</para>
         
         <para>Conversion is done <emphasis>on demand</emphasis>: only when the method on 
         the interface is actually invoked. This avoids conversion errors on methods 
-        for which the information is missing or cannot be converted, which the caller 
-        may not be interested.</para>
+        for which the information is missing or cannot be converted, but which the caller 
+        does not require.</para>
         
         <para>Interfaces can provide methods for default values by providing a single-argument method
         override in addition to the no-arg method matching the key name. If the type of the default
-        does not match the target type it is converted using the active converter or adapter first. 
+        does not match the target type it is converted first. 
         For example:  
         <programlisting>interface Config {
   int my_value(); // no default, used when converting from the interface
   int my_value(int defVal);
-  int my_value(String defVal); // default value is automatically converted to the target type
+  int my_value(String defVal); // String value is automatically converted to int
   boolean my_other_value();
 }
 
 // Usage
-Map&lt;String, ?&gt; myMap = ... // an example map
+Map&lt;String, Object&gt; myMap = new HashMap&lt;&gt;(); // an example map
+myMap.put("my.other.value", "true");
 Config cfg = converter.convert(myMap).to(Config.class);
 int val = cfg.my_value(17); // if not set then use 17
+boolean val2 = cfg.my_other_value(); // val2=true
 </programlisting>
         Default values are used when the key is not present in the map for the method. If a key is 
         present with a <code>null</code> value, then <code>null</code> is taken as the value and 
@@ -520,29 +531,33 @@ int val = cfg.my_value(17); // if not set then use 17
       
       <section>
         <title>Annotation</title>
-        <para>Conversion to and from annotations is behaves identical to conversion from
-        interface but with the added capability of specifying a default in the annotation definition.
+        <para>Conversion to and from annotations is behaves identical to 
+        interface conversion with the added capability of specifying a default in the annotation definition.
         </para>
         
         <para>Below a few examples of conversions to an annotation:
-        <programlisting>@interface Config {
+        <programlisting>@interface MyAnnotation {
   String[] args() default {"arg1", "arg2"};
 }
 
-// Will set a={"args1", "arg2"}
-String[] a = converter.convert(new HashMap()).to(Config.class).args();
+// Will set sa={"args1", "arg2"}
+String[] sa = converter.convert(new HashMap()).to(MyAnnotation.class).args();
+
+// Will set a={"x", "y", "z"}
+Map m = Collections.singletonMap("args", new String [] {"x", "y", "z"});
+String[] a = converter.convert(m).to(MyAnnotation.class).args();
 
 // Will set a1={}
 Map m1 = Collections.singletonMap("args", null)
-String[] a1 = converter.convert(m1).to(Config.class).args();
+String[] a1 = converter.convert(m1).to(MyAnnotation.class).args();
 
 // Will set a2={""}
 Map m2 = Collections.singletonMap("args", "")
-String[] a2 = converter.convert(m2).to(Config.class).args();
+String[] a2 = converter.convert(m2).to(MyAnnotation.class).args();
 
 // Will set a3={","}
 Map m3 = Collections.singletonMap("args", ",")
-String[] a3 = converter.convert(m3).to(Config.class).args();
+String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();
 
 // Will set a4={"",""}, non-default conversion via adapter
 Map m4 = Collections.singletonMap("args", ",")
@@ -550,7 +565,7 @@ Adapter ca = c.getAdapter();
 ca.rule(String[].class, String.class,
   v -> Stream.of(v).collect(Collectors.joining(","))),
   v -> v.split(","));
-String[] a4 = converter.convert(m4).to(Config.class).args();
+String[] a4 = converter.convert(m4).to(MyAnnotation.class).args();
 </programlisting>
         </para>
       </section>
@@ -559,9 +574,10 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
         <title>Java Beans</title>
         <para>Java Beans are objects that follow a naming convention. They provide getters and setters to
         access their properties and have a no-arg constructor. When converting from a Java Bean introspection
-        is used to find the read accessors. A read accessor must have no arguments and a non-void return 
+        is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
         value. The method name must start with get followed by a capitalized property name, 
-        e.g. <code>getName()</code>. For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
+        e.g. <code>getSize()</code> provides access to the property <code>size</code>. 
+        For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
         is also permitted.</para> 
         <para>When converting to a Java Bean, the following strategies are used:</para>
         <orderedlist>
@@ -585,21 +601,24 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
         <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
         find out the size of the array via these accessors.
         </para>
-        <remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans</remark>
+        <remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans and/or 
+        interfaces at the same time</remark>
+        <remark>Do we need explicitly call out certain types that are not treated as JavaBeans? E.g. String?</remark>
       </section>
       
       <section>
         <title>OSGi DTO</title>
-        <para>Objects that extend (either directly or indirectly) the <code>org.osgi.dto.DTO</code> class ...
+        <para>
         DTOs are classes with public non-static fields and no methods other than the ones provided by the 
-        <code>java.lang.Object class</code>. OSGi DTOs extend the org.osgi.dto.DTO class but the converter 
+        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class but the converter 
         should ignore this. This is to keep the converter API itself clean from OSGi dependencies. 
-        DTOs may have static final fields, these can also be ignored by the converter.</para>
+        DTOs may have static fields, these can also be ignored by the converter.</para>
         
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the map and then converting the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
         table 112.9 of the R6 Declarative Service specification.<remark>proper xref</remark></para>
+        <remark>Do we not take the same approach as with JavaBeans/interfaces: Proying?</remark>
         
         <para>When converting from a DTO the value of each public non-static field is put in the target 
         map, taking the field name as its String key.
@@ -622,7 +641,7 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
       <section>
         <title>Conversion between maps and other types</title>
         <para>Map-like structures are converted to other types by converting the map into a collection of entries
-        by calling <code>Map.Entry Map.entrySet()</code>. Then this collection is converted into the target type.</para>
+        by calling <code>Map.entrySet()</code>. Then this collection is converted into the target type.</para>
         <para>To convert from other types to a map, a Collection of <code>Map.Entry</code> objects is constructed
         first. Subsequently each entry is inserted into the target map.</para>
       </section>
