@@ -515,7 +515,39 @@ int val = cfg.my_value(17); // if not set then use 17
       
       <section>
         <title>Annotation</title>
-        <para>...</para>
+        <para>Conversion to and from annotations is behaves identical to conversion from
+        interface but with the added capability of specifying a default in the annotation definition.
+        </para>
+        
+        <para>Below a few examples of conversions to annotations:
+        <programlisting>@interface Config {
+  String[] args() default {"arg1", "arg2"};
+}
+
+// Will set a={"args1", "arg2"}
+String[] a = converter.convert(new HashMap()).to(Config.class).args();
+
+// Will set a1={}
+Map m1 = Collections.singletonMap("args", null)
+String[] a1 = converter.convert(m1).to(Config.class).args();
+
+// Will set a2={""}
+Map m2 = Collections.singletonMap("args", "")
+String[] a2 = converter.convert(m2).to(Config.class).args();
+
+// Will set a3={","}
+Map m3 = Collections.singletonMap("args", ",")
+String[] a3 = converter.convert(m3).to(Config.class).args();
+
+// Will set a4={"",""}, non-default conversion via adapter
+Map m4 = Collections.singletonMap("args", ",")
+Adapter ca = c.getAdapter();
+ca.rule(String[].class, String.class,
+  v -> Stream.of(v).collect(Collectors.joining(","))),
+  v -> v.split(","));
+String[] a4 = converter.convert(m4).to(Config.class).args();
+</programlisting>
+        </para>
       </section>
       
       <section>
