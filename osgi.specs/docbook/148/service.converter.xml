@@ -608,7 +608,23 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
       
       <section>
         <title>Types with getProperties()</title>
-        <para><remark>Need to describe what happens if something is a JavaBean that also has getProperties()</remark></para>
+        
+        <para>The converter uses reflection to find a <code>java.util.Map getProperties()</code> or 
+        <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
+        the source object. This map view can be used to convert the source object to another map-like structure.</para>
+        
+        <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
+        The reverse is not supported</para>
+                
+        <remark>Need to describe what happens if something is a JavaBean that also has getProperties()</remark>
+      </section>
+      
+      <section>
+        <title>Conversion between maps and other types</title>
+        <para>Map-like structures are converted to other types by converting the map into a collection of entries
+        by calling <code>Map.Entry Map.entrySet()</code>. Then this collection is converted into the target type.</para>
+        <para>To convert from other types to a map, a Collection of <code>Map.Entry</code> objects is constructed
+        first. Subsequently each entry is inserted into the target map.</para>
       </section>
     </section>
     
