@@ -492,6 +492,11 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         table 112.9 of the R6 Declarative Service specification. <remark>proper xref</remark> 
         The key of the map may need to be converted into a String first.</para>
         
+        <para>Conversion is done <emphasis>on demand</emphasis>: only when the method on 
+        the interface is actually invoked. This avoids conversion errors on methods 
+        for which the information is missing or cannot be converted, which the caller 
+        may not be interested.</para>
+        
         <para>Interfaces can provide methods for default values by providing a single-argument method
         override in addition to the no-arg method matching the key name. If the type of the default
         does not match the target type it is converted using the active converter or adapter first. 
@@ -552,7 +557,35 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
       
       <section>
         <title>Java Beans</title>
-        <para><remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans</remark></para>
+        <para>Java Beans are objects that follow a naming convention. They provide getters and setters to
+        access their properties and have a no-arg constructor. When converting from a Java Bean introspection
+        is used to find the read accessors. A read accessor must have no arguments and a non-void return 
+        value. The method name must start with get followed by a capitalized property name, 
+        e.g. <code>getName()</code>. For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
+        is also permitted.</para> 
+        <para>When converting to a Java Bean, the following strategies are used:</para>
+        <orderedlist>
+          <listitem>
+            <para>If the Java Bean is a non-final class, a subclass is dynamically generated and conversion
+            is done on-demand when any of the getter methods are called, similar to interfaces and annotations.
+            </para>
+          </listitem>
+          
+          <listitem>
+            <para>If the Java Bean is a final class, the bean is constructed eagerly. All available properties
+            are set in the bean using the bean's write accessors, i.e. public setters methods with a single argument. 
+            All methods of the bean class itself and its 
+            super classes are considered. However accessor methods inherited from <code>java.lang.Object</code> are 
+            ignored; i.e. the <code>getClass()</code> method inherited from Object is not considered an accessor.
+            If a property cannot be converted this will cause a 
+            <xref linkend="org.osgi.service.converter.ConversionException" xrefstyle="hyperlink"/>.
+            </para>
+          </listitem>
+        </orderedlist>
+        <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
+        find out the size of the array via these accessors.
+        </para>
+        <remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans</remark>
       </section>
       
       <section>
