@@ -524,7 +524,7 @@ int val = cfg.my_value(17); // if not set then use 17
         interface but with the added capability of specifying a default in the annotation definition.
         </para>
         
-        <para>Below a few examples of conversions to annotations:
+        <para>Below a few examples of conversions to an annotation:
         <programlisting>@interface Config {
   String[] args() default {"arg1", "arg2"};
 }
@@ -590,7 +590,20 @@ String[] a4 = converter.convert(m4).to(Config.class).args();
       
       <section>
         <title>OSGi DTO</title>
-        <para>Objects that extend (either directly or indirectly) the <code>org.osgi.dto.DTO</code> class ...</para>
+        <para>Objects that extend (either directly or indirectly) the <code>org.osgi.dto.DTO</code> class ...
+        DTOs are classes with public non-static fields and no methods other than the ones provided by the 
+        <code>java.lang.Object class</code>. OSGi DTOs extend the org.osgi.dto.DTO class but the converter 
+        should ignore this. This is to keep the converter API itself clean from OSGi dependencies. 
+        DTOs may have static final fields, these can also be ignored by the converter.</para>
+        
+        <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
+        entry in the map and then converting the value to the field type before assigning it. They key of
+        the map entries may need to be converted into a String first. Keys are mapped according to 
+        table 112.9 of the R6 Declarative Service specification.<remark>proper xref</remark></para>
+        
+        <para>When converting from a DTO the value of each public non-static field is put in the target 
+        map, taking the field name as its String key.
+        </para>
       </section>
       
       <section>
