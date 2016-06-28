@@ -293,6 +293,27 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		return endpoint;
 	}
 
+	private ZCLCluster getClusterById(ZigBeeEndpoint endpoint, int id) {
+
+		ZCLCluster[] clusters = endpoint.getServerClusters();
+
+		for (int i = 0; i < clusters.length; i++) {
+
+			if (clusters[i].getId() == id) {
+				return clusters[i];
+			}
+		}
+		clusters = endpoint.getClientClusters();
+		for (int j = 0; j < clusters.length; j++) {
+
+			if (clusters[j].getId() == id) {
+				return clusters[j];
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * 
 	 * @param endpointIeeeAddress
@@ -836,7 +857,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 					public short getId() {
 
-						return 3;
+						return 0;
 					}
 				};
 				return dataType;
@@ -878,12 +899,23 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		// READ ONLY EXCEPTION
 		zigBeeHandler = new ZigBeeHandlerImpl();
-		cluster.getAttribute(0, zigBeeHandler); // mandatory unsigned bit int
+
+		NetworkAttributeIds attrIds = conf.getFirstReadOnlyAttribute();
+		endpoint = getZigBeeEndpoint(attrIds.getIeeeAddresss());
+		cluster = getClusterById(endpoint, attrIds.getClusterId());
+
+		cluster.getAttribute(attrIds.getAttributeId(), zigBeeHandler); // mandatory
+		// unsigned
+		// bit int
 
 		attr = (ZCLAttribute) zigBeeHandler.getSuccessResponse();
+		attr.getValue(zigBeeHandler);
+		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
+		Object attrValue = zigBeeHandler.getSuccessResponse();
 
+		// set the value with what has been read to avoid range /type problems
 		zigBeeHandler = new ZigBeeHandlerImpl();
-		attr.setValue(new Integer(0), zigBeeHandler);
+		attr.setValue(attrValue, zigBeeHandler);
 
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 		assertTrue("a failure is expected", !zigBeeHandler.isSuccess().booleanValue());

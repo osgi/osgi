@@ -28,7 +28,7 @@
          try to pick one which does not exist -->
         <attribute>
          <!-- for dataTypes see org.osgi.service.zigbee.types -->
-         <attributeDescription id="0" isReadOnly="true"
+         <attributeDescription id="4" isReadOnly="true"
           name="ZCLVersion" isReportable="false"
           dataType="ZigBeeUnsignedInteger16">
          </attributeDescription>

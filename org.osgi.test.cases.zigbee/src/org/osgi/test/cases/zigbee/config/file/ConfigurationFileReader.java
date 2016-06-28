@@ -331,6 +331,60 @@ public class ConfigurationFileReader {
 		return null;
 	}
 
+	public NetworkAttributeIds getFirstWritableAttribute() {
+		BigInteger ieeeAddresss;
+		short endpointId;
+		int clusterId;
+		int attributeId;
+
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpoint[] endpoints = ((ZigBeeNodeImpl) nodes[i]).getEndpoints();
+			ieeeAddresss = nodes[i].getIEEEAddress();
+			for (int j = 0; j < endpoints.length; j++) {
+				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				endpointId = endpoints[j].getId();
+				for (int k = 0; k < serverClusters.length; k++) {
+					ZCLAttribute[] attributes = ((ZCLClusterConf) serverClusters[k]).getAttributes();
+					clusterId = serverClusters[k].getId();
+					for (int l = 0; l < attributes.length; l++) {
+						if (!((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReadOnly()) {
+							attributeId = attributes[l].getId();
+							return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public NetworkAttributeIds getFirstReadOnlyAttribute() {
+		BigInteger ieeeAddresss;
+		short endpointId;
+		int clusterId;
+		int attributeId;
+
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpoint[] endpoints = ((ZigBeeNodeImpl) nodes[i]).getEndpoints();
+			ieeeAddresss = nodes[i].getIEEEAddress();
+			for (int j = 0; j < endpoints.length; j++) {
+				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				endpointId = endpoints[j].getId();
+				for (int k = 0; k < serverClusters.length; k++) {
+					ZCLAttribute[] attributes = ((ZCLClusterConf) serverClusters[k]).getAttributes();
+					clusterId = serverClusters[k].getId();
+					for (int l = 0; l < attributes.length; l++) {
+						if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReadOnly()) {
+							attributeId = attributes[l].getId();
+							return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	private ZigBeeNodeDescriptor getZigBeeNodeDescriptor(Element nodeElement) {
 		ZigBeeNodeDescriptor result = null;
 		NodeList descList = nodeElement.getElementsByTagName("nodeDescriptor");
