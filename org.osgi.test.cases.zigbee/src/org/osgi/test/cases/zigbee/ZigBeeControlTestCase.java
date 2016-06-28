@@ -754,7 +754,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// create, and launch a test event listener.
 		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(getContext());
 		Dictionary properties = new Properties();
-		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, "3");
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(3));
 		aZCLEventListenerImpl.start(properties);
 
 		TestStepProxy testStep = launcher.getTeststepProxy();
@@ -795,7 +795,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	public void testExceptions() {
+	public void testGeneralCommandExceptions() {
 
 		log("---- testExceptions");
 
@@ -868,7 +868,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 		assertNull("readAttributes response is not null", zigBeeHandler.getSuccessResponse());
 
-		assertTrue("The response is successfull. A failure is expected", !zigBeeHandler.isSuccess().booleanValue());
+		assertTrue("The response is successfull. BUT a failure is expected in this test case reading a invalid attribute.", !zigBeeHandler.isSuccess().booleanValue());
 
 		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
 
@@ -885,12 +885,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		zigBeeHandler = new ZigBeeHandlerImpl();
 
 		cluster.getAttribute(booleanDatatypeAttr.getId(), zigBeeHandler);
-
+		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 		ZCLAttribute attr = (ZCLAttribute) zigBeeHandler.getSuccessResponse();
 		zigBeeHandler = new ZigBeeHandlerImpl();
 		attr.setValue(new Float(4), zigBeeHandler);
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
-		assertTrue("The response was succesfull. a failure is expected", !zigBeeHandler.isSuccess().booleanValue());
+		assertTrue("The response was succesfull. a failure is expected in this case testing the Invalid data type.", !zigBeeHandler.isSuccess().booleanValue());
 
 		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
 		assertEquals("The ZCL exception is not an Invalid data type exception",
@@ -920,7 +920,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		zigBeeHandler.waitForResponse(HANDLER_TIMEOUT);
 		assertTrue("a failure is expected", !zigBeeHandler.isSuccess().booleanValue());
 
-		assertTrue("The exception is not a ZCL exception", zigBeeHandler.getFailureResponse() instanceof ZCLException);
+		assertTrue("The exception is not a ZCL exception as expected in this case testing the read-only exception.", zigBeeHandler.getFailureResponse() instanceof ZCLException);
 		assertEquals("could set a value tagged as read only in the description",
 				ZCLException.READ_ONLY,
 				((ZCLException) zigBeeHandler.getFailureResponse()).getErrorCode());
