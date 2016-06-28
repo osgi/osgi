@@ -28,8 +28,9 @@
          try to pick one which does not exist -->
         <attribute>
          <!-- for dataTypes see org.osgi.service.zigbee.types -->
-         <attributeDescription id="4" isReadOnly="true"
-          name="ZCLVersion" isReportable="false"
+         <!-- the test needs at leat one attribute which is read only -->
+         <attributeDescription id="8" isReadOnly="true"
+          name="version" isReportable="false"
           dataType="ZigBeeUnsignedInteger16">
          </attributeDescription>
         </attribute>
