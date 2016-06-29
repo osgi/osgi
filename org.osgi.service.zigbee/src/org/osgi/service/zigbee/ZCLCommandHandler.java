@@ -19,7 +19,7 @@ package org.osgi.service.zigbee;
 /**
  * Manage response of a command request to the Base Driver
  * 
- * @author $Id: ceeebfdfb63842afe4e4b600aa2c682d60838366 $
+ * @author $Id$
  */
 public interface ZCLCommandHandler {
 

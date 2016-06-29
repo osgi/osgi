@@ -27,7 +27,7 @@ import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id: 948fd24bef60fa9723eb4c6be5ed62168a175b3b $
+ * @author $Id$
  */
 public class ZCLAttributeImpl implements ZCLAttribute {
 

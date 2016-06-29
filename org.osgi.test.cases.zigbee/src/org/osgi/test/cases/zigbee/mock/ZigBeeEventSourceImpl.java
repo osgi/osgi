@@ -25,7 +25,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Mocked test event source.
  * 
- * @author $Id: cd76b3e4be43d70ff11f1b2a767576b9630a341a $
+ * @author $Id$
  */
 public class ZigBeeEventSourceImpl implements Runnable {
 

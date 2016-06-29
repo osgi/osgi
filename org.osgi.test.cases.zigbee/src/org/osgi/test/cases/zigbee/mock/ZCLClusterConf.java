@@ -26,7 +26,7 @@ import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
  * Class used by the configuration file reader. see
  * {@link ConfigurationFileReader}
  * 
- * @author $Id: 1d84453d85ed9879dbad614548e2eb4fe5bc0c2b $
+ * @author $Id$
  */
 public class ZCLClusterConf extends ZCLClusterImpl {
 

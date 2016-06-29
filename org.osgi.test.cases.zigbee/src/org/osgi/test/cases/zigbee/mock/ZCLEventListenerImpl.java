@@ -27,7 +27,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Mocked test.
  * 
- * @author $Id: 74c55c9cd68ca7cea2207c83c1b4fb92c82559a5 $
+ * @author $Id$
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 

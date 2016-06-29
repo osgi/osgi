@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
 /**
  * Mocked impl of ZigBeeNodeDescriptor.
  * 
- * @author $Id: e12032d3fcdd059801f5b7cb425f2ed6ef09b64b $
+ * @author $Id$
  */
 public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 

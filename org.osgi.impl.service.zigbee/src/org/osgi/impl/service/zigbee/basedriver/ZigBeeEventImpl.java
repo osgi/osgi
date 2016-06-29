@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 /**
  * Mocked impl of ZigBeeEvent.
  * 
- * @author $Id: 0d969d86430674155d6b0545ad3331099f92773f $
+ * @author $Id$
  */
 public class ZigBeeEventImpl implements ZigBeeEvent {
 
