@@ -176,7 +176,7 @@
               
             <row>
               <entry><code>char / Character</code></entry>
-              <entry><code>v.lenght() > 0 ? v.charAt(0) : 0</code></entry>
+              <entry><code>v.length() > 0 ? v.charAt(0) : 0</code></entry>
             </row>
               
             <row>
