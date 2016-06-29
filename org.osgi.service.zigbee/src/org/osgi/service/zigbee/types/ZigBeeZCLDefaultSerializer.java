@@ -26,32 +26,14 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 
 /**
- * This class contains the common serialize/deserialize methods for the
- * org.osgi.service.zigbee.types.*
- * 
- * This constants are not the same provided by the ZigBee specification, and
- * follows the rules below:
- * 
- * <p>
- * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data
- * type in bytes.<br>
- * <em>bit 6</em>: if set to 1 bits 0-3 represents the size of the data type in
- * bytes. <br>
- * <em>bit 7</em>: if one the data type represents a unsigned value, otherwise
- * it is signed.
- * 
- * 
- * <p>
- * <dl>
- * Related documentation:
- * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
- * 2012.
- * </dl>
+ * This class contains the common serialize/deserialize methods for all the
+ * org.osgi.service.zigbee.types.* classes. The array, bag, set, structure data
+ * types are not supported.
  * 
  * @author $Id$
  */
 class ZigBeeZCLDefaultSerializer {
-	static final long			zigBeeTimeZero			= 946684800000L;	// 1/1/2000
+	static final long zigBeeTimeZero = 946684800000L;	// 1/1/2000
 
 	/**
 	 * Marshal the passed value into a {@code ZigBeeDataOutput} stream,
@@ -59,6 +41,9 @@ class ZigBeeZCLDefaultSerializer {
 	 * {@code IllegalArgumentException} is thrown when the the passed
 	 * {@code value} does not belong to the class allowed for the
 	 * {@code dataType}.
+	 * 
+	 * <p>
+	 * Array, bag, set and structure data types are not supported.
 	 * 
 	 * <p>
 	 * If the data type allows that, a null value is marshaled into ZCL Invalid
@@ -77,12 +62,14 @@ class ZigBeeZCLDefaultSerializer {
 	 *        do not allow any invalid value and the passed value is null an
 	 *        {@link IllegalArgumentException} is thrown.
 	 * 
+	 * @throws IOException
+	 * 
 	 * @throws IllegalArgumentException Thrown when the the passed {@code value}
 	 *         does not belong to the allowed class for the {@code dataType} as
 	 *         described in the specification or when the value exceed the range
 	 *         allowed by that type (i.e. length for Octet String data types).
 	 */
-	static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) {
+	static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) throws IOException {
 
 		if (os == null) {
 			throw new NullPointerException();
@@ -349,6 +336,9 @@ class ZigBeeZCLDefaultSerializer {
 					throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be serialized with this generic method.");
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
+
+					// FIXME: probably there is a mistake here.
+
 					Date d = (Date) value;
 					Calendar c = GregorianCalendar.getInstance();
 					c.setTime(d);
@@ -358,14 +348,20 @@ class ZigBeeZCLDefaultSerializer {
 					os.writeByte((byte) c.get(Calendar.MILLISECOND / 10));
 					return;
 				}
+
 				case ZigBeeDataTypes.DATE : {
-					Date d = (Date) value;
-					Calendar c = GregorianCalendar.getInstance();
-					c.setTime(d);
-					os.writeByte((byte) c.get(Calendar.YEAR));
-					os.writeByte((byte) c.get(Calendar.MONTH));
-					os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
-					os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
+					if (value instanceof Date) {
+						Date d = (Date) value;
+						// FIXME: probably there is a mistake here.
+						Calendar c = GregorianCalendar.getInstance();
+						c.setTime(d);
+						os.writeByte((byte) c.get(Calendar.YEAR));
+						os.writeByte((byte) c.get(Calendar.MONTH));
+						os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
+						os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
+					} else {
+						os.writeBytes((byte[]) value, 4);
+					}
 					return;
 				}
 
@@ -399,6 +395,14 @@ class ZigBeeZCLDefaultSerializer {
 	}
 
 	/**
+	 * Unarshal {@code ZigBeeDataInput} stream, according the {@code dataType}
+	 * argument. An {@code IllegalArgumentException} is thrown when the the
+	 * passed {@code value} does not belong to the class allowed for the
+	 * {@code dataType}.
+	 * 
+	 * <p>
+	 * Array, bag, set and structure data types are not supported.
+	 * 
 	 * @param is A valid {@link ZigBeeDataInput} stream instance. This parameter
 	 *        cannot be null.
 	 * 
@@ -703,7 +707,8 @@ class ZigBeeZCLDefaultSerializer {
 			case ZigBeeDataTypes.STRUCTURE :
 				throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be deserialized with this generic method.");
 
-			case ZigBeeDataTypes.TIME_OF_DAY : {
+			case ZigBeeDataTypes.TIME_OF_DAY :
+			case ZigBeeDataTypes.DATE : {
 				byte[] value = is.readBytes(4);
 				if (value[0] == 0xff && value[1] == 0xff && value[3] == 0xff && value[4] == 0xff) {
 					// checks for invalid value
@@ -711,22 +716,6 @@ class ZigBeeZCLDefaultSerializer {
 				}
 				swap(value);
 				return value;
-			}
-
-			case ZigBeeDataTypes.DATE : {
-				int value = is.readInt(4);
-				if (value == -1) {
-					return null;
-				}
-				Calendar c = GregorianCalendar.getInstance();
-
-				// NOTE: the Year byte contains years since 1900!
-				c.set(Calendar.YEAR, (is.readByte() & 0xff) + 1900);
-				c.set(Calendar.MONTH, is.readByte() & 0xff);
-				c.set(Calendar.DAY_OF_MONTH, is.readByte() & 0xff);
-				c.set(Calendar.DAY_OF_WEEK, is.readByte() & 0xff);
-
-				return c.getTime();
 			}
 
 			case ZigBeeDataTypes.UTC_TIME : {

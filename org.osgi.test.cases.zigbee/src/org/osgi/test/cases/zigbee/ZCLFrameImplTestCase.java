@@ -22,8 +22,8 @@ import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
-import org.osgi.test.cases.zigbee.impl.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.impl.ZCLHeaderImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**

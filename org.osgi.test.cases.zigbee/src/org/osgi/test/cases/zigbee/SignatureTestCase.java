@@ -19,7 +19,7 @@ package org.osgi.test.cases.zigbee;
 /**
  * 
  *
- * TODO Add Javadoc comment for this type.
+ * for Sgnature tests purpose
  * 
  * @author $Id$
  */

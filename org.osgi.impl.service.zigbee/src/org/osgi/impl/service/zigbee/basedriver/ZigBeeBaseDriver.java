@@ -26,14 +26,12 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.util.teststep.ConfigurationFileReader;
 import org.osgi.impl.service.zigbee.util.teststep.EndpointServicesListener;
 import org.osgi.impl.service.zigbee.util.teststep.TestStepForZigBeeImpl;
-import org.osgi.service.zigbee.ZCLEventListener;
-import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
-import org.osgi.test.cases.zigbee.impl.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.impl.ZigBeeNodeConf;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
 import org.osgi.test.support.step.TestStep;
 
 /**
@@ -41,7 +39,7 @@ import org.osgi.test.support.step.TestStep;
  * 
  * @author $Id$
  */
-public class ZigBeeBaseDriver implements ZCLEventListener {
+public class ZigBeeBaseDriver {
 
 	private BundleContext		bc;
 	private List				Endpoints;
@@ -71,13 +69,11 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 			listener = new EndpointServicesListener(bc);
 			listener.open();
 		} catch (InvalidSyntaxException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
 			// this.start();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -89,7 +85,6 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 	public void stop() {
 		listener.close();
 		System.out.println(this.getClass().getName() + " - Stop the base driver.");
-		// TODO
 	}
 
 	public void notifyEvent(ZigBeeEvent event) {
@@ -129,16 +124,6 @@ public class ZigBeeBaseDriver implements ZCLEventListener {
 			bc.registerService(ZigBeeNode.class.getName(), node, nodeProperties);
 
 		}
-
-	}
-
-	public void onFailure(ZCLException e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void notifyTimeOut(int timeout) {
-		// TODO Auto-generated method stub
 
 	}
 

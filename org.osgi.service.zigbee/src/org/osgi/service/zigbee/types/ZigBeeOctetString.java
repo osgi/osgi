@@ -59,7 +59,7 @@ public class ZigBeeOctetString
 		return ZigBeeDataTypes.OCTET_STRING;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.OCTET_STRING, value);
 	}
 

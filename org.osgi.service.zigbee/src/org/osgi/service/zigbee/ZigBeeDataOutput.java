@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee;
 
+import java.io.IOException;
+
 /**
  * The {@code ZigBeeDataOutput} interface is designed for converting java data
  * types into a series of bytes. The purpose of this interface is the same as
@@ -40,38 +42,51 @@ public interface ZigBeeDataOutput {
 	 * @param value The int value to append
 	 * @param size The size in bytes that have to be actually appended. The size
 	 *        must be in the range (1,4]
+	 *        
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeInt(int value, int size);
+	public void writeInt(int value, int size) throws IOException;
 
 	/**
 	 * Appends a long to to the data output.
 	 * 
 	 * @param value The long value to append
-	 * @param size The size in bytes that have to be actually appended.
+	 * @param size The size in bytes that have to be actually appended. The size
+	 *        must be in the range (1,8]
+	 * 
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeLong(long value, int size);
+	public void writeLong(long value, int size) throws IOException;
 
 	/**
 	 * Appends on the Data Output Stream a float value
 	 * 
 	 * @param value The float value to append
-	 * @param size The size in bytes that have to be actually appended.
+	 * @param size The size in bytes that have to be actually appended. The size
+	 *        must be 2 (for semi precision floats) or 4 (for standard precision
+	 *        floats)
+	 * 
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeFloat(float value, int size);
+	public void writeFloat(float value, int size) throws IOException;
 
 	/**
 	 * Appends on the Data Output Stream a double value
 	 * 
 	 * @param value The double value to append
+	 * 
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeDouble(double value);
+	public void writeDouble(double value) throws IOException;
 
 	/**
 	 * Appends on the Data Output Stream a bytes value
 	 * 
 	 * @param bytes The bytes value to append
 	 * @param length The length in bytes that have to be actually appended.
+	 * 
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeBytes(byte[] bytes, int length);
+	public void writeBytes(byte[] bytes, int length) throws IOException;
 
 }

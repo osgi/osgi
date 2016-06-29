@@ -16,13 +16,13 @@
 
 package org.osgi.service.zigbee;
 
-
 /**
- * This interface represents all ZigBee data types.
- * <p>
+ * This interface contains the constants that are used internally by these API
+ * to represent the ZCL data types.
  * 
- * This constants are not the same provided by the ZigBee specification, and
- * follows the rules below:
+ * <p>
+ * This constants do not match the values provided by the ZigBee specification,
+ * and follows the rules below:
  * 
  * <p>
  * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data

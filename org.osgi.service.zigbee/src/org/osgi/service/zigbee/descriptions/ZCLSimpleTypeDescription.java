@@ -62,13 +62,15 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 *        not allow any invalid value and the passed value is null an
 	 *        {@link IllegalArgumentException} is thrown.
 	 * 
+	 * @throws IOException
+	 * 
 	 * @throws IllegalArgumentException Must be thrown if the passed value does
 	 *         not belong to the expected class or its value exceeds the
 	 *         possible values allowed (range or length).
 	 * 
 	 */
 
-	public void serialize(ZigBeeDataOutput os, Object value);
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException;
 
 	/**
 	 * Method for deserializing a value from the passed {@link ZigBeeDataInput}

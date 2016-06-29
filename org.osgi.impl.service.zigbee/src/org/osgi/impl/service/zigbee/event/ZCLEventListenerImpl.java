@@ -28,15 +28,15 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 public class ZCLEventListenerImpl implements ZCLEventListener {
 
 	public void notifyEvent(ZigBeeEvent event) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void onFailure(ZCLException e) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void notifyTimeOut(int timeout) {
-		// TODO Auto-generated method stub
+
 	}
 
 }
