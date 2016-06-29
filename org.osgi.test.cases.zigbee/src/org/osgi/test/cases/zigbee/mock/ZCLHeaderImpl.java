@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.ZCLHeader;
  * from a real one, and it is provided to allow to test the test cases provided
  * along with the ZigBee Device Service.
  * 
- * @author $Id: ee70cac3aceebe8d0448355c7aa3fa0d3731e4af $
+ * @author $Id$
  */
 public class ZCLHeaderImpl implements ZCLHeader {
 

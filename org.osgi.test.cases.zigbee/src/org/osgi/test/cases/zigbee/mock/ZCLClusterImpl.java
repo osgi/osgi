@@ -32,7 +32,7 @@ import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id: 01248cc3dfca2ad0c7027d7b89694a6199db46dc $
+ * @author $Id$
  */
 public class ZCLClusterImpl implements ZCLCluster {
 

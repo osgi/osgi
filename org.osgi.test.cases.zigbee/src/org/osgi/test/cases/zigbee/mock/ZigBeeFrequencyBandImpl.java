@@ -21,7 +21,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 /**
  * Mocked impl of ZigBeeFrequencyBand.
  * 
- * @author $Id: 94ba5e4cac296cb89055fab4feaa135ea6faabac $
+ * @author $Id$
  */
 public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
 

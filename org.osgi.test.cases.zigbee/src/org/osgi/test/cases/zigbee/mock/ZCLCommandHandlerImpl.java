@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZCLFrame;
 /**
  * Mocked impl.
  * 
- * @author $Id: 7b665f09fd2e023a885fc679d0cb421102f41536 $
+ * @author $Id$
  */
 public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 

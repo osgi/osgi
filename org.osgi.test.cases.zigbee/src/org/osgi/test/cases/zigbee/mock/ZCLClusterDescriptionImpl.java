@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id: 97d8c925b3bdf68977a94932ef09e2528b5823dd $
+ * @author $Id$
  */
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 

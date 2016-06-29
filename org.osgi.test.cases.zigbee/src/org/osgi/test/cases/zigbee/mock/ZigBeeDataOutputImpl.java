@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 /**
  * Mocked impl.
  * 
- * @author $Id: 395123d8ddfb18e3a71d022ea6fbad8fbaa4b468 $
+ * @author $Id$
  */
 public class ZigBeeDataOutputImpl implements ZigBeeDataOutput {
 

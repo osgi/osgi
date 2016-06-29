@@ -16,7 +16,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * Mocked impl.
  * 
- * @author $Id: 41e7051fd4fa89a209de2a9cc136c59da4d7c649 $
+ * @author $Id$
  */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
