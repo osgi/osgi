@@ -50,15 +50,10 @@ public interface ZCLCluster {
 	int getId();
 
 	/**
-	 * Read the cluster attribute with the specified {@code attributeId}.
+	 * Get the cluster attribute identified corresponding to given attributeId.
 	 * 
-	 * @param attributeId the attribute identified of the attribute that have to
-	 *        be read.
-	 * 
-	 * @param handler the response handler TODO: not clear what is returned in
-	 *        the handler.
-	 * 
-	 *        TODO: the following see is not correct.
+	 * @param attributeId an Attribute identifier
+	 * @param handler the response handler
 	 * 
 	 * @see ZCLCluster#getAttribute(int, int, ZigBeeHandler) To get Manufacturer
 	 *      specific attribute use ZCLCluster#getAttribute(int, int,
@@ -71,11 +66,9 @@ public interface ZCLCluster {
 	 * of a specific Manufacturer or the standard attribute
 	 * 
 	 * @param attributeId an Attribute identifier
-	 * 
 	 * @param code the int representing the Manufacturer code for getting the
 	 *        vendor specific attribute, use -1 if looking for standard
 	 *        attribute
-	 * 
 	 * @param handler the response handler
 	 */
 	void getAttribute(int attributeId, int code, ZigBeeHandler handler);
@@ -83,8 +76,6 @@ public interface ZCLCluster {
 	/**
 	 * Get an array of all this Cluster's Attributes. This method returns only
 	 * standard attributes
-	 * 
-	 * TODO: not clear what is returned. An array of what???
 	 * 
 	 * @param handler the response handler
 	 * 
@@ -98,10 +89,7 @@ public interface ZCLCluster {
 	 * standard attributes when using -1 as code or vendor specific attribute
 	 * when invoked with the proper code.
 	 * 
-	 * TODO: not clear what is returned. An array of what???
-	 * 
 	 * @param handler the response handler
-	 * 
 	 * @param code the int representing the Manufacturer code for getting the
 	 *        vendor specific attribute, use -1 if looking for standard
 	 *        attribute
@@ -129,16 +117,13 @@ public interface ZCLCluster {
 	 * {@link IllegalArgumentException} will be thrown
 	 * 
 	 * @param attributes An array of ZCLAttributeInfo
-	 * 
 	 * @param handler the response handler
-	 * 
 	 * @throws NullPointerException the attribute array cannot be null
 	 * 
-	 * @throws IllegalArgumentException if the passed array of
-	 *         {@code ZCLAttributeInfo} instances mixes non manufacturer
-	 *         specific attributes with not-manufacturer specific ones, or even
-	 *         if there are mix of attributes with different manufacturer
-	 *         specific code, or if the array is empty.
+	 * @throws IllegalArgumentException if some of {@link ZCLAttributeInfo} are
+	 *         manufacturer specific and other are standard, or even if there
+	 *         are mix of attributes with different manufacturer specific code,
+	 *         Or if the attributes array is empty
 	 */
 	void readAttributes(ZCLAttributeInfo[] attributes, ZigBeeHandler handler);
 
@@ -160,11 +145,8 @@ public interface ZCLCluster {
 	 * equals true and an error has occurred, onFailure is called with a
 	 * ZCLException.
 	 * 
-	 * TODO: not clear enough to be implemented. In particular, what is returned
-	 * in the handler?
-	 * 
 	 * <p>
-	 * <b>NOTE</b>: Considering the ZigBee Specification all the attributes must
+	 * <b>NOTE</b>Considering the ZigBee Specification all the attributes must
 	 * be standard attributes or belong to the same Manufacturer otherwise
 	 * {@link IllegalArgumentException} will be thrown
 	 * 
