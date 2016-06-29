@@ -50,10 +50,13 @@ public interface ZCLCluster {
 	int getId();
 
 	/**
-	 * Get the cluster attribute identified corresponding to given attributeId.
+	 * Get the cluster {@link ZCLAttribute} identifying corresponding attribute
+	 * that matches the given attributeId.
 	 * 
 	 * @param attributeId an Attribute identifier
-	 * @param handler the response handler
+	 * @param handler the response handler. The
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked with the
+	 *        proper {@link ZCLAttribute}
 	 * 
 	 * @see ZCLCluster#getAttribute(int, int, ZigBeeHandler) To get Manufacturer
 	 *      specific attribute use ZCLCluster#getAttribute(int, int,
@@ -62,22 +65,26 @@ public interface ZCLCluster {
 	void getAttribute(int attributeId, ZigBeeHandler handler);
 
 	/**
-	 * Get the cluster attribute identified corresponding to given attributeId
+	 * Get the cluster {@link ZCLAttribute} identifying corresponding attribute
 	 * of a specific Manufacturer or the standard attribute
 	 * 
 	 * @param attributeId an Attribute identifier
 	 * @param code the int representing the Manufacturer code for getting the
 	 *        vendor specific attribute, use -1 if looking for standard
 	 *        attribute
-	 * @param handler the response handler
+	 * @param handler the response handler. The
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked with the
+	 *        proper {@link ZCLAttribute}
 	 */
 	void getAttribute(int attributeId, int code, ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all this Cluster's Attributes. This method returns only
-	 * standard attributes
+	 * Get an array of {@link ZCLAttribute} representing all this Cluster's
+	 * Attributes. This method returns only standard attributes
 	 * 
-	 * @param handler the response handler
+	 * @param handler the response handler. The
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked an array
+	 *        of {@link ZCLAttribute}
 	 * 
 	 * @see ZCLCluster#getAttributes(int, ZigBeeHandler) To get Manufacturer
 	 *      specific attribute use ZCLCluster#getAttributes(int, ZigBeeHandler)
@@ -85,14 +92,16 @@ public interface ZCLCluster {
 	void getAttributes(ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all this Cluster's Attributes. This method returns only
-	 * standard attributes when using -1 as code or vendor specific attribute
-	 * when invoked with the proper code.
+	 * Get an array of {@link ZCLAttribute} representing all this Cluster's
+	 * Attributes. This method returns only standard attributes when using -1 as
+	 * code or vendor specific attribute when invoked with the proper code
 	 * 
-	 * @param handler the response handler
 	 * @param code the int representing the Manufacturer code for getting the
 	 *        vendor specific attribute, use -1 if looking for standard
 	 *        attribute
+	 * @param handler the response handler. The
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked an array
+	 *        of {@link ZCLAttribute}
 	 */
 	void getAttributes(int code, ZigBeeHandler handler);
 
