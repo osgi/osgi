@@ -39,7 +39,7 @@ import org.osgi.test.support.step.TestStep;
 /**
  * Mocked impl of ZigBeeDeviceNodeListener.
  * 
- * @author $Id: bf64dce5e65d559684e4f5ed5aae16f1a90f967a $
+ * @author $Id$
  */
 public class ZigBeeBaseDriver implements ZCLEventListener {
 
