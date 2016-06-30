@@ -30,6 +30,15 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface Encoding {
 	/**
+	 * Specify that keys with a {@code null} value must not appear in the
+	 * result. If not specified {@code null} values will be included in the
+	 * result.
+	 * 
+	 * @return This Encoding object to allow further invocations on it.
+	 */
+	Encoding ignoreNull();
+
+	/**
 	 * Specify that the encoded output should be formatted to look 'pretty',
 	 * which may make it easier for humans to read. If not specified, the
 	 * encoded output should be formatted to be compact, so save space.
@@ -40,7 +49,8 @@ public interface Encoding {
 
 	/**
 	 * Use an output stream as the target of the encoding operation. UTF-8 will
-	 * be used.
+	 * be used if applicable, the character set may not apply to binary
+	 * encodings.
 	 *
 	 * @param out The output stream to use.
 	 * @throws IOException If an I/O error occurred.
@@ -51,7 +61,8 @@ public interface Encoding {
 	 * Use an output stream as the target of the encoding operation.
 	 *
 	 * @param out The output stream to use.
-	 * @param charset The character set to use.
+	 * @param charset The character set to use, if applicable, the character set
+	 *            may not apply to binary encodings.
 	 * @throws IOException If an I/O error occurred.
 	 */
 	void to(OutputStream out, Charset charset) throws IOException;
