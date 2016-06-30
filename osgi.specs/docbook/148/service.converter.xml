@@ -121,7 +121,7 @@
                 <entry><code>v.booleanValue() ? 1 : 0</code></entry>
                 <entry><code>(</code><emphasis>number</emphasis><code>) v.charValue()</code></entry>
                 <entry><code>v.</code><emphasis>number</emphasis><code>Value()</code></entry>
-                <entry><code>null</code></entry>
+                <entry>0</entry>
               </row>
             </tbody>
           </tgroup>
@@ -152,7 +152,7 @@
             </listitem>
   
             <listitem>
-              <para>String constructor.</para>
+              <para>public constructor taking a single <code>String</code> argument.</para>
             </listitem>
           </orderedlist>
           
@@ -264,62 +264,48 @@
               </thead>         
               <tbody>
               <row>
-                <entry><code>Boolean</code></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(v.toString().toUpperCase())</code></entry>
-              </row>
-                
-              <row>
-                <entry><code>Character</code></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(Character.toString(v))</code></entry>
-              </row>
-                
-              <row>
                 <entry><emphasis>Number</emphasis></entry>
                 <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>
               </row>
                 
               <row>
                 <entry><code>String</code></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code></entry>
+                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>. If no matching enum value can be found
+                a case-insensitive lookup if done for a matching enum value.
+                </entry>
               </row>
             </tbody>
           </tgroup>
         </table>  
-        <para>Primitives are boxed before conversion is done.
+        <para>
+        Primitives are boxed before conversion is done.
           Other source types are converted to String before converting to Enum.</para>
       </section>
         
       <section xml:id="service.converter.special.cases.map.entry">
         <title>Map.Entry</title>
-        <para>Conversion of <code>Map.Entry</code> to a target type is done by evaluating the compatibility of the 
-        target type with both the key and the value in the entry and then using the best match.
-        <remark>Need to make crisp what 'best match' means. What if they match equally?</remark>
-        If the target type matches the key type, the key type is used. If the target matches 
-        the value type then the value type is used.</para>
-        
-        <para>Conversion of <code>Map.Entry</code> to <code>String</code> is be done by converting both key and value to 
-        String and concatenating both with an <code>=</code> character.</para>
-        <remark>when does this override the previous rule? What if key is of type String and value is Long?</remark>
-        
-        <para>Conversion of a <code>Map.Entry</code> to any other type is done by converting the value to 
-        <code>String</code> and then converting the result to the target type.</para>
-        
-        <para>Converting to a Map.Entry can only be done from <code>String</code> values which contain an <code>=</code> 
-        character. The <emphasis>left hand side</emphasis>  
-        is assigned to the key and the <emphasis>right hand side</emphasis> is the value. 
-        Key and value must be converted in the requested 
-        target type where this type information is available. Strings without an <code>=</code> 
-        sign result in a conversion failure.</para>
+        <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target type is done by evaluating the compatibility of the 
+        target type with both the key and the value in the entry and then using the best match. This is done in this order:
+        <orderedlist>
+          <listitem><para>If one of the key or value is the same as the target type, then this is used.</para></listitem>
+          <listitem><para>If one of the key or value type is assignable to the target type, then this is used.</para></listitem>
+          <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type.</para></listitem>
+          <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
+          value is then converted to the target type.</para></listitem>
+        </orderedlist>
+        If the key or value of the <code>Map.Entry&lt;K,V&gt;</code> equally match, the key is used.</para>
+                        
+        <para>Conversion to <code>Map.Entry</code> from another type is not supported.</para>
       </section>
       </section>
     
     <section>
-      <title>Collections and Arrays</title>
+      <title>Aggregates</title>
   
-      <para>...</para>
+      <para>Collections and Arrays...</para>
       
       <section>
-        <title>Converting to a single value</title>
+        <title>Converting to a scalar</title>
         <para>
         If a Collection or array needs to be converted to a target which is not a 
         Collection, Array or Map-like structure (as described
