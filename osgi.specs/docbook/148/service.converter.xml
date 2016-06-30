@@ -547,16 +547,7 @@ String[] a2 = converter.convert(m2).to(MyAnnotation.class).args();
 
 // Will set a3={","}
 Map m3 = Collections.singletonMap("args", ",")
-String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();
-
-// Will set a4={"",""}, non-default conversion via adapter
-Map m4 = Collections.singletonMap("args", ",")
-Adapter ca = c.getAdapter();
-ca.rule(String[].class, String.class,
-  v -> Stream.of(v).collect(Collectors.joining(","))),
-  v -> v.split(","));
-String[] a4 = converter.convert(m4).to(MyAnnotation.class).args();
-</programlisting>
+String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisting>
         </para>
       </section>
       
