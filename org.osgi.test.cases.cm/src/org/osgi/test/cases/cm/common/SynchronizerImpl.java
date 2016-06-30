@@ -46,7 +46,7 @@ public class SynchronizerImpl implements Synchronizer {
 	private int signalDeletedCount;
 	private final String id;
 	private final String header;
-	private Dictionary props;
+	private Dictionary<String,Object>	props;
 	private static final boolean DEBUG = true;
 
 	/**
@@ -183,14 +183,14 @@ public class SynchronizerImpl implements Synchronizer {
 		}
 	}
 
-	public synchronized void signal(Dictionary p) {
+	public synchronized void signal(Dictionary<String,Object> p) {
 		this.props = p;
 		if (DEBUG)
 			System.out.println(header + ":signal(props=" + p + ")");
 		this.signal();
 	}
 
-	public synchronized Dictionary getProps() {
+	public synchronized Dictionary<String,Object> getProps() {
 		return props;
 	}
 

@@ -26,6 +26,7 @@
 package org.osgi.test.cases.cm.common;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.test.cases.cm.shared.Synchronizer;
@@ -43,7 +44,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	private String[]			factoryPids;
 	private String[]			pids;
 	private int[]				types;
-	private ServiceReference[]	references;
+	private ServiceReference<ConfigurationAdmin>[]	references;
 	private Synchronizer		synchronizer;
 	private int					eventCount;
 	public static final String	LISTENER_PID_SUFFIX	= "RFC0103";
@@ -67,6 +68,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	 *        between the listener and the test execution.
 	 * @param eventCount number of events expected by this listener.
 	 */
+	@SuppressWarnings("unchecked")
 	public ConfigurationListenerImpl(Synchronizer synchronizer, int eventCount) {
 		this.synchronizer = synchronizer;
 		this.eventCount = 0;
@@ -107,7 +109,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	 * @return the Service Reference from the first (or single) event
 	 * @see org.osgi.service.cm.ConfigurationEvent
 	 */
-	public ServiceReference getReference() {
+	public ServiceReference<ConfigurationAdmin> getReference() {
 		return references[0];
 	}
 
@@ -120,7 +122,7 @@ public class ConfigurationListenerImpl implements ConfigurationListener {
 	 * @return the Service Reference from the <code>i</code> th event
 	 * @see org.osgi.service.cm.ConfigurationEvent
 	 */
-	public ServiceReference getReference(int i) {
+	public ServiceReference<ConfigurationAdmin> getReference(int i) {
 		return references[i - 1];
 	}
 

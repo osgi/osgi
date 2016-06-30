@@ -30,19 +30,20 @@ import org.osgi.service.cm.ManagedService;
 import org.osgi.test.support.compatibility.Semaphore;
 
 public class ManagedServiceImpl implements ManagedService {
-	private Dictionary		properties;
+	private Dictionary<String,Object>	properties;
 	private final Semaphore	semaphore;
 
 	public ManagedServiceImpl(Semaphore semaphore) {
 		this.semaphore = semaphore;
 	}
 
-	public synchronized Dictionary getProperties() {
+	public synchronized Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 
-	public synchronized void updated(Dictionary p) {
-		properties = p;
+	@SuppressWarnings("unchecked")
+	public synchronized void updated(Dictionary<String, ? > p) {
+		properties = (Dictionary<String,Object>) p;
 		semaphore.signal();
 	}
 }
