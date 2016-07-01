@@ -15,6 +15,8 @@
  */
 package org.osgi.service.converter;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A function that can throw an exception.
  *
@@ -22,6 +24,7 @@ package org.osgi.service.converter;
  * @param <R> The type of the result of the function.
  */
 @FunctionalInterface
+@ConsumerType
 public interface FunctionThrowsException<T, R> {
     /**
 	 * Applies this function to the argument.

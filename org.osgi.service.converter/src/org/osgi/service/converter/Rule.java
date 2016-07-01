@@ -15,6 +15,8 @@
  */
 package org.osgi.service.converter;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A rule is a data entity can hold all the information needed to specify a
  * custom conversion for use by an @{link Adapter}.
@@ -24,6 +26,7 @@ package org.osgi.service.converter;
  * @author $Id$
  * @Immutable
  */
+@ProviderType
 public class Rule<F, T> {
 	private final FunctionThrowsException<F,T>	toFun;
 	private final FunctionThrowsException<T,F>	fromFun;
