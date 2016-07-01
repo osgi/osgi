@@ -636,6 +636,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
   </section> 
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.util.xml"/>
  
   <section>
     <title>References</title>
