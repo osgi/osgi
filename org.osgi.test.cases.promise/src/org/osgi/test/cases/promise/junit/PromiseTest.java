@@ -1770,4 +1770,100 @@ public class PromiseTest extends TestCase {
 			// expected
 		}
 	}
+
+	public void testTryResolve() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final AtomicBoolean fail1 = new AtomicBoolean(false);
+		final AtomicBoolean fail2 = new AtomicBoolean(false);
+		assertFalse(p.isDone());
+		p.onResolve(() -> {
+			try {
+				fail1.set(d.tryResolve("onResolve"));
+			} catch (IllegalStateException e) {
+				fail1.set(true);
+			}
+		}).onResolve(() -> {
+			try {
+				d.resolve("onResolve");
+				fail2.set(true);
+			} catch (IllegalStateException e) {
+				// expected
+			}
+		});
+		assertTrue(d.tryResolve("first"));
+		assertTrue(p.isDone());
+		assertFalse("failed to error on callback resolve", fail1.get());
+		assertFalse("failed to error on callback resolve", fail2.get());
+		try {
+			assertFalse(d.tryResolve("second"));
+		} catch (IllegalStateException e) {
+			fail("error on tryResolve after resolve", e);
+		}
+		try {
+			d.resolve("second");
+			fail("error on second resolve");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+		try {
+			assertFalse(d.tryFail(new Exception("second")));
+		} catch (IllegalStateException e) {
+			fail("error on tryFail after resolve");
+		}
+		try {
+			d.fail(new Exception("second"));
+			fail("failed to error on fail after resolve");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+	}
+
+	public void testTryFail() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final AtomicBoolean fail1 = new AtomicBoolean(false);
+		final AtomicBoolean fail2 = new AtomicBoolean(false);
+		assertFalse(p.isDone());
+		p.onResolve(() -> {
+			try {
+				fail1.set(d.tryFail(new Exception("onResolve")));
+			} catch (IllegalStateException e) {
+				fail1.set(true);
+			}
+		}).onResolve(() -> {
+			try {
+				d.fail(new Exception("onResolve"));
+				fail2.set(true);
+			} catch (IllegalStateException e) {
+				// expected
+			}
+		});
+		assertTrue(d.tryFail(new Exception("first")));
+		assertTrue(p.isDone());
+		assertFalse("failed to error on callback fail", fail1.get());
+		assertFalse("failed to error on callback fail", fail2.get());
+		try {
+			assertFalse(d.tryFail(new Exception("second")));
+		} catch (IllegalStateException e) {
+			fail("error on second tryFail", e);
+		}
+		try {
+			d.fail(new Exception("second"));
+			fail("failed to error on second fail");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+		try {
+			assertFalse(d.tryResolve("second"));
+		} catch (IllegalStateException e) {
+			fail("error on tryResolve after fail", e);
+		}
+		try {
+			d.resolve("second");
+			fail("failed to error on resolve after fail");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+	}
 }

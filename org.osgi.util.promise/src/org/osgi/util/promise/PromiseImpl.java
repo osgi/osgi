@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 
@@ -96,16 +97,22 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * Resolve this Promise.
+	 * Try to resolve this Promise.
+	 * <p>
+	 * If this Promise was already resolved, return false. Otherwise, resolve
+	 * this Promise and return true.
 	 * 
 	 * @param v The value of this Promise.
 	 * @param f The failure of this Promise.
+	 * @return false if this Promise was already resolved; true if this method
+	 *         resolved this Promise.
+	 * @since 1.1
 	 */
-	void resolve(T v, Throwable f) {
+	boolean tryResolve(T v, Throwable f) {
 		// critical section: only one resolver at a time
 		synchronized (resolved) {
 			if (resolved.getCount() == 0) {
-				throw new IllegalStateException("Already resolved");
+				return false;
 			}
 			/*
 			 * The resolved state variables must be set before opening the
@@ -117,6 +124,20 @@ final class PromiseImpl<T> implements Promise<T> {
 			resolved.countDown();
 		}
 		notifyCallbacks(); // call any registered callbacks
+		return true;
+	}
+
+	/**
+	 * Resolve this Promise.
+	 * 
+	 * @param v The value of this Promise.
+	 * @param f The failure of this Promise.
+	 * @throws IllegalStateException If this Promise was already resolved.
+	 */
+	void resolve(T v, Throwable f) {
+		if (!tryResolve(v, f)) {
+			throw new IllegalStateException("Already resolved");
+		}
 	}
 
 	/**
