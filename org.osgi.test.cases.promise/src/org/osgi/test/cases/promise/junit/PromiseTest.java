@@ -1294,13 +1294,13 @@ public class PromiseTest extends TestCase {
 
 	public void testFilterException() throws Exception {
 		String value1 = new String("value");
-		final Error failure = new Error("fail");
+		final Exception failure = new Exception("fail");
 		Promise<String> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
 			@Override
-			public boolean test(String t) {
+			public boolean test(String t) throws Exception {
 				latch1.countDown();
 				throw failure;
 			}
@@ -1393,13 +1393,13 @@ public class PromiseTest extends TestCase {
 
 	public void testMapException() throws Exception {
 		Integer value1 = new Integer(42);
-		final Error failure = new Error("fail");
+		final Exception failure = new Exception("fail");
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.map(new Function<Number, Long>() {
 			@Override
-			public Long apply(Number t) {
+			public Long apply(Number t) throws Exception {
 				latch1.countDown();
 				throw failure;
 			}
@@ -1464,13 +1464,13 @@ public class PromiseTest extends TestCase {
 
 	public void testFlatMapException() throws Exception {
 		Integer value1 = new Integer(42);
-		final Error failure = new Error("fail");
+		final Exception failure = new Exception("fail");
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<? extends Long>>() {
 			@Override
-			public Promise<Long> apply(Number t) {
+			public Promise<Long> apply(Number t) throws Exception {
 				latch1.countDown();
 				throw failure;
 			}
@@ -1533,13 +1533,9 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			@Override
-			public Long apply(Promise<?> t) {
+			public Long apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure, t.getFailure());
 				return value2;
 			}
 		});
@@ -1557,13 +1553,9 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			@Override
-			public Long apply(Promise<?> t) {
+			public Long apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure, t.getFailure());
 				return null;
 			}
 		});
@@ -1581,19 +1573,15 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverFailureException() throws Exception {
-		final Throwable failure1 = new Error("fail1");
-		final Error failure2 = new Error("fail2");
+		final Throwable failure1 = new Exception("fail1");
+		final Exception failure2 = new Exception("fail2");
 		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			@Override
-			public Long apply(Promise<?> t) {
+			public Long apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure1, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure1, t.getFailure());
 				throw failure2;
 			}
 		});
@@ -1648,13 +1636,9 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
 			@Override
-			public Promise<Long> apply(Promise<?> t) {
+			public Promise<Long> apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure, t.getFailure());
 				return resolved(value2);
 			}
 		});
@@ -1672,13 +1656,9 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
 			@Override
-			public Promise<Long> apply(Promise<?> t) {
+			public Promise<Long> apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure, t.getFailure());
 				return null;
 			}
 		});
@@ -1696,19 +1676,15 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverWithFailureException() throws Exception {
-		final Throwable failure1 = new Error("fail1");
-		final Error failure2 = new Error("fail2");
+		final Throwable failure1 = new Exception("fail1");
+		final Exception failure2 = new Exception("fail2");
 		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
 			@Override
-			public Promise<Long> apply(Promise<?> t) {
+			public Promise<Long> apply(Promise<?> t) throws Exception {
 				latch1.countDown();
-				try {
-					assertSame(failure1, t.getFailure());
-				} catch (InterruptedException e) {
-					fail(e);
-				}
+				assertSame(failure1, t.getFailure());
 				throw failure2;
 			}
 		});

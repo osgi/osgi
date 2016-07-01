@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ public interface Predicate<T> {
 	 * @param t The input to this predicate.
 	 * @return {@code true} if the specified argument is accepted by this
 	 *         predicate; {@code false} otherwise.
+	 * @throws Exception An exception thrown by the method.
 	 */
-	boolean test(T t);
+	boolean test(T t) throws Exception;
 }
