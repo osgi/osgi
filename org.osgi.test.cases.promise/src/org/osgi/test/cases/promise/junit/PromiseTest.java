@@ -17,6 +17,7 @@
 package org.osgi.test.cases.promise.junit;
 
 import static org.osgi.util.promise.Promises.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,8 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
+
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Deferred;
@@ -41,6 +41,9 @@ import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.Success;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 public class PromiseTest extends TestCase {
 	public static final long	WAIT_TIME	= 2L;
 	static Timer				timer		= new Timer();
@@ -83,6 +86,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Deferred<String> d = new Deferred<String>();
 		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -102,6 +106,7 @@ public class PromiseTest extends TestCase {
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.then(new Success<Number, Number>() {
+			@Override
 			public Promise<Number> call(Promise<Number> resolved) throws Exception {
 				latch.countDown();
 				return resolved((Number) new Long(resolved.getValue().longValue()));
@@ -127,9 +132,11 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.then(new Success<Number, Number>() {
+			@Override
 			public Promise<Number> call(Promise<Number> resolved) throws Exception {
 				final Promise<Number> returned = resolved((Number) new Long(resolved.getValue().longValue()));
 				returned.onResolve(new Runnable() {
+					@Override
 					public void run() {
 						latch1.countDown();
 					}
@@ -137,6 +144,7 @@ public class PromiseTest extends TestCase {
 				return returned;
 			}
 		}, new Failure() {
+			@Override
 			public void fail(Promise<?> resolved) throws Exception {
 				latch2.countDown();
 			}
@@ -164,10 +172,12 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Integer> p = d1.getPromise();
 		Promise<String> p2 = p.then(new Success<Number, String>() {
+			@Override
 			public Promise<String> call(Promise<Number> resolved) throws Exception {
 				result.set(resolved.getValue().toString());
 				Promise<String> returned = d2.getPromise();
 				returned.onResolve(new Runnable() {
+					@Override
 					public void run() {
 						latch.countDown();
 					}
@@ -175,6 +185,7 @@ public class PromiseTest extends TestCase {
 				return returned;
 			}
 		}, new Failure() {
+			@Override
 			public void fail(Promise<?> resolved) throws Exception {
 			}
 		});
@@ -200,6 +211,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Deferred<String> d = new Deferred<String>();
 		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -224,6 +236,7 @@ public class PromiseTest extends TestCase {
 		final Deferred<String> d = new Deferred<String>();
 		final Promise<String> p = d.getPromise();
 		p.then(null, new Failure() {
+			@Override
 			public void fail(Promise<?> resolved) throws Exception {
 				latch.countDown();
 			}
@@ -258,6 +271,7 @@ public class PromiseTest extends TestCase {
 		final AtomicInteger callbackCallCount = new AtomicInteger(0);
 
 		Success<String, String> doubler = new Success<String, String>() {
+			@Override
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				callbackCallCount.incrementAndGet();
 				return resolved(promise.getValue() + promise.getValue());
@@ -266,6 +280,7 @@ public class PromiseTest extends TestCase {
 		final Promise<String> p2 = p1.then(doubler).then(doubler).then(doubler);
 
 		p2.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					if (p2.getFailure() != null)
@@ -301,12 +316,14 @@ public class PromiseTest extends TestCase {
 		final AtomicInteger failureCallbackCallCount = new AtomicInteger(0);
 
 		Success<String, String> doubler = new Success<String, String>() {
+			@Override
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				successCallbackCallCount.incrementAndGet();
 				return resolved(promise.getValue() + promise.getValue());
 			}
 		};
 		Failure wrapper = new Failure() {
+			@Override
 			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
 				throw new Exception(promise.getFailure());
@@ -315,6 +332,7 @@ public class PromiseTest extends TestCase {
 		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
 
 		p2.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					if (p2.getFailure() == null)
@@ -346,12 +364,14 @@ public class PromiseTest extends TestCase {
 		final AtomicInteger failureCallbackCallCount = new AtomicInteger(0);
 
 		Success<String, String> doubler = new Success<String, String>() {
+			@Override
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				successCallbackCallCount.incrementAndGet();
 				return resolved(promise.getValue() + promise.getValue());
 			}
 		};
 		Failure wrapper = new Failure() {
+			@Override
 			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
 				throw new Exception(promise.getFailure());
@@ -360,6 +380,7 @@ public class PromiseTest extends TestCase {
 		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
 
 		p2.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					if (p2.getFailure() != null)
@@ -403,6 +424,7 @@ public class PromiseTest extends TestCase {
 
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		p1.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -411,6 +433,7 @@ public class PromiseTest extends TestCase {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		p1.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
@@ -419,6 +442,7 @@ public class PromiseTest extends TestCase {
 
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		Promise<Integer> p2 = p1.then(new Success<String, Integer>() {
+			@Override
 			public Promise<Integer> call(Promise<String> promise) throws Exception {
 				latch3.countDown();
 				return resolved(Integer.valueOf(promise.getValue()));
@@ -438,11 +462,13 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<Number> p2 = p1.then(new Success<Object, Number>() {
+			@Override
 			public Promise<Number> call(final Promise<Object> promise)
 					throws Exception {
 				latch.countDown();
 				final Deferred<Number> n = new Deferred<Number>();
 				timer.schedule(new TimerTask() {
+					@Override
 					public void run() {
 						try {
 							n.resolve(Integer.valueOf(promise.getValue().toString()));
@@ -475,9 +501,11 @@ public class PromiseTest extends TestCase {
 		final Thread thread = Thread.currentThread();
 		assertFalse(p.isDone());
 		timer.schedule(new TimerTask() {
+			@Override
 			public void run() {
 				thread.interrupt();
 				timer.schedule(new TimerTask() {
+					@Override
 					public void run() {
 						d.resolve("failsafe");
 					}
@@ -498,9 +526,11 @@ public class PromiseTest extends TestCase {
 		final Thread thread = Thread.currentThread();
 		assertFalse(p.isDone());
 		timer.schedule(new TimerTask() {
+			@Override
 			public void run() {
 				thread.interrupt();
 				timer.schedule(new TimerTask() {
+					@Override
 					public void run() {
 						d.resolve("failsafe");
 					}
@@ -542,6 +572,7 @@ public class PromiseTest extends TestCase {
 		final AtomicBoolean fail = new AtomicBoolean(false);
 		assertFalse(p.isDone());
 		p.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					d.resolve("onResolve");
@@ -574,6 +605,7 @@ public class PromiseTest extends TestCase {
 		final AtomicBoolean fail = new AtomicBoolean(false);
 		assertFalse(p.isDone());
 		p.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					d.fail(new Exception("onResolve"));
@@ -615,6 +647,7 @@ public class PromiseTest extends TestCase {
 		final int errorFail = next;
 		for (int i = 0; i < size; i++) {
 			p.onResolve(new Runnable() {
+				@Override
 				public void run() {
 					final int callback = count.getAndIncrement();
 					latch.countDown();
@@ -643,6 +676,7 @@ public class PromiseTest extends TestCase {
 		Throwable failure = new RuntimeException();
 		d.fail(failure);
 		p.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				throw new Error("bad callback upon onResolve");
 			}
@@ -666,11 +700,13 @@ public class PromiseTest extends TestCase {
 		assertTrue("promise not resolved", p1.isDone());
 		assertTrue("promise not resolved", p2.isDone());
 		p1.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
 		});
 		p2.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
@@ -689,6 +725,7 @@ public class PromiseTest extends TestCase {
 		final Promise<String> p = failed(failure);
 		assertTrue("promise not resolved", p.isDone());
 		p.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -713,6 +750,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -720,13 +758,14 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Long> d2 = new Deferred<Long>();
 		final Promise<Long> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
 		});
 		final CountDownLatch latch = new CountDownLatch(1);
-		@SuppressWarnings("unchecked")
 		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -762,6 +801,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -769,6 +809,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Integer> d2 = new Deferred<Integer>();
 		final Promise<Integer> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
@@ -778,6 +819,7 @@ public class PromiseTest extends TestCase {
 		promises.add(p2);
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<List<Number>> latched = Promises.<Number, Integer> all(promises).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -813,6 +855,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Number> d1 = new Deferred<Number>();
 		final Promise<Number> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -820,6 +863,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
@@ -827,13 +871,14 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		final Deferred<Long> d3 = new Deferred<Long>();
 		final Promise<Long> p3 = d3.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch3.countDown();
 			}
 		});
 		final CountDownLatch latch = new CountDownLatch(1);
-		@SuppressWarnings("unchecked")
 		final Promise<List<Number>> latched = all(p1, p2, p3).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -895,6 +940,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -907,11 +953,11 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllEmpty2() throws Exception {
-		@SuppressWarnings("unchecked")
 		final Promise<List<Object>> latched = all();
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch.countDown();
 			}
@@ -942,6 +988,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -949,12 +996,14 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
 		});
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch3.countDown();
 			}
@@ -986,6 +1035,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -993,12 +1043,14 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
 		});
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch3.countDown();
 			}
@@ -1040,6 +1092,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch1.countDown();
 			}
@@ -1047,12 +1100,14 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch2.countDown();
 			}
 		});
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
+			@Override
 			public void run() {
 				latch3.countDown();
 			}
@@ -1179,6 +1234,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch1.countDown();
 				return t.length() > 0;
@@ -1186,6 +1242,7 @@ public class PromiseTest extends TestCase {
 		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p4 = p1.filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch2.countDown();
 				return t.length() == 0;
@@ -1194,6 +1251,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p3 = resolved(value3);
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		Promise<String> p5 = p3.filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch3.countDown();
 				return t.length() > 0;
@@ -1241,11 +1299,13 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch1.countDown();
 				throw failure;
 			}
 		}).filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch2.countDown();
 				return t.length() > 0;
@@ -1273,6 +1333,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			@Override
 			public boolean test(String t) {
 				latch1.countDown();
 				return t.length() > 0;
@@ -1309,11 +1370,13 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.map(new Function<Number, Long>() {
+			@Override
 			public Long apply(Number t) {
 				latch1.countDown();
 				return new Long(t.longValue());
 			}
 		}).map(new Function<Number, String>() {
+			@Override
 			public String apply(Number t) {
 				latch2.countDown();
 				return t.toString();
@@ -1335,11 +1398,13 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.map(new Function<Number, Long>() {
+			@Override
 			public Long apply(Number t) {
 				latch1.countDown();
 				throw failure;
 			}
 		}).map(new Function<Number, String>() {
+			@Override
 			public String apply(Number t) {
 				latch2.countDown();
 				return t.toString();
@@ -1376,11 +1441,13 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<? extends Long>>() {
+			@Override
 			public Promise<Long> apply(Number t) {
 				latch1.countDown();
 				return resolved(new Long(t.longValue()));
 			}
 		}).flatMap(new Function<Number, Promise<? extends String>>() {
+			@Override
 			public Promise<String> apply(Number t) {
 				latch2.countDown();
 				return resolved(t.toString());
@@ -1402,11 +1469,13 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<? extends Long>>() {
+			@Override
 			public Promise<Long> apply(Number t) {
 				latch1.countDown();
 				throw failure;
 			}
 		}).flatMap(new Function<Number, Promise<? extends String>>() {
+			@Override
 			public Promise<String> apply(Number t) {
 				latch2.countDown();
 				return resolved(t.toString());
@@ -1443,6 +1512,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			@Override
 			public Long apply(Promise<?> t) {
 				latch1.countDown();
 				return value2;
@@ -1462,6 +1532,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			@Override
 			public Long apply(Promise<?> t) {
 				latch1.countDown();
 				try {
@@ -1485,6 +1556,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			@Override
 			public Long apply(Promise<?> t) {
 				latch1.countDown();
 				try {
@@ -1514,6 +1586,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			@Override
 			public Long apply(Promise<?> t) {
 				latch1.countDown();
 				try {
@@ -1554,6 +1627,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
+			@Override
 			public Promise<Long> apply(Promise<?> t) {
 				latch1.countDown();
 				return resolved(value2);
@@ -1573,6 +1647,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
+			@Override
 			public Promise<Long> apply(Promise<?> t) {
 				latch1.countDown();
 				try {
@@ -1596,6 +1671,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
+			@Override
 			public Promise<Long> apply(Promise<?> t) {
 				latch1.countDown();
 				try {
@@ -1625,6 +1701,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
+			@Override
 			public Promise<Long> apply(Promise<?> t) {
 				latch1.countDown();
 				try {
