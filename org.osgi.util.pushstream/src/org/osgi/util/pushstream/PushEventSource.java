@@ -16,7 +16,6 @@
 
 package org.osgi.util.pushstream;
 
-import java.io.Closeable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -38,14 +37,14 @@ public interface PushEventSource<T> {
 
 	/**
 	 * Open the asynchronous channel between the source and the consumer. The
-	 * call returns a Closeable. This closeable can be closed, this should close
-	 * the channel, including sending a Close event if the channel was not
-	 * already closed. The closeable must be able to be closed multiple times
-	 * without sending more than one Close events.
+	 * call returns an {@link AutoCloseable}. This can be closed, and should
+	 * close the channel, including sending a Close event if the channel was not
+	 * already closed. The returned object must be able to be closed multiple
+	 * times without sending more than one Close events.
 	 * 
 	 * @param aec the consumer (not null)
-	 * @return a Closeable that can be used to close the stream
+	 * @return a {@link AutoCloseable} that can be used to close the stream
 	 * @throws Exception
 	 */
-	Closeable open(PushEventConsumer<? super T> aec) throws Exception;
+	AutoCloseable open(PushEventConsumer< ? super T> aec) throws Exception;
 }

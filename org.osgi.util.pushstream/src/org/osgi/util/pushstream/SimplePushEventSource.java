@@ -16,8 +16,6 @@
 
 package org.osgi.util.pushstream;
 
-import java.io.Closeable;
-
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.promise.Promise;
 
@@ -30,7 +28,7 @@ import org.osgi.util.promise.Promise;
  */
 @ProviderType
 public interface SimplePushEventSource<T>
-		extends PushEventSource<T>, Closeable {
+		extends PushEventSource<T>, AutoCloseable {
 	/**
 	 * Close this source. Calling this method indicates that there will never be
 	 * any more events published by it. Calling this method sends a close event

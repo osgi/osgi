@@ -3,8 +3,6 @@ package org.osgi.util.pushstream;
 import static java.util.Optional.ofNullable;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,13 +12,13 @@ import java.util.function.Function;
 class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 	extends AbstractPushStreamImpl<T> implements PushStream<T> {
 	
-	protected final Function<PushEventConsumer<T>, Closeable> connector;
+	protected final Function<PushEventConsumer<T>,AutoCloseable>	connector;
 	
-	protected final AtomicReference<Closeable> upstream = new AtomicReference<Closeable>();
+	protected final AtomicReference<AutoCloseable>					upstream	= new AtomicReference<AutoCloseable>();
 	
 	UnbufferedPushStreamImpl(PushStreamProvider psp,
 			Executor executor, ScheduledExecutorService scheduler,
-			Function<PushEventConsumer<T>, Closeable> connector) {
+			Function<PushEventConsumer<T>,AutoCloseable> connector) {
 		super(psp, executor, scheduler);
 		this.connector = connector;
 	}
@@ -47,12 +45,12 @@ class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T
 	@Override
 	protected boolean begin() {
 		if(closed.compareAndSet(BUILDING, STARTED)) {
-			Closeable toClose = connector.apply(this::handleEvent);
+			AutoCloseable toClose = connector.apply(this::handleEvent);
 			if(!upstream.compareAndSet(null,toClose)) {
 				//TODO log that we tried to connect twice...
 				try {
 					toClose.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

@@ -4,7 +4,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
 import static org.osgi.util.pushstream.PushEventConsumer.ABORT;
 
-import java.io.Closeable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,7 +37,7 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 			ScheduledExecutorService scheduler, U eventQueue,
 			int parallelism, Executor worker, QueuePolicy<T,U> queuePolicy,
 			PushbackPolicy<T,U> pushbackPolicy,
-			Function<PushEventConsumer<T>,Closeable> connector) {
+			Function<PushEventConsumer<T>,AutoCloseable> connector) {
 		super(psp, worker, scheduler, connector);
 		this.eventQueue = eventQueue;
 		this.parallelism = parallelism;

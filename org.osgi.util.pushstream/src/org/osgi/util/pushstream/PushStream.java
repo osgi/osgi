@@ -16,7 +16,6 @@
 
 package org.osgi.util.pushstream;
 
-import java.io.Closeable;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Comparator;
@@ -53,7 +52,7 @@ import org.osgi.util.promise.Promise;
  * @param <T> The Payload type
  */
 @ProviderType
-public interface PushStream<T> extends Closeable {
+public interface PushStream<T> extends AutoCloseable {
 
 	/**
 	 * Must be run after the channel is closed. This handler will run after the

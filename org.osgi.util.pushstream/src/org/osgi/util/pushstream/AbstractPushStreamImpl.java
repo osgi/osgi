@@ -5,7 +5,6 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 import static org.osgi.util.pushstream.PushEventConsumer.*;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.AbstractQueue;
@@ -426,7 +425,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			}
 		};
 		updateNext(consumer);
-		Closeable second;
+		AutoCloseable second;
 		try {
 			second = source.open((PushEvent< ? extends T> event) -> {
 				return consumer.accept(event);
