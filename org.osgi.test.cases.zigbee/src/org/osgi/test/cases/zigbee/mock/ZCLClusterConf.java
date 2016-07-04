@@ -37,6 +37,11 @@ public class ZCLClusterConf extends ZCLClusterImpl {
 		this.commandIds = commandIds;
 	}
 
+	public ZCLClusterConf(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc, int unsupportedAttribute) {
+		super(commandIds, attributes, desc, unsupportedAttribute);
+		this.commandIds = commandIds;
+	}
+
 	public int[] getCommandIds() {
 		return commandIds;
 	}

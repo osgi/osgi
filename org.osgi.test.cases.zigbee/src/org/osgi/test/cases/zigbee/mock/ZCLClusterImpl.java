@@ -40,6 +40,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 	protected ZCLAttribute[]		attributes;
 	private int[]					commandIds;
 	private ZCLClusterDescription	description;
+	private int						unsupportedAttribute;
 
 	/**
 	 * @param id
@@ -60,6 +61,14 @@ public class ZCLClusterImpl implements ZCLCluster {
 		this.description = desc;
 	}
 
+	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc, int unsupportedAttribute) {
+		this.id = desc.getId();
+		this.commandIds = commandIds;
+		this.attributes = attributes;
+		this.description = desc;
+		this.unsupportedAttribute = unsupportedAttribute;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -78,6 +87,10 @@ public class ZCLClusterImpl implements ZCLCluster {
 					ZCLException.FAILURE,
 					"the AttributeId is not valid"));
 		}
+	}
+
+	public int getUnsupportedAttribute() {
+		return unsupportedAttribute;
 	}
 
 	public void getAttributes(ZigBeeHandler handler) {

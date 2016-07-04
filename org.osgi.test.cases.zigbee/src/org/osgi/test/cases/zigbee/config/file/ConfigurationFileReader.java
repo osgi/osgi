@@ -27,6 +27,7 @@ import org.osgi.test.cases.zigbee.mock.ZCLAttributeDescriptionImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterDescriptionImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLGlobalClusterDescriptionImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
@@ -385,6 +386,29 @@ public class ConfigurationFileReader {
 		return null;
 	}
 
+	public NetworkAttributeIds getUnsuportedAttribute() {
+		BigInteger ieeeAddresss;
+		short endpointId;
+		int clusterId;
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpoint[] endpoints = ((ZigBeeNodeImpl) nodes[i]).getEndpoints();
+			ieeeAddresss = nodes[i].getIEEEAddress();
+			for (int j = 0; j < endpoints.length; j++) {
+				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				endpointId = endpoints[j].getId();
+				for (int k = 0; k < serverClusters.length; k++) {
+					int unsupportedAttribute = ((ZCLClusterImpl) serverClusters[k]).getUnsupportedAttribute();
+					clusterId = serverClusters[k].getId();
+					if (unsupportedAttribute != -1) {
+						return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, unsupportedAttribute);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
 	private ZigBeeNodeDescriptor getZigBeeNodeDescriptor(Element nodeElement) {
 		ZigBeeNodeDescriptor result = null;
 		NodeList descList = nodeElement.getElementsByTagName("nodeDescriptor");
@@ -456,6 +480,7 @@ public class ConfigurationFileReader {
 				ZCLAttribute[] attributes = null;
 
 				Node clusterNode = clusterList.item(i);
+				int unsupportedAttribute = -1;
 				if (clusterNode != null
 						&& node.getNodeType() == Node.ELEMENT_NODE) {
 					Element clusterElement = (Element) clusterNode;
@@ -506,6 +531,7 @@ public class ConfigurationFileReader {
 						}
 					}
 
+					unsupportedAttribute = Integer.parseInt(clusterElement.getAttribute("unsupportedAttribute"));
 					// get attributes
 					clusterElement.getElementsByTagName("attributes");
 					Node nodeAttributes = serverClusters.item(0);
@@ -531,7 +557,8 @@ public class ConfigurationFileReader {
 				}
 				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
 						attributes,
-						serverClusterDescription);
+						serverClusterDescription,
+						unsupportedAttribute);
 				result[i] = clusterImpl;
 			}
 		}

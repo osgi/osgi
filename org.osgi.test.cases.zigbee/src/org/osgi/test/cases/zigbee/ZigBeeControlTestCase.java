@@ -799,26 +799,22 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		log("---- testExceptions");
 
+		NetworkAttributeIds attrIds = conf.getUnsuportedAttribute();
+
 		// get the endpoint values in the conf file
 		ZigBeeNodeImpl node = conf.getNode0();
 
 		ZigBeeEndpointConf endpointConf = (ZigBeeEndpointConf) conf.getEnpoints(node)[0];
 
-		ZigBeeEndpoint endpoint = getZigBeeEndpoint(node.getIEEEAddress());
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(attrIds.getIeeeAddresss());
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
 
-		ZCLCluster[] clusters = endpoint.getServerClusters();
-		ZCLCluster cluster = null;
-		if (clusters != null && clusters.length != 0) {
-			cluster = clusters[0];
-		}
+		ZCLCluster cluster = getClusterById(endpoint, attrIds.getClusterId());
 
-		ZCLCluster[] clustersConf = endpointConf.getServerClusters();
-		ZCLClusterConf clusterConf = (ZCLClusterConf) clustersConf[0];
-		final int invalidId = getInvalidId(clusterConf);
+		final int invalidId = attrIds.getAttributeId();
 
 		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfo() {
 
@@ -900,7 +896,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		// READ ONLY EXCEPTION
 		zigBeeHandler = new ZigBeeHandlerImpl();
 
-		NetworkAttributeIds attrIds = conf.getFirstReadOnlyAttribute();
+		attrIds = conf.getFirstReadOnlyAttribute();
 		endpoint = getZigBeeEndpoint(attrIds.getIeeeAddresss());
 		cluster = getClusterById(endpoint, attrIds.getClusterId());
 
