@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -54,7 +54,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
-import org.osgi.service.cm.ConfigurationPlugin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.cm.SynchronousConfigurationListener;
@@ -83,8 +82,8 @@ public class CMControl extends DefaultTestBundleControl {
 	private boolean permissionFlag;
 	private Bundle setAllPermissionBundle;
 
-	private String thisLocation = null;
-	private Bundle thisBundle = null;
+	private String									thisLocation;
+	private Bundle									thisBundle;
 
 	private Set<String>								existingConfigs;
 
@@ -4194,84 +4193,7 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Tests if a configuration plugin is invoked when only a configuration
-	 * listener is registered (no managed service). It should not be invoked.
-	 *
-	 * @spec ConfigurationAdmin.getConfiguration(String)
-	 * @spec Configuration.update(Dictionary)
-	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
-	 * @spec
-	 *       ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
-	 *
-	 * @throws Exception
-	 *             if an error occurs or an assertion fails in the test.
-	 */
-	public void testConfigurationPluginService() throws Exception {
-		ConfigurationListenerImpl cl = null;
-		NotVisitablePlugin plugin = null;
-		String pid = Util
-				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		/* Set up the configuration */
-		Configuration conf = cm.getConfiguration(pid);
-		Hashtable<String,Object> props = new Hashtable<>();
-		props.put("key", "value1");
-		SynchronizerImpl synchronizer = new SynchronizerImpl();
-		trace("Create and register a new ConfigurationListener");
-		cl = createConfigurationListener(synchronizer);
-		trace("Create and register a new ConfigurationPlugin");
-		plugin = createConfigurationPlugin();
-		conf.update(props);
-		trace("Wait until the ConfigurationListener has gotten the update");
-		try {
-			assertTrue("Update done",
-					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
-			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
-		} finally {
-			removeConfigurationListener(cl);
-			removeConfigurationPlugin(plugin);
-		}
-	}
 
-	/**
-	 * Tests if a configuration plugin is invoked when only a configuration
-	 * listener is registered (managed service factory). It should not be
-	 * invoked.
-	 *
-	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
-	 * @spec Configuration.update(Dictionary)
-	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
-	 * @spec
-	 *       ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
-	 *
-	 * @throws Exception
-	 *             if an error occurs or an assertion fails in the test.
-	 */
-	public void testConfigurationPluginServiceFactory() throws Exception {
-		ConfigurationListenerImpl cl = null;
-		NotVisitablePlugin plugin = null;
-		String factorypid = Util
-				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		/* Set up the configuration */
-		Configuration conf = cm.createFactoryConfiguration(factorypid);
-		Hashtable<String,Object> props = new Hashtable<>();
-		props.put("key", "value1");
-		SynchronizerImpl synchronizer = new SynchronizerImpl();
-		trace("Create and register a new ConfigurationListener");
-		cl = createConfigurationListener(synchronizer);
-		trace("Create and register a new ConfigurationPlugin");
-		plugin = createConfigurationPlugin();
-		conf.update(props);
-		trace("Wait until the ConfigurationListener has gotten the update");
-		try {
-			assertTrue("Update done",
-					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
-			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
-		} finally {
-			removeConfigurationListener(cl);
-			removeConfigurationPlugin(plugin);
-		}
-	}
 
 	/** *** Helper methods **** */
 	/**
@@ -4296,28 +4218,11 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * creates and registers a configuration plugin.
-	 */
-	private NotVisitablePlugin createConfigurationPlugin() throws Exception {
-		NotVisitablePlugin plugin = new NotVisitablePlugin();
-		registerService(ConfigurationPlugin.class.getName(), plugin, null);
-		return plugin;
-	}
-
-	/**
 	 * unregisters a configuration listener.
 	 */
 	private void removeConfigurationListener(ConfigurationListener cl)
 			throws Exception {
 		unregisterService(cl);
-	}
-
-	/**
-	 * unregisters a configuration plugin.
-	 */
-	private void removeConfigurationPlugin(ConfigurationPlugin plugin)
-			throws Exception {
-		unregisterService(plugin);
 	}
 
 	private ManagedServiceImpl createManagedService(String pid, Semaphore s)
@@ -4406,153 +4311,6 @@ public class CMControl extends DefaultTestBundleControl {
         } else {
             // log("  cleanCM() -- No CM !");
         }
-	}
-
-	class Plugin implements ConfigurationPlugin {
-		private int index;
-
-		Plugin(int x) {
-			index = x;
-		}
-
-		public void modifyConfiguration(ServiceReference< ? > ref,
-				Dictionary<String,Object> props) {
-			trace("Calling plugin with cmRanking=" + (index * 10));
-			String[] types = (String[]) ref.getProperty("objectClass");
-			for (int i = 0; i < types.length; i++) {
-				if ("org.osgi.service.cm.ManagedService".equals(types[i])) {
-					props.put("plugin.ms." + index, "added by plugin#" + index);
-					break;
-				} else if ("org.osgi.service.cm.ManagedServiceFactory"
-						.equals(types[i])) {
-					props.put("plugin.factory." + index, "added by plugin#"
-							+ index);
-					break;
-				}
-			}
-		}
-	}
-
-	/**
-	 * <code>ConfigurationPlugin</code> implementation to be used in the
-	 * <code>ConfigurationListener</code> test. The plugin should NOT be invoked
-	 * when there's no <code>ManagedService</code> or
-	 * <code>ManagedServiceFactory</code> registered.
-	 */
-	class NotVisitablePlugin implements ConfigurationPlugin {
-		private boolean visited;
-
-		/**
-		 * Creates a <code>ConfigurationPlugin</code> instance that has not been
-		 * invoked (visited) by a <code>Configuration</code> update event.
-		 *
-		 */
-		public NotVisitablePlugin() {
-			visited = false;
-		}
-
-		/**
-		 * <p>
-		 * Callback method when a <code>Configuration</code> update is being
-		 * delivered to a registered <code>ManagedService</code> or
-		 * <code>ManagedServiceFactory</code> instance.
-		 * </p>
-		 * <p>
-		 * Set plugin to visited (<code>visited = true</code>) when this method
-		 * is invoked. If this happens, the <code>ConfigurationListener</code>
-		 * tests failed.
-		 * </p>
-		 *
-		 * @param ref
-		 *            the <code>ConfigurationAdmin</code> that generated the
-		 *            update.
-		 * @param props
-		 *            the <code>Dictionary</code> containing the properties of
-		 *            the <code>
-		 * @see org.osgi.service.cm.ConfigurationPlugin#modifyConfiguration(org.osgi.framework.ServiceReference,
-		 *      java.util.Dictionary)
-		 */
-		public void modifyConfiguration(ServiceReference< ? > ref,
-				Dictionary<String,Object> props) {
-			visited = true;
-		}
-
-		/**
-		 * Checks if the plugin has not been invoked by a <code>Configuration
-		 * </code> update event.
-		 *
-		 * @return <code>true</code> if plugin has not been visited (invoked).
-		 *         <code>false</code>, otherwise.
-		 */
-		public boolean notVisited() {
-			return !visited;
-		}
-	}
-
-	/**
-	 * <code>ConfigurationPlugin</code> implementation to be used in the
-	 * <code>ConfigurationListener</code> test. The plugin should NOT be invoked
-	 * when there's no <code>ManagedService</code> or
-	 * <code>ManagedServiceFactory</code> registered.
-	 */
-	class RunnableImpl implements Runnable {
-		private final String pid;
-		private String location;
-		private Configuration conf;
-		private Object lock = new Object();
-
-		RunnableImpl(String pid, String location) {
-			this.pid = pid;
-			this.location = location;
-		}
-
-		Configuration getConfiguration() {
-			return conf;
-		}
-
-		public void run() {
-			try {
-				Sleep.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				conf = cm.getConfiguration(pid, location);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			synchronized (lock) {
-				try {
-					lock.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				Sleep.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			conf.setBundleLocation(location);
-
-		}
-
-		void unlock() {
-			synchronized (lock) {
-				lock.notifyAll();
-			}
-		}
-
-		void unlock(String newLocation) {
-			location = newLocation;
-			synchronized (lock) {
-				lock.notifyAll();
-			}
-		}
 	}
 
     class SyncEventListener implements SynchronousConfigurationListener {
