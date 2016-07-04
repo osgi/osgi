@@ -140,8 +140,12 @@ public final class PushStreamProvider {
 			throw new NullPointerException("There is no source of events");
 		}
 
-		if (parallelism <= 0) {
-			parallelism = 2;
+		if (parallelism < 0) {
+			throw new IllegalArgumentException(
+					"The supplied parallelism cannot be less than zero. It was "
+							+ parallelism);
+		} else if (parallelism == 0) {
+			parallelism = 1;
 		}
 
 		boolean closeExecutorOnClose;

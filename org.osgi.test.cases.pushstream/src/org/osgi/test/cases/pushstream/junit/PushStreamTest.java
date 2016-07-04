@@ -85,8 +85,6 @@ public class PushStreamTest extends TestCase {
 	
 	private <T> PushStream<T> withLessBackPressure(PushEventSource<T> source) {
 		return impl.buildStream(source)
-				.withParallelism(1)
-				// .withBuffer(new ArrayBlockingQueue<>(120))
 				.withPushbackPolicy(LINEAR, 20)
 				.withQueuePolicy(FAIL)
 				.create();

@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -568,47 +569,62 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	@Override
 	public <R> PushStream<R> coalesce(IntSupplier count,
 			Function<Collection<T>,R> f) {
-		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<>(
-				psp, defaultExecutor, scheduler, this);
-		Object lock = new Object();
 		AtomicReference<Queue<T>> queueRef = new AtomicReference<Queue<T>>(
 				null);
+
+		Runnable init = () -> queueRef
+				.set(getQueueForInternalBuffering(count.getAsInt()));
+
+		@SuppressWarnings("resource")
+		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<R>(
+				psp, defaultExecutor, scheduler, this) {
+			@Override
+			protected void beginning() {
+				init.run();
+			}
+		};
+
+		AtomicBoolean endPending = new AtomicBoolean();
+		Object lock = new Object();
 		updateNext((event) -> {
 			try {
+				Queue<T> queue;
 				if (!event.isTerminal()) {
-					Queue<T> queue;
-					Queue<T> toCoalesce = null;
 					synchronized (lock) {
-						queue = queueRef.get();
-					    if(queue == null) {
-							queue = getQueueForInternalBuffering(
-									count.getAsInt());
-
-							if (queue.offer(event.getData())) {
-								queueRef.lazySet(queue);
+						for (;;) {
+							queue = queueRef.get();
+							if (queue == null) {
+								if (endPending.get()) {
+									return ABORT;
+								} else {
+									continue;
+								}
+							} else if (queue.offer(event.getData())) {
 								return CONTINUE;
 							} else {
-								toCoalesce = queue;
+								queueRef.lazySet(null);
+								break;
 							}
-						} else if (queue.offer(event.getData())) {
-							return CONTINUE;
-						} else {
-							toCoalesce = queue;
-							queueRef.lazySet(null);
-					    }
+						}
 					}
+
+					queueRef.set(
+							getQueueForInternalBuffering(count.getAsInt()));
+
+					// This call is on the same thread and so must happen
+					// outside
+					// the synchronized block.
 					return aggregateAndForward(f, eventStream, event,
-							toCoalesce);
+							queue);
 				} else {
-					Queue<T> toCoalesce = null;
 					synchronized (lock) {
-						toCoalesce = queueRef.get();
+						queue = queueRef.get();
 						queueRef.lazySet(null);
+						endPending.set(true);
 					}
-					if (toCoalesce != null) {
-						List<T> collected = new ArrayList<T>(toCoalesce);
+					if (queue != null) {
 						eventStream.handleEvent(
-								PushEvent.data(f.apply(collected)));
+								PushEvent.data(f.apply(queue)));
 					}
 				}
 				return eventStream.handleEvent(event.nodata());
@@ -623,10 +639,10 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	private <R> long aggregateAndForward(Function<Collection<T>,R> f,
 			AbstractPushStreamImpl<R> eventStream,
 			PushEvent< ? extends T> event, Queue<T> queue) {
-		List<T> collected = new ArrayList<T>(queue.size() + 1);
-		collected.addAll(queue);
-		collected.add(event.getData());
-		return eventStream.handleEvent(PushEvent.data(f.apply(collected)));
+		if (!queue.offer(event.getData())) {
+			((ArrayQueue<T>) queue).forcePush(event.getData());
+		}
+		return eventStream.handleEvent(PushEvent.data(f.apply(queue)));
 	}
 	
 	
@@ -663,18 +679,22 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		// This code is declared as a separate block to avoid any confusion
 		// about which instance's methods and variables are in scope
 		Consumer<AbstractPushStreamImpl<R>> begin = p -> {
+
 			synchronized (lock) {
 				timestamp.lazySet(System.nanoTime());
 				long count = counter.get();
 
+
 				scheduler.schedule(
-						getWindowTask(p, f, time, lock, count, queueRef,
-								timestamp, counter, ex),
+						getWindowTask(p, f, time, maxEvents, lock, count,
+								queueRef, timestamp, counter, ex),
 						time.get().toNanos(), NANOSECONDS);
 			}
 
+			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
 		};
 
+		@SuppressWarnings("resource")
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<R>(
 				psp, ex, scheduler, this) {
 			@Override
@@ -682,57 +702,65 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				begin.accept(this);
 			}
 		};
+
+		AtomicBoolean endPending = new AtomicBoolean(false);
 		updateNext((event) -> {
 			try {
+				Queue<T> queue;
 				if (!event.isTerminal()) {
-					Queue<T> queue;
-					Queue<T> toCoalesce = null;
 					long elapsed;
 					long newCount;
 					synchronized (lock) {
-						queue = queueRef.get();
-						if (queue == null) {
-							queue = getQueueForInternalBuffering(
-									maxEvents.getAsInt());
-
-							if (queue.offer(event.getData())) {
-								queueRef.lazySet(queue);
+						for (;;) {
+							queue = queueRef.get();
+							if (queue == null) {
+								if (endPending.get()) {
+									return ABORT;
+								} else {
+									continue;
+								}
+							} else if (queue.offer(event.getData())) {
 								return CONTINUE;
 							} else {
-								toCoalesce = queue;
+								queueRef.lazySet(null);
+								break;
 							}
-						} else if (queue.offer(event.getData())) {
-							return CONTINUE;
-						} else {
-							toCoalesce = queue;
-							queueRef.lazySet(null);
 						}
+
 						long now = System.nanoTime();
 						elapsed = now - timestamp.get();
 						timestamp.lazySet(now);
 						newCount = counter.get() + 1;
 						counter.lazySet(newCount);
+
+						// This is a non-blocking call, and must happen in the
+						// synchronized block to avoid re=ordering the executor
+						// enqueue with a subsequent incoming close operation
+						aggregateAndForward(f, eventStream, event, queue,
+								ex, elapsed);
 					}
+					// These must happen outside the synchronized block as we
+					// call out to user code
+					queueRef.set(
+							getQueueForInternalBuffering(maxEvents.getAsInt()));
 					scheduler.schedule(
-							getWindowTask(eventStream, f, time, lock, newCount,
-									queueRef, timestamp, counter, ex),
+							getWindowTask(eventStream, f, time, maxEvents, lock,
+									newCount, queueRef, timestamp, counter, ex),
 							time.get().toNanos(), NANOSECONDS);
 
-					aggregateAndForward(f, eventStream, event, toCoalesce, ex,
-							elapsed);
 					return CONTINUE;
 				} else {
-					Queue<T> toCoalesce = null;
 					long elapsed;
 					synchronized (lock) {
-						toCoalesce = queueRef.get();
+						queue = queueRef.get();
 						queueRef.lazySet(null);
+						endPending.set(true);
 						long now = System.nanoTime();
 						elapsed = now - timestamp.get();
 						counter.lazySet(counter.get() + 1);
 					}
-					List<T> collected = toCoalesce == null ? emptyList()
-							: new ArrayList<T>(toCoalesce);
+					Collection<T> collected = queue == null ? emptyList()
+							: queue;
 					ex.execute(() -> {
 						try {
 							eventStream
@@ -755,7 +783,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		return eventStream;
 	}
 
-	private Queue<T> getQueueForInternalBuffering(int size) {
+	protected Queue<T> getQueueForInternalBuffering(int size) {
 		if (size == 0) {
 			return new LinkedList<T>();
 		} else {
@@ -764,31 +792,47 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * A special queue that keeps one element in reserve and can have that last
+	 * element set using forcePush. After the element is set the capacity is
+	 * permanently increased by one and cannot grow further.
+	 * 
+	 * @param <E> The element type
+	 */
 	private static class ArrayQueue<E> extends AbstractQueue<E>
 			implements Queue<E> {
 
 		final Object[]	store;
+
+		int				normalLength;
 
 		int				nextIndex;
 
 		int				size;
 
 		ArrayQueue(int capacity) {
-			store = new Object[capacity];
+			store = new Object[capacity + 1];
+			normalLength = store.length - 1;
 		}
 
 		@Override
 		public boolean offer(E e) {
 			if (e == null)
 				throw new NullPointerException("Null values are not supported");
-			if (size < store.length) {
+			if (size < normalLength) {
 				store[nextIndex] = e;
 				size++;
 				nextIndex++;
-				nextIndex = nextIndex % store.length;
+				nextIndex = nextIndex % normalLength;
 				return true;
 			}
 			return false;
+		}
+
+		public void forcePush(E e) {
+			store[normalLength] = e;
+			normalLength++;
+			size++;
 		}
 
 		@Override
@@ -798,7 +842,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			} else {
 				int idx = nextIndex - size;
 				if (idx < 0) {
-					idx += store.length;
+					idx += normalLength;
 				}
 				E value = (E) store[idx];
 				store[idx] = null;
@@ -814,7 +858,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			} else {
 				int idx = nextIndex - size;
 				if (idx < 0) {
-					idx += store.length;
+					idx += normalLength;
 				}
 				return (E) store[idx];
 			}
@@ -832,7 +876,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				{
 					idx = nextIndex - size;
 					if (idx < 0) {
-						idx += store.length;
+						idx += normalLength;
 					}
 				}
 
@@ -854,7 +898,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 					E value = (E) store[idx];
 					idx++;
 					remaining--;
-					if (idx == store.length) {
+					if (idx == normalLength) {
 						idx = 0;
 					}
 					return value;
@@ -872,12 +916,12 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	private <R> Runnable getWindowTask(AbstractPushStreamImpl<R> eventStream,
 			BiFunction<Long,Collection<T>,R> f, Supplier<Duration> time,
-			Object lock, long expectedCounter,
+			IntSupplier maxEvents, Object lock, long expectedCounter,
 			AtomicReference<Queue<T>> queueRef, AtomicLong timestamp,
 			AtomicLong counter, Executor executor) {
 		return () -> {
 
-			Queue<T> toCoalesce = null;
+			Queue<T> queue = null;
 			long elapsed;
 			synchronized (lock) {
 				
@@ -890,25 +934,32 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				elapsed = now - timestamp.get();
 				timestamp.lazySet(now);
 
-				toCoalesce = queueRef.get();
+				queue = queueRef.get();
 				queueRef.lazySet(null);
+
+				// This is a non-blocking call, and must happen in the
+				// synchronized block to avoid re=ordering the executor
+				// enqueue with a subsequent incoming close operation
+
+				Collection<T> collected = queue == null ? emptyList() : queue;
+				executor.execute(() -> {
+					try {
+						eventStream.handleEvent(PushEvent.data(f.apply(
+								Long.valueOf(NANOSECONDS.toMillis(elapsed)),
+								collected)));
+					} catch (Exception e) {
+						close(PushEvent.error(e));
+					}
+				});
 			}
 
-			List<T> collected = toCoalesce == null ? emptyList()
-					: new ArrayList<T>(toCoalesce);
-			executor.execute(() -> {
-				try {
-					eventStream.handleEvent(PushEvent.data(
-							f.apply(Long.valueOf(NANOSECONDS.toMillis(elapsed)),
-									collected)));
-				} catch (Exception e) {
-					close(PushEvent.error(e));
-				}
-			});
-
+			// These must happen outside the synchronized block as we
+			// call out to user code
+			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
 			scheduler.schedule(
-					getWindowTask(eventStream, f, time, lock, expectedCounter,
-							queueRef, timestamp, counter, executor),
+					getWindowTask(eventStream, f, time, maxEvents, lock,
+							expectedCounter, queueRef, timestamp, counter,
+							executor),
 					time.get().toNanos(), NANOSECONDS);
 		};
 	}
@@ -919,12 +970,12 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			long elapsed) {
 		executor.execute(() -> {
 			try {
-				List<T> collected = new ArrayList<T>(queue.size() + 1);
-				collected.addAll(queue);
-				collected.add(event.getData());
+				if (!queue.offer(event.getData())) {
+					((ArrayQueue<T>) queue).forcePush(event.getData());
+				}
 				eventStream.handleEvent(PushEvent.data(
 						f.apply(Long.valueOf(NANOSECONDS.toMillis(elapsed)),
-								collected)));
+								queue)));
 			} catch (Exception e) {
 				close(PushEvent.error(e));
 			}
