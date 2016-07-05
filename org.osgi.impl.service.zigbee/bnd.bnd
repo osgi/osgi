@@ -9,14 +9,12 @@ Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
 	
 	
-Private-Package = org.osgi.test.cases.zigbee.mock;-noimport:=true, \
-					org.osgi.test.support.compatibility;-noimport:=true, \
+Private-Package = 	org.osgi.test.support.compatibility;-noimport:=true, \
 					org.osgi.test.support;-noimport:=true, \
 					org.osgi.test.support.sleep;-noimport:=true, \
 			      ${p}.*;-split-package:=first	
 	
-Conditional-Package = org.osgi.test.cases.zigbee.impl, \
-						org.osgi.test.support.compatibility, \
+Conditional-Package =   org.osgi.test.support.compatibility, \
 						org.osgi.test.support.sleep, \
 						org.osgi.test.support
 
@@ -25,7 +23,6 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 
 -buildpath = \
-	org.osgi.test.cases.zigbee; version=project,\
 	org.osgi.service.zigbee; 	version=project, \
 	org.osgi.test.support;      version=project, \
 	ee.j2se;                    version=${javac.compliance}, \

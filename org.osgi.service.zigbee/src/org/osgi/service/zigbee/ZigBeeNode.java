@@ -307,7 +307,7 @@ public interface ZigBeeNode {
 	 * defined in {@link ZDPException}.
 	 * 
 	 * @param handler that will be used in order to return the node user
-	 *        description. Return an exception with NO_DESCRIPTOR (via
+	 *        description (String). Return an exception with NO_DESCRIPTOR (via
 	 *        handler.onFailure(...)) whether no user descriptor is available.
 	 */
 	void getUserDescription(ZigBeeHandler handler);

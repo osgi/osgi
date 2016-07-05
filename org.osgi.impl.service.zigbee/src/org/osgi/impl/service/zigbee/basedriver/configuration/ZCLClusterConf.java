@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.impl.service.zigbee.basedriver.configuration;
 
+import org.osgi.impl.service.zigbee.basedriver.ZCLClusterImpl;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 
 /**
  * 
@@ -34,11 +34,6 @@ public class ZCLClusterConf extends ZCLClusterImpl {
 
 	public ZCLClusterConf(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
 		super(commandIds, attributes, desc);
-		this.commandIds = commandIds;
-	}
-
-	public ZCLClusterConf(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc, int unsupportedAttribute) {
-		super(commandIds, attributes, desc, unsupportedAttribute);
 		this.commandIds = commandIds;
 	}
 

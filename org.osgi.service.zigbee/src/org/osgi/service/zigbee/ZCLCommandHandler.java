@@ -29,10 +29,6 @@ public interface ZCLCommandHandler {
 	 * parse the ZCL frame payload. Thus, error codes that are conveyed in the
 	 * ZCLFrame payload must not be turned into exceptions.
 	 * 
-	 * The ZigBee Base Driver will release the handler object when he receives a
-	 * null frame in a notifyResponse call or thanks to the an implementation
-	 * specific timeout.
-	 * 
 	 * The ZigBee Base Driver MUST discard the Default Response if the caller
 	 * set the DisableDefaultReponse flag and the status of DefaultResponse
 	 * command is SUCCESS.
@@ -41,9 +37,9 @@ public interface ZCLCommandHandler {
 	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
-	 * @param e the exception if any (As described in
-	 *        "Table 2.17 Enumerated Status Values Used in the ZCL" of the ZCL
-	 *        specification).
+	 * @param e the exception if any, see {@link ZCLException} constants mapping
+	 *        the names described in "Table 2.17 Enumerated Status Values Used
+	 *        in the ZCL" of the ZCL specification.
 	 */
 	void notifyResponse(ZCLFrame frame, Exception e);
 
