@@ -45,12 +45,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	private final ConcurrentLinkedQueue<Runnable>	callbacks;
 	/**
 	 * A CountDownLatch to manage the resolved state of this Promise.
-	 * 
 	 * <p>
 	 * This object is used as the synchronizing object to provide a critical
-	 * section in {@link #resolve(Object, Throwable)} so that only a single
+	 * section in {@link #tryResolve(Object, Throwable)} so that only a single
 	 * thread can write the resolved state variables and open the latch.
-	 * 
 	 * <p>
 	 * The resolved state variables, {@link #value} and {@link #fail}, must only
 	 * be written when the latch is closed (getCount() != 0) and must only be
@@ -129,6 +127,9 @@ final class PromiseImpl<T> implements Promise<T> {
 
 	/**
 	 * Resolve this Promise.
+	 * <p>
+	 * If this Promise was already resolved, throw IllegalStateException.
+	 * Otherwise, resolve this Promise.
 	 * 
 	 * @param v The value of this Promise.
 	 * @param f The failure of this Promise.
