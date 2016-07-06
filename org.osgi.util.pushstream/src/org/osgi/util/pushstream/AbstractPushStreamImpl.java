@@ -489,7 +489,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 				return delay;
 			}
-			for (AbstractPushStreamImpl< ? extends T> as : rsult) {
+			for (AbstractPushStreamImpl<T> as : rsult) {
 				try {
 					as.handleEvent(event.nodata());
 				} catch (Exception e) {
