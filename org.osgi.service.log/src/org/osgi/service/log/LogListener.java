@@ -30,8 +30,8 @@ import org.osgi.annotation.versioning.ConsumerType;
  * unregistered by calling the {@code LogReaderService.removeLogListener}
  * method.
  * <p>
- * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred way
- * to obtain {@link LogEntry} objects.
+ * Since 1.4, {@link org.osgi.service.log.stream.LogStreamProvider} is the
+ * preferred way to obtain {@link LogEntry} objects.
  * 
  * @ThreadSafe
  * @author $Id$

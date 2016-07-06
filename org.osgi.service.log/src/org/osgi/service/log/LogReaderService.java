@@ -26,7 +26,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * There are two ways to obtain {@link LogEntry} objects:
  * <ul>
  * <li>The primary way to obtain {@link LogEntry} objects is to get a
- * {@link org.osgi.service.log.stream.LogStream} object from the service
+ * {@link org.osgi.service.log.stream.LogStreamProvider} object from the service
  * registry. This replaces adding a {@link LogListener} object.</li>
  * <li>To obtain past {@link LogEntry} objects, the {@link #getLog()} method can
  * be called which will return an {@code Enumeration} of the {@link LogEntry}
@@ -53,8 +53,8 @@ public interface LogReaderService {
 	 * listener {@code l} such that {@code (l==listener)}, this method does
 	 * nothing.
 	 * <p>
-	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
-	 * way to obtain {@link LogEntry} objects.
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStreamProvider} is the
+	 * preferred way to obtain {@link LogEntry} objects.
 	 * 
 	 * @param listener A {@link LogListener} object to register; the
 	 *            {@link LogListener} object is used to receive {@link LogEntry}
@@ -71,8 +71,8 @@ public interface LogReaderService {
 	 * If {@code listener} is not contained in this Log Reader Service's list of
 	 * listeners, this method does nothing.
 	 * <p>
-	 * Since 1.4, {@link org.osgi.service.log.stream.LogStream} is the preferred
-	 * way to obtain {@link LogEntry} objects.
+	 * Since 1.4, {@link org.osgi.service.log.stream.LogStreamProvider} is the
+	 * preferred way to obtain {@link LogEntry} objects.
 	 * 
 	 * @param listener A {@link LogListener} object to unregister.
 	 */
