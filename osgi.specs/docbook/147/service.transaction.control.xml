@@ -179,7 +179,7 @@
       instances can then be used in the scoped work. This is demonstrated 
       in the following example:</para>
 
-      <programlisting id="service.transaction.control-simple-usage">
+      <programlisting xml:id="service.transaction.control-simple-usage">
       
 @Reference
 TransactionControl control;
@@ -286,11 +286,11 @@ control.required(() -> connection.createStatement()
         
         <itemizedlist>
           <listitem>
-            Declare <code>throws Exception</code> on the calling method
+            <para>Declare <code>throws Exception</code> on the calling method</para>
           </listitem>
           <listitem>
-            Add <code>try/catch Exception</code> blocks around the calls to the
-            Transaction Control Service.
+            <para>Add <code>try/catch Exception</code> blocks around the calls to the
+            Transaction Control Service.</para>
           </listitem>
         </itemizedlist>
        
@@ -344,7 +344,7 @@ try {
         to roll back. This can be indicated to the Transaction Control Service when 
         the Scope is being declared.</para>
 
-        <programlisting id="service.transaction.control-no-rollback">
+        <programlisting xml:id="service.transaction.control-no-rollback">
         
 control.build()
     .noRollbackFor(URISyntaxException.class)
@@ -398,43 +398,171 @@ control.required(() -> {
   <section xml:id="service.transaction.control-main.body">
     <title>Transaction Control Service</title>
     
-    <itemizedList>
+    <para>The Transaction Control Service is the primary interaction point 
+    between a client and the Transaction Control Service implementation. A
+    Transaction Control Service implementation must expose a service 
+    implementing the <xref 
+    linkend="org.osgi.service.transaction.control.TransactionControl" 
+    xrefstyle="hyperlink"/> interface.</para>
+    
+    <para>Clients obtain an instance of the Transaction Control Service using 
+    the normal OSGi service registry mechanisms, either directly using the 
+    OSGi framework API, or using dependency injection.</para>
+
+    <para>The Transaction Control Service is used to:</para>
+
+    <itemizedlist>
       <listitem>
-        <para><emphasis>Atomic</emphasis> - An action or group of actions that
-        must occur as a single unit, i.e. either all actions complete successfully
-        or none complete successfully.</para>
+        <para>Execute work within a defined scope</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Consistent</emphasis> - The actions that make up a 
-        Transaction must not violate any of the constraints within the resource.
-        </para>
+        <para>Query the current execution scope</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Isolated</emphasis> - The actions that make up an
-        ongoing Transaction must not have any impact on other ongoing
-        Transactions, i.e. an ongoing Transaction can only see the results of
-        previously completed Transactions</para>
+        <para>Associate objects with the current execution scope</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Durable</emphasis> - The result of a Transaction must be
-        persisted so that in the event of a failure the results of all committed 
-        transactions can be restored.</para>
+        <para>Register for callbacks when the scope ends</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>ACID</emphasis> - a Transaction which has Atomic, Consistent,
-        Isolated, Durable behaviour.</para>
+        <para>Enlist resource with the current transaction (if there is a
+        Transaction Scope active)</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>XA Transaction</emphasis> - A Transaction which uses the
-        XA two-phase commit protocol to ensure ACID guarantees across multiple
-        external Resources.</para>
+        <para>Mark the current scope for rollback (if there is a Transaction 
+        scope)</para>
       </listitem>
-    </itemizedList>
+    </itemizedlist>
+    
+    <section>
+      <title>Using the Transaction Control Service</title>
+
+      <para>The first action that a client wishing to execute scoped work
+      must take is to identify the type of scope that they wish to use.
+      The work should then be passed to the relevant method on the
+      TransactionControl service:</para>
+      
+      <table>
+      <title>Methods for executing scoped work</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.5*"/>
+
+        <colspec colnum="2" colwidth="1.5*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Method Name</entry>
+
+            <entry>Existing Scope</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry morerows='2' valign='middle'><code>required()</code></entry>
+            <entry>Unscoped</entry>
+            <entry><para>Begins a new Transaction scope and executes the 
+            work inside it</para></entry>
+          </row>
+          <row>
+            <entry>No Transaction scope</entry>
+            <entry><para>Suspends the No Transaction Scope and begins a new 
+            Transaction scope, executing the work inside it. After the work
+            completes the original scope is restored.</para></entry>
+          </row>
+          <row>
+            <entry>Transaction scope</entry>
+            <entry><para>Runs the work within the existing scope</para></entry>
+          </row>
+
+          <row>
+            <entry morerows='2' valign='middle'><code>requiresNew()</code></entry>
+            <entry>Unscoped</entry>
+            <entry><para>Begins a new Transaction scope and executes the 
+            work inside it</para></entry>
+          </row>
+          <row>
+            <entry>No Transaction scope</entry>
+            <entry><para>Suspends the No Transaction Scope and begins a new 
+            Transaction scope, executing the work inside it. After the work
+            completes the original scope is restored.</para></entry>
+          </row>
+          <row>
+            <entry>Transaction scope</entry>
+            <entry><para>Suspends the Transaction Scope and begins a new 
+            Transaction scope, executing the work inside it. After the work
+            completes the original scope is restored.</para></entry>
+          </row>
+ 
+          <row>
+            <entry morerows='2' valign='middle'><code>supports()</code></entry>
+            <entry>Unscoped</entry>
+            <entry><para>Begins a new No Transaction scope and executes the 
+            work inside it</para></entry>
+          </row>
+          <row>
+            <entry>No Transaction scope</entry>
+            <entry><para>Runs the work within the existing scope</para></entry>
+          </row>
+          <row>
+            <entry>Transaction scope</entry>
+            <entry><para>Runs the work within the existing scope</para></entry>
+          </row>
+
+          <row>
+            <entry morerows='2' valign='middle'><code>notSupported()</code></entry>
+            <entry>Unscoped</entry>
+            <entry><para>Begins a new No Transaction scope and executes the 
+            work inside it</para></entry>
+          </row>
+          <row>
+            <entry>No Transaction scope</entry>
+            <entry><para>Runs the work within the existing scope</para></entry>
+          </row>
+          <row>
+            <entry>Transaction scope</entry>
+            <entry><para>Runs the work within the existing scope</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+      
+    <para>Once the relevant method has been identified the client passes
+      the scoped work to the Transaction Control Service. In the typical
+      case the Transaction Control Service must then:</para>
+      
+    <orderedlist>
+      <listitem>
+        <para>Establish a new scope</para>
+      </listitem>
+      <listitem>
+        <para>Execute the scoped work</para>
+      </listitem>
+      <listitem>
+        <para>Finish the scope, calling any registered callbacks</para>
+      </listitem>
+      <listitem>
+        <para>Return the result of the scoped work to the client</para>
+      </listitem>
+    </orderedlist>
+      
+    <para>The Transaction Control Service must only finish a scope once,
+      after the execution of the Scoped Work which originally started the
+      scope. This means that callbacks registered by a piece of Scoped Work
+      may not run immediately after the work finishes, but will be delayed
+      until the parent task has finished if the scope was inherited.</para>
+    </section>
+    
   </section>
       
   

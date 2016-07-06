@@ -28,6 +28,7 @@ osgi.enterprise.specs = \
      org.osgi.service.rest, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
+     org.osgi.service.transaction.control, \
      org.osgi.service.useradmin, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
