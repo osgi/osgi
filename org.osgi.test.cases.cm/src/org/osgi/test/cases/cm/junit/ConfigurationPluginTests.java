@@ -24,33 +24,41 @@
  */
 package org.osgi.test.cases.cm.junit;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPlugin;
-import org.osgi.service.cm.SynchronousConfigurationListener;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.sleep.Sleep;
 
 /**
  * Tests related to {@link ConfigurationPlugin}
  */
 public class ConfigurationPluginTests extends DefaultTestBundleControl {
+
+	private static final String	PROP_MS_PREFIX	= "plugin.ms.";
+
+	private static final String	PROP_MSF_PREFIX			= "plugin.msf.";
 
 	private long				SIGNAL_WAITING_TIME;
 
@@ -122,29 +130,26 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigurationPluginService() throws Exception {
-		ConfigurationListenerImpl cl = null;
-		NotVisitablePlugin plugin = null;
+		// create configuration
 		String pid = Util
 				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		/* Set up the configuration */
 		Configuration conf = cm.getConfiguration(pid);
-		Hashtable<String,Object> props = new Hashtable<>();
-		props.put("key", "value1");
+
 		SynchronizerImpl synchronizer = new SynchronizerImpl();
 		trace("Create and register a new ConfigurationListener");
-		cl = createConfigurationListener(synchronizer);
+		createConfigurationListener(synchronizer);
 		trace("Create and register a new ConfigurationPlugin");
-		plugin = createConfigurationPlugin();
+		NotVisitablePlugin plugin = createConfigurationPlugin();
+
+		// update configuration
+		Dictionary<String,Object> props = Util.singletonDictionary("key",
+				"value1");
 		conf.update(props);
 		trace("Wait until the ConfigurationListener has gotten the update");
-		try {
-			assertTrue("Update done",
+
+		assertTrue("Update done",
 					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
-			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
-		} finally {
-			removeConfigurationListener(cl);
-			removeConfigurationPlugin(plugin);
-		}
+		assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
 	}
 
 	/**
@@ -162,54 +167,367 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 *             if an error occurs or an assertion fails in the test.
 	 */
 	public void testConfigurationPluginServiceFactory() throws Exception {
-		ConfigurationListenerImpl cl = null;
-		NotVisitablePlugin plugin = null;
+
+		// create configuration
 		String factorypid = Util
 				.createPid(ConfigurationListenerImpl.LISTENER_PID_SUFFIX);
-		/* Set up the configuration */
 		Configuration conf = cm.createFactoryConfiguration(factorypid);
-		Hashtable<String,Object> props = new Hashtable<>();
-		props.put("key", "value1");
+
 		SynchronizerImpl synchronizer = new SynchronizerImpl();
 		trace("Create and register a new ConfigurationListener");
-		cl = createConfigurationListener(synchronizer);
+		createConfigurationListener(synchronizer);
 		trace("Create and register a new ConfigurationPlugin");
-		plugin = createConfigurationPlugin();
+		NotVisitablePlugin plugin = createConfigurationPlugin();
+
+		Dictionary<String,Object> props = Util.singletonDictionary("key",
+				"value1");
 		conf.update(props);
 		trace("Wait until the ConfigurationListener has gotten the update");
-		try {
-			assertTrue("Update done",
+
+		assertTrue("Update done",
 					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
-			assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
-		} finally {
-			removeConfigurationListener(cl);
-			removeConfigurationPlugin(plugin);
-		}
+		assertTrue("ConfigurationPlugin not visited", plugin.notVisited());
 	}
 
 	/**
-	 * creates and registers a configuration listener that expects just one
+	 * Tests the order of invoked plugins based on cmRanking for a managed
+	 * service. This test checks several aspects at once:
+	 * <ul>
+	 * <li>ordering
+	 * <li>handling of update(Dictionary), update(), and delete()
+	 * <li>handling of auto properties
+	 * <li>modifications wrt ranking
+	 * </ul>
+	 */
+	public void testRankingForManagedService() throws Exception {
+		// create configuration
+		final String pid = Util.createPid("mspid");
+		cm.getConfiguration(pid).update(Util.singletonDictionary("key", "val"));
+
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+
+		final PluginContext context = new PluginContext();
+		context.pid = pid;
+		createConfigurationPlugin(context, 1, -1, null);
+		createConfigurationPlugin(context, 2, null, null);
+		createConfigurationPlugin(context, 3, 5, null);
+		createConfigurationPlugin(context, 4, 1000, null);
+		createConfigurationPlugin(context, 5, 1001, null);
+
+		registerManagerService(pid, synchronizer);
+
+		trace("Wait until the ManagedService has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props = synchronizer.getProps();
+		assertEquals("val", props.get("key"));
+		verifyPlugins(props, false, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// update configuration
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		cm.getConfiguration(pid)
+				.update(Util.singletonDictionary("key1", "val1"));
+		trace("Wait until the ManagedService has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props1 = synchronizer.getProps();
+		assertEquals("val1", props1.get("key1"));
+		verifyPlugins(props1, false, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// force update
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		cm.getConfiguration(pid)
+				.update(Util.singletonDictionary("key1", "val1"));
+		trace("Wait until the ManagedService has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props2 = synchronizer.getProps();
+		assertEquals("val1", props2.get("key1"));
+		verifyPlugins(props2, false, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// delete configuration
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		cm.getConfiguration(pid).delete();
+		trace("Wait until the ManagedService has gotten the delete");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		assertNull(synchronizer.getProps());
+		assertTrue(context.invocationOrder.isEmpty());
+		assertTrue(context.errors.isEmpty());
+	}
+
+	/**
+	 * Tests the order of invoked plugins based on cmRanking for a managed
+	 * service factory. This test checks several aspects at once:
+	 * <ul>
+	 * <li>ordering
+	 * <li>handling of update(Dictionary), update(), and delete()
+	 * <li>handling of auto properties
+	 * <li>modifications wrt ranking
+	 * </ul>
+	 */
+	public void testRankingForManagedServiceFactory() throws Exception {
+		// create configuration
+		final String pid = Util.createPid("msfpid");
+		final Configuration conf = cm.createFactoryConfiguration(pid);
+		conf.update(Util.singletonDictionary("key", "val"));
+
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+
+		final PluginContext context = new PluginContext();
+		context.factoryPid = pid;
+		createConfigurationPlugin(context, 1, -1, null);
+		createConfigurationPlugin(context, 2, null, null);
+		createConfigurationPlugin(context, 3, 5, null);
+		createConfigurationPlugin(context, 4, 1000, null);
+		createConfigurationPlugin(context, 5, 1001, null);
+
+		registerManagerServiceFactory(pid, synchronizer);
+
+		trace("Wait until the ManagedServiceFactory has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props = synchronizer.getProps();
+		assertEquals("val", props.get("key"));
+
+		verifyPlugins(props, true, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// update configuration
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		conf.update(Util.singletonDictionary("key1", "val1"));
+		trace("Wait until the ManagedServiceFactory has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props1 = synchronizer.getProps();
+		assertEquals("val1", props1.get("key1"));
+		verifyPlugins(props1, true, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// force update
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		conf.update();
+		trace("Wait until the ManagedServiceFactory has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props2 = synchronizer.getProps();
+		assertEquals("val1", props2.get("key1"));
+		verifyPlugins(props2, true, Arrays.asList(1, 2, 3, 4, 5),
+				Arrays.asList(2, 3, 4), context);
+
+		// delete configuration
+		context.invocationOrder.clear();
+		synchronizer.resetCount();
+		conf.delete();
+		trace("Wait until the ManagedServiceFactory has gotten the delete");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		assertNull(synchronizer.getProps());
+		assertTrue(context.invocationOrder.isEmpty());
+		assertTrue(context.errors.isEmpty());
+	}
+
+	/**
+	 * Test targetting of configuration plugins with a managed service
+	 */
+	public void testTargettingManagedService() throws Exception {
+		// create configuration
+		final String pid = Util.createPid("mspid");
+		cm.getConfiguration(pid).update(Util.singletonDictionary("key", "val"));
+
+		final PluginContext context = new PluginContext();
+
+		createConfigurationPlugin(context, 1, 1, null);
+		createConfigurationPlugin(context, 2, 2, pid);
+		createConfigurationPlugin(context, 3, 3, "foo");
+
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+		registerManagerService(pid, synchronizer);
+
+		trace("Wait until the ManagedService has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props = synchronizer.getProps();
+		assertEquals("val", props.get("key"));
+		verifyPlugins(props, false, Arrays.asList(1, 2), Arrays.asList(1, 2),
+				context);
+	}
+
+	/**
+	 * Test targetting of configuration plugins with a managed service factory
+	 */
+	public void testTargettingManagedServiceFactory() throws Exception {
+		// create factory configuration
+		final String factoryPid = Util.createPid("msfpid");
+		final Configuration conf = cm.createFactoryConfiguration(factoryPid);
+		conf.update(Util.singletonDictionary("key", "val"));
+
+		final PluginContext context = new PluginContext();
+
+		createConfigurationPlugin(context, 1, 1, null);
+		createConfigurationPlugin(context, 2, 2, factoryPid);
+		createConfigurationPlugin(context, 3, 3, "foo");
+
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+		registerManagerServiceFactory(factoryPid, synchronizer);
+
+		trace("Wait until the ManagedServiceFactory has gotten the update");
+
+		assertTrue("Update done",
+				synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+		final Dictionary<String,Object> props = synchronizer.getProps();
+		assertEquals("val", props.get("key"));
+		verifyPlugins(props, true, Arrays.asList(1, 2), Arrays.asList(1, 2),
+				context);
+	}
+
+	/**
+	 * Verify that the plugins are called in the correct order and that only
+	 * modifications from plugins in the modification set got accepted.
+	 * 
+	 * @param props The properties
+	 * @param isFactory Whether to check for managed service or ms factory
+	 * @param callOrder The expected call order of the plugins
+	 * @param modifyOrder These plugins are allowed to modify
+	 * @param context The context collecting the plugin info
+	 */
+	private void verifyPlugins(final Dictionary<String,Object> props,
+			final boolean isFactory,
+			final List<Integer> callOrder, final List<Integer> modifyOrder,
+			final PluginContext context) {
+
+		if (context.pid != null) {
+			assertEquals(context.pid, props.get(Constants.SERVICE_PID));
+		}
+		if (context.factoryPid != null) {
+			assertEquals(context.factoryPid,
+					props.get(ConfigurationAdmin.SERVICE_FACTORYPID));
+		}
+		assertNull(props.get(ConfigurationAdmin.SERVICE_BUNDLELOCATION));
+		assertEquals(
+				"Order expected=" + callOrder + ", but was "
+						+ context.invocationOrder,
+				callOrder, context.invocationOrder);
+
+		assertTrue("Errors: " + context.errors, context.errors.isEmpty());
+
+		final Set<Integer> modifications = new HashSet<>();
+		Enumeration<String> keyEnum = props.keys();
+		while (keyEnum.hasMoreElements()) {
+			final String key = keyEnum.nextElement();
+			if (key.startsWith(PROP_MSF_PREFIX)) {
+				if (!isFactory) {
+					fail("no managed service factory modification expected");
+				}
+				final Integer id = Integer
+						.valueOf(key.substring(PROP_MSF_PREFIX.length()));
+				assertTrue("No modification from plugin " + id + " expected.",
+						modifyOrder.contains(id));
+				modifications.add(id);
+			} else if (key.startsWith(PROP_MS_PREFIX)) {
+				if (isFactory) {
+					fail("no managed service modification expected");
+				}
+				final Integer id = Integer
+						.valueOf(key.substring(PROP_MS_PREFIX.length()));
+				assertTrue("No modification from plugin " + id + " expected.",
+						modifyOrder.contains(id));
+				modifications.add(id);
+			}
+		}
+		assertTrue(modifications.equals(new HashSet<>(modifyOrder)));
+	}
+
+	/**
+	 * Register a managed service
+	 * 
+	 * @param pid The pid for the service
+	 * @param synchronizer The synchronizer
+	 * @throws Exception if something goes wrong
+	 */
+	private void registerManagerService(final String pid,
+			final Synchronizer synchronizer) throws Exception {
+		trace("Create and register a new ManagedService");
+
+		registerService(ManagedService.class.getName(), new ManagedService() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void updated(Dictionary<String, ? > properties)
+					throws ConfigurationException {
+				synchronizer.signal((Dictionary<String,Object>) properties);
+
+			}
+		}, Util.singletonDictionary(Constants.SERVICE_PID, pid));
+	}
+
+	/**
+	 * Register a managed service factory
+	 * 
+	 * @param factoryPid The factoryPid for the service
+	 * @param synchronizer The synchronizer
+	 * @throws Exception if something goes wrong
+	 */
+	private void registerManagerServiceFactory(final String factoryPid,
+			final Synchronizer synchronizer) throws Exception {
+		trace("Create and register a new ManagedServiceFactory");
+
+		registerService(ManagedServiceFactory.class.getName(),
+				new ManagedServiceFactory() {
+
+					@Override
+					public String getName() {
+						return null;
+					}
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void updated(String pid,
+							Dictionary<String, ? > properties)
+							throws ConfigurationException {
+						synchronizer
+								.signal((Dictionary<String,Object>) properties);
+					}
+
+					@Override
+					public void deleted(String pid) {
+						synchronizer.signal(null);
+					}
+
+				}, Util.singletonDictionary(Constants.SERVICE_PID, factoryPid));
+	}
+
+	/**
+	 * Creates and registers a configuration listener that expects just one
 	 * event.
 	 */
 	private ConfigurationListenerImpl createConfigurationListener(
 			SynchronizerImpl synchronizer) throws Exception {
-		return createConfigurationListener(synchronizer, 1);
-	}
-
-	/**
-	 * creates and registers a configuration listener that expects eventCount
-	 * events.
-	 */
-	private ConfigurationListenerImpl createConfigurationListener(
-			SynchronizerImpl synchronizer, int eventCount) throws Exception {
 		ConfigurationListenerImpl listener = new ConfigurationListenerImpl(
-				synchronizer, eventCount);
+				synchronizer, 1);
 		registerService(ConfigurationListener.class.getName(), listener, null);
 		return listener;
 	}
 
 	/**
-	 * creates and registers a configuration plugin.
+	 * Creates and registers a non visible configuration plugin.
 	 */
 	private NotVisitablePlugin createConfigurationPlugin() throws Exception {
 		NotVisitablePlugin plugin = new NotVisitablePlugin();
@@ -218,19 +536,28 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * unregisters a configuration listener.
+	 * Creates a configuration plugin with the id and ranking
+	 * 
+	 * @param context The context to collect invocation information
+	 * @param id The id of the plugin
+	 * @param ranking The ranking of the plugin
+	 * @param pid The pid to register the plugin for
+	 * @throws Exception If an error occurs
 	 */
-	private void removeConfigurationListener(ConfigurationListener cl)
-			throws Exception {
-		unregisterService(cl);
-	}
+	private void createConfigurationPlugin(final PluginContext context, int id,
+			Object ranking,
+			Object pid) throws Exception {
+		trace("Create and register a new ConfigurationPlugin");
+		Dictionary<String,Object> props = new Hashtable<>();
+		if (ranking != null) {
+			props.put(ConfigurationPlugin.CM_RANKING, ranking);
+		}
+		if (pid != null) {
+			props.put(ConfigurationPlugin.CM_TARGET, pid);
+		}
 
-	/**
-	 * unregisters a configuration plugin.
-	 */
-	private void removeConfigurationPlugin(ConfigurationPlugin plugin)
-			throws Exception {
-		unregisterService(plugin);
+		Plugin plugin = new Plugin(context, ranking, id);
+		registerService(ConfigurationPlugin.class.getName(), plugin, props);
 	}
 
 	/**
@@ -251,28 +578,70 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
         }
 	}
 
-	class Plugin implements ConfigurationPlugin {
-		private int index;
+	private static final class PluginContext {
+		public String				pid;
+		public String				factoryPid;
+		public final List<Integer>	invocationOrder	= new ArrayList<>();
+		public final List<String>	errors			= new ArrayList<>();
+	}
 
-		Plugin(int x) {
-			index = x;
+	/**
+	 * Test Configuration Plugin gets id and ranking
+	 */
+	private static class Plugin implements ConfigurationPlugin {
+		private final int			id;
+
+		private final Object	ranking;
+
+		private final PluginContext	context;
+
+		Plugin(PluginContext ctx, Object ranking, int x) {
+			this.ranking = ranking;
+			this.id = x;
+			this.context = ctx;
 		}
 
 		public void modifyConfiguration(ServiceReference< ? > ref,
 				Dictionary<String,Object> props) {
-			trace("Calling plugin with cmRanking=" + (index * 10));
+			trace("Calling plugin with cmRanking=" + ranking);
+			// add to invocation order
+			this.context.invocationOrder.add(id);
+			// set prop
 			String[] types = (String[]) ref.getProperty("objectClass");
 			for (int i = 0; i < types.length; i++) {
-				if ("org.osgi.service.cm.ManagedService".equals(types[i])) {
-					props.put("plugin.ms." + index, "added by plugin#" + index);
+				if (ManagedService.class.getName().equals(types[i])) {
+					props.put(PROP_MS_PREFIX + id, id);
 					break;
-				} else if ("org.osgi.service.cm.ManagedServiceFactory"
+				} else if (ManagedServiceFactory.class.getName()
 						.equals(types[i])) {
-					props.put("plugin.factory." + index, "added by plugin#"
-							+ index);
+					props.put(PROP_MSF_PREFIX + id, id);
 					break;
 				}
 			}
+			// check bundle location
+			if (props.get(ConfigurationAdmin.SERVICE_BUNDLELOCATION) != null) {
+				this.context.errors.add("Add plugin " + id
+						+ " must not see service.bundleLocation property");
+			}
+			// check pid
+			if (this.context.pid != null && !this.context.pid
+					.equals(props.get(Constants.SERVICE_PID))) {
+				this.context.errors.add("Plugin " + id + " expected pid "
+						+ this.context.pid + " but got "
+						+ props.get(Constants.SERVICE_PID));
+			}
+			// check factory pid
+			if (this.context.factoryPid != null && !this.context.factoryPid
+					.equals(props.get(ConfigurationAdmin.SERVICE_FACTORYPID))) {
+				this.context.errors.add("Plugin " + id
+						+ " expected factory pid " + this.context.pid
+						+ " but got "
+						+ props.get(ConfigurationAdmin.SERVICE_FACTORYPID));
+			}
+			// modify auto props
+			props.put(Constants.SERVICE_PID, "a");
+			props.put(ConfigurationAdmin.SERVICE_FACTORYPID, "a");
+			props.put(ConfigurationAdmin.SERVICE_BUNDLELOCATION, "a");
 		}
 	}
 
@@ -282,8 +651,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * when there's no <code>ManagedService</code> or
 	 * <code>ManagedServiceFactory</code> registered.
 	 */
-	class NotVisitablePlugin implements ConfigurationPlugin {
-		private boolean visited;
+	private static class NotVisitablePlugin implements ConfigurationPlugin {
+		private volatile boolean visited;
 
 		/**
 		 * Creates a <code>ConfigurationPlugin</code> instance that has not been
@@ -295,25 +664,12 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		}
 
 		/**
-		 * <p>
-		 * Callback method when a <code>Configuration</code> update is being
-		 * delivered to a registered <code>ManagedService</code> or
-		 * <code>ManagedServiceFactory</code> instance.
-		 * </p>
-		 * <p>
 		 * Set plugin to visited (<code>visited = true</code>) when this method
 		 * is invoked. If this happens, the <code>ConfigurationListener</code>
 		 * tests failed.
-		 * </p>
 		 *
-		 * @param ref
-		 *            the <code>ConfigurationAdmin</code> that generated the
-		 *            update.
-		 * @param props
-		 *            the <code>Dictionary</code> containing the properties of
-		 *            the <code>
-		 * @see org.osgi.service.cm.ConfigurationPlugin#modifyConfiguration(org.osgi.framework.ServiceReference,
-		 *      java.util.Dictionary)
+		 * @param ref the service that gets the update.
+		 * @param props the properties
 		 */
 		public void modifyConfiguration(ServiceReference< ? > ref,
 				Dictionary<String,Object> props) {
@@ -331,85 +687,4 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 			return !visited;
 		}
 	}
-
-	/**
-	 * <code>ConfigurationPlugin</code> implementation to be used in the
-	 * <code>ConfigurationListener</code> test. The plugin should NOT be invoked
-	 * when there's no <code>ManagedService</code> or
-	 * <code>ManagedServiceFactory</code> registered.
-	 */
-	class RunnableImpl implements Runnable {
-		private final String pid;
-		private String location;
-		private Configuration conf;
-		private Object lock = new Object();
-
-		RunnableImpl(String pid, String location) {
-			this.pid = pid;
-			this.location = location;
-		}
-
-		Configuration getConfiguration() {
-			return conf;
-		}
-
-		public void run() {
-			try {
-				Sleep.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				conf = cm.getConfiguration(pid, location);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			synchronized (lock) {
-				try {
-					lock.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				Sleep.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			conf.setBundleLocation(location);
-
-		}
-
-		void unlock() {
-			synchronized (lock) {
-				lock.notifyAll();
-			}
-		}
-
-		void unlock(String newLocation) {
-			location = newLocation;
-			synchronized (lock) {
-				lock.notifyAll();
-			}
-		}
-	}
-
-    class SyncEventListener implements SynchronousConfigurationListener {
-
-        private final Synchronizer sync;
-
-        public SyncEventListener(final Synchronizer sync) {
-            this.sync = sync;
-        }
-
-        public void configurationEvent(ConfigurationEvent event) {
-            this.sync.signal();
-        }
-
-    }
-
 }
