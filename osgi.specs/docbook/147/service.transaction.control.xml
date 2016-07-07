@@ -440,7 +440,13 @@ control.required(() -> {
     </itemizedlist>
     
     <section>
-      <title>Using the Transaction Control Service</title>
+      <title>Scope Lifecycle</title>
+
+      <para>The lifecycle of a scope is tied to the execution of a piece of
+        scoped work. Unless a scope is being inherited then a scope starts
+        immediately before the scoped work executes and ends immediately
+        after the scoped work completes, even if the scoped work throws
+        an exception.</para>
 
       <para>The first action that a client wishing to execute scoped work
       must take is to identify the type of scope that they wish to use.
@@ -451,11 +457,11 @@ control.required(() -> {
       <title>Methods for executing scoped work</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="1.5*"/>
+        <colspec colnum="1" colwidth="1.2*"/>
 
         <colspec colnum="2" colwidth="1.5*"/>
 
-        <colspec colnum="3" colwidth="3.5*"/>
+        <colspec colnum="3" colwidth="3.3*"/>
 
         <thead>
           <row>
@@ -549,7 +555,9 @@ control.required(() -> {
         <para>Execute the scoped work</para>
       </listitem>
       <listitem>
-        <para>Finish the scope, calling any registered callbacks</para>
+        <para>Finish the scope, calling any registered callbacks
+          and committing the Transaction if the scope is a
+          Transaction Scope</para>
       </listitem>
       <listitem>
         <para>Return the result of the scoped work to the client</para>
@@ -561,10 +569,441 @@ control.required(() -> {
       scope. This means that callbacks registered by a piece of Scoped Work
       may not run immediately after the work finishes, but will be delayed
       until the parent task has finished if the scope was inherited.</para>
+
     </section>
     
-  </section>
+    <section>
+      <title>Scopes and Exception Management</title>
       
+      <para>Resource access is intrinsically error-prone, and therefore there
+        are many potential failure scenarios. Exceptions therefore form an
+        important part of the scope lifecycle.</para>
+        
+        <section>
+          <title>Client Exceptions</title>
+        
+          <para>The work provided by the client to the Transaction Control Service 
+          is passed as a <code>Callable</code>, meaning that the work may throw an
+          Exception. An Exception thrown by the work is known as a <emphasis>Client
+          Exception</emphasis>.</para>
+          
+          <para>If a client exception is thrown then it must be caught by the
+          Transaction Control Service and handled appropriately by finishing the
+          scope as required. Once the scope has completed the client exception
+          must be wrapped in a <code>ScopedWorkException</code> and rethrown by 
+          the Transaction Control service.</para> 
+          
+          <para>If a number of scopes are nested then a ScopedWorkException may be
+          received as a client Exception. A ScopedWorkException should not be re-wrapped
+          by the Transaction Control Service but instead a new ScopedWorkException should 
+          be created initialised with the original cause. The caught ScopedWorkException 
+          must then be added to the new ScopedWorkException as a supressed Exception. 
+          This prevents clients from having to deeply introspect the exception cause chain 
+          to locate the original error.</para>
+        </section>
+
+        <section>
+          <title>Rethrowing Client Exceptions</title>
+          <para>In the general case clients will not need to catch a ScopedWorkException, 
+            and it can be left to report/handle at a higher level. Sometimes, however, 
+            the Exceptions thrown by a piece of work represent an important part of the 
+            API, and they need to be thrown on without being wrapped in a ScopedWorkException.
+            The ScopedWorkException provides a simple mechanism to do this. The client simply 
+            calls one of the <code>asOneOf()</code> methods which will throw the cause of the
+            Exception as one of the supplied checked Exception types, or directly as an 
+            unchecked Exception if the cause is unchecked. 
+          </para>
+          <para> 
+            The <code>asOneOf()</code> methods always throw an Exception, but the method 
+            return value is declared as a RuntimeException. This can can be used to simplify 
+            the act of rethrowing the cause when using this method.</para>
+          
+          <programlisting>
+
+try {
+    txControl.required(() -> {
+                // Do some work in here that may throw IOException
+                // or ClassNotFoundException
+                return result;
+        });
+} catch (ScopedWorkException swe) {
+    throw swe.asOneOf(IOException.class, ClassNotFoundException.class);
+}
+          </programlisting>
+          
+          <para>If the cause of a ScopedWorkException is a checked exception, but that
+          exception is not assignable to any of the types passed to the 
+          <code>asOneOf()</code> method then this is a programming error and an 
+          <code>IllegalArgument</code> exception will be thrown with its cause
+          set as the ScopedWorkException</para>
+        </section>
+
+        <section>
+          <title>Exceptions Generated by the Transaction Control Service</title>
+          
+          <para>Many operations performed by the Transaction Control Service,
+            particularly when finishing a scope, may result in an Exception.
+            Internal failures, for example a failure when attempting to commit
+            a resource, must be wrapped in a TransactionException and thrown
+            to the client.</para>
+            <para>A TransactionException must never override a ScopedWorkException.
+            In the case where a ScopedWorkException should be thrown and a
+            Transaction Control Service failure occurs then the TransactionException
+            must be set as a suppressed exception in the ScopedWorkException.</para>
+        </section>
+      </section>
+    
+    <section>
+      <title>Transaction Scope lifecycle</title>
+        <para>In addition to callbacks and scoped variables Transaction scopes also
+        provide an ongoing software transaction which shares the lifecycle of the
+        scope. There are therefore additional lifecycle rules for Transaction Scopes</para>
+      
+      <section>
+        <title>Triggering Rollback in Transaction Scopes</title>
+
+        <para>By default a transaction will commit automatically when the piece of work 
+        completes normally. If this is not desired (for example if the work's business 
+        logic determines that the transaction should not complete) then the work may trigger 
+        a rollback in one of two ways.</para>
+      
+        <para>Calling <code>setRollbackOnly()</code> on the Transaction Control object will 
+        mark the transaction for rollback so that it will never commit, even if the method 
+        completes normally. This is a one-way operation, and the rollback state can be 
+        queried using <code>getRollbackOnly().</code></para>
+      
+        <programlisting>
+txControl.required(() -> {
+            // Do some work in here
+            ...
+            // This work will not be committed!
+            txControl.setRollbackOnly();
+            return result;
+    });      
+        </programlisting>
+      
+        <para>Throwing an exception from the piece of work will, by default, cause the 
+        transaction to be rolled back. Note that this is different from Java EE behaviour, 
+        where a checked exceptions <emphasis>does not</emphasis> trigger rollback. This is 
+        a deliberate difference as many applications get the wrong behaviour based on this 
+        default. For example SQLException is a commonly thrown Exception in JDBC, but is 
+        rarely, if ever, a “safe return”. Forgetting to override this behaviour means that 
+        production code will fail to enforce the correct transaction boundaries.</para>
+      
+        <programlisting>
+txControl.required(() -> {
+            // Do some work in here
+            ...
+            // Uh oh – something went wrong!
+            throw new IllegalStateException(“Kaboom!”);
+    });  
+        </programlisting>
+      </section> 
+        
+      <section>
+        <title>Avoiding Rollback</title>
+        
+        <para>Sometimes it is preferable for a piece of work to throw an exception, but 
+        for that exception not to trigger a rollback of the transaction. For example some 
+        business exceptions may be considered “normal”, or it may be the case that the work 
+        performed so far must be persisted for audit reasons.</para>
+        
+        <para>There are two ways to prevent a transaction from rolling back when a particular 
+        exception occurs</para>
+
+        <para>The Transaction Control service provides a <code>TransactionBuilder</code>.
+        The builder can can be used to define sets of Exception types that should, or should 
+        not, trigger rollback. The most specific match will be used to determine whether the 
+        transaction should roll back or not.</para>
+        
+        <para>The Transaction Control service provides an ignoreException() method. This can 
+        be used from within an Active Transaction to declare a specific Exception object that 
+        should not trigger rollback.</para>
+        
+        <para>If a transaction is marked for rollback using <code>setRollbackOnly()</code>
+        then it must roll back, even if the work throws an exception which would not normally
+        trigger a rollback.</para>
+      </section>
+      
+      <section>
+        <title>Read Only transactions</title>
+        <para>Resources accessed within a transaction are frequently used to update persistent 
+        data, however in some cases it is known in advance that no changes will be made to the 
+        data. In the case where no changes are going to be made then different, more optimal, 
+        algorithms can be used by the resource to improve performance. It is therefore useful 
+        for applications to be able to indicate when resources are going to be used in a 
+        read-only way.</para>
+        
+        <para>To indicate that a transaction is read only the TransactionBuilder must be used.</para>
+        
+        <programlisting>
+txControl.build()
+    .readOnly()
+    .required(() -> {
+            // Do some work in here
+            ...
+            return result;
+        });
+        </programlisting>
+        
+        <para>The readOnly method provides a hint to the TransactionControl service that the 
+        scoped work only uses read access to resources. The TransactionControl service is free 
+        to ignore this hint if it does not offer read-only optimisations. Also, read only only 
+        applies to Transaction Scopes. No Transaction Scopes always ignore the call to readOnly.</para>
+
+        <section>
+          <title>Determining whether a Transaction is read only</title>
+          <para>The TransactionContext provides access to whether the transaction is read only 
+          using the <code>isReadOnly()</code> method. This method will return true if the 
+          transaction was started using the read only flag, and the TransactionControl 
+          service supports read-only optimization.</para>
+          
+          <para>This method is primarily available so that resource providers can set their 
+          read-only status correctly when they first enlist with the transaction. Resource 
+          providers are free to ignore the read only status as it is provided for optimization 
+          only.</para>
+        </section>
+        
+        <section>
+          <title>Writing to resources using in a read only transaction</title>
+            <para>When a client begins a transaction in read-only mode there is no API 
+            restriction that prevents them from writing to one or more resources. If the scoped 
+            work does write to the resource then the result is undefined. The write may succeed, 
+            or it may result in an exception, triggering a rollback. </para>
+            
+            <para>Clients should avoid declaring a transaction as read only unless they are 
+            certain that no resources are updated within the scope of the work. This includes any
+            operations performed by external services which inherit the transaction.</para>
+        </section>
+        
+        <section>
+          <title>Changing the read state in nested transactions</title>
+          
+          <para>When a client begins a Transaction Scope using the required method then it 
+            inherits the existing Transaction Scope if it exists. It is not possible to change 
+            the writability of an inherited transaction.</para>
+          
+          <para>In the case where the inherited transaction is a writable transaction then 
+            the <code>readOnly()</code> state declared for the nested scope will be ignored. 
+            In the case where the inherited transaction is read only then an attempt to change 
+            the transaction to a writable transaction will fail with a TransactionException.
+            </para>
+          
+          <para>If the nested transaction is declared using requiresNew then it will create 
+            a new transaction which may have a different writability from the outer scope.</para>
+        </section>
+      </section>
+    </section>
+  </section>
+  
+  <section>
+    <title>The TransactionContext</title>
+    
+    <para>When a client uses the TransactionControl service to scope a piece of work, the scope 
+    gains an associated Transaction Context. The current transaction context is not normally 
+    needed by clients, but is an important integration point for ResourceProviders, and for 
+    clients that wish to register transaction completion callbacks.</para>
+    
+    <para>The Transaction Control Service provides methods that can be used to query the current 
+    transaction context.</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><code>activeTransaction()</code> - returns true if there is a Transaction
+        scope associated with the currently executing work.</para>
+      </listitem>
+      <listitem>
+        <para><code>activeScope()</code> - returns true if there is a Transaction
+        Scope or a No Transaction Scope associated with the currently executing work.</para>
+      </listitem>
+      <listitem>
+        <para><code>getCurrentContext()</code> - returns the current 
+        <code>TransactionContext</code>, or <code>null</code> if the currently executing code 
+        is unscoped. If the current work has a No Transaction scope then the returned 
+        Transaction Context will report its status as <code>NO_TRANSACTION</code></para>
+      </listitem>
+    </itemizedlist>
+  
+    <para>If a Transaction scope is active then it may either be backed by a 
+    Local Transaction, or by an XA Transaction, which affects the types of resource that
+    can be used with the Transaction Context. The transaction support can be queried
+    using the <code>supportsLocal()</code> and <code>supportsXA()</code> methods on the
+    transaction context object. Some implementations may support both XA and Local
+    resources in the same transaction, but these are still considered to be XA 
+    Transactions.</para>
+  
+    <section>
+      <title>Transaction Lifecycle callbacks</title>
+      
+      <para>In addition to registering Resources with the Transaction Context clients or resources
+      may register callback functions. Callback functions can run either before or after the transaction
+      finishes, depending as to whether they are registered using <code>preCompletion</code> or 
+      <code>postCompletion</code> to register their callbacks.</para>
+       
+      <section>
+        <title>Pre-completion Callbacks</title>
+        
+        <para>Pre-completion callbacks run immediately after the end of the scoped work,
+        and before any associated transaction finishes. Because pre-completion callbacks
+        run before the end of the transaction they are able to prevent it from committing, 
+        either by calling <code>setRollbackOnly()</code> or potentially by throwing a 
+        <code>RuntimeException</code>. If the scope is a No Transaction scope then there
+        is no commit to prevent.</para>
+        
+        <para>If scoped work completes with an exception that triggers rollback, then the
+        Transaction Context must be marked for rollback before calling any pre-completion
+        callbacks.</para>
+        
+        <para>Exceptions generated by pre-completion callbacks are gathered, If any of the 
+        generated Exceptions would trigger rollback then the transaction is treated as having 
+        failed with the first of those exceptions. Any other exceptions are added as suppressed 
+        exceptions. Assuming that no Client Exception occurred then the failure must be reported
+        by throwing a <code>TransactionRolledBackException</code>, or in the case of a 
+        No Transaction scope, a <code>TransactionException</code>.</para>
+      </section>
+      
+      <section>
+        <title>Post-completion Callbacks</title>
+        
+        <para>Post-completion callbacks are run after any associated transaction finishes.
+        As the transaction has completed, post-completion callbacks receive the completion
+        state of the transaction as a method parameter. In the case of a No Transaction 
+        context there is no transaction, so the post-completion callbacks immediately 
+        follow the pre-completion callbacks, and are passed a status of NO_TRANSACTION.</para>
+        
+        <para>Exceptions generated by post-completion callbacks are unable to affect the 
+        outcome of any transaction, and must therefore be logged, but not acted on further 
+        by the Transaction Control service.</para>
+      </section>
+    </section>
+  
+    <section>
+      <title>Scoped variables</title>
+    
+      <para>A Transaction context may be used to store scoped variables. These variables are 
+      attached to the TransactionContext, and will be released after the Context finishes.
+      Scoped resources are guaranteed to be accessible in lifecycle callbacks.</para>
+    
+      <para>Variables may be added to the scope using <code>putScopedValue()</code> and retrieved 
+      using <code>getScopedValue()</code>. These methods are valid both for Active Transactions 
+      and the No Transaction scope.</para>
+    </section>
+    
+    <section>
+      <title>Transaction Key</title>
+      
+      <para>Every Active Transaction has an associated key, which will be unique within the 
+      lifetime of the TransactionControl service's registration i.e. a registered Transaction 
+      Control instance will never reuse a key. The key object is opaque, but is guaranteed to 
+      be suitable for use as a key in a <code>HashMap</code>. Note that the Transaction Key 
+      is not globally unique, but only unique to the registered TransactionControl service. 
+      In particular, two concurrently registered TransactionControl services may simultaneously 
+      use the same key, and/or a Transaction Control implementation may reuse keys if it 
+      unregisters and then re-registers its service with a different service id.</para>
+
+      <para>TransactionContexts for the NoTransaction scope have a null key.</para>
+    </section>
+    
+    <section>
+      <title>The Transaction Status</title>
+      <para>TODO list the statuses and what they mean</para>
+    </section>
+    
+    <section>
+      <title>Local Transaction scopes</title>
+      
+      <para>A Local Transaction is not persistent, and therefore not recoverable. It also may
+      not be atomic or consistent if multiple resources are involved. Local transactions do, 
+      however, provide isolation and durability, even when multiple resources are involved.</para>
+      
+      <para>A Local Transaction is therefore a very good choice when a single resource is 
+      involved as it is extremely lightweight and provides ACID behaviour. Local Transactions 
+      do provide benefits when multiple resources are involved, however it is important to realise 
+      that Local Transactions may end up in a state where some commits have succeeded and others 
+      failed.</para>
+      
+      <section>
+        <title>The Local Transaction Lifecycle</title>
+        
+        <para>The transaction context for a local transaction begins in the ACTIVE state, 
+        and may enter the MARKED_ROLLBACK state if the client calls setRollbackOnly().</para>
+        
+        <para>A local transaction must always return true from the <code>supportsLocal()</code> 
+        method, indicating that LocalResource participants may be registered using the 
+        <code>registerLocalResource(LocalResource)</code> method.</para>
+        
+        <para>Once the transactional work has completed and the pre-completion callbacks have
+        run the transaction will be proceed as follows:</para>
+ 
+        <table>
+          <title>Lifecycle rules for Local Transactions</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="3*"/>
+
+            <colspec colnum="2" colwidth="3*"/>
+
+            <thead>
+              <row>
+                <entry>Active</entry>
+
+                <entry>Marked for Rollback</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>
+                  <orderedlist>
+                    <listitem><para>Set the Transaction Status to COMMITTING</para></listitem>
+
+                    <listitem><para>Call commit on the first LocalResource</para></listitem>
+              
+                    <listitem><para>If the first commit fails set the status Transaction
+                    Status to ROLLING_BACK and initialise a TransactionRolledBackException
+                    with its cause set to the failure.</para></listitem>
+
+                    <listitem><para>Continue committing or rolling-back resources based on
+                    the Transaction Status. If a failure occurs then add it as a suppressed
+                    exception of an existing TransactionException, creating a new
+                    TransactionException if this is the first failure.</para></listitem>
+
+                    <listitem><para>Set the Transaction Status to COMMITTED or 
+                    ROLLED_BACK as appropriate</para></listitem>
+
+                    <listitem><para>Call the post-completion callbacks, passing the
+                    Transaction Status</para></listitem>
+                  </orderedlist>
+                </entry>
+            
+            <entry>
+                  <orderedlist>
+                    <listitem><para>Set the Transaction Status to ROLLING_BACK</para></listitem>
+
+                    <listitem><para>Call rollback on each of the LocalResources</para></listitem>
+              
+                    <listitem><para>If a failure occurs then add it as a suppressed
+                    exception of an existing TransactionException, creating a new
+                    TransactionException if this is the first failure.</para></listitem>
+
+                    <listitem><para>Set the Transaction Status to ROLLED_BACK</para></listitem>
+
+                    <listitem><para>Call the post-completion callbacks, passing the
+                    Transaction Status</para></listitem>
+                  </orderedlist>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>Local Transaction Support Service Properties</title>
+        <para>A TransactionControl Service which supports local transactions may be identified 
+        using the <code>osgi.local.enabled</code> property which will be set to <code>Boolean.TRUE</code>.</para>
+      </section>
+    </section>
+  </section>
   
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.xml"/>
