@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,5 +138,16 @@ public class Deferred<T> {
 	 */
 	public Promise<Void> resolveWith(Promise<? extends T> with) {
 		return promise.resolveWith(with);
+	}
+
+	/**
+	 * Returns a string representation of the associated Promise.
+	 * 
+	 * @return A string representation of the associated Promise.
+	 * @since 1.1
+	 */
+	@Override
+	public String toString() {
+		return promise.toString();
 	}
 }

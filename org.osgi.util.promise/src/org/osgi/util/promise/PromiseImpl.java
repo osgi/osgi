@@ -197,6 +197,26 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * @since 1.1
+	 */
+	@Override
+	public String toString() {
+		try {
+			if (isDone()) {
+				Throwable t;
+				t = getFailure();
+				if (t != null) {
+					return "failed: " + String.valueOf(t);
+				}
+				return "resolved: " + String.valueOf(getValue());
+			}
+			return "unresolved";
+		} catch (InterruptedException | InvocationTargetException e) {
+			return String.valueOf(e);
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
