@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,27 +81,8 @@ public class Deferred<T> {
 	}
 
 	/**
-	 * Try to successfully resolve the Promise associated with this Deferred.
-	 * <p>
-	 * If the associated Promise was already resolved, {@code false} is
-	 * returned. Otherwise, the associated Promise is resolved and {@code true}
-	 * is returned.
-	 * <p>
-	 * See {@link #resolve(Object) resolve(T)} for details on resolving the
-	 * associated Promise.
-	 * 
-	 * @param value The value of the resolved Promise.
-	 * @return {@code false} if the associated Promise associated was already
-	 *         resolved. {@code true} otherwise.
-	 * @since 1.1
-	 * @see #resolve(Object) resolve(T)
-	 */
-	public boolean tryResolve(T value) {
-		return promise.tryResolve(value, null);
-	}
-
-	/**
 	 * Fail the Promise associated with this Deferred.
+	 * 
 	 * <p>
 	 * After the associated Promise is resolved with the specified failure, all
 	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
@@ -124,29 +105,9 @@ public class Deferred<T> {
 	}
 
 	/**
-	 * Try to fail the Promise associated with this Deferred.
-	 * <p>
-	 * If the associated Promise was already resolved, {@code false} is
-	 * returned. Otherwise, the associated Promise is failed and {@code true} is
-	 * returned.
-	 * <p>
-	 * See {@link #fail(Throwable)} for details on failing the associated
-	 * Promise.
-	 * 
-	 * @param failure The failure of the resolved Promise. Must not be
-	 *            {@code null}.
-	 * @return {@code false} if the associated Promise associated was already
-	 *         resolved. {@code true} otherwise.
-	 * @since 1.1
-	 * @see #fail(Throwable)
-	 */
-	public boolean tryFail(Throwable failure) {
-		return promise.tryResolve(null, requireNonNull(failure));
-	}
-
-	/**
 	 * Resolve the Promise associated with this Deferred with the specified
 	 * Promise.
+	 * 
 	 * <p>
 	 * If the specified Promise is successfully resolved, the associated Promise
 	 * is resolved with the value of the specified Promise. If the specified

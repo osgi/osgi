@@ -199,12 +199,8 @@
     <para>A Deferred object can later be used to resolve the associated
     Promise successfully by calling <xref
     linkend="org.osgi.util.promise.Deferred.resolve-T-"
-    xrefstyle="hyperlink"/> or <xref
-    linkend="org.osgi.util.promise.Deferred.tryResolve-T-"
     xrefstyle="hyperlink"/> or unsuccessfully by calling <xref
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
-    xrefstyle="hyperlink"/> or <xref
-    linkend="org.osgi.util.promise.Deferred.tryFail-Throwable-"
     xrefstyle="hyperlink"/>.</para>
 
     <programlisting>private void doTask(Deferred&lt;String&gt; deferred) {
@@ -235,11 +231,7 @@
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
     xrefstyle="hyperlink"/> is called when the Promise associated with the
     Deferred is already resolved, then an Illegal State Exception must be
-    thrown. If <xref linkend="org.osgi.util.promise.Deferred.tryResolve-T-"
-    xrefstyle="hyperlink"/> or <xref
-    linkend="org.osgi.util.promise.Deferred.tryFail-Throwable-"
-    xrefstyle="hyperlink"/> is called when the Promise associated with the
-    Deferred is already resolved, nothing happens.</para>
+    thrown.</para>
 
     <para>Care must be taken in sharing a Deferred object with other parties
     since the other parties can resolve the associated Promise. A Deferred
@@ -593,11 +585,6 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     <title>Changes</title>
 
     <para><itemizedlist>
-        <listitem>
-          <para>Deferred is updated to add tryResolve and tryFail
-          methods.</para>
-        </listitem>
-
         <listitem>
           <para>Function and Predicate are updated so that their methods are
           now declared to throw Exception.</para>
