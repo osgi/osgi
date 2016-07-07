@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
@@ -400,4 +402,23 @@ public interface Promise<T> {
 	 *         the value of the specified Promise.
 	 */
 	Promise<T> fallbackTo(Promise<? extends T> fallback);
+
+	/**
+	 * Time out the resolution of this Promise.
+	 * <p>
+	 * If this Promise is successfully resolved before the timeout, the returned
+	 * Promise is resolved with the value of this Promise. If this Promise is
+	 * resolved with a failure before the timeout, the returned Promise is
+	 * resolved with the failure of this Promise. If the timeout is reached
+	 * before this Promise is resolved, the returned Promise is failed with a
+	 * {@code TimeoutException}.
+	 * 
+	 * @param timeout The maximum time to wait. Zero and negative time is
+	 *            treated as an immediate timeout.
+	 * @param unit The time unit of the {@code timeout} argument.
+	 * @return A Promise that is resolved when either this Promise is resolved
+	 *         or the timeout is reached.
+	 * @since 1.1
+	 */
+	Promise<T> timeout(long timeout, TimeUnit unit);
 }

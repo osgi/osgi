@@ -29,6 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -1855,5 +1856,109 @@ public class PromiseTest extends TestCase {
 		} catch (IllegalStateException e) {
 			// expected
 		}
+	}
+
+	public void testTimeoutWithTimeout() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		assertNotNull(t.getFailure());
+		assertTrue(t.getFailure() instanceof TimeoutException);
+		assertTrue(t.isDone());
+		assertFalse(p.isDone());
+	}
+
+	public void testTimeoutWithSuccess1() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		d.resolve("no timeout");
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNull(p.getFailure());
+		assertSame(p.getValue(), t.getValue());
+	}
+
+	public void testTimeoutWithSuccess2() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no timeout");
+		assertTrue(p.isDone());
+		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+		assertNull(p.getFailure());
+		assertSame(p.getValue(), t.getValue());
+	}
+
+	public void testTimeoutWithFailure1() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		d.fail(new Exception("no timeout"));
+		assertTrue(t.isDone());
+		assertNotNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNotNull(p.getFailure());
+		assertSame(p.getFailure(), t.getFailure());
+	}
+
+	public void testTimeoutWithFailure2() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.fail(new Exception("no timeout"));
+		assertTrue(p.isDone());
+		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		assertTrue(t.isDone());
+		assertNotNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNotNull(p.getFailure());
+		assertSame(p.getFailure(), t.getFailure());
+	}
+
+	public void testTimeoutWithNegativeTimeoutResolved() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no timeout");
+		assertTrue(p.isDone());
+		Promise<String> t = p.timeout(-1, TimeUnit.SECONDS);
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+	}
+
+	public void testTimeoutWithNegativeTimeoutUnresolved() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.timeout(-1, TimeUnit.SECONDS);
+		assertNotNull(t.getFailure());
+		assertTrue(t.getFailure() instanceof TimeoutException);
+		assertTrue(t.isDone());
+		assertFalse(p.isDone());
+	}
+
+	public void testTimeoutWithZeroTimeoutResolved() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no timeout");
+		assertTrue(p.isDone());
+		Promise<String> t = p.timeout(0, TimeUnit.SECONDS);
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+	}
+
+	public void testTimeoutWithZeroTimeoutUnresolved() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.timeout(0, TimeUnit.SECONDS);
+		assertNotNull(t.getFailure());
+		assertTrue(t.getFailure() instanceof TimeoutException);
+		assertTrue(t.isDone());
+		assertFalse(p.isDone());
 	}
 }

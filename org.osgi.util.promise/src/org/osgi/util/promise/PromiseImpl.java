@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 
@@ -44,12 +49,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	private final ConcurrentLinkedQueue<Runnable>	callbacks;
 	/**
 	 * A CountDownLatch to manage the resolved state of this Promise.
-	 * 
 	 * <p>
 	 * This object is used as the synchronizing object to provide a critical
-	 * section in {@link #resolve(Object, Throwable)} so that only a single
+	 * section in {@link #tryResolve(Object, Throwable)} so that only a single
 	 * thread can write the resolved state variables and open the latch.
-	 * 
 	 * <p>
 	 * The resolved state variables, {@link #value} and {@link #fail}, must only
 	 * be written when the latch is closed (getCount() != 0) and must only be
@@ -96,16 +99,22 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * Resolve this Promise.
+	 * Try to resolve this Promise.
+	 * <p>
+	 * If this Promise was already resolved, return false. Otherwise, resolve
+	 * this Promise and return true.
 	 * 
 	 * @param v The value of this Promise.
 	 * @param f The failure of this Promise.
+	 * @return false if this Promise was already resolved; true if this method
+	 *         resolved this Promise.
+	 * @since 1.1
 	 */
-	void resolve(T v, Throwable f) {
+	boolean tryResolve(T v, Throwable f) {
 		// critical section: only one resolver at a time
 		synchronized (resolved) {
 			if (resolved.getCount() == 0) {
-				throw new IllegalStateException("Already resolved");
+				return false;
 			}
 			/*
 			 * The resolved state variables must be set before opening the
@@ -117,6 +126,23 @@ final class PromiseImpl<T> implements Promise<T> {
 			resolved.countDown();
 		}
 		notifyCallbacks(); // call any registered callbacks
+		return true;
+	}
+
+	/**
+	 * Resolve this Promise.
+	 * <p>
+	 * If this Promise was already resolved, throw IllegalStateException.
+	 * Otherwise, resolve this Promise.
+	 * 
+	 * @param v The value of this Promise.
+	 * @param f The failure of this Promise.
+	 * @throws IllegalStateException If this Promise was already resolved.
+	 */
+	void resolve(T v, Throwable f) {
+		if (!tryResolve(v, f)) {
+			throw new IllegalStateException("Already resolved");
+		}
 	}
 
 	/**
@@ -615,6 +641,65 @@ final class PromiseImpl<T> implements Promise<T> {
 			fallback.onResolve(new Chain<T>(chained, fallback, failure));
 		}
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @since 1.1
+	 */
+	@Override
+	public Promise<T> timeout(long timeout, TimeUnit unit) {
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		chained.resolveWith(this);
+		if (chained.isDone()) {
+			unit.toNanos(timeout); // make sure input values are not invalid
+		} else {
+			chained.onResolve(new Timeout(chained, timeout, unit));
+		}
+		return chained;
+	}
+
+	/**
+	 * Timeout class used by the {@link PromiseImpl#timeout(long, TimeUnit)}
+	 * method.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private static final class Timeout implements Runnable {
+		private static final ScheduledThreadPoolExecutor executor;
+		static {
+			executor = new ScheduledThreadPoolExecutor(1);
+			executor.setRemoveOnCancelPolicy(true);
+		}
+		private final ScheduledFuture< ? >	future;
+
+		Timeout(PromiseImpl< ? > chained, long timeout, TimeUnit unit) {
+			future = executor.schedule(new Action(chained), timeout, unit);
+		}
+
+		@Override
+		public void run() {
+			future.cancel(false);
+		}
+
+		/**
+		 * @Immutable
+		 */
+		private static final class Action implements Runnable {
+			private final PromiseImpl< ? > chained;
+			
+			Action(PromiseImpl< ? > chained) {
+				this.chained = chained;
+			}
+			
+			@Override
+			public void run() {
+				chained.tryResolve(null, new TimeoutException());
+			}
+		}
+	}
+
 
 	static <V> V requireNonNull(V value) {
 		if (value != null) {
