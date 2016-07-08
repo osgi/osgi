@@ -629,7 +629,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
       
       <section>
         <title>Annotation</title>
-        <para>Conversion to and from annotations is behaves identical to 
+        <para>Conversion to and from annotations behaves identical to 
         interface conversion with the added capability of specifying a default in the annotation definition.
         </para>
         
@@ -725,6 +725,66 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>To convert from other types to a map, a Collection of <code>Map.Entry</code> objects is constructed
         first. Subsequently each entry is inserted into the target map.</para>
       </section>
+    </section>
+
+    
+    <section>
+      <title>Priority</title>
+      
+      <para>In case multiple conversion rules match, the rule with the lowest priority is used.
+      </para>
+        <table>
+          <title>Conversion rule priority</title>
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Priority</entry>
+                <entry>Rule</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>1</entry>
+                <entry>annotation</entry>
+              </row>
+
+              <row>
+                <entry>2</entry>
+                <entry>interface</entry>
+              </row>
+              
+              <row>
+                <entry>3</entry>
+                <entry>OSGi DTO</entry>
+              </row>
+              
+              <row>
+                <entry>4</entry>
+                <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
+              </row>
+
+              <row>
+                <entry>5</entry>
+                <entry>JavaBean</entry>
+              </row>
+              
+              <row>
+                <entry>6</entry>
+                <entry>Collection</entry>
+              </row>
+              
+              <row>
+                <entry>7</entry>
+                <entry><code>Map.Entry</code></entry>
+              </row>
+              
+              <row>
+                <entry>8</entry>
+                <entry>scalar</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
     </section>
     
     <section>
