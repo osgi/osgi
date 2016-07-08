@@ -488,7 +488,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         <para>When converting into an interface the converter will create a dynamic proxy to 
         implement the interface. The name of the method returning the value should match the key 
         of the map entry, taking into account the mapping rules specified in 
-        table 112.9 of the R6 Declarative Service specification. <remark>proper xref</remark> 
+        <xref linkend="service.converter-key.mapping"/>.
         The key of the map may need to be converted into a <code>String</code> first.</para>
         
         <para>Conversion is done <emphasis>on demand</emphasis>: only when the method on 
@@ -517,6 +517,114 @@ boolean val2 = cfg.my_other_value(); // val2=true
         Default values are used when the key is not present in the map for the method. If a key is 
         present with a <code>null</code> value, then <code>null</code> is taken as the value and 
         converted to the target type.</para>
+        
+      <section xml:id="service.converter-key.mapping">
+        <title>Key Mapping</title>
+
+        <para>Each no-argument and each single-argument method that has a non-void return value of the interface is mapped to 
+        a key in the map. The key name is derived from the method name.
+        Certain common property name characters, such as full stop (<code>'.'
+        \u002E</code>) are not valid in Java identifiers. So the name of a
+        method must be converted to its corresponding property name as
+        follows:<itemizedlist>
+            <listitem>
+              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
+              unless it is followed by another dollar sign in which case the
+              two consecutive dollar signs (<code>"$$"</code>) are converted
+              to a single dollar sign.</para>
+            </listitem>
+
+            <listitem>
+              <para>A single low line (<code>'_' \u005F</code>) is converted
+              into a full stop (<code>'.' \u002E</code>) unless is it followed
+              by another low line in which case the two consecutive low lines
+              (<code>"__"</code>) are converted to a single low line.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref
+        linkend="service.converter-key.name.mapping"/> contains
+        some name mapping examples.</para>
+
+        <table xml:id="service.converter-key.name.mapping">
+          <title>Component Property Name Mapping Examples</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Component Property Type Method Name</entry>
+
+                <entry>Component Property Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>myProperty143</code></entry>
+
+                <entry><code>myProperty143</code></entry>
+              </row>
+
+              <row>
+                <entry><code>$new</code></entry>
+
+                <entry><code>new</code></entry>
+              </row>
+
+              <row>
+                <entry><code>my$$prop</code></entry>
+
+                <entry><code>my$prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>dot_prop</code></entry>
+
+                <entry><code>dot.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>_secret</code></entry>
+
+                <entry><code>.secret</code></entry>
+              </row>
+
+              <row>
+                <entry><code>another__prop</code></entry>
+
+                <entry><code>another_prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>three___prop</code></entry>
+
+                <entry><code>three_.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>four_$__prop</code></entry>
+
+                <entry><code>four._prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>five_$_prop</code></entry>
+
+                <entry><code>five..prop</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+        
       </section>
       
       <section>
