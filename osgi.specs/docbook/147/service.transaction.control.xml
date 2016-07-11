@@ -1672,6 +1672,137 @@ txControl.required(() ->
 
   </section>
   
+  <section>
+    <title>Transaction Recovery</title>
+    
+    <para>The XA transaction protocol defines a recovery mechanism which can be used to resolve 
+    in-doubt transactions. This is based upon the interaction of an XA Transaction Manager with 
+    an XAResource. In an OSGi environment resources may come and go at any time, as may Transaction 
+    Manager instances. Transaction recovery in OSGi is therefore a continuous, rather than a 
+    one-time process.</para>
+    
+    <para>There are two main recovery scenarios that must be resolved by a Transaction Manager:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>Failure of one or more remote resources before the end of the transaction.
+        In this case the Transaction Manager remains running and can roll-back or commit
+        the other resources as appropriate. When the failed resource(s) eventually become 
+        available again the Transaction Manager can complete the in-doubt Transaction branch 
+        by committing it or rolling it back as appropriate.</para>
+      </listitem>
+      <listitem>
+        <para>Failure of the Transaction Manager before the end of the transaction. In this 
+        case the Transaction Manager must use its recovery log to discover any in-doubt 
+        transaction branches. When the resources associated with the in-doubt transaction 
+        branches become available the Transaction Manager can resolve the in-doubt branch by 
+        committing or rolling it back as appropriate.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>In both of these cases it is cruicial that the Transaction Manager can uniquely identify
+    the resource that is being recovered. The Transaction Manager must be able to tell that a 
+    returning resource is suitable for recovering an in-doubt transaction branch.</para>
+     
+    <para>The transaction branch itself has an Xid, which could theoretically be used to identify
+    the resource. The problem with this, however, is that if the resource has already completed 
+    the transaction branch (for example if the failure occurred after sending a commit operation) 
+    then the resource may have discarded the Xid. We therefore require another identifier for a 
+    resource. The identifier must be unique to the Transaction Manager, but need not be Globally 
+    Unique. The identifier must also be persistent, i.e. the same resource must have the same 
+    identifier after a restart of the OSGi framework. This ensures that transaction recovery can 
+    occur after a system crash.</para> 
+    
+    <section>
+      <title>Enlisting a Recoverable Resource in a Transaction</title>
+      
+      <para>When a recoverable XA resource is associated with a TransactionContext using the 
+      <code>registerXAResource</code> method the resource identifier String is passed as a second
+      argument. This is the identifier that will be used to locate the resource during recovery. If 
+      the XAResource is not recoverable then it may simply pass null as the second argument when 
+      registering.</para>
+      
+    </section>
+    
+    <section>
+      <title>Providing an XAResource for Recovery</title>
+      
+      <para>When recovery is required the Transaction Manager may or may not be actively processing 
+      transactions involving the required recoverable resource. Therefore the Transaction Control 
+      service must be able to locate and obtain an XAResource instance for a named ResourceProvider.</para>
+      
+      <para>To enable this the ResourceProvider must provide a whiteboard service which implements 
+      the <code>RecoverableXAResource</code> interface. This interface provides the resource 
+      identifier, and acts as a factory for XAResources that can be used to recover Transaction 
+      Branches.</para>
+      
+      <para>The Transaction Control service can use this whiteboard to locate the correct 
+      XAResource to use. It may be, however, that when recovery is attempted it is not possible to 
+      provide a valid XAResource. In this case the RecoverableXAResource service may throw an 
+      exception. For example if the ResourceProvider is providing pooling and the pool is currently 
+      fully used then this may result in an exception.</para>
+      
+      <para>Once the Transaction Control service has finished attempting to recover a Transaction 
+      branch then it must release the XAResource it obtained from the RecoverableXAResource using 
+      the <code>releaseXAResource</code> method.</para>
+    </section>
+  </section>
+
+  <section xml:id="service.transaction.control-capabilities">
+    <title>Capabilities</title>
+
+    <para>Implementations of the Transaction Control Service specification must
+    provide a capability in the <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+        namespace representing the <xref
+        linkend="org.osgi.service.transaction.control.TransactionControl" xrefstyle="hyperlink"/>
+        service. This capability must also declare a uses constraint for the
+        <code>org.osgi.service.transaction.control</code> package, and attributes
+        indicating whether the service supports local and/or XA transactions. For example:</para>
+
+        <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;="org.osgi.service.transaction.control.TransactionControl";
+    uses:="org.osgi.service.transaction.control";osgi.local.enabled="true"</programlisting>
+
+   <para>Resource Provider Implementations must provide capabilities in the <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+        namespace representing the <xref
+        linkend="org.osgi.service.transaction.control.ResourceProvider" xrefstyle="hyperlink"/>
+        services and any factory services that they provide. These capabilities must also declare 
+        uses constraints for the<code>org.osgi.service.transaction.control</code> package and any
+        other packages that they provide. In the case where a more specific type is registered
+        (for example JDBCConnectionProvider) then that type should be used instead. The service
+        properties that indicate whether the resource provider supports local and/or XA 
+        transactions should be advertised as attributes.
+        
+        For example:</para>
+
+        <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
+    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider";uses:=
+    "org.osgi.service.transaction.control,org.osgi.service.transaction.control.jdbc";
+    osgi.local.enabled="true", 
+    osgi.service;objectClass:List&lt;String&gt;=
+    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory";uses:=
+    "org.osgi.service.transaction.control,org.osgi.service.transaction.control.jdbc";
+    osgi.local.enabled="true"</programlisting>
+
+        <para>These capabilities must follow the rules defined for the <xref
+        linkend="service.namespaces-osgi.service.namespace"/>.</para>
+   
+  </section>
+
+  <section xml:id="service.transaction.control-security">
+    <title>Security</title>
+
+    <para>Access to the Transaction Control service and to Resource Provider services
+    can be secured through the standard OSGi service permission model.</para>
+    
+    <para>Clients should be aware that when they run scoped work there will be 
+    code from the Transaction Control service on the stack. Client operations that
+    require specific privileges will therefore have to be performed inside a 
+    doPrivileged block.</para>
+  </section>
+
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.xml"/>
   
