@@ -1174,6 +1174,504 @@ txControl.build()
     </section>
   </section>
   
+  <section>
+    <title>Resource Providers</title>
+    
+    <para>It is important that clients can easily control the transaction boundaries within
+    their application, but it is equally important that the resources that the clients use 
+    participate in these transactions. In a Java EE Application server this is achieved by 
+    having the central application container create and manage all of the resources. In the 
+    Spring framework the Application context is responsible for ensuring that the resources 
+    are linked to a Transaction Manager.</para> 
+
+    <para>There is no central container in OSGi, and so a modular solution is required. This
+    specification defines the concept of a Resource Provider. A Resource Provider is a generic
+    service which can provide a resource of some kind to the client. The Resource Provider
+    exists to ensure that the resource being used will always be enlisted with the correct 
+    transaction context.</para>
+
+    <section>
+      <title>Generic Resource Providers</title>
+      
+      <para>The purpose of a ResourceProvider is to provide the client with a configured 
+      resource which will automatically integrate with the correct transaction context at 
+      runtime.</para>
+      
+      <para>Resources are created from a Resource Provider using the following method:</para>
+      
+      <programlisting>
+public &lt;T&gt; T getResource(TransactionControl txControl);
+      </programlisting>
+      
+      <para>Typically clients will not use a plain Resource Provider, but will search
+      for a specific subclass instead, which reifies the type parameter <code>T</code>.
+      This allows for type safe access to resources, and ensures that the correct
+      ResourceProvider implementation has been found.</para>
+      
+      <para>Resources returned by a Resource Provider are proxies to an underlying resource
+      factory. When the resource is accessed then then the proxy will check the current 
+      transaction scope. If this is the first time the resource has been accessed in the scope
+      then the factory returns a new copy of the resource. If the scope is a Transaction scope
+      then the resource must also be enlisted into the transaction at this point. 
+      Subsequent resource access within the same scope must use the same backing resource.</para>
+
+      <section>
+        <title>Resource Lifecycle</title>
+        
+        <para>When a scope finishes any resources associated with the scope must be cleaned up 
+        without action required by the client. This rule applies to both the Transaction scope 
+        and the No Transaction scope, meaning that a client can safely write code using 
+        <code>TransactionControl#supports</code> without being concerned about resource leaks.</para>
+      </section>
+
+      <section>
+        <title>Unscoped Resource Access</title>
+        
+        <para>If a resource is accessed by unscoped code then it may throw a TransactionException 
+        to indicate that it cannot be used.</para>
+      </section>
+
+      <section>
+        <title>Closing, Flushing and Committing Resources</title>
+        
+        <para>Most resources offer programmatic APIs for transaction and lifecycle management.
+        For example <code>java.sql.Connection</code> has methods called <code>commit</code>
+        and <code>close</code>.</para>
+        
+        <para>If a client attempts to close a scoped resource then this operation should be 
+        silently ignored. The resource will be automatically cleaned up when the current 
+        scope completes and so there is no need to manually close the resource. Furthermore,
+        if the resource were prematurely closed then it may prevent other services from 
+        accessing the resource within this scope.</para>
+        
+        <para>If the resource is being used in a Transaction Scope then any transaction 
+        lifecycle methods, such as <code>commit</code> or <code>rollback</code>, must
+        not delegate to the real resource and must throw a TransactionException instead.</para>
+      </section>
+
+    </section>
+
+    <section>
+      <title>JDBC Resource Providers</title>
+    
+      <para>One of the most common resources to use in a transaction is a JDBC Connection. 
+      This specification therefore defines a specialised resource provider for obtaining 
+      JDBC Connections called a <code>JDBCConnectionProvider</code>. The purpose of this type 
+      is simply to reifiy the generic type of the ResourceProvider interface.</para>
+      
+      <para>The scoped resource for a JDBC Connection Provider is a JDBC connection. The
+      scoped resource allows for JDBC connections to be transparently pooled, enlisted in
+      Transaction Scopes, and automatically closed.</para>
+      
+      <section>
+        <title>JDBC and Transaction Scopes</title>
+        <para>When enlisted in an Active Transaction a JDBC connection will have autocommit
+        set to false. Also the following methods must not be called by the client and must 
+        trigger a <code>TransactionException</code> if called.</para>
+        
+        <itemizedlist>
+          <listitem><para><code>commit()</code></para></listitem>
+          <listitem><para><code>setAutoCommit()</code></para></listitem>
+          <listitem><para><code>setSavepoint()</code></para></listitem>
+          <listitem><para><code>setSavepoint(String)</code></para></listitem>
+          <listitem><para><code>releaseSavepoint()</code></para></listitem>
+          <listitem><para><code>rollback()</code></para></listitem>
+          <listitem><para><code>rollback(Savepoint)</code></para></listitem>
+        </itemizedlist>
+        
+        <para>If the Active Transaction commits the JDBC Connection must commit any work 
+        performed in the transaction. Similarly if the Active Transaction rolls back then 
+        the JDBC Connection must roll back any work performed in the transaction. After the 
+        transaction completes the JDBC connection must be cleaned up in an appropriate way, 
+        for example by closing it or returning it to a connection pool. There is no need for
+        the client to close the connection, and any attempt to do so must be ignored by the 
+        resource provider.</para>
+      </section>
+    
+      <section>
+        <title>JDBC and No Transaction Scopes</title>
+        
+        <para>When accessed with from the No Transaction scope the JDBC connection may have 
+        autocommit set to true or false depending on the underlying configuration of the 
+        resource provider. This value may be changed by the client by using 
+        <code>setAutoCommit</code> within the scope, but the value will be reset after the 
+        end of the scope.</para>
+        
+        <para>In the No Transaction context the JDBC connection will not be committed or rolled 
+        back by the Transaction Control Service or the Resource Provider. It is therefore the 
+        client's responsibility to call <code>commit</code> or <code>rollback</code> if 
+        appropriate. Savepoints may be used for partial rollback if desired.</para>
+        
+        <para>After the end of the scope the JDBC connection must be automatically cleaned up 
+        by the Resource Provider in an appropriate way, for example by closing it or returning 
+        it to a connection pool. There is no need for the client to close the connection, and
+        any attempt to do so must be ignored by the resource provider.</para>
+      </section>
+      
+      <section>
+        <title>Closing the JDBC connection</title>
+        
+        <para>As for all resource providers, calls to close() the connection must be ignored. 
+        JDBC connections also have an abort() method. Abort is effectively an asynchnonous 
+        close operation for a JDBC connection, and so must also be ignored for any scoped 
+        connection.</para>
+      </section>
+      
+      <section>
+        <title>The JDBCConnectionProviderFactory</title>
+        
+        <para>The JDBCConnectionProvider may be provided as a service directly in the OSGi 
+        service registry, however this may not be acceptable in all use cases. JDBC 
+        Connections are often authenticated using a username and password. If the username 
+        and password relate to a specific bundle then it may not be appropriate to have the 
+        fully configured connections available in the Service Registry. In this case the 
+        JDBCConnectionProviderFactory offers several factory methods that can programatically
+        create a JDBCConnectionProvider.</para>
+      
+        <section>
+          <title>JDBCConnectionProvider Configuration</title>
+          
+          <para>Each factory method on the JDBCConnectionProviderFactory supplies set of 
+          properties which are used to configure the JDBCConnectionProvider, including the 
+          connection pooling behaviour, and whether the ResourceProvider can be enlisted 
+          with XA and/or Local transactions.</para>
+  
+          <para>By default the JDBCConnectionProvider will have a pool of 10 connections 
+          with a connection timeout of 30 seconds, an idle timeout of 10 minutes and a 
+          maximum connection lifetime of 3 hours. The JDBCConnectionProvider will also, by 
+          default, work all transaction types supported by the resource provider.</para>
+          
+          <para>If the JDBCConnectionProvider is configured to enable XA then the 
+          DataSourceFactory being used must support XADataSource creation. If a pre-configured
+          DataSource is supplied then it must be able to be unwrapped to an XADataSource.</para>
+        </section>
+        
+        <section>
+          <title>Creating a JDBCConnectionProvider Using a DataSourceFactory</title>
+          
+          <para>In this case the client provides the DataSourceFactory that should be used, 
+          along with the properties that should be used to create the DataSource/XADataSource. 
+          If XA transactions are enabled then the factory must create an XADataSource, otherwise 
+          the “osgi.use.driver” property can be used to force the creation of a Driver instance 
+          rather than a DataSource.</para>
+        
+        </section>
+
+        <section>
+          <title>Creating a JDBCConnectionProvider Using a DataSource</title>
+          
+          <para>In this case the client provides a pre-configured DataSource that should be used. 
+          If XA transactions are enabled then the DataSource must be be able to be unwrapped to
+          an XADataSource using the <code>unwrap</code> method.</para>
+        </section>
+        
+        <section>
+          <title>Creating a JDBCConnectionProvider Using an XADataSource</title>
+          
+          <para>In this case the client provides a preconfigured XADataSource that should be used
+          by the resource provider.</para>
+        </section>
+
+        <section>
+          <title>Creating a JDBCConnectionProvider Using a Driver</title>
+          
+          <para>In this case the client provides an instantiated driver class that should be used, 
+          along with the properties that should be used to create the JDBC connection. The JDBC
+          properties must include a JDBC url to use when connecting to the database. 
+          XA transactions may not be enabled when using a Driver instance.</para>
+        </section>
+      </section>
+      
+      <section>
+         <title>JDBCResourceProvider Examples</title>
+         
+         <para>Setting up data Access with Declarative Services:</para>
+         <programlisting>
+@Reference
+TransactionControl txControl;
+
+@Reference
+JDBCConnectionProviderFactory resourceProviderFactory;
+
+@Reference
+DataSourceFactory dsf;
+
+Connection connection;
+
+@Activate
+public void setUp(Config config) {
+    Properties jdbc = new Properties();
+    jdbc.setProperty(JDBC_URL, config.getURL());
+        
+    connection = resourceProviderFactory.getProviderFor(dsf, jdbc, null)
+                    .getResource(txControl);
+}
+         </programlisting>
+
+         <para>Reading data from a table:</para>
+         <programlisting>
+txControl.supports(() -> {
+        ResultSet rs = connection.createStatement()
+                .executeQuery("Select message from TEST_TABLE");
+
+        rs.next();
+        return rs.getString(1);
+    });
+         </programlisting>
+
+         <para>Updating a table:</para>
+         <programlisting>
+txControl.required(() -> 
+        connection.createStatement()
+           .execute("Insert into TEST_TABLE values ( 'Hello World!' )")
+    );
+         </programlisting>
+      </section>
+      
+    </section>
+
+    <section>
+      <title>JPA</title>
+      
+      <para>JPA is a popular Object Relational Mapping (ORM) framework used to abstract
+      away the low-level database access from business code. As an alternative means of 
+      accessing a database it is just as important for JPA resources to participate in 
+      transactions as it is for JDBC resources. This RFC therefore defines the 
+      <code>JPAEntityManagerProvider</code> interface as a specialised resource provider 
+      for JPA.</para>
+      
+      <section>
+        <title>JPA and Transaction Scopes</title>
+        <para>When enlisted in a Transaction a JPA EntityManager will automatically
+        track the state of persisted entity types and update the database as necessary. When 
+        participating in a transaction it is forbidden to call the <code>getTransaction</code>
+        method on the EntityManager as manual transaction management is disabled.</para>
+
+        <para>If the Transaction commits the JPA EntityManager must commit any work 
+        performed in the transaction. Similarly if the Transaction rolls back then 
+        the JPA EntityManager must roll back any work performed in the transaction. After the 
+        transaction completes the JPA EntityMAnager must be cleaned up in an appropriate way, 
+        for example by closing it or returning it to a pool. There is no need for
+        the client to close the entity manager, and any attempt to do so must be ignored by the 
+        resource provider.</para>
+      </section>
+      
+      <section>
+        <title>JPA and No Transaction Scopes</title>
+        <para>When accessed with from the No Transaction scope the JPA EntityManager will not 
+        be participating in a Transaction or rolled back, it is therefore the client's 
+        responsibility to set up an EntityTransaction and to call <code>commit</code> or 
+        <code>rollback</code> as appropriate.</para>
+
+        <para>After the end of the scope the EntityManager must be automatically cleaned 
+        up in an appropriate way, for example by closing it or returning it to a pool.</para>
+      </section>
+      
+      <section>
+        <title>RESOURCE_LOCAL and JTA EntityManagerFactory instances</title>
+        
+        <para>When defining a JPA Persistence Unit the author must declare whether the 
+        EntityManagerFactory integrates with JTA transactions, or is suitable for resource 
+        local usage. The JPAEntityManagerProvider must take this into account when creating the 
+        transactional resource.</para>
+        
+        <para>JTA scoped EntityManager instances may not manage their own transactions and must 
+        throw a JPA TransactionRequiredException if the client attempts to use the EntityTransaction 
+        interface. In effect the EntityManager behaves as a Synchronized, Transaction-Scoped, 
+        Managed Persistence Context as per the JPA 2.1 Specification. It is important to ensure 
+        that the Database connections used in a JTA Persistence Unit are integrated with the ongoing 
+        transaction.</para>
+        
+        <para>RESOURCE_LOCAL scoped EntityManager instances may not participate in XA transactions, 
+        but otherwise behave in much the same way as JTA EntityManager instances. The one significant 
+        difference is that RESOURCE_LOCAL EntityManager instances may obtain an EntityTransaction 
+        when running in the No Transaction context.</para>
+      </section>
+      
+      <section>
+        <title>The JPAEntityManagerProvider Factory</title>
+        
+        <para>The JPAEntityManagerProvider may be provided directly in the OSGi service registry, 
+        however this may not be acceptable in all use cases. Database Connections are often 
+        authenticated using a username and password. If the username and password relate to a 
+        specific bundle then it may not be appropriate to have the configured connections available 
+        in the Service Registry. In this case the JPAEntityManagerProviderFactory offers several 
+        factory methods that can programmatically create a JPAEntityManagerProvider.</para>
+        
+        <section> 
+          <title>Creating a JPAEntityManagerProvider Using an EntityManagerFactoryBuilder</title>
+          
+          <para>In this case the client provides the EntityManagerFactoryBuilder that should be used, 
+          along with the properties that should be used to create the EntityManagerFactory.</para>
+          
+          <para>The typical reason for using an EntityManagerFactoryBuilder is to allow for the
+          late binding of configuration, such as the database location. To support this usage
+          pattern it is best to specify as few properties as possible inside the persistence
+          descriptor. For example:</para>
+          
+          <programlisting>
+&lt;persistence-unit name="test-unit"&gt;
+  &lt;description>My application's persistence unit&lt;/description&gt;
+&lt;/persistence-unit&gt;
+          </programlisting>
+          
+          <para>Passing String class names and expecting the JPA provider to load the 
+          Database driver reflectively should be avoided, however a configured DataSource can
+          be passed using the <code>javax.persistence.jtaDataSource</code> property.</para>
+          
+          <para>The <code>osgi.jdbc.provider</code> property can be passed to the resource provider 
+          defining a JDBCConnectionProvider that should be converted into a DataSource and 
+          passed to the EntityManageFactoryBuilder using the javax.persistence.jtaDataSource
+          property. This allows the same physical database connection to be used by JPA and
+          by JDBC within the same scope.</para>
+        
+        </section>
+
+        <section> 
+          <title>Creating a JPAEntityManagerProvider Using an EntityManagerFactory</title>
+          
+          <para>In this case the client provides the configured EntityManagerFactory that 
+          should be used, along with the properties that should be used to create the 
+          EntityManager.</para>
+        
+        </section>
+      </section>
+    </section> 
+    
+    <section>
+      <title>Connection Pooling</title>
+      
+      <para>Database connections are usually heavyweight objects that require significant time
+      to create. They may also consume physical resources such as memory or network ports. 
+      Creating a new database connection for every request is therefore wasteful, and adds 
+      unnecessary load to both the application and the database. Caching of database connections 
+      is therefore a useful way of improving performance. On the other hand applications must be 
+      careful not to create too many database connections. If one thousand requests arrive 
+      simultaneously then creating one thousand database connections is likely to crash the 
+      database server. These two requirements make database connections an excellent candidate for 
+      pooling. A small number of connections are made available and recycled after use. This saves 
+      the cost of recreating the connection and limits the overall load on the database.</para>
+      
+      <para>In fact pooling is an excellent solution for many transactional resources, including 
+      JMS and EIS access.</para>
+      
+      <section>
+        <title>Pooling in OSGi</title>
+        <para>Pooling has traditionally been difficult in OSGi because most connection pooling 
+        libraries use reflective access to load the underlying resource connector. This obviously 
+        fails unless the pooling library creates a static wiring to the connector, or has dynamic 
+        package imports. Both of these solutions are bad practices which create brittle 
+        dependencies.</para>
+        
+        <para>The correct way to obtain Database connections in OSGi is to use a DataSourceFactory, 
+        however this offers no Connection Pooling. There is no real equivalent of a 
+        DataSourceFactory for JMS ConnectionFactory instances, but they also require manual 
+        decoration to enable connection pooling.</para>
+        
+        <para>As pooling is such a core requirement for transactional resource access it is 
+        required for JDBCConnectionProviderFactory and JPAEntityManagerProviderFactory 
+        instances to offer connection pooling. The resource provider properties can be used 
+        to override the connection pooling configuration defaults (or to disable connection 
+        pooling entirely).</para>
+        
+        <para>Third party resource providers should offer connection pooling using the same
+        configuration properties and defaults wherever possible.</para>
+        
+        <table>
+          <title>Pooling configuration properties</title>
+
+          <tgroup cols="3">
+            <colspec colnum="1" colwidth="2.3*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <colspec colnum="3" colwidth="2.3*"/>
+
+            <thead>
+              <row>
+                <entry>Property Name</entry>
+
+                <entry>Default</entry>
+
+                <entry>Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>
+                  <code>osgi.connection.pooling.enabled</code>
+                </entry>
+                <entry>
+                  <code>true</code>
+                </entry>
+                <entry>
+                  <para>Whether connection pooling is enabled for this ResourceProvider</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <code>osgi.connection.timeout</code>
+                </entry>
+                <entry>
+                  <code>30000</code>
+                </entry>
+                <entry>
+                  <para>The maximum time that a client will wait for a connection (in ms)</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <code>osgi.idle.timeout</code>
+                </entry>
+                <entry>
+                  <code>180000</code>
+                </entry>
+                <entry>
+                  <para>The time that a connection will remain idle before being closed (in ms)</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <code>osgi.connection.lifetime</code>
+                </entry>
+                <entry>
+                  <code>10800000</code>
+                </entry>
+                <entry>
+                  <para>The maximum time that a connection will remain open (in ms)</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <code>osgi.connection.min</code>
+                </entry>
+                <entry>
+                  <code>10</code>
+                </entry>
+                <entry>
+                  <para>The minimum number of connections that will be kept alive</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <code>osgi.connection.max</code>
+                </entry>
+                <entry>
+                  <code>10</code>
+                </entry>
+                <entry>
+                  <para>The maximum number of connections that will exist in the pool</para>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+    </section>
+
+  </section>
+  
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.transaction.control.xml"/>
   
