@@ -689,7 +689,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	private static final class Timeout implements Runnable {
 		private static final ScheduledThreadPoolExecutor executor;
 		static {
-			executor = new ScheduledThreadPoolExecutor(1);
+			executor = new ScheduledThreadPoolExecutor(2);
 			executor.setRemoveOnCancelPolicy(true);
 		}
 		private final ScheduledFuture< ? >	future;
