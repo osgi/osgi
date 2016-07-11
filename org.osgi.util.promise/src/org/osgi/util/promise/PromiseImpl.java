@@ -20,8 +20,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -689,7 +691,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	private static final class Timeout implements Runnable {
 		private static final ScheduledThreadPoolExecutor executor;
 		static {
-			executor = new ScheduledThreadPoolExecutor(2);
+			executor = new ScheduledThreadPoolExecutor(2, new Factory());
 			executor.setRemoveOnCancelPolicy(true);
 		}
 		private final ScheduledFuture< ? >	future;
@@ -718,8 +720,26 @@ final class PromiseImpl<T> implements Promise<T> {
 				chained.tryResolve(null, new TimeoutException());
 			}
 		}
-	}
 
+		/**
+		 * @Immutable
+		 */
+		private static final class Factory implements ThreadFactory {
+			private final ThreadFactory defaultThreadFactory;
+
+			Factory() {
+				defaultThreadFactory = Executors.defaultThreadFactory();
+			}
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread t = defaultThreadFactory.newThread(r);
+				// timeout threads should not prevent VM from exiting
+				t.setDaemon(true);
+				return t;
+			}
+		}
+	}
 
 	static <V> V requireNonNull(V value) {
 		if (value != null) {
