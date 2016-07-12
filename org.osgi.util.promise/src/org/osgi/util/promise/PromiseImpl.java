@@ -205,8 +205,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	public String toString() {
 		try {
 			if (isDone()) {
-				Throwable t;
-				t = getFailure();
+				Throwable t = getFailure();
 				if (t != null) {
 					return "failed: " + String.valueOf(t);
 				}
@@ -689,15 +688,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @since 1.1
 	 */
 	private static final class Timeout implements Runnable {
-		private static final ScheduledThreadPoolExecutor executor;
-		static {
-			executor = new ScheduledThreadPoolExecutor(2, new Factory());
-			executor.setRemoveOnCancelPolicy(true);
-		}
-		private final ScheduledFuture< ? >	future;
+		private final ScheduledFuture< ? > future;
 
 		Timeout(PromiseImpl< ? > chained, long timeout, TimeUnit unit) {
-			future = executor.schedule(new Action(chained), timeout, unit);
+			future = Scheduler.schedule(new Action(chained), timeout, unit);
 		}
 
 		@Override
@@ -710,11 +704,11 @@ final class PromiseImpl<T> implements Promise<T> {
 		 */
 		private static final class Action implements Runnable {
 			private final PromiseImpl< ? > chained;
-			
+
 			Action(PromiseImpl< ? > chained) {
 				this.chained = chained;
 			}
-			
+
 			@Override
 			public void run() {
 				chained.tryResolve(null, new TimeoutException());
@@ -724,19 +718,51 @@ final class PromiseImpl<T> implements Promise<T> {
 		/**
 		 * @Immutable
 		 */
-		private static final class Factory implements ThreadFactory {
-			private final ThreadFactory defaultThreadFactory;
-
-			Factory() {
+		private static final class Scheduler
+				implements ThreadFactory, Runnable {
+			private static final ThreadFactory					defaultThreadFactory;
+			private static final ScheduledThreadPoolExecutor	executor;
+			static {
+				Scheduler scheduler = new Scheduler();
 				defaultThreadFactory = Executors.defaultThreadFactory();
+				executor = new ScheduledThreadPoolExecutor(2, scheduler);
+				executor.setRemoveOnCancelPolicy(true);
+				executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(
+						false);
+				Thread shutdown = scheduler.newThread(scheduler);
+				shutdown.setDaemon(false);
+				Runtime.getRuntime().addShutdownHook(shutdown);
 			}
 
+			static ScheduledFuture< ? > schedule(Runnable action, long timeout,
+					TimeUnit unit) {
+				return executor.schedule(action, timeout, unit);
+			}
+
+			private Scheduler() {}
+
+			/**
+			 * Timeout threads should not prevent VM from exiting
+			 */
 			@Override
 			public Thread newThread(Runnable r) {
 				Thread t = defaultThreadFactory.newThread(r);
-				// timeout threads should not prevent VM from exiting
+				t.setName("PromiseImpl-" + t.getName());
 				t.setDaemon(true);
 				return t;
+			}
+
+			/**
+			 * Shutdown hook
+			 */
+			@Override
+			public void run() {
+				executor.shutdown();
+				try {
+					executor.awaitTermination(120, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					// ignore
+				}
 			}
 		}
 	}
