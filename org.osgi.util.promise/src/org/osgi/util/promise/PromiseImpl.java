@@ -165,7 +165,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * executed cannot be specified.
 		 */
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
-			Callbacks.submit(callback);
+			Callbacks.execute(callback);
 		}
 	}
 
@@ -761,9 +761,9 @@ final class PromiseImpl<T> implements Promise<T> {
 			}
 		}
 
-		static void submit(Runnable callback) {
+		static void execute(Runnable callback) {
 			try {
-				executor.submit(callback);
+				executor.execute(callback);
 			} catch (RejectedExecutionException e) {
 				safeRun(callback);
 			}
