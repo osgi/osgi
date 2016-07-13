@@ -19,7 +19,10 @@ package org.osgi.service.zigbee;
 import java.util.Map;
 
 /**
- * This interface represents a ZCL Cluster
+ * This interface represents a ZCL Cluster. Along with methods to retrieve the
+ * cluster information, like its ID, it provides methods to asynchronously send
+ * commands to the cluster and other methods that wrap most of the ZCL general
+ * commands.
  * 
  * @author $Id$
  */
@@ -65,16 +68,17 @@ public interface ZCLCluster {
 	void getAttribute(int attributeId, ZigBeeHandler handler);
 
 	/**
-	 * Get the cluster {@link ZCLAttribute} identifying corresponding attribute
-	 * of a specific Manufacturer or the standard attribute
+	 * Get a manufacturer specific cluster {@link ZCLAttribute}. If the
+	 * {@code code} parameter is -1 it retrieves a non-manufacturer specific
+	 * attribute.
 	 * 
 	 * @param attributeId an Attribute identifier
 	 * @param code the int representing the Manufacturer code for getting the
-	 *        vendor specific attribute, use -1 if looking for standard
+	 *        vendor specific attribute, use -1 if looking for a standard
 	 *        attribute
 	 * @param handler the response handler. The
 	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked with the
-	 *        proper {@link ZCLAttribute}
+	 *        requested {@link ZCLAttribute}.
 	 */
 	void getAttribute(int attributeId, int code, ZigBeeHandler handler);
 
