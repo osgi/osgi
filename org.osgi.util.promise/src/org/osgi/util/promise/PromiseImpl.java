@@ -18,9 +18,13 @@ package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -157,15 +161,25 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		/*
 		 * Note: multiple threads can be in this method removing callbacks from
-		 * the queue and calling them, so the order in which callbacks are
-		 * called cannot be specified.
+		 * the queue and executing them, so the order in which callbacks are
+		 * executed cannot be specified.
 		 */
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
-			try {
-				callback.run();
-			} catch (Throwable t) {
-				Logger.logCallbackException(t);
-			}
+			safeRun(callback);
+		}
+	}
+
+	/**
+	 * Safely call the callback. Catch any exceptions and log them.
+	 * 
+	 * @param callback The callback to run
+	 * @since 1.1
+	 */
+	static void safeRun(Runnable callback) {
+		try {
+			callback.run();
+		} catch (Throwable t) {
+			Logger.logCallbackException(t);
 		}
 	}
 
@@ -671,18 +685,17 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> timeout(long timeout, TimeUnit unit) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		chained.resolveWith(this);
-		if (chained.isDone()) {
-			unit.toNanos(timeout); // make sure input values are not invalid
-		} else {
-			chained.onResolve(new Timeout(chained, timeout, unit));
+		unit = requireNonNull(unit);
+		if (!isDone()) {
+			onResolve(new Timeout(chained, timeout, unit));
 		}
+		chained.resolveWith(this);
 		return chained;
 	}
 
 	/**
 	 * Timeout class used by the {@link PromiseImpl#timeout(long, TimeUnit)}
-	 * method.
+	 * method to cancel timeout when the Promise is resolved.
 	 * 
 	 * @Immutable
 	 * @since 1.1
@@ -691,15 +704,19 @@ final class PromiseImpl<T> implements Promise<T> {
 		private final ScheduledFuture< ? > future;
 
 		Timeout(PromiseImpl< ? > chained, long timeout, TimeUnit unit) {
-			future = Scheduler.schedule(new Action(chained), timeout, unit);
+			future = Callbacks.schedule(new Action(chained), timeout, unit);
 		}
 
 		@Override
 		public void run() {
-			future.cancel(false);
+			if (future != null) {
+				future.cancel(false);
+			}
 		}
 
 		/**
+		 * Callback used to fail the Promise if the timeout expires.
+		 * 
 		 * @Immutable
 		 */
 		private static final class Action implements Runnable {
@@ -714,40 +731,81 @@ final class PromiseImpl<T> implements Promise<T> {
 				chained.tryResolve(null, new TimeoutException());
 			}
 		}
+	}
+
+	/**
+	 * Callback handler used to asynchronously execute callbacks.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private static final class Callbacks {
+		private static final CallbackExecutor executor;
+		static {
+			executor = new CallbackExecutor(2);
+			executor.installShutdownHook();
+		}
+
+		static ScheduledFuture< ? > schedule(Runnable callback, long timeout,
+				TimeUnit unit) {
+			try {
+				return executor.schedule(callback, timeout, unit);
+			} catch (RejectedExecutionException e) {
+				safeRun(callback);
+				return null;
+			}
+		}
+
+		private Callbacks() {}
 
 		/**
-		 * @Immutable
+		 * ScheduledThreadPoolExecutor for callback execution.
+		 * 
+		 * @ThreadSafe
 		 */
-		private static final class Scheduler
-				implements ThreadFactory, Runnable {
-			private static final ThreadFactory					defaultThreadFactory;
-			private static final ScheduledThreadPoolExecutor	executor;
-			static {
-				Scheduler scheduler = new Scheduler();
-				defaultThreadFactory = Executors.defaultThreadFactory();
-				executor = new ScheduledThreadPoolExecutor(2, scheduler);
-				executor.setRemoveOnCancelPolicy(true);
-				executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(
-						false);
-				Thread shutdown = scheduler.newThread(scheduler);
-				shutdown.setDaemon(false);
-				Runtime.getRuntime().addShutdownHook(shutdown);
+		private static final class CallbackExecutor extends
+				ScheduledThreadPoolExecutor implements ThreadFactory, Runnable {
+			private final ThreadFactory delegateThreadFactory;
+
+			CallbackExecutor(int corePoolSize) {
+				super(corePoolSize);
+				delegateThreadFactory = Executors.defaultThreadFactory();
+				setThreadFactory(this);
+				setRemoveOnCancelPolicy(true);
 			}
 
-			static ScheduledFuture< ? > schedule(Runnable action, long timeout,
-					TimeUnit unit) {
-				return executor.schedule(action, timeout, unit);
+			void installShutdownHook() {
+				Thread shutdownHook = newThread(this);
+				shutdownHook.setDaemon(false);
+				Runtime.getRuntime().addShutdownHook(shutdownHook);
 			}
-
-			private Scheduler() {}
 
 			/**
-			 * Timeout threads should not prevent VM from exiting
+			 * Log uncaught exceptions
+			 */
+			@Override
+			protected void afterExecute(Runnable r, Throwable t) {
+				super.afterExecute(r, t);
+				if (r instanceof Future< ? >) {
+					try {
+						((Future< ? >) r).get();
+					} catch (CancellationException e) {
+						// ignore
+					} catch (ExecutionException e) {
+						Logger.logCallbackException(e.getCause());
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+				}
+			}
+
+			/**
+			 * Executor threads should not prevent VM from exiting
 			 */
 			@Override
 			public Thread newThread(Runnable r) {
-				Thread t = defaultThreadFactory.newThread(r);
-				t.setName("PromiseImpl-" + t.getName());
+				Thread t = delegateThreadFactory.newThread(r);
+				t.setName("CallbackExecutor-" + t.getName());
 				t.setDaemon(true);
 				return t;
 			}
@@ -757,11 +815,11 @@ final class PromiseImpl<T> implements Promise<T> {
 			 */
 			@Override
 			public void run() {
-				executor.shutdown();
+				shutdown();
 				try {
-					executor.awaitTermination(120, TimeUnit.SECONDS);
+					awaitTermination(120, TimeUnit.SECONDS);
 				} catch (InterruptedException e) {
-					// ignore
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
