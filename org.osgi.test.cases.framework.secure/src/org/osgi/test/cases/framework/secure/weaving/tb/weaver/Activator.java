@@ -18,8 +18,6 @@ package org.osgi.test.cases.framework.secure.weaving.tb.weaver;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -28,7 +26,9 @@ import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.test.cases.framework.secure.junit.hooks.weaving.TestConstants;
 import org.osgi.test.support.OSGiTestCase;
 
-public class Activator extends OSGiTestCase implements BundleActivator {
+import junit.framework.TestCase;
+
+public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		TestWeavingHook hook = new TestWeavingHook();
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -41,7 +41,7 @@ public class Activator extends OSGiTestCase implements BundleActivator {
 			catch (Throwable t) {
 				if (!TestConstants.isRethrowingSecurityException() &&
 						!TestConstants.isInvalidSetBytes())
-					fail("Class should have loaded", t);
+					OSGiTestCase.fail("Class should have loaded", t);
 			}
 			TestCase.assertTrue("Failed to call weaving hook", hook.isCalled());
 			if (hook.getError() != null)
