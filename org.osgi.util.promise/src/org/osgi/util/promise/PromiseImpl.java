@@ -217,17 +217,22 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public String toString() {
-		try {
-			if (isDone()) {
-				Throwable t = getFailure();
-				if (t != null) {
-					return "failed: " + String.valueOf(t);
-				}
-				return "resolved: " + String.valueOf(getValue());
-			}
+		if (!isDone()) {
 			return "unresolved";
+		}
+		final boolean interrupted = Thread.interrupted();
+		try {
+			Throwable t = getFailure();
+			if (t != null) {
+				return "failed: " + String.valueOf(t);
+			}
+			return "resolved: " + String.valueOf(getValue());
 		} catch (InterruptedException | InvocationTargetException e) {
 			return String.valueOf(e);
+		} finally {
+			if (interrupted) { // restore interrupt status
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -795,14 +800,17 @@ final class PromiseImpl<T> implements Promise<T> {
 			protected void afterExecute(Runnable r, Throwable t) {
 				super.afterExecute(r, t);
 				if (r instanceof Future< ? >) {
+					final boolean interrupted = Thread.interrupted();
 					try {
 						((Future< ? >) r).get();
-					} catch (CancellationException e) {
+					} catch (CancellationException | InterruptedException e) {
 						// ignore
 					} catch (ExecutionException e) {
 						Logger.logCallbackException(e.getCause());
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+					} finally {
+						if (interrupted) { // restore interrupt status
+							Thread.currentThread().interrupt();
+						}
 					}
 				}
 			}
