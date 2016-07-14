@@ -217,17 +217,17 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public String toString() {
 		if (!isDone()) {
-			return "unresolved";
+			return super.toString() + "[unresolved]";
 		}
 		final boolean interrupted = Thread.interrupted();
 		try {
 			Throwable t = getFailure();
 			if (t != null) {
-				return "failed: " + String.valueOf(t);
+				return super.toString() + "[failed: " + t + "]";
 			}
-			return "resolved: " + String.valueOf(getValue());
+			return super.toString() + "[resolved: " + getValue() + "]";
 		} catch (InterruptedException | InvocationTargetException e) {
-			return String.valueOf(e);
+			return super.toString() + "[" + e + "]";
 		} finally {
 			if (interrupted) { // restore interrupt status
 				Thread.currentThread().interrupt();
