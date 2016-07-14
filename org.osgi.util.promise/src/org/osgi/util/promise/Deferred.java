@@ -64,7 +64,7 @@ public class Deferred<T> {
 	 * After the associated Promise is resolved with the specified value, all
 	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
 	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
-	 * 
+	 * This may occur asynchronously to this method.
 	 * <p>
 	 * Resolving the associated Promise <i>happens-before</i> any registered
 	 * callback is called. That is, in a registered callback,
@@ -87,7 +87,7 @@ public class Deferred<T> {
 	 * After the associated Promise is resolved with the specified failure, all
 	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
 	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
-	 * 
+	 * This may occur asynchronously to this method.
 	 * <p>
 	 * Resolving the associated Promise <i>happens-before</i> any registered
 	 * callback is called. That is, in a registered callback,
@@ -118,7 +118,7 @@ public class Deferred<T> {
 	 * After the associated Promise is resolved with the specified Promise, all
 	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
 	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
-	 * 
+	 * This may occur asynchronously to this method.
 	 * <p>
 	 * Resolving the associated Promise <i>happens-before</i> any registered
 	 * callback is called. That is, in a registered callback,
