@@ -18,6 +18,7 @@ package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -25,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -798,17 +800,23 @@ final class PromiseImpl<T> implements Promise<T> {
 			protected void afterExecute(Runnable r, Throwable t) {
 				super.afterExecute(r, t);
 				if (r instanceof Future< ? >) {
-					final boolean interrupted = Thread.interrupted();
-					try {
-						((Future< ? >) r).get();
-					} catch (CancellationException | InterruptedException e) {
-						// ignore
-					} catch (ExecutionException e) {
-						Logger.logCallbackException(e.getCause());
-					} finally {
-						if (interrupted) { // restore interrupt status
-							Thread.currentThread().interrupt();
-						}
+					logCallbackException((Future< ? >) r);
+				}
+			}
+
+			private static void logCallbackException(Future< ? > future) {
+				boolean interrupted = Thread.interrupted();
+				try {
+					future.get();
+				} catch (CancellationException e) {
+					// ignore
+				} catch (InterruptedException e) {
+					interrupted = true;
+				} catch (ExecutionException e) {
+					Logger.logCallbackException(e.getCause());
+				} finally {
+					if (interrupted) { // restore interrupt status
+						Thread.currentThread().interrupt();
 					}
 				}
 			}
@@ -829,9 +837,26 @@ final class PromiseImpl<T> implements Promise<T> {
 			 */
 			@Override
 			public void run() {
+				// Shutdown executor and stop accepting new work
 				shutdown();
+				// Run all delayed work now
+				BlockingQueue<Runnable> queue = getQueue();
+				if (!queue.isEmpty()) {
+					for (Object r : queue.toArray()) {
+						if (r instanceof RunnableScheduledFuture< ? >) {
+							RunnableScheduledFuture< ? > future = (RunnableScheduledFuture< ? >) r;
+							if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
+									&& queue.remove(future)) {
+								future.run();
+								logCallbackException(future);
+							}
+						}
+					}
+					shutdown();
+				}
+				// Wait for running work to complete
 				try {
-					awaitTermination(120, TimeUnit.SECONDS);
+					awaitTermination(20, TimeUnit.SECONDS);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
