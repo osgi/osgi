@@ -29,7 +29,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
@@ -688,11 +687,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @since 1.1
 	 */
 	@Override
-	public Promise<T> timeout(long timeout, TimeUnit unit) {
+	public Promise<T> timeout(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		unit = requireNonNull(unit);
 		if (!isDone()) {
-			onResolve(new Timeout(chained, timeout, unit));
+			onResolve(new Timeout(chained, millis, TimeUnit.MILLISECONDS));
 		}
 		chained.resolveWith(this);
 		return chained;

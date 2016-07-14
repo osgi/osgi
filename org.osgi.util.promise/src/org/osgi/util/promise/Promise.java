@@ -17,7 +17,6 @@
 package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.TimeUnit;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.function.Function;
@@ -411,14 +410,13 @@ public interface Promise<T> {
 	 * resolved with a failure before the timeout, the returned Promise is
 	 * resolved with the failure of this Promise. If the timeout is reached
 	 * before this Promise is resolved, the returned Promise is failed with a
-	 * {@code TimeoutException}.
+	 * {@link TimeoutException}.
 	 * 
-	 * @param timeout The maximum time to wait. Zero and negative time is
-	 *            treated as an immediate timeout.
-	 * @param unit The time unit of the {@code timeout} argument.
+	 * @param milliseconds The maximum time to wait in milliseconds. Zero and
+	 *            negative time is treated as an immediate timeout.
 	 * @return A Promise that is resolved when either this Promise is resolved
 	 *         or the timeout is reached.
 	 * @since 1.1
 	 */
-	Promise<T> timeout(long timeout, TimeUnit unit);
+	Promise<T> timeout(long milliseconds);
 }

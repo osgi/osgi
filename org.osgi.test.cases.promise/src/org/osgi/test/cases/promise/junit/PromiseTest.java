@@ -29,7 +29,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,6 +41,7 @@ import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.Success;
+import org.osgi.util.promise.TimeoutException;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -1902,7 +1902,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
-		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		t.onResolve(() -> latch1.countDown());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertNotNull(t.getFailure());
@@ -1916,7 +1916,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
-		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		t.onResolve(() -> latch1.countDown());
 		d.resolve("no timeout");
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
@@ -1933,7 +1933,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		assertTrue(p.isDone());
-		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		t.onResolve(() -> latch1.countDown());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -1947,7 +1947,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
-		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		t.onResolve(() -> latch1.countDown());
 		d.fail(new Exception("no timeout"));
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
@@ -1964,7 +1964,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		d.fail(new Exception("no timeout"));
 		assertTrue(p.isDone());
-		Promise<String> t = p.timeout(WAIT_TIME, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
 		t.onResolve(() -> latch1.countDown());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -1980,7 +1980,7 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		d.resolve("no timeout");
 		assertTrue(p.isDone());
-		Promise<String> t = p.timeout(-1, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
 		t.onResolve(() -> latch1.countDown());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -1992,7 +1992,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
-		Promise<String> t = p.timeout(-1, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
 		t.onResolve(() -> latch1.countDown());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertNotNull(t.getFailure());
@@ -2010,7 +2010,7 @@ public class PromiseTest extends TestCase {
 		d.resolve("no timeout");
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p.isDone());
-		Promise<String> t = p.timeout(0, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(0);
 		t.onResolve(() -> latch2.countDown());
 		assertTrue(latch2.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -2021,7 +2021,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
-		Promise<String> t = p.timeout(0, TimeUnit.SECONDS);
+		Promise<String> t = p.timeout(0);
 		assertNotNull(t.getFailure());
 		assertTrue(t.getFailure() instanceof TimeoutException);
 		assertTrue(t.isDone());
