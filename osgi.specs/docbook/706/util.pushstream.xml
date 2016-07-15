@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="705"
+         revision="$Id$"
+         version="5" xml:id="util.pushstream"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Promises Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.util.pushstream-version"
+    linkend="org.osgi.util.pushstream"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>In large-scale distributed systems <emphasis>events</emphasis> are
+    a commonly used communication mechanism for passing data and triggering
+    behaviours. Events are typically generated 
+    <emphasis>asynchronously</emphasis> rather than at the request of the
+    processing system, and once received an event usually undergoes some
+    level of transformation before being stored, acted upon, or forwarded to
+    another consumer.</para>
+    
+    <para>Pipelines and streams are a popular and effective model for consuming
+    and processing events, with numerous APIs providing this sort of model.
+    One of the most well-known processing pipeline APIs is the Java 8 Streams
+    API, which provides a functional pipleline for operating on Collections. 
+    The Streams API is inherently <emphasis>pull based</emphasis>” as it relies 
+    on iterators and spliterators to <emphasis>pull</emphasis> the next entry 
+    from the stream. This is the primary difference between synchronous and 
+    asynchronous models. In an asynchronous world events are pushed into the 
+    pipeline as they are received.</para>
+
+    <para>This specification defines a PushStream API which can be used on
+    devices which support the Java 8 compact1 profile. The PushStream API
+    defined by this specification depends on OSGi Promises but is 
+    independent of all other OSGi specifications, including the OSGi 
+    Framework, and thus can be easily used outside of the OSGi environment.</para>
+
+    <para>A PushStream object encapsulates a pipeline of a potentially 
+    asynchronous tasks which will be performed when an event arrives. The 
+    result of the processing pipeline is represented using a Promise object
+    which will resolve when the result has been calculated.</para>
+
+    <para>PushStream capture the effects of errors, finite streams and back 
+    pressure by making these explicit in the API signatures. Errors and End 
+    of Stream conditions are represented by specific events which are pushed 
+    into the stream. Back pressure is represented by a delay value returned
+    from the event pipeline stages.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Common concepts</emphasis> - The API is inspired by
+          the Streams API in Java 8 and uses the same basic concepts.
+          See ## TODO.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Independent</emphasis> - The design is independent
+          of all other OSGi specifications (except for OSGi Promises) and 
+          can be used outside of an OSGi environment.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Asynchronous</emphasis> - The design is built
+          to handle asynchronously produced events.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Back Pressure</emphasis> - The design provides
+          a means for event pipelines to communicate back-pressure to
+          the Event Source.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Complete</emphasis> - The design provides a very
+          complete set of operations for PushStreams which are primitives 
+          that can be used to address most use cases.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Generified</emphasis> - Generics are used to promote
+          type safety.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Push Event Source</emphasis> - A PushEventSource
+          object represents a source of asynchronous events, and can
+          be used to create a PushStream.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Push Event Consumer</emphasis> - A Push Event Consumer
+          object represents a sink for asynchronous events, and can be
+          attached to a PushEventSource or a PushStream.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Push Stream</emphasis> - A PushStream object 
+          represents a pipeline for processing asynchronous events.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Terminal Operation</emphasis> - The final operation
+          of a PushStream pipeline results in a Promise which represents the
+          completion state of the pipeline. The operation also begins the
+          processing of events.</para>
+        </listitem>
+      </itemizedlist>
+
+    </section>
+  </section>
+
+  <section>
+    <title>Asynchronous Eventing Streams</title>
+    
+    <para>The Push Stream API is built upon the principals of Asynchronous
+    Event streams, and therefore requires three basic primitives:</para>
+    
+    <itemizedlist>
+      <listitem><para>An event object</para></listitem>
+      <listitem><para>A source of event objects</para></listitem>
+      <listitem><para>A consumer of event objects</para></listitem>
+    </itemizedlist>
+  
+    <section>
+      <title>The Push Event</title>
+      
+      <para>The Push Event is an object representing an event. Every
+      Push Event has an event type, which has one of three values:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>DATA</code> - A data event encapsulates a
+          typed object</para></listitem>
+        <listitem>
+          <para><code>ERROR</code> - An error event encapsulates
+          an exception and indicates a failure in the event stream.</para>
+        </listitem>
+        <listitem>
+          <para><code>CLOSE</code> - A close event represents
+          the end of the stream of events.</para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>An event stream consists of zero or more data events
+      followed by a <emphasis>terminal event</emphasis>. A terminal
+      event is either an error or a failure, and it indicates that
+      there will be no more events in this stream. Depending on the
+      reason for the terminal event it may be possible to re-attach
+      to the event source and consume more events.</para>
+    </section>
+    
+    <section>
+      <title>The Push Event Source</title>
+  
+      <para>A Push Event Source object represents a source of asynchronous
+      Push Events. The event source defines a single method <xref
+      linkend="org.osgi.util.pushstream.PushEventSource.open--" 
+      xrefstyle="hyperlink"/> which can be used to connect to the source
+      and begin receiving a stream of events.</para>
+      
+      <para>The <code>open</code> method of the Push Event Source returns 
+      an <code>AutoCloseable</code> which can be used to close the event 
+      stream. If the <code>close</code> method is called on this object then 
+      the stream is terminated by sending a close event. If additional calls 
+      are made to the close method then they return without further action. 
+      </para>
+      
+    </section>
+
+    <section>
+      <title>The Push Event Consumer</title>
+  
+      <para>A Push Event Consumer object represents a sink for 
+      asynchronous Push Events. The event consumer defines a single method 
+      <xref linkend="org.osgi.util.pushstream.PushEventConsumer.accept--" 
+      xrefstyle="hyperlink"/> which can be used to receive a stream of 
+      events.</para>
+      
+      <para>The <code>accept</code> method of the Push Event Consumer 
+      returns a <code>long</code> representing 
+      <emphasis>back pressure</emphasis>. Back pressure is described in
+      detail in <xref linkend="util.pushstream.back-pressure" 
+      xrefstyle="hyperlink"/>. If the returned long is negative then
+      the event stream should be closed by the event source. 
+      </para>
+    </section>
+    
+    
+    <section>
+      <title>Closing the Event Stream</title>
+      
+      <para>There are three ways in which a stream can be closed:</para>
+      
+      <para>The Push Event Source may close the stream at any time by
+      sending a terminal event to the consumer. Upon receiving a terminal
+      event the consumer should clean up any resources and not expect
+      to receive further messages. Note that in a multi-threaded system
+      the consumer may receive events out of order, and in this case data 
+      events may be received after a terminal event. Event processors 
+      should be careful to ignore data events that occur after terminal
+      events, and to ensure that any downstream consumers receive any
+      pending data events before forwarding the terminal event.</para>
+        
+      <para>The <code>open</code> method of the Push Event Source returns 
+      an <code>AutoCloseable</code> which can be used to close the event 
+      stream. If the <code>close</code> method is called on this object then 
+      the stream is terminated by sending a close event. If additional calls 
+      are made to the close method then they return without action. If the 
+      close method is called after a terminal event has been sent for any
+      other reason then it should return without action.</para>
+       
+      <para>The <code>accept</code> method of the Push Event Consumer
+      returns a long indicating back pressure. If the long is negative
+      then the event source should immediately close the stream by sending
+      a close event.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Buffering, Back pressure and Circuit Breakers</title>
+  
+    <para>TODO</para>
+  
+    <section xml:id="util.pushstream.back-pressure">
+      <title>Back pressure</title>
+      <para>TODO</para>
+    </section>
+  
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>The Push Stream API does not define any OSGi services nor does the 
+    API perform any privileged actions. Therefore, it has no security
+    considerations.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.util.pushstream.xml"/>
+
+  <section>
+    <title>References</title>
+      <para>TODO</para>
+
+  </section>
+
+</chapter>
