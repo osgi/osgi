@@ -234,16 +234,97 @@
   </section>
 
   <section>
-    <title>Buffering, Back pressure and Circuit Breakers</title>
+    <title>The Push Stream</title>
+    
+      <para>Simple event passing can be achieved by connecting a Push Event
+      Consumer directly to a Push Event Source, however this model forces
+      a large amount of flow-control and resource management into a single
+      location. Furthermore it is difficult to reuse business logic across
+      different event streams.</para>
+    
+      <para>The Push Stream provides a powerful, flexible pipeline for event
+      processing. The Push Stream API shares many concepts with the Java 8 
+      Streams API, in particular Push Streams are lazy, they may not consume
+      the entire event stream, and they can be composed from functional steps.
+      </para>
+    
+    <section>
+      <title>Simple Pipelines</title>
+
+      <para>A Push Stream can be created from a Push Event Source. As Push 
+      Stream instances are lazy the Push Stream will not be connected to
+      the Push Event Source until a <code>terminal operation</code> is
+      invoked on the Push Stream. This means that a push stream object can
+      be safely built without events being received when the pipeline is
+      partially initialized.</para>
+      
+      <section>
+        <title>Mapping, Flat Mapping and Filtering</title>
   
-    <para>TODO</para>
+        <para>The simplest operations on a Push Stream are 
+        <emphasis>mapping</emphasis> and <emphasis>filtering</emphasis>.</para>
+        
+        <section>
+          <title>Mapping</title>
+          
+          <para>TODO</para>
+        </section>
+      </section>
+      
+      <section>
+        <title>Terminal Operations</title>
   
-    <section xml:id="util.pushstream.back-pressure">
-      <title>Back pressure</title>
+        <para>TODO</para>
+      </section>
+    </section>
+    
+    <section>
+      <title>Buffering, Back pressure and Circuit Breakers</title>
+    
+      <para>TODO</para>
+    
+      <section xml:id="util.pushstream.back-pressure">
+        <title>Back pressure</title>
+        <para>TODO</para>
+      </section>
+    
+    </section>
+    
+    <section>
+      <title>Coalescing and Windowing</title>
+  
       <para>TODO</para>
     </section>
+
+    <section>
+      <title>Aggregating and Splitting</title>
   
+      <para>TODO</para>
+    </section>
+    
+    <section>
+      <title>The Push Stream Provider</title>
+    
+      <para>TODO</para>
+      
+      <section>
+        <title>Building Buffers</title>
+  
+        <para>TODO</para>
+      </section>
+
+      <section>
+        <title>Simple Push Event Sources</title>
+  
+        <para>TODO</para>
+      </section>
+      
+    </section>
+    
+    
+    
   </section>
+
 
   <section>
     <title>Security</title>
