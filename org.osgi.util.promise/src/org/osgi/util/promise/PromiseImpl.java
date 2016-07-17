@@ -16,6 +16,7 @@
 
 package org.osgi.util.promise;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;
@@ -25,12 +26,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
@@ -744,53 +748,113 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Callbacks {
-		private static final CallbackExecutor executor;
+	private static final class Callbacks implements Runnable, ThreadFactory {
+		private static final AtomicBoolean		shutdownHookInstalled;
+		private static final ThreadFactory		delegateThreadFactory;
+		private static final TimeoutExecutor	timeoutExecutor;
+		private static final CallbackExecutor	callbackExecutor;
 		static {
-			executor = new CallbackExecutor(2);
-			executor.installShutdownHook();
+			shutdownHookInstalled = new AtomicBoolean();
+			delegateThreadFactory = Executors.defaultThreadFactory();
+			timeoutExecutor = new TimeoutExecutor(1,
+					new Callbacks("TimeoutExecutor"));
+			callbackExecutor = new CallbackExecutor(4,
+					new Callbacks("CallbackExecutor"));
 		}
 
+		/**
+		 * Schedule a callback on the TimeoutExecutor
+		 */
 		static ScheduledFuture< ? > schedule(Runnable callback, long timeout,
 				TimeUnit unit) {
 			try {
-				return executor.schedule(callback, timeout, unit);
+				return timeoutExecutor.schedule(callback, timeout, unit);
 			} catch (RejectedExecutionException e) {
 				safeRun(callback);
 				return null;
 			}
 		}
 
+		/**
+		 * Execute a callback on the CallbackExecutor
+		 */
 		static void execute(Runnable callback) {
 			try {
-				executor.execute(callback);
+				callbackExecutor.execute(callback);
 			} catch (RejectedExecutionException e) {
 				safeRun(callback);
 			}
 		}
 
-		private Callbacks() {}
+		private final String name;
+
+		private Callbacks(String name) {
+			this.name = name;
+		}
 
 		/**
-		 * ScheduledThreadPoolExecutor for callback execution.
+		 * Executor threads should not prevent VM from exiting
+		 */
+		@Override
+		public Thread newThread(Runnable r) {
+			if (shutdownHookInstalled.compareAndSet(false, true)) {
+				Thread shutdownThread = delegateThreadFactory.newThread(this);
+				shutdownThread.setName("ExecutorShutdownHook["
+						+ shutdownThread.getName() + "]");
+				Runtime.getRuntime().addShutdownHook(shutdownThread);
+			}
+			Thread t = delegateThreadFactory.newThread(r);
+			t.setName(name + "[" + t.getName() + "]");
+			t.setDaemon(true);
+			return t;
+		}
+
+		/**
+		 * Shutdown hook
+		 */
+		@Override
+		public void run() {
+			// limit new thread creation
+			callbackExecutor.setMaximumPoolSize(
+					Math.max(1, callbackExecutor.getPoolSize()));
+			// Transfer all delayed work to CallbackExecutor
+			timeoutExecutor.shutdown();
+			BlockingQueue<Runnable> queue = timeoutExecutor.getQueue();
+			if (!queue.isEmpty()) {
+				for (Object r : queue.toArray()) {
+					if (r instanceof RunnableScheduledFuture< ? >) {
+						RunnableScheduledFuture< ? > future = (RunnableScheduledFuture< ? >) r;
+						if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
+								&& queue.remove(future)) {
+							execute(future);
+						}
+					}
+				}
+			}
+			// Wait for running work to complete
+			callbackExecutor.shutdown();
+			try {
+				callbackExecutor.awaitTermination(20, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			timeoutExecutor.shutdown();
+			try {
+				timeoutExecutor.awaitTermination(20, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+
+		/**
+		 * ScheduledThreadPoolExecutor for timeout execution.
 		 * 
 		 * @ThreadSafe
 		 */
-		private static final class CallbackExecutor extends
-				ScheduledThreadPoolExecutor implements ThreadFactory, Runnable {
-			private final ThreadFactory delegateThreadFactory;
-
-			CallbackExecutor(int corePoolSize) {
-				super(corePoolSize);
-				delegateThreadFactory = Executors.defaultThreadFactory();
-				setThreadFactory(this);
-				setRemoveOnCancelPolicy(true);
-			}
-
-			void installShutdownHook() {
-				Thread shutdownHook = newThread(this);
-				shutdownHook.setDaemon(false);
-				Runtime.getRuntime().addShutdownHook(shutdownHook);
+		private static final class TimeoutExecutor
+				extends ScheduledThreadPoolExecutor {
+			TimeoutExecutor(int corePoolSize, ThreadFactory threadFactory) {
+				super(corePoolSize, threadFactory);
 			}
 
 			/**
@@ -800,66 +864,52 @@ final class PromiseImpl<T> implements Promise<T> {
 			protected void afterExecute(Runnable r, Throwable t) {
 				super.afterExecute(r, t);
 				if (r instanceof Future< ? >) {
-					logCallbackException((Future< ? >) r);
-				}
-			}
-
-			private static void logCallbackException(Future< ? > future) {
-				boolean interrupted = Thread.interrupted();
-				try {
-					future.get();
-				} catch (CancellationException e) {
-					// ignore
-				} catch (InterruptedException e) {
-					interrupted = true;
-				} catch (ExecutionException e) {
-					Logger.logCallbackException(e.getCause());
-				} finally {
-					if (interrupted) { // restore interrupt status
-						Thread.currentThread().interrupt();
-					}
-				}
-			}
-
-			/**
-			 * Executor threads should not prevent VM from exiting
-			 */
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread t = delegateThreadFactory.newThread(r);
-				t.setName("CallbackExecutor-" + t.getName());
-				t.setDaemon(true);
-				return t;
-			}
-
-			/**
-			 * Shutdown hook
-			 */
-			@Override
-			public void run() {
-				// Shutdown executor and stop accepting new work
-				shutdown();
-				// Run all delayed work now
-				BlockingQueue<Runnable> queue = getQueue();
-				if (!queue.isEmpty()) {
-					for (Object r : queue.toArray()) {
-						if (r instanceof RunnableScheduledFuture< ? >) {
-							RunnableScheduledFuture< ? > future = (RunnableScheduledFuture< ? >) r;
-							if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
-									&& queue.remove(future)) {
-								future.run();
-								logCallbackException(future);
-							}
+					boolean interrupted = Thread.interrupted();
+					try {
+						((Future< ? >) r).get();
+					} catch (CancellationException e) {
+						// ignore
+					} catch (InterruptedException e) {
+						interrupted = true;
+					} catch (ExecutionException e) {
+						Logger.logCallbackException(e.getCause());
+					} finally {
+						if (interrupted) { // restore interrupt status
+							Thread.currentThread().interrupt();
 						}
 					}
-					shutdown();
 				}
-				// Wait for running work to complete
-				try {
-					awaitTermination(20, TimeUnit.SECONDS);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
+			}
+		}
+
+		/**
+		 * ThreadPoolExecutor for callback execution.
+		 * 
+		 * @ThreadSafe
+		 */
+		private static final class CallbackExecutor extends ThreadPoolExecutor
+				implements UncaughtExceptionHandler {
+			CallbackExecutor(int maxPoolSize, ThreadFactory threadFactory) {
+				super(0, maxPoolSize, 60L, TimeUnit.SECONDS,
+						new LinkedBlockingQueue<Runnable>(), threadFactory);
+			}
+
+			/**
+			 * Log uncaught exceptions
+			 */
+			@Override
+			protected void afterExecute(Runnable r, Throwable t) {
+				super.afterExecute(r, t);
+				if (t != null) {
+					Logger.logCallbackException(t);
+					Thread.currentThread().setUncaughtExceptionHandler(this);
 				}
+			}
+
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				// original exception handled in afterExecute
+				// but we need this to stop the exception print out
 			}
 		}
 	}
