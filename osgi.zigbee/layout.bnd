@@ -1,0 +1,15 @@
+build.impls                 = ${build.zigbee.impls}
+build.tests                 = ${build.zigbee.tests}
+
+build.zigbee.impls = \
+	org.osgi.impl.service.zigbee
+
+jar.zigbee.impls = \
+	${repo;org.osgi.impl.service.cm;latest}, \
+	${repo;org.osgi.impl.service.event;latest}, \
+	${repo;org.osgi.impl.service.zigbee;latest}
+
+build.zigbee.tests = \
+    org.osgi.test.cases.zigbee
+
+jar.zigbee.tests =

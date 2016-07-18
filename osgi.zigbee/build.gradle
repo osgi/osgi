@@ -1,0 +1,56 @@
+/*
+ * osgi.zigbee Gradle build script
+ */
+
+tasks.addRule('Pattern: prepct.<name>: Prepare the CT for <name>.') { taskName ->
+  if (taskName.startsWith('prepct.')) {
+    task(taskName) {
+      ext.book = taskName - 'prepct.'
+      description "Prepare the CT for ${book}."
+      group 'verification'
+      ext.destinationDir = new File(buildDir, "osgi.ct.${book}")
+      inputs.files fileTree(rootProject.file('cnf/repo/osgi.ri.core')).include('osgi.ri.core*.jar')
+      inputs.files fileTree(buildDir).include("osgi.ri.${book}*.jar", "osgi.ct.${book}*.jar")
+      doFirst {
+        project.delete(destinationDir)
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        inputs.files.each { jar ->
+          copy {
+            from zipTree(jar)
+            into destinationDir
+          }
+        }
+      }
+    }
+  }
+}
+
+tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
+  if (taskName.startsWith('ct.')) {
+    task(taskName) {
+      ext.book = taskName - 'ct.'
+      description "Run the CT for ${book}."
+      group 'verification'
+      ext.destinationDir = new File(buildDir, "osgi.ct.${book}")
+      dependsOn "prepct.${book}"
+      doLast {
+        javaexec {
+          workingDir destinationDir
+          main = '-jar' // first arg must be the bnd jar
+          args new File(destinationDir, 'jar/bnd.jar')
+          args '--exceptions'
+          args 'runtests'
+          args '--title', "osgi.ct.${book}"
+        }.assertNormalExitValue()
+      }
+    }
+  }
+}
+
+task('ct') {
+  description 'Run all the CTs.'
+  group 'verification'
+  dependsOn 'ct.zigbee'
+}
