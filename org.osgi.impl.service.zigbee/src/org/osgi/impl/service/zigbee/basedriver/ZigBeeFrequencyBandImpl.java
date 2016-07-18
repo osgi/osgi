@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee;
+package org.osgi.impl.service.zigbee.basedriver;
+
+import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 
 /**
- * 
- *
- * for Sgnature tests purpose
+ * Mocked impl of ZigBeeFrequencyBand.
  * 
  * @author $Id$
  */
-public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
-	// concrete subclass
+public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
+
+	private int value;
+
+	public ZigBeeFrequencyBandImpl(short band) {
+		this.value = band;
+	}
+
+	public boolean is868() {
+		return value == 868;
+	}
+
+	public boolean is915() {
+		return value == 915;
+	}
+
+	public boolean is2400() {
+		return value == 2400;
+	}
 }

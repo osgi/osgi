@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 /**
  * Mocked impl.
  * 
- * @author $Id: d5d26e2f9444166228ded0ad7d4b0561ca12a7f0 $
+ * @author $Id$
  * 
  */
 public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {

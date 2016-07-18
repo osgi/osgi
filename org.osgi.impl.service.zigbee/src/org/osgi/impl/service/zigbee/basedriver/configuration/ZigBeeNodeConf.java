@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.impl.service.zigbee.basedriver.configuration;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.zigbee.basedriver.ZigBeeNodeImpl;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 
 /**
  * 
@@ -87,7 +92,36 @@ public class ZigBeeNodeConf extends ZigBeeNodeImpl {
 	}
 
 	public ZigBeeEndpoint[] getEndpoints() {
+		BigInteger endpointIeeeAddress = this.getIEEEAddress();
+		ZigBeeEndpoint[] result = null;
+		List zEndpoints = new ArrayList();
+		try {
+			ServiceReference[] srs = bc.getAllServiceReferences(
+					ZigBeeEndpoint.class.getName(), null);
+			if (srs == null) {
+				return super.getEndpoints();
+			}
+			int srsIndex = 0;
+			while (srsIndex < srs.length) {
+				ServiceReference sr = srs[srsIndex];
+				if (endpointIeeeAddress.equals(sr
+						.getProperty(ZigBeeNode.IEEE_ADDRESS))) {
+					zEndpoints.add(bc.getService(srs[srsIndex]));
+				}
+				srsIndex = srsIndex + 1;
 
-		return endpoints;
+			}
+			int length = zEndpoints.size();
+			result = new ZigBeeEndpoint[length];
+			for (int i = 0; i < length; i++) {
+
+				result[i] = (ZigBeeEndpoint) zEndpoints.get(i);
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
+
 }

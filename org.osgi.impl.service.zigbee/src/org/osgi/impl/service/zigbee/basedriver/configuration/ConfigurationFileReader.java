@@ -1,5 +1,5 @@
 
-package org.osgi.impl.service.zigbee.util.teststep;
+package org.osgi.impl.service.zigbee.basedriver.configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,6 +12,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.zigbee.basedriver.ZCLAttributeImpl;
+import org.osgi.impl.service.zigbee.basedriver.ZigBeeHostImpl;
+import org.osgi.impl.service.zigbee.basedriver.ZigBeeNodeImpl;
+import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeNodeDescriptorImpl;
+import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeePowerDescriptorImpl;
+import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeSimpleDescriptorImpl;
+import org.osgi.impl.service.zigbee.descriptions.ZCLAttributeDescriptionImpl;
+import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
+import org.osgi.impl.service.zigbee.descriptions.ZCLGlobalClusterDescriptionImpl;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -22,18 +31,6 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
-import org.osgi.test.cases.zigbee.mock.ZCLAttributeDescriptionImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
-import org.osgi.test.cases.zigbee.mock.ZCLClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLGlobalClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
-import org.osgi.test.cases.zigbee.mock.ZigBeeHostImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeDescriptorImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeePowerDescriptorImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeSimpleDescriptorImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -133,7 +130,7 @@ public class ConfigurationFileReader {
 
 	public ZigBeeEndpoint[] getEnpoints(ZigBeeNodeImpl node) {
 
-		return node.getEnpoints();
+		return node.getEndpoints();
 	}
 
 	private void getHost(Document doc) {
@@ -347,6 +344,33 @@ public class ConfigurationFileReader {
 					isUserAv);
 		}
 		return result;
+	}
+
+	public NetworkAttributeIds getFirstReportableAttribute() {
+		BigInteger ieeeAddresss;
+		short endpointId;
+		int clusterId;
+		int attributeId;
+
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
+			ieeeAddresss = nodes[i].getIEEEAddress();
+			for (int j = 0; j < endpoints.length; j++) {
+				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				endpointId = endpoints[j].getId();
+				for (int k = 0; k < serverClusters.length; k++) {
+					ZCLAttribute[] attributes = ((ZCLClusterConf) serverClusters[k]).getAttributes();
+					clusterId = serverClusters[k].getId();
+					for (int l = 0; l < attributes.length; l++) {
+						if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
+							attributeId = attributes[l].getId();
+							return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	private ZigBeePowerDescriptor getZigBeePowerDescriptor(Element nodeElement) {

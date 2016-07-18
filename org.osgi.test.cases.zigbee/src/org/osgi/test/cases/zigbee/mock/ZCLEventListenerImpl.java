@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.zigbee.mock;
 
+import java.util.Dictionary;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.zigbee.ZCLEventListener;
@@ -26,7 +27,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Mocked test.
  * 
- * @author $Id: fa997c7fe4b792215abb2e241c12377de1761cee $
+ * @author $Id$
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 
@@ -44,8 +45,8 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 	/**
 	 * Register the test event listener in the OSGi Service Registry.
 	 */
-	public void start() {
-		bc.registerService(ZCLEventListener.class.getName(), this, null);
+	public void start(Dictionary properties) {
+		bc.registerService(ZCLEventListener.class.getName(), this, properties);
 	}
 
 	/**

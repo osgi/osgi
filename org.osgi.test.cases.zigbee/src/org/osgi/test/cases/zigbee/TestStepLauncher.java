@@ -32,9 +32,10 @@ public class TestStepLauncher {
 	static public final String		LOAD_CONF		= "load conf";
 	private String					confFilePath	= "template.xml";
 	private ConfigurationFileReader	confReader;
+	private TestStepProxy			tproxy;
 
 	private TestStepLauncher(String pathFile, BundleContext bc) {
-		TestStepProxy tproxy = new TestStepProxy(bc);
+		tproxy = new TestStepProxy(bc);
 		String stringFile;
 		try {
 			stringFile = readFile(pathFile);
@@ -51,7 +52,7 @@ public class TestStepLauncher {
 			e.printStackTrace();
 		}
 
-		confReader = ConfigurationFileReader.getInstance(pathFile);
+		confReader = ConfigurationFileReader.getInstance(pathFile, bc);
 		ZCLFrameImpl.minHeaderSize = confReader.getHeaderMinSize();
 	}
 
@@ -81,5 +82,9 @@ public class TestStepLauncher {
 		}
 
 		return result;
+	}
+
+	public TestStepProxy getTeststepProxy() {
+		return tproxy;
 	}
 }
