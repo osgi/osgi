@@ -46,8 +46,7 @@ public interface ZigBeeGroup {
 	 * add_group request can have the following status: SUCCESS,
 	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}).
 	 * 
-	 * @param pid {@link String} representing the service PID (see
-	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
+	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to add to this Group.
 	 * @param handler the handler that will notified of the result of "joining".
 	 *        The expected object is always a {@link Boolean} indicating a
@@ -78,8 +77,7 @@ public interface ZigBeeGroup {
 	 * remove_group request can have the following status: SUCCESS,
 	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}).
 	 * 
-	 * @param pid {@link String} representing the service PID (see
-	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
+	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to remove from this Group.
 	 * @param handler the handler that will notified of the result of "joining".
 	 *        The expected object is always a {@link Boolean} indicating a

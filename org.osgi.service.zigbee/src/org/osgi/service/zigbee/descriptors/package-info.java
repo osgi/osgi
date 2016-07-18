@@ -22,14 +22,14 @@
  * An interface for modeling the ZigBee User Descriptor is missing because this
  * descriptor has only one field (the UserDescription). Therefore this field can
  * be read and written using respectively the
- * {@link ZigBeeNode#getUserDescription()} and the
- * {@link ZigBeeNode#setUserDescription()} methods.
+ * {@link org.osgi.service.zigbee.ZigBeeNode#getUserDescription(ZigBeeHandler)} and the
+ * {@link org.osgi.service.zigbee.ZigBeeNode#setUserDescription(String,ZigBeeHandler)} methods.
  * 
  * <p>
  * The {@code ZigBeeNodeDescriptor}, {@code ZigBeePowerDescriptor} and the
  * {@code ZigBeeComplexDescriptor} are read using the appropriate methods in the
- * {@link ZigBeeNode} interface, whereas the ZigBeeSimpleDescriptor can be read
- * using the appropriate method of the {@link ZigBeeEndpoint} services
+ * {@link org.osgi.service.zigbee.ZigBeeNode} interface, whereas the ZigBeeSimpleDescriptor can be read
+ * using the appropriate method of the {@link org.osgi.service.zigbee.ZigBeeEndpoint} services
  * registered in the framework.
  * 
  * <p>

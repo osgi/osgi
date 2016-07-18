@@ -21,13 +21,14 @@
  * 
  * <p>
  * Each time a new ZigBee node is discovered, the driver will register a
- * {@link ZigBeeNode} service and then one {@link ZigBeeEndpoint} service for
+ * {@link org.osgi.service.zigbee.ZigBeeNode} service and then one 
+ * {@link org.osgi.service.zigbee.ZigBeeEndpoint} service for
  * each ZigBee endpoint discovered on the node.
  * 
  * <p>
  * {@code ZigBeeEndpoint} interface provides the
- * {@link ZigBeeEndpoint#getServerCluster(serverClusterId) } method to get an
- * interface reference to a ZCLCluster object.
+ * {@link org.osgi.service.zigbee.ZigBeeEndpoint#getServerCluster(int)} method 
+ * to get an  interface reference to a ZCLCluster object.
  * 
  * <p>
  * {@code ZCLCluster} interface contains methods that directly maps to the ZCL
@@ -37,8 +38,8 @@
  * 
  * <p>
  * ZCL Attribute reportings are configured, registering a
- * {@link ZigBeeEventListener}, provided that this service is registered with
- * the right service properties.
+ * {@link org.osgi.service.zigbee.ZCLEventListener}, provided that this service 
+ * is registered with the right service properties.
  * 
  * <p>
  * In addition to ZCL frames, the current specification allows also to send ZDP
