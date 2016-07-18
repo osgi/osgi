@@ -26,11 +26,11 @@ import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class TestStepLauncher {
-	private static TestStepLauncher instance;
+	private static TestStepLauncher	instance;
 
 	static public final String		CONF_FILE_PATH	= "file path";
 	static public final String		LOAD_CONF		= "load conf";
-	private String					confFilePath	= "template.xml";
+	private String					confFilePath	= "zigbee-template.xml";
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
 

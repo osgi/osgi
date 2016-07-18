@@ -57,7 +57,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	ConfigurationFileReader	conf;
 
-	private String			confFilePath	= "template.xml";
+	private String			confFilePath	= "zigbee-template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
