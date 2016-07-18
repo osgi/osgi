@@ -31,7 +31,6 @@ Test-Cases			= ${testcases}
 	${junit}
 
 -runbundles: \
-	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\
 	org.osgi.impl.service.zigbee;version=latest
