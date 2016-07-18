@@ -47,15 +47,17 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 public class PromiseTest extends TestCase {
 	public static final long	WAIT_TIME	= 2L;
-	static Timer				timer		= new Timer();
+	Timer						timer;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		timer = new Timer();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		timer.cancel();
 		super.tearDown();
 	}
 
