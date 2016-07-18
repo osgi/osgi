@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.ZigBeeDataInput;
 /**
  * A mock implementation of {@link ZigBeeDataInput} interface.
  * 
- * @author $Id: fb275709db79c6812d4c914d1ee62070ccb62dcf $
+ * @author $Id$
  * 
  */
 public class ZigBeeDataInputImpl implements ZigBeeDataInput {

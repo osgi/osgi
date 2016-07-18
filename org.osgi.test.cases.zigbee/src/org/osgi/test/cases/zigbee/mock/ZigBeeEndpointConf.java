@@ -26,7 +26,7 @@ import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
  * Class used by the configuration file reader. see
  * {@link ConfigurationFileReader}
  * 
- * @author $Id: 7dfcfe97916e5b41964da4bdde5c2141bcc044e4 $
+ * @author $Id$
  */
 public class ZigBeeEndpointConf extends ZigBeeEndpointImpl {
 
