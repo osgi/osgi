@@ -801,7 +801,13 @@ final class PromiseImpl<T> implements Promise<T> {
 				Thread shutdownThread = delegateThreadFactory.newThread(this);
 				shutdownThread.setName("ExecutorShutdownHook["
 						+ shutdownThread.getName() + "]");
-				Runtime.getRuntime().addShutdownHook(shutdownThread);
+				try {
+					Runtime.getRuntime().addShutdownHook(shutdownThread);
+				} catch (IllegalStateException e) {
+					// VM is already shutting down...
+					callbackExecutor.shutdown();
+					timeoutExecutor.shutdown();
+				}
 			}
 			Thread t = delegateThreadFactory.newThread(r);
 			t.setName(name + "[" + t.getName() + "]");
