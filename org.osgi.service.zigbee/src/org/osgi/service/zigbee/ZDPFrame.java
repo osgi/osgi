@@ -52,6 +52,6 @@ public interface ZDPFrame {
 	 * 
 	 * @throws IllegalStateException if the InputStream is not available.
 	 */
-	ZigBeeDataInput getDataInput();
+	ZigBeeDataInput getDataInput() throws IllegalStateException;
 
 }

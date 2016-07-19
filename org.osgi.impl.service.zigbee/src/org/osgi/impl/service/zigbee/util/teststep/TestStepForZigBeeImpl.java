@@ -32,8 +32,8 @@ public class TestStepForZigBeeImpl implements TestStep {
 	static public final String	LOAD_CONF			= "load conf";
 	public static final String	EVENT_REPORTABLE	= "event reportable";
 
-	static private final String	TAG				= "TestStepForZigBeeImpl";
-	private String				confFilePath	= "template.xml";
+	static private final String	TAG					= "TestStepForZigBeeImpl";
+	private String				confFilePath		= "zigbee-template.xml";
 	private ZigBeeBaseDriver	baseDriver;
 
 	/**

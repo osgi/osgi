@@ -34,20 +34,18 @@ public class ZCLFrameImpl implements ZCLFrame {
 
 	// The minimum header size of the ZCL command frame. The value is given by
 	// the configuration file.
-	public static int	minHeaderSize;
+	public static int minHeaderSize;
 
 	/**
 	 * The buffer used to store the ZCLFrame payload.
 	 */
-	protected byte[]	data		= null;
+	protected byte[] data = null;
 
-	protected boolean	isEmpty		= true;
+	protected boolean isEmpty = true;
 
-	// FIXME: rename from index to something else.
+	int index = 0;
 
-	int					index		= 0;
-
-	protected ZCLHeader	zclHeader	= null;
+	protected ZCLHeader zclHeader = null;
 
 	/**
 	 * Basic constructor. It creates a default ZCL Frame with the passed
@@ -86,7 +84,6 @@ public class ZCLFrameImpl implements ZCLFrame {
 		this.zclHeader = header;
 		this.data = payload;
 		this.isEmpty = false;
-		this.index = payload.length;
 	}
 
 	/**
@@ -127,7 +124,7 @@ public class ZCLFrameImpl implements ZCLFrame {
 	}
 
 	/**
-	 * Returns the ZCL Frame + ZCL payload in a byte array. In this mock
+	 * Returns the ZCL Frame + ZCL Payload in a byte array. In this mock
 	 * implementation of the ZCLFrame the ZCL Header is not copied in the
 	 * returned byte array (@see ZCLFrameImpl}
 	 */
@@ -153,18 +150,8 @@ public class ZCLFrameImpl implements ZCLFrame {
 		return new ZigBeeDataOutputImpl(this);
 	}
 
-	/**
-	 * Read a byte from the internal data array at the specified index.
-	 * 
-	 * @param pos
-	 * @return
-	 * @throws EOFException
-	 */
 	public byte readByte(int pos) throws EOFException {
 		try {
-			if (pos >= index) {
-				throw new EOFException();
-			}
 			return data[pos];
 		} catch (IndexOutOfBoundsException e) {
 			throw new EOFException();
@@ -203,34 +190,8 @@ public class ZCLFrameImpl implements ZCLFrame {
 			int raw = readInt(pos, 4);
 			return Float.intBitsToFloat(raw);
 		} else if (size == 2) {
-			int raw = readInt(pos, 2);
-
-			// seee eemm mmmm mmmm, hidden bit is 1
-
-			int s = (raw >> 15) & 0x01;
-			int e = (raw >> 10) & 0x1f;
-			int m = raw & 0x3ff;
-
-			if (e == 31 && m != 0) {
-				// NaN
-				return Float.NaN;
-			} else if (e == 31 && m == 0) {
-				// Infinity
-				if (s == 1) {
-					return Float.NEGATIVE_INFINITY;
-				} else {
-					return Float.POSITIVE_INFINITY;
-				}
-			} else if (e == 0 && m == 0) {
-				// Zero
-				return 0f;
-			} else if (e == 0) {
-				int v = (s << 31) | m << 13;
-				return Float.intBitsToFloat(v);
-			} else {
-				int v = (s << 31) | ((e - 15 + 127) << 23) | m << 13;
-				return Float.intBitsToFloat(v);
-			}
+			// FIXME: implement 2 bytes float
+			throw new RuntimeException("Not yet implemented: Float semi");
 		} else {
 			throw new IllegalArgumentException("invalid size");
 		}
@@ -273,55 +234,20 @@ public class ZCLFrameImpl implements ZCLFrame {
 	}
 
 	public void writeFloat(float value, int size) {
-		int bits;
 		if (size == 4) {
-			bits = Float.floatToRawIntBits(value);
-			this.writeInt(bits, 4);
+			int raw = Float.floatToRawIntBits(value);
+			this.writeInt(raw, 4);
 		} else if (size == 2) {
-			bits = Float.floatToRawIntBits(value);
-
-			// convert the 4 bytes float into a 2 bytes float
-			int s = (bits >> 31) & 0x01;
-			int e = ((bits >> 23) & 0xff);
-			int m = bits & 0x7fffff;
-
-			if (e == 0xff) {
-				if (m == 0) {
-					if (s == 0) {
-						bits = 0x7c00; // +Infinite
-					} else {
-						bits = 0xfc00; // -Infinite
-					}
-				} else {
-					// m != 0
-					bits = 0x7d00; // NaN
-				}
-			} else if (e == 0) {
-				// denormalized
-				bits = (m >> 13) + s << 15;
-			} else {
-				// a number
-				int e1 = e - 127 + 15;
-				if (e1 > 31) {
-					if (s == 0) {
-						bits = 0x7c00; // +Infinite
-					} else {
-						bits = 0xfc00; // -Infinite
-					}
-				} else {
-					bits = s << 15 | e1 << 10 | m >> 13;
-				}
-			}
-
-			this.writeInt(bits, 2);
+			// FIXME: implement 2 bytes float
+			throw new RuntimeException("Not yet implemented: Float semi");
 		} else {
-			throw new IllegalArgumentException("invalid size");
+			throw new IllegalArgumentException();
 		}
 	}
 
 	public void writeDouble(double value) {
-		long bits = Double.doubleToRawLongBits(value);
-		this.writeLong(bits, 8);
+		long raw = Double.doubleToRawLongBits(value);
+		this.writeLong(raw, 8);
 	}
 
 	public void writeBytes(byte[] bytes, int length) {

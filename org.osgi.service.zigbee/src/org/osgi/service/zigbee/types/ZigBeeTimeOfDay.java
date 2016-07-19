@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
+import java.util.Date;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -52,7 +53,7 @@ public class ZigBeeTimeOfDay
 	}
 
 	public Class getJavaDataType() {
-		return byte[].class;
+		return Date.class;
 	}
 
 	public short getId() {

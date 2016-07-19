@@ -8,7 +8,6 @@ Export-Package: \
 
 Conditional-Package					= org.osgi.test.support.*
 Import-Package: \
-  org.osgi.service.zigbee.types, \
   ${-signaturetest}, \
   *
 Private-Package: \
@@ -17,7 +16,11 @@ Private-Package: \
 
 Test-Cases			= ${testcases}
 -signaturetest = \
- org.osgi.service.zigbee
+ org.osgi.service.zigbee, \
+ org.osgi.service.zigbee.descriptions, \
+ org.osgi.service.zigbee.descriptors, \
+ org.osgi.service.zigbee.types
+ 
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.zigbee;version=project,\
@@ -28,7 +31,6 @@ Test-Cases			= ${testcases}
 	${junit}
 
 -runbundles: \
-	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\
 	org.osgi.impl.service.zigbee;version=latest

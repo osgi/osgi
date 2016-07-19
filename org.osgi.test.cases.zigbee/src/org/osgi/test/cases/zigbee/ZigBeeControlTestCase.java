@@ -73,9 +73,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	public static int			DISCOVERY_TIMEOUT	= 3000;
 	private static final String	EVENT_REPORTABLE	= "event reportable";
 
-	ConfigurationFileReader conf;
+	ConfigurationFileReader		conf;
 
-	private String confFilePath = "template.xml";
+	private String				confFilePath		= "zigbee-template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
