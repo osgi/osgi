@@ -59,7 +59,7 @@ public class ZigBeeFloatingDouble
 		return ZigBeeDataTypes.FLOATING_DOUBLE;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.FLOATING_DOUBLE, value);
 	}
 

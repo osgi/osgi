@@ -59,7 +59,7 @@ public class ZigBeeUnsignedInteger48
 		return ZigBeeDataTypes.UNSIGNED_INTEGER_48;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UNSIGNED_INTEGER_48, value);
 	}
 

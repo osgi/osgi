@@ -61,6 +61,7 @@ public class ZigBeeTimeOfDay
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.TIME_OF_DAY, value);
 	}
 

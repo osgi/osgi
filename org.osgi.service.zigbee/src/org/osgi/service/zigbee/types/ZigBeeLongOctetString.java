@@ -59,7 +59,7 @@ public class ZigBeeLongOctetString
 		return ZigBeeDataTypes.LONG_OCTET_STRING;
 	}
 
-	public void serialize(ZigBeeDataOutput os, Object value) {
+	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
 		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.LONG_OCTET_STRING, value);
 	}
 
