@@ -37,18 +37,54 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	private static int		minHeaderSize;
 	private static int		maxHeaderSize;
 
-	byte[]					payloadTest1	= new byte[] {(byte) 0xf1, (byte) 0xfa, (byte) 0xf1, (byte) 0xf2, (byte) 0xf1, (byte) 0xf2,
-			(byte) 0xf3, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xfa, (byte) 0xf1, (byte) 0xf2,
-			(byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf1,
-			(byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
-			(byte) 0xf5, (byte) 0xf6, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6,
-			(byte) 0xf7, (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf7,
-			(byte) 0xf8, 0x05, 0x06, 0x07, 0x08, 0x00, (byte) 0x00, (byte) 0x00, 0x00, (byte) 0x01, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	byte[]					payloadTestBasic	= new byte[] {
+			/* readByte() */ (byte) 0xf1,
+			/* readInt(1) */ (byte) 0xfa,
+			/* readInt(2) */ (byte) 0xf1, (byte) 0xf2,
+			/* readInt(3) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3,
+			/* readInt(4) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
+			/* readLong(1) */ (byte) 0xfa,
+			/* readLong(2) */ (byte) 0xf1, (byte) 0xf2,
+			/* readLong(3) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3,
+			/* readLong(4) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4,
+			/* readLong(5) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5,
+			/* readLong(6) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6,
+			/* readLong(7) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf7,
+			/* readLong(8) */ (byte) 0xf1, (byte) 0xf2, (byte) 0xf3, (byte) 0xf4, (byte) 0xf5, (byte) 0xf6, (byte) 0xf7, (byte) 0xf8,
+			/* readBytes(4) */ 0x05, 0x06, 0x07, 0x08
+	};
 
-	byte[]					bytes1			= new byte[] {0x05, 0x06, 0x07, 0x08};
+	/**
+	 * This is a payload used for testing marshaling and unmarshaling of float
+	 * and double types.
+	 */
+	byte[]					payloadTestFloat	= new byte[] {
+			/* readFloat(2), NaN */ 0x01, 0x7C,
+			/* readFloat(2), 0.0 */ 0x00, 0x00,
+			/* readFloat(2), + INFIN */ 0x00, (byte) 0x7C,
+			/* readFloat(2), - INFIN */ 0x00, (byte) 0xFC,
+			/* readFloat(2), denormalized */ 0x68, 0x03,
+			/* readFloat(4), normalized (-252.5) */ (byte) 0xe4, (byte) 0xdb,
+			/* readFloat(4), normalized (+118.5) */ 0x68, 0x57,
 
-	private boolean			skipNaN			= true;
+			/* readFloat(4), NaN */ 0x01, 0x00, (byte) 0x80, (byte) 0x7f,
+			/* readFloat(4), 0.0 */ 0x00, 0x00, 0x00, 0x00,
+			/* readFloat(4), + INFIN */ 0x00, 0x00, (byte) 0x80, (byte) 0x7f,
+			/* readFloat(4), - INFIN */ 0x00, 0x00, (byte) 0x80, (byte) 0xff,
+			/* readFloat(4), denormalized */ 0x00, 0x00, (byte) 0x6d, (byte) 0x00,
+			/* readFloat(4), normalized (-252.5) */ 0x00, (byte) 0x80, 0x7c, (byte) 0xc3,
+			/* readFloat(4), normalized (+118.5) */ 0x00, 0x00, (byte) 0xed, (byte) 0x42,
+
+			/* readDouble(), NaN */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xf8, 0x7f,
+			/* readDouble(), 0.0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			/* readDouble(), + INFIN */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xf0, 0x7f,
+			/* readDouble(), - INFIN */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xf0, (byte) 0xff,
+			/* readDouble(), denormalized */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x08, 0x00,
+			/* readDouble(), normalized (-252.5) */ 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x90, 0x6f, (byte) 0xc0,
+			/* readDouble(), normalized (+118.5) */ 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xa0, 0x5d, 0x40
+	};
+
+	byte[]					bytes1				= new byte[] {0x05, 0x06, 0x07, 0x08};
 
 	/**
 	 * Tests the internal implementation of the ZCLFrame interface (not
@@ -57,7 +93,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	ConfigurationFileReader	conf;
 
-	private String			confFilePath	= "template.xml";
+	private String			confFilePath		= "template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
@@ -207,6 +243,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Creates a ZCLHeader
 		 */
+
 		ZCLHeader headerInit = new ZCLHeaderImpl(commandId,
 				isClusterSpecificCommand,
 				isClientServerDirection,
@@ -215,27 +252,28 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 				manufacturerCode);
 
 		/*
-		 * Creates the frame with initial payload, paylaodTest1
+		 * Creates the frame with initial payload, payloadTestBasic and we
+		 * compare what it is read with what it is expected.
 		 */
-		ZCLFrame frame = new ZCLFrameImpl(headerInit, payloadTest1);
+		ZCLFrame frame = new ZCLFrameImpl(headerInit, payloadTestBasic);
 
 		ZigBeeDataInput dataInput = frame.getDataInput();
 
-		/**
+		/*
 		 * Test ZigBeeDataInput.readByte()
 		 */
 
 		try {
-			assertEquals(payloadTest1[0], dataInput.readByte());
+			assertEquals(payloadTestBasic[0], dataInput.readByte());
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
 
-		/**
+		/*
 		 * ########## Test ZigBeeDataInput.readInt()
 		 */
 
-		/**
+		/*
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
 
@@ -266,11 +304,11 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input, ");
 		}
 
-		/**
+		/*
 		 * Test ZigBeeDataInput.readLong()
 		 */
 
-		/**
+		/*
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
 
@@ -305,7 +343,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input");
 		}
 
-		/**
+		/*
 		 * Test ########## ZigBeeDataInput.readBytes()
 		 */
 
@@ -329,16 +367,25 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input");
 		}
 
-		/**
+		/*
+		 * Issue reads using a frame pre-initialized with some already known
+		 * values
+		 */
+		frame = new ZCLFrameImpl(headerInit, payloadTestFloat);
+
+		dataInput = frame.getDataInput();
+
+		/*
 		 * Test ########## ZigBeeDataInput.readFloat()
 		 */
 
-		/**
-		 * Checks on IllegalArgumentException on wrong size parameter
+		/*
+		 * Checks on IllegalArgumentException on wrong value of the size
+		 * parameter
 		 */
 
 		try {
-			float v = dataInput.readFloat(1);
+			dataInput.readFloat(1);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -347,7 +394,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		}
 
 		try {
-			float v = dataInput.readFloat(3);
+			dataInput.readFloat(3);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -356,7 +403,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		}
 
 		try {
-			float v = dataInput.readFloat(5);
+			dataInput.readFloat(5);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
@@ -364,25 +411,95 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading float, we expected an IllegalArgumentException");
 		}
 
-		try {
-			// FIXME: not supported, yet, semi precision
-			// assertEquals(4, dataInput.readFloat(2));
+		/*
+		 * Test ########## semi-precision readFloat()
+		 */
 
-			if (!skipNaN) {
-				float f = dataInput.readFloat(4);
-			}
-			assertEquals(0.0, dataInput.readFloat(4), 0.00001);
-			assertEquals(Float.MIN_VALUE, dataInput.readFloat(4), 0.00001);
+		try {
+			// NaN
+			float f = dataInput.readFloat(2);
+			assertTrue("the semi-precision float read must be NaN", Float.isNaN(f));
+
+			// Zero
+			assertEquals(0.0, dataInput.readFloat(2), 0f);
+
+			// Positive Infinitive
+			assertEquals(Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
+
+			// Negative Infinitive
+			assertEquals(Float.NEGATIVE_INFINITY, dataInput.readFloat(2), 0f);
+
+			// denormalized value
+			assertEquals(1.0010069E-38f, dataInput.readFloat(2), 0f);
+
+			// normalized value 1
+			assertEquals(-252.5f, dataInput.readFloat(2), 0f);
+
+			// normalized value 2
+			assertEquals(118.5f, dataInput.readFloat(2), 0f);
+
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
 
+		/*
+		 * Test ########## standard precision readFloat()
+		 */
+
 		try {
-			if (!skipNaN) {
-				double d = dataInput.readDouble();
-			}
-			assertEquals(0.0, dataInput.readDouble(), 0.00001);
-			assertEquals(Double.MIN_VALUE, dataInput.readDouble(), 0.00001);
+
+			// NaN
+			float f = dataInput.readFloat(4);
+			assertTrue("the semi-precision float read must be NaN", Float.isNaN(f));
+
+			// Zero
+			assertEquals(0.0, dataInput.readFloat(4), 0.00001);
+
+			// Positive Infinitive
+			assertEquals(Float.POSITIVE_INFINITY, dataInput.readFloat(4), 0f);
+
+			// Negative Infinitive
+			assertEquals(Float.NEGATIVE_INFINITY, dataInput.readFloat(4), 0f);
+
+			// denormalized value
+			assertEquals(1.0010069E-38f, dataInput.readFloat(4), 0f);
+
+			// normalized value 1
+			assertEquals(-252.5f, dataInput.readFloat(4), 0f);
+
+			// normalized value 2
+			assertEquals(118.5f, dataInput.readFloat(4), 0f);
+		} catch (Exception e) {
+			fail("got an unexpected exception while reading from data input");
+		}
+
+		/*
+		 * Test ########## readDouble()
+		 */
+
+		try {
+			// NaN
+			double d = dataInput.readDouble();
+			assertTrue("the semi-precision float read must be NaN", Double.isNaN(d));
+
+			// Zero
+			assertEquals(0.0, dataInput.readDouble(), 0d);
+
+			// Positive Infinitive
+			assertEquals(Double.POSITIVE_INFINITY, dataInput.readDouble(), 0d);
+
+			// Negative Infinitive
+			assertEquals(Double.NEGATIVE_INFINITY, dataInput.readDouble(), 0d);
+
+			// denormalized value
+			assertEquals(1.1125369292536007E-308, dataInput.readDouble(), 0d);
+
+			// normalized value 1
+			assertEquals(-252.5d, dataInput.readDouble(), 0d);
+
+			// normalized value 2
+			assertEquals(118.5d, dataInput.readDouble(), 0d);
+
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
@@ -396,6 +513,10 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got unexpected exception, instead of EOFException: " + e.getMessage());
 		}
 	}
+
+	/**
+	 * Tests marshaling on on the ZCLHeader implementation
+	 */
 
 	public void testDataOutput() {
 
@@ -417,16 +538,17 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 				manufacturerCode);
 
 		/*
-		 * Creates the frame with no initial payload
+		 * Creates an empty frame with a specific maximum payload size.
 		 */
-		ZCLFrameImpl frame = new ZCLFrameImpl(headerInit, payloadTest1.length + 20);
+		ZCLFrameImpl frame = new ZCLFrameImpl(headerInit, payloadTestBasic.length + 20);
 
 		/*
-		 * The getDataOutput() method is not present in the ZCLFrame interface.
+		 * The getDataOutput() method is not present in the ZCLFrame interface,
+		 * but only in the implementation class
 		 */
 		ZigBeeDataOutput dataOutput = frame.getDataOutput();
 
-		/**
+		/*
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
 
@@ -466,12 +588,12 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception in the writeLong(), we expected an IllegalArgumentException");
 		}
 
-		/**
+		/*
 		 * Test writeByte() methods of ZigBeeDataOutput interface
 		 */
 
 		try {
-			dataOutput.writeByte(payloadTest1[0]);
+			dataOutput.writeByte(payloadTestBasic[0]);
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
@@ -506,7 +628,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
-		/**
+		/*
 		 * Test writeBytes() method of ZigBeeDataOutput interface
 		 */
 
@@ -516,36 +638,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
-		/**
-		 * Test writeFloat() method of ZigBeeDataOutput interface
-		 */
-
-		try {
-			if (!skipNaN) {
-				dataOutput.writeFloat(Float.NaN, 4);
-			}
-			dataOutput.writeFloat(0, 4);
-			dataOutput.writeFloat(Float.MIN_VALUE, 4);
-		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: " + e.getMessage());
-		}
-
-		/**
-		 * Test writeDouble() method of ZigBeeDataOutput interface
-		 */
-
-		try {
-			if (!skipNaN) {
-				dataOutput.writeDouble(Double.NaN);
-			}
-			dataOutput.writeDouble(0);
-			dataOutput.writeDouble(Double.MIN_VALUE);
-		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input: " + e.getMessage());
-		}
-
 		/*
-		 * Checks if the data has been marshalled correctly
+		 * Checks if the data has been marshaled correctly
 		 */
 
 		byte[] rawFrame = frame.getBytes();
@@ -556,16 +650,177 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		int i;
 		for (i = 0; i < rawFrame.length - offs; i++) {
-			if (rawFrame[i + offs] != payloadTest1[i]) {
+			if (rawFrame[i + offs] != payloadTestBasic[i]) {
 				equals = false;
 				break;
 			}
 		}
 
 		if (!equals) {
-			fail("marshalling failed at index " + i);
+			fail("marshaled data is different from what it is expected at index " + i);
 		} else {
-			assertEquals("ZCLFrame.getBytes() size", payloadTest1.length + offs, rawFrame.length);
+			assertEquals("ZCLFrame.getBytes() size", payloadTestBasic.length + offs, rawFrame.length);
+		}
+
+		frame = new ZCLFrameImpl(headerInit, payloadTestFloat.length + 20);
+
+		dataOutput = frame.getDataOutput();
+
+		/*
+		 * Checks on IllegalArgumentException on wrong value of the size
+		 * parameter for writeFloat() method of the ZigBeeDataOutput interface.
+		 */
+
+		try {
+			dataOutput.writeFloat(0f, 1);
+			fail("we expected an IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// We expect this exception
+		} catch (Exception e) {
+			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
+		}
+
+		try {
+			dataOutput.writeFloat(0f, 3);
+			fail("we expected an IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// We expect this exception
+		} catch (Exception e) {
+			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
+		}
+
+		try {
+			dataOutput.writeFloat(0f, 5);
+			fail("we expected an IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			// We expect this exception
+		} catch (Exception e) {
+			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
+		}
+
+		/*
+		 * Test writeFloat() method of ZigBeeDataOutput interface for size 2
+		 * (semi-float precision)
+		 */
+
+		try {
+			dataOutput.writeFloat(Float.NaN, 2);
+			dataOutput.writeFloat(0f, 2);
+			dataOutput.writeFloat(Float.POSITIVE_INFINITY, 2);
+			dataOutput.writeFloat(Float.NEGATIVE_INFINITY, 2);
+
+			/*
+			 * too big to fit in a semi-precision float. The actual value that
+			 * must be written is {@link Float.POSITIVE_INFINITY}
+			 */
+			dataOutput.writeFloat(Float.MAX_VALUE, 2);
+			dataOutput.writeFloat(-252.5f, 2);
+			dataOutput.writeFloat(+118.5f, 2);
+		} catch (Exception e) {
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
+		}
+
+		/*
+		 * Test writeFloat() method of ZigBeeDataOutput interface for size 4
+		 * (i.e. stardard precision float)
+		 */
+
+		try {
+			dataOutput.writeFloat(Float.NaN, 4);
+			dataOutput.writeFloat(0f, 4);
+			dataOutput.writeFloat(Float.POSITIVE_INFINITY, 4);
+			dataOutput.writeFloat(Float.NEGATIVE_INFINITY, 4);
+			dataOutput.writeFloat(-252.5f, 4);
+			dataOutput.writeFloat(+118.5f, 4);
+		} catch (Exception e) {
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
+		}
+
+		/*
+		 * Test writeDouble() method of ZigBeeDataOutput interface
+		 */
+
+		try {
+			dataOutput.writeDouble(Double.NaN);
+			dataOutput.writeDouble(0d);
+			dataOutput.writeDouble(Double.POSITIVE_INFINITY);
+			dataOutput.writeDouble(Double.NEGATIVE_INFINITY);
+			dataOutput.writeDouble(-252.5d);
+			dataOutput.writeDouble(+118.5d);
+		} catch (Exception e) {
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
+		}
+
+		/*
+		 * opens a data input stream that should point to the first byte of the
+		 * frame paylaod. Here what it is tested is the correctness of the
+		 * writeFloat() and writeDouble() methods, because the readFloat() and
+		 * readDouble() methods are tested in the testDataInput() testcase.
+		 */
+		ZigBeeDataInput dataInput = frame.getDataInput();
+
+		/*
+		 * Try to read what has been written in the DataOutput stream in the
+		 * lines above.
+		 */
+
+		try {
+
+			/*
+			 * read the values that we have written above, and we check that the
+			 * actual returned value is the expected one
+			 */
+
+			/*
+			 * Read back the semi-float numbers and check if are those that are
+			 * expected to be.
+			 */
+
+			assertTrue("expected NaN", Float.isNaN(dataInput.readFloat(2)));
+			assertEquals(0f, dataInput.readFloat(2), 0f);
+			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
+			assertEquals("expected negative infinity", Float.NEGATIVE_INFINITY, dataInput.readFloat(2), 0f);
+			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
+			assertEquals("wrong value read", -252.5f, dataInput.readFloat(2), 0f);
+			assertEquals("wrong value read", +118.5f, dataInput.readFloat(2), 0f);
+
+			/*
+			 * Read back the float numbers and check if are those that are
+			 * expected to be.
+			 */
+			assertTrue("expected NaN", Float.isNaN(dataInput.readFloat(4)));
+			assertEquals(0f, dataInput.readFloat(4), 0f);
+			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(4), 0f);
+			assertEquals("expected negative infinity", Float.NEGATIVE_INFINITY, dataInput.readFloat(4), 0f);
+			assertEquals("wrong value read", -252.5f, dataInput.readFloat(4), 0f);
+			assertEquals("wrong value read", +118.5f, dataInput.readFloat(4), 0f);
+
+			/*
+			 * Read back the double numbers and check if are those that are
+			 * expected to be.
+			 */
+			assertTrue("expected NaN", Double.isNaN(dataInput.readDouble()));
+			assertEquals(0d, dataInput.readDouble(), 0d);
+			assertEquals("expected positive infinity", Double.POSITIVE_INFINITY, dataInput.readDouble(), 0d);
+			assertEquals("expected negative infinity", Double.NEGATIVE_INFINITY, dataInput.readDouble(), 0d);
+			assertEquals("wrong value read", -252.5d, dataInput.readDouble(), 0d);
+			assertEquals("wrong value read", +118.5d, dataInput.readDouble(), 0d);
+
+		} catch (Exception e) {
+			fail("got an unexpected exception while reading from data input: " + e.getMessage());
+		}
+
+		/*
+		 * If we read any additional byte we should get an EOF exception.
+		 */
+
+		try {
+			dataInput.readByte();
+			fail("expected an EOFException but no exception was thrown");
+		} catch (EOFException e) {
+			// we expect this exception!
+		} catch (Throwable e) {
+			fail("expected an EOFException, got: " + e.getMessage());
 		}
 	}
 
