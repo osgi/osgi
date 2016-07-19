@@ -823,7 +823,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			// limit new thread creation
 			callbackExecutor.setMaximumPoolSize(
 					Math.max(1, callbackExecutor.getPoolSize()));
-			// Transfer all delayed work to CallbackExecutor
+			// Run all delayed callbacks now
 			timeoutExecutor.shutdown();
 			BlockingQueue<Runnable> queue = timeoutExecutor.getQueue();
 			if (!queue.isEmpty()) {
@@ -832,21 +832,22 @@ final class PromiseImpl<T> implements Promise<T> {
 						RunnableScheduledFuture< ? > future = (RunnableScheduledFuture< ? >) r;
 						if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
 								&& queue.remove(future)) {
-							execute(future);
+							future.run();
+							timeoutExecutor.afterExecute(future, null);
 						}
 					}
 				}
+				timeoutExecutor.shutdown();
 			}
-			// Wait for running work to complete
-			callbackExecutor.shutdown();
 			try {
-				callbackExecutor.awaitTermination(20, TimeUnit.SECONDS);
+				timeoutExecutor.awaitTermination(20, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
-			timeoutExecutor.shutdown();
+			// Shutdown callback executor
+			callbackExecutor.shutdown();
 			try {
-				timeoutExecutor.awaitTermination(20, TimeUnit.SECONDS);
+				callbackExecutor.awaitTermination(20, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
