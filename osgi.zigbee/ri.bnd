@@ -1,0 +1,6 @@
+Bundle-Description: OSGi Residential Release ${version;=;${build.version}} ZigBee Reference Implementation
+
+-includeresource: {legal}
+
+Bundle-SymbolicName: osgi.ri.zigbee
+-pack: ${build.zigbee.impls},${jar.zigbee.impls}

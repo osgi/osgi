@@ -1,0 +1,9 @@
+-include            : ${build}/eclipse/jdt.bnd, layout.bnd
+-nobundles: ${is;${driver};eclipse}
+-dependson          : org.osgi.service.event, ${build.impls}, ${build.tests}
+-resourceonly       : true
+
+-outputmask = ${@bsn}-${version;===;${@version}}.jar
+
+# Build the osgi spec files
+-sub       = !layout.bnd, *.bnd
