@@ -29,11 +29,11 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * serialize and deserialize methods to marshal and unmarshal the data into the
  * {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
- * <dl>
+ * <p>
  * Related documentation:
- * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
+ * [1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
  * 2012.
- * </dl>
+ * 
  * 
  * @author $Id$
  */

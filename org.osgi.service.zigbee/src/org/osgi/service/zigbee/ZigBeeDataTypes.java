@@ -34,11 +34,11 @@ package org.osgi.service.zigbee;
  * 
  * 
  * <p>
- * <dl>
+ * 
  * Related documentation:
- * <dd>[1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
+ * [1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
  * 2012.
- * </dl>
+ * 
  * 
  * @author $Id$
  */
@@ -59,19 +59,19 @@ public interface ZigBeeDataTypes {
 	 * is needed but its use does not conform to any of the standard types.
 	 */
 	public static final short	GENERAL_DATA_8			= 0x50;
-	/** */
+	/** General Data 16-bit*/
 	public static final short	GENERAL_DATA_16			= 0x51;
-	/** */
+	/** General Data 24-bit*/
 	public static final short	GENERAL_DATA_24			= 0x52;
-	/** */
+	/** General Data 32-bit*/
 	public static final short	GENERAL_DATA_32			= 0x53;
-	/** */
+	/** General Data 40-bit*/
 	public static final short	GENERAL_DATA_40			= 0x54;
-	/** */
+	/** General Data 48-bit*/
 	public static final short	GENERAL_DATA_48			= 0x55;
-	/** */
+	/** General Data 56-bit*/
 	public static final short	GENERAL_DATA_56			= 0x56;
-	/** */
+	/** General Data 64-bit*/
 	public static final short	GENERAL_DATA_64			= 0x57;
 
 	/**
@@ -91,19 +91,19 @@ public interface ZigBeeDataTypes {
 	 * invalid value of this type.
 	 */
 	public static final short	BITMAP_8				= 0x58;
-	/** */
+	/** Bitmap16-bit*/
 	public static final short	BITMAP_16				= 0x59;
-	/** */
+	/** Bitmap 24-bit*/
 	public static final short	BITMAP_24				= 0x5a;
-	/** */
+	/** Bitmap 32-bit*/
 	public static final short	BITMAP_32				= 0x5b;
-	/** */
+	/** Bitmap 40-bit*/
 	public static final short	BITMAP_40				= 0x5c;
-	/** */
+	/** Bitmap 48-bit*/
 	public static final short	BITMAP_48				= 0x5d;
-	/** */
+	/** Bitmap 56-bit*/
 	public static final short	BITMAP_56				= 0x5e;
-	/** */
+	/** Bitmap 64-bit*/
 	public static final short	BITMAP_64				= 0x5f;
 
 	/**
@@ -117,19 +117,19 @@ public interface ZigBeeDataTypes {
 	 * 0xffffffffffffffff respectively.
 	 */
 	public static final short	UNSIGNED_INTEGER_8		= 0x60;
-	/** */
+	/** Unsigned Integer 16-bit*/
 	public static final short	UNSIGNED_INTEGER_16		= 0x61;
-	/** */
+	/** Unsigned Integer 24-bit*/
 	public static final short	UNSIGNED_INTEGER_24		= 0x62;
-	/** */
+	/** Unsigned Integer 32-bit*/
 	public static final short	UNSIGNED_INTEGER_32		= 0x63;
-	/** */
+	/** Unsigned Integer 40-bit*/
 	public static final short	UNSIGNED_INTEGER_40		= 0x64;
-	/** */
+	/** Unsigned Integer 48-bit*/
 	public static final short	UNSIGNED_INTEGER_48		= 0x65;
-	/** */
+	/** Unsigned Integer 56-bit*/
 	public static final short	UNSIGNED_INTEGER_56		= 0x66;
-	/** */
+	/** Unsigned Integer 64-bit*/
 	public static final short	UNSIGNED_INTEGER_64		= 0x67;
 
 	/**
@@ -144,19 +144,19 @@ public interface ZigBeeDataTypes {
 	 * respectively.
 	 */
 	public static final short	SIGNED_INTEGER_8		= 0xe0;
-	/** */
+	/** Signed Integer 16-bit*/
 	public static final short	SIGNED_INTEGER_16		= 0xe1;
-	/** */
+	/** Signed Integer 24-bit*/
 	public static final short	SIGNED_INTEGER_24		= 0xe2;
-	/** */
+	/** Signed Integer 32-bit*/
 	public static final short	SIGNED_INTEGER_32		= 0xe3;
-	/** */
+	/** Signed Integer 40-bit*/
 	public static final short	SIGNED_INTEGER_40		= 0xe4;
-	/** */
+	/** Signed Integer 48-bit*/
 	public static final short	SIGNED_INTEGER_48		= 0xe5;
-	/** */
+	/** Signed Integer 56-bit*/
 	public static final short	SIGNED_INTEGER_56		= 0xe6;
-	/** */
+	/** Signed Integer 64-bit*/
 	public static final short	SIGNED_INTEGER_64		= 0xe7;
 
 	/**
@@ -167,7 +167,7 @@ public interface ZigBeeDataTypes {
 	 * the 8-bit and 16- bit types respectively.
 	 */
 	public static final short	ENUMERATION_8			= 0x70;
-	/** */
+	/** Enumeration 16-bit*/
 	public static final short	ENUMERATION_16			= 0x71;
 
 	/**
