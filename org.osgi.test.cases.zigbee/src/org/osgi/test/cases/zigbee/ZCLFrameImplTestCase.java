@@ -93,7 +93,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	ConfigurationFileReader	conf;
 
-	private String			confFilePath	= "zigbee-template.xml";
+	private String			confFilePath		= "zigbee-template.xml";
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
@@ -557,7 +557,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading float, we expected an IllegalArgumentException");
 		}
 
@@ -566,7 +566,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception in the writeInt(), we expected an IllegalArgumentException");
 		}
 
@@ -575,7 +575,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception in the writeLong(), we expected an IllegalArgumentException");
 		}
 
@@ -584,7 +584,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception in the writeLong(), we expected an IllegalArgumentException");
 		}
 
@@ -594,7 +594,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		try {
 			dataOutput.writeByte(payloadTestBasic[0]);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
@@ -634,7 +634,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		try {
 			dataOutput.writeBytes(bytes1, bytes1.length);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
@@ -676,7 +676,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
 		}
 
@@ -685,7 +685,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
 		}
 
@@ -694,7 +694,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while writing a float of invalid size, we expected an IllegalArgumentException");
 		}
 
@@ -716,7 +716,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeFloat(Float.MAX_VALUE, 2);
 			dataOutput.writeFloat(-252.5f, 2);
 			dataOutput.writeFloat(+118.5f, 2);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
@@ -732,7 +732,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeFloat(Float.NEGATIVE_INFINITY, 4);
 			dataOutput.writeFloat(-252.5f, 4);
 			dataOutput.writeFloat(+118.5f, 4);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
@@ -747,7 +747,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			dataOutput.writeDouble(Double.NEGATIVE_INFINITY);
 			dataOutput.writeDouble(-252.5d);
 			dataOutput.writeDouble(+118.5d);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
@@ -806,7 +806,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			assertEquals("wrong value read", -252.5d, dataInput.readDouble(), 0d);
 			assertEquals("wrong value read", +118.5d, dataInput.readDouble(), 0d);
 
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
 		}
 
