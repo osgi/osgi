@@ -82,29 +82,52 @@ class ZigBeeZCLDefaultSerializer {
 			 */
 
 			if (dataType >= ZigBeeDataTypes.UNSIGNED_INTEGER_8 && dataType <= ZigBeeDataTypes.UNSIGNED_INTEGER_64) {
-				// This is an Unsigned Integer Data Type
 
-				if (value == null) {
-					// serialize an Invalid Value for Unsigned Integers
-					switch (dataType) {
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_8 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_16 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_24 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
-							os.writeInt(0xffffffff, (dataType & 0x07) + 1);
-							return;
+				int size = (dataType & 0x07) + 1;
 
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_40 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_48 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_56 :
-						case ZigBeeDataTypes.UNSIGNED_INTEGER_64 :
-							os.writeLong(0xffffffffffffffffL, (dataType & 0x07) + 1);
-							return;
+				// serialize an Invalid Value for Unsigned Integers
+				switch (dataType) {
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_8 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_16 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_24 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
+						os.writeInt(0xffffffff, size);
+						return;
 
-						default :
-							break;
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_40 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_48 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_56 :
+					case ZigBeeDataTypes.UNSIGNED_INTEGER_64 :
+						os.writeLong(0xffffffffffffffffL, size);
+						return;
 
-					}
+					default :
+						break;
+
+				}
+			}
+			else if (dataType >= ZigBeeDataTypes.SIGNED_INTEGER_8 && dataType <= ZigBeeDataTypes.SIGNED_INTEGER_64) {
+
+				int size = (dataType & 0x07) + 1;
+
+				switch (dataType) {
+					case ZigBeeDataTypes.SIGNED_INTEGER_8 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_16 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_24 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_32 :
+						os.writeInt(1 << ((size << 3) - 1), size);
+						return;
+
+					case ZigBeeDataTypes.SIGNED_INTEGER_40 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_48 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_56 :
+					case ZigBeeDataTypes.SIGNED_INTEGER_64 :
+						os.writeLong(1L << ((size << 3) - 1), size);
+						return;
+
+					default :
+						break;
+
 				}
 			} else {
 				switch (dataType) {
@@ -386,7 +409,7 @@ class ZigBeeZCLDefaultSerializer {
 	}
 
 	/**
-	 * Unarshal {@code ZigBeeDataInput} stream, according the {@code dataType}
+	 * Unmarshal {@code ZigBeeDataInput} stream, according the {@code dataType}
 	 * argument. An {@code IllegalArgumentException} is thrown when the the
 	 * passed {@code value} does not belong to the class allowed for the
 	 * {@code dataType}.
@@ -419,7 +442,7 @@ class ZigBeeZCLDefaultSerializer {
 	 */
 	static Object deserializeDataType(ZigBeeDataInput is, short dataType) throws IOException {
 		if (is == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("ZigBeeDataInput parameter cannot be null");
 		}
 		switch (dataType) {
 			case ZigBeeDataTypes.GENERAL_DATA_8 :
@@ -545,7 +568,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_8 : {
 				short s = is.readByte();
-				if (s == Short.MIN_VALUE) {
+				if (s == Byte.MIN_VALUE) {
 					return null;
 				}
 				return new Short(s);
@@ -561,23 +584,23 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_24 : {
 				int i = is.readInt(3);
-				if (i == Integer.MIN_VALUE) {
+				if (i == 0x800000) {
 					return null;
 				}
 				return new Integer(i);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_32 : {
-				long l = is.readLong(4);
-				if (l == Long.MIN_VALUE) {
+				int i = is.readInt(4);
+				if (i == Integer.MIN_VALUE) {
 					return null;
 				}
-				return new Long(l);
+				return new Integer(i);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_40 : {
 				long l = is.readLong(5);
-				if (l == Long.MIN_VALUE) {
+				if (l == 0x8000000000L) {
 					return null;
 				}
 				return new Long(l);
@@ -585,7 +608,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_48 : {
 				long l = is.readLong(6);
-				if (l == Long.MIN_VALUE) {
+				if (l == 0x800000000000L) {
 					return null;
 				}
 				return new Long(l);
@@ -593,7 +616,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_56 : {
 				long l = is.readLong(7);
-				if (l == Long.MIN_VALUE) {
+				if (l == 0x80000000000000L) {
 					return null;
 				}
 				return new Long(l);
