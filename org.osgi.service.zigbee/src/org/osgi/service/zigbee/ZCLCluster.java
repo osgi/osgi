@@ -234,7 +234,7 @@ public interface ZCLCluster {
 	 *        response {@link ZCLFrame} is passed to the {@code onSuccess}
 	 *        method of the handler. The handler is called only once.
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler);
+	Promise invoke(ZCLFrame frame);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -249,6 +249,6 @@ public interface ZCLCluster {
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
+	Promise invoke(ZCLFrame frame, String exportedServicePID);
 
 }

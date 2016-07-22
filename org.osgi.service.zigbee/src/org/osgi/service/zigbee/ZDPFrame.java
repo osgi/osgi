@@ -22,7 +22,7 @@ package org.osgi.service.zigbee;
  * 
  * <p>
  * This interface MUST be implemented by the developer invoking the
- * {@link ZigBeeNode#invoke(int, int, ZDPFrame, ZDPHandler)}
+ * {@link ZigBeeNode#invoke(int, int, ZDPFrame)}
  * 
  * <p>
  * <b>Notes</b>

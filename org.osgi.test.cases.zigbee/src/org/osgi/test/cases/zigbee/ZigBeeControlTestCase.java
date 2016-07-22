@@ -48,7 +48,6 @@ import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.config.file.NetworkAttributeIds;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
-import org.osgi.test.cases.zigbee.mock.ZCLCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
 import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
@@ -696,12 +695,11 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZCLFrame frame = new TestZCLFrame(conf.getRequestHeader(),
 				conf.getRequestFullFrame());
 		try {
-			ZCLCommandHandlerImpl commandHandlerImpl = new ZCLCommandHandlerImpl();
-			cluster.invoke(frame, commandHandlerImpl);
-			commandHandlerImpl.waitForResponse(HANDLER_TIMEOUT);
-			ZCLFrame frameResponse = commandHandlerImpl.getResponse();
+			p = cluster.invoke(frame);
+			waitForPromise(p);
+			ZCLFrame frameResponse = (ZCLFrame) p.getValue();
 			log("commandHandlerImpl.getResponse(): "
-					+ commandHandlerImpl.getResponse());
+					+ frameResponse);
 			assertTrue(
 					"the response frame is not the one expected",
 					Arrays.equals(conf.getResponseFullFrame(),
@@ -719,10 +717,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		frame = null;
 		String exportedServicePID = null;
 		try {
-			ZCLCommandHandlerImpl commandHandlerImpl = new ZCLCommandHandlerImpl();
-			cluster.invoke(frame, commandHandlerImpl, exportedServicePID);
-			commandHandlerImpl.waitForResponse(HANDLER_TIMEOUT);
-			ZCLFrame response = commandHandlerImpl.getResponse();
+			p = cluster.invoke(frame, exportedServicePID);
+			waitForPromise(p);
+			ZCLFrame response = (ZCLFrame) p.getValue();
 			log("commandHandlerImpl.getResponse(): " + response);
 		} catch (ZCLException e) {
 			e.printStackTrace();

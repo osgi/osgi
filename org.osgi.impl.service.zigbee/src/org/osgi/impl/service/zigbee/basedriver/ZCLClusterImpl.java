@@ -23,7 +23,6 @@ import java.util.Set;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
-import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
@@ -73,8 +72,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 			}
 		}
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
-					ZCLException.FAILURE,
-					"the AttributeId is not valid"));
+				ZCLException.FAILURE,
+				"the AttributeId is not valid"));
 	}
 
 	public Promise getAttributes() {
@@ -140,14 +139,14 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.resolved(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) {
+	public Promise invoke(ZCLFrame frame) {
 		// mocked invocation.
-		handler.notifyResponse(frame, null);
+		return Promises.resolved(frame);
 	}
 
-	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
+	public Promise invoke(ZCLFrame frame, String exportedServicePID) {
 		// mocked invocation.
-		handler.notifyResponse(frame, null);
+		return Promises.resolved(frame);
 	}
 
 	public String toString() {

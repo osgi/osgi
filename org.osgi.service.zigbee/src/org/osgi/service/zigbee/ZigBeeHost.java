@@ -227,7 +227,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */
-	void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler);
+	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame);
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.
@@ -241,7 +241,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */
-	void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
+	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**
 	 * @return the current broadcastradius value.

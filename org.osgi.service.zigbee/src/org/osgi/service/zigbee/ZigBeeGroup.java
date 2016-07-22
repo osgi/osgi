@@ -111,7 +111,7 @@ public interface ZigBeeGroup {
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
 	 */
-	void invoke(int clusterId, ZCLFrame frame, ZCLCommandHandler handler);
+	Promise invoke(int clusterId, ZCLFrame frame);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -127,6 +127,6 @@ public interface ZigBeeGroup {
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
 	 */
-	void invoke(int clusterId, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
+	Promise invoke(int clusterId, ZCLFrame frame, String exportedServicePID);
 
 }
