@@ -6,7 +6,6 @@ import java.math.BigInteger;
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPFrame;
-import org.osgi.service.zigbee.ZDPHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -185,12 +184,12 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return Promises.failed(new UnsupportedOperationException());
 	}
 
-	public void invoke(int clusterIdReq, int expectedClusterIdRsp,
-			ZDPFrame message, ZDPHandler handler) {
-
+	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp,
+			ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void invoke(int clusterIdReq, ZDPFrame message, ZDPHandler handler) {
-
+	public Promise invoke(int clusterIdReq, ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 }

@@ -261,7 +261,7 @@ public interface ZigBeeNode {
 	 * @param message the {@link ZDPFrame} containing the message.
 	 * @param handler The handler for the response to the {@link ZDPFrame}.
 	 */
-	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler);
+	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message);
 
 	/**
 	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
@@ -276,7 +276,7 @@ public interface ZigBeeNode {
 	 * @param message the {@link ZDPFrame} containing the message
 	 * @param handler The handler for the response to the {@link ZDPFrame}
 	 */
-	public void invoke(int clusterIdReq, ZDPFrame message, ZDPHandler handler);
+	public Promise invoke(int clusterIdReq, ZDPFrame message);
 
 	/**
 	 * Enable to broadcast a given frame of a specific cluster to all the

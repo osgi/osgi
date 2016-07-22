@@ -21,7 +21,6 @@ import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZDPFrame;
-import org.osgi.service.zigbee.ZDPHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
@@ -129,12 +128,12 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler) {
-
+	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void invoke(int clusterIdReq, ZDPFrame message, ZDPHandler handler) {
-
+	public Promise invoke(int clusterIdReq, ZDPFrame message) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public String toString() {
