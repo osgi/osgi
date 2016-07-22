@@ -359,13 +359,20 @@ public class ConfigurationFileReader {
 				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
 				endpointId = endpoints[j].getId();
 				for (int k = 0; k < serverClusters.length; k++) {
-					ZCLAttribute[] attributes = ((ZCLClusterConf) serverClusters[k]).getAttributes();
-					clusterId = serverClusters[k].getId();
-					for (int l = 0; l < attributes.length; l++) {
-						if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
-							attributeId = attributes[l].getId();
-							return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+
+					// This is poor practice as we shouldn't block on a Promise
+					try {
+						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterConf) serverClusters[k]).getAttributes().getValue();
+						clusterId = serverClusters[k].getId();
+						for (int l = 0; l < attributes.length; l++) {
+							if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
+								attributeId = attributes[l].getId();
+								return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
+							}
 						}
+					} catch (Exception e) {
+						throw new RuntimeException("A problem occurred!",
+								e instanceof InvocationTargetException ? ((InvocationTargetException) e).getTargetException() : e);
 					}
 				}
 			}

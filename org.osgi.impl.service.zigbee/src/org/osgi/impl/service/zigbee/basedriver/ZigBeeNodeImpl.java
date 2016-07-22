@@ -23,11 +23,12 @@ import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZDPHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl.
@@ -98,35 +99,34 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return BigInteger.valueOf(-1);
 	}
 
-	public void getNodeDescriptor(ZigBeeHandler handler) {
+	public Promise getNodeDescriptor() {
 
-		handler.onSuccess(nodeDescriptor);
+		return Promises.resolved(nodeDescriptor);
 	}
 
-	public void getPowerDescriptor(ZigBeeHandler handler) {
+	public Promise getPowerDescriptor() {
 
-		handler.onSuccess(powerDescriptor);
+		return Promises.resolved(powerDescriptor);
 	}
 
-	public void getComplexDescriptor(ZigBeeHandler handler) {
-
-		handler.onSuccess(complexDescriptor);
+	public Promise getComplexDescriptor() {
+		return Promises.resolved(complexDescriptor);
 	}
 
-	public void getLinksQuality(ZigBeeHandler handler) throws ZDPException {
-
+	public Promise getLinksQuality() throws ZDPException {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void getRoutingTable(ZigBeeHandler handler) {
-
+	public Promise getRoutingTable() {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void leave(ZigBeeHandler handler) {
-
+	public Promise leave() {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
-
+	public Promise leave(boolean rejoin, boolean removeChildren) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message, ZDPHandler handler) {
@@ -143,12 +143,12 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
-	public void getUserDescription(ZigBeeHandler handler) {
-		handler.onSuccess(userDescription);
+	public Promise getUserDescription() {
+		return Promises.resolved(userDescription);
 	}
 
-	public void setUserDescription(String userDescriptor, ZigBeeHandler handler) {
-
+	public Promise setUserDescription(String userDescriptor) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void broadcast(int clusterID, ZCLFrame frame, ZCLCommandHandler handler) {

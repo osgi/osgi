@@ -20,9 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl.
@@ -52,29 +53,29 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return description.getDataType();
 	}
 
-	public void getValue(ZigBeeHandler handler) {
+	public Promise getValue() {
 		// Map<Integer, Object> response = null;
 		Map response = null;
 		response = new HashMap();
 		response.put(Integer.valueOf(Integer.toString(id)), value);
-		handler.onSuccess(response);
+		return Promises.resolved(response);
 	}
 
-	public void setValue(Object value, ZigBeeHandler handler) {
+	public Promise setValue(Object value) {
 		this.value = value;
 		// Map<Integer, Object> response = null;
 		Map response = null;
 		response = new HashMap();
 		response.put(Integer.valueOf(Integer.toString(id)), this.value);
 		if (description.isReadOnly()) {
-			handler.onFailure(new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute"));
+			return Promises.failed(new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute"));
 		} else if (!description.getDataType().getJavaDataType().isInstance(value)) {
-			handler.onFailure(
+			return Promises.failed(
 					new ZCLException(ZCLException.INVALID_DATA_TYPE, "can't set the value, invalid dataType"));
 		}
 
 		else {
-			handler.onSuccess(response);
+			return Promises.resolved(response);
 		}
 	}
 

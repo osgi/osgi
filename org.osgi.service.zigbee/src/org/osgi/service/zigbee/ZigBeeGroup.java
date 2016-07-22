@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee;
 
+import org.osgi.util.promise.Promise;
+
 /**
  * This interface represents a ZigBee Group
  * 
@@ -48,9 +50,9 @@ public interface ZigBeeGroup {
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to add to this Group.
-	 * @param handler the handler that will notified of the result of "joining".
-	 *        The expected object is always a {@link Boolean} indicating a
-	 *        failure or a success
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         The expected object is always a {@link Boolean} indicating a
+	 *         failure or a success
 	 * 
 	 * @throws APSException when the joining is performed locally on an exported
 	 *         {@link ZigBeeEndpoint} and it fails either with error code
@@ -63,7 +65,7 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	void joinGroup(String pid, ZigBeeHandler handler);
+	Promise joinGroup(String pid);
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
@@ -79,9 +81,10 @@ public interface ZigBeeGroup {
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to remove from this Group.
-	 * @param handler the handler that will notified of the result of "joining".
-	 *        The expected object is always a {@link Boolean} indicating a
-	 *        failure or a success
+	 * 
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         The expected object is always a {@link Boolean} indicating a
+	 *         failure or a success
 	 * 
 	 * @throws APSException when the joining is performed locally on an exported
 	 *         {@link ZigBeeEndpoint} and it fails either with error code
@@ -94,7 +97,7 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	void leaveGroup(String pid, ZigBeeHandler handler);
+	Promise leaveGroup(String pid);
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation

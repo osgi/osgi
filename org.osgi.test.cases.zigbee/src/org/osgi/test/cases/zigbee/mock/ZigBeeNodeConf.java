@@ -19,10 +19,11 @@ package org.osgi.test.cases.zigbee.mock;
 import java.math.BigInteger;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * 
@@ -63,19 +64,19 @@ public class ZigBeeNodeConf extends ZigBeeNodeImpl {
 
 	}
 
-	public ZigBeeNodeDescriptor getNodeDescriptor() {
+	public Promise getNodeDescriptor() {
 
-		return nodeDescriptor;
+		return Promises.resolved(nodeDescriptor);
 	}
 
-	public ZigBeePowerDescriptor getPowerDescriptor() {
+	public Promise getPowerDescriptor() {
 
-		return powerDescriptor;
+		return Promises.resolved(powerDescriptor);
 	}
 
-	public ZigBeeComplexDescriptor getComplexDescriptor() {
+	public Promise getComplexDescriptor() {
 
-		return complexDescriptor;
+		return Promises.resolved(complexDescriptor);
 	}
 
 	public String getUserDesc() {

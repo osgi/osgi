@@ -8,10 +8,11 @@ import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZDPHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl.
@@ -80,8 +81,8 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return null;
 	}
 
-	public void refreshNetwork(ZigBeeHandler handler) throws Exception {
-
+	public Promise refreshNetwork() throws Exception {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void permitJoin(short duration) throws Exception {
@@ -168,21 +169,20 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return null;
 	}
 
-	public void getLinksQuality(ZigBeeHandler handler) {
-
+	public Promise getLinksQuality() {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void getRoutingTable(ZigBeeHandler handler) {
-
+	public Promise getRoutingTable() {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void leave(ZigBeeHandler handler) {
-
+	public Promise leave() {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren,
-			ZigBeeHandler handler) {
-
+	public Promise leave(boolean rejoin, boolean removeChildren) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void invoke(int clusterIdReq, int expectedClusterIdRsp,

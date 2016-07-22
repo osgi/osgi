@@ -19,6 +19,8 @@ package org.osgi.impl.service.zigbee.basedriver.configuration;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeEndpointImpl;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * 
@@ -38,9 +40,9 @@ public class ZigBeeEndpointConf extends ZigBeeEndpointImpl {
 
 	}
 
-	public ZigBeeSimpleDescriptor getSimpleDescriptor() {
+	public Promise getSimpleDescriptor() {
 
-		return desc;
+		return Promises.resolved(desc);
 	}
 
 }

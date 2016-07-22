@@ -19,6 +19,8 @@ package org.osgi.impl.service.zigbee.basedriver.configuration;
 import org.osgi.impl.service.zigbee.basedriver.ZCLClusterImpl;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * 
@@ -37,11 +39,11 @@ public class ZCLClusterConf extends ZCLClusterImpl {
 		this.commandIds = commandIds;
 	}
 
-	public int[] getCommandIds() {
-		return commandIds;
+	public Promise getCommandIds() {
+		return Promises.resolved(commandIds);
 	}
 
-	public ZCLAttribute[] getAttributes() {
-		return attributes;
+	public Promise getAttributes() {
+		return Promises.resolved(attributes);
 	}
 }

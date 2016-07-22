@@ -4,5 +4,6 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	osgi.core;					version=4.2, \
-	ee.minimum;					version=1.2.1
+	osgi.core;					    version=4.2, \
+	osgi.promise;                   version=6.0, \
+	ee.minimum;					    version=1.2.1

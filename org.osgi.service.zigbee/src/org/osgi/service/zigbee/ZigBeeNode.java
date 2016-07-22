@@ -21,6 +21,7 @@ import java.util.Map;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.util.promise.Promise;
 
 /**
  * This interface represents a ZigBee node, means a physical device that can
@@ -140,10 +141,11 @@ public interface ZigBeeNode {
 	 * node_decr request can have the following status: SUCCESS,
 	 * DEVICE_NOT_FOUND ,INV_REQUESTTYPE or NO_DESCRIPTOR.
 	 * 
-	 * @param handler that will be used in order to return the node descriptor
-	 *        {@link ZigBeeNodeDescriptor}.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the node descriptor
+	 *         {@link ZigBeeNodeDescriptor}.
 	 */
-	public void getNodeDescriptor(ZigBeeHandler handler);
+	public Promise getNodeDescriptor();
 
 	/**
 	 * As described in "Table 2.92 Fields of the Power_Desc_rsp Command" of the
@@ -151,10 +153,11 @@ public interface ZigBeeNode {
 	 * power_decr request can have the following status: SUCCESS,
 	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
 	 * 
-	 * @param handler that will be used in order to return the node power
-	 *        descriptor {@link ZigBeePowerDescriptor}.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the node power descriptor
+	 *         {@link ZigBeePowerDescriptor}.
 	 */
-	public void getPowerDescriptor(ZigBeeHandler handler);
+	public Promise getPowerDescriptor();
 
 	/**
 	 * As described in "Table 2.96 Fields of the Complex_Desc_rsp Command" of
@@ -162,11 +165,12 @@ public interface ZigBeeNode {
 	 * complex_desc request can have the following status: SUCCESS,
 	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
 	 * 
-	 * @param handler that will be used in order to return the node complex
-	 *        descriptor {@link ZigBeeComplexDescriptor}. Can be null if complex
-	 *        descriptor is not provided.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the node complex descriptor
+	 *         {@link ZigBeeComplexDescriptor}. Can be null no complex
+	 *         descriptor is not provided.
 	 */
-	public void getComplexDescriptor(ZigBeeHandler handler);
+	public Promise getComplexDescriptor();
 
 	/**
 	 * The ZigBee Base Drive may use the Mgmt_Lqi_req / Mgmt_Lqi_rsp messages to
@@ -178,14 +182,14 @@ public interface ZigBeeNode {
 	 * UNSUPPORTED_ATTRIBUTE in case of failure that will be notified to the
 	 * handler.
 	 * 
-	 * @param handler that will notified with the result of this operation. In
-	 *        case of success, the object notified with
-	 *        {@link ZigBeeHandler#onSuccess(Object)} will be a {@link Map}
-	 *        containing the Service.PID as {@link String} key of the
-	 *        {@link ZigBeeNode} service and the value the
-	 *        {@link ZigBeeLinkQuality} for that node.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be resolved with the result of this operation. In case of
+	 *         success the resolved value will be a {@link Map} containing the
+	 *         Service.PID as {@link String} key of the {@link ZigBeeNode}
+	 *         service and the value the {@link ZigBeeLinkQuality} for that
+	 *         node.
 	 */
-	public void getLinksQuality(ZigBeeHandler handler);
+	public Promise getLinksQuality();
 
 	/**
 	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
@@ -195,14 +199,13 @@ public interface ZigBeeNode {
 	 * UNSUPPORTED_ATTRIBUTE in case of failure that will be notified to the
 	 * handler.
 	 * 
-	 * @param handler that will notified with the result of this operation. In
-	 *        case of success, the object notified with
-	 *        {@link ZigBeeHandler#onSuccess(Object)} will be a {@link Map}
-	 *        containing the Service.PID as {@link String} key of the
-	 *        {@link ZigBeeNode} service and the value the {@link ZigBeeRoute}
-	 *        for that node.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         In case of success, the resolved value will be a {@link Map}
+	 *         containing the Service.PID as {@link String} key of the
+	 *         {@link ZigBeeNode} service and the value the {@link ZigBeeRoute}
+	 *         for that node.
 	 */
-	public void getRoutingTable(ZigBeeHandler handler);
+	public Promise getRoutingTable();
 
 	/**
 	 * Request to leave the network. <br>
@@ -217,9 +220,9 @@ public interface ZigBeeNode {
 	 * leave succeeds. In case of an error has occurred, onFailure is called
 	 * with a ZCLException.
 	 * 
-	 * @param handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public void leave(ZigBeeHandler handler);
+	public Promise leave();
 
 	/**
 	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
@@ -242,9 +245,9 @@ public interface ZigBeeNode {
 	 * @param removeChildren This field has a value of 1 if the device being
 	 *        asked to leave the network is also being asked to remove its child
 	 *        devices, if any. Otherwise, it has a value of 0.
-	 * @param handler The handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler);
+	public Promise leave(boolean rejoin, boolean removeChildren);
 
 	/**
 	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
@@ -306,11 +309,12 @@ public interface ZigBeeNode {
 	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR. These constants are
 	 * defined in {@link ZDPException}.
 	 * 
-	 * @param handler that will be used in order to return the node user
-	 *        description (String). Return an exception with NO_DESCRIPTOR (via
-	 *        handler.onFailure(...)) whether no user descriptor is available.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the node user description
+	 *         (String). The promise will fail with NO_DESCRIPTOR when no user
+	 *         descriptor is available.
 	 */
-	void getUserDescription(ZigBeeHandler handler);
+	Promise getUserDescription();
 
 	/**
 	 * As described in "Table 2.137 ZDP Enumerations Description" of the ZigBee
@@ -319,8 +323,8 @@ public interface ZigBeeNode {
 	 * NO_DESCRIPTOR. These constants are defined in {@link ZDPException}.
 	 * 
 	 * @param userDescription the user description
-	 * @param handler the response handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	void setUserDescription(String userDescription, ZigBeeHandler handler);
+	Promise setUserDescription(String userDescription);
 
 }

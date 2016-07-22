@@ -18,6 +18,7 @@ package org.osgi.service.zigbee;
 
 import java.math.BigInteger;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
+import org.osgi.util.promise.Promise;
 
 /**
  * This interface represents a ZigBee EndPoint.
@@ -108,10 +109,12 @@ public interface ZigBeeEndpoint {
 	 * simple_decr request can have the following status: SUCCESS, INVALID_EP,
 	 * NOT_ACTIVE, DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
 	 * 
-	 * @param handler that will be used in order to return the node simple
-	 *        descriptor {@link ZigBeeSimpleDescriptor}.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the node simple descriptor
+	 *         {@link ZigBeeSimpleDescriptor}.
+	 * 
 	 */
-	public void getSimpleDescriptor(ZigBeeHandler handler);
+	public Promise getSimpleDescriptor();
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -156,9 +159,9 @@ public interface ZigBeeEndpoint {
 	 * 
 	 * @param servicePid to bound to
 	 * @param clusterId the cluster identifier to bound to
-	 * @param handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public void bind(String servicePid, int clusterId, ZigBeeHandler handler);
+	public Promise bind(String servicePid, int clusterId);
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by
@@ -177,9 +180,9 @@ public interface ZigBeeEndpoint {
 	 * 
 	 * @param servicePid to unbound from
 	 * @param clusterId The cluster identifier to unbound from
-	 * @param handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public void unbind(String servicePid, int clusterId, ZigBeeHandler handler);
+	public Promise unbind(String servicePid, int clusterId);
 
 	/**
 	 * This method is used to get details about problems when an error occurs
@@ -205,12 +208,12 @@ public interface ZigBeeEndpoint {
 	 * status code returned from the APSME-GET.confirm primitive (see
 	 * {@link APSException}). <br>
 	 * 
-	 * The response object given to the handler is a List containing the bound
+	 * The response object given to the Promise is a List containing the bound
 	 * endpoint service PIDs.
 	 * 
 	 * @param clusterId
-	 * @param handler
+	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler);
+	public Promise getBoundEndPoints(int clusterId);
 
 }

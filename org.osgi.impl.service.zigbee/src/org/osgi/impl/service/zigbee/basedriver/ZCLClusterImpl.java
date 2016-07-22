@@ -26,8 +26,9 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl.
@@ -64,32 +65,28 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return id;
 	}
 
-	public void getAttribute(int attributeId, ZigBeeHandler handler) {
+	public Promise getAttribute(int attributeId) {
 
-		boolean hasBeenFound = false;
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributeId == attributes[i].getId()) {
-				handler.onSuccess(attributes[i]);
-				hasBeenFound = true;
+				return Promises.resolved(attributes[i]);
 			}
 		}
-		if (!hasBeenFound) {
-			handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
+		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 					ZCLException.FAILURE,
 					"the AttributeId is not valid"));
-		}
 	}
 
-	public void getAttributes(ZigBeeHandler handler) {
-		handler.onSuccess(attributes);
+	public Promise getAttributes() {
+		return Promises.resolved(attributes);
 	}
 
-	public void getCommandIds(ZigBeeHandler handler) {
+	public Promise getCommandIds() {
 
-		handler.onSuccess(this.commandIds.clone());
+		return Promises.resolved(this.commandIds.clone());
 	}
 
-	public void readAttributes(ZCLAttributeInfo[] attributesInfoArray, ZigBeeHandler handler) {
+	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
 		// Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		// FIX Should we check for a null value?
 		/*
@@ -98,9 +95,9 @@ public class ZCLClusterImpl implements ZCLCluster {
 		 */
 
 		if (attributesInfoArray == null) {
-			throw new NullPointerException("attributes cannot be null");
+			return Promises.failed(new NullPointerException("attributes cannot be null"));
 		} else if (attributesInfoArray.length == 0) {
-			throw new IllegalArgumentException("attributes array cannot be empty");
+			return Promises.failed(new IllegalArgumentException("attributes array cannot be empty"));
 		}
 		Map response = new HashMap();
 
@@ -110,28 +107,24 @@ public class ZCLClusterImpl implements ZCLCluster {
 			ZCLAttributeInfo attributeInfo = attributesInfoArray[i];
 			code.add(new Integer(attributeInfo.getManufacturerCode()));
 			if (code.size() != 1) {
-				handler.onFailure(new IllegalArgumentException(
+				return Promises.failed(new IllegalArgumentException(
 						attributeInfo.getId() + " has a different manufacturer code compared to the others"));
-				return;
 			}
 			int attrId = attributeInfo.getId();
 			ZCLAttribute attribute = getAttributeFromId(attrId);
 			if (attribute == null) {
-				handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
+				return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 						ZCLException.FAILURE,
 						"the AttributeId is not valid"));
-				return;
 			}
 			if (attributeInfo.getDataType() != null && attribute.getDataType() != null) {
 
 				if (attributeInfo.getDataType().getId() != attribute.getDataType().getId()) {
-					handler.onFailure(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
+					return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 							ZCLException.FAILURE,
 							"the Attribute datatype is not valid"));
-					return;
 				}
 			}
-
 		}
 
 		int i = 0;
@@ -140,11 +133,11 @@ public class ZCLClusterImpl implements ZCLCluster {
 		byte[] attributeValue = {0};
 		response.put(Integer.valueOf(Integer.toString(attribute.getId())), attributeValue);
 		// }
-		handler.onSuccess(response);
+		return Promises.resolved(response);
 	}
 
-	public void writeAttributes(boolean undivided, Map attributesIdsAndValues, ZigBeeHandler handler) {
-
+	public Promise writeAttributes(boolean undivided, Map attributesIdsAndValues) {
+		return Promises.resolved(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) {
@@ -184,18 +177,18 @@ public class ZCLClusterImpl implements ZCLCluster {
 				+ commandIdsAsAString + ", description: " + description + "]";
 	}
 
-	public void getAttribute(int attributeId, int code, ZigBeeHandler handler) {
+	public Promise getAttribute(int attributeId, int code) {
 		if (code == -1) {
-			getAttribute(attributeId, handler);
+			return getAttribute(attributeId);
 		}
-		throw new UnsupportedOperationException("getAttribute:Please implement it");
+		return Promises.failed(new UnsupportedOperationException("getAttribute:Please implement it"));
 	}
 
-	public void getAttributes(int code, ZigBeeHandler handler) {
+	public Promise getAttributes(int code) {
 		if (code == -1) {
-			getAttributes(handler);
+			return getAttributes();
 		}
-		throw new UnsupportedOperationException("getAttributes:Please implement it");
+		return Promises.failed(new UnsupportedOperationException("getAttributes:Please implement it"));
 	}
 
 	private ZCLAttribute getAttributeFromId(int attrId) {

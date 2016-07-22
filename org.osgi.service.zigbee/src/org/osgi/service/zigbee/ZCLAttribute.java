@@ -16,11 +16,13 @@
 
 package org.osgi.service.zigbee;
 
+import org.osgi.util.promise.Promise;
+
 /**
  * This interface represents a ZCLAttribute and adds to the ZCLAttributeInfo
  * interface the methods to read and write the ZCL attribute from and to the
- * ZigBee node with respectively the {@link #getValue(ZigBeeHandler)} and
- * {@link #setValue(Object, ZigBeeHandler)} methods
+ * ZigBee node with respectively the {@link #getValue()} and
+ * {@link #setValue(Object)} methods
  * 
  * @author $Id$
  */
@@ -35,8 +37,8 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * Gets the current value of the attribute.
 	 * 
 	 * <p>
-	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a
-	 * "read attribute" can have the following status: SUCCESS, or
+	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a "read
+	 * attribute" can have the following status: SUCCESS, or
 	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}).
 	 * 
 	 * <p>
@@ -45,19 +47,20 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * attribute value (or null if an UNSUPPORTED_ATTRIBUTE occurred or in case
 	 * of an invalid value).
 	 * 
-	 * @param handler the handler
+	 * @return A promise representing the completion of this asynchronous call.
+	 * 
 	 * 
 	 */
-	public void getValue(ZigBeeHandler handler);
+	public Promise getValue();
 
 	/**
 	 * Sets the current value of the attribute.
 	 * 
 	 * <p>
-	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a
-	 * "write attribute" can have the following status: SUCCESS,
-	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
-	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
+	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a "write
+	 * attribute" can have the following status: SUCCESS, UNSUPPORTED_ATTRIBUTE,
+	 * INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see {@link ZCLException}),
+	 * or NOT_AUTHORIZED (see {@link ZDPException}).
 	 * 
 	 * <p>
 	 * The response object given to the handler is a Boolean set to true if the
@@ -67,8 +70,9 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * 
 	 * @param value the Java value to set
 	 * 
-	 * @param handler the handler
+	 * @return A promise representing the completion of this asynchronous call.
+	 * 
 	 */
-	public void setValue(Object value, ZigBeeHandler handler);
+	public Promise setValue(Object value);
 
 }

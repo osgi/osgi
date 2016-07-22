@@ -20,8 +20,9 @@ import java.math.BigInteger;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 
 /**
  * Mocked impl of ZigBeeEndpoint.
@@ -57,9 +58,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return BigInteger.valueOf(-1);
 	}
 
-	public void getSimpleDescriptor(ZigBeeHandler handler) {
-
-		handler.onSuccess(desc);
+	public Promise getSimpleDescriptor() {
+		return Promises.resolved(desc);
 	}
 
 	public ZCLCluster[] getServerClusters() {
@@ -78,20 +78,20 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs[clientClusterId];
 	}
 
-	public void bind(String servicePid, int clusterId, ZigBeeHandler handler) {
-
+	public Promise bind(String servicePid, int clusterId) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void unbind(String servicePid, int clusterId, ZigBeeHandler handler) {
-
+	public Promise unbind(String servicePid, int clusterId) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public void notExported(ZigBeeException e) {
 
 	}
 
-	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler) {
-
+	public Promise getBoundEndPoints(int clusterId) {
+		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public String toString() {

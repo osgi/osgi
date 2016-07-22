@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee;
 
 import java.io.IOException;
+import org.osgi.util.promise.Promise;
 
 /**
  * This interface represents the machine that hosts the code to run a ZigBee
@@ -179,12 +180,15 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * whole representation of all nodes (endpoints, clusters, descriptors,
 	 * attributes).
 	 * 
-	 * @param handler in case of success handler.onSuccess(true) is called,
-	 *        handler.onFailure(any Exception) is called otherwise.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         In case of success the promise will resolve with Boolean.TRUE
+	 *         otherwise the promise is failed with an exception.
+	 * 
+	 * 
 	 * @throws Exception, any exception related to the communication with the
 	 *         chip.
 	 */
-	public void refreshNetwork(ZigBeeHandler handler) throws Exception;
+	public Promise refreshNetwork() throws Exception;
 
 	/**
 	 * @return The network security level, i.e. 0 if security is disabled, an
