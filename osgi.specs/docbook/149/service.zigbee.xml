@@ -19,7 +19,8 @@
   <section>
     <title>Introduction</title>
 
-    <para>ZigBee [1]. is a standard wireless communication protocol designed for low-cost and low-power devices by
+    <para>ZigBee <xref
+      linkend="service.zigbee-ref-1-bibliomixed_id_20162007_17h48_51"/>. is a standard wireless communication protocol designed for low-cost and low-power devices by
 ZigBee Alliance. ZigBee is widely supported by various types of devices such as smart meters, lights and
 many kinds of sensors in the residential area. OSGi applications need to communicate with those ZigBee
 devices.</para>
@@ -27,9 +28,12 @@ devices.</para>
     <para>This specification defines how OSGi bundles can be developed to discover and control ZigBee devices on
 the one hand, and act as ZigBee devices and interoperate with ZigBee clients on the other hand. In
 particular, a Java mapping is provided for the standard hierarchical representation of ZigBee devices called
-ZigBee Cluster Library [2].. The specification also describes the external API of a ZigBee Base Driver
+ZigBee Cluster Library <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>.. The specification also describes the external API of a ZigBee Base Driver
 according to Device Access specification, the example made by UPnP Device Service specification and
-spread OSGi practices on residential market [3].[4]..
+spread OSGi practices on residential market <xref
+      linkend="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26"/>.<xref
+      linkend="service.zigbee-ref-4-bibliomixed_id_20162007_17h49_53"/>..
     </para>
   </section>
 
@@ -47,7 +51,8 @@ spread OSGi practices on residential market [3].[4]..
       </listitem>   
       <listitem>
         <para><emphasis role="italic">Lightweight implementation option</emphasis> – The full description of ZigBee device services on the OSGi platform
-                                                                                    is optional. Some base driver implementations may implement all the classes including ZigBee device
+                                                                              
+      is optional. Some base driver implementations may implement all the classes including ZigBee device
                                                                                     description classes while implementations targeting constrained devices are able to implement only the
                                                                                     part that is necessary for ZigBee device discovery and control.</para>
       </listitem>            
@@ -149,7 +154,8 @@ ZigBee Base Driver or by the ZigBee network.</para>
       </listitem>
         <listitem>
         <para><emphasis role="italic">ZigBee Exception</emphasis> – This class represents root exception for all the error codes related to ZCL, APS, ZDP
-layers (see Table 2.137 ZDP Enumerations Description in [1].).</para>
+layers (see Table 2.137 ZDP Enumerations Description in <xref
+      linkend="service.zigbee-ref-1-bibliomixed_id_20162007_17h48_51"/>.).</para>
       </listitem>
        <listitem>
         <para><emphasis role="italic">ZCL Frame</emphasis> – A ZCL frame that must used when invoking a command.</para>
@@ -168,7 +174,7 @@ layers (see Table 2.137 ZDP Enumerations Description in [1].).</para>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.5in"
-                     contentwidth="5.000in"
+                     contentwidth="6.000in"
                      fileref="RFC192_ZigBee_ClassDiagram_20140416_14h55.svg.2014_04_16_16_40_29.0.svg"/>
         </imageobject>
       </mediaobject>
@@ -204,8 +210,7 @@ framework as an object implementing <xref
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="4.5in"
-                     contentwidth="5.000in"
+          <imagedata align="left" contentdepth="7in" contentwidth="4in" 
                      fileref="DeviceImport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -225,8 +230,7 @@ network. This is a <emphasis role="italic">device export</emphasis> situation. F
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="6.5in"
-                     contentwidth="5.000in"
+          <imagedata align="left" contentdepth="3.5in" contentwidth="2.000in"
                      fileref="DeviceExport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -252,7 +256,8 @@ response frame. It is called by the base driver in the device import situation a
       xrefstyle="hyperlink"/> in the device export situation.</para>  
 
 <para>OSGi bundles – called listeners in Figure 3 – subscribe to attribute value changes through the White Board
-Pattern ([6].). They register an object under the ZCLEventListener interface with properties identifying a
+Pattern (<xref
+      linkend="service.zigbee-ref-6-bibliomixed_id_20162007_17h50_18"/>.). They register an object under the ZCLEventListener interface with properties identifying a
 ZigBee attribute and a special event filter. This registration is conveyed as a ZigBee configure report
 command on the ZigBee network in the device import situation. Reports are received by the base driver and
 transmitted as ZCLEventListener.notifyEvent() method calls on relevant <xref
@@ -278,7 +283,7 @@ supported by the described type of endpoint.</para>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="6.5in"
+          <imagedata align="center" contentdepth="2.5in"
                      contentwidth="5.000in"
                      fileref="device_description_set.svg"/>
         </imageobject>
@@ -742,7 +747,8 @@ command request. In targeted situations, the source endpoint is the valid servic
       xrefstyle="hyperlink"/> . It lists the available
 commands and attributes for this client or server cluster.</para>
     
-    <para>Every cluster client and server may have attributes (see [2]. chapter 2.2.1), received and generated
+    <para>Every cluster client and server may have attributes (see <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>. chapter 2.2.1), received and generated
 commands. <xref
       linkend="org.osgi.service.zigbee.descriptions.ZCLClusterDescription"
       xrefstyle="hyperlink"/>  provides methods to describe commands, attributes and retrieve
@@ -1024,7 +1030,8 @@ assigned to public final static fields (constants).</para>
             </tbody>
          </tgroup> 
     </table>
-    <para>* BACnet OID (Object identifier) data type is included to allow interworking with BACnet (see [5].). The format is described in the referenced standard.</para>
+    <para>* BACnet OID (Object identifier) data type is included to allow interworking with BACnet (see <xref
+      linkend="service.zigbee-ref-5-bibliomixed_id_20162007_17h50_09"/>.). The format is described in the referenced standard.</para>
     </section>
     
       <section>
@@ -1034,7 +1041,8 @@ assigned to public final static fields (constants).</para>
       xrefstyle="hyperlink"/> interface
 within the OSGi Framework. Every time a ZigBee endpoint appears or quits the network, the associated
 OSGi service is registered or unregistered in the OSGi service registry. Thanks to the ZigBee Base Driver, the
-OSGi service availability in the registry mirrors ZigBee device availability on ZigBee networks [3]..</para>
+OSGi service availability in the registry mirrors ZigBee device availability on ZigBee networks <xref
+      linkend="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26"/>..</para>
 
 <para>Using a remote ZigBee endpoint thus involves tracking <xref
       linkend="org.osgi.service.zigbee.ZigBeeNode"
@@ -1175,7 +1183,8 @@ local endpoint with the same host or if it already exists in an optional cache o
 cal ls ZigBeeEndpoint.notExported() method with the ZigBeeException object as the input
 argument with ZigBeeException.OSGI_EXISTING_ID error code. The base driver may keep IDs in a
 cache for endpoints that might come back in the registry. The range of potential IDs is 1-240 according to
-ZigBee specification [1]..</para>
+ZigBee specification <xref
+      linkend="service.zigbee-ref-1-bibliomixed_id_20162007_17h48_51"/>..</para>
 
 <para>The reader must note that a same ZigBeeEndpoint object can not be registered several times with distinct
 PAN IDs since ZigBeeEndpoint.getNodeAddress() method can only return one ZigBee node address.</para>
@@ -1206,7 +1215,8 @@ dispatches events from its own listeners.</para>
       </listitem>
       </itemizedlist> 
 
-         <para>ZigBee events are sent using the whiteboard pattern [6]., in which a bundle interested in receiving the ZigBee
+         <para>ZigBee events are sent using the whiteboard pattern <xref
+      linkend="service.zigbee-ref-6-bibliomixed_id_20162007_17h50_18"/>., in which a bundle interested in receiving the ZigBee
 events registers an object implementing the <xref
       linkend="org.osgi.service.zigbee.ZCLEventListener"
       xrefstyle="hyperlink"/> interface. The service MUST be registered
@@ -1260,7 +1270,8 @@ matching a specific attribute are delivered.</para>
       <listitem>
         <para>ZCLEventListener.<xref
       linkend="org.osgi.service.zigbee.ZCLEventListener.ATTRIBUTE_DATA_TYPE"
-      xrefstyle="hyperlink"/> – (<code>zigbee.attribute.datatype/Short</code>) The Attribute data type field contains the data type of the attribute that is to be reported (see [2]. – 2.4.7.1.4
+      xrefstyle="hyperlink"/> – (<code>zigbee.attribute.datatype/Short</code>) The Attribute data type field contains the data type of the attribute that is to be reported (see <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>. – 2.4.7.1.4
 Attribute Data Type Field).</para>
       </listitem>      
       </itemizedlist> 
@@ -1272,13 +1283,15 @@ Attribute Data Type Field).</para>
         <para>ZCLEventListener.<xref
       linkend="org.osgi.service.zigbee.ZCLEventListener.MIN_REPORT_INTERVAL"
       xrefstyle="hyperlink"/> – (<code>zigbee.attribute.min.report.interval/Integer</code>) The minimum interval, in seconds, between
-issuing reports of the specified attribute (see [2]. – 2.4.7.1.5).</para>
+issuing reports of the specified attribute (see <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>. – 2.4.7.1.5).</para>
       </listitem>
             <listitem>
         <para>ZCLEventListener.<xref
       linkend="org.osgi.service.zigbee.ZCLEventListener.MAX_REPORT_INTERVAL"
       xrefstyle="hyperlink"/> – (<code>zigbee.attribute.max.report.interval/Integer</code>) The maximum interval, in seconds,
-between issuing reports of the specified attribute (see [2]. 2.4.7.1.6).</para>
+between issuing reports of the specified attribute (see <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>. 2.4.7.1.6).</para>
       </listitem>
              <listitem>
         <para>ZCLEventListener.<xref
@@ -1292,7 +1305,8 @@ the data type is 'analog'. If the data type is 'digital', the base driver will i
  <para>If the endpoint sets a timeout between two attribute reports, the
 <code>ZCLEventListener.notifyTimeOut(int)</code> is then called with the set ‘timeout’ argument. In the import
 situation, the base driver calls this method on the relevant listeners when it receives a configure reporting
-command with a set TIMEOUT_PERIOD field (see [2]. 2.4.7 Configure Reporting Command)”. In the export
+command with a set TIMEOUT_PERIOD field (see <xref
+      linkend="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12"/>. 2.4.7 Configure Reporting Command)”. In the export
 situation, the local endpoint calls this method on relevant listeners and, in case the base driver is one of the
 notified listeners, it sends a configure reporting request with the appropriate TIMEOUT_PERIOD field to
 interested endpoints on the network.</para>
@@ -1616,7 +1630,8 @@ ZigBeeNode.<xref
         <para>The base driver provides a <xref
       linkend="org.osgi.service.zigbee.ZigBeeHost"
       xrefstyle="hyperlink"/> object for every available ZigBee local host. A ZigBee local host
-can represent a ZigBee chip on a USB dongle, a ZigBee built-in chip or a ZigBee Gateway Device (see [7].)
+can represent a ZigBee chip on a USB dongle, a ZigBee built-in chip or a ZigBee Gateway Device (see <xref
+      linkend="service.zigbee-ref-7-bibliomixed_id_20162007_17h50-45"/>.)
 This object must be registered under <xref
       linkend="org.osgi.service.zigbee.ZigBeeHost"
       xrefstyle="hyperlink"/> interface. The latter enables to start, and stop the Host,
@@ -1740,6 +1755,30 @@ REGISTER|GET]</code> be used sparingly and only for trusted bundles.</para>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.descriptors.xml"/>
   
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.zigbee.descriptions.xml"/>
-
+  
+  <section>
+    <title>References</title>
+    
+    <bibliolist>
+      <bibliomixed
+      xml:id="service.zigbee-ref-1-bibliomixed_id_20162007_17h48_51">ZigBee Alliance, ZigBee specification, Document 053474r17, October 19, 2007.</bibliomixed>
+    <bibliomixed
+      xml:id="service.zigbee-ref-2-bibliomixed_id_20162007_17h49_12">ZigBee Alliance, ZigBee Cluster Library specification, Document 075123r04ZB, May 29, 2012.</bibliomixed>
+    <bibliomixed
+      xml:id="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26">André Bottaro, Anne Gérodolle, Philippe Lalanda, "Pervasive Service Composition in the Home
+Network", 21st IEEE International Conference on Advanced Information Networking and Applications
+(AINA-07), Niagara Falls, Canada, May 2007.</bibliomixed>
+     <bibliomixed
+      xml:id="service.zigbee-ref-4-bibliomixed_id_20162007_17h49_53">Pavlin Dobrev, David Famolari, Christian Kurzke, Brent A. Miller, "Device and Service Discovery in
+Home Networks with OSGi", IEEE Communications magazine, Volume 40, Issue 8, pp. 86-92, August
+2002.</bibliomixed>
+        <bibliomixed
+      xml:id="service.zigbee-ref-5-bibliomixed_id_20162007_17h50_09">ASHRAE 135-2004 standard, Data Communication Protocol for Building Automation and Control
+Networks..</bibliomixed>
+      <bibliomixed
+      xml:id="service.zigbee-ref-6-bibliomixed_id_20162007_17h50_18">Peter Kriens, BJ Hargrave for the OSGi Alliance, "Listeners considered harmful: The whiteboard
+pattern", Technical Whitepaper, August 2004.</bibliomixed>
+    </bibliolist>
+  </section>
 
 </chapter>
