@@ -303,6 +303,32 @@ discovered device into an OSGi registered <xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
       xrefstyle="hyperlink"/> services (programmatically registered as OSGi services).</para>
 
+
+<para><xref linkend="org.osgi.service.zigbee.ZigBeeNode"
+    xrefstyle="hyperlink"/> object also provides simple methods to handle standard ZigBee Device Object networking
+feature: <code>getLinksQuality()</code>, <code>getRoutingTable()</code>, and <code>leave()</code>.</para>
+
+      <figure xml:id="service.zigbee-cluster-figure_id_20160713_9h46_22">
+      <title>ZigBee Cluster Library model</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="6.5in"
+                     contentwidth="5.000in"
+                     fileref="clusterLibrairie.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    
+    <para>All interfaces corresponding to the ZigBee Cluster Library model (see <xref
+        linkend="service.zigbee-cluster-figure_id_20160713_9h46_22"
+        xrefstyle="template:Figure %n on page %p"/>) must be implemented in
+order to discover and control asynchronously ZigBee devices. Classes related to the description of these
+entities (named with suffix “*Description” may optionally be implemented. This rule follows the fact that
+ZigBee device descriptions are not downloadable on the device itself and are often given to developers in an
+out-of-band manner.</para> 
+
+
     <para>Several base drivers may be deployed on a residential OSGi device, one for every supported network
 technology. An OSGi device abstraction layer may then be implemented as a layer of refining drivers above a
 layer of base drivers. The refining driver is responsible for adapting technology-specific device services
@@ -476,30 +502,61 @@ ZigBee Cluster Library (ZCL) commands is enabled on <xref linkend="org.osgi.serv
 however broadcasted on a ZigBee node thanks to <code>ZigBeeNode.broadcast()</code> methods. Broadcasting
 enables the sending of a ZCL command to all clusters identified with an identifier of all endpoints available on
 the targeted ZigBee node. </para>
+  
+          <para>All discovered ZigBee nodes in the local networks are registered under <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode"
+      xrefstyle="hyperlink"/> interface
+within the OSGi Framework. Every time a ZigBee node appears or quits the network, the associated
+OSGi service is registered or unregistered in the OSGi service registry. Thanks to the ZigBee Base Driver, the
+OSGi service availability in the registry mirrors ZigBee device availability on ZigBee networks <xref
+      linkend="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26"/>.. Using a remote ZigBee node thus involves tracking <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode"
+      xrefstyle="hyperlink"/> services in the OSGi service registry.
+The following code illustrates how this can be done. The sample Controller class extends the
+<code>ServiceTracker</code> class so that it can track all <xref
+      linkend="org.osgi.service.zigbee.ZigBeeNode"
+      xrefstyle="hyperlink"/> services and add them to a user interface, such
+as a remote controller application. The friendly name of this node is retrieved in order to be printed on the
+user interface.</para>
 
-<para><xref linkend="org.osgi.service.zigbee.ZigBeeNode"
-    xrefstyle="hyperlink"/> object also provides simple methods to handle standard ZigBee Device Object networking
-feature: <code>getLinksQuality()</code>, <code>getRoutingTable()</code>, and <code>leave()</code>.</para>
 
-      <figure xml:id="service.zigbee-cluster-figure_id_20160713_9h46_22">
-      <title>ZigBee Cluster Library model</title>
+ <programlisting>
+class Controller extends ServiceTracker {
+    UI ui;
+    Controller( BundleContext context ) {
+        super( context, ZigBeeNode.class, null );
+    }
+    public Object addingService( ServiceReference ref ) {
+        ZigBeeNode node = (ZigBeeNode)super.addingService(ref);
+        ui.addNode( node );
+        return node;
+    }
+    public void removedService( ServiceReference ref, Object endpoint ) {
+        ui.removeNode( (ZigBeeNode) node );
+    }
+    ...
+}
 
-      <mediaobject>
-        <imageobject>
-          <imagedata align="center" contentdepth="6.5in"
-                     contentwidth="5.000in"
-                     fileref="clusterLibrairie.svg"/>
-        </imageobject>
-      </mediaobject>
-    </figure>
-    
-    <para>All interfaces corresponding to the ZigBee Cluster Library model (see <xref
-        linkend="service.zigbee-cluster-figure_id_20160713_9h46_22"
-        xrefstyle="template:Figure %n on page %p"/>) must be implemented in
-order to discover and control asynchronously ZigBee devices. Classes related to the description of these
-entities (named with suffix “*Description” may optionally be implemented. This rule follows the fact that
-ZigBee device descriptions are not downloadable on the device itself and are often given to developers in an
-out-of-band manner.</para>     
+public class UI {
+    public void addNode(ZigBeeNode node) {
+    	node.getUserDescription(new ZigBeeHandler(){
+              
+              public void onSuccess(Object response) {
+                    String friendlyName = (String) response;
+                    ZigBeeSimpleDescriptor sd = (ZigBeeSimpleDescriptor) response;
+                    createUINode(node, friendlyName);
+              }
+              
+              public void onFailure(Exception e) {
+                    createUINode(node, "No friendly name");
+              }
+        });
+    }
+...
+} 
+
+ </programlisting>
+  
   </section> 
 
    <section>
@@ -527,7 +584,7 @@ services. Endpoints are registered under the <xref
       <listitem>
         <para><xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ENDPOINT_ID"
-      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.id/short</code>) specifies the endpoint address within the node.
+      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.id/Short</code>) specifies the endpoint address within the node.
 Applications shall only use endpoints 1-240.</para>
       </listitem> 
        <listitem>
@@ -548,8 +605,8 @@ endpoints that belong to a specific network MUST specify the value of the associ
         <para><xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_ID"
       xrefstyle="hyperlink"/> – (<code>zigbee.device.id/Integer</code>) identifies the device description supported by this
-endpoint. Like the profiles identifiers, the ZigBee specification defines several device identifiers, and some
-others are vendor specific.</para>
+endpoint. Like for profile identifiers, the ZigBee specification defines several device identifiers. Vendors are also able to 
+define specific device identifiers.</para>
       </listitem> 
             <listitem>
         <para><xref
@@ -560,14 +617,14 @@ supported by this endpoint.</para>
             <listitem>
         <para><xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint.INPUT_CLUSTERS"
-      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.clusters.output/String[]</code>) specifies the list of output
-cluster ids supported by this endpoint. Output cluster are called Client cluster.</para>
+      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.clusters.input/Integer[]</code>) specifies the list of input
+cluster ids supported by this endpoint. Input cluster are called Server cluster.</para>
       </listitem>
             <listitem>
         <para><xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint.OUTPUT_CLUSTERS"
-      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.id/short</code>)specifies the endpoint address within the node.
-Applications shall only use endpoints 1-240.</para>
+      xrefstyle="hyperlink"/> – (<code>zigbee.endpoint.clusters.output/Integer[]</code>) specifies the list of output
+cluster ids supported by this endpoint. Output cluster are called Client cluster.</para>
       </listitem>
              <listitem>
         <para><xref
@@ -1033,115 +1090,6 @@ assigned to public final static fields (constants).</para>
     <para>* BACnet OID (Object identifier) data type is included to allow interworking with BACnet (see <xref
       linkend="service.zigbee-ref-5-bibliomixed_id_20162007_17h50_09"/>.). The format is described in the referenced standard.</para>
     </section>
-    
-      <section>
-    <title>Working With a ZigBee Endpoint</title> 
-        <para>All discovered ZigBee endpoints in the local networks are registered under <xref
-      linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
-      xrefstyle="hyperlink"/> interface
-within the OSGi Framework. Every time a ZigBee endpoint appears or quits the network, the associated
-OSGi service is registered or unregistered in the OSGi service registry. Thanks to the ZigBee Base Driver, the
-OSGi service availability in the registry mirrors ZigBee device availability on ZigBee networks <xref
-      linkend="service.zigbee-ref-3-bibliomixed_id_20162007_17h49_26"/>..</para>
-
-<para>Using a remote ZigBee endpoint thus involves tracking <xref
-      linkend="org.osgi.service.zigbee.ZigBeeNode"
-      xrefstyle="hyperlink"/> services in the OSGi service registry.
-The following code illustrates how this can be done. The sample Controller class extends the
-<code>ServiceTracker</code> class so that it can track all <xref
-      linkend="org.osgi.service.zigbee.ZigBeeNode"
-      xrefstyle="hyperlink"/> services and add them to a user interface, such
-as a remote controller application. The friendly name of this node is retrieved in order to be printed on the
-user interface.</para>
-
-
- <programlisting>
-class Controller extends ServiceTracker {
-    UI ui;
-    Controller( BundleContext context ) {
-        super( context, ZigBeeNode.class, null );
-    }
-    public Object addingService( ServiceReference ref ) {
-        ZigBeeNode node = (ZigBeeNode)super.addingService(ref);
-        ui.addNode( node );
-        return node;
-    }
-    public void removedService( ServiceReference ref, Object endpoint ) {
-        ui.removeNode( (ZigBeeNode) node );
-    }
-    ...
-}
-
-    public class UI {
-        private final static int HANDLER_TIMEOUT = 3000;
-        public void addNode(ZigBeeNode node) {
-            ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
-            node.getUserDescription(handler);
-            handler.waitForResponse(HANDLER_TIMEOUT);
-            String friendlyName = (String) handler.getSuccessResponse();
-            createUINode(node, friendlyName);
-    }
-...
-} 
- </programlisting>
- 
-<para>In the code snippet below, a button of the user interface monitors the state (on or off) of a smart plug and
-enables the user to switch the plug on and off. To monitor the plug state, a <xref
-      linkend="org.osgi.service.zigbee.ZCLEventListener"
-      xrefstyle="hyperlink"/> is registered
-with the properties related to the node, endpoint, cluster and attribute representing the plug and its state.
-When an appropriate event is sent on the network, the base driver (or a local endpoint implementer) notifies
-the listener. The listener then changes the state value shown by the button. When the user clicks on the
-button, a command is invoked on the plug.</para>
-
- <programlisting>
-public class UIOnOffButton implements ZCLEventListener {
-    public UIOnOffButton(BigInteger ieeeAddress, Short endpointId, Integer
-                         clusterId, Integer attributeId, BundleContext bc) {
-        Dictionary properties = new Properties();
-        properties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
-        properties.put(ZigBeeEndpoint.ENDPOINT_ID, endpointId);
-        properties.put(ZCLCluster.ID, clusterId);
-        properties.put(ZCLAttribute.ID, attributeId);
-        // events will be filtered by the basedriver call notifyEvent() method
-        // only when the event comes from a node, endpoint, cluster, attribute
-        // matching these properties
-        bc.registerService(ZCLEventListener.class.getName(), this, properties);
-    }
-    
-    public void changeUIValue(Object value) {
-    ....
-    }
-    
-    public void onClick() {
-        // the button has been clicked
-        // get the ZCLCluster
-        ServiceReference[] srs = bundleContext.getServiceReferences(
-                                    ZigBeeEndpoint.class.getName(),
-                                    "(&amp;(" + ZigBeeNode.IEEE_ADDRESS + "=" + ieeeAddress + ")("
-                                    + ZigBeeEndpoint.ENDPOINT_ID + "=" + endpointID + "))");
-        if (srs.length>0){
-            ZCLCluster cluster =
-                ((ZigBeeEndpoint) bundleContext.getService(srs[0]))
-                .getServerCluster(clusterID);
-            ZCLCommandHandlerImpl commandHandlerImpl =
-                new ZCLCommandHandlerImpl();
-            // send the toggle frame
-            cluster.invoke(toggleFrame, commandHandlerImpl);
-        }
-    }
-    
-    public void notifyEvent(ZigBeeEvent event) {
-        // change the attribute value of the UICluster
-        Object value = event.getValue();
-        changeUIValue(value);
-    }
-....
-}
-</programlisting> 
- 
-     </section>
- 
 
       <section>
     <title>Implementing a ZigBee Endpoint</title> 
@@ -1324,6 +1272,101 @@ described in Delivering Events in Life Cycle Layer chapter of the Core specifica
 ZigBee device. It SHOULD also notify every listener with respect to their specific expectations.</para>
  
      </section>
+ 
+       <section>
+    <title>Monitoring Events and sending Commands</title> 
+
+<para>In the code snippet below, a button of the user interface monitors the state (on or off) of a smart plug and
+enables the user to switch the plug on and off. To monitor the plug state, a <xref
+      linkend="org.osgi.service.zigbee.ZCLEventListener"
+      xrefstyle="hyperlink"/> is registered
+with the properties related to the node, endpoint, cluster and attribute representing the plug and its state.
+When an appropriate event is sent on the network, the base driver (or a local endpoint implementer) notifies
+the listener. The listener then changes the state value shown by the button. When the user clicks on the
+button, a command is invoked on the plug.</para>
+
+ <programlisting>
+public class UIOnOffButton implements ZCLEventListener {
+    public UIOnOffButton(BigInteger ieeeAddress, Short endpointId, Integer 
+    				clusterId, Integer attributeId, Short dataType, 
+    				BundleContext bc) {
+        Dictionary properties = new Hashtable();
+        properties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
+        properties.put(ZigBeeEndpoint.ENDPOINT_ID, endpointId);
+        properties.put(ZCLCluster.ID, clusterId);
+        properties.put(ZCLAttribute.ID, attributeId);
+        properties.put(ZigBeeEventListener.ATTRIBUTE_DATA_TYPE, dataType);
+        // events will be filtered by the basedriver call notifyEvent() method
+        // only when the event comes from a node, endpoint, cluster, attribute
+        // matching these properties
+        bc.registerService(ZCLEventListener.class.getName(), this, properties);
+    }
+
+    public void notifyEvent(ZigBeeEvent event) {
+        // change the attribute value of the UICluster
+        Object value = event.getValue();
+        changeUIValue(value);
+    }   
+     
+    public void notifyTimeOut(int timeout) {
+          System.out.println("Timeout notified");
+    }
+
+    public void onFailure(ZCLException e) {
+          System.err.println("Failure registering the listener: " + e.getMessage());
+    }
+        
+    public void changeUIValue(Object value) {
+    ....
+    }
+    
+    public void onClick() {
+        // the button has been clicked
+        // get the ZCLCluster
+        ServiceReference[] srs = bundleContext.getServiceReferences(
+                          ZigBeeEndpoint.class.getName(),
+                          "(&amp;(" + ZigBeeNode.IEEE_ADDRESS + "=" + ieeeAddress 
+                          + ")(" + ZigBeeEndpoint.ENDPOINT_ID + "=" + endpointID 
+                          + "))");
+        if (srs.length>0){
+            ZCLCluster onOffCluster =
+                ((ZigBeeEndpoint) bundleContext.getService(srs[0]))
+                .getServerCluster(ZCL_ONOFF_CLUSTER_ID);
+	        if (onOffCluster != null) {
+	            onOffCluster.invoke(new ToggleCommand(), new ZCLCommandHandler() {
+	                public void notifyResponse(ZCLFrame frame, Exception e) {
+		                ZCLHeader header = frame.getHeader();
+		                if (header.getCommandId() == TOGGLE_COMMAND_ID) {
+		                    ZigBeeDataInput is = frame.getDataInput();
+		                    try {
+		                        Short status = (Short) ZigBeeUnsignedInteger8
+		                        				.getInstance().deserialize(is);
+		                        if (status.shortValue() == 0) {
+		                            log.info("toggle command returned success.");
+		                        } else {
+		                            log.info("toggle command returned a failure: " 
+		                            				+ e.getMessage() + ”.”);
+		                        }
+		                    } catch (IOException ioe) {
+		                        ioe.printStackTrace();
+		                    }
+		                } 
+		            }
+		        });
+		    }
+	    }
+	}
+	
+	class ToggleCommand implements ZCLFrame {
+		...
+	}
+...
+}
+
+ 
+</programlisting> 
+ 
+     </section> 
  
       <section>
     <title>ZCL Exception</title> 
