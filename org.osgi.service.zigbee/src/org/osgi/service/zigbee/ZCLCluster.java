@@ -61,15 +61,10 @@ public interface ZCLCluster {
 	/**
 	 * Get the cluster {@link ZCLAttribute} identifying corresponding attribute
 	 * that matches the given attributeId. Use, instead the
-	 * {@link ZCLCluster#getAttribute(int, int, ZigBeeHandler)} to retrieve
-	 * manufacturer specific attributes.
+	 * {@link ZCLCluster#getAttribute(int, int)} to retrieve manufacturer
+	 * specific attributes.
 	 * 
-	 * @param attributeId the attribute identifier
-	 * @param handler the response handler. The
-	 *        {@link ZigBeeHandler#onSuccess(Object)} will be invoked with the
-	 *        proper {@link ZCLAttribute}
-	 * 
-	 * @param attributeId an Attribute identifier
+	 * @param attributeId the ZCL attribute identifier
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 * 
@@ -196,8 +191,8 @@ public interface ZCLCluster {
 	 * {@link IllegalArgumentException} will be thrown
 	 * 
 	 * @param undivided The write command is undivided or not
-	 * @param attributesAndValues A Map<ZCLAttributeInfo, Object> of attributes,
-	 *        and values to be written.
+	 * @param attributesAndValues A Map&lt;ZCLAttributeInfo, Object&gt; of
+	 *        attributes and values to be written.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 * 

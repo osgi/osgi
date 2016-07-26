@@ -1340,7 +1340,7 @@ public class UIOnOffButton implements ZCLEventListener {
 		                    try {
 		                        Short status = (Short) ZigBeeUnsignedInteger8
 		                        				.getInstance().deserialize(is);
-		                        if (status.shortValue() == 0 && ) {
+		                        if (status.shortValue() == 0 &amp;&amp; commandId == TOGGLE_COMMAND_ID) {
 		                            log.info("toggle command returned success.");
 		                        } else {
 		                            log.info("toggle command returned a failure: " 
@@ -1484,7 +1484,7 @@ specified by ZigBee Alliance are conveyed by the errorCode field of <xref
       linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_MULTIPLE_HOSTS"
       xrefstyle="hyperlink"/>– several hosts exist for this PAN ID target or HOST_PID target.</para>
       </listitem> 
-      </itemizedlist>  
+      </itemizedlist>   
      </section>
      
     <section>
@@ -1587,7 +1587,7 @@ authorized from this device.</para>
       xrefstyle="hyperlink"/> must be managed by the base driver.</para>
 
 <para>Only getters (not setters) are shared by client applications, the base driver and endpoint implementations.
-Therefore only getters are specified.</para>              
+Therefore only getters are specified.</para>             
      </section>
      
       <section>
