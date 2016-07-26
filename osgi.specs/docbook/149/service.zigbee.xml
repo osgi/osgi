@@ -239,14 +239,14 @@ network. This is a <emphasis role="italic">device export</emphasis> situation. F
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
       xrefstyle="hyperlink"/> services in the OSGi service registry and
 control them appropriately. OSGi applications can browse the clusters (ZCLCluster objects) that are
-discovered on every registerd <xref
+discovered on every registered <xref
       linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
       xrefstyle="hyperlink"/> and attributes (ZCLAttribute objects) that are discovered
 on every <xref
       linkend="org.osgi.service.zigbee.ZCLCluster"
       xrefstyle="hyperlink"/>. They can invoke commands on these clusters and get the current value of attributes.</para> 
 
-<para>Several methods obey an asynchronous mechanism. For instance, ZigBee command invokation is made
+<para>Several methods obey an asynchronous mechanism. For instance, ZigBee command invocation is made
 through the call to ZCLCommand invoke method that returns nothing. A handler object – here a
 ZCLCommandHandler – is passed as an argument in this method call. When the command response is to be
 received, a callback – here notifyResponse() – is called on the handler to convey the command
@@ -1335,12 +1335,12 @@ public class UIOnOffButton implements ZCLEventListener {
 	            onOffCluster.invoke(new ToggleCommand(), new ZCLCommandHandler() {
 	                public void notifyResponse(ZCLFrame frame, Exception e) {
 		                ZCLHeader header = frame.getHeader();
-		                if (header.getCommandId() == TOGGLE_COMMAND_ID) {
+		                if (header.getCommandId() == DEFAULT_RESPONSE_COMMAND_ID) {
 		                    ZigBeeDataInput is = frame.getDataInput();
 		                    try {
 		                        Short status = (Short) ZigBeeUnsignedInteger8
 		                        				.getInstance().deserialize(is);
-		                        if (status.shortValue() == 0) {
+		                        if (status.shortValue() == 0 && ) {
 		                            log.info("toggle command returned success.");
 		                        } else {
 		                            log.info("toggle command returned a failure: " 
@@ -1510,7 +1510,7 @@ to a parent.</para>
       <listitem>
         <para><xref
       linkend="org.osgi.service.zigbee.ZDPException.INVALID_EP"
-      xrefstyle="hyperlink"/>– The supplied endpoint was equal to 0x00 or between 0xf1 and 0xff.</para>
+      xrefstyle="hyperlink"/>– The supplied endpoint was equal to 0 or above 241 (0xf1).</para>
       </listitem>
       <listitem>
         <para><xref
