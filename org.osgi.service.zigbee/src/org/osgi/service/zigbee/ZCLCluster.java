@@ -90,9 +90,9 @@ public interface ZCLCluster {
 	 *        {@link ZCLCluster#getAttribute(int)}
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with the
-	 *         requested {@link ZCLAttribute}. The Promise is immediately
-	 *         resolved if getAttributes ZCL command has already been called
-	 *         once by the ZigBee host. The resolution may take some time the
+	 *         requested {@link ZCLAttribute}. If Discover Attributes ZCL
+	 *         command has already been called once by the ZigBee host, the
+	 *         Promise can be quickly resolved. The resolution may be longer the
 	 *         first time one of the ZCLCluster methods to get one or all
 	 *         attributes is successfully called.
 	 */
@@ -129,9 +129,9 @@ public interface ZCLCluster {
 	 * 
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with an array of
-	 *         {@link ZCLAttribute} The Promise is immediately resolved if
-	 *         getAttributes ZCL command has already been called once by the
-	 *         ZigBee host. The resolution may take some time the first time one
+	 *         {@link ZCLAttribute}. If Discover Attributes ZCL command has
+	 *         already been called once by the ZigBee host, the Promise can be
+	 *         quickly resolved. The resolution may be longer the first time one
 	 *         of the ZCLCluster methods to get one or all attributes is
 	 *         successfully called.
 	 */
