@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="2.6in"
-   height="1.5in"
+   width="180.26247"
+   height="103.74613"
    id="svg5310"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="DeviceImport-2.svg"
    inkscape:export-filename="D:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
    inkscape:export-xdpi="90"
@@ -23,7 +23,7 @@
     <filter
        id="filter7731-7"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7733-6"
          flood-opacity="1"
@@ -50,7 +50,7 @@
     <filter
        id="filter7731-7-3"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7733-6-1"
          flood-opacity="1"
@@ -77,7 +77,7 @@
     <filter
        id="filter7801-8-1-5"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7803-8-7-7"
          flood-opacity="1"
@@ -104,7 +104,7 @@
     <filter
        id="filter7801-8-1"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7803-8-7"
          flood-opacity="1"
@@ -131,7 +131,7 @@
     <filter
        id="filter7731"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7733"
          flood-opacity="1"
@@ -158,7 +158,7 @@
     <filter
        id="filter7801-8-1-2"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7803-8-7-77"
          flood-opacity="1"
@@ -185,7 +185,7 @@
     <filter
        id="filter7751"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7753"
          flood-opacity="1"
@@ -212,7 +212,7 @@
     <filter
        id="filter7761"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7763"
          flood-opacity="1"
@@ -239,7 +239,7 @@
     <filter
        id="filter7741"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7743"
          flood-opacity="1"
@@ -266,7 +266,7 @@
     <filter
        id="filter7731-8"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7733-60"
          flood-opacity="1"
@@ -293,7 +293,7 @@
     <filter
        id="filter7801-8-1-0"
        inkscape:label="Drop Shadow"
-       style="color-interpolation-filters:sRGB">
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood7803-8-7-9"
          flood-opacity="1"
@@ -326,15 +326,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
-     inkscape:cx="157.9732"
-     inkscape:cy="108.7399"
+     inkscape:cx="124.76444"
+     inkscape:cy="78.502646"
      inkscape:document-units="px"
-     inkscape:current-layer="g431-5"
+     inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1178"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1509"
+     inkscape:window-height="881"
+     inkscape:window-x="1676"
+     inkscape:window-y="285"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -349,7 +349,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -357,7 +357,7 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-48.282814,-330.46327)">
+     transform="translate(-48.282814,-331.47988)">
     <rect
        style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
        id="rect11730-5-8"
@@ -431,7 +431,7 @@
        font-size="12px"
        id="g15"
        style="font-size:12px;text-anchor:middle"
-       transform="matrix(0.25989381,0,0,0.30088123,-20.239374,199.46665)"
+       transform="matrix(0.25989381,0,0,0.30088123,-33.583294,199.46665)"
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
@@ -439,7 +439,7 @@
          x="337"
          y="536"
          id="text17"
-         style="font-family:Helvetica;fill:#000000">ZigBee Base Driver</text>
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc">ZigBee Base Driver</text>
     </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.27963758px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -461,25 +461,22 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g431"
-       style="font-size:12px;text-anchor:middle"
-       transform="matrix(0.25989381,0,0,0.30088123,17.34397,303.53883)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         x="334.28125"
-         y="361"
-         id="text433"
-         style="font-family:Helvetica;fill:#000000">&lt;&lt;Interface&gt;&gt;</text>
-      <text
-         x="297.32617"
-         y="375"
-         id="text435"
-         style="font-family:Helvetica;text-align:start;text-anchor:start;fill:#000000">ZigBeeEndpoint</text>
-    </g>
+    <text
+       style="font-size:3.3556509px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text433"
+       y="383.0567"
+       x="101.6888"
+       transform="scale(0.92939516,1.0759686)">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       style="font-size:3.3556509px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text435"
+       y="386.97162"
+       x="101.80513"
+       transform="scale(0.92939516,1.0759686)">
+      <tspan
+         id="tspan3090"
+         style="font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">ZigBeeEndpoint</tspan>
+    </text>
     <path
        style="stroke-linejoin:miter"
        d="m 122.50016,423.82584 c 0.22337,-0.28412 2.35945,-2.98847 4.74685,-6.00965 l 4.34072,-5.4931 0.0887,3.44401 c 0.0488,1.89417 0.0968,4.59852 0.10678,6.00966 l 0.0181,2.56567 -4.85358,0 -4.85358,0 0.40613,-0.51659 z"
@@ -489,7 +486,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 115.64345,381.35854 0,8.29254 -7.68268,-4.14627 z"
        id="path4609"
        inkscape:connector-curvature="0"
@@ -521,10 +518,10 @@
          x="289"
          y="536"
          id="text17-1"
-         style="font-family:Helvetica;text-align:start;text-anchor:start;fill:#000000">A ZigBee client</text>
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc">A ZigBee client</text>
     </g>
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 115.64345,367.37362 0,8.29254 -7.68268,-4.14626 z"
        id="path4609-7"
        inkscape:connector-curvature="0"
@@ -552,25 +549,22 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g431-8"
-       style="font-size:12px;text-anchor:middle"
-       transform="matrix(0.25989381,0,0,0.30088123,17.34397,227.65801)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         x="334.28125"
-         y="361"
-         id="text433-6"
-         style="font-family:Helvetica;fill:#000000">&lt;&lt;Interface&gt;&gt;</text>
-      <text
-         x="328.69727"
-         y="375"
-         id="text435-5"
-         style="font-family:Helvetica;fill:#000000">ZigBeeHost</text>
-    </g>
+    <text
+       style="font-size:3.3556509px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text433-6"
+       y="312.53342"
+       x="101.6888"
+       transform="scale(0.92939517,1.0759686)">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       style="font-size:3.3556509px;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text435-5"
+       y="316.44833"
+       x="110.57767"
+       transform="scale(0.92939517,1.0759686)">
+      <tspan
+         id="tspan3088"
+         style="font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">ZigBeeHost</tspan>
+    </text>
     <path
        style="stroke-linejoin:miter"
        d="m 122.06699,347.94503 c 0.22337,-0.28412 2.35944,-2.98847 4.74685,-6.00966 l 4.34072,-5.4931 0.0887,3.44402 c 0.0488,1.89416 0.0968,4.59851 0.10679,6.00965 l 0.0181,2.56567 -4.85358,0 -4.85358,0 0.40611,-0.51658 z"
@@ -603,16 +597,16 @@
          x="284.66016"
          y="522"
          id="text17-4"
-         style="font-family:Helvetica;text-align:start;text-anchor:start;fill:#000000">An ZigBee endpoint</text>
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc">An ZigBee endpoint</text>
       <text
          x="283.8457"
          y="536"
-         style="font-family:Helvetica;text-align:start;text-anchor:start;fill:#000000"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
          id="text7304">implementation</text>
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.18550301px;line-height:7.00000003%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-size:11.18550301px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="76.713516"
        y="350.80682"
        id="text11764"
@@ -628,7 +622,7 @@
          style="font-size:3.35565114px">1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.18550301px;line-height:7.00000003%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-size:11.18550301px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="76.586456"
        y="354.741"
        id="text11764-5-1"
@@ -642,41 +636,34 @@
          x="76.586456"
          y="354.741"
          style="font-size:3.35565114px">0..n</tspan></text>
+    <rect
+       x="2"
+       y="507"
+       width="140"
+       height="50"
+       pointer-events="none"
+       id="rect277-5"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-8)"
+       transform="matrix(0.25984122,0,0,0.32108911,186.91841,207.75297)" />
     <g
-       id="g6126"
-       transform="matrix(0.25989381,0,0,0.30088123,46.532351,304.78116)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <rect
-         transform="matrix(0.99979765,0,0,1.0671623,540.16701,-322.48004)"
-         style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-8)"
-         id="rect277-5"
-         pointer-events="none"
-         height="50"
-         width="140"
-         y="507"
-         x="2" />
-      <g
-         transform="translate(540.56552,-298.60129)"
-         style="font-size:12px;text-anchor:middle"
-         id="g279"
-         font-size="12px">
-        <text
-           style="font-family:Helvetica;fill:#000000"
-           id="text281"
-           y="529"
-           x="32">A listener</text>
-        <text
-           style="font-family:Helvetica;fill:#000000"
-           id="text283"
-           y="543"
-           x="45.005859" />
-      </g>
+       font-size="12px"
+       id="g279"
+       style="font-size:12px;text-anchor:middle"
+       transform="matrix(0.25989381,0,0,0.30088123,180.53397,215.19018)">
+      <text
+         x="32"
+         y="529"
+         id="text281"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc">A listener</text>
+      <text
+         x="45.005859"
+         y="543"
+         id="text283"
+         style="fill:#000000;font-family:ProductusOSGiBookc" />
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.18550301px;line-height:7.00000003%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-size:11.18550301px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="195.05072"
        y="355.82367"
        id="text11764-5-1-0-9"
@@ -692,7 +679,7 @@
          style="font-size:3.35565114px">0..n</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.18550301px;line-height:7.00000003%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-size:11.18550301px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="185.40761"
        y="355.83847"
        id="text11764-5-0"
@@ -723,7 +710,7 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.27963758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 169.13926,391.98675 0,8.29254 7.68268,-4.14626 z"
        id="path4609-4"
        inkscape:connector-curvature="0"
@@ -743,30 +730,28 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g431-5"
-       style="font-size:12px;text-anchor:middle"
-       transform="translate(120.11711,30.36032)">
-      <text
-         x="47.891964"
-         y="364.45456"
-         id="text433-5"
-         style="font-size:3.35565114px;font-family:Helvetica;fill:#000000"
-         inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
-         transform="scale(0.92939517,1.0759686)">&lt;&lt;Interface&gt;&gt;</text>
-      <text
-         x="37.557941"
-         y="368.36948"
-         id="text435-1"
-         style="font-size:3.35565114px;font-family:Helvetica;text-align:start;text-anchor:start;fill:#000000"
-         inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90"
-         transform="scale(0.92939517,1.0759686)">ZCLEventListener</text>
-    </g>
+    <text
+       transform="scale(0.92939516,1.0759686)"
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
+       style="font-size:3.35565114px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text433-5"
+       y="392.6713"
+       x="166.68385">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       transform="scale(0.92939516,1.0759686)"
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\DeviceImport-2.png"
+       style="font-size:3.35565114px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc"
+       id="text435-1"
+       y="396.58621"
+       x="166.80019">
+      <tspan
+         id="tspan3092"
+         style="font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">ZCLEventListener</tspan>
+    </text>
     <path
        style="stroke-linejoin:miter"
        d="m 182.90623,434.17084 c 0.22337,-0.28411 2.35945,-2.98847 4.74685,-6.00963 l 4.34072,-5.49311 0.0887,3.44401 c 0.0488,1.89417 0.0968,4.59851 0.10678,6.00965 l 0.0181,2.56568 -4.85358,0 -4.85358,0 0.40612,-0.5166 z"

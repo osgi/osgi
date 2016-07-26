@@ -1,0 +1,3707 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="880.5"
+   height="674.07629"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="ZigBeeClassDiagram.svg"
+   inkscape:export-filename="D:\Documents\Norm@Home\OSGi\EnOceanDeviceService-specification\docbook\svgs\RFC_EnOcean_ClassDiagram_Rev18.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata447">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1509"
+     inkscape:window-height="881"
+     id="namedview445"
+     showgrid="true"
+     inkscape:zoom="1.22"
+     inkscape:cx="436.40479"
+     inkscape:cy="229.26733"
+     inkscape:window-x="1676"
+     inkscape:window-y="285"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g11"
+     showguides="false"
+     width="1052.36px"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:showpageshadow="false"
+     showborder="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="false">
+    <sodipodi:guide
+       position="1078.6566,82.308181"
+       orientation="0,1102"
+       id="guide11732" />
+    <sodipodi:guide
+       position="1124.1808,132.54181"
+       orientation="-563,0"
+       id="guide11734" />
+    <sodipodi:guide
+       position="1026.0683,681.1871"
+       orientation="0,-1102"
+       id="guide11736" />
+    <sodipodi:guide
+       position="-6.8605336,152.94921"
+       orientation="563,0"
+       id="guide11738" />
+    <sodipodi:guide
+       position="8.8374729,103.50049"
+       orientation="0,1102"
+       id="guide11740" />
+    <sodipodi:guide
+       position="1110.8375,103.50049"
+       orientation="-563,0"
+       id="guide11742" />
+    <sodipodi:guide
+       position="37.878909,722.78662"
+       orientation="0,-1102"
+       id="guide11744" />
+    <sodipodi:guide
+       position="-80.641033,696.88491"
+       orientation="563,0"
+       id="guide11746" />
+    <sodipodi:guide
+       position="8.8374729,103.50049"
+       orientation="0,1102"
+       id="guide11748" />
+    <sodipodi:guide
+       position="1110.8375,103.50049"
+       orientation="-563,0"
+       id="guide11750" />
+    <sodipodi:guide
+       position="1110.8375,666.50049"
+       orientation="0,-1102"
+       id="guide11752" />
+    <sodipodi:guide
+       position="8.8374729,666.50049"
+       orientation="563,0"
+       id="guide11754" />
+    <sodipodi:guide
+       position="-36.686744,82.308181"
+       orientation="0,1102"
+       id="guide11756" />
+    <sodipodi:guide
+       position="1110.8375,103.50049"
+       orientation="-563,0"
+       id="guide11758" />
+    <sodipodi:guide
+       position="8.8374729,666.50049"
+       orientation="563,0"
+       id="guide11762" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid3559"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="163.2412px"
+       originy="180.15701px" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path4586"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleInL"
+       style="overflow:visible">
+      <path
+         id="path4683"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart"
+       style="overflow:visible">
+      <path
+         id="path4574"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path4556"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path4698"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.8,0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend"
+       style="overflow:visible">
+      <path
+         id="path4577"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         id="path4559"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <linearGradient
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1"
+       id="mx-gradient-ffffff-1-cccccc-1-s-0">
+      <stop
+         offset="0%"
+         style="stop-color:#ffffff"
+         id="stop7" />
+      <stop
+         offset="100%"
+         style="stop-color:#CCCCCC"
+         id="stop9" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-1"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4577-7"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#mx-gradient-ffffff-1-cccccc-1-s-0-9"
+       id="linearGradient7258-0"
+       x1="160.27757"
+       y1="842.17804"
+       x2="160.27757"
+       y2="926.97778"
+       gradientTransform="matrix(1.6627405,0,0,0.60141677,288,0)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1"
+       id="mx-gradient-ffffff-1-cccccc-1-s-0-9">
+      <stop
+         offset="0%"
+         style="stop-color:#ffffff"
+         id="stop7-4" />
+      <stop
+         offset="100%"
+         style="stop-color:#CCCCCC"
+         id="stop9-8" />
+    </linearGradient>
+    <filter
+       id="filter7701"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7703"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7705"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7707"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7709"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7711"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7713"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7715"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7717"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7719"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7721"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7723"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7725"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7727"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7729"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7731"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7733"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7735"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7737"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7739"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7741"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7743"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7745"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7747"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7749"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7751"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7753"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7755"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7757"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7759"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7761"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7763"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7765"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7767"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7769"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7771"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7773"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7775"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7777"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7779"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7781"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7783"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7785"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7787"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7789"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7791"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7793"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7795"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7797"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7799"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7821"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7823"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7825"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7827"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7829"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7831"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7833"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7835"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7837"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7839"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7841"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7843"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7845"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7847"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7849"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-8"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4577-2"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-5"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4574-2"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter7741-7"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood7743-5"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7745-7"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7747-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7749-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7751-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7753-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7755-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7757-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7759-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-16"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-8-1-2-6"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-2-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-16-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-8-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-5-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-9"
+       style="overflow:visible">
+      <path
+         id="path4577-5"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7801-8-1-7-3"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-8-7-6-3"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-2-1-1-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-4-1-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-5-5-2-1"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-3"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-9"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-7"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-9-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-2-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-7-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-9-2"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-5-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-9-8-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-2-7-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-7-4-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-9-2-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-5-7-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-9-8-2-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-2-7-8-3"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-7-4-6-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-9-2-0-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-5-7-2-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-9-8-2-1-9"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-2-7-8-3-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-7-4-6-8-3"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-9-2-0-9-7"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-5-7-2-3-8"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-0"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-36"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-1"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-0-0"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-7-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-6-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-36-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-1-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-0-0-0"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-7-1-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-6-6-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-36-5-7"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-1-7-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-0-0-0-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-7-1-7-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-6-6-1-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-36-5-7-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-1-7-7-0"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-5"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-2"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-8-6"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-6-5"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-1-3"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-2-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-4-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-8-6-0"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-6-5-3"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-1-3-9"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-2-9-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-4-2-8"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-8-6-0-5"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-6-5-3-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-1-3-9-5"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-2-9-1-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-4-2-8-6"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-4-7-4"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-38-2-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-0-2-9"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-8-8-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-8-2-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-5"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-08"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-3"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-93"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-5-5"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-5-5-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1-7-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0-6-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9-6-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9-5-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-5-5-1-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1-7-6-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0-6-1-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9-6-6-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9-5-3-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7801-17-7-8-8-5-5-1-2-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1-7-6-8-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0-6-1-2-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9-6-6-5-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9-5-3-3-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-1"
+       style="overflow:visible">
+      <path
+         id="path4574-7"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-15"
+       style="overflow:visible">
+      <path
+         id="path4574-27"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-7"
+       style="overflow:visible">
+      <path
+         id="path4574-4"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7801-17-7-8-8-5-5-1-2-2-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7803-4-8-4-3-1-7-6-8-1-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7805-0-3-1-8-0-6-1-2-4-0"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7807-9-5-4-3-9-6-6-5-6-9"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7809-4-12-3-7-9-5-3-3-2-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-51"
+       style="overflow:visible">
+      <path
+         id="path4574-71"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-9-1"
+       style="overflow:visible">
+      <path
+         id="path4577-5-7"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-51-0"
+       style="overflow:visible">
+      <path
+         id="path4574-71-9"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <g
+     transform="translate(9.3374729,8.0759775)"
+     id="g11">
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7-5"
+       y="304.81638"
+       x="565.92859"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4-4"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <rect
+       style="font-size:10px;text-anchor:end;fill:#ffffff;stroke:none"
+       id="rect263-9-2-2-8-4"
+       height="11.907701"
+       width="20"
+       y="196.69571"
+       x="70.699997" />
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7-2"
+       y="204.42958"
+       x="67.41732"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4-3"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7-2-1"
+       y="104.04277"
+       x="67.41732"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4-3-6"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7-7"
+       y="204.42958"
+       x="301.23422"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4-6"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-3"
+       width="139.99998"
+       height="79.199409"
+       x="-9.3374729"
+       y="496.24362"
+       ry="0" />
+    <rect
+       x="272"
+       y="387"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect43"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="602"
+       y="72"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect91"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="612"
+       y="110"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect99"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="682"
+       y="27"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect109"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="837"
+       y="135"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect117"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="837"
+       y="362"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect167"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="372"
+       y="110"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect175"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       transform="matrix(0.54921856,0,0,1.0040422,-122.91945,-102.42312)"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17)"
+       id="rect365-5"
+       pointer-events="none"
+       height="54"
+       width="223"
+       y="108"
+       x="227" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-4"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-9)"
+       transform="matrix(0.54895083,0,0,1.0040446,-123.33332,-2.02343)" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-4-7"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-9-8)"
+       transform="matrix(0.53762438,0,0,1.0041624,-120.53503,97.5606)" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-4-7-4-4"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-9-8-2-1)"
+       transform="matrix(0.53762438,0,0,1.0041624,-120.53503,197.5606)" />
+    <text
+       x="37.275734"
+       y="434.41611"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-4-6-0-1">
+      <tspan
+         style="-inkscape-font-specification:ProductusOSGiBookc Bold"
+         id="tspan4628-7-11-5-0-8" />
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 86.36759,358.7454 c 0.85944,-0.94431 9.07849,-9.93239 18.26454,-19.97352 l 16.7019,-18.25662 0.34131,11.44632 c 0.18773,6.29548 0.37255,15.28357 0.41071,19.97352 l 0.0694,8.52721 -18.67525,0 -18.67524,0 1.56264,-1.71691 z"
+       id="path7438-6-6-3-0-6-4"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-4-7-4-4-8"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-9-8-2-1-9)"
+       transform="matrix(0.53762438,0,0,1.0041624,-120.53503,397.5606)" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7)"
+       transform="matrix(0.54921856,0,0,1.0040422,116.27465,-101.91318)" />
+    <text
+       x="246.73932"
+       y="18.141159"
+       id="text369-1-16"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3657">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="247.15533"
+       y="30.141159"
+       id="text371-7-4"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0">ZCLGlobalCluster</tspan>
+    </text>
+    <text
+       x="246.46979"
+       y="42.926056"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8">Description</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8)"
+       transform="matrix(0.54921856,0,0,1.0040422,356.27465,-101.91318)" />
+    <text
+       x="486.73938"
+       y="18.141159"
+       id="text369-1-16-8"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="text-align:start;text-anchor:start"
+         id="tspan3726">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="487.1554"
+       y="30.141159"
+       id="text371-7-4-8"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0">ZCLCommand</tspan>
+    </text>
+    <text
+       x="486.46985"
+       y="42.926071"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61-8">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8-7">Description</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8)"
+       transform="matrix(0.54921856,0,0,1.0040422,596.27465,-101.91318)" />
+    <text
+       x="728.73938"
+       y="18.141159"
+       id="text369-1-16-8-0"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3924"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="729.1554"
+       y="30.141159"
+       id="text371-7-4-8-7"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-3">ZCLParameter</tspan>
+    </text>
+    <text
+       x="728.46985"
+       y="42.926071"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61-8-4">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8-7-9">Description</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4)"
+       transform="matrix(0.54921856,0,0,1.0040422,114.98654,97.576974)" />
+    <text
+       x="246.73932"
+       y="217.63132"
+       id="text369-1-16-8-6"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3712"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="247.15533"
+       y="229.63132"
+       id="text371-7-4-8-8"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1">ZCLCluster</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-8"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-7)"
+       transform="matrix(0.54921856,0,0,1.0040422,114.98654,-2.0230888)" />
+    <text
+       x="246.73932"
+       y="118.03126"
+       id="text369-1-16-8-6-9"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3659"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="247.15533"
+       y="130.03125"
+       id="text371-7-4-8-8-0"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-7">ZCLCluster</tspan>
+    </text>
+    <text
+       x="246.46979"
+       y="142.81616"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61-8-9-8">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8-7-8-1">Description</tspan>
+    </text>
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-2"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-8)"
+       transform="matrix(0.54921856,0,0,1.0040422,357.56271,198.5253)" />
+    <text
+       x="486.73938"
+       y="318.57962"
+       id="text369-1-16-8-6-5"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3730">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="487.1554"
+       y="330.57962"
+       id="text371-7-4-8-8-8"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-6">ZigBeeEndpoint</tspan>
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 570.84975,359.69382 c 0.85944,-0.94431 9.07849,-9.93239 18.26454,-19.97352 l 16.70192,-18.25662 0.3413,11.44631 c 0.1877,6.29548 0.3725,15.28357 0.4107,19.97352 l 0.069,8.5272 -18.67525,0 -18.67524,0 1.56264,-1.7169 z"
+       id="path7438-6-6-9-7-9-2"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-2-4"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-8-6)"
+       transform="matrix(0.54921856,0,0,1.0040422,596.27465,198.5253)" />
+    <text
+       x="728.73938"
+       y="318.57962"
+       id="text369-1-16-8-6-5-6"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3860"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="729.1554"
+       y="330.57962"
+       id="text371-7-4-8-8-8-1"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-6-8">ZigBeeNode</tspan>
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 809.56169,359.69382 c 0.8594,-0.94431 9.0785,-9.93239 18.2645,-19.97352 l 16.702,-18.25662 0.3413,11.44631 c 0.1877,6.29548 0.3725,15.28357 0.4107,19.97352 l 0.069,8.5272 -18.6753,0 -18.6752,0 1.5626,-1.7169 z"
+       id="path7438-6-6-9-7-9-2-2"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-2-4-1"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-8-6-0)"
+       transform="matrix(0.54921856,0,0,1.0040422,598.04216,497.29888)" />
+    <text
+       x="728.73938"
+       y="617.35321"
+       id="text369-1-16-8-6-5-6-9"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3978">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="729.1554"
+       y="629.35321"
+       id="text371-7-4-8-8-8-1-5"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-6-8-3">ZigBeeGroup</tspan>
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 811.32921,658.4674 c 0.8594,-0.94431 9.0785,-9.93239 18.2645,-19.97352 l 16.702,-18.25662 0.3413,11.44631 c 0.1877,6.29548 0.3725,15.28357 0.4107,19.97352 l 0.069,8.5272 -18.6753,0 -18.6752,0 1.5626,-1.7169 z"
+       id="path7438-6-6-9-7-9-2-2-2"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-2-4-1-7"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-8-6-0-5)"
+       transform="matrix(0.54921856,0,0,1.0040422,598.04216,398.08681)" />
+    <text
+       x="728.73938"
+       y="518.14111"
+       id="text369-1-16-8-6-5-6-9-7"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3784"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="729.1554"
+       y="530.14111"
+       id="text371-7-4-8-8-8-1-5-2"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-6-8-3-2">ZigBeeHost</tspan>
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 811.32921,559.25533 c 0.8594,-0.94431 9.0785,-9.93239 18.2645,-19.97352 l 16.702,-18.25662 0.3413,11.44631 c 0.1877,6.29548 0.3725,15.28357 0.4107,19.97352 l 0.069,8.5272 -18.6753,0 -18.6752,0 1.5626,-1.7169 z"
+       id="path7438-6-6-9-7-9-2-2-2-9"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-0-8-8"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-4-7-4)"
+       transform="matrix(0.54921856,0,0,1.0040422,596.27465,-1.91317)" />
+    <text
+       x="728.73938"
+       y="118.14116"
+       id="text369-1-16-8-6-9-2"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3901"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="729.1554"
+       y="130.14116"
+       id="text371-7-4-8-8-0-5"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-1-7-5">ZigBeeDevice</tspan>
+    </text>
+    <text
+       x="728.46985"
+       y="142.92607"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61-8-9-8-4">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8-7-8-1-9">DescriptionSet</tspan>
+    </text>
+    <path
+       style="font-size:12px;text-anchor:middle;stroke-linejoin:miter"
+       d="m 809.5617,159.25536 c 0.8595,-0.94431 9.0785,-9.93239 18.2646,-19.97352 l 16.7019,-18.25662 0.3413,11.44631 c 0.1877,6.29548 0.3725,15.28357 0.4107,19.97352 l 0.069,8.5272 -18.6753,0 -18.6754,0 1.5627,-1.7169 z"
+       id="path7438-6-6-9-7-9-5-1"
+       inkscape:connector-curvature="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-9"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-2)"
+       transform="matrix(0.54921856,0,0,1.0040422,356.27465,-2.0230889)" />
+    <text
+       x="486.73938"
+       y="118.14116"
+       id="text369-1-16-8-0-6"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         id="tspan3728"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="487.1554"
+       y="130.14116"
+       id="text371-7-4-8-7-7"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-0-0-3-9">ZigBeeDevice</tspan>
+    </text>
+    <text
+       x="486.46985"
+       y="142.92607"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-61-8-4-9">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-8-7-9-7">Description</tspan>
+    </text>
+    <rect
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-8"
+       width="139.99998"
+       height="79.199425"
+       x="230.9057"
+       y="295.06589"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6-2"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5-5)"
+       transform="matrix(0.54921856,0,0,1.0040422,116.51779,196.90909)" />
+    <text
+       x="247.41315"
+       y="318.87552"
+       id="text187-5-54"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3710">A ZigBee Endpoint</tspan>
+    </text>
+    <text
+       x="246.27643"
+       y="331.2554"
+       id="text187-5-5-4"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3708">Implementer</tspan>
+    </text>
+    <rect
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-8-3"
+       width="139.99998"
+       height="79.199425"
+       x="470.43011"
+       y="396.6235"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6-2-5"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5-5-1)"
+       transform="matrix(0.54921856,0,0,1.0040422,356.04219,298.4667)" />
+    <text
+       x="486.27649"
+       y="432.81302"
+       id="text187-5-5-4-3"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3734">Implementation</tspan>
+    </text>
+    <rect
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-8-3-6"
+       width="139.99998"
+       height="79.199425"
+       x="470.41058"
+       y="496.24362"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6-2-5-1"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5-5-1-2)"
+       transform="matrix(0.54921856,0,0,1.0040422,356.02264,398.08681)" />
+    <rect
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-8-3-6-9"
+       width="139.99998"
+       height="79.199425"
+       x="710.66254"
+       y="396.64389"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6-2-5-1-1"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5-5-1-2-2)"
+       transform="matrix(0.54921856,0,0,1.0040422,598.04216,298.46669)" />
+    <text
+       x="487.41321"
+       y="418.87552"
+       id="text187-5-54-4"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3732">A ZigBee Endpoint</tspan>
+    </text>
+    <rect
+       style="font-size:12px;text-anchor:middle;fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9-8-3-6-9-8"
+       width="139.99998"
+       height="79.199425"
+       x="230.9057"
+       y="396.64389"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6-2-5-1-1-8"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5-5-1-2-2-7)"
+       transform="matrix(0.54921856,0,0,1.0040422,116.04217,298.46668)" />
+    <text
+       x="247.41315"
+       y="419.022"
+       id="text187-5-54-5-8-5-2"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">A ZigBee Client</text>
+    <text
+       x="728.27649"
+       y="432.81302"
+       id="text187-5-5-4-3-6"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3786">Implementation</tspan>
+    </text>
+    <rect
+       style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
+       id="rect11730-5-4-9"
+       width="139.99998"
+       height="79.199425"
+       x="710.66254"
+       y="193.49454"
+       ry="0" />
+    <rect
+       x="227"
+       y="108"
+       width="223"
+       height="54"
+       pointer-events="none"
+       id="rect365-5-0-9-1-6"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7801-17-7-8-8-5)"
+       transform="matrix(0.54921856,0,0,1.0040422,596.27465,95.33776)" />
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text187-5"
+       y="215.30421"
+       x="729.41321">
+      <tspan
+         id="tspan3878"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">A ZigBee Device</tspan>
+    </text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text187-5-5"
+       y="227.68411"
+       x="728.46985">
+      <tspan
+         id="tspan3869"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">Descriptor</tspan>
+    </text>
+    <text
+       x="7.1451187"
+       y="17.63121"
+       id="text369-1"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="text-align:start;text-anchor:start"
+         id="tspan3647">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="7.5611343"
+       y="29.63121"
+       id="text371-7"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1">ZCLDataType</tspan>
+    </text>
+    <text
+       x="6.8755875"
+       y="42.416107"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7">Description</tspan>
+    </text>
+    <text
+       x="7.1451187"
+       y="118.0313"
+       id="text369-1-3"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3649">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="7.5611343"
+       y="130.0313"
+       id="text371-7-1"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-2">ZCLAttribute</tspan>
+    </text>
+    <text
+       x="6.8755875"
+       y="142.81621"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text4619-2-4">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4628-7-11">Description</tspan>
+    </text>
+    <text
+       x="7.1451187"
+       y="217.63121"
+       id="text369-1-3-9"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3651">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="7.5611343"
+       y="229.63121"
+       id="text371-7-1-3"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-2-1">ZCLAttribute</tspan>
+    </text>
+    <text
+       x="7.1451187"
+       y="317.6312"
+       id="text369-1-3-9-8-4"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3653">&lt;&lt;Interface&gt;&gt;</tspan>
+    </text>
+    <text
+       x="7.5611343"
+       y="329.6312"
+       id="text371-7-1-3-6-6"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan4630-1-2-1-5-0">ZCLEventListener</tspan>
+    </text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text187-5-7"
+       y="518.05328"
+       x="7.8189468">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3655">A Listener</tspan>
+    </text>
+    <rect
+       x="417"
+       y="30"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect193"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="965"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect223"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="965"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect231"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="337"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect251"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="337"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect259"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="107"
+       y="507"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect287"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="457"
+       y="507"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect297"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="532"
+       y="532"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect329"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="611"
+       y="337"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect349"
+       style="fill:#ffffff;stroke:#000000" />
+    <rect
+       x="611"
+       y="287"
+       width="0"
+       height="0"
+       pointer-events="none"
+       id="rect357"
+       style="fill:#ffffff;stroke:#000000" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.9433369;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 60.334384,-4.6303176 721.356516,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90804392;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 61.116541,5.784236 0,-9.7657193"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.949628;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 781.2085,6.3684983 0,-10.6806464"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-3" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90410358;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 64.393257,106.02132 0,-42.785863"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90399998;stroke-miterlimit:10;stroke-dasharray:7.23199987, 3.61599994;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       d="m 64.393257,206.02132 0,-42.78587"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.49120545;stroke-miterlimit:10;stroke-dasharray:3.92964367, 1.96482184;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       d="m 64.393257,305.70987 0,-42.46329"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-5" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.77278554px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart)"
+       d="M 61.405262,365.09373 61.352316,506.337"
+       id="path8943-9-4"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.62750387;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 122.99964,135.11011 116.80545,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.62925625;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 122.21347,235.57688 117.59074,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.63068563;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 123.265,325.41853 117.58904,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.63068563;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 603.265,35.41854 117.58904,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-0-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.63068563;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 603.6116,135.41854 117.58904,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-0-4-8" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.32559967;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 121.32532,346.50611 59.58721,0 0,188.5744 59.58722,0"
+       id="path4761-4-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90779299;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 240.52608,535.08042 240.42949,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-7" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.94549084;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 541.11457,506.57057 0,-44.74449"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.7816745px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart)"
+       d="m 540.63043,365.53527 -0.18698,40.91721"
+       id="path8943-9-4-6"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90128386;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 365.61312,435.39276 58.29945,0 0,-89.09872 58.29932,0"
+       id="path4761-4-5-7"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.70364785;stroke-miterlimit:10;stroke-dasharray:5.62918282, 2.81459141;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       d="m 605.81669,325.16836 114.22263,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-7-0-1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.73873252px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart)"
+       d="m 780.53053,164.45479 0.17534,38.99057"
+       id="path8943-9-4-6-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.01467395;stroke-miterlimit:10;stroke-dasharray:8.11739186, 4.05869593;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       d="m 562.20275,305.25864 0,-141.70651"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-1-2-4-4-8" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.92875147;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 290.19817,106.68594 0,-43.174202"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-1-2-4-9-5" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.89682907;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 308.11095,106.6153 0,-22.351604 230.10317,0 0,-22.351567"
+       id="path4761-4-5-7-4-8-7-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.92875147;stroke-miterlimit:10;stroke-dasharray:7.43001175, 3.71500587;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       d="m 298.19817,206.68594 0,-43.1742"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-1-2-4-9-5-1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.626697;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 363.58734,135.3435 117.04912,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-1" />
+    <g
+       font-size="10px"
+       id="g261-58-5-2"
+       transform="matrix(1,0,0,0.99230845,-187.30001,79.81089)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-4"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-5"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-5">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="477.44592"
+       y="550.271"
+       id="text265-7-8-2-5-7-9-5-1"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-7">1</tspan>
+    </text>
+    <rect
+       style="font-size:10px;text-anchor:end;fill:#ffffff;stroke:none"
+       id="rect263-9-2-5"
+       height="11.907701"
+       width="20"
+       y="340.69571"
+       x="-192.57869" />
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-2-3"
+       y="338.94791"
+       x="608.93762"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-7-3"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">1..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-2-3-6"
+       y="103.0389"
+       x="1040.397"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-7-3-5"
+         style="font-size:11.95376205px" />
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="543.48352"
+       y="506.10049"
+       id="text265-7-8-2-5-7-9-5-4"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusBook;-inkscape-font-specification:Sans"
+         id="tspan11826-2">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21"
+       y="477.48172"
+       x="544.29211"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusBook;-inkscape-font-specification:Sans">0..n</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-2-8"
+       transform="matrix(1,0,0,0.99230845,-187.30001,57.81089)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-4-5"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-5-7"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-5-6">0..n</tspan>
+      </text>
+    </g>
+    <g
+       font-size="10px"
+       id="g261-58-5-2-1"
+       transform="matrix(1,0,0,0.99230845,-106.57869,57.81089)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-4-8"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-5-9"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-5-2">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-1"
+       y="605.73602"
+       x="801.32172"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-2"
+         style="font-size:11.95376205px">0..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="712.8728"
+       y="339.45868"
+       id="text265-7-8-2-5-7-9-5-41"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-1">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7"
+       y="276.70807"
+       x="301.23422"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-4-7"
+       y="177.32513"
+       x="301.23422"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-0-9"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..1</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-5-3"
+       transform="matrix(1,0,0,0.99230845,50.933595,-132.18911)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-43-1"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-1-9"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-2-8">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-4-7-8"
+       y="147.81187"
+       x="609.7431"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-0-9-6"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..1</tspan>
+    </text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.7816745px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart-51)"
+       d="m 780.63043,365.63527 -0.18698,40.91721"
+       id="path8943-9-4-6-1"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       x="66.611847"
+       y="303.31949"
+       id="text265-7-8-2-5-7-9-5-17"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px;text-align:start;text-anchor:start"
+         id="tspan11826-4">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-48"
+       y="276.70807"
+       x="67.41732"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-8"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-0-2"
+       transform="matrix(1,0,0,0.99230845,-187.30001,-30.18911)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-9-4"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-48-5"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-8-5">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-4-1"
+       y="176.32127"
+       x="67.41732"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-0-5"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..1</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-0-2-2"
+       transform="matrix(1,0,0,0.99230845,-187.30001,-130.18911)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-9-4-7"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-48-5-6"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-8-5-1">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-4-7-8-3"
+       y="177.32513"
+       x="565.92859"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-0-9-6-2"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..1</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-0-2-2-2"
+       transform="matrix(1,0,0,0.99230845,227.42128,-204.18911)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-9-4-7-1"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-48-5-6-6"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-8-5-1-8">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-48-5-6-6-6"
+       y="50.344742"
+       x="711.50116"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-8-5-1-8-1"
+         style="font-size:11.95376205px">0..n</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="287.97299"
+       y="104.55362"
+       id="text265-7-8-2-5-7-9-5-8"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92">1</tspan>
+    </text>
+    <rect
+       style="font-size:11px;fill:#ffffff;stroke:none"
+       id="rect57-3-7-7"
+       height="13"
+       width="33"
+       y="88.273521"
+       x="394.4873" />
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4"
+       y="97.273521"
+       x="425.36938">
+      <tspan
+         id="tspan11858-9-0-0"
+         style="font-size:12px;text-align:center;text-anchor:middle">owns</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook;text-anchor:middle;text-align:center"
+       id="text59-1-4-4-9"
+       y="129.27351"
+       x="181.73535">
+      <tspan
+         id="tspan11858-9-0-0-4"
+         style="font-size:12px;text-anchor:middle;text-align:center">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;text-align:center;text-anchor:middle;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-2"
+       y="127.27351"
+       x="665.99158">
+      <tspan
+         id="tspan11858-9-0-0-4-4"
+         style="font-size:12px;text-align:center;text-anchor:middle">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-7"
+       y="89.273521"
+       x="286.9834">
+      <tspan
+         id="tspan11858-9-0-0-6"
+         style="font-size:12px;text-anchor:end;text-align:end">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-1"
+       y="127.27351"
+       x="424.99146">
+      <tspan
+         id="tspan11858-9-0-0-4-8"
+         style="font-size:12px;text-align:center;text-anchor:middle">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-7-9"
+       y="295.27353"
+       x="424.99146">
+      <tspan
+         id="tspan11858-9-0-0-6-2"
+         style="font-size:12px;text-anchor:middle;text-align:center">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;text-align:center;text-anchor:middle;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-2-7-5"
+       y="317.27353"
+       x="665.99158">
+      <tspan
+         id="tspan11858-9-0-0-4-4-9-4"
+         style="font-size:12px;text-align:center;text-anchor:middle">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-8-2-3"
+       y="319.27353"
+       x="180.52347">
+      <tspan
+         id="tspan11858-9-0-0-8-7-1"
+         style="font-size:12px;text-anchor:middle;text-align:center">transmits events to</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-8-2-3-2"
+       y="548.0932"
+       x="247.18463">
+      <tspan
+         id="tspan11858-9-0-0-8-7-1-3"
+         style="font-size:12px">transmits events to</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-3"
+       y="229.27351"
+       x="181.73535">
+      <tspan
+         id="tspan11858-9-0-0-4-41"
+         style="font-size:12px;text-anchor:middle;text-align:center">is owned by</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-3-1"
+       y="289.27353"
+       x="67.379272">
+      <tspan
+         id="tspan11858-9-0-0-4-41-3"
+         style="font-size:12px">is associated with</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-7-8"
+       y="5.27352"
+       x="424.99146">
+      <tspan
+         id="tspan11858-9-0-0-6-8"
+         style="font-size:12px;text-anchor:middle;text-align:center">is owned by</tspan>
+    </text>
+    <g
+       font-size="11px"
+       id="g55-9-1-17"
+       transform="translate(-46.837481,49.343312)"
+       style="font-size:11px">
+      <rect
+         x="436"
+         y="370"
+         width="33"
+         height="13"
+         id="rect57-3-7-1"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="436"
+         y="379"
+         id="text59-1-4-1"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11858-9-0-5">gets</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:10px;fill:#000000;font-family:ProductusBook"
+       x="567.81879"
+       y="230.06792"
+       id="text355-4-3-6">
+      <tspan
+         style="font-size:12px"
+         id="tspan11824-1">is associated to</tspan>
+    </text>
+    <text
+       x="67.765991"
+       y="189.27351"
+       id="text59-1-4-4-9-4"
+       style="font-size:11px;fill:#000000;font-family:ProductusBook">
+      <tspan
+         style="font-size:12px"
+         id="tspan11858-9-0-0-4-2">describes</tspan>
+    </text>
+    <text
+       x="302.4873"
+       y="189.27351"
+       id="text59-1-4-4-9-4-3"
+       style="font-size:11px;fill:#000000;font-family:ProductusBook">
+      <tspan
+         style="font-size:12px"
+         id="tspan11858-9-0-0-4-2-2">describes</tspan>
+    </text>
+    <text
+       x="67.765991"
+       y="89.273514"
+       id="text59-1-4-4-9-4-2"
+       style="font-size:11px;fill:#000000;font-family:ProductusBook">
+      <tspan
+         style="font-size:12px"
+         id="tspan11858-9-0-0-4-2-1">describes</tspan>
+    </text>
+    <text
+       style="font-size:10px;text-align:center;text-anchor:middle;fill:#000000;font-family:ProductusBook"
+       x="666.17322"
+       y="27.846195"
+       id="text355-4-3-68">
+      <tspan
+         style="font-size:12px;text-align:center;text-anchor:middle"
+         id="tspan11824-5">has</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="57.07193"
+       y="0.48455027"
+       id="text265-7-8-2-5-7-9-5-7-1"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-9-7">1</tspan>
+    </text>
+    <g
+       font-size="10px"
+       id="g261-58-5-0-2-2-2-5-4"
+       transform="matrix(1,0,0,0.99230845,468.42131,-280.16797)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-9-4-7-1-7-0"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="320"
+         y="286.79654"
+         id="text265-0-1-48-5-6-6-6-9"
+         style="text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px;text-align:start;text-anchor:start"
+           id="tspan11822-8-5-1-8-1-4">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="287.97299"
+       y="76.445313"
+       id="text265-7-8-2-5-7-9-5-8-2"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-4">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="476.97278"
+       y="146.71608"
+       id="text265-7-8-2-5-7-9-5-8-2-5"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-4-5">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="712.8728"
+       y="147.81187"
+       id="text265-7-8-2-5-7-9-5-8-2-1"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-4-7">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="316.06842"
+       y="104.55362"
+       id="text265-7-8-2-5-7-9-5-8-1"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-1">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       x="66.611847"
+       y="76.445007"
+       id="text265-7-8-2-5-7-9-5-7-1-2"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px;text-align:start;text-anchor:start"
+         id="tspan11826-9-7-2">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="232.73007"
+       y="148.72382"
+       id="text265-7-8-2-5-7-9-5-8-2-8"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-4-57">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="232.73007"
+       y="249.11063"
+       id="text265-7-8-2-5-7-9-5-8-2-8-6"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-4-57-1">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       x="608.93762"
+       y="50.344742"
+       id="text265-7-8-2-5-7-9-5-8-2-89"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px;text-align:start;text-anchor:start"
+         id="tspan11826-92-4-2">1</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="535.22278"
+       y="305.32718"
+       id="text265-7-8-2-5-7-9-5-8-3"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-92-12">1</tspan>
+    </text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.71200001;stroke-miterlimit:10;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow2Lend-9)"
+       inkscape:connector-curvature="0"
+       d="m 362.92491,325.16836 117.00553,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-7-0-1-4" />
+    <g
+       font-size="10px"
+       id="g261-58-5-3-3-7-3"
+       transform="matrix(1,0,0,0.99230845,143.42131,79.81089)"
+       style="font-size:10px;text-anchor:end">
+      <rect
+         x="318"
+         y="275"
+         width="20"
+         height="12"
+         id="rect263-9-2-2-8-9-3"
+         style="fill:#ffffff;stroke:none" />
+      <text
+         x="336"
+         y="282"
+         id="text265-0-1-21-7-5-4"
+         style="fill:#000000;font-family:ProductusBook">
+        <tspan
+           style="font-size:12px"
+           id="tspan11822-6-4-4-1">0..n</tspan>
+      </text>
+    </g>
+    <text
+       style="font-size:9.96146774px;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusBook"
+       id="text265-0-1-21-7-5-7"
+       y="451.38113"
+       x="373.97449"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         id="tspan11822-6-4-4-4"
+         style="font-size:11.95376205px;text-align:start;text-anchor:start">0..n</tspan>
+    </text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.71200001;stroke-miterlimit:10;stroke-dasharray:none;marker-start:none;marker-end:url(#Arrow2Lend-9)"
+       inkscape:connector-curvature="0"
+       d="m 604.44458,535.85585 117.00553,0"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-3-9-1-4-7-0-1-4-4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+       d="m 860,551.81482 30,0 0,-200"
+       id="path3880"
+       inkscape:connector-type="orthogonal"
+       inkscape:connector-curvature="0"
+       transform="translate(-19.337481,-15.971507)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90696234px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Lstart-51-0)"
+       d="m 846.41495,335.84331 24.67742,0"
+       id="path3882"
+       inkscape:connector-type="orthogonal"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.90410358;stroke-miterlimit:10"
+       inkscape:connector-curvature="0"
+       d="m 780.21457,605.71418 0,-42.78587"
+       stroke-miterlimit="10"
+       pointer-events="none"
+       id="path347-9-86-4-2-4-3" />
+    <text
+       x="785.85712"
+       y="588.96637"
+       id="text59-1-4-4-9-4-2-2"
+       style="font-size:11px;fill:#000000;font-family:ProductusBook">
+      <tspan
+         style="font-size:12px"
+         id="tspan11858-9-0-0-4-2-1-2">creates</tspan>
+    </text>
+    <text
+       style="font-size:9.96146774px;text-anchor:end;fill:#000000;font-family:ProductusBook"
+       x="787.23169"
+       y="578.07074"
+       id="text265-7-8-2-5-7-9-5-7-1-2-1"
+       transform="scale(1.0038681,0.9961468)">
+      <tspan
+         style="font-size:11.95376205px"
+         id="tspan11826-9-7-2-6">1</tspan>
+    </text>
+    <text
+       style="font-size:11px;fill:#000000;font-family:ProductusBook"
+       id="text59-1-4-4-9-3-1-8"
+       y="490.7027"
+       x="546.10059">
+      <tspan
+         id="tspan11858-9-0-0-4-41-3-5"
+         style="font-size:12px">is discovered or owned by</tspan>
+    </text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.89682907;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 298.18221,262.51285 0,22.3516 230.10317,0 0,22.35157"
+       id="path4761-4-5-7-4-8-7-1-7"
+       inkscape:connector-curvature="0" />
+    <text
+       x="729.41321"
+       y="418.87552"
+       id="text187-5-54-4-1"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3732-7">A ZigBee Node</tspan>
+    </text>
+    <text
+       x="487.41321"
+       y="518.05328"
+       id="text187-5-54-4-5"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc">
+      <tspan
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+         id="tspan3732-76">ZigBee Base Driver</tspan>
+    </text>
+  </g>
+</svg>

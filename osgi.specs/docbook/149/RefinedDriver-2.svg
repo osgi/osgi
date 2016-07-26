@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="803"
-   height="400"
+   width="803.67224"
+   height="356.21927"
    id="svg4487"
    version="1.1"
    inkscape:version="0.48.4 r9939"
@@ -204,18 +204,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="325.6626"
-     inkscape:cy="805.72034"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="561.9946"
+     inkscape:cy="161.71564"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      showborder="true"
      inkscape:window-width="1509"
      inkscape:window-height="881"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1" />
+     inkscape:window-x="1676"
+     inkscape:window-y="285"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <metadata
      id="metadata4492">
     <rdf:RDF>
@@ -224,14 +228,15 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-4.0952377,-18.147903)">
     <rect
        style="fill:#e1e1eb;fill-opacity:1;stroke-linejoin:miter"
        id="rect11730-5-8"
@@ -248,7 +253,7 @@
        id="rect11730-5-8-3"
        width="172.67781"
        height="87"
-       x="318.94681"
+       x="318.37537"
        y="159.07188"
        ry="0"
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
@@ -274,24 +279,6 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g15"
-       style="font-size:12px;text-anchor:middle"
-       transform="translate(-251.31399,-346.69875)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         x="337"
-         y="536"
-         id="text17"
-         style="fill:#000000;font-family:Helvetica">
-        <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
-           id="tspan3038">ZigBee Base Driver</tspan>
-      </text>
-    </g>
     <rect
        x="227"
        y="108"
@@ -304,29 +291,20 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g431"
-       style="font-size:12px;text-anchor:middle"
-       transform="translate(-114.94894,-32.807541)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         x="334.28125"
-         y="361"
-         id="text433"
-         style="fill:#000000;font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal">&lt;&lt;Interface&gt;&gt;</text>
-      <text
-         x="340"
-         y="375"
-         id="text435"
-         style="fill:#000000;font-family:Helvetica">
-        <tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
-           id="tspan3036">ZigBeeEndpoint</tspan>
-      </text>
-    </g>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433"
+       y="328.19244"
+       x="179.33231">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+       id="text435"
+       y="342.19244"
+       x="179.74832">
+      <tspan
+         id="tspan3036"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">ZigBeeEndpoint</tspan>
+    </text>
     <path
        style="stroke-linejoin:miter"
        d="m 289.66323,366.97479 c 0.85944,-0.94431 9.07849,-9.93239 18.26454,-19.97352 l 16.7019,-18.25662 0.34131,11.44632 c 0.18773,6.29548 0.37255,15.28357 0.41071,19.97352 l 0.0694,8.52721 -18.67525,0 -18.67524,0 1.56264,-1.71691 z"
@@ -365,25 +343,29 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
-       style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
        id="text433-7"
        y="328.19269"
-       x="534.46716"
+       x="494.46716"
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <tspan
-         style="-inkscape-font-specification:Arial;font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
          id="tspan3040">&lt;&lt;Interface&gt;&gt;</tspan>
     </text>
     <text
-       style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
        id="text435-9"
        y="342.19269"
-       x="538.14099"
+       x="495.14099"
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">AbstractDevice</text>
+       inkscape:export-ydpi="90">
+      <tspan
+         style="text-align:start;text-anchor:start;font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
+         id="tspan3051">AbstractDevice</tspan>
+    </text>
     <rect
        ry="0"
        y="159.07188"
@@ -423,25 +405,6 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       transform="translate(369.68044,-334.69874)"
-       style="font-size:12px;text-anchor:middle"
-       id="g15-2-1"
-       font-size="12px"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
-         id="text17-1-3"
-         y="522"
-         x="285">Application interacting</text>
-      <text
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
-         y="536"
-         x="285"
-         id="text3817">with an abstraction layer</text>
-    </g>
     <rect
        x="2"
        y="507"
@@ -450,24 +413,10 @@
        pointer-events="none"
        id="rect277-2"
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7731-7)"
-       transform="matrix(0.99979765,0,0,1.0671623,333.30028,-365.15841)"
+       transform="matrix(0.99979765,0,0,1.0671623,332.72886,-365.15841)"
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       font-size="12px"
-       id="g15-2"
-       style="font-size:12px;text-anchor:middle"
-       transform="translate(63.53758,-346.69873)"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         x="325"
-         y="536"
-         id="text17-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">Refining Driver</text>
-    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 563.84914,211.03847 0,102.85714"
@@ -508,25 +457,6 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <g
-       transform="translate(54.96616,-481.62272)"
-       style="font-size:12px;text-anchor:middle"
-       id="g15-2-1-8"
-       font-size="12px"
-       inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <text
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
-         id="text17-1-3-2"
-         y="528"
-         x="283">Application interacting</text>
-      <text
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial"
-         y="542"
-         x="283"
-         id="text3815">with the base driver</text>
-    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 301.42857,203.07647 0,-141.428573 32.85714,0"
@@ -535,5 +465,35 @@
        inkscape:export-filename="E:\Documents\Norm@Home\OSGi\ZigBeeDeviceService-specification\pictures\RefinedDriver-2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-1"
+       y="190.01213"
+       x="25.917557">ZigBee Base Driver</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-74"
+       y="190.01213"
+       x="338.83026">Refining Driver</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-1-0"
+       y="62.103645"
+       x="339.73846">with the base driver</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-1-0-9"
+       y="47.367466"
+       x="339.7912">Application interacting</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-1-0-4"
+       y="204.60184"
+       x="656.61426">with an abstraction layer</text>
+    <text
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
+       id="text433-1-0-9-8"
+       y="189.86565"
+       x="656.66699">Application interacting</text>
   </g>
 </svg>

@@ -168,14 +168,13 @@ layers (see Table 2.137 ZDP Enumerations Description in <xref
       </listitem>      
   </itemizedlist>
   
-     <figure xml:id="service.zigbee-figure_id_20160712_18h51_11">
+     <figure pgwide="1" xml:id="service.zigbee-figure_id_20160712_18h51_11">
       <title>ZigBee Service Specification class Diagram org.osgi.service.zigbee package</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.5in"
-                     contentwidth="6.000in"
-                     fileref="RFC192_ZigBee_ClassDiagram_20140416_14h55.svg.2014_04_16_16_40_29.0.svg"/>
+          <imagedata align="center" contentwidth="6in"
+                     fileref="ZigBeeClassDiagram.svg"/>
         </imageobject>
       </mediaobject>
     </figure>      
@@ -210,7 +209,7 @@ framework as an object implementing <xref
 
       <mediaobject>
         <imageobject>
-          <imagedata align="left" contentdepth="7in" contentwidth="4in" 
+          <imagedata align="center" contentdepth="7in" contentwidth="4in" 
                      fileref="DeviceImport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -230,7 +229,7 @@ network. This is a <emphasis role="italic">device export</emphasis> situation. F
 
       <mediaobject>
         <imageobject>
-          <imagedata align="left" contentdepth="3.5in" contentwidth="2.000in"
+          <imagedata align="center" contentwidth="3.1in"
                      fileref="DeviceExport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -283,8 +282,8 @@ supported by the described type of endpoint.</para>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.5in"
-                     contentwidth="5.000in"
+          <imagedata align="center" 
+                     contentwidth="3.5in"
                      fileref="device_description_set.svg"/>
         </imageobject>
       </mediaobject>
@@ -313,8 +312,8 @@ feature: <code>getLinksQuality()</code>, <code>getRoutingTable()</code>, and <co
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="6.5in"
-                     contentwidth="5.000in"
+          <imagedata align="center" 
+                     contentwidth="4in"
                      fileref="clusterLibrairie.svg"/>
         </imageobject>
       </mediaobject>
@@ -940,7 +939,7 @@ assigned to public final static fields (constants).</para>
     <para>Here is the table of encoding relations between ZigBee types and Java types:</para>
     <table frame='all'>
        <title></title>
-        <tgroup align="left" cols="3" colsep="1" rowsep="1">
+        <tgroup align="center" cols="3" colsep="1" rowsep="1">
           <colspec colname="c1" colwidth="1*"/>
 
           <colspec colname="c2" colwidth="1*"/>
@@ -1723,7 +1722,11 @@ network:</para>
     <itemizedlist>
       <listitem>
         <para><code>setChannel(byte channel, ZigBeeHandler handler)</code> – Sets the network channel.</para>
+      </listitem>
+      <listitem>
         <para><code>setChannelMask(int mask, ZigBeeHandler handler)</code> – Sets a new configured channel mask.</para>
+      </listitem>
+      <listitem>
         <para><code>refreshNetwork(ZigBeeHandler handler)</code> – Requests the base driver to launch new discovery
 requests and refresh devices service registration according to current devices availability. This method is
 made mandatory since ZigBee specification allows devices not to notify the network when they leave it.</para>
