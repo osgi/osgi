@@ -24,7 +24,11 @@ import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
  * This interface represents the 'Time Of Day' Data Type, as described in the
- * ZigBee Specification
+ * ZigBee Cluster Library specification.
+ * 
+ * The ZigBee data type is mapped to a byte[4] array. where byte[0] must contain
+ * the Hour field and byte[3] the Hundredths of seconds. The array is
+ * marshaled/unmarshaled starting from byte[0].
  * 
  * @author $Id$
  * 

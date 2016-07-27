@@ -23,8 +23,14 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Date' Data Type, as described in the ZigBee
- * Specification
+ * This interface represents the 'Date' Data Type, as described in the ZigBeb
+ * Cluster Library specification.
+ * 
+ * <p>
+ * The ZigBee data type is mapped to a byte[4] array. where byte[0] must contain
+ * the Year field (be careful that in the ZCL specification this byte do not
+ * contain the actual year, but an offset) whereas byte[3] the Day of Week. The
+ * array is marshaled/unmarshaled starting from byte[0].
  * 
  * @author $Id$
  * 
