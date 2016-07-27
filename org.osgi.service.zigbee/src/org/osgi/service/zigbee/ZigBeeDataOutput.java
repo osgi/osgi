@@ -80,7 +80,7 @@ public interface ZigBeeDataOutput {
 	public void writeDouble(double value) throws IOException;
 
 	/**
-	 * Appends on the Data Output Stream a bytes value
+	 * Appends on the Data Output Stream a bytes value starting from bytes[0]
 	 * 
 	 * @param bytes The bytes value to append
 	 * @param length The length in bytes that have to be actually appended.
