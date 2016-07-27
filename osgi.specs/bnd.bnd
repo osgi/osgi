@@ -1,6 +1,6 @@
 -nobundles = true
 
--dependson = osgi.companion, dmforest
+-dependson = osgi.companion, dmforest, org.osgi.service.zigbee
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
@@ -14,7 +14,7 @@
     org.eclipse.persistence.jpa_spec; version=latest, \
     com.icl.saxon; version=latest 
 
-javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
+javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt, org.osgi.service.zigbee}
 
 saxon    = ${repo;com.icl.saxon;latest}
 log4j    = ${repo;org.apache.log4j;latest}
