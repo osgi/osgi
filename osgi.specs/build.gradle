@@ -187,6 +187,12 @@ configure(tasks.getByPath('residential.xml')) {
     inputs.files it.outputs.files
   }
 }
+configure(tasks.getByPath('residential-supplement.xml')) {
+  [javadoc].each {
+    dependsOn it
+    inputs.files it.outputs.files
+  }
+}
 
 tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for the book <name>.') { taskName ->
   if (taskName.endsWith('-diff.xml')) {
@@ -332,5 +338,5 @@ defaultTasks += 'specifications'
 task('specifications') {
   description 'Generates all the specifications.'
   group 'documentation'
-  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf'
+  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf', 'residential-supplement.pdf'
 }

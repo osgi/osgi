@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="1" revision="$Id$"
+         version="5" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Introduction</title>
+
+  <para>Subsequent to the release of OSGi Residential Specification Release 6,
+  an additional specification has been completed and is presented in this
+  supplement.</para>
+
+  <section>
+    <title>Overview of the Residential Supplement Specifications</title>
+
+    <section>
+      <title>Device Interoperability</title>
+
+      <para>A residential gateway can directly attach devices, for example via
+      a USB adapter, through a home network. There is therefore a need to have
+      a unified device abstraction, discovery and control model. For this
+      purpose, this Specification contains the following services:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Device Service Specification for ZigBee™
+          Technology</emphasis> - This specification defines how OSGi bundles
+          can be developed to discover and control ZigBee devices on the one
+          hand, and act as ZigBee devices and interoperate with ZigBee clients
+          on the other hand. In particular, a Java mapping is provided for the
+          standard representation of ZigBee devices and ZigBee clusters. See
+          <xref linkend="service.zigbee"/>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Version Information</title>
+
+    <para>This document is the OSGi Residential <xref
+    endterm="residential.book-release" linkend="residential.book"/>.</para>
+
+    <section xml:id="intro.core.release">
+      <title>OSGi Core Release 6</title>
+
+      <para>This specification is based on the OSGi Core Release 6. This
+      specification can be downloaded from:</para>
+
+      <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
+    </section>
+
+    <section>
+      <title>Component Versions</title>
+
+      <para>Components in this specification have their own specification
+      version, independent of this specification. The following table
+      summarizes the packages and specification versions for the different
+      subjects.</para>
+
+      <table pgwide="1">
+        <title>Packages and versions</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2.5*"/>
+
+          <colspec colnum="3" colwidth="0.8*"/>
+
+          <thead>
+            <row>
+              <entry>Item</entry>
+
+              <entry>Package(s)</entry>
+
+              <entry>Version</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><xref linkend="service.zigbee"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.zigbee"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.descriptions"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.descriptors"/></code></para><para><code><xref
+              linkend="org.osgi.service.zigbee.types"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.zigbee-version"
+              linkend="service.zigbee"/></code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>When a component is represented in a bundle, a
+      <code>version</code> attribute is needed in the declaration of the
+      Import-Package or Export-Package manifest headers.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i310173"><title>Bradner, S., Key words for use in
+      RFCs to Indicate Requirement
+      Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
+      1997.</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
