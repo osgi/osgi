@@ -359,21 +359,6 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		 */
 		assertEquals("isAnalog() method returned the wrong value for data type " + dataType.getClass().getName(), A, dataType.isAnalog());
 
-		/*
-		 * try to serialize an object of an invalid data type.
-		 */
-
-		if (Number.class.isAssignableFrom(clazz)) {
-			/*
-			 * The javaDataType inherit from Number
-			 */
-
-			Object wrongJavaDataObject = getWrongJavaDataType(dataType.getJavaDataType());
-
-		} else if (String.class.isAssignableFrom(clazz)) {
-			// TODO:
-		}
-
 		if (!I) {
 			try {
 				dataType.serialize(dataOutput, null);
@@ -405,18 +390,11 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				fail("unexpected exception: " + e.getMessage());
 			}
 
-			// TODO: check if the buffer moved of 'size' bytes.
 			int outputIndex = payload.getCurrentOutputIndex();
 			if (outputIndex != size) {
 				fail("even if we didn't serialize nothing, the cursor inside the ZigBeeData buffer has moved.");
 			}
 		}
-	}
-
-	Object[] possibleUnsignedValues = new Object[] {new Short((short) 10), new Integer(100), new Long(1000L), new Float(10f), new Double(100.0d)};
-
-	private Object getWrongJavaDataType(Class javaDataType) {
-		return new Integer(1111);
 	}
 
 	/**
