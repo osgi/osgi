@@ -8,6 +8,7 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 import org.osgi.service.zigbee.types.ZigBeeAttributeID;
+import org.osgi.service.zigbee.types.ZigBeeBACnet;
 import org.osgi.service.zigbee.types.ZigBeeBitmap16;
 import org.osgi.service.zigbee.types.ZigBeeBitmap24;
 import org.osgi.service.zigbee.types.ZigBeeBitmap32;
@@ -240,6 +241,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 		this.checkUnsignedDataType(ZigBeeAttributeID.getInstance(), ZigBeeDataTypes.ATTRIBUTE_ID, 2, Integer.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeClusterID.getInstance(), ZigBeeDataTypes.CLUSTER_ID, 2, Integer.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeBACnet.getInstance(), ZigBeeDataTypes.BACNET_OID, 4, Long.class, U, I, A);
 	}
 
 	public void testBooleanDataType() {

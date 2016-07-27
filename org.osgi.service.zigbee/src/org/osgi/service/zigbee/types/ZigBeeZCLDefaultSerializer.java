@@ -224,6 +224,7 @@ class ZigBeeZCLDefaultSerializer {
 				case ZigBeeDataTypes.BITMAP_40 :
 				case ZigBeeDataTypes.BITMAP_48 :
 				case ZigBeeDataTypes.BITMAP_56 :
+				case ZigBeeDataTypes.BACNET_OID :
 					if (value instanceof Long) {
 						os.writeLong((((Number) value).longValue()), size);
 					} else {
@@ -549,7 +550,8 @@ class ZigBeeZCLDefaultSerializer {
 				return new Integer(i);
 			}
 
-			case ZigBeeDataTypes.UNSIGNED_INTEGER_32 : {
+			case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
+			case ZigBeeDataTypes.BACNET_OID : {
 				long l = is.readLong(4) & 0xffffffff;
 				if (l == 0xffffffffL) {
 					return null;
