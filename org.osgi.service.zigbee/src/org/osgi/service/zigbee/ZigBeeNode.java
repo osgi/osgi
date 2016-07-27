@@ -282,6 +282,8 @@ public interface ZigBeeNode {
 	 * Enable to broadcast a given frame of a specific cluster to all the
 	 * {@link ZigBeeEndpoint} that are running on this node.
 	 * 
+	 * FIXME: this description must be improved.
+	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
@@ -292,6 +294,8 @@ public interface ZigBeeNode {
 	 * Enable to broadcast a given frame of a specific cluster to all the
 	 * {@link ZigBeeEndpoint} that are running on this node from a specific
 	 * exported endpoint.
+	 * 
+	 * FIXME: this description must be improved.
 	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
