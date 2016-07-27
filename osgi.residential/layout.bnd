@@ -24,7 +24,6 @@ osgi.residential.specs = \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.usbinfo, \
 	 org.osgi.service.useradmin, \
-     org.osgi.service.zigbee, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
 	 org.osgi.util.xml

@@ -75,8 +75,6 @@
   <xi:include href="../145/service.usbinfo.xml"/>
 
   <xi:include href="../146/service.serial.xml"/>
-  
-  <xi:include href="../149/service.zigbee.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 
