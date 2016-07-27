@@ -81,6 +81,10 @@ public class ZigBeeSerializer {
 		return d;
 	}
 
+	protected int getIndex() {
+		return index;
+	}
+
 	public ZigBeeDataInput getDataInput() {
 		return new ZigBeeDataInputImpl(this);
 	}

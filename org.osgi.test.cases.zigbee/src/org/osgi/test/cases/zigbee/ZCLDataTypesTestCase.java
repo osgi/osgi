@@ -7,6 +7,7 @@ import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
+import org.osgi.service.zigbee.types.ZigBeeAttributeID;
 import org.osgi.service.zigbee.types.ZigBeeBitmap16;
 import org.osgi.service.zigbee.types.ZigBeeBitmap24;
 import org.osgi.service.zigbee.types.ZigBeeBitmap32;
@@ -15,6 +16,15 @@ import org.osgi.service.zigbee.types.ZigBeeBitmap48;
 import org.osgi.service.zigbee.types.ZigBeeBitmap56;
 import org.osgi.service.zigbee.types.ZigBeeBitmap64;
 import org.osgi.service.zigbee.types.ZigBeeBitmap8;
+import org.osgi.service.zigbee.types.ZigBeeBoolean;
+import org.osgi.service.zigbee.types.ZigBeeCharacterString;
+import org.osgi.service.zigbee.types.ZigBeeClusterID;
+import org.osgi.service.zigbee.types.ZigBeeDate;
+import org.osgi.service.zigbee.types.ZigBeeEnumeration16;
+import org.osgi.service.zigbee.types.ZigBeeEnumeration8;
+import org.osgi.service.zigbee.types.ZigBeeFloatingDouble;
+import org.osgi.service.zigbee.types.ZigBeeFloatingSemi;
+import org.osgi.service.zigbee.types.ZigBeeFloatingSingle;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData16;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData24;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData32;
@@ -23,6 +33,11 @@ import org.osgi.service.zigbee.types.ZigBeeGeneralData48;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData56;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData64;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData8;
+import org.osgi.service.zigbee.types.ZigBeeIEEEADDRESS;
+import org.osgi.service.zigbee.types.ZigBeeLongCharacterString;
+import org.osgi.service.zigbee.types.ZigBeeLongOctetString;
+import org.osgi.service.zigbee.types.ZigBeeOctetString;
+import org.osgi.service.zigbee.types.ZigBeeSecurityKey128;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger16;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger24;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger32;
@@ -31,6 +46,8 @@ import org.osgi.service.zigbee.types.ZigBeeSignedInteger48;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger56;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger64;
 import org.osgi.service.zigbee.types.ZigBeeSignedInteger8;
+import org.osgi.service.zigbee.types.ZigBeeTimeOfDay;
+import org.osgi.service.zigbee.types.ZigBeeUTCTime;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger16;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger24;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger32;
@@ -167,12 +184,153 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.checkUnsignedDataType(ZigBeeSignedInteger64.getInstance(), ZigBeeDataTypes.SIGNED_INTEGER_64, 8, Long.class, U, I, A);
 	}
 
+	public void testEnumDataTypes() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned
+		boolean U;
+
+		I = true;
+		A = false;
+		U = true;
+
+		this.checkUnsignedDataType(ZigBeeEnumeration8.getInstance(), ZigBeeDataTypes.ENUMERATION_8, 1, Short.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeEnumeration16.getInstance(), ZigBeeDataTypes.ENUMERATION_16, 2, Integer.class, U, I, A);
+	}
+
+	public void testTimeDataTypes() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned
+		boolean U;
+
+		I = true;
+		A = true;
+		U = true; // don't care for Time of Day and Date
+
+		this.checkUnsignedDataType(ZigBeeTimeOfDay.getInstance(), ZigBeeDataTypes.TIME_OF_DAY, 4, byte[].class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeDate.getInstance(), ZigBeeDataTypes.DATE, 4, byte[].class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeUTCTime.getInstance(), ZigBeeDataTypes.UTC_TIME, 4, Long.class, U, I, A);
+	}
+
+	public void testIdentifierDataTypes() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned
+		boolean U;
+
+		I = true;
+		A = false;
+		U = true;
+
+		this.checkUnsignedDataType(ZigBeeAttributeID.getInstance(), ZigBeeDataTypes.ATTRIBUTE_ID, 2, Integer.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeClusterID.getInstance(), ZigBeeDataTypes.CLUSTER_ID, 2, Integer.class, U, I, A);
+	}
+
+	public void testBooleanDataType() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned
+		boolean U;
+
+		I = true;
+		A = false;
+		U = true; // we don't care
+
+		this.checkUnsignedDataType(ZigBeeBoolean.getInstance(), ZigBeeDataTypes.BOOLEAN, 1, Boolean.class, U, I, A);
+	}
+
+	public void testFloatDataTypes() {
+
+		// true if it is analog
+		boolean A;
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is unsigned
+		boolean U;
+
+		A = true;
+		I = true;
+		U = false;
+
+		this.checkUnsignedDataType(ZigBeeFloatingSemi.getInstance(), ZigBeeDataTypes.FLOATING_SEMI, 2, Float.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeFloatingSingle.getInstance(), ZigBeeDataTypes.FLOATING_SINGLE, 4, Float.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeFloatingDouble.getInstance(), ZigBeeDataTypes.FLOATING_DOUBLE, 8, Double.class, U, I, A);
+	}
+
+	public void testStringDataTypes() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned (only for numbers)
+		boolean U;
+
+		I = true;
+		A = false;
+		U = false; // don't care for Strings
+
+		this.checkUnsignedDataType(ZigBeeCharacterString.getInstance(), ZigBeeDataTypes.CHARACTER_STRING, 1, String.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeOctetString.getInstance(), ZigBeeDataTypes.OCTET_STRING, 1, byte[].class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeLongCharacterString.getInstance(), ZigBeeDataTypes.LONG_CHARACTER_STRING, 2, String.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeLongOctetString.getInstance(), ZigBeeDataTypes.LONG_OCTET_STRING, 2, byte[].class, U, I, A);
+	}
+
+	public void testMiscellaneousDataTypes() {
+
+		// true if allows invalid values
+		boolean I;
+
+		// true if it is analog
+		boolean A;
+
+		// true if it is unsigned (only for numbers)
+		boolean U;
+
+		I = true;
+		A = false;
+		U = false;
+
+		this.checkUnsignedDataType(ZigBeeIEEEADDRESS.getInstance(), ZigBeeDataTypes.IEEE_ADDRESS, 8, BigInteger.class, U, I, A);
+
+		I = false;
+		this.checkUnsignedDataType(ZigBeeSecurityKey128.getInstance(), ZigBeeDataTypes.SECURITY_KEY_128, 1, byte[].class, U, I, A);
+	}
+
 	protected void checkUnsignedDataType(ZCLSimpleTypeDescription dataType, short dataTypeId, int size, Class clazz, boolean U, boolean I, boolean A) {
 
 		/*
 		 * Checks if the name assigned to the data type is the expected one.
 		 */
 
+		/*
+		 * Create a buffer of big enough!
+		 */
 		byte[] data = new byte[100];
 
 		ZigBeeDataImpl payload = new ZigBeeDataImpl(data);
@@ -192,14 +350,14 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		/*
 		 * Checks if the java type used to map the data type is correct.
 		 */
-		assertEquals("java class is not correct ", dataType.getJavaDataType().getName(), clazz.getName());
+		assertEquals("java class is not correct ", clazz.getName(), dataType.getJavaDataType().getName());
 
 		// TODO: check analog or digital
 
 		/*
 		 * Checks the correctnes of the analog/digital information
 		 */
-		assertEquals("isAnalog() method returned the wrong value for data type " + dataType.getClass().getName(), dataType.isAnalog(), A);
+		assertEquals("isAnalog() method returned the wrong value for data type " + dataType.getClass().getName(), A, dataType.isAnalog());
 
 		/*
 		 * try to serialize an object of an invalid data type.
@@ -210,11 +368,11 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			 * The javaDataType inherit from Number
 			 */
 
+			Object wrongJavaDataObject = getWrongJavaDataType(dataType.getJavaDataType());
+
 		} else if (String.class.isAssignableFrom(clazz)) {
-
+			// TODO:
 		}
-
-		Object wrongJavaDataObject = getWrongJavaDataType(dataType.getJavaDataType());
 
 		if (!I) {
 			try {
@@ -224,6 +382,11 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				// we expect it!
 			} catch (Throwable e) {
 				fail("unexpected exception: " + e.getMessage());
+			}
+
+			int outputIndex = payload.getCurrentOutputIndex();
+			if (outputIndex != 0) {
+				fail("even if we didn't serialize nothing, the cursor inside the ZigBeeData buffer has moved.");
 			}
 		} else {
 			/*
@@ -243,7 +406,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			}
 
 			// TODO: check if the buffer moved of 'size' bytes.
-
+			int outputIndex = payload.getCurrentOutputIndex();
+			if (outputIndex != size) {
+				fail("even if we didn't serialize nothing, the cursor inside the ZigBeeData buffer has moved.");
+			}
 		}
 	}
 
@@ -258,17 +424,15 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 	 */
 	class ZigBeeDataImpl extends ZigBeeSerializer {
 
-		private byte[]	data;
-
-		private int		outputIndex	= 0;
-		private int		inputIndex	= 0;
+		private int	outputIndex	= 0;
+		private int	inputIndex	= 0;
 
 		public int getCurrentInputIndex() {
 			return inputIndex;
 		}
 
 		public int getCurrentOutputIndex() {
-			return outputIndex;
+			return getIndex();
 		}
 
 		public void resetIndexes() {
@@ -281,59 +445,4 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			this.resetIndexes();
 		}
 	}
-
-	/*
-	 * protected Class getExpectedJavaClass(short dataTypeId, int size, boolean
-	 * isUnsigned) { Class expectedJavaClass = null;
-	 * 
-	 * switch (dataTypeId) { case ZigBeeDataTypes.ATTRIBUTE_ID : case
-	 * ZigBeeDataTypes.CLUSTER_ID : case ZigBeeDataTypes.BACNET_OID :
-	 * expectedJavaClass = Integer.class; break;
-	 * 
-	 * case ZigBeeDataTypes.BOOLEAN : expectedJavaClass = Boolean.class; break;
-	 * 
-	 * case ZigBeeDataTypes.CHARACTER_STRING : case ZigBeeDataTypes.OCTET_STRING
-	 * : case ZigBeeDataTypes.LONG_CHARACTER_STRING : case
-	 * ZigBeeDataTypes.LONG_OCTET_STRING : expectedJavaClass = String.class;
-	 * break;
-	 * 
-	 * case ZigBeeDataTypes.FLOATING_SEMI: case ZigBeeDataTypes.FLOATING_SINGLE:
-	 * expectedJavaClass = Float.class; break;
-	 * 
-	 * case ZigBeeDataTypes.FLOATING_DOUBLE: expectedJavaClass = Double.class;
-	 * break;
-	 * 
-	 * case ZigBeeDataTypes.TIME_OF_DAY: expectedJavaClass = break;
-	 * 
-	 * case ZigBeeDataTypes.UTC_TIME: expectedJavaClass = break;
-	 * 
-	 * case ZigBeeDataTypes.DATE: expectedJavaClass = break;
-	 * 
-	 * case ZigBeeDataTypes.SECURITY_KEY_128: expectedJavaClass = break;
-	 * 
-	 * case ZigBeeDataTypes.IEEE_ADDRESS: expectedJavaClass = break; default:
-	 * fail(
-	 * "the test is failed because an internal CT error: invalid data type id");
-	 * }
-	 * 
-	 * if (isUnsigned) { switch (size) { case 1 : expectedJavaClass =
-	 * Short.class; break;
-	 * 
-	 * case 2 : case 3 : expectedJavaClass = Integer.class; break;
-	 * 
-	 * case 4 : case 5 : case 6 : case 7 : expectedJavaClass = Long.class;
-	 * break;
-	 * 
-	 * case 8 : expectedJavaClass = BigInteger.class;
-	 * 
-	 * default : fail("the test is failed because an internal CT error"); } }
-	 * else { switch (size) { case 1 : case 2 : expectedJavaClass = Short.class;
-	 * break;
-	 * 
-	 * case 3 : case 4 : expectedJavaClass = Integer.class; break;
-	 * 
-	 * case 5 : case 6 : case 7 : case 8 : expectedJavaClass = Long.class;
-	 * break; default : fail("the test is failed because an internal CT error");
-	 * } } return expectedJavaClass; }
-	 */
 }
