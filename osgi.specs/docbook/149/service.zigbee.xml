@@ -544,12 +544,12 @@
       </listitem>
 
       <listitem>
-        <para><xref
+        <para><link
         linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
-        xrefstyle="hyperlink"/> (see OSGi Compendium: 103 Device Access
+        xrefstyle="hyperlink">DEVICE_CATEGORY</link> (see 103 Device Access
         Specification) – (“DEVICE_CATEGORY”) describes a table of the
-        categories to which the device belongs. One of the value MUST be “
-        ZigBee”
+        categories to which the device belongs. One of the value MUST be
+        “ZigBee”
         (<code>org.osgi.service.zigbee.ZigBeeEndpoint.DEVICE_CATEGORY</code>).</para>
       </listitem>
     </itemizedlist>
@@ -559,20 +559,20 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref
+        <para><link
         linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION"
-        xrefstyle="hyperlink"/> – if the complex descriptor of the device is
-        available, the value MUST be set and MUST be the value returned by
-        <xref
+        xrefstyle="hyperlink">DEVICE_DESCRIPTION</link> – if the complex
+        descriptor of the device is available, the value MUST be set and MUST
+        be the value returned by <xref
         linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getModelName--"
         xrefstyle="hyperlink"/>.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.device.Constants.DEVICE_SERIAL"
-        xrefstyle="hyperlink"/> – if the complex descriptor of the device is
-        available, the value MUST be set and MUST be the value returned by
-        <xref
+        <para><link linkend="org.osgi.service.device.Constants.DEVICE_SERIAL"
+        xrefstyle="hyperlink">DEVICE_SERIAL</link> – if the complex descriptor
+        of the device is available, the value MUST be set and MUST be the
+        value returned by <xref
         linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getSerialNumber--"
         xrefstyle="hyperlink"/>.</para>
       </listitem>
@@ -787,14 +787,12 @@ public class UI {
       </listitem>
 
       <listitem>
-        <para><xref
+        <para><link
         linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
-        xrefstyle="hyperlink"/> (see OSGi Compendium: Device Access
+        xrefstyle="hyperlink">DEVICE_CATEGORY</link> (see 103 Device Access
         Specification) – (“DEVICE_CATEGORY”) describes a table of the
         categories to which the device belongs. One of the value MUST be
-        “ZigBee” (<xref
-        linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
-        xrefstyle="hyperlink"/>).</para>
+        “ZigBee”.</para>
       </listitem>
     </itemizedlist>
 
