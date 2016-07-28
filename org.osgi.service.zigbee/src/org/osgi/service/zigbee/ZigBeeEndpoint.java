@@ -143,8 +143,8 @@ public interface ZigBeeEndpoint {
 	public ZCLCluster getClientCluster(int clientClusterId);
 
 	/**
-	 * This method modify the <i>Binding Table</i> of physical device by adding
-	 * the following entry:
+	 * This method modifies the <i>Binding Table</i> of physical device by
+	 * adding the following entry:
 	 * 
 	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
 	 * 
@@ -164,7 +164,7 @@ public interface ZigBeeEndpoint {
 	public Promise bind(String servicePid, int clusterId);
 
 	/**
-	 * This method modify the <i>Binding Table</i> of physical device by
+	 * This method modifies the <i>Binding Table</i> of physical device by
 	 * removing the entry if exists:
 	 * 
 	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
@@ -178,8 +178,8 @@ public interface ZigBeeEndpoint {
 	 * unbinding succeeds. In case of an error has occurred, onFailure is called
 	 * with a APSException.
 	 * 
-	 * @param servicePid to unbound from
-	 * @param clusterId The cluster identifier to unbound from
+	 * @param servicePid The pid of the service to unbind.
+	 * @param clusterId The cluster identifier to unbind.
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
 	public Promise unbind(String servicePid, int clusterId);

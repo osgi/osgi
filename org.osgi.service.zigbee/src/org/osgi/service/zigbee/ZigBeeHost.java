@@ -235,9 +235,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
-	 * @param exportedServicePID : the source endpoint of the command request.
-	 *        In targeted situations, the source endpoint is the valid service
-	 *        PID of an exported endpoint.
+	 * @param exportedServicePID : the PID of the source endpoint of the command
+	 *        request. In targeted situations, the source endpoint is the valid
+	 *        service PID of an exported endpoint.
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */

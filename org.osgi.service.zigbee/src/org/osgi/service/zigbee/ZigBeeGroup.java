@@ -38,7 +38,7 @@ public interface ZigBeeGroup {
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoint or even on imported Endpoint. In the former case,
+	 * on exported Endpoints or even on imported Endpoints. In the former case,
 	 * the ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API
 	 * defined by the ZigBee Specification, or it will use the proper commands
 	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
@@ -52,13 +52,13 @@ public interface ZigBeeGroup {
 	 *        {@link ZigBeeEndpoint} to add to this Group.
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         The expected object is always a {@link Boolean} indicating a
-	 *         failure or a success
+	 *         failure or a success.
 	 * 
 	 * @throws APSException when the joining is performed locally on an exported
 	 *         {@link ZigBeeEndpoint} and it fails either with error code
 	 *         INVALID_PARAMETER or TABLE_FULL. This exception is also generated
 	 *         when the joining is performed remotely on an imported
-	 *         {@link ZigBeeEndpoint} and the communication with it fails
+	 *         {@link ZigBeeEndpoint} and the communication with it fails.
 	 * 
 	 * @throws ZCLException when the joining is performed remotely on an
 	 *         imported {@link ZigBeeEndpoint} and it fails either because the
@@ -69,7 +69,7 @@ public interface ZigBeeGroup {
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoint or even on imported Endpoint. In the former case,
+	 * on exported Endpoints or even on imported Endpoints. In the former case,
 	 * the ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
 	 * defined by the ZigBee Specification, or it will use the proper commands
 	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
@@ -84,13 +84,13 @@ public interface ZigBeeGroup {
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         The expected object is always a {@link Boolean} indicating a
-	 *         failure or a success
+	 *         failure or a success.
 	 * 
 	 * @throws APSException when the joining is performed locally on an exported
 	 *         {@link ZigBeeEndpoint} and it fails either with error code
 	 *         INVALID_PARAMETER or INVALID_GROUP. This exception is also
 	 *         generated when the joining is performed remotely on an imported
-	 *         {@link ZigBeeEndpoint} and the communication with it fails
+	 *         {@link ZigBeeEndpoint} and the communication with it fails.
 	 * 
 	 * @throws ZCLException when the joining is performed remotely on an
 	 *         imported {@link ZigBeeEndpoint} and it fails either because the
@@ -101,7 +101,7 @@ public interface ZigBeeGroup {
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation
-	 * response in an asynchronously way.
+	 * response in an asynchronous way.
 	 * 
 	 * The source endpoint is not specified in this method call. To send the
 	 * appropriate message on the network, the base driver must generate a

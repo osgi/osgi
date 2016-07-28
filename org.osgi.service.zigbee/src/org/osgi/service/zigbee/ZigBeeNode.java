@@ -173,9 +173,9 @@ public interface ZigBeeNode {
 	public Promise getComplexDescriptor();
 
 	/**
-	 * The ZigBee Base Drive may use the Mgmt_Lqi_req / Mgmt_Lqi_rsp messages to
-	 * retrieve the Link Quality table (i.e also known as NeighborTableList in
-	 * the ZigBee Specification). <br>
+	 * The ZigBee Base Driver may use the Mgmt_Lqi_req / Mgmt_Lqi_rsp messages
+	 * to retrieve the Link Quality table (i.e also known as NeighborTableList
+	 * in the ZigBee Specification). <br>
 	 * The method limit the Link Quality table to the {@link ZigBeeNode} service
 	 * discovered.<br>
 	 * The target device may report error code NOT_SUPPORTED, or
@@ -208,7 +208,7 @@ public interface ZigBeeNode {
 	public Promise getRoutingTable();
 
 	/**
-	 * Request to leave the network. <br>
+	 * Requests to leave the network. <br>
 	 * 
 	 * As described in "Table 2.131 Fields of the Mgmt_Leave_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
@@ -266,15 +266,15 @@ public interface ZigBeeNode {
 	/**
 	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
 	 * the specified cluster id and it will expect a specific cluster as
-	 * response to the request
+	 * response to the request.
 	 * 
 	 * This method considers that the 0x8000 + clusterIdReq is the clusterId
 	 * expected from messaged received for the message sent by this request.
 	 * 
 	 * @param clusterIdReq the cluster Id of the {@link ZDPFrame} that will be
-	 *        sent to the device
-	 * @param message the {@link ZDPFrame} containing the message
-	 * @param handler The handler for the response to the {@link ZDPFrame}
+	 *        sent to the device.
+	 * @param message the {@link ZDPFrame} containing the message.
+	 * @param handler The handler for the response to the {@link ZDPFrame}.
 	 */
 	public Promise invoke(int clusterIdReq, ZDPFrame message);
 

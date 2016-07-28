@@ -150,7 +150,7 @@ public interface ZCLCluster {
 	 * <p>
 	 * <b>NOTE</b> Considering the ZigBee Specification all the attributes must
 	 * be standard attributes or belong to the same manufacturer code, otherwise
-	 * {@link IllegalArgumentException} will be thrown
+	 * {@link IllegalArgumentException} will be thrown.
 	 * 
 	 * @param attributes An array of {@link ZCLAttributeInfo}
 	 * @param handler the response handler. If the operation is successful the
@@ -162,8 +162,8 @@ public interface ZCLCluster {
 	 * 
 	 * @throws IllegalArgumentException if some of {@link ZCLAttributeInfo} are
 	 *         manufacturer specific and other are standard, or even if there
-	 *         are mix of attributes with different manufacturer specific code,
-	 *         Or if the attributes array is empty
+	 *         are a mix of attributes with different manufacturer specific
+	 *         code, Or if the attributes array is empty
 	 */
 	Promise readAttributes(ZCLAttributeInfo[] attributes);
 
@@ -226,7 +226,7 @@ public interface ZCLCluster {
 
 	/**
 	 * Invokes the action. The handler will provide the invocation response in
-	 * an asynchronously way.
+	 * an asynchronous way.
 	 * 
 	 * The source endpoint is not specified in this method call. To send the
 	 * appropriate message on the network, the base driver must generate a
