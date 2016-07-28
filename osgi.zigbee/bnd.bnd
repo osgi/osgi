@@ -1,6 +1,6 @@
 -include            : ${build}/eclipse/jdt.bnd, layout.bnd
 -nobundles: ${is;${driver};eclipse}
--dependson          : org.osgi.service.event, ${build.impls}, ${build.tests}
+-dependson          : org.osgi.service.event, osgi.annotation, ${build.impls}, ${build.tests}
 -resourceonly       : true
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
