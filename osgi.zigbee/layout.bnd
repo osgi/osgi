@@ -7,7 +7,7 @@ build.zigbee.impls = \
 jar.zigbee.impls = \
 	${repo;org.osgi.impl.service.cm;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
-	${repo;org.osgi.impl.service.zigbee;latest}
+	${repo;osgi.promise;latest}
 
 build.zigbee.tests = \
     org.osgi.test.cases.zigbee

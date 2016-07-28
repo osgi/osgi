@@ -2,25 +2,16 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Vendor				= Orange
-Bundle-Activator			= org.osgi.impl.service.zigbee.ZigBeeBundleActivator
+Bundle-Activator			= ${p}.ZigBeeBundleActivator
 Bundle-Description			= The ZigBee bundle with Control Point stack
 
 Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
-	
-	
+
 Private-Package = 	org.osgi.test.support.compatibility;-noimport:=true, \
 					org.osgi.test.support;-noimport:=true, \
 					org.osgi.test.support.sleep;-noimport:=true, \
-			      ${p}.*;-split-package:=first	
-	
-Conditional-Package =   org.osgi.test.support.compatibility, \
-						org.osgi.test.support.sleep, \
-						org.osgi.test.support
-
-
-Bundle-RequiredExecutionEnvironment = J2SE-1.4 
-
+			      ${p}.*
 
 -buildpath: \
 	org.osgi.service.zigbee;version=project,\
