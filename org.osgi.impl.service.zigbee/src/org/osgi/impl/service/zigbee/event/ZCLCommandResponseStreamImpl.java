@@ -2,11 +2,11 @@
 package org.osgi.impl.service.zigbee.event;
 
 import java.util.LinkedList;
-import org.osgi.service.zigbee.ZCLCommandMultiResponse;
+import org.osgi.service.zigbee.ZCLCommandResponseStream;
 import org.osgi.service.zigbee.ZCLCommandResponse;
 import org.osgi.util.function.Predicate;
 
-public class ZCLCommandMultiResponseImpl implements ZCLCommandMultiResponse {
+public class ZCLCommandResponseStreamImpl implements ZCLCommandResponseStream {
 
 	private final Object	lock	= new Object();
 

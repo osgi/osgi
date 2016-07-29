@@ -1,24 +1,19 @@
 package org.osgi.service.zigbee;
 
+import org.osgi.util.promise.Promise;
+
 /**
- * A response event for a {@link ZCLCommandMultiResponse}
+ * A response event for a {@link ZCLCommandResponseStream}
  */
 public interface ZCLCommandResponse {
 
 	/**
-	 * An event representing a failure will have an exception included.
+	 * The response from a ZigBee commmand
 	 * 
-	 * @return A failure, or <code>null</code> if there was no failure
+	 * @return A Promise holding the {@link ZCLFrame} response, or a failure
+	 *         exception if this is not a success response
 	 */
-	Exception getFailure();
-	
-	/**
-	 * An event representing a successful response from a ZigBee commmand
-	 * 
-	 * @return A {@link ZCLFrame} response, or <code>null</code> if this is not
-	 *         a success response
-	 */
-	ZCLFrame getResponse();
+	Promise /* <ZCLFrame> */ getResponse();
 	
 	/**
 	 * @return <code>true</code> if this is a terminal close event

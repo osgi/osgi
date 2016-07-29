@@ -6,7 +6,7 @@ import org.osgi.util.function.Predicate;
  * This type represents a stream of responses to a broadcast operation. It can
  * be closed by the client using the {@link #close} method is called.
  * 
- * The {@link ZCLCommandMultiResponse} is used to process a stream of responses
+ * The {@link ZCLCommandResponseStream} is used to process a stream of responses
  * from a ZigBee network. Responses are consumed by registering a handler with
  * {@link #forEach(Predicate)}. Responses received before a handler is
  * registered are buffered until a handler is registered, or until the close
@@ -18,7 +18,7 @@ import org.osgi.util.function.Predicate;
  * <code>true</code> from {@link ZCLCommandResponse#isEnd()}. After a close
  * event the handler function will be dereferenced.
  */
-public interface ZCLCommandMultiResponse {
+public interface ZCLCommandResponseStream {
 
 	/**
 	 * Close this response, indicating that no further responses are needed.
@@ -51,5 +51,5 @@ public interface ZCLCommandMultiResponse {
 	 *         handler function will be dereferenced.
 	 *
 	 */
-	void forEach(Predicate handler) throws IllegalStateException;
+	void forEach(Predicate/* <ZCLCommandResponse> */ handler) throws IllegalStateException;
 }

@@ -4,9 +4,9 @@ package org.osgi.impl.service.zigbee.basedriver;
 import java.io.IOException;
 import java.math.BigInteger;
 import org.osgi.impl.service.zigbee.event.EndResponse;
-import org.osgi.impl.service.zigbee.event.ZCLCommandMultiResponseImpl;
 import org.osgi.impl.service.zigbee.event.ZCLCommandResponseImpl;
-import org.osgi.service.zigbee.ZCLCommandMultiResponse;
+import org.osgi.impl.service.zigbee.event.ZCLCommandResponseStreamImpl;
+import org.osgi.service.zigbee.ZCLCommandResponseStream;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -121,27 +121,27 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	}
 
-	public ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame) {
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
 
-		ZCLCommandMultiResponseImpl impl = new ZCLCommandMultiResponseImpl();
+		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
 		// Stub out the response by immediately filling it with an Unsupported
 		// Operation Exception and ending it
-		impl.handleResponse(new ZCLCommandResponseImpl(
-				new UnsupportedOperationException("Not yet implemented")));
+		impl.handleResponse(new ZCLCommandResponseImpl(Promises.failed(
+				new UnsupportedOperationException("Not yet implemented"))));
 		impl.handleResponse(new EndResponse());
 
 		return impl;
 	}
 
-	public ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame,
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame,
 			String exportedServicePID) {
-		ZCLCommandMultiResponseImpl impl = new ZCLCommandMultiResponseImpl();
+		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
 		// Stub out the response by immediately filling it with an Unsupported
 		// Operation Exception and ending it
-		impl.handleResponse(new ZCLCommandResponseImpl(
-				new UnsupportedOperationException("Not yet implemented")));
+		impl.handleResponse(new ZCLCommandResponseImpl(Promises.failed(
+				new UnsupportedOperationException("Not yet implemented"))));
 		impl.handleResponse(new EndResponse());
 
 		return impl;

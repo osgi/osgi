@@ -3,7 +3,7 @@ package org.osgi.test.cases.zigbee.mock;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import org.osgi.service.zigbee.ZCLCommandMultiResponse;
+import org.osgi.service.zigbee.ZCLCommandResponseStream;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -118,11 +118,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	}
 
-	public ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame) {
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
-	public ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame,
+	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame,
 			String exportedServicePID) {
 		throw new UnsupportedOperationException("Not implemented");
 	}

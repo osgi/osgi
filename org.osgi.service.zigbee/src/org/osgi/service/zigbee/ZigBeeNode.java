@@ -290,7 +290,7 @@ public interface ZigBeeNode {
 	 * @param frame a command frame sequence.
 	 * @return The response handler that manages the command response.
 	 */
-	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame);
+	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
 	/**
 	 * Enable to broadcast a given frame of a specific cluster to all the
@@ -306,7 +306,7 @@ public interface ZigBeeNode {
 	 *        PID of an exported endpoint.
 	 * @return The response handler that manages the command response.
 	 */
-	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
+	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**
 	 * As described in "Table 2.97 Fields of the User_Desc_rsp Command" of the
