@@ -71,7 +71,7 @@ public interface ZCLCluster {
 	 * @see ZCLCluster#getAttribute(int, int) To get Manufacturer specific
 	 *      attribute use ZCLCluster#getAttribute(int, int)
 	 */
-	Promise getAttribute(int attributeId);
+	Promise/* <ZCLAttribute> */ getAttribute(int attributeId);
 
 	/**
 	 * Retrieve a {@link ZCLAttribute} object for a manufacturer specific
@@ -91,7 +91,7 @@ public interface ZCLCluster {
 	 *         resolution may be longer the first time one of the ZCLCluster
 	 *         methods to get one or all attributes is successfully called.
 	 */
-	Promise getAttribute(int attributeId, int code);
+	Promise/* <ZCLAttribute> */ getAttribute(int attributeId, int code);
 
 	/**
 	 * Get an array of {@link ZCLAttribute} objects representing all this
@@ -108,7 +108,7 @@ public interface ZCLCluster {
 	 * @see ZCLCluster#getAttributes(int) To get Manufacturer specific attribute
 	 *      use ZCLCluster#getAttributes(int)
 	 */
-	Promise getAttributes();
+	Promise /* <ZCLAttribute[]> */ getAttributes();
 
 	/**
 	 * Get an array of {@link ZCLAttribute} objects representing all the
@@ -130,7 +130,7 @@ public interface ZCLCluster {
 	 *         longer the first time one of the ZCLCluster methods to get one or
 	 *         all attributes is successfully called.
 	 */
-	Promise getAttributes(int code);
+	Promise /* <ZCLAttribute[]> */ getAttributes(int code);
 
 	/**
 	 * Read a list of attributes.
@@ -153,9 +153,6 @@ public interface ZCLCluster {
 	 * {@link IllegalArgumentException} will be thrown.
 	 * 
 	 * @param attributes An array of {@link ZCLAttributeInfo}
-	 * @param handler the response handler. If the operation is successful the
-	 *        {@code onSuccess} method of the handler is called with a Map
-	 *        object containing the requested attributes.
 	 * @throws NullPointerException the attribute array cannot be null
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
@@ -165,7 +162,7 @@ public interface ZCLCluster {
 	 *         are a mix of attributes with different manufacturer specific
 	 *         code, Or if the attributes array is empty
 	 */
-	Promise readAttributes(ZCLAttributeInfo[] attributes);
+	Promise /* <Map<Integer,Object>> */ readAttributes(ZCLAttributeInfo[] attributes);
 
 	/**
 	 * Write a list of attributes.
@@ -200,7 +197,7 @@ public interface ZCLCluster {
 	 *         manufacturer specific and other are standard, or even if there
 	 *         are mix of attributes with different manufacturer specific code
 	 */
-	Promise writeAttributes(boolean undivided, Map attributesAndValues);
+	Promise /* <Map<Integer,Object>> */ writeAttributes(boolean undivided, Map attributesAndValues);
 
 	/**
 	 * Get an array of all the commandIds of the ZCLCluster.
@@ -222,7 +219,7 @@ public interface ZCLCluster {
 	 *         asynchronous call. The promise will be resolved with an array of
 	 *         {@code int} of the command identifiers supported by the cluster.
 	 */
-	Promise getCommandIds();
+	Promise /* <int[]> */ getCommandIds();
 
 	/**
 	 * Invokes the action. The handler will provide the invocation response in
@@ -233,11 +230,10 @@ public interface ZCLCluster {
 	 * source endpoint. The latter must not correspond to any exported endpoint.
 	 * 
 	 * @param frame The frame containing the command to issue.
-	 * @param handler The handler that manages the command response. The
-	 *        response {@link ZCLFrame} is passed to the {@code onSuccess}
-	 *        method of the handler. The handler is called only once.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZCLFrame}.
 	 */
-	Promise invoke(ZCLFrame frame);
+	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -247,11 +243,12 @@ public interface ZCLCluster {
 	 * alert system.
 	 * 
 	 * @param frame The frame containing the command to issue.
-	 * @param handler The handler that manages the command response.
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZCLFrame}.
 	 */
-	Promise invoke(ZCLFrame frame, String exportedServicePID);
+	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame, String exportedServicePID);
 
 }

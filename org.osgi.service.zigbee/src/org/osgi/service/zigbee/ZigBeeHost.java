@@ -188,7 +188,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @throws Exception, any exception related to the communication with the
 	 *         chip.
 	 */
-	public Promise refreshNetwork() throws Exception;
+	public Promise /* <Boolean> */ refreshNetwork() throws Exception;
 
 	/**
 	 * @return The network security level, i.e. 0 if security is disabled, an
@@ -223,7 +223,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
+	 * @return The response handler that manages the command response.
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */
@@ -234,17 +234,17 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
 	 * @param exportedServicePID : the PID of the source endpoint of the command
 	 *        request. In targeted situations, the source endpoint is the valid
 	 *        service PID of an exported endpoint.
+	 * @return The response handler that manages the command response.
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */
 	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**
-	 * @return the current broadcastradius value.
+	 * @return the current broadcast radius value.
 	 */
 	short getBroadcastRadius();
 

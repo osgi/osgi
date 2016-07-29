@@ -145,7 +145,7 @@ public interface ZigBeeNode {
 	 *         It will be used in order to return the node descriptor
 	 *         {@link ZigBeeNodeDescriptor}.
 	 */
-	public Promise getNodeDescriptor();
+	public Promise /* <ZigBeeNodeDescriptor> */ getNodeDescriptor();
 
 	/**
 	 * As described in "Table 2.92 Fields of the Power_Desc_rsp Command" of the
@@ -157,7 +157,7 @@ public interface ZigBeeNode {
 	 *         It will be used in order to return the node power descriptor
 	 *         {@link ZigBeePowerDescriptor}.
 	 */
-	public Promise getPowerDescriptor();
+	public Promise /* <ZigBeePowerDescriptor> */ getPowerDescriptor();
 
 	/**
 	 * As described in "Table 2.96 Fields of the Complex_Desc_rsp Command" of
@@ -170,7 +170,7 @@ public interface ZigBeeNode {
 	 *         {@link ZigBeeComplexDescriptor}. Can be null no complex
 	 *         descriptor is not provided.
 	 */
-	public Promise getComplexDescriptor();
+	public Promise /* <ZigBeeComplexDescriptor> */ getComplexDescriptor();
 
 	/**
 	 * The ZigBee Base Driver may use the Mgmt_Lqi_req / Mgmt_Lqi_rsp messages
@@ -189,7 +189,7 @@ public interface ZigBeeNode {
 	 *         service and the value the {@link ZigBeeLinkQuality} for that
 	 *         node.
 	 */
-	public Promise getLinksQuality();
+	public Promise /* <ZigBeeLinkQuality> */ getLinksQuality();
 
 	/**
 	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
@@ -205,7 +205,7 @@ public interface ZigBeeNode {
 	 *         {@link ZigBeeNode} service and the value the {@link ZigBeeRoute}
 	 *         for that node.
 	 */
-	public Promise getRoutingTable();
+	public Promise /* <Map<String,ZigBeeRoute>> */ getRoutingTable();
 
 	/**
 	 * Requests to leave the network. <br>
@@ -222,7 +222,7 @@ public interface ZigBeeNode {
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public Promise leave();
+	public Promise /* <Boolean> */ leave();
 
 	/**
 	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
@@ -247,7 +247,7 @@ public interface ZigBeeNode {
 	 *        devices, if any. Otherwise, it has a value of 0.
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public Promise leave(boolean rejoin, boolean removeChildren);
+	public Promise /* <Boolean> */ leave(boolean rejoin, boolean removeChildren);
 
 	/**
 	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
@@ -259,9 +259,10 @@ public interface ZigBeeNode {
 	 * @param expectedClusterIdRsp the expected cluster Id of the response to
 	 *        the {@link ZDPFrame} sent.
 	 * @param message the {@link ZDPFrame} containing the message.
-	 * @param handler The handler for the response to the {@link ZDPFrame}.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZDPFrame}.
 	 */
-	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message);
+	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message);
 
 	/**
 	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
@@ -274,9 +275,10 @@ public interface ZigBeeNode {
 	 * @param clusterIdReq the cluster Id of the {@link ZDPFrame} that will be
 	 *        sent to the device.
 	 * @param message the {@link ZDPFrame} containing the message.
-	 * @param handler The handler for the response to the {@link ZDPFrame}.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZDPFrame}.
 	 */
-	public Promise invoke(int clusterIdReq, ZDPFrame message);
+	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, ZDPFrame message);
 
 	/**
 	 * Enable to broadcast a given frame of a specific cluster to all the
@@ -286,7 +288,7 @@ public interface ZigBeeNode {
 	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
+	 * @return The response handler that manages the command response.
 	 */
 	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame);
 
@@ -299,10 +301,10 @@ public interface ZigBeeNode {
 	 * 
 	 * @param clusterID the cluster ID.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
+	 * @return The response handler that manages the command response.
 	 */
 	ZCLCommandMultiResponse broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
@@ -318,7 +320,7 @@ public interface ZigBeeNode {
 	 *         (String). The promise will fail with NO_DESCRIPTOR when no user
 	 *         descriptor is available.
 	 */
-	Promise getUserDescription();
+	Promise /* <String> */ getUserDescription();
 
 	/**
 	 * As described in "Table 2.137 ZDP Enumerations Description" of the ZigBee
@@ -329,6 +331,6 @@ public interface ZigBeeNode {
 	 * @param userDescription the user description
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	Promise setUserDescription(String userDescription);
+	Promise /* <String> */ setUserDescription(String userDescription);
 
 }

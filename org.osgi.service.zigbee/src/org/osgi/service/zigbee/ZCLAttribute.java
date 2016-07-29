@@ -51,7 +51,7 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * 
 	 * 
 	 */
-	public Promise getValue();
+	public Promise/* <Object> */ getValue();
 
 	/**
 	 * Sets the current value of the attribute.
@@ -73,6 +73,6 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * @return A promise representing the completion of this asynchronous call.
 	 * 
 	 */
-	public Promise setValue(Object value);
+	public Promise/* <Boolean> */ setValue(Object value);
 
 }

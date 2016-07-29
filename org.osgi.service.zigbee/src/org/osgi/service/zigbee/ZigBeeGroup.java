@@ -65,7 +65,7 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	Promise joinGroup(String pid);
+	Promise /* <Boolean> */ joinGroup(String pid);
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
@@ -97,7 +97,7 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	Promise leaveGroup(String pid);
+	Promise /* <Boolean> */ leaveGroup(String pid);
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation
@@ -109,9 +109,10 @@ public interface ZigBeeGroup {
 	 * 
 	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZCLFrame}.
 	 */
-	Promise invoke(int clusterId, ZCLFrame frame);
+	Promise /* <ZCLFrame> */ invoke(int clusterId, ZCLFrame frame);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -122,11 +123,12 @@ public interface ZigBeeGroup {
 	 * 
 	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
-	 * @param handler The handler that manages the command response.
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
+	 * @return A promise representing the completion of this asynchronous call.
+	 *         It will be used in order to return the {@link ZCLFrame}.
 	 */
-	Promise invoke(int clusterId, ZCLFrame frame, String exportedServicePID);
+	Promise /* <ZCLFrame> */ invoke(int clusterId, ZCLFrame frame, String exportedServicePID);
 
 }

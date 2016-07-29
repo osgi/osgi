@@ -114,7 +114,7 @@ public interface ZigBeeEndpoint {
 	 *         {@link ZigBeeSimpleDescriptor}.
 	 * 
 	 */
-	public Promise getSimpleDescriptor();
+	public Promise /* <ZigBeeSimpleDescriptor> */ getSimpleDescriptor();
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -161,7 +161,7 @@ public interface ZigBeeEndpoint {
 	 * @param clusterId the cluster identifier to bound to
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public Promise bind(String servicePid, int clusterId);
+	public Promise /* <Boolean> */ bind(String servicePid, int clusterId);
 
 	/**
 	 * This method modifies the <i>Binding Table</i> of physical device by
@@ -182,7 +182,7 @@ public interface ZigBeeEndpoint {
 	 * @param clusterId The cluster identifier to unbind.
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public Promise unbind(String servicePid, int clusterId);
+	public Promise /* <Boolean> */ unbind(String servicePid, int clusterId);
 
 	/**
 	 * This method is used to get details about problems when an error occurs
@@ -214,6 +214,6 @@ public interface ZigBeeEndpoint {
 	 * @param clusterId
 	 * @return A promise representing the completion of this asynchronous call.
 	 */
-	public Promise getBoundEndPoints(int clusterId);
+	public Promise/* <List<String>> */ getBoundEndPoints(int clusterId);
 
 }
