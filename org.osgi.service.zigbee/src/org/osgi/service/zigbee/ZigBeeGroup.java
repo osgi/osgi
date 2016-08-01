@@ -98,7 +98,7 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	Promise /* <Boolean> */ eaveGroup(String pid);
+	Promise /* <Boolean> */ leaveGroup(String pid);
 
 	/**
 	 * Send a ZCL frame to the ZigBee group represented by this service. The
