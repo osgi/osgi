@@ -33,7 +33,7 @@ public class ZDPException extends ZigBeeException {
 	public static final int		SUCCESS				= 0x00;
 
 	/**
-	 * Note that: 0x01-0x7f Reserved.
+	 * Note that: 0x01-0x7f are reserved.
 	 */
 
 	/**

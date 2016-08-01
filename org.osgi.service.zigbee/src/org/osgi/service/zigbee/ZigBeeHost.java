@@ -220,13 +220,15 @@ public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
 	 * Broadcast a the ZCL frame to the cluster ID of all the nodes of the
-	 * ZigBee network.
+	 * ZigBee network. The {@link #setBroadcastRadius(short)} method, may be
+	 * used to limit the broadcast radius used in the subsequent broadcast
+	 * calls.
 	 * 
-	 * @param clusterID the cluster ID.
-	 * @param frame a ZCL Frame.
-	 * @return TODO add description of returned value
-	 * 
-	 * @see #setBroadcastRadius(short) for setting the broadcast radius
+	 * @param clusterID The cluster ID this ZCL frame must be sent to.
+	 * @param frame A ZCL Frame.
+	 * @return a response stream instance that collects and allows the caller to
+	 *         be asynchronously notified about the ZCLFrame responses sent back
+	 *         by the ZigBee nodes.
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
@@ -236,13 +238,14 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * source endpoint of the message sent to be the endpoint id of the exported
 	 * ZigBeeEndPoint service having the specified service.pid property.
 	 * 
-	 * @param clusterID the cluster ID.
-	 * @param frame a ZCL Frame.
+	 * @param clusterID The cluster ID.
+	 * @param frame A ZCL Frame.
 	 * @param exportedServicePID the source endpoint of the command request. In
 	 *        targeted situations, the source endpoint is the valid service PID
 	 *        of an exported endpoint.
-	 * 
-	 * @return TODO add description of returned value
+	 * @return a response stream instance that collects and allows the caller to
+	 *         be asynchronously notified about the ZCLFrame responses sent back
+	 *         by the ZigBee nodes.
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius.
 	 * 
@@ -263,6 +266,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @throws IllegalArgumentException if set with a value out of the expected
 	 *         range.
+	 * 
 	 * @throws IllegalStateException if set when the ZigBeeHost is "running".
 	 */
 	void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException;
