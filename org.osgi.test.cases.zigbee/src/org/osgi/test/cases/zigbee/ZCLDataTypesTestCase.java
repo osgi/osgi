@@ -354,8 +354,6 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		 */
 		assertEquals("java class is not correct ", clazz.getName(), dataType.getJavaDataType().getName());
 
-		// TODO: check analog or digital
-
 		/*
 		 * Checks the correctnes of the analog/digital information
 		 */
