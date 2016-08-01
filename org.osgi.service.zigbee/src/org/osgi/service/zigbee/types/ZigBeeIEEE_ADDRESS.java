@@ -30,22 +30,22 @@ import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
  * @author $Id$
  * 
  */
-public class ZigBeeIEEEADDRESS
+public class ZigBeeIEEE_ADDRESS
 		implements ZCLSimpleTypeDescription {
 
-	private final static ZigBeeIEEEADDRESS instance = new ZigBeeIEEEADDRESS();
+	private final static ZigBeeIEEE_ADDRESS instance = new ZigBeeIEEE_ADDRESS();
 
 	/**
 	 * Get a Singleton instance of this class
 	 * 
 	 * @return the Singleton instance
 	 */
-	public static ZigBeeIEEEADDRESS getInstance() {
+	public static ZigBeeIEEE_ADDRESS getInstance() {
 		return instance;
 	}
 
 	public String getName() {
-		return "IEEEADDRESS";
+		return "IEEE_ADDRESS";
 	}
 
 	public boolean isAnalog() {
