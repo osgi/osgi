@@ -5,7 +5,6 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 import static org.osgi.util.pushstream.PushEventConsumer.*;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.AbstractQueue;
 import java.util.ArrayList;
@@ -105,7 +104,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	}
 	
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		close(PushEvent.close());
 	}
 	

@@ -107,7 +107,7 @@ public final class PushStreamProvider {
 	 * @return A {@link PushStream} with a default initial buffer
 	 */
 	public <T> PushStream<T> createStream(PushEventSource<T> eventSource) {
-		return createStream(eventSource, 2, null, new ArrayBlockingQueue<>(32),
+		return createStream(eventSource, 1, null, new ArrayBlockingQueue<>(32),
 				FAIL.getPolicy(), LINEAR.getPolicy(1000));
 	}
 	
@@ -151,7 +151,7 @@ public final class PushStreamProvider {
 		boolean closeExecutorOnClose;
 		Executor toUse;
 		if (executor == null) {
-			toUse = Executors.newFixedThreadPool(2);
+			toUse = Executors.newFixedThreadPool(parallelism);
 			closeExecutorOnClose = true;
 		} else {
 			toUse = executor;
@@ -278,7 +278,9 @@ public final class PushStreamProvider {
 	 * @return a {@link SimplePushEventSource}
 	 */
 	public <T> SimplePushEventSource<T> createSimpleEventSource(Class<T> type) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return createSimplePushEventSource(1, null,
+				new ArrayBlockingQueue<>(32),
+				FAIL.getPolicy());
 	}
 	
 	/**
@@ -294,9 +296,59 @@ public final class PushStreamProvider {
 
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<SimplePushEventSource<T>,T,U> buildSimpleEventSource(
 			Class<T> type) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new AbstractBufferBuilder<SimplePushEventSource<T>,T,U>() {
+			@Override
+			public SimplePushEventSource<T> create() {
+				return createSimplePushEventSource(concurrency, worker, buffer,
+						bufferingPolicy);
+			}
+		};
 	}
 	
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
+	<T, U extends BlockingQueue<PushEvent< ? extends T>>> SimplePushEventSource<T> createSimplePushEventSource(
+			int parallelism, Executor executor, U queue,
+			QueuePolicy<T,U> queuePolicy) {
+
+		if (parallelism < 0) {
+			throw new IllegalArgumentException(
+					"The supplied parallelism cannot be less than zero. It was "
+							+ parallelism);
+		} else if (parallelism == 0) {
+			parallelism = 1;
+		}
+
+		boolean closeExecutorOnClose;
+		Executor toUse;
+		if (executor == null) {
+			toUse = Executors.newFixedThreadPool(2);
+			closeExecutorOnClose = true;
+		} else {
+			toUse = executor;
+			closeExecutorOnClose = false;
+		}
+
+		if (queue == null) {
+			queue = (U) new ArrayBlockingQueue(32);
+		}
+
+		if (queuePolicy == null) {
+			queuePolicy = FAIL.getPolicy();
+		}
+
+		SimplePushEventSourceImpl<T,U> spes = new SimplePushEventSourceImpl<T,U>(
+				toUse, acquireScheduler(), queuePolicy, queue, parallelism,
+				() -> {
+					if (closeExecutorOnClose) {
+						((ExecutorService) toUse).shutdown();
+					}
+					releaseScheduler();
+				});
+		return spes;
+	}
+
 	/**
 	 * Create a buffered {@link PushEventConsumer} with the default configured
 	 * buffer, executor size, queue, queue policy and pushback policy. This is
