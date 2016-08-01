@@ -27,14 +27,14 @@ import org.osgi.service.zigbee.ZigBeeDataInput;
  */
 public class ZigBeeDataInputImpl implements ZigBeeDataInput {
 
-	private ZCLFrameImpl frame;
+	private ZigBeeSerializer	frame;
 
-	private int i = 0;
+	private int					i	= 0;
 
 	/**
 	 * @param frame
 	 */
-	public ZigBeeDataInputImpl(ZCLFrameImpl frame) {
+	public ZigBeeDataInputImpl(ZigBeeSerializer frame) {
 		this.frame = frame;
 	}
 

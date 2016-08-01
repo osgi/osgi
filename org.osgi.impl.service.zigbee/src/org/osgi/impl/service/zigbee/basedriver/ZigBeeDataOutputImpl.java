@@ -26,12 +26,12 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  */
 public class ZigBeeDataOutputImpl implements ZigBeeDataOutput {
 
-	private ZCLFrameImpl frame;
+	private ZigBeeSerializer frame;
 
 	/**
 	 * @param zclFrameImpl
 	 */
-	public ZigBeeDataOutputImpl(ZCLFrameImpl zclFrameImpl) {
+	public ZigBeeDataOutputImpl(ZigBeeSerializer zclFrameImpl) {
 		this.frame = zclFrameImpl;
 	}
 
