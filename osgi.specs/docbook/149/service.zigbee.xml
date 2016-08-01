@@ -1143,193 +1143,375 @@ public class UI {
     <para>Here is the table of encoding relations between ZigBee types and
     Java types:</para>
 
-    <table frame="all">
-      <title/>
+	<table pgwide="1" >
+		<title>Mapping of ZCL Data Types to Java</title>
+		<tgroup cols="3">
+			<colspec colname="c1" colwidth="1*" />
+			<colspec colname="c2" colwidth="1*" />
+			<colspec colname="c3" colwidth="1*" />
+			<thead>
+				<row>
+					<entry>ZigBeeDataType constant</entry>
+					<entry>ZigBee type</entry>
+					<entry>Java Type</entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_8" xrefstyle="hyperlink"/></entry>
+					<entry>8-bit data</entry>
+					<entry>
+						<code>Byte</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_16" xrefstyle="hyperlink"/></entry>
+					<entry>16-bit data</entry>
+					<entry>
+						<code>Short</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_24" xrefstyle="hyperlink"/></entry>
+					<entry>24-bit data</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_32" xrefstyle="hyperlink"/></entry>
+					<entry>32-bit data</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_40" xrefstyle="hyperlink"/></entry>
+					<entry>40-bit data</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_48" xrefstyle="hyperlink"/></entry>
+					<entry>48-bit data</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_56" xrefstyle="hyperlink"/></entry>
+					<entry>56-bit data</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_64" xrefstyle="hyperlink"/></entry>
+					<entry>64-bit data</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_8" xrefstyle="hyperlink"/></entry>
+					<entry>8-bit bitmap</entry>
+					<entry>
+						<code>Byte</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_16" xrefstyle="hyperlink"/></entry>
+					<entry>16-bit bitmap</entry>
+					<entry>
+						<code>Short</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_24" xrefstyle="hyperlink"/></entry>
+					<entry>24-bit bitmap</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
 
-      <tgroup align="center" cols="3" colsep="1" rowsep="1">
-        <colspec colname="c1" colwidth="1*"/>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_32" xrefstyle="hyperlink"/></entry>
+					<entry>32-bit bitmap</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_40" xrefstyle="hyperlink"/></entry>
+					<entry>40-bit bitmap</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_48" xrefstyle="hyperlink"/></entry>
+					<entry>48-bit bitmap</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_56" xrefstyle="hyperlink"/></entry>
+					<entry>56-bit bitmap</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BITMAP_64" xrefstyle="hyperlink"/></entry>
+					<entry>64-bit bitmap</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_8" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 8-bit integer</entry>
+					<entry>
+						<code>Byte</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_16" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 16-bit integer</entry>
+					<entry>
+						<code>Short</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_24" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 24-bit integer</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_32" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 32-bit integer</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_40" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 40-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_48" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 48-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_56" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 56-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SIGNED_INTEGER_64" xrefstyle="hyperlink"/></entry>
+					<entry>Signed 64-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_8" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 8-bit integer</entry>
+					<entry>
+						<code>Short</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_16" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 16-bit integer</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_24" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 24-bit integer</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
 
-        <colspec colname="c2" colwidth="1*"/>
-
-        <colspec colname="c3" colwidth="1*"/>
-
-        <thead>
-          <row>
-            <entry>ZigBeeDataType constant</entry>
-
-            <entry>ZigBee type</entry>
-
-            <entry>Java type</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry><para>SIGNED_INTEGER_8</para><para>BITMAP_8</para><para>GENERAL_DATA_8</para></entry>
-
-            <entry><para>Signed 8-bit integer</para><para>8-bit
-            bitmap</para><para>8-bit data</para></entry>
-
-            <entry>Byte</entry>
-          </row>
-
-          <row>
-            <entry><para>SIGNED_INTEGER_16</para><para>BITMAP_16</para><para>GENERAL_DATA_16</para><para>UNSIGNED_INTEGER_8</para></entry>
-
-            <entry><para>Signed 16-bit integer</para><para>16-bit
-            bitmap</para><para>16-bit data</para><para>Unsigned 8-bit
-            integer</para></entry>
-
-            <entry>Short</entry>
-          </row>
-
-          <row>
-            <entry><para>SIGNED_INTEGER_24</para><para>SIGNED_INTEGER_32</para><para>BITMAP_24</para><para>BITMAP_32</para><para>GENERAL_DATA_24</para><para>GENERAL_DATA_32</para><para>UNSIGNED_INTEGER_16</para><para>UNSIGNED_INTEGER_24</para></entry>
-
-            <entry><para>Signed 24-bit integer</para><para>Signed 32-bit
-            integer</para><para>24-bit bitmap</para><para>32-bit
-            bitmap</para><para>24-bit data</para><para>32-bit
-            data</para><para>Unsigned 16-bit integer</para><para>Unsigned
-            24-bit integer</para></entry>
-
-            <entry>Integer</entry>
-          </row>
-
-          <row>
-            <entry><para>SIGNED_INTEGER_40</para><para>SIGNED_INTEGER_48</para><para>SIGNED_INTEGER_56</para><para>SIGNED_INTEGER_64</para><para>BITMAP_40</para><para>BITMAP_48</para><para>BITMAP_56</para><para>BITMAP_64</para>
-            <para>GENERAL_DATA_40</para><para>GENERAL_DATA_48</para><para>GENERAL_DATA_56</para><para>GENERAL_DATA_64</para><para>UNSIGNED_INTEGER_32</para><para>UNSIGNED_INTEGER_40</para><para>UNSIGNED_INTEGER_48</para><para>UNSIGNED_INTEGER_56</para></entry>
-
-            <entry><para>Signed 40-bit integer</para><para>Signed 48-bit
-            integer</para><para>Signed 56-bit integer</para><para>Signed
-            64-bit integer</para><para>40-bit bitmap</para><para>48-bit
-            bitmap</para><para>56-bit bitmap</para><para>64-bit bitmap</para>
-            <para>40-bit data</para><para>48-bit data</para><para>56-bit
-            data</para><para>64-bit data</para><para>Unsigned 32-bit
-            integer</para><para>Unsigned 40-bit integer</para><para>Unsigned
-            48-bit integer</para><para>Unsigned 56-bit integer</para></entry>
-
-            <entry>Integer</entry>
-          </row>
-
-          <row>
-            <entry><para>UNSIGNED_INTEGER_64</para></entry>
-
-            <entry><para>Unsigned 64-bit integer</para></entry>
-
-            <entry>BigInteger</entry>
-          </row>
-
-          <row>
-            <entry><para>OCTET_STRING</para><para>LONG_OCTET_STRING</para><para>SECURITY_KEY</para></entry>
-
-            <entry><para>Octet string</para><para>Long octet
-            string</para><para>128-bit Security Key</para></entry>
-
-            <entry>byte[]</entry>
-          </row>
-
-          <row>
-            <entry><para>CHARACTER_STRING</para><para>LONG_CHARACTER_STRING</para></entry>
-
-            <entry><para>Character string</para><para>Long character
-            string</para></entry>
-
-            <entry>String</entry>
-          </row>
-
-          <row>
-            <entry><para>BOOLEAN</para></entry>
-
-            <entry><para>Logical</para></entry>
-
-            <entry>Boolean</entry>
-          </row>
-
-          <row>
-            <entry><para>ENUMERATION_8</para></entry>
-
-            <entry><para>8-bit enumeration</para></entry>
-
-            <entry>Short</entry>
-          </row>
-
-          <row>
-            <entry><para>ENUMERATION_16</para><para>CLUSTER_ID</para><para>ATTRIBUTE_ID</para></entry>
-
-            <entry><para>16-bit enumeration</para><para>Unsigned 16-bit
-            integer</para><para>Unsigned 16-bit integer</para></entry>
-
-            <entry>Integer</entry>
-          </row>
-
-          <row>
-            <entry><para>BACNET_OID</para></entry>
-
-            <entry><para>BACnet OID*(Unsigned 32-bit integer)</para></entry>
-
-            <entry>Long</entry>
-          </row>
-
-          <row>
-            <entry><para>IEEE_ADDRESS</para></entry>
-
-            <entry><para>IEEE address (MAC-48,EUI-48/64)</para></entry>
-
-            <entry>BigInteger</entry>
-          </row>
-
-          <row>
-            <entry><para>TIME_OF_DAY</para><para>DATE</para><para>UTC_TIME</para></entry>
-
-            <entry><para>Time of
-            day</para><para>Date</para><para>UTCTime</para></entry>
-
-            <entry>Date</entry>
-          </row>
-
-          <row>
-            <entry><para>FLOATING_SEMI</para><para>FLOATING_SINGLE</para></entry>
-
-            <entry><para>Semi-precision</para><para>Single
-            precision</para></entry>
-
-            <entry>Float</entry>
-          </row>
-
-          <row>
-            <entry><para>FLOATING_DOUBLE</para></entry>
-
-            <entry><para>Double</para></entry>
-
-            <entry>Short</entry>
-          </row>
-
-          <row>
-            <entry><para>ARRAY</para><para>STRUCTURE</para><para>BAG</para></entry>
-
-            <entry><para>Array</para><para>Structure</para><para>Bag</para></entry>
-
-            <entry>List</entry>
-          </row>
-
-          <row>
-            <entry><para>SET</para></entry>
-
-            <entry><para>Set</para></entry>
-
-            <entry>Set</entry>
-          </row>
-
-          <row>
-            <entry><para>UNKNOWN</para></entry>
-
-            <entry><para>Unknown</para></entry>
-
-            <entry/>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_32" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 32-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_40" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 40-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_48" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 48-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_56" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 56-bit integer</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNSIGNED_INTEGER_64" xrefstyle="hyperlink"/></entry>
+					<entry>Unsigned 64-bit integer</entry>
+					<entry>
+						<code>BigInteger</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.CHARACTER_STRING" xrefstyle="hyperlink"/></entry>
+					<entry>Character string</entry>
+					<entry>
+						<code>String</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.OCTET_STRING" xrefstyle="hyperlink"/></entry>
+					<entry>Octet string</entry>
+					<entry>
+						<code>byte[]</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LONG_CHARACTER_STRING" xrefstyle="hyperlink"/></entry>
+					<entry>Character string</entry>
+					<entry>
+						<code>String</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LONG_OCTET_STRING" xrefstyle="hyperlink"/></entry>
+					<entry>Octet string</entry>
+					<entry>
+						<code>byte[]</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SECURITY_KEY_128" xrefstyle="hyperlink"/></entry>
+					<entry>128-bit Security Key</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BOOLEAN" xrefstyle="hyperlink"/></entry>
+					<entry>Boolean</entry>
+					<entry>
+						<code>Boolean</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ENUMERATION_8" xrefstyle="hyperlink"/></entry>
+					<entry>8-bit enumeration</entry>
+					<entry>
+						<code>Byte</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ENUMERATION_16" xrefstyle="hyperlink"/></entry>
+					<entry>16-bit enumeration</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.CLUSTER_ID" xrefstyle="hyperlink"/></entry>
+					<entry>8-bit enumeration</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ATTRIBUTE_ID" xrefstyle="hyperlink"/></entry>
+					<entry>16-bit enumeration</entry>
+					<entry>
+						<code>Integer</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BACNET_OID" xrefstyle="hyperlink"/></entry>
+					<entry>BACnet OID*(Unsigned 32-bit integer)</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.IEEE_ADDRESS" xrefstyle="hyperlink"/></entry>
+					<entry>IEEE address (MAC-48,EUI-48/64)</entry>
+					<entry>
+						<code>BigInteger</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.TIME_OF_DAY" xrefstyle="hyperlink"/></entry>
+					<entry>Time of day</entry>
+					<entry>
+						<code>byte[4]</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.DATE" xrefstyle="hyperlink"/></entry>
+					<entry>Date</entry>
+					<entry>
+						<code>byte[4]</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UTC_TIME" xrefstyle="hyperlink"/></entry>
+					<entry>UTC Time</entry>
+					<entry>
+						<code>Long</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_SEMI" xrefstyle="hyperlink"/></entry>
+					<entry>Semi-precision float</entry>
+					<entry>
+						<code>Float</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_SINGLE" xrefstyle="hyperlink"/></entry>
+					<entry>Single precision float</entry>
+					<entry>
+						<code>Float</code>
+					</entry>
+				</row>
+				<row>
+					<entry><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.FLOATING_DOUBLE" xrefstyle="hyperlink"/></entry>
+					<entry>Double</entry>
+					<entry>
+						<code>Double</code>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
 
     <para>* BACnet OID (Object identifier) data type is included to allow
     interworking with BACnet (see <xref
