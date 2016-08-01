@@ -34,7 +34,7 @@ import org.osgi.service.zigbee.types.ZigBeeGeneralData48;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData56;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData64;
 import org.osgi.service.zigbee.types.ZigBeeGeneralData8;
-import org.osgi.service.zigbee.types.ZigBeeIEEEADDRESS;
+import org.osgi.service.zigbee.types.ZigBeeIEEE_ADDRESS;
 import org.osgi.service.zigbee.types.ZigBeeLongCharacterString;
 import org.osgi.service.zigbee.types.ZigBeeLongOctetString;
 import org.osgi.service.zigbee.types.ZigBeeOctetString;
@@ -100,14 +100,14 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		A = false;
 		U = true;
 
-		this.checkUnsignedDataType(ZigBeeGeneralData8.getInstance(), ZigBeeDataTypes.GENERAL_DATA_8, 1, Short.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeGeneralData16.getInstance(), ZigBeeDataTypes.GENERAL_DATA_16, 2, Integer.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeGeneralData8.getInstance(), ZigBeeDataTypes.GENERAL_DATA_8, 1, Byte.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeGeneralData16.getInstance(), ZigBeeDataTypes.GENERAL_DATA_16, 2, Short.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeGeneralData24.getInstance(), ZigBeeDataTypes.GENERAL_DATA_24, 3, Integer.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeGeneralData32.getInstance(), ZigBeeDataTypes.GENERAL_DATA_32, 4, Long.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeGeneralData32.getInstance(), ZigBeeDataTypes.GENERAL_DATA_32, 4, Integer.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeGeneralData40.getInstance(), ZigBeeDataTypes.GENERAL_DATA_40, 5, Long.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeGeneralData48.getInstance(), ZigBeeDataTypes.GENERAL_DATA_48, 6, Long.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeGeneralData56.getInstance(), ZigBeeDataTypes.GENERAL_DATA_56, 7, Long.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeGeneralData64.getInstance(), ZigBeeDataTypes.GENERAL_DATA_64, 8, BigInteger.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeGeneralData64.getInstance(), ZigBeeDataTypes.GENERAL_DATA_64, 8, Long.class, U, I, A);
 	}
 
 	public void testBitmapDataTypes() {
@@ -125,14 +125,14 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		A = false;
 		U = true;
 
-		this.checkUnsignedDataType(ZigBeeBitmap8.getInstance(), ZigBeeDataTypes.BITMAP_8, 1, Short.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeBitmap16.getInstance(), ZigBeeDataTypes.BITMAP_16, 2, Integer.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeBitmap8.getInstance(), ZigBeeDataTypes.BITMAP_8, 1, Byte.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeBitmap16.getInstance(), ZigBeeDataTypes.BITMAP_16, 2, Short.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeBitmap24.getInstance(), ZigBeeDataTypes.BITMAP_24, 3, Integer.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeBitmap32.getInstance(), ZigBeeDataTypes.BITMAP_32, 4, Long.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeBitmap32.getInstance(), ZigBeeDataTypes.BITMAP_32, 4, Integer.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeBitmap40.getInstance(), ZigBeeDataTypes.BITMAP_40, 5, Long.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeBitmap48.getInstance(), ZigBeeDataTypes.BITMAP_48, 6, Long.class, U, I, A);
 		this.checkUnsignedDataType(ZigBeeBitmap56.getInstance(), ZigBeeDataTypes.BITMAP_56, 7, Long.class, U, I, A);
-		this.checkUnsignedDataType(ZigBeeBitmap64.getInstance(), ZigBeeDataTypes.BITMAP_64, 8, BigInteger.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeBitmap64.getInstance(), ZigBeeDataTypes.BITMAP_64, 8, Long.class, U, I, A);
 	}
 
 	public void testUnsignedIntegerDataTypes() {
@@ -318,7 +318,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		A = false;
 		U = false;
 
-		this.checkUnsignedDataType(ZigBeeIEEEADDRESS.getInstance(), ZigBeeDataTypes.IEEE_ADDRESS, 8, BigInteger.class, U, I, A);
+		this.checkUnsignedDataType(ZigBeeIEEE_ADDRESS.getInstance(), ZigBeeDataTypes.IEEE_ADDRESS, 8, BigInteger.class, U, I, A);
 
 		I = false;
 		this.checkUnsignedDataType(ZigBeeSecurityKey128.getInstance(), ZigBeeDataTypes.SECURITY_KEY_128, 1, byte[].class, U, I, A);

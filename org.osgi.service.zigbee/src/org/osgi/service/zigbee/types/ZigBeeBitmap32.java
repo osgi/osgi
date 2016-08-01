@@ -52,7 +52,7 @@ public class ZigBeeBitmap32
 	}
 
 	public Class getJavaDataType() {
-		return Long.class;
+		return Integer.class;
 	}
 
 	public short getId() {
