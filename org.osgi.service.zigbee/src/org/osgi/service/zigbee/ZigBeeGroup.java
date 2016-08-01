@@ -32,13 +32,13 @@ public interface ZigBeeGroup {
 	public static final String ID = "zigbee.group.id";
 
 	/**
-	 * @return The 16bit group address.
+	 * @return The 16 bit group address.
 	 */
 	int getGroupAddress();
 
 	/**
-	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoints or even on imported Endpoints. In the former case,
+	 * This method is used for adding an endpoint to a Group, it may be invoked
+	 * on exported endpoints or even on imported endpoints. In the former case,
 	 * the ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API
 	 * defined by the ZigBee Specification, or it will use the proper commands
 	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
@@ -50,6 +50,7 @@ public interface ZigBeeGroup {
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to add to this Group.
+	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         The expected object is always a {@link Boolean} indicating a
 	 *         failure or a success.
@@ -97,24 +98,30 @@ public interface ZigBeeGroup {
 	 *         command is not supported by the remote End Point, or the remote
 	 *         device cannot perform the operation at the moment.
 	 */
-	Promise /* <Boolean> */ leaveGroup(String pid);
+	Promise /* <Boolean> */ eaveGroup(String pid);
 
 	/**
-	 * Invokes the action on a Group. The handler will provide the invocation
-	 * response in an asynchronous way.
+	 * Send a ZCL frame to the ZigBee group represented by this service. The
+	 * handler will provide the invocation response(s) in an asynchronous way.
 	 * 
+	 * <p>
 	 * The source endpoint is not specified in this method call. To send the
 	 * appropriate message on the network, the base driver must generate a
 	 * source endpoint. The latter must not correspond to any exported endpoint.
 	 * 
 	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
-	 * @return A promise representing the completion of this asynchronous call.
-	 *         It will be used in order to return the {@link ZCLFrame}.
+	 * 
+	 * @return a {@link ZCLCommandResponseStream} to collect all the ZCL frames
+	 *         in case of multiple responses.
 	 */
-	Promise /* <ZCLFrame> */ invoke(int clusterId, ZCLFrame frame);
+	ZCLCommandResponseStream groupcast(int clusterId, ZCLFrame frame);
 
 	/**
+	 * Send a ZCL frame to the ZigBee group represented by this service. The
+	 * handler will provide the invocation response(s) in an asynchronous way.
+	 * 
+	 * <p>
 	 * This method is to be used by applications when the targeted device has to
 	 * distinguish between source endpoints of the message. For instance, alarms
 	 * cluster (see 3.11 Alarms Cluster in [ZCL]) generated events are
@@ -126,9 +133,9 @@ public interface ZigBeeGroup {
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
-	 * @return A promise representing the completion of this asynchronous call.
-	 *         It will be used in order to return the {@link ZCLFrame}.
+	 * @return a {@link ZCLCommandResponseStream} to collect the ZCL frames in
+	 *         case of multiple responses.
 	 */
-	Promise /* <ZCLFrame> */ invoke(int clusterId, ZCLFrame frame, String exportedServicePID);
+	ZCLCommandResponseStream groupcast(int clusterId, ZCLFrame frame, String exportedServicePID);
 
 }
