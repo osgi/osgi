@@ -219,27 +219,33 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void createGroupService(int groupAddress) throws Exception;
 
 	/**
-	 * Enable to broadcast a given frame on a given cluster.
+	 * Broadcast a the ZCL frame to the cluster ID of all the nodes of the
+	 * ZigBee network.
 	 * 
 	 * @param clusterID the cluster ID.
-	 * @param frame a command frame sequence.
-	 * @return The response handler that manages the command response.
+	 * @param frame a ZCL Frame.
+	 * @return TODO add description of returned value
 	 * 
 	 * @see #setBroadcastRadius(short) for setting the broadcast radius
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
 	/**
-	 * Enable to broadcast a given frame on a given cluster.
+	 * Broadcast a the ZCL frame to the cluster ID of all the nodes of the
+	 * ZigBee network. The passed {@code exportedServicePID} allows to force the
+	 * source endpoint of the message sent to be the endpoint id of the exported
+	 * ZigBeeEndPoint service having the specified service.pid property.
 	 * 
 	 * @param clusterID the cluster ID.
-	 * @param frame a command frame sequence.
-	 * @param exportedServicePID : the PID of the source endpoint of the command
-	 *        request. In targeted situations, the source endpoint is the valid
-	 *        service PID of an exported endpoint.
-	 * @return The response handler that manages the command response.
+	 * @param frame a ZCL Frame.
+	 * @param exportedServicePID the source endpoint of the command request. In
+	 *        targeted situations, the source endpoint is the valid service PID
+	 *        of an exported endpoint.
 	 * 
-	 * @see #setBroadcastRadius(short) for setting the broadcast radius
+	 * @return TODO add description of returned value
+	 * 
+	 * @see #setBroadcastRadius(short) for setting the broadcast radius.
+	 * 
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 

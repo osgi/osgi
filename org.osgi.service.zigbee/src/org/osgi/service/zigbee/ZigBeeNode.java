@@ -281,30 +281,34 @@ public interface ZigBeeNode {
 	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, ZDPFrame message);
 
 	/**
-	 * Enable to broadcast a given frame of a specific cluster to all the
-	 * {@link ZigBeeEndpoint} that are running on this node.
+	 * Broadcast a given ZCL Frame to cluster {@code clusterID} on all the
+	 * {@link ZigBeeEndpoint} that are running on this node (endpoint
+	 * broadcasting).
+	 *
+	 * @param clusterID the cluster ID the broadcast message is directed.
+	 * @param frame a ZCL Frame that contains the command that have to be
+	 *        broadcasted to the specific cluster of all the endpoints running
+	 *        on the node.
 	 * 
-	 * FIXME: this description must be improved.
-	 * 
-	 * @param clusterID the cluster ID.
-	 * @param frame a command frame sequence.
-	 * @return The response handler that manages the command response.
+	 * @return FIXME: add description of the returned value
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
 	/**
-	 * Enable to broadcast a given frame of a specific cluster to all the
-	 * {@link ZigBeeEndpoint} that are running on this node from a specific
-	 * exported endpoint.
+	 * Broadcast a given ZCL Frame to cluster {@code clusterID} on all the
+	 * {@link ZigBeeEndpoint} that are running on this node (endpoint
+	 * broadcasting). The source endpoint of the APS message sent, is set to the
+	 * endpoint identifier of the {@code exportedServicePID} service.
 	 * 
-	 * FIXME: this description must be improved.
+	 * @param clusterID the cluster ID the broadcast message is directed.
+	 * @param frame a ZCL Frame that contains the command that have to be
+	 *        broadcasted to the specific cluster of all the endpoints running
+	 *        on the node.
+	 * @param exportedServicePID the source endpoint of the command request. In
+	 *        targeted situations, the source endpoint is the valid service PID
+	 *        of an exported endpoint.
 	 * 
-	 * @param clusterID the cluster ID.
-	 * @param frame a command frame sequence.
-	 * @param exportedServicePID : the source endpoint of the command request.
-	 *        In targeted situations, the source endpoint is the valid service
-	 *        PID of an exported endpoint.
-	 * @return The response handler that manages the command response.
+	 * @return FIXME: add description of the returned value
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
