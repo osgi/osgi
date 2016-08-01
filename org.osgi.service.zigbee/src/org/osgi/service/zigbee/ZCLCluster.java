@@ -92,10 +92,9 @@ public interface ZCLCluster {
 	 *         Attributes or Discover Attributes has already been called once by
 	 *         the ZigBee host, the Promise can be quickly resolved. The
 	 *         resolution may be longer the first time one of the ZCLCluster
-	 *         methods to get one or all attributes is successfully called.
-	 *         <p>
-	 *         If attributeId do not exist in the cluster, then the promise
-	 *         fails with a {@link ZCLException} with status code
+	 *         methods to get one or all attributes is successfully called. If
+	 *         attributeId do not exist in the cluster, then the promise fails
+	 *         with a {@link ZCLException} with status code
 	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}
 	 */
 	Promise /* <ZCLAttribute> */ getAttribute(int attributeId, int code);
@@ -145,7 +144,7 @@ public interface ZCLCluster {
 	 * As described in <em>§2.4.1.3 Effect on Receipt</em> section of the ZCL
 	 * specification, a <em>Read Attributes</em> command may result in a
 	 * successful read of an attribute, or in a failure. If the attribute is not
-	 * available status {@link ZCLException#UNSUPPORTED_ATTRIBUTE) is returned.
+	 * available status {@link ZCLException#UNSUPPORTED_ATTRIBUTE} is returned.
 	 * 
 	 * <p>
 	 * The method returns a promise. The object used to resolve the
@@ -164,8 +163,6 @@ public interface ZCLCluster {
 	 * @param attributes An array of {@link ZCLAttributeInfo}
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 * 
-	 *         <p>
 	 *         The promise may fail with an {@link IllegalArgumentException}
 	 *         exception, if some of {@link ZCLAttributeInfo} are manufacturer
 	 *         specific and other are standard, or even if there are mix of
@@ -199,22 +196,18 @@ public interface ZCLCluster {
 	 *        attributes and values to be written.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         If resolved successfully the promise may return an empty{ @code
-	 *         Map<Integer, Integer}}. Otherwise the map will be filled with the
+	 *         If resolved successfully the promise may return an empty {@code
+	 *         Map<Integer, Integer>}. Otherwise the map will be filled with the
 	 *         status information about the attributes that were not written.
 	 *         The key represents the attributeID and the value the status
 	 *         present in the corresponding attribute record returned by the ZCL
-	 *         Write Attributes response message.
-	 * 
-	 *         <p>
-	 *         The original ZCL status values must be re-mapped to the list of
-	 *         status values listed in the {@link ZCLException} class.
-	 * 
-	 *         <p>
-	 *         The promise may fail with an {@link IllegalArgumentException} if
-	 *         some of {@link ZCLAttributeInfo} are manufacturer specific and
-	 *         other are standard, or even if there are mix of attributes with
-	 *         different manufacturer specific code.
+	 *         Write Attributes response message. The original ZCL status values
+	 *         must be re-mapped to the list of status values listed in the
+	 *         {@link ZCLException} class. The promise may fail with an
+	 *         {@link IllegalArgumentException} if some of
+	 *         {@link ZCLAttributeInfo} are manufacturer specific and other are
+	 *         standard, or even if there are mix of attributes with different
+	 *         manufacturer specific code.
 	 */
 	Promise /* <Map<Integer, Short>> */ writeAttributes(boolean undivided, Map attributesAndValues);
 

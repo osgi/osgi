@@ -226,10 +226,7 @@ public interface ZigBeeNode {
 	 *         success the resolved value will be a {@link Map} containing the
 	 *         Service.PID as {@link String} key of the {@link ZigBeeNode}
 	 *         service and the value the {@link ZigBeeLinkQuality} for that
-	 *         node.
-	 * 
-	 *         <p>
-	 *         In case of errors the promise must fail with the correct
+	 *         node. In case of errors the promise must fail with the correct
 	 *         {@link ZDPException}.
 	 */
 	public Promise /* <ZigBeeLinkQuality> */ getLinksQuality();
@@ -251,11 +248,9 @@ public interface ZigBeeNode {
 	 *         In case of success, the resolved value will be a {@link Map}
 	 *         containing the Service.PID as {@link String} key of the
 	 *         {@link ZigBeeNode} service and the value the {@link ZigBeeRoute}
-	 *         for that node.
-	 * 
-	 *         <p>
-	 *         In case of failure a {@link ZDPException} exception with the
-	 *         correct status code must be used to fail the promise.
+	 *         for that node. In case of failure a {@link ZDPException}
+	 *         exception with the correct status code must be used to fail the
+	 *         promise.
 	 */
 	public Promise /* <Map<String,ZigBeeRoute>> */ getRoutingTable();
 
@@ -395,8 +390,8 @@ public interface ZigBeeNode {
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         It will be used in order to return the node user description
 	 *         (String). In case of errors the promise will fail with a
-	 *         {@ZDPException} exception containing the response status code
-	 *         value.
+	 *         {@link ZDPException} exception containing the response status
+	 *         code value.
 	 */
 	Promise /* <String> */ getUserDescription();
 
@@ -415,9 +410,8 @@ public interface ZigBeeNode {
 	 * @param userDescription the user description
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         In case of success the promise returns a {@code null} value. In
-	 *         case of errors the promise must fail with a
-	 *         {@ZDPException} exception containing the response status code
-	 *         value.
+	 *         case of errors the promise must fail with a {@link ZDPException}
+	 *         exception containing the response status code value.
 	 */
 	Promise setUserDescription(String userDescription);
 
