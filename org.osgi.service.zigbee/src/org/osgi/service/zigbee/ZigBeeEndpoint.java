@@ -81,8 +81,9 @@ public interface ZigBeeEndpoint {
 	public static final String	OUTPUT_CLUSTERS	= "zigbee.endpoint.clusters.output";
 
 	/**
-	 * Key of the {@link String} property mentioning that an endpoint is an
-	 * exported one or not. It is an <b>optional</b> property for this service.
+	 * Property used to mark if a ZigBeeEndPoint service is an exported one or
+	 * not. Imported endpoints do not have this property set. This service
+	 * property requires no value.
 	 */
 	public static final String	ZIGBEE_EXPORT	= "zigbee.export";
 
