@@ -116,7 +116,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		System.out.println("maxHeaderSize = " + maxHeaderSize);
 	}
 
-	public void testInternalZCLFrameImpl1() {
+	public void testZCLHeader() {
 
 		int commandId = 0x10;
 		boolean isClusterSpecificCommand = true;
