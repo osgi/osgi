@@ -1503,7 +1503,7 @@ public class UI {
 					</entry>
 					<entry>8-bit enumeration</entry>
 					<entry>
-						<code>Byte</code>
+						<code>Short</code>
 					</entry>
 				</row>
 				<row>
@@ -1664,7 +1664,17 @@ public class UI {
 					</entry>
 					<entry>128-bit Security Key</entry>
 					<entry>
-						<code>Long</code>
+						<code>byte[8]</code>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>Unknown</entry>
+					<entry>
+						<code></code>
 					</entry>
 				</row>
 			</tbody>
