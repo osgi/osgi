@@ -187,8 +187,6 @@ class ZigBeeZCLDefaultSerializer {
 			// serialize the actual value
 			switch (dataType) {
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_8 :
-				case ZigBeeDataTypes.GENERAL_DATA_8 :
-				case ZigBeeDataTypes.BITMAP_8 :
 				case ZigBeeDataTypes.ENUMERATION_8 :
 					if (value instanceof Short) {
 						os.writeInt((((Number) value).shortValue()), size);
@@ -199,14 +197,21 @@ class ZigBeeZCLDefaultSerializer {
 
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_16 :
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_24 :
-				case ZigBeeDataTypes.GENERAL_DATA_16 :
 				case ZigBeeDataTypes.GENERAL_DATA_24 :
-				case ZigBeeDataTypes.BITMAP_16 :
+				case ZigBeeDataTypes.GENERAL_DATA_32 :
+				case ZigBeeDataTypes.BITMAP_32 :
 				case ZigBeeDataTypes.BITMAP_24 :
-
 				case ZigBeeDataTypes.ENUMERATION_16 :
 					if (value instanceof Integer) {
 						os.writeInt((((Number) value).intValue()), size);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
+					return;
+
+				case ZigBeeDataTypes.BACNET_OID :
+					if (value instanceof Long) {
+						os.writeLong((((Number) value).longValue()), 4);
 					} else {
 						throw new IllegalArgumentException("invalid java class");
 					}
@@ -216,15 +221,12 @@ class ZigBeeZCLDefaultSerializer {
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_40 :
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_48 :
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_56 :
-				case ZigBeeDataTypes.GENERAL_DATA_32 :
 				case ZigBeeDataTypes.GENERAL_DATA_40 :
 				case ZigBeeDataTypes.GENERAL_DATA_48 :
 				case ZigBeeDataTypes.GENERAL_DATA_56 :
-				case ZigBeeDataTypes.BITMAP_32 :
 				case ZigBeeDataTypes.BITMAP_40 :
 				case ZigBeeDataTypes.BITMAP_48 :
 				case ZigBeeDataTypes.BITMAP_56 :
-				case ZigBeeDataTypes.BACNET_OID :
 					if (value instanceof Long) {
 						os.writeLong((((Number) value).longValue()), size);
 					} else {
@@ -233,6 +235,21 @@ class ZigBeeZCLDefaultSerializer {
 					return;
 
 				case ZigBeeDataTypes.UNSIGNED_INTEGER_64 :
+					if (value instanceof BigInteger) {
+						os.writeLong((((Number) value).longValue()), size);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
+					return;
+
+				case ZigBeeDataTypes.IEEE_ADDRESS :
+					if (value instanceof BigInteger) {
+						os.writeLong((((Number) value).longValue()), 8);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
+					return;
+
 				case ZigBeeDataTypes.GENERAL_DATA_64 :
 				case ZigBeeDataTypes.BITMAP_64 :
 					if (value instanceof Long) {
@@ -243,7 +260,18 @@ class ZigBeeZCLDefaultSerializer {
 					return;
 
 				case ZigBeeDataTypes.SIGNED_INTEGER_8 :
+				case ZigBeeDataTypes.GENERAL_DATA_8 :
+				case ZigBeeDataTypes.BITMAP_8 :
+					if (value instanceof Byte) {
+						os.writeByte(((Byte) value).byteValue());
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
+					return;
+
 				case ZigBeeDataTypes.SIGNED_INTEGER_16 :
+				case ZigBeeDataTypes.GENERAL_DATA_16 :
+				case ZigBeeDataTypes.BITMAP_16 :
 					if (value instanceof Short) {
 						os.writeInt((((Short) value).shortValue()), size);
 					} else {
@@ -263,7 +291,7 @@ class ZigBeeZCLDefaultSerializer {
 				case ZigBeeDataTypes.SIGNED_INTEGER_40 :
 				case ZigBeeDataTypes.SIGNED_INTEGER_48 :
 				case ZigBeeDataTypes.SIGNED_INTEGER_56 :
-					if (value instanceof Number) {
+					if (value instanceof Long) {
 						os.writeLong((((Long) value).longValue()), size);
 					} else {
 						throw new IllegalArgumentException("invalid java class");
@@ -279,47 +307,67 @@ class ZigBeeZCLDefaultSerializer {
 					return;
 
 				case ZigBeeDataTypes.BOOLEAN :
-					boolean b = ((Boolean) value).booleanValue();
-					os.writeByte((byte) (b ? 1 : 0));
+					if (value instanceof Boolean) {
+						boolean b = ((Boolean) value).booleanValue();
+						os.writeByte((byte) (b ? 1 : 0));
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
 					return;
 
 				case ZigBeeDataTypes.CHARACTER_STRING : {
-					String s = (String) value;
-					if (s.length() > 0xfe) {
-						throw new IllegalArgumentException("string length too big");
+					if (value instanceof String) {
+						String s = (String) value;
+						if (s.length() > 0xfe) {
+							throw new IllegalArgumentException("string length too big");
+						}
+						os.writeByte((byte) s.length());
+						os.writeBytes(s.getBytes(), s.length());
+					} else {
+						throw new IllegalArgumentException("invalid java class");
 					}
-					os.writeByte((byte) s.length());
-					os.writeBytes(s.getBytes(), s.length());
 					return;
 				}
 
 				case ZigBeeDataTypes.OCTET_STRING : {
-					byte[] array = (byte[]) value;
-					if (array.length > 0xfe) {
-						throw new IllegalArgumentException();
+					if (value instanceof byte[]) {
+						byte[] array = (byte[]) value;
+						if (array.length > 0xfe) {
+							throw new IllegalArgumentException();
+						}
+						os.writeByte((byte) array.length);
+						os.writeBytes(array, array.length);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
 					}
-					os.writeByte((byte) array.length);
-					os.writeBytes(array, array.length);
 					return;
 				}
 
 				case ZigBeeDataTypes.LONG_CHARACTER_STRING : {
-					String s = (String) value;
-					if (s.length() > 0xfffe) {
-						throw new IllegalArgumentException("string length too big");
+					if (value instanceof String) {
+						String s = (String) value;
+						if (s.length() > 0xfffe) {
+							throw new IllegalArgumentException("string length too big");
+						}
+						os.writeInt(s.length(), 2);
+						os.writeBytes(s.getBytes(), s.length());
+					} else {
+						throw new IllegalArgumentException("invalid java class");
 					}
-					os.writeByte((byte) s.length());
-					os.writeBytes(s.getBytes(), s.length());
 					return;
 				}
 
 				case ZigBeeDataTypes.LONG_OCTET_STRING : {
-					byte[] array = (byte[]) value;
-					if (array.length > 0xfffe) {
-						throw new IllegalArgumentException();
+					if (value instanceof byte[]) {
+						byte[] array = (byte[]) value;
+						if (array.length > 0xfffe) {
+							throw new IllegalArgumentException();
+						}
+						os.writeInt(array.length, 2);
+						os.writeBytes(array, array.length);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
 					}
-					os.writeByte((byte) array.length);
-					os.writeBytes(array, array.length);
 					return;
 				}
 
@@ -335,20 +383,32 @@ class ZigBeeZCLDefaultSerializer {
 				}
 
 				case ZigBeeDataTypes.FLOATING_SEMI : {
-					float f = ((Float) value).floatValue();
-					os.writeFloat(f, 2);
+					if (value instanceof Float) {
+						float f = ((Float) value).floatValue();
+						os.writeFloat(f, 2);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
 					return;
 				}
 
 				case ZigBeeDataTypes.FLOATING_SINGLE : {
-					float f = ((Float) value).floatValue();
-					os.writeFloat(f, 4);
+					if (value instanceof Float) {
+						float f = ((Float) value).floatValue();
+						os.writeFloat(f, 4);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
 					return;
 				}
 
 				case ZigBeeDataTypes.FLOATING_DOUBLE : {
-					double d = ((Double) value).doubleValue();
-					os.writeDouble(d);
+					if (value instanceof Double) {
+						double d = ((Double) value).doubleValue();
+						os.writeDouble(d);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
+					}
 					return;
 				}
 
@@ -367,8 +427,6 @@ class ZigBeeZCLDefaultSerializer {
 						os.writeByte((byte) c.get(Calendar.MINUTE));
 						os.writeByte((byte) c.get(Calendar.SECOND));
 						os.writeByte((byte) c.get(Calendar.MILLISECOND / 10));
-					} else if (value instanceof Long) {
-						os.writeLong(((Long) value).longValue(), 4);
 					} else if (value instanceof byte[]) {
 						byte[] buffer = (byte[]) value;
 						if (buffer.length != 4) {
@@ -389,8 +447,6 @@ class ZigBeeZCLDefaultSerializer {
 						os.writeByte((byte) c.get(Calendar.MONTH));
 						os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
 						os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
-					} else if (value instanceof Long) {
-						os.writeLong(((Long) value).longValue(), 4);
 					} else if (value instanceof byte[]) {
 						byte[] buffer = (byte[]) value;
 						if (buffer.length != 4) {
@@ -410,24 +466,25 @@ class ZigBeeZCLDefaultSerializer {
 						os.writeInt((int) utc, 4);
 					} else if (value instanceof Long) {
 						os.writeLong(((Long) value).longValue(), 4);
-					}
-					return;
-				}
-
-				case ZigBeeDataTypes.IEEE_ADDRESS :
-					if (value instanceof Number) {
-						os.writeLong((((Number) value).longValue()), 8);
 					} else {
 						throw new IllegalArgumentException("invalid java class");
 					}
 					return;
+				}
 
 				case ZigBeeDataTypes.SECURITY_KEY_128 : {
-					byte[] array = (byte[]) value;
-					if (array.length != 8) {
-						throw new IllegalArgumentException("invalid array length");
+					if (value instanceof byte[]) {
+						byte[] array = (byte[]) value;
+						if (array.length != 8) {
+							throw new IllegalArgumentException("invalid array length");
+						}
+
+						byte[] copy = (byte[]) array.clone();
+						swap(copy);
+						os.writeBytes(copy, array.length);
+					} else {
+						throw new IllegalArgumentException("invalid java class");
 					}
-					os.writeBytes(array, array.length);
 					return;
 				}
 			}
@@ -475,14 +532,14 @@ class ZigBeeZCLDefaultSerializer {
 		switch (dataType) {
 			case ZigBeeDataTypes.GENERAL_DATA_8 :
 			case ZigBeeDataTypes.BITMAP_8 : {
-				short s = (short) (is.readInt(1) & 0xff);
-				return new Short(s);
+				byte b = is.readByte();
+				return new Byte(b);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_16 :
 			case ZigBeeDataTypes.BITMAP_16 : {
-				int i = is.readInt(2) & 0xffff;
-				return new Integer(i);
+				short s = (short) is.readInt(2);
+				return new Short(s);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_24 :
@@ -493,8 +550,8 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.GENERAL_DATA_32 :
 			case ZigBeeDataTypes.BITMAP_32 : {
-				long l = is.readLong(4) & 0xffffffff;
-				return new Long(l);
+				int i = is.readInt(4);
+				return new Integer(i);
 			}
 
 			case ZigBeeDataTypes.GENERAL_DATA_40 :
@@ -520,8 +577,8 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.GENERAL_DATA_64 :
 			case ZigBeeDataTypes.BITMAP_64 : {
-				long l = is.readLong(8) & 0xffffffffffffffffL;
-				return BigInteger.valueOf(l);
+				long l = is.readLong(8);
+				return new Long(l);
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_8 :
@@ -596,11 +653,11 @@ class ZigBeeZCLDefaultSerializer {
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_8 : {
-				short s = is.readByte();
+				byte s = is.readByte();
 				if (s == Byte.MIN_VALUE) {
 					return null;
 				}
-				return new Short(s);
+				return new Byte(s);
 			}
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_16 : {
@@ -683,7 +740,7 @@ class ZigBeeZCLDefaultSerializer {
 					return null;
 				}
 				byte[] array = is.readBytes(len & 0xff);
-				return new String(array);
+				return array;
 			}
 
 			case ZigBeeDataTypes.LONG_CHARACTER_STRING : {
@@ -701,7 +758,7 @@ class ZigBeeZCLDefaultSerializer {
 					return null;
 				}
 				byte[] array = is.readBytes(len & 0xffff);
-				return new String(array);
+				return array;
 			}
 
 			case ZigBeeDataTypes.CLUSTER_ID :
@@ -779,14 +836,15 @@ class ZigBeeZCLDefaultSerializer {
 			}
 
 			case ZigBeeDataTypes.IEEE_ADDRESS : {
-				byte[] array = is.readBytes(8);
-				swap(array);
-				BigInteger invalidValue = new BigInteger("-1");
-				BigInteger value = new BigInteger(array);
-				if (value.equals(invalidValue)) {
+				long l = is.readLong(8) & 0xffffffffffffffffL;
+				if (l == 0xffffffffffffffffL) {
 					return null;
 				}
-				return value;
+				BigInteger bl = BigInteger.valueOf(l & 0xffffffffL);
+				BigInteger bh = BigInteger.valueOf(l >>> 32).shiftLeft(32);
+				BigInteger bi = bh.or(bl);
+
+				return bi;
 			}
 
 			case ZigBeeDataTypes.SECURITY_KEY_128 : {
