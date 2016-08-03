@@ -1609,10 +1609,10 @@ public class UI {
 				</row>
 				<row>
 					<entry>
-						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LIST"
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SRUCTURE"
 							xrefstyle="hyperlink" />
 					</entry>
-					<entry>List</entry>
+					<entry>Structure</entry>
 					<entry>
 						<code></code>
 					</entry>
