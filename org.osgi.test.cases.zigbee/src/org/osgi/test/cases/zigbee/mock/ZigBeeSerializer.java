@@ -85,6 +85,10 @@ public class ZigBeeSerializer {
 		return index;
 	}
 
+	protected void resetIndex() {
+		index = 0;
+	}
+
 	public ZigBeeDataInput getDataInput() {
 		return new ZigBeeDataInputImpl(this);
 	}
@@ -277,5 +281,16 @@ public class ZigBeeSerializer {
 		for (int i = 0; i < length; i++) {
 			this.writeByte(bytes[i]);
 		}
+	}
+
+	private char[] hexDigits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+	public String toString() {
+		String out = "";
+		for (int i = 0; i < index; i++) {
+			int d = data[i];
+			out += "0x" + hexDigits[((d >> 4) & 0x0f)] + hexDigits[(d & 0x0f)] + ", ";
+		}
+		return out;
 	}
 }
