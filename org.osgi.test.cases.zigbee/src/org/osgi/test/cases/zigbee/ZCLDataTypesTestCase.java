@@ -61,7 +61,28 @@ import org.osgi.test.cases.zigbee.mock.ZigBeeSerializer;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * Partial test of the ZCL data types classes
+ * Partial test of the ZCL data types classes. The tests verify for each
+ * ZigBeeDataType<dataType> class if;
+ * <ul>
+ * <li>The data type returned by the getJavaDataType(), isAnalog(), getId() and
+ * getName() methods return the right value for that type.
+ * <li>The serialize() method throws an {@link NullPointerException} if the
+ * passed {@link ZigBeeDataOutput} is null.
+ * <li>The serialize() method throws an {@link IllegalArgumentException} if
+ * passing {@code null} value for data types that do not support an
+ * <em>Invalid Value</em>.
+ * <li>The serialize() method throws an {@link IllegalArgumentException} if
+ * passing a value that is instance of a class that is not compatible with the
+ * data type.
+ * <li>The serialize() method writes the right amount of bytes on in the
+ * {@link ZigBeeDataOutput} stream, and in the correct order (it checks also
+ * that the byte that are written are correct).
+ * <li>The serialize() method throws an {@link NullPointerException} if the
+ * passed {@link ZigBeeDataInput} is null.
+ * <li>The deserialize() method returns a value of the correct java class.
+ * <li>The value returned by the deserialize() is identical to the value that
+ * was previously serialized().
+ * </ul>
  * 
  * @author $Id$
  *
@@ -976,11 +997,6 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			b >>= 1;
 		}
 
-		return null;
-	}
-
-	private Object createObject(Class clazz, long unsignedValue) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
