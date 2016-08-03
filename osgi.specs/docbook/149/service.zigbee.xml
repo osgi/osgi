@@ -1159,6 +1159,16 @@ public class UI {
 			<tbody>
 				<row>
 					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>No data</entry>
+					<entry>
+						<code></code>
+					</entry>
+				</row>
+				<row>
+					<entry>
 						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.GENERAL_DATA_8"
 							xrefstyle="hyperlink" />
 					</entry>
@@ -1585,6 +1595,46 @@ public class UI {
 					<entry>Octet string</entry>
 					<entry>
 						<code>byte[]</code>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.ARRAY"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>Array</entry>
+					<entry>
+						<code></code>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.LIST"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>List</entry>
+					<entry>
+						<code></code>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SET"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>Set</entry>
+					<entry>
+						<code></code>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.BAG"
+							xrefstyle="hyperlink" />
+					</entry>
+					<entry>Bag</entry>
+					<entry>
+						<code></code>
 					</entry>
 				</row>
 				<row>
