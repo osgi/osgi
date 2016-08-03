@@ -243,7 +243,7 @@ public final class PushStreamProvider {
 	 */
 	public <T> PushEventSource<T> createEventSourceFromStream(
 			PushStream<T> stream) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return buildEventSourceFromStream(stream).create();
 	}
 
 	/**
@@ -261,7 +261,24 @@ public final class PushStreamProvider {
 	 */
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventSource<T>,T,U> buildEventSourceFromStream(
 			PushStream<T> stream) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new AbstractBufferBuilder<PushEventSource<T>,T,U>() {
+			@Override
+			public PushEventSource<T> create() {
+				SimplePushEventSource<T> spes = createSimplePushEventSource(
+						concurrency, worker, buffer, bufferingPolicy, () -> {
+							try {
+								stream.close();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						});
+				spes.connectPromise()
+						.then(p -> stream.forEach(t -> spes.publish(t))
+								.onResolve(() -> spes.close()));
+				return spes;
+			}
+		};
 	}
 	
 
@@ -280,7 +297,7 @@ public final class PushStreamProvider {
 	public <T> SimplePushEventSource<T> createSimpleEventSource(Class<T> type) {
 		return createSimplePushEventSource(1, null,
 				new ArrayBlockingQueue<>(32),
-				FAIL.getPolicy());
+				FAIL.getPolicy(), () -> { /* Nothing else to do */ });
 	}
 	
 	/**
@@ -300,7 +317,7 @@ public final class PushStreamProvider {
 			@Override
 			public SimplePushEventSource<T> create() {
 				return createSimplePushEventSource(concurrency, worker, buffer,
-						bufferingPolicy);
+						bufferingPolicy, () -> { /* Nothing else to do */ });
 			}
 		};
 	}
@@ -310,7 +327,7 @@ public final class PushStreamProvider {
 	})
 	<T, U extends BlockingQueue<PushEvent< ? extends T>>> SimplePushEventSource<T> createSimplePushEventSource(
 			int parallelism, Executor executor, U queue,
-			QueuePolicy<T,U> queuePolicy) {
+			QueuePolicy<T,U> queuePolicy, Runnable onClose) {
 
 		if (parallelism < 0) {
 			throw new IllegalArgumentException(
@@ -341,6 +358,11 @@ public final class PushStreamProvider {
 		SimplePushEventSourceImpl<T,U> spes = new SimplePushEventSourceImpl<T,U>(
 				toUse, acquireScheduler(), queuePolicy, queue, parallelism,
 				() -> {
+					try {
+						onClose.run();
+					} catch (Exception e) {
+						// TODO log this?
+					}
 					if (closeExecutorOnClose) {
 						((ExecutorService) toUse).shutdown();
 					}
@@ -375,36 +397,64 @@ public final class PushStreamProvider {
 	 */
 	public <T> PushEventConsumer<T> createBufferedConsumer(
 			PushEventConsumer<T> delegate) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return buildBufferedConsumer(delegate).create();
 	}
 	
 	/**
 	 * Build a buffered {@link PushEventConsumer} with custom configuration.
-	 * 
 	 * <p>
 	 * The returned consumer will be buffered from the event source, and will
 	 * honour back pressure requests from its delegate even if the event source
 	 * does not.
-	 * 
 	 * <p>
 	 * Buffered consumers are useful for "bursty" event sources which produce a
 	 * number of events close together, then none for some time. These bursts
 	 * can sometimes overwhelm the consumer. Buffering will not, however,
 	 * protect downstream components from a source which produces events faster
 	 * than they can be consumed.
-	 * 
 	 * <p>
 	 * Buffers are also useful as "circuit breakers". If a
 	 * {@link QueuePolicyOption#FAIL} is used then a full buffer will request
 	 * that the stream close, preventing an event storm from reaching the
 	 * client.
+	 * <p>
+	 * Note that this buffered consumer will close when it receives a terminal
+	 * event, or if the delegate returns negative backpressure. No further
+	 * events will be propagated after this time.
 	 * 
 	 * @param delegate
-	 * 
 	 * @return a {@link PushEventConsumer} with a buffer directly before it
 	 */
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventConsumer<T>,T,U> buildBufferedConsumer(
 			PushEventConsumer<T> delegate) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return new AbstractBufferBuilder<PushEventConsumer<T>,T,U>() {
+			@Override
+			public PushEventConsumer<T> create() {
+				PushEventPipe<T> pipe = new PushEventPipe<>();
+				
+				createStream(pipe, concurrency, worker, buffer, bufferingPolicy, backPressure)
+					.forEachEvent(delegate);
+				
+				return pipe;
+			}
+		};
+	}
+
+	static final class PushEventPipe<T>
+			implements PushEventConsumer<T>, PushEventSource<T> {
+
+		volatile PushEventConsumer< ? super T> delegate;
+
+		@Override
+		public AutoCloseable open(PushEventConsumer< ? super T> pec)
+				throws Exception {
+			return () -> { /* Nothing else to do */ };
+		}
+
+		@Override
+		public long accept(PushEvent< ? extends T> event) throws Exception {
+			return delegate.accept(event);
+		}
+
 	}
 }
