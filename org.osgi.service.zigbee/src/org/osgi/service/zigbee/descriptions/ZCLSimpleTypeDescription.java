@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+import java.io.EOFException;
 import java.io.IOException;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
@@ -62,10 +63,16 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 *        not allow any invalid value and the passed value is null an
 	 *        {@link IllegalArgumentException} is thrown.
 	 * 
-	 * @throws IOException
+	 * @throws IOException If an I/O error occurs while writing on the
+	 *         {@code ZigBeeDataOutput}. The {@link EOFException} may be thrown
+	 *         if there is no more space on the data output for serializing the
+	 *         passed value.
 	 * 
-	 * @throws IllegalArgumentException Must be thrown if the passed value does
-	 *         not belong to the expected class or its value exceeds the
+	 * @throws NullPointerException If {@code ZigBeeDataOutput} parameter is
+	 *         {@code null}.
+	 * 
+	 * @throws IllegalArgumentException If the passed {@code value} parameter
+	 *         does not belong to the expected class or its value exceeds the
 	 *         possible values allowed (range or length).
 	 * 
 	 */
@@ -79,12 +86,17 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 * @param is the {@link ZigBeeDataInput} from where the value of data type
 	 *        is read from.
 	 * 
-	 * @return An object that represents the deserialized value of data. Return
+	 * @return An object that represents the deserialized value of data. Returns
 	 *         {@code  null} if the read value represents the
 	 *         <em>Invalid Value</em> for the specific ZigBee data type.
 	 * 
-	 * @throws IOException if an I/O error occurs while reading the
-	 *         {@code ZigBeeDataInput}
+	 * @throws NullPointerException If {@code ZigBeeDataInput} parameter is
+	 *         {@code null}.
+	 * 
+	 * @throws IOException If an I/O error occurs while reading the
+	 *         {@code ZigBeeDataInput}. An {@link EOFException} is thrown if the
+	 *         data input stream end is reached while deserializing the data
+	 *         type.
 	 */
 	public Object deserialize(ZigBeeDataInput is) throws IOException;
 

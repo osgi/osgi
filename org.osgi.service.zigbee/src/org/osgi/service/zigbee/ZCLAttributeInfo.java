@@ -33,16 +33,16 @@ public interface ZCLAttributeInfo {
 	public final static String ID = "zigbee.attribute.id";
 
 	/**
-	 * @return true if and only if this attribute is related to a Manufacturer
-	 *         extension
+	 * @return {@code true} if and only if this attribute is related to a
+	 *         manufacturer extension
 	 */
 	public boolean isManufacturerSpecific();
 
 	/**
 	 * 
-	 * @return the Manufacturer code that defined this attribute, if the
+	 * @return The manufacturer code that defined this attribute, if the
 	 *         attribute does not belong to any manufacture extension then it
-	 *         returns -1
+	 *         returns -1.
 	 */
 	public int getManufacturerCode();
 
@@ -52,7 +52,7 @@ public interface ZCLAttributeInfo {
 	public int getId();
 
 	/**
-	 * @return the Attribute data type. It may be null if the data type is not
+	 * @return The attribute data type. It may be null if the data type is not
 	 *         retrievable (issue with read attribute and discover attributes
 	 *         commands).
 	 */

@@ -25,12 +25,12 @@ package org.osgi.service.zigbee;
  * {@link ZigBeeNode#invoke(int, int, ZDPFrame)}
  * 
  * <p>
- * <b>Notes</b>
+ * <b>Notes:</b>
  * <ul>
  * <li>This interface hides on purpose the Transaction Sequence Number field
  * because it MUST be handled internally by the ZigBee Base Driver</li>
  * <li>The interface does not provide any method for writing the payload because
- * the ZigBee Base Driver needs only to read the payload
+ * the ZigBee Base Driver needs only to read the payload.
  * </ul>
  * 
  * @author $Id$
@@ -38,19 +38,21 @@ package org.osgi.service.zigbee;
 public interface ZDPFrame {
 
 	/**
-	 * Get (a copy of this ZDP) payload
+	 * Get (a copy of this ZDP) payload.
 	 * 
-	 * @return a copy of the payload
+	 * @return A copy of the payload.
 	 */
 	byte[] getPayload();
 
 	/**
-	 * @return an {@link ZigBeeDataInput} for the payload of the
+	 * @return An {@link ZigBeeDataInput} for the payload of the
 	 *         {@link ZDPFrame}. This method, in contrary to
 	 *         {@link #getPayload()}, doesn't require to create a copy of the
 	 *         payload.
 	 * 
-	 * @throws IllegalStateException if the InputStream is not available.
+	 * @throws IllegalStateException if a {@link ZigBeeDataInput} stream cannot
+	 *         be returned because the underlying ZDPFrame implementation was
+	 *         not correctly initialized.
 	 */
 	ZigBeeDataInput getDataInput();
 
