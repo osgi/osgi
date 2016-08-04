@@ -274,7 +274,7 @@ public class ZigBeeSerializer {
 	}
 
 	public void writeBytes(byte[] bytes, int length) {
-		if ((bytes == null) || (length == 0)) {
+		if ((bytes == null) || (length == 0) || ((bytes != null) && (bytes.length < length))) {
 			throw new IllegalArgumentException();
 		}
 
