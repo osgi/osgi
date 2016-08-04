@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="705"
+<chapter label="706"
          revision="$Id$"
          version="5" xml:id="util.pushstream"
          xmlns="http://docbook.org/ns/docbook"
@@ -9,7 +9,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Promises Specification</title>
+  <title>Push Stream Specification</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.util.pushstream-version"
@@ -369,7 +369,7 @@
       </section>
       
       <section>
-        <title>Stateless and Stateful Operations</title>
+        <title>Stateless and Stateful Intermediate Operations</title>
         
         <para>Intermediate operations are either <emphasis>stateless</emphasis>
          or <emphasis>stateful</emphasis>. Stateless operations are ones
@@ -384,12 +384,183 @@
          of each entry in the stream, and filters out duplicate events.</para>
          
          <para>Care should be taken when using Stateful operations with large
-         or infinite streams. Ror example the <code>sorted</code> operation
+         or infinite streams. For example the <code>sorted</code> operation
          must process the <emphasis>entire</emphasis> stream until it receives 
          a close event. At this point the events can be sorted and delivered 
          in order. It is usually a good idea to use the <code>limit</code>
          operation to restrict the length of the stream before performing
          a stateful operation.</para>
+         
+                 <table>
+          <title>Intermediate Operations on the Push Stream</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.6*"/>
+        
+        <colspec colnum="2" colwidth="0.8*"/>
+
+        <colspec colnum="3" colwidth="4.0*"/>
+
+        <thead>
+          <row>
+            <entry>Intermediate Operation</entry>
+
+            <entry>Stateful</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>filter()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Register a selection function to be called with each
+            data event in the stream. If the function returns <code>true</code>
+            then the event will propagated, if <code>false</code> then the event
+            will dropped from the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>distinct()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>A variation of <code>filter</code> which drops data
+            from the stream that has already been seen. Specifically if a
+            data element <code>equals</code> an element which has previously
+            been seen then it will be dropped. This stateful operation must
+            remember all data that has been seen.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>map()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Register a transformation function to be called with each
+            data event in the stream. The transformed data is propagated to the
+            next stage of the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>sorted()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>Remembers all items in the stream until the stream
+            ends. At this point the data in the stream will be propagated to the
+            next stage of the stream, in the order defined by the Comparator</para></entry>
+          </row>
+
+          <row>
+            <entry><code>flatMap()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Register a transformation function to be called with each
+            data event in the stream. Each incoming data element is converted into
+            a stream of elements. The transformed data is then propagated to the
+            next stage of the stream.</para></entry>
+          </row>
+          
+          <row>
+            <entry><code>limit()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>Limits the length of the stream to the defined number of 
+            elements. Once that number of elements are received then a close
+            event is propagated to the next stage of the stream.</para></entry>
+          </row>
+          
+          <row>
+            <entry><code>split()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Register a set of filter functions to select elements that
+            should be forwarded downstream. The returned streams correspond to
+            the supplied filter functions.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>skip()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>Drops the supplied number of data events from the stream
+            and then forwards any further data events.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>sequential()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Forces data events to be delivered sequentially to the
+            next stage of the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>buffer()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>Introduces a buffer before the next stage of the stream.
+            The buffer can be used to provide a circuit breaker, or to allow a
+            switch of consumer thread(s).</para></entry>
+          </row>
+          
+          <row>
+            <entry><code>fork()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry><para>Pushes event processing onto one or more threads in
+            the supplied <code>Executor</code> returning a fixed backpressure</para></entry>
+          </row>
+
+          <row>
+            <entry><code>coalesce()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry>
+              <para>Register a coalescing function which aggregates one or more data
+              events into a single data event which will be passed to the next
+              stage of the stream.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry><code>merge()</code></entry>
+
+            <entry><code>false</code></entry>
+
+            <entry>
+              <para>Merges <code>this</code> stream and another stream into a
+              single stream. The returned stream will not close until both
+              parent streams are closed.</para>
+            </entry>
+          </row>
+          
+          <row>
+            <entry><code>window()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry>
+              <para>Collects events over the specified time-limit, passing them
+              to the registered handler function. If no events occur during the
+              time limit then no events are propagated</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
       </section>
       
       <section>
@@ -566,48 +737,287 @@
     <section>
       <title>Buffering, Back pressure and Circuit Breakers</title>
     
-      <para>TODO</para>
-    
+      <para>Buffering and Back Pressure are an important part of asynchronous 
+      stream processing. Back pressure and buffering are therefore an important
+      part of the push stream API.</para>
+      
       <section xml:id="util.pushstream.back-pressure">
         <title>Back pressure</title>
-        <para>TODO</para>
+        <para>In a synchronous model the producer's thread is held by the consumer 
+        until the consumer has finished processing the data. This is not true for 
+        asynchronous systems, and so a producer can easily overwhelm a consumer with
+        data. Back pressure is therefore used in asynchronous systems to allow 
+        consumers to control the speed at which producers provide data.</para>
+        
+        <para>Back pressure in the asynchronous event processing model is
+        is provided by the PushEventConsumer. The value returned by the 
+        <code>accept</code> method of the PushEventConsumer is an indication of
+        the requested back pressure. A return of zero indicates that event
+        delivery may continue immediately. A positive return value indicates
+        that the source should delay sending any further events for the
+        requested number of milliseconds. A return value of -1 indicates that
+        no further events should be sent and that the stream can be closed.</para>
       </section>
     
+      <section>
+        <title>Buffering and circuit breakers</title>
+        
+        <para>In asynchronous systems events may be produced and consumed at
+        different rates. If the consumer is faster than the producer then there
+        is no issue, however if the producer is faster than the consumer then
+        events must be held somewhere. Backpressure provides some assistance
+        here, however some sources do not have control over when events are
+        produced. In these cases the data must be buffered until it can be 
+        processed.</para>
+        
+        <para>As well as providing a queue for pending work, introducing buffers
+        allows event processing to be moved onto a different thread, and for the 
+        number of processing threads to be changed part way through the pipeline. 
+        Buffering can therefore protect an PushEventSource from having its event 
+        generation thread “stolen” by a consumer which executes a long running 
+        operation. As a result the PushEventSource can be written more simply, 
+        without a thread switch, if a buffer is used.</para>
+
+        <para>Buffering also provides a “fire break” for back-pressure. Back-pressure
+        return values propagate back along a PushStream until they reach a part of 
+        the stream that is able to respond. For some PushEventSource implementations 
+        it is not possible to slow or delay event generation, however a buffer can 
+        always respond to back pressure by not releasing events from the buffer. 
+        Buffers can therefore be used to “smooth out” sources that produce bursts of 
+        events more quickly than they can be immediately processed. This simplifies 
+        the creation of PushEventConsumer instances, which can rely on their 
+        back-pressure requests being honoured.</para>
+      
+        <para>Buffering is provided by the Push Stream using default configuration values,
+        either when creating the Push Stream from the Push Stream Provider, or using the
+        <code>buffer</code> method. These values can be overridden by using a 
+        <code>PushStreamBuilder</code> to explicitly provide the buffering parameters. If 
+        no Executor is provided then the PushStream will create its own internal Executor 
+        with the same number of threads as the defined parallelism. An internally created 
+        Executor will be shut down when the PushStream is closed.</para>
+        
+        <para>The PushStreamBuilder can be used to customize the buffer at the start of 
+        the PushStream, or it can be used to create an unbuffered PushStream. An unbuffered 
+        PushStream uses the incoming event delivery thread to process the events, and 
+        therefore users must be careful not to block the thread, or perform long-running 
+        tasks. The default configuration when buffering is as follows:</para>
+        
+        <itemizedlist>
+          <listitem><para>A parallelism of one</para></listitem>
+          <listitem><para>A <code>FAIL</code> QueuePolicy</para></listitem>
+          <listitem><para>A <code>LINEAR</code> PushbackPolicy with a maximum pushback of one second</para></listitem>
+          <listitem><para>A Buffer with a capacity of 32 elements</para></listitem>
+        </itemizedlist>
+        
+
+        <section>
+          <title>Circuit Breakers</title>
+          <para>Buffering is a powerful tool in event processing pipelines, however it
+          cannot help in the situation where the average event production rate is higher
+          than the average processing rate. Rather than having an infinitely growing
+          buffer a circuit breaker is used. A circuit breaker is a buffer which fails
+          the stream when the buffer is full. This halts event processing and prevents
+          the consuming system from being overwhelmed.</para>
+          
+          <para>The default policy for push stream buffers is the FAIL policy, which
+          means that push stream buffers are all circuit breakers by default.</para>
+        </section>
+      </section>
+    
+    </section>
+    
+    <section>
+      <title>Forking</title>
+      
+      <para>Sometimes the processing that needs to be performed on an event is 
+      long-running. An important part of the asynchronous eventing model is that 
+      callbacks are short and non-blocking, which means that these callbacks should not 
+      run using the primary event thread. One solution to this is to buffer the stream, 
+      allowing a thread handoff at the buffer and limiting the impact of the long-running 
+      task. Buffering, however, has other consequences, and so it may be the case that a 
+      simple thread hand-off is preferable.</para>
+      
+      <para>Forking allows users to specify a maximum number of concurrent downstream 
+      operations. Incoming events will block if this limit has been reached. If there are 
+      blocked threads then the returned back pressure for an event will be equal to the 
+      number of queued threads multiplied by the supplied timeout value. If there are no 
+      blocked threads then the back pressure will be zero.</para>
     </section>
     
     <section>
       <title>Coalescing and Windowing</title>
   
-      <para>TODO</para>
+      <para>Coalescing and windowing are both processes by which multiple incoming
+      data events are collapsed into a single outgoing event.</para>
+      
+      <section>
+        <title>Coalescing</title>
+        <para>There are two main ways to coalesce a stream.</para>
+        
+        <para> The first mechanism delegates all
+        responsibility to the coalescing function, which returns an <code>Optional</code>.
+        The coalescing function is called for every data event, and returns an optional
+        which either has a value, or is empty. If the optional has a value then this value
+        is passed to the next stage of the processing pipeline. If the optional is empty
+        then no data event is passed to the next stage.
+        </para>
+
+        <para> The second mechanism allows the stream to be configured with a
+        (potentially variable) buffer size. The stream then stores values into this
+        buffer. When the buffer is full then the stream passes the buffer to the
+        handler function, which returns data to be passed to the next stage. If the
+        stream finishes when a buffer is partially filled then the partially filled
+        buffer will be passed to the handler function.</para>
+        
+        <para>When coalescing events there is no opportunity for feedback from the 
+        event handler while the events are being buffered. As a result back pressure 
+        from the handler is zero except when the event triggers a call to the next stage. 
+        When the next stage is triggered the back pressure from that stage is returned.</para>
+      </section>
+
+      <section>
+        <title>Windowing</title>
+        <para>Windowing is similar to coalescing, the primary difference between 
+        coalescing and windowing is the way in which the next stage of processing
+        is triggered. A coalescing stage collects events until it has the correct 
+        number and then passes them to the handler function, regardless of how long 
+        this takes. A windowing stage collects events for a given amount of time, and 
+        then passes the collected events to the handler function, regardless of how many 
+        events are collected.</para>
+        
+        <para>To avoid the need for a potentially infinite buffer a windowing stage may 
+        also place a limit on the number of events to be buffered. If this limit is reached 
+        then the window finishes early and the buffer is passed to the client, just like a 
+        coalescing stage. In this mode of operation the handler function is also passed the 
+        length of time for which the window lasted.</para>
+
+        <para>As windowing requires the collected events to be delivered asynchronously 
+        there is no opportunity for back-pressure from the previous stage to be applied 
+        upstream. Windowing therefore returns zero back-pressure in all cases except when 
+        a buffer size limit has been declared and is reached. If a window size limit is 
+        reached then the windowing stage returns the remaining window time as back 
+        pressure. Applying back pressure in this way means that the event source will 
+        tend not to repeatedly over saturate the window.</para>
+      </section>
+      
     </section>
 
     <section>
-      <title>Aggregating and Splitting</title>
+      <title>Merging and Splitting</title>
   
-      <para>TODO</para>
+      <para>Merging and Splitting are actions that can be used to combine push streams,
+      or to convert one stream into many streams.</para>
+      
+      <section>
+        <title>Merging</title>
+        <para>A client may need to consume data from more than one Event Sources. In 
+        this case the PushStream may be used to merge two event streams. The returned
+        stream will receive events from both parent streams, but will only close when
+        <emphasis>both</emphasis> parent streams have delivered terminal events.</para>
+      </section>
+      
+      <section>
+        <title>Splitting</title>
+        <para>Sometimes it is desirable to split a stream into multiple parallel pipelines. 
+        These pipelines are independent from the point at which they are split, but share 
+        the same source and upstream pipeline.</para>
+        
+        <para>Splitting a stream is possible using the 
+        <code>split(Predicate&lt;? super T &gt;... predicates)</code> method. For each 
+        predicate a PushStream will be returned that receives the events accepted by the 
+        predicate.</para>
+        
+        <para>The lifecycle of a split stream differs from that of a normal stream in two 
+        key ways:</para>
+        
+        <itemizedlist>
+          <listitem><para>The stream will begin event delivery when any of the downstream 
+          handlers encounters a terminal operation</para></listitem>
+          <listitem><para>The stream will only close when all of the downstream handlers 
+          are closed</para></listitem>
+        </itemizedlist>
+      </section>
     </section>
     
     <section>
       <title>The Push Stream Provider</title>
     
-      <para>TODO</para>
+      <para>The <code>PushStreamProvider</code> can be used to assist with a variety 
+      of asynchronous event handling use cases. A Push Stream Provider can create 
+      Push Stream instances from a Push Event Source, it can buffer an Push Event Consumer,
+      or it can turn a Push Stream into a reusable Push Event Source.</para>
       
       <section>
         <title>Building Buffers</title>
   
-        <para>TODO</para>
+        <para>The Push Stream Provider allows several types of buffered objects to be
+        created. By default all Push Streams are created with a buffer, but other
+        objects can also be wrapped in a buffer. For example a Push Event Consumer can
+        be wrapped in a buffer to isolate it from a Push Event Source. The 
+        <code>SimplePushEventSource</code> also has a buffer, which is used
+        to isolate the event producing thread from event consumers.</para>
+        
+        <para>In all cases buffers are configured using a <code>BufferBuilder</code>
+        with the following defaults:</para>
+        
+        <itemizedlist>
+          <listitem><para>A parallelism of one</para></listitem>
+          <listitem><para>A <code>FAIL</code> QueuePolicy</para></listitem>
+          <listitem><para>A <code>LINEAR</code> PushbackPolicy with a maximum pushback of one second</para></listitem>
+          <listitem><para>A Buffer with a capacity of 32 elements</para></listitem>
+        </itemizedlist>
+        
+        <para>If no Executor is provided when creating a buffer then the buffer will 
+        have its own internal Executor with the same number of threads as the defined 
+        parallelism. An internally created Executor will be shut down after the buffer has
+        processed a terminal event.</para>
+        
       </section>
 
       <section>
         <title>Simple Push Event Sources</title>
   
-        <para>TODO</para>
+        <para>The PushEventSource and PushEventConsumer are both functional interfaces, 
+        however it is noticeably harder to implement a PushEventSource than a 
+        PushEventConsumer. A PushEventSource must be able to support multiple 
+        independently closeable consumer registrations, all of which are providing 
+        potentially different amounts of back pressure.</para>
+        
+        <para>To simplify the case where a user wishes to write a basic event source the 
+        PushStreamProvider is able to create a SimplePushEventSource. The 
+        SimplePushEventSource handles the details of implementing PushEventSource, providing 
+        a simplified API for the event producing code to use.</para>
+        
+        <para>Events can be sent via the Simple Push Event Source <code>publish(T t)</code> 
+        method at any time until it is closed. These events may be silently ignored if no 
+        consumer is connected, but if one or more consumers are connected then the event 
+        will be asynchronously delivered to them, When the event has been delivered to all 
+        of the connected consumers then the returned promise will resolve.</para>
+        
+        <para>Close or error events can be sent equally easily using the 
+        <code>endOfStream()</code> and <code>error(Exception e)</code> methods. These will 
+        send disconnection events to all of the currently connected consumers and remove 
+        them from the Simple Push Event Source. Note that sending these events does not 
+        close the Simple Push Event Source. Subsequent connection attempts will succeed, 
+        and events can still be published.</para>
+        
+        <section>
+          <title>Optimising Event Creation</title>
+
+          <para>In addition to the publication methods the Simple Push Event Source 
+          provides <code>isConnected()</code> and <code>connectPromise()</code> methods. 
+          The isConnected method gives a point-in-time snapshot of whether there are any 
+          connections to the Simple Push Event Source. If this method returns false then 
+          the event producer may wish to avoid creating the event, particularly if it is 
+          computationally expensive to do so. The connectPromise method returns a Promise 
+          representing the current connection state. This Promise resolves when there is a 
+          client connected (which means it may be resolved immediately as it is created). 
+          If the Simple Push Event Source is closed before the Promise resolves then the 
+          Promise is failed with an IllegalStateException. The connect Promise can be used 
+          to trigger the initialisation of an event thread, allowing lazier startup.</para>
+        </section>
       </section>
-      
     </section>
-    
-    
-    
   </section>
 
 
