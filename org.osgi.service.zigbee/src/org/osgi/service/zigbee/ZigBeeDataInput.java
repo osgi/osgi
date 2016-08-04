@@ -16,16 +16,18 @@
 
 package org.osgi.service.zigbee;
 
+import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 
 /**
  * The {@code ZigBeeDataInput} interface is designed for converting a series of
  * bytes in java data types. The purpose of this interface is the same as the
- * DataInput interface that is in the java library, with the difference that in
- * this interface, byte ordering is little endian, whereas in the DataInput
- * interface is big endian.
+ * {@link DataInput} interface available in the standard java library, with the
+ * difference that in this interface, byte ordering is little endian, whereas in
+ * the DataInput interface is big endian.
  * 
+ * <p>
  * Each method provided by this interface read one or more bytes from the
  * underlying stream, combine them, and return a java data type. The pointer to
  * the stream is then moved immediately after the last byte read. If this
@@ -49,37 +51,55 @@ public interface ZigBeeDataInput {
 	public byte readByte() throws IOException;
 
 	/**
-	 * Read an an integer of the specified {@code size}.
+	 * Read an an integer of the specified {@code size}. The sign bit of the
+	 * {@code size}-bytes integer is left-extended. In other words if a
+	 * {@code readInt(2)} is issued and the byte read are 0x01, 0x02 and 0xf0,
+	 * the method returns 0xfff00201. For this reason if the 4 bytes read from
+	 * the stream represent an unsigned value, to get the expected value the and
+	 * bitwise operator must be used:
+	 * 
+	 * <p>
+	 * {@code int u = readInt(3) & 0xffffff;}
 	 * 
 	 * @param size the number of bytes that have to be read. Allowed values for
-	 *        this parameter are in the range (1, 4]. If b1 is the first read
-	 *        byte and b4 is the last (supposing that size is 4) then:
-	 *        <p>
-	 *        {@code int = (b1 & 0xff) | ((b2 & 0xff) << 8) | ((b3 & 0xff) << 16) |
-	 *        ((b4 & 0xff) << 24) }
-	 * 
-	 * @return the integer read.
+	 *        this parameter are in the range [1, 4].
+	 *
+	 * @return the integer read from the data input.
 	 * 
 	 * @throws EOFException When the end of the input has been reached and there
 	 *         are no more data to read.
 	 * 
 	 * @throws IOException If an I/O error occurs.
+	 * 
+	 * @throws IllegalArgumentException If the passed {@code size} is not in the
+	 *         allowed range.
 	 */
 	public int readInt(int size) throws IOException;
 
 	/**
 	 * 
-	 * Read a certain amount of bytes and returns a long.
+	 * Read a certain amount of bytes and returns a long. The sign bit of the
+	 * read {@code size}-bytes long is left-extended. In other words if a
+	 * readLong(2) is issued and the byte read are 0x01 and 0xf0, the method
+	 * returns 0xfffffffffffff001L. For this reason if the 2 bytes read from the
+	 * stream represent an unsigned value, to get the expected value the and
+	 * bitwise operator must be used:
+	 * 
+	 * <p>
+	 * {@code long u = readLong(2) & 0xffff;}
 	 * 
 	 * @param size the number of bytes that have to be read. Allowed values for
-	 *        this parameter are in the range (5, 8].
+	 *        this parameter are in the range [1, 8].
 	 * 
-	 * @return the long resulting from the bytes read.
+	 * @return The {@code long} value read from the data input.
 	 * 
 	 * @throws EOFException if there are not at least {@code size} bytes left on
 	 *         the data input.
 	 * 
 	 * @throws IOException If an I/O error occurs.
+	 * 
+	 * @throws IllegalArgumentException If the passed {@code size} is not in the
+	 *         allowed range.
 	 */
 	public long readLong(int size) throws IOException;
 
@@ -88,13 +108,15 @@ public interface ZigBeeDataInput {
 	 *        reading {@link ZigBeeDataTypes#FLOATING_SEMI} or
 	 *        {@link ZigBeeDataTypes#FLOATING_SINGLE}
 	 * 
-	 * @return a decoded float
+	 * @return The {@code float} number read from the data input.
 	 * 
 	 * @throws EOFException if there are not at least {@code size} bytes left on
 	 *         the data input.
 	 * 
 	 * @throws IOException If an I/O error occurs.
 	 * 
+	 * @throws IllegalArgumentException If the passed {@code size} is not in the
+	 *         allowed range.
 	 */
 	public float readFloat(int size) throws IOException;
 
