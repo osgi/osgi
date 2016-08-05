@@ -128,7 +128,7 @@ public class ZigBeeSerializer {
 		}
 	}
 
-	public long readLong(int pos, int size) throws EOFException {
+	public long readUnsignedLong(int pos, int size) throws EOFException {
 		if (size <= 8 && size != 0) {
 			try {
 				long l = 0;
@@ -144,6 +144,24 @@ public class ZigBeeSerializer {
 			}
 		} else {
 			throw new IllegalArgumentException();
+		}
+	}
+
+	public long readLong(int pos, int size) throws EOFException {
+
+		if (size >= 1 && size <= 8) {
+			pos += size;
+			try {
+				long l = data[--pos];
+				for (int i = 1; i < size; i++) {
+					l = (l << 8) | (data[--pos]) & 0xff;
+				}
+				return l;
+			} catch (IndexOutOfBoundsException e) {
+				throw new EOFException();
+			}
+		} else {
+			throw new IllegalArgumentException("Invalid size parameter, accepted values are (1, 8]");
 		}
 	}
 

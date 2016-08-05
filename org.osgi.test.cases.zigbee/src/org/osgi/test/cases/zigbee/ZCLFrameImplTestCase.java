@@ -296,9 +296,9 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		}
 
 		try {
-			assertEquals(0xfa, dataInput.readInt(1));
-			assertEquals(0xf2f1, dataInput.readInt(2));
-			assertEquals(0xf3f2f1, dataInput.readInt(3));
+			assertEquals(0xfffffffa, dataInput.readInt(1));
+			assertEquals(0xfffff2f1, dataInput.readInt(2));
+			assertEquals(0xfff3f2f1, dataInput.readInt(3));
 			assertEquals(0xf4f3f2f1, dataInput.readInt(4));
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input, ");
@@ -331,13 +331,13 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		}
 
 		try {
-			assertEquals(0xfa, dataInput.readLong(1));
-			assertEquals(0xf2f1, dataInput.readLong(2));
-			assertEquals(0xf3f2f1, dataInput.readLong(3));
-			assertEquals(0xf4f3f2f1L, dataInput.readLong(4));
-			assertEquals(0xf5f4f3f2f1L, dataInput.readLong(5));
-			assertEquals(0xf6f5f4f3f2f1L, dataInput.readLong(6));
-			assertEquals(0xf7f6f5f4f3f2f1L, dataInput.readLong(7));
+			assertEquals(0xfffffffffffffffaL, dataInput.readLong(1));
+			assertEquals(0xfffffffffffff2f1L, dataInput.readLong(2));
+			assertEquals(0xfffffffffff3f2f1L, dataInput.readLong(3));
+			assertEquals(0xfffffffff4f3f2f1L, dataInput.readLong(4));
+			assertEquals(0xfffffff5f4f3f2f1L, dataInput.readLong(5));
+			assertEquals(0xfffff6f5f4f3f2f1L, dataInput.readLong(6));
+			assertEquals(0xfff7f6f5f4f3f2f1L, dataInput.readLong(7));
 			assertEquals(0xf8f7f6f5f4f3f2f1L, dataInput.readLong(8));
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");

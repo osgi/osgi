@@ -91,14 +91,14 @@ class ZigBeeZCLDefaultSerializer {
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_16 :
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_24 :
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
-						os.writeInt(0xffffffff, size);
+						os.writeInt(-1, size);
 						return;
 
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_40 :
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_48 :
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_56 :
 					case ZigBeeDataTypes.UNSIGNED_INTEGER_64 :
-						os.writeLong(0xffffffffffffffffL, size);
+						os.writeLong(-1, size);
 						return;
 
 					default :
@@ -608,8 +608,9 @@ class ZigBeeZCLDefaultSerializer {
 			}
 
 			case ZigBeeDataTypes.UNSIGNED_INTEGER_32 :
+			case ZigBeeDataTypes.UTC_TIME :
 			case ZigBeeDataTypes.BACNET_OID : {
-				long l = is.readLong(4) & 0xffffffff;
+				long l = is.readLong(4) & 0xffffffffL;
 				if (l == 0xffffffffL) {
 					return null;
 				}
@@ -670,7 +671,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_24 : {
 				int i = is.readInt(3);
-				if (i == 0x800000) {
+				if ((i & 0xffffff) == 0x800000) {
 					return null;
 				}
 				return new Integer(i);
@@ -686,7 +687,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_40 : {
 				long l = is.readLong(5);
-				if (l == 0x8000000000L) {
+				if ((l & 0xffffffffffL) == 0x8000000000L) {
 					return null;
 				}
 				return new Long(l);
@@ -694,7 +695,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_48 : {
 				long l = is.readLong(6);
-				if (l == 0x800000000000L) {
+				if ((l & 0xffffffffffffL) == 0x800000000000L) {
 					return null;
 				}
 				return new Long(l);
@@ -702,7 +703,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.SIGNED_INTEGER_56 : {
 				long l = is.readLong(7);
-				if (l == 0x80000000000000L) {
+				if ((l & 0xffffffffffffffL) == 0x80000000000000L) {
 					return null;
 				}
 				return new Long(l);
@@ -763,7 +764,7 @@ class ZigBeeZCLDefaultSerializer {
 
 			case ZigBeeDataTypes.CLUSTER_ID :
 			case ZigBeeDataTypes.ATTRIBUTE_ID : {
-				int value = is.readInt(2);
+				int value = is.readInt(2) & 0xffff;
 				if (value == 0xffff) {
 					return null;
 				}
@@ -827,13 +828,10 @@ class ZigBeeZCLDefaultSerializer {
 				return value;
 			}
 
-			case ZigBeeDataTypes.UTC_TIME : {
-				long value = is.readLong(4);
-				if (value == 0xffffffffL) {
-					return null;
-				}
-				return new Long(value);
-			}
+			/*
+			 * case ZigBeeDataTypes.UTC_TIME : { long value = is.readLong(4); if
+			 * (value == 0xffffffffL) { return null; } return new Long(value); }
+			 */
 
 			case ZigBeeDataTypes.IEEE_ADDRESS : {
 				long l = is.readLong(8) & 0xffffffffffffffffL;

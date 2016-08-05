@@ -105,7 +105,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 		I = false;
 		A = false;
-		U = false;
+		U = true;
 
 		this.basicDataTypeChecks(ZigBeeGeneralData8.getInstance(), ZigBeeDataTypes.GENERAL_DATA_8, 1, Byte.class, U, I, A);
 		this.basicDataTypeChecks(ZigBeeGeneralData16.getInstance(), ZigBeeDataTypes.GENERAL_DATA_16, 2, Short.class, U, I, A);
@@ -516,10 +516,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					checkValue(dataType, payload, new Integer(0xfafbfc), size, new byte[] {(byte) 0xfc, (byte) 0xfb, (byte) 0xfa});
 				} else {
 					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Integer(0x7f0000), size, new byte[] {0x00, 0x00, 0x7f});
+					checkValue(dataType, payload, new Integer(0x7fffff), size, new byte[] {(byte) 0xff, (byte) 0xff, 0x7f});
 
 					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Integer(0x800000 + 1), size, new byte[] {(byte) 0x01, 0x00, (byte) 0x80});
+					checkValue(dataType, payload, new Integer(0xff800000 + 1), size, new byte[] {(byte) 0x01, (byte) 0x00, (byte) 0x80});
 				}
 			} else if (size == 4) {
 				/*
@@ -583,10 +583,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					checkValue(dataType, payload, new Long(0xf8f9fafbfcL), size, new byte[] {(byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
 				} else {
 					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Long(0x7f00000000L), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x7f});
+					checkValue(dataType, payload, new Long(0x7fffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
 
 					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Long(0x8000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, (byte) 0x80});
+					checkValue(dataType, payload, new Long(0xffffff8000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, (byte) 0x80});
 				}
 			} else if (size == 6) {
 				/*
@@ -602,7 +602,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 */
 				if (U) {
 					/*
-					 * the maximum unsigned value that fits into 4 bytes and
+					 * the maximum unsigned value that fits into 6 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
 					checkValue(dataType, payload, new Long(0xfffffffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
@@ -610,11 +610,12 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					// another number
 					checkValue(dataType, payload, new Long(0xf8f9fafbfcfdL), size, new byte[] {(byte) 0xfd, (byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
 				} else {
-					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Long(0x7f0000000000L), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x7f});
+					// the maximum signed value that fits into 6 bytes.
+					checkValue(dataType, payload, new Long(0x7fffffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
 
-					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Long(0x800000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
+					// the minimum signed value that fits into 6 bytes and it is
+					// not an Invalid Number
+					checkValue(dataType, payload, new Long(0xffff800000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
 				}
 			} else if (size == 7) {
 				/*
@@ -630,7 +631,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				 */
 				if (U) {
 					/*
-					 * the maximum unsigned value that fits into 4 bytes and
+					 * the maximum unsigned value that fits into 7 bytes and
 					 * that it cannot confused with an Invalid number
 					 */
 					checkValue(dataType, payload, new Long(0xfffffffffffffeL), size, new byte[] {(byte) 0xfe, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff});
@@ -638,11 +639,14 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 					// another number
 					checkValue(dataType, payload, new Long(0xf8f9fafbfcfdfeL), size, new byte[] {(byte) 0xfe, (byte) 0xfd, (byte) 0xfc, (byte) 0xfb, (byte) 0xfa, (byte) 0xf9, (byte) 0xf8});
 				} else {
-					// the maximum signed value that fits into 3 bytes.
-					checkValue(dataType, payload, new Long(0x7f000000000000L), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f});
+					// the maximum signed value that fits into 7 bytes.
+					checkValue(dataType, payload, new Long(0x7fffffffffffffL), size, new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x7f});
 
-					// the minimum signed value that fits into 3 bytes
-					checkValue(dataType, payload, new Long(0x80000000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
+					/*
+					 * the minimum signed value that fits into 7 bytes and that
+					 * it cannot confused with an Invalid number
+					 */
+					checkValue(dataType, payload, new Long(0xff80000000000000L + 1), size, new byte[] {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80});
 				}
 			} else if (size == 8) {
 				/*
@@ -784,7 +788,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			}
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);
 
-			checkValue(dataType, payload, new Double(-218.5), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x50, 0x6b, (byte) 0xc0});
+			checkValue(dataType, payload, new Double(-252.5), size, new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x90, 0x6f, (byte) 0xc0});
 
 		} else if (clazz.equals(Boolean.class)) {
 			checkAgainstSerializeWrongJavaType(dataType, dataOutput);
