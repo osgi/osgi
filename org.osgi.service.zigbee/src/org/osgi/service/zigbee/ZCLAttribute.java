@@ -37,9 +37,15 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * Gets the current value of the attribute.
 	 * 
 	 * <p>
-	 * As described in "2.4.1.3 Effect on Receipt" chapter of the ZCL, a "read
-	 * attribute" can have the following status: SUCCESS, or
+	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
+	 * specification, a <em>Read
+	 * attributes</em> can have the following status: SUCCESS, or
 	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}).
+	 * 
+	 * TODO: change to use promises.
+	 * 
+	 * FIXME: what if the data type of this attribute do not exist in the ZigBee
+	 * specification?
 	 * 
 	 * <p>
 	 * The response object given to the handler is the attribute's Java data
@@ -48,6 +54,7 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * of an invalid value).
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
+	 *         TODO: update here the documentation.
 	 * 
 	 * 
 	 */
@@ -57,20 +64,28 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * Sets the current value of the attribute.
 	 * 
 	 * <p>
-	 * As described in "2.4.3.3 Effect on Receipt" chapter of the ZCL, a "write
-	 * attribute" can have the following status: SUCCESS, UNSUPPORTED_ATTRIBUTE,
-	 * INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see {@link ZCLException}),
-	 * or NOT_AUTHORIZED (see {@link ZDPException}).
+	 * As described in section <em>2.4.3.3 Effect on Receipt</em> of the ZCL
+	 * specification, a <em>Write
+	 * attributes</em> may return the following status: SUCCESS,
+	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
+	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
 	 * 
 	 * <p>
-	 * The response object given to the handler is a Boolean set to true if the
-	 * attribute value has been written. A null value is processed as an invalid
-	 * number. In case of an error has occurred, onFailure is called with a
-	 * ZCLException.
+	 * 
+	 * TODO: change to use promises. Get rid of the Boolean.
+	 * 
+	 * FIXME: what if the data type of this attribute do not exist in the ZigBee
+	 * specification?
+	 * 
+	 * The response object given to the promise is a {@link Boolean} set to
+	 * {@code true} if the attribute value has been written. A null value is
+	 * processed as an invalid number. In case of an error has occurred,
+	 * onFailure is called with a ZCLException.
 	 * 
 	 * @param value the Java value to set
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
+	 *         TODO: describe the returned values.
 	 * 
 	 */
 	public Promise/* <Boolean> */ setValue(Object value);
