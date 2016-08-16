@@ -60,11 +60,11 @@ public class ZigBeeSignedInteger40
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.SIGNED_INTEGER_40, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.SIGNED_INTEGER_40, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.SIGNED_INTEGER_40);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.SIGNED_INTEGER_40);
 	}
 
 }

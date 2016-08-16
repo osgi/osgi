@@ -60,11 +60,11 @@ public class ZigBeeGeneralData48
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.GENERAL_DATA_48, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.GENERAL_DATA_48, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.GENERAL_DATA_48);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.GENERAL_DATA_48);
 	}
 
 }

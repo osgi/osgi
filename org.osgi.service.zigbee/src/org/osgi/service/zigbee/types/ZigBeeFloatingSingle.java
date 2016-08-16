@@ -60,11 +60,11 @@ public class ZigBeeFloatingSingle
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.FLOATING_SINGLE, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.FLOATING_SINGLE, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.FLOATING_SINGLE);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.FLOATING_SINGLE);
 	}
 
 }

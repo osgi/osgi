@@ -60,11 +60,11 @@ public class ZigBeeClusterID
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.CLUSTER_ID, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.CLUSTER_ID, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.CLUSTER_ID);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.CLUSTER_ID);
 	}
 
 }

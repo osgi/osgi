@@ -60,11 +60,11 @@ public class ZigBeeBACnet
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BACNET_OID, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BACNET_OID, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BACNET_OID);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BACNET_OID);
 	}
 
 }

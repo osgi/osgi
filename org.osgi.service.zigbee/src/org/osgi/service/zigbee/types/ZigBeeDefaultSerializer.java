@@ -32,7 +32,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
  * 
  * @author $Id$
  */
-class ZigBeeZCLDefaultSerializer {
+class ZigBeeDefaultSerializer {
 	static final long zigBeeTimeZero = 946684800000L;	// 1/1/2000
 
 	/**

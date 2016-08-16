@@ -60,11 +60,11 @@ public class ZigBeeUTCTime
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UTC_TIME, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UTC_TIME, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UTC_TIME);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UTC_TIME);
 	}
 
 }

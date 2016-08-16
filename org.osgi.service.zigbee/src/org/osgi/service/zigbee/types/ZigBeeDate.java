@@ -66,11 +66,11 @@ public class ZigBeeDate
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.DATE, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.DATE, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.DATE);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.DATE);
 	}
 
 }

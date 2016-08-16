@@ -60,11 +60,11 @@ public class ZigBeeFloatingSemi
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.FLOATING_SEMI, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.FLOATING_SEMI, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.FLOATING_SEMI);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.FLOATING_SEMI);
 	}
 
 }

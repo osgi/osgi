@@ -61,11 +61,11 @@ public class ZigBeeUnsignedInteger64
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UNSIGNED_INTEGER_64, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.UNSIGNED_INTEGER_64, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UNSIGNED_INTEGER_64);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.UNSIGNED_INTEGER_64);
 	}
 
 }

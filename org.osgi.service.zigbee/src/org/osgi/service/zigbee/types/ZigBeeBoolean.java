@@ -60,11 +60,11 @@ public class ZigBeeBoolean
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BOOLEAN, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.BOOLEAN, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BOOLEAN);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.BOOLEAN);
 	}
 
 }

@@ -60,11 +60,11 @@ public class ZigBeeLongCharacterString
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.LONG_CHARACTER_STRING, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.LONG_CHARACTER_STRING, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.LONG_CHARACTER_STRING);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.LONG_CHARACTER_STRING);
 	}
 
 }

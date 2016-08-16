@@ -60,11 +60,11 @@ public class ZigBeeAttributeID
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.ATTRIBUTE_ID, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.ATTRIBUTE_ID, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.ATTRIBUTE_ID);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.ATTRIBUTE_ID);
 	}
 
 }

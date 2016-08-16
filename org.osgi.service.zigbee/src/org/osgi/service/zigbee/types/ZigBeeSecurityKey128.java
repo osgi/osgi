@@ -60,11 +60,11 @@ public class ZigBeeSecurityKey128
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.SECURITY_KEY_128, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.SECURITY_KEY_128, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.SECURITY_KEY_128);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.SECURITY_KEY_128);
 	}
 
 }

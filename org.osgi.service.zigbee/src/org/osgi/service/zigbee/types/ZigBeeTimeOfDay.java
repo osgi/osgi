@@ -64,11 +64,11 @@ public class ZigBeeTimeOfDay
 	}
 
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException {
-		ZigBeeZCLDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.TIME_OF_DAY, value);
+		ZigBeeDefaultSerializer.serializeDataType(os, ZigBeeDataTypes.TIME_OF_DAY, value);
 	}
 
 	public Object deserialize(ZigBeeDataInput is) throws IOException {
-		return ZigBeeZCLDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.TIME_OF_DAY);
+		return ZigBeeDefaultSerializer.deserializeDataType(is, ZigBeeDataTypes.TIME_OF_DAY);
 	}
 
 }
