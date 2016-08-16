@@ -586,43 +586,64 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZigBeeNode.getNodeDescriptor-ZigBeeHandler-"
-        xrefstyle="hyperlink"/> – Returns a <xref
-        linkend="org.osgi.service.zigbee.ZigBeeHandler"
-        xrefstyle="hyperlink"/> object that is asynchronously notified with a
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getNodeDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with a
         <xref
         linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor"
         xrefstyle="hyperlink"/> object representing the Node Descriptor which
-        contains information about the node capabilities. On failure, an
-        exception is returned.</para>
+        contains information about the node capabilities. On failure, the promise is resolved with an
+        exception instead.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZigBeeNode.getPowerDescriptor-ZigBeeHandler-"
-        xrefstyle="hyperlink"/> – Returns a <xref
-        linkend="org.osgi.service.zigbee.ZigBeeHandler"
-        xrefstyle="hyperlink"/> object that is asynchronously notified with a
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getComplexDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link 
+        linkend="org.osgi.util.promise.Promise" 
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with a
+        <xref
+        linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor"
+        xrefstyle="hyperlink"/> object representing the Complex Descriptor
+        which contains extended information for each device description
+        contained in this node. On failure, the promise is resolved with an 
+        exception instead, especially an exception with <xref 
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR" 
+        xrefstyle="hyperlink"/> 
+        error code if no Complex Descriptor is provided.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getPowerDescriptor--"
+        xrefstyle="hyperlink"/> – Returns a <link 
+        linkend="org.osgi.util.promise.Promise" 
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with a
         <xref
         linkend="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor"
-        xrefstyle="hyperlink"/> object representing the Complex Descriptor
-        which contains extended information for each device descriptions
-        contained in this node. On failure, an exception is returned, esp. an
-        execption with <code>NO_DESCRIPTOR</code> error code if no Complex
-        Descriptor is provided.</para>
+        xrefstyle="hyperlink"/> object representing the Power Descriptor
+        which contains power-related information of this node. On failure, 
+        the promise is resolved with an exception instead, especially an 
+        exception with <xref 
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR" 
+        xrefstyle="hyperlink"/> 
+        error code if no Power Descriptor is provided.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZigBeeNode.getUserDescription-ZigBeeHandler-"
-        xrefstyle="hyperlink"/> – Returns a <xref
-        linkend="org.osgi.service.zigbee.ZigBeeHandler"
-        xrefstyle="hyperlink"/> object that is asynchronously notified with
+        linkend="org.osgi.service.zigbee.ZigBeeNode.getUserDescription--"
+        xrefstyle="hyperlink"/> – Returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with
         the unique field named “User description” of the User Descriptor,
         which contains information that allows the user to identify the device
-        using user-friendly character string. On failure, an exception is
-        returned, esp. an exception with <code>NO_DESCRIPTOR</code> error code
-        if no User Descriptor is provided.</para>
+        using user-friendly character string. On failure, the promise is resolved 
+        with an exception instead, especially an exception with <xref 
+        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR" 
+        xrefstyle="hyperlink"/>  
+        error code if no User Descriptor is provided.</para>
       </listitem>
     </itemizedlist>
 
@@ -817,13 +838,13 @@ public class UI {
     cluster.</para>
 
     <para>Every endpoint must provide a simple descriptor. <xref
-    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getSimpleDescriptor-ZigBeeHandler-"
-    xrefstyle="hyperlink"/> returns a <xref
-    linkend="org.osgi.service.zigbee.ZigBeeHandler" xrefstyle="hyperlink"/>
-    object that is asynchronously notified with a <xref
+    linkend="org.osgi.service.zigbee.ZigBeeEndpoint.getSimpleDescriptor--"
+    xrefstyle="hyperlink"/> returns a <link
+    linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink">Promise</link>
+    object that is asynchronously resolved with a <xref
     linkend="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor"
     xrefstyle="hyperlink"/> object which contains general information about
-    the endpoint.</para>
+    the endpoint or with an exception in case of a failure.</para>
 
     <para><xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
     xrefstyle="hyperlink"/> interface provides two methods to bind and unbind
@@ -930,19 +951,22 @@ public class UI {
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZCLCluster.readAttributes-ZCLAttributeInfo---ZigBeeHandler-"
+        linkend="org.osgi.service.zigbee.ZCLCluster.readAttributes-ZCLAttributeInfo---"
         xrefstyle="hyperlink"/> – The ZigBee Base driver MAY generate the read
         attributes command on behalf of the OSGi application that is invoking
-        <code>readAttributes()</code> method</para>
+        <code>readAttributes()</code> method. The latter returns a <link
+        linkend="org.osgi.util.promise.Promise"
+        xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with a
+        <code>Map</code> of attribute values identified by their attribute identifiers. On 
+        failure, the promise is resolved with an exception instead.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZCLCluster.writeAttributes-boolean-Map-ZigBeeHandler-"
+        linkend="org.osgi.service.zigbee.ZCLCluster.writeAttributes-boolean-Map-"
         xrefstyle="hyperlink"/> – The ZigBee Base driver generates the write
         attributes command on behalf of the OSGi application that is invoking
-        <code>writeAttributes()</code> method. If the handler is set to null,
-        the base driver should use a 'no response' ZigBee general command. The
+        <code>writeAttributes()</code> method. The
         boolean <code>undivided</code> parameter specifies that if any
         attribute cannot be written (e.g. If an attribute is not implemented
         on the device, or a value to be written is outside the valid range),
@@ -957,8 +981,8 @@ public class UI {
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-ZCLCommandHandler-"
-        xrefstyle="hyperlink"/> – a sequence of byte represents the command
+        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-"
+        xrefstyle="hyperlink"/> – a sequence of bytes represents the command
         frame. The source endpoint is not specified in this method call. To
         send the appropriate message on the network, the base driver must
         generate a source endpoint. The latter must not correspond to any
@@ -967,13 +991,13 @@ public class UI {
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-ZCLCommandHandler-String-"
+        linkend="org.osgi.service.zigbee.ZCLCluster.invoke-ZCLFrame-String-"
         xrefstyle="hyperlink"/> – a sequence of bytes represents the command
         frame, and exportedServicePID is the source endpoint of the command
         request. In targeted situations, the source endpoint is the valid
         service PID of an exported endpoint.</para>
 
-        <para>A handler is provided to manage the command response
+        <para>A <code>Promise</code> is returned and manages the command response
         asynchronously.</para>
       </listitem>
     </itemizedlist>
@@ -1609,7 +1633,7 @@ public class UI {
 				</row>
 				<row>
 					<entry>
-						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.SRUCTURE"
+						<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.STRUCTURE"
 							xrefstyle="hyperlink" />
 					</entry>
 					<entry>Structure</entry>
