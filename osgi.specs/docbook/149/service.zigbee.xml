@@ -196,9 +196,12 @@
       </listitem>
 
       <listitem>
-        <para><emphasis role="italic">ZigBee Handler</emphasis> – A ZigBee
-        handler is a helper that manages asynchronous communication with the
-        base driver. This entity is represented, e.g. by ZigBeeHandler.</para>
+        <para><emphasis role="italic">ZigBee Command Response Stream</emphasis> – A 
+        stream is a helper that manages asynchronous responses from several endpoints 
+        that received a same request message. This entity is represented by 
+        a ZigBeeCommandResponseStream. For methods that generates a message to a 
+        unique endpoint, a <link linkend="org.osgi.util.promise.Promise" 
+        xrefstyle="hyperlink">Promise</link> is used instead.</para>
       </listitem>
 
       <listitem>
@@ -328,14 +331,17 @@
     attributes.</para>
 
     <para>Several methods obey an asynchronous mechanism. For instance, ZigBee
-    command invocation is made through the call to ZCLCommand invoke method
-    that returns nothing. A handler object – here a ZCLCommandHandler – is
-    passed as an argument in this method call. When the command response is to
-    be received, a callback – here notifyResponse() – is called on the handler
-    to convey the command response frame. It is called by the base driver in
-    the device import situation and it is called by the local <xref
-    linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
-    in the device export situation.</para>
+    command invocation is made through the call to ZCLCluster invoke method
+    that returns a <code>Promise</code>. When the command response is received, 
+    the Promise is resolved and <code>Promise.getValue()</code> returns the expected 
+    response value. The <code>Promise</code> is resolved by the base driver in
+    the device import situation and by the invoked local <xref
+    linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>
+    in the device export situation. A <xref 
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
+    xrefstyle="hyperlink"/> is used instead of a <code>Promise</code> in case
+    of a method that generates a message broadcasted (or groupcasted) to potentially 
+    several endpoints.</para>
 
     <para>OSGi bundles – called listeners in Figure 3 – subscribe to attribute
     value changes through the White Board Pattern (<xref
@@ -1142,16 +1148,54 @@ public class UI {
   </section>
 
   <section>
-    <title>ZigBee Handlers</title>
+    <title>Promise and ZCLCommandResponseStream objects for asynchronous message communication</title>
 
-    <para>The ZigBee Handlers (i.e. <xref
-    linkend="org.osgi.service.zigbee.ZigBeeHandler" xrefstyle="hyperlink"/>,
-    <xref linkend="org.osgi.service.zigbee.ZDPHandler" xrefstyle="hyperlink"/>
-    and <xref linkend="org.osgi.service.zigbee.ZCLCommandHandler"
-    xrefstyle="hyperlink"/>) help to manage asynchronous communication with
-    the base driver. The defined interfaces are used when requesting the base
-    driver and provide <code>onSuccess()</code> and <code>onFailure()</code>
-    methods for managing responses.</para>
+    <para><link linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink">
+    Promise</link> and <xref 
+    linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
+    xrefstyle="hyperlink"/> objects handle ZigBee network 
+    communication latency and errors. A Promise is returned by every method 
+    that generates a message exchange with one ZigBee endpoint, i.e., the sending 
+    of a message to this endpoint and the handling of a unique response from this 
+    endpoint.</para> 
+    
+    <para>A ZCLCommandResponseStream is returned by every method 
+    that generates the sending of a message to potentially several endpoints 
+    with the expectation of a response from several of them. This is the case
+    for the following message invocation types:
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>
+        Broadcasting: Sending a message to all available endpoints of a specific 
+        type and receiving responses from each of them, see         
+        <xref
+        linkend="org.osgi.service.zigbee.ZigBeeHost.broadcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>.
+		</para>
+      </listitem>
+
+      <listitem>
+        <para>
+		Groupcasting: Sending a message to the endpoints of a specific type in a 
+		group of endpoints and receiving responses from each of them, see         
+        <xref
+        linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>. 
+		</para>
+      </listitem>
+
+      <listitem>
+        <para>Nodecasting: Sending a message to the endpoints of a specific type 
+        on a node and receiving responses from each of them, see         
+        <xref
+        linkend="org.osgi.service.zigbee.ZigBeeNode.broadcast-int-ZCLFrame-String-"
+        xrefstyle="hyperlink"/>.
+		</para>
+      </listitem>
+    </itemizedlist>    
+    
   </section>
 
   <section>
