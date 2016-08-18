@@ -128,8 +128,14 @@
       <listitem>
         <para><emphasis role="italic">ZigBee Device Description</emphasis> –
         Statically describes a ZigBee endpoint by providing its input/output
-        clusters and specifies which of these clusters are mandatory or not.
-        This entity is represented by a ZigBeeDeviceDescription object.</para>
+        clusters and specifies which of described commands and attributes are 
+        mandatory or not. This entity is represented by a 
+        ZigBeeDeviceDescription object.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="italic">ZigBee Device Description Set</emphasis> – 
+        A service representing a set of ZigBeeDeviceDescription objects.</para>
       </listitem>
 
       <listitem>
@@ -219,7 +225,7 @@
         services.</para>
       </listitem>
 
-      <listitem>
+      <!-- listitem>
         <para><emphasis role="italic">ZCL Exception</emphasis> – An exception
         that delivers errors that occurred in the ZigBee stack or internally
         by the ZigBee Base Driver or by the ZigBee network.</para>
@@ -240,7 +246,7 @@
       <listitem>
         <para><emphasis role="italic">ZCL Header</emphasis> – A ZCL header
         that describes the header of a ZCL frame.</para>
-      </listitem>
+      </listitem-->
 
       <listitem>
         <para><emphasis role="italic">ZigBee Group</emphasis> – Enables group
@@ -658,7 +664,7 @@
     send network frames within ZDP layer, while invoking ZigBee Cluster
     Library (ZCL) commands is enabled on <xref
     linkend="org.osgi.service.zigbee.ZCLCluster"
-    xrefstyle="hyperlink"/>ZCLCluster object. ZCL commands can be however
+    xrefstyle="hyperlink"/> object. ZCL commands can be however
     broadcasted on a ZigBee node thanks to <code>ZigBeeNode.broadcast()</code>
     methods. Broadcasting enables the sending of a ZCL command to all clusters
     identified with an identifier of all endpoints available on the targeted
@@ -708,8 +714,8 @@ public class UI {
                     	 String friendlyName = (String) p.getValue();
                     	 createUINode(node, friendlyName);
                     } catch (InvocationTargetException e) {
-                         log.info("Get User Description command returned a failure: " 
-		                            				+ e.getMessage() + ”.”);
+                         log.info("Get User Description command returned "
+                                   + "a failure: " + e.getMessage() + ”.”);
                          createUINode(node, "No friendly name");
                     } catch (InterruptedException e) {
                          e.printStackTrace();
@@ -1152,7 +1158,7 @@ public class UI {
   </section>
 
   <section>
-    <title>Promise and ZCLCommandResponseStream objects for asynchronous message communication</title>
+    <title>Promise and ZCLCommandResponseStream objects</title>
 
     <para><link linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink">
     Promise</link> and <xref 
@@ -2092,28 +2098,28 @@ public class UIOnOffButton implements ZCLEventListener {
         if (srs.length&gt;0){
             ZCLCluster onOffCluster =
                 ((ZigBeeEndpoint) bundleContext.getService(srs[0]))
-                .getServerCluster(ZCL_ONOFF_CLUSTER_ID);
-	        if (onOffCluster != null) {
-	            Promise p = onOffCluster.invoke(new ToggleCommand());
-	            p.onResolve(new Runnable() {
-	            	public void run(){
+                          .getServerCluster(ZCL_ONOFF_CLUSTER_ID);
+            if (onOffCluster != null) {
+                Promise p = onOffCluster.invoke(new ToggleCommand());
+                p.onResolve(new Runnable() {
+                    public void run(){
 	                    try { 
-	                    	ZCLFrame frame = (ZCLFrame) p.getValue();
-			                log.info("toggle command returned success.");
+                            ZCLFrame frame = (ZCLFrame) p.getValue();
+                            log.info("toggle command returned success.");
 			            } catch (InvocationTargetException e) {
-							log.info("toggle command returned a failure: " 
-			                		+ e.getMessage() + ”.”);
-			            } catch (InterruptedException e) {
-	                         e.printStackTrace();
-	                    }
-	                }
-		        });
-		    }
-	    }
-	}
-	
-	class ToggleCommand implements ZCLFrame {
-		...
+                            log.info("toggle command returned a failure: " 
+                                      + e.getMessage() + ”.”);
+                        } catch (InterruptedException e) {
+                             e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    class ToggleCommand implements ZCLFrame {
+        ...
 	}
 ...
 }
