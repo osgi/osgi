@@ -154,13 +154,12 @@ public interface ZigBeeEndpoint {
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
 	 * TABLE_FULL, NOT_SUPPORTED (see {@link APSException}). <br>
 	 * 
-	 * The response object given to the handler is a Boolean set to true if the
-	 * binding succeeds. In case of an error has occurred, onFailure is called
-	 * with a APSException.
-	 * 
-	 * @param servicePid to bound to
-	 * @param clusterId the cluster identifier to bound to
+	 * @param servicePid the PID of the endpoint to bind to
+	 * @param clusterId the cluster identifier to bind to
 	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getFailure()} returns null if the cluster has been
+	 *         successfully bound. The adequate APSException is returned
+	 *         otherwise.
 	 */
 	public Promise /* <Boolean> */ bind(String servicePid, int clusterId);
 
@@ -170,24 +169,24 @@ public interface ZigBeeEndpoint {
 	 * 
 	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
 	 * 
+	 * <p>
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an unbind
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * INVALID_BINDING (see {@link APSException}). <br>
-	 * 
-	 * The response object given to the handler is a Boolean set to true if the
-	 * unbinding succeeds. In case of an error has occurred, onFailure is called
-	 * with a APSException.
+	 * INVALID_BINDING (see {@link APSException}).
 	 * 
 	 * @param servicePid The pid of the service to unbind.
 	 * @param clusterId The cluster identifier to unbind.
 	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getFailure()} returns null if the cluster has been
+	 *         successfully bound. The adequate APSException is returned
+	 *         otherwise.
 	 */
 	public Promise /* <Boolean> */ unbind(String servicePid, int clusterId);
 
 	/**
-	 * This method is used to get details about problems when an error occurs
-	 * during exporting an endpoint
+	 * This method is called by the base driver and used to give details about
+	 * issues preventing the export of an endpoint.
 	 * 
 	 * @param e A device {@link ZigBeeException} the occurred exception
 	 */
@@ -196,24 +195,21 @@ public interface ZigBeeEndpoint {
 	/**
 	 * This method is used to get bound endpoints (identified by their service
 	 * PIDs). It is implemented on the base driver with Mgmt_Bind_req command.
-	 * It is implemented without a command request in local endpoints. If the
-	 * local method or command request is not supported, then an exception with
-	 * the following reason is thrown: GENERAL_COMMAND_NOT_SUPPORTED. If the
-	 * method fails to retrieve the full binding table (that could require
-	 * several Mgmt_Bind_req command), then an exception with the error code
-	 * that was sent on the last response is thrown. <br>
+	 * It is implemented without a command request in local endpoints.
 	 * 
+	 * <p>
 	 * As described in "Table 2.129 Fields of the Mgmt_Bind_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * Mgmt_Bind_rsp command can have the following status: NOT_SUPPORTED or any
 	 * status code returned from the APSME-GET.confirm primitive (see
-	 * {@link APSException}). <br>
-	 * 
-	 * The response object given to the Promise is a List containing the bound
-	 * endpoint service PIDs.
+	 * {@link APSException}).
 	 * 
 	 * @param clusterId
 	 * @return A promise representing the completion of this asynchronous call.
+	 *         {@link Promise#getValue()} returns a List of the bound endpoint
+	 *         service PIDs if the command is successful. The response object is
+	 *         null and the adequate APSException is returned by
+	 *         {@link Promise#getFailure()} otherwise.
 	 */
 	public Promise/* <List<String>> */ getBoundEndPoints(int clusterId);
 
