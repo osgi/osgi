@@ -701,18 +701,22 @@ class Controller extends ServiceTracker {
 
 public class UI {
     public void addNode(ZigBeeNode node) {
-    	node.getUserDescription(new ZigBeeHandler(){
-              
-              public void onSuccess(Object response) {
-                    String friendlyName = (String) response;
-                    ZigBeeSimpleDescriptor sd = (ZigBeeSimpleDescriptor) response;
-                    createUINode(node, friendlyName);
-              }
-              
-              public void onFailure(Exception e) {
-                    createUINode(node, "No friendly name");
+    	Promise p = node.getUserDescription;
+    	p.onResolve(new Runnable(){
+              public void run(){
+                    try { 
+                    	 String friendlyName = (String) p.getValue();
+                    	 createUINode(node, friendlyName);
+                    } catch (InvocationTargetException e) {
+                         log.info("Get User Description command returned a failure: " 
+		                            				+ e.getMessage() + ”.”);
+                         createUINode(node, "No friendly name");
+                    } catch (InterruptedException e) {
+                         e.printStackTrace();
+                    }
               }
         });
+              
     }
 ...
 } 
@@ -982,7 +986,7 @@ public class UI {
 
     <para><xref linkend="org.osgi.service.zigbee.ZCLCluster"
     xrefstyle="hyperlink"/> objects use ZCLFrame to invoke ZigBee commands
-    using a handler based response:</para>
+    using a <code>Promise</code> as a response:</para>
 
     <itemizedlist>
       <listitem>
@@ -1081,7 +1085,7 @@ public class UI {
     xrefstyle="hyperlink"/>. <xref
     linkend="org.osgi.service.zigbee.ZCLAttribute" xrefstyle="hyperlink"/>
     provides <code>getValue()</code> and <code>setValue()</code> to retrieve
-    and set current attribute value with the use of a handler, which returns
+    and set current attribute value with the use of a <code>Promise</code>, which returns
     the response asynchronously.</para>
   </section>
 
@@ -2066,11 +2070,11 @@ public class UIOnOffButton implements ZCLEventListener {
     }   
      
     public void notifyTimeOut(int timeout) {
-          System.out.println("Timeout notified");
+          log.info("Timeout notified");
     }
 
     public void onFailure(ZCLException e) {
-          System.err.println("Failure registering the listener: " + e.getMessage());
+          log.info("Failure registering the listener: " + e.getMessage());
     }
         
     public void changeUIValue(Object value) {
@@ -2090,25 +2094,19 @@ public class UIOnOffButton implements ZCLEventListener {
                 ((ZigBeeEndpoint) bundleContext.getService(srs[0]))
                 .getServerCluster(ZCL_ONOFF_CLUSTER_ID);
 	        if (onOffCluster != null) {
-	            onOffCluster.invoke(new ToggleCommand(), new ZCLCommandHandler() {
-	                public void notifyResponse(ZCLFrame frame, Exception e) {
-		                ZCLHeader header = frame.getHeader();
-		                if (header.getCommandId() == DEFAULT_RESPONSE_COMMAND_ID) {
-		                    ZigBeeDataInput is = frame.getDataInput();
-		                    try {
-		                        Short status = (Short) ZigBeeUnsignedInteger8
-		                        				.getInstance().deserialize(is);
-		                        if (status.shortValue() == 0 &amp;&amp; commandId == TOGGLE_COMMAND_ID) {
-		                            log.info("toggle command returned success.");
-		                        } else {
-		                            log.info("toggle command returned a failure: " 
-		                            				+ e.getMessage() + ”.”);
-		                        }
-		                    } catch (IOException ioe) {
-		                        ioe.printStackTrace();
-		                    }
-		                } 
-		            }
+	            Promise p = onOffCluster.invoke(new ToggleCommand());
+	            p.onResolve(new Runnable() {
+	            	public void run(){
+	                    try { 
+	                    	ZCLFrame frame = (ZCLFrame) p.getValue();
+			                log.info("toggle command returned success.");
+			            } catch (InvocationTargetException e) {
+							log.info("toggle command returned a failure: " 
+			                		+ e.getMessage() + ”.”);
+			            } catch (InterruptedException e) {
+	                         e.printStackTrace();
+	                    }
+	                }
 		        });
 		    }
 	    }
@@ -2525,10 +2523,10 @@ public class UIOnOffButton implements ZCLEventListener {
     <section>
       <title>Network coordination</title>
 
-      <para>In case <xref linkend="org.osgi.service.zigbee.ZigBeeHost"
+      <para>In case the <xref linkend="org.osgi.service.zigbee.ZigBeeHost"
       xrefstyle="hyperlink"/> is configured as the network coordinator ,
       <code>ZigBeeHost.getNodeDescriptor().getLogicalType()</code> MUST return
-      ZigBeeNode.<xref
+      <code>ZigBeeNode.</code><xref
       linkend="org.osgi.service.zigbee.ZigBeeNode.COORDINATOR"
       xrefstyle="hyperlink"/> constant value. <xref
       linkend="org.osgi.service.zigbee.ZigBeeHost" xrefstyle="hyperlink"/>
@@ -2537,17 +2535,25 @@ public class UIOnOffButton implements ZCLEventListener {
 
       <itemizedlist>
         <listitem>
-          <para><code>setChannel(byte channel, ZigBeeHandler handler)</code> –
-          Sets the network channel.</para>
+          <para>
+          <xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.updateNetworkChannel-byte-" 
+          xrefstyle="hyperlink"/> - 
+          Updates the network channel.</para>
         </listitem>
 
         <listitem>
-          <para><code>setChannelMask(int mask, ZigBeeHandler handler)</code> –
+          <para>
+          <xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.setChannelMask-int-" 
+          xrefstyle="hyperlink"/> - 
           Sets a new configured channel mask.</para>
         </listitem>
 
         <listitem>
-          <para><code>refreshNetwork(ZigBeeHandler handler)</code> – Requests
+          <para><xref
+          linkend="org.osgi.service.zigbee.ZigBeeHost.refreshNetwork--"
+          xrefstyle="hyperlink"/> – Requests
           the base driver to launch new discovery requests and refresh devices
           service registration according to current devices availability. This
           method is made mandatory since ZigBee specification allows devices
