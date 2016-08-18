@@ -161,7 +161,7 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate APSException is returned
 	 *         otherwise.
 	 */
-	public Promise /* <Boolean> */ bind(String servicePid, int clusterId);
+	public Promise /* <void> */ bind(String servicePid, int clusterId);
 
 	/**
 	 * This method modifies the <i>Binding Table</i> of physical device by
@@ -182,7 +182,7 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate APSException is returned
 	 *         otherwise.
 	 */
-	public Promise /* <Boolean> */ unbind(String servicePid, int clusterId);
+	public Promise /* <void> */ unbind(String servicePid, int clusterId);
 
 	/**
 	 * This method is called by the base driver and used to give details about

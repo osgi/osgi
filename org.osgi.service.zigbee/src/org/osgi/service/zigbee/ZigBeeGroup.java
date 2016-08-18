@@ -37,72 +37,60 @@ public interface ZigBeeGroup {
 	int getGroupAddress();
 
 	/**
-	 * This method is used for adding an endpoint to a Group, it may be invoked
-	 * on exported endpoints or even on imported endpoints. In the former case,
-	 * the ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API
-	 * defined by the ZigBee Specification, or it will use the proper commands
-	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
+	 * This method is used to add an endpoint to a group, it may be invoked on
+	 * exported and imported endpoints. In the former case, the ZigBee Base
+	 * Driver should rely on the <i>APSME-ADD-GROUP</i> API defined by the
+	 * ZigBee Specification, or it will use the proper commands of the
+	 * <i>Groups</i> cluster of the ZigBee Specification Library.
 	 * 
 	 * As described in "Table 2.15 APSME-ADD-GROUP.confirm Parameters" of the
-	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an
 	 * add_group request can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}).
+	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}). When the
+	 * joining is performed remotely on an imported {@link ZigBeeEndpoint}, it
+	 * may also fail because the command is not supported by the remote
+	 * endpoint, or because the remote device cannot perform the operation at
+	 * the moment (see {@link ZCLException}).
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to add to this Group.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         The expected object is always a {@link Boolean} indicating a
-	 *         failure or a success.
-	 * 
-	 * @throws APSException when the joining is performed locally on an exported
-	 *         {@link ZigBeeEndpoint} and it fails either with error code
-	 *         INVALID_PARAMETER or TABLE_FULL. This exception is also generated
-	 *         when the joining is performed remotely on an imported
-	 *         {@link ZigBeeEndpoint} and the communication with it fails.
-	 * 
-	 * @throws ZCLException when the joining is performed remotely on an
-	 *         imported {@link ZigBeeEndpoint} and it fails either because the
-	 *         command is not supported by the remote End Point, or the remote
-	 *         device cannot perform the operation at the moment.
+	 *         {@link Promise#getFailure()} returns null if the cluster has been
+	 *         successfully bound. The adequate {@link ZigBeeException} is
+	 *         returned otherwise.
 	 */
-	Promise /* <Boolean> */ joinGroup(String pid);
+	Promise /* <void> */ joinGroup(String pid);
 
 	/**
-	 * This method is used for adding an Endpoint to a Group, it may be invoked
-	 * on exported Endpoints or even on imported Endpoints. In the former case,
-	 * the ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
-	 * defined by the ZigBee Specification, or it will use the proper commands
-	 * of the <i>Groups</i> cluster of the ZigBee Specification Library.
+	 * This method is used for adding an endpoint to a group, it may be invoked
+	 * on exported and imported endpoints. In the former case, the ZigBee Base
+	 * Driver should rely on the <i>APSME-REMOVE-GROUP </i> API defined by the
+	 * ZigBee Specification, or it will use the proper commands of the
+	 * <i>Groups</i> cluster of the ZigBee Specification Library.
 	 * 
 	 * As described in "Table 2.17 APSME-REMOVE-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * remove_group request can have the following status: SUCCESS,
-	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}).
+	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}). When the
+	 * command is invoked remotely on an imported {@link ZigBeeEndpoint}, it may
+	 * also fail because the command is not supported by the remote endpoint, or
+	 * because the remote device cannot perform the operation at the moment (see
+	 * {@link ZCLException}).
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to remove from this Group.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         The expected object is always a {@link Boolean} indicating a
-	 *         failure or a success.
-	 * 
-	 * @throws APSException when the joining is performed locally on an exported
-	 *         {@link ZigBeeEndpoint} and it fails either with error code
-	 *         INVALID_PARAMETER or INVALID_GROUP. This exception is also
-	 *         generated when the joining is performed remotely on an imported
-	 *         {@link ZigBeeEndpoint} and the communication with it fails.
-	 * 
-	 * @throws ZCLException when the joining is performed remotely on an
-	 *         imported {@link ZigBeeEndpoint} and it fails either because the
-	 *         command is not supported by the remote End Point, or the remote
-	 *         device cannot perform the operation at the moment.
+	 *         {@link Promise#getFailure()} returns null if the cluster has been
+	 *         successfully bound. The adequate {@link ZigBeeException} is
+	 *         returned otherwise.
 	 */
-	Promise /* <Boolean> */ leaveGroup(String pid);
+	Promise /* <void> */ leaveGroup(String pid);
 
 	/**
-	 * Send a ZCL frame to the ZigBee group represented by this service. The
-	 * handler will provide the invocation response(s) in an asynchronous way.
+	 * Send a ZCL frame to the group represented by this service. The returned
+	 * stream will provide the invocation response(s) in an asynchronous way.
 	 * 
 	 * <p>
 	 * The source endpoint is not specified in this method call. To send the
@@ -112,14 +100,15 @@ public interface ZigBeeGroup {
 	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
 	 * 
-	 * @return a {@link ZCLCommandResponseStream} to collect all the ZCL frames
-	 *         in case of multiple responses.
+	 * @return a {@link ZCLCommandResponseStream} to collect every ZCL frame one
+	 *         after the other in case of multiple responses.
 	 */
 	ZCLCommandResponseStream groupcast(int clusterId, ZCLFrame frame);
 
 	/**
 	 * Send a ZCL frame to the ZigBee group represented by this service. The
-	 * handler will provide the invocation response(s) in an asynchronous way.
+	 * returned stream will provide the invocation response(s) in an
+	 * asynchronous way.
 	 * 
 	 * <p>
 	 * This method is to be used by applications when the targeted device has to
@@ -133,8 +122,8 @@ public interface ZigBeeGroup {
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
-	 * @return a {@link ZCLCommandResponseStream} to collect the ZCL frames in
-	 *         case of multiple responses.
+	 * @return a {@link ZCLCommandResponseStream} to collect every ZCL frame one
+	 *         after the other in case of multiple responses.
 	 */
 	ZCLCommandResponseStream groupcast(int clusterId, ZCLFrame frame, String exportedServicePID);
 
