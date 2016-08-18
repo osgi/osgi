@@ -26,9 +26,8 @@ import org.osgi.util.promise.Promise;
  * commands.
  * 
  * <p>
- * Any asynchronous method defined in this interface returns back its result by
- * calling <strong>at most once</strong>, the {@code onSuccess} method OR the
- * {@code onFailure} method on the passed handler.
+ * Every asynchronous method defined in this interface returns back its result
+ * trough the use of a {@link Promise}.
  * 
  * @author $Id$
  */
@@ -59,9 +58,8 @@ public interface ZCLCluster {
 	int getId();
 
 	/**
-	 * Get the cluster {@link ZCLAttribute} identifying corresponding attribute
-	 * that matches the given attributeId. Use, instead the
-	 * {@link ZCLCluster#getAttribute(int, int)} to retrieve
+	 * Get the cluster {@link ZCLAttribute} identifying that matches the given
+	 * attributeId. {@link ZCLCluster#getAttribute(int, int)} method retrieves
 	 * manufacturer-specific attributes.
 	 * 
 	 * @param attributeId the ZCL attribute identifier
@@ -142,17 +140,17 @@ public interface ZCLCluster {
 	 * 
 	 * <p>
 	 * As described in <em>§2.4.1.3 Effect on Receipt</em> section of the ZCL
-	 * specification, a <em>Read Attributes</em> command may result in a
-	 * successful read of an attribute, or in a failure. If the attribute is not
-	 * available status {@link ZCLException#UNSUPPORTED_ATTRIBUTE} is returned.
+	 * specification, a <em>Read Attributes</em> command results in a list of
+	 * attribute status records comprising a mix of successful and unsuccessful
+	 * attribute reads.
 	 * 
 	 * <p>
 	 * The method returns a promise. The object used to resolve the
 	 * {@link Promise} is a {@code Map<Integer,
 	 * Object>}. For each Map entry, the key contains the attribute identifier
 	 * and the value, the attribute value in the corresponding java wrapper type
-	 * (or null if an {@link ZCLException#UNSUPPORTED_ATTRIBUTE} occurred or in
-	 * case of an invalid value).
+	 * (or null in case of an unsupported attribute or in case of an invalid
+	 * value).
 	 * 
 	 * <p>
 	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
@@ -180,10 +178,11 @@ public interface ZCLCluster {
 	 * The promise resolves with a {@code Map<Integer, Integer>}. If all the
 	 * attributes have been written successfully, the map is empty. In case of
 	 * failure in writing specific attribute(s), the map is filled with entries
-	 * related to those attributes. The key is set with the attribute value that
-	 * were not written successfully, the value with the status returned in the
-	 * associated <em>write attribute response record</em> accordingly re-mapped
-	 * to one of the constants defined in the {@link ZCLException} class.
+	 * related to those attributes. Every key is set with the id of an attribute
+	 * that was not written successfully, every value with the status returned
+	 * in the associated <em>write attribute response record</em> accordingly
+	 * re-mapped to one of the constants defined in the {@link ZCLException}
+	 * class.
 	 * 
 	 * <p>
 	 * According to the ZigBee Specification all the attributes must be standard
@@ -222,10 +221,6 @@ public interface ZCLCluster {
 	 * promise fails with a {@code ZCLException} with code
 	 * {@code ZCLException.GENERAL_COMMAND_NOT_SUPPORTED}.
 	 * 
-	 * <p>
-	 * The response object given to the handler is an array containing the
-	 * commandIds. Each commandId is of {@code Integer} type.
-	 * 
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with
 	 *         {@code Integer[]} containing the the command identifiers
@@ -234,8 +229,8 @@ public interface ZCLCluster {
 	Promise /* <Integer[]> */ getCommandIds();
 
 	/**
-	 * Invokes the action. The handler will provide the invocation response in
-	 * an asynchronous way.
+	 * Invokes a command on this cluster with a {@link ZCLFrame}. The returned
+	 * promise provides the invocation response in an asynchronous way.
 	 * 
 	 * The source endpoint is not specified in this method call. To send the
 	 * appropriate message on the network, the base driver must generate a
@@ -243,7 +238,7 @@ public interface ZCLCluster {
 	 * 
 	 * @param frame The frame containing the command to issue.
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         It will be used in order to return the {@link ZCLFrame}.
+	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
 	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame);
 
@@ -259,7 +254,7 @@ public interface ZCLCluster {
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         It will be used in order to return the {@link ZCLFrame}.
+	 *         {@link Promise#getValue()} returns the response {@link ZCLFrame}.
 	 */
 	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame, String exportedServicePID);
 
