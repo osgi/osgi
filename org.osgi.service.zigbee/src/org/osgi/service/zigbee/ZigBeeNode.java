@@ -268,11 +268,6 @@ public interface ZigBeeNode {
 	 * <li>any status code returned from the NLMELEAVE.confirm primitive}
 	 * </ul>
 	 * 
-	 * <p>
-	 * The response object given to the handler is a Boolean set to true if the
-	 * leave succeeds. In case of an error has occurred, onFailure is called
-	 * with a ZCLException.
-	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         In case of success, the promise is resolved with a {@code null}
 	 *         value, otherwise with the correct {@link ZDPException} exception.
