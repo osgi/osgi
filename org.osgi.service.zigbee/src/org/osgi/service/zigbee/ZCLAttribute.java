@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee;
 
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -39,23 +40,18 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * <p>
 	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
 	 * specification, a <em>Read
-	 * attributes</em> can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link ZCLException}).
-	 * 
-	 * TODO: change to use promises.
-	 * 
-	 * FIXME: what if the data type of this attribute do not exist in the ZigBee
-	 * specification?
-	 * 
-	 * <p>
-	 * The response object given to the handler is the attribute's Java data
-	 * type (see {@link #getDataType()} method) that will contain the current
-	 * attribute value (or null if an UNSUPPORTED_ATTRIBUTE occurred or in case
-	 * of an invalid value).
+	 * attributes</em> command can have the following status: SUCCESS,
+	 * UNSUPPORTED_ATTRIBUTE, or INVALID_VALUE (see {@link ZCLException}).
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         TODO: update here the documentation.
-	 * 
+	 *         The response object returned by {@link Promise#getValue()} is the
+	 *         requested attribute value in the relevant Java data type (see
+	 *         {@link #getDataType()} method and
+	 *         {@link ZCLDataTypeDescription#getJavaDataType()}) or in
+	 *         {@code byte[]} if {@link #getDataType()} returns null. The
+	 *         response object is null if an UNSUPPORTED_ATTRIBUTE or
+	 *         INVALID_VALUE error occurs and the adequate ZCLException is
+	 *         returned by {@link Promise#getFailure()} .
 	 * 
 	 */
 	public Promise/* <Object> */ getValue();
@@ -66,28 +62,18 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * <p>
 	 * As described in section <em>2.4.3.3 Effect on Receipt</em> of the ZCL
 	 * specification, a <em>Write
-	 * attributes</em> may return the following status: SUCCESS,
+	 * attributes</em> command may return the following status: SUCCESS,
 	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
 	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
-	 * 
-	 * <p>
-	 * 
-	 * TODO: change to use promises. Get rid of the Boolean.
-	 * 
-	 * FIXME: what if the data type of this attribute do not exist in the ZigBee
-	 * specification?
-	 * 
-	 * The response object given to the promise is a {@link Boolean} set to
-	 * {@code true} if the attribute value has been written. A null value is
-	 * processed as an invalid number. In case of an error has occurred,
-	 * onFailure is called with a ZCLException.
 	 * 
 	 * @param value the Java value to set
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         TODO: describe the returned values.
+	 *         {@link Promise#getFailure()} returns null if the attribute value
+	 *         has been successfully written. The adequate ZigBeeException is
+	 *         returned otherwise.
 	 * 
 	 */
-	public Promise/* <Boolean> */ setValue(Object value);
+	public Promise/* <void> */ setValue(Object value);
 
 }
