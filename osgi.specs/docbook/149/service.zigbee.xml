@@ -2132,124 +2132,39 @@ public class UIOnOffButton implements ZCLEventListener {
     <title>ZCL Exception</title>
 
     <para>The <xref linkend="org.osgi.service.zigbee.ZCLException"
-    xrefstyle="hyperlink"/> can be thrown and holds information about the
+    xrefstyle="hyperlink"/> extends the <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeException"
+    xrefstyle="hyperlink"/>. It holds information about the
     different ZigBee ZCL layers. Error codes specified by ZigBee Alliance are
     conveyed by the errorCode field of <xref
     linkend="org.osgi.service.zigbee.ZCLException" xrefstyle="hyperlink"/>
-    objects:</para>
+    objects.</para>
+  </section>
 
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZCLException.FAILURE"
-        xrefstyle="hyperlink"/>– Operation was not successful.</para>
-      </listitem>
+ <section>
+    <title>ZDP Exception</title>
 
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.MALFORMED_COMMAND"
-        xrefstyle="hyperlink"/>– Wrong or missing field command.</para>
-      </listitem>
+    <para>The <xref linkend="org.osgi.service.zigbee.ZDPException"
+    xrefstyle="hyperlink"/> extends the <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeException"
+    xrefstyle="hyperlink"/>. It holds information about the
+    ZigBee ZDP layer. Error codes specified by ZigBee Alliance are conveyed by
+    the errorCode field of <xref
+    linkend="org.osgi.service.zigbee.ZDPException" xrefstyle="hyperlink"/>
+    objects.</para>
+  </section>
 
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.CLUSTER_COMMAND_NOT_SUPPORTED"
-        xrefstyle="hyperlink"/>– Cluster command not supported.</para>
-      </listitem>
+ <section>
+    <title>APS Exception</title>
 
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.GENERAL_COMMAND_NOT_SUPPORTED"
-        xrefstyle="hyperlink"/>– General command not supported.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.MANUF_GENERAL_COMMAND_NOT_SUPPORTED"
-        xrefstyle="hyperlink"/>– Manufacturer general command not
-        supported.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.MANUF_CLUSTER_COMMAND_NOT_SUPPORTED"
-        xrefstyle="hyperlink"/>- Manufacturer cluster command not
-        supported.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.INVALID_FIELD"
-        xrefstyle="hyperlink"/>– Invalid field.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.UNSUPPORTED_ATTRIBUTE"
-        xrefstyle="hyperlink"/>– Attribute not supported.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.INVALID_VALUE"
-        xrefstyle="hyperlink"/>– Invalid attribute value.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZCLException.READ_ONLY"
-        xrefstyle="hyperlink"/>– Read only attribute.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.INSUFFICIENT_SPACE"
-        xrefstyle="hyperlink"/>– Insufficient amount of free space.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.DUPLICATE_EXISTS"
-        xrefstyle="hyperlink"/>– Entry already exists in the table.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZCLException.NOT_FOUND"
-        xrefstyle="hyperlink"/>– Requested information can not be
-        found.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.UNREPORTABLE_TYPE"
-        xrefstyle="hyperlink"/>– Attribute periodic reports cannot be
-        issued.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.INVALID_DATA_TYPE"
-        xrefstyle="hyperlink"/>– Incorrect attribute data type.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.HARDWARE_FAILURE"
-        xrefstyle="hyperlink"/>– Operation unsuccessful due to a hardware
-        failure.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.SOFTWARE_FAILURE"
-        xrefstyle="hyperlink"/>– Operation unsuccessful due to a software
-        failure.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZCLException.CALIBRATION_ERROR"
-        xrefstyle="hyperlink"/>– An error occurred during calibration.</para>
-      </listitem>
-    </itemizedlist>
+    <para>The <xref linkend="org.osgi.service.zigbee.APSException"
+    xrefstyle="hyperlink"/> extends the <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeException"
+    xrefstyle="hyperlink"/>. It holds information about the
+    ZigBee APS layer. Error codes specified by ZigBee Alliance are conveyed by
+    the errorCode field of <xref
+    linkend="org.osgi.service.zigbee.APSException" xrefstyle="hyperlink"/>
+    objects.</para>
   </section>
 
   <section>
@@ -2270,105 +2185,6 @@ public class UIOnOffButton implements ZCLEventListener {
         linkend="org.osgi.service.zigbee.ZigBeeException.OSGI_MULTIPLE_HOSTS"
         xrefstyle="hyperlink"/>– several hosts exist for this PAN ID target or
         HOST_PID target.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
-    <title>ZDP Exception</title>
-
-    <para>The <xref linkend="org.osgi.service.zigbee.ZDPException"
-    xrefstyle="hyperlink"/> can be thrown and holds information about the
-    ZigBee ZDP layer. Error codes specified by ZigBee Alliance are conveyed by
-    the errorCode field of <xref
-    linkend="org.osgi.service.zigbee.ZDPException" xrefstyle="hyperlink"/>
-    objects:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.INV_REQUESTTYPE"
-        xrefstyle="hyperlink"/>– The supplied request type was invalid.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.DEVICE_NOT_FOUND"
-        xrefstyle="hyperlink"/>– The requested device did not exist on a
-        device following a child descriptor request to a parent.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.INVALID_EP"
-        xrefstyle="hyperlink"/>– The supplied endpoint was equal to 0 or above
-        241 (0xf1).</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.NOT_ACTIVE"
-        xrefstyle="hyperlink"/>– The requested endpoint is not described by a
-        simple descriptor.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.NOT_SUPPORTED"
-        xrefstyle="hyperlink"/>– The requested optional feature is not
-        supported on the target device.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.TIMEOUT"
-        xrefstyle="hyperlink"/>– A timeout has occurred with the requested
-        operation.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.NO_MATCH"
-        xrefstyle="hyperlink"/>– The end device bind request was unsuccessful
-        due to a failure to match any suitable clusters.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.NO_ENTRY"
-        xrefstyle="hyperlink"/>– The unbind request was unsuccessful due to
-        the coordinator or source device not having an entry in its binding
-        table to unbind.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.NO_DESCRIPTOR"
-        xrefstyle="hyperlink"/>– A child descriptor was not available
-        following a discovery request to a parent.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.INSUFFICIENT_SPACE"
-        xrefstyle="hyperlink"/>– The device does not have storage space to
-        support the requested operation.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.NOT_PERMITTED"
-        xrefstyle="hyperlink"/>– The device is not in the proper state to
-        support the requested operation.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref linkend="org.osgi.service.zigbee.ZDPException.TABLE_FULL"
-        xrefstyle="hyperlink"/>– The device does not have table space to
-        support the operation.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.zigbee.ZDPException.NOT_AUTHORIZED"
-        xrefstyle="hyperlink"/>– The permissions configuration table on the
-        target indicates that the request is not authorized from this
-        device.</para>
       </listitem>
     </itemizedlist>
   </section>
