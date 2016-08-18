@@ -111,8 +111,10 @@ public interface ZigBeeEndpoint {
 	 * NOT_ACTIVE, DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         It will be used in order to return the node simple descriptor
-	 *         {@link ZigBeeSimpleDescriptor}.
+	 *         {@link Promise#getValue()} returns the node simple descriptor
+	 *         {@link ZigBeeSimpleDescriptor} in case of success and
+	 *         {@link Promise#getFailure()} returns the adequate
+	 *         {@link ZCLException} otherwise.
 	 * 
 	 */
 	public Promise /* <ZigBeeSimpleDescriptor> */ getSimpleDescriptor();
