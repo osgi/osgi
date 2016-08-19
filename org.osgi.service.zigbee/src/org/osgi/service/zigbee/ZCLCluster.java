@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee;
 
 import java.util.Map;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -150,7 +151,9 @@ public interface ZCLCluster {
 	 * Object>}. For each Map entry, the key contains the attribute identifier
 	 * and the value, the attribute value in the corresponding java wrapper type
 	 * (or null in case of an unsupported attribute or in case of an invalid
-	 * value).
+	 * value). For attributes which data type serialization is not supported
+	 * (i.e, {@link ZCLDataTypeDescription#getJavaDataType()} returns null), the
+	 * value is of type byte[].
 	 * 
 	 * <p>
 	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
@@ -158,7 +161,7 @@ public interface ZCLCluster {
 	 * otherwise the promise must fail with a {@link IllegalArgumentException}
 	 * exception .
 	 * 
-	 * @param attributes An array of {@link ZCLAttributeInfo}
+	 * @param attributes An array of {@link ZCLAttributeInfo}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         The promise may fail with an {@link IllegalArgumentException}
@@ -192,7 +195,10 @@ public interface ZCLCluster {
 	 * @param undivided {@code true} if an undivided write attributes command is
 	 *        requested, {@code false} if not.
 	 * @param attributesAndValues A {@code Map<ZCLAttributeInfo, Object>} of
-	 *        attributes and values to be written.
+	 *        attributes and values to be written. For ZCLAttributeInfo objects
+	 *        which serialization is not supported (i.e,
+	 *        <code>getDataType().getJavaDataType()</code> returns null), the
+	 *        value must be of type byte[].
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         If resolved successfully the promise may return an empty {@code

@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee.types;
 
-import java.util.Set;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
@@ -50,7 +49,7 @@ public class ZigBeeSet
 	}
 
 	public Class getJavaDataType() {
-		return Set.class;
+		return null;
 	}
 
 	public short getId() {
