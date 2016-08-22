@@ -156,6 +156,15 @@ public interface ZCLCluster {
 	 * value is of type byte[].
 	 * 
 	 * <p>
+	 * When the list of attributes do not fit into a single ZCLFrame, ZigBee
+	 * clusters truncate the list of attributes returned in the response. In
+	 * import situations, the base driver send multiple read attributes commands
+	 * until being able to resolve the promise with a full table of all the
+	 * attribute values requested by the ZigBee client. In export situations,
+	 * the base driver truncates the read attribute command response as
+	 * necessary.
+	 * 
+	 * <p>
 	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
 	 * must be standard attributes or belong to the same manufacturer code,
 	 * otherwise the promise must fail with a {@link IllegalArgumentException}
