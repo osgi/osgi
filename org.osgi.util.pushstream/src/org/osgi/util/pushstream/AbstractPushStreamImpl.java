@@ -304,11 +304,13 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		updateNext(event -> {
 			try {
 				if (!event.isTerminal()) {
-					if (counter.decrementAndGet() < 0) {
-						return ABORT;
-					} else {
+					long count = counter.decrementAndGet();
+					if (count > 0) {
 						return eventStream.handleEvent(event);
-					} 				
+					} else if (count == 0) {
+						eventStream.handleEvent(event);
+					}
+					return ABORT;
 				} else {
 					return eventStream.handleEvent(event.nodata());
 				}

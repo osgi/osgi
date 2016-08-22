@@ -280,7 +280,7 @@ public class PushStreamTest extends TestCase {
 				.limit(2)
 				.collect(toList());
 
-		assertTrue(latch.await(4, SECONDS));
+		assertTrue(latch.await(3, SECONDS));
 		assertTrue(counts.isDone());
 		assertEquals(2, counts.getValue().size());
 
