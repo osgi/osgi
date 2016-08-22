@@ -1,6 +1,8 @@
 package org.osgi.test.cases.pushstream.junit;
 
+import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
@@ -11,10 +13,13 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushEvent;
 import org.osgi.util.pushstream.PushEventConsumer;
 import org.osgi.util.pushstream.PushEventSource;
@@ -243,5 +248,42 @@ public class PushStreamTest extends TestCase {
 		} catch (Exception e) {
 			System.out.println(list);
 		}
+	}
+
+	public void testWindowClosing() throws Exception {
+		CountDownLatch latch = new CountDownLatch(1);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			new Thread(() -> {
+				int i = 0;
+				for (;;) {
+					try {
+						if (latch.await(0, SECONDS)) {
+							break;
+						}
+						if (pec.accept(PushEvent.data(i++)) < 0) {
+							latch.countDown();
+						} else {
+							Thread.sleep(200);
+						}
+					} catch (Exception e) {
+						latch.countDown();
+					}
+				}
+			}).start();
+
+			return () -> latch.countDown();
+		};
+
+		Promise<List<Integer>> counts = impl.createStream(pes)
+				.window(() -> ofSeconds(1), () -> 20, (t, l) -> l.size())
+				.limit(2)
+				.collect(toList());
+
+		assertTrue(latch.await(20, TimeUnit.SECONDS));
+		assertTrue(counts.isDone());
+		assertEquals(2, counts.getValue().size());
+
 	}
 }

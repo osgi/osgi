@@ -972,39 +972,17 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				if (!queue.offer(event.getData())) {
 					((ArrayQueue<T>) queue).forcePush(event.getData());
 				}
-				eventStream.handleEvent(PushEvent.data(
+				long result = eventStream.handleEvent(PushEvent.data(
 						f.apply(Long.valueOf(NANOSECONDS.toMillis(elapsed)),
 								queue)));
+				if (result < 0) {
+					close();
+				}
 			} catch (Exception e) {
 				close(PushEvent.error(e));
 			}
 		});
 	}
-
-	//
-	// private <R> long createQueueAndStartWindow(
-	// AbstractPushStreamImpl<R> eventStream,
-	// BiFunction<Long, Collection<T>, R> transformationFunction, Semaphore
-	// queueCreationMutex,
-	// Supplier<Duration> timeProvider, IntSupplier queueSizer,
-	// AtomicReference<BlockingQueue<T>> currentQueueRef,
-	// AtomicLong currentTimestamp, AtomicLong windowSizeTracker, Executor
-	// executor, long startTime) {
-	// BlockingQueue<T> newQueue = currentQueueRef.get();
-	// if(newQueue == null && closed.get() != CLOSED) {
-	// newQueue = getQueueForInternalBuffering(queueSizer.getAsInt());
-	// currentQueueRef.set(newQueue);
-	// Runnable windowTask = getWindowTask(startTime, newQueue, eventStream,
-	// transformationFunction, queueCreationMutex, timeProvider,
-	// queueSizer, currentQueueRef, currentTimestamp, windowSizeTracker,
-	// executor);
-	// long nextInterval = timeProvider.get().toMillis();
-	// scheduler.schedule(windowTask,
-	// nextInterval, MILLISECONDS);
-	// return windowSizeTracker.getAndSet(nextInterval);
-	// }
-	// return 0;
-	// }
 
 	@Override
 	public Promise<Void> forEach(Consumer< ? super T> action) {
