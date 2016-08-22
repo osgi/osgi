@@ -705,6 +705,9 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		AtomicBoolean endPending = new AtomicBoolean(false);
 		updateNext((event) -> {
 			try {
+				if (eventStream.closed.get() == CLOSED) {
+					return ABORT;
+				}
 				Queue<T> queue;
 				if (!event.isTerminal()) {
 					long elapsed;
@@ -957,7 +960,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
 			scheduler.schedule(
 					getWindowTask(eventStream, f, time, maxEvents, lock,
-							expectedCounter, queueRef, timestamp, counter,
+							expectedCounter + 1, queueRef, timestamp, counter,
 							executor),
 					time.get().toNanos(), NANOSECONDS);
 		};

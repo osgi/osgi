@@ -16,7 +16,6 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.util.promise.Promise;
@@ -281,7 +280,7 @@ public class PushStreamTest extends TestCase {
 				.limit(2)
 				.collect(toList());
 
-		assertTrue(latch.await(20, TimeUnit.SECONDS));
+		assertTrue(latch.await(4, SECONDS));
 		assertTrue(counts.isDone());
 		assertEquals(2, counts.getValue().size());
 
