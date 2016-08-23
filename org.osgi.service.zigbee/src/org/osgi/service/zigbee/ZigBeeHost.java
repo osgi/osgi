@@ -272,17 +272,17 @@ public interface ZigBeeHost extends ZigBeeNode {
 	void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException;
 
 	/**
-	 * Set the timeout for the communication sent through this device
+	 * Set the timeout for the communication sent through this device.
 	 * 
 	 * @param seconds the number of milliseconds before firing a timeout
-	 *        exception
+	 *        exception.
 	 */
 	void setComunicationTimeout(long milliseconds);
 
 	/**
 	 * 
 	 * @return the current number of seconds used for firing timeout in
-	 *         communication
+	 *         communication.
 	 */
 	long getComunicationTimeout();
 }

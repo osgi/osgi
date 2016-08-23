@@ -1180,7 +1180,12 @@ public class UI {
     either <code>Promise.getValue()</code> returns a value or 
     <code>Promise.getFailure()</code> returns a relevant <code>Throwable</code>. The 
     type of the value and the type of Throwable are specific to the method returning 
-    a <code>Promise.</code></para> 
+    a <code>Promise</code>. In import situations, the base driver fails the Promise 
+    when a timeout is reached before any response is received on the network. and the 
+    returned failure is then a <xref linkend="org.osgi.service.zigbee.ZigBeeException" 
+    xrefstyle="hyperlink"/> with 
+    <xref linkend="org.osgi.service.zigbee.ZigBeeException.TIMEOUT" 
+    xrefstyle="hyperlink"/> error code.</para> 
     
     <para>A <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
     xrefstyle="hyperlink"/> is immediately returned by every method 
