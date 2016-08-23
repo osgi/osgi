@@ -2126,10 +2126,10 @@ public class UIOnOffButton implements ZCLEventListener {
                 Promise p = onOffCluster.invoke(new ToggleCommand());
                 p.onResolve(new Runnable() {
                     public void run(){
-	                    try { 
+                        try { 
                             ZCLFrame frame = (ZCLFrame) p.getValue();
                             log.info("toggle command returned success.");
-			            } catch (InvocationTargetException e) {
+                        } catch (InvocationTargetException e) {
                             log.info("toggle command returned a failure: " 
                                       + e.getMessage() + ”.”);
                         } catch (InterruptedException e) {
