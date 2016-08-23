@@ -27,52 +27,52 @@ public class ZCLException extends ZigBeeException {
 
 	private static final long	serialVersionUID					= -7330626950388193679L;
 
-	/** SUCCESS */
+	/** ZCL Success error code */
 	public static final int		SUCCESS								= 0x00;
 
-	/** FAILURE */
+	/** ZCL Failure error code */
 	public static final int		FAILURE								= 0x01;
 
-	/** MALFORMED_COMMAND */
+	/** ZCL Malformed Command error code */
 	public static final int		MALFORMED_COMMAND					= 0x02;
 
-	/** CLUSTER_COMMAND_NOT_SUPPORTED */
+	/** ZCL Cluster Command Not Supported error code */
 	public static final int		CLUSTER_COMMAND_NOT_SUPPORTED		= 0x03;
 
-	/** GENERAL_COMMAND_NOT_SUPPORTED */
+	/** ZCL General Command Not Supported error code */
 	public static final int		GENERAL_COMMAND_NOT_SUPPORTED		= 0x04;
 
-	/** MANUF_CLUSTER_COMMAND_NOT_SUPPORTED */
+	/** ZCL Manuf Cluster Command Not Supported error code */
 	public static final int		MANUF_CLUSTER_COMMAND_NOT_SUPPORTED	= 0x05;
 
-	/** MANUF_GENERAL_COMMAND_NOT_SUPPORTED */
+	/** ZCL Manuf General Command Not Supported error code */
 	public static final int		MANUF_GENERAL_COMMAND_NOT_SUPPORTED	= 0x06;
 
-	/** INVALID_FIELD */
+	/** ZCL Invalid Field error code */
 	public static final int		INVALID_FIELD						= 0x07;
 
-	/** UNSUPPORTED_ATTRIBUTE */
+	/** ZCL Unsupported Attribute error code */
 	public static final int		UNSUPPORTED_ATTRIBUTE				= 0x08;
 
-	/** INVALID_VALUE */
+	/** ZCL Invalid Value error code */
 	public static final int		INVALID_VALUE						= 0x09;
 
-	/** READ_ONLY */
+	/** ZCL Read Only error code */
 	public static final int		READ_ONLY							= 0x0a;
 
-	/** INSUFFICIENT_SPACE */
+	/** ZCL Insufficient Space error code */
 	public static final int		INSUFFICIENT_SPACE					= 0x0b;
 
-	/** DUPLICATE_EXISTS */
+	/** ZCL Duplicate Exists error code */
 	public static final int		DUPLICATE_EXISTS					= 0x0c;
 
-	/** NOT_FOUND */
+	/** ZCL Not Found error code */
 	public static final int		NOT_FOUND							= 0x0d;
 
-	/** UNREPORTABLE_TYPE */
+	/** Unreportable Type error code */
 	public static final int		UNREPORTABLE_TYPE					= 0x0e;
 
-	/** INVALID_DATA_TYPE */
+	/** ZCL Invalid Data Type error code */
 	public static final int		INVALID_DATA_TYPE					= 0x0f;
 
 	/**
@@ -82,12 +82,12 @@ public class ZCLException extends ZigBeeException {
 	public static final int		HARDWARE_FAILURE					= 0x10;
 
 	/**
-	 * SOFTWARE_FAILURE - in this case, an additional exception describing the
-	 * problem can be nested.
+	 * Software Failure error code - in this case, an additional exception
+	 * describing the problem can be nested.
 	 */
 	public static final int		SOFTWARE_FAILURE					= 0x11;
 
-	/** CALIBRATION_ERROR */
+	/** ZCL Calibration Error error code */
 	public static final int		CALIBRATION_ERROR					= 0x12;
 
 	/**

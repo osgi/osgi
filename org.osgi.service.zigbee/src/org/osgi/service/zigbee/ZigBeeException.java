@@ -26,14 +26,20 @@ public class ZigBeeException extends RuntimeException {
 
 	private static final long	serialVersionUID	= -2147129696681024813L;
 
-	/** OSGI_EXISTING_ID (16) – another endpoint exists with the same ID. */
+	/** The error code used when another endpoint exists with the same ID. */
 	public static final int		OSGI_EXISTING_ID	= 0x30;
 
 	/**
-	 * OSGI_MULTIPLE_HOSTS (17) – several hosts exist for this PAN ID target or
+	 * The error code used when several hosts exist for this PAN ID target or
 	 * HOST_PID target.
 	 */
 	public static final int		OSGI_MULTIPLE_HOSTS	= 0x31;
+
+	/**
+	 * The error code used when the timeout of ZigBee asynchrounous exchange is
+	 * reached.
+	 */
+	public static final int TIMEOUT = 0x32;
 
 	/**
 	 * This error code is used if the ZigBee error returned is not covered by
