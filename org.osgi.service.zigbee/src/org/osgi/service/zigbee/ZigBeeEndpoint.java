@@ -160,8 +160,8 @@ public interface ZigBeeEndpoint {
 	 * @param clusterId the cluster identifier to bind to
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getFailure()} returns null if the cluster has been
-	 *         successfully bound. The adequate APSException is returned
-	 *         otherwise.
+	 *         successfully bound. The adequate {@link ZigBeeEndpoint} is
+	 *         returned otherwise.
 	 */
 	public Promise /* <void> */ bind(String servicePid, int clusterId);
 
@@ -181,7 +181,7 @@ public interface ZigBeeEndpoint {
 	 * @param clusterId The cluster identifier to unbind.
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getFailure()} returns null if the cluster has been
-	 *         successfully bound. The adequate APSException is returned
+	 *         successfully bound. The adequate {@link APSException} is returned
 	 *         otherwise.
 	 */
 	public Promise /* <void> */ unbind(String servicePid, int clusterId);
@@ -210,7 +210,7 @@ public interface ZigBeeEndpoint {
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getValue()} returns a List of the bound endpoint
 	 *         service PIDs if the command is successful. The response object is
-	 *         null and the adequate APSException is returned by
+	 *         null and the adequate {@link APSException}tion is returned by
 	 *         {@link Promise#getFailure()} otherwise.
 	 */
 	public Promise/* <List<String>> */ getBoundEndPoints(int clusterId);
