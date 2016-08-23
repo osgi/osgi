@@ -23,9 +23,9 @@ import org.osgi.util.promise.Promises;
  */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
-	private int	channelAsInt;
-	private int	securityLevel;
-	private int	timeout	= 60;
+	private int		channelAsInt;
+	private int		securityLevel;
+	private long	timeout	= 60 * 1000;
 
 	/**
 	 * @param hostPId
@@ -189,11 +189,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return null;
 	}
 
-	public void setComunicationTimeout(int seconds) {
-		this.timeout = seconds;
+	public void setComunicationTimeout(long milli) {
+		this.timeout = milli;
 	}
 
-	public int getComunicationTimeout() {
+	public long getComunicationTimeout() {
 		return timeout;
 	}
 
