@@ -1164,14 +1164,34 @@ public class UI {
     Promise</link> and <xref 
     linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
     xrefstyle="hyperlink"/> objects handle ZigBee network 
-    communication latency and errors. A Promise is returned by every method 
-    that generates a message exchange with one ZigBee endpoint, i.e., the sending 
-    of a message to this endpoint and the handling of a unique response from this 
-    endpoint.</para> 
+    communication latency and errors. An <code>org.osgi.util.promise.Promise</code> 
+    is immediately returned by every method that generates a message exchange with 
+    one ZigBee endpoint, i.e., the sending of a message to this endpoint and the 
+    handling of a unique response from this endpoint. No exception is thrown by this 
+    method. The <code>Promise</code> handles the expected result and any occuring error 
+    asynchronously. The caller can either get a callback 
+    when the Promise is resolved with a value or an error, or the Promise can be used 
+    in chaining. Both <code>onResolve(Runnable)</code> callbacks and 
+    <code>then(Success, Failure)</code> chaining can be repeated any number of 
+    times, even after the Promise has been resolved. When the Promise is resolved, 
+    callbacks and chaining are called, <code>Promise.isDone()</code> returns true, and 
+    either <code>Promise.getValue()</code> returns a value or 
+    <code>Promise.getFailure()</code> returns a relevant <code>Throwable</code>. The 
+    type of the value and the type of Throwable are specific to the method returning 
+    a <code>Promise.</code></para> 
     
-    <para>A ZCLCommandResponseStream is returned by every method 
+    <para>A <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
+    xrefstyle="hyperlink"/> is immediately returned by every method 
     that generates the sending of a message to potentially several endpoints 
-    with the expectation of a response from several of them. This is the case
+    with the expectation of a response from several of them. No exception is thrown by 
+    this method. The caller can register a handler with 
+    <code>ZCLCommandResponseStream.forEach(Predicate)</code>. The unique method of the 
+    handler is called with a <xref linkend="org.osgi.service.zigbee.ZCLCommandResponse" 
+    xrefstyle="hyperlink"/> every time a response is received from one of the targeted 
+    endpoints until the <code>ZCLCommandResponseStream</code> is closed. The latter is 
+    closed either when the handler returns false to the test method or 
+    <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.close()" 
+    xrefstyle="hyperlink"/> is closed. <code>ZCLCommandResponseStream</code> is used 
     for the following message invocation types:
     </para>
     
