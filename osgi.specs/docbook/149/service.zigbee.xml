@@ -1185,13 +1185,14 @@ public class UI {
     that generates the sending of a message to potentially several endpoints 
     with the expectation of a response from several of them. No exception is thrown by 
     this method. The caller can register a handler with 
-    <code>ZCLCommandResponseStream.forEach(Predicate)</code>. The unique method of the 
+    <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.forEach-Predicate-" 
+    xrefstyle="hyperlink"/>. The unique method of the 
     handler is called with a <xref linkend="org.osgi.service.zigbee.ZCLCommandResponse" 
     xrefstyle="hyperlink"/> every time a response is received from one of the targeted 
     endpoints until the <code>ZCLCommandResponseStream</code> is closed. The latter is 
     closed either when the handler returns false to the test method or 
-    <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.close()" 
-    xrefstyle="hyperlink"/> is closed. <code>ZCLCommandResponseStream</code> is used 
+    <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream.close--" 
+    xrefstyle="hyperlink"/> is called. <code>ZCLCommandResponseStream</code> is used 
     for the following message invocation types:
     </para>
     
