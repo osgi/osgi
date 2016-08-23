@@ -22,6 +22,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private int	channelAsInt;
 	private int	securityLevel;
+	private int	timeout	= 60;
 
 	/**
 	 * @param hostPId
@@ -190,5 +191,13 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	public Promise invoke(int clusterIdReq, ZDPFrame message) {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
+	}
+
+	public void setComunicationTimeout(int seconds) {
+		this.timeout = seconds;
+	}
+
+	public int getComunicationTimeout() {
+		return timeout;
 	}
 }

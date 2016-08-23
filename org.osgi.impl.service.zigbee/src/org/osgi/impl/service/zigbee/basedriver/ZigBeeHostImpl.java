@@ -25,6 +25,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private int	channelAsInt;
 	private int	securityLevel;
+	private int	timeout	= 60;
 
 	/**
 	 * @param hostPId
@@ -186,6 +187,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	public BigInteger getExtendedPanId() {
 
 		return null;
+	}
+
+	public void setComunicationTimeout(int seconds) {
+		this.timeout = seconds;
+	}
+
+	public int getComunicationTimeout() {
+		return timeout;
 	}
 
 	public Promise getLinksQuality() {
