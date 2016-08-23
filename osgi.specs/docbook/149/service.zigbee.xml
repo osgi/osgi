@@ -349,7 +349,9 @@
     of a method that generates a message broadcasted (or groupcasted) to potentially 
     several endpoints.</para>
 
-    <para>OSGi bundles – called listeners in Figure 3 – subscribe to attribute
+    <para>OSGi bundles – called listeners in <xref
+    linkend="service.zigbee-figure_id_20160712_18h51_11"
+    xrefstyle="template:Figure %n"/> – subscribe to attribute
     value changes through the White Board Pattern (<xref
     linkend="service.zigbee-ref-6-bibliomixed_id_20162007_17h50_18"/>.). They
     register an object under the ZCLEventListener interface with properties
