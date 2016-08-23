@@ -157,12 +157,11 @@ public interface ZCLCluster {
 	 * 
 	 * <p>
 	 * When the list of attributes do not fit into a single ZCLFrame, ZigBee
-	 * clusters truncate the list of attributes returned in the response. In
-	 * import situations, the base driver send multiple read attributes commands
-	 * until being able to resolve the promise with a full table of all the
-	 * attribute values requested by the ZigBee client. In export situations,
-	 * the base driver truncates the read attribute command response as
-	 * necessary.
+	 * clusters truncate the list of attributes returned in the response. The
+	 * client has to check the Map of results to send a new request for the
+	 * attributes which values are missing. In export situations, the base
+	 * driver may truncate the read attribute command response sent to networked
+	 * devices in order to obey the rules.
 	 * 
 	 * <p>
 	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
