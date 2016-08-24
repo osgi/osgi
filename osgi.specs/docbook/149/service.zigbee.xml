@@ -1181,11 +1181,16 @@ public class UI {
     <code>Promise.getFailure()</code> returns a relevant <code>Throwable</code>. The 
     type of the value and the type of Throwable are specific to the method returning 
     a <code>Promise</code>. In import situations, the base driver fails the Promise 
-    when a timeout is reached before any response is received on the network. and the 
+    when a timeout is reached before any response is received on the network. The 
     returned failure is then a <xref linkend="org.osgi.service.zigbee.ZigBeeException" 
     xrefstyle="hyperlink"/> with 
     <xref linkend="org.osgi.service.zigbee.ZigBeeException.TIMEOUT" 
-    xrefstyle="hyperlink"/> error code.</para> 
+    xrefstyle="hyperlink"/> error code. The associated timeout is given by <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeHost.getCommunicationTimeout--" 
+    xrefstyle="hyperlink"/>. It can be set by calling <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeHost.setCommunicationTimeout-long-" 
+    xrefstyle="hyperlink"/> on the adequate ZigBeeHost object.
+    </para> 
     
     <para>A <xref linkend="org.osgi.service.zigbee.ZCLCommandResponseStream" 
     xrefstyle="hyperlink"/> is immediately returned by every method 
@@ -1240,11 +1245,16 @@ public class UI {
     <title>ZigBee Data Types</title>
 
     <para><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
-    xrefstyle="hyperlink"/> provides all standard ZigBee type descriptions as
-    <xref
-    linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription"
-    xrefstyle="hyperlink"/> objects assigned to public final static fields
-    (constants).</para>
+    xrefstyle="hyperlink"/> provides all standard ZigBee data type identifiers 
+    as public final static fields (constants). A class is associated to every 
+    constant in <xref linkend="org.osgi.service.zigbee.types"
+    xrefstyle="hyperlink"/> package except <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
+    xrefstyle="hyperlink"/> and <xref 
+    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
+    xrefstyle="hyperlink"/>. Every associated class is statically instantiated 
+    as a single instance that is available by calling <code>getInstance()</code> 
+    static method.</para>
 
     <para>Here is the table of encoding relations between ZigBee types and
     Java types:</para>
