@@ -793,8 +793,8 @@ final class PromiseImpl<T> implements Promise<T> {
 		public Thread newThread(Runnable r) {
 			if (shutdownHookInstalled.compareAndSet(false, true)) {
 				Thread shutdownThread = delegateThreadFactory.newThread(this);
-				shutdownThread.setName("ExecutorShutdownHook["
-						+ shutdownThread.getName() + "]");
+				shutdownThread.setName("ExecutorShutdownHook,"
+						+ shutdownThread.getName());
 				try {
 					Runtime.getRuntime().addShutdownHook(shutdownThread);
 				} catch (IllegalStateException e) {
