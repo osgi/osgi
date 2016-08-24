@@ -517,13 +517,13 @@ public class PromiseTest extends TestCase {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				thread.interrupt();
 				timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						d.resolve("failsafe");
 					}
 				}, 1000);
+				thread.interrupt();
 			}
 		}, 500);
 		try {
@@ -542,13 +542,13 @@ public class PromiseTest extends TestCase {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				thread.interrupt();
 				timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						d.resolve("failsafe");
 					}
 				}, 1000);
+				thread.interrupt();
 			}
 		}, 500);
 		try {

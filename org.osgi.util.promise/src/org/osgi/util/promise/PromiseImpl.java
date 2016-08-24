@@ -26,11 +26,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -171,20 +172,6 @@ final class PromiseImpl<T> implements Promise<T> {
 		 */
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
 			Callbacks.execute(callback);
-		}
-	}
-
-	/**
-	 * Safely call the callback. Catch any exceptions and log them.
-	 * 
-	 * @param callback The callback to run
-	 * @since 1.1
-	 */
-	static void safeRun(Runnable callback) {
-		try {
-			callback.run();
-		} catch (Throwable t) {
-			Logger.logCallbackException(t);
 		}
 	}
 
@@ -758,7 +745,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			delegateThreadFactory = Executors.defaultThreadFactory();
 			timeoutExecutor = new TimeoutExecutor(1,
 					new Callbacks("TimeoutExecutor"));
-			callbackExecutor = new CallbackExecutor(4,
+			callbackExecutor = new CallbackExecutor(1024,
 					new Callbacks("CallbackExecutor"));
 		}
 
@@ -779,10 +766,17 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * Execute a callback on the CallbackExecutor
 		 */
 		static void execute(Runnable callback) {
+			callbackExecutor.execute(callback);
+		}
+
+		/**
+		 * Safely call the callback. Catch any exceptions and log them.
+		 */
+		static void safeRun(Runnable callback) {
 			try {
-				callbackExecutor.execute(callback);
-			} catch (RejectedExecutionException e) {
-				safeRun(callback);
+				callback.run();
+			} catch (Throwable t) {
+				Logger.logCallbackException(t);
 			}
 		}
 
@@ -810,7 +804,7 @@ final class PromiseImpl<T> implements Promise<T> {
 				}
 			}
 			Thread t = delegateThreadFactory.newThread(r);
-			t.setName(name + "[" + t.getName() + "]");
+			t.setName(name + "," + t.getName());
 			t.setDaemon(true);
 			return t;
 		}
@@ -895,10 +889,11 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * @ThreadSafe
 		 */
 		private static final class CallbackExecutor extends ThreadPoolExecutor
-				implements UncaughtExceptionHandler {
+				implements UncaughtExceptionHandler, RejectedExecutionHandler {
 			CallbackExecutor(int maxPoolSize, ThreadFactory threadFactory) {
 				super(0, maxPoolSize, 60L, TimeUnit.SECONDS,
-						new LinkedBlockingQueue<Runnable>(), threadFactory);
+						new SynchronousQueue<Runnable>(), threadFactory);
+				setRejectedExecutionHandler(this);
 			}
 
 			/**
@@ -917,6 +912,15 @@ final class PromiseImpl<T> implements Promise<T> {
 			public void uncaughtException(Thread t, Throwable e) {
 				// original exception handled in afterExecute
 				// but we need this to stop the exception print out
+			}
+
+			/**
+			 * Safely call the callback.
+			 */
+			@Override
+			public void rejectedExecution(Runnable callback,
+					ThreadPoolExecutor executor) {
+				safeRun(callback);
 			}
 		}
 	}
@@ -939,7 +943,10 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		static void logCallbackException(Throwable t) {
-			LOGGER.log(java.util.logging.Level.WARNING, "Exception from Promise callback", t);
+			LOGGER.log(java.util.logging.Level.WARNING,
+					"Exception from Promise callback in thread "
+							+ Thread.currentThread().getName(),
+					t);
 		}
 	}
 }
