@@ -193,11 +193,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
-	public void setComunicationTimeout(long milli) {
+	public void setCommunicationTimeout(long milli) {
 		this.timeout = milli;
 	}
 
-	public long getComunicationTimeout() {
+	public long getCommunicationTimeout() {
 		return timeout;
 	}
 }
