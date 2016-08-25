@@ -745,7 +745,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			delegateThreadFactory = Executors.defaultThreadFactory();
 			timeoutExecutor = new TimeoutExecutor(1,
 					new Callbacks("TimeoutExecutor"));
-			callbackExecutor = new CallbackExecutor(1024,
+			callbackExecutor = new CallbackExecutor(64,
 					new Callbacks("CallbackExecutor"));
 		}
 
