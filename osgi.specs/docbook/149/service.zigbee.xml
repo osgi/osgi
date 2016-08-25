@@ -1244,20 +1244,50 @@ public class UI {
   <section>
     <title>ZigBee Data Types</title>
 
-    <para><xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
-    xrefstyle="hyperlink"/> provides all standard ZigBee data type identifiers 
-    as public final static fields (constants). A class is associated to every 
-    constant in <xref linkend="org.osgi.service.zigbee.types"
-    xrefstyle="hyperlink"/> package except <xref 
-    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
-    xrefstyle="hyperlink"/> and <xref 
-    linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
-    xrefstyle="hyperlink"/>. Every associated class is statically instantiated 
-    as a single instance that is available by calling <code>getInstance()</code> 
-    static method.</para>
+	<para>
+		<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes"
+			xrefstyle="hyperlink" />
+		interface provides all standard ZigBee data type identifiers
+		as public final static fields (constants). It should be noted that actual value of these
+		constants do not match
+		the values assigned in the ZCL specification for these data types.
+	</para>
+	<para>
+		The
+		<xref linkend="org.osgi.service.zigbee.types" xrefstyle="hyperlink" />
+		package contains an implementation class for each of the ZCL scalar
+		data types, with the exception of
+		<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.NO_DATA"
+			xrefstyle="hyperlink" />
+		and
+		<xref linkend="org.osgi.service.zigbee.ZigBeeDataTypes.UNKNOWN"
+			xrefstyle="hyperlink" />
+		. Each of these classes declares a static
+		<code>getInstance()</code>
+		method, that returns a sigleton of the class istelf.
+		Moreover, because
+		they implement the
+		<xref linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription"
+			xrefstyle="hyperlink" />
+		interface, they provide methods for getting some metadata information
+		about the ZCL data type they represent, like
+		the relative
+		ZigBeeDataType
+		constant (
+		<code>getId()</code>
+		method) and the java class the ZCL data type is mapped to.
+		Methods to
+		marshal and unmarshal the data type into a
+		ZigBeeDataInput
+		stream and
+		from a ZigBeeDataOutput stream according to
+		the ZigBee
+		specification,
+		are provided as well.
+	</para>
 
     <para>Here is the table of encoding relations between ZigBee types and
-    Java types:</para>
+    Java types, used in this specification:</para>
 
 	<table pgwide="1">
 		<title>Mapping of ZCL Data Types to Java</title>
