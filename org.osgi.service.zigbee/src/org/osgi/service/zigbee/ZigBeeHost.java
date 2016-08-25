@@ -274,15 +274,14 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Set the timeout for the communication sent through this device.
 	 * 
-	 * @param seconds the number of milliseconds before firing a timeout
+	 * @param timeout the number of milliseconds before firing a timeout
 	 *        exception.
 	 */
-	void setCommunicationTimeout(long milliseconds);
+	void setCommunicationTimeout(long timeout);
 
 	/**
-	 * 
-	 * @return the current number of seconds used for firing timeout in
-	 *         communication.
+	 * @return the current value set for the communication timeout expressed in
+	 *         milliseconds.
 	 */
 	long getCommunicationTimeout();
 }
