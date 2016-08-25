@@ -16,7 +16,6 @@
 
 package org.osgi.util.promise;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;
@@ -735,7 +734,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Callbacks implements Runnable, ThreadFactory {
+	private static final class Callbacks implements ThreadFactory, Runnable {
 		private static final AtomicBoolean		shutdownHookInstalled;
 		private static final ThreadFactory		delegateThreadFactory;
 		private static final TimeoutExecutor	timeoutExecutor;
@@ -757,7 +756,11 @@ final class PromiseImpl<T> implements Promise<T> {
 			try {
 				return timeoutExecutor.schedule(callback, timeout, unit);
 			} catch (RejectedExecutionException e) {
-				safeRun(callback);
+				try {
+					callback.run();
+				} catch (Throwable t) {
+					uncaughtException(t);
+				}
 				return null;
 			}
 		}
@@ -769,14 +772,13 @@ final class PromiseImpl<T> implements Promise<T> {
 			callbackExecutor.execute(callback);
 		}
 
-		/**
-		 * Safely call the callback. Catch any exceptions and log them.
-		 */
-		static void safeRun(Runnable callback) {
+		static void uncaughtException(Throwable t) {
 			try {
-				callback.run();
-			} catch (Throwable t) {
-				Logger.logCallbackException(t);
+				Thread thread = Thread.currentThread();
+				thread.getUncaughtExceptionHandler().uncaughtException(thread,
+						t);
+			} catch (Throwable ignored) {
+				// we ignore this
 			}
 		}
 
@@ -859,7 +861,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			}
 
 			/**
-			 * Log uncaught exceptions
+			 * Handle uncaught exceptions
 			 */
 			@Override
 			protected void afterExecute(Runnable r, Throwable t) {
@@ -873,7 +875,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					} catch (InterruptedException e) {
 						interrupted = true;
 					} catch (ExecutionException e) {
-						Logger.logCallbackException(e.getCause());
+						uncaughtException(e.getCause());
 					} finally {
 						if (interrupted) { // restore interrupt status
 							Thread.currentThread().interrupt();
@@ -889,7 +891,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * @ThreadSafe
 		 */
 		private static final class CallbackExecutor extends ThreadPoolExecutor
-				implements UncaughtExceptionHandler, RejectedExecutionHandler {
+				implements RejectedExecutionHandler {
 			CallbackExecutor(int maxPoolSize, ThreadFactory threadFactory) {
 				super(0, maxPoolSize, 60L, TimeUnit.SECONDS,
 						new SynchronousQueue<Runnable>(), threadFactory);
@@ -897,30 +899,17 @@ final class PromiseImpl<T> implements Promise<T> {
 			}
 
 			/**
-			 * Log uncaught exceptions
-			 */
-			@Override
-			protected void afterExecute(Runnable r, Throwable t) {
-				super.afterExecute(r, t);
-				if (t != null) {
-					Logger.logCallbackException(t);
-					Thread.currentThread().setUncaughtExceptionHandler(this);
-				}
-			}
-
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				// original exception handled in afterExecute
-				// but we need this to stop the exception print out
-			}
-
-			/**
-			 * Safely call the callback.
+			 * Call the callback using the caller's thread because the thread
+			 * pool has reached max size.
 			 */
 			@Override
 			public void rejectedExecution(Runnable callback,
 					ThreadPoolExecutor executor) {
-				safeRun(callback);
+				try {
+					callback.run();
+				} catch (Throwable t) {
+					uncaughtException(t);
+				}
 			}
 		}
 	}
@@ -930,23 +919,5 @@ final class PromiseImpl<T> implements Promise<T> {
 			return value;
 		}
 		throw new NullPointerException();
-	}
-
-	/**
-	 * Use the lazy initialization holder class idiom to delay creating a Logger
-	 * until we actually need it.
-	 */
-	private static final class Logger {
-		private final static java.util.logging.Logger	LOGGER;
-		static {
-			LOGGER = java.util.logging.Logger.getLogger(PromiseImpl.class.getName());
-		}
-
-		static void logCallbackException(Throwable t) {
-			LOGGER.log(java.util.logging.Level.WARNING,
-					"Exception from Promise callback in thread "
-							+ Thread.currentThread().getName(),
-					t);
-		}
 	}
 }
