@@ -25,6 +25,8 @@ import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeReadStatusRecord;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
@@ -141,9 +143,23 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		int i = 0;
 		// for (int i : attributesIds) {
-		ZCLAttributeInfo attribute = attributesInfoArray[i];
-		byte[] attributeValue = {0};
-		response.put(Integer.valueOf(Integer.toString(attribute.getId())), attributeValue);
+		final ZCLAttributeInfo attribute = attributesInfoArray[i];
+		final byte[] attributeValue = {0};
+		ZigBeeReadStatusRecord result = new ZigBeeReadStatusRecord() {
+
+			public Object getValue() {
+				return attributeValue;
+			}
+
+			public ZigBeeException getFailure() {
+				return null;
+			}
+
+			public ZCLAttributeInfo getAttributeInfo() {
+				return attribute;
+			}
+		};
+		response.put(Integer.valueOf(Integer.toString(attribute.getId())), result);
 		// }
 		return Promises.resolved(response);
 	}
