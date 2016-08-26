@@ -18,9 +18,6 @@ package org.osgi.service.zigbee.types;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -419,15 +416,7 @@ class ZigBeeDefaultSerializer {
 					throw new IllegalArgumentException("ZCL data types bag, structure, set, array can not be serialized with this generic method.");
 
 				case ZigBeeDataTypes.TIME_OF_DAY : {
-					if (value instanceof Date) {
-						Date d = (Date) value;
-						Calendar c = GregorianCalendar.getInstance();
-						c.setTime(d);
-						os.writeByte((byte) c.get(Calendar.HOUR_OF_DAY));
-						os.writeByte((byte) c.get(Calendar.MINUTE));
-						os.writeByte((byte) c.get(Calendar.SECOND));
-						os.writeByte((byte) (c.get(Calendar.MILLISECOND) / 10));
-					} else if (value instanceof byte[]) {
+					if (value instanceof byte[]) {
 						byte[] buffer = (byte[]) value;
 						if (buffer.length != 4) {
 							throw new IllegalArgumentException("invalid size");
@@ -439,15 +428,7 @@ class ZigBeeDefaultSerializer {
 					return;
 				}
 				case ZigBeeDataTypes.DATE : {
-					if (value instanceof Date) {
-						Date d = (Date) value;
-						Calendar c = GregorianCalendar.getInstance();
-						c.setTime(d);
-						os.writeByte((byte) c.get(Calendar.YEAR - 1900));
-						os.writeByte((byte) c.get(Calendar.MONTH));
-						os.writeByte((byte) c.get(Calendar.DAY_OF_MONTH));
-						os.writeByte((byte) c.get(Calendar.DAY_OF_WEEK));
-					} else if (value instanceof byte[]) {
+					if (value instanceof byte[]) {
 						byte[] buffer = (byte[]) value;
 						if (buffer.length != 4) {
 							throw new IllegalArgumentException("invalid size");
@@ -460,11 +441,7 @@ class ZigBeeDefaultSerializer {
 				}
 
 				case ZigBeeDataTypes.UTC_TIME : {
-					if (value instanceof Date) {
-						Date d = (Date) value;
-						long utc = d.getTime() - zigBeeTimeZero;
-						os.writeInt((int) utc, 4);
-					} else if (value instanceof Long) {
+					if (value instanceof Long) {
 						os.writeLong(((Long) value).longValue(), 4);
 					} else {
 						throw new IllegalArgumentException("invalid java class");
