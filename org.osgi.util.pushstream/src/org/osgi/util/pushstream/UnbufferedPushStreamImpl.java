@@ -55,6 +55,17 @@ class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T
 					e.printStackTrace();
 				}
 			}
+
+			if (closed.get() == CLOSED
+					&& upstream.compareAndSet(toClose, null)) {
+				// We closed before setting the upstream - close it now
+				try {
+					toClose.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			return true;
 		}
 		return false;

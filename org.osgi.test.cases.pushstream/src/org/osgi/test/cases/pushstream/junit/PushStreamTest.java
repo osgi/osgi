@@ -2,7 +2,7 @@ package org.osgi.test.cases.pushstream.junit;
 
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.asList;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.*;
 import static java.util.stream.Collectors.toList;
 import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
@@ -283,6 +283,40 @@ public class PushStreamTest extends TestCase {
 		assertTrue(latch.await(3, SECONDS));
 		assertTrue(counts.isDone());
 		assertEquals(2, counts.getValue().size());
+
+	}
+
+	public void testFindFirstClosing() throws Exception {
+		CountDownLatch latch = new CountDownLatch(1);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			new Thread(() -> {
+				int i = 0;
+				for (;;) {
+					try {
+						if (latch.await(0, SECONDS)) {
+							break;
+						}
+						if (pec.accept(PushEvent.data(i++)) < 0) {
+							latch.countDown();
+						} else {
+							Thread.sleep(200);
+						}
+					} catch (Exception e) {
+						latch.countDown();
+					}
+				}
+			}).start();
+
+			return () -> latch.countDown();
+		};
+
+		Promise<Optional<Integer>> counts = impl.createStream(pes).findFirst();
+
+		assertTrue(latch.await(500, MILLISECONDS));
+		assertTrue(counts.isDone());
+		assertEquals(Integer.valueOf(0), counts.getValue().get());
 
 	}
 }

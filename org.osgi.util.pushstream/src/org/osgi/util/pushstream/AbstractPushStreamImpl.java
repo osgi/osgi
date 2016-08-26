@@ -233,12 +233,36 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			Function< ? super T, ? extends PushStream< ? extends R>> mapper) {
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<>(
 				psp, defaultExecutor, scheduler, this);
+
+		PushEventConsumer<R> consumer = e -> {
+			switch (e.getType()) {
+				case ERROR :
+					close(e.nodata());
+					return ABORT;
+				case CLOSE :
+					// Close should allow the next flat mapped entry
+					// without closing the stream;
+					return ABORT;
+				case DATA :
+					long returnValue = eventStream.handleEvent(e);
+					if (returnValue < 0) {
+						close();
+						return ABORT;
+					}
+					return returnValue;
+				default :
+					throw new IllegalArgumentException(
+							"The event type " + e.getType() + " is unknown");
+			}
+		};
+
 		updateNext(event -> {
 			try {
 				if (!event.isTerminal()) {
 					PushStream< ? extends R> mappedStream = mapper
 							.apply(event.getData());
-					return mappedStream.forEachEvent(e -> eventStream.handleEvent(e))
+
+					return mappedStream.forEachEvent(consumer)
 							.getValue()
 							.longValue();
 				} else {
@@ -403,7 +427,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	}
 
 	@Override
-	public PushStream< ? extends T> merge(
+	public PushStream<T> merge(
 			PushEventSource< ? extends T> source) {
 		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
 				psp, defaultExecutor, scheduler, this);
@@ -443,6 +467,59 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		return eventStream.onClose(() -> {
 			try {
 				second.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}).map(Function.identity());
+	}
+
+	@Override
+	public PushStream<T> merge(PushStream< ? extends T> source) {
+		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
+				psp, defaultExecutor, scheduler, this);
+		AtomicInteger count = new AtomicInteger(2);
+		PushEventConsumer<T> consumer = event -> {
+			try {
+				if (!event.isTerminal()) {
+					return eventStream.handleEvent(event);
+				}
+				
+				if (count.decrementAndGet() == 0) {
+					eventStream.handleEvent(event.nodata());
+					return ABORT;
+				}
+				return CONTINUE;
+			} catch (Exception e) {
+				PushEvent<T> error = PushEvent.error(e);
+				close(error);
+				eventStream.close(event.nodata());
+				return ABORT;
+			}
+		};
+		updateNext(consumer);
+		try {
+			source.forEachEvent(event -> {
+				return consumer.accept(event);
+			}).then(p -> {
+				count.decrementAndGet();
+				consumer.accept(PushEvent.close());
+				return null;
+			}, p -> {
+				count.decrementAndGet();
+				consumer.accept(PushEvent.error((Exception) p.getFailure()));
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new IllegalStateException(
+					"Unable to merge events as the event source could not be opened.",
+					e);
+		}
+		
+		return eventStream.onClose(() -> {
+			try {
+				source.close();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

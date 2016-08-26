@@ -215,7 +215,16 @@ public interface PushStream<T> extends AutoCloseable {
 	 * @param source The source to merge in.
 	 * @return Builder style (can be a new or the same object)
 	 */
-	PushStream< ? extends T> merge(PushEventSource< ? extends T> source);
+	PushStream<T> merge(PushEventSource< ? extends T> source);
+
+	/**
+	 * Merge in the events from another PushStream. The resulting channel is not
+	 * closed until this channel and the channel from the source are closed.
+	 * 
+	 * @param source The source to merge in.
+	 * @return Builder style (can be a new or the same object)
+	 */
+	PushStream<T> merge(PushStream< ? extends T> source);
 
 	/**
 	 * Split the events to different streams based on a predicate. If the

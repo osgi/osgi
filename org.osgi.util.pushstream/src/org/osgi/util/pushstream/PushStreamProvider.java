@@ -16,18 +16,24 @@
 
 package org.osgi.util.pushstream;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
+import static org.osgi.util.pushstream.PushEvent.*;
 import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 
+import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A factory for {@link PushStream} instances, and utility methods for handling
@@ -205,7 +211,7 @@ public final class PushStreamProvider {
 		}
 
 		@SuppressWarnings("resource")
-		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, executor,
+		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, toUse,
 				acquireScheduler(), aec -> {
 					try {
 						return eventSource.open(aec);
@@ -456,5 +462,120 @@ public final class PushStreamProvider {
 			return delegate.accept(event);
 		}
 
+	}
+
+	/**
+	 * Create an Unbuffered {@link PushStream} from a Java {@link Stream} The
+	 * data from the stream will be pushed into the PushStream synchronously as
+	 * it is opened. This may make terminal operations blocking unless a buffer
+	 * has been added to the {@link PushStream}. Care should be taken with
+	 * infinite {@link Stream}s to avoid blocking indefinitely.
+	 * 
+	 * @param items The items to push into the PushStream
+	 * @return A PushStream containing the items from the Java Stream
+	 */
+	public <T> PushStream<T> streamOf(Stream<T> items) {
+		PushEventSource<T> pes = aec -> {
+			AtomicBoolean closed = new AtomicBoolean(false);
+
+			items.mapToLong(i -> {
+				try {
+					long returnValue = closed.get() ? -1 : aec.accept(data(i));
+					if (returnValue < 0) {
+						aec.accept(close());
+					}
+					return returnValue;
+				} catch (Exception e) {
+					try {
+						aec.accept(error(e));
+					} catch (Exception e2) {/* No further events needed */}
+					return -1;
+				}
+			}).filter(i -> i < 0).findFirst().orElseGet(() -> {
+				try {
+					return aec.accept(close());
+				} catch (Exception e) {
+					return -1;
+				}
+			});
+
+			return () -> closed.set(true);
+		};
+
+		return this.<T> createUnbufferedStream(pes, null);
+	}
+
+	/**
+	 * Create an Unbuffered {@link PushStream} from a Java {@link Stream} The
+	 * data from the stream will be pushed into the PushStream asynchronously
+	 * using the supplied Executor.
+	 * 
+	 * @param executor The worker to use to push items from the Stream into the
+	 *            PushStream
+	 * @param items The items to push into the PushStream
+	 * @return A PushStream containing the items from the Java Stream
+	 */
+	public <T> PushStream<T> streamOf(Executor executor, Stream<T> items) {
+
+		boolean closeExecutorOnClose;
+		Executor toUse;
+		if (executor == null) {
+			toUse = Executors.newFixedThreadPool(2);
+			closeExecutorOnClose = true;
+		} else {
+			toUse = executor;
+			closeExecutorOnClose = false;
+		}
+
+		@SuppressWarnings("resource")
+		PushStream<T> stream = new UnbufferedPushStreamImpl<T,BlockingQueue<PushEvent< ? extends T>>>(
+				this, toUse, acquireScheduler(), aec -> {
+					return () -> { /* No action to take */ };
+				}) {
+
+			@Override
+			protected boolean begin() {
+				if (super.begin()) {
+					Iterator<T> it = items.iterator();
+
+					toUse.execute(() -> pushData(it));
+
+					return true;
+				}
+				return false;
+			}
+
+			private void pushData(Iterator<T> it) {
+				while (it.hasNext()) {
+					try {
+						long returnValue = closed.get() == CLOSED ? -1
+								: handleEvent(data(it.next()));
+						if (returnValue != 0) {
+							if (returnValue < 0) {
+								close();
+								return;
+							} else {
+								scheduler.schedule(
+										() -> toUse.execute(() -> pushData(it)),
+										returnValue, MILLISECONDS);
+								return;
+							}
+						}
+					} catch (Exception e) {
+						close(error(e));
+					}
+				}
+				close();
+			}
+		};
+
+		stream = stream.onClose(() -> {
+			if (closeExecutorOnClose) {
+				((ExecutorService) toUse).shutdown();
+			}
+			releaseScheduler();
+		}).map(Function.identity());
+
+		return stream;
 	}
 }
