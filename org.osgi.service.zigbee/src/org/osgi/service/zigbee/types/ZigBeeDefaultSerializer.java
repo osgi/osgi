@@ -426,7 +426,7 @@ class ZigBeeDefaultSerializer {
 						os.writeByte((byte) c.get(Calendar.HOUR_OF_DAY));
 						os.writeByte((byte) c.get(Calendar.MINUTE));
 						os.writeByte((byte) c.get(Calendar.SECOND));
-						os.writeByte((byte) c.get(Calendar.MILLISECOND / 10));
+						os.writeByte((byte) (c.get(Calendar.MILLISECOND) / 10));
 					} else if (value instanceof byte[]) {
 						byte[] buffer = (byte[]) value;
 						if (buffer.length != 4) {
