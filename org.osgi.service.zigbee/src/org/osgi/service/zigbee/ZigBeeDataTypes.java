@@ -21,7 +21,7 @@ package org.osgi.service.zigbee;
  * to represent the ZCL data types.
  * 
  * <p>
- * This constants do not match the values used in the ZigBee specification, but
+ * These constants do not match the values used in the ZigBee specification, but
  * follow the rules below:
  * <p>
  * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data

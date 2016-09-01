@@ -975,7 +975,9 @@ public class UI {
         <code>readAttributes()</code> method. The latter returns a <link
         linkend="org.osgi.util.promise.Promise"
         xrefstyle="hyperlink">Promise</link> object that is asynchronously resolved with a
-        <code>Map</code> of attribute values identified by their attribute identifiers. On 
+        <code>Map</code> of <xref
+        linkend="org.osgi.service.zigbee.ZCLReadStatusRecord"
+        xrefstyle="hyperlink"/>  identified by their attribute identifiers. On 
         failure, the promise is resolved with an exception instead.</para>
       </listitem>
 
@@ -1264,7 +1266,7 @@ public class UI {
 			xrefstyle="hyperlink" />
 		. Each of these classes declares a static
 		<code>getInstance()</code>
-		method, that returns a sigleton of the class istelf.
+		method, that returns a singleton of the class itself.
 		Moreover, because
 		they implement the
 		<xref linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription"

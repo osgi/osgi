@@ -148,8 +148,10 @@ public interface ZCLCluster {
 	 * <p>
 	 * The method returns a promise. The object used to resolve the
 	 * {@link Promise} is a {@code Map<Integer,
-	 * ZigBeeReadStatusRecord>}. For each Map entry, the key contains the
-	 * attribute identifier and the value, the attribute value in the
+	 * ZCLReadStatusRecord>}. For each Map entry, the key contains the
+	 * attribute identifier and the value, a ZigBee Read Attributes Status
+	 * Record, which is made of the status of the read of this attribute, the
+	 * ZigBee data type of the attribute and the attribute value in the
 	 * corresponding java wrapper type (or null in case of an unsupported
 	 * attribute or in case of an invalid value). For attributes which data type
 	 * serialization is not supported (i.e,
@@ -179,7 +181,7 @@ public interface ZCLCluster {
 	 *         attributes with different manufacturer specific code.
 	 * 
 	 */
-	Promise /* <Map<Integer,ZigBeeReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
+	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
 
 	/**
 	 * Write a set of attributes on the cluster using the ZCL <em>Write

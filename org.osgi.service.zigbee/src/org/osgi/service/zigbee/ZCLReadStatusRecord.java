@@ -22,7 +22,7 @@ package org.osgi.service.zigbee;
  * 
  * @author $Id$
  */
-public interface ZigBeeReadStatusRecord {
+public interface ZCLReadStatusRecord {
 
 	/**
 	 * 

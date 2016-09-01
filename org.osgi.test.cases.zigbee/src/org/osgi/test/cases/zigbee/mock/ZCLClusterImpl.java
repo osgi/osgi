@@ -25,8 +25,8 @@ import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.ZigBeeReadStatusRecord;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
@@ -100,17 +100,10 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
-		// Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
-		// FIX Should we check for a null value?
-		/*
-		 * if (attributes == null ) { handler.onFailure(new
-		 * NullPointerException("attributes cannot be null")); }
-		 */
-
 		if (attributesInfoArray == null) {
-			throw new NullPointerException("attributes cannot be null");
+			return Promises.failed(new NullPointerException("attributes cannot be null"));
 		} else if (attributesInfoArray.length == 0) {
-			throw new IllegalArgumentException("attributes array cannot be empty");
+			return Promises.failed(new IllegalArgumentException("attributes array cannot be empty"));
 		}
 		Map response = new HashMap();
 
@@ -145,7 +138,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// for (int i : attributesIds) {
 		final ZCLAttributeInfo attribute = attributesInfoArray[i];
 		final byte[] attributeValue = {0};
-		ZigBeeReadStatusRecord result = new ZigBeeReadStatusRecord() {
+		ZCLReadStatusRecord result = new ZCLReadStatusRecord() {
 
 			public Object getValue() {
 				return attributeValue;
