@@ -19,6 +19,7 @@ package org.osgi.util.promise;
 /**
  * Timeout exception for a Promise.
  * 
+ * @since 1.1
  * @author $Id$
  */
 public class TimeoutException extends Exception {
