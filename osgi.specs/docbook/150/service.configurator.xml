@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="150"
+         revision="$Id$"
+         version="5" xml:id="service.configurator"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Configurator Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.configurator-version"
+    linkend="org.osgi.service.configurator"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+    
+    <para>...
+    </para>
+  </section> 
+  
+  <section>
+    <title>Entities</title>
+    
+    <para>The following entities are used in this specification</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Configuration Admin Service</emphasis> - yyy.</para>
+      </listitem>
+    
+      <listitem>
+          <para><emphasis>Configuration resource</emphasis> - A YAML resource containing
+              configuration.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>xxx</emphasis> - yyy.</para>
+      </listitem>
+    
+    </itemizedlist>
+    <remark>Add entity diagram</remark>
+  </section> 
+
+  <section>
+    <title>Configurator Service</title>
+    
+    <para>...</para>
+  </section> 
+
+  <section>
+    <title>Security</title>
+    <para>...</para>
+  </section> 
+
+  <!--
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.util.xml"/>
+  -->
+ 
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
