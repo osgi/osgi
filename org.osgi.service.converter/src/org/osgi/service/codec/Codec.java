@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.converter;
+package org.osgi.service.codec;
 
 import java.lang.reflect.Type;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.converter.Converter;
+import org.osgi.service.converter.TypeReference;
 
 /**
  * The Codec service can be used to encode a given object in a certain
@@ -25,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * decode the representation it produced. A single Codec service can
  * encode/decode only a single format. To support multiple encoding formats
  * register multiple services.
- * 
+ *
  * @author $Id$
  * @ThreadSafe
  */
@@ -33,7 +35,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface Codec {
 	/**
 	 * Start specifying a decode operation.
-	 * 
+	 *
 	 * @param <T> The type to decode to.
 	 * @param cls The class to decode to.
 	 * @return A {@link Decoding} object to specify the source for the decode
@@ -43,7 +45,7 @@ public interface Codec {
 
 	/**
 	 * Start specifying a decode operation.
-	 * 
+	 *
 	 * @param <T> The type to decode to.
 	 * @param ref A type reference for the target type.
 	 * @return A {@link Decoding} object to specify the source for the decode
@@ -53,7 +55,7 @@ public interface Codec {
 
 	/**
 	 * Start specifying a decode operation.
-	 * 
+	 *
 	 * @param type The type to convert to.
 	 * @return A {@link Decoding} object to specify the source for the decode
 	 *         operation.
@@ -62,7 +64,7 @@ public interface Codec {
 
 	/**
 	 * Start specifying an encode operation.
-	 * 
+	 *
 	 * @param obj The object to encode.
 	 * @return an Encoding object to specify the target for the decode
 	 *         operation.
@@ -72,7 +74,7 @@ public interface Codec {
 	/**
 	 * Specify the converter to be used by the code, if an alternative, adapted,
 	 * converter is to be used.
-	 * 
+	 *
 	 * @param converter The converter to use.
 	 * @return A codec that uses the converter as specified.
 	 */
