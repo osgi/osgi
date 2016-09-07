@@ -30,8 +30,6 @@ public class ZigBeeSerializer {
 	 */
 	protected byte[]	data	= null;
 
-	protected boolean	isEmpty	= true;
-
 	int					index	= 0;
 
 	/**
@@ -42,7 +40,6 @@ public class ZigBeeSerializer {
 	 */
 	public ZigBeeSerializer() {
 		this.data = new byte[30];
-		this.isEmpty = true;
 	}
 
 	/**
@@ -54,7 +51,6 @@ public class ZigBeeSerializer {
 
 	public ZigBeeSerializer(byte[] payload) {
 		this.data = payload;
-		this.isEmpty = false;
 		this.index = payload.length;
 	}
 

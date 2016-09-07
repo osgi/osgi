@@ -28,19 +28,19 @@ import org.osgi.service.zigbee.ZCLHeader;
  */
 public class ZCLHeaderImpl implements ZCLHeader {
 
-	private int commandId;
+	private int		commandId;
 
-	private int manufacturerCode = -1;
+	private int		manufacturerCode			= -1;
 
-	private boolean isClusterSpecificCommand = false;
+	private boolean	isClusterSpecificCommand	= false;
 
-	private boolean isManufacturerSpecific = false;
+	private boolean	isManufacturerSpecific		= false;
 
-	private boolean isClientServerDirection = false;
+	private boolean	isClientServerDirection		= false;
 
-	private boolean disableDefaultResponse = false;
+	private boolean	disableDefaultResponse		= false;
 
-	private byte tsn = 40;
+	private byte	tsn							= 40;
 
 	/**
 	 * 

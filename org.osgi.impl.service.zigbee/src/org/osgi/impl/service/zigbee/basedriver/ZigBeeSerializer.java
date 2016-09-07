@@ -30,8 +30,6 @@ public class ZigBeeSerializer {
 	 */
 	protected byte[]	data	= null;
 
-	protected boolean	isEmpty	= true;
-
 	int					index	= 0;
 
 	/**
@@ -42,7 +40,6 @@ public class ZigBeeSerializer {
 	 */
 	public ZigBeeSerializer() {
 		this.data = new byte[30];
-		this.isEmpty = true;
 	}
 
 	/**
@@ -54,7 +51,6 @@ public class ZigBeeSerializer {
 
 	public ZigBeeSerializer(byte[] payload) {
 		this.data = payload;
-		this.isEmpty = false;
 		this.index = payload.length;
 	}
 
@@ -83,6 +79,10 @@ public class ZigBeeSerializer {
 
 	protected int getIndex() {
 		return index;
+	}
+
+	protected void resetIndex() {
+		index = 0;
 	}
 
 	public ZigBeeDataInput getDataInput() {
@@ -124,7 +124,7 @@ public class ZigBeeSerializer {
 		}
 	}
 
-	public long readLong(int pos, int size) throws EOFException {
+	public long readUnsignedLong(int pos, int size) throws EOFException {
 		if (size <= 8 && size != 0) {
 			try {
 				long l = 0;
@@ -140,6 +140,24 @@ public class ZigBeeSerializer {
 			}
 		} else {
 			throw new IllegalArgumentException();
+		}
+	}
+
+	public long readLong(int pos, int size) throws EOFException {
+
+		if (size >= 1 && size <= 8) {
+			pos += size;
+			try {
+				long l = data[--pos];
+				for (int i = 1; i < size; i++) {
+					l = (l << 8) | (data[--pos]) & 0xff;
+				}
+				return l;
+			} catch (IndexOutOfBoundsException e) {
+				throw new EOFException();
+			}
+		} else {
+			throw new IllegalArgumentException("Invalid size parameter, accepted values are (1, 8]");
 		}
 	}
 
@@ -270,12 +288,23 @@ public class ZigBeeSerializer {
 	}
 
 	public void writeBytes(byte[] bytes, int length) {
-		if ((bytes == null) || (length == 0)) {
+		if ((bytes == null) || (length == 0) || ((bytes != null) && (bytes.length < length))) {
 			throw new IllegalArgumentException();
 		}
 
 		for (int i = 0; i < length; i++) {
 			this.writeByte(bytes[i]);
 		}
+	}
+
+	private char[] hexDigits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+	public String toString() {
+		String out = "";
+		for (int i = 0; i < index; i++) {
+			int d = data[i];
+			out += "0x" + hexDigits[((d >> 4) & 0x0f)] + hexDigits[(d & 0x0f)] + ", ";
+		}
+		return out;
 	}
 }
