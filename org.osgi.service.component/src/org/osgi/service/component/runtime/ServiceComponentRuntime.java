@@ -17,6 +17,7 @@
 package org.osgi.service.component.runtime;
 
 import java.util.Collection;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentContext;
@@ -97,7 +98,8 @@ public interface ServiceComponentRuntime {
 	 * @param description The component description. Must not be {@code null}.
 	 * @return A collection containing a snapshot of the current component
 	 *         configurations for the specified component description. An empty
-	 *         collection is returned if there are none.
+	 *         collection is returned if there are none or if the provided
+	 *         component description does not belong to an active bundle.
 	 */
 	Collection<ComponentConfigurationDTO> getComponentConfigurationDTOs(ComponentDescriptionDTO description);
 
@@ -121,11 +123,9 @@ public interface ServiceComponentRuntime {
 
 	/**
 	 * Enables the specified component description.
-	 * 
 	 * <p>
 	 * If the specified component description is currently enabled, this method
 	 * has no effect.
-	 * 
 	 * <p>
 	 * This method must return after changing the enabled state of the specified
 	 * component description. Any actions that result from this, such as
@@ -133,21 +133,20 @@ public interface ServiceComponentRuntime {
 	 * asynchronously to this method call.
 	 * 
 	 * @param description The component description to enable. Must not be
-	 *        {@code null}.
+	 *            {@code null}.
 	 * @return A promise that will be resolved when the actions that result from
 	 *         changing the enabled state of the specified component have
-	 *         completed.
+	 *         completed. If the provided description does not belong to an
+	 *         active bundle, a failed promise is returned.
 	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
 	Promise<Void> enableComponent(ComponentDescriptionDTO description);
 
 	/**
 	 * Disables the specified component description.
-	 * 
 	 * <p>
 	 * If the specified component description is currently disabled, this method
 	 * has no effect.
-	 * 
 	 * <p>
 	 * This method must return after changing the enabled state of the specified
 	 * component description. Any actions that result from this, such as
@@ -155,10 +154,11 @@ public interface ServiceComponentRuntime {
 	 * asynchronously to this method call.
 	 * 
 	 * @param description The component description to disable. Must not be
-	 *        {@code null}.
+	 *            {@code null}.
 	 * @return A promise that will be resolved when the actions that result from
 	 *         changing the enabled state of the specified component have
-	 *         completed.
+	 *         completed. If the provided description does not belong to an
+	 *         active bundle, a failed promise is returned.
 	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
 	Promise<Void> disableComponent(ComponentDescriptionDTO description);
