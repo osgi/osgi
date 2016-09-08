@@ -301,12 +301,16 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 						return CONTINUE;
 					case CLOSE :
 						list.sort(comparator);
-						for(T t : list) {
-							eventStream.handleEvent(PushEvent.data(t));
+						sorted: for (T t : list) {
+							if (eventStream
+									.handleEvent(PushEvent.data(t)) < 0) {
+								break sorted;
+							}
 						}
-						return ABORT;
+						// Fall through
 					case ERROR :
-						return eventStream.handleEvent(event.nodata());
+						eventStream.handleEvent(event);
+						return ABORT;
 				}
 				return eventStream.handleEvent(event.nodata());
 			} catch (Exception e) {
@@ -411,8 +415,9 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public PushStream<T> skip(long n) {
-		if(n <= 0) {
-			throw new IllegalArgumentException("The number to skip must be greater than zero");
+		if (n < 0) {
+			throw new IllegalArgumentException(
+					"The number to skip must be greater than or equal to zero");
 		}
 		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
 				psp, defaultExecutor, scheduler, this);
@@ -599,7 +604,11 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			rsult[i] = new IntermediatePushStreamImpl<>(psp, defaultExecutor,
 					scheduler, this);
 		}
-		AtomicReferenceArray<Boolean> off = new AtomicReferenceArray<>(tests.length);
+
+		Boolean[] array = new Boolean[tests.length];
+		Arrays.fill(array, Boolean.TRUE);
+		AtomicReferenceArray<Boolean> off = new AtomicReferenceArray<>(array);
+
 		AtomicInteger count = new AtomicInteger(tests.length);
 		updateNext(event -> {
 			if (!event.isTerminal()) {

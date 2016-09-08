@@ -159,6 +159,8 @@ public interface PushStream<T> extends AutoCloseable {
 	 * Skip a number of events in the channel.
 	 * 
 	 * @param n number of elements to skip
+	 * @throws IllegalArgumentException if the number of events to skip is
+	 *             negative
 	 * @return Builder style (can be a new or the same object)
 	 */
 	PushStream<T> skip(long n);

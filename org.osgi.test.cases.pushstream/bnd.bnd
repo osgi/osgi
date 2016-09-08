@@ -11,17 +11,18 @@ Import-Package: ${-signaturetest}, *
 Test-Cases = ${testcases}
 -signaturetest = org.osgi.util.pushstream
 
--buildpath = \
-    osgi.core; version=5.0, \
-    org.osgi.test.support; version=project, \
-    org.osgi.util.pushstream; version=project, \
-    org.osgi.util.function; version=project, \
-    org.osgi.util.promise; version=project, \
-    ${junit}
+-buildpath: \
+	osgi.core;version=5.0,\
+	org.osgi.test.support;version=project,\
+	org.osgi.util.pushstream;version=project,\
+	org.osgi.util.function;version=project,\
+	org.osgi.util.promise;version=project,\
+	${junit},\
+	org.easymock
 
--runbundles = \
-    org.osgi.util.pushstream; version=latest, \
-    org.osgi.util.function; version=latest, \
-    org.osgi.util.promise; version=latest
+-runbundles: \
+	org.osgi.util.pushstream;version=latest,\
+	org.osgi.util.function;version=latest,\
+	org.osgi.util.promise;version=latest
 
 -runproperties = ${runproperties}
