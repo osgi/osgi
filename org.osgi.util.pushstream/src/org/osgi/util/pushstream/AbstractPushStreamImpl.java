@@ -400,7 +400,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		return eventStream;
 	}
 
-	public void check(AtomicLong lastTime, long timeout) {
+	private void check(AtomicLong lastTime, long timeout) {
 		long now = System.nanoTime();
 
 		long elapsed = now - lastTime.get();
