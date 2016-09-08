@@ -467,12 +467,22 @@
           </row>
           
           <row>
-            <entry><code>limit()</code></entry>
+            <entry><code>limit(long)</code></entry>
 
             <entry><code>true</code></entry>
 
             <entry><para>Limits the length of the stream to the defined number of 
             elements. Once that number of elements are received then a close
+            event is propagated to the next stage of the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>limit(Duration)</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry><para>Limits the time that the stream will remain open
+            to the supplied Duration. Once that time has elapsed then a close
             event is propagated to the next stage of the stream.</para></entry>
           </row>
           
@@ -556,6 +566,18 @@
               <para>Collects events over the specified time-limit, passing them
               to the registered handler function. If no events occur during the
               time limit then no events are propagated</para>
+            </entry>
+          </row>
+          <row>
+            <entry><code>timeout()</code></entry>
+
+            <entry><code>true</code></entry>
+
+            <entry>
+              <para>Tracks the time since the last event was received. If no
+              event is received within the supplied Duration then an error event
+              is propagated to the next stage of the stream. The exception in the
+              event will be an <code>org.osgi.util.promise.TimeoutException</code>.</para>
             </entry>
           </row>
         </tbody>
@@ -760,7 +782,7 @@
       </section>
     
       <section>
-        <title>Buffering and circuit breakers</title>
+        <title>Buffering</title>
         
         <para>In asynchronous systems events may be produced and consumed at
         different rates. If the consumer is faster than the producer then there
@@ -810,6 +832,7 @@
         </itemizedlist>
         
 
+      </section>
         <section>
           <title>Circuit Breakers</title>
           <para>Buffering is a powerful tool in event processing pipelines, however it
@@ -822,7 +845,6 @@
           <para>The default policy for push stream buffers is the FAIL policy, which
           means that push stream buffers are all circuit breakers by default.</para>
         </section>
-      </section>
     
     </section>
     
@@ -937,8 +959,32 @@
           are closed</para></listitem>
         </itemizedlist>
       </section>
+      
     </section>
-    
+    <section>
+      <title>Time Limited Streams</title>
+        
+      <para>An important difference between Push Streams and Java 8 Streams is that 
+      events occur over time, there are therefore some operations that do not apply 
+      to Java 8 Streams which are relevant to Push Streams.</para>
+        
+      <para>The <code>limit()</code> operation on a Stream can be used to limit the 
+      number of elements that are processed, however on a Push Stream that number of 
+      events may never be reached, even though the stream has not closed. Push Streams 
+      therefore also have a <code>limit</code> method which takes a <code>Duration</code>. 
+      This duration limits the time for which the stream is open, closing it after the 
+      duration has elapsed.</para>
+
+      <para>The <code>timeout</code> operation of a Push Stream can be used to end a 
+      stream if no events are received for the given amount of time. If an event 
+      is received then this resets the timeout counter. The timeout operation is 
+      therefore a useful mechanism for identifying pipelines which have stalled 
+      in their processing. If the timeout expires then it propagates an error event
+      to the next stage of the pipeline. The Exception in the error event is an
+      <code>org.osgi.util.promise.TimeoutException</code>.
+      </para>
+    </section>
+  </section>
     <section>
       <title>The Push Stream Provider</title>
     
@@ -974,6 +1020,38 @@
         
       </section>
 
+      <section>
+        <title>Mapping between Java 8 Streams and Push Streams</title>
+        <para>There are a number of scenarios where an application developer may wish to 
+        convert between a Java 8 Stream and a PushStream. In particular, the 
+        <code>flatMap</code> operation of a Push Stream takes a single event and converts 
+        it into many events in a Push Stream. Common operations, such as splitting the 
+        event into child events will result in a Java Collection, or a Java 8 Stream. 
+        These need to be converted into a Push Stream before they can be returned from 
+        the flatMap operation.</para>
+        
+        <para>To assist this model the PushStreamProvider provides two <code>streamOf</code> 
+        methods. These convert a Java 8 Stream into a Push Stream, changing the pull-based 
+        model of Java 8 Streams into the asynchronous model of the Push Stream.</para>
+        
+        <para>The first <code>streamOf</code> method takes a Java 8 Stream. The 
+        PushStream created by this method is not fully asynchronous, it uses the 
+        connecting thread to consume the Java 8 Stream. As a result the streams created 
+        using this method will block terminal operations. This method should therefore 
+        not normally be used for infinite event streams, but instead for short, finite 
+        streams of data that can be processed rapidly, for example as the result of a 
+        flatmapping operation. In this scenario reusing the incoming thread improves 
+        performance.</para>
+        
+        <para>For larger Streams of data, or when truly asynchronous operation is 
+        required, there is a second <code>streamOf</code> method which also takes an 
+        <code>Executor</code>. This Executor is used to asynchronously consume elements 
+        from the Java 8 Stream using a single task. This mode of operation is suitable 
+        for use with infinite data streams, or for streams which require a truly 
+        asynchronous mode of operation, and does not require the stream to be parallel.</para>
+      </section>
+      
+    </section>
       <section>
         <title>Simple Push Event Sources</title>
   
@@ -1017,8 +1095,6 @@
           to trigger the initialisation of an event thread, allowing lazier startup.</para>
         </section>
       </section>
-    </section>
-  </section>
 
 
   <section>
