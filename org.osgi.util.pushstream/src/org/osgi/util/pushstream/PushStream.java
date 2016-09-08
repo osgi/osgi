@@ -137,6 +137,25 @@ public interface PushStream<T> extends AutoCloseable {
 	PushStream<T> limit(long maxSize);
 
 	/**
+	 * Automatically close the channel after the given amount of time has
+	 * elapsed.
+	 * 
+	 * @param maxTime The maximum time that the stream should remain open
+	 * @return Builder style (can be a new or the same object)
+	 */
+	PushStream<T> limit(Duration maxTime);
+
+	/**
+	 * Automatically close the channel if no events are received for the
+	 * indicated length of time
+	 * 
+	 * @param idleTime The length of time that the stream should remain open
+	 *            when no events are being received.
+	 * @return Builder style (can be a new or the same object)
+	 */
+	PushStream<T> timeout(Duration idleTime);
+
+	/**
 	 * Skip a number of events in the channel.
 	 * 
 	 * @param n number of elements to skip

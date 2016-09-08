@@ -482,18 +482,18 @@ public final class PushStreamProvider {
 				try {
 					long returnValue = closed.get() ? -1 : aec.accept(data(i));
 					if (returnValue < 0) {
-						aec.accept(close());
+						aec.accept(PushEvent.<T> close());
 					}
 					return returnValue;
 				} catch (Exception e) {
 					try {
-						aec.accept(error(e));
+						aec.accept(PushEvent.<T> error(e));
 					} catch (Exception e2) {/* No further events needed */}
 					return -1;
 				}
 			}).filter(i -> i < 0).findFirst().orElseGet(() -> {
 				try {
-					return aec.accept(close());
+					return aec.accept(PushEvent.<T> close());
 				} catch (Exception e) {
 					return -1;
 				}

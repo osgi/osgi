@@ -345,6 +345,69 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		});
 		return eventStream;
 	}
+	
+	@Override
+	public PushStream<T> limit(Duration maxTime) {
+		
+		Runnable start = () -> scheduler.schedule(() -> close(),
+				maxTime.toNanos(), NANOSECONDS);
+
+		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<T>(
+				psp, defaultExecutor, scheduler, this) {
+			@Override
+			protected void beginning() {
+				start.run();
+			}
+		};
+		updateNext((event) -> {
+			try {
+				return eventStream.handleEvent(event);
+			} catch (Exception e) {
+				close(PushEvent.error(e));
+				return ABORT;
+			}
+		});
+		return eventStream;
+	}
+
+	@Override
+	public PushStream<T> timeout(Duration maxTime) {
+
+		AtomicLong lastTime = new AtomicLong();
+		long timeout = maxTime.toNanos();
+
+		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<T>(
+				psp, defaultExecutor, scheduler, this) {
+			@Override
+			protected void beginning() {
+				lastTime.set(System.nanoTime());
+				scheduler.schedule(() -> check(lastTime, timeout), timeout,
+						NANOSECONDS);
+			}
+		};
+		updateNext((event) -> {
+			try {
+				return eventStream.handleEvent(event);
+			} catch (Exception e) {
+				close(PushEvent.error(e));
+				return ABORT;
+			}
+		});
+		return eventStream;
+	}
+
+	public void check(AtomicLong lastTime, long timeout) {
+		long now = System.nanoTime();
+
+		long elapsed = now - lastTime.get();
+
+		if (elapsed < timeout) {
+			scheduler.schedule(() -> check(lastTime, timeout),
+					timeout - elapsed, NANOSECONDS);
+		} else {
+			close();
+		}
+	}
 
 	@Override
 	public PushStream<T> skip(long n) {
