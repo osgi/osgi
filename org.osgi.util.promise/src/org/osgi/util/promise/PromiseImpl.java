@@ -682,24 +682,24 @@ final class PromiseImpl<T> implements Promise<T> {
 	public Promise<T> timeout(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
 		if (!isDone()) {
-			onResolve(new Timeout(chained, millis, TimeUnit.MILLISECONDS));
+			onResolve(new Timeout<T>(chained, millis, TimeUnit.MILLISECONDS));
 		}
 		chained.resolveWith(this);
 		return chained;
 	}
 
 	/**
-	 * Timeout class used by the {@link PromiseImpl#timeout(long, TimeUnit)}
-	 * method to cancel timeout when the Promise is resolved.
+	 * Timeout class used by the {@link PromiseImpl#timeout(long)} method to
+	 * cancel timeout when the Promise is resolved.
 	 * 
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Timeout implements Runnable {
+	private static final class Timeout<R> implements Runnable {
 		private final ScheduledFuture< ? > future;
 
-		Timeout(PromiseImpl< ? > chained, long timeout, TimeUnit unit) {
-			future = Callbacks.schedule(new Action(chained), timeout, unit);
+		Timeout(PromiseImpl<R> chained, long timeout, TimeUnit unit) {
+			future = Callbacks.schedule(new Action<R>(chained), timeout, unit);
 		}
 
 		@Override
@@ -714,10 +714,10 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * 
 		 * @Immutable
 		 */
-		private static final class Action implements Runnable {
-			private final PromiseImpl< ? > chained;
+		private static final class Action<R> implements Runnable {
+			private final PromiseImpl<R> chained;
 
-			Action(PromiseImpl< ? > chained) {
+			Action(PromiseImpl<R> chained) {
 				this.chained = chained;
 			}
 
@@ -850,7 +850,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		/**
-		 * ScheduledThreadPoolExecutor for timeout execution.
+		 * ScheduledThreadPoolExecutor for scheduled execution.
 		 * 
 		 * @ThreadSafe
 		 */

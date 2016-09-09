@@ -412,10 +412,10 @@ public interface Promise<T> {
 	 * before this Promise is resolved, the returned Promise is failed with a
 	 * {@link TimeoutException}.
 	 * 
-	 * @param milliseconds The maximum time to wait in milliseconds. Zero and
-	 *            negative time is treated as an immediate timeout.
+	 * @param milliseconds The time to wait in milliseconds. Zero and negative
+	 *            time is treated as an immediate timeout.
 	 * @return A Promise that is resolved when either this Promise is resolved
-	 *         or the timeout is reached.
+	 *         or the specified timeout is reached.
 	 * @since 1.1
 	 */
 	Promise<T> timeout(long milliseconds);
