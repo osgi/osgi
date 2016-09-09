@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+     * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,14 +59,14 @@ public interface Adapter extends Converter {
 	 * @return The current adapter, can be used to chain invocations.
 	 */
 	<F, T> Adapter rule(Class<F> fromCls, Class<T> toCls,
-			SimpleConvertFunction<F,T> toFun,
-			SimpleConvertFunction<T,F> fromFun);
+			FunctionThrowsException<F,T> toFun,
+			FunctionThrowsException<T,F> fromFun);
 
 	<F, T> Adapter rule(TypeReference<F> fromRef, TypeReference<T> toRef,
-			SimpleConvertFunction<F,T> toFun,
-			SimpleConvertFunction<T,F> fromFun);
+			FunctionThrowsException<F,T> toFun,
+			FunctionThrowsException<T,F> fromFun);
 
 	<F, T> Adapter rule(Type fromType, Type toType,
-			SimpleConvertFunction<F,T> toFun,
-			SimpleConvertFunction<T,F> fromFun);
+			FunctionThrowsException<F,T> toFun,
+			FunctionThrowsException<T,F> fromFun);
 }

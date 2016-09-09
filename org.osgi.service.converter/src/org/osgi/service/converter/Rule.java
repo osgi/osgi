@@ -32,7 +32,7 @@ public class Rule<F, T> {
 
 	/**
 	 * Create a bidirectional rule.
-	 * 
+	 *
 	 * @param fromCls The class from which to convert. If {@link Object} is
 	 *            specified then this functions as a wildcard for generic
 	 *            conversions.
@@ -64,7 +64,7 @@ public class Rule<F, T> {
 
 	/**
 	 * Create a single-direction rule.
-	 * 
+	 *
 	 * @param fromCls The class from which to convert. If {@link Object} is
 	 *            specified then this functions as a wildcard for generic
 	 *            conversions.
@@ -79,7 +79,7 @@ public class Rule<F, T> {
 
 	/**
 	 * Accessor for the class to convert from.
-	 * 
+	 *
 	 * @return The class to convert from.
 	 */
 	public Class<F> getFromClass() {
@@ -88,7 +88,7 @@ public class Rule<F, T> {
 
 	/**
 	 * Accessor for the class to convert to.
-	 * 
+	 *
 	 * @return The class to convert to.
 	 */
 	public Class<T> getToClass() {
