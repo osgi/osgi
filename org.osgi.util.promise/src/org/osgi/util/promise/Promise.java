@@ -419,4 +419,18 @@ public interface Promise<T> {
 	 * @since 1.1
 	 */
 	Promise<T> timeout(long milliseconds);
+
+	/**
+	 * Delay after the resolution of this Promise.
+	 * <p>
+	 * Once this Promise is resolved, resolve the returned Promise with this
+	 * Promise after the specified delay.
+	 * 
+	 * @param milliseconds The time to delay in milliseconds. Zero and negative
+	 *            time is treated as no delay.
+	 * @return A Promise that is resolved with this Promise after this Promise
+	 *         is resolved and the specified delay has elapsed.
+	 * @since 1.1
+	 */
+	Promise<T> delay(long milliseconds);
 }

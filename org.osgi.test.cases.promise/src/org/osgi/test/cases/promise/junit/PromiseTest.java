@@ -2029,4 +2029,133 @@ public class PromiseTest extends TestCase {
 		assertTrue(t.isDone());
 		assertFalse(p.isDone());
 	}
+
+	public void testDelayWithSuccess1() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
+		t.onResolve(() -> latch1.countDown());
+		d.resolve("no delay");
+		assertFalse(t.isDone());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNull(p.getFailure());
+		assertSame(p.getValue(), t.getValue());
+	}
+
+	public void testDelayWithSuccess2() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no delay");
+		assertTrue(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
+		t.onResolve(() -> latch1.countDown());
+		assertFalse(t.isDone());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+		assertNull(p.getFailure());
+		assertSame(p.getValue(), t.getValue());
+	}
+
+	public void testDelayWithFailure1() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
+		t.onResolve(() -> latch1.countDown());
+		d.fail(new Exception("no delay"));
+		assertFalse(t.isDone());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNotNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNotNull(p.getFailure());
+		assertSame(p.getFailure(), t.getFailure());
+	}
+
+	public void testDelayWithFailure2() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.fail(new Exception("no delay"));
+		assertTrue(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
+		t.onResolve(() -> latch1.countDown());
+		assertFalse(t.isDone());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNotNull(t.getFailure());
+		assertTrue(p.isDone());
+		assertNotNull(p.getFailure());
+		assertSame(p.getFailure(), t.getFailure());
+	}
+
+	public void testDelayWithDelayUnresolved() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
+		t.onResolve(() -> latch1.countDown());
+		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertFalse(t.isDone());
+	}
+
+	public void testDelayWithNegativeDelayResolved() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no delay");
+		assertTrue(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
+		t.onResolve(() -> latch1.countDown());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+	}
+
+	public void testDelayWithNegativeDelayUnresolved() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
+		t.onResolve(() -> latch1.countDown());
+		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertFalse(t.isDone());
+		assertFalse(p.isDone());
+	}
+
+	public void testDelayWithZeroDelayResolved() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		d.resolve("no delay");
+		assertTrue(p.isDone());
+		Promise<String> t = p.delay(0);
+		t.onResolve(() -> latch1.countDown());
+		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertTrue(t.isDone());
+		assertNull(t.getFailure());
+	}
+
+	public void testDelayWithZeroDelayUnresolved() throws Exception {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		assertFalse(p.isDone());
+		Promise<String> t = p.delay(0);
+		t.onResolve(() -> latch1.countDown());
+		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
+		assertFalse(t.isDone());
+		assertFalse(p.isDone());
+	}
+
 }
