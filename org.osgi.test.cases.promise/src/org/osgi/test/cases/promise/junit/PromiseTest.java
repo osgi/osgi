@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.osgi.util.function.Callback;
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Deferred;
@@ -108,12 +109,8 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final Promise<Integer> p = d.getPromise();
-		Promise<Number> p2 = p.then(new Success<Number, Number>() {
-			@Override
-			public Promise<Number> call(Promise<Number> resolved) throws Exception {
-				return resolved((Number) new Long(resolved.getValue().longValue()));
-			}
-		});
+		Promise<Number> p2 = p.then(resolved -> resolved(
+				(Number) new Long(resolved.getValue().longValue())));
 		p2.onResolve(() -> latch.countDown());
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -2156,6 +2153,73 @@ public class PromiseTest extends TestCase {
 		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertFalse(t.isDone());
 		assertFalse(p.isDone());
+	}
+
+	/**
+	 * Test the then Callback functionality.
+	 */
+	public void testThenCallback() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p2 = p1.then(() -> latch.countDown())
+				.onResolve(() -> latch2.countDown());
+
+		assertFalse("callback ran before resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(p1.isDone());
+		assertFalse(p2.isDone());
+
+		String value = new String("20");
+		d.resolve(value);
+		assertTrue("callback did not run after resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p1.isDone());
+		assertTrue("callback did not run after resolved",
+				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p2.isDone());
+		assertSame(value, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+	}
+
+	public void testThenCallbackFailure() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Exception e = new Exception("failure");
+		Promise<String> p2 = p1.then(() -> {
+			latch.countDown();
+			throw e;
+		}).onResolve(() -> latch2.countDown());
+		
+		assertFalse("callback ran before resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(p1.isDone());
+		assertFalse(p2.isDone());
+		
+		String value = new String("20");
+		d.resolve(value);
+		assertTrue("callback did not run after resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p1.isDone());
+		assertTrue("callback did not run after resolved",
+				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p2.isDone());
+		assertNotNull("wrong failure", p2.getFailure());
+		assertSame(e, p2.getFailure());
+	}
+
+	public void testThenCallbackNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = resolved(value1);
+		try {
+			p1.then((Callback) null);
+			fail("failed to error on null function");
+		} catch (NullPointerException e) {
+			// expected
+		}
 	}
 
 }

@@ -36,6 +36,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.osgi.util.function.Callback;
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 
@@ -360,6 +361,33 @@ final class PromiseImpl<T> implements Promise<T> {
 				}
 			}
 			chained.resolve(value, f);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> then(Callback callback) {
+		return then(new ThenCallback<T>(callback), null);
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#then(Callback)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class ThenCallback<T> implements Success<T,T> {
+		private final Callback callback;
+	
+		ThenCallback(Callback callback) {
+			this.callback = requireNonNull(callback);
+		}
+	
+		@Override
+		public Promise<T> call(Promise<T> resolved) throws Exception {
+			callback.run();
+			return resolved;
 		}
 	}
 
