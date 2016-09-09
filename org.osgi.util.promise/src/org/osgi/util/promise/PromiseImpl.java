@@ -791,39 +791,34 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Callbacks implements ThreadFactory, Runnable {
-		private static final AtomicBoolean		shutdownHookInstalled;
-		private static final ThreadFactory		delegateThreadFactory;
-		private static final TimeoutExecutor	timeoutExecutor;
-		private static final CallbackExecutor	callbackExecutor;
+	private static final class Callbacks
+			implements ThreadFactory, RejectedExecutionHandler, Runnable {
+		private static final Callbacks			callbacks;
+		private static final ScheduledExecutor	scheduledExecutor;
+		private static final ThreadPoolExecutor	callbackExecutor;
 		static {
-			shutdownHookInstalled = new AtomicBoolean();
-			delegateThreadFactory = Executors.defaultThreadFactory();
-			timeoutExecutor = new TimeoutExecutor(2,
-					new Callbacks("TimeoutExecutor"));
-			callbackExecutor = new CallbackExecutor(64,
-					new Callbacks("CallbackExecutor"));
+			callbacks = new Callbacks();
+			scheduledExecutor = new ScheduledExecutor(2, callbacks);
+			callbackExecutor = new ThreadPoolExecutor(0, 64, 60L,
+					TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
+					callbacks, callbacks);
 		}
 
 		/**
-		 * Schedule a callback on the TimeoutExecutor
+		 * Schedule a callback on the scheduled executor
 		 */
-		static ScheduledFuture< ? > schedule(Runnable callback, long timeout,
+		static ScheduledFuture< ? > schedule(Runnable callback, long delay,
 				TimeUnit unit) {
 			try {
-				return timeoutExecutor.schedule(callback, timeout, unit);
+				return scheduledExecutor.schedule(callback, delay, unit);
 			} catch (RejectedExecutionException e) {
-				try {
-					callback.run();
-				} catch (Throwable t) {
-					uncaughtException(t);
-				}
+				callbacks.rejectedExecution(callback, scheduledExecutor);
 				return null;
 			}
 		}
 
 		/**
-		 * Execute a callback on the CallbackExecutor
+		 * Execute a callback on the callback executor
 		 */
 		static void execute(Runnable callback) {
 			callbackExecutor.execute(callback);
@@ -839,10 +834,12 @@ final class PromiseImpl<T> implements Promise<T> {
 			}
 		}
 
-		private final String name;
+		private final AtomicBoolean	shutdownHookInstalled;
+		private final ThreadFactory	delegateThreadFactory;
 
-		private Callbacks(String name) {
-			this.name = name;
+		private Callbacks() {
+			shutdownHookInstalled = new AtomicBoolean();
+			delegateThreadFactory = Executors.defaultThreadFactory();
 		}
 
 		/**
@@ -859,13 +856,27 @@ final class PromiseImpl<T> implements Promise<T> {
 				} catch (IllegalStateException e) {
 					// VM is already shutting down...
 					callbackExecutor.shutdown();
-					timeoutExecutor.shutdown();
+					scheduledExecutor.shutdown();
 				}
 			}
 			Thread t = delegateThreadFactory.newThread(r);
-			t.setName(name + "," + t.getName());
+			t.setName("PromiseImpl," + t.getName());
 			t.setDaemon(true);
 			return t;
+		}
+
+		/**
+		 * Call the callback using the caller's thread because the thread pool
+		 * rejected the execution.
+		 */
+		@Override
+		public void rejectedExecution(Runnable callback,
+				ThreadPoolExecutor executor) {
+			try {
+				callback.run();
+			} catch (Throwable t) {
+				uncaughtException(t);
+			}
 		}
 
 		/**
@@ -877,8 +888,8 @@ final class PromiseImpl<T> implements Promise<T> {
 			callbackExecutor.setMaximumPoolSize(
 					Math.max(1, callbackExecutor.getPoolSize()));
 			// Run all delayed callbacks now
-			timeoutExecutor.shutdown();
-			BlockingQueue<Runnable> queue = timeoutExecutor.getQueue();
+			scheduledExecutor.shutdown();
+			BlockingQueue<Runnable> queue = scheduledExecutor.getQueue();
 			if (!queue.isEmpty()) {
 				for (Object r : queue.toArray()) {
 					if (r instanceof RunnableScheduledFuture< ? >) {
@@ -886,14 +897,14 @@ final class PromiseImpl<T> implements Promise<T> {
 						if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
 								&& queue.remove(future)) {
 							future.run();
-							timeoutExecutor.afterExecute(future, null);
+							scheduledExecutor.afterExecute(future, null);
 						}
 					}
 				}
-				timeoutExecutor.shutdown();
+				scheduledExecutor.shutdown();
 			}
 			try {
-				timeoutExecutor.awaitTermination(20, TimeUnit.SECONDS);
+				scheduledExecutor.awaitTermination(20, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -911,9 +922,9 @@ final class PromiseImpl<T> implements Promise<T> {
 		 * 
 		 * @ThreadSafe
 		 */
-		private static final class TimeoutExecutor
+		private static final class ScheduledExecutor
 				extends ScheduledThreadPoolExecutor {
-			TimeoutExecutor(int corePoolSize, ThreadFactory threadFactory) {
+			ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
 				super(corePoolSize, threadFactory);
 			}
 
@@ -923,7 +934,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			@Override
 			protected void afterExecute(Runnable r, Throwable t) {
 				super.afterExecute(r, t);
-				if (r instanceof Future< ? >) {
+				if ((t == null) && (r instanceof Future< ? >)) {
 					boolean interrupted = Thread.interrupted();
 					try {
 						((Future< ? >) r).get();
@@ -932,39 +943,14 @@ final class PromiseImpl<T> implements Promise<T> {
 					} catch (InterruptedException e) {
 						interrupted = true;
 					} catch (ExecutionException e) {
-						uncaughtException(e.getCause());
+						t = e.getCause();
 					} finally {
 						if (interrupted) { // restore interrupt status
 							Thread.currentThread().interrupt();
 						}
 					}
 				}
-			}
-		}
-
-		/**
-		 * ThreadPoolExecutor for callback execution.
-		 * 
-		 * @ThreadSafe
-		 */
-		private static final class CallbackExecutor extends ThreadPoolExecutor
-				implements RejectedExecutionHandler {
-			CallbackExecutor(int maxPoolSize, ThreadFactory threadFactory) {
-				super(0, maxPoolSize, 60L, TimeUnit.SECONDS,
-						new SynchronousQueue<Runnable>(), threadFactory);
-				setRejectedExecutionHandler(this);
-			}
-
-			/**
-			 * Call the callback using the caller's thread because the thread
-			 * pool has reached max size.
-			 */
-			@Override
-			public void rejectedExecution(Runnable callback,
-					ThreadPoolExecutor executor) {
-				try {
-					callback.run();
-				} catch (Throwable t) {
+				if (t != null) {
 					uncaughtException(t);
 				}
 			}
