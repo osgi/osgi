@@ -19,7 +19,33 @@
   <section>
     <title>Introduction</title>
     
-    <para>...
+    <para>Today, many programs directly interface directly with the outside world through REST, HTTP, and other protocols
+     that are frequently require conversion from strings or byte streams. Data conversion is an inherent part of writing 
+     software in a type safe language. In Java, converting strings to proper types or to convert one type to a more 
+     convenient type is often done manually. Any errors are then handled inline.</para>
+      
+	<para>A common problem is interacting with Javascript. Since Javascript has no user defined types, it can get away with 
+	relatively clean looking code; the same code in Java usually requires significantly more code due to the required 
+	conversions to the fine grained types of Java. This code bypasses the built-in facilities like fields and methods 
+	and instead defines constant key strings and embeds the knowledge of the types in a piece of code instead of relying on a 
+	central declaration that is then verified by the compiler.</para>
+
+	<para>In release 6, the OSGi specifications introduced Data Transfer Objects (DTOs). DTOs are public objects without 
+	generics that only contain public instance fields based on simple types, arrays, and collections. 
+	In many ways DTOs replace Java beans. Java beans are hiding their fields and provide access methods but that separated 
+	the contract (the public interface) from the internal usage. Though this model has advantages in technical applications 
+	(many types, few fields) it tend to be a large overhead when there are relatively few types with lots of fields. i.e. 
+	the more common web applications. DTOs unify the specification with the data since the data is what is already public 
+	when it is sent to another process or serialized.</para>
+	
+	<para>By limiting the allowed data types in DTOs and ensuring they have no cycles they can be easily (de)serialized 
+	using JSON, providing easy interactions with Javascript.
+    </para>
+    
+    <para>This specification defines the OSGi Converter that makes it easy to convert many types to other types, including scalars,
+    Collections, Maps, Beans, Interfaces and DTOs without having to write the boilerplate conversion code. The converter
+    strictly adheres to the rule specified in this chapter. Converters can also be enhanced with custom behavior using converter
+    adapters. 
     </para>
   </section> 
   
@@ -794,17 +820,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
   </section>
 
   <section>
-    <title>Codecs</title>
-    <para>...</para>
-  </section> 
-
-  <section>
     <title>Security</title>
     <para>...</para>
   </section> 
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.util.xml"/>
  
   <section>
     <title>References</title>
