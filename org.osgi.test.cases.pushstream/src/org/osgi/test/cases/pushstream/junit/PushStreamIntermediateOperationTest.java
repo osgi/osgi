@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
@@ -11,6 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushEvent;
@@ -765,24 +767,41 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen_first = new ExtGenerator(5);
 		ExtGenerator gen_second = new ExtGenerator(5);
 
+		// Adding pushback ensures that the streams will interleave
 		PushStream<Integer> ps_first = new PushStreamProvider()
-				.createStream(gen_first);
+				.buildStream(gen_first)
+				.withPushbackPolicy(PushbackPolicyOption.FIXED, 100)
+				.create();
 		PushStream<Integer> ps_second = new PushStreamProvider()
-				.createStream(gen_second);
+				.buildStream(gen_second)
+				.withPushbackPolicy(PushbackPolicyOption.FIXED, 100)
+				.create();
 
 		Promise<Object[]> p = ps_first.merge(ps_second).toArray();
 		
-		gen_first.getExecutionThread().join();
-		gen_second.getExecutionThread().join();
+		// Keep the ordering
+		LinkedHashSet<Object> one = new LinkedHashSet<>();
+		LinkedHashSet<Object> two = new LinkedHashSet<>();
 
-		int timeout = 5100;
-		while (!p.isDone() && (timeout -= 100) > 0)
-			Thread.sleep(100);
+		for (Object o : p.getValue()) {
+			if (!one.add(o)) {
+				assertTrue("Object " + o + " was present three times",
+						two.add(o));
+			}
+		}
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(
-				new HashSet(Arrays.asList(0, 0, 1, 1, 2, 2, 3, 3, 4, 4)),
-				new HashSet(Arrays.asList(p.getValue())));
+		// The two sets of events should be in order, even though they were
+		// interleaved
+		Assert.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
+				one.stream().collect(Collectors.toList()));
+		Assert.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
+				two.stream().collect(Collectors.toList()));
+
+		// The two sets of events should be interleaved as they have a 100 ms
+		// delay after each event, giving time for the other stream to run
+		Assert.assertFalse("The two streams were processed sequentially",
+				Arrays.asList(0, 1, 2, 3, 4, 0, 1, 2, 3, 4)
+						.equals(Arrays.asList(p.getValue())));
 	}
 
 	/**

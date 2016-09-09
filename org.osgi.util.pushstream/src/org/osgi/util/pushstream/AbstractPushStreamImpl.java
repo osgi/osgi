@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -400,7 +401,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 		return eventStream;
 	}
 
-	private void check(AtomicLong lastTime, long timeout) {
+	void check(AtomicLong lastTime, long timeout) {
 		long now = System.nanoTime();
 
 		long elapsed = now - lastTime.get();
@@ -544,48 +545,61 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public PushStream<T> merge(PushStream< ? extends T> source) {
-		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
-				psp, defaultExecutor, scheduler, this);
+
 		AtomicInteger count = new AtomicInteger(2);
-		PushEventConsumer<T> consumer = event -> {
-			try {
-				if (!event.isTerminal()) {
-					return eventStream.handleEvent(event);
+		Consumer<AbstractPushStreamImpl<T>> start = downstream -> {
+			PushEventConsumer<T> consumer = e -> {
+				long toReturn;
+				try {
+					if (!e.isTerminal()) {
+						toReturn = downstream.handleEvent(e);
+					} else if (count.decrementAndGet() == 0) {
+						downstream.handleEvent(e);
+						toReturn = ABORT;
+					} else {
+						return ABORT;
+					}
+				} catch (Exception ex) {
+					try {
+						downstream.handleEvent(PushEvent.error(ex));
+					} catch (Exception ex2) { /* Just ignore this */}
+					toReturn = ABORT;
 				}
-				
-				if (count.decrementAndGet() == 0) {
-					eventStream.handleEvent(event.nodata());
-					return ABORT;
+				if (toReturn < 0) {
+					try {
+						close();
+					} catch (Exception ex2) { /* Just ignore this */}
+					try {
+						source.close();
+					} catch (Exception ex2) { /* Just ignore this */}
 				}
-				return CONTINUE;
-			} catch (Exception e) {
-				PushEvent<T> error = PushEvent.error(e);
-				close(error);
-				eventStream.close(event.nodata());
-				return ABORT;
+				return toReturn;
+			};
+			forEachEvent(consumer);
+			source.forEachEvent(consumer);
+		};
+
+		@SuppressWarnings("resource")
+		AbstractPushStreamImpl<T> eventStream = new AbstractPushStreamImpl<T>(
+				psp, defaultExecutor, scheduler) {
+			@Override
+			protected boolean begin() {
+				if (closed.compareAndSet(BUILDING, STARTED)) {
+					start.accept(this);
+					return true;
+				}
+				return false;
 			}
 		};
-		updateNext(consumer);
-		try {
-			source.forEachEvent(event -> {
-				return consumer.accept(event);
-			}).then(p -> {
-				count.decrementAndGet();
-				consumer.accept(PushEvent.close());
-				return null;
-			}, p -> {
-				count.decrementAndGet();
-				consumer.accept(PushEvent.error((Exception) p.getFailure()));
-			});
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new IllegalStateException(
-					"Unable to merge events as the event source could not be opened.",
-					e);
-		}
 		
+
 		return eventStream.onClose(() -> {
+			try {
+				close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			try {
 				source.close();
 			} catch (Exception e) {
@@ -1268,27 +1282,58 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	@Override
 	public <R, A> Promise<R> collect(Collector<? super T, A, R> collector) {
 		A result = collector.supplier().get();
+		BiConsumer<A, ? super T> accumulator = collector.accumulator();
 		Deferred<R> d = new Deferred<>();
-		updateNext(event -> {
-			try {
-				switch(event.getType()) {
-					case DATA:
-						collector.accumulator().accept(result, event.getData());
-						return CONTINUE;
-					case CLOSE:
-						d.resolve(collector.finisher().apply(result));
-						break;
-					case ERROR:
-						d.fail(event.getFailure());
-						break;
+		PushEventConsumer<T> consumer;
+
+		if (collector.characteristics()
+				.contains(Collector.Characteristics.CONCURRENT)) {
+			consumer = event -> {
+				try {
+					switch (event.getType()) {
+						case DATA :
+							accumulator.accept(result, event.getData());
+							return CONTINUE;
+						case CLOSE :
+							d.resolve(collector.finisher().apply(result));
+							break;
+						case ERROR :
+							d.fail(event.getFailure());
+							break;
+					}
+					close(event.nodata());
+					return ABORT;
+				} catch (Exception e) {
+					close(PushEvent.error(e));
+					return ABORT;
 				}
-				close(event.nodata());
-				return ABORT;
-			} catch (Exception e) {
-				close(PushEvent.error(e));
-				return ABORT;
-			}
-		});
+			};
+		} else {
+			consumer = event -> {
+				try {
+					switch (event.getType()) {
+						case DATA :
+							synchronized (result) {
+								accumulator.accept(result, event.getData());
+							}
+							return CONTINUE;
+						case CLOSE :
+							d.resolve(collector.finisher().apply(result));
+							break;
+						case ERROR :
+							d.fail(event.getFailure());
+							break;
+					}
+					close(event.nodata());
+					return ABORT;
+				} catch (Exception e) {
+					close(PushEvent.error(e));
+					return ABORT;
+				}
+			};
+		}
+
+		updateNext(consumer);
 		begin();
 		return d.getPromise();
 	}
