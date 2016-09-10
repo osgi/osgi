@@ -354,6 +354,14 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
+			if (callback != null) {
+				try {
+					callback.run();
+				} catch (Throwable e) {
+					chained.resolve(null, e);
+					return;
+				}
+			}
 			R value = null;
 			Throwable f;
 			final boolean interrupted = Thread.interrupted();
@@ -364,11 +372,7 @@ final class PromiseImpl<T> implements Promise<T> {
 				} else if (failure != null) {
 					f = failure;
 				}
-				if (callback != null) {
-					callback.run();
-				}
 			} catch (Throwable e) { // propagate new exception
-				value = null;
 				f = e;
 			} finally {
 				if (interrupted) { // restore interrupt status
