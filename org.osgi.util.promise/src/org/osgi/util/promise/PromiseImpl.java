@@ -328,17 +328,28 @@ final class PromiseImpl<T> implements Promise<T> {
 		private final PromiseImpl<R>		chained;
 		private final Promise<? extends R>	promise;
 		private final Throwable				failure;
+		private final Callback				callback;
 
 		Chain(PromiseImpl<R> chained, Promise<? extends R> promise) {
 			this.chained = chained;
 			this.promise = promise;
 			this.failure = null;
+			this.callback = null;
 		}
 
 		Chain(PromiseImpl<R> chained, Promise<? extends R> promise, Throwable failure) {
 			this.chained = chained;
 			this.promise = promise;
-			this.failure = failure;
+			this.failure = requireNonNull(failure);
+			this.callback = null;
+		}
+
+		Chain(PromiseImpl<R> chained, Promise< ? extends R> promise,
+				Callback callback) {
+			this.chained = chained;
+			this.promise = promise;
+			this.failure = null;
+			this.callback = requireNonNull(callback);
 		}
 
 		@Override
@@ -353,8 +364,12 @@ final class PromiseImpl<T> implements Promise<T> {
 				} else if (failure != null) {
 					f = failure;
 				}
-			} catch (Throwable e) {
-				f = e; // propagate new exception
+				if (callback != null) {
+					callback.run();
+				}
+			} catch (Throwable e) { // propagate new exception
+				value = null;
+				f = e;
 			} finally {
 				if (interrupted) { // restore interrupt status
 					Thread.currentThread().interrupt();
@@ -369,26 +384,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> then(Callback callback) {
-		return then(new ThenCallback<T>(callback), null);
-	}
-
-	/**
-	 * A callback used by the {@link PromiseImpl#then(Callback)} method.
-	 * 
-	 * @Immutable
-	 */
-	private static final class ThenCallback<T> implements Success<T,T> {
-		private final Callback callback;
-	
-		ThenCallback(Callback callback) {
-			this.callback = requireNonNull(callback);
-		}
-	
-		@Override
-		public Promise<T> call(Promise<T> resolved) throws Exception {
-			callback.run();
-			return resolved;
-		}
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		onResolve(new Chain<T>(chained, this, callback));
+		return chained;
 	}
 
 	/**

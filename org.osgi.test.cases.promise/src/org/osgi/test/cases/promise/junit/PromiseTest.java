@@ -2158,7 +2158,7 @@ public class PromiseTest extends TestCase {
 	/**
 	 * Test the then Callback functionality.
 	 */
-	public void testThenCallback() throws Exception {
+	public void testThenCallbackSuccess() throws Exception {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -2188,6 +2188,31 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p2 = p1.then(() -> latch.countDown())
+				.onResolve(() -> latch2.countDown());
+
+		assertFalse("callback ran before resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(p1.isDone());
+		assertFalse(p2.isDone());
+
+		final Exception e = new Exception("failure");
+		d.fail(e);
+		assertTrue("callback did not run after resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p1.isDone());
+		assertTrue("callback did not run after resolved",
+				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p2.isDone());
+		assertNotNull("wrong failure", p2.getFailure());
+		assertSame(e, p2.getFailure());
+	}
+
+	public void testThenCallbackSuccessThrowFailure() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Exception e = new Exception("failure");
 		Promise<String> p2 = p1.then(() -> {
 			latch.countDown();
@@ -2201,6 +2226,34 @@ public class PromiseTest extends TestCase {
 		
 		String value = new String("20");
 		d.resolve(value);
+		assertTrue("callback did not run after resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p1.isDone());
+		assertTrue("callback did not run after resolved",
+				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p2.isDone());
+		assertNotNull("wrong failure", p2.getFailure());
+		assertSame(e, p2.getFailure());
+	}
+
+	public void testThenCallbackFailureThrowFailure() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Exception e = new Exception("failure");
+		Promise<String> p2 = p1.then(() -> {
+			latch.countDown();
+			throw e;
+		}).onResolve(() -> latch2.countDown());
+
+		assertFalse("callback ran before resolved",
+				latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(p1.isDone());
+		assertFalse(p2.isDone());
+
+		final Exception f = new Exception("not expected");
+		d.fail(f);
 		assertTrue("callback did not run after resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p1.isDone());
