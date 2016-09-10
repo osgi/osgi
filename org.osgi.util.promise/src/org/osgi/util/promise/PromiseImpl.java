@@ -714,7 +714,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		if (!isDone()) {
 			onResolve(new Timeout<T>(chained, millis, TimeUnit.MILLISECONDS));
 		}
-		chained.resolveWith(this);
+		onResolve(new Chain<T>(chained, this));
 		return chained;
 	}
 
@@ -766,52 +766,32 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> delay(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		onResolve(new Delay<T>(chained, this, millis, TimeUnit.MILLISECONDS));
+		onResolve(new Delay<T>(new Chain<T>(chained, this), millis,
+				TimeUnit.MILLISECONDS));
 		return chained;
 	}
 
 	/**
 	 * Delay class used by the {@link PromiseImpl#delay(long)} method to delay
-	 * resolving after the Promise is resolved.
+	 * chaining a promise.
 	 * 
 	 * @Immutable
 	 * @since 1.1
 	 */
 	private static final class Delay<R> implements Runnable {
-		private final Action<R>	action;
+		private final Chain<R>	chain;
 		private final long		delay;
 		private final TimeUnit	unit;
 
-		Delay(PromiseImpl<R> chained, Promise< ? extends R> promise, long delay,
-				TimeUnit unit) {
-			this.action = new Action<R>(chained, promise);
+		Delay(Chain<R> chain, long delay, TimeUnit unit) {
+			this.chain = chain;
 			this.delay = delay;
 			this.unit = unit;
 		}
 
 		@Override
 		public void run() {
-			Callbacks.schedule(action, delay, unit);
-		}
-
-		/**
-		 * Callback used to resolve the Promise after the delay expires.
-		 * 
-		 * @Immutable
-		 */
-		private static final class Action<R> implements Runnable {
-			private final PromiseImpl<R> chained;
-			private final Promise< ? extends R>	promise;
-
-			Action(PromiseImpl<R> chained, Promise< ? extends R> promise) {
-				this.chained = chained;
-				this.promise = promise;
-			}
-
-			@Override
-			public void run() {
-				chained.resolveWith(promise);
-			}
+			Callbacks.schedule(chain, delay, unit);
 		}
 	}
 
