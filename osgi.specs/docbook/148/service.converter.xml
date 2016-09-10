@@ -56,32 +56,61 @@
     
     <itemizedlist>
       <listitem>
-        <para><emphasis>source</emphasis> - the object to be converted.</para>
+        <para><emphasis>Source</emphasis> - the object to be converted.</para>
       </listitem>
     
       <listitem>
-        <para><emphasis>result</emphasis> - the result of the conversion.</para>
+        <para><emphasis>Result</emphasis> - the result of the conversion.</para>
       </listitem>
     
       <listitem>
-        <para><emphasis>source type</emphasis> - the type of the source to be converted.</para>
+        <para><emphasis>Source Type</emphasis> - the type of the source to be converted.</para>
       </listitem>
       
       <listitem>
-        <para><emphasis>target type</emphasis> - the desired type of the conversion result.</para>
+        <para><emphasis>Target Type</emphasis> - the desired type of the conversion result.</para>
       </listitem>
     </itemizedlist>
     <remark>Add entity diagram</remark>
   </section> 
 
   <section>
-    <title>Converter Service</title>
+    <title>Standard Converter</title>
     
-    <para>...</para>
+    <para>A Standard Converter is a converter that follows precisely what is described in this 
+    specification. It converts objects to the desired target type if a suitable conversion is 
+    available. An instance can be obtained as by creating a <code>new StandardConverter()</code>.</para> 
+    
+    <para>Example:
+    <programlisting>Converter c = new StandardConverter();
+Map someMap = ... 
+MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
+    </para>
+    
+    <section>
+      <title>Generics</title>
+      <para>When converting to a target type with generic type parameters it is necessary to capture 
+      the generic type parameters to instruct the converter to produce the correct parameterized type.
+      This can be achieved with the <code>TypeReference</code> based APIs, for example:
+      <programlisting>Converter c = new StandardConverter();
+List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;&gt;());
+// list will contain the Long value 123L</programlisting></para>
+    </section>
     
     <section>
       <title>Adapting converters</title>
-      <para>...</para>
+      <para>The Standard Converter applies the conversion rules described in this specification. While this is 
+      useful for many applications, in some cases small deviations from the default rules may be necessary.
+      This can be done by using Converter Adapters. The adapters accept rules that are used
+      when the applicable conversion is triggered. An adapter for a converter is obtained by calling
+      <code>converter.newAdapter()</code>. Adapters extend the Converter interface so all the converter
+      operations apply to the adapter as well. This includes the ability to create adapters for existing
+      adapters. This makes it possible to customize existing adapters further without actually modifying
+      the behavior of the original adapter.
+      <remark>Would it make sense to make the adapters immutable? It would make the API a little awkward though...</remark>
+      </para>
+      
+      <para>For example converting a Date to a String may require a specific format. </para>
     </section>
   </section> 
 
