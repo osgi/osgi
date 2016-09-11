@@ -296,7 +296,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					}
 				}
 				// fail chained
-				chained.resolve(null, f);
+				chained.tryResolve(null, f);
 				return;
 			}
 			Promise<? extends R> returned = null;
@@ -304,13 +304,13 @@ final class PromiseImpl<T> implements Promise<T> {
 				try {
 					returned = success.call(PromiseImpl.this);
 				} catch (Throwable e) {
-					chained.resolve(null, e);
+					chained.tryResolve(null, e);
 					return;
 				}
 			}
 			if (returned == null) {
 				// resolve chained with null value
-				chained.resolve(null, null);
+				chained.tryResolve(null, null);
 			} else {
 				// resolve chained when returned promise is resolved
 				returned.onResolve(new Chain<R>(chained, returned));
@@ -358,7 +358,7 @@ final class PromiseImpl<T> implements Promise<T> {
 				try {
 					callback.run();
 				} catch (Throwable e) {
-					chained.resolve(null, e);
+					chained.tryResolve(null, e);
 					return;
 				}
 			}
@@ -379,7 +379,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					Thread.currentThread().interrupt();
 				}
 			}
-			chained.resolve(value, f);
+			chained.tryResolve(value, f);
 		}
 	}
 

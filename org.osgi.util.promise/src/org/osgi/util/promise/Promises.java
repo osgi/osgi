@@ -17,6 +17,7 @@
 package org.osgi.util.promise;
 
 import static org.osgi.util.promise.PromiseImpl.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -160,7 +161,7 @@ public class Promises {
 					failure = promise.getFailure();
 					value = (failure != null) ? null : promise.getValue();
 				} catch (Throwable e) {
-					chained.resolve(null, e);
+					chained.tryResolve(null, e);
 					return;
 				}
 				if (failure != null) {
@@ -173,9 +174,10 @@ public class Promises {
 				}
 			}
 			if (failed.isEmpty()) {
-				chained.resolve(result, null);
+				chained.tryResolve(result, null);
 			} else {
-				chained.resolve(null, new FailedPromisesException(failed, cause));
+				chained.tryResolve(null,
+						new FailedPromisesException(failed, cause));
 			}
 		}
 	}
