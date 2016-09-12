@@ -97,7 +97,7 @@
             <annotation>
                 <documentation xml:lang="en">
                     The URL to the referred repository. The URL can be
-                    absolute or relative from the given repository’s
+                    absolute or relative from the given repository's
                     URL.
                 </documentation>
             </annotation>

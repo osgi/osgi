@@ -34,7 +34,7 @@ import org.osgi.service.log.LoggerFactory;
  * longest name, which has a non-empty Logger Context, according to this syntax:
  * 
  * <pre>
- * name ::= symbolic-name ( ’|’ version ( ’|’ location )? )?
+ * name ::= symbolic-name ( '|' version ( '|' location )? )?
  * </pre>
  * 
  * The version must be formatted canonically, that is, according to the

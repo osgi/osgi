@@ -57,7 +57,7 @@ public interface DataPlugin {
 	String	MOUNT_POINTS	= "mountPoints";
 
 	/**
-	 * The string to be used as key for the “dataRootURIs” property when an
+	 * The string to be used as key for the "dataRootURIs" property when an
 	 * DataPlugin is registered.
 	 * 
 	 * @since 2.0

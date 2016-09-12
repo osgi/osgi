@@ -38,7 +38,7 @@ public interface ExecPlugin {
 	String	MOUNT_POINTS	= "mountPoints";
 
 	/**
-	 * The string to be used as key for the “execRootURIs” property when an
+	 * The string to be used as key for the "execRootURIs" property when an
 	 * ExecPlugin is registered.
 	 * 
 	 * @since 2.0

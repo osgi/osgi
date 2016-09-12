@@ -2,6 +2,7 @@
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+
 import org.osgi.dmt.ddf.LIST;
 import org.osgi.dmt.ddf.Mutable;
 import org.osgi.dmt.ddf.NODE;
@@ -88,7 +89,7 @@ import org.osgi.dmt.ddf.Scope;
 
 public interface Filter {
 	/**
-	 * An absolute URI always ending in a slash (’/’), with optional wildcards,
+	 * An absolute URI always ending in a slash ('/'), with optional wildcards,
 	 * selecting a set of sub-nodes {@code N}. Wildcards can be an asterisk (
 	 * {@code '*'} &#92;u002A) or a minus sign ({@code '-'} &#92;u002D). An
 	 * asterisk can be used in place of a single node name in the URI, a minus
