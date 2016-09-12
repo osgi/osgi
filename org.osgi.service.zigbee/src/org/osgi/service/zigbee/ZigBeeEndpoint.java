@@ -149,7 +149,9 @@ public interface ZigBeeEndpoint {
 	 * This method modifies the <i>Binding Table</i> of physical device by
 	 * adding the following entry:
 	 * 
-	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
+	 * <code>this.getNodeAddress()</code>, <code>this.getId()</code>,
+	 * <code>clusterId</code>, <code>device.getNodeAddress()</code>,
+	 * <code>device.getId()</code>
 	 * 
 	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a binding
@@ -169,7 +171,9 @@ public interface ZigBeeEndpoint {
 	 * This method modifies the <i>Binding Table</i> of physical device by
 	 * removing the entry if exists:
 	 * 
-	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
+	 * <code>this.getNodeAddress()</code>, <code>this.getId()</code>,
+	 * <code>clusterId</code>, <code>device.getNodeAddress()</code>,
+	 * <code>device.getId()</code>
 	 * 
 	 * <p>
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
