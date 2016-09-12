@@ -32,7 +32,7 @@ public interface ZigBeeDeviceDescriptionSet {
 
 	/**
 	 * Property key for a version of the application profile. The format is
-	 * ‘major.minor’ with major and minor being integers.
+	 * 'major.minor' with major and minor being integers.
 	 * 
 	 * This property is <b>mandatory</b>.
 	 */

@@ -140,7 +140,7 @@ public interface ZCLCluster {
 	 * {@link ZCLAttributeInfo} objects.
 	 * 
 	 * <p>
-	 * As described in <em>§2.4.1.3 Effect on Receipt</em> section of the ZCL
+	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
 	 * specification, a <em>Read Attributes</em> command results in a list of
 	 * attribute status records comprising a mix of successful and unsuccessful
 	 * attribute reads.
