@@ -45,27 +45,12 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	protected ZigBeeComplexDescriptor	complexDescriptor;
 	protected String					userDescription;
 
-	/**
-	 * @param IEEEAddress
-	 * @param nwkAddress
-	 * @param hostPId
-	 * @param endpoints
-	 */
 	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
 		this.IEEEAddress = IEEEAddress;
 		this.hostPId = hostPId;
 		this.endpoints = endpoints;
 	}
 
-	/**
-	 * 
-	 * @param IEEEAddress
-	 * @param hostPId
-	 * @param endpoints
-	 * @param nodeDesc
-	 * @param powerDesc
-	 * @param userdescription
-	 */
 	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints,
 			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
 		this.IEEEAddress = IEEEAddress;
@@ -93,27 +78,22 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public int getPanId() {
-
 		return 0;
 	}
 
 	public BigInteger getExtendedPanId() {
-
 		return BigInteger.valueOf(-1);
 	}
 
 	public Promise getNodeDescriptor() {
-
 		return Promises.resolved(nodeDescriptor);
 	}
 
 	public Promise getPowerDescriptor() {
-
 		return Promises.resolved(powerDescriptor);
 	}
 
 	public Promise getComplexDescriptor() {
-
 		return Promises.resolved(complexDescriptor);
 	}
 

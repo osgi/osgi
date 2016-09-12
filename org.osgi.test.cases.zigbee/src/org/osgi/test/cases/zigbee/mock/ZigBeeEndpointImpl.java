@@ -36,12 +36,6 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	private ZCLCluster[]			inputs;
 	private ZCLCluster[]			outputs;
 
-	/**
-	 * @param id
-	 * @param inputs i.e. ServerClusters
-	 * @param ouputs i.e. ClientClusters
-	 * @param desc
-	 */
 	public ZigBeeEndpointImpl(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
 		this.id = id;
 		this.inputs = inputs;
@@ -54,12 +48,10 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public BigInteger getNodeAddress() {
-
 		return BigInteger.valueOf(-1);
 	}
 
 	public Promise getSimpleDescriptor() {
-
 		return Promises.resolved(desc);
 	}
 

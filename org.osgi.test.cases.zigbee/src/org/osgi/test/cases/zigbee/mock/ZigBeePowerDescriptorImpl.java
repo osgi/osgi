@@ -30,12 +30,6 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	private short	currentPowerSourceLevel;
 	private boolean	isConstantMainsPowerAvailable;
 
-	/**
-	 * @param powerMode
-	 * @param powerSource
-	 * @param powerSourceLevel
-	 * @param isconstant
-	 */
 	public ZigBeePowerDescriptorImpl(short powerMode, short powerSource, short powerSourceLevel, boolean isconstant) {
 		this.currentPowerMode = powerMode;
 		this.currentPowerSource = powerSourceLevel;
@@ -68,32 +62,26 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	}
 
 	public boolean isMainsPower() {
-
 		return false;
 	}
 
 	public boolean isDisposableBattery() {
-
 		return false;
 	}
 
 	public boolean isRechargableBattery() {
-
 		return false;
 	}
 
 	public boolean isSyncronizedWithOnIdle() {
-
 		return false;
 	}
 
 	public boolean isPeriodicallyOn() {
-
 		return false;
 	}
 
 	public boolean isOnWhenStimulated() {
-
 		return false;
 	}
 }

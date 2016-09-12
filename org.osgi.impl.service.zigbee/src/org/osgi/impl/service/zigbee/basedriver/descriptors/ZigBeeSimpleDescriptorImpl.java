@@ -55,17 +55,14 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	}
 
 	public short getEndpoint() {
-
 		return 0;
 	}
 
 	public int[] getInputClusters() {
-
 		return InputClusters;
 	}
 
 	public int[] getOutputClusters() {
-
 		return outputClusters;
 	}
 
@@ -78,18 +75,14 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	}
 
 	public boolean providesInputCluster(int clusterId) {
-
 		return false;
 	}
 
 	public boolean providesOutputCluster(int clusterId) {
-
 		return false;
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[deviceId: " + deviceId + ", version: " + version + ", profileId: "
-				+ profileId + "]";
+		return "" + this.getClass().getName() + "[deviceId: " + deviceId + ", version: " + version + ", profileId: " + profileId + "]";
 	}
-
 }
