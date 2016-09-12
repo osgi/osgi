@@ -54,8 +54,8 @@ public interface ZigBeeDataOutput {
 	 * 
 	 * <p>
 	 * For instance if {@code size} is 2 the correct range for signed numbers is
-	 * [0xffff8000, 0x7fff] (i.e [-‭32768, +‭32767]), whereas for unsigned
-	 * numbers is [0L, 0xffff].
+	 * [0xffff8000, 0x7fff] (i.e [-32768, +32767]), whereas for unsigned numbers
+	 * is [0L, 0xffff].
 	 * 
 	 * <p>
 	 * Although this method allows write even 1 byte of the passed {@code int}
@@ -87,7 +87,7 @@ public interface ZigBeeDataOutput {
 	 * 
 	 * <p>
 	 * For instance if {@code size} is 3 the correct range for signed numbers is
-	 * [0xffffffffff800000L, 0x7fffffL] (i.e [-‭21474836448, +‭2147483647‬‬]),
+	 * [0xffffffffff800000L, 0x7fffffL] (i.e [-21474836448, +2147483647]),
 	 * whereas for unsigned numbers is [0L, 0xffffffL].
 	 * 
 	 * <p>
