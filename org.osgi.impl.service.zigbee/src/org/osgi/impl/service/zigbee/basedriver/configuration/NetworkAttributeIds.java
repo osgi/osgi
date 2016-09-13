@@ -4,8 +4,6 @@ package org.osgi.impl.service.zigbee.basedriver.configuration;
 import java.math.BigInteger;
 
 /**
- * 
- * 
  * This class is used to identify an attribute Id in the network
  * 
  * @author $Id$

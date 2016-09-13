@@ -37,22 +37,10 @@ import org.osgi.util.promise.Promises;
 public class ZCLClusterImpl implements ZCLCluster {
 
 	private int						id;
-	protected ZCLAttribute[]		attributes;
+	private ZCLAttribute[]			attributes;
 	private int[]					commandIds;
 	private ZCLClusterDescription	description;
 
-	/**
-	 * @param id
-	 */
-	public ZCLClusterImpl(Integer id) {
-		this.id = id.intValue();
-	}
-
-	/**
-	 * @param commandIds
-	 * @param attributes
-	 * @param desc
-	 */
 	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
 		this.id = desc.getId();
 		this.commandIds = commandIds;
@@ -81,7 +69,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public Promise getCommandIds() {
-
 		return Promises.resolved(this.commandIds.clone());
 	}
 
