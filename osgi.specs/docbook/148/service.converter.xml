@@ -9,7 +9,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Converter Service Specification</title>
+  <title>Converter Specification</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.converter-version"
@@ -19,23 +19,20 @@
   <section>
     <title>Introduction</title>
     
-    <para>Today, many programs directly interface directly with the outside world through REST, HTTP, and other protocols
-     that are frequently require conversion from strings or byte streams. Data conversion is an inherent part of writing 
+    <para>Data conversion is an inherent part of writing 
      software in a type safe language. In Java, converting strings to proper types or to convert one type to a more 
      convenient type is often done manually. Any errors are then handled inline.</para>
       
 	<para>A common problem is interacting with Javascript. Since Javascript has no user defined types, it can get away with 
-	relatively clean looking code; the same code in Java usually requires significantly more code due to the required 
-	conversions to the fine grained types of Java. This code bypasses the built-in facilities like fields and methods 
-	and instead defines constant key strings and embeds the knowledge of the types in a piece of code instead of relying on a 
-	central declaration that is then verified by the compiler.</para>
+	relatively clean looking code; the same in Java usually requires significantly more code due to the required 
+	conversions to the fine grained types of Java.</para>
 
 	<para>In release 6, the OSGi specifications introduced Data Transfer Objects (DTOs). DTOs are public objects without 
-	generics that only contain public instance fields based on simple types, arrays, and collections. 
-	In many ways DTOs replace Java beans. Java beans are hiding their fields and provide access methods but that separated 
+	open generics that only contain public instance fields based on simple types, arrays, and collections. 
+	In many ways DTOs can be used as an alternative to Java beans. 
+	Java beans are hiding their fields and provide access methods but that separated 
 	the contract (the public interface) from the internal usage. Though this model has advantages in technical applications 
-	(many types, few fields) it tend to be a large overhead when there are relatively few types with lots of fields. i.e. 
-	the more common web applications. DTOs unify the specification with the data since the data is what is already public 
+    it tends to add overhead. DTOs unify the specification with the data since the data is what is already public 
 	when it is sent to another process or serialized.</para>
 	
 	<para>By limiting the allowed data types in DTOs and ensuring they have no cycles they can be easily (de)serialized 
@@ -55,6 +52,18 @@
     <para>The following entities are used in this specification</para>
     
     <itemizedlist>
+      <listitem>
+        <para><emphasis>Converter</emphasis> - a converter implements the Converter interface and can perform conversion operations.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>Standard Converter</emphasis> - a converter implementation that follows this specification.</para>
+      </listitem>
+      
+      <listitem>
+        <para><emphasis>Adapter</emphasis> - an adapter can modify the behavior of a converter by specifying rules for specific conversions.</para>
+      </listitem>
+      
       <listitem>
         <para><emphasis>Source</emphasis> - the object to be converted.</para>
       </listitem>
@@ -77,7 +86,7 @@
   <section>
     <title>Standard Converter</title>
     
-    <para>A Standard Converter is a converter that follows precisely what is described in this 
+    <para>The Standard Converter is a converter that follows precisely what is described in this 
     specification. It converts objects to the desired target type if a suitable conversion is 
     available. An instance can be obtained as by creating a <code>new StandardConverter()</code>.</para> 
     
@@ -88,31 +97,22 @@ MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
     </para>
     
     <section>
-      <title>Generics</title>
-      <para>When converting to a target type with generic type parameters it is necessary to capture 
-      the generic type parameters to instruct the converter to produce the correct parameterized type.
-      This can be achieved with the <code>TypeReference</code> based APIs, for example:
-      <programlisting>Converter c = new StandardConverter();
-List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;&gt;());
-// list will contain the Long value 123L</programlisting></para>
-    </section>
-    
-    <section>
       <title>Adapting converters</title>
       <para>The Standard Converter applies the conversion rules described in this specification. While this is 
       useful for many applications, in some cases small deviations from the default rules may be necessary.
-      This can be done by using Converter Adapters. The adapters accept rules that are used
+      This can be done by using Converter Adapters. Adapters accept rules that are used
       when the applicable conversion is triggered. An adapter for a converter is obtained by calling
       <code>converter.newAdapter()</code>. Adapters extend the Converter interface so all the converter
       operations apply to the adapter as well. This includes the ability to create adapters for existing
       adapters. This makes it possible to customize existing adapters further without actually modifying
       the behavior of the original adapter.
-      <remark>Would it make sense to make the adapters immutable? It would make the API a little awkward though...</remark>
+      <remark>Would it make sense to make the adapters immutable? It might make the API a little awkward though...</remark>
       </para>
       
       <para>For example converting a Date to a String may require a specific format. The default 
       <code>Date</code> to <code>String</code> conversion produces a String in the format 
-      @@@@@@. If we want to produce a String in the format @@@@@ instead it can be done as follows. 
+      <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
+      <code>yyMMddHHmmssZ</code> instead it can be done as follows. 
       This example shows the conversion with such a type from a JavaBean to a Map.
       <programlisting>class MyBean {
   //... fields ommitted
@@ -123,6 +123,8 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
 
 Adapter a = new StandardConverter().newAdapter();
 a.rule(Date.class, String.class, d -> sdf.format(d), );
+// TODO finish example
+// Capture generics in Type Reference
 Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;Map&lt;String,String&gt;&gt;());
 </programlisting></para>
     </section>
@@ -136,15 +138,25 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
     <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
     requested target type.</para>
     
-    <para>In the case of Arrays, Collections and Map-like structures a deep copy is always returned, 
+    <para>In the case of Aggregates (Arrays and Collections) and Map-like structures a deep copy is always returned, 
     even if the target type is compatible with the source type. This copy can be owned and optionally further
     modified by the caller.</para>
+    
+    <section>
+      <title>Generics</title>
+      <para>When converting to a target type with generic type parameters it is necessary to capture 
+      the generic type parameters to instruct the converter to produce the correct parameterized type.
+      This can be achieved with the <code>TypeReference</code> based APIs, for example:
+      <programlisting>Converter c = new StandardConverter();
+List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;&gt;());
+// list will contain the Long value 123L</programlisting></para>
+    </section>
     
     <section>
       <title>Scalars</title>
           
       <section>
-        <title>Conversion between scalars</title>
+        <title>Direct conversion between scalars</title>
         
         <para>Direct conversion between certain scalar types is supported. For all other 
         scalar types conversion is done by converting to <code>String</code> and then converting 
@@ -225,7 +237,7 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
             </listitem>
           </orderedlist>
           
-          Many types have special rules for converting from String
+          Some types have special rules for converting from String
           values. See below.
         </para>
       </section>
@@ -262,10 +274,10 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
               </row>
                             
               <row>
-                <entry><code>java.time.Duration</code></entry>
-                <entry><remark>TODO!!!@@@</remark></entry>
+                <entry><code>java.time.Instant</code></entry>
+                <entry><code>Instant.parse(v)</code></entry>
               </row>
-                            
+
               <row>
                 <entry><code>java.time.LocalDate</code></entry>
                 <entry><code>LocalDate.parse(v)</code></entry>
@@ -292,6 +304,11 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
               </row>
               
               <row>
+                <entry><code>java.util.Date</code></entry>
+                <entry><code>Date.from(Instant.parse(v))</code></entry>
+              </row>
+              
+              <row>
                 <entry><code>java.util.UUID</code></entry>
                 <entry><code>UUID.fromString(v)</code></entry>
               </row>              
@@ -312,15 +329,18 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
         Converting a <code>long</code> into a <code>java.util.Date</code>
         is done by calling <code>new Date(long)</code>.</para> 
         
-        <para>Converting a Date to a String is done by
-          <remark>@@@ TODO UTC</remark>
+        <para>Converting a Date to a String is done by converting it to an 
+        <code>Instant</code> and then calling <code>Instant.toString()</code>.
+        This will produce a ISO-8601 UTC date/time string in the following 
+        format: <code>2011-12-03T10:15:30Z</code>. Converting a String to
+        a date it done by calling <code>Date.from(Instant.parse(v))</code>
+        which can convert this ISO-8601 format back into a Date.
         </para>
-        
-        <para>Converting into other types is done by converting via a String as intermediary.</para>
-  
+          
         <para>Conversions from Calendar objects are done by converting the Calendar
-        to a Date via getTime() first. Convertions to a Calendar object are done by 
-        constructing a Date object with the desired time (UTC) and then setting the 
+        to a Date via getTime() first, and then converting the resulting Date to the 
+        target type. Convertions to a Calendar object are done by converting the
+        source to a Date object with the desired time (UTC) and then setting the 
         time in the Calendar object via setTime().</para>
       </section>
         
@@ -376,14 +396,13 @@ Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;
     <section>
       <title>Aggregates</title>
   
-      <para>Collections and Arrays...</para>
+      <para>Aggregates represent Collections and Arrays, this includes Lists and Sets.</para>
       
       <section>
         <title>Converting to a scalar</title>
         <para>
         If a Collection or array needs to be converted to a target which is not a 
-        Collection, Array or Map-like structure (as described
-        in <xref linkend="service.converter.special.cases.maps"/>)
+        Collection or Array,
         the first element is taken and converted into the target type.</para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
@@ -424,7 +443,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
               <row>
                 <entry>Collection interface</entry>
                 <entry>A mutable implementation is created. E.g. if the target type is 
-                <code>java.util.List</code> then the implementation can create a
+                <code>java.util.List</code> then the converter can create a
                 <code>java.util.ArrayList</code>. When converting to a <code>java.util.Set</code>
                 the converter must choose a set implementation that preserves iteration order.</entry>
               </row>
@@ -432,11 +451,13 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
                 <entry>Collection concrete type</entry>
                 <entry>A new instance is created by calling <code>Class.newInstance()</code> on the 
                 provided type. For example if the target type is <code>LinkedList</code> then the 
-                converter creates a target object by calling <code>LinkedList.class.newInstance()</code>.</entry>
+                converter creates a target object by calling <code>LinkedList.class.newInstance()</code>.
+                The converter may choose to use a call a well-known constructor to optimize the
+                creation of the collection.</entry>
               </row>
               <row>
                 <entry><code>T[]</code></entry>
-                <entry><code>Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
+                <entry><code>A new array is created via Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
                 <code>x</code> is the required size of the target collection.</entry>
               </row>
             </tbody>
@@ -459,7 +480,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         the resulting set should preserve the same iteration order as the original array:
         
         <programlisting>Set&lt;Double&gt; result =
-  converter.convert(new int[] {1,2,3}).
+  converter.convert(new int[] {3,2,1}).
     to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
         </programlisting>
         
@@ -490,15 +511,22 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
               Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
               result.</para>
             </listitem>
-          </itemizedlist> 
+          </itemizedlist>         
         </para>
+      </section>
+      
+      <section>
+        <title>Converting to maps</title>
+        <para>Conversion to a map-like structure from an aggregate is not supported.</para>
+        <remark>Or maybe a map where the keys and values are the same representing the values of the collection?</remark>
       </section>
     </section>
     
     <section xml:id="service.converter.special.cases.maps">
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
-      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. Additionally objects that provide a map view
+      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We will call these map-like types.
+      Additionally objects that provide a map view
       are supported.</para>
       
       <para>When converting between map-like types, a map is used as intermediary.
@@ -533,7 +561,9 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
                 <entry>A new instance is created by calling <code>Class.newInstance()</code> 
                 on the provided type. For example if the target type is <code>HashMap</code> 
                 then the converter creates a target object by calling
-                <code>HashMap.class.newInstance()</code>.</entry>
+                <code>HashMap.class.newInstance()</code>.
+                The converter may choose to use a call a well-known constructor to optimize the
+                creation of the map.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -570,12 +600,15 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         for which the information is missing or cannot be converted, but which the caller 
         does not require.</para>
         
+        <para>Note that the converter will not copy the source map when converting to an interface
+        so any changes to the source map will be reflected live to the proxy.</para>
+        
         <para>Interfaces can provide methods for default values by providing a single-argument method
         override in addition to the no-arg method matching the key name. If the type of the default
         does not match the target type it is converted first. 
         For example:  
         <programlisting>interface Config {
-  int my_value(); // no default, used when converting from the interface
+  int my_value(); // no default
   int my_value(int defVal);
   int my_value(String defVal); // String value is automatically converted to int
   boolean my_other_value();
@@ -591,6 +624,9 @@ boolean val2 = cfg.my_other_value(); // val2=true
         Default values are used when the key is not present in the map for the method. If a key is 
         present with a <code>null</code> value, then <code>null</code> is taken as the value and 
         converted to the target type.</para>
+        
+        <para>If no default is specified and a requested value is not present in the map,
+        a <code>ConversionException</code> is thrown.</para>
         
       <section xml:id="service.converter-key.mapping">
         <title>Key Mapping</title>
@@ -625,7 +661,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
         some name mapping examples.</para>
 
         <table xml:id="service.converter-key.name.mapping">
-          <title>Component Property Name Mapping Examples</title>
+          <title>Name Mapping Examples</title>
 
           <tgroup cols="2">
             <colspec colnum="1" colwidth="1*"/>
@@ -634,9 +670,9 @@ boolean val2 = cfg.my_other_value(); // val2=true
 
             <thead>
               <row>
-                <entry>Component Property Type Method Name</entry>
+                <entry>Method Name</entry>
 
-                <entry>Component Property Name</entry>
+                <entry>Property Name</entry>
               </row>
             </thead>
 
@@ -735,7 +771,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       
       <section>
         <title>Java Beans</title>
-        <para>Java Beans are objects that follow a naming convention. They provide getters and setters to
+        <para>Java Beans are concrete (non-abstract) classes that follow a naming convention. They provide getters and setters to
         access their properties and have a public no-arg constructor. When converting from a Java Bean introspection
         is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
         value. The method name must start with get followed by a capitalized property name, 
@@ -755,13 +791,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para><emphasis>Note: </emphasis>the <code>getClass()</code> method of the <code>java.lang.Object</code>
         class is not considered an accessor.
         </para>
-        <remark>Need to make sure to define priority. Some types described elsewhere are also JavaBeans and/or 
-        interfaces at the same time</remark>
         <remark>Do we need explicitly call out certain types that are not treated as JavaBeans? E.g. String?</remark>
       </section>
       
       <section>
-        <title>OSGi DTO</title>
+        <title>DTOs</title>
         <para>
         DTOs are classes with public non-static fields and no methods other than the ones provided by the 
         <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class but the converter 
@@ -771,8 +805,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the map and then converting the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
-        table 112.9 of the R6 Declarative Service specification.<remark>proper xref</remark></para>
-        <remark>Do we not take the same approach as with JavaBeans/interfaces: Proying?</remark>
+        <xref linkend="service.converter-key.name.mapping"/>.</para>
         
         <para>When converting from a DTO the value of each public non-static field is put in the target 
         map, taking the field name as its String key.
@@ -788,77 +821,72 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         
         <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
         The reverse is not supported</para>
-                
-        <remark>Need to describe what happens if something is a JavaBean that also has getProperties()</remark>
-      </section>
-      
-      <section>
-        <title>Conversion between maps and other types</title>
-        <para>Map-like structures are converted to other types by converting the map into a collection of entries
-        by calling <code>Map.entrySet()</code>. Then this collection is converted into the target type.</para>
-        <para>To convert from other types to a map, a Collection of <code>Map.Entry</code> objects is constructed
-        first. Subsequently each entry is inserted into the target map.</para>
       </section>
     </section>
-
     
     <section>
       <title>Priority</title>
       
-      <para>In case multiple conversion rules match, the rule with the lowest priority is used.
+      <para>In case multiple conversion rules match, the rule with the highest priority is used, where 1 is the highest overall priority.
       </para>
-        <table>
-          <title>Conversion rule priority</title>
-          <tgroup cols="2">
-            <thead>
-              <row>
-                <entry>Priority</entry>
-                <entry>Rule</entry>
-              </row>
-            </thead>
-            <tbody>
-              <row>
-                <entry>1</entry>
-                <entry>annotation</entry>
-              </row>
+      <table>
+        <title>Conversion rule priority</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Priority</entry>
+              <entry>Rule</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>1</entry>
+              <entry>annotation</entry>
+            </row>
 
-              <row>
-                <entry>2</entry>
-                <entry>interface</entry>
-              </row>
-              
-              <row>
-                <entry>3</entry>
-                <entry>OSGi DTO</entry>
-              </row>
-              
-              <row>
-                <entry>4</entry>
-                <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
-              </row>
+            <row>
+              <entry>2</entry>
+              <entry>Java Bean (non-interface, concrete type)</entry>
+            </row>
+            
+            <row>
+              <entry>3</entry>
+              <entry>interface</entry>
+            </row>
+            
+            <row>
+              <entry>4</entry>
+              <entry><code>java.util.Map</code></entry>
+            </row>
 
-              <row>
-                <entry>5</entry>
-                <entry>JavaBean</entry>
-              </row>
-              
-              <row>
-                <entry>6</entry>
-                <entry>Collection</entry>
-              </row>
-              
-              <row>
-                <entry>7</entry>
-                <entry><code>Map.Entry</code></entry>
-              </row>
-              
-              <row>
-                <entry>8</entry>
-                <entry>scalar</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
+            <row>
+              <entry>5</entry>
+              <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
+            </row>
+            
+            <row>
+              <entry>6</entry>
+              <entry>Collection</entry>
+            </row>
+            
+            <row>
+              <entry>7</entry>
+              <entry><code>Map.Entry</code></entry>
+            </row>
+            
+            <row>
+              <entry>8</entry>
+              <entry>DTO</entry>
+            </row>
+
+            <row>
+              <entry>9</entry>
+              <entry>scalar</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <remark>OK?</remark>
     </section>
     
     <section>
