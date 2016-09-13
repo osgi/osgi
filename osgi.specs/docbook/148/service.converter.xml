@@ -110,19 +110,33 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
       <remark>Would it make sense to make the adapters immutable? It would make the API a little awkward though...</remark>
       </para>
       
-      <para>For example converting a Date to a String may require a specific format. </para>
+      <para>For example converting a Date to a String may require a specific format. The default 
+      <code>Date</code> to <code>String</code> conversion produces a String in the format 
+      @@@@@@. If we want to produce a String in the format @@@@@ instead it can be done as follows. 
+      This example shows the conversion with such a type from a JavaBean to a Map.
+      <programlisting>class MyBean {
+  //... fields ommitted
+  MyBean(int amount, Date d) { /* ... */ }
+  int getAmount() { /* ... */ }
+  Date getDate() { /* ... */ }
+}
+
+Adapter a = new StandardConverter().newAdapter();
+a.rule(Date.class, String.class, d -> sdf.format(d), );
+Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;Map&lt;String,String&gt;&gt;());
+</programlisting></para>
     </section>
   </section> 
 
   <section>
     <title>Conversions</title>
     
-    <para>Unless otherwise noted, conversions are only performed when the target type is not compatible
+    <para>For scalars, conversions are only performed when the target type is not compatible
     with the source type. For example, when requesting to convert a <code>java.math.BigDecimal</code> to a 
     <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
     requested target type.</para>
     
-    <para>Note that in the case of Arrays, Collections and Map-like structures a deep copy is always returned, 
+    <para>In the case of Arrays, Collections and Map-like structures a deep copy is always returned, 
     even if the target type is compatible with the source type. This copy can be owned and optionally further
     modified by the caller.</para>
     
@@ -245,6 +259,11 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
               <row>
                 <entry><code>java.lang.Class</code></entry>
                 <entry><code>Bundle.loadClass(v)</code></entry>
+              </row>
+                            
+              <row>
+                <entry><code>java.time.Duration</code></entry>
+                <entry><remark>TODO!!!@@@</remark></entry>
               </row>
                             
               <row>
