@@ -23,32 +23,32 @@ import java.util.StringTokenizer;
 
 @SuppressWarnings("javadoc")
 public class HtmlCleaner {
-	StringTokenizer		in;
+	StringTokenizer				in;
 	Stack<String>				pushed		= new Stack<String>();
-	int					pushedType	= 0;
-	String				pushedTag	= null;
-	String				source;
-	int					cnt			= 0;
-	int					line		= 0;
-	String				tokens[]	= new String[16];
-	int					rover;
-	String				file;
+	int							pushedType	= 0;
+	String						pushedTag	= null;
+	String						source;
+	int							cnt			= 0;
+	int							line		= 0;
+	String						tokens[]	= new String[16];
+	int							rover;
+	String						file;
 
-	int					type		= 0;
-	String				tag			= null;
-	String				token		= null;
-	boolean				eof;
+	int							type		= 0;
+	String						tag			= null;
+	String						token		= null;
+	boolean						eof;
 
-	final static int	CHAR		= 1;
-	final static int	PARA		= 2;
-	final static int	LIST		= 4;
-	final static int	TABLE		= 8;
-	final static int	ROW			= 16;
-	final static int	COLUMN		= 32;
-	final static int	TEXT		= 64;
-	final static int	ITEM		= 128;
-	final static int	CLOSE		= 256;
-	final static int	SINGLE		= 512;
+	final static int			CHAR		= 1;
+	final static int			PARA		= 2;
+	final static int			LIST		= 4;
+	final static int			TABLE		= 8;
+	final static int			ROW			= 16;
+	final static int			COLUMN		= 32;
+	final static int			TEXT		= 64;
+	final static int			ITEM		= 128;
+	final static int			CLOSE		= 256;
+	final static int			SINGLE		= 512;
 
 	static Map<String, Integer>	descr		= new HashMap<String, Integer>();
 
@@ -119,8 +119,7 @@ public class HtmlCleaner {
 				}
 			}
 			return result.toString();
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			System.out.println("Error " + source);
 			e.printStackTrace();
 			error("Cannot parse text");
@@ -227,8 +226,7 @@ public class HtmlCleaner {
 			element(allowed);
 			previous.append(pre(result.toString()));
 			result = previous;
-		}
-		else
+		} else
 			element(allowed);
 		result.append("</" + getTag(current) + ">");
 		// System.out.print( "</" + current + ">" );
@@ -240,18 +238,15 @@ public class HtmlCleaner {
 			token = pushed.pop();
 			// System.out.println( "pushed " + token );
 			return;
+		} else if (!in.hasMoreTokens()) {
+			token = "";
+			eof = true;
+			// System.out.println( "eof" );
+			return;
+		} else {
+			token = in.nextToken();
+			count(token);
 		}
-		else
-			if (!in.hasMoreTokens()) {
-				token = "";
-				eof = true;
-				// System.out.println( "eof" );
-				return;
-			}
-			else {
-				token = in.nextToken();
-				count(token);
-			}
 		// result.append( "<!-- TOKEN " + token + "-->" );
 
 		if (token.equals(">")) {
@@ -291,28 +286,25 @@ public class HtmlCleaner {
 			tag = getTag(token);
 			// System.out.println( "close " + tag );
 			return;
-		}
-		else
-			if (content.endsWith("/")) {
-				type = SINGLE;
-				token = tidy(content.substring(0, content.length() - 1));
-				tag = getTag(token);
-				// System.out.println( "single " + tag );
-				return;
-			}
+		} else if (content.endsWith("/")) {
+			type = SINGLE;
+			token = tidy(content.substring(0, content.length() - 1));
+			tag = getTag(token);
+			// System.out.println( "single " + tag );
+			return;
+		} else {
+			token = tidy(content);
+			tag = getTag(token);
+			Integer t = descr.get(tag);
+			if (t != null)
+				type = t.intValue();
 			else {
-				token = tidy(content);
-				tag = getTag(token);
-				Integer t = descr.get(tag);
-				if (t != null)
-					type = t.intValue();
-				else {
-					error("Unexpected tag " + token + ", assume para");
-					type = PARA;
-				}
-				// System.out.println( "tag " + tag + " " + t );
-				return;
+				error("Unexpected tag " + token + ", assume para");
+				type = PARA;
 			}
+			// System.out.println( "tag " + tag + " " + t );
+			return;
+		}
 	}
 
 	String getTag(String s) {
@@ -414,8 +406,7 @@ public class HtmlCleaner {
 					break;
 
 				remainder = remainder.substring(e + 1).trim();
-			}
-			else
+			} else
 				throw new RuntimeException("Not a valid element " + in);
 		}
 		return sb.toString();
@@ -427,8 +418,7 @@ public class HtmlCleaner {
 			if (s.charAt(i) == '\n') {
 				line++;
 				cnt = 0;
-			}
-			else
+			} else
 				cnt++;
 	}
 

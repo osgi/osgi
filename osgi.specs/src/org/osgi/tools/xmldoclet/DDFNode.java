@@ -48,31 +48,31 @@ public class DDFNode {
 		DMT_TYPES.put("org.osgi.dmt.ddf.base64", "base64");
 		DMT_TYPES.put("byte[]", "binary");
 	}
-	static Pattern DDF_OPT = Pattern
+	static Pattern	DDF_OPT		= Pattern
 			.compile("org.osgi.dmt.ddf.Opt<\\s*(.*)\\s*>");
-	static Pattern DDF_MUTABLE = Pattern
+	static Pattern	DDF_MUTABLE	= Pattern
 			.compile("org.osgi.dmt.ddf.Mutable<\\s*(.*)\\s*>");
-	static Pattern DDF_MAP = Pattern
+	static Pattern	DDF_MAP		= Pattern
 			.compile("org.osgi.dmt.ddf.(Mutable|Addable)?MAP<\\s*(.+)\\s*,\\s*(.+)\\s*>");
-	static Pattern DDF_LIST = Pattern
+	static Pattern	DDF_LIST	= Pattern
 			.compile("org.osgi.dmt.ddf.(Mutable)?LIST<\\s*(.+)\\s*>");
 
-	final DDFNode parent;
-	String name;
-	List<DDFNode> children = new ArrayList<DDFNode>();
-	boolean optional = false;
-	boolean multiple = false;
-	boolean add = false;
-	boolean delete = false;
-	boolean get = true;
-	boolean replace = false;
-	String dmtType;
-	String shortName;
-	String scope = "P";
-	boolean interior = true;
+	final DDFNode	parent;
+	String			name;
+	List<DDFNode>	children	= new ArrayList<DDFNode>();
+	boolean			optional	= false;
+	boolean			multiple	= false;
+	boolean			add			= false;
+	boolean			delete		= false;
+	boolean			get			= true;
+	boolean			replace		= false;
+	String			dmtType;
+	String			shortName;
+	String			scope		= "P";
+	boolean			interior	= true;
 
-	String cardinality = "1";
-	String mime = "";
+	String			cardinality	= "1";
+	String			mime		= "";
 
 	/**
 	 * @param parent
@@ -122,7 +122,8 @@ public class DDFNode {
 			typeName = m.group(3);
 			String keyTypeName = m.group(2);
 
-			DDFNode child = new DDFNode(this, "[" + shorten(keyTypeName) + "]",
+			DDFNode child = new DDFNode(this,
+					"[" + shorten(keyTypeName) + "]",
 					typeName);
 			child.add = m.group(1) != null;
 			child.delete = m.group(1) != null && m.group(1).equals("Mutable");
@@ -154,7 +155,8 @@ public class DDFNode {
 				replace, //
 				delete, //
 				dmtType, //
-				shortName, cardinality, //
+				shortName,
+				cardinality, //
 				scope, //
 				interior, //
 				mime == null ? "NODE" : mime);
@@ -176,12 +178,12 @@ public class DDFNode {
 	 * @return if this ClassDoc represents a DDF node
 	 */
 	public static boolean isDDF(ClassDoc clazz) {
-		if ( isDDF(clazz.containingPackage().annotations()))
+		if (isDDF(clazz.containingPackage().annotations()))
 			return true;
 		while (clazz != null) {
 			if (isDDF(clazz.annotations()))
 				return true;
-			
+
 			clazz = clazz.containingClass();
 		}
 		return false;
