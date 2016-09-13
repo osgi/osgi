@@ -17,6 +17,7 @@
 package org.osgi.impl.service.zigbee.util.teststep;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.util.tracker.ServiceTracker;
@@ -28,10 +29,12 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ZigBeeEventSourceImpl implements Runnable {
 
-	private BundleContext	bc;
-	private ZigBeeEvent		zigbeeEvent;
-	private Thread			thread;
-	private ServiceTracker	serviceTracker;
+	private static final String	TAG	= ZigBeeEventSourceImpl.class.getName();
+
+	private BundleContext		bc;
+	private ZigBeeEvent			zigbeeEvent;
+	private Thread				thread;
+	private ServiceTracker		serviceTracker;
 
 	/**
 	 * @param bc
@@ -46,7 +49,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Launch this testEventSource.
 	 */
 	public void start() {
-		System.out.println(this.getClass().getName() + " start");
+		Logger.d(TAG, "start");
 		serviceTracker = new ServiceTracker(bc,
 				ZCLEventListener.class.getName(),
 				null);
@@ -60,13 +63,13 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Terminate this testEventSource.
 	 */
 	public void stop() {
-		System.out.println(this.getClass().getName() + " stop.");
+		Logger.d(TAG, "stop.");
 		serviceTracker.close();
 		thread = null;
 	}
 
 	public synchronized void run() {
-		System.out.println(this.getClass().getName() + " run");
+		Logger.d(TAG, "run");
 		Thread current = Thread.currentThread();
 		int n = 0;
 		while (current == thread) {
@@ -78,15 +81,13 @@ public class ZigBeeEventSourceImpl implements Runnable {
 				}
 				ZCLEventListener aZCLEventListener = (ZCLEventListener) listeners[n++];
 
-				System.out.println(this.getClass().getName()
-						+ " is sending the following event: " + zigbeeEvent);
+				Logger.d(TAG, "is sending the following event: " + zigbeeEvent);
 
 				aZCLEventListener.notifyEvent(zigbeeEvent);
 			}
 			try {
 				int waitinms = 1000;
-				System.out.println(this.getClass().getName() + "wait("
-						+ waitinms + ")");
+				Logger.d(TAG, "wait(" + waitinms + ")");
 				wait(waitinms);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

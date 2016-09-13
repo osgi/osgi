@@ -23,14 +23,10 @@ package org.osgi.impl.service.zigbee.util;
  */
 public final class Logger {
 
-	static final boolean	DEBUG	= Boolean
-			.getBoolean("org.osgi.service.zigbee.loglevel.debug");
-	static final boolean	WARN	= Boolean
-			.getBoolean("org.osgi.service.zigbee.loglevel.warn");
-	static final boolean	INFO	= Boolean
-			.getBoolean("org.osgi.service.zigbee.loglevel.info");
-	static final boolean	ERROR	= Boolean
-			.getBoolean("org.osgi.service.zigbee.loglevel.error");
+	static final boolean	DEBUG	= Boolean.getBoolean("org.osgi.service.zigbee.loglevel.debug");
+	static final boolean	WARN	= Boolean.getBoolean("org.osgi.service.zigbee.loglevel.warn");
+	static final boolean	INFO	= Boolean.getBoolean("org.osgi.service.zigbee.loglevel.info");
+	static final boolean	ERROR	= Boolean.getBoolean("org.osgi.service.zigbee.loglevel.error");
 
 	/**
 	 * @return true if at least one of the following options has been set to
@@ -59,58 +55,37 @@ public final class Logger {
 	 */
 	private static final void display(String tag, String msg) {
 		System.out.println("[" + tag + "," + Thread.currentThread().getName()
-				+ "] " + msg);
+				+ "] - " + msg);
 	}
 
-	/**
-	 * @param tag
-	 * @param msg
-	 */
 	public static final void d(String tag, String msg) {
 		if (DEBUG) {
 			display(tag, msg);
 		}
 	}
 
-	/**
-	 * @param tag
-	 * @param msg
-	 */
 	public static final void i(String tag, String msg) {
 		if (INFO) {
 			display(tag, msg);
 		}
 	}
 
-	/**
-	 * @param tag
-	 * @param msg
-	 */
 	public static final void w(String tag, String msg) {
 		if (WARN) {
 			display(tag, msg);
 		}
 	}
 
-	/**
-	 * @param tag
-	 * @param msg
-	 */
 	public static final void e(String tag, String msg) {
 		if (ERROR) {
 			display(tag, msg);
 		}
 	}
 
-	/**
-	 * @param tag
-	 * @param msg
-	 */
 	public static final void e(String tag, String msg, Exception e) {
 		if (ERROR) {
 			display(tag, msg);
 			e.printStackTrace();
 		}
 	}
-
 }

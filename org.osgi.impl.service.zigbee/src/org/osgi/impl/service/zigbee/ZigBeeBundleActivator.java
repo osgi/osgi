@@ -19,6 +19,7 @@ package org.osgi.impl.service.zigbee;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
+import org.osgi.impl.service.zigbee.util.Logger;
 
 /**
  * Activator for mocked ZigBee basedriver.
@@ -27,7 +28,9 @@ import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
  */
 public class ZigBeeBundleActivator implements BundleActivator {
 
-	private ZigBeeBaseDriver basedriver;
+	private static final String	TAG	= ZigBeeBundleActivator.class.getName();
+
+	private ZigBeeBaseDriver	basedriver;
 
 	/**
 	 * This method is called when ZigBee Bundle starts, so that the Bundle can
@@ -37,35 +40,35 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 */
 	public void start(BundleContext bc) {
 		try {
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - Instantiate the ZigBeeBaseDriver.");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "Instantiate the ZigBeeBaseDriver.");
 			basedriver = new ZigBeeBaseDriver(bc);
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - Start the ZigBeeBaseDriver instance.");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "Start the ZigBeeBaseDriver instance.");
 			basedriver.start();
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - The ZigBeeBaseDriver instance is started.");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
-			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "The ZigBeeBaseDriver instance is started.");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
+			Logger.d(TAG, "////////// ////////// ////////// ////////// //////////");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			Logger.e(TAG, e.getMessage());
 		}
 	}
 
@@ -76,11 +79,11 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 */
 	public void stop(BundleContext bc) {
 		try {
-			System.out.println(this.getClass().getName() + " - Stop the ZigBeeBaseDriver instance.");
+			Logger.d(TAG, "Stop the ZigBeeBaseDriver instance.");
 			basedriver.stop();
-			System.out.println(this.getClass().getName() + " - The ZigBeeBaseDriver instance is stopped.");
+			Logger.d(TAG, "The ZigBeeBaseDriver instance is stopped.");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			Logger.e(TAG, e.getMessage());
 		}
 	}
 }
