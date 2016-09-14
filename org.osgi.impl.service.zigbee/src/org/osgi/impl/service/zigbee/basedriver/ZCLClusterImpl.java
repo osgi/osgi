@@ -37,7 +37,7 @@ import org.osgi.util.promise.Promises;
 public class ZCLClusterImpl implements ZCLCluster {
 
 	private int						id;
-	private ZCLAttribute[]			attributes;
+	protected ZCLAttribute[]		attributes;
 	private int[]					commandIds;
 	private ZCLClusterDescription	description;
 
