@@ -75,7 +75,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	}
 
-	public void setExtendedPanId(long extendedPanId) {
+	public void setExtendedPanId(BigInteger extendedPanId) {
 
 	}
 

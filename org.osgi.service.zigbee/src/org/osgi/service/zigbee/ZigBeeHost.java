@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -89,7 +90,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @throws IllegalStateException, is thrown in case the host is still
 	 *         started.
 	 */
-	void setExtendedPanId(long extendedPanId) throws IllegalStateException;
+	void setExtendedPanId(BigInteger extendedPanId) throws IllegalStateException;
 
 	/**
 	 * Indicates if a ZigBee device can join the network.
