@@ -26,7 +26,7 @@ package org.osgi.service.zigbee;
 public interface ZigBeeLinkQuality {
 
 	/**
-	 * * Constant value representing a parent relationship between current
+	 * Constant value representing a parent relationship between current
 	 * {@link ZigBeeNode} and the neighbor
 	 */
 	public static final int	PARENT_NEIGHBOR			= 0xf0;
