@@ -64,9 +64,9 @@
     Compendium <xref endterm="cmpn.book-release" linkend="cmpn.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 6</title>
+      <title>OSGi Core Release 7</title>
 
-      <para>This specification is based on the OSGi Core Release 6. This
+      <para>This specification is based on the OSGi Core Release 7. This
       specification can be downloaded from:</para>
 
       <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
@@ -485,8 +485,9 @@
               <entry><xref linkend="service.rest"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.rest"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.rest"/></code></para><para><code><xref
+              linkend="org.osgi.service.rest.client"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.rest-version"
               linkend="service.rest"/></code></entry>
@@ -517,6 +518,45 @@
               <entry><code><xref
               endterm="org.osgi.service.http.whiteboard-version"
               linkend="service.http.whiteboard"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.transaction.control"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.transaction.control"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.jdbc"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.jpa"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.recovery"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.transaction.control-version"
+              linkend="service.transaction.control"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.converter"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.converter"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.converter-version"
+              linkend="service.resolver"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.configurator"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.configurator"/></code></para><para><code><xref
+              linkend="org.osgi.service.configurator.util"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.configurator-version"
+              linkend="service.configurator"/></code></entry>
             </row>
 
             <row>
@@ -561,6 +601,17 @@
 
               <entry><code><xref endterm="org.osgi.util.promise-version"
               linkend="util.promise"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="util.pushstream"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.util.pushstream"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.util.pushstream-version"
+              linkend="util.pushstream"/></code></entry>
             </row>
           </tbody>
         </tgroup>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="1" revision="$Id$"
-         version="5" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="introduction"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -530,9 +531,9 @@
     linkend="enterprise.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 6</title>
+      <title>OSGi Core Release 7</title>
 
-      <para>This specification is based on the OSGi Core Release 6. This
+      <para>This specification is based on the OSGi Core Release 7. This
       specification can be downloaded from:</para>
 
       <programlisting>https://www.osgi.org/developer/specifications/</programlisting>
@@ -560,7 +561,7 @@
             <row>
               <entry>Item</entry>
 
-              <entry>Package(s)</entry>
+              <entry>Package</entry>
 
               <entry>Version</entry>
             </row>
@@ -871,6 +872,45 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.transaction.control"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.transaction.control"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.jdbc"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.jpa"/></code></para><para><code><xref
+              linkend="org.osgi.service.transaction.control.recovery"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.transaction.control-version"
+              linkend="service.transaction.control"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.converter"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.converter"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.converter-version"
+              linkend="service.resolver"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.configurator"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.configurator"/></code></para><para><code><xref
+              linkend="org.osgi.service.configurator.util"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.configurator-version"
+              linkend="service.configurator"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -890,6 +930,17 @@
 
               <entry><code><xref endterm="org.osgi.util.promise-version"
               linkend="util.promise"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="util.pushstream"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.util.pushstream"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.util.pushstream-version"
+              linkend="util.pushstream"/></code></entry>
             </row>
           </tbody>
         </tgroup>
