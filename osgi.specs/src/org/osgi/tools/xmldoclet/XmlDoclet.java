@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.AnnotationTypeDoc;
 import com.sun.javadoc.AnnotationTypeElementDoc;
@@ -343,10 +344,10 @@ public class XmlDoclet extends Doclet {
 			Type print[] = new Type[0];
 			sb.append("?");
 			String del = "";
-			if (extend != null) {
+			if (extend.length > 0) {
 				del = " extends ";
 				print = extend;
-			} else if (zuper != null) {
+			} else if (zuper.length > 0) {
 				del = " super ";
 				print = zuper;
 			}
