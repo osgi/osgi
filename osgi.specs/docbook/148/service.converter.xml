@@ -587,7 +587,12 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
       
       <section>
         <title>Interface</title>
-        <para>...</para>
+        <para>Conversions to and from an interface are done in a lazy fashion meaning that
+        values are only obtained when they are actually needed. When converting to an interface, 
+        defaults can be specified using the one-arg overloads in the interface. Converting from an 
+        interface does not provide this mechanism for defaults. Annotations can provide a good
+        alternative to interfaces as they make it possible to specify the default in the annotation
+        code.</para>
         <section>
         <title>Converting to an Interface</title>
         <para>When converting into an interface the converter will create a dynamic proxy to 
@@ -631,7 +636,21 @@ boolean val2 = cfg.my_other_value(); // val2=true
       </section>
       <section>
         <title>Converting from an Interface</title>
-        <para>...</para>
+        <para>
+        Whether a conversion source object is an interface is determined dynamically, taking the
+        <xref linkend="service.converter-priorities"/> into account. When an object implements multiple interfaces
+        only the first interface from these is taken as the source type. 
+        </para>
+        <para>
+        When converting from an interface to the map intermediary format, the converter returns 
+        a lazy map of which all the keys are pre-populated from any non-void no-arg methods in the interface. 
+        The mapping rules as described in
+        <xref linkend="service.converter-key.mapping"/> are taken into account when mapping the 
+        method names to keys in the map.
+        Values are retrieved from the underlying interface in a lazy manner. Only when the client looks up a
+        given key or iterates through all entries or values these are obtained from the underlying map. 
+        </para>
+        <remark>OK?</remark>
       </section>
       <section xml:id="service.converter-key.mapping">
         <title>Key Mapping</title>
@@ -809,7 +828,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the map and then converting the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
-        <xref linkend="service.converter-key.name.mapping"/>.</para>
+        <xref linkend="service.converter-key.mapping"/>.</para>
         
         <para>When converting from a DTO the value of each public non-static field is put in the target 
         map, taking the field name as its String key.
@@ -828,7 +847,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       </section>
     </section>
     
-    <section>
+    <section xml:id="service.converter-priorities">
       <title>Priority</title>
       
       <para>In case multiple conversion rules match, the rule with the highest priority is used, where 1 is the highest overall priority.
@@ -845,17 +864,17 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           <tbody>
             <row>
               <entry>1</entry>
-              <entry>Array</entry>
+              <entry>array</entry>
             </row>
 
             <row>
               <entry>2</entry>
-              <entry>Java Bean (non-interface, concrete type)</entry>
+              <entry>Java bean</entry>
             </row>
             
             <row>
               <entry>3</entry>
-              <entry>@interface</entry>
+              <entry>annotation</entry>
             </row>
             
             <row>
