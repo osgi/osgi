@@ -23,22 +23,18 @@
      software in a type safe language. In Java, converting strings to proper types or to convert one type to a more 
      convenient type is often done manually. Any errors are then handled inline.</para>
       
-	<para>A common problem is interacting with Javascript. Since Javascript has no user defined types, it can get away with 
+	<para>A common problem is interacting with Javascript. Since Javascript has no user defined types, it leaves 
 	relatively clean looking code; the same in Java usually requires significantly more code due to the required 
 	conversions to the fine grained types of Java.</para>
 
 	<para>In release 6, the OSGi specifications introduced Data Transfer Objects (DTOs). DTOs are public objects without 
 	open generics that only contain public instance fields based on simple types, arrays, and collections. 
 	In many ways DTOs can be used as an alternative to Java beans. 
-	Java beans are hiding their fields and provide access methods but that separated 
+	Java beans are hiding their fields and provide access methods which separates 
 	the contract (the public interface) from the internal usage. Though this model has advantages in technical applications 
     it tends to add overhead. DTOs unify the specification with the data since the data is what is already public 
 	when it is sent to another process or serialized.</para>
 	
-	<para>By limiting the allowed data types in DTOs and ensuring they have no cycles they can be easily (de)serialized 
-	using JSON, providing easy interactions with Javascript.
-    </para>
-    
     <para>This specification defines the OSGi Converter that makes it easy to convert many types to other types, including scalars,
     Collections, Maps, Beans, Interfaces and DTOs without having to write the boilerplate conversion code. The converter
     strictly adheres to the rule specified in this chapter. Converters can also be enhanced with custom behavior using converter
@@ -88,7 +84,8 @@
     
     <para>The Standard Converter is a converter that follows precisely what is described in this 
     specification. It converts objects to the desired target type if a suitable conversion is 
-    available. An instance can be obtained as by creating a <code>new StandardConverter()</code>.</para> 
+    available. Otherwise it will throw a Conversion Exception.
+    An instance can be obtained by creating a <code>new StandardConverter()</code>.</para> 
     
     <para>Example:
     <programlisting>Converter c = new StandardConverter();
@@ -100,11 +97,11 @@ MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
       <title>Adapting converters</title>
       <para>The Standard Converter applies the conversion rules described in this specification. While this is 
       useful for many applications, in some cases small deviations from the default rules may be necessary.
-      This can be done by using Converter Adapters. Adapters accept rules that are used
-      when the applicable conversion is triggered. An adapter for a converter is obtained by calling
+      This can be done by using converter Adapters. Adapters accept custom rules that are used
+      when the applicable conversion is triggered. A new adapter for a converter is obtained by calling
       <code>converter.newAdapter()</code>. Adapters extend the Converter interface so all the converter
       operations apply to the adapter as well. This includes the ability to create adapters for existing
-      adapters. This makes it possible to customize existing adapters further without actually modifying
+      adapters, which makes it possible to customize existing adapters further without actually modifying
       the behavior of the original adapter.
       <remark>Would it make sense to make the adapters immutable? It might make the API a little awkward though...</remark>
       </para>
@@ -389,32 +386,33 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
         </orderedlist>
         If the key or value of the <code>Map.Entry&lt;K,V&gt;</code> equally match, the key is used.</para>
                         
-        <para>Conversion to <code>Map.Entry</code> from another type is not supported.</para>
+        <para>Conversion to <code>Map.Entry</code> from another type is not supported.
+        <remark>Or maybe create a Map.Entry with both key and value to be the same?</remark></para>
       </section>
       </section>
     
     <section>
       <title>Aggregates</title>
   
-      <para>Aggregates represent Collections and Arrays, this includes Lists and Sets.</para>
+      <para>Aggregates represent Collections and Arrays, including Lists and Sets.</para>
       
       <section>
         <title>Converting to a scalar</title>
         <para>
         If a Collection or array needs to be converted to a target which is not a 
         Collection or Array,
-        the first element is taken and converted into the target type.</para>
+        the first element is taken and converted into the target type. Example:
+        <programlisting>Converter converter = ...; // from service registry
+String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"</programlisting></para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
         used to convert into the target type.</para>
         
         <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
           <xref linkend="org.osgi.service.converter.Adapter" xrefstyle="hyperlink"/>. For example:
-          <programlisting>Converter converter = ...; // from service registry
-String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"
-          
+          <programlisting>
 // Use an adapter to modify converter behavior          
-Adapter ca = converter.getAdapter();
+Adapter ca = converter.newAdapter();
 ca.rule(String[].class, String.class,
   v -> Stream.of(v).collect(Collectors.joining(",")),
   v -> v.split(","));
@@ -529,7 +527,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
       Additionally objects that provide a map view
       are supported.</para>
       
-      <para>When converting between map-like types, a map is used as intermediary.
+      <para>When converting between map-like types, a <code>Map</code> is used as intermediary.
       When converting to other structures, the map is converted into a collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
@@ -572,7 +570,7 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
         <para>Each key-value pair in the source map is converted to desired types of the target map
         using the generic information if available.
         
-        Map type information about the target type can be made available by using the
+        Map type information for the target type can be made available by using the
         <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods.        
@@ -589,6 +587,9 @@ String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlist
       
       <section>
         <title>Interface</title>
+        <para>...</para>
+        <section>
+        <title>Converting to an Interface</title>
         <para>When converting into an interface the converter will create a dynamic proxy to 
         implement the interface. The name of the method returning the value should match the key 
         of the map entry, taking into account the mapping rules specified in 
@@ -627,12 +628,15 @@ boolean val2 = cfg.my_other_value(); // val2=true
         
         <para>If no default is specified and a requested value is not present in the map,
         a <code>ConversionException</code> is thrown.</para>
-        
+      </section>
+      <section>
+        <title>Converting from an Interface</title>
+        <para>...</para>
+      </section>
       <section xml:id="service.converter-key.mapping">
         <title>Key Mapping</title>
 
-        <para>Each no-argument and each single-argument method that has a non-void return value of the interface is mapped to 
-        a key in the map. The key name is derived from the method name.
+        <para>The key name is derived from the method name.
         Certain common property name characters, such as full stop (<code>'.'
         \u002E</code>) are not valid in Java identifiers. So the name of a
         method must be converted to its corresponding property name as
@@ -841,7 +845,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           <tbody>
             <row>
               <entry>1</entry>
-              <entry>annotation</entry>
+              <entry>Array</entry>
             </row>
 
             <row>
@@ -851,12 +855,12 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             
             <row>
               <entry>3</entry>
-              <entry>interface</entry>
+              <entry>@interface</entry>
             </row>
             
             <row>
               <entry>4</entry>
-              <entry><code>java.util.Map</code></entry>
+              <entry>interface (including Collections and Maps)</entry>
             </row>
 
             <row>
@@ -866,21 +870,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             
             <row>
               <entry>6</entry>
-              <entry>Collection</entry>
+              <entry>DTO</entry>
             </row>
             
             <row>
               <entry>7</entry>
-              <entry><code>Map.Entry</code></entry>
-            </row>
-            
-            <row>
-              <entry>8</entry>
-              <entry>DTO</entry>
-            </row>
-
-            <row>
-              <entry>9</entry>
               <entry>scalar</entry>
             </row>
           </tbody>
