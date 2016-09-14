@@ -31,13 +31,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 
+	private static final String	TAG						= ZCLEventListenerImpl.class.getName();
+
 	private BundleContext		bc;
 	private ServiceRegistration	sr;
 	private ZigBeeEvent			lastReceivedZigBeeEvent	= null;
 
-	/**
-	 * @param bc
-	 */
 	public ZCLEventListenerImpl(BundleContext bc) {
 		this.bc = bc;
 	}
@@ -60,8 +59,7 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 
 	public void notifyEvent(ZigBeeEvent zigbeeEvent) {
 		lastReceivedZigBeeEvent = zigbeeEvent;
-		DefaultTestBundleControl.log(
-				ZCLEventListener.class.getName() + " just received the following event: " + lastReceivedZigBeeEvent);
+		DefaultTestBundleControl.log(TAG + " - just received the following event: " + lastReceivedZigBeeEvent);
 	}
 
 	/**

@@ -29,15 +29,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class ZigBeeEventSourceImpl implements Runnable {
 
-	private BundleContext	bc;
-	private ZigBeeEvent		zigbeeEvent;
-	private Thread			thread;
-	private ServiceTracker	serviceTracker;
+	private static final String	TAG	= ZigBeeEventSourceImpl.class.getName();
 
-	/**
-	 * @param bc
-	 * @param zigbeeEvent
-	 */
+	private BundleContext		bc;
+	private ZigBeeEvent			zigbeeEvent;
+	private Thread				thread;
+	private ServiceTracker		serviceTracker;
+
 	public ZigBeeEventSourceImpl(BundleContext bc, ZigBeeEvent zigbeeEvent) {
 		this.bc = bc;
 		this.zigbeeEvent = zigbeeEvent;
@@ -47,10 +45,10 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Launch this testEventSource.
 	 */
 	public void start() {
-		DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " start.");
+		DefaultTestBundleControl.log("start.");
 		serviceTracker = new ServiceTracker(bc, ZCLEventListener.class.getName(), null);
 		serviceTracker.open();
-		thread = new Thread(this, ZigBeeEventSourceImpl.class.getName() + " - Whiteboard");
+		thread = new Thread(this, TAG + " - Whiteboard");
 		thread.start();
 	}
 
@@ -58,46 +56,29 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Terminate this testEventSource.
 	 */
 	public void stop() {
-		DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " stop.");
+		DefaultTestBundleControl.log(TAG + " - stop.");
 		serviceTracker.close();
 		thread = null;
 	}
 
 	public synchronized void run() {
-		DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " run.");
+		DefaultTestBundleControl.log(TAG + " - run.");
 		Thread current = Thread.currentThread();
 		int n = 0;
 		while (current == thread) {
 			Object[] listeners = serviceTracker.getServices();
-			// log("listeners: " + listeners);
-
-			// try {
-			// ServiceReference[] srs = bc.getAllServiceReferences(null,
-			// null);
-			// log("srs: " + srs);
-			// if (srs != null) {
-			// for (ServiceReference sr : srs) {
-			// log("sr: " + sr);
-			// }
-			// }
-			// } catch (InvalidSyntaxException e1) {
-			// e1.printStackTrace();
-			// }
 
 			if (listeners != null && listeners.length > 0) {
 				if (n >= listeners.length) {
 					n = 0;
 				}
+
 				ZCLEventListener aZCLEventListener = (ZCLEventListener) listeners[n++];
-
-				DefaultTestBundleControl
-						.log(ZigBeeEventSourceImpl.class.getName() + " is sending the following event: " + zigbeeEvent);
-
+				DefaultTestBundleControl.log(TAG + " - is sending the following event: " + zigbeeEvent);
 				aZCLEventListener.notifyEvent(zigbeeEvent);
 			}
 			try {
 				int waitinms = 1000;
-				// DefaultTestBundleControl.log("wait(" + waitinms + ")");
 				wait(waitinms);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
