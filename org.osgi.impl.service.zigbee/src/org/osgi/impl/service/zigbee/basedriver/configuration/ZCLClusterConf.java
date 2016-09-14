@@ -23,8 +23,6 @@ import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * 
- *
  * Class used by the configuration file reader. see
  * {@link ConfigurationFileReader}
  * 
@@ -46,4 +44,5 @@ public class ZCLClusterConf extends ZCLClusterImpl {
 	public Promise getAttributes() {
 		return Promises.resolved(attributes);
 	}
+
 }
