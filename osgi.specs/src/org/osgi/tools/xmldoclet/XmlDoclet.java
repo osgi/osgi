@@ -21,6 +21,10 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -523,28 +527,28 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void printThrows(StringBuilder sb, ThrowsTag tag) {
-		sb.append("   <throws name='"
-				+ simplify(tag.exceptionName())
-				+ (tag.exception() != null ? "' exception='"
-						+ tag.exception().qualifiedName() : "")
-				+ "'>");
-		sb.append(html(toString(tag.inlineTags())));
-		sb.append("   </throws>");
+		sb.append("<throws name='").append(simplify(tag.exceptionName()));
+		if (tag.exception() != null) {
+			sb.append("' exception='").append(tag.exception().qualifiedName());
+		}
+		sb.append("'>").append(html(toString(tag.inlineTags()))).append("</throws>\n");
 	}
 
 	void printParamTag(StringBuilder sb, ParamTag tag) {
 		String name = tag.parameterName();
-
-		if (tag.isTypeParameter())
-			name = "&lt;" + name + "&gt;";
-
-		String text = toString(tag.inlineTags()).trim();
+		sb.append("<param name='");
+		if (tag.isTypeParameter()) {
+			sb.append("&lt;");
+		}
+		sb.append(name);
+		if (tag.isTypeParameter()) {
+			sb.append("&gt;");
+		}
+		String text = toString(tag.inlineTags());
 		if (text.length() == 0)
-			sb.append("   <param name='" + name + "'/>");
+			sb.append("'/>\n");
 		else {
-			sb.append("   <param name='" + name + "'>");
-			sb.append(html(text));
-			sb.append("</param>\n");
+			sb.append("'>").append(html(text)).append("</param>\n");
 		}
 	}
 
@@ -552,7 +556,6 @@ public class XmlDoclet extends Doclet {
 		String ref = "";
 		String file = "";
 		String text = tag.text().trim();
-		// String text = tag.label().trim();
 
 		if (tag.referencedMember() != null) {
 			file = tag.referencedMember().containingPackage().name();
@@ -580,7 +583,7 @@ public class XmlDoclet extends Doclet {
 			sb.append("<a>");
 			sb.append(text.substring(1, text.length() - 1));
 			sb.append("</a>");
-		} else if (text.trim().startsWith("<")) {
+		} else if (text.startsWith("<")) {
 			sb.append(text);
 		} else {
 			sb.append("<a href='" + file + "#" + ref + "'>");
@@ -606,8 +609,8 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void print(StringBuilder sb, Tag tags[]) {
-		for (int i = 0; i < tags.length; i++) {
-			printX(sb, tags[i]);
+		for (Tag tag : tags) {
+			printX(sb, tag);
 		}
 	}
 
@@ -617,26 +620,171 @@ public class XmlDoclet extends Doclet {
 		return sb.toString().trim();
 	}
 
+	void print(StringBuilder sb, Collection<? extends Tag> tags) {
+		for (Tag tag : tags) {
+			printX(sb, tag);
+		}
+	}
+
+	String toString(Collection<? extends Tag> tags) {
+		StringBuilder sb = new StringBuilder();
+		print(sb, tags);
+		return sb.toString().trim();
+	}
+
 	void printComment(Doc doc) {
-		Tag[] lead = doc.firstSentenceTags();
-		String text = toString(lead).trim();
-		if (text.length() != 0) {
+		List<MethodDoc> overrides = (doc instanceof MethodDoc) ? overriddenMethod((MethodDoc) doc) : Collections.<MethodDoc> emptyList();
+		String text = toString(doc.firstSentenceTags());
+		if (text.isEmpty() && (doc instanceof MethodDoc)) {
+			for (MethodDoc m : overrides) {
+				text = toString(m.firstSentenceTags());
+				if (!text.isEmpty()) {
+					break;
+				}
+			}
+		}
+		if (text.isEmpty()) {
+			pw.println("   <lead/>");
+		} else {
 			pw.println("   <lead>");
 			pw.println(html(text));
 			pw.println("   </lead>");
-		} else
-			pw.println("   <lead/>");
+		}
 
-		text = toString(doc.inlineTags()).trim();
-		if (text.length() != 0) {
+		text = toString(doc.inlineTags());
+		if (text.isEmpty() && (doc instanceof MethodDoc)) {
+			for (MethodDoc m : overrides) {
+				text = toString(m.inlineTags());
+				if (!text.isEmpty()) {
+					break;
+				}
+			}
+		}
+		if (text.isEmpty()) {
+			pw.println("   <description/>");
+		} else {
 			pw.println("   <description>");
 			pw.println(html(text));
 			pw.println("   </description>");
-		} else
-			pw.println("   <description/>");
+		}
 
-		Tag tags[] = doc.tags();
-		pw.println(toString(tags));
+		Set<Tag> tagSet = new LinkedHashSet<Tag>(Arrays.asList(doc.tags()));
+		if (!(doc instanceof MethodDoc)) {
+			pw.println(toString(tagSet));
+			return;
+		}
+
+		// Handle inheritance of comments, @params, @return and @throws javadoc
+		// for methods.
+		MethodDoc method = (MethodDoc) doc;
+
+		List<ParamTag> paramTags = new ArrayList<ParamTag>(Arrays.asList(method.typeParamTags()));
+		tagSet.removeAll(paramTags);
+		pw.println(toString(paramTags));
+
+		paramTags = new ArrayList<ParamTag>(Arrays.asList(method.paramTags()));
+		tagSet.removeAll(paramTags);
+		int j = 0;
+		for (Parameter param : method.parameters()) {
+			String name = param.name();
+			if (j < paramTags.size()) {
+				ParamTag tag = paramTags.get(j);
+				if (name.equals(tag.parameterName())) {
+					j++;
+					continue;
+				}
+			}
+			ParamTag tag = inheritParamTag(name, overrides);
+			if (tag != null) {
+				paramTags.add(j, tag);
+				j++;
+			}
+		}
+		pw.println(toString(paramTags));
+
+		List<Tag> returnTags = new ArrayList<Tag>(Arrays.asList(method.tags("@return")));
+		tagSet.removeAll(returnTags);
+		if ((returnTags.isEmpty()) && !"void".equals(method.returnType().toString())) {
+			Tag tag = inheritReturnTag(overrides);
+			if (tag != null) {
+				returnTags.add(tag);
+			}
+		}
+		pw.println(toString(returnTags));
+
+		List<ThrowsTag> throwsTags = new ArrayList<ThrowsTag>(Arrays.asList(method.throwsTags()));
+		tagSet.removeAll(throwsTags);
+		thrown: for (Type thrown : method.thrownExceptionTypes()) {
+			String thrownName = thrown.toString();
+			for (ThrowsTag tag : throwsTags) {
+				String name = throwsTypeName(tag);
+				if (thrownName.equals(name)) {
+					continue thrown;
+				}
+			}
+			ThrowsTag tag = inheritThrowsTag(thrownName, overrides);
+			if (tag != null) {
+				throwsTags.add(tag);
+			}
+		}
+		pw.println(toString(throwsTags));
+
+		pw.println(toString(tagSet));
+	}
+
+	static final String		JAVAIDENTIFIER	= "\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*";
+	static final Pattern	FQCN			= Pattern.compile(JAVAIDENTIFIER + "(\\." + JAVAIDENTIFIER + ")*");
+
+	String throwsTypeName(ThrowsTag tag) {
+		Type t = tag.exceptionType();
+		if (t != null) {
+			return t.toString();
+		}
+
+		String name = tag.exceptionName();
+		Matcher m = FQCN.matcher(name);
+		if (m.find()) {
+			name = m.group();
+		}
+		if (name.indexOf('.') < 0) {
+			name = "java.lang." + name;
+		}
+		return name;
+	}
+
+	ParamTag inheritParamTag(String paramName, List<MethodDoc> overrides) {
+		for (MethodDoc m : overrides) {
+			ParamTag[] tags = m.paramTags();
+			for (ParamTag tag : tags) {
+				if (paramName.equals(tag.parameterName())) {
+					return tag;
+				}
+			}
+		}
+		return null;
+	}
+
+	ThrowsTag inheritThrowsTag(String throwsName, List<MethodDoc> overrides) {
+		for (MethodDoc m : overrides) {
+			ThrowsTag[] tags = m.throwsTags();
+			for (ThrowsTag tag : tags) {
+				String name = throwsTypeName(tag);
+				if (throwsName.equals(name)) {
+					return tag;
+				}
+			}
+		}
+		return null;
+	}
+
+	Tag inheritReturnTag(List<MethodDoc> overrides) {
+		for (MethodDoc m : overrides) {
+			Tag[] tags = m.tags("@return");
+			for (Tag tag : tags) {
+				return tag;
+			}
+		}
+		return null;
 	}
 
 	String html(String text) {
@@ -648,109 +796,157 @@ public class XmlDoclet extends Doclet {
 	void printX(StringBuilder sb, Tag tag) {
 		if (tag.kind().equals("Text")) {
 			sb.append(tag.text());
-		} else {
-			if (tag instanceof ParamTag)
-				printParamTag(sb, (ParamTag) tag);
-			else if (tag instanceof ThrowsTag)
-				printThrows(sb, (ThrowsTag) tag);
-			else if (tag instanceof SeeTag)
-				printSee(sb, (SeeTag) tag);
-			else {
-				if (tag.kind().equals("@literal")) {
-					sb.append(escape(toString(tag.inlineTags())));
-				} else if (tag.kind().equals("@code")) {
-					sb.append("<code>");
-					sb.append(escape(toString(tag.inlineTags())));
-					sb.append("</code>");
-				} else if (tag.kind().equals("@value")) {
-					FieldDoc field = getReferredField(tag);
-					if (field != null) {
-						sb.append(escape(field.constantValueExpression()));
-					} else
-						root.printError("No value for "
-								+ tag.text());
-				} else if (tag.kind().equals("@security")) {
-					StringBuilder sb2 = new StringBuilder();
-					print(sb2, tag.inlineTags());
-					for (int i = 0; i < sb2.length(); i++)
-						if (sb2.charAt(i) == '\n'
-								|| sb2.charAt(i) == '\r')
-							sb2.setCharAt(i, ' ');
-					String s = sb2.toString();
+			return;
+		}
+		if (tag instanceof ParamTag) {
+			printParamTag(sb, (ParamTag) tag);
+			return;
+		}
+		if (tag instanceof ThrowsTag) {
+			printThrows(sb, (ThrowsTag) tag);
+			return;
+		}
+		if (tag instanceof SeeTag) {
+			printSee(sb, (SeeTag) tag);
+			return;
+		}
+		if (tag.kind().equals("@literal")) {
+			sb.append(escape(toString(tag.inlineTags())));
+			return;
+		}
+		if (tag.kind().equals("@code")) {
+			sb.append("<code>");
+			sb.append(escape(toString(tag.inlineTags())));
+			sb.append("</code>");
+			return;
+		}
+		if (tag.kind().equals("@value")) {
+			FieldDoc field = getReferredField(tag);
+			if (field != null) {
+				sb.append(escape(field.constantValueExpression()));
+			} else {
+				root.printError("No value for " + tag.text());
+			}
+			return;
+		}
+		if (tag.kind().equals("@security")) {
+			StringBuilder sb2 = new StringBuilder();
+			print(sb2, tag.inlineTags());
+			for (int i = 0; i < sb2.length(); i++)
+				if (sb2.charAt(i) == '\n'
+						|| sb2.charAt(i) == '\r')
+					sb2.setCharAt(i, ' ');
+			String s = sb2.toString();
 
-					Matcher m = SECURITY_PATTERN.matcher(s);
-					if (m.matches()) {
-						String permission = m.group(1);
-						String resource = m.group(2);
-						String actions = m.group(3);
-						String remainder = m.group(4);
+			Matcher m = SECURITY_PATTERN.matcher(s);
+			if (m.matches()) {
+				String permission = m.group(1);
+				String resource = m.group(2);
+				String actions = m.group(3);
+				String remainder = m.group(4);
 
-						sb.append("\n<security name='");
-						sb.append(escape(permission));
-						sb.append("' resource='");
-						sb.append(escape(resource));
-						sb.append("' actions='");
-						sb.append(escape(actions));
-						sb.append("'>");
-						sb.append(remainder);
-						sb.append("</security>");
-					} else
-						throw new IllegalArgumentException(
-								"@security tag invalid: '"
-										+ s
-										+ "', matching pattern is "
-										+ SECURITY_PATTERN
-										+ " " + m);
-				} else if (tag.name().equals("@inheritDoc")) {
-					Doc holder = tag.holder();
-					if (holder instanceof MethodDoc) {
-
-						MethodDoc method = (MethodDoc) holder;
-						MethodDoc zuper = method
-								.overriddenMethod(); // works only for classes
-						if (zuper == null) {
-							ClassDoc clazz = method.containingClass();
-							outer: for (ClassDoc interf : clazz.interfaces()) {
-								for (MethodDoc md : interf.methods()) {
-									if (method.overrides(md)) {
-										zuper = md;
-										break outer;
-									}
-								}
-							}
-						}
-						if (zuper != null && zuper != method) {
-							String text = toString(zuper.inlineTags()).trim();
-							if (text.length() != 0) {
-								sb.append(html(text));
-							}
-						}
-					} else {
-						sb.append("<inheritDoc/>");
+				sb.append("\n<security name='");
+				sb.append(escape(permission));
+				sb.append("' resource='");
+				sb.append(escape(resource));
+				sb.append("' actions='");
+				sb.append(escape(actions));
+				sb.append("'>");
+				sb.append(remainder);
+				sb.append("</security>");
+				return;
+			}
+			throw new IllegalArgumentException(
+					"@security tag invalid: '"
+							+ s
+							+ "', matching pattern is "
+							+ SECURITY_PATTERN
+							+ " " + m);
+		}
+		if (tag.kind().equals("@inheritDoc")) {
+			Doc holder = tag.holder();
+			if (holder instanceof MethodDoc) {
+				MethodDoc method = (MethodDoc) holder;
+				List<MethodDoc> results = overriddenMethod(method);
+				if (!results.isEmpty()) {
+					MethodDoc m = results.get(0);
+					String text = toString(m.inlineTags());
+					if (!text.isEmpty()) {
+						sb.append(html(text));
+						return;
 					}
-				} else if (tag.kind().equals("@version")) {
-					sb.append("<version>");
-					Version v = new Version(toString(tag.inlineTags()));
-					sb.append(v.toSpecificationString());
-					sb.append("</version>");
-				} else {
-					sb.append("<"
-							+ tag.kind().substring(1)
-							+ ">"
-							+ html(toString(tag
-									.inlineTags()))
-							+ "</"
-							+ tag.kind().substring(1)
-							+ ">");
+				}
+			}
+			sb.append("<inheritDoc/>");
+			return;
+		}
+		if (tag.kind().equals("@version")) {
+			sb.append("<version>");
+			Version v = new Version(toString(tag.inlineTags()));
+			sb.append(v.toSpecificationString());
+			sb.append("</version>");
+			return;
+		}
+		if (tag.kind().equals("@return")) {
+			sb.append("<return>")
+					.append(html(toString(tag.inlineTags())))
+					.append("</return>\n");
+			return;
+		}
+		String name = tag.kind().substring(1);
+		sb.append("<")
+				.append(name)
+				.append(">")
+				.append(html(toString(tag.inlineTags())))
+				.append("</")
+				.append(name)
+				.append(">");
+	}
+
+	List<MethodDoc> overriddenMethod(MethodDoc method) {
+		List<MethodDoc> results = new ArrayList<MethodDoc>();
+		while ((method = overriddenMethod(method, method.containingClass())) != null) {
+			results.add(method);
+		}
+		// System.err.printf("results %s\n\n", results);
+		return results;
+	}
+
+	MethodDoc overriddenMethod(MethodDoc method, ClassDoc clazz) {
+		// Step 1
+		for (ClassDoc interf : clazz.interfaces()) {
+			for (MethodDoc md : interf.methods()) {
+				if (method.overrides(md)) {
+					return md;
 				}
 			}
 		}
+		// Step 2
+		for (ClassDoc interf : clazz.interfaces()) {
+			MethodDoc md = overriddenMethod(method, interf);
+			if (md != null) {
+				return md;
+			}
+		}
+		// Step 3
+		clazz = clazz.superclass();
+		if (clazz == null) {
+			return null;
+		}
+		// Step 3a
+		for (MethodDoc md : clazz.methods()) {
+			if (method.overrides(md)) {
+				return md;
+			}
+		}
+		// Step 3b
+		return overriddenMethod(method, clazz);
 	}
 
 	/**
 	 * Find a reference to a field.
 	 */
-	static Pattern MEMBER_REFERENCE = Pattern.compile("\\s*(.+)?#(.+)\\s*");
+	static final Pattern MEMBER_REFERENCE = Pattern.compile("\\s*(.+)?#(.+)\\s*");
 
 	private FieldDoc getReferredField(Tag value) {
 		Doc holder = value.holder();
