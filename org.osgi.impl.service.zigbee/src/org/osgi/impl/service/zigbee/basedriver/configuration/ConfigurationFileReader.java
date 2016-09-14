@@ -75,16 +75,12 @@ public class ConfigurationFileReader {
 				getHost(doc);
 				getNodes(doc);
 				getFrameInfo(doc);
-
 			} catch (SAXException e) {
-
 				e.printStackTrace();
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 		} catch (ParserConfigurationException e) {
-
 			e.printStackTrace();
 		}
 	}
@@ -112,6 +108,13 @@ public class ConfigurationFileReader {
 		return node;
 	}
 
+	/**
+	 * Returns the value read from the configuration file that must contain the
+	 * ZCL minimum frame size.
+	 * 
+	 * @return the ZCL frames possible minimum frame size.
+	 */
+
 	public int getHeaderMinSize() {
 		return headerMinSize;
 	}
@@ -129,7 +132,6 @@ public class ConfigurationFileReader {
 	}
 
 	public ZigBeeEndpoint[] getEnpoints(ZigBeeNodeImpl node) {
-
 		return node.getEndpoints();
 	}
 
@@ -163,27 +165,23 @@ public class ConfigurationFileReader {
 					&& enpointNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element enpointElement = (Element) enpointNode;
 				String endpointId = enpointElement.getAttribute("id");
-				NodeList serverClusters = enpointElement
-						.getElementsByTagName("serverClusters");
+
+				NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
 				ZCLCluster[] clusters = getServerClusters(serverClusters);
 
-				NodeList clientClustersNodes = enpointElement
-						.getElementsByTagName("clientClusters");
+				NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
 				ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
-				ZigBeeEndpointConf[] endpointsHost = new ZigBeeEndpointConf[1];
+				ZigBeeEndpointImpl[] endpointsHost = new ZigBeeEndpointImpl[1];
+
 				ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-				endpointsHost[0] = new ZigBeeEndpointConf(
-						Short.parseShort(endpointId),
-						clusters,
-						clientClusters,
-						desc);
+
+				endpointsHost[0] = new ZigBeeEndpointImpl(Short.parseShort(endpointId), clusters, clientClusters, desc);
 
 				host = new ZigBeeHostImpl(hostPId,
 						Integer.parseInt(panId),
 						Integer.parseInt(channel),
 						Integer.parseInt(securityLevel),
-						new BigInteger(
-								ieeeAddress),
+						new BigInteger(ieeeAddress),
 						endpointsHost,
 						nodeDesc,
 						null,
@@ -209,22 +207,18 @@ public class ConfigurationFileReader {
 					Element nodeElement = (Element) node;
 
 					// get NB of enpoints
-					int enpointNb = Integer.parseInt(nodeElement
-							.getAttribute("endpointNb"));
+					int enpointNb = Integer.parseInt(nodeElement.getAttribute("endpointNb"));
+
 					// get host infos
 					String hostPId = nodeElement.getAttribute("hostPid");
-					String ieeeAddress = nodeElement
-							.getAttribute("ieeeAddress");
-					String userDescription = nodeElement
-							.getAttribute("userDescription");
+					String ieeeAddress = nodeElement.getAttribute("ieeeAddress");
+					String userDescription = nodeElement.getAttribute("userDescription");
 					String endpointNb = nodeElement.getAttribute("endpointNb");
 					String nwkAddress = nodeElement.getAttribute("nwkAddress");
 
-					NodeList enpointsList = nodeElement
-							.getElementsByTagName("endpoints");
+					NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
 					Node endpoints = enpointsList.item(0);
-					if (endpoints != null
-							&& endpoints.getNodeType() == Node.ELEMENT_NODE) {
+					if (endpoints != null && endpoints.getNodeType() == Node.ELEMENT_NODE) {
 						Element endpointsElement = (Element) endpoints;
 						NodeList enpointList = endpointsElement
 								.getElementsByTagName("endpoint");
@@ -234,45 +228,27 @@ public class ConfigurationFileReader {
 						ZEnpoints = new ZigBeeEndpoint[enpointNb];
 						for (int j = 0; j < endpointsLength; j++) {
 							Node enpointNode = enpointList.item(j);
-							if (enpointNode != null
-									&& enpointNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (enpointNode != null && enpointNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element enpointElement = (Element) enpointNode;
-								String endpointId = enpointElement
-										.getAttribute("id");
-								endpointUsedIds[i] = Integer
-										.parseInt(endpointId);
-								NodeList serverClusters = enpointElement
-										.getElementsByTagName("serverClusters");
+								String endpointId = enpointElement.getAttribute("id");
+								endpointUsedIds[i] = Integer.parseInt(endpointId);
+
+								NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
 								ZCLCluster[] clusters = getServerClusters(serverClusters);
 
-								NodeList clientClustersNodes = enpointElement
-										.getElementsByTagName("clientClusters");
+								NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
 								ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
 								ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-								ZEnpoints[i] = new ZigBeeEndpointConf(
-										Short.parseShort(endpointId),
-										clusters,
-										clientClusters,
-										desc);
+								ZEnpoints[i] = new ZigBeeEndpointImpl(Short.parseShort(endpointId), clusters, clientClusters, desc);
 							}
 						}
-						createFakeEndpointsIfNeeded(ZEnpoints,
-								endpointsLength,
-								endpointUsedIds,
-								enpointNb);
+						createFakeEndpointsIfNeeded(ZEnpoints, endpointsLength, endpointUsedIds, enpointNb);
 					}
 
 					ZigBeeNodeDescriptor nodeDesc = getZigBeeNodeDescriptor(nodeElement);
 					ZigBeePowerDescriptor powerDesc = getZigBeePowerDescriptor(nodeElement);
 
-					nodes[i] = new ZigBeeNodeConf(new BigInteger(ieeeAddress),
-							hostPId,
-							ZEnpoints,
-							nodeDesc,
-							powerDesc,
-							userDescription,
-							endpointNb,
-							bc);
+					nodes[i] = new ZigBeeNodeImpl(host, new BigInteger(ieeeAddress), ZEnpoints, nodeDesc, powerDesc, userDescription);
 				}
 			}
 		}

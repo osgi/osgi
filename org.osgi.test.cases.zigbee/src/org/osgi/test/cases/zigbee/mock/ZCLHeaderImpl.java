@@ -57,6 +57,8 @@ public class ZCLHeaderImpl implements ZCLHeader {
 	 * 
 	 * @param disableDefaultResponse pass {@code true} to disable the default
 	 *        response
+	 * 
+	 * @param sequenceNumber The Sequence number of the generated frame.
 	 *
 	 */
 

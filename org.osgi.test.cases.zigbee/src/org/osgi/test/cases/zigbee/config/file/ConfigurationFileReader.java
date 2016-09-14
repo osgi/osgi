@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.config.file;
 
@@ -98,7 +113,6 @@ public class ConfigurationFileReader {
 				e.printStackTrace();
 			}
 		} catch (ParserConfigurationException e) {
-
 			e.printStackTrace();
 		}
 	}
@@ -125,28 +139,20 @@ public class ConfigurationFileReader {
 			node = nList.item(0);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element requestFullFrameElement = (Element) node;
-				String payloadString = requestFullFrameElement
-						.getAttribute("hex");
+				String payloadString = requestFullFrameElement.getAttribute("hex");
 				requestFullFrame = hexStringToByteArray(payloadString);
-				int commandId = Integer.parseInt(requestFullFrameElement
-						.getAttribute("commandId"));
-				boolean isClusterSpecificCommand = Boolean
-						.getBoolean(requestFullFrameElement
-								.getAttribute("isClusterSpecificCommand"));
-				boolean isClientServerDirection = Boolean
-						.getBoolean(requestFullFrameElement
-								.getAttribute("isClientServerDirection"));
-				boolean disableDefaultResponse = Boolean
-						.getBoolean(requestFullFrameElement
-								.getAttribute("false"));
-				byte sequenceNumber = Byte.parseByte(requestFullFrameElement
-						.getAttribute("sequenceNumber"));
+
+				int commandId = Integer.parseInt(requestFullFrameElement.getAttribute("commandId"));
+				boolean isClusterSpecificCommand = Boolean.getBoolean(requestFullFrameElement.getAttribute("isClusterSpecificCommand"));
+				boolean isClientServerDirection = Boolean.getBoolean(requestFullFrameElement.getAttribute("isClientServerDirection"));
+				boolean disableDefaultResponse = Boolean.getBoolean(requestFullFrameElement.getAttribute("false"));
+				byte sequenceNumber = Byte.parseByte(requestFullFrameElement.getAttribute("sequenceNumber"));
+
 				requestHeader = new ZCLHeaderImpl(commandId,
 						isClusterSpecificCommand,
 						isClientServerDirection,
 						disableDefaultResponse,
 						sequenceNumber);
-
 			}
 			nList = doc.getElementsByTagName("responseFullFrame");
 			node = nList.item(0);
@@ -511,8 +517,7 @@ public class ConfigurationFileReader {
 					NodeList globalDescList = clusterElement
 							.getElementsByTagName("globalServerDescription");
 					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null
-							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
+					if (globalDesc != null && globalDesc.getNodeType() == Node.ELEMENT_NODE) {
 						Element desc = (Element) globalDesc;
 						String id = desc.getAttribute("id");
 						String name = desc.getAttribute("name");
@@ -596,21 +601,19 @@ public class ConfigurationFileReader {
 		if (attributeDescriptionNode != null
 				&& attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element attrDescriptionsElement = (Element) attributeDescriptionNode;
+
 			String id = attrDescriptionsElement.getAttribute("id");
-			String isReadOnly = attrDescriptionsElement
-					.getAttribute("isReadOnly");
-			String defaultValue = attrDescriptionsElement
-					.getAttribute("defaultValue");
+			String isReadOnly = attrDescriptionsElement.getAttribute("isReadOnly");
+			String defaultValue = attrDescriptionsElement.getAttribute("defaultValue");
 			String name = attrDescriptionsElement.getAttribute("name");
-			String isMandatory = attrDescriptionsElement
-					.getAttribute("isMandatory");
-			String isReportable = attrDescriptionsElement
-					.getAttribute("isReportable");
+			String isMandatory = attrDescriptionsElement.getAttribute("isMandatory");
+			String isReportable = attrDescriptionsElement.getAttribute("isReportable");
 			String datatype = attrDescriptionsElement.getAttribute("dataType");
 			Class cls;
+
 			try {
-				cls = Class
-						.forName("org.osgi.service.zigbee.types." + datatype);
+				cls = Class.forName("org.osgi.service.zigbee.types." + datatype);
+
 				Class[] classes = {};
 				Method method = cls.getMethod("getInstance", classes);
 				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method
@@ -628,19 +631,15 @@ public class ConfigurationFileReader {
 					firstAttributeWithBooleanDatatype = attr;
 				}
 			} catch (ClassNotFoundException e) {
-
 				e.printStackTrace();
 			} catch (NoSuchMethodException e) {
-
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-
 				e.printStackTrace();
 			}
-
 		}
 
 		return attr;
@@ -720,19 +719,16 @@ public class ConfigurationFileReader {
 					// get attributes
 					clusterElement.getElementsByTagName("attributes");
 					Node nodeAttributes = clientClusters.item(0);
-					if (nodeAttributes != null
-							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
+					if (nodeAttributes != null && nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
 						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement
-								.getElementsByTagName("attribute");
+						NodeList attributeList = attributesElement.getElementsByTagName("attribute");
 
 						int length = attributeList.getLength();
 						attributes = new ZCLAttribute[length];
 
 						for (int k = 0; k < length; k++) {
 							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null
-									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (attributeNode != null && attributeNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element attributeElement = (Element) node;
 								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
 								attributes[k] = ZCLAttr;
@@ -750,7 +746,7 @@ public class ConfigurationFileReader {
 		return result;
 	}
 
-	public static byte[] hexStringToByteArray(String s) {
+	private static byte[] hexStringToByteArray(String s) {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
