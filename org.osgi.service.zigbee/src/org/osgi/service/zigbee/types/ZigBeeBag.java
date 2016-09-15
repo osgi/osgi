@@ -20,8 +20,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents the 'Bag' Data Type, as described in the ZigBee
- * Specification
+ * This class represents the 'Bag' data type, as it is defined in the ZigBee
+ * Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -32,9 +32,9 @@ public class ZigBeeBag
 	private final static ZigBeeBag instance = new ZigBeeBag();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeBag getInstance() {
 		return instance;

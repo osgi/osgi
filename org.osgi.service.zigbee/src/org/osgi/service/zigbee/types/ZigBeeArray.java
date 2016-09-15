@@ -20,8 +20,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents the 'Array' Data Type, as described in the ZigBee
- * Specification
+ * This class represents the 'Array' data type, as it is defined in the ZigBee
+ * Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -32,9 +32,9 @@ public class ZigBeeArray
 	private final static ZigBeeArray instance = new ZigBeeArray();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeArray getInstance() {
 		return instance;

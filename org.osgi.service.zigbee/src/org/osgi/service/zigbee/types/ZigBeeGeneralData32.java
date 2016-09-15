@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'General Data 32-bits' Data Type, as described
- * in the ZigBee Specification
+ * This class represents the 'General Data 32-bits' data type, as it is defined
+ * in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeGeneralData32
 	private final static ZigBeeGeneralData32 instance = new ZigBeeGeneralData32();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeGeneralData32 getInstance() {
 		return instance;

@@ -20,8 +20,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
- * This interface represents the 'Set' Data Type, as described in the ZigBee
- * Specification
+ * This class represents the 'Set' data type, as it is defined in the ZigBee
+ * Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -32,9 +32,9 @@ public class ZigBeeSet
 	private final static ZigBeeSet instance = new ZigBeeSet();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeSet getInstance() {
 		return instance;

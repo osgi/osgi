@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Floating Semi' Data Type, as described in the
- * ZigBee Specification
+ * This class represents the 'Floating Semi' data type, as it is defined in the
+ * ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeFloatingSemi
 	private final static ZigBeeFloatingSemi instance = new ZigBeeFloatingSemi();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeFloatingSemi getInstance() {
 		return instance;

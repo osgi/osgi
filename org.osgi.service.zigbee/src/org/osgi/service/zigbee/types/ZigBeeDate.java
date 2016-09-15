@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Date' Data Type, as described in the ZigBeb
- * Cluster Library specification.
+ * This class represents the 'Date' data type, as it is defined in the ZigBeb
+ * Cluster Library specification..
  * 
  * <p>
  * The ZigBee data type is mapped to a byte[4] array. where byte[0] must contain
@@ -41,9 +41,9 @@ public class ZigBeeDate
 	private final static ZigBeeDate instance = new ZigBeeDate();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeDate getInstance() {
 		return instance;

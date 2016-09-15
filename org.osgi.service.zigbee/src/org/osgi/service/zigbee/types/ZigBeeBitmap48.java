@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Bitmap 48-bits' Data Type, as described in the
- * ZigBee Specification
+ * This class represents the 'Bitmap 48-bits' data type, as it is defined in the
+ * ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeBitmap48
 	private final static ZigBeeBitmap48 instance = new ZigBeeBitmap48();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeBitmap48 getInstance() {
 		return instance;

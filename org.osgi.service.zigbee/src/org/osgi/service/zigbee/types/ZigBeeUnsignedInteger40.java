@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Unsigned Integer 40-bits' Data Type, as
- * described in the ZigBee Specification
+ * This class represents the 'Unsigned Integer 40-bits' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeUnsignedInteger40
 	private final static ZigBeeUnsignedInteger40 instance = new ZigBeeUnsignedInteger40();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeUnsignedInteger40 getInstance() {
 		return instance;

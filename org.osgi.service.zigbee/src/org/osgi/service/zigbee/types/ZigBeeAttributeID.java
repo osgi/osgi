@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Attribute ID' Data Type, as described in the
- * ZigBee Specification
+ * This class represents the 'Attribute ID' data type, as it is defined in the
+ * ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeAttributeID
 	private final static ZigBeeAttributeID instance = new ZigBeeAttributeID();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeAttributeID getInstance() {
 		return instance;

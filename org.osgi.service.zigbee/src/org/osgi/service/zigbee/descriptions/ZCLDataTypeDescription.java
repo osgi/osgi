@@ -35,10 +35,9 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 public interface ZCLDataTypeDescription {
 
 	/**
-	 * The data type identifier.
-	 * 
-	 * @return The data type identifier. The currently supported data types ids
-	 *         are in file {@link ZigBeeDataTypes}
+	 * @return The data type identifier. The data types identifiers supported by
+	 *         this specification are defined in the {@link ZigBeeDataTypes}
+	 *         interface.
 	 */
 	public short getId();
 

@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This interface represents the 'Floating Double' Data Type, as described in
- * the ZigBee Specification
+ * This class represents the 'Floating Double' data type, as it is defined in
+ * the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -35,9 +35,9 @@ public class ZigBeeFloatingDouble
 	private final static ZigBeeFloatingDouble instance = new ZigBeeFloatingDouble();
 
 	/**
-	 * Get a Singleton instance of this class
+	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the Singleton instance
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeFloatingDouble getInstance() {
 		return instance;
