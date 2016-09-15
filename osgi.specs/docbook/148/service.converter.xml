@@ -87,10 +87,13 @@
     available. Otherwise it will throw a Conversion Exception.
     An instance can be obtained by creating a <code>new StandardConverter()</code>.</para> 
     
-    <para>Example:
+    <para>Some example conversions:
     <programlisting>Converter c = new StandardConverter();
 Map someMap = ... 
-MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
+MyInterface mi = c.convert(someMap).to(MyInterface.class);
+BigDecimal bd = c.convert(12345).to(BigDecimal.class);
+List&lt;String&gt; ls = Arrays.asList("978", "142", "-99");
+long[] la = c.convert(ls).to(long[].class);</programlisting>
     </para>
     
     <section>
@@ -899,7 +902,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           </tbody>
         </tgroup>
       </table>
-      <remark>OK?</remark>
+      <remark>OK? What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
+      Can we make it depend on the target class? I.e. UUID -> scalar via toString() and UUID -> map via JavaBean accessors?</remark>
     </section>
     
     <section>
