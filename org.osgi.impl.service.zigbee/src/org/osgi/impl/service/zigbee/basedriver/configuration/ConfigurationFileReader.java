@@ -1,8 +1,8 @@
 
 package org.osgi.impl.service.zigbee.basedriver.configuration;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -11,8 +11,9 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.zigbee.basedriver.ZCLAttributeImpl;
+import org.osgi.impl.service.zigbee.basedriver.ZCLClusterImpl;
+import org.osgi.impl.service.zigbee.basedriver.ZigBeeEndpointImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeHostImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeNodeImpl;
 import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeNodeDescriptorImpl;
@@ -35,7 +36,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -43,35 +43,39 @@ import org.xml.sax.SAXException;
  */
 public class ConfigurationFileReader {
 
+	private ZigBeeNodeImpl[]				nodes;
+
 	private static ConfigurationFileReader	instance;
-	private ZigBeeHost						host;
-	public ZigBeeNodeConf[]					nodes;
+	private ZigBeeHostImpl					host;
 	private int								headerMinSize						= 1;
 	private int								headerMaxSize						= 1;
 	private ZCLAttribute					firstAttributeWithBooleanDatatype	= null;
-	private BundleContext					bc;
 
-	private ConfigurationFileReader(String pathFile, BundleContext bc) {
-		this.bc = bc;
-		readXmlFile(pathFile);
+	private ConfigurationFileReader(InputStream is) {
+		readXmlFile(is);
 	}
 
-	public static ConfigurationFileReader getInstance(String pathFile,
-			BundleContext bc) {
+	public static ConfigurationFileReader getInstance(InputStream is) {
 		if (instance == null) {
-			return new ConfigurationFileReader(pathFile, bc);
+			return new ConfigurationFileReader(is);
 		}
 		return instance;
 	}
 
-	public void readXmlFile(String pathFile) {
+	/**
+	 * Parse the input stream passed as parameter. The input stream refers to
+	 * the xml file that contains the node configuratiosn.
+	 * 
+	 * @param is an InputStream
+	 */
+
+	public void readXmlFile(InputStream is) {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			try {
-				Document doc = dBuilder.parse(new InputSource(
-						new ByteArrayInputStream(pathFile.getBytes("utf-8"))));
+				Document doc = dBuilder.parse(is);
 				getHost(doc);
 				getNodes(doc);
 				getFrameInfo(doc);
@@ -95,16 +99,14 @@ public class ConfigurationFileReader {
 			headerMaxSize = Integer.parseInt(maxSize);
 			headerMinSize = Integer.parseInt(minSize);
 		}
-
 	}
 
 	/**
 	 * 
 	 * @return the first node in the configuration file
 	 */
-	public ZigBeeNodeConf getNode0() {
-		ZigBeeNodeConf node = nodes[0];
-
+	public ZigBeeNodeImpl getNode0() {
+		ZigBeeNodeImpl node = nodes[0];
 		return node;
 	}
 
@@ -127,7 +129,13 @@ public class ConfigurationFileReader {
 		return firstAttributeWithBooleanDatatype;
 	}
 
-	public ZigBeeHost getZigBeeHost() {
+	/**
+	 * Returns the ZigBeeHostImpl object read from the configuration file.
+	 * 
+	 * @return a ZigBeeHost.
+	 */
+
+	public ZigBeeHostImpl getZigBeeHost() {
 		return host;
 	}
 
@@ -135,7 +143,16 @@ public class ConfigurationFileReader {
 		return node.getEndpoints();
 	}
 
-	private void getHost(Document doc) {
+	/**
+	 * Returns the ZigBeeNodes read from the configuration file.
+	 * 
+	 * @return An array of the read ZigBeeNodeImpl instances.
+	 */
+	public ZigBeeNodeImpl[] getZigBeeNodes() {
+		return nodes;
+	}
+
+	private ZigBeeHost getHost(Document doc) {
 		NodeList nList = doc.getElementsByTagName("host");
 		Node node = nList.item(0);
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -188,10 +205,11 @@ public class ConfigurationFileReader {
 						null);
 			}
 		}
+
+		return host;
 	}
 
 	private void getNodes(Document doc) {
-
 		NodeList nList = doc.getElementsByTagName("nodes");
 		Node nodesNode = nList.item(0);
 		if (nodesNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -200,7 +218,7 @@ public class ConfigurationFileReader {
 			NodeList nodeList = nodesElement.getElementsByTagName("node");
 			ZigBeeEndpoint[] ZEnpoints = null;
 			int listLength = nodeList.getLength();
-			nodes = new ZigBeeNodeConf[listLength];
+			nodes = new ZigBeeNodeImpl[listLength];
 			for (int i = 0; i < listLength; i++) {
 				Node node = nodeList.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -266,7 +284,7 @@ public class ConfigurationFileReader {
 
 		for (int j = endpointsLength; j < enpointNb; j++) {
 			maxId++;
-			zEnpoints[j] = new ZigBeeEndpointConf((short) maxId,
+			zEnpoints[j] = new ZigBeeEndpointImpl((short) maxId,
 					null,
 					null,
 					null);
@@ -338,7 +356,7 @@ public class ConfigurationFileReader {
 
 					// This is poor practice as we shouldn't block on a Promise
 					try {
-						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterConf) serverClusters[k]).getAttributes().getValue();
+						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterImpl) serverClusters[k]).getAttributes().getValue();
 						clusterId = serverClusters[k].getId();
 						for (int l = 0; l < attributes.length; l++) {
 							if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
@@ -475,9 +493,7 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
-						attributes,
-						serverClusterDescription);
+				ZCLClusterImpl clusterImpl = new ZCLClusterImpl(ids, attributes, serverClusterDescription);
 				result[i] = clusterImpl;
 			}
 		}
@@ -640,9 +656,7 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
-						attributes,
-						serverClusterDescription);
+				ZCLClusterImpl clusterImpl = new ZCLClusterImpl(ids, attributes, serverClusterDescription);
 				result[i] = clusterImpl;
 			}
 		}

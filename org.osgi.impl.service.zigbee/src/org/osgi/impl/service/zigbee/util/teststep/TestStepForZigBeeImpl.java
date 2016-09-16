@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.zigbee.util.teststep;
 
+import java.io.FileInputStream;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.test.support.step.TestStep;
@@ -27,38 +28,52 @@ import org.osgi.test.support.step.TestStep;
  * @author $Id$
  */
 public class TestStepForZigBeeImpl implements TestStep {
+	static private final String	TAG						= TestStepForZigBeeImpl.class.getName();
 
-	static public final String	CONF_FILE_PATH		= "file path";
-	static public final String	LOAD_CONF			= "load conf";
-	public static final String	EVENT_REPORTABLE	= "event reportable";
+	static public final String	ASK_CONFIG_FILE_PATH	= "file_path";
+	static public final String	ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
+	public static final String	EVENT_REPORTABLE		= "event_reportable";
 
-	static private final String	TAG					= "TestStepForZigBeeImpl";
-	private String				confFilePath		= "zigbee-template.xml";
+	private String				confFilePath			= "zigbee-template.xml";
+
 	private ZigBeeBaseDriver	baseDriver;
 
 	/**
 	 * It is possible to change this constructor in order to add some parameters
 	 * to specify simulators.
+	 * 
+	 * @param baseDriver The base driver implementation.
 	 */
 	public TestStepForZigBeeImpl(ZigBeeBaseDriver baseDriver) {
 		this.baseDriver = baseDriver;
 	}
 
 	public String execute(String stepId, String userPrompt) {
+		Logger.d(TAG, "execute the stepId: " + stepId + ", userPrompt: " + userPrompt);
 
-		Logger.d(TAG, "execute the stepId: " + stepId + ", userPrompt: "
-				+ userPrompt);
 		if (stepId == null) {
 			Logger.e(TAG, "The given stepId is null, but it can NOT be.");
 			return null;
 		}
 
-		if (stepId.startsWith(CONF_FILE_PATH)) {
-			confFilePath = stepId.replaceAll(CONF_FILE_PATH, "");
-			return null;
-		} else if (stepId.equals(LOAD_CONF)) {
-			baseDriver.loadConfigurationFIle(confFilePath);
-			return null;
+		if (stepId.startsWith(ASK_CONFIG_FILE_PATH)) {
+			Logger.d(TAG, "returns: " + confFilePath);
+			return confFilePath;
+		} else if (stepId.equals(ACTIVATE_ZIGBEE_DEVICES)) {
+			/*
+			 * Load and parse the template configuration file. This produces the
+			 * registration of all the services related to the content of this
+			 * file.
+			 */
+			try {
+				baseDriver.loadConfigurationFile(new FileInputStream(confFilePath));
+			} catch (Exception e) {
+				Logger.d(TAG, "returns: null");
+				return null;
+			}
+			Logger.d(TAG, "returns: 'success'");
+			return "success";
+
 		} else if (stepId.equals(EVENT_REPORTABLE)) {
 			baseDriver.startReportableEventing();
 		}

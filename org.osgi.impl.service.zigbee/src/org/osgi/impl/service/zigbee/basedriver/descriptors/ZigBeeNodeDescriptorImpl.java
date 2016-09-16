@@ -36,14 +36,6 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	private boolean				isComplexDescriptorAvailable;
 	private boolean				isUserDescriptorAvailable;
 
-	/**
-	 * @param type
-	 * @param band
-	 * @param manufCode
-	 * @param maxBufSize
-	 * @param isComplexAv
-	 * @param isUserAv
-	 */
 	public ZigBeeNodeDescriptorImpl(short type, short band, Integer manufCode, int maxBufSize, boolean isComplexAv,
 			boolean isUserAv) {
 		this.logicalType = type;

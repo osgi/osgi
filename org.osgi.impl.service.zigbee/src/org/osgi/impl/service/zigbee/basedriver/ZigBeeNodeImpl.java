@@ -25,6 +25,7 @@ import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -39,44 +40,29 @@ import org.osgi.util.promise.Promises;
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 
-	protected BigInteger				IEEEAddress;
-	protected int						nwkAddress;
-	protected String					hostPId;
-	protected ZigBeeEndpoint[]			endpoints;
-	protected ZigBeeNodeDescriptor		nodeDescriptor;
-	protected ZigBeePowerDescriptor		powerDescriptor;
-	protected ZigBeeComplexDescriptor	complexDescriptor;
-	protected String					userDescription;
+	private ZigBeeHost				host;
+	private BigInteger				IEEEAddress;
+	private int						nwkAddress;
+	private ZigBeeEndpoint[]		endpoints;
+	private ZigBeeNodeDescriptor	nodeDescriptor;
+	private ZigBeePowerDescriptor	powerDescriptor;
+	private ZigBeeComplexDescriptor	complexDescriptor;
+	private String					userDescription;
 
-	/**
-	 * @param IEEEAddress
-	 * @param nwkAddress
-	 * @param hostPId
-	 * @param endpoints
-	 */
-	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
-		this.IEEEAddress = IEEEAddress;
-		this.hostPId = hostPId;
-		this.endpoints = endpoints;
-	}
-
-	/**
-	 * 
-	 * @param IEEEAddress
-	 * @param hostPId
-	 * @param endpoints
-	 * @param nodeDesc
-	 * @param powerDesc
-	 * @param userdescription
-	 */
-	public ZigBeeNodeImpl(BigInteger IEEEAddress, String hostPId, ZigBeeEndpoint[] endpoints,
+	public ZigBeeNodeImpl(BigInteger IEEEAddress, ZigBeeEndpoint[] endpoints,
 			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
 		this.IEEEAddress = IEEEAddress;
-		this.hostPId = hostPId;
 		this.endpoints = endpoints;
 		this.powerDescriptor = powerDesc;
 		this.nodeDescriptor = nodeDesc;
 		this.userDescription = userdescription;
+	}
+
+	public ZigBeeNodeImpl(ZigBeeHost host, BigInteger IEEEAddress, ZigBeeEndpoint[] endpoints,
+			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
+		this(IEEEAddress, endpoints, nodeDesc, powerDesc, userdescription);
+
+		this.host = host;
 	}
 
 	public BigInteger getIEEEAddress() {
@@ -88,26 +74,22 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public String getHostPid() {
-		return this.hostPId;
+		return host.getHostPid();
 	}
 
 	public int getPanId() {
-
-		return 0;
+		return host.getPanId();
 	}
 
 	public BigInteger getExtendedPanId() {
-
-		return BigInteger.valueOf(-1);
+		return host.getExtendedPanId();
 	}
 
 	public Promise getNodeDescriptor() {
-
 		return Promises.resolved(nodeDescriptor);
 	}
 
 	public Promise getPowerDescriptor() {
-
 		return Promises.resolved(powerDescriptor);
 	}
 
@@ -141,7 +123,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 	public String toString() {
 		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
-				+ ", hostPId: " + hostPId + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
+				+ ", hostPId: " + host.getHostPid() + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
 				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
