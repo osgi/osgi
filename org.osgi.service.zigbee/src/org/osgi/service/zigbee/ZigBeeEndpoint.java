@@ -31,7 +31,7 @@ import org.osgi.util.promise.Promise;
 public interface ZigBeeEndpoint {
 
 	/**
-	 * Key of the {@link String} property containing the EndPoint Address of the
+	 * Key of the {@link String} property containing the EndPoint ID of the
 	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
