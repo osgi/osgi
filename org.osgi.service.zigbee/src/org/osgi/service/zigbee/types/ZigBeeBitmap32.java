@@ -38,7 +38,9 @@ public class ZigBeeBitmap32
 	}
 
 	/**
-	 * @return the singleton instance of this class.
+	 * Gets a singleton instance of this class.
+	 * 
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeBitmap32 getInstance() {
 		return instance;

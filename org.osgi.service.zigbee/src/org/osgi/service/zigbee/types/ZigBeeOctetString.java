@@ -38,7 +38,9 @@ public class ZigBeeOctetString
 	}
 
 	/**
-	 * @return the singleton instance of this class.
+	 * Gets a singleton instance of this class.
+	 * 
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeOctetString getInstance() {
 		return instance;

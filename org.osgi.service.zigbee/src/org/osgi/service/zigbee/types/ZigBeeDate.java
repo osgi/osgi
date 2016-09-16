@@ -44,7 +44,9 @@ public class ZigBeeDate
 	}
 
 	/**
-	 * @return the singleton instance of this class.
+	 * Gets a singleton instance of this class.
+	 * 
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeDate getInstance() {
 		return instance;

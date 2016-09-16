@@ -39,7 +39,9 @@ public class ZigBeeIEEE_ADDRESS
 	}
 
 	/**
-	 * @return the singleton instance of this class.
+	 * Gets a singleton instance of this class.
+	 * 
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeIEEE_ADDRESS getInstance() {
 		return instance;

@@ -38,7 +38,9 @@ public class ZigBeeUnsignedInteger56
 	}
 
 	/**
-	 * @return the singleton instance of this class.
+	 * Gets a singleton instance of this class.
+	 * 
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeUnsignedInteger56 getInstance() {
 		return instance;
