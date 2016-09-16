@@ -87,7 +87,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Set the extendedPanId.
 	 * 
 	 * @param extendedPanId The network Extended PAN identifier(EPID)
-	 * @throws IllegalStateException, is thrown in case the host is still
+	 * @throws IllegalStateException is thrown in case the host is still
 	 *         started.
 	 */
 	void setExtendedPanId(BigInteger extendedPanId) throws IllegalStateException;
@@ -95,6 +95,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Indicates if a ZigBee device can join the network.
 	 * 
+	 * <p>
 	 * Broadcasts a Mgmt_Permit_req to all routers and the coordinator. If the
 	 * duration argument is not equal to zero or 0xFF, the argument is a number
 	 * of seconds and joining is permitted until it counts down to zero, after
@@ -103,6 +104,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * indefinitely or until another Mgmt_Permit_Joining_req is received by the
 	 * coordinator.
 	 * 
+	 * <p>
 	 * As described in
 	 * "Table 2.133 Fields of the Mgmt_Permit_Joining_rsp Command" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a permitjoin
@@ -141,6 +143,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Updates the network channel. 802.15.4 and ZigBee divide the 2.4Ghz band
 	 * into 16 channels, numbered from 11 to 26.
 	 * 
+	 * <p>
 	 * As described in "Table 2.4.3.3.9 Mgmt_NWK_Update_req" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, this request is
 	 * sent as broadcast by the network manager with a ScanDuration to be set
@@ -163,6 +166,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Set a new configured channel mask.
 	 * 
+	 * <p>
 	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a set request
 	 * can have the following status: SUCCESS, INVALID_PARAMETER or
