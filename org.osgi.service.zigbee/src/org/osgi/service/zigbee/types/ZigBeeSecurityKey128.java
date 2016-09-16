@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Security Key 128' data type, as it is defined in
- * the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Security Key 128' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeSecurityKey128
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeSecurityKey128 instance = new ZigBeeSecurityKey128();
+
+	private ZigBeeSecurityKey128() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

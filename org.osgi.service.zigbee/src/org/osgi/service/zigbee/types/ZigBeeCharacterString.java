@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Character String' data type, as it is defined in
- * the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Character String' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeCharacterString
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeCharacterString instance = new ZigBeeCharacterString();
+
+	private ZigBeeCharacterString() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

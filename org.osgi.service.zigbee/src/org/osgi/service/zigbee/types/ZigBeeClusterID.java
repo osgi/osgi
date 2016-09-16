@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Cluster ID' data type, as it is defined in the
- * ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Cluster ID' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeClusterID
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeClusterID instance = new ZigBeeClusterID();
+
+	private ZigBeeClusterID() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

@@ -24,8 +24,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'IEEE ADDRESS' data type, as it is defined in the
- * ZigBee Cluster Library specification.
+ * A singleton class that represents the 'IEEE ADDRESS' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -34,6 +34,9 @@ public class ZigBeeIEEE_ADDRESS
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeIEEE_ADDRESS instance = new ZigBeeIEEE_ADDRESS();
+
+	private ZigBeeIEEE_ADDRESS() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

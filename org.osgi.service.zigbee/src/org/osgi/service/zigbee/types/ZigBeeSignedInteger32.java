@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Signed Integer 32-bits' data type, as it is
- * defined in the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Signed Integer 32-bits' data type, as
+ * it is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeSignedInteger32
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeSignedInteger32 instance = new ZigBeeSignedInteger32();
+
+	private ZigBeeSignedInteger32() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Boolean' data type, as it is defined defined in
- * the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Boolean' data type, as it is defined
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeBoolean
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeBoolean instance = new ZigBeeBoolean();
+
+	private ZigBeeBoolean() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

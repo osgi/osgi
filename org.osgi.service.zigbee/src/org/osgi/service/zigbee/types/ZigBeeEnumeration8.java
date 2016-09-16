@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Enumeration 8-bits' data type, as it is defined in
- * the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Enumeration 8-bits' data type, as it
+ * is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeEnumeration8
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeEnumeration8 instance = new ZigBeeEnumeration8();
+
+	private ZigBeeEnumeration8() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'Long Octet String' data type, as it is defined in
- * the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'Long Octet String' data type, as it is
+ * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeLongOctetString
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeLongOctetString instance = new ZigBeeLongOctetString();
+
+	private ZigBeeLongOctetString() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

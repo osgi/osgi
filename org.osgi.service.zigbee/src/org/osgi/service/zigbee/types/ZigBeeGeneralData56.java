@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'General Data 56-bits' data type, as it is defined
- * in the ZigBee Cluster Library specification.
+ * A singleton class that represents the 'General Data 56-bits' data type, as it
+ * is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeGeneralData56
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeGeneralData56 instance = new ZigBeeGeneralData56();
+
+	private ZigBeeGeneralData56() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.

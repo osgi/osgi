@@ -23,8 +23,8 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * This class represents the 'UTC Time' data type, as it is defined in the
- * ZigBee Cluster Library specification.
+ * A singleton class that represents the 'UTC Time' data type, as it is defined
+ * in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 
@@ -33,6 +33,9 @@ public class ZigBeeUTCTime
 		implements ZCLSimpleTypeDescription {
 
 	private final static ZigBeeUTCTime instance = new ZigBeeUTCTime();
+
+	private ZigBeeUTCTime() {
+	}
 
 	/**
 	 * Gets a singleton instance of this class.
