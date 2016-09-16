@@ -28,6 +28,8 @@ import org.osgi.util.promise.Promise;
  * ZigBeeHost is more than a ZigBeeNode.<br>
  * It must be registered as a OSGi service.
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeHost extends ZigBeeNode {

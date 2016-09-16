@@ -17,6 +17,10 @@
 package org.osgi.service.zigbee.descriptors;
 
 /**
+ * Represents the ZigBee Server Mask field of the ZigBee Node Descriptor.
+ * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeServerMask {

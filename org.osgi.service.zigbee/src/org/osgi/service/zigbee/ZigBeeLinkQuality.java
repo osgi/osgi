@@ -21,6 +21,8 @@ package org.osgi.service.zigbee;
  * NeighborTableList Record Format in ZIGBEE SPECIFICATION:
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeLinkQuality {

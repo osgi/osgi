@@ -22,6 +22,8 @@ package org.osgi.service.zigbee.descriptors;
  * of the device descriptions contained in the node. The use of the Complex
  * Descriptor is optional.
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeComplexDescriptor {

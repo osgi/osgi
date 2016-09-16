@@ -17,9 +17,9 @@
 package org.osgi.service.zigbee.descriptors;
 
 /**
+ * This interface represents a the frequency band field.
  * 
- *
- * This interface represents a frequency band.
+ * @noimplement
  * 
  * @author $Id$
  */

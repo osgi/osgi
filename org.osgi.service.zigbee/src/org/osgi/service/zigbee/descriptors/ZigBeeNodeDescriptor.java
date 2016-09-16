@@ -21,6 +21,8 @@ package org.osgi.service.zigbee.descriptors;
  * Specification The Node Descriptor contains information about the capabilities
  * of the node.
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeNodeDescriptor {

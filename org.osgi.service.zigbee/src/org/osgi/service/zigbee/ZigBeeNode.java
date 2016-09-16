@@ -33,6 +33,8 @@ import org.osgi.util.promise.Promise;
  * - <i>64-bit 802.15.4 IEEE Address</i><br>
  * - <i>16-bit ZigBee Network Address</i><br>
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeNode {

@@ -33,6 +33,8 @@ package org.osgi.service.zigbee;
  * Related documentation: [1] ZigBee Cluster Library specification, Document
  * 075123r04ZB, May 29, 2012.
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeDataTypes {

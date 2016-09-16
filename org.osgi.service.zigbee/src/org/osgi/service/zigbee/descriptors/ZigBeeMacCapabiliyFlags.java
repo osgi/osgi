@@ -20,6 +20,8 @@ package org.osgi.service.zigbee.descriptors;
  * This interface represents the Node Descriptor MAC Capability Flags as
  * described in the ZigBee Specification.
  * 
+ * @noimplement
+ * 
  * @author $Id$
  */
 
