@@ -34,10 +34,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
-	private static int		minHeaderSize;
-	private static int		maxHeaderSize;
+	private static final String	TAG					= ZCLFrameImplTestCase.class.getName();
 
-	byte[]					payloadTestBasic	= new byte[] {
+	private static int			minHeaderSize;
+	private static int			maxHeaderSize;
+
+	byte[]						payloadTestBasic	= new byte[] {
 			/* readByte() */ (byte) 0xf1,
 			/* readInt(1) */ (byte) 0xfa,
 			/* readInt(2) */ (byte) 0xf1, (byte) 0xf2,
@@ -58,7 +60,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	 * This is a payload used for testing marshaling and unmarshaling of float
 	 * and double types.
 	 */
-	byte[]					payloadTestFloat	= new byte[] {
+	byte[]						payloadTestFloat	= new byte[] {
 			/* readFloat(2), NaN */ 0x01, 0x7C,
 			/* readFloat(2), 0.0 */ 0x00, 0x00,
 			/* readFloat(2), + INFIN */ 0x00, (byte) 0x7C,
@@ -84,16 +86,14 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			/* readDouble(), normalized (+118.5) */ 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xa0, 0x5d, 0x40
 	};
 
-	byte[]					bytes1				= new byte[] {0x05, 0x06, 0x07, 0x08};
+	byte[]						bytes1				= new byte[] {0x05, 0x06, 0x07, 0x08};
 
 	/**
 	 * Tests the internal implementation of the ZCLFrame interface (not
 	 * manufacturer specific case)
 	 */
 
-	ConfigurationFileReader	conf;
-
-	private String			confFilePath		= "zigbee-template.xml";
+	ConfigurationFileReader		conf;
 
 	protected void setUp() throws Exception {
 		log("Prepare for ZigBee Test Case");
@@ -107,7 +107,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.launch(confFilePath, getContext());
+		TestStepLauncher launcher = TestStepLauncher.launch(getContext());
 		conf = launcher.getConfReader();
 		minHeaderSize = conf.getHeaderMinSize();
 		maxHeaderSize = conf.getHeaderMaxSize();

@@ -77,7 +77,6 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public String getPreconfiguredLinkKey() throws Exception {
-
 		return null;
 	}
 
@@ -86,7 +85,6 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public void permitJoin(short duration) throws Exception {
-
 	}
 
 	public int getChannelMask() throws Exception {

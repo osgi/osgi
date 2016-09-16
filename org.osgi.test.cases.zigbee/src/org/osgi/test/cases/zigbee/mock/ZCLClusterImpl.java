@@ -27,7 +27,6 @@ import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
@@ -38,37 +37,14 @@ import org.osgi.util.promise.Promises;
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private int						id;
-	protected ZCLAttribute[]		attributes;
-	private int[]					commandIds;
-	private ZCLClusterDescription	description;
-	private int						unsupportedAttribute;
+	private int				id;
+	private ZCLAttribute[]	attributes;
+	private int[]			commandIds;
 
-	/**
-	 * @param id
-	 */
-	public ZCLClusterImpl(Integer id) {
-		this.id = id.intValue();
-	}
-
-	/**
-	 * @param commandIds
-	 * @param attributes
-	 * @param desc
-	 */
-	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
-		this.id = desc.getId();
+	public ZCLClusterImpl(int id, int[] commandIds, ZCLAttribute[] attributes) {
+		this.id = id;
 		this.commandIds = commandIds;
 		this.attributes = attributes;
-		this.description = desc;
-	}
-
-	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc, int unsupportedAttribute) {
-		this.id = desc.getId();
-		this.commandIds = commandIds;
-		this.attributes = attributes;
-		this.description = desc;
-		this.unsupportedAttribute = unsupportedAttribute;
 	}
 
 	public int getId() {
@@ -85,10 +61,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 				ZCLException.FAILURE,
 				"the AttributeId is not valid"));
-	}
-
-	public int getUnsupportedAttribute() {
-		return unsupportedAttribute;
 	}
 
 	public Promise getAttributes() {
@@ -131,7 +103,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 							"the Attribute datatype is not valid"));
 				}
 			}
-
 		}
 
 		int i = 0;
@@ -195,7 +166,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		}
 
 		return "" + this.getClass().getName() + "[id: " + id + ", attributes: " + attributesAsAString + ", commandIds: "
-				+ commandIdsAsAString + ", description: " + description + "]";
+				+ commandIdsAsAString + "]";
 	}
 
 	public Promise getAttribute(int attributeId, int code) {

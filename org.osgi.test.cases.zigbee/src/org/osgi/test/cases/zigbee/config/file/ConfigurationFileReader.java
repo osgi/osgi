@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.zigbee.config.file;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -26,12 +26,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLAttribute;
-import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLHeader;
-import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
@@ -40,16 +36,10 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeDescriptionImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLClusterConf;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterDescriptionImpl;
-import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLGlobalClusterDescriptionImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointConf;
-import org.osgi.test.cases.zigbee.mock.ZigBeeHostImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeConf;
 import org.osgi.test.cases.zigbee.mock.ZigBeeNodeDescriptorImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeNodeImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeePowerDescriptorImpl;
 import org.osgi.test.cases.zigbee.mock.ZigBeeSimpleDescriptorImpl;
 import org.w3c.dom.Document;
@@ -68,8 +58,8 @@ import org.xml.sax.SAXException;
 public class ConfigurationFileReader {
 
 	private static ConfigurationFileReader	instance;
-	private ZigBeeHost						host;
-	public ZigBeeNodeConf[]					nodes;
+	private ZigBeeHostConfig				host;
+	public ZigBeeNodeConfig[]				nodes;
 	private int								headerMinSize	= 1;
 	private int								headerMaxSize	= 1;
 	private int								discoveryTimeout;
@@ -78,28 +68,25 @@ public class ConfigurationFileReader {
 	private ZCLHeader						requestHeader;
 	private byte[]							responseFullFrame;
 	private ZCLAttribute					firstAttributeWithBooleanDatatype;
-	private BundleContext					bc;
 
-	private ConfigurationFileReader(String pathFile, BundleContext bc) {
-		this.bc = bc;
-		readXmlFile(pathFile);
+	private ConfigurationFileReader(InputStream is) {
+		readXmlFile(is);
 	}
 
-	public static ConfigurationFileReader getInstance(String pathFile,
-			BundleContext bc) {
+	public static ConfigurationFileReader getInstance(InputStream is) {
 		if (instance == null) {
-			return new ConfigurationFileReader(pathFile, bc);
+			return new ConfigurationFileReader(is);
 		}
 		return instance;
 	}
 
-	public void readXmlFile(String pathFile) {
+	public void readXmlFile(InputStream is) {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			try {
-				Document doc = dBuilder.parse(new File(pathFile));
+				Document doc = dBuilder.parse(is);
 				getGeneralParameters(doc);
 				getHost(doc);
 				getNodes(doc);
@@ -168,9 +155,8 @@ public class ConfigurationFileReader {
 	 * 
 	 * @return the first node in the configuration file
 	 */
-	public ZigBeeNodeConf getNode0() {
-		ZigBeeNodeConf node = nodes[0];
-
+	public ZigBeeNodeConfig getNode0() {
+		ZigBeeNodeConfig node = nodes[0];
 		return node;
 	}
 
@@ -206,12 +192,11 @@ public class ConfigurationFileReader {
 		return firstAttributeWithBooleanDatatype;
 	}
 
-	public ZigBeeHost getZigBeeHost() {
+	public ZigBeeHostConfig getZigBeeHost() {
 		return host;
 	}
 
-	public ZigBeeEndpoint[] getEnpoints(ZigBeeNodeImpl node) {
-
+	public ZigBeeEndpointConfig[] getEnpoints(ZigBeeNodeConfig node) {
 		return node.getEnpoints();
 	}
 
@@ -221,17 +206,17 @@ public class ConfigurationFileReader {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element hostElement = (Element) node;
 			// get host infos
-			String hostPId = hostElement.getAttribute("pid");
-			String panId = hostElement.getAttribute("panId");
-			String channel = hostElement.getAttribute("channel");
-			String securityLevel = hostElement.getAttribute("securityLevel");
+			String hostPid = hostElement.getAttribute("pid");
+			String panIdAttribute = hostElement.getAttribute("panId");
+			String channelAttribute = hostElement.getAttribute("channel");
+			String securityLevelAttribute = hostElement.getAttribute("securityLevel");
 			String ieeeAddress = hostElement.getAttribute("ieeeAddress");
-			host = new ZigBeeHostImpl(hostPId,
-					Integer.parseInt(panId),
-					Integer.parseInt(channel),
-					Integer.parseInt(securityLevel),
-					new BigInteger(ieeeAddress),
-					null);
+
+			int panId = Integer.parseInt(panIdAttribute);
+			int channel = Integer.parseInt(channelAttribute);
+			int securityLevel = Integer.parseInt(securityLevelAttribute);
+
+			host = new ZigBeeHostConfig(hostPid, panId, channel, securityLevel, new BigInteger(ieeeAddress), null, null, null);
 		}
 	}
 
@@ -243,69 +228,51 @@ public class ConfigurationFileReader {
 			Element nodesElement = (Element) nodesNode;
 
 			NodeList nodeList = nodesElement.getElementsByTagName("node");
-			ZigBeeEndpoint[] ZEnpoints = null;
+			ZigBeeEndpointConfig[] endpointsConfig = null;
 			int listLength = nodeList.getLength();
-			nodes = new ZigBeeNodeConf[listLength];
+			nodes = new ZigBeeNodeConfig[listLength];
 			for (int i = 0; i < listLength; i++) {
 				Node node = nodeList.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element nodeElement = (Element) node;
-					// get host infos
+
 					String hostPId = nodeElement.getAttribute("hostPid");
-					String ieeeAddress = nodeElement
-							.getAttribute("ieeeAddress");
-					String userDescription = nodeElement
-							.getAttribute("userDescription");
+					String ieeeAddress = nodeElement.getAttribute("ieeeAddress");
+					String userDescription = nodeElement.getAttribute("userDescription");
 					String endpointNb = nodeElement.getAttribute("endpointNb");
+
 					String nwkAddress = nodeElement.getAttribute("nwkAddress");
 
-					NodeList enpointsList = nodeElement
-							.getElementsByTagName("endpoints");
+					NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
 					Node endpoints = enpointsList.item(0);
-					if (endpoints != null
-							&& endpoints.getNodeType() == Node.ELEMENT_NODE) {
+					if (endpoints != null && endpoints.getNodeType() == Node.ELEMENT_NODE) {
 						Element endpointsElement = (Element) endpoints;
-						NodeList enpointList = endpointsElement
-								.getElementsByTagName("endpoint");
+						NodeList enpointList = endpointsElement.getElementsByTagName("endpoint");
 
 						int endpointsLength = enpointList.getLength();
-						ZEnpoints = new ZigBeeEndpoint[endpointsLength];
+						endpointsConfig = new ZigBeeEndpointConfig[endpointsLength];
 						for (int j = 0; j < endpointsLength; j++) {
 							Node enpointNode = enpointList.item(j);
-							if (enpointNode != null
-									&& enpointNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (enpointNode != null && enpointNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element enpointElement = (Element) enpointNode;
-								String endpointId = enpointElement
-										.getAttribute("id");
-								NodeList serverClusters = enpointElement
-										.getElementsByTagName("serverClusters");
-								ZCLCluster[] clusters = getServerClusters(serverClusters);
+								String endpointId = enpointElement.getAttribute("id");
+								NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
+								ZCLClusterConfig[] clusters = getServerClusters(serverClusters);
 
-								NodeList clientClustersNodes = enpointElement
-										.getElementsByTagName("clientClusters");
-								ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
+								NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
+								ZCLClusterConfig[] clientClusters = getClientClusters(clientClustersNodes);
 								ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-								ZEnpoints[i] = new ZigBeeEndpointConf(
-										Short.parseShort(endpointId),
-										clusters,
-										clientClusters,
-										desc);
+								endpointsConfig[i] = new ZigBeeEndpointConfig(null, Short.parseShort(endpointId), clusters, clientClusters, desc);
 							}
 						}
 					}
 
-					ZigBeeNodeDescriptor nodeDesc = getZigBeeNodeDescriptor(nodeElement);
-					ZigBeePowerDescriptor powerDesc = getZigBeePowerDescriptor(nodeElement);
+					ZigBeeNodeDescriptor nodeDescriptor = getZigBeeNodeDescriptor(nodeElement);
+					ZigBeePowerDescriptor powerDescriptor = getZigBeePowerDescriptor(nodeElement);
 
-					nodes[i] = new ZigBeeNodeConf(new BigInteger(ieeeAddress),
-							hostPId,
-							ZEnpoints,
-							nodeDesc,
-							powerDesc,
-							userDescription,
-							endpointNb,
-							bc);
-
+					ZigBeeNodeConfig nodeConfig = new ZigBeeNodeConfig(host, new BigInteger(ieeeAddress), endpointsConfig, nodeDescriptor, powerDescriptor, userDescription);
+					nodeConfig.setActualEndpointsNumber(Integer.parseInt(endpointNb));
+					nodes[i] = nodeConfig;
 				}
 			}
 		}
@@ -318,16 +285,16 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
-				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
 				endpointId = endpoints[j].getId();
 				for (int k = 0; k < serverClusters.length; k++) {
 
 					// This is poor practice as we shouldn't block on a Promise
 					try {
-						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterConf) serverClusters[k]).getAttributes().getValue();
+						ZCLAttribute[] attributes = serverClusters[k].getAttributes();
 						clusterId = serverClusters[k].getId();
 						for (int l = 0; l < attributes.length; l++) {
 							if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
@@ -352,16 +319,16 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
-				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
 				endpointId = endpoints[j].getId();
 				for (int k = 0; k < serverClusters.length; k++) {
 
 					// This is poor practice as we shouldn't block on a Promise
 					try {
-						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterConf) serverClusters[k]).getAttributes().getValue();
+						ZCLAttribute[] attributes = serverClusters[k].getAttributes();
 						clusterId = serverClusters[k].getId();
 						for (int l = 0; l < attributes.length; l++) {
 							if (!((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReadOnly()) {
@@ -386,16 +353,16 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
-				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
 				endpointId = endpoints[j].getId();
 				for (int k = 0; k < serverClusters.length; k++) {
 
 					// This is poor practice as we shouldn't block on a Promise
 					try {
-						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterConf) serverClusters[k]).getAttributes().getValue();
+						ZCLAttribute[] attributes = serverClusters[k].getAttributes();
 						clusterId = serverClusters[k].getId();
 						for (int l = 0; l < attributes.length; l++) {
 							if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReadOnly()) {
@@ -418,13 +385,13 @@ public class ConfigurationFileReader {
 		short endpointId;
 		int clusterId;
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpoint[] endpoints = ((ZigBeeNodeImpl) nodes[i]).getEndpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
-				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
+				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
 				endpointId = endpoints[j].getId();
 				for (int k = 0; k < serverClusters.length; k++) {
-					int unsupportedAttribute = ((ZCLClusterImpl) serverClusters[k]).getUnsupportedAttribute();
+					int unsupportedAttribute = serverClusters[k].getAnUnsupportedAttributeId();
 					clusterId = serverClusters[k].getId();
 					if (unsupportedAttribute != -1) {
 						return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, unsupportedAttribute);
@@ -489,17 +456,17 @@ public class ConfigurationFileReader {
 		return result;
 	}
 
-	private ZCLCluster[] getServerClusters(NodeList serverClusters) {
+	private ZCLClusterConfig[] getServerClusters(NodeList serverClusters) {
 
 		Node node = serverClusters.item(0);
-		ZCLCluster[] result = null;
+		ZCLClusterConfig[] result = null;
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 			Element serverClustersElement = (Element) node;
 			NodeList clusterList = serverClustersElement
 					.getElementsByTagName("cluster");
 
 			int clusterLength = clusterList.getLength();
-			result = new ZCLCluster[clusterLength];
+			result = new ZCLClusterConfig[clusterLength];
 			for (int i = 0; i < clusterLength; i++) {
 
 				ZCLClusterDescription serverClusterDescription = null;
@@ -507,7 +474,7 @@ public class ConfigurationFileReader {
 				ZCLAttribute[] attributes = null;
 
 				Node clusterNode = clusterList.item(i);
-				int unsupportedAttribute = -1;
+				int anUnsupportedAttributeId = -1;
 				if (clusterNode != null
 						&& node.getNodeType() == Node.ELEMENT_NODE) {
 					Element clusterElement = (Element) clusterNode;
@@ -537,11 +504,9 @@ public class ConfigurationFileReader {
 					NodeList commandIdsList = clusterElement
 							.getElementsByTagName("commandIds");
 					Node commandIds = commandIdsList.item(0);
-					if (commandIds != null
-							&& commandIds.getNodeType() == Node.ELEMENT_NODE) {
+					if (commandIds != null && commandIds.getNodeType() == Node.ELEMENT_NODE) {
 						Element commandIdsElt = (Element) commandIds;
-						NodeList idlist = commandIdsElt
-								.getElementsByTagName("id");
+						NodeList idlist = commandIdsElt.getElementsByTagName("id");
 
 						int length = idlist.getLength();
 						ids = new int[length];
@@ -557,23 +522,20 @@ public class ConfigurationFileReader {
 						}
 					}
 
-					unsupportedAttribute = Integer.parseInt(clusterElement.getAttribute("unsupportedAttribute"));
+					anUnsupportedAttributeId = Integer.parseInt(clusterElement.getAttribute("unsupportedAttribute"));
 					// get attributes
 					clusterElement.getElementsByTagName("attributes");
 					Node nodeAttributes = serverClusters.item(0);
-					if (nodeAttributes != null
-							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
+					if (nodeAttributes != null && nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
 						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement
-								.getElementsByTagName("attribute");
+						NodeList attributeList = attributesElement.getElementsByTagName("attribute");
 
 						int length = attributeList.getLength();
 						attributes = new ZCLAttribute[length];
 
 						for (int k = 0; k < length; k++) {
 							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null
-									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (attributeNode != null && attributeNode.getNodeType() == Node.ELEMENT_NODE) {
 								Element attributeElement = (Element) attributeNode;
 								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
 								attributes[k] = ZCLAttr;
@@ -581,11 +543,8 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
-						attributes,
-						serverClusterDescription,
-						unsupportedAttribute);
-				result[i] = clusterImpl;
+				ZCLClusterConfig clusterConfig = new ZCLClusterConfig(ids, attributes, serverClusterDescription, anUnsupportedAttributeId);
+				result[i] = clusterConfig;
 			}
 		}
 
@@ -672,17 +631,17 @@ public class ConfigurationFileReader {
 		return result;
 	}
 
-	private ZCLCluster[] getClientClusters(NodeList clientClusters) {
+	private ZCLClusterConfig[] getClientClusters(NodeList clientClusters) {
 
 		Node node = clientClusters.item(0);
-		ZCLCluster[] result = null;
+		ZCLClusterConfig[] result = null;
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 			Element serverClustersElement = (Element) node;
 			NodeList clusterList = serverClustersElement
 					.getElementsByTagName("cluster");
 
 			int clusterLength = clusterList.getLength();
-			result = new ZCLCluster[clusterLength];
+			result = new ZCLClusterConfig[clusterLength];
 			for (int i = 0; i < clusterLength; i++) {
 
 				ZCLClusterDescription serverClusterDescription = null;
@@ -690,30 +649,20 @@ public class ConfigurationFileReader {
 				ZCLAttribute[] attributes = null;
 
 				Node clusterNode = clusterList.item(i);
-				if (clusterNode != null
-						&& node.getNodeType() == Node.ELEMENT_NODE) {
+				if (clusterNode != null && node.getNodeType() == Node.ELEMENT_NODE) {
 					Element clusterElement = (Element) clusterNode;
 					String clusterId = clusterElement.getAttribute("id");
 
 					// get serverGlobalDescription
-					NodeList globalDescList = clusterElement
-							.getElementsByTagName("globalServerDescription");
+					NodeList globalDescList = clusterElement.getElementsByTagName("globalServerDescription");
 					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null
-							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
+					if (globalDesc != null && globalDesc.getNodeType() == Node.ELEMENT_NODE) {
 						Element desc = (Element) globalDesc;
 						String id = desc.getAttribute("id");
 						String name = desc.getAttribute("name");
 						String domain = desc.getAttribute("domain");
-						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(
-								new Integer(id).intValue(),
-								name,
-								domain,
-								null,
-								null);
-						serverClusterDescription = new ZCLClusterDescriptionImpl(
-								new Integer(clusterId).intValue(),
-								ZCLGlobalDesc);
+						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(new Integer(id).intValue(), name, domain, null, null);
+						serverClusterDescription = new ZCLClusterDescriptionImpl(new Integer(clusterId).intValue(), ZCLGlobalDesc);
 					}
 
 					// get attributes
@@ -736,10 +685,8 @@ public class ConfigurationFileReader {
 						}
 					}
 				}
-				ZCLClusterConf clusterImpl = new ZCLClusterConf(ids,
-						attributes,
-						serverClusterDescription);
-				result[i] = clusterImpl;
+				ZCLClusterConfig clusterConfig = new ZCLClusterConfig(ids, attributes, serverClusterDescription, -1);
+				result[i] = clusterConfig;
 			}
 		}
 

@@ -16,11 +16,11 @@
 
 package org.osgi.test.cases.zigbee;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.support.step.TestStepProxy;
@@ -28,37 +28,60 @@ import org.osgi.test.support.step.TestStepProxy;
 public class TestStepLauncher {
 	private static TestStepLauncher	instance;
 
-	static public final String		CONF_FILE_PATH	= "file path";
-	static public final String		LOAD_CONF		= "load conf";
-	private String					confFilePath	= "zigbee-template.xml";
+	/**
+	 * The CT asks to the user to input the path of the configuration file that
+	 * contains all the info about the ZigBee node that it is going to use in
+	 * the test cases.
+	 */
+	static public final String		ASK_CONFIG_FILE_PATH	= "file_path";
+
+	/**
+	 * The CT asks to the user to pair with the RI all the devices that have
+	 * been described in the configuration file configured at step
+	 * {@link #ASK_CONFIG_FILE_PATH}.
+	 */
+	static public final String		ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
+
+	/**
+	 * The CT asks to the user to add the device that is described in the
+	 * configuration file specified at step {@link #ASK_CONFIG_FILE_PATH} and
+	 * that contains at least one reportable attribute. Once the user presses
+	 * Enter, the CT tries to register a {@link ZCLEventListener} and check if
+	 * the RI is sending the attribute reporting events accordingly.
+	 */
+	public static final String		EVENT_REPORTABLE		= "event_reportable";
+
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
 
-	private TestStepLauncher(String pathFile, BundleContext bc) {
+	private TestStepLauncher(BundleContext bc) {
 		tproxy = new TestStepProxy(bc);
-		String stringFile;
-		try {
-			stringFile = readFile(pathFile);
-			String result = tproxy.execute(CONF_FILE_PATH + stringFile,
-					"please type the configuration file path and be sure to fill it with your values: ");
-			if (result != null && !"".equals(result)) {
-				confFilePath = result;
-			}
 
-			tproxy.execute(LOAD_CONF,
-					"please please plug and setup all the devices described in the configuration file: ");
-		} catch (IOException e) {
+		String configFilePath = tproxy.execute(ASK_CONFIG_FILE_PATH,
+				"please type the configuration file path and be sure to fill it with your values:");
 
-			e.printStackTrace();
+		if ((configFilePath == null) || ((configFilePath != null) && (configFilePath.equals("")))) {
+			throw new IllegalArgumentException("invalid path");
 		}
 
-		confReader = ConfigurationFileReader.getInstance(pathFile, bc);
+		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
+				"please please plug and setup all the devices described in the configuration file:");
+
+		InputStream is;
+		try {
+			is = new FileInputStream(configFilePath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		confReader = ConfigurationFileReader.getInstance(is);
 		ZCLFrameImpl.minHeaderSize = confReader.getHeaderMinSize();
 	}
 
-	public static TestStepLauncher launch(String pathFile, BundleContext bc) {
+	public static TestStepLauncher launch(BundleContext bc) {
 		if (instance == null) {
-			instance = new TestStepLauncher(pathFile, bc);
+			instance = new TestStepLauncher(bc);
 		}
 		return instance;
 	}
@@ -67,22 +90,22 @@ public class TestStepLauncher {
 		return confReader;
 	}
 
-	private String readFile(String file) throws IOException {
-		String result = "";
-		try {
-			String line;
-			File myFile = new File(file);
-			BufferedReader inFile = new BufferedReader(new FileReader(myFile));
-			while ((line = inFile.readLine()) != null) {
-				result += line;
-			}
-			inFile.close();
-		} catch (IOException e) {
-			System.out.println("problem with file");
-		}
-
-		return result;
-	}
+	// private String readFile(String file) throws IOException {
+	// String result = "";
+	// try {
+	// String line;
+	// File myFile = new File(file);
+	// BufferedReader inFile = new BufferedReader(new FileReader(myFile));
+	// while ((line = inFile.readLine()) != null) {
+	// result += line;
+	// }
+	// inFile.close();
+	// } catch (IOException e) {
+	// System.out.println("problem with file");
+	// }
+	//
+	// return result;
+	// }
 
 	public TestStepProxy getTeststepProxy() {
 		return tproxy;

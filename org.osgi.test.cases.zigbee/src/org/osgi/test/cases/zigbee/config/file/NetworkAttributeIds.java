@@ -19,8 +19,6 @@ package org.osgi.test.cases.zigbee.config.file;
 import java.math.BigInteger;
 
 /**
- * 
- * 
  * This class is used to identify an attribute Id in the network
  * 
  * @author $Id$
