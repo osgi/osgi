@@ -42,22 +42,16 @@ public interface ZCLDataTypeDescription {
 	public short getId();
 
 	/**
-	 * The associated data type name.
-	 * 
-	 * @return The associated data type name string.
+	 * @return The associated data type name.
 	 */
 	public String getName();
 
 	/**
-	 * Returns whether the data type is analog.
-	 * 
-	 * @return true, if the data type is Analog, otherwise is Discrete.
+	 * @return true if the data type is Analog, false if it is discrete.
 	 */
 	public boolean isAnalog();
 
 	/**
-	 * The corresponding Java type class.
-	 * 
 	 * @return The corresponding Java type class.
 	 */
 	public Class getJavaDataType();

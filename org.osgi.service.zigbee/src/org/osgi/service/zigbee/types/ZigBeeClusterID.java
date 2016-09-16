@@ -38,9 +38,7 @@ public class ZigBeeClusterID
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeClusterID getInstance() {
 		return instance;

@@ -38,9 +38,7 @@ public class ZigBeeEnumeration16
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeEnumeration16 getInstance() {
 		return instance;

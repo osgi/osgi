@@ -35,9 +35,7 @@ public class ZigBeeBag
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeBag getInstance() {
 		return instance;

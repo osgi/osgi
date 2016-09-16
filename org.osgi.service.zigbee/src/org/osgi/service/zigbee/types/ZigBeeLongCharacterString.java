@@ -38,9 +38,7 @@ public class ZigBeeLongCharacterString
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeLongCharacterString getInstance() {
 		return instance;

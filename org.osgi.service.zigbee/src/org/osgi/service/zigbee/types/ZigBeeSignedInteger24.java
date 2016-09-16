@@ -38,9 +38,7 @@ public class ZigBeeSignedInteger24
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeSignedInteger24 getInstance() {
 		return instance;

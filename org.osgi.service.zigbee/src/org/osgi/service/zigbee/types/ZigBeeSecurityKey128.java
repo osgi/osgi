@@ -38,9 +38,7 @@ public class ZigBeeSecurityKey128
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeSecurityKey128 getInstance() {
 		return instance;

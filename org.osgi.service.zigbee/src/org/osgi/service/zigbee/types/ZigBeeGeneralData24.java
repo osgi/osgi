@@ -38,9 +38,7 @@ public class ZigBeeGeneralData24
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeGeneralData24 getInstance() {
 		return instance;

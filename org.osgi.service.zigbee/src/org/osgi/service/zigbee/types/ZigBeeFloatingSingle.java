@@ -38,9 +38,7 @@ public class ZigBeeFloatingSingle
 	}
 
 	/**
-	 * Gets a singleton instance of this class.
-	 * 
-	 * @return the singleton instance.
+	 * @return the singleton instance of this class.
 	 */
 	public static ZigBeeFloatingSingle getInstance() {
 		return instance;
