@@ -27,52 +27,52 @@ public class ZCLException extends ZigBeeException {
 
 	private static final long	serialVersionUID					= -7330626950388193679L;
 
-	/** ZCL Success error code */
+	/** ZCL Success error code. */
 	public static final int		SUCCESS								= 0x00;
 
-	/** ZCL Failure error code */
+	/** ZCL Failure error code. */
 	public static final int		FAILURE								= 0x01;
 
-	/** ZCL Malformed Command error code */
+	/** ZCL Malformed Command error code. */
 	public static final int		MALFORMED_COMMAND					= 0x02;
 
-	/** ZCL Cluster Command Not Supported error code */
+	/** ZCL Cluster Command Not Supported error code. */
 	public static final int		CLUSTER_COMMAND_NOT_SUPPORTED		= 0x03;
 
-	/** ZCL General Command Not Supported error code */
+	/** ZCL General Command Not Supported error code. */
 	public static final int		GENERAL_COMMAND_NOT_SUPPORTED		= 0x04;
 
-	/** ZCL Manuf Cluster Command Not Supported error code */
+	/** ZCL Manuf Cluster Command Not Supported error code. */
 	public static final int		MANUF_CLUSTER_COMMAND_NOT_SUPPORTED	= 0x05;
 
-	/** ZCL Manuf General Command Not Supported error code */
+	/** ZCL Manuf General Command Not Supported error code. */
 	public static final int		MANUF_GENERAL_COMMAND_NOT_SUPPORTED	= 0x06;
 
-	/** ZCL Invalid Field error code */
+	/** ZCL Invalid Field error code. */
 	public static final int		INVALID_FIELD						= 0x07;
 
-	/** ZCL Unsupported Attribute error code */
+	/** ZCL Unsupported Attribute error code. */
 	public static final int		UNSUPPORTED_ATTRIBUTE				= 0x08;
 
-	/** ZCL Invalid Value error code */
+	/** ZCL Invalid Value error code. */
 	public static final int		INVALID_VALUE						= 0x09;
 
-	/** ZCL Read Only error code */
+	/** ZCL Read Only error code. */
 	public static final int		READ_ONLY							= 0x0a;
 
-	/** ZCL Insufficient Space error code */
+	/** ZCL Insufficient Space error code. */
 	public static final int		INSUFFICIENT_SPACE					= 0x0b;
 
-	/** ZCL Duplicate Exists error code */
+	/** ZCL Duplicate Exists error code. */
 	public static final int		DUPLICATE_EXISTS					= 0x0c;
 
-	/** ZCL Not Found error code */
+	/** ZCL Not Found error code. */
 	public static final int		NOT_FOUND							= 0x0d;
 
-	/** Unreportable Type error code */
+	/** Unreportable Type error code. */
 	public static final int		UNREPORTABLE_TYPE					= 0x0e;
 
-	/** ZCL Invalid Data Type error code */
+	/** ZCL Invalid Data Type error code. */
 	public static final int		INVALID_DATA_TYPE					= 0x0f;
 
 	/**
@@ -87,23 +87,23 @@ public class ZCLException extends ZigBeeException {
 	 */
 	public static final int		SOFTWARE_FAILURE					= 0x11;
 
-	/** ZCL Calibration Error error code */
+	/** ZCL Calibration Error error code. */
 	public static final int		CALIBRATION_ERROR					= 0x12;
 
 	/**
-	 * Create a {@linkplain ZCLException} containing only a description, but no
+	 * Creates a {@linkplain ZCLException} containing only a description, but no
 	 * error codes. If issued on this exeption the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
 	 * 
-	 * @param errorDesc exception error description
+	 * @param errorDesc exception error description.
 	 */
 	public ZCLException(String errorDesc) {
 		this(UNKNOWN_ERROR, UNKNOWN_ERROR, errorDesc);
 	}
 
 	/**
-	 * Create a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZCLException(String)}.
@@ -122,7 +122,7 @@ public class ZCLException extends ZigBeeException {
 	}
 
 	/**
-	 * Create a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call

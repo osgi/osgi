@@ -26,20 +26,26 @@ package org.osgi.service.zigbee.descriptors;
 public interface ZigBeeFrequencyBand {
 
 	/**
+	 * Checks if the radio band is 868MHz.
+	 * 
 	 * @return {@code true} if and only if the radio is operating in the
-	 *         frequency band 868 to 868.6 MHz
+	 *         frequency band 868 to 868.6 MHz.
 	 */
 	public boolean is868();
 
 	/**
+	 * Checks if the radio band is 900MHz.
+	 * 
 	 * @return {@code true} if and only if the radio is operating in the
-	 *         frequency band 908Mhz to 928Mhz
+	 *         frequency band 908Mhz to 928Mhz.
 	 */
 	public boolean is915();
 
 	/**
+	 * Checks if the radio band is 2.4GHz.
+	 * 
 	 * @return {@code true} if and only if the radio is operating in the
-	 *         frequency band 2400Mhz to 2483Mhz
+	 *         frequency band 2400Mhz to 2483Mhz.
 	 */
 	public boolean is2400();
 }

@@ -19,7 +19,7 @@ package org.osgi.service.zigbee;
 /**
  * This interface represents an entry of the RoutingTableList (see Table 2.128
  * RoutingTableList Record Format in ZIGBEE SPECIFICATION:
- * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
  * 
  * @noimplement
  * 
@@ -28,46 +28,54 @@ package org.osgi.service.zigbee;
 public interface ZigBeeRoute {
 
 	/**
-	 * Constant value representing an active route
+	 * Constant value representing an active route.
 	 */
 	public static final int	ACTIVE				= 0xf0;
 
 	/**
-	 * Constant value representing a route that is under discovery
+	 * Constant value representing a route that is under discovery.
 	 */
 	public static final int	DISCOVERY_UNDERWAY	= 0xf1;
 
 	/**
-	 * Constant value representing a failed route discovery
+	 * Constant value representing a failed route discovery.
 	 */
 	public static final int	DISCOVERY_FAILED	= 0xf2;
 
 	/**
-	 * Constant value representing an inactive route
+	 * Constant value representing an inactive route.
 	 */
 	public static final int	INACTIVE			= 0xf3;
 
 	/**
-	 * Constant value representing a route which is under validation
+	 * Constant value representing a route which is under validation.
 	 */
 	public static final int	VALIDATION_UNDERWAY	= 0xf4;
 
 	/**
-	 * @return the Service.PID of the {@link ZigBeeNode} as destination of this
-	 *         route entry
+	 * Returns the service PID of the {@link ZigBeeNode} as destination of this
+	 * route entry.
+	 * 
+	 * @return the service PID of the {@link ZigBeeNode} as destination of this
+	 *         route entry.
 	 */
 	public String getDestination();
 
 	/**
-	 * @return the Service.PID of the {@link ZigBeeNode} to send the data for
-	 *         reaching the destination
+	 * Returns the service PID of the {@link ZigBeeNode} to send the data for
+	 * reaching the destination.
+	 * 
+	 * @return the service PID of the {@link ZigBeeNode} to send the data for
+	 *         reaching the destination.
 	 */
 	public String getNextHop();
 
 	/**
-	 * @return the status of the RoutingLink as defined by ZigBee Specification:
-	 *         ACTIVE, DISCOVERY_UNDERWAY, DISCOVERY FAILED, INACTIVE,
-	 *         VALIDATION_UNDERDAY
+	 * Returns the status of this route.
+	 * 
+	 * @return the status of this route (or routing link) as defined by ZigBee
+	 *         Specification: ACTIVE, DISCOVERY_UNDERWAY, DISCOVERY FAILED,
+	 *         INACTIVE, VALIDATION_UNDERDAY.
 	 */
 	public int getStatus();
 

@@ -54,28 +54,30 @@ public interface ZCLCluster {
 	public final static String	NAME	= "zigbee.cluster.name";
 
 	/**
-	 * @return the cluster identifier
+	 * Returns the identifier of this cluster.
+	 * 
+	 * @return the cluster identifier.
 	 */
 	int getId();
 
 	/**
-	 * Get the cluster {@link ZCLAttribute} identifying that matches the given
-	 * attributeId. {@link ZCLCluster#getAttribute(int, int)} method retrieves
-	 * manufacturer-specific attributes.
+	 * Returns the cluster {@link ZCLAttribute} identifying that matches the
+	 * given attributeId. {@link ZCLCluster#getAttribute(int, int)} method
+	 * retrieves manufacturer-specific attributes.
 	 * 
-	 * @param attributeId the ZCL attribute identifier
+	 * @param attributeId the ZCL attribute identifier.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         In case of success in getting the attribute, the promise will be
 	 *         resolved with a {@link ZCLAttribute} instance. If attributeId do
 	 *         not exist in the cluster, then the promise fails with a
 	 *         {@link ZCLException} with status code
-	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}
+	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE}.
 	 */
 	Promise /* <ZCLAttribute> */ getAttribute(int attributeId);
 
 	/**
-	 * Retrieve a {@link ZCLAttribute} object for a manufacturer specific
+	 * Retrieves a {@link ZCLAttribute} object for a manufacturer specific
 	 * attribute. If the {@code code} parameter is -1 it behaves like the
 	 * {@link ZCLCluster#getAttribute(int)} and retrieves the non-manufacturer
 	 * specific attribute {@code attributeId}.
@@ -99,7 +101,7 @@ public interface ZCLCluster {
 	Promise /* <ZCLAttribute> */ getAttribute(int attributeId, int code);
 
 	/**
-	 * Get an array of {@link ZCLAttribute} objects representing all this
+	 * Returns an array of {@link ZCLAttribute} objects representing all this
 	 * cluster's attributes.
 	 * 
 	 * <p>
@@ -114,7 +116,7 @@ public interface ZCLCluster {
 	Promise /* <ZCLAttribute[]> */ getAttributes();
 
 	/**
-	 * Get an array of {@link ZCLAttribute} objects representing all the
+	 * Returns an array of {@link ZCLAttribute} objects representing all the
 	 * specific manufacturer attributes available on the cluster.
 	 * 
 	 * <p>
@@ -135,7 +137,7 @@ public interface ZCLCluster {
 	Promise /* <ZCLAttribute[]> */ getAttributes(int code);
 
 	/**
-	 * Read a list of attributes by issuing a ZCL Read Attributes command. The
+	 * Reads a list of attributes by issuing a ZCL Read Attributes command. The
 	 * attribute list is provided in terms of an array of
 	 * {@link ZCLAttributeInfo} objects.
 	 * 
@@ -148,15 +150,14 @@ public interface ZCLCluster {
 	 * <p>
 	 * The method returns a promise. The object used to resolve the
 	 * {@link Promise} is a {@code Map<Integer,
-	 * ZCLReadStatusRecord>}. For each Map entry, the key contains the
-	 * attribute identifier and the value, a ZigBee Read Attributes Status
-	 * Record, which is made of the status of the read of this attribute, the
-	 * ZigBee data type of the attribute and the attribute value in the
-	 * corresponding java wrapper type (or null in case of an unsupported
-	 * attribute or in case of an invalid value). For attributes which data type
-	 * serialization is not supported (i.e,
-	 * {@link ZCLDataTypeDescription#getJavaDataType()} returns null), the value
-	 * is of type byte[].
+	 * ZCLReadStatusRecord>}. For each Map entry, the key contains the attribute
+	 * identifier and the value, a ZigBee Read Attributes Status Record, which
+	 * is made of the status of the read of this attribute, the ZigBee data type
+	 * of the attribute and the attribute value in the corresponding java
+	 * wrapper type (or null in case of an unsupported attribute or in case of
+	 * an invalid value). For attributes which data type serialization is not
+	 * supported (i.e, {@link ZCLDataTypeDescription#getJavaDataType()} returns
+	 * null), the value is of type byte[].
 	 * 
 	 * <p>
 	 * When the list of attributes do not fit into a single ZCLFrame, ZigBee
@@ -170,7 +171,7 @@ public interface ZCLCluster {
 	 * <b>NOTE:</b> According to the ZigBee Specification all the attributes
 	 * must be standard attributes or belong to the same manufacturer code,
 	 * otherwise the promise must fail with a {@link IllegalArgumentException}
-	 * exception .
+	 * exception.
 	 * 
 	 * @param attributes An array of {@link ZCLAttributeInfo}.
 	 * 
@@ -184,7 +185,7 @@ public interface ZCLCluster {
 	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
 
 	/**
-	 * Write a set of attributes on the cluster using the ZCL <em>Write
+	 * Writes a set of attributes on the cluster using the ZCL <em>Write
 	 * Attributes</em> or the <em>Write Attributes Undivided</em> commands,
 	 * according to the passed {@code undivided} parameter.
 	 * 
@@ -228,7 +229,7 @@ public interface ZCLCluster {
 	Promise /* <Map<Integer, Short>> */ writeAttributes(boolean undivided, Map attributesAndValues);
 
 	/**
-	 * Get an array of all the commandIds of the ZCLCluster.
+	 * Returns an array of all the commandIds of the ZCLCluster.
 	 * 
 	 * <p>
 	 * This method is implemented for ZCL devices compliant version equal or
@@ -260,11 +261,11 @@ public interface ZCLCluster {
 	Promise /* <ZCLFrame> */ invoke(ZCLFrame frame);
 
 	/**
-	 * This method is to be used by applications when the targeted device has to
-	 * distinguish between source endpoints of the message. For instance, alarms
-	 * cluster (see 3.11 Alarms Cluster in [ZCL]) generated events are
-	 * differently interpreted if they come from the oven or from the intrusion
-	 * alert system.
+	 * Invokes a command on this cluster. This method is to be used by
+	 * applications when the targeted device has to distinguish between source
+	 * endpoints of the message. For instance, alarms cluster (see 3.11 Alarms
+	 * Cluster in [ZCL]) generated events are differently interpreted if they
+	 * come from the oven or from the intrusion alert system.
 	 * 
 	 * @param frame The frame containing the command to issue.
 	 * @param exportedServicePID : the source endpoint of the command request.

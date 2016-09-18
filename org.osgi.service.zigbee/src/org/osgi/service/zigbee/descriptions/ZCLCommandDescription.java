@@ -17,58 +17,72 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZCLCommandDescription
+ * This interface represents a ZCLCommandDescription.
  * 
  * @author $Id$
  */
 public interface ZCLCommandDescription {
 	/**
-	 * @return the command identifier
+	 * Returns the command identifier.
+	 * 
+	 * @return the command identifier.
 	 */
 	int getId();
 
 	/**
-	 * @return the command name
+	 * Returns the command name.
+	 * 
+	 * @return the command name.
 	 */
 	String getName();
 
 	/**
-	 * @return the command functional description
+	 * Returns the command functional description.
+	 * 
+	 * @return the command functional description.
 	 */
 	String getShortDescription();
 
 	/**
-	 * @return true, if and only if the command is mandatory
+	 * Checks if this command it mandatory.
+	 * 
+	 * @return true, if and only if the command is mandatory.
 	 */
 	boolean isMandatory();
 
 	/**
-	 * @return an array of command's parameters description
+	 * Returns an array of the parameter descriptions.
+	 * 
+	 * @return an array of the parameter descriptions.
 	 */
 	ZCLParameterDescription[] getParameterDescriptions();
 
 	/**
-	 * @return the isClusterSpecificCommand value
+	 * @return the isClusterSpecificCommand value.
 	 */
 	boolean isClusterSpecificCommand();
 
 	/**
-	 * Get manufacturerCode
+	 * Returns the manufacturer code.
 	 * 
-	 * Default value is: -1 (no code)
+	 * Default value is: -1 (no code).
 	 * 
-	 * @return the manufacturerCode
+	 * @return the manufacturer code.
 	 */
 	int getManufacturerCode();
 
 	/**
-	 * @return {@code true} if end only if {@link #getManufacturerCode()} is not
-	 *         -1
+	 * Checks if the command is manufacturer specific.
+	 * 
+	 * @return {@code true} if end only if {@link #getManufacturerCode()} is
+	 *         not. -1.
 	 */
 	public boolean isManufacturerSpecific();
 
 	/**
-	 * @return the isClientServerDirection value
+	 * Checks if this is a client-server direction.
+	 * 
+	 * @return the isClientServerDirection value.
 	 */
 	boolean isClientServerDirection();
 

@@ -26,48 +26,66 @@ package org.osgi.service.zigbee.descriptors;
 public interface ZigBeeSimpleDescriptor {
 
 	/**
+	 * Returns the application profile id.
+	 * 
 	 * @return the application profile id.
 	 */
 	public int getApplicationProfileId();
 
 	/**
-	 * @return device id as defined per profile.
+	 * Returns the application device id as defined per profile.
+	 * 
+	 * @return the application device id as defined per profile.
 	 */
 	public int getApplicationDeviceId();
 
 	/**
+	 * Returns the endpoint for which this descriptor is defined.
+	 * 
 	 * @return the endpoint for which this descriptor is defined.
 	 */
 	public short getEndpoint();
 
 	/**
+	 * Returns the version of the application.
+	 * 
 	 * @return the version of the application.
 	 */
 	public byte getApplicationDeviceVersion();
 
 	/**
-	 * @return An array of input(server) cluster identifiers, returns an empty
-	 *         array if does not provides any inputs(servers) clusters.
+	 * Returns an array of input (server) cluster identifiers.
+	 * 
+	 * @return an array of input (server) cluster identifiers, returns an empty
+	 *         array if does not provides any input (server) clusters.
 	 */
 	public int[] getInputClusters();
 
 	/**
-	 * @return An array of output(client) cluster identifiers, returns an empty
-	 *         array if does not provides any outputs(clients) clusters.
+	 * Returns an array of output (client) cluster identifiers.
+	 * 
+	 * @return an array of output (client) cluster identifiers, returns an empty
+	 *         array if does not provides any output (client) clusters.
 	 */
 	public int[] getOutputClusters();
 
 	/**
-	 * @param clusterId the cluster identifier
-	 * @return true if and only if the endpoint implements the given cluster id
-	 *         as an input cluster
+	 * Checks if this endpoint implements the given cluster id as an input
+	 * cluster.
+	 * 
+	 * @param clusterId the cluster identifier.
+	 * @return true if and only if this endpoint implements the given cluster id
+	 *         as an input cluster.
 	 */
 	public boolean providesInputCluster(int clusterId);
 
 	/**
-	 * @param clusterId the cluster identifier
-	 * @return true if and only if the endpoint implements the given cluster id
-	 *         as an output cluster
+	 * Checks if this endpoint implements the given cluster id as an output
+	 * cluster.
+	 * 
+	 * @param clusterId the cluster identifier.
+	 * @return true if and only if this endpoint implements the given cluster id
+	 *         as an output cluster.
 	 */
 	public boolean providesOutputCluster(int clusterId);
 

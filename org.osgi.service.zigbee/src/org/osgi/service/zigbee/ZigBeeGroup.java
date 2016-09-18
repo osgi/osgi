@@ -19,8 +19,9 @@ package org.osgi.service.zigbee;
 import org.osgi.util.promise.Promise;
 
 /**
- * This interface represents a ZigBee Group
+ * This interface represents a ZigBee Group.
  * 
+ * @noimplement
  * @author $Id$
  */
 public interface ZigBeeGroup {
@@ -32,12 +33,14 @@ public interface ZigBeeGroup {
 	public static final String ID = "zigbee.group.id";
 
 	/**
-	 * @return The 16 bit group address.
+	 * Returns the 16 bit group address.
+	 * 
+	 * @return the 16 bit group address.
 	 */
 	int getGroupAddress();
 
 	/**
-	 * This method is used to add an endpoint to a group, it may be invoked on
+	 * Requests an endpoint to join this group. This method may be invoked on
 	 * exported and imported endpoints. In the former case, the ZigBee Base
 	 * Driver should rely on the <i>APSME-ADD-GROUP</i> API defined by the
 	 * ZigBee Specification, or it will use the proper commands of the
@@ -63,8 +66,8 @@ public interface ZigBeeGroup {
 	Promise /* <void> */ joinGroup(String pid);
 
 	/**
-	 * This method is used for adding an endpoint to a group, it may be invoked
-	 * on exported and imported endpoints. In the former case, the ZigBee Base
+	 * Requests an endpoint to leave this group. This method may be invoked on
+	 * exported and imported endpoints. In the former case, the ZigBee Base
 	 * Driver should rely on the <i>APSME-REMOVE-GROUP </i> API defined by the
 	 * ZigBee Specification, or it will use the proper commands of the
 	 * <i>Groups</i> cluster of the ZigBee Specification Library.
@@ -89,7 +92,7 @@ public interface ZigBeeGroup {
 	Promise /* <void> */ leaveGroup(String pid);
 
 	/**
-	 * Send a ZCL frame to the group represented by this service. The returned
+	 * Sends a ZCL frame to the group represented by this service. The returned
 	 * stream will provide the invocation response(s) in an asynchronous way.
 	 * 
 	 * <p>
@@ -106,7 +109,7 @@ public interface ZigBeeGroup {
 	ZCLCommandResponseStream groupcast(int clusterId, ZCLFrame frame);
 
 	/**
-	 * Send a ZCL frame to the ZigBee group represented by this service. The
+	 * Sends a ZCL frame to the ZigBee group represented by this service. The
 	 * returned stream will provide the invocation response(s) in an
 	 * asynchronous way.
 	 * 

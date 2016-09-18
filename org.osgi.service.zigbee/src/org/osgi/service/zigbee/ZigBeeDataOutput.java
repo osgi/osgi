@@ -36,7 +36,7 @@ public interface ZigBeeDataOutput {
 	 * To avoid losing information, the passed value must be in the range [-128,
 	 * 127] for signed numbers and [0, 255] for unsigned numbers.
 	 * 
-	 * @param value The value to append
+	 * @param value The value to append.
 	 */
 	public void writeByte(byte value);
 
@@ -107,7 +107,7 @@ public interface ZigBeeDataOutput {
 	public void writeLong(long value, int size) throws IOException;
 
 	/**
-	 * Appends on the Data Output Stream a float value
+	 * Appends on the Data Output Stream a float value.
 	 * 
 	 * @param value The {@code float} value to append.
 	 * @param size The size in bytes that have to be actually appended. The size

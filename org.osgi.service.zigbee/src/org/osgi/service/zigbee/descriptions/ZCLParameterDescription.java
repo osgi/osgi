@@ -17,14 +17,16 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee parameter description
+ * This interface represents a ZigBee parameter description.
  * 
  * @author $Id$
  */
 public interface ZCLParameterDescription {
 
 	/**
-	 * @return the parameter data type
+	 * Returns the parameter data type.
+	 * 
+	 * @return the parameter data type.
 	 */
 	public ZCLDataTypeDescription getDataTypeDescription();
 }

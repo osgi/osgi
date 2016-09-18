@@ -54,6 +54,9 @@ public interface ZigBeeDeviceDescriptionSet {
 	public final static String	DEVICES			= "zigbee.profile.devices";
 
 	/**
+	 * Returns the description of a device identified by its identifier and its
+	 * version.
+	 * 
 	 * @param deviceId Identifier of the device.
 	 * @param version The version of the application profile.
 	 * @return The associated device description.

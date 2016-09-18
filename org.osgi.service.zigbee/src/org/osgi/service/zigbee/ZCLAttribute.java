@@ -23,7 +23,7 @@ import org.osgi.util.promise.Promise;
  * This interface represents a ZCLAttribute and adds to the ZCLAttributeInfo
  * interface the methods to read and write the ZCL attribute from and to the
  * ZigBee node with respectively the {@link #getValue()} and
- * {@link #setValue(Object)} methods
+ * {@link #setValue(Object)} methods.
  * 
  * @author $Id$
  */
@@ -66,7 +66,7 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
 	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
 	 * 
-	 * @param value the Java value to set
+	 * @param value the Java value to set.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getFailure()} returns null if the attribute value

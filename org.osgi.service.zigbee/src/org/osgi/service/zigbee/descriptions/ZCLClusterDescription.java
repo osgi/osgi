@@ -17,33 +17,41 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZCL Cluster description
+ * This interface represents a ZCL Cluster description.
  * 
  * @author $Id$
  */
 public interface ZCLClusterDescription {
 	/**
-	 * @return the cluster identifier
+	 * @return the cluster identifier.
 	 */
 	public int getId();
 
 	/**
-	 * @return an array of cluster's generated command description
+	 * Returns an array of the generated command descriptions.
+	 * 
+	 * @return an array of the generated command descriptions.
 	 */
 	public ZCLCommandDescription[] getGeneratedCommandDescriptions();
 
 	/**
-	 * @return an array of cluster's received command description
+	 * Returns an array of the received command description.
+	 * 
+	 * @return an array of the received command description.
 	 */
 	public ZCLCommandDescription[] getReceivedCommandDescriptions();
 
 	/**
-	 * @return an array of cluster's Attributes description
+	 * Returns an array of the attribute descriptions.
+	 * 
+	 * @return an array of the attribute descriptions.
 	 */
 	public ZCLAttributeDescription[] getAttributeDescriptions();
 
 	/**
-	 * @return an array of cluster's Commands description
+	 * Returns an array of the command descriptions.
+	 * 
+	 * @return an array of the command descriptions.
 	 */
 	public ZCLGlobalClusterDescription getGlobalClusterDescription();
 }

@@ -26,41 +26,55 @@ package org.osgi.service.zigbee.descriptors;
 public interface ZigBeeServerMask {
 
 	/**
-	 * @return {@code true} if and only if the server is a Primary Trust Center
+	 * Checks if the server is a Primary Trust Center.
+	 * 
+	 * @return {@code true} if and only if the server is a Primary Trust Center.
 	 */
 	public boolean isPrimaryTrustCenter();
 
 	/**
-	 * @return {@code true} if and only if the server is a Backup Trust Center
+	 * Checks if the server is a Backup Trust Center.
+	 * 
+	 * @return {@code true} if and only if the server is a Backup Trust Center.
 	 */
 	public boolean isBackupTrustCenter();
 
 	/**
+	 * Checks if the server is a Primary Binding Table Cache.
+	 * 
 	 * @return {@code true} if and only if the server is a Primary Binding Table
-	 *         Cache
+	 *         Cache.
 	 */
 	public boolean isPrimaryBindingTableCache();
 
 	/**
+	 * Checks if the server is a Backup Binding Table Cache.
+	 * 
 	 * @return {@code true} if and only if the server is a Backup Binding Table
-	 *         Cache
+	 *         Cache.
 	 */
 	public boolean isBackupBindingTableCache();
 
 	/**
+	 * Checks if the server is a Primary Discovery Cache.
+	 * 
 	 * @return {@code true} if and only if the server is a Primary Discovery
-	 *         Cache
+	 *         Cache.
 	 */
 	public boolean isPrimaryDiscoveryCache();
 
 	/**
+	 * Checks if the server is a Backup Discovery Cache.
+	 * 
 	 * @return {@code true} if and only if the server is a Backup Discovery
-	 *         Cache
+	 *         Cache.
 	 */
 	public boolean isBackupDiscoveryCache();
 
 	/**
-	 * @return {@code true} if and only if the server is a Network Manager
+	 * Checks if the server is a Network Manager.
+	 * 
+	 * @return {@code true} if and only if the server is a Network Manager.
 	 */
 	public boolean isNetworkManager();
 

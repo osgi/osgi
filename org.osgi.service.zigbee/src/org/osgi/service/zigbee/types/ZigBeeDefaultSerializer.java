@@ -500,7 +500,7 @@ class ZigBeeDefaultSerializer {
 	 *         supported.
 	 * 
 	 * @throws NullPointerException if the passed {@code ZigBeeDataInput} is
-	 *         null
+	 *         null.
 	 */
 	static Object deserializeDataType(ZigBeeDataInput is, short dataType) throws IOException {
 		if (is == null) {

@@ -21,7 +21,7 @@ import org.osgi.util.function.Predicate;
 public interface ZCLCommandResponseStream {
 
 	/**
-	 * Close this response, indicating that no further responses are needed.
+	 * Closes this response, indicating that no further responses are needed.
 	 * 
 	 * Any buffered responses will be discarded, and a close event will be sent
 	 * to a handler if it is registered.
@@ -30,7 +30,7 @@ public interface ZCLCommandResponseStream {
 	void close();
 	
 	/**
-	 * Register a handler that will be called for each of the received
+	 * Registers a handler that will be called for each of the received
 	 * responses. Only one handler may be registered. Any responses that arrive
 	 * before a handler is registered will be buffered and pushed into the
 	 * handler when it is registered.
@@ -41,7 +41,7 @@ public interface ZCLCommandResponseStream {
 	 * closed.
 	 * 
 	 * If the handler does not close the stream early then the ZigBee service
-	 * implementation will eventually send a close event
+	 * implementation will eventually send a close event.
 	 * 
 	 * @param handler A handler to process ZCLCommandResponse objects
 	 * @throws IllegalStateException if a handler has already been registered,

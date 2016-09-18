@@ -22,7 +22,7 @@ package org.osgi.service.zigbee;
  * 
  * <p>
  * This interface MUST be implemented by the developer invoking the
- * {@link ZigBeeNode#invoke(int, int, ZDPFrame)}
+ * {@link ZigBeeNode#invoke(int, int, ZDPFrame)}.
  * 
  * <p>
  * <b>Notes:</b>
@@ -38,14 +38,16 @@ package org.osgi.service.zigbee;
 public interface ZDPFrame {
 
 	/**
-	 * Get (a copy of this ZDP) payload.
+	 * Returns a copy of the payload of this frame.
 	 * 
-	 * @return A copy of the payload.
+	 * @return A copy of the payload of this frame.
 	 */
 	byte[] getPayload();
 
 	/**
-	 * @return An {@link ZigBeeDataInput} for the payload of the
+	 * Returns the {@link ZigBeeDataInput} of the payload of this frame.
+	 * 
+	 * @return the {@link ZigBeeDataInput} of the payload of the
 	 *         {@link ZDPFrame}. This method, in contrary to
 	 *         {@link #getPayload()}, doesn't require to create a copy of the
 	 *         payload.

@@ -19,46 +19,60 @@ package org.osgi.service.zigbee.descriptions;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 
 /**
- * This interface represents a ZCLAttributeDescription
+ * This interface represents a ZCLAttributeDescription.
  * 
  * @author $Id$
  */
 public interface ZCLAttributeDescription extends ZCLAttributeInfo {
 
 	/**
-	 * @return The attribute name
+	 * Returns the attribute name.
+	 * 
+	 * @return the attribute name.
 	 */
 	public String getName();
 
 	/**
-	 * @return The Attribute functional description
+	 * Returns the attribute functional description.
+	 * 
+	 * @return the attribute functional description.
 	 */
 	public String getShortDescription();
 
 	/**
-	 * @return The attribute default value
+	 * Returns the attribute default value.
+	 * 
+	 * @return the attribute default value.
 	 */
 	public Object getDefaultValue();
 
 	/**
-	 * @return true, if and only if the attribute is mandatory
+	 * Checks if this attribute is mandatory.
+	 * 
+	 * @return true, if and only if the attribute is mandatory.
 	 */
 	public boolean isMandatory();
 
 	/**
-	 * @return the true if and only if the attribute support subscription
+	 * Checks if this attribute is reportable.
+	 * 
+	 * @return true if and only if the attribute support subscription.
 	 */
 	public boolean isReportable();
 
 	/**
+	 * Checks if this attribute is read-only.
+	 * 
 	 * @return true if the attribute is read only, false otherwise (i.e. if the
-	 *         attribute is read/write or optionally writable (R*W))
+	 *         attribute is read/write or optionally writable (R*W)).
 	 */
 	public boolean isReadOnly();
 
 	/**
+	 * Checks if this attribute is part of a scene.
+	 * 
 	 * @return true if the attribute is part of a scene (cluster), false
-	 *         otherwise
+	 *         otherwise.
 	 */
 	public boolean isPartOfAScene();
 

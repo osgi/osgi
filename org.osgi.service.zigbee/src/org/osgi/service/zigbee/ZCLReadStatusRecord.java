@@ -18,30 +18,33 @@ package org.osgi.service.zigbee;
 
 /**
  * This interface the reading result of
- * {@link ZCLCluster#readAttributes(ZCLAttributeInfo[])}
+ * {@link ZCLCluster#readAttributes(ZCLAttributeInfo[])}.
  * 
  * @author $Id$
  */
 public interface ZCLReadStatusRecord {
 
 	/**
+	 * Returns the value of the related read attribute.
 	 * 
 	 * @return null in case of failure or invalid data, otherwise the Java
-	 *         {@link Object} representing the ZigBee value
+	 *         {@link Object} representing the ZigBee value.
 	 */
 	public Object getValue();
 
 	/**
+	 * Returns the potential failure of the reading operation.
 	 * 
 	 * @return null in case of success, otherwise the {@link ZigBeeException}
-	 *         specifying the failing of the reading
+	 *         specifying the failing of the reading.
 	 */
 	public ZigBeeException getFailure();
 
 	
 	/**
+	 * Returns the {@link ZCLAttributeInfo} related to the reading operation.
 	 * 
-	 * @return the {@link ZCLAttributeInfo} related to the reading operation
+	 * @return the {@link ZCLAttributeInfo} related to the reading operation.
 	 */
 	public ZCLAttributeInfo getAttributeInfo();
 

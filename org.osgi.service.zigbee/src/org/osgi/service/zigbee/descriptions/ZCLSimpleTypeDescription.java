@@ -41,8 +41,8 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 
 	/**
-	 * Method for serializing a ZigBee data type into a {@code ZigBeeDataOutput}
-	 * stream. An implementation of this method must throw an
+	 * Serializes a ZigBee data type into a {@code ZigBeeDataOutput} stream. An
+	 * implementation of this method must throw an
 	 * {@code IllegalArgumentException} if the passed value does not belong to
 	 * the expected class or its value exceeds the possible values allowed (in
 	 * terms of range or length).
@@ -80,8 +80,7 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	public void serialize(ZigBeeDataOutput os, Object value) throws IOException;
 
 	/**
-	 * Method for deserializing a value from the passed {@link ZigBeeDataInput}
-	 * stream.
+	 * Deserializes a value from the passed {@link ZigBeeDataInput} stream.
 	 *
 	 * @param is the {@link ZigBeeDataInput} from where the value of data type
 	 *        is read from.

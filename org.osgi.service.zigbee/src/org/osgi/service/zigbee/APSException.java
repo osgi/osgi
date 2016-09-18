@@ -132,19 +132,19 @@ public class APSException extends ZigBeeException {
 	public static final int		UNSUPPORTED_ATTRIBUTE	= 0x51;
 
 	/**
-	 * Create a {@linkplain ZCLException} containing only a description, but no
+	 * Creates a {@linkplain ZCLException} containing only a description, but no
 	 * error codes. If issued on this exception the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
 	 * 
-	 * @param errorDesc exception error description
+	 * @param errorDesc exception an error description.
 	 */
 	public APSException(String errorDesc) {
 		super(errorDesc);
 	}
 
 	/**
-	 * Create a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #APSException(String)}.
@@ -163,7 +163,7 @@ public class APSException extends ZigBeeException {
 	}
 
 	/**
-	 * Create a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call

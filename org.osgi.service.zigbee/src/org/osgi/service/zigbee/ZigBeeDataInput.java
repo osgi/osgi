@@ -39,7 +39,7 @@ import java.io.IOException;
 public interface ZigBeeDataInput {
 
 	/**
-	 * Read a byte from the DataInput Stream.
+	 * Reads a byte from the DataInput Stream.
 	 * 
 	 * @return the byte read from the data input.
 	 * 
@@ -51,7 +51,7 @@ public interface ZigBeeDataInput {
 	public byte readByte() throws IOException;
 
 	/**
-	 * Read an an integer of the specified {@code size}. The sign bit of the
+	 * Reads an integer of the specified {@code size}. The sign bit of the
 	 * {@code size}-bytes integer is left-extended. In other words if a
 	 * {@code readInt(2)} is issued and the byte read are 0x01, 0x02 and 0xf0,
 	 * the method returns 0xfff00201. For this reason if the 4 bytes read from
@@ -78,7 +78,7 @@ public interface ZigBeeDataInput {
 
 	/**
 	 * 
-	 * Read a certain amount of bytes and returns a long. The sign bit of the
+	 * Reads a certain amount of bytes and returns a long. The sign bit of the
 	 * read {@code size}-bytes long is left-extended. In other words if a
 	 * readLong(2) is issued and the byte read are 0x01 and 0xf0, the method
 	 * returns 0xfffffffffffff001L. For this reason if the 2 bytes read from the
@@ -104,9 +104,11 @@ public interface ZigBeeDataInput {
 	public long readLong(int size) throws IOException;
 
 	/**
+	 * Reads a number of type Float.
+	 * 
 	 * @param size expected value for this parameter are 2 or 4 depending if
 	 *        reading {@link ZigBeeDataTypes#FLOATING_SEMI} or
-	 *        {@link ZigBeeDataTypes#FLOATING_SINGLE}
+	 *        {@link ZigBeeDataTypes#FLOATING_SINGLE}.
 	 * 
 	 * @return The {@code float} number read from the data input.
 	 * 
@@ -121,6 +123,8 @@ public interface ZigBeeDataInput {
 	public float readFloat(int size) throws IOException;
 
 	/**
+	 * Reads a number of type Double.
+	 * 
 	 * @return a decoded double.
 	 * 
 	 * @throws EOFException if there are not at least {@code size} 8 bytes left
@@ -131,13 +135,13 @@ public interface ZigBeeDataInput {
 	public double readDouble() throws IOException;
 
 	/**
-	 * Read the specified amount of bytes from the underlying stream and return
+	 * Reads the specified amount of bytes from the underlying stream and return
 	 * a copy of them. If the number of available bytes is less than the
-	 * requested len, it throws an EOFException
+	 * requested len, it throws an EOFException.
 	 * 
 	 * @param len the number of bytes to read.
 	 * 
-	 * @return return a copy of the byte contained in the stream
+	 * @return return a copy of the bytes contained in the stream.
 	 * 
 	 * @throws EOFException if there are not at least {@code len} bytes left on
 	 *         the data input.

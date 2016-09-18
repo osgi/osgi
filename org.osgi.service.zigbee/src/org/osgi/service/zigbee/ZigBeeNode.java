@@ -28,10 +28,10 @@ import org.osgi.util.promise.Promise;
  * communicate using the ZigBee protocol.<br>
  * Each physical device may contain up 240 logical devices which are represented
  * by the {@link ZigBeeEndpoint} class.<br>
- * Each logical device is identified by an <i>EndPoint</i> address, but shares
- * either the:<br>
- * - <i>64-bit 802.15.4 IEEE Address</i><br>
- * - <i>16-bit ZigBee Network Address</i><br>
+ * Each logical device is identified by an <i>EndPoint</i> address, but shares:
+ * <br>
+ * - either the <i>64-bit 802.15.4 IEEE Address</i><br>
+ * - or the <i>16-bit ZigBee Network Address</i>.<br>
  * 
  * @noimplement
  * 
@@ -45,7 +45,7 @@ public interface ZigBeeNode {
 	 * hexadecimal numbers. There is no need to use 0x hexadecimal notation.
 	 * <i>i.e zigbee.node.ieee.address="00:25:96:AB:37:56"</i> for a 48-bit
 	 * address and <i>i.e zigbee.node.ieee.address="00:25:96:FF:FE:AB:37:56"</i>
-	 * for a 64-bit address
+	 * for a 64-bit address.
 	 * 
 	 * A ZigBee Event Listener service can announce for what ZigBee device nodes
 	 * it wants notifications.
@@ -53,7 +53,7 @@ public interface ZigBeeNode {
 	public static final String	IEEE_ADDRESS			= "zigbee.node.ieee.address";
 
 	/**
-	 * Property key for the device logical type
+	 * Property key for the device logical type.
 	 */
 	public static final String	LOGICAL_TYPE			= "zigbee.node.description.node.type";
 
@@ -64,7 +64,7 @@ public interface ZigBeeNode {
 	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
-	 * Key of {@link String} containing the device node network PAN ID
+	 * Key of {@link String} containing the device node network PAN ID.
 	 */
 	public static final String	PAN_ID					= "zigbee.node.pan.id";
 
@@ -91,54 +91,68 @@ public interface ZigBeeNode {
 	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
 
 	/**
-	 * The Node is a ZigBee End Device
+	 * The Node is a ZigBee End Device.
 	 */
 	public static final short	ZED						= 0x01;
 
 	/**
-	 * The Node is a ZigBee Coordinator
+	 * The Node is a ZigBee Coordinator.
 	 */
 	public static final short	COORDINATOR				= 0x02;
 
 	/**
-	 * The Node is a ZigBee Router
+	 * The Node is a ZigBee Router.
 	 */
 	public static final short	ROUTER					= 0x03;
 
 	/**
-	 * @return The ZigBee device node IEEE Address.
+	 * Returns the ZigBee device node IEEE Address of this node.
+	 * 
+	 * @return the ZigBee device node IEEE Address of this node.
 	 */
 	public BigInteger getIEEEAddress();
 
 	/**
-	 * @return The ZigBee device node current network address.
+	 * Returns the current network address of this node.
+	 * 
+	 * @return the current network address of this node.
 	 */
 	public int getNetworkAddress();
 
 	/**
-	 * @return The ZigBee Host OSGi service PID.
+	 * Returns the OSGi service PID of the ZigBee Host that is on the network of
+	 * this node.
+	 * 
+	 * @return the OSGi service PID of the ZigBee Host that is on the network of
+	 *         this node.
 	 */
 	public String getHostPid();
 
 	/**
-	 * @return The network Personal Area Network identifier(PAND ID)
+	 * Returns the network Personal Area Network identifier (PAN ID).
+	 * 
+	 * @return the network Personal Area Network identifier (PAN ID).
 	 */
 	public int getPanId();
 
 	/**
-	 * @return The network Extended PAN identifier(EPID)
+	 * Returns the network Extended PAN identifier (EPID).
+	 * 
+	 * @return the network Extended PAN identifier (EPID).
 	 */
 	public BigInteger getExtendedPanId();
 
 	/**
 	 * 
-	 * @return An array of embedded endpoints, returns an empty array if it does
-	 *         not provide any endpoint.
+	 * Returns the array of the endpoints hosted by this node.
+	 * 
+	 * @return the array of the endpoints hosted by this node, returns an empty
+	 *         array if this node does not host any endpoint.
 	 */
 	public ZigBeeEndpoint[] getEndpoints();
 
 	/**
-	 * Retrieve the ZigBee node Node Descriptor.
+	 * Retrieves the ZigBee node Node Descriptor.
 	 * 
 	 * As described in <em>Table 2.91 Fields of the Node_Desc_rsp Command</em>
 	 * of the ZigBee specification, a <em>Node_Desc_rsp</em> command can return
@@ -160,7 +174,7 @@ public interface ZigBeeNode {
 	public Promise /* <ZigBeeNodeDescriptor> */ getNodeDescriptor();
 
 	/**
-	 * Retrieve the ZigBee node Power Descriptor
+	 * Retrieves the ZigBee node Power Descriptor.
 	 * 
 	 * As described in <em>Table 2.92 Fields of the Power_Desc_rsp Command</em>
 	 * of the ZigBee specification, a <em>Power_Desc_rsp</em> command can return
@@ -183,7 +197,7 @@ public interface ZigBeeNode {
 
 	/**
 	 * 
-	 * Retrieve the ZigBee node Complex Descriptor.
+	 * Retrieves the ZigBee node Complex Descriptor.
 	 * 
 	 * <p>
 	 * As described in
@@ -235,8 +249,8 @@ public interface ZigBeeNode {
 
 	/**
 	 * 
-	 * Retrieve the routing table information of the node. This routing table is
-	 * also known as RoutingTableList in the ZigBee Specification.
+	 * Retrieves the routing table information of the node. This routing table
+	 * is also known as RoutingTableList in the ZigBee Specification.
 	 * 
 	 * <p>
 	 * An implementation of this method may use the <em>Mgmt_Rtg_req</em> ZDP
@@ -306,9 +320,9 @@ public interface ZigBeeNode {
 	public Promise leave(boolean rejoin, boolean removeChildren);
 
 	/**
-	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
-	 * the specified cluster id and it will expect a specific cluster as
-	 * response to the request.
+	 * Sends the {@link ZDPFrame} to this {@link ZigBeeNode} with the specified
+	 * cluster id. This method expects a specific cluster in the response to the
+	 * request.
 	 * 
 	 * @param clusterIdReq the cluster Id of the {@link ZDPFrame} that will be
 	 *        sent to the device.
@@ -322,9 +336,9 @@ public interface ZigBeeNode {
 	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message);
 
 	/**
-	 * This method sends the {@link ZDPFrame} to this {@link ZigBeeNode} with
-	 * the specified cluster id and it will expect a specific cluster as
-	 * response to the request.
+	 * Sends the {@link ZDPFrame} to this {@link ZigBeeNode} with the specified
+	 * cluster id. This method expects a specific cluster in the response to the
+	 * request.
 	 * 
 	 * This method considers that the 0x8000 + clusterIdReq is the clusterId
 	 * expected from messaged received for the message sent by this request.
@@ -339,7 +353,7 @@ public interface ZigBeeNode {
 	public Promise /* <ZDPFrame> */ invoke(int clusterIdReq, ZDPFrame message);
 
 	/**
-	 * Broadcast a given ZCL Frame to cluster {@code clusterID} on all the
+	 * Broadcasts a given ZCL Frame to cluster {@code clusterID} on all the
 	 * {@link ZigBeeEndpoint} that are running on this node (endpoint
 	 * broadcasting).
 	 *
@@ -354,7 +368,7 @@ public interface ZigBeeNode {
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame);
 
 	/**
-	 * Broadcast a given ZCL Frame to cluster {@code clusterID} on all the
+	 * Broadcasts a given ZCL Frame to cluster {@code clusterID} on all the
 	 * {@link ZigBeeEndpoint} that are running on this node (endpoint
 	 * broadcasting). The source endpoint of the APS message sent, is set to the
 	 * endpoint identifier of the {@code exportedServicePID} service.
@@ -373,9 +387,10 @@ public interface ZigBeeNode {
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**
-	 * As described in <em>Table 2.97 Fields of the User_Desc_rsp Command</em>
-	 * of the ZigBee specification, a User_Desc_rsp may return the following
-	 * status (defined in class {@link ZDPException}:
+	 * Returns the user description of this node. As described in
+	 * <em>Table 2.97 Fields of the User_Desc_rsp Command</em> of the ZigBee
+	 * specification, a User_Desc_rsp may return the following status (defined
+	 * in class {@link ZDPException}:
 	 * <ul>
 	 * <li>{@code SUCCESS}
 	 * <li>{@code NOT_SUPPORTED}
@@ -393,9 +408,10 @@ public interface ZigBeeNode {
 	Promise /* <String> */ getUserDescription();
 
 	/**
-	 * As described in <em>Table 2.137 ZDP Enumerations Description</em> of the
-	 * ZigBee specification, a Set_User_Desc_rsp request may return the
-	 * following status (defined in class {@link ZDPException}:
+	 * Sets the user description of this node. As described in
+	 * <em>Table 2.137 ZDP Enumerations Description</em> of the ZigBee
+	 * specification, a Set_User_Desc_rsp request may return the following
+	 * status (defined in class {@link ZDPException}:
 	 * 
 	 * <ul>
 	 * <li>{@code SUCCESS}
@@ -404,7 +420,7 @@ public interface ZigBeeNode {
 	 * <li>{@code NO_DESCRIPTOR}
 	 * </ul>
 	 * 
-	 * @param userDescription the user description
+	 * @param userDescription the user description.
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         In case of success the promise returns a {@code null} value. In
 	 *         case of errors the promise must fail with a {@link ZDPException}

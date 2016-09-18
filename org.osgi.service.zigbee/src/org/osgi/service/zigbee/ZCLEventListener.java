@@ -17,7 +17,7 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a listener to events from ZigBee Device nodes
+ * This interface represents a listener to events from ZigBee Device nodes.
  * 
  * @author $Id$
  */
@@ -52,10 +52,9 @@ public interface ZCLEventListener {
 	public final static String	REPORTABLE_CHANGE	= "zigbee.attribute.reportable.change";
 
 	/**
-	 * Callback method that is invoked for received events. This method must be
-	 * called asynchronously.
+	 * Notifies the reception of an event. This method is called asynchronously.
 	 * 
-	 * @param event a set of events
+	 * @param event a set of events.
 	 */
 	public void notifyEvent(ZigBeeEvent event);
 
@@ -70,10 +69,10 @@ public interface ZCLEventListener {
 	public void onFailure(ZCLException e);
 
 	/**
-	 * TIMEOUT_PERIOD is sent from the attribute owner to the listening client
-	 * to say that the interval between reports may exceed MAX_INTERVAL.
+	 * Notifies that the timeout is elapsed. No event will be received in the
+	 * interval.
 	 * 
-	 * @param timeout in seconds
+	 * @param timeout the timetout in seconds.
 	 */
 	public void notifyTimeOut(int timeout);
 

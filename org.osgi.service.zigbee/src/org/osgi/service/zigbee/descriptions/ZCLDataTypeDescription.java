@@ -21,12 +21,12 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 /**
  * This interface is used for representing any of the ZigBee Data Types defined
  * in the ZCL. Each of these data types has a set of associated information that
- * this interface definition permit to retrieve using the specific methods.
+ * this interface definition permits to retrieve using the specific methods.
  * <ul>
  * <li>The data type identifier
  * <li>The data type name
  * <li>The data type is analog or digital
- * <li>The java class used to represent the data type
+ * <li>The java class used to represent the data type.
  * </ul>
  * 
  * 
@@ -35,30 +35,32 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 public interface ZCLDataTypeDescription {
 
 	/**
-	 * @return The data type identifier. The data types identifiers supported by
+	 * Returns the data type identifier.
+	 * 
+	 * @return the data type identifier. The data types identifiers supported by
 	 *         this specification are defined in the {@link ZigBeeDataTypes}
 	 *         interface.
 	 */
 	public short getId();
 
 	/**
-	 * The associated data type name.
+	 * Returns the associated data type name.
 	 * 
-	 * @return The associated data type name string.
+	 * @return the associated data type name string.
 	 */
 	public String getName();
 
 	/**
-	 * Returns whether the data type is analog.
+	 * Checks if the data type is analog.
 	 * 
 	 * @return true, if the data type is Analog, otherwise is Discrete.
 	 */
 	public boolean isAnalog();
 
 	/**
-	 * The corresponding Java type class.
+	 * Returns the corresponding Java type class.
 	 * 
-	 * @return The corresponding Java type class.
+	 * @return the corresponding Java type class.
 	 */
 	public Class getJavaDataType();
 

@@ -28,36 +28,49 @@ package org.osgi.service.zigbee.descriptors;
 public interface ZigBeeMacCapabiliyFlags {
 
 	/**
+	 * Checks if this node is capable of becoming PAN coordinator.
+	 * 
 	 * @return true if this node is capable of becoming PAN coordinator or false
 	 *         otherwise.
 	 */
 	public boolean isAlternatePANCoordinator();
 
 	/**
+	 * Checks if this node a Full Function Device (FFD).
+	 * 
 	 * @return true if this node a Full Function Device (FFD), false otherwise
-	 *         (it is a Reduced Function Device, RFD)
+	 *         (it is a Reduced Function Device, RFD).
 	 */
 	public boolean isFullFunctionDevice();
 
 	/**
+	 * Checks if the current power source is mains power.
+	 * 
 	 * @return true if the current power source is mains power or false
 	 *         otherwise.
 	 */
 	public boolean isMainsPower();
 
 	/**
+	 * Checks if the device does not disable its receiver to conserve power
+	 * during idle periods.
+	 * 
 	 * @return true if the device does not disable its receiver to conserve
 	 *         power during idle periods or false otherwise.
 	 */
 	public boolean isReceiverOnWhenIdle();
 
 	/**
+	 * Checks if the device is capable of sending and receiving secured frames
+	 * 
 	 * @return true if the device is capable of sending and receiving secured
 	 *         frames or false otherwise.
 	 */
 	public boolean isSecurityCapable();
 
 	/**
+	 * Checks if the device is address allocate.
+	 * 
 	 * @return true if the device is address allocate or false otherwise.
 	 */
 	public boolean isAddressAllocate();

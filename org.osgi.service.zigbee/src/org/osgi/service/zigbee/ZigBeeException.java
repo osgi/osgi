@@ -18,7 +18,7 @@ package org.osgi.service.zigbee;
 
 /**
  * This class represents root exception for all the code related to ZigBee. The
- * provided constants names, but not the values
+ * provided constants names, but not the values.
  * 
  * @author $Id$
  */
@@ -48,7 +48,7 @@ public class ZigBeeException extends RuntimeException {
 	public static final int		UNKNOWN_ERROR		= -1;
 
 	/**
-	 * The error code associated to this exception
+	 * The error code associated to this exception.
 	 * 
 	 * @see #getErrorCode()
 	 */
@@ -62,19 +62,19 @@ public class ZigBeeException extends RuntimeException {
 	protected final int			zigBeeErrorCode;
 
 	/**
-	 * Create a {@linkplain ZigBeeException} containing only a description, but
+	 * Creates a {@linkplain ZigBeeException} containing only a description, but
 	 * no error codes. If issued on this exeption the {@link #getErrorCode()}
 	 * and {@link #getZigBeeErrorCode()} methods return the
 	 * {@link #UNKNOWN_ERROR} constant.
 	 * 
-	 * @param errorDesc exception error description
+	 * @param errorDesc exception error description.
 	 */
 	public ZigBeeException(String errorDesc) {
 		this(UNKNOWN_ERROR, UNKNOWN_ERROR, errorDesc);
 	}
 
 	/**
-	 * Create a {@linkplain ZigBeeException} containing a specific
+	 * Creates a {@linkplain ZigBeeException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZigBeeException(String)}.
@@ -90,7 +90,7 @@ public class ZigBeeException extends RuntimeException {
 	}
 
 	/**
-	 * Create a {@linkplain ZigBeeException} containing a specific
+	 * Creates a {@linkplain ZigBeeException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
 	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
@@ -112,6 +112,8 @@ public class ZigBeeException extends RuntimeException {
 	}
 
 	/**
+	 * Returns the potential ZigBee error code.
+	 * 
 	 * @return One of the error codes defined above. If the returned error code
 	 *         is {@link #UNKNOWN_ERROR} and the {@link #hasZigbeeErrorCode()}
 	 *         returns {@code true} then the {@link #getZigBeeErrorCode()}
@@ -122,6 +124,8 @@ public class ZigBeeException extends RuntimeException {
 	}
 
 	/**
+	 * Returns the error code.
+	 * 
 	 * @return the error code.
 	 */
 	public int getErrorCode() {
@@ -129,6 +133,8 @@ public class ZigBeeException extends RuntimeException {
 	}
 
 	/**
+	 * Checks if this exception has a ZigBee error code.
+	 * 
 	 * @return true if the {@link ZigBeeException} convey also the actual error
 	 *         code returned by the ZigBee stack.
 	 */

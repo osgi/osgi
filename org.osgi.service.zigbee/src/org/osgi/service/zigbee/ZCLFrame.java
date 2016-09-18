@@ -26,9 +26,9 @@ import java.io.DataInput;
 public interface ZCLFrame {
 
 	/**
-	 * Returns the ZCLFrame header.
+	 * Returns the header of this frame.
 	 * 
-	 * @return the header
+	 * @return the header of this frame.
 	 */
 	public ZCLHeader getHeader();
 

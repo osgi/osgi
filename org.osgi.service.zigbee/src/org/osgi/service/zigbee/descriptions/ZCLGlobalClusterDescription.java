@@ -17,41 +17,51 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents Cluster global description
+ * This interface represents Cluster global description.
  * 
  * @author $Id$
  */
 public interface ZCLGlobalClusterDescription {
 
 	/**
-	 * @return the cluster identifier
+	 * Returns the cluster identifier.
+	 * 
+	 * @return the cluster identifier.
 	 */
 	public int getClusterId();
 
 	/**
-	 * @return the cluster name
+	 * Returns the cluster name.
+	 * 
+	 * @return the cluster name.
 	 */
 	public String getClusterName();
 
 	/**
-	 * @return the cluster functional description
+	 * Returns the cluster functional description.
+	 * 
+	 * @return the cluster functional description.
 	 */
 	public String getClusterDescription();
 
 	/**
-	 * @return the cluster functional domain
+	 * Returns the cluster functional domain.
+	 * 
+	 * @return the cluster functional domain.
 	 */
 	public String getClusterFunctionalDomain();
 
 	/**
-	 * @return a ZCLClusterDescription representing the client cluster
-	 *         description
+	 * Returns the client cluster description.
+	 * 
+	 * @return the client cluster description.
 	 */
 	public ZCLClusterDescription getClientClusterDescription();
 
 	/**
-	 * @return a ZCLClusterDescription representing the server cluster
-	 *         description
+	 * Returns the server cluster description.
+	 * 
+	 * @return the server cluster description.
 	 */
 	public ZCLClusterDescription getServerClusterDescription();
 

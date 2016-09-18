@@ -28,64 +28,88 @@ package org.osgi.service.zigbee.descriptors;
 public interface ZigBeeNodeDescriptor {
 
 	/**
+	 * Returns the logical type of the described node.
+	 * 
 	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
 	 *         ZigBeeNode.END_DEVICE.
 	 */
 	public short getLogicalType();
 
 	/**
+	 * Checks if a complex descriptor is available.
+	 * 
 	 * @return true if a complex descriptor is available or false otherwise.
 	 */
 	public boolean isComplexDescriptorAvailable();
 
 	/**
+	 * Checks if a user descriptor is available.
+	 * 
 	 * @return true if a user descriptor is available or false otherwise.
 	 */
 	public boolean isUserDescriptorAvailable();
 
 	/**
-	 * @return returns the information about the frequency band the radio is
-	 *         currently operating on.
+	 * Returns the radio frequency band the node is currently operating on.
+	 * 
+	 * @return returns the information about the radio frequency band the node
+	 *         is currently operating on.
 	 */
 	public ZigBeeFrequencyBand getFrequencyBand();
 
 	/**
-	 * @return the MAC Capability Flags field information
+	 * Returns the MAC Capability Flags field information.
+	 * 
+	 * @return the MAC Capability Flags field information.
 	 */
 	public ZigBeeMacCapabiliyFlags getMacCapabilityFlags();
 
 	/**
-	 * @return the manufacurer code field.
+	 * Returns the manufacturer code of the described node.
+	 * 
+	 * @return the manufacturer code of the described node.
 	 */
 	public int getManufacturerCode();
 
 	/**
-	 * @return the maximum buffer size field.
+	 * Returns the maximum buffer size of the described node.
+	 * 
+	 * @return the maximum buffer size of the described node.
 	 */
 	public int getMaxBufferSize();
 
 	/**
-	 * @return the maximum incoming transfer size field.
+	 * Returns the maximum incoming transfer size of the described node.
+	 * 
+	 * @return the maximum incoming transfer size of the described node.
 	 */
 	public int getMaxIncomingTransferSize();
 
 	/**
-	 * @return the maximum outgoing transfer size field.
+	 * Returns the maximum outgoing transfer size of the described node.
+	 * 
+	 * @return the maximum outgoing transfer size of the described node.
 	 */
 	public int getMaxOutgoingTransferSize();
 
 	/**
-	 * @return the server mask field.
+	 * Returns the server mask of the described node.
+	 * 
+	 * @return the server mask of the described node.
 	 */
 	public ZigBeeServerMask getServerMask();
 
 	/**
+	 * Checks if extended active endpoint list is available.
+	 * 
 	 * @return true if extended active endpoint list is available or false
 	 *         otherwise.
 	 */
 	public boolean isExtendedActiveEndpointListAvailable();
 
 	/**
+	 * Checks if extended simple descriptor is available.
+	 * 
 	 * @return true if extended simple descriptor is available or false
 	 *         otherwise.
 	 */

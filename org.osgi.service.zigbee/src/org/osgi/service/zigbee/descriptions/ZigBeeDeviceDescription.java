@@ -17,39 +17,51 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee device description
+ * This interface represents a ZigBee device description.
  * 
  * @author $Id$
  */
 public interface ZigBeeDeviceDescription {
 
 	/**
-	 * @return The device identifier.
+	 * Returns the device identifier.
+	 * 
+	 * @return the device identifier.
 	 */
 	public int getId();
 
 	/**
-	 * @return The device name.
+	 * Returns the device name.
+	 * 
+	 * @return the device name.
 	 */
 	public String getName();
 
 	/**
-	 * @return The device version.
+	 * Returns the device version.
+	 * 
+	 * @return the device version.
 	 */
 	public Integer getVersion();
 
 	/**
-	 * @return The profile identifier.
+	 * Returns the profile identifier.
+	 * 
+	 * @return the profile identifier.
 	 */
 	public int getProfileId();
 
 	/**
-	 * @return An array of server cluster description.
+	 * Returns an array of server cluster descriptions.
+	 * 
+	 * @return an array of server cluster descriptions.
 	 */
 	public ZCLClusterDescription[] getServerClustersDescriptions();
 
 	/**
-	 * @return an array of client cluster description.
+	 * Returns an array of client cluster descriptions.
+	 * 
+	 * @return an array of client cluster descriptions.
 	 */
 	public ZCLClusterDescription[] getClientClustersDescriptions();
 
