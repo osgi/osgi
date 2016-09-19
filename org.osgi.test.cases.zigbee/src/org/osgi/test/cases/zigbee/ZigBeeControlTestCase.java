@@ -637,7 +637,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		boolean isSuccess;
 
-		// cluster.readAttributes
+		/*
+		 * tests ZCLCluster.readAttributes()
+		 */
 		Promise p = cluster.readAttributes(zclAttributeInfos);
 		waitForPromise(p);
 
@@ -646,8 +648,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		assertTrue("isSuccess is expected not to be false. ", isSuccess);
 		log("handlerCluster.getSuccessResponse(): " + p.getValue());
 
-		// cluster.writeAttributes(undivided, attributesRecords,
-		// handlerCluster);
+		/*
+		 * tests ZCLCluster.writeAttributes()
+		 */
 		boolean undivided = true;
 		Map attributesIdsAndValues = null;
 		p = cluster.writeAttributes(undivided, attributesIdsAndValues);
@@ -657,9 +660,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		assertTrue("isSuccess is expected not to be false.", isSuccess);
 		log("handlerCluster.getSuccessResponse(): " + p.getValue());
 
-		// Test "control" methods of ZCLAttribute.
-
-		// attributes
+		/*
+		 * tests ZCLCluster.getAttributes()
+		 */
 		p = cluster.getAttributes();
 		waitForPromise(p);
 		ZCLAttribute[] attributes = (ZCLAttribute[]) p.getValue();
@@ -680,9 +683,9 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
-		// Test "control" methods of ZigBeeCluster.
-
-		// cluster
+		/*
+		 * tests ZCLCluster.getCommandIds()
+		 */
 		p = cluster.getCommandIds();
 		waitForPromise(p);
 		int[] commandIds = (int[]) (p.getValue());
@@ -708,7 +711,6 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 				assertNotNull("Response is NULL", frameResponse);
 				assertTrue(Arrays.equals(frameResponse.getBytes(), conf.getResponseFullFrame()));
 			}
-
 		} catch (ZCLException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");

@@ -47,9 +47,9 @@ public class ConfigurationFileReader {
 
 	private static ConfigurationFileReader	instance;
 	private ZigBeeHostImpl					host;
-	private int								headerMinSize						= 1;
-	private int								headerMaxSize						= 1;
-	private ZCLAttribute					firstAttributeWithBooleanDatatype	= null;
+	private int								headerMinSize			= 1;
+	private int								headerMaxSize			= 1;
+	private ZCLAttribute					firstBooleanAttribute	= null;
 
 	private ConfigurationFileReader(InputStream is) {
 		readXmlFile(is);
@@ -125,8 +125,8 @@ public class ConfigurationFileReader {
 		return headerMaxSize;
 	}
 
-	public ZCLAttribute getFirstAttributeWithBooleanDatatype() {
-		return firstAttributeWithBooleanDatatype;
+	public ZCLAttribute getFirstBooleanAttribute() {
+		return firstBooleanAttribute;
 	}
 
 	/**
@@ -504,33 +504,30 @@ public class ConfigurationFileReader {
 	private ZCLAttribute getZCLAttribute(Element attrElt) {
 		ZCLAttribute attr = null;
 
-		NodeList attrList = attrElt
-				.getElementsByTagName("attributeDescription");
+		NodeList attrList = attrElt.getElementsByTagName("attributeDescription");
 		Node attributeDescriptionNode = attrList.item(0);
-		if (attributeDescriptionNode != null
-				&& attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
+		if (attributeDescriptionNode != null && attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element attrDescriptionsElement = (Element) attributeDescriptionNode;
 			String id = attrDescriptionsElement.getAttribute("id");
-			String isReadOnly = attrDescriptionsElement
-					.getAttribute("isReadOnly");
-			String defaultValue = attrDescriptionsElement
-					.getAttribute("defaultValue");
+			String isReadOnly = attrDescriptionsElement.getAttribute("isReadOnly");
+			String defaultValue = attrDescriptionsElement.getAttribute("defaultValue");
 			String name = attrDescriptionsElement.getAttribute("name");
-			String isMandatory = attrDescriptionsElement
-					.getAttribute("isMandatory");
-			String isReportable = attrDescriptionsElement
-					.getAttribute("isReportable");
+			String isMandatory = attrDescriptionsElement.getAttribute("isMandatory");
+			String isReportable = attrDescriptionsElement.getAttribute("isReportable");
 			String datatype = attrDescriptionsElement.getAttribute("dataType");
 
 			Class cls;
+
 			try {
-				cls = Class
-						.forName("org.osgi.service.zigbee.types." + datatype);
+				cls = Class.forName("org.osgi.service.zigbee.types." + datatype);
+
 				Class[] classes = {};
+
 				Method method = cls.getMethod("getInstance", classes);
-				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method
-						.invoke(null, null);
-				ZCLAttributeDescriptionImpl attrDescImpl = new ZCLAttributeDescriptionImpl(
+
+				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method.invoke(null, null);
+
+				ZCLAttributeDescriptionImpl attributeDescription = new ZCLAttributeDescriptionImpl(
 						new Integer(id).intValue(),
 						new Boolean(isReadOnly).booleanValue(),
 						defaultValue,
@@ -538,9 +535,10 @@ public class ConfigurationFileReader {
 						new Boolean(isMandatory).booleanValue(),
 						new Boolean(isReportable).booleanValue(),
 						dataTypeDesc);
-				attr = new ZCLAttributeImpl(attrDescImpl);
+
+				attr = new ZCLAttributeImpl(attributeDescription);
 				if ("ZigBeeBoolean".equals(datatype)) {
-					firstAttributeWithBooleanDatatype = attr;
+					firstBooleanAttribute = attr;
 				}
 
 			} catch (ClassNotFoundException e) {

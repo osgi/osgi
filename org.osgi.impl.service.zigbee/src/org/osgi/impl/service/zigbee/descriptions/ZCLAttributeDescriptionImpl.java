@@ -76,7 +76,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public String getShortDescription() {
-
 		return null;
 	}
 
@@ -89,7 +88,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isPartOfAScene() {
-
 		return false;
 	}
 
@@ -100,7 +98,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isManufacturerSpecific() {
-
 		return false;
 	}
 
@@ -110,8 +107,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public ZCLDataTypeDescription getDataType() {
-
 		return datatype;
 	}
-
 }

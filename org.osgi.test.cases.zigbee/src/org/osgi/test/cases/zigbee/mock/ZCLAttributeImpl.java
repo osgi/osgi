@@ -36,9 +36,6 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 	private Object					value;
 	private ZCLAttributeDescription	description;
 
-	/**
-	 * @param desc
-	 */
 	public ZCLAttributeImpl(ZCLAttributeDescription desc) {
 		id = desc.getId();
 		value = desc.getDefaultValue();
