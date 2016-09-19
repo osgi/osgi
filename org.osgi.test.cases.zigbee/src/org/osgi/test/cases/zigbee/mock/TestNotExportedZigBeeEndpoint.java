@@ -20,7 +20,6 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
-import junit.framework.Assert;
 
 /**
  * for test purpose only.
@@ -28,21 +27,22 @@ import junit.framework.Assert;
  */
 public class TestNotExportedZigBeeEndpoint extends ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
-	private boolean notExportedHasBeenCalled = false;
+	private ZigBeeException notExportedException = null;
 
 	public TestNotExportedZigBeeEndpoint(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs,
 			ZigBeeSimpleDescriptor simpleDescriptor) {
 		super(id, inputs, ouputs, simpleDescriptor);
 	}
 
-	public void notExported(ZigBeeException e) {
-		notExportedHasBeenCalled = true;
-		Assert.assertEquals("the Endpoint Not exported is called with the wrong exception",
-				ZigBeeException.OSGI_EXISTING_ID,
-				e.getErrorCode());
+	public synchronized void notExported(ZigBeeException e) {
+		notExportedException = e;
 	}
 
-	public boolean notExportedHasBeenCalled() {
-		return notExportedHasBeenCalled;
+	/**
+	 * Used by the testExport() test case to retrieve the value the exception
+	 * passed in the notExported() callback.
+	 */
+	public synchronized ZigBeeException getNotExportedException() {
+		return notExportedException;
 	}
 }

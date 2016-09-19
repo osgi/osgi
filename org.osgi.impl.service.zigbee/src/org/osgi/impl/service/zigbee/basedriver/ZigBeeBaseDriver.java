@@ -17,7 +17,6 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -34,6 +33,7 @@ import org.osgi.impl.service.zigbee.event.ZigBeeEventImpl;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.impl.service.zigbee.util.teststep.TestStepForZigBeeImpl;
 import org.osgi.impl.service.zigbee.util.teststep.ZigBeeEventSourceImpl;
+import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -63,7 +63,7 @@ public class ZigBeeBaseDriver {
 	private ServiceRegistration		sReg				= null;
 	private ServiceRegistration		sRegTestStep		= null;
 
-	private static final String		EXPORTED_EPS_FILTER	= "(&(objectclass=" + ZigBeeEndpoint.class.getName() + ")(" + ZigBeeEndpoint.ZIGBEE_EXPORT + "=))";
+	private static final String		EXPORTED_EPS_FILTER	= "(&(objectClass=" + ZigBeeEndpoint.class.getName() + ")(" + ZigBeeEndpoint.ZIGBEE_EXPORT + "=*))";
 
 	/**
 	 * This constructor creates the ZigBeeBaseDriver object based on the
@@ -152,22 +152,34 @@ public class ZigBeeBaseDriver {
 	 */
 
 	protected boolean tryToExportEndpoint(ZigBeeEndpoint newEndpoint) {
+		if ((newEndpoint.getId() > 0xfe) || (newEndpoint.getId() < 0)) {
+			newEndpoint.notExported(new ZDPException(ZDPException.INVALID_EP, "endpoint IDs must be in the range [0, 254]"));
+			return false;
+		}
+
 		for (Iterator it = exportedEpsList.iterator(); it.hasNext();) {
 			ZigBeeEndpoint endpoint = (ZigBeeEndpoint) it.next();
 			if (endpoint.getId() == newEndpoint.getId() && endpoint.getNodeAddress().equals(newEndpoint.getNodeAddress())) {
+				/*
+				 * Once the notExported() method has been called once we can
+				 * immediately return without iterating over the remaining
+				 * already exported endpoints.
+				 */
 				try {
 					newEndpoint.notExported(new ZigBeeException(ZigBeeException.OSGI_EXISTING_ID, "this Id already exists"));
+					return false;
 				} catch (Throwable e) {
 					/*
 					 * Isolates the RI from any exception occurring calling the
 					 * notExported() method.
 					 */
+
 					Logger.e(TAG, "got from the endpoint exception '" + e.getMessage() + "' while calling notExported()");
 				}
 				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	/**

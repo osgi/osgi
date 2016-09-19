@@ -30,8 +30,10 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
@@ -951,90 +953,120 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	 * property set.
 	 */
 
-	public void hold_testExport() {
+	public void testExport() {
 		log("---- testExport");
 
 		BundleContext bc = getContext();
 
-		ZigBeeNodeConfig devConf = conf.getNode0();
-		ZigBeeEndpointConfig ep = devConf.getEnpoints()[0];
+		BigInteger hostIeeeAddresss = conf.getZigBeeHost().getIEEEAddress();
+
+		ZigBeeHost host = this.getZigBeeHost(hostIeeeAddresss);
+
+		ZigBeeNodeConfig nodeConfig = conf.getNode0();
+
+		/*
+		 * The exported endpoint identifier cannot be a broadcast endpoint.
+		 */
+		short broadcastEndpointId = 0xff;
+		this.registerInvalidEndpointId(bc, host, nodeConfig, broadcastEndpointId);
+
+		/*
+		 * The exported endpoint identifier must be in the range [0, 0xff)
+		 */
+		this.registerInvalidEndpointId(bc, host, nodeConfig, (short) 300);
+
+		this.registerInvalidEndpointId(bc, host, nodeConfig, (short) -10);
+	}
+
+	/**
+	 * Used to verify if the RI is calling the appropriate notExported()
+	 * callback if a ZigBeeEndpoint with wrong properties is exported.
+	 * 
+	 * @param bc The BundleContext
+	 * @param host The ZigBeeHost where to export the ZigBeeEndpoint.
+	 * @param invalidEndpointId An invalid value of the endpoint identifier.
+	 */
+
+	private void registerInvalidEndpointId(BundleContext bc, ZigBeeHost host, ZigBeeNodeConfig nodeConfig, short invalidEndpointId) {
 
 		/**
-		 * Create a first endpoint, but we need to create clusters, first.
+		 * Try to export an invalid ZigBeeEnpoint, by setting invalid values of
+		 * the service properties. The invalid endpoint is configured with some
+		 * ZCLClusters that are the exact couterpart of the first node found in
+		 * the xml file provided by the user.
 		 */
 
+		ZigBeeEndpoint[] hostEndpoints = host.getEndpoints();
+
+		assertNotNull("ZigBeeHost.getEndpoints() cannot return null", hostEndpoints);
+
+		int initialHostEndpointsNumber = host.getEndpoints().length;
+
+		ZigBeeEndpointConfig ep = nodeConfig.getEndpoints()[0];
+
 		ZCLClusterConfig[] serverClustersConfig = ep.getServerClusters();
+		ZCLClusterConfig[] clientClustersConfig = ep.getServerClusters();
 
 		ZCLCluster[] serverClusters = new ZCLCluster[serverClustersConfig.length];
+		ZCLCluster[] clientClusters = new ZCLCluster[clientClustersConfig.length];
 
-		for (int i = 0; i < serverClustersConfig.length; i++) {
-			ZCLClusterConfig clusterConfig = serverClustersConfig[i];
-			ZCLCluster cluster = new ZCLClusterImpl(clusterConfig.getId(), clusterConfig.getCommandIds(), clusterConfig.getAttributes());
+		for (int i = 0; i < serverClusters.length; i++) {
+			ZCLCluster cluster = new ZCLClusterImpl(serverClustersConfig[i]);
 			serverClusters[i] = cluster;
 		}
 
-		ZCLClusterConfig[] clientClustersConfig = ep.getClientClusters();
-		ZCLCluster[] clientClusters = new ZCLCluster[clientClustersConfig.length];
-
-		for (int i = 0; i < clientClustersConfig.length; i++) {
-			ZCLClusterConfig clusterConfig = clientClustersConfig[i];
-			ZCLCluster cluster = new ZCLClusterImpl(clusterConfig.getId(), clusterConfig.getCommandIds(), clusterConfig.getAttributes());
+		for (int i = 0; i < clientClusters.length; i++) {
+			ZCLCluster cluster = new ZCLClusterImpl(clientClustersConfig[i]);
 			clientClusters[i] = cluster;
 		}
 
-		ZigBeeEndpoint testEp = new TestNotExportedZigBeeEndpoint(ep.getId(), serverClusters, clientClusters, ep.getSimpleDescriptor());
+		/**
+		 * Creates a ZigBeeEndpoint swapping the client and server clusters and
+		 * by using a wrong endpoint identifier (endpoint broadcast)
+		 */
+
+		ZigBeeEndpoint badEnpoint = new TestNotExportedZigBeeEndpoint(invalidEndpointId, clientClusters, serverClusters, ep.getSimpleDescriptor());
 
 		Dictionary endpointProperties = new Properties();
-		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, devConf.getIEEEAddress());
-		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(testEp.getId()));
+		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, host.getIEEEAddress());
+		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(badEnpoint.getId()));
 		endpointProperties.put(ZigBeeEndpoint.ZIGBEE_EXPORT, "exported");
-		// register test endpoint
-		log("Register  endpoint: " + testEp + " in the OSGi services registry");
-		bc.registerService(ZigBeeEndpoint.class.getName(), testEp, endpointProperties);
+
+		/*
+		 * Register this ZigBeeEndpoint
+		 */
+
+		log("Register  endpoint: " + badEnpoint + " in the OSGi services registry");
+
+		bc.registerService(ZigBeeEndpoint.class.getName(), badEnpoint, endpointProperties);
 
 		try {
 			/*
 			 * It might takes time to register the service test framework.
 			 */
-			log("Thread.sleep(" + DISCOVERY_TIMEOUT + ")");
+			log("Waiting wait for a discovery timeout value of milliseconds = " + DISCOVERY_TIMEOUT);
 			Thread.sleep(DISCOVERY_TIMEOUT);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			fail("No exception is expected.");
+			fail("No exception is expected during sleep!");
 		}
 
-		boolean notExported = ((TestNotExportedZigBeeEndpoint) testEp).notExportedHasBeenCalled();
+		TestNotExportedZigBeeEndpoint t = (TestNotExportedZigBeeEndpoint) badEnpoint;
 
-		assertTrue("the method notExported should have been called", notExported);
+		ZigBeeException notExportedException = t.getNotExportedException();
 
-		// adding an endpoint
-
-		endpointProperties = new Properties();
-		BigInteger ieeeAddress = devConf.getIEEEAddress();
-		ZigBeeNode node = getZigBeeNode(ieeeAddress);
-		int endpointsNb = node.getEndpoints().length;
-
-		endpointProperties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
-		endpointProperties.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(testEp.getId()));
-
-		ZigBeeEndpoint ep2 = new ZigBeeEndpointImpl((short) getValidEndpointId(node), null, null, null);
-
-		bc.registerService(ZigBeeEndpoint.class.getName(), ep2, endpointProperties);
-
-		try {
-			// It might takes time to register the service
-			// test framework.
-			int sleepinms = DISCOVERY_TIMEOUT;
-			log("Thread.sleep(" + sleepinms + ")");
-			Thread.sleep(sleepinms);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			fail("No exception is expected.");
+		if (notExportedException == null) {
+			fail("method ZigBeeEndpoint.notExported() should have been called within the discovery timeout, as expected.");
+		} else if (notExportedException instanceof ZDPException) {
+			assertEquals("method ZigBeeEndpoint.notExported() was called with the wrong exception error code",
+					ZDPException.INVALID_EP,
+					notExportedException.getErrorCode());
+		} else {
+			fail("the ZigBeeEndpoint.notExported() method has been called with the wrong exception (it should be a ZDPException.INVALID_EP.");
 		}
-		int newNb = node.getEndpoints().length;
 
-		assertTrue("the nubmber of endpoints for the node " + ieeeAddress + " did not change",
-				newNb == endpointsNb + 1);
+		int newNb = host.getEndpoints().length;
+		assertEquals("The number of enpoints returned by the ZigBeeHost.getEnpoints() is changed desipite the ZigBee endpoint is wrong.", newNb, initialHostEndpointsNumber);
 
 	}
 
