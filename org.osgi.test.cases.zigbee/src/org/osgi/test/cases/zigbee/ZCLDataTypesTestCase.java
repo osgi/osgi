@@ -765,7 +765,6 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				byte[] time = new byte[] {0x01, 0x02, (byte) 0xff, 0x04};
 				byte[] timeWrong = new byte[] {0x01, 0x02, (byte) 0xff, 0x04, 0x05};
 
-				// FIXME: which is the right order of the bytes of a date???
 				checkArrayValues(dataType, payload, time, size, new byte[] {0x01, 0x02, (byte) 0xff, 0x04});
 
 				try {
