@@ -90,23 +90,6 @@ public class TestStepLauncher {
 		return confReader;
 	}
 
-	// private String readFile(String file) throws IOException {
-	// String result = "";
-	// try {
-	// String line;
-	// File myFile = new File(file);
-	// BufferedReader inFile = new BufferedReader(new FileReader(myFile));
-	// while ((line = inFile.readLine()) != null) {
-	// result += line;
-	// }
-	// inFile.close();
-	// } catch (IOException e) {
-	// System.out.println("problem with file");
-	// }
-	//
-	// return result;
-	// }
-
 	public TestStepProxy getTeststepProxy() {
 		return tproxy;
 	}
