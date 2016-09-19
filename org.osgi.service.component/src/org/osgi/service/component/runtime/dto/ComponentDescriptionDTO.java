@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.component.runtime.dto;
 
 import java.util.Map;
+
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.BundleDTO;
 
@@ -101,11 +102,11 @@ public class ComponentDescriptionDTO extends DTO {
 	public String[]				serviceInterfaces;
 
 	/**
-	 * The declared component properties.
-	 * 
+	 * The component properties.
 	 * <p>
-	 * These are declared in the {@code property} and {@code properties}
-	 * elements.
+	 * These are declared in the component description by the {@code property}
+	 * and {@code properties} elements as well as the {@code target} attribute
+	 * of the {@code reference} elements.
 	 */
 	public Map<String, Object>	properties;
 
