@@ -49,7 +49,6 @@ import org.osgi.test.cases.zigbee.mock.TestNotExportedZigBeeEndpoint;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeEndpointImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.step.TestStepProxy;
 import org.osgi.util.promise.Promise;
@@ -78,12 +77,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 	 * the OSGi framework as a service. This constant is read from the
 	 * configuration file provided by the RI.
 	 */
-	public static int			DISCOVERY_TIMEOUT	= 3000;
+	public static int			DISCOVERY_TIMEOUT	= 10000;
 
 	ConfigurationFileReader		conf;
 
 	protected void setUp() throws Exception {
-		log("Prepare for ZigBee Test Case");
+		log(TAG + " - Prepare for ZigBee Test Case");
 
 		prepareTestStart();
 		log("Prepared for ZigBee Test Case");
@@ -116,9 +115,12 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 	/**
 	 * Tests related to Node Discovery.
+	 * 
+	 * @throws Exception
+	 * 
 	 */
 	public void testNodeDiscovery() throws Exception {
-		log("---- testNodeDiscovery");
+		log(TAG + "---- testNodeDiscovery");
 
 		// get the endpoint values in the conf file
 		ZigBeeNodeConfig nodeConfig = conf.getNode0();
@@ -127,7 +129,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		ZigBeeNode node = getZigBeeNode(nodeConfig.getIEEEAddress());
 		try {
 
-			// check endpoints number
+			// checks endpoints number
 			int endpointNb = nodeConfig.getActualEndpointsNumber();
 
 			int registeredEnpointNb = getRegisteredEnpoints(nodeConfig.getIEEEAddress());
@@ -156,7 +158,7 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 			assertNotNull("node descriptor is NULL", zigBeeNodeDescriptor);
 
-			log("ZigBeeNode LOGICAL_TYPE: " + zigBeeNodeDescriptor.getLogicalType());
+			log(TAG + " - ZigBeeNode LOGICAL_TYPE: " + zigBeeNodeDescriptor.getLogicalType());
 			assertEquals("Logical type not matched", nodeDescConf.getLogicalType(), zigBeeNodeDescriptor.getLogicalType());
 
 			p = node.getNodeDescriptor();
@@ -390,11 +392,8 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 			return (ZigBeeHost) service;
 
 		} catch (InterruptedException e) {
-
 			e.printStackTrace();
-
 		} catch (InvalidSyntaxException e1) {
-
 			e1.printStackTrace();
 		}
 		return host;
