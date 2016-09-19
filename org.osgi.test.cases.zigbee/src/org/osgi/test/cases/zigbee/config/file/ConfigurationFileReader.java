@@ -59,7 +59,7 @@ public class ConfigurationFileReader {
 
 	private static ConfigurationFileReader	instance;
 	private ZigBeeHostConfig				host;
-	public ZigBeeNodeConfig[]				nodes;
+	private ZigBeeNodeConfig[]				nodes;
 	private int								headerMinSize	= 1;
 	private int								headerMaxSize	= 1;
 	private int								discoveryTimeout;
@@ -73,14 +73,21 @@ public class ConfigurationFileReader {
 		readXmlFile(is);
 	}
 
-	public static ConfigurationFileReader getInstance(InputStream is) {
+	/**
+	 * Retrieves a singleton instance of the ConfigurationFileReader class.
+	 * 
+	 * @param is An {@link InputStream} of the xml file to parse.
+	 * @return a {@link ConfigurationFileReader} instance.
+	 */
+
+	public synchronized static ConfigurationFileReader getInstance(InputStream is) {
 		if (instance == null) {
 			return new ConfigurationFileReader(is);
 		}
 		return instance;
 	}
 
-	public void readXmlFile(InputStream is) {
+	private void readXmlFile(InputStream is) {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try {
@@ -93,10 +100,8 @@ public class ConfigurationFileReader {
 				getFrameInfo(doc);
 
 			} catch (SAXException e) {
-
 				e.printStackTrace();
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 		} catch (ParserConfigurationException e) {
@@ -702,5 +707,4 @@ public class ConfigurationFileReader {
 		}
 		return data;
 	}
-
 }
