@@ -55,7 +55,7 @@ public class TestStepLauncher {
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String		riConfFilename			= "zigbee-template.xml";
+	private static final String		riConfFilename			= "ri-config.xml";
 
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;

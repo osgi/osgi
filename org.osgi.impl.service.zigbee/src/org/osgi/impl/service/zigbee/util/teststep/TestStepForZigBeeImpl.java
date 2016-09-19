@@ -37,7 +37,7 @@ public class TestStepForZigBeeImpl implements TestStep {
 	static public final String	ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
 	public static final String	EVENT_REPORTABLE		= "event_reportable";
 
-	private String				confFilePath			= "zigbee-template.xml";
+	private String				confFilePath			= "ri-config.xml";
 
 	private ZigBeeBaseDriver	baseDriver;
 
