@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import java.lang.annotation.Target;
 /**
  * Identify the annotated method as the {@code activate} method of a Service
  * Component.
- * 
  * <p>
- * The annotated method is the activate method of the Component.
- * 
+ * The annotated method is the activate method of the Component. A constructor
+ * can also be used as the activate method of the Component.
  * <p>
  * This annotation is not processed at runtime by Service Component Runtime. It
  * must be processed by tools and used to add a Component Description to the
@@ -38,7 +37,9 @@ import java.lang.annotation.Target;
  * @since 1.1
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.METHOD)
+@Target({
+		ElementType.METHOD, ElementType.CONSTRUCTOR
+})
 public @interface Activate {
 	// marker annotation
 }

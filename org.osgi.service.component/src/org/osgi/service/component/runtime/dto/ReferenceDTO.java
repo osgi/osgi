@@ -145,4 +145,27 @@ public class ReferenceDTO extends DTO {
 	 * not declare a scope for the reference.
 	 */
 	public String	scope;
+
+	/**
+	 * The zero-based parameter number of the constructor parameter for the
+	 * reference.
+	 * <p>
+	 * This is declared in the {@code parameter} attribute of the
+	 * {@code reference} element. This must be zero if the component description
+	 * does not declare a parameter number for the reference.
+	 * 
+	 * @since 1.4
+	 */
+	public int		parameter;
+
+	/**
+	 * The collection type for the reference.
+	 * <p>
+	 * This is declared in the {@code field-collection-type} attribute of the
+	 * {@code reference} element. This must be {@code null} if the component
+	 * description does not declare a collection type for the reference.
+	 * 
+	 * @since 1.4
+	 */
+	public String	collectionType;
 }
