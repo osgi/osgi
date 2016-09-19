@@ -55,6 +55,8 @@ public class TestStepLauncher {
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
+	private static final String		riConfFilename			= "zigbee-template.xml";
+
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
 
@@ -80,7 +82,7 @@ public class TestStepLauncher {
 
 		InputStream is = null;
 
-		if (!configFilePath.equals("zigbee-template.xml")) {
+		if (!configFilePath.equals(riConfFilename)) {
 			// the file is not the RI one.
 			is = new FileInputStream(configFilePath);
 		} else {
