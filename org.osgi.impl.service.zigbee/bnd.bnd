@@ -4,6 +4,7 @@
 Bundle-Vendor				= Orange
 Bundle-Activator			= ${p}.ZigBeeBundleActivator
 Bundle-Description			= The ZigBee bundle with Control Point stack
+Include-Resource            = zigbee-template.xml
 
 Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true

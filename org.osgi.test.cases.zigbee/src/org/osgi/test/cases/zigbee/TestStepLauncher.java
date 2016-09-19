@@ -91,6 +91,7 @@ public class TestStepLauncher {
 
 					URL url = bundles[i].getEntry(configFilePath);
 					is = url.openStream();
+					break;
 				}
 			}
 			if (is == null) {
