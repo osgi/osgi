@@ -102,8 +102,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public int getManufacturerCode() {
-
-		return 0;
+		return -1;
 	}
 
 	public ZCLDataTypeDescription getDataType() {
