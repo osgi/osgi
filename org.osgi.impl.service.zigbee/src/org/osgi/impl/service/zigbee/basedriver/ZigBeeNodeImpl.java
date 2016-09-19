@@ -160,7 +160,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public ZigBeeEndpoint[] getEndpoints() {
-
+		if (endpoints == null) {
+			return new ZigBeeEndpoint[0];
+		}
 		return endpoints;
 	}
 
