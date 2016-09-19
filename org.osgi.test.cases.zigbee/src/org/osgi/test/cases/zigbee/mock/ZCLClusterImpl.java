@@ -27,11 +27,12 @@ import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.test.cases.zigbee.config.file.ZCLClusterConfig;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * Mocked impl.
+ * ZCLCluster intreface mocked implementation.
  * 
  * @author $Id$
  */
@@ -45,6 +46,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 		this.id = id;
 		this.commandIds = commandIds;
 		this.attributes = attributes;
+	}
+
+	public ZCLClusterImpl(ZCLClusterConfig config) {
+		this.id = config.getId();
+		this.commandIds = config.getCommandIds();
+		this.attributes = config.getAttributes();
 	}
 
 	public int getId() {
