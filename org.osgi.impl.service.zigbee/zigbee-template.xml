@@ -11,7 +11,7 @@
 	Timeouts are expressed in milliseconds.
 -->
 	
-<zigBeeconf discoveryTimeout="10000" invokeTimeout="3000">
+<zigBeeconf discoveryTimeout="5000" invokeTimeout="3000">
  <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" >
  	<nodeDescriptor type="2"/>
  </host>
