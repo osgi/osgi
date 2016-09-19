@@ -29,6 +29,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
  * <li>The java class used to represent the data type.
  * </ul>
  * 
+ * @noimplement
  * 
  * @author $Id$
  */

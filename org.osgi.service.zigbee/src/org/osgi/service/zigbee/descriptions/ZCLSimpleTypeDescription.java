@@ -31,10 +31,10 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
  * <p>
- * Related documentation:
- * [1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29,
- * 2012.
+ * Related documentation:<br>
+ * [1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29, 2012.
  * 
+ * @noimplement
  * 
  * @author $Id$
  */

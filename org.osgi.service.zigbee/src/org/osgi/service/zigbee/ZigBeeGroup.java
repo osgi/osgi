@@ -22,6 +22,7 @@ import org.osgi.util.promise.Promise;
  * This interface represents a ZigBee Group.
  * 
  * @noimplement
+ * 
  * @author $Id$
  */
 public interface ZigBeeGroup {
