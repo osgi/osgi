@@ -47,7 +47,7 @@ public class ZigBeeNodeConfig {
 		return host.getHostPid();
 	}
 
-	public ZigBeeEndpointConfig[] getEnpoints() {
+	public ZigBeeEndpointConfig[] getEndpoints() {
 		return endpoints;
 	}
 

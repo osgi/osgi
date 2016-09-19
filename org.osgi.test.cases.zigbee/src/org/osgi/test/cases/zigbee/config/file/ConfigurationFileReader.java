@@ -197,7 +197,7 @@ public class ConfigurationFileReader {
 	}
 
 	public ZigBeeEndpointConfig[] getEnpoints(ZigBeeNodeConfig node) {
-		return node.getEnpoints();
+		return node.getEndpoints();
 	}
 
 	private void getHost(Document doc) {
@@ -285,7 +285,7 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
 				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
@@ -319,7 +319,7 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
 				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
@@ -353,7 +353,7 @@ public class ConfigurationFileReader {
 		int attributeId;
 
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
 				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
@@ -385,7 +385,7 @@ public class ConfigurationFileReader {
 		short endpointId;
 		int clusterId;
 		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpointConfig[] endpoints = nodes[i].getEnpoints();
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
 			ieeeAddresss = nodes[i].getIEEEAddress();
 			for (int j = 0; j < endpoints.length; j++) {
 				ZCLClusterConfig[] serverClusters = endpoints[j].getServerClusters();
