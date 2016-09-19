@@ -245,7 +245,6 @@ public class ConfigurationFileReader {
 					String ieeeAddress = nodeElement.getAttribute("ieeeAddress");
 					String userDescription = nodeElement.getAttribute("userDescription");
 					String endpointNb = nodeElement.getAttribute("endpointNb");
-
 					String nwkAddress = nodeElement.getAttribute("nwkAddress");
 
 					NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");

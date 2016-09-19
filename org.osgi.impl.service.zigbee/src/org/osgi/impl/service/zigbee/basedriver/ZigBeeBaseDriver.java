@@ -92,21 +92,16 @@ public class ZigBeeBaseDriver {
 					boolean hasBeenExported = tryToExportEndpoint(endpoint);
 					if (hasBeenExported) {
 						addExportedEndpoint(endpoint);
-						ZigBeeNode node = getZigBeeNode(endpoint.getNodeAddress());
-						if (node == null) {
-							Logger.e(TAG, "Fatal error: this must never happen");
-						} else {
-							node.getEndpoints();
-						}
 					}
 					return endpoint;
 				}
 
 				public void modifiedService(ServiceReference reference, Object service) {
 					/*
-					 * In our CT we don't test this scenario, because it is
-					 * really unlikely that an exported service changes its
-					 * properties.
+					 * It should check if the service, since the service
+					 * properties are changed can now be exported. In our CT we
+					 * do not issue this check (modify the service properties)
+					 * so we do not have to implement this method.
 					 */
 				}
 
@@ -138,10 +133,6 @@ public class ZigBeeBaseDriver {
 		if (this.sRegTestStep != null) {
 			sRegTestStep.unregister();
 		}
-
-		/**
-		 * TODO: unregister: ZigBeeNodes, ZigBeeEndpoints services.
-		 */
 
 		Logger.d(TAG, "Stop the base driver.");
 	}
@@ -273,7 +264,9 @@ public class ZigBeeBaseDriver {
 	}
 
 	/**
-	 * Called to simulate a reportable attribute.
+	 * Called to start to report an attribute. A better implementation would
+	 * start to report attributes only when ZigBeeEventListener service is
+	 * actually registered in the framework.
 	 */
 	public void startReportableEventing() {
 
@@ -294,25 +287,5 @@ public class ZigBeeBaseDriver {
 				value);
 
 		return event;
-	}
-
-	/**
-	 * We are in the base driver so we know which are the Nodes we registered
-	 * and we don't have to ask the Service registry for them!
-	 * 
-	 * @param nodeIeeeAddress
-	 * @return The {@link ZigBeeNode} that matches the passed nodeIeeeAddress.
-	 */
-
-	protected ZigBeeNode getZigBeeNode(BigInteger nodeIeeeAddress) {
-		ZigBeeNodeImpl[] nodes = conf.getZigBeeNodes();
-
-		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeNode node = nodes[i];
-			if (nodeIeeeAddress.equals(node.getIEEEAddress())) {
-				return node;
-			}
-		}
-		return null;
 	}
 }

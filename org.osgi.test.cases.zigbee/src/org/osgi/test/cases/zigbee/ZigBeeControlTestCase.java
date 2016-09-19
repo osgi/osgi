@@ -374,6 +374,16 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 		return node;
 	}
 
+	/**
+	 * Wait till a ZigBeeHost service with the passed
+	 * {@link ZigBeeNode.IEEE_ADDRESS} property equal to the passed one is
+	 * registered in the OSGi framework.
+	 * 
+	 * @param nodeIeeeAddress The IEEE address of the ZigBeeHost service to look
+	 *        for.
+	 * @return The service object of the ZigBeeHost.
+	 */
+
 	private ZigBeeHost getZigBeeHost(BigInteger nodeIeeeAddress) {
 		ZigBeeHost host = null;
 		BundleContext bc = getContext();
