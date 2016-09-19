@@ -18,7 +18,11 @@ package org.osgi.test.cases.zigbee;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
@@ -54,11 +58,18 @@ public class TestStepLauncher {
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
 
-	private TestStepLauncher(BundleContext bc) {
+	private TestStepLauncher(BundleContext bc) throws IOException {
 		tproxy = new TestStepProxy(bc);
 
-		String configFilePath = tproxy.execute(ASK_CONFIG_FILE_PATH,
-				"please type the configuration file path and be sure to fill it with your values:");
+		String msg = "Please type the absolute path of the xml file that contains the\n"
+				+ "information about the the zigbee network characteristics you are\n"
+				+ "going to use during this CT. A template of this file is available in\n"
+				+ "the OSGi A RI bundle (zigbee-template.xml). Please be careful to\n"
+				+ "provide an absolute path and NOT GIVE to this file\n"
+				+ "the name 'zigbee-template.xml' and that it is correctly filled\n"
+				+ "with your devices info\n";
+
+		String configFilePath = tproxy.execute(ASK_CONFIG_FILE_PATH, msg);
 
 		if ((configFilePath == null) || ((configFilePath != null) && (configFilePath.equals("")))) {
 			throw new IllegalArgumentException("invalid path");
@@ -67,19 +78,32 @@ public class TestStepLauncher {
 		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
 				"please please plug and setup all the devices described in the configuration file:");
 
-		InputStream is;
-		try {
+		InputStream is = null;
+
+		if (!configFilePath.equals("zigbee-template.xml")) {
+			// the file is not the RI one.
 			is = new FileInputStream(configFilePath);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
+		} else {
+			Bundle[] bundles = bc.getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				if (bundles[i].getSymbolicName().equals("org.osgi.impl.service.zigbee")) {
+					Enumeration e = bundles[i].getEntryPaths("");
+
+					URL url = bundles[i].getEntry(configFilePath);
+					is = url.openStream();
+				}
+			}
+			if (is == null) {
+				throw new FileNotFoundException("ZigBee RI not found.");
+			}
 		}
 
 		confReader = ConfigurationFileReader.getInstance(is);
+		is.close();
 		ZCLFrameImpl.minHeaderSize = confReader.getHeaderMinSize();
 	}
 
-	public static TestStepLauncher launch(BundleContext bc) {
+	public static TestStepLauncher launch(BundleContext bc) throws IOException {
 		if (instance == null) {
 			instance = new TestStepLauncher(bc);
 		}

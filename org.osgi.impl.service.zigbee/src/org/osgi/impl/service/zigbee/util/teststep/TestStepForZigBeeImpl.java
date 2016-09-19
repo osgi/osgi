@@ -16,7 +16,9 @@
 
 package org.osgi.impl.service.zigbee.util.teststep;
 
-import java.io.FileInputStream;
+import java.net.URL;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.test.support.step.TestStep;
@@ -28,6 +30,7 @@ import org.osgi.test.support.step.TestStep;
  * @author $Id$
  */
 public class TestStepForZigBeeImpl implements TestStep {
+
 	static private final String	TAG						= TestStepForZigBeeImpl.class.getName();
 
 	static public final String	ASK_CONFIG_FILE_PATH	= "file_path";
@@ -66,7 +69,9 @@ public class TestStepForZigBeeImpl implements TestStep {
 			 * file.
 			 */
 			try {
-				baseDriver.loadConfigurationFile(new FileInputStream(confFilePath));
+				Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+				URL url = bundle.getEntry(confFilePath);
+				baseDriver.loadConfigurationFile(url.openStream());
 			} catch (Exception e) {
 				Logger.d(TAG, "returns: null");
 				return null;
