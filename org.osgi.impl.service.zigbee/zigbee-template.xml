@@ -1,5 +1,4 @@
 <!-- 
-
 	This configuration file describes the ZigBee device that the tester 
 	is going to use to run the CT against a RI. It must be filled properly, according 
 	to the ZigBee devices that will be actually used for the compliant tests. This 
@@ -8,10 +7,11 @@
 	filled.
 	During the tests the CT will ask you to provide a path to the file you filled.
 	Its name MUST be different from zigbee-template.xml.
-
+	
+	Timeouts are expressed in milliseconds.
 -->
 	
-<zigBeeconf discoveryTimeout="100" invokeTimeout="3000">
+<zigBeeconf discoveryTimeout="10000" invokeTimeout="3000">
  <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" >
  	<nodeDescriptor type="2"/>
  </host>
