@@ -64,12 +64,10 @@ public class TestStepLauncher {
 		tproxy = new TestStepProxy(bc);
 
 		String msg = "Please type the absolute path of the xml file that contains the\n"
-				+ "information about the the zigbee network characteristics you are\n"
-				+ "going to use during this CT. A template of this file is available in\n"
-				+ "the OSGi A RI bundle (zigbee-template.xml). Please be careful to\n"
-				+ "provide an absolute path and NOT GIVE to this file\n"
-				+ "the name 'zigbee-template.xml' and that it is correctly filled\n"
-				+ "with your devices info\n";
+				+ "information about the zigbee network characteristics you are\n"
+				+ "going to use with your RI. A template of this file is available in\n"
+				+ "the CT distribution. Ensure yourself that this is correctly filled\n"
+				+ "with your ZigBee devices info\n";
 
 		String configFilePath = tproxy.execute(ASK_CONFIG_FILE_PATH, msg);
 
