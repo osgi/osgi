@@ -30,6 +30,7 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
@@ -49,6 +50,7 @@ import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
 import org.osgi.test.cases.zigbee.mock.TestNotExportedZigBeeEndpoint;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLAttributeInfoImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -821,54 +823,43 @@ public class ZigBeeControlTestCase extends DefaultTestBundleControl {
 
 		final int invalidId = attrIds.getAttributeId();
 
-		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfo() {
-
-			public boolean isManufacturerSpecific() {
-				return false;
-			}
-
-			public int getManufacturerCode() {
-				return 0;
-			}
-
-			public int getId() {
-				return invalidId;
-			}
-
-			public ZCLDataTypeDescription getDataType() {
-
-				ZCLDataTypeDescription dataType = new ZCLDataTypeDescription() {
-
-					public boolean isAnalog() {
-						return false;
-					}
-
-					public String getName() {
-						return "DeviceEnabled";
-					}
-
-					public Class getJavaDataType() {
-						return ZigBeeBoolean.class;
-					}
-
-					public short getId() {
-						return 0;
-					}
-				};
-				return dataType;
-			}
-		}};
+		/*
+		 * Creates a ZCLAttributeInfo related to a not existing attributeId.
+		 */
+		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfoImpl(invalidId, -1, ZigBeeBoolean.getInstance())};
 
 		Promise p = cluster.readAttributes(zclAttributeInfos);
 		waitForPromise(p);
 
-		assertNotNull("The response is successfull. BUT a failure is expected in this test case reading a invalid attribute.", p.getFailure());
+		/*
+		 * The returned promise must return a map with just one entry.
+		 */
 
-		assertTrue("The exception is not a ZCL exception", p.getFailure() instanceof ZCLException);
+		Object value = p.getValue();
+
+		assertNotNull("as return from a readAttribute, expected a Map, got null");
+
+		if (!(value instanceof Map)) {
+			fail("as return from a readAttribute, expected a Map, got class " + value.getClass().getName());
+		}
+
+		Map map = (Map) value;
+
+		if (map.size() != 1) {
+			assertEquals("as return from a readAttribute, expected a Map with a different size", 1, map.size());
+		}
+
+		ZCLReadStatusRecord readStatusRecord = (ZCLReadStatusRecord) map.get(new Integer(invalidId));
+
+		Exception failure = readStatusRecord.getFailure();
+
+		assertNotNull("The response is successfull. BUT a failure is expected in this test case reading a invalid attribute.", failure);
+
+		assertTrue("The exception is not a ZCL exception", failure instanceof ZCLException);
 
 		assertEquals("The ZCL exception is not an unsupported attribute exception",
 				ZCLException.UNSUPPORTED_ATTRIBUTE,
-				((ZCLException) p.getFailure()).getErrorCode());
+				((ZCLException) failure).getErrorCode());
 
 		// DATATYPE EXCEPTION
 
