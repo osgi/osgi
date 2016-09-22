@@ -17,19 +17,17 @@
 package org.osgi.service.converter;
 
 public class StandardConverter implements Converter {
-    private final Adapter adapter;
 
     public StandardConverter() {
-		adapter = null; // TODO provide a complete impl here
     }
 
     @Override
     public Converting convert(Object obj) {
-        return adapter.convert(obj);
+		return null;
     }
 
     @Override
-    public Adapter newAdapter() {
-        return adapter.newAdapter();
+	public ConverterBuilder newConverterBuilder() {
+		return null;
     }
 }
