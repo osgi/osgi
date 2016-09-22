@@ -37,8 +37,8 @@
 	
     <para>This specification defines the OSGi Converter that makes it easy to convert many types to other types, including scalars,
     Collections, Maps, Beans, Interfaces and DTOs without having to write the boilerplate conversion code. The converter
-    strictly adheres to the rule specified in this chapter. Converters can also be enhanced with custom behavior using converter
-    adapters. 
+    strictly adheres to the rule specified in this chapter. Converters can also be customized using converter
+    builders. 
     </para>
   </section> 
   
@@ -57,7 +57,7 @@
       </listitem>
       
       <listitem>
-        <para><emphasis>Adapter</emphasis> - an adapter can modify the behavior of a converter by specifying rules for specific conversions.</para>
+        <para><emphasis>Converter Builder</emphasis> - can create a customized converter by specifying rules for specific conversions.</para>
       </listitem>
       
       <listitem>
@@ -97,16 +97,17 @@ long[] la = c.convert(ls).to(long[].class);</programlisting>
     </para>
     
     <section>
-      <title>Adapting converters</title>
+      <title>Customizing converters</title>
       <para>The Standard Converter applies the conversion rules described in this specification. While this is 
-      useful for many applications, in some cases small deviations from the default rules may be necessary.
-      This can be done by using converter Adapters. Adapters accept custom rules that are used
-      when the applicable conversion is triggered. A new adapter for a converter is obtained by calling
-      <code>converter.newAdapter()</code>. Adapters extend the Converter interface so all the converter
-      operations apply to the adapter as well. This includes the ability to create adapters for existing
-      adapters, which makes it possible to customize existing adapters further without actually modifying
-      the behavior of the original adapter.
-      <remark>Would it make sense to make the adapters immutable? It might make the API a little awkward though...</remark>
+      useful for many applications, in some cases deviations from the default rules may be necessary.
+      This can be done by creating customized converter. 
+      Customized converters are created based on an existing converter with additional rules specified that
+      override the existing converter's behavior.
+      A customized converter is created through a 
+      <xref linkend="org.osgi.service.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
+      implement the converter interface and as such can be used to create further customized converters from.
+      Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
+      risk of causing modification to the converter's behavior.
       </para>
       
       <para>For example converting a Date to a String may require a specific format. The default 
@@ -121,7 +122,7 @@ long[] la = c.convert(ls).to(long[].class);</programlisting>
   Date getDate() { /* ... */ }
 }
 
-Adapter a = new StandardConverter().newAdapter();
+ConverterBuilder a = new StandardConverter().newConverterBuilder();
 a.rule(Date.class, String.class, d -> sdf.format(d), );
 // TODO finish example
 // Capture generics in Type Reference
@@ -412,16 +413,17 @@ String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"
         used to convert into the target type.</para>
         
         <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
-          <xref linkend="org.osgi.service.converter.Adapter" xrefstyle="hyperlink"/>. For example:
+          <xref linkend="org.osgi.service.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
           <programlisting>
-// Use an adapter to modify converter behavior          
-Adapter ca = converter.newAdapter();
-ca.rule(String[].class, String.class,
+// Use an ConverterBuilder to create a customized converter          
+ConverterBuilder cb = converter.newConverterBuilder();
+cb.rule(String[].class, String.class,
   v -> Stream.of(v).collect(Collectors.joining(",")),
   v -> v.split(","));
+Converter c = cb.build();
 
-String s2 = ca.convert(new String[] {"A","B"}).to(String.class)); // s2="A,B"
-String[] sa = ca.convert("A,B").to(String[].class); // sa={"A","B"}</programlisting> 
+String s2 = c.convert(new String[] {"A","B"}).to(String.class)); // s2="A,B"
+String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisting> 
         </para>
       </section>
       
