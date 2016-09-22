@@ -144,9 +144,8 @@ public class Version implements Comparable<Version> {
 				}
 			}
 		} catch (NoSuchElementException e) {
-			IllegalArgumentException iae = new IllegalArgumentException("invalid version \"" + version + "\": invalid format");
-			iae.initCause(e);
-			throw iae;
+			throw new IllegalArgumentException(
+					"invalid version \"" + version + "\": invalid format", e);
 		}
 
 		major = maj;
@@ -167,9 +166,8 @@ public class Version implements Comparable<Version> {
 		try {
 			return Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			IllegalArgumentException iae = new IllegalArgumentException("invalid version \"" + version + "\": non-numeric \"" + value + "\"");
-			iae.initCause(e);
-			throw iae;
+			throw new IllegalArgumentException("invalid version \"" + version
+					+ "\": non-numeric \"" + value + "\"", e);
 		}
 	}
 

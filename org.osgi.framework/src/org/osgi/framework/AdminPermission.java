@@ -565,9 +565,7 @@ public final class AdminPermission extends BasicPermission {
 		try {
 			return FrameworkUtil.createFilter(filterString);
 		} catch (InvalidSyntaxException e) {
-			IllegalArgumentException iae = new IllegalArgumentException("invalid filter");
-			iae.initCause(e);
-			throw iae;
+			throw new IllegalArgumentException("invalid filter", e);
 		}
 	}
 

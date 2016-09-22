@@ -170,9 +170,8 @@ public class VersionRange {
 				}
 			}
 		} catch (NoSuchElementException e) {
-			IllegalArgumentException iae = new IllegalArgumentException("invalid range \"" + range + "\": invalid format");
-			iae.initCause(e);
-			throw iae;
+			throw new IllegalArgumentException(
+					"invalid range \"" + range + "\": invalid format", e);
 		}
 
 		leftClosed = closedLeft;
@@ -193,9 +192,8 @@ public class VersionRange {
 		try {
 			return Version.valueOf(version);
 		} catch (IllegalArgumentException e) {
-			IllegalArgumentException iae = new IllegalArgumentException("invalid range \"" + range + "\": " + e.getMessage());
-			iae.initCause(e);
-			throw iae;
+			throw new IllegalArgumentException(
+					"invalid range \"" + range + "\": " + e.getMessage(), e);
 		}
 	}
 
