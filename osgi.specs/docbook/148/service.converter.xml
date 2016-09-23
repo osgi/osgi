@@ -23,10 +23,6 @@
      software in a type safe language. In Java, converting strings to proper types or to convert one type to a more 
      convenient type is often done manually. Any errors are then handled inline.</para>
       
-	<para>A common problem is interacting with Javascript. Since Javascript has no user defined types, it leaves 
-	relatively clean looking code; the same in Java usually requires significantly more code due to the required 
-	conversions to the fine grained types of Java.</para>
-
 	<para>In release 6, the OSGi specifications introduced Data Transfer Objects (DTOs). DTOs are public objects without 
 	open generics that only contain public instance fields based on simple types, arrays, and collections. 
 	In many ways DTOs can be used as an alternative to Java beans. 
@@ -57,7 +53,7 @@
       </listitem>
       
       <listitem>
-        <para><emphasis>Converter Builder</emphasis> - can create a customized converter by specifying rules for specific conversions.</para>
+        <para><emphasis>Converter Builder</emphasis> - can create customized converters by specifying rules for specific conversions.</para>
       </listitem>
       
       <listitem>
@@ -89,25 +85,33 @@
     
     <para>Some example conversions:
     <programlisting>Converter c = new StandardConverter();
-Map someMap = ... 
-MyInterface mi = c.convert(someMap).to(MyInterface.class);
+    
+// Scalar conversions    
+MyEnum e = c.convert(MyOtherEnum.BLUE).to(MyEnum.class);
 BigDecimal bd = c.convert(12345).to(BigDecimal.class);
+
+// Aggregate conversions
 List&lt;String&gt; ls = Arrays.asList("978", "142", "-99");
-long[] la = c.convert(ls).to(long[].class);</programlisting>
+long[] la = c.convert(ls).to(long[].class);
+
+// Map conversions
+Map someMap = new HashMap();
+someMap.put("mykey", 700); 
+MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
     </para>
     
     <section>
       <title>Customizing converters</title>
       <para>The Standard Converter applies the conversion rules described in this specification. While this is 
-      useful for many applications, in some cases deviations from the default rules may be necessary.
+      useful for many applications, in some cases deviations from the specified rules may be necessary.
       This can be done by creating customized converter. 
       Customized converters are created based on an existing converter with additional rules specified that
       override the existing converter's behavior.
       A customized converter is created through a 
       <xref linkend="org.osgi.service.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
-      implement the converter interface and as such can be used to create further customized converters from.
+      implement the converter interface and as such can be used to create further customized converters.
       Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
-      risk of causing modification to the converter's behavior.
+      risk of modification to the converter's behavior.
       </para>
       
       <para>For example converting a Date to a String may require a specific format. The default 
@@ -117,17 +121,24 @@ long[] la = c.convert(ls).to(long[].class);</programlisting>
       This example shows the conversion with such a type from a JavaBean to a Map.
       <programlisting>class MyBean {
   //... fields ommitted
-  MyBean(int amount, Date d) { /* ... */ }
-  int getAmount() { /* ... */ }
-  Date getDate() { /* ... */ }
+  boolean getEnabled() { /* ... */ }
+  void setEnabled(boolean e)  { /* ... */ }
+  Date getStartDate() { /* ... */ }
+  void setStartDate(Date d) { /* ... */ }
 }
 
-ConverterBuilder a = new StandardConverter().newConverterBuilder();
-a.rule(Date.class, String.class, d -> sdf.format(d), );
-// TODO finish example
-// Capture generics in Type Reference
-Map&lt;String, String&gt; m = a.convert(new MyBean(29)).to(new TypeReference&lt;Map&lt;String,String&gt;&gt;());
-</programlisting></para>
+MyBean mb = new MyBean();
+mb.setStartDate(new Date());
+mb.setEnabled(true);
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
+Converter ca = cb.build();
+
+Map&lt;String, String&gt; m = ca.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
+String en = m.get("enabled");   // en = "true"
+String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting></para>
     </section>
   </section> 
 
@@ -418,8 +429,8 @@ String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"
 // Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
 cb.rule(String[].class, String.class,
-  v -> Stream.of(v).collect(Collectors.joining(",")),
-  v -> v.split(","));
+  v -&gt; Stream.of(v).collect(Collectors.joining(",")),
+  v -&gt; v.split(","));
 Converter c = cb.build();
 
 String s2 = c.convert(new String[] {"A","B"}).to(String.class)); // s2="A,B"
@@ -905,7 +916,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </tgroup>
       </table>
       <remark>OK? What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
-      Can we make it depend on the target class? I.e. UUID -> scalar via toString() and UUID -> map via JavaBean accessors?</remark>
+      Can we make it depend on the target class? I.e. UUID -&gt; scalar via toString() and UUID -&gt; map via JavaBean accessors?</remark>
     </section>
     
     <section>
