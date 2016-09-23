@@ -232,6 +232,11 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
         be converted. In the case of a primitive type, the object is boxed first.</para>
         
         <para>A <code>null</code> object results in a <code>null</code> String value.</para>
+        
+        <para><emphasis>Exception: </emphasis><code>java.util.Calendar</code> and 
+        <code>java.util.Date</code> are converted to <code>String</code> as described in 
+        <xref linkend="service.converter.date.calendar"/>.
+        </para>
       </section>
       
       <section>
@@ -281,11 +286,6 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
               </row>
   
               <row>
-                <entry><code>java.lang.Class</code></entry>
-                <entry><code>Bundle.loadClass(v)</code></entry>
-              </row>
-                            
-              <row>
                 <entry><code>java.time.Instant</code></entry>
                 <entry><code>Instant.parse(v)</code></entry>
               </row>
@@ -316,6 +316,11 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
               </row>
               
               <row>
+                <entry><code>java.util.Calendar</code></entry>
+                <entry>See <xref linkend="service.converter.date.calendar"/>.</entry>
+              </row>
+
+              <row>
                 <entry><code>java.util.Date</code></entry>
                 <entry><code>Date.from(Instant.parse(v))</code></entry>
               </row>
@@ -334,7 +339,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
         </table>
       </section>
       
-      <section>
+      <section xml:id="service.converter.date.calendar">
         <title>Date and Calendar</title>
         <para>A <code>java.util.Date</code> instance is converted to 
         a <code>long</code> value by calling <code>Date.getTime()</code>.
@@ -345,7 +350,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
         <code>Instant</code> and then calling <code>Instant.toString()</code>.
         This will produce a ISO-8601 UTC date/time string in the following 
         format: <code>2011-12-03T10:15:30Z</code>. Converting a String to
-        a date it done by calling <code>Date.from(Instant.parse(v))</code>
+        a date is done by calling <code>Date.from(Instant.parse(v))</code>
         which can convert this ISO-8601 format back into a Date.
         </para>
           
@@ -393,16 +398,18 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
         <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target type is done by evaluating the compatibility of the 
         target type with both the key and the value in the entry and then using the best match. This is done in this order:
         <orderedlist>
-          <listitem><para>If one of the key or value is the same as the target type, then this is used.</para></listitem>
-          <listitem><para>If one of the key or value type is assignable to the target type, then this is used.</para></listitem>
+          <listitem><para>If one of the key or value is the same as the target type, then this is used.
+          If both match, the key is used.</para></listitem>
+          <listitem><para>If one of the key or value type is assignable to the target type, then this is used.
+          It both are assignable the most specific is used. If key and value type are both assignable and equal
+          the key is used.</para></listitem>
           <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type.</para></listitem>
           <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
           value is then converted to the target type.</para></listitem>
         </orderedlist>
-        If the key or value of the <code>Map.Entry&lt;K,V&gt;</code> equally match, the key is used.</para>
+        </para>
                         
-        <para>Conversion to <code>Map.Entry</code> from another type is not supported.
-        <remark>Or maybe create a Map.Entry with both key and value to be the same?</remark></para>
+        <para>Conversion to <code>Map.Entry</code> from another type is not supported.</para>
       </section>
       </section>
     
@@ -414,10 +421,9 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
       <section>
         <title>Converting to a scalar</title>
         <para>
-        If a Collection or array needs to be converted to a target which is not a 
-        Collection or Array,
+        If a Collection or array needs to be converted to a scalar,
         the first element is taken and converted into the target type. Example:
-        <programlisting>Converter converter = ...; // from service registry
+        <programlisting>Converter converter = new StandardConverter();
 String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"</programlisting></para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
@@ -471,7 +477,7 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
               </row>
               <row>
                 <entry><code>T[]</code></entry>
-                <entry><code>A new array is created via Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
+                <entry>A new array is created via <code>Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
                 <code>x</code> is the required size of the target collection.</entry>
               </row>
             </tbody>
@@ -483,7 +489,10 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         Collection generic type information about the target type can be made available by using the
         <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
-        methods. For example, 
+        methods. If no type information is available, source elements are inserted into the target 
+        aggregate as-is.</para>
+        
+        <para>Example: 
         to convert an array of <code>String</code>s into a list of <code>Integer</code>s:
         
         <programlisting>List&lt;Integer&gt; result =
@@ -509,12 +518,12 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
               <para>If the value is not a Collection, Array or Map-like structure (as described
               in <xref linkend="service.converter.special.cases.maps"/>) a result with
               a single element is produced. The value is first converted into the desired
-              target type.</para>
+              target type, if the target type is known.</para>
             </listitem>
             
             <listitem>
               <para>If the value is a Collection or Array, then each of its elements is converted 
-              into desired target type before inserting. Elements are inserted into the target
+              into desired target type, if known, before inserting. Elements are inserted into the target
               collection in their normal iteration order.</para>
             </listitem>
             
@@ -531,8 +540,7 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
       
       <section>
         <title>Converting to maps</title>
-        <para>Conversion to a map-like structure from an aggregate is not supported.</para>
-        <remark>Or maybe a map where the keys and values are the same representing the values of the collection?</remark>
+        <para>Conversion to a map-like structure from an aggregate is not supported by the Standard Converter.</para>
       </section>
     </section>
     
@@ -543,16 +551,16 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
       Additionally objects that provide a map view
       are supported.</para>
       
-      <para>When converting between map-like types, a <code>Map</code> is used as intermediary.
+      <para>When converting between map-like types, a <code>Map</code> can be used as intermediary.
       When converting to other structures, the map is converted into a collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
       
-      <para>A new object is always created to be returned and owned by the caller.
+      <para>When converting to a map-like type, a new object is always created to be returned and owned by the caller.
       This is true even it the target type is compatible with the source type.</para>
       
       <section>
-        <title>Map</title>
+        <title>Converting to a Map</title>
         <table>
           <title>Map result creation</title>
           <tgroup cols="2">
@@ -589,7 +597,7 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         Map type information for the target type can be made available by using the
         <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
-        methods.        
+        methods. If no type information is available, key-value pairs are inserted into the map as-is.    
         </para>      
       </section>
       
@@ -597,7 +605,7 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         <title>Dictionary</title>
         <para>Converting between a map and a <code>Dictionary</code> is done by iterating over the
         source and inserting the key value pairs in the result, converting them to the requested target 
-        type. As with other generic types, target type information for Dictionaries can be provided
+        type, if known. As with other generic types, target type information for Dictionaries can be provided
         via a <xref linkend="org.osgi.service.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
       </section>
       
@@ -658,7 +666,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
         only the first interface from these is taken as the source type. 
         </para>
         <para>
-        When converting from an interface to the map intermediary format, the converter returns 
+        When converting from an interface to another map-like structure, the converter returns 
         a lazy map of which all the keys are pre-populated from any non-void no-arg methods in the interface. 
         The mapping rules as described in
         <xref linkend="service.converter-key.mapping"/> are taken into account when mapping the 
@@ -666,7 +674,6 @@ boolean val2 = cfg.my_other_value(); // val2=true
         Values are retrieved from the underlying interface in a lazy manner. Only when the client looks up a
         given key or iterates through all entries or values these are obtained from the underlying map. 
         </para>
-        <remark>OK?</remark>
       </section>
       <section xml:id="service.converter-key.mapping">
         <title>Key Mapping</title>
@@ -810,7 +817,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       
       <section>
         <title>Java Beans</title>
-        <para>Java Beans are concrete (non-abstract) classes that follow a naming convention. They provide getters and setters to
+        <para>Java Beans are concrete (non-abstract) classes that follow a naming convention. They provide 
+        public getters and setters to
         access their properties and have a public no-arg constructor. When converting from a Java Bean introspection
         is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
         value. The method name must start with get followed by a capitalized property name, 
@@ -837,9 +845,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <title>DTOs</title>
         <para>
         DTOs are classes with public non-static fields and no methods other than the ones provided by the 
-        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class but the converter 
-        should ignore this. This is to keep the converter API itself clean from OSGi dependencies. 
-        DTOs may have static fields, these can also be ignored by the converter.</para>
+        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class. 
+        DTOs may have static fields, these are ignored by the converter.</para>
         
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the map and then converting the value to the field type before assigning it. They key of
@@ -915,7 +922,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           </tbody>
         </tgroup>
       </table>
-      <remark>OK? What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
+      <remark>What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
       Can we make it depend on the target class? I.e. UUID -&gt; scalar via toString() and UUID -&gt; map via JavaBean accessors?</remark>
     </section>
     
