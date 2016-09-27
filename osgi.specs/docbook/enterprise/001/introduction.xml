@@ -897,6 +897,7 @@
               linkend="service.resolver"/></code></entry>
             </row>
 
+<!--
             <row>
               <entry><xref linkend="service.configurator"
               xrefstyle="template:%n %t"/></entry>
@@ -909,6 +910,7 @@
               endterm="org.osgi.service.configurator-version"
               linkend="service.configurator"/></code></entry>
             </row>
+-->
 
             <row>
               <entry><xref linkend="util.xml"
