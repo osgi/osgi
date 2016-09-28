@@ -17,12 +17,8 @@
 package org.osgi.test.cases.zigbee;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
@@ -33,29 +29,21 @@ public class TestStepLauncher {
 	private static TestStepLauncher	instance;
 
 	/**
-	 * The CT asks to the user to input the path of the configuration file that
-	 * contains all the info about the ZigBee node that it is going to use in
-	 * the test cases.
-	 */
-	static public final String		ASK_CONFIG_FILE_PATH	= "file_path";
-
-	/**
 	 * The CT asks to the user to pair with the RI all the devices that have
-	 * been described in the configuration file configured at step
-	 * {@link #ASK_CONFIG_FILE_PATH}.
+	 * been described in the configuration file (see configFilename constant)
 	 */
 	static public final String		ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
 
 	/**
 	 * The CT asks to the user to add the device that is described in the
-	 * configuration file specified at step {@link #ASK_CONFIG_FILE_PATH} and
-	 * that contains at least one reportable attribute. Once the user presses
-	 * Enter, the CT tries to register a {@link ZCLEventListener} and check if
-	 * the RI is sending the attribute reporting events accordingly.
+	 * configuration file that contains at least one reportable attribute. Once
+	 * the user presses Enter, the CT tries to register a
+	 * {@link ZCLEventListener} and check if the RI is sending the attribute
+	 * reporting events accordingly.
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String		riConfFilename			= "ri-config.xml";
+	private static final String		configFilename			= "zigbee-template.xml";
 
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
@@ -63,45 +51,19 @@ public class TestStepLauncher {
 	private TestStepLauncher(BundleContext bc) throws IOException {
 		tproxy = new TestStepProxy(bc);
 
-		String msg = "Please type the absolute path of the xml file that contains the\n"
-				+ "information about the zigbee network characteristics you are\n"
-				+ "going to use with your RI. A template of this file is available in\n"
-				+ "the CT distribution. Ensure yourself that this is correctly filled\n"
-				+ "with your ZigBee devices info\n";
-
-		String configFilePath = tproxy.execute(ASK_CONFIG_FILE_PATH, msg);
-
-		if ((configFilePath == null) || ((configFilePath != null) && (configFilePath.equals("")))) {
-			throw new IllegalArgumentException("invalid path");
-		}
-
-		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
-				"please please plug and setup all the devices described in the configuration file:");
-
-		InputStream is = null;
-
-		if (!configFilePath.equals(riConfFilename)) {
-			// the file is not the RI one.
-			is = new FileInputStream(configFilePath);
-		} else {
-			Bundle[] bundles = bc.getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				if (bundles[i].getSymbolicName().equals("org.osgi.impl.service.zigbee")) {
-					Enumeration e = bundles[i].getEntryPaths("");
-
-					URL url = bundles[i].getEntry(configFilePath);
-					is = url.openStream();
-					break;
-				}
-			}
-			if (is == null) {
-				throw new FileNotFoundException("ZigBee RI not found.");
-			}
-		}
-
+		/*
+		 * Loads the configuration file from the filesystem. This file is
+		 * located in the CT project but it is not a bnd resource and so it is
+		 * not stored in the bundle but in the filesystem.
+		 */
+		InputStream is = new FileInputStream(configFilename);
 		confReader = ConfigurationFileReader.getInstance(is);
 		is.close();
 		ZCLFrameImpl.minHeaderSize = confReader.getHeaderMinSize();
+
+		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
+				"please please plug and setup all the ZigBee devices described in the " + configFilename + " file");
+
 	}
 
 	public static TestStepLauncher launch(BundleContext bc) throws IOException {

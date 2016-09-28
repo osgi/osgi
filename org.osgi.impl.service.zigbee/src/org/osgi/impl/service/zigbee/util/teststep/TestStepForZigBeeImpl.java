@@ -16,9 +16,8 @@
 
 package org.osgi.impl.service.zigbee.util.teststep;
 
-import java.net.URL;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.test.support.step.TestStep;
@@ -33,11 +32,10 @@ public class TestStepForZigBeeImpl implements TestStep {
 
 	static private final String	TAG						= TestStepForZigBeeImpl.class.getName();
 
-	static public final String	ASK_CONFIG_FILE_PATH	= "file_path";
 	static public final String	ACTIVATE_ZIGBEE_DEVICES	= "activate_devices";
 	public static final String	EVENT_REPORTABLE		= "event_reportable";
 
-	private String				confFilePath			= "ri-config.xml";
+	private static final String	configFilePath			= "zigbee-template.xml";
 
 	private ZigBeeBaseDriver	baseDriver;
 
@@ -59,19 +57,16 @@ public class TestStepForZigBeeImpl implements TestStep {
 			return null;
 		}
 
-		if (stepId.startsWith(ASK_CONFIG_FILE_PATH)) {
-			Logger.d(TAG, "returns: " + confFilePath);
-			return confFilePath;
-		} else if (stepId.equals(ACTIVATE_ZIGBEE_DEVICES)) {
+		if (stepId.equals(ACTIVATE_ZIGBEE_DEVICES)) {
 			/*
 			 * Load and parse the template configuration file. This produces the
 			 * registration of all the services related to the content of this
 			 * file.
 			 */
 			try {
-				Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-				URL url = bundle.getEntry(confFilePath);
-				baseDriver.loadConfigurationFile(url.openStream());
+				InputStream is = new FileInputStream(configFilePath);
+				baseDriver.loadConfigurationFile(is);
+				is.close();
 			} catch (Exception e) {
 				Logger.d(TAG, "returns: null");
 				return null;
