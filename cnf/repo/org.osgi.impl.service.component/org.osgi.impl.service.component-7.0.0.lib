@@ -1,0 +1,2 @@
+org.osgi.service.component; version=latest
+org.apache.felix.scr; version=2.0.6
