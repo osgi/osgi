@@ -10,8 +10,13 @@ import aQute.bnd.osgi.Constants
 
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
+  repositories {
+    mavenCentral()
+  }
+
   dependencies {
     classpath bndPlugin
+    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.2.0'
   }
 }
 
@@ -30,6 +35,19 @@ subprojects {
   def bndProject = bndWorkspace.getProject(name)
   if (bndProject != null) {
     plugins.apply 'biz.aQute.bnd'
+    plugins.apply 'ru.vyarus.animalsniffer'
+    repositories {
+      mavenCentral()
+    }
+    dependencies {
+      signature "org.codehaus.mojo.signature:${bnd('animalsniffer.signature', 'java17:1.0')}@signature"
+    }
+    animalsniffer {
+      sourceSets = [sourceSets.main]
+    }
+    assemble {
+      dependsOn animalsnifferMain
+    }
   }
 }
 subprojects {

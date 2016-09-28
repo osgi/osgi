@@ -1,6 +1,8 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
+animalsniffer.signature: java18:1.0
+
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath: \
