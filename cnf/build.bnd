@@ -119,7 +119,8 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 -runfw = org.osgi.impl.framework; version=latest
 
 -runtrace=true
-runproperties = report=true
+runproperties = report=true, \
+ equinox.use.ds=true
 runsecureproperties = ${runproperties}, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore

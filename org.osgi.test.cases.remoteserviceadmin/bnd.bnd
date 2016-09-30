@@ -49,7 +49,7 @@ Test-Cases							= ${testcases}
 	rsa.ct.timeout.factor=3,\
 	amdatu.remote.logging.level=0,\
 	amdatu.remote.console.level=3,\
-	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
+	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@,equinox.use.ds=true", \
 	${p}.system.packages.extra="${junit.package}", \
     ${p}.serverconfig="service.exported.intents.extra,service.exported.configs", \
     service.exported.intents.extra="passByValue", \

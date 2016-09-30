@@ -27,6 +27,8 @@ Test-Cases		= \
 	org.osgi.impl.service.dal.step;	version=latest, \
 	org.osgi.impl.service.event;	version=latest
 
+-runproperties = ${runproperties}
+
 -signaturetest	= \
 	org.osgi.service.dal.functions, \
 	org.osgi.service.dal.functions.data

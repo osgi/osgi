@@ -20,6 +20,8 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.dmt; version=latest, \
 	org.osgi.impl.service.tr069todmt; version=latest
 
+-runproperties = ${runproperties}
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.tr069todmt
 	
