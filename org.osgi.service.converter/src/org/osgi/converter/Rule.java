@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.converter;
+package org.osgi.converter;
 
 /**
  * A rule is a data entity can hold all the information needed to specify a

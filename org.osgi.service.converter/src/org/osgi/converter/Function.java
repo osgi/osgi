@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.converter;
+package org.osgi.converter;
 
 import org.osgi.annotation.versioning.ConsumerType;
 

@@ -33,6 +33,6 @@
  * @author $Id$
  */
 @Version("1.0")
-package org.osgi.service.converter;
+package org.osgi.converter;
 
 import org.osgi.annotation.versioning.Version;

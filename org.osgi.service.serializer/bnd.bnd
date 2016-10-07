@@ -6,4 +6,4 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath: \
 	osgi.annotation;version=6.0.1,\
 	osgi.core;version=6.0,\
-	org.osgi.service.converter;version=latest
+	org.osgi.converter;version=latest
