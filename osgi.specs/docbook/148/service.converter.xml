@@ -80,7 +80,7 @@
     
     <para>The Standard Converter is a converter that follows precisely what is described in this 
     specification. It converts objects to the desired target type if a suitable conversion is 
-    available. Otherwise it will throw a Conversion Exception.
+    available. 
     An instance can be obtained by creating a <code>new StandardConverter()</code>.</para> 
     
     <para>Some example conversions:
@@ -108,7 +108,7 @@ MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
       Customized converters are created based on an existing converter with additional rules specified that
       override the existing converter's behavior.
       A customized converter is created through a 
-      <xref linkend="org.osgi.service.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
+      <xref linkend="org.osgi.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
       implement the converter interface and as such can be used to create further customized converters.
       Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
       risk of modification to the converter's behavior.
@@ -401,9 +401,9 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;Set&lt;Long&gt;
           <listitem><para>If one of the key or value is the same as the target type, then this is used.
           If both match, the key is used.</para></listitem>
           <listitem><para>If one of the key or value type is assignable to the target type, then this is used.
-          It both are assignable the most specific is used. If key and value type are both assignable and equal
+          If both are assignable the most specific is used. If key and value type are both assignable and equal
           the key is used.</para></listitem>
-          <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type.</para></listitem>
+  <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type. If both are of type <code>String</code> the key is used.</para></listitem>
           <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
           value is then converted to the target type.</para></listitem>
         </orderedlist>
@@ -430,7 +430,7 @@ String s = converter.convert(new String[] {"A","B"}).to(String.class)); // s="A"
         used to convert into the target type.</para>
         
         <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
-          <xref linkend="org.osgi.service.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
+          <xref linkend="org.osgi.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
           <programlisting>
 // Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
@@ -487,8 +487,8 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         <para>Before inserting values into the resulting collection/array they are converted to the desired
         target type first. In the case of arrays this is the type of the array. When inserting into a 
         Collection generic type information about the target type can be made available by using the
-        <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
-        or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
+        <xref linkend="org.osgi.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
+        or <xref linkend="org.osgi.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods. If no type information is available, source elements are inserted into the target 
         aggregate as-is.</para>
         
@@ -595,8 +595,8 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         using the generic information if available.
         
         Map type information for the target type can be made available by using the
-        <xref linkend="org.osgi.service.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
-        or <xref linkend="org.osgi.service.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
+        <xref linkend="org.osgi.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
+        or <xref linkend="org.osgi.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods. If no type information is available, key-value pairs are inserted into the map as-is.    
         </para>      
       </section>
@@ -606,7 +606,7 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         <para>Converting between a map and a <code>Dictionary</code> is done by iterating over the
         source and inserting the key value pairs in the result, converting them to the requested target 
         type, if known. As with other generic types, target type information for Dictionaries can be provided
-        via a <xref linkend="org.osgi.service.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
+        via a <xref linkend="org.osgi.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
       </section>
       
       <section>
@@ -631,7 +631,8 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
         does not require.</para>
         
         <para>Note that the converter will not copy the source map when converting to an interface
-        so any changes to the source map will be reflected live to the proxy.</para>
+        so any changes to the source map will be reflected live to the proxy. 
+        The proxy cannot cache the conversion results.</para>
         
         <para>Interfaces can provide methods for default values by providing a single-argument method
         override in addition to the no-arg method matching the key name. If the type of the default
@@ -830,7 +831,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             All methods of the bean class itself and its 
             super classes are considered. 
             If a property cannot be converted this will cause a 
-            <xref linkend="org.osgi.service.converter.ConversionException" xrefstyle="hyperlink"/>.
+            <xref linkend="org.osgi.converter.ConversionException" xrefstyle="hyperlink"/>.
             </para>
         <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
         find out the size of the array via these accessors.

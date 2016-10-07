@@ -26,10 +26,12 @@ import java.lang.reflect.Type;
  */
 public interface ConverterBuilder {
     /**
-     * Build the specified converter.
-     *
-     * @return A new converter with the rules provided to the builder.
-     */
+	 * Build the specified converter. Each time this method is called a new
+	 * custom converter is produced based on the rules registered with the
+	 * builder.
+	 *
+	 * @return A new converter with the rules provided to the builder.
+	 */
     Converter build();
 
     /**
