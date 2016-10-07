@@ -86,23 +86,11 @@ public interface Serializing {
 	String toString();
 
 	/**
-     * Specify the converter to be used by the code, if an alternative, adapted,
-     * converter is to be used.
-     *
-     * @param converter The converter to use.
-     * @return This Serializing object to allow further invocations on it.
-     */
-    Serializing with(Converter converter);
-
-    /**
-     * Provide contextual information to complete the serializing operation.
-     * The contexts that can be handled are serializer-specific.
-     *
-     * @param obj The context to use while serializing.
-     * @return This Serializing object to allow further invocations on it.
-     */
-    default Serializing withContext(Object obj) {
-        // Default or simple serializers do not need additional context
-        return this;
-    }
+	 * Specify the converter to be used by the code, if an alternative, adapted,
+	 * converter is to be used.
+	 *
+	 * @param converter The converter to use.
+	 * @return This Serializing object to allow further invocations on it.
+	 */
+	Serializing with(Converter converter);
 }

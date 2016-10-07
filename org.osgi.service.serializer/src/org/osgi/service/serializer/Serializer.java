@@ -37,8 +37,8 @@ public interface Serializer {
 	 *
 	 * @param <T> The type to decode to.
 	 * @param cls The class to decode to.
-	 * @return A {@link Deserializing} object to specify the source for the decode
-	 *         operation.
+	 * @return A {@link Deserializing} object to specify the source for the
+	 *         decode operation.
 	 */
 	<T> Deserializing<T> deserialize(Class<T> cls);
 
@@ -47,8 +47,8 @@ public interface Serializer {
 	 *
 	 * @param <T> The type to decode to.
 	 * @param ref A type reference for the target type.
-	 * @return A {@link Deserializing} object to specify the source for the decode
-	 *         operation.
+	 * @return A {@link Deserializing} object to specify the source for the
+	 *         decode operation.
 	 */
 	<T> Deserializing<T> deserialize(TypeReference<T> ref);
 
@@ -56,8 +56,8 @@ public interface Serializer {
 	 * Start specifying a decode operation.
 	 *
 	 * @param type The type to convert to.
-	 * @return A {@link Deserializing} object to specify the source for the decode
-	 *         operation.
+	 * @return A {@link Deserializing} object to specify the source for the
+	 *         decode operation.
 	 */
 	Deserializing< ? > deserialize(Type type);
 
