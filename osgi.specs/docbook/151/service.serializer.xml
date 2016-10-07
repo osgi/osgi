@@ -30,8 +30,9 @@
     </para>
     <para>External parsers came up that provided ways to serialize and de-serialize 
       objects to formats such as XML and 
-      JSON without the need to have the object declared Serializable. OSGi introduced the DTO
-      <remark>add link</remark> to support serialization of arbirtrary data. 
+      JSON without the need to have the object declared Serializable. OSGi introduced 
+      <emphasis>Data Transfer Objects</emphasis> (DTOs)
+      to support serialization of arbirtrary data. 
     </para>
     <para>With OSGi R7 the Object Converter has been introduced. This converter can convert many 
       Java types into many other Java types and it can also be customized to literally support any
@@ -46,11 +47,11 @@
   <section>
     <title>Entities</title>
 
-    <para>The following entities are used in this specification</para>
-
     <itemizedlist>
       <listitem>
-        <para><emphasis>Converter</emphasis> - yyy.</para>
+        <para><emphasis>Converter</emphasis> - The <xref linkend="service.converter"/> is
+          used to assist the serializer in converting Java objects to types supported by
+          the serialized type.</para>
       </listitem>
 
       <listitem>
@@ -78,8 +79,10 @@
       For example JSON does not have the distinction between different types of numbers. So an 
       Integer serialized from a Java Map may be deserialized as a Long if no additional help is 
       provided to the serializer.
-      However, serializer services are designed to use the OSGi Converter 
-      <remark>link</remark>. Providing a customized converter can assist the serialization process.
+      However, serializer services are designed to use the <xref linkend="service.converter"/>.
+    </para>
+    <para>
+      Providing a customized converter can assist the serialization process.
       Additionally, the Converter can also be used on the resulting deserialized object to convert
       it into the correct data types, if needed.
     </para>
@@ -117,9 +120,134 @@
   <section>
     <title>JSON Serializer Service</title>
     <para>
+      The JSON Serialization Service can serialize objects that can be converted to a Map structure
+      to JSON. It can also convert JSON back to a Java Object.
+      The JSON Serializer provides a portable serialization that all serializers compliant with this
+      specification should support.
     </para>
+
+    <section>
+      <title>MIME type</title>
+      <para><code>application/json</code></para>
+    </section>
+
+    <section>
+      <title>Conversions</title>
+      <para>
+        JSON supports a subset of datatypes supported in Java. Therefore when converting to JSON,
+        the following conversions are made:
+        <table>
+          <title>JSON Conversions</title>
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry>From Java type</entry>
+                <entry>JSON type</entry>
+                <entry>To Java type</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry><code>Boolean</code></entry>
+                <entry>Boolean</entry>
+                <entry><code>Boolean</code></entry>
+              </row>
+              <row>
+                <entry><code>Number</code> or subclass</entry>
+                <entry>Number</entry>
+                <entry>The smallest numerical Java boxed primitive type that can hold the value.
+                  If the value contains no decimal point integer types are used. 
+                  Otherwise floating point types are used. If no primitive is big enough to hold
+                  the value a <code>BigInteger</code> or <code>BigDecimal</code> is used.</entry>
+              </row>
+              <row>
+                <entry><code>String</code></entry>
+                <entry>String</entry>
+                <entry><code>String</code></entry>
+              </row>
+              <row>
+                <entry>Array</entry>
+                <entry>Array</entry>
+                <entry>Array, contents are boxed</entry>
+              </row>
+              <row>
+                <entry><code>Collection</code> or subclass</entry>
+                <entry>Array</entry>
+                <entry>Array, contents are boxed</entry>
+              </row>
+              <row>
+                <entry><code>Map</code> or subclass</entry>
+                <entry>Object</entry>
+                <entry>The OSGi Converter is used to create the map to hold the object data.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </para>
+
+      <section>
+        <title>Other types</title>
+        <para>
+          Other types are converted to JSON with the help of the Converter. If the source type is a 
+          map-like structure, as described
+          in <xref linkend="service.converter.special.cases.maps"/>, 
+          the object is converted into a map
+          before it is converted to a JSON Object. Otherwise it is converted to String before it is 
+          inserted to JSON. 
+        </para>
+        <para>
+          Conversion back from JSON to the target type is done by inspecting the target data type 
+          and using the converter to convert to the target type.
+        </para>
+      </section>
+    </section>
+    <section>
+      <title>Example</title>
+      <para>
+        The example below shows how the JSON Serializer can be used, the service is obtained
+        via a Declarative Service @Reference annotation.
+        <programlisting>@Reference(target="mimetype=application/json")
+private Serializer jsonSerializer;
+
+private void myMethod() {
+  Map&lt;String, Object&gt; m = new LinkedHashMap&lt;&gt;();
+  m.put("sKey", "a string");
+  m.put("iKey", 42);
+  m.put("bKey",  true);
+  m.put("noKey", null);
+  m.put("simpleArray", new int[] {1,2,3});
+
+  Map&lt;String, Object&gt; m1 = new LinkedHashMap&lt;&gt;();
+  m1.put("a", 1L);
+  m1.put("b", "hello");
+  m.put("simpleObject", m1);
+
+  String json = jsonSerializer.serialize(m).toString(); </programlisting>
+          The JSON produced will look as follows:
+          <programlisting>{
+  "sKey":"a string",
+  "iKey":42,
+  "bKey":true,
+  "noKey":null,
+  "simpleArray":[1,2,3],
+  "simpleObject":{"a":1,"b":"hello"}
+} </programlisting>
+        Serializing the JSON back into Java is done with the 
+        <xref linkend="org.osgi.service.serializer.Serializer.deserialize-Class-" xrefstyle="hyperlink"/> methods:
+<programlisting>  Map dm = jsonSerializer.deserialize(Map.class).from(json);</programlisting>
+
+      </para>
+    </section>
   </section>
 
+  <section>
+    <title>YAML Serializer Service</title>
+    <para>
+      The YAML Serialization Service can serialize objects that can be converted to a Map structure
+      to YAML. ...
+    </para>
+  </section>
+  
   <section>
     <title>Security</title>
     <para>...</para>
