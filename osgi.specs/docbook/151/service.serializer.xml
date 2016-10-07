@@ -37,10 +37,12 @@
     <para>With OSGi R7 the Object Converter has been introduced. This converter can convert many 
       Java types into many other Java types and it can also be customized to literally support any
       object conversion that a developer might need. 
-      This specification defines an OSGi Service that utilizes the OSGi Converter to serialize and
+      This specification defines an OSGi Service that can, with the help of the Converter, 
+      serialize and
       de-serialize Java Objects to representations such as JSON and YAML. The Serializer service
-      is keyed on the MIME-type of the serialization, so additional services can be added to support
-      any other serialization format.
+      is found by looking for the MIME-type of the serialization on the service properties. 
+      Additional service objects can be registered to support
+      any other serialization formats.
     </para>
   </section> 
 
@@ -74,8 +76,8 @@
 
     <para>Serialization services can be found in the Service Registry. A serialization service can
       convert to a serialized format and deserialize the serialized format back to a runtime 
-      object. Most serialization formats don't have the exact same data types as in Java so in 
-      some cases cases serialization and deserialization may not yield a purely identical result. 
+      object. Most serialization formats don't have the exact same data types as Java
+      serialization and subsequent deserialization may not yield a purely identical result. 
       For example JSON does not have the distinction between different types of numbers. So an 
       Integer serialized from a Java Map may be deserialized as a Long if no additional help is 
       provided to the serializer.
@@ -84,7 +86,7 @@
     <para>
       Providing a customized converter can assist the serialization process.
       Additionally, the Converter can also be used on the resulting deserialized object to convert
-      it into the correct data types, if needed.
+      it into the desired data types, if needed.
     </para>
 
     <para>
@@ -112,7 +114,7 @@
         </tgroup>
       </table>
 
-      While Serializers can be used for any data type, this specification defines two portable
+      While Serializers can be used for any format, this specification defines two portable
       serializations. The YAML Serialization service and the JSON Serialization service.
     </para>
   </section> 
@@ -193,7 +195,7 @@
           in <xref linkend="service.converter.special.cases.maps"/>, 
           the object is converted into a map
           before it is converted to a JSON Object. Otherwise it is converted to String before it is 
-          inserted to JSON. 
+          inserted in the JSON. 
         </para>
         <para>
           Conversion back from JSON to the target type is done by inspecting the target data type 
