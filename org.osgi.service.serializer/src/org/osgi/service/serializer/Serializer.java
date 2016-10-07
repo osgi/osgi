@@ -18,7 +18,7 @@ package org.osgi.service.serializer;
 import java.lang.reflect.Type;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.converter.TypeReference;
+import org.osgi.converter.TypeReference;
 
 /**
  * The Codec service can be used to encode a given object in a certain

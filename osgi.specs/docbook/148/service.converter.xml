@@ -12,8 +12,8 @@
   <title>Converter Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.service.converter-version"
-    linkend="org.osgi.service.converter"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.converter-version"
+    linkend="org.osgi.converter"/></releaseinfo>
   </info>
 
   <section>
@@ -937,7 +937,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <para>...</para>
   </section> 
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.converter.xml"/>
  
   <section>
     <title>References</title>

@@ -1,32 +1,32 @@
 osgi.cmpn.specs = \
-	 org.osgi.application, \
-	 org.osgi.namespace.contract, \
-	 org.osgi.namespace.extender, \
-	 org.osgi.namespace.implementation, \
-	 org.osgi.namespace.service, \
-	 org.osgi.namespace.unresolvable, \
-	 org.osgi.service.async, \
-	 org.osgi.service.application, \
-	 org.osgi.service.blueprint, \
-	 org.osgi.service.cm, \
-	 org.osgi.service.component, \
-	 org.osgi.service.component.annotations, \
-	 org.osgi.service.coordinator, \
-	 org.osgi.service.deploymentadmin, \
-	 org.osgi.service.device, \
-	 org.osgi.service.dmt, \
-	 org.osgi.service.event, \
-	 org.osgi.service.http, \
-	 org.osgi.service.http.whiteboard, \
-	 org.osgi.service.io, \
-	 org.osgi.service.jdbc, \
-	 org.osgi.service.jndi, \
-	 org.osgi.service.jpa, \
-	 org.osgi.service.log, \
-	 org.osgi.service.metatype, \
+     org.osgi.application, \
+     org.osgi.namespace.contract, \
+     org.osgi.namespace.extender, \
+     org.osgi.namespace.implementation, \
+     org.osgi.namespace.service, \
+     org.osgi.namespace.unresolvable, \
+     org.osgi.service.async, \
+     org.osgi.service.application, \
+     org.osgi.service.blueprint, \
+     org.osgi.service.cm, \
+     org.osgi.service.component, \
+     org.osgi.service.component.annotations, \
+     org.osgi.service.coordinator, \
+     org.osgi.service.deploymentadmin, \
+     org.osgi.service.device, \
+     org.osgi.service.dmt, \
+     org.osgi.service.event, \
+     org.osgi.service.http, \
+     org.osgi.service.http.whiteboard, \
+     org.osgi.service.io, \
+     org.osgi.service.jdbc, \
+     org.osgi.service.jndi, \
+     org.osgi.service.jpa, \
+     org.osgi.service.log, \
+     org.osgi.service.metatype, \
      org.osgi.service.metatype.annotations, \
-	 org.osgi.service.monitor, \
-	 org.osgi.service.prefs, \
+     org.osgi.service.monitor, \
+     org.osgi.service.prefs, \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
      org.osgi.service.repository, \
@@ -34,23 +34,23 @@ osgi.cmpn.specs = \
      org.osgi.service.rest, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
-	 org.osgi.service.upnp, \
-	 org.osgi.service.useradmin, \
-	 org.osgi.service.wireadmin, \
+     org.osgi.service.upnp, \
+     org.osgi.service.useradmin, \
+     org.osgi.service.wireadmin, \
      org.osgi.util.function, \
-	 org.osgi.util.measurement, \
-	 org.osgi.util.position, \
+     org.osgi.util.measurement, \
+     org.osgi.util.position, \
      org.osgi.util.promise, \
      org.osgi.util.pushstream, \
-	 org.osgi.util.xml
+     org.osgi.util.xml
 
 osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};^.*$;$0.*}
 
 osgi.cmpn.resources = {${project.workspace}/osgi.companion/legal/jar}, \
-  				xmlns/app=${project.workspace}/xmlns/app, \
-  				xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
-  				xmlns/metatype=${project.workspace}/xmlns/metatype, \
-  				xmlns/rsa=${project.workspace}/xmlns/rsa, \
+                xmlns/app=${project.workspace}/xmlns/app, \
+                xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
+                xmlns/metatype=${project.workspace}/xmlns/metatype, \
+                xmlns/rsa=${project.workspace}/xmlns/rsa, \
                 xmlns/repository=${project.workspace}/xmlns/repository, \
                 xmlns/rest=${project.workspace}/xmlns/rest, \
-  				xmlns/scr=${project.workspace}/xmlns/scr
+                xmlns/scr=${project.workspace}/xmlns/scr

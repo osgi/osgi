@@ -38,6 +38,7 @@ public interface ConvertFunction<F, T> {
 	 *         convert function cannot handle this conversion. In this case the
 	 *         next matching rule or adapter will be given a opportunity to
 	 *         convert.
+	 * @throws Exception
 	 */
 	T convert(F obj, Type targetType) throws Exception;
 }
