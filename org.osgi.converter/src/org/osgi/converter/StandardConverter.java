@@ -16,6 +16,12 @@
  */
 package org.osgi.converter;
 
+/**
+ * The standard converter.
+ * 
+ * @author $Id$
+ * @ThreadSafe
+ */
 public class StandardConverter implements Converter {
 
     public StandardConverter() {
