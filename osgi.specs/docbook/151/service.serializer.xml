@@ -123,7 +123,7 @@
     <title>JSON Serializer Service</title>
     <para>
       The JSON Serialization Service can serialize objects that can be converted to a Map structure
-      to JSON. It can also convert JSON back to a Java Object.
+      to JSON. It can also convert JSON back to Java Objects.
       The JSON Serializer provides a portable serialization that all serializers compliant with this
       specification should support.
     </para>
@@ -136,7 +136,7 @@
     <section>
       <title>Conversions</title>
       <para>
-        JSON supports a subset of datatypes supported in Java. Therefore when converting to JSON,
+        JSON supports a subset of datatypes supported in Java. When converting to JSON,
         the following conversions are made:
         <table>
           <title>JSON Conversions</title>
@@ -246,8 +246,72 @@ private void myMethod() {
     <title>YAML Serializer Service</title>
     <para>
       The YAML Serialization Service can serialize objects that can be converted to a Map structure
-      to YAML. ...
+      to YAML. It can also convert YAML back to Java Objects.
     </para>
+    <section>
+      <title>MIME type</title>
+      <para><code>text/yaml</code></para>
+    </section>
+    <section>
+      <title>Convertsion</title>
+      <para>
+        YAML supports a subset of datatypes supported in Java. When converting to YAML the following
+        convertsions are made:
+        <table>
+          <title>YAML Conversions</title>
+          <tgroup cols="3">
+            <thead>
+              <row>
+                <entry>From Java type</entry>
+                <entry>YAML type</entry>
+                <entry>To Java type</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry><code>Boolean</code></entry>
+                <entry><code>!!bool</code></entry>
+                <entry><code>Boolean</code></entry>
+              </row>
+              <row>
+                <entry>Integer <code>Number</code> or subclass</entry>
+                <entry><code>!!int</code></entry>
+                <entry>The smallest numerical Java boxed non-floating point 
+                  primitive type that can hold the value.
+                  If no primitive is big enough to hold
+                  the value a <code>BigInteger</code> is used.</entry>
+              </row>
+              <row>
+                <entry>Floating point <code>Number</code> or subclass</entry>
+                <entry><code>!!float</code></entry>
+                <entry><code>double</code></entry>
+              </row>
+              <row>
+                <entry><code>String</code></entry>
+                <entry><code>!!str</code></entry>
+                <entry><code>String</code></entry>
+              </row>
+              <row>
+                <entry>Array</entry>
+                <entry><code>!!seq</code></entry>
+                <entry>Array, contents are boxed</entry>
+              </row>
+              <row>
+                <entry><code>Collection</code> or subclass</entry>
+                <entry><code>!!seq</code></entry>
+                <entry>Array, contents are boxed</entry>
+              </row>
+              <row>
+                <entry><code>Map</code> or subclass</entry>
+                <entry><code>!!map</code></entry>
+                <entry>The OSGi Converter is used to create the map to hold the object data.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+      </para>
+    </section>
   </section>
   
   <section>
