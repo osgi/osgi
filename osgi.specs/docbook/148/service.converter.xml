@@ -100,46 +100,6 @@ someMap.put("mykey", 700);
 MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
     </para>
     
-    <section>
-      <title>Customizing converters</title>
-      <para>The Standard Converter applies the conversion rules described in this specification. While this is 
-      useful for many applications, in some cases deviations from the specified rules may be necessary.
-      This can be done by creating customized converter. 
-      Customized converters are created based on an existing converter with additional rules specified that
-      override the existing converter's behavior.
-      A customized converter is created through a 
-      <xref linkend="org.osgi.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
-      implement the converter interface and as such can be used to create further customized converters.
-      Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
-      risk of modification to the converter's behavior.
-      </para>
-      
-      <para>For example converting a Date to a String may require a specific format. The default 
-      <code>Date</code> to <code>String</code> conversion produces a String in the format 
-      <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
-      <code>yyMMddHHmmssZ</code> instead it can be done as follows. 
-      This example shows the conversion with such a type from a JavaBean to a Map.
-      <programlisting>class MyBean {
-  //... fields ommitted
-  boolean getEnabled() { /* ... */ }
-  void setEnabled(boolean e)  { /* ... */ }
-  Date getStartDate() { /* ... */ }
-  void setStartDate(Date d) { /* ... */ }
-}
-
-MyBean mb = new MyBean();
-mb.setStartDate(new Date());
-mb.setEnabled(true);
-
-SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
-ConverterBuilder cb = new StandardConverter().newConverterBuilder();
-cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
-Converter ca = cb.build();
-
-Map&lt;String, String&gt; m = ca.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
-String en = m.get("enabled");   // en = "true"
-String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting></para>
-    </section>
   </section> 
 
   <section>
@@ -846,7 +806,9 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <title>DTOs</title>
         <para>
         DTOs are classes with public non-static fields and no methods other than the ones provided by the 
-        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class. 
+        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class,
+        however objects following the DTO rules that do not extend the DTO
+        class are also treated as DTOs. 
         DTOs may have static fields, these are ignored by the converter.</para>
         
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
@@ -875,54 +837,63 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       <title>Priority</title>
       
       <para>In case multiple conversion rules match, the rule with the highest priority is used, where 1 is the highest overall priority.
+        <table>
+          <title>Conversion rule priority</title>
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Priority</entry>
+                <entry>Rule</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>1</entry>
+                <entry>array</entry>
+              </row>
+
+              <row>
+                <entry>2</entry>
+                <entry>Java bean</entry>
+              </row>
+              
+              <row>
+                <entry>3</entry>
+                <entry>annotation</entry>
+              </row>
+              
+              <row>
+                <entry>4</entry>
+                <entry>interface (including Collections and Maps)</entry>
+              </row>
+
+              <row>
+                <entry>5</entry>
+                <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
+              </row>
+              
+              <row>
+                <entry>6</entry>
+                <entry>DTO</entry>
+              </row>
+              
+              <row>
+                <entry>7</entry>
+                <entry>scalar</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        The priority rules defined in the above table can be overridden by using 
+        <xref linkend="org.osgi.converter.Converting.as-Class-" xrefstyle="hyperlink"/> 
+        to indicate as what class the source object should be treated: 
+        <programlisting>  Map m = converter.convert(myBean).as(MyInterface.class).to(Map.class);</programlisting>
+        In this example myBean is both a Java Bean as well as implementing an interface. 
+        To override the priority rules from treating it as a bean and converting it as an interface
+        instead the <code>as()</code> method is used.
+        
       </para>
-      <table>
-        <title>Conversion rule priority</title>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Priority</entry>
-              <entry>Rule</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>1</entry>
-              <entry>array</entry>
-            </row>
-
-            <row>
-              <entry>2</entry>
-              <entry>Java bean</entry>
-            </row>
-            
-            <row>
-              <entry>3</entry>
-              <entry>annotation</entry>
-            </row>
-            
-            <row>
-              <entry>4</entry>
-              <entry>interface (including Collections and Maps)</entry>
-            </row>
-
-            <row>
-              <entry>5</entry>
-              <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
-            </row>
-            
-            <row>
-              <entry>6</entry>
-              <entry>DTO</entry>
-            </row>
-            
-            <row>
-              <entry>7</entry>
-              <entry>scalar</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
       <remark>What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
       Can we make it depend on the target class? I.e. UUID -&gt; scalar via toString() and UUID -&gt; map via JavaBean accessors?</remark>
     </section>
@@ -931,6 +902,49 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       <title>Conversion failures</title>
       <para>...</para>
     </section>
+  </section>
+
+  <section>
+    <title>Customizing converters</title>
+    <para>The Standard Converter applies the conversion rules described in this specification. While this is 
+    useful for many applications, in some cases deviations from the specified rules may be necessary.
+    This can be done by creating customized converter. 
+    Customized converters are created based on an existing converter with additional rules specified that
+    override the existing converter's behavior.
+    A customized converter is created through a 
+    <xref linkend="org.osgi.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
+    implement the converter interface and as such can be used to create further customized converters.
+    Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
+    risk of modification to the converter's behavior.
+    </para>
+    
+    <para>For example converting a Date to a String may require a specific format. The default 
+    <code>Date</code> to <code>String</code> conversion produces a String in the format 
+    <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
+    <code>yyMMddHHmmssZ</code> instead it can be done as follows. 
+    This example shows the conversion with such a type from a JavaBean to a Map.
+    <programlisting>class MyBean {
+  //... fields ommitted
+  boolean getEnabled() { /* ... */ }
+  void setEnabled(boolean e)  { /* ... */ }
+  Date getStartDate() { /* ... */ }
+  void setStartDate(Date d) { /* ... */ }
+}
+
+MyBean mb = new MyBean();
+mb.setStartDate(new Date());
+mb.setEnabled(true);
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
+Converter ca = cb.build();
+
+Map&lt;String, String&gt; m = ca.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
+String en = m.get("enabled");   // en = "true"
+String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
+  <remark>TODO describe how the hierarchy is walked and how converters can hand back conversions</remark>
+</para>
   </section>
 
   <section>

@@ -207,7 +207,7 @@
       <title>Example</title>
       <para>
         The example below shows how the JSON Serializer can be used, the service is obtained
-        via a Declarative Service @Reference annotation.
+        via a Declarative Services @Reference annotation.
         <programlisting>@Reference(target="mimetype=application/json")
 private Serializer jsonSerializer;
 
@@ -309,6 +309,62 @@ private void myMethod() {
             </tbody>
           </tgroup>
         </table>
+      </para>
+
+      <section>
+        <title>Other types</title>
+        <para>
+          Other types are converted to YAML with the help of the Converter. If the source type is a 
+          map-like structure, as described
+          in <xref linkend="service.converter.special.cases.maps"/>, 
+          the object is converted into a map
+          before it is converted to a YAML serialization. Otherwise it is converted to String before it is 
+          inserted in the YAML stream. 
+        </para>
+        <para>
+          Conversion back from YAML to the target type is done by inspecting the target data type 
+          and using the converter to convert to the target type.
+        </para>
+      </section>
+    </section>
+    
+    <section>
+      <title>Example</title>
+      <para>
+        The example below shows how the YAML Serializer can be used, the service is obtained
+        via a Declarative Services @Reference annotation.
+        <programlisting>@Reference(target="mimetype=text/yaml")
+private Serializer yamlSerializer;
+
+private void myMethod() {
+  Map&lt;String, Object&gt; m = new LinkedHashMap&lt;&gt;();
+  m.put("sKey", "a string");
+  m.put("iKey", 42);
+  m.put("bKey",  true);
+  m.put("noKey", null);
+  m.put("simpleArray", new int[] {1,2,3});
+
+  Map&lt;String, Object&gt; m1 = new LinkedHashMap&lt;&gt;();
+  m1.put("a", 1L);
+  m1.put("b", "hello");
+  m.put("simpleObject", m1);
+
+  String yaml = yamlSerializer.serialize(m).toString(); </programlisting>
+          The YAML produced will look as follows:
+          <programlisting>sKey: 'a string'
+iKey: 42
+bKey: true
+noKey: 
+simpleArray: 
+  - 1
+  - 2
+  - 3
+simpleObject: 
+  a: 1
+  b: 'hello' </programlisting>
+        Serializing the YAML back into Java is done with the 
+        <xref linkend="org.osgi.service.serializer.Serializer.deserialize-Class-" xrefstyle="hyperlink"/> methods:
+<programlisting>  Map dm = yamlSerializer.deserialize(Map.class).from(yaml);</programlisting>
 
       </para>
     </section>
