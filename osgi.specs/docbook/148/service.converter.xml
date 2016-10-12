@@ -827,10 +827,29 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>The converter uses reflection to find a <code>java.util.Map getProperties()</code> or 
         <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
         the source object. This map view can be used to convert the source object to another map-like structure.</para>
+
+        <remark>TODO: Expand BundleContext to provide getProperties() </remark>
         
         <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
         The reverse is not supported</para>
       </section>
+
+      <section>
+        <title>Other types</title>
+        <para>
+          When converting from a map-like structure to other types, the map is first converted in an ordered collection 
+          of <code>Map.Entry</code> objects. This collection is then converted to the target type using the rules specified
+          in <xref linkend="service.converter.special.cases.map.entry"/>.
+        </para>
+        <para>
+          When converting other objects such as scalars and aggregates to a map-like structure, the objects are treated 
+          using the rules defined in <xref linkend="service.converter.special.cases.maps"/>. This means that if the object
+          has bean properties, it will be treated as a Java Bean, otherwise it will be treated as an interface, or the
+          getProperties() method will be used.
+        </para>
+      </section> 
+
+
     </section>
     
     <section xml:id="service.converter-priorities">
@@ -861,17 +880,17 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
                 <entry>3</entry>
                 <entry>annotation</entry>
               </row>
-              
-              <row>
-                <entry>4</entry>
-                <entry>interface (including Collections and Maps)</entry>
-              </row>
 
               <row>
-                <entry>5</entry>
+                <entry>4</entry>
                 <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
               </row>
               
+              <row>
+                <entry>5</entry>
+                <entry>interface (including Collections and Maps)</entry>
+              </row>
+
               <row>
                 <entry>6</entry>
                 <entry>DTO</entry>
