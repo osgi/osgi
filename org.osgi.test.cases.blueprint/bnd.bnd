@@ -415,5 +415,6 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.event; version=latest, \
     org.osgi.impl.service.blueprint; version=latest
     
--runproperties = ${runproperties}
-    
+-runproperties = ${runproperties}, \
+ osgi.compatibility.trigger.lazyActivation.onFailedClassLoad=true
+   
