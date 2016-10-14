@@ -244,7 +244,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
 		PromiseImpl<R> chained = new PromiseImpl<R>();
-		onResolve(new Then<R>(chained, success, failure));
+		onResolve(chained.new Then<T>(this, success, failure));
 		return chained;
 	}
 
@@ -262,15 +262,16 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class Then<R> implements Runnable {
-		private final PromiseImpl<R>			chained;
-		private final Success<T, ? extends R>	success;
+	private final class Then<P> implements Runnable {
+		private final Promise<P>				promise;
+		private final Success<P, ? extends T>	success;
 		private final Failure					failure;
 
 		@SuppressWarnings("unchecked")
-		Then(PromiseImpl<R> chained, Success<? super T, ? extends R> success, Failure failure) {
-			this.chained = chained;
-			this.success = (Success<T, ? extends R>) success;
+		Then(Promise<P> promise, Success< ? super P, ? extends T> success,
+				Failure failure) {
+			this.promise = promise;
+			this.success = (Success<P, ? extends T>) success;
 			this.failure = failure;
 		}
 
@@ -279,7 +280,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			Throwable f;
 			final boolean interrupted = Thread.interrupted();
 			try {
-				f = getFailure();
+				f = promise.getFailure();
 			} catch (Throwable e) {
 				f = e; // propagate new exception
 			} finally {
@@ -290,30 +291,30 @@ final class PromiseImpl<T> implements Promise<T> {
 			if (f != null) {
 				if (failure != null) {
 					try {
-						failure.fail(PromiseImpl.this);
+						failure.fail(promise);
 					} catch (Throwable e) {
 						f = e; // propagate new exception
 					}
 				}
 				// fail chained
-				chained.tryResolve(null, f);
+				tryResolve(null, f);
 				return;
 			}
-			Promise<? extends R> returned = null;
+			Promise< ? extends T> returned = null;
 			if (success != null) {
 				try {
-					returned = success.call(PromiseImpl.this);
+					returned = success.call(promise);
 				} catch (Throwable e) {
-					chained.tryResolve(null, e);
+					tryResolve(null, e);
 					return;
 				}
 			}
 			if (returned == null) {
 				// resolve chained with null value
-				chained.tryResolve(null, null);
+				tryResolve(null, null);
 			} else {
 				// resolve chained when returned promise is resolved
-				returned.onResolve(new Chain<R>(chained, returned));
+				returned.onResolve(new Chain(returned));
 			}
 		}
 	}
@@ -324,29 +325,24 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final static class Chain<R> implements Runnable {
-		private final PromiseImpl<R>		chained;
-		private final Promise<? extends R>	promise;
+	private final class Chain implements Runnable {
+		private final Promise< ? extends T>	promise;
 		private final Throwable				failure;
 		private final Callback				callback;
 
-		Chain(PromiseImpl<R> chained, Promise<? extends R> promise) {
-			this.chained = chained;
+		Chain(Promise< ? extends T> promise) {
 			this.promise = promise;
 			this.failure = null;
 			this.callback = null;
 		}
 
-		Chain(PromiseImpl<R> chained, Promise<? extends R> promise, Throwable failure) {
-			this.chained = chained;
+		Chain(Promise< ? extends T> promise, Throwable failure) {
 			this.promise = promise;
 			this.failure = requireNonNull(failure);
 			this.callback = null;
 		}
 
-		Chain(PromiseImpl<R> chained, Promise< ? extends R> promise,
-				Callback callback) {
-			this.chained = chained;
+		Chain(Promise< ? extends T> promise, Callback callback) {
 			this.promise = promise;
 			this.failure = null;
 			this.callback = requireNonNull(callback);
@@ -358,17 +354,17 @@ final class PromiseImpl<T> implements Promise<T> {
 				try {
 					callback.run();
 				} catch (Throwable e) {
-					chained.tryResolve(null, e);
+					tryResolve(null, e);
 					return;
 				}
 			}
-			R value = null;
+			T v = null;
 			Throwable f;
 			final boolean interrupted = Thread.interrupted();
 			try {
 				f = promise.getFailure();
 				if (f == null) {
-					value = promise.getValue();
+					v = promise.getValue();
 				} else if (failure != null) {
 					f = failure;
 				}
@@ -379,7 +375,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					Thread.currentThread().interrupt();
 				}
 			}
-			chained.tryResolve(value, f);
+			tryResolve(v, f);
 		}
 	}
 
@@ -389,7 +385,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> then(Callback callback) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		onResolve(new Chain<T>(chained, this, callback));
+		onResolve(chained.new Chain(this, callback));
 		return chained;
 	}
 
@@ -477,9 +473,9 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		@Override
-		public Promise<T> call(Promise<T> resolved) throws Exception {
-			if (predicate.test(resolved.getValue())) {
-				return resolved;
+		public Promise<T> call(Promise<T> promise) throws Exception {
+			if (predicate.test(promise.getValue())) {
+				return promise;
 			}
 			throw new NoSuchElementException();
 		}
@@ -506,8 +502,8 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		@Override
-		public Promise<R> call(Promise<T> resolved) throws Exception {
-			return new PromiseImpl<R>(mapper.apply(resolved.getValue()), null);
+		public Promise<R> call(Promise<T> promise) throws Exception {
+			return new PromiseImpl<R>(mapper.apply(promise.getValue()), null);
 		}
 	}
 
@@ -533,8 +529,8 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public Promise<R> call(Promise<T> resolved) throws Exception {
-			return (Promise<R>) mapper.apply(resolved.getValue());
+		public Promise<R> call(Promise<T> promise) throws Exception {
+			return (Promise<R>) mapper.apply(promise.getValue());
 		}
 	}
 
@@ -544,7 +540,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		Recover<T> recover = new Recover<T>(chained, recovery);
+		Recover recover = chained.new Recover(recovery);
 		then(recover, recover);
 		return chained;
 	}
@@ -554,43 +550,41 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class Recover<T> implements Success<T, Void>, Failure {
-		private final PromiseImpl<T>					chained;
+	private final class Recover implements Success<T,Void>, Failure {
 		private final Function<Promise<?>, ? extends T>	recovery;
 
-		Recover(PromiseImpl<T> chained, Function<Promise<?>, ? extends T> recovery) {
-			this.chained = chained;
+		Recover(Function<Promise< ? >, ? extends T> recovery) {
 			this.recovery = requireNonNull(recovery);
 		}
 
 		@Override
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			T value;
+		public Promise<Void> call(Promise<T> promise) throws Exception {
+			T v;
 			try {
-				value = resolved.getValue();
+				v = promise.getValue();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return null;
 			}
-			chained.resolve(value, null);
+			resolve(v, null);
 			return null;
 		}
 
 		@Override
-		public void fail(Promise<?> resolved) throws Exception {
+		public void fail(Promise< ? > promise) throws Exception {
 			T recovered;
-			Throwable failure;
+			Throwable f;
 			try {
-				recovered = recovery.apply(resolved);
-				failure = resolved.getFailure();
+				recovered = recovery.apply(promise);
+				f = promise.getFailure();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return;
 			}
 			if (recovered == null) {
-				chained.resolve(null, failure);
+				resolve(null, f);
 			} else {
-				chained.resolve(recovered, null);
+				resolve(recovered, null);
 			}
 		}
 	}
@@ -601,7 +595,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		RecoverWith<T> recoverWith = new RecoverWith<T>(chained, recovery);
+		RecoverWith recoverWith = chained.new RecoverWith(recovery);
 		then(recoverWith, recoverWith);
 		return chained;
 	}
@@ -611,43 +605,41 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class RecoverWith<T> implements Success<T, Void>, Failure {
-		private final PromiseImpl<T>								chained;
+	private final class RecoverWith implements Success<T,Void>, Failure {
 		private final Function<Promise<?>, Promise<? extends T>>	recovery;
 
-		RecoverWith(PromiseImpl<T> chained, Function<Promise<?>, Promise<? extends T>> recovery) {
-			this.chained = chained;
+		RecoverWith(Function<Promise< ? >,Promise< ? extends T>> recovery) {
 			this.recovery = requireNonNull(recovery);
 		}
 
 		@Override
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			T value;
+		public Promise<Void> call(Promise<T> promise) throws Exception {
+			T v;
 			try {
-				value = resolved.getValue();
+				v = promise.getValue();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return null;
 			}
-			chained.resolve(value, null);
+			resolve(v, null);
 			return null;
 		}
 
 		@Override
-		public void fail(Promise<?> resolved) throws Exception {
+		public void fail(Promise< ? > promise) throws Exception {
 			Promise<? extends T> recovered;
-			Throwable failure;
+			Throwable f;
 			try {
-				recovered = recovery.apply(resolved);
-				failure = resolved.getFailure();
+				recovered = recovery.apply(promise);
+				f = promise.getFailure();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return;
 			}
 			if (recovered == null) {
-				chained.resolve(null, failure);
+				resolve(null, f);
 			} else {
-				recovered.onResolve(new Chain<T>(chained, recovered));
+				recovered.onResolve(new Chain(recovered));
 			}
 		}
 	}
@@ -658,7 +650,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		FallbackTo<T> fallbackTo = new FallbackTo<T>(chained, fallback);
+		FallbackTo fallbackTo = chained.new FallbackTo(fallback);
 		then(fallbackTo, fallbackTo);
 		return chained;
 	}
@@ -668,38 +660,36 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class FallbackTo<T> implements Success<T, Void>, Failure {
-		private final PromiseImpl<T>		chained;
+	private final class FallbackTo implements Success<T,Void>, Failure {
 		private final Promise<? extends T>	fallback;
 
-		FallbackTo(PromiseImpl<T> chained, Promise<? extends T> fallback) {
-			this.chained = chained;
+		FallbackTo(Promise< ? extends T> fallback) {
 			this.fallback = requireNonNull(fallback);
 		}
 
 		@Override
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			T value;
+		public Promise<Void> call(Promise<T> promise) throws Exception {
+			T v;
 			try {
-				value = resolved.getValue();
+				v = promise.getValue();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return null;
 			}
-			chained.resolve(value, null);
+			resolve(v, null);
 			return null;
 		}
 
 		@Override
-		public void fail(Promise<?> resolved) throws Exception {
-			Throwable failure;
+		public void fail(Promise< ? > promise) throws Exception {
+			Throwable f;
 			try {
-				failure = resolved.getFailure();
+				f = promise.getFailure();
 			} catch (Throwable e) {
-				chained.resolve(null, e);
+				resolve(null, e);
 				return;
 			}
-			fallback.onResolve(new Chain<T>(chained, fallback, failure));
+			fallback.onResolve(new Chain(fallback, f));
 		}
 	}
 
@@ -712,9 +702,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	public Promise<T> timeout(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
 		if (!isDone()) {
-			onResolve(new Timeout<T>(chained, millis, TimeUnit.MILLISECONDS));
+			onResolve(chained.new Timeout(millis, TimeUnit.MILLISECONDS));
 		}
-		onResolve(new Chain<T>(chained, this));
+		onResolve(chained.new Chain(this));
 		return chained;
 	}
 
@@ -725,11 +715,11 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Timeout<R> implements Runnable {
+	private final class Timeout implements Runnable {
 		private final ScheduledFuture< ? > future;
 
-		Timeout(PromiseImpl<R> chained, long timeout, TimeUnit unit) {
-			future = Callbacks.schedule(new Action<R>(chained), timeout, unit);
+		Timeout(long timeout, TimeUnit unit) {
+			future = Callbacks.schedule(new TimeoutAction(), timeout, unit);
 		}
 
 		@Override
@@ -738,23 +728,19 @@ final class PromiseImpl<T> implements Promise<T> {
 				future.cancel(false);
 			}
 		}
-
-		/**
-		 * Callback used to fail the Promise if the timeout expires.
-		 * 
-		 * @Immutable
-		 */
-		private static final class Action<R> implements Runnable {
-			private final PromiseImpl<R> chained;
-
-			Action(PromiseImpl<R> chained) {
-				this.chained = chained;
-			}
-
-			@Override
-			public void run() {
-				chained.tryResolve(null, new TimeoutException());
-			}
+	}
+	
+	/**
+	 * Callback used to fail the Promise if the timeout expires.
+	 * 
+	 * @Immutable
+	 */
+	private final class TimeoutAction implements Runnable {
+		TimeoutAction() {}
+		
+		@Override
+		public void run() {
+			tryResolve(null, new TimeoutException());
 		}
 	}
 
@@ -766,7 +752,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> delay(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<T>();
-		onResolve(new Delay<T>(new Chain<T>(chained, this), millis,
+		onResolve(new Delay(chained.new Chain(this), millis,
 				TimeUnit.MILLISECONDS));
 		return chained;
 	}
@@ -778,20 +764,20 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 * @since 1.1
 	 */
-	private static final class Delay<R> implements Runnable {
-		private final Chain<R>	chain;
+	private static final class Delay implements Runnable {
+		private final Runnable	callback;
 		private final long		delay;
 		private final TimeUnit	unit;
 
-		Delay(Chain<R> chain, long delay, TimeUnit unit) {
-			this.chain = chain;
+		Delay(Runnable callback, long delay, TimeUnit unit) {
+			this.callback = callback;
 			this.delay = delay;
 			this.unit = unit;
 		}
 
 		@Override
 		public void run() {
-			Callbacks.schedule(chain, delay, unit);
+			Callbacks.schedule(callback, delay, unit);
 		}
 	}
 
