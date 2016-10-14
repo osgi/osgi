@@ -21,7 +21,8 @@ Provide-Capability: osgi.service;objectClass:List<String>="org.osgi.service.asyn
 
 -buildpath:  \
 	org.osgi.service.async;version=project,\
-	osgi.promise;version=6.0,\
+	org.osgi.util.function;version=project,\
+	org.osgi.util.promise;version=project,\
 	osgi.core;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
 	com.springsource.net.sf.cglib
