@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.osgi.util.promise.PromiseImpl.Result;
 
 /**
  * Static helper methods for {@link Promise}s.
@@ -151,30 +153,22 @@ public class Promises {
 			if (promiseCount.decrementAndGet() != 0) {
 				return;
 			}
-			List<T> result = new ArrayList<T>(promises.size());
+			List<T> value = new ArrayList<T>(promises.size());
 			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
 			Throwable cause = null;
 			for (Promise<? extends T> promise : promises) {
-				Throwable failure;
-				T value;
-				try {
-					failure = promise.getFailure();
-					value = (failure != null) ? null : promise.getValue();
-				} catch (Throwable e) {
-					chained.tryResolve(null, e);
-					return;
-				}
-				if (failure != null) {
+				Result<T> result = Result.collect(promise);
+				if (result.fail != null) {
 					failed.add(promise);
 					if (cause == null) {
-						cause = failure;
+						cause = result.fail;
 					}
 				} else {
-					result.add(value);
+					value.add(result.value);
 				}
 			}
 			if (failed.isEmpty()) {
-				chained.tryResolve(result, null);
+				chained.tryResolve(value, null);
 			} else {
 				chained.tryResolve(null,
 						new FailedPromisesException(failed, cause));

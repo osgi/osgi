@@ -104,8 +104,11 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @param f The failure of this resolved Promise.
 	 */
 	PromiseImpl(T v, Throwable f) {
-		value = v;
-		fail = f;
+		if (f == null) {
+			value = v;
+		} else {
+			fail = f;
+		}
 		callbacks = new ConcurrentLinkedQueue<Runnable>();
 		resolved = new CountDownLatch(0);
 	}
@@ -412,7 +415,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			} catch (Throwable e) {
 				f = e; // propagate new exception
 			}
-			chained.resolve(null, f);
+			chained.tryResolve(null, f);
 		}
 	}
 
@@ -885,7 +888,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @NotThreadSafe
 	 */
-	private static final class Result<P> {
+	static final class Result<P> {
 		Throwable	fail;
 		P			value;
 	
