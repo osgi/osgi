@@ -134,7 +134,7 @@ public class ScopedWorkException extends RuntimeException {
 
 		throw new IllegalArgumentException(
 				"The cause of this Exception is not an instance of "
-						+ String.join(", ", a.getName(), b.getName()),
+						+ a.getName() + " or " + b.getName(),
 				this);
 	}
 
@@ -163,8 +163,9 @@ public class ScopedWorkException extends RuntimeException {
 		possibleThrow(c, t);
 
 		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of " + String
-						.join(", ", a.getName(), b.getName(), c.getName()),
+				"The cause of this Exception is not an instance of "
+						+ a.getName() + ", " + b.getName() + ", or "
+						+ c.getName(),
 				this);
 	}
 
@@ -197,8 +198,9 @@ public class ScopedWorkException extends RuntimeException {
 		possibleThrow(d, t);
 
 		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of " + String
-						.join(", ", a.getName(), b.getName(), c.getName()),
+				"The cause of this Exception is not an instance of "
+						+ a.getName() + ", " + b.getName() + ", " + c.getName()
+						+ ", or " + d.getName(),
 				this);
 	}
 
