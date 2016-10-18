@@ -891,9 +891,9 @@
               xrefstyle="template:%n %t"/></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.converter"/></code></entry>
+              linkend="org.osgi.util.converter"/></code></entry>
 
-              <entry><code><xref endterm="org.osgi.service.converter-version"
+              <entry><code><xref endterm="org.osgi.util.converter-version"
               linkend="service.resolver"/></code></entry>
             </row>
 
