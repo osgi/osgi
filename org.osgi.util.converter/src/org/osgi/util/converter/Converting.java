@@ -25,7 +25,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * {@link Converter} service by starting a conversion for a specific object.
  *
  * @author $Id$
- * @ThreadSafe
+ * @NotThreadSafe
  */
 @ProviderType
 public interface Converting {
@@ -33,7 +33,7 @@ public interface Converting {
 	 * Convert the source object based on rules for the class being passed in.
 	 * This method can be used to disambiguate objects that would match multiple
 	 * conversion rules.
-	 * 
+	 *
 	 * @param type The type or class to be used as the source type for the
 	 *            conversion
 	 * @return The current {@code Converting} object so that additional calls
@@ -50,6 +50,19 @@ public interface Converting {
 	 *         can be chained.
 	 */
 	Converting defaultValue(Object defVal);
+
+	/**
+	 * Specify the target type to view the conversion target as. Can be used to
+	 * force the converter to treat the target, specified in the
+	 * {@link #to(Class)} method to be viewed as the type specified here. If
+	 * specified, the class specified by the {@link #to(Class)} method will need
+	 * to be assignable to this type.
+	 *
+	 * @param cls The class to view the target type as.
+	 * @return The current {@code Converting} object so that additional calls
+	 *         can be chained.
+	 */
+	Converting target(Class< ? > cls);
 
 	/**
 	 * Specify the target object type for the conversion as a class object.
