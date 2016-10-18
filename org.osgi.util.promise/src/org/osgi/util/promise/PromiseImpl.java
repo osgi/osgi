@@ -424,7 +424,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
-		return then(new Filter<T>(predicate));
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		onResolve(chained.new Filter(this, predicate));
+		return chained;
 	}
 
 	/**
@@ -432,19 +434,28 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class Filter<T> implements Success<T, T> {
+	private final class Filter implements Runnable {
+		private final Promise< ? extends T>	promise;
 		private final Predicate<? super T>	predicate;
 
-		Filter(Predicate<? super T> predicate) {
+		Filter(Promise< ? extends T> promise, Predicate< ? super T> predicate) {
+			this.promise = promise;
 			this.predicate = requireNonNull(predicate);
 		}
 
 		@Override
-		public Promise<T> call(Promise<T> promise) throws Exception {
-			if (predicate.test(promise.getValue())) {
-				return promise;
+		public void run() {
+			Result<T> result = Result.collect(promise);
+			if (result.fail == null) {
+				try {
+					if (!predicate.test(result.value)) {
+						result.fail = new NoSuchElementException();
+					}
+				} catch (Throwable e) { // propagate new exception
+					result.fail = e;
+				}
 			}
-			throw new NoSuchElementException();
+			tryResolve(result.value, result.fail);
 		}
 	}
 
@@ -453,7 +464,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
-		return then(new Map<T, R>(mapper));
+		PromiseImpl<R> chained = new PromiseImpl<R>();
+		onResolve(chained.new Map<T>(this, mapper));
+		return chained;
 	}
 
 	/**
@@ -461,16 +474,28 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class Map<T, R> implements Success<T, R> {
-		private final Function<? super T, ? extends R>	mapper;
+	private final class Map<P> implements Runnable {
+		private final Promise< ? extends P>				promise;
+		private final Function<? super P, ? extends T>	mapper;
 
-		Map(Function<? super T, ? extends R> mapper) {
+		Map(Promise< ? extends P> promise,
+				Function< ? super P, ? extends T> mapper) {
+			this.promise = promise;
 			this.mapper = requireNonNull(mapper);
 		}
 
 		@Override
-		public Promise<R> call(Promise<T> promise) throws Exception {
-			return new PromiseImpl<R>(mapper.apply(promise.getValue()), null);
+		public void run() {
+			Result<P> result = Result.collect(promise);
+			T v = null;
+			if (result.fail == null) {
+				try {
+					v = mapper.apply(result.value);
+				} catch (Throwable e) { // propagate new exception
+					result.fail = e;
+				}
+			}
+			tryResolve(v, result.fail);
 		}
 	}
 
@@ -479,7 +504,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
-		return then(new FlatMap<T, R>(mapper));
+		PromiseImpl<R> chained = new PromiseImpl<R>();
+		onResolve(chained.new FlatMap<T>(this, mapper));
+		return chained;
 	}
 
 	/**
@@ -487,17 +514,32 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private static final class FlatMap<T, R> implements Success<T, R> {
-		private final Function<? super T, Promise<? extends R>>	mapper;
+	private final class FlatMap<P> implements Runnable {
+		private final Promise< ? extends P>							promise;
+		private final Function< ? super P,Promise< ? extends T>>	mapper;
 
-		FlatMap(Function<? super T, Promise<? extends R>> mapper) {
+		FlatMap(Promise< ? extends P> promise,
+				Function< ? super P,Promise< ? extends T>> mapper) {
+			this.promise = promise;
 			this.mapper = requireNonNull(mapper);
 		}
 
 		@Override
-		@SuppressWarnings("unchecked")
-		public Promise<R> call(Promise<T> promise) throws Exception {
-			return (Promise<R>) mapper.apply(promise.getValue());
+		public void run() {
+			Result<P> result = Result.collect(promise);
+			if (result.fail == null) {
+				Promise< ? extends T> flatmap = null;
+				try {
+					flatmap = mapper.apply(result.value);
+				} catch (Throwable e) { // propagate new exception
+					result.fail = e;
+				}
+				if (flatmap != null) {
+					flatmap.onResolve(new Chain(flatmap));
+					return;
+				}
+			}
+			tryResolve(null, result.fail);
 		}
 	}
 
