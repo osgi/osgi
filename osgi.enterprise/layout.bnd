@@ -1,5 +1,4 @@
 osgi.enterprise.specs = \
-     org.osgi.converter, \
      org.osgi.jmx, \
      org.osgi.namespace.contract, \
      org.osgi.namespace.extender, \
@@ -31,6 +30,7 @@ osgi.enterprise.specs = \
      org.osgi.service.subsystem, \
      org.osgi.service.transaction.control, \
      org.osgi.service.useradmin, \
+     org.osgi.util.converter, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
      org.osgi.util.pushstream, \

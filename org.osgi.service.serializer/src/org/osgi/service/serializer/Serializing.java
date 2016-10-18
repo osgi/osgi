@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.converter.Converter;
+import org.osgi.util.converter.Converter;
 
 /**
  * Interface to specify the target of the encoding operation.

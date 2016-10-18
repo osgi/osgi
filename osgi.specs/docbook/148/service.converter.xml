@@ -12,8 +12,8 @@
   <title>Converter Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.converter-version"
-    linkend="org.osgi.converter"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.util.converter-version"
+    linkend="org.osgi.util.converter"/></releaseinfo>
   </info>
 
   <section>
@@ -971,7 +971,7 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     <para>...</para>
   </section> 
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.converter.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.util.converter.xml"/>
  
   <section>
     <title>References</title>
