@@ -45,7 +45,7 @@ public class Deferred<T> {
 	 * Create a new Deferred with an associated Promise.
 	 */
 	public Deferred() {
-		promise = new PromiseImpl<T>();
+		promise = new PromiseImpl<>();
 	}
 
 	/**

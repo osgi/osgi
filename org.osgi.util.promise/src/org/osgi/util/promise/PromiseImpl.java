@@ -93,7 +93,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * Initialize this Promise.
 	 */
 	PromiseImpl() {
-		callbacks = new ConcurrentLinkedQueue<Runnable>();
+		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(1);
 	}
 
@@ -109,7 +109,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		} else {
 			fail = f;
 		}
-		callbacks = new ConcurrentLinkedQueue<Runnable>();
+		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(0);
 	}
 
@@ -249,8 +249,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
-		PromiseImpl<R> chained = new PromiseImpl<R>();
-		onResolve(chained.new Then<T>(this, success, failure));
+		PromiseImpl<R> chained = new PromiseImpl<>();
+		onResolve(chained.new Then<>(this, success, failure));
 		return chained;
 	}
 
@@ -361,7 +361,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> then(Callback callback) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(chained.new Chain(this, callback));
 		return chained;
 	}
@@ -386,7 +386,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 *         resolved.
 	 */
 	Promise<Void> resolveWith(Promise<? extends T> with) {
-		PromiseImpl<Void> chained = new PromiseImpl<Void>();
+		PromiseImpl<Void> chained = new PromiseImpl<>();
 		with.onResolve(new ResolveWith(with, chained));
 		return chained;
 	}
@@ -424,7 +424,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(chained.new Filter(this, predicate));
 		return chained;
 	}
@@ -464,8 +464,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<R>();
-		onResolve(chained.new Map<T>(this, mapper));
+		PromiseImpl<R> chained = new PromiseImpl<>();
+		onResolve(chained.new Map<>(this, mapper));
 		return chained;
 	}
 
@@ -504,8 +504,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<R>();
-		onResolve(chained.new FlatMap<T>(this, mapper));
+		PromiseImpl<R> chained = new PromiseImpl<>();
+		onResolve(chained.new FlatMap<>(this, mapper));
 		return chained;
 	}
 
@@ -548,7 +548,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(chained.new Recover(this, recovery));
 		return chained;
 	}
@@ -591,7 +591,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(chained.new RecoverWith(this, recovery));
 		return chained;
 	}
@@ -635,7 +635,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(chained.new FallbackTo(this, fallback));
 		return chained;
 	}
@@ -672,7 +672,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> timeout(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		if (!isDone()) {
 			onResolve(chained.new Timeout(millis, TimeUnit.MILLISECONDS));
 		}
@@ -723,7 +723,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> delay(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<T>();
+		PromiseImpl<T> chained = new PromiseImpl<>();
 		onResolve(new Delay(chained.new Chain(this), millis,
 				TimeUnit.MILLISECONDS));
 		return chained;
