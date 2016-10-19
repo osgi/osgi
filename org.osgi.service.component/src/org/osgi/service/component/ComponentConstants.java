@@ -139,4 +139,16 @@ public interface ComponentConstants {
 	 * @since 1.3
 	 */
 	public static final String	COMPONENT_CAPABILITY_NAME					= "osgi.component";
+
+	/**
+	 * Compile time constant for the Specification Version of Declarative
+	 * Services.
+	 * <p>
+	 * Used in {@code Version} and {@code Requirement} annotations. The value of
+	 * this compile time constant will change when the specification version of
+	 * Declarative Services is updated.
+	 * 
+	 * @since 1.4
+	 */
+	public static final String	COMPONENT_SPECIFICATION_VERSION				= "1.4.0";
 }

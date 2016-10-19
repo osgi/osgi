@@ -33,8 +33,10 @@
  * @author $Id$
  */
 
-@Version("1.4")
+@Version(COMPONENT_SPECIFICATION_VERSION)
 package org.osgi.service.component;
+
+import static org.osgi.service.component.ComponentConstants.COMPONENT_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 
