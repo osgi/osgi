@@ -21,6 +21,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.component.ComponentConstants;
+
 /**
  * Identify the annotated class as a Service Component.
  * 
@@ -37,6 +41,9 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
+@Requirement(namespace = ExtenderNamespace.EXTENDER_NAMESPACE, //
+		name = ComponentConstants.COMPONENT_CAPABILITY_NAME, //
+		version = ComponentConstants.COMPONENT_SPECIFICATION_VERSION)
 public @interface Component {
 	/**
 	 * The name of this Component.
