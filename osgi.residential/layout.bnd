@@ -15,7 +15,6 @@ osgi.residential.specs = \
 	 org.osgi.service.http, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
-     org.osgi.service.metatype.annotations, \
 	 org.osgi.service.networkadapter, \
      org.osgi.service.provisioning, \
 	 org.osgi.service.resourcemonitoring, \
