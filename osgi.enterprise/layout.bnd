@@ -9,7 +9,6 @@ osgi.enterprise.specs = \
      org.osgi.service.blueprint, \
      org.osgi.service.cm, \
      org.osgi.service.component, \
-     org.osgi.service.component.annotations, \
      org.osgi.service.coordinator, \
      org.osgi.service.event, \
      org.osgi.service.http, \

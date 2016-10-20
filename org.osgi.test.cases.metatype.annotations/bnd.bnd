@@ -10,7 +10,7 @@ Private-Package						=  \
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-	org.osgi.service.component.annotations;					version=project	, \
+	org.osgi.service.component;					version=project, \
 	osgi.core;									version=4.3.1	, \
 	osgi.cmpn;									version=4.3.1	, \
 	${junit}

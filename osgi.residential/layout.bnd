@@ -6,7 +6,6 @@ osgi.residential.specs = \
      org.osgi.namespace.unresolvable, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
-	 org.osgi.service.component.annotations, \
 	 org.osgi.service.dal, \
 	 org.osgi.service.dal.functions, \
 	 org.osgi.service.device, \

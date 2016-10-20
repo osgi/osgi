@@ -9,7 +9,7 @@ Private-Package 			= ${p}.*
 -metatypeannotations: ${p}.*
 
 -buildpath 					= \
-	org.osgi.service.component.annotations; 	version=project, \
+	org.osgi.service.component; 	version=project, \
 	org.osgi.service.metatype.annotations; 	version=project, \
 	osgi.core;					version=6.0, \
 	osgi.cmpn;					version=6.0
