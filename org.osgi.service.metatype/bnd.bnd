@@ -1,7 +1,7 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
-Export-Package: ${p}.*; -split-package:=first
+-sub: *.bnd
 
 -buildpath = \
     osgi.core; version=5, \
