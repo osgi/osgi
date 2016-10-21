@@ -4,7 +4,7 @@ Bundle-License: Apache-2.0; \
 Bundle-Description: \
 	OSGi Compendium Release ${versionmask;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
-Bundle-Name: ${-groupid}:${p}
+Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
 
 -buildrepo: Local

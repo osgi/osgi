@@ -1,12 +1,12 @@
 # bnd instructions for companion code projects
-spec.package.versionattr: ${packageattribute;${def;spec.package;${p}};version}
+spec.package.versionattr: ${packageattribute;${def;spec.package;${bsn}};version}
 spec.version = ${versionmask;===;${if;${spec.package.versionattr};${spec.package.versionattr};0}}
 build.version = ${spec.version}.${project.build}
 Bundle-License: Apache-2.0; \
                 link="http://www.apache.org/licenses/LICENSE-2.0"; \
                 description="Apache License, Version 2.0"
-Bundle-Description: OSGi Companion Code for ${p} Version ${spec.version}.
-Bundle-Name: ${-groupid}:${p}
+Bundle-Description: OSGi Companion Code for ${bsn} Version ${spec.version}.
+Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
 -includeresource: {${project.workspace}/osgi.companion/legal/jar}
 

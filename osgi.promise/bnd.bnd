@@ -4,7 +4,7 @@ Bundle-License: Apache-2.0; \
 Bundle-Description: \
     OSGi Promise API Release ${versionmask;=;${build.version}} \
     for use inside and outside of OSGi environments.
-Bundle-Name: ${-groupid}:${p}
+Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
 
 -buildrepo: Local

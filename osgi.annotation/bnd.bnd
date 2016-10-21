@@ -4,7 +4,7 @@ Bundle-License: Apache-2.0; \
 Bundle-Description: \
     OSGi Annotation Release ${versionmask;=;${build.version}}, \
     Annotations for use in compiling bundles.
-Bundle-Name: ${-groupid}:${p}
+Bundle-Name: ${-groupid}:${bsn}
 -pom: version=${versionmask;===s;${@version}}
 
 -buildrepo: Local
