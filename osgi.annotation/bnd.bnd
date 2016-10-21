@@ -13,7 +13,7 @@ companion.code = true
 
 Export-Package: ${osgi.annotation.packages}
 
-Include-Resource: ${osgi.annotation.resources}
+-includeresource: ${osgi.annotation.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"

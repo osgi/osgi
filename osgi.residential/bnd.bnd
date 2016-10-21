@@ -15,7 +15,7 @@ Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${replace;${osgi.residential.packages};.+;$0\\;-split-package:=first}
 
-Include-Resource 				: ${osgi.residential.resources}
+-includeresource 				: ${osgi.residential.resources}
 
 Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
