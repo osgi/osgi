@@ -1,0 +1,10 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+Provide-Capability: osgi.unresolvable
+Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+
+-buildpath = \
+    org.osgi.service.metatype; version=latest

@@ -1,2 +1,0 @@
-Bundle-SymbolicName: ${p}
-Export-Package: ${p}.*; -split-package:=first

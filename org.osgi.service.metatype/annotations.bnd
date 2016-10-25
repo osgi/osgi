@@ -1,2 +1,0 @@
-Bundle-SymbolicName: ${p}.annotations
-Export-Package: ${p}.annotations; -split-package:=first
