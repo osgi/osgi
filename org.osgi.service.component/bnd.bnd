@@ -1,7 +1,8 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
-Export-Package: ${p}.*; -split-package:=first
+Export-Package: !${p}.annotations, ${p}.*; -split-package:=first
+Private-Package: ${p}.annotations
 
 -buildpath = \
     osgi.annotation; version=latest, \
