@@ -8,15 +8,13 @@ Bundle-Description			= The ZigBee bundle with Control Point stack
 Export-Package: \
 	org.osgi.service.zigbee.*;-split-package:=first;provide:=true
 
-Private-Package = 	org.osgi.test.support.compatibility;-noimport:=true, \
-					org.osgi.test.support;-noimport:=true, \
-					org.osgi.test.support.sleep;-noimport:=true, \
-			      ${p}.*
+Private-Package = ${p}.*
 
 -buildpath: \
+    ee.minimum;version=1.2.1,\
+    com.icl.saxon;version=latest,\
 	org.osgi.service.zigbee;version=project,\
 	org.osgi.test.support;version=project,\
-	ee.j2se;version=${javac.compliance},\
-	osgi.core;version=4.2,\
-	osgi.cmpn;version=4.2,\
-	osgi.promise;version=6.0.0
+    osgi.core;version=4.2,\
+    osgi.cmpn;version=4.2,\
+    osgi.promise;version=6.0
