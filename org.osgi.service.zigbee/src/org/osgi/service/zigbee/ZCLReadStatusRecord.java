@@ -40,7 +40,6 @@ public interface ZCLReadStatusRecord {
 	 */
 	public ZigBeeException getFailure();
 
-	
 	/**
 	 * Returns the {@link ZCLAttributeInfo} related to the reading operation.
 	 * 

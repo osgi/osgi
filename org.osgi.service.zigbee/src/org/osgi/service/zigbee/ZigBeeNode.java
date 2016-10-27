@@ -25,13 +25,16 @@ import org.osgi.util.promise.Promise;
 
 /**
  * This interface represents a ZigBee node, means a physical device that can
- * communicate using the ZigBee protocol.<br>
+ * communicate using the ZigBee protocol.
+ * <p>
  * Each physical device may contain up 240 logical devices which are represented
- * by the {@link ZigBeeEndpoint} class.<br>
+ * by the {@link ZigBeeEndpoint} class.
+ * <p>
  * Each logical device is identified by an <i>EndPoint</i> address, but shares:
- * <br>
- * - either the <i>64-bit 802.15.4 IEEE Address</i><br>
- * - or the <i>16-bit ZigBee Network Address</i>.<br>
+ * <ul>
+ * <li>either the <i>64-bit 802.15.4 IEEE Address</i></li>
+ * <li>or the <i>16-bit ZigBee Network Address</i>.</li>
+ * </ul>
  * 
  * @noimplement
  * 
@@ -42,10 +45,14 @@ public interface ZigBeeNode {
 	/**
 	 * Property key for the mandatory node IEEE Address representing node MAC
 	 * address. MAC Address is a 12-digit(48-bit) or 16-digit(64-bit)
-	 * hexadecimal numbers. There is no need to use 0x hexadecimal notation.
-	 * <i>i.e zigbee.node.ieee.address="00:25:96:AB:37:56"</i> for a 48-bit
-	 * address and <i>i.e zigbee.node.ieee.address="00:25:96:FF:FE:AB:37:56"</i>
-	 * for a 64-bit address.
+	 * hexadecimal numbers. There is no need to use 0x hexadecimal notation. For
+	 * example:
+	 * <ul>
+	 * <li><i>zigbee.node.ieee.address="00:25:96:AB:37:56"</i> for a 48-bit
+	 * address</li>
+	 * <li><i>zigbee.node.ieee.address="00:25:96:FF:FE:AB:37:56"</i> for a
+	 * 64-bit address</li>
+	 * </ul>
 	 * 
 	 * A ZigBee Event Listener service can announce for what ZigBee device nodes
 	 * it wants notifications.
@@ -77,15 +84,15 @@ public interface ZigBeeNode {
 	public static final String	EXTENDED_PAN_ID			= "zigbee.node.extended.pan.id";
 
 	/**
-	 * ZigBee power source, i.e. 3rd bit of "MAC Capabilities" in Node
+	 * ZigBee power source, that is, 3rd bit of "MAC Capabilities" in Node
 	 * Descriptor. Set to 1 if the current power source is mains power, set to 0
 	 * otherwise.
 	 */
 	public static final String	POWER_SOURCE			= "zigbee.node.power.source";
 
 	/**
-	 * ZigBee receiver on when idle, i.e. 4th bit of "MAC Capabilities" in Node
-	 * Descriptor. Set to 1 if the device does not disable its receiver to
+	 * ZigBee receiver on when idle, that is, 4th bit of "MAC Capabilities" in
+	 * Node Descriptor. Set to 1 if the device does not disable its receiver to
 	 * conserve power during idle periods, set to 0 otherwise.
 	 */
 	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
@@ -156,20 +163,19 @@ public interface ZigBeeNode {
 	 * 
 	 * As described in <em>Table 2.91 Fields of the Node_Desc_rsp Command</em>
 	 * of the ZigBee specification, a <em>Node_Desc_rsp</em> command can return
-	 * with the following status codes (see {@link ZDPException} class):
-	 * 
+	 * with the following status codes:
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code DEVICE_NOT_FOUND}
-	 * <li>{@code INV_REQUESTTYPE}
-	 * <li>{@code NO_DESCRIPTOR}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#DEVICE_NOT_FOUND}</li>
+	 * <li>{@link ZDPException#INV_REQUESTTYPE}</li>
+	 * <li>{@link ZDPException#NO_DESCRIPTOR}</li>
 	 * </ul>
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         It will be used in order to return the node descriptor
 	 *         {@link ZigBeeNodeDescriptor}. If the ZDP <em>Node_Desc_rsp</em>
 	 *         do not return success, the promise must fail with a
-	 *         {@link ZDPException} exception with the correct status code..
+	 *         {@link ZDPException} exception with the correct status code.
 	 */
 	public Promise /* <ZigBeeNodeDescriptor> */ getNodeDescriptor();
 
@@ -178,13 +184,12 @@ public interface ZigBeeNode {
 	 * 
 	 * As described in <em>Table 2.92 Fields of the Power_Desc_rsp Command</em>
 	 * of the ZigBee specification, a <em>Power_Desc_rsp</em> command can return
-	 * with the following status codes (see {@link ZDPException} class):
-	 * 
+	 * with the following status codes:
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code DEVICE_NOT_FOUND}
-	 * <li>{@code INV_REQUESTTYPE}
-	 * <li>{@code NO_DESCRIPTOR}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#DEVICE_NOT_FOUND}</li>
+	 * <li>{@link ZDPException#INV_REQUESTTYPE}</li>
+	 * <li>{@link ZDPException#NO_DESCRIPTOR}</li>
 	 * </ul>
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
@@ -200,16 +205,14 @@ public interface ZigBeeNode {
 	 * Retrieves the ZigBee node Complex Descriptor.
 	 * 
 	 * <p>
-	 * As described in
-	 * <em>Table 2.92 Fields of the Complex_Desc_rsp Command</em> of the ZigBee
-	 * specification, a <em>Complex_Desc_rsp</em> command can return with the
-	 * following status codes (see {@link ZDPException} class):
-	 * 
+	 * As described in <em>Table 2.92 Fields of the Complex_Desc_rsp
+	 * Command</em> of the ZigBee specification, a <em>Complex_Desc_rsp</em>
+	 * command can return with the following status codes:
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code DEVICE_NOT_FOUND}
-	 * <li>{@code INV_REQUESTTYPE}
-	 * <li>{@code NO_DESCRIPTOR}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#DEVICE_NOT_FOUND}</li>
+	 * <li>{@link ZDPException#INV_REQUESTTYPE}</li>
+	 * <li>{@link ZDPException#NO_DESCRIPTOR}</li>
 	 * </ul>
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
@@ -227,15 +230,16 @@ public interface ZigBeeNode {
 	 * 
 	 * <p>
 	 * An implementation of this method may use the <em>Mgmt_Lqi_req</em> and
-	 * <em>Mgmt_Lqi_rsp</em> messages to retrieve the Link Quality table (i.e
-	 * also known as NeighborTableList in the ZigBee Specification).
+	 * <em>Mgmt_Lqi_rsp</em> messages to retrieve the Link Quality table (also
+	 * known as NeighborTableList in the ZigBee Specification).
 	 * 
 	 * <p>
 	 * The method limit the Link Quality table to the {@link ZigBeeNode} service
 	 * discovered.
 	 * 
 	 * <p>
-	 * In case of failure the target device may report error code NOT_SUPPORTED.
+	 * In case of failure the target device may report error code
+	 * {@link ZDPException#NOT_SUPPORTED}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         It will be resolved with the result of this operation. In case of
@@ -257,8 +261,8 @@ public interface ZigBeeNode {
 	 * command to retrieve the Routing Table .
 	 * 
 	 * <p>
-	 * The target device may report a status code NOT_SUPPORTED in case of
-	 * failure.
+	 * The target device may report a status code
+	 * {@link ZDPException#NOT_SUPPORTED} in case of failure.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         In case of success, the resolved value will be a {@link Map}
@@ -278,10 +282,10 @@ public interface ZigBeeNode {
 	 * of the ZigBee specification, a Mgmt_Leave_rsp ZDP command may return the
 	 * following status values:
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code NOT_SUPPORTED}
-	 * <li>{@code NOT_AUTHORIZED}
-	 * <li>any status code returned from the NLMELEAVE.confirm primitive}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#NOT_SUPPORTED}</li>
+	 * <li>{@link ZDPException#NOT_AUTHORIZED}</li>
+	 * <li>any status code returned from the NLMELEAVE.confirm primitive</li>
 	 * </ul>
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
@@ -296,26 +300,25 @@ public interface ZigBeeNode {
 	 * <p>
 	 * As described in <em>Table 2.131 Fields of the Mgmt_Leave_rsp Command</em>
 	 * of the ZigBee specification, a Mgmt_Leave_rsp command could return the
-	 * following status values (defined in class {@link ZDPException}):
+	 * following status values:
 	 * 
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code NOT_SUPPORTED}
-	 * <li>{@code NOT_AUTHORIZED}
-	 * <li>any status code returned from the NLMELEAVE.confirm primitive}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#NOT_SUPPORTED}</li>
+	 * <li>{@link ZDPException#NOT_AUTHORIZED}</li>
+	 * <li>any status code returned from the NLMELEAVE.confirm primitive</li>
 	 * </ul>
 	 * 
-	 * @param rejoin This field has a value of 1 if the device being asked to
-	 *        leave from the current parent is requested to rejoin the network.
-	 *        Otherwise, it has a value of 0.
-	 * @param removeChildren This field has a value of 1 if the device being
-	 *        asked to leave the network is also being asked to remove its child
-	 *        devices, if any. Otherwise, it has a value of 0.
+	 * @param rejoin {@code true} if the device being asked to leave from the
+	 *        current parent is requested to rejoin the network. Otherwise,
+	 *        {@code false}.
+	 * @param removeChildren {@code true} if the device being asked to leave the
+	 *        network is also being asked to remove its child devices, if any.
+	 *        Otherwise, {@code false}.
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         In case of success, the ZigBeeDeviceNode service must be
-	 *         unregistered, first and then the promise may be resolved with a
-	 *         {@code null} value, otherwise with the correct
-	 *         {@link ZDPException} exception.
+	 *         In case of success, the ZigBeeNode service must be unregistered,
+	 *         first and then the promise may be resolved with a {@code null}
+	 *         value, otherwise with the correct {@link ZDPException} exception.
 	 */
 	public Promise leave(boolean rejoin, boolean removeChildren);
 
@@ -387,16 +390,15 @@ public interface ZigBeeNode {
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
 	/**
-	 * Returns the user description of this node. As described in
-	 * <em>Table 2.97 Fields of the User_Desc_rsp Command</em> of the ZigBee
-	 * specification, a User_Desc_rsp may return the following status (defined
-	 * in class {@link ZDPException}:
+	 * Returns the user description of this node. As described in <em>Table 2.97
+	 * Fields of the User_Desc_rsp Command</em> of the ZigBee specification, a
+	 * User_Desc_rsp may return the following status:
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code NOT_SUPPORTED}
-	 * <li>{@code DEVICE_NOT_FOUND}
-	 * <li>{@code INV_REQUESTTYPE}
-	 * <li>{@code NO_DESCRIPTOR}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#NOT_SUPPORTED}</li>
+	 * <li>{@link ZDPException#DEVICE_NOT_FOUND}</li>
+	 * <li>{@link ZDPException#INV_REQUESTTYPE}</li>
+	 * <li>{@link ZDPException#NO_DESCRIPTOR}</li>
 	 * </ul>
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
@@ -408,16 +410,15 @@ public interface ZigBeeNode {
 	Promise /* <String> */ getUserDescription();
 
 	/**
-	 * Sets the user description of this node. As described in
-	 * <em>Table 2.137 ZDP Enumerations Description</em> of the ZigBee
-	 * specification, a Set_User_Desc_rsp request may return the following
-	 * status (defined in class {@link ZDPException}:
+	 * Sets the user description of this node. As described in <em>Table 2.137
+	 * ZDP Enumerations Description</em> of the ZigBee specification, a
+	 * Set_User_Desc_rsp request may return the following status:
 	 * 
 	 * <ul>
-	 * <li>{@code SUCCESS}
-	 * <li>{@code DEVICE_NOT_FOUND}
-	 * <li>{@code INV_REQUESTTYPE}
-	 * <li>{@code NO_DESCRIPTOR}
+	 * <li>{@link ZDPException#SUCCESS}</li>
+	 * <li>{@link ZDPException#DEVICE_NOT_FOUND}</li>
+	 * <li>{@link ZDPException#INV_REQUESTTYPE}</li>
+	 * <li>{@link ZDPException#NO_DESCRIPTOR}</li>
 	 * </ul>
 	 * 
 	 * @param userDescription the user description.
@@ -426,6 +427,5 @@ public interface ZigBeeNode {
 	 *         case of errors the promise must fail with a {@link ZDPException}
 	 *         exception containing the response status code value.
 	 */
-	Promise setUserDescription(String userDescription);
-
+	Promise /* <Void> */ setUserDescription(String userDescription);
 }

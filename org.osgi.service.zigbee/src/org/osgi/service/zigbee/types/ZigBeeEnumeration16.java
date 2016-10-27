@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * A singleton class that represents the 'Enumeration 16-bits' data type, as it
+ * A singleton class that represents the 'Enumeration 16-bit' data type, as it
  * is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$

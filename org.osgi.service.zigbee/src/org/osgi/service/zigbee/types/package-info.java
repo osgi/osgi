@@ -15,13 +15,16 @@
  */
 
 /**
+ * Device Service Specification for ZigBee Technology Data Types.
+ * 
+ * <p>
  * Utility classes modeling the ZCL data types. Each class provides the static
  * getInstance() method for retrieving a singleton instance of the class itself.
  * 
  * <p>
  * Every class contains methods for getting information about the data type like
  * its ID and name. It is also possible to know if the data type is analog or
- * digital or get the java class it is mapped in.
+ * digital or get the Java class it is mapped in.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

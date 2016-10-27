@@ -15,6 +15,9 @@
  */
 
 /**
+ * Device Service Specification for ZigBee Technology.
+ * 
+ * <p>
  * This is the main package of this specification. It defines the interfaces
  * that models the ZigBee concepts, like the ZigBee node and the ZigBee
  * endpoint.
@@ -26,12 +29,12 @@
  * each ZigBee endpoint discovered on the node.
  * 
  * <p>
- * {@code ZigBeeEndpoint} interface provides the
+ * {@link org.osgi.service.zigbee.ZigBeeEndpoint} interface provides the
  * {@link org.osgi.service.zigbee.ZigBeeEndpoint#getServerCluster(int)} method 
  * to get an  interface reference to a ZCLCluster object.
  * 
  * <p>
- * {@code ZCLCluster} interface contains methods that directly maps to the ZCL
+ * {@link org.osgi.service.zigbee.ZCLCluster} interface contains methods that directly maps to the ZCL
  * profile-wide commands, like Read Attributes and Write Attributes, and allow
  * the developer to forge its own commands and send them through the invoke()
  * methods.

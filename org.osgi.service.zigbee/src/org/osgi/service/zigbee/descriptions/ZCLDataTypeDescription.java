@@ -23,10 +23,10 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
  * in the ZCL. Each of these data types has a set of associated information that
  * this interface definition permits to retrieve using the specific methods.
  * <ul>
- * <li>The data type identifier
- * <li>The data type name
- * <li>The data type is analog or digital
- * <li>The java class used to represent the data type.
+ * <li>The data type identifier</li>
+ * <li>The data type name</li>
+ * <li>The data type is analog or digital</li>
+ * <li>The Java class used to represent the data type.</li>
  * </ul>
  * 
  * @noimplement

@@ -17,8 +17,8 @@
 package org.osgi.service.zigbee;
 
 /**
- * This exception class is specialized for the APS errors. See
- * "Table 2.26 APS Sub-layer Status Values" of the ZigBee specification
+ * This exception class is specialized for the APS errors. See "Table 2.26 APS
+ * Sub-layer Status Values" of the ZigBee specification
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
  * @author $Id$
@@ -75,7 +75,7 @@ public class APSException extends ZigBeeException {
 
 	/**
 	 * An APSDE-DATA.request requesting acknowledged transmission failed due to
-	 * no acknowledgement being received.
+	 * no acknowledgment being received.
 	 */
 	public static final int		NO_ACK					= 0x48;
 
@@ -132,7 +132,7 @@ public class APSException extends ZigBeeException {
 	public static final int		UNSUPPORTED_ATTRIBUTE	= 0x51;
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing only a description, but no
+	 * Creates a {@linkplain APSException} containing only a description, but no
 	 * error codes. If issued on this exception the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
@@ -144,9 +144,9 @@ public class APSException extends ZigBeeException {
 	}
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain APSException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #APSException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
@@ -163,16 +163,16 @@ public class APSException extends ZigBeeException {
 	}
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain APSException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #APSException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
 	 *        {@link #UNKNOWN_ERROR} the actual error is not covered in this
 	 *        interface. In this case the {@code zigBeeErrorCode} parameter must
-	 *        be the actual status code returned by the ZigBe stack.
+	 *        be the actual status code returned by the ZigBee stack.
 	 * 
 	 * @param zigBeeErrorCode The actual APS status code or
 	 *        {@link #UNKNOWN_ERROR} if this status is unknown.

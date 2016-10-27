@@ -47,9 +47,9 @@ public interface ZigBeeEvent {
 	public int getClusterId();
 
 	/**
-	 * Returns the attribute identifier (i.e. the attribute's ID).
+	 * Returns the attribute identifier (that is, the attribute's ID).
 	 * 
-	 * @return the attribute identifier (i.e. the attribute's ID).
+	 * @return the attribute identifier (that is, the attribute's ID).
 	 */
 	public int getAttributeId();
 

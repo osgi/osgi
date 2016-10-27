@@ -433,7 +433,7 @@
          id="text17"
          style="fill:#000000">
         <tspan
-           style="-inkscape-font-specification:ProductusOSGiBookc;font-family:ProductusOSGiBookc"
+           style="font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
            id="tspan3086">ZigBee Base Driver</tspan>
       </text>
     </g>
@@ -469,7 +469,7 @@
        x="188.4001">
       <tspan
          id="tspan3082"
-         style="-inkscape-font-specification:ProductusSemibold;font-family:ProductusSemibold">ZigBeeEndpoint</tspan>
+         style="font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold">ZigBeeEndpoint</tspan>
     </text>
     <path
        inkscape:connector-curvature="0"
@@ -507,7 +507,7 @@
          y="361"
          x="334.28125">
         <tspan
-           style="-inkscape-font-specification:ProductusOSGiBookc;font-family:ProductusOSGiBookc"
+           style="font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
            id="tspan3105">&lt;&lt;Interface&gt;&gt;</tspan>
       </text>
       <g
@@ -616,7 +616,7 @@
          id="text433-6"
          style="fill:#000000">
         <tspan
-           style="-inkscape-font-specification:ProductusOSGiBookc;font-family:ProductusOSGiBookc"
+           style="font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
            id="tspan3103">&lt;&lt;Interface&gt;&gt;</tspan>
       </text>
       <text
@@ -625,7 +625,7 @@
          id="text435-5"
          style="text-align:start;text-anchor:start;fill:#000000">
         <tspan
-           style="-inkscape-font-specification:ProductusSemibold;font-family:ProductusSemibold"
+           style="font-family:ProductusSemibold;-inkscape-font-specification:ProductusSemibold"
            id="tspan3084">ZigBeeHost</tspan>
       </text>
     </g>
@@ -651,7 +651,7 @@
        inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="95.288246"
        y="285.65057"
        id="text11764"
@@ -663,10 +663,10 @@
          id="tspan11766"
          x="95.288246"
          y="285.65057"
-         style="font-size:12px;-inkscape-font-specification:ProductusBook;font-family:ProductusBook">1</tspan></text>
+         style="font-size:12px;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">1</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:7.00000003%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:ProductusBook"
        x="94.833862"
        y="299.71948"
        id="text11764-5-1"
@@ -678,7 +678,7 @@
          id="tspan11766-5-5"
          x="94.833862"
          y="299.71948"
-         style="font-size:12px;-inkscape-font-specification:ProductusBook;font-family:ProductusBook">0..n</tspan></text>
+         style="font-size:12px;font-family:ProductusBook;-inkscape-font-specification:ProductusBook">0..n</tspan></text>
     <g
        font-size="12px"
        id="g279-1"
@@ -693,7 +693,7 @@
          id="text281-3"
          style="fill:#000000">
         <tspan
-           style="-inkscape-font-specification:ProductusOSGiBookc;font-family:ProductusOSGiBookc"
+           style="font-family:ProductusOSGiBookc;-inkscape-font-specification:ProductusOSGiBookc"
            id="tspan3088">A listener</tspan>
       </text>
     </g>

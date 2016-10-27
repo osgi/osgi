@@ -24,9 +24,9 @@ import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
  * A singleton class that represents the 'Time Of Day' data type, as it is
- * defined in the ZigBee Cluster Library specification..
+ * defined in the ZigBee Cluster Library specification.
  * 
- * The ZigBee data type is mapped to a byte[4] array. where byte[0] must contain
+ * The ZigBee data type is mapped to a byte[4] array where byte[0] must contain
  * the Hour field and byte[3] the Hundredths of seconds. The array is
  * marshaled/unmarshaled starting from byte[0].
  * 

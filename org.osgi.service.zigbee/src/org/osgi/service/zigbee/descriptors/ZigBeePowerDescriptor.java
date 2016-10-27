@@ -18,8 +18,10 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a power descriptor as described in the ZigBee
- * Specification The Power Descriptor gives a dynamic indication of the power
- * status of the node.
+ * Specification.
+ * <p>
+ * The Power Descriptor gives a dynamic indication of the power status of the
+ * node.
  * 
  * @noimplement
  * 

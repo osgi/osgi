@@ -37,7 +37,7 @@ public interface ZigBeeFrequencyBand {
 	 * Checks if the radio band is 900MHz.
 	 * 
 	 * @return {@code true} if and only if the radio is operating in the
-	 *         frequency band 908Mhz to 928Mhz.
+	 *         frequency band 908MHz to 928MHz.
 	 */
 	public boolean is915();
 
@@ -45,7 +45,7 @@ public interface ZigBeeFrequencyBand {
 	 * Checks if the radio band is 2.4GHz.
 	 * 
 	 * @return {@code true} if and only if the radio is operating in the
-	 *         frequency band 2400Mhz to 2483Mhz.
+	 *         frequency band 2400MHz to 2483MHz.
 	 */
 	public boolean is2400();
 }

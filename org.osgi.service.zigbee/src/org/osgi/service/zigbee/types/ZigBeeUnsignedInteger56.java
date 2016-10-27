@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * A singleton class that represents the 'Unsigned Integer 56-bits' data type,
+ * A singleton class that represents the 'Unsigned Integer 56-bit' data type,
  * as it is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$

@@ -92,7 +92,7 @@ public class ZCLException extends ZigBeeException {
 
 	/**
 	 * Creates a {@linkplain ZCLException} containing only a description, but no
-	 * error codes. If issued on this exeption the {@link #getErrorCode()} and
+	 * error codes. If issued on this exception the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
 	 * 
@@ -105,7 +105,7 @@ public class ZCLException extends ZigBeeException {
 	/**
 	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZCLException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
@@ -125,13 +125,13 @@ public class ZCLException extends ZigBeeException {
 	 * Creates a {@linkplain ZCLException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZCLException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
 	 *        {@link #UNKNOWN_ERROR} the actual error is not covered in this
 	 *        interface. In this case the {@code zigBeeErrorCode} parameter must
-	 *        be the actual status code returned by the ZigBe stack.
+	 *        be the actual status code returned by the ZigBee stack.
 	 * 
 	 * @param zigBeeErrorCode The actual ZCL status code or
 	 *        {@link #UNKNOWN_ERROR} if this status is unknown.

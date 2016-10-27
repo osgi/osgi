@@ -36,10 +36,10 @@ public class ZigBeeException extends RuntimeException {
 	public static final int		OSGI_MULTIPLE_HOSTS	= 0x31;
 
 	/**
-	 * The error code used when the timeout of ZigBee asynchrounous exchange is
+	 * The error code used when the timeout of ZigBee asynchronous exchange is
 	 * reached.
 	 */
-	public static final int TIMEOUT = 0x32;
+	public static final int		TIMEOUT				= 0x32;
 
 	/**
 	 * This error code is used if the ZigBee error returned is not covered by
@@ -63,7 +63,7 @@ public class ZigBeeException extends RuntimeException {
 
 	/**
 	 * Creates a {@linkplain ZigBeeException} containing only a description, but
-	 * no error codes. If issued on this exeption the {@link #getErrorCode()}
+	 * no error codes. If issued on this exception the {@link #getErrorCode()}
 	 * and {@link #getZigBeeErrorCode()} methods return the
 	 * {@link #UNKNOWN_ERROR} constant.
 	 * 
@@ -76,7 +76,7 @@ public class ZigBeeException extends RuntimeException {
 	/**
 	 * Creates a {@linkplain ZigBeeException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZigBeeException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
@@ -93,7 +93,7 @@ public class ZigBeeException extends RuntimeException {
 	 * Creates a {@linkplain ZigBeeException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZigBeeException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
@@ -115,7 +115,7 @@ public class ZigBeeException extends RuntimeException {
 	 * Returns the potential ZigBee error code.
 	 * 
 	 * @return One of the error codes defined above. If the returned error code
-	 *         is {@link #UNKNOWN_ERROR} and the {@link #hasZigbeeErrorCode()}
+	 *         is {@link #UNKNOWN_ERROR} and the {@link #hasZigBeeErrorCode()}
 	 *         returns {@code true} then the {@link #getZigBeeErrorCode()}
 	 *         provides the actual ZigBee error code returned by the device.
 	 */
@@ -138,7 +138,7 @@ public class ZigBeeException extends RuntimeException {
 	 * @return true if the {@link ZigBeeException} convey also the actual error
 	 *         code returned by the ZigBee stack.
 	 */
-	public boolean hasZigbeeErrorCode() {
+	public boolean hasZigBeeErrorCode() {
 		return (zigBeeErrorCode != UNKNOWN_ERROR);
 	}
 }

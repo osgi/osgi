@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * A singleton class that represents the 'Bitmap 40-bits' data type, as it is
+ * A singleton class that represents the 'Bitmap 40-bit' data type, as it is
  * defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
@@ -40,7 +40,7 @@ public class ZigBeeBitmap40
 	/**
 	 * Gets a singleton instance of this class.
 	 * 
-	 * @return the singleton instance..
+	 * @return the singleton instance.
 	 */
 	public static ZigBeeBitmap40 getInstance() {
 		return instance;

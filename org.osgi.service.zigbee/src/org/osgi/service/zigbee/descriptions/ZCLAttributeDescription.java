@@ -63,8 +63,8 @@ public interface ZCLAttributeDescription extends ZCLAttributeInfo {
 	/**
 	 * Checks if this attribute is read-only.
 	 * 
-	 * @return true if the attribute is read only, false otherwise (i.e. if the
-	 *         attribute is read/write or optionally writable (R*W)).
+	 * @return true if the attribute is read only, false otherwise (that is, if
+	 *         the attribute is read/write or optionally writable (R*W)).
 	 */
 	public boolean isReadOnly();
 

@@ -24,10 +24,10 @@ import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
  * A singleton class that represents the 'Date' data type, as it is defined in
- * the ZigBeb Cluster Library specification.
+ * the ZigBee Cluster Library specification.
  * 
  * <p>
- * The ZigBee data type is mapped to a byte[4] array. where byte[0] must contain
+ * The ZigBee data type is mapped to a byte[4] array where byte[0] must contain
  * the Year field (be careful that in the ZCL specification this byte do not
  * contain the actual year, but an offset) whereas byte[3] the Day of Week. The
  * array is marshaled/unmarshaled starting from byte[0].

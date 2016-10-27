@@ -18,9 +18,11 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a Complex Descriptor as described in the ZigBee
- * Specification The Complex Descriptor contains extended information for each
- * of the device descriptions contained in the node. The use of the Complex
- * Descriptor is optional.
+ * Specification.
+ * <p>
+ * The Complex Descriptor contains extended information for each of the device
+ * descriptions contained in the node. The use of the Complex Descriptor is
+ * optional.
  * 
  * @noimplement
  * 

@@ -49,9 +49,9 @@ public interface ZCLHeader {
 	/**
 	 * Checks if the frame is manufacturer specific.
 	 * 
-	 * @return true if the ZCL frame is manufacturer specific (i.e. the
-	 *         Manufacturer Specific Sub-field of the ZCL Frame Frame Control
-	 *         Field is 1.
+	 * @return true if the ZCL frame is manufacturer specific (that is, the
+	 *         Manufacturer Specific Sub-field of the ZCL Frame Control Field is
+	 *         1.
 	 */
 	boolean isManufacturerSpecific();
 
@@ -65,8 +65,8 @@ public interface ZCLHeader {
 	/**
 	 * Checks if the default response is disabled.
 	 * 
-	 * @return {@code true} if the ZCL Header Frame Control Field
-	 *         "Disable Default Response Sub-field" is 1. Returns {@code false}
+	 * @return {@code true} if the ZCL Header Frame Control Field "Disable
+	 *         Default Response Sub-field" is 1. Returns {@code false}
 	 *         otherwise.
 	 */
 	boolean isDefaultResponseDisabled();

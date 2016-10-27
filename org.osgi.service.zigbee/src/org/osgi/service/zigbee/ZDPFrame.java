@@ -17,12 +17,14 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a ZDP frame (see Figure 2.19 Format of the ZDP
- * Frame ZIGBEE SPECIFICATION: 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
+ * This interface represents a ZDP frame.
+ * <p>
+ * See Figure 2.19 Format of the ZDP Frame ZIGBEE SPECIFICATION:
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
  * <p>
  * This interface MUST be implemented by the developer invoking the
- * {@link ZigBeeNode#invoke(int, int, ZDPFrame)}.
+ * {@link ZigBeeNode#invoke(int, int, ZDPFrame)} method.
  * 
  * <p>
  * <b>Notes:</b>
@@ -30,7 +32,7 @@ package org.osgi.service.zigbee;
  * <li>This interface hides on purpose the Transaction Sequence Number field
  * because it MUST be handled internally by the ZigBee Base Driver</li>
  * <li>The interface does not provide any method for writing the payload because
- * the ZigBee Base Driver needs only to read the payload.
+ * the ZigBee Base Driver needs only to read the payload.</li>
  * </ul>
  * 
  * @author $Id$

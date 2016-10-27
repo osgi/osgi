@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
  * A singleton class that represents the 'Boolean' data type, as it is defined
- * defined in the ZigBee Cluster Library specification.
+ * in the ZigBee Cluster Library specification.
  * 
  * @author $Id$
  * 

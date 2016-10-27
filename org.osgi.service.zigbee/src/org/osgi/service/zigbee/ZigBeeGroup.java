@@ -28,15 +28,16 @@ import org.osgi.util.promise.Promise;
 public interface ZigBeeGroup {
 
 	/**
-	 * Key of the {@link String} containing the Group Address of the device.<br>
+	 * Key of the {@link String} containing the Group Address of the device.
+	 * <p>
 	 * It is a <b>mandatory</b> property for this service.
 	 */
 	public static final String ID = "zigbee.group.id";
 
 	/**
-	 * Returns the 16 bit group address.
+	 * Returns the 16-bit group address.
 	 * 
-	 * @return the 16 bit group address.
+	 * @return the 16-bit group address.
 	 */
 	int getGroupAddress();
 
@@ -49,12 +50,13 @@ public interface ZigBeeGroup {
 	 * 
 	 * As described in "Table 2.15 APSME-ADD-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an
-	 * add_group request can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}). When the
-	 * joining is performed remotely on an imported {@link ZigBeeEndpoint}, it
-	 * may also fail because the command is not supported by the remote
-	 * endpoint, or because the remote device cannot perform the operation at
-	 * the moment (see {@link ZCLException}).
+	 * add_group request can have the following status:
+	 * {@link APSException#SUCCESS}, {@link APSException#INVALID_PARAMETER} or
+	 * {@link APSException#TABLE_FULL}. When the joining is performed remotely
+	 * on an imported {@link ZigBeeEndpoint}, it may also fail because the
+	 * command is not supported by the remote endpoint, or because the remote
+	 * device cannot perform the operation at the moment (see
+	 * {@link ZCLException}).
 	 * 
 	 * @param pid {@link String} representing the service PID of the
 	 *        {@link ZigBeeEndpoint} to add to this Group.
@@ -64,7 +66,7 @@ public interface ZigBeeGroup {
 	 *         successfully bound. The adequate {@link ZigBeeException} is
 	 *         returned otherwise.
 	 */
-	Promise /* <void> */ joinGroup(String pid);
+	Promise /* <Void> */ joinGroup(String pid);
 
 	/**
 	 * Requests an endpoint to leave this group. This method may be invoked on
@@ -75,11 +77,12 @@ public interface ZigBeeGroup {
 	 * 
 	 * As described in "Table 2.17 APSME-REMOVE-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * remove_group request can have the following status: SUCCESS,
-	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}). When the
-	 * command is invoked remotely on an imported {@link ZigBeeEndpoint}, it may
-	 * also fail because the command is not supported by the remote endpoint, or
-	 * because the remote device cannot perform the operation at the moment (see
+	 * remove_group request can have the following status:
+	 * {@link APSException#SUCCESS}, {@link APSException#INVALID_GROUP} or
+	 * {@link APSException#INVALID_PARAMETER}. When the command is invoked
+	 * remotely on an imported {@link ZigBeeEndpoint}, it may also fail because
+	 * the command is not supported by the remote endpoint, or because the
+	 * remote device cannot perform the operation at the moment (see
 	 * {@link ZCLException}).
 	 * 
 	 * @param pid {@link String} representing the service PID of the
@@ -90,7 +93,7 @@ public interface ZigBeeGroup {
 	 *         successfully bound. The adequate {@link ZigBeeException} is
 	 *         returned otherwise.
 	 */
-	Promise /* <void> */ leaveGroup(String pid);
+	Promise /* <Void> */ leaveGroup(String pid);
 
 	/**
 	 * Sends a ZCL frame to the group represented by this service. The returned

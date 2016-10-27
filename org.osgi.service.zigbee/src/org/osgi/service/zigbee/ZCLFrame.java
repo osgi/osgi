@@ -45,10 +45,10 @@ public interface ZCLFrame {
 	public byte[] getBytes();
 
 	/**
-	 * Returns {@code ZigBeeDataInput} for reading the ZCLFrame payload content.
+	 * Returns {@link ZigBeeDataInput} for reading the ZCLFrame payload content.
 	 * Every call to this method returns a different instance. The returned
 	 * instances must not share the current position to the underlying
-	 * {@code ZCLFrame} payload.
+	 * {@link ZCLFrame} payload.
 	 * 
 	 * @return a {@link DataInput} for the payload of the {@link ZCLFrame}. This
 	 *         method does not generate a copy of the payload.

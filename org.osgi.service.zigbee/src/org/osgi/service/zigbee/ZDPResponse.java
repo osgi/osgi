@@ -1,3 +1,4 @@
+
 package org.osgi.service.zigbee;
 
 /**
@@ -8,7 +9,6 @@ package org.osgi.service.zigbee;
  *
  */
 public interface ZDPResponse {
-
 
 	/**
 	 * Returns the clusterId this response refers to.

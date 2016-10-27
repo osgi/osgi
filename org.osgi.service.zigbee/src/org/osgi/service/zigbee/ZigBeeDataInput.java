@@ -21,15 +21,15 @@ import java.io.EOFException;
 import java.io.IOException;
 
 /**
- * The {@code ZigBeeDataInput} interface is designed for converting a series of
- * bytes in java data types. The purpose of this interface is the same as the
- * {@link DataInput} interface available in the standard java library, with the
+ * The {@link ZigBeeDataInput} interface is designed for converting a series of
+ * bytes in Java data types. The purpose of this interface is the same as the
+ * {@link DataInput} interface available in the standard Java library, with the
  * difference that in this interface, byte ordering is little endian, whereas in
  * the DataInput interface is big endian.
  * 
  * <p>
  * Each method provided by this interface read one or more bytes from the
- * underlying stream, combine them, and return a java data type. The pointer to
+ * underlying stream, combine them, and return a Java data type. The pointer to
  * the stream is then moved immediately after the last byte read. If this
  * pointer past the available buffer bounds, a subsequent call to one of these
  * methods will throw a {@link EOFException}.

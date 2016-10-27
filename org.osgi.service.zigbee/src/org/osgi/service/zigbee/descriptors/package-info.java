@@ -15,6 +15,9 @@
  */
 
 /**
+ * Device Service Specification for ZigBee Technology Descriptors.
+ * 
+ * <p>
  * This package contains the interfaces representing the ZigBee descriptors and
  * the fields defined inside some of them.
  * 
@@ -27,8 +30,10 @@
  * methods.
  * 
  * <p>
- * The {@code ZigBeeNodeDescriptor}, {@code ZigBeePowerDescriptor} and the
- * {@code ZigBeeComplexDescriptor} are read using the appropriate methods in the
+ * The {@link org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor}, 
+ * {@link org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor} and the
+ * {@link org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor} are read 
+ * using the appropriate methods in the
  * {@link org.osgi.service.zigbee.ZigBeeNode} interface, whereas the
  * ZigBeeSimpleDescriptor can be read using the appropriate method of the
  * {@link org.osgi.service.zigbee.ZigBeeEndpoint} services registered in the

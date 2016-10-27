@@ -15,6 +15,9 @@
  */
 
 /**
+ * Device Service Specification for ZigBee Technology Descriptions.
+ * 
+ * <p>
  * This package contains the interfaces for descriptions. The latter may be used
  * to embed meta information about the ZigBee devices, and in other words a meta
  * description of each device type present in a ZCL profile, or even custom

@@ -18,8 +18,10 @@ package org.osgi.service.zigbee.descriptors;
 
 /**
  * This interface represents a simple descriptor as described in the ZigBee
- * Specification The Simple Descriptor contains information specific to each
- * endpoint present in the node.
+ * Specification.
+ * <p>
+ * The Simple Descriptor contains information specific to each endpoint present
+ * in the node.
  * 
  * @author $Id$
  */

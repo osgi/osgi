@@ -32,20 +32,23 @@ public interface ZigBeeEndpoint {
 
 	/**
 	 * Key of the {@link String} property containing the EndPoint ID of the
-	 * device. <br>
+	 * device.
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	ENDPOINT_ID		= "zigbee.endpoint.id";
 
 	/**
 	 * Key of the {@link String} property containing the profile id implemented
-	 * by the device. <br>
+	 * by the device.
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	PROFILE_ID		= "zigbee.device.profile.id";
 
 	/**
-	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.<br>
+	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.
+	 * <p>
 	 * The ZigBee local host identifier is intended to uniquely identify the
 	 * ZigBee local host, since there could be many hosts on the same platform.
 	 * All the nodes that belong to a specific network MUST specify the value of
@@ -56,26 +59,29 @@ public interface ZigBeeEndpoint {
 
 	/**
 	 * Key of the {@link String} property containing the DeviceId of the device.
-	 * <br>
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	DEVICE_ID		= "zigbee.device.id";
 
 	/**
 	 * Key of the {@link String} property containing the DeviceVersion of the
-	 * device. <br>
+	 * device.
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	DEVICE_VERSION	= "zigbee.device.version";
 
 	/**
-	 * Key of the int array of containing the ids of each input cluster <br>
+	 * Key of the int array of containing the ids of each input cluster.
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	INPUT_CLUSTERS	= "zigbee.endpoint.clusters.input";
 
 	/**
-	 * Key of the int array of containing the ids of each output cluster <br>
+	 * Key of the int array of containing the ids of each output cluster.
+	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	OUTPUT_CLUSTERS	= "zigbee.endpoint.clusters.output";
@@ -108,17 +114,20 @@ public interface ZigBeeEndpoint {
 	public BigInteger getNodeAddress();
 
 	/**
-	 * Returns the simple descriptor of this endpoint. As described in
-	 * "Table 2.93 Fields of the Simple_Desc_rsp Command" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a simple_decr
-	 * request can have the following status: SUCCESS, INVALID_EP, NOT_ACTIVE,
-	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * Returns the simple descriptor of this endpoint. As described in "Table
+	 * 2.93 Fields of the Simple_Desc_rsp Command" of the ZigBee specification
+	 * 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a simple_decr request can
+	 * have the following status: {@link ZDPException#SUCCESS},
+	 * {@link ZDPException#INVALID_EP}, {@link ZDPException#NOT_ACTIVE},
+	 * {@link ZDPException#DEVICE_NOT_FOUND},
+	 * {@link ZDPException#INV_REQUESTTYPE} or
+	 * {@link ZDPException#NO_DESCRIPTOR}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getValue()} returns the node simple descriptor
 	 *         {@link ZigBeeSimpleDescriptor} in case of success and
 	 *         {@link Promise#getFailure()} returns the adequate
-	 *         {@link ZCLException} otherwise.
+	 *         {@link ZDPException} otherwise.
 	 * 
 	 */
 	public Promise /* <ZigBeeSimpleDescriptor> */ getSimpleDescriptor();
@@ -132,10 +141,10 @@ public interface ZigBeeEndpoint {
 	public ZCLCluster[] getServerClusters();
 
 	/**
-	 * Returns the server (input) cluster identified by the given identifer.
+	 * Returns the server (input) cluster identified by the given identifier.
 	 * 
 	 * @param serverClusterId The server(input) cluster identifier.
-	 * @return the server (input) cluster identified by the given identifer, or
+	 * @return the server (input) cluster identified by the given identifier, or
 	 *         null if the given id is not listed in the simple descriptor.
 	 */
 	public ZCLCluster getServerCluster(int serverClusterId);
@@ -159,15 +168,16 @@ public interface ZigBeeEndpoint {
 
 	/**
 	 * Adds the following entry in the <i>Binding Table</i> of the device:
-	 * 
+	 * <p>
 	 * <code>this.getNodeAddress()</code>, <code>this.getId()</code>,
 	 * <code>clusterId</code>, <code>device.getNodeAddress()</code>,
 	 * <code>device.getId()</code>
-	 * 
+	 * <p>
 	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a binding
-	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * TABLE_FULL, NOT_SUPPORTED (see {@link APSException}). <br>
+	 * request can have the following results: {@link APSException#SUCCESS},
+	 * {@link APSException#ILLEGAL_REQUEST}, {@link APSException#TABLE_FULL},
+	 * {@link APSException#NOT_SUPPORTED}.
 	 * 
 	 * @param servicePid the PID of the endpoint to bind to
 	 * @param clusterId the cluster identifier to bind to
@@ -176,12 +186,12 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate {@link ZigBeeEndpoint} is
 	 *         returned otherwise.
 	 */
-	public Promise /* <void> */ bind(String servicePid, int clusterId);
+	public Promise /* <Void> */ bind(String servicePid, int clusterId);
 
 	/**
 	 * Removes the following entry in the <i>Binding Table</i> of the device if
 	 * it exists:
-	 * 
+	 * <p>
 	 * <code>this.getNodeAddress()</code>, <code>this.getId()</code>,
 	 * <code>clusterId</code>, <code>device.getNodeAddress()</code>,
 	 * <code>device.getId()</code>
@@ -189,8 +199,9 @@ public interface ZigBeeEndpoint {
 	 * <p>
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an unbind
-	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * INVALID_BINDING (see {@link APSException}).
+	 * request can have the following results: {@link APSException#SUCCESS},
+	 * {@link APSException#ILLEGAL_REQUEST},
+	 * {@link APSException#INVALID_BINDING}.
 	 * 
 	 * @param servicePid The pid of the service to unbind.
 	 * @param clusterId The cluster identifier to unbind.
@@ -199,10 +210,10 @@ public interface ZigBeeEndpoint {
 	 *         successfully bound. The adequate {@link APSException} is returned
 	 *         otherwise.
 	 */
-	public Promise /* <void> */ unbind(String servicePid, int clusterId);
+	public Promise /* <Void> */ unbind(String servicePid, int clusterId);
 
 	/**
-	 * Notifies that the base driver unability to export this endpoint. This
+	 * Notifies that the base driver is unable to export this endpoint. This
 	 * method is called by the base driver and used to give details about issues
 	 * preventing the export of an endpoint.
 	 * 
@@ -218,15 +229,15 @@ public interface ZigBeeEndpoint {
 	 * <p>
 	 * As described in "Table 2.129 Fields of the Mgmt_Bind_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
-	 * Mgmt_Bind_rsp command can have the following status: NOT_SUPPORTED or any
-	 * status code returned from the APSME-GET.confirm primitive (see
-	 * {@link APSException}).
+	 * Mgmt_Bind_rsp command can have the following status:
+	 * {@link APSException#NOT_SUPPORTED} or any status code returned from the
+	 * APSME-GET.confirm primitive (see {@link APSException}).
 	 * 
 	 * @param clusterId the cluster identifier of the targeted bindings.
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         {@link Promise#getValue()} returns a List of the bound endpoint
 	 *         service PIDs if the command is successful. The response object is
-	 *         null and the adequate {@link APSException}tion is returned by
+	 *         null and the adequate {@link APSException} is returned by
 	 *         {@link Promise#getFailure()} otherwise.
 	 */
 	public Promise/* <List<String>> */ getBoundEndPoints(int clusterId);

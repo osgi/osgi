@@ -31,8 +31,8 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
  * {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
  * 
  * <p>
- * Related documentation:<br>
- * [1] ZigBee Cluster Library specification, Document 075123r04ZB, May 29, 2012.
+ * Related documentation: [1] ZigBee Cluster Library specification, Document
+ * 075123r04ZB, May 29, 2012.
  * 
  * @noimplement
  * 
@@ -41,16 +41,16 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 
 	/**
-	 * Serializes a ZigBee data type into a {@code ZigBeeDataOutput} stream. An
+	 * Serializes a ZigBee data type into a {@link ZigBeeDataOutput} stream. An
 	 * implementation of this method must throw an
-	 * {@code IllegalArgumentException} if the passed value does not belong to
+	 * {@link IllegalArgumentException} if the passed value does not belong to
 	 * the expected class or its value exceeds the possible values allowed (in
 	 * terms of range or length).
 	 * 
 	 * <p>
 	 * An implementation of this method must interpret (where it makes sense) a
-	 * {@code null} {@code value} as the request to serialize the so called
-	 * <em>Invalid Value</em>.
+	 * {@code null} value as the request to serialize the so called <em>Invalid
+	 * Value</em>.
 	 * 
 	 *
 	 * @param os a {@link ZigBeeDataOutput} stream where to the passed value
@@ -64,16 +64,16 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 *        {@link IllegalArgumentException} is thrown.
 	 * 
 	 * @throws IOException If an I/O error occurs while writing on the
-	 *         {@code ZigBeeDataOutput}. The {@link EOFException} may be thrown
+	 *         {@link ZigBeeDataOutput}. The {@link EOFException} may be thrown
 	 *         if there is no more space on the data output for serializing the
 	 *         passed value.
 	 * 
-	 * @throws NullPointerException If {@code ZigBeeDataOutput} parameter is
+	 * @throws NullPointerException If {@link ZigBeeDataOutput} parameter is
 	 *         {@code null}.
 	 * 
-	 * @throws IllegalArgumentException If the passed {@code value} parameter
-	 *         does not belong to the expected class or its value exceeds the
-	 *         possible values allowed (range or length).
+	 * @throws IllegalArgumentException If the passed value parameter does not
+	 *         belong to the expected class or its value exceeds the possible
+	 *         values allowed (range or length).
 	 * 
 	 */
 
@@ -86,14 +86,14 @@ public interface ZCLSimpleTypeDescription extends ZCLDataTypeDescription {
 	 *        is read from.
 	 * 
 	 * @return An object that represents the deserialized value of data. Returns
-	 *         {@code  null} if the read value represents the
-	 *         <em>Invalid Value</em> for the specific ZigBee data type.
+	 *         {@code  null} if the read value represents the <em>Invalid
+	 *         Value</em> for the specific ZigBee data type.
 	 * 
-	 * @throws NullPointerException If {@code ZigBeeDataInput} parameter is
+	 * @throws NullPointerException If {@link ZigBeeDataInput} parameter is
 	 *         {@code null}.
 	 * 
 	 * @throws IOException If an I/O error occurs while reading the
-	 *         {@code ZigBeeDataInput}. An {@link EOFException} is thrown if the
+	 *         {@link ZigBeeDataInput}. An {@link EOFException} is thrown if the
 	 *         data input stream end is reached while deserializing the data
 	 *         type.
 	 */

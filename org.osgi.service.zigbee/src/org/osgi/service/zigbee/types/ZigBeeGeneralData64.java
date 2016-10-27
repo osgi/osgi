@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * A singleton class that represents the 'General Data 64-bits' data type, as it
+ * A singleton class that represents the 'General Data 64-bit' data type, as it
  * is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$

@@ -28,7 +28,7 @@ import org.osgi.util.promise.Promise;
  * 
  * <p>
  * Every asynchronous method defined in this interface returns back its result
- * trough the use of a {@link Promise}.
+ * through the use of a {@link Promise}.
  * 
  * @author $Id$
  */
@@ -123,8 +123,8 @@ public interface ZCLCluster {
 	 * This method behaves like the {@link ZCLCluster#getAttributes()} method if
 	 * the passed {@code} value is -1.
 	 * 
-	 * @param code The the manufacturer code. Pass -1 to retrieve standard (i.e.
-	 *        non-manufacturer specific) attributes.
+	 * @param code The the manufacturer code. Pass -1 to retrieve standard (that
+	 *        is, non-manufacturer specific) attributes.
 	 * 
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with an array of
@@ -153,11 +153,11 @@ public interface ZCLCluster {
 	 * ZCLReadStatusRecord>}. For each Map entry, the key contains the attribute
 	 * identifier and the value, a ZigBee Read Attributes Status Record, which
 	 * is made of the status of the read of this attribute, the ZigBee data type
-	 * of the attribute and the attribute value in the corresponding java
+	 * of the attribute and the attribute value in the corresponding Java
 	 * wrapper type (or null in case of an unsupported attribute or in case of
 	 * an invalid value). For attributes which data type serialization is not
-	 * supported (i.e, {@link ZCLDataTypeDescription#getJavaDataType()} returns
-	 * null), the value is of type byte[].
+	 * supported (that is, {@link ZCLDataTypeDescription#getJavaDataType()}
+	 * returns null), the value is of type byte[].
 	 * 
 	 * <p>
 	 * When the list of attributes do not fit into a single ZCLFrame, ZigBee
@@ -176,10 +176,10 @@ public interface ZCLCluster {
 	 * @param attributes An array of {@link ZCLAttributeInfo}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         The promise may fail with an {@link IllegalArgumentException}
-	 *         exception, if some of {@link ZCLAttributeInfo} are manufacturer
-	 *         specific and other are standard, or even if there are mix of
-	 *         attributes with different manufacturer specific code.
+	 *         The promise may fail with an {@link IllegalArgumentException}, if
+	 *         some of {@link ZCLAttributeInfo} are manufacturer specific and
+	 *         other are standard, or even if there are mix of attributes with
+	 *         different manufacturer specific code.
 	 * 
 	 */
 	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
@@ -208,7 +208,7 @@ public interface ZCLCluster {
 	 *        requested, {@code false} if not.
 	 * @param attributesAndValues A {@code Map<ZCLAttributeInfo, Object>} of
 	 *        attributes and values to be written. For ZCLAttributeInfo objects
-	 *        which serialization is not supported (i.e,
+	 *        which serialization is not supported (that is,
 	 *        <code>getDataType().getJavaDataType()</code> returns null), the
 	 *        value must be of type byte[].
 	 * 
@@ -236,13 +236,13 @@ public interface ZCLCluster {
 	 * later than 1.2 of the Home Automation Profile or other profiles that adds
 	 * a general command that enables discovery of command identifiers. When the
 	 * device implements a profile that does not support this feature, the
-	 * promise fails with a {@code ZCLException} with code
-	 * {@code ZCLException.GENERAL_COMMAND_NOT_SUPPORTED}.
+	 * promise fails with a {@link ZCLException} with code
+	 * {@link ZCLException#GENERAL_COMMAND_NOT_SUPPORTED}.
 	 * 
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with
-	 *         {@code Integer[]} containing the the command identifiers
-	 *         supported by the cluster.
+	 *         {@code Integer[]} containing the command identifiers supported by
+	 *         the cluster.
 	 */
 	Promise /* <Integer[]> */ getCommandIds();
 

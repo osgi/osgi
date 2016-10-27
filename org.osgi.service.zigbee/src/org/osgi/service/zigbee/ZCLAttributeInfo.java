@@ -52,7 +52,7 @@ public interface ZCLAttributeInfo {
 	/**
 	 * Returns the ID of this attribute.
 	 * 
-	 * @return the attribute identifier (i.e. the attribute's ID).
+	 * @return the attribute identifier (that is, the attribute's ID).
 	 */
 	public int getId();
 

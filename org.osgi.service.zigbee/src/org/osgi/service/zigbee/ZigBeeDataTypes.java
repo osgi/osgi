@@ -17,36 +17,38 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface contains the constants that are used internally by these API
- * to represent the ZCL data types.
+ * This class contains the constants that are used internally by these API to
+ * represent the ZCL data types.
  * 
  * <p>
  * These constants do not match the values used in the ZigBee specification, but
  * follow the rules below:
  * <p>
- * <em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the data
- * type in bytes.<br>
- * <em>bit 6</em>: if set to 1 bits 0-3 represents the size of the data type in
- * bytes.
+ * <ul>
+ * <li><em>bit 0-3</em>: if bit 6 is one, these bits represents the size of the
+ * data type in bytes.</li>
+ * <li><em>bit 6</em>: if set to 1 bits 0-3 represents the size of the data type
+ * in bytes.</li>
+ * </ul>
  * 
  * <p>
  * Related documentation: [1] ZigBee Cluster Library specification, Document
  * 075123r04ZB, May 29, 2012.
  * 
- * @noimplement
- * 
  * @author $Id$
  */
-public interface ZigBeeDataTypes {
+public class ZigBeeDataTypes {
+	private ZigBeeDataTypes() {
+	}
 
 	/**
-	 * According to Zigbee Cluster Library [1], the no data type represents an
+	 * According to ZigBee Cluster Library [1], the no data type represents an
 	 * attribute with no associated data.
 	 */
 	public static final short	NO_DATA					= 0x00;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the General Data type may be
+	 * According to ZigBee Cluster Library [1], the General Data type may be
 	 * used when a data element is needed but its use does not conform to any of
 	 * other types. The General Data type is defined with several sizes: 8, 16,
 	 * 24, 32, 40, 48, 56 and 64 bits.
@@ -68,7 +70,7 @@ public interface ZigBeeDataTypes {
 	public static final short	GENERAL_DATA_64			= 0x57;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Boolean type represents a
+	 * According to ZigBee Cluster Library [1], the Boolean type represents a
 	 * logical value, either FALSE (0x00) or TRUE (0x01). The value 0xff
 	 * represents an invalid value of this type. All other values of this type
 	 * are forbidden.
@@ -76,7 +78,7 @@ public interface ZigBeeDataTypes {
 	public static final short	BOOLEAN					= 0x01;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Bitmap type holds logical
+	 * According to ZigBee Cluster Library [1], the Bitmap type holds logical
 	 * values, one per bit, depending on its length. There is no value that
 	 * represents an invalid value of this type. The Bitmap type is defined with
 	 * several sizes: 8, 16, 24, 32, 40, 48, 56 and 64 bits.
@@ -98,7 +100,7 @@ public interface ZigBeeDataTypes {
 	public static final short	BITMAP_64				= 0x5f;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Unsigned Integer type
+	 * According to ZigBee Cluster Library [1], the Unsigned Integer type
 	 * represents an unsigned integer with a decimal range of 0 to 2^8-1, 0 to
 	 * 2^16-1, 0 to 2^24-1, 0 to 2^32-1, 0 to 2^40-1, 0 to 2^48-1, 0 to 2^56-1,
 	 * or 0 to 2^64-1, depending on its length. The values that represents an
@@ -124,7 +126,7 @@ public interface ZigBeeDataTypes {
 	public static final short	UNSIGNED_INTEGER_64		= 0x67;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Signed Integer type
+	 * According to ZigBee Cluster Library [1], the Signed Integer type
 	 * represents a signed integer with a decimal range of -(2^7-1) to 2^7-1, -
 	 * (2^15-1) to 2^15-1, -(2^23-1) to 2^23-1, -(2^31-1) to 2^31-1, -(2^39-1)
 	 * to 2^39-1, -(2^47-1) to 2^47-1, -(2^55-1) to 2^55-1, or -(2^63-1) to
@@ -151,9 +153,9 @@ public interface ZigBeeDataTypes {
 	public static final short	SIGNED_INTEGER_64		= 0xe7;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Enumeration type represents
+	 * According to ZigBee Cluster Library [1], the Enumeration type represents
 	 * an index into a lookup table to determine the final value. The values
-	 * 0xff and 0xffff represent invalid values of the 8-bit and 16- bit types
+	 * 0xff and 0xffff represent invalid values of the 8-bit and 16-bit types
 	 * respectively.
 	 */
 	public static final short	ENUMERATION_8			= 0x70;
@@ -161,54 +163,54 @@ public interface ZigBeeDataTypes {
 	public static final short	ENUMERATION_16			= 0x71;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the ZigBee semi-precision number
+	 * According to ZigBee Cluster Library [1], the ZigBee semi-precision number
 	 * format is based on the IEEE 754 standard for binary floating-point
 	 * arithmetic.
 	 */
 	public static final short	FLOATING_SEMI			= 0xf8;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the format of the single
+	 * According to ZigBee Cluster Library [1], the format of the single
 	 * precision data type is based on the IEEE 754 standard for binary
 	 * floating-point arithmetic.
 	 */
 	public static final short	FLOATING_SINGLE			= 0xf9;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the format of the double
+	 * According to ZigBee Cluster Library [1], the format of the double
 	 * precision data type is based on the IEEE 754 standard for binary
 	 * floating-point arithmetic.
 	 */
 	public static final short	FLOATING_DOUBLE			= 0xfa;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Octet String data type
+	 * According to ZigBee Cluster Library [1], the Octet String data type
 	 * contains data in application-defined formats.
 	 */
 	public static final short	OCTET_STRING			= 0x78;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Character String data type
+	 * According to ZigBee Cluster Library [1], the Character String data type
 	 * contains data octets encoding characters according to the language and
 	 * character set field of the complex descriptor.
 	 */
 	public static final short	CHARACTER_STRING		= 0x79;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Long Octet String data type
+	 * According to ZigBee Cluster Library [1], the Long Octet String data type
 	 * contains data in application-defined formats.
 	 */
 	public static final short	LONG_OCTET_STRING		= 0x7a;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the Long Character String data
+	 * According to ZigBee Cluster Library [1], the Long Character String data
 	 * type contains data octets encoding characters according to the language
 	 * and character set field of the complex descriptor.
 	 */
 	public static final short	LONG_CHARACTER_STRING	= 0x7b;
 
 	/**
-	 * According to Zigbee Cluster Library [1], an Array is an ordered sequence
+	 * According to ZigBee Cluster Library [1], an Array is an ordered sequence
 	 * of zero or more elements, all of the same data type. This data type may
 	 * be any ZCL defined data type, including Array, Structure, Bag or Set. The
 	 * total nesting depth is limited to 15.
@@ -216,7 +218,7 @@ public interface ZigBeeDataTypes {
 	public static final short	ARRAY					= 0x10;
 
 	/**
-	 * According to Zigbee Cluster Library [1], a Structure is an ordered
+	 * According to ZigBee Cluster Library [1], a Structure is an ordered
 	 * sequence of elements, which may be of different data types. Each data
 	 * type may be any ZCL defined data type, including Array, Structure, Bag or
 	 * Set. The total nesting depth is limited to 15.
@@ -224,7 +226,7 @@ public interface ZigBeeDataTypes {
 	public static final short	STRUCTURE				= 0x11;
 
 	/**
-	 * According to Zigbee Cluster Library [1], a Set is a collection of
+	 * According to ZigBee Cluster Library [1], a Set is a collection of
 	 * elements with no associated order. Each element has the same data type,
 	 * which may be any ZCL defined data type, including Array, Structure, Bag
 	 * or Set. The nesting depth is limited to 15.
@@ -232,7 +234,7 @@ public interface ZigBeeDataTypes {
 	public static final short	SET						= 0x12;
 
 	/**
-	 * According to Zigbee Cluster Library [1], a Bag behaves exactly the same
+	 * According to ZigBee Cluster Library [1], a Bag behaves exactly the same
 	 * as a Set, except that two elements may have the same value.
 	 */
 	public static final short	BAG						= 0x13;
@@ -250,7 +252,7 @@ public interface ZigBeeDataTypes {
 	public static final short	DATE					= 0x03;
 
 	/**
-	 * According to Zigbee Cluster Library [1], UTCTime is an unsigned 32-bit
+	 * According to ZigBee Cluster Library [1], UTCTime is an unsigned 32-bit
 	 * value representing the number of seconds since 0 hours, 0 minutes, 0
 	 * seconds, on the 1st of January, 2000 UTC (Universal Coordinated Time).
 	 * The value that represents an invalid value of this type is 0xffffffffff.
@@ -268,21 +270,21 @@ public interface ZigBeeDataTypes {
 	public static final short	ATTRIBUTE_ID			= 0x06;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the BACnet OID data type is
+	 * According to ZigBee Cluster Library [1], the BACnet OID data type is
 	 * included to allow interworking with BACnet. The format is described in
 	 * the referenced standard.
 	 */
 	public static final short	BACNET_OID				= 0x07;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the IEEE Address data type is a
+	 * According to ZigBee Cluster Library [1], the IEEE Address data type is a
 	 * 64-bit IEEE address that is unique to every ZigBee device. A value of
 	 * 0xffffffffffffffff indicates that the address is unknown.
 	 */
 	public static final short	IEEE_ADDRESS			= 0x08;
 
 	/**
-	 * According to Zigbee Cluster Library [1], the 128-bit Security Key data
+	 * According to ZigBee Cluster Library [1], the 128-bit Security Key data
 	 * type is for use in ZigBee security, and may take any 128-bit value.
 	 */
 	public static final short	SECURITY_KEY_128		= 0x09;

@@ -33,11 +33,10 @@ class ZigBeeDefaultSerializer {
 	static final long zigBeeTimeZero = 946684800000L;	// 1/1/2000
 
 	/**
-	 * Marshal the passed value into a {@code ZigBeeDataOutput} stream,
+	 * Marshal the passed value into a {@link ZigBeeDataOutput} stream,
 	 * according the {@code dataType} argument. An
-	 * {@code IllegalArgumentException} is thrown when the the passed
-	 * {@code value} does not belong to the class allowed for the
-	 * {@code dataType}.
+	 * {@link IllegalArgumentException} is thrown when the passed {@code value}
+	 * does not belong to the class allowed for the {@code dataType}.
 	 * 
 	 * <p>
 	 * Array, bag, set and structure data types are not supported.
@@ -61,10 +60,11 @@ class ZigBeeDefaultSerializer {
 	 * 
 	 * @throws IOException
 	 * 
-	 * @throws IllegalArgumentException Thrown when the the passed {@code value}
+	 * @throws IllegalArgumentException Thrown when the passed {@code value}
 	 *         does not belong to the allowed class for the {@code dataType} as
 	 *         described in the specification or when the value exceed the range
-	 *         allowed by that type (i.e. length for Octet String data types).
+	 *         allowed by that type (for example, length for Octet String data
+	 *         types).
 	 */
 	static void serializeDataType(ZigBeeDataOutput os, short dataType, Object value) throws IOException {
 
@@ -471,9 +471,9 @@ class ZigBeeDefaultSerializer {
 	}
 
 	/**
-	 * Unmarshal {@code ZigBeeDataInput} stream, according the {@code dataType}
-	 * argument. An {@code IllegalArgumentException} is thrown when the the
-	 * passed {@code value} does not belong to the class allowed for the
+	 * Unmarshal {@link ZigBeeDataInput} stream, according the {@code dataType}
+	 * argument. An {@link IllegalArgumentException} is thrown when the passed
+	 * {@code value} does not belong to the class allowed for the
 	 * {@code dataType}.
 	 * 
 	 * <p>
@@ -492,14 +492,14 @@ class ZigBeeDefaultSerializer {
 	 *         specified dataType.
 	 * 
 	 * @throws IOException in case of problems while deserializing the
-	 *         {@code ZigBeeDataInput}. For instance this could happen if in the
+	 *         {@link ZigBeeDataInput}. For instance this could happen if in the
 	 *         stream the remaining bytes are not enough to be able to unmarshal
 	 *         the requested data type.
 	 * 
 	 * @throws IllegalArgumentException if the passed {@code dataType} is not
 	 *         supported.
 	 * 
-	 * @throws NullPointerException if the passed {@code ZigBeeDataInput} is
+	 * @throws NullPointerException if the passed {@link ZigBeeDataInput} is
 	 *         null.
 	 */
 	static Object deserializeDataType(ZigBeeDataInput is, short dataType) throws IOException {

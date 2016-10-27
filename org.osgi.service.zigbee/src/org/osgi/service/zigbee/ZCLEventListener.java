@@ -59,10 +59,12 @@ public interface ZCLEventListener {
 	public void notifyEvent(ZigBeeEvent event);
 
 	/**
-	 * Notifies a failure, i.e. when either a
-	 * ZCLException.UNSUPPORTED_ATTRIBUTE, or a
-	 * ZCLException.UNREPORTABLE_ATTRIBUTE, or ZCLException.INVALID_VALUE, or
-	 * ZCLException.INVALID_DATA_TYPE status occurs.
+	 * Notifies that a failure has occurred.
+	 * <p>
+	 * That is, when either a {@link ZCLException#UNSUPPORTED_ATTRIBUTE},
+	 * {@link ZCLException#UNREPORTABLE_TYPE},
+	 * {@link ZCLException#INVALID_VALUE}, or
+	 * {@link ZCLException#INVALID_DATA_TYPE} status occurs.
 	 * 
 	 * @param e the ZCLException.
 	 */
@@ -72,7 +74,7 @@ public interface ZCLEventListener {
 	 * Notifies that the timeout is elapsed. No event will be received in the
 	 * interval.
 	 * 
-	 * @param timeout the timetout in seconds.
+	 * @param timeout the timeout in seconds.
 	 */
 	public void notifyTimeOut(int timeout);
 

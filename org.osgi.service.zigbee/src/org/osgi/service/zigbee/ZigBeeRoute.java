@@ -17,9 +17,10 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents an entry of the RoutingTableList (see Table 2.128
- * RoutingTableList Record Format in ZIGBEE SPECIFICATION:
- * 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
+ * This interface represents an entry of the RoutingTableList
+ * <p>
+ * See Table 2.128 RoutingTableList Record Format in ZIGBEE SPECIFICATION:
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
  * @noimplement
  * 
@@ -74,8 +75,9 @@ public interface ZigBeeRoute {
 	 * Returns the status of this route.
 	 * 
 	 * @return the status of this route (or routing link) as defined by ZigBee
-	 *         Specification: ACTIVE, DISCOVERY_UNDERWAY, DISCOVERY FAILED,
-	 *         INACTIVE, VALIDATION_UNDERDAY.
+	 *         Specification: {@link #ACTIVE}, {@link #DISCOVERY_UNDERWAY},
+	 *         {@link #DISCOVERY_FAILED}, {@link #INACTIVE},
+	 *         {@link #VALIDATION_UNDERWAY}.
 	 */
 	public int getStatus();
 

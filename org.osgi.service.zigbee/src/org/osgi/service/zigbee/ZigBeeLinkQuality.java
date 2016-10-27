@@ -17,9 +17,10 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents an entry of the NeighborTableList (see Table 2.126
- * NeighborTableList Record Format in ZIGBEE SPECIFICATION:
- * 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
+ * This interface represents an entry of the NeighborTableList.
+ * <p>
+ * See Table 2.126 NeighborTableList Record Format in ZIGBEE SPECIFICATION:
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
  * @noimplement
  * 
@@ -58,11 +59,11 @@ public interface ZigBeeLinkQuality {
 	public static final int	PREVIOUS_CHILD_NEIGHBOR	= 0xf4;
 
 	/**
-	 * Returns the Service.PID refering to the {@link ZigBeeNode} representing a
-	 * neighbor.
+	 * Returns the Service.PID referring to the {@link ZigBeeNode} representing
+	 * a neighbor.
 	 * 
-	 * @return the Service.PID refering to the {@link ZigBeeNode} representing a
-	 *         neighbor.
+	 * @return the Service.PID referring to the {@link ZigBeeNode} representing
+	 *         a neighbor.
 	 */
 	public String getNeighbor();
 

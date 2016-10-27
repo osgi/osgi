@@ -1,3 +1,4 @@
+
 package org.osgi.service.zigbee;
 
 import org.osgi.util.promise.Promise;
@@ -14,7 +15,7 @@ public interface ZCLCommandResponse {
 	 *         exception if this is not a success response.
 	 */
 	Promise /* <ZCLFrame> */ getResponse();
-	
+
 	/**
 	 * Checks if this is a terminal close event.
 	 * 

@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 
 /**
- * A singleton class that represents the 'Signed Integer 8-bits' data type, as
+ * A singleton class that represents the 'Signed Integer 8-bit' data type, as
  * it is defined in the ZigBee Cluster Library specification.
  * 
  * @author $Id$

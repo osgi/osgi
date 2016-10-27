@@ -17,9 +17,10 @@
 package org.osgi.service.zigbee;
 
 /**
- * This class represents root exception for all the code related to ZDP (see
- * Table 2.137 ZDP Enumerations Description in ZIGBEE SPECIFICATION:
- * 1_053474r17ZB_TSC-ZigBee-Specification.pdf).
+ * This class represents root exception for all the code related to ZDP.
+ * <p>
+ * See Table 2.137 ZDP Enumerations Description in ZIGBEE SPECIFICATION:
+ * 1_053474r17ZB_TSC-ZigBee-Specification.pdf.
  * 
  * @author $Id$
  */
@@ -108,7 +109,7 @@ public class ZDPException extends ZigBeeException {
 	public static final int		NOT_AUTHORIZED		= 0x2d;
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing only a description, but no
+	 * Creates a {@linkplain ZDPException} containing only a description, but no
 	 * error codes. If issued on this exception the {@link #getErrorCode()} and
 	 * {@link #getZigBeeErrorCode()} methods return the {@link #UNKNOWN_ERROR}
 	 * constant.
@@ -120,9 +121,9 @@ public class ZDPException extends ZigBeeException {
 	}
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZDPException} containing a specific
 	 * {@code errorCode}. Using this constructor with {@code errorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZDPException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
@@ -139,16 +140,16 @@ public class ZDPException extends ZigBeeException {
 	}
 
 	/**
-	 * Creates a {@linkplain ZCLException} containing a specific
+	 * Creates a {@linkplain ZDPException} containing a specific
 	 * {@code errorCode} or {@code zigBeeErrorCode}. Using this constructor with
 	 * both the {@code errorCode} and {@code zigBeeErrorCode} set to
-	 * {@linkplain #UNKNOWN_ERROR} is equivalent to call
+	 * {@link #UNKNOWN_ERROR} is equivalent to call
 	 * {@link #ZDPException(String)}.
 	 * 
 	 * @param errorCode One of the error codes defined in this interface or
 	 *        {@link #UNKNOWN_ERROR} the actual error is not covered in this
 	 *        interface. In this case the {@code zigBeeErrorCode} parameter must
-	 *        be the actual status code returned by the ZigBe stack.
+	 *        be the actual status code returned by the ZigBee stack.
 	 * 
 	 * @param zigBeeErrorCode The actual ZDP status code or
 	 *        {@link #UNKNOWN_ERROR} if this status is unknown.

@@ -1,3 +1,4 @@
+
 package org.osgi.service.zigbee;
 
 import org.osgi.util.function.Predicate;
@@ -28,7 +29,7 @@ public interface ZCLCommandResponseStream {
 	 * 
 	 */
 	void close();
-	
+
 	/**
 	 * Registers a handler that will be called for each of the received
 	 * responses. Only one handler may be registered. Any responses that arrive
@@ -51,5 +52,5 @@ public interface ZCLCommandResponseStream {
 	 *         handler function will be dereferenced.
 	 *
 	 */
-	void forEach(Predicate/* <ZCLCommandResponse> */ handler) throws IllegalStateException;
+	void forEach(Predicate/* <ZCLCommandResponse> */ handler);
 }

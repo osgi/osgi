@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeNode;
+
 /**
  * This interface represents a ZigBee Device description Set. A Set is
  * registered as an OSGi Service that provides method to retrieve endpoint
@@ -23,8 +26,8 @@ package org.osgi.service.zigbee.descriptions;
  * 
  * In addition to the ZigBeeDeviceDescriptionSet's (OSGi service) properties;
  * ZigBeeDeviceDescriptionSet is also expected to be registered as an OSGi
- * service with the following ZigBeeEndpoint.PROFILE_ID, and
- * ZigBeeNode.MANUFACTURER_CODE properties.
+ * service with the following {@link ZigBeeEndpoint#PROFILE_ID}, and
+ * {@link ZigBeeNode#MANUFACTURER_CODE} properties.
  * 
  * @author $Id$
  */

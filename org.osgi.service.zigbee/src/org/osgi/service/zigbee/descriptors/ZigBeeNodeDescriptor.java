@@ -16,10 +16,13 @@
 
 package org.osgi.service.zigbee.descriptors;
 
+import org.osgi.service.zigbee.ZigBeeNode;
+
 /**
  * This interface represents a Node Descriptor as described in the ZigBee
- * Specification The Node Descriptor contains information about the capabilities
- * of the node.
+ * Specification.
+ * <p>
+ * The Node Descriptor contains information about the capabilities of the node.
  * 
  * @noimplement
  * 
@@ -30,8 +33,8 @@ public interface ZigBeeNodeDescriptor {
 	/**
 	 * Returns the logical type of the described node.
 	 * 
-	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
-	 *         ZigBeeNode.END_DEVICE.
+	 * @return one of: {@link ZigBeeNode#COORDINATOR},
+	 *         {@link ZigBeeNode#ROUTER}, {@link ZigBeeNode#ZED}.
 	 */
 	public short getLogicalType();
 

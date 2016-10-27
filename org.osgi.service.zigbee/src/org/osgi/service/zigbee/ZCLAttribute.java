@@ -20,10 +20,11 @@ import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.util.promise.Promise;
 
 /**
- * This interface represents a ZCLAttribute and adds to the ZCLAttributeInfo
- * interface the methods to read and write the ZCL attribute from and to the
- * ZigBee node with respectively the {@link #getValue()} and
- * {@link #setValue(Object)} methods.
+ * This interface represents a ZCLAttribute.
+ * <p>
+ * Its extends ZCLAttributeInfo to add methods to read and write the ZCL
+ * attribute from and to the ZigBee node with respectively the
+ * {@link #getValue()} and {@link #setValue(Object)} methods.
  * 
  * @author $Id$
  */
@@ -39,9 +40,10 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * 
 	 * <p>
 	 * As described in section <em>2.4.1.3 Effect on Receipt</em> of the ZCL
-	 * specification, a <em>Read
-	 * attributes</em> command can have the following status: SUCCESS,
-	 * UNSUPPORTED_ATTRIBUTE, or INVALID_VALUE (see {@link ZCLException}).
+	 * specification, a <em>Read attributes</em> command can have the following
+	 * status: {@link ZCLException#SUCCESS},
+	 * {@link ZCLException#UNSUPPORTED_ATTRIBUTE}, or
+	 * {@link ZCLException#INVALID_VALUE}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         The response object returned by {@link Promise#getValue()} is the
@@ -49,10 +51,10 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 *         {@link #getDataType()} method and
 	 *         {@link ZCLDataTypeDescription#getJavaDataType()}) or in
 	 *         {@code byte[]} if {@link #getDataType()} returns null. The
-	 *         response object is null if an UNSUPPORTED_ATTRIBUTE or
-	 *         INVALID_VALUE error occurs and the adequate ZCLException is
-	 *         returned by {@link Promise#getFailure()} .
-	 * 
+	 *         response object is null if an
+	 *         {@link ZCLException#UNSUPPORTED_ATTRIBUTE} or
+	 *         {@link ZCLException#INVALID_VALUE} error occurs and the adequate
+	 *         ZCLException is returned by {@link Promise#getFailure()} .
 	 */
 	public Promise/* <Object> */ getValue();
 
@@ -61,10 +63,12 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 * 
 	 * <p>
 	 * As described in section <em>2.4.3.3 Effect on Receipt</em> of the ZCL
-	 * specification, a <em>Write
-	 * attributes</em> command may return the following status: SUCCESS,
-	 * UNSUPPORTED_ATTRIBUTE, INVALID_DATA_TYPE, READ_ONLY, INVALID_VALUE (see
-	 * {@link ZCLException}), or NOT_AUTHORIZED (see {@link ZDPException}).
+	 * specification, a <em>Write attributes</em> command may return the
+	 * following status: {@link ZCLException#SUCCESS},
+	 * {@link ZCLException#UNSUPPORTED_ATTRIBUTE},
+	 * {@link ZCLException#INVALID_DATA_TYPE}, {@link ZCLException#READ_ONLY},
+	 * {@link ZCLException#INVALID_VALUE}, or
+	 * {@link ZDPException#NOT_AUTHORIZED}.
 	 * 
 	 * @param value the Java value to set.
 	 * 
@@ -72,8 +76,7 @@ public interface ZCLAttribute extends ZCLAttributeInfo {
 	 *         {@link Promise#getFailure()} returns null if the attribute value
 	 *         has been successfully written. The adequate ZigBeeException is
 	 *         returned otherwise.
-	 * 
 	 */
-	public Promise/* <void> */ setValue(Object value);
+	public Promise/* <Void> */ setValue(Object value);
 
 }

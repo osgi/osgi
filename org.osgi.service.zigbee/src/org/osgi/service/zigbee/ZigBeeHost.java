@@ -23,9 +23,11 @@ import org.osgi.util.promise.Promise;
 /**
  * This interface represents the machine that hosts the code to run a ZigBee
  * device or client. This machine is, for example, the ZigBee chip/dongle that
- * is controlled by the basedriver (below/under the OSGi execution environment).
- * <br>
- * ZigBeeHost is more than a ZigBeeNode.<br>
+ * is controlled by the base driver (below/under the OSGi execution
+ * environment).
+ * <p>
+ * ZigBeeHost is more than a ZigBeeNode.
+ * <p>
  * It must be registered as a OSGi service.
  * 
  * @noimplement
@@ -42,21 +44,23 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Starts the host.
 	 * 
-	 * If the host is a Coordinator, then it can be started with or without
-	 * PAN_ID and Extended PAN_ID (i.e. if no PAN_ID, and Extended PAN_ID are
-	 * given, then they will be automatically generated and then added to the
-	 * service properties).
+	 * If the host is a {@link ZigBeeNode#COORDINATOR}, then it can be started
+	 * with or without {@link ZigBeeNode#PAN_ID} and
+	 * {@link ZigBeeNode#EXTENDED_PAN_ID} (that is, if no PAN_ID, and Extended
+	 * PAN_ID are given, then they will be automatically generated and then
+	 * added to the service properties).
 	 * 
-	 * If the host is a router, or an end device, then the host may start
-	 * without a registered PAN_ID property; the property will be set when the
-	 * host will find and join a ZigBee network.
+	 * If the host is a {@link ZigBeeNode#ROUTER}, or a {@link ZigBeeNode#ZED},
+	 * then the host may start without a registered {@link ZigBeeNode#PAN_ID}
+	 * property; the property will be set when the host will find and join a
+	 * ZigBee network.
 	 * 
-	 * The host status must be persistent, i.e. if the host was started, then
-	 * the host must starts again when the bundle restarts. In addition, the
-	 * values of channel, pan id, extended pan id, and host pid must remain the
-	 * same.
+	 * The host status must be persistent, that is, if the host was started,
+	 * then the host must starts again when the bundle restarts. In addition,
+	 * the values of channel, pan id, extended pan id, and host pid must remain
+	 * the same.
 	 * 
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public void start() throws Exception;
@@ -64,7 +68,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Stops the host.
 	 * 
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public void stop() throws Exception;
@@ -79,20 +83,18 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Sets the panId.
 	 * 
-	 * @param panId The network Personal Area Network identifier (PAND ID)
-	 * @throws IllegalStateException, is thrown in case the host is still
-	 *         started.
+	 * @param panId The network Personal Area Network identifier (PAN ID)
+	 * @throws IllegalStateException If the host is already started.
 	 */
-	void setPanId(int panId) throws IllegalStateException;
+	void setPanId(int panId);
 
 	/**
 	 * Sets the extendedPanId.
 	 * 
 	 * @param extendedPanId The network Extended PAN identifier(EPID)
-	 * @throws IllegalStateException is thrown in case the host is still
-	 *         started.
+	 * @throws IllegalStateException If the host is already started.
 	 */
-	void setExtendedPanId(BigInteger extendedPanId) throws IllegalStateException;
+	void setExtendedPanId(BigInteger extendedPanId);
 
 	/**
 	 * Indicates if a ZigBee device can join the network.
@@ -107,45 +109,42 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * coordinator.
 	 * 
 	 * <p>
-	 * As described in
-	 * "Table 2.133 Fields of the Mgmt_Permit_Joining_rsp Command" of the ZigBee
-	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a permitjoin
-	 * request can have the following status: SUCCESS, INVALID_REQUEST,
-	 * NOT_AUTHORIZED or any status code returned from the
-	 * NLMEPERMITJOINING.confirm primitive.
+	 * As described in "Table 2.133 Fields of the Mgmt_Permit_Joining_rsp
+	 * Command" of the ZigBee specification
+	 * 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a permitJoin request can have
+	 * the following status: {@link ZDPException#SUCCESS},
+	 * {@link ZDPException#INV_REQUESTTYPE}, {@link ZDPException#NOT_AUTHORIZED}
+	 * or any status code returned from the NLMEPERMITJOINING.confirm primitive.
 	 * 
 	 * @param duration The time during which associations are permitted.
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public void permitJoin(short duration) throws Exception;
 
 	/**
 	 * Sets the host logical node type. ZigBee defines three different types of
-	 * node, coordinator({@link org.osgi.service.zigbee.ZigBeeNode ->
-	 * COORDINATOR}), router( {@link org.osgi.service.zigbee.ZigBeeNode ROUTER})
-	 * and end device( {@link org.osgi.service.zigbee.ZigBeeNode -> END_DEVICE}
-	 * ).
+	 * node: {@link ZigBeeNode#COORDINATOR}, {@link ZigBeeNode#ROUTER} and
+	 * {@link ZigBeeNode#ZED}.
 	 * 
 	 * @param logicalNodeType The logical node type.
-	 * @throws IllegalStateException, is thrown in case the host is still
-	 *         started.
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws IllegalStateException If the host is already started.
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
-	public void setLogicalType(short logicalNodeType) throws IllegalStateException, Exception;
+	public void setLogicalType(short logicalNodeType) throws Exception;
 
 	/**
 	 * Returns the current network channel.
 	 * 
 	 * @return the current network channel.
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public int getChannel() throws Exception;
 
 	/**
-	 * Updates the network channel. 802.15.4 and ZigBee divide the 2.4Ghz band
+	 * Updates the network channel. 802.15.4 and ZigBee divide the 2.4GHz band
 	 * into 16 channels, numbered from 11 to 26.
 	 * 
 	 * <p>
@@ -155,17 +154,17 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * with the channel parameter.
 	 * 
 	 * @param channel The network channel.
-	 * @throws IllegalStateException, is thrown in case the host is still
-	 *         started, or in case the host is not a network manager.
+	 * @throws IllegalStateException If the host is started started, or the host
+	 *         is not a network manager.
 	 * @throws IOException for serial communication exception.
 	 */
-	public void updateNetworkChannel(byte channel) throws IllegalStateException, IOException;
+	public void updateNetworkChannel(byte channel) throws IOException;
 
 	/**
 	 * Returns the currently configured channel mask.
 	 * 
 	 * @return the currently configured channel mask.
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public int getChannelMask() throws Exception;
@@ -176,15 +175,15 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * <p>
 	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a set request
-	 * can have the following status: SUCCESS, INVALID_PARAMETER or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
+	 * can have the following status: {@link APSException#SUCCESS},
+	 * {@link APSException#INVALID_PARAMETER} or
+	 * {@link APSException#UNSUPPORTED_ATTRIBUTE}.
 	 * 
 	 * @param mask A value representing the channel mask.
-	 * @throws IllegalStateException, is thrown in case the host is still
-	 *         started.
+	 * @throws IllegalStateException If the host is already started.
 	 * @throws IOException for serial communication exception.
 	 */
-	public void setChannelMask(int mask) throws IllegalStateException, IOException;
+	public void setChannelMask(int mask) throws IOException;
 
 	/**
 	 * Forces a new network scan. It checks that the ZigBeeNode services are
@@ -193,11 +192,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * attributes).
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         In case of success the promise will resolve with Boolean.TRUE
-	 *         otherwise the promise is failed with an exception.
+	 *         In case of success the promise will resolve with {@code
+	 *         Boolean.TRUE} otherwise the promise is failed with an exception.
 	 * 
-	 * 
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public Promise /* <Boolean> */ refreshNetwork() throws Exception;
@@ -205,11 +203,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Returns the network security level.
 	 * 
-	 * @return the network security level, i.e. 0 if security is disabled, an
-	 *         int code if enabled (see
-	 *         "Table 4.38 Security Levels Available to the NWK, and APS Layers"
-	 *         of the ZigBee specification").
-	 * @throws Exception, any exception related to the communication with the
+	 * @return the network security level, that is, 0 if security is disabled,
+	 *         an int code if enabled (see "Table 4.38 Security Levels Available
+	 *         to the NWK, and APS Layers" of the ZigBee specification").
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public int getSecurityLevel() throws Exception;
@@ -218,7 +215,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Returns the current preconfigured link key.
 	 * 
 	 * @return the current preconfigured link key.
-	 * @throws Exception, any exception related to the communication with the
+	 * @throws Exception Any exception related to the communication with the
 	 *         chip.
 	 */
 	public String getPreconfiguredLinkKey() throws Exception;
@@ -226,7 +223,6 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Creates a {@link ZigBeeGroup} service that has not yet been discovered by
 	 * the ZigBee Base Driver or that does not exist on the ZigBee network yet.
-	 * <br>
 	 * 
 	 * @param groupAddress the address of the group to create.
 	 * @throws Exception when a ZigBeeGroup service with the same groupAddress
@@ -262,8 +258,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 *         be asynchronously notified about the ZCLFrame responses sent back
 	 *         by the ZigBee nodes.
 	 * 
-	 * @see #setBroadcastRadius(short) for setting the broadcast radius.
-	 * 
+	 * @see #setBroadcastRadius(short) Setting the broadcast radius.
 	 */
 	ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID);
 
@@ -281,13 +276,11 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param broadcastRadius - is the number of routers that the messages are
 	 *        allowed to cross. Radius value is in the range from 0 to 0xff.
-	 * 
 	 * @throws IllegalArgumentException if set with a value out of the expected
 	 *         range.
-	 * 
 	 * @throws IllegalStateException if set when the ZigBeeHost is "running".
 	 */
-	void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException;
+	void setBroadcastRadius(short broadcastRadius);
 
 	/**
 	 * Sets the timeout for the communication sent through this device.
