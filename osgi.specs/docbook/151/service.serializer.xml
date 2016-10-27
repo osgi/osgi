@@ -106,7 +106,7 @@
           </thead>
           <tbody>
             <row>
-              <entry><code>mimetype</code></entry>
+              <entry><code>osgi.mimetype</code></entry>
               <entry><code>String+</code></entry>
               <entry>The MIME type(s) supported by this serializer service</entry>
             </row>
@@ -157,10 +157,11 @@
               <row>
                 <entry><code>Number</code> or subclass</entry>
                 <entry>Number</entry>
-                <entry>The smallest numerical Java boxed primitive type that can hold the value.
-                  If the value contains no decimal point integer types are used. 
-                  Otherwise floating point types are used. If no primitive is big enough to hold
-                  the value a <code>BigInteger</code> or <code>BigDecimal</code> is used.</entry>
+                <entry>If the number is a whole number an <code>Integer</code> is created. 
+                  If the number is too large
+                  for an <code>Integer</code> a <code>Long</code> is used. 
+                  If the number is a floating point number a 
+                  <code>Double</code> is used.</entry>
               </row>
               <row>
                 <entry><code>String</code></entry>
@@ -208,7 +209,7 @@
       <para>
         The example below shows how the JSON Serializer can be used, the service is obtained
         via a Declarative Services @Reference annotation.
-        <programlisting>@Reference(target="mimetype=application/json")
+        <programlisting>@Reference(target="(osgi.mimetype=application/json)")
 private Serializer jsonSerializer;
 
 private void myMethod() {
@@ -276,10 +277,9 @@ private void myMethod() {
               <row>
                 <entry>Integer <code>Number</code> or subclass</entry>
                 <entry><code>!!int</code></entry>
-                <entry>The smallest numerical Java boxed non-floating point 
-                  primitive type that can hold the value.
-                  If no primitive is big enough to hold
-                  the value a <code>BigInteger</code> is used.</entry>
+                <entry>An <code>Integer</code> is created. 
+                  If the number is too large
+                  for an <code>Integer</code> a <code>Long</code> is used.</entry>
               </row>
               <row>
                 <entry>Floating point <code>Number</code> or subclass</entry>
@@ -333,7 +333,7 @@ private void myMethod() {
       <para>
         The example below shows how the YAML Serializer can be used, the service is obtained
         via a Declarative Services @Reference annotation.
-        <programlisting>@Reference(target="mimetype=text/yaml")
+        <programlisting>@Reference(target="(osgi.mimetype=text/yaml)")
 private Serializer yamlSerializer;
 
 private void myMethod() {
