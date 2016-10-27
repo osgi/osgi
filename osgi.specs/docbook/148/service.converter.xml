@@ -533,7 +533,12 @@ String[] sa = c.convert("A,B").to(String[].class); // sa={"A","B"}</programlisti
             </thead>         
             <tbody>
               <row>
-                <entry>Map interface</entry>
+                <entry><code>java.util.Map</code></entry>
+                <entry>A map view over the backing object is created, changes to the backing
+                object will be reflected in the map, unless overwritten by the client.</entry>
+              </row>
+              <row>
+                <entry>Other Map interface</entry>
                 <entry>A mutable implementation is created. E.g. if the target type is 
                 <code>ConcurrentNavigableMap</code> then the implementation can create a 
                 <code>ConcurrentSkipListMap</code>.</entry>
@@ -942,6 +947,13 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
     <code>yyMMddHHmmssZ</code> instead it can be done as follows. 
     This example shows the conversion with such a type from a JavaBean to a Map.
+    <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
+Converter ca = cb.build();
+    
+    String s = ca.convert(new Date()).toString(); // s = "160923102853+0100" or similar</programlisting>
+    Custom conversions are also applied to embedded conversions that are part of a map or other enclosing object:
     <programlisting>class MyBean {
   //... fields ommitted
   boolean getEnabled() { /* ... */ }
@@ -954,16 +966,29 @@ MyBean mb = new MyBean();
 mb.setStartDate(new Date());
 mb.setEnabled(true);
 
-SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
-ConverterBuilder cb = new StandardConverter().newConverterBuilder();
-cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
-Converter ca = cb.build();
 
 Map&lt;String, String&gt; m = ca.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
 String en = m.get("enabled");   // en = "true"
 String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
-  <remark>TODO describe how the hierarchy is walked and how converters can hand back conversions</remark>
-</para>
+	Rules will only be invoked when an actual object needs to be converted, <code>null</code> values are never 
+	handed to converter rules. A converter rule can return <code>null</code> however to indicate that it cannot handle
+	the conversion, in which case the parent converter object is asked to convert the value.
+	Since custom converters can be the basis for further custom converters, a chain of custom converters can be 
+	created where the outermost converter is given the opportunity to convert an object first, but it can delegate
+	back to the converter in the next converter in the hierarchy by returning <code>null</code> if it wishes to do so.
+	</para>
+	<section>
+	  <title>Abstract converter rules</title>
+	  <para>
+	  When specifying the types for the converter, abstract or supertypes can be used. When the converter looks for 
+	  a customized converter rule, it first looks for a converter rules for the most specific types. If it cannot 
+	  find a matching rule, it will look for matching converters for the supertypes of the provided objects. It will 
+	  continue to go up the type hierarchy until it reaches <code>java.lang.Object</code>. Therefore converter 
+	  rules that convert from or to Object can be used as catchall or default rules that are invoked if no specific rule
+	  is available.
+	  <remark>Need to specify what the order or lookup is if class x extends s implements a,b,c</remark>
+	  </para>
+	</section>
   </section>
 
   <section>
