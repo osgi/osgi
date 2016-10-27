@@ -16,8 +16,6 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
@@ -54,30 +52,20 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 	}
 
 	public Promise getValue() {
-		// Map<Integer, Object> response = null;
-		Map response = null;
-		response = new HashMap();
-		response.put(Integer.valueOf(Integer.toString(id)), value);
-		return Promises.resolved(response);
+		return Promises.resolved(value);
 	}
 
 	public Promise setValue(Object value) {
-		this.value = value;
-		// Map<Integer, Object> response = null;
-		Map response = null;
-		response = new HashMap();
-		response.put(Integer.valueOf(Integer.toString(id)), this.value);
 		if (description.isReadOnly()) {
 			return Promises.failed(
 					new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute"));
-		} else if (!description.getDataType().getJavaDataType().isInstance(value)) {
+		}
+		if (!description.getDataType().getJavaDataType().isInstance(value)) {
 			return Promises.failed(
 					new ZCLException(ZCLException.INVALID_DATA_TYPE, "can't set the value, invalid dataType"));
 		}
-
-		else {
-			return Promises.resolved(response);
-		}
+		this.value = value;
+		return Promises.resolved(null);
 	}
 
 	public String toString() {
