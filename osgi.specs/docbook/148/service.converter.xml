@@ -873,36 +873,31 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             <tbody>
               <row>
                 <entry>1</entry>
-                <entry>array</entry>
-              </row>
-
-              <row>
-                <entry>2</entry>
                 <entry>Java bean</entry>
               </row>
               
               <row>
-                <entry>3</entry>
+                <entry>2</entry>
                 <entry>annotation</entry>
               </row>
 
               <row>
-                <entry>4</entry>
+                <entry>3</entry>
                 <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
               </row>
               
               <row>
-                <entry>5</entry>
+                <entry>4</entry>
                 <entry>interface (including Collections and Maps)</entry>
               </row>
 
               <row>
-                <entry>6</entry>
+                <entry>5</entry>
                 <entry>DTO</entry>
               </row>
               
               <row>
-                <entry>7</entry>
+                <entry>6</entry>
                 <entry>scalar</entry>
               </row>
             </tbody>
@@ -950,9 +945,9 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
-Converter ca = cb.build();
+Converter c = cb.build();
     
-    String s = ca.convert(new Date()).toString(); // s = "160923102853+0100" or similar</programlisting>
+String s = c.convert(new Date()).to(String.class); // s = "160923102853+0100" or similar</programlisting>
     Custom conversions are also applied to embedded conversions that are part of a map or other enclosing object:
     <programlisting>class MyBean {
   //... fields ommitted
@@ -966,8 +961,7 @@ MyBean mb = new MyBean();
 mb.setStartDate(new Date());
 mb.setEnabled(true);
 
-
-Map&lt;String, String&gt; m = ca.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
+Map&lt;String, String&gt; m = c.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
 String en = m.get("enabled");   // en = "true"
 String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
 	Rules will only be invoked when an actual object needs to be converted, <code>null</code> values are never 
