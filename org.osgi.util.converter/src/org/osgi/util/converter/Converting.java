@@ -39,7 +39,7 @@ public interface Converting {
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
-	Converting as(Class< ? > type);
+	Converting sourceType(Class< ? > type);
 
 	/**
 	 * Always return a fully populated copy of the object, however if the object
@@ -73,7 +73,7 @@ public interface Converting {
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
-	Converting target(Class< ? > cls);
+	Converting targetType(Class< ? > cls);
 
 	/**
 	 * Specify the target object type for the conversion as a class object.
@@ -107,12 +107,4 @@ public interface Converting {
 	 * @return The converted object.
 	 */
 	Object to(Type type);
-
-	/**
-	 * Same as {@code to(String.class)}.
-	 *
-	 * @return The converted object.
-	 */
-	@Override
-	String toString();
 }
