@@ -57,6 +57,10 @@
                 <element name="property" type="scr:Tproperty" />
                 <element name="properties" type="scr:Tproperties" />
             </choice>
+            <choice minOccurs="0" maxOccurs="unbounded">
+                <element name="factoryProperty" type="scr:Tproperty" />
+                <element name="factoryProperties" type="scr:Tproperties" />
+            </choice>
             <element name="service" type="scr:Tservice" minOccurs="0"
                 maxOccurs="1" />
             <element name="reference" type="scr:Treference"

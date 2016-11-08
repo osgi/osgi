@@ -284,4 +284,39 @@ public @interface Component {
 	 * @since 1.3
 	 */
 	Reference[] reference() default {};
+
+	/**
+	 * Factory properties for this Factory Component.
+	 * <p>
+	 * Each factory property string is specified as {@code "name=value"}. The
+	 * type of the factory property value can be specified in the name as
+	 * {@code name:type=value}. The type must be one of the factory property
+	 * types supported by the type attribute of the factoryProperty element of a
+	 * Component Description.
+	 * <p>
+	 * To specify a factory property with multiple values, use multiple name,
+	 * value pairs. For example, {@code "foo=bar", "foo=baz"}.
+	 * <p>
+	 * If specified, the {@link #factory()} element must also be specified to
+	 * indicate the component is a Factory Component.
+	 * 
+	 * @see "The factoryProperty element of a Component Description."
+	 * @since 1.4
+	 */
+	String[] factoryProperty() default {};
+
+	/**
+	 * Factory property entries for this Factory Component.
+	 * <p>
+	 * Specifies the name of an entry in the bundle whose contents conform to a
+	 * standard Java Properties File. The entry is read and processed to obtain
+	 * the factory properties and their values.
+	 * <p>
+	 * If specified, the {@link #factory()} element must also be specified to
+	 * indicate the component is a Factory Component.
+	 * 
+	 * @see "The factoryProperties element of a Component Description."
+	 * @since 1.4
+	 */
+	String[] factoryProperties() default {};
 }

@@ -50,7 +50,7 @@ public class ComponentDescriptionDTO extends DTO {
 	 * <p>
 	 * This is declared in the {@code factory} attribute of the
 	 * {@code component} element. This must be {@code null} if the component
-	 * description is not declared as a component factory.
+	 * description is not declared as a factory component.
 	 */
 	public String				factory;
 
@@ -169,4 +169,16 @@ public class ComponentDescriptionDTO extends DTO {
 	 * pid if the component description does not declare a configuration pid.
 	 */
 	public String[]				configurationPid;
+
+	/**
+	 * The factory properties.
+	 * <p>
+	 * These are declared in the component description by the
+	 * {@code factoryProperty} and {@code factoryProperties} elements. This must
+	 * be {@code null} if the component description is not declared as a
+	 * {@link #factory factory component}.
+	 * 
+	 * @since 1.4
+	 */
+	public Map<String,Object>	factoryProperties;
 }
