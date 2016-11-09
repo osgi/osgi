@@ -17,6 +17,7 @@
 package org.osgi.service.component.runtime.dto;
 
 import java.util.Map;
+
 import org.osgi.dto.DTO;
 import org.osgi.service.component.ComponentContext;
 
@@ -59,6 +60,23 @@ public class ComponentConfigurationDTO extends DTO {
 	public static final int			ACTIVE						= 8;
 
 	/**
+	 * The component configuration failed to activate.
+	 * <p>
+	 * This means the component configuration is satisfied but that either:
+	 * <ul>
+	 * <li>an exception occurred loading the implementation class,</li>
+	 * <li>the static initializer threw an exception,</li>
+	 * <li>the constructor threw an exception, or</li>
+	 * <li>the activate method threw an exception.</li>
+	 * </ul>
+	 * The failure information from the exception is available from
+	 * {@link #failure}.
+	 * 
+	 * @since 1.4
+	 */
+	public static final int				FAILED_ACTIVATION			= 16;
+
+	/**
 	 * The representation of the component configuration's component
 	 * description.
 	 */
@@ -66,10 +84,10 @@ public class ComponentConfigurationDTO extends DTO {
 
 	/**
 	 * The current state of the component configuration.
-	 * 
 	 * <p>
 	 * This is one of {@link #UNSATISFIED_CONFIGURATION},
-	 * {@link #UNSATISFIED_REFERENCE}, {@link #SATISFIED} or {@link #ACTIVE}.
+	 * {@link #UNSATISFIED_REFERENCE}, {@link #SATISFIED}, {@link #ACTIVE}, or
+	 * {@link #FAILED_ACTIVATION}.
 	 */
 	public int							state;
 
@@ -110,4 +128,23 @@ public class ComponentConfigurationDTO extends DTO {
 	 * empty if the component configuration has no unsatisfied references.
 	 */
 	public UnsatisfiedReferenceDTO[]	unsatisfiedReferences;
+
+	/**
+	 * The failure information if the component configuration state is
+	 * {@link #FAILED_ACTIVATION}.
+	 * <p>
+	 * This is the failure exception converted to a String using:
+	 * 
+	 * <pre>
+	 * StringWriter sw = new StringWriter();
+	 * exception.printStackTrace(new PrintWriter(sw));
+	 * sw.toString();
+	 * </pre>
+	 * 
+	 * This must be {@code null} if the component configuration state is not
+	 * {@link #FAILED_ACTIVATION}.
+	 * 
+	 * @since 1.4
+	 */
+	public String						failure;
 }
