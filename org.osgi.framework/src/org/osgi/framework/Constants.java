@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1809,4 +1809,25 @@ public interface Constants {
 	 * @since 1.8
 	 */
 	String	BUNDLE_LICENSE							= "Bundle-License";
+
+	/**
+	 * Manifest header identifying the bundle's developers.
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.9
+	 */
+	String	BUNDLE_DEVELOPERS						= "Bundle-Developers";
+
+	/**
+	 * Manifest header identifying the bundle's software configuration
+	 * management system.
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.9
+	 */
+	String	BUNDLE_SCM								= "Bundle-SCM";
 }
