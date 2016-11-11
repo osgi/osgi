@@ -27,35 +27,39 @@ import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.test.cases.zigbee.config.file.ZCLClusterConfig;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * ZCLCluster intreface mocked implementation.
+ * ZCLCluster interface mocked implementation.
  * 
  * @author $Id$
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private int				id;
-	private ZCLAttribute[]	attributes;
-	private int[]			commandIds;
+	private ZCLClusterDescription	description;
+	private ZCLAttribute[]			attributes	= null;
 
-	public ZCLClusterImpl(int id, int[] commandIds, ZCLAttribute[] attributes) {
-		this.id = id;
-		this.commandIds = commandIds;
-		this.attributes = attributes;
-	}
+	public ZCLClusterImpl(ZCLClusterDescription clusterDescription) {
+		this.description = clusterDescription;
 
-	public ZCLClusterImpl(ZCLClusterConfig config) {
-		this.id = config.getId();
-		this.commandIds = config.getCommandIds();
-		this.attributes = config.getAttributes();
+		/*
+		 * Creates the ZCLAttribute object from the ZCLAttributeDescription[]
+		 * array embedded in the ZCLClusterDescription.
+		 */
+
+		ZCLAttributeDescription[] attributeDescriptions = clusterDescription.getAttributeDescriptions();
+		attributes = new ZCLAttribute[attributeDescriptions.length];
+		for (int i = 0; i < attributeDescriptions.length; i++) {
+			attributes[i] = new ZCLAttributeImpl(attributeDescriptions[i]);
+		}
 	}
 
 	public int getId() {
-		return id;
+		return description.getId();
 	}
 
 	public Promise getAttribute(int attributeId) {
@@ -65,6 +69,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 				return Promises.resolved(attributes[i]);
 			}
 		}
+
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 				ZCLException.FAILURE,
 				"the AttributeId is not valid"));
@@ -75,7 +80,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public Promise getCommandIds() {
-		return Promises.resolved(this.commandIds.clone());
+		ZCLCommandDescription[] receivedCommandDescriptions = description.getReceivedCommandDescriptions();
+		int[] commandIds = new int[receivedCommandDescriptions.length];
+		for (int i = 0; i < commandIds.length; i++) {
+			commandIds[i] = receivedCommandDescriptions[i].getId();
+		}
+		return Promises.resolved(commandIds);
 	}
 
 	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
@@ -113,7 +123,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		}
 
 		int i = 0;
-		// for (int i : attributesIds) {
+
 		final ZCLAttributeInfo attribute = attributesInfoArray[i];
 		final byte[] attributeValue = {0};
 		ZCLReadStatusRecord result = new ZCLReadStatusRecord() {
@@ -131,7 +141,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			}
 		};
 		response.put(Integer.valueOf(Integer.toString(attribute.getId())), result);
-		// }
+
 		return Promises.resolved(response);
 	}
 
@@ -162,17 +172,20 @@ public class ZCLClusterImpl implements ZCLCluster {
 		}
 
 		String commandIdsAsAString = null;
-		if (commandIds != null) {
+
+		ZCLCommandDescription[] receivedCommands = this.description.getReceivedCommandDescriptions();
+
+		if (receivedCommands != null) {
 			commandIdsAsAString = "[";
 			int i = 0;
-			while (i < commandIds.length) {
-				commandIdsAsAString = commandIdsAsAString + commandIds[i];
+			while (i < receivedCommands.length) {
+				commandIdsAsAString = commandIdsAsAString + receivedCommands[i].getId();
 				i = i + 1;
 			}
 			commandIdsAsAString = commandIdsAsAString + "]";
 		}
 
-		return "" + this.getClass().getName() + "[id: " + id + ", attributes: " + attributesAsAString + ", commandIds: "
+		return "" + this.getClass().getName() + "[id: " + description.getId() + ", attributes: " + attributesAsAString + ", commandIds: "
 				+ commandIdsAsAString + "]";
 	}
 

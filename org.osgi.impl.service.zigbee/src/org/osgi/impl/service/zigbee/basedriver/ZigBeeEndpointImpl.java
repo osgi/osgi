@@ -31,39 +31,30 @@ import org.osgi.util.promise.Promises;
  */
 public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
-	private short					id;
-	private ZigBeeSimpleDescriptor	desc;
+	private short					endpointId;
+	private ZigBeeSimpleDescriptor	simpleDescriptor;
 	private ZCLCluster[]			inputs;
 	private ZCLCluster[]			outputs;
+	private ZigBeeNodeImpl			node;
 
-	/**
-	 * @param id
-	 * @param inputs i.e. ServerClusters
-	 * @param ouputs i.e. ClientClusters
-	 * @param desc
-	 */
-	public ZigBeeEndpointImpl(short id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
-		this.id = id;
+	public ZigBeeEndpointImpl(short endpointId, ZCLCluster[] inputs, ZCLCluster[] outputs, ZigBeeSimpleDescriptor simpleDescriptor) {
+		this.endpointId = endpointId;
 		this.inputs = inputs;
-		this.outputs = ouputs;
-		this.desc = desc;
+		this.outputs = outputs;
+		this.simpleDescriptor = simpleDescriptor;
 	}
 
 	public short getId() {
-		return this.id;
+		return this.endpointId;
 	}
 
 	public BigInteger getNodeAddress() {
-
-		return BigInteger.valueOf(-1);
+		return node.getIEEEAddress();
 	}
 
 	public Promise getSimpleDescriptor() {
-		return Promises.resolved(desc);
-	}
-
-	public ZCLCluster[] getServerClusters() {
-		return inputs;
+		// FIXME: check if CT checks returned value
+		return Promises.resolved(simpleDescriptor);
 	}
 
 	public ZCLCluster getServerCluster(int serverClusterId) {
@@ -76,6 +67,10 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	public ZCLCluster getClientCluster(int clientClusterId) {
 		return outputs[clientClusterId];
+	}
+
+	public ZCLCluster[] getServerClusters() {
+		return inputs;
 	}
 
 	public Promise bind(String servicePid, int clusterId) {
@@ -94,8 +89,18 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
+	/**
+	 * Sets the ZigBeeNode this endpoint is part of.
+	 * 
+	 * @param node The ZigBee node.
+	 */
+
+	public void setZigBeeNode(ZigBeeNodeImpl node) {
+		this.node = node;
+	}
+
 	public String toString() {
-		return "" + this.getClass().getName() + "[id: " + id + ", desc: " + desc + ", inputs: " + inputs + ", outputs: "
+		return "" + this.getClass().getName() + "[id: " + endpointId + ", desc: " + simpleDescriptor + ", inputs: " + inputs + ", outputs: "
 				+ outputs + "]";
 	}
 

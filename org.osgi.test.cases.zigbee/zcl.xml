@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<profiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zcl.xsd">
+  <profile profileId="7" name="profileName">
+    <clusters>
+      <cluster id="3" name="light cluster">
+        
+        <server>
+          <attribute id="8" name="version" reportable="false" readOnly="true" dataType="ZigBeeUnsignedInteger16" />
+          <attribute id="6" name="unknown" reportable="true" readOnly="false" dataType="ZigBeeBoolean" />
+          <command id="3" name="commandName" responseId="7">
+            <param dataType="ZigBeeBoolean" />
+          </command>
+        </server>
+        
+        <client>
+          <command id="7" name="commandName1">
+            <param dataType="ZigBeeBoolean" />
+          </command>
+        </client>
+      </cluster>
+    </clusters>
+  </profile>
+</profiles>

@@ -1,0 +1,197 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://org.osgi/zigbee-ct"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="nodeDescriptor">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:short" name="type" use="required" />
+          <xs:attribute type="xs:short" name="frequencyBand" use="required" />
+          <xs:attribute type="xs:int" name="manufacturerCode" use="required" />
+          <xs:attribute type="xs:int" name="maxBufferSize" use="required" />
+          <xs:attribute type="xs:boolean" name="isUserDescriptorAvailable" use="required" />
+          <xs:attribute type="xs:boolean" name="isComplexDescriptorAvailable" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="powerDescriptor">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:unsignedByte" name="currentPowerMode" use="required" />
+          <xs:attribute type="xs:unsignedByte" name="currentPowerSource" use="required" />
+          <xs:attribute type="xs:unsignedByte" name="currentPowerSourceLevel" use="required" />
+          <xs:attribute type="xs:boolean" name="isConstantMainsPowerAvailable" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="simpleDescriptor">
+    <xs:annotation>
+      <xs:documentation>
+        This element represents a ZigBee Endpoint Simple Descriptor. It does not define all the attributes actually
+        specified by the ZigBee Specification, but only those that will be actually checked by the
+        CT.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:int" name="deviceId" use="required" />
+          <xs:attribute type="xs:int" name="version" use="required" />
+          <xs:attribute type="xs:int" name="profileId" use="required" />
+          <xs:attribute type="xs:string" name="inputClusters" use="required" />
+          <xs:attribute type="xs:string" name="outputClusters" use="required" />
+          <xs:attribute type="xs:unsignedInt" name="inputClustersNumber" use="required" />
+          <xs:attribute type="xs:unsignedInt" name="outputClustersNumber" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="cluster">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:command" xmlns:zb="http://org.osgi/zigbee-ct" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="endpoint">
+    <xs:annotation>
+      <xs:documentation>
+        This element represent a ZigBee Active Endpoint on the ZigBee node. Define the simpleDescriptor and the
+        client and server clusters.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:simpleDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:clusters" xmlns:zb="http://org.osgi/zigbee-ct" />
+      </xs:sequence>
+      <xs:attribute type="xs:unsignedShort" name="id" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="endpoints">
+    <xs:annotation>
+      <xs:documentation>
+        This tag must contain a list of active endpoints available on the ZigBee Node.
+        The total number of this
+        active endpoints must be assigned to the 'activeEndpointsNumber' attribute.
+        On the other hand the list itself must not be
+        exhaustive, because the CT will only try to check only the first one.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:endpoint" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="node">
+    <xs:annotation>
+      <xs:documentation>
+        A node represents a ZigBee device. Fill the ieeeAddress, userDescription attributes here, according to the
+        device characteristics. No need to explicitly describe in this xml file all the active endpoints available on the ZigBee
+        node, but remember to set the activeEndpointsNumber attribute of the 'endpoints' element to the total number
+        of active
+        endpoints that are available inside this
+        ZigBee device.
+        This value will be compared with the total number of ZigBeeEndpoint
+        services registered by this
+        ZigBeeNode in the
+        OSGi framework.
+
+        The ieeeAddress attribute is the IEEE address of the ZigBee node
+        expressed as a decimal
+        number. This
+        attribute is mandatory.
+
+        If the ZigBee node has a User Descriptor, the 'userDescription'
+        attribute MUST contain
+        the value
+        stored in is the corresponding field of the User Descriptor. Otherwise this attribute may be
+        omitted.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct">
+          <xs:annotation>
+            <xs:documentation>All the discovery tests will be done on this node. Please ensure that the simpleDescriptor tag is
+              fully filled (the server and client clusters number must be filled accordingly). At least one attribute must be read
+              only.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="zb:powerDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:endpoints" xmlns:zb="http://org.osgi/zigbee-ct" />
+      </xs:sequence>
+      <xs:attribute type="xs:unsignedLong" name="ieeeAddress" use="required" />
+      <xs:attribute type="xs:unsignedShort" name="hostPanId" use="required" />
+      <xs:attribute type="xs:string" name="userDescription" use="required" />
+      <xs:attribute type="xs:unsignedInt" name="activeEndpointsNumber" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="host">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="pid" use="required" />
+      <xs:attribute type="xs:unsignedShort" name="panId" use="required" />
+      <xs:attribute type="xs:unsignedShort" name="channel" use="required" />
+      <xs:attribute type="xs:unsignedByte" name="securityLevel" use="required" />
+      <xs:attribute type="xs:unsignedLong" name="ieeeAddress" use="required" />
+      <xs:attribute type="xs:long" name="discoveryTimeout" use="required" />
+      <xs:attribute type="xs:long" name="invokeTimeout" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="nodes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:node" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="frame">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute type="xs:unsignedInt" name="headerMinSize" use="required" />
+    <xs:attribute type="xs:unsignedInt" name="headerMaxSize" use="required" />
+  </xs:element>
+</xs:schema>
+
+<xs:element name="configuration">
+  <xs:annotation>
+    <xs:documentation>
+      This configuration file describes the ZigBee device that the tester is going
+      to use to run the CT against a
+      RI. It must be filled properly, according to the ZigBee
+      devices that will be actually used for the compliant tests. This
+      template version is useful
+      to understand how to fill all the required information.
+      Keep in mind that the tests will fail
+      if
+      this file is not provided or properly filled. Timeouts are expressed in milliseconds.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="zb:host" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
+      <xs:element ref="zb:nodes" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
+      <xs:element ref="zb:frame" xmlns:zb="http://org.osgi/zigbee-ct" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+</xs:schema>

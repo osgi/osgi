@@ -25,7 +25,9 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
@@ -36,20 +38,32 @@ import org.osgi.util.promise.Promises;
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private int						id;
-	protected ZCLAttribute[]		attributes;
-	private int[]					commandIds;
-	private ZCLClusterDescription	description;
+	private int							id;
+	private ZCLAttribute[]				attributes;
+	private int[]						commandIds;
+	private ZCLClusterDescription		description;
 
-	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
-		this.id = desc.getId();
-		this.commandIds = commandIds;
-		this.attributes = attributes;
-		this.description = desc;
+	private boolean						isServer;
+
+	private ZCLGlobalClusterDescription	global;
+
+	public ZCLClusterImpl(ZCLGlobalClusterDescription global, boolean isServer) {
+
+		this.global = global;
+		this.isServer = isServer;
+
+		ZCLAttributeDescription[] attributeDescriptions;
+		if (isServer) {
+			attributeDescriptions = global.getServerClusterDescription().getAttributeDescriptions();
+		} else {
+			attributeDescriptions = global.getClientClusterDescription().getAttributeDescriptions();
+		}
+
+		this.attributes = toZCLAttributes(attributeDescriptions);
 	}
 
 	public int getId() {
-		return id;
+		return global.getClusterId();
 	}
 
 	public Promise getAttribute(int attributeId) {
@@ -59,20 +73,28 @@ public class ZCLClusterImpl implements ZCLCluster {
 				return Promises.resolved(attributes[i]);
 			}
 		}
+
+		// FIXME: CT must check type of returned value or exception
 		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
 				ZCLException.FAILURE,
 				"the AttributeId is not valid"));
 	}
 
 	public Promise getAttributes() {
+		// FIXME: CT must check type of returned value or exception
 		return Promises.resolved(attributes);
 	}
 
 	public Promise getCommandIds() {
+		// FIXME: CT must check type of returned value or exception
+
+		// FIXME this implementation is wrong!!
+
 		return Promises.resolved(this.commandIds.clone());
 	}
 
 	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
+		// FIXME: CT must check type of returned value or exception
 		if (attributesInfoArray == null) {
 			return Promises.failed(new NullPointerException("attributes cannot be null"));
 		} else if (attributesInfoArray.length == 0) {
@@ -200,5 +222,22 @@ public class ZCLClusterImpl implements ZCLCluster {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Given an array of ZCLAttributeDescriptions convert it in an array of
+	 * ZCLAttribute objects.
+	 * 
+	 * @param attributeDescriptions An array of ZCLAttributeDescription objects.
+	 * @return The array of corresponding ZCLAttribute objects
+	 */
+	private ZCLAttribute[] toZCLAttributes(ZCLAttributeDescription[] attributeDescriptions) {
+		ZCLAttribute[] attributes = new ZCLAttribute[attributeDescriptions.length];
+
+		for (int i = 0; i < attributeDescriptions.length; i++) {
+			ZCLAttributeImpl attribute = new ZCLAttributeImpl(attributeDescriptions[i]);
+		}
+
+		return attributes;
 	}
 }

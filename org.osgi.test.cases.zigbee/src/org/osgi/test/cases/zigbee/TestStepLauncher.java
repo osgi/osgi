@@ -17,7 +17,6 @@
 package org.osgi.test.cases.zigbee;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
@@ -43,12 +42,12 @@ public class TestStepLauncher {
 	 */
 	public static final String		EVENT_REPORTABLE		= "event_reportable";
 
-	private static final String		configFilename			= "zigbee-template.xml";
+	private static final String		configFilename			= "zigbee-ct-template.xml";
 
 	private ConfigurationFileReader	confReader;
 	private TestStepProxy			tproxy;
 
-	private TestStepLauncher(BundleContext bc) throws IOException {
+	private TestStepLauncher(BundleContext bc) throws Exception {
 		tproxy = new TestStepProxy(bc);
 
 		/*
@@ -66,7 +65,7 @@ public class TestStepLauncher {
 
 	}
 
-	public static TestStepLauncher launch(BundleContext bc) throws IOException {
+	public static TestStepLauncher launch(BundleContext bc) throws Exception {
 		if (instance == null) {
 			instance = new TestStepLauncher(bc);
 		}

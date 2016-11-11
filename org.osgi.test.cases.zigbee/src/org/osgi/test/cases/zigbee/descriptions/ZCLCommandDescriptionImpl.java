@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
@@ -30,31 +30,24 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	private int							id;
 	private String						name;
 	private boolean						isMandatory;
-	private ZCLParameterDescription[]	parametersDesc;
+	private ZCLParameterDescription[]	parameterDescription	= null;
+	private boolean						isServerSide;
+	private int							manufacturerCode;
+	private boolean						isCusterSpecificCommand;
 
-	/**
-	 * @param id
-	 * @param name
-	 * @param mandatory
-	 */
 	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory) {
 		this.id = id;
 		this.name = name;
 		this.isMandatory = mandatory;
-		parametersDesc = null;
 	}
 
-	/**
-	 * @param id
-	 * @param name
-	 * @param mandatory
-	 * @param parametersDesc
-	 */
-	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory, ZCLParameterDescription[] parametersDesc) {
-		this.id = id;
-		this.name = name;
-		this.isMandatory = mandatory;
-		this.parametersDesc = parametersDesc;
+	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory, boolean isServerSide, int manufacturerCode, boolean isClusterSpecific, int responseId,
+			ZCLParameterDescription[] parameterDescription) {
+		this(id, name, mandatory);
+		this.parameterDescription = parameterDescription;
+		this.isServerSide = isServerSide;
+		this.manufacturerCode = manufacturerCode;
+		this.isCusterSpecificCommand = isClusterSpecific;
 	}
 
 	public int getId() {
@@ -74,27 +67,22 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	}
 
 	public ZCLParameterDescription[] getParameterDescriptions() {
-		return parametersDesc;
+		return parameterDescription;
 	}
 
 	public boolean isClusterSpecificCommand() {
-
-		return false;
+		return isCusterSpecificCommand;
 	}
 
 	public int getManufacturerCode() {
-
-		return -1;
+		return manufacturerCode;
 	}
 
 	public boolean isClientServerDirection() {
-
-		return false;
+		return isServerSide;
 	}
 
 	public boolean isManufacturerSpecific() {
-
-		return false;
+		return manufacturerCode >= 0;
 	}
-
 }

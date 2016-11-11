@@ -16,44 +16,27 @@
 
 package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
+import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLHeader;
 
 /**
- * Mocked impl of ZigBeeServerType.
+ * ZCLFrame implementation class that may be initialized with a specific raw
+ * frame.
  * 
- * @author $Id$
+ * @author portinaro
+ * 
+ *         FIXME: probably this class is wrong!!!
+ *
  */
-public class ZigBeeServerTypeImpl implements ZigBeeServerMask {
+public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 
-	public ZigBeeServerTypeImpl() {
-
+	public ZCLFrameRaw(ZCLHeader header, byte[] fullFrame) {
+		super(header);
+		data = fullFrame;
+		zclHeader = header;
 	}
 
-	public boolean isPrimaryTrustCenter() {
-		return false;
-	}
-
-	public boolean isBackupTrustCenter() {
-		return false;
-	}
-
-	public boolean isPrimaryBindingTableCache() {
-		return false;
-	}
-
-	public boolean isBackupBindingTableCache() {
-		return false;
-	}
-
-	public boolean isPrimaryDiscoveryCache() {
-		return false;
-	}
-
-	public boolean isBackupDiscoveryCache() {
-		return false;
-	}
-
-	public boolean isNetworkManager() {
-		return false;
+	public byte[] getBytes() {
+		return (byte[]) data.clone();
 	}
 }

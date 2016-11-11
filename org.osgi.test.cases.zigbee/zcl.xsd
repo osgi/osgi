@@ -1,0 +1,135 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <xs:element name="param">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:NCName" />
+      <xs:attribute name="dataType" type="xs:NCName" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="command">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param" />
+      </xs:sequence>
+      <xs:attribute name="id"  type="xs:unsignedShort" use="required" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="mandatory" type="xs:boolean" default="true" />
+      <xs:attribute name="responseId" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="attribute">
+    <xs:annotation>
+      <xs:documentation>
+        For dataTypes see org.osgi.service.zigbee.types the test needs at least one attribute which is read only.
+        At
+        least one attribute must have a boolean dataType to test INVALID_DATATYPE exception.
+        At least one attribute must be
+        reportable for eventing test purpose.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:unsignedShort" name="id" use="required" />
+          <xs:attribute type="xs:boolean" name="readOnly" use="required" />
+          <xs:attribute type="xs:string" name="name" use="required" />
+          <xs:attribute type="xs:boolean" name="reportable" use="required" />
+          <xs:attribute type="xs:string" name="dataType" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="client">
+    <xs:annotation>
+      <xs:documentation>
+        The 'client' element collects all the cluster server-side attributes and all the commands consumed by the
+        client side of a cluster.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="command" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="server">
+    <xs:annotation>
+      <xs:documentation>
+        The 'server' element collects all the cluster server-side attributes and all the commands consumed by the
+        server side of a cluster.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribute" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="command" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="cluster">
+    <xs:annotation>
+      <xs:documentation>
+        Defines a specific cluster in terms of client and server attributes and commands.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="server" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="client" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="name" use="required" />
+      <xs:attribute type="xs:unsignedShort" name="id" use="required" />
+      <xs:attribute type="xs:string" name="domain" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="clusters">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cluster" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="profile">
+    <xs:annotation>
+      <xs:documentation>
+        Defines a ZCL profile.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="clusters" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="name" use="required" />
+      <xs:attribute type="xs:unsignedShort" name="profileId" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="profiles">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="profile" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+
+
+</xs:schema>

@@ -8,7 +8,6 @@ import org.osgi.impl.service.zigbee.event.ZCLCommandResponseImpl;
 import org.osgi.impl.service.zigbee.event.ZCLCommandResponseStreamImpl;
 import org.osgi.service.zigbee.ZCLCommandResponseStream;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -26,16 +25,31 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private boolean		isStarted				= false;
 
-	private int			channelAsInt;
+	private int			currentChannel;
 	private int			securityLevel;
 	private int			panId;
 	private BigInteger	extendedPanId;
+	private int			channelMask;
+	private short		broadcastRadius;
 
-	public ZigBeeHostImpl(String hostPid, int panId, int channel, int securityLevel, BigInteger IEEEAddress, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc,
-			String userdescription) {
-		super(IEEEAddress, endpoints, nodeDesc, powerDesc, userdescription);
+	/**
+	 * Creates a ZigBeeHost object.
+	 * 
+	 * @param hostPid
+	 * @param panId
+	 * @param channel
+	 * @param securityLevel
+	 * @param IEEEAddress
+	 * @param endpoints
+	 * @param nodeDescriptor
+	 * @param powerDescriptor
+	 * @param userdescription
+	 */
+	public ZigBeeHostImpl(String hostPid, int panId, int channel, int nwkAddress, int securityLevel, BigInteger IEEEAddress, ZigBeeEndpointImpl[] endpoints, ZigBeeNodeDescriptor nodeDescriptor,
+			ZigBeePowerDescriptor powerDescriptor, String userdescription) {
+		super(IEEEAddress, nwkAddress, endpoints, nodeDescriptor, powerDescriptor, userdescription);
 
-		this.channelAsInt = channel;
+		this.currentChannel = channel;
 		this.securityLevel = securityLevel;
 		this.extendedPanId = new BigInteger("-1");
 		this.panId = panId;
@@ -74,7 +88,8 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public Promise refreshNetwork() throws Exception {
-		return Promises.failed(new UnsupportedOperationException("Not implemented"));
+		// FIXME: CT must check type of returned value or exception
+		return Promises.failed(new UnsupportedOperationException("This feature is not implemented because cannot be tested by the CT."));
 	}
 
 	public void permitJoin(short duration) throws Exception {
@@ -82,11 +97,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public int getChannelMask() throws Exception {
-		throw new UnsupportedOperationException("Not implemented");
+		return channelMask;
 	}
 
 	public int getChannel() {
-		return channelAsInt;
+		return currentChannel;
 	}
 
 	public int getSecurityLevel() {
@@ -94,19 +109,21 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public void setLogicalType(short logicalNodeType) throws Exception {
-		new UnsupportedOperationException("Not implemented");
+		new UnsupportedOperationException("This feature is not implemented because cannot be tested by the CT.");
 	}
 
 	public void setChannelMask(int mask) throws IOException, IllegalStateException {
-		new UnsupportedOperationException("Not implemented");
+		this.channelMask = mask;
 	}
 
 	public void createGroupService(int groupAddress) throws Exception {
-		new UnsupportedOperationException("Not implemented");
+		// FIXME: Do we have a specific exception if this is not supported?
+		new UnsupportedOperationException("This feature is not implemented because cannot be tested by the CT.");
 	}
 
 	public void removeGroupService(int groupAddress) throws Exception {
-		new UnsupportedOperationException("Not implemented");
+		// FIXME: Do we have a specific exception if this is not supported?
+		new UnsupportedOperationException("This feature is not implemented because cannot be tested by the CT.");
 	}
 
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
@@ -119,7 +136,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		 */
 		stream.handleResponse(new ZCLCommandResponseImpl(Promises.failed(new UnsupportedOperationException("Not yet implemented"))));
 		stream.handleResponse(new EndResponse());
-
+		// FIXME: CT must check type of returned value or exception
 		return stream;
 	}
 
@@ -134,23 +151,20 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		stream.handleResponse(new ZCLCommandResponseImpl(Promises.failed(new UnsupportedOperationException("Not yet implemented"))));
 		stream.handleResponse(new EndResponse());
 
+		// FIXME: CT must check type of returned value or exception
 		return stream;
 	}
 
 	public void updateNetworkChannel(byte channel) throws IllegalStateException, IOException {
-		this.channelAsInt = channel & 0xff;
+		this.currentChannel = channel & 0xff;
 	}
 
 	public short getBroadcastRadius() {
-		throw new UnsupportedOperationException("Not implemented");
+		return broadcastRadius;
 	}
 
 	public void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException {
-		new UnsupportedOperationException("Not implemented");
-	}
-
-	public int getNetworkAddress() {
-		return 0;
+		this.broadcastRadius = broadcastRadius;
 	}
 
 	public void setCommunicationTimeout(long timeout) {
@@ -162,10 +176,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public Promise getLinksQuality() {
+		// FIXME: Return a value. CT must check type of returned value or
+		// exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise getRoutingTable() {
+		// FIXME: Return a value. CT must check type of returned value or
+		// exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 }

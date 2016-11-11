@@ -1,7 +1,23 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.config.file;
 
 import java.math.BigInteger;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
@@ -12,23 +28,21 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  */
 public class ZigBeeEndpointConfig {
 
-	private short					id;
+	private short					endpointId;
 	private ZigBeeSimpleDescriptor	simpleDescriptor;
-	private ZCLClusterConfig[]		inputs;
-	private ZCLClusterConfig[]		outputs;
-
+	private ZCLClusterDescription[]	inputs;
+	private ZCLClusterDescription[]	outputs;
 	private ZigBeeNodeConfig		node;
 
-	public ZigBeeEndpointConfig(ZigBeeNodeConfig node, short id, ZCLClusterConfig[] inputs, ZCLClusterConfig[] ouputs, ZigBeeSimpleDescriptor desc) {
-		this.id = id;
+	public ZigBeeEndpointConfig(short endpointId, ZCLClusterDescription[] inputs, ZCLClusterDescription[] outputs, ZigBeeSimpleDescriptor simpleDescriptor) {
+		this.endpointId = endpointId;
 		this.inputs = inputs;
-		this.outputs = ouputs;
-		this.simpleDescriptor = desc;
-		this.node = node;
+		this.outputs = outputs;
+		this.simpleDescriptor = simpleDescriptor;
 	}
 
 	public short getId() {
-		return this.id;
+		return this.endpointId;
 	}
 
 	public BigInteger getNodeAddress() {
@@ -39,19 +53,23 @@ public class ZigBeeEndpointConfig {
 		return simpleDescriptor;
 	}
 
-	public ZCLClusterConfig[] getServerClusters() {
+	public ZCLClusterDescription[] getServerClusters() {
 		return inputs;
 	}
 
-	public ZCLClusterConfig getServerCluster(int serverClusterId) {
+	public ZCLClusterDescription getServerCluster(int serverClusterId) {
 		return inputs[serverClusterId];
 	}
 
-	public ZCLClusterConfig[] getClientClusters() {
+	public ZCLClusterDescription[] getClientClusters() {
 		return outputs;
 	}
 
-	public ZCLClusterConfig getClientCluster(int clientClusterId) {
+	public ZCLClusterDescription getClientCluster(int clientClusterId) {
 		return outputs[clientClusterId];
+	}
+
+	public void setZigBeeNodeConfig(ZigBeeNodeConfig node) {
+		this.node = node;
 	}
 }

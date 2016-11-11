@@ -28,29 +28,28 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 
 	private int						id;
 	private String					name;
-	private String					desc;
+	private String					description	= "";
 	private String					domain;
-	private ZCLClusterDescription	client	= null;
-	private ZCLClusterDescription	server	= null;
 
-	/**
-	 * @param id
-	 * @param name
-	 * @param domain
-	 * @param client
-	 * @param server
-	 */
+	private ZCLClusterDescription	client		= null;
+	private ZCLClusterDescription	server		= null;
+
 	public ZCLGlobalClusterDescriptionImpl(int id, String name, String domain, ZCLClusterDescription client,
 			ZCLClusterDescription server) {
-		this.id = id;
-		this.name = name;
-		this.domain = domain;
+		this(id, name, domain);
+
 		this.client = client;
 		this.server = server;
 	}
 
+	public ZCLGlobalClusterDescriptionImpl(int id, String name, String domain) {
+		this.id = id;
+		this.name = name;
+		this.domain = domain;
+	}
+
 	public String getClusterDescription() {
-		return desc;
+		return description;
 	}
 
 	public int getClusterId() {
@@ -62,7 +61,6 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 	}
 
 	public String getClusterFunctionalDomain() {
-
 		return domain;
 	}
 
@@ -74,9 +72,16 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 		return server;
 	}
 
-	public String toString() {
-		return "" + this.getClass().getName() + "[id: " + id + ", name: " + name + ", desc: " + desc + ", domain: "
-				+ domain + ", client: " + client + ", server: " + server + "]";
+	public void setServerClusterDescription(ZCLClusterDescription description) {
+		this.server = description;
 	}
 
+	public void setClientClusterDescription(ZCLClusterDescription description) {
+		this.client = description;
+	}
+
+	public String toString() {
+		return "" + this.getClass().getName() + "[id: " + id + ", name: " + name + ", desc: " + description + ", domain: "
+				+ domain + ", client: " + client + ", server: " + server + "]";
+	}
 }

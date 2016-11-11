@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.config.file;
+package org.osgi.test.cases.zigbee.descriptors;
 
-import java.math.BigInteger;
-import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
-import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 
 /**
- * This class represent the expected host configuration.
+ * Implementation of the FrequencyBand field.
  * 
- * @author portinaro
- *
+ * @author $Id$
  */
-public class ZigBeeHostConfig extends ZigBeeNodeConfig {
+public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
 
-	public ZigBeeHostConfig(String hostPid, int panId, int channel, int securityLevel, BigInteger IEEEAddress, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc,
-			String userdescription) {
-		super(IEEEAddress, null, nodeDesc, powerDesc, userdescription);
+	private int value;
+
+	public ZigBeeFrequencyBandImpl(short band) {
+		this.value = band;
+	}
+
+	public boolean is868() {
+		return value == 868;
+	}
+
+	public boolean is915() {
+		return value == 915;
+	}
+
+	public boolean is2400() {
+		return value == 2400;
 	}
 }

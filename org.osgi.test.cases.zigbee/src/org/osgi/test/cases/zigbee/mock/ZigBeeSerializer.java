@@ -35,8 +35,6 @@ public class ZigBeeSerializer {
 	/**
 	 * Basic constructor. It creates a ZCLFrame with the passed ZCLHeader and
 	 * with a maxPayloadZise of 30 bytes.
-	 * 
-	 * @param header a ZCLHeader instance
 	 */
 	public ZigBeeSerializer() {
 		this.data = new byte[30];

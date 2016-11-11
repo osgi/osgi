@@ -1,98 +1,92 @@
-<!-- 
-	This configuration file describes the ZigBee device that the tester 
-	is going to use to run the CT against a RI. It must be filled properly, according 
-	to the ZigBee devices that will be actually used for the compliant tests. This 
-	template version is useful to understand how to fill all the required information. 
-	Keep in mind that the tests will fail if this file is not provided or properly 
-	filled.
-	During the tests the CT will ask you to provide a path to the file you filled.
-	Its name MUST be different from zigbee-template.xml.
-	
-	Timeouts are expressed in milliseconds.
--->
-	
-<zigBeeconf discoveryTimeout="1000" invokeTimeout="3000">
- <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" >
- 	<nodeDescriptor type="2"/>
- </host>
- <nodes>
-	<!-- 
-	    A node represents a ZigBee device. Fill the ieeeAddress, userDescription 
-		and the endpointNb attributes here, according to the device characteristics. 
-		No need to explicitly mention in this xml file all the endpoints available 
-		on the node, but remember to set the endpointNb attribute to the total number 
-		of endpoints that are available inside this ZigBee device. This value will 
-		be compared with the total number of ZigBeeEndpoint services registered by 
-		this ZigBeeNode in the OSGi framework. The ieeeAddress attribute is the IEEE 
-		address of the ZigBee node in decimal notation. The userDescription is the 
-		corresponding field in the ZigBee User Descriptor.
-	-->
-  <node ieeeAddress="6628417766" hostPanId="33" userDescription="user description" endpointNb="8" >
+<?xml version="1.0" encoding="utf-8"?>
 
-	<!-- 
-		All the discovery tests will be done on this node. Please ensure that 
-		the simpleDescriptor is fully filled (the server and client clusters number 
-		must be filled) At least one attribute must be read only 
-	-->
-		
-   <endpoints>
-    
-    <endpoint id="25">
-     <serverClusters>
-	 <!-- 
-	 	Specify an invalid attribute id for a cluster of your choice by filling 
-		"unsupportedAttribute" This will help to test the UNSUPPORTED_ATTRIBUTE exception 
-	 -->    
-      <cluster id="6" unsupportedAttribute="9">
-       <!-- name and domain are optional,they are not tested -->
-       <globalServerDescription id="54" name="light cluster"
-        domain="general" />
-       <commandIds>
-        <id id="3" />
-       </commandIds>
-       <attributes>
-        <!-- all the attributes must be filled as the exception tests will 
-         try to pick one which does not exist -->
-        <attribute>
-         <!-- for dataTypes see org.osgi.service.zigbee.types -->
-         <!-- the test needs at leat one attribute which is read only -->
-         <attributeDescription id="8" isReadOnly="true"
-          name="version" isReportable="false"
-          dataType="ZigBeeUnsignedInteger16">
-         </attributeDescription>
-        </attribute>
-        <!-- the test needs at leat one attribute which is not read only to test READ_ONLY exception-->
-        <attribute>
-        <!-- At least one attribute must have a boolean dataType to test INVALID_DATATYPE exception -->
-         <!-- At least one attribute must be reportable for eventing test purpose -->
-         <attributeDescription id="6" isReadOnly="false"
-           name="" isReportable="true" dataType="ZigBeeBoolean">
-         </attributeDescription>
-        </attribute>
-       </attributes>
-      </cluster>
-     </serverClusters>
-     <!-- declare the number of serverCluster and clientCluster -->
-     <simpleDescriptor deviceId="8" version="4"
-      profileId="3" nbServerCluster="4" nbClientCluster="2"/>
+<!-- This configuration file describes the ZigBee device that the tester is going to use to run the CT 
+  against a RI. It must be filled properly, according to the ZigBee devices that will be actually used 
+  for the compliant tests. This template version is useful to understand how to fill all the required information. 
+  Keep in mind that the tests will fail if this file is not provided or properly filled. Timeouts are expressed 
+  in milliseconds. -->
 
-    </endpoint>
-   </endpoints>
-   <nodeDescriptor type="1" band="868" manufCode="45"
-    maxBufSize="36" isComplexAv="false" isUserAv="false" />
-   <powerDescriptor powerMode="2" powerSource="1"
-    powerSourceLevel="1" isconstant="true" />
-  </node>
- </nodes>
-	<!-- 
-		Please fill the headerMaxSize and headerMinSize attributes with the 
-		right values (these values can be obtained from the ZigBee Cluster Library 
-		specification. 
-	-->
- <frame headerMaxSize="5" headerMinSize ="3">
- 	<requestFullFrame commandId="10"  isClusterSpecificCommand= "false" isClientServerDirection="true" disableDefaultResponse="false" sequenceNumber="46" hex="34f010"/>
- 	<responseFullFrame hex="34f010"/>	 	
- </frame>
-</zigBeeconf>
+<zigBeeConf xmlns="http://org.osgi/zigbee-ct"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://org.osgi/zigbee-ct zigbee-ct.xsd">
+  <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" discoveryTimeout="1000" invokeTimeout="2000">
+    <nodeDescriptor type="2" />
+  </host>
+  <nodes>
+    <!-- 
+      A node represents a ZigBee device. Fill the ieeeAddress, userDescription 
+      and the endpointNb attributes here, according to the device characteristics. 
+      No need to explicitly mention in this xml file all the endpoints available 
+      on the ZigBee node, but remember to set the endpointNb attribute to the total 
+      number of endpoints that are available inside this ZigBee device. 
+      This value will be compared with the total number of ZigBeeEndpoint services 
+      registered by this ZigBeeNode in the OSGi framework. 
+      
+      The ieeeAddress attribute is the IEEE address of the ZigBee node expressed 
+      as a decimal number. This attribute is mandatory. 
+      
+      If the ZigBee node has a User Descriptor, the 'userDescription' attribute 
+      MUST contain the value stored in is the corresponding field of the 
+      User Descriptor. Otherwise this attribute may be omitted. 
+    -->
+    <node ieeeAddress="6628417766" hostPanId="33" userDescription="user description" endpointNb="8">
+
+      <!-- All the discovery tests will be done on this node. Please ensure that the simpleDescriptor 
+        tag is fully filled (the server and client clusters number must be filled accordingly). At least one 
+        attribute must be read only. -->
+
+      <nodeDescriptor type="1" band="868" manufCode="45" maxBufSize="36" isComplexAvail="false"
+        isUserAvail="false" />
+      <powerDescriptor powerMode="2" powerSource="1" powerSourceLevel="1"
+        isConstant="true" />
+
+      <endpoints>
+        <endpoint id="25">
+          <serverClusters>
+            <!-- Within this tag the tester must partially describe a subset of the clusters provided 
+              by the endpoint. Specifies an unsupported attribute id for a cluster of your choice by filling "unsupportedAttribute" 
+              This will help to test the UNSUPPORTED_ATTRIBUTE exception -->
+            <cluster id="6" unsupportedAttribute="9">
+              <!-- name and domain are optional,they are not tested -->
+              <globalServerDescription id="54" name="light cluster" domain="general" />
+              <commandIds>
+                <id id="3" />
+              </commandIds>
+              <attributes>
+                <!-- all the attributes must be filled as the exception tests will try to pick one which 
+                  does not exist -->
+                <attribute>
+                  <!-- for dataTypes see org.osgi.service.zigbee.types the test needs at least one attribute 
+                    which is read only -->
+                  <attributeDescription id="8" isReadOnly="true" name="version"
+                    isReportable="false" dataType="ZigBeeUnsignedInteger16">
+                  </attributeDescription>
+                </attribute>
+                <!-- the CTs need at least one attribute which is read only in order to test if the READ_ONLY 
+                  exception is correctly thrown. -->
+                <attribute>
+                  <!-- At least one attribute must have a boolean dataType to test INVALID_DATATYPE exception. 
+                    At least one attribute must be reportable for eventing test purpose -->
+                  <attributeDescription id="6" isReadOnly="false" name=""
+                    isReportable="true" dataType="ZigBeeBoolean">
+                  </attributeDescription>
+                </attribute>
+              </attributes>
+            </cluster>
+          </serverClusters>
+          <!-- declare the number of serverCluster and clientCluster -->
+          <simpleDescriptor deviceId="8" version="4" profileId="3" nbServerCluster="4"
+            nbClientCluster="2" />
+        </endpoint>
+      </endpoints>
+    </node>
+  </nodes>
+  <!-- Please fill the headerMaxSize and headerMinSize attributes with the right values (these values 
+    can be obtained from the ZigBee Cluster Library specification. -->
+  <frame headerMaxSize="5" headerMinSize="3">
+    <requestFullFrame commandId="10" isClusterSpecificCommand="false"
+      isClientServerDirection="true" disableDefaultResponse="false" sequenceNumber="46" hex="34f010" />
+    <responseFullFrame hex="34f010" />
+  </frame>
+</zigBeeConf>
 
  

@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee;
+package org.osgi.test.cases.zigbee.config.file;
 
-import org.osgi.service.zigbee.ZCLHeader;
-import org.osgi.service.zigbee.ZigBeeDataInput;
-import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.mock.ZigBeeDataInputImpl;
+import org.osgi.service.zigbee.ZCLAttributeInfo;
 
-public class TestZCLFrame extends ZCLFrameImpl {
+/**
+ * Utility functions to manimulate the ZigBee configuration model.
+ *
+ * @author portinaro
+ */
+public class ConfigurationUtils {
 
-	public TestZCLFrame(ZCLHeader header, byte[] fullFrame) {
-		super(header);
-		data = fullFrame;
-		zclHeader = header;
+	/**
+	 * Retrieves from the ZigBee configuration model an unsupported attribute.
+	 * 
+	 * @return The unsupported attribute informations.
+	 */
+	public static ZCLAttributeInfo getUnsupportedServerAttribute() {
+		return null;
 	}
 
-	public byte[] getBytes() {
-		return (byte[]) data.clone();
-	}
-
-	public ZigBeeDataInput getDataInput() {
-		return new ZigBeeDataInputImpl(this);
-	}
 }

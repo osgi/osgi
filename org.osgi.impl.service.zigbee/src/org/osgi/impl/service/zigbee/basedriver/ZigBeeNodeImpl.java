@@ -43,24 +43,31 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	private ZigBeeHost				host;
 	private BigInteger				IEEEAddress;
 	private int						nwkAddress;
-	private ZigBeeEndpoint[]		endpoints;
+
+	private ZigBeeEndpointImpl[]	endpoints	= new ZigBeeEndpointImpl[0];
+
 	private ZigBeeNodeDescriptor	nodeDescriptor;
 	private ZigBeePowerDescriptor	powerDescriptor;
 	private ZigBeeComplexDescriptor	complexDescriptor;
 	private String					userDescription;
 
-	public ZigBeeNodeImpl(BigInteger IEEEAddress, ZigBeeEndpoint[] endpoints,
-			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
+	public ZigBeeNodeImpl(BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
+			ZigBeeNodeDescriptor nodeDescriptor, ZigBeePowerDescriptor powerDescriptor, String userdescription) {
 		this.IEEEAddress = IEEEAddress;
 		this.endpoints = endpoints;
-		this.powerDescriptor = powerDesc;
-		this.nodeDescriptor = nodeDesc;
+		this.powerDescriptor = powerDescriptor;
+		this.nodeDescriptor = nodeDescriptor;
 		this.userDescription = userdescription;
+		this.nwkAddress = nwkAddress;
+
+		for (int i = 0; i < endpoints.length; i++) {
+			endpoints[i].setZigBeeNode(this);
+		}
 	}
 
-	public ZigBeeNodeImpl(ZigBeeHost host, BigInteger IEEEAddress, ZigBeeEndpoint[] endpoints,
+	public ZigBeeNodeImpl(ZigBeeHost host, BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
 			ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc, String userdescription) {
-		this(IEEEAddress, endpoints, nodeDesc, powerDesc, userdescription);
+		this(IEEEAddress, nwkAddress, endpoints, nodeDesc, powerDesc, userdescription);
 
 		this.host = host;
 	}
@@ -86,38 +93,47 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public Promise getNodeDescriptor() {
+		// FIXME: CT check type of returned value or exception
 		return Promises.resolved(nodeDescriptor);
 	}
 
 	public Promise getPowerDescriptor() {
+		// FIXME: CT check type of returned value or exception
 		return Promises.resolved(powerDescriptor);
 	}
 
 	public Promise getComplexDescriptor() {
+		// FIXME: CT check type of returned value or exception
 		return Promises.resolved(complexDescriptor);
 	}
 
 	public Promise getLinksQuality() throws ZDPException {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise getRoutingTable() {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise leave() {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise leave(boolean rejoin, boolean removeChildren) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise invoke(int clusterIdReq, int expectedClusterIdRsp, ZDPFrame message) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public Promise invoke(int clusterIdReq, ZDPFrame message) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
@@ -128,14 +144,17 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public Promise getUserDescription() {
+		// FIXME: CT check type of returned value or exception
 		return Promises.resolved(userDescription);
 	}
 
 	public Promise setUserDescription(String userDescriptor) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
 		// Stub out the response by immediately filling it with an Unsupported
@@ -148,6 +167,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public ZCLCommandResponseStream broadcast(int clusterID, ZCLFrame frame, String exportedServicePID) {
+		// FIXME: Implement it. CT check type of returned value or exception
 		ZCLCommandResponseStreamImpl impl = new ZCLCommandResponseStreamImpl();
 
 		// Stub out the response by immediately filling it with an Unsupported
@@ -160,10 +180,10 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public ZigBeeEndpoint[] getEndpoints() {
+		// FIXME: how to handle endpoints.
 		if (endpoints == null) {
 			return new ZigBeeEndpoint[0];
 		}
 		return endpoints;
 	}
-
 }

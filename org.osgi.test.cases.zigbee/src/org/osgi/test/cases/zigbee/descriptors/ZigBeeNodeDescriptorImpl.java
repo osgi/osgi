@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.osgi.impl.service.zigbee.basedriver.descriptors;
+package org.osgi.test.cases.zigbee.descriptors;
 
-import org.osgi.impl.service.zigbee.basedriver.ZigBeeFrequencyBandImpl;
 import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
 import org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -37,13 +36,13 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	private boolean				isComplexDescriptorAvailable;
 	private boolean				isUserDescriptorAvailable;
 
-	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufCode, int maxBufSize, boolean isComplexAvail, boolean isUserAvail) {
+	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufCode, int maxBufSize, boolean isComplexAvailable, boolean isUserAvailable) {
 		this.logicalType = logicalType;
 		this.frequencyBand = new ZigBeeFrequencyBandImpl(band);
 		this.manufacturerCode = manufCode;
 		this.maxBufferSize = maxBufSize;
-		this.isComplexDescriptorAvailable = isComplexAvail;
-		this.isUserDescriptorAvailable = isUserAvail;
+		this.isComplexDescriptorAvailable = isComplexAvailable;
+		this.isUserDescriptorAvailable = isUserAvailable;
 	}
 
 	public ZigBeeFrequencyBand getFrequencyBand() {

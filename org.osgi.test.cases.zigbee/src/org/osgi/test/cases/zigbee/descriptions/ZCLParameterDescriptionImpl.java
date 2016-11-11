@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.descriptions;
 
-import org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 
-/**
- * Mocked impl of ZigBeeFrequencyBand.
- * 
- * @author $Id$
- */
-public class ZigBeeFrequencyBandImpl implements ZigBeeFrequencyBand {
+public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
 
-	private int value;
+	private ZCLDataTypeDescription dataType;
 
-	public ZigBeeFrequencyBandImpl(short band) {
-		this.value = band;
+	public ZCLParameterDescriptionImpl(ZCLDataTypeDescription dataType) {
+		this.dataType = dataType;
 	}
 
-	public boolean is868() {
-		return value == 868;
-	}
-
-	public boolean is915() {
-		return value == 915;
-	}
-
-	public boolean is2400() {
-		return value == 2400;
+	public ZCLDataTypeDescription getDataTypeDescription() {
+		return dataType;
 	}
 }

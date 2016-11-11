@@ -16,20 +16,11 @@
 
 package org.osgi.test.cases.zigbee.config.file;
 
-import java.math.BigInteger;
-import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
-import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
-/**
- * This class represent the expected host configuration.
- * 
- * @author portinaro
- *
- */
-public class ZigBeeHostConfig extends ZigBeeNodeConfig {
-
-	public ZigBeeHostConfig(String hostPid, int panId, int channel, int securityLevel, BigInteger IEEEAddress, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc,
-			String userdescription) {
-		super(IEEEAddress, null, nodeDesc, powerDesc, userdescription);
-	}
+public class AttributeCoordinates {
+	public ZigBeeEndpointConfig		expectedEndpoint;
+	public ZCLClusterDescription	expectedCluster;
+	public ZCLAttributeDescription	expectedAttributeDescription;
 }

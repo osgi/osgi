@@ -24,24 +24,28 @@ import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * Mocked impl.
+ * 
+ * FIXME: reimplement this!!!
  * 
  * @author $Id$
  */
 public class ZCLAttributeImpl implements ZCLAttribute {
 
-	private int						id;
 	private Object					value;
 	private ZCLAttributeDescription	description;
 
-	public ZCLAttributeImpl(ZCLAttributeDescription desc) {
-		id = desc.getId();
-		value = desc.getDefaultValue();
-		description = desc;
+	/**
+	 * Creates a ZCLAttribute class from a ZCLAttributeDescription object
+	 * 
+	 * @param description A {@link ZCLAttributeDescription} object.
+	 */
+	public ZCLAttributeImpl(ZCLAttributeDescription description) {
+		value = description.getDefaultValue();
+		this.description = description;
 	}
 
 	public int getId() {
-		return id;
+		return description.getId();
 	}
 
 	public ZCLDataTypeDescription getDataType() {

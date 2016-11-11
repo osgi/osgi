@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 
@@ -54,19 +54,19 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	}
 
 	public boolean isDisposableBatteryAvailable() {
-		return true;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public boolean isRechargableBatteryAvailable() {
-		return true;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public boolean isMainsPower() {
-		return false;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public boolean isDisposableBattery() {
-		return false;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public boolean isRechargableBattery() {

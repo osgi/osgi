@@ -209,12 +209,12 @@ public interface ZCLCluster {
 	 * @param attributesAndValues A {@code Map<ZCLAttributeInfo, Object>} of
 	 *        attributes and values to be written. For ZCLAttributeInfo objects
 	 *        which serialization is not supported (that is,
-	 *        <code>getDataType().getJavaDataType()</code> returns null), the
-	 *        value must be of type byte[].
+	 *        {@code getDataType().getJavaDataType()} returns null), the value
+	 *        must be of type byte[].
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         If resolved successfully the promise may return an empty {@code
-	 *         Map<Integer, Integer>}. Otherwise the map will be filled with the
+	 *         Map<Integer, Short>}. Otherwise the map will be filled with the
 	 *         status information about the attributes that were not written.
 	 *         The key represents the attributeID and the value the status
 	 *         present in the corresponding attribute record returned by the ZCL

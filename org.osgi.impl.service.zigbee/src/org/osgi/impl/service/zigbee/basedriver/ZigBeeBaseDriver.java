@@ -195,9 +195,10 @@ public class ZigBeeBaseDriver {
 	 * that is also passed to this method.
 	 * 
 	 * @param is The InputStream where to read the configuration file.
+	 * @throws Exception
 	 */
 
-	public void loadConfigurationFile(InputStream is) {
+	public void loadConfigurationFile(InputStream is) throws Exception {
 		conf = ConfigurationFileReader.getInstance(is);
 
 		/*
@@ -282,13 +283,18 @@ public class ZigBeeBaseDriver {
 	 */
 	public void startReportableEventing() {
 
-		NetworkAttributeIds attrId = conf.getFirstReportableAttribute();
-		Integer value = new Integer(12);
-		ZigBeeEvent event = this.createEvent(attrId, value);
+		// FIXME: the reportable attribute must be decided by the CT and not by
+		// the RI!!!!
 
-		// create, and launch a test event source.
-		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(bc, event);
-		aZigBeeEventSourceImpl.start();
+		if (false) {
+			NetworkAttributeIds attrId = null;
+			Integer value = new Integer(12);
+			ZigBeeEvent event = this.createEvent(attrId, value);
+
+			// create, and launch a test event source.
+			ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(bc, event);
+			aZigBeeEventSourceImpl.start();
+		}
 	}
 
 	protected ZigBeeEvent createEvent(NetworkAttributeIds attrId, Object value) {

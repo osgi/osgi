@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
@@ -25,8 +25,9 @@ import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
  * @author $Id$
  */
 public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
-
 	private int						id;
+	private int						manufacturerCode;
+
 	private boolean					isReadOnly;
 	private Object					defaultValue;
 	private String					name;
@@ -34,15 +35,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	private boolean					isReportable;
 	private ZCLDataTypeDescription	datatype;
 
-	/**
-	 * @param id
-	 * @param isReadOnly
-	 * @param defaultvalue
-	 * @param name
-	 * @param isMandatory
-	 * @param isReportable
-	 * @param datatype
-	 */
 	public ZCLAttributeDescriptionImpl(int id, boolean isReadOnly, Object defaultvalue, String name,
 			boolean isMandatory, boolean isReportable, ZCLDataTypeDescription datatype) {
 
@@ -53,6 +45,8 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 		this.isMandatory = isMandatory;
 		this.isReportable = isReportable;
 		this.datatype = datatype;
+
+		this.manufacturerCode = -1;
 	}
 
 	public int getId() {
@@ -61,10 +55,6 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
 	public boolean isReadOnly() {
 		return isReadOnly;
-	}
-
-	public ZCLDataTypeDescription getDataTypeDescription() {
-		return datatype;
 	}
 
 	public Object getDefaultValue() {
@@ -76,8 +66,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public String getShortDescription() {
-
-		return null;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public boolean isMandatory() {
@@ -89,8 +78,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isPartOfAScene() {
-
-		return false;
+		throw new UnsupportedOperationException("this field is not checked by the CT.");
 	}
 
 	public String toString() {
@@ -100,18 +88,14 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	}
 
 	public boolean isManufacturerSpecific() {
-
-		return false;
+		return manufacturerCode < 0 ? false : true;
 	}
 
 	public int getManufacturerCode() {
-
-		return 0;
+		return manufacturerCode;
 	}
 
 	public ZCLDataTypeDescription getDataType() {
-
 		return datatype;
 	}
-
 }

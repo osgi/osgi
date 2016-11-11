@@ -14,33 +14,18 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.config.file;
 
-import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
-import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
 /**
- * Mocked impl.
+ * Used to store the exact location of a specific commands in terms of
+ * ZigBeeEndpoint and ZCLCluster
  * 
- * @author $Id$
- * 
+ * @author portinaro
+ *
  */
-public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
-
-	private ZCLDataTypeDescription type;
-
-	/**
-	 * @param type
-	 */
-	public ZCLParameterDescriptionImpl(ZCLDataTypeDescription type) {
-		this.type = type;
-	}
-
-	public ZCLDataTypeDescription getDataTypeDescription() {
-		return type;
-	}
-
-	public boolean checkValue(Object value) {
-		return false;
-	}
+public class CommandCoordinates {
+	public ZigBeeEndpointConfig		expectedEndpoint;
+	public ZCLClusterDescription	expectedCluster;
 }

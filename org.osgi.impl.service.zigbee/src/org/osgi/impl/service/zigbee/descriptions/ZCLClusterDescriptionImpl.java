@@ -22,49 +22,60 @@ import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 
 /**
- * Mocked impl.
- * 
  * @author $Id$
  */
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 
-	private int							id;
 	private ZCLGlobalClusterDescription	global;
+	private ZCLAttributeDescription[]	attributeDescriptions;
 
 	/**
+	 * 
 	 * @param id
+	 * @param attributesDescriptions
 	 * @param global
+	 * @deprecated because the id can be read from the global cluster
+	 *             description.
 	 */
-	public ZCLClusterDescriptionImpl(int id, ZCLGlobalClusterDescription global) {
-		this.id = id;
+	public ZCLClusterDescriptionImpl(int id, ZCLAttributeDescription[] attributesDescriptions, ZCLGlobalClusterDescription global) {
+		this.attributeDescriptions = attributesDescriptions;
+		this.global = global;
+	}
+
+	public ZCLClusterDescriptionImpl(ZCLAttributeDescription[] attributesDescriptions, ZCLGlobalClusterDescription global) {
+		this.attributeDescriptions = attributesDescriptions;
 		this.global = global;
 	}
 
 	public int getId() {
-		return id;
+		return global.getClusterId();
 	}
 
 	public ZCLGlobalClusterDescription getGlobalClusterDescription() {
 		return global;
 	}
 
-	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
+	/**
+	 * FIXME retrieve from the global....
+	 */
 
+	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
 		return null;
 	}
 
-	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
+	/**
+	 * FIXME retrieve from the global....
+	 */
 
+	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
 		return null;
 	}
 
 	public ZCLAttributeDescription[] getAttributeDescriptions() {
-
-		return null;
+		return attributeDescriptions;
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[id: " + id + ", global: " + global + "]";
+		return "" + this.getClass().getName() + "[id: " + global.getClusterId() + ", global: " + global + "]";
 	}
-
 }

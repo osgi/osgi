@@ -1,17 +1,11 @@
 
 package org.osgi.impl.service.zigbee.basedriver.configuration;
 
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.osgi.impl.service.zigbee.basedriver.ZCLAttributeImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZCLClusterImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeEndpointImpl;
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeHostImpl;
@@ -19,15 +13,8 @@ import org.osgi.impl.service.zigbee.basedriver.ZigBeeNodeImpl;
 import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeSimpleDescriptorImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZCLAttributeDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZCLGlobalClusterDescriptionImpl;
-import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHost;
-import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
-import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -36,7 +23,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * @author $Id$
@@ -47,15 +33,28 @@ public class ConfigurationFileReader {
 
 	private static ConfigurationFileReader	instance;
 	private ZigBeeHostImpl					host;
-	private int								headerMinSize			= 1;
-	private int								headerMaxSize			= 1;
-	private ZCLAttribute					firstBooleanAttribute	= null;
 
-	private ConfigurationFileReader(InputStream is) {
+	private int								discoveryTimeout	= -1;
+	private int								invokeTimeout		= -1;
+
+	private int								headerMinSize		= -1;
+	private int								headerMaxSize		= -1;
+
+	private ZigBeeProfiles					profiles;
+
+	private int								hostNetworkAddress	= 0;
+
+	/**
+	 * This is the base value of the short address that will be assigned to the
+	 * ZigBeeNode services.
+	 */
+	private int								nwkAddress			= 0x1000;
+
+	private ConfigurationFileReader(InputStream is) throws Exception {
 		readXmlFile(is);
 	}
 
-	public static ConfigurationFileReader getInstance(InputStream is) {
+	public static ConfigurationFileReader getInstance(InputStream is) throws Exception {
 		if (instance == null) {
 			return new ConfigurationFileReader(is);
 		}
@@ -69,64 +68,92 @@ public class ConfigurationFileReader {
 	 * @param is an InputStream
 	 */
 
-	public void readXmlFile(InputStream is) {
+	private void readXmlFile(InputStream is) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
-		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-			try {
-				Document doc = dBuilder.parse(is);
-				getHost(doc);
-				getNodes(doc);
-				getFrameInfo(doc);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-	}
 
-	private void getFrameInfo(Document doc) {
-		NodeList nList = doc.getElementsByTagName("frame");
-		Node node = nList.item(0);
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element frameElement = (Element) node;
-			String maxSize = frameElement.getAttribute("headerMaxSize");
-			String minSize = frameElement.getAttribute("headerMinSize");
-			headerMaxSize = Integer.parseInt(maxSize);
-			headerMinSize = Integer.parseInt(minSize);
+		dBuilder = dbFactory.newDocumentBuilder();
+
+		Document doc = dBuilder.parse(is);
+
+		parseFrameInfo(doc);
+		host = parseHostElement(doc);
+		parseNodesElement(doc);
+
+		/*
+		 * Post checks
+		 */
+
+		if (this.headerMinSize <= 0) {
+			throw new Exception("please set the headerMinSize attribute to a positive value");
 		}
+
+		if (this.headerMaxSize <= 0) {
+			throw new Exception("please set the headerMaxSize attribute to a positive value");
+		}
+
+		if (this.discoveryTimeout <= 0) {
+			throw new Exception("please set the discoveryTimeout attribute to a positive value");
+		}
+
+		if (this.invokeTimeout <= 0) {
+			throw new Exception("please set the invokeTimeout attribute to a positive value");
+		}
+
+		profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
+
 	}
 
 	/**
-	 * 
 	 * @return the first node in the configuration file
 	 */
-	public ZigBeeNodeImpl getNode0() {
+	public ZigBeeNodeImpl getFirstNode() {
 		ZigBeeNodeImpl node = nodes[0];
 		return node;
 	}
 
 	/**
-	 * Returns the value read from the configuration file that must contain the
-	 * ZCL minimum frame size.
+	 * Return the minimum ZCL Header Size, that is the ZCL Header size when the
+	 * ZCLFrame is not manufacturer specific. This information is avaiable in
+	 * the ZCL specification and must be written in the CT configuration file.
 	 * 
-	 * @return the ZCL frames possible minimum frame size.
+	 * @return the requested information.
 	 */
 
 	public int getHeaderMinSize() {
 		return headerMinSize;
 	}
 
+	/**
+	 * Return the maximum ZCL Header Size, that is the ZCL Header size when the
+	 * ZCLFrame is manufacturer specific. This information is avaiable in the
+	 * ZCL specification and must be written in the CT configuration file.
+	 * 
+	 * @return the requested information.
+	 */
+
 	public int getHeaderMaxSize() {
 		return headerMaxSize;
 	}
 
-	public ZCLAttribute getFirstBooleanAttribute() {
-		return firstBooleanAttribute;
+	/**
+	 * Timeout used for the ZigBeeNode discovery phase.
+	 * 
+	 * @return the timeout value.
+	 */
+	public int getDiscoveryTimeout() {
+		return discoveryTimeout;
+	}
+
+	/**
+	 * Timeout used for the timing out all the methods belonging to the
+	 * ZigBeeHost, ZigBeeNode, ZigBeeEndpoint, ZigBeeCluster interfaces, that
+	 * are also returning a Promise.
+	 * 
+	 * @return the timeout value
+	 */
+	public int getInvokeTimeout() {
+		return invokeTimeout;
 	}
 
 	/**
@@ -138,6 +165,15 @@ public class ConfigurationFileReader {
 	public ZigBeeHostImpl getZigBeeHost() {
 		return host;
 	}
+
+	/**
+	 * Retrieves the Endpoint objects available in a specific node
+	 * 
+	 * FIXME: it is really necessary?
+	 * 
+	 * @param node
+	 * @return
+	 */
 
 	public ZigBeeEndpoint[] getEnpoints(ZigBeeNodeImpl node) {
 		return node.getEndpoints();
@@ -152,71 +188,44 @@ public class ConfigurationFileReader {
 		return nodes;
 	}
 
-	private ZigBeeHost getHost(Document doc) {
+	private ZigBeeHostImpl parseHostElement(Document doc) throws Exception {
 		NodeList nList = doc.getElementsByTagName("host");
 		Node node = nList.item(0);
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element hostElement = (Element) node;
-			// get host infos
-			String hostPId = hostElement.getAttribute("pid");
-			String panId = hostElement.getAttribute("panId");
-			String channel = hostElement.getAttribute("channel");
-			String securityLevel = hostElement.getAttribute("securityLevel");
-			String ieeeAddress = hostElement.getAttribute("ieeeAddress");
-			// get descriptor
-			ZigBeeNodeDescriptor nodeDesc = getZigBeeNodeDescriptor(hostElement);
-			host = new ZigBeeHostImpl(hostPId,
-					Integer.parseInt(panId),
-					Integer.parseInt(channel),
-					Integer.parseInt(securityLevel),
-					new BigInteger(ieeeAddress),
-					null,
-					nodeDesc,
-					null,
-					null);
 
-			NodeList enpointsList = hostElement
-					.getElementsByTagName("endpoint");
-			Node enpointNode = enpointsList.item(0);
-			if (enpointNode != null
-					&& enpointNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element enpointElement = (Element) enpointNode;
-				String endpointId = enpointElement.getAttribute("id");
+			// FIXME: do we need the PID, unless getting the ieeeAddress?
+			String hostPid = ParserUtils.getAttribute(hostElement, "pid", ParserUtils.MANDATORY, "");
+			int panId = ParserUtils.getAttribute(hostElement, "panId", ParserUtils.MANDATORY, -1);
+			int channel = ParserUtils.getAttribute(hostElement, "channel", ParserUtils.MANDATORY, -1);
+			int securityLevel = ParserUtils.getAttribute(hostElement, "securityLevel", ParserUtils.MANDATORY, -1);
+			BigInteger ieeeAddress = ParserUtils.getAttribute(hostElement, "ieeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
+			discoveryTimeout = ParserUtils.getAttribute(hostElement, "discoveryTimeout", ParserUtils.MANDATORY, -1);
+			invokeTimeout = ParserUtils.getAttribute(hostElement, "invokeTimeout", ParserUtils.MANDATORY, -1);
 
-				NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
-				ZCLCluster[] clusters = getServerClusters(serverClusters);
-
-				NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
-				ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
-				ZigBeeEndpointImpl[] endpointsHost = new ZigBeeEndpointImpl[1];
-
-				ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-
-				endpointsHost[0] = new ZigBeeEndpointImpl(Short.parseShort(endpointId), clusters, clientClusters, desc);
-
-				host = new ZigBeeHostImpl(hostPId,
-						Integer.parseInt(panId),
-						Integer.parseInt(channel),
-						Integer.parseInt(securityLevel),
-						new BigInteger(ieeeAddress),
-						endpointsHost,
-						nodeDesc,
-						null,
-						null);
-			}
+			ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(hostElement);
+			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, null, nodeDescriptor, null, null);
 		}
 
-		return host;
+		throw new Exception("host element not found in the zigbee-ct configuration xml file");
 	}
 
-	private void getNodes(Document doc) {
+	/**
+	 * Parse the <nodes> element, by looking at embedded <node> elements
+	 * 
+	 * @param doc The root of the DOM.
+	 * @throws Exception In case of failure in parsing the configuration file.
+	 */
+
+	private void parseNodesElement(Document doc) throws Exception {
+
 		NodeList nList = doc.getElementsByTagName("nodes");
 		Node nodesNode = nList.item(0);
 		if (nodesNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element nodesElement = (Element) nodesNode;
 
 			NodeList nodeList = nodesElement.getElementsByTagName("node");
-			ZigBeeEndpoint[] ZEnpoints = null;
+
 			int listLength = nodeList.getLength();
 			nodes = new ZigBeeNodeImpl[listLength];
 			for (int i = 0; i < listLength; i++) {
@@ -224,441 +233,165 @@ public class ConfigurationFileReader {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element nodeElement = (Element) node;
 
-					// get NB of enpoints
-					int enpointNb = Integer.parseInt(nodeElement.getAttribute("endpointNb"));
-
-					// get host infos
-					String hostPId = nodeElement.getAttribute("hostPid");
-					String ieeeAddress = nodeElement.getAttribute("ieeeAddress");
-					String userDescription = nodeElement.getAttribute("userDescription");
-					String endpointNb = nodeElement.getAttribute("endpointNb");
-					String nwkAddress = nodeElement.getAttribute("nwkAddress");
-
-					NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
-					Node endpoints = enpointsList.item(0);
-					if (endpoints != null && endpoints.getNodeType() == Node.ELEMENT_NODE) {
-						Element endpointsElement = (Element) endpoints;
-						NodeList enpointList = endpointsElement
-								.getElementsByTagName("endpoint");
-
-						int endpointsLength = enpointList.getLength();
-						int[] endpointUsedIds = new int[endpointsLength];
-						ZEnpoints = new ZigBeeEndpoint[enpointNb];
-						for (int j = 0; j < endpointsLength; j++) {
-							Node enpointNode = enpointList.item(j);
-							if (enpointNode != null && enpointNode.getNodeType() == Node.ELEMENT_NODE) {
-								Element enpointElement = (Element) enpointNode;
-								String endpointId = enpointElement.getAttribute("id");
-								endpointUsedIds[i] = Integer.parseInt(endpointId);
-
-								NodeList serverClusters = enpointElement.getElementsByTagName("serverClusters");
-								ZCLCluster[] clusters = getServerClusters(serverClusters);
-
-								NodeList clientClustersNodes = enpointElement.getElementsByTagName("clientClusters");
-								ZCLCluster[] clientClusters = getClientClusters(clientClustersNodes);
-								ZigBeeSimpleDescriptor desc = getSimpleDescriptor(enpointElement);
-								ZEnpoints[i] = new ZigBeeEndpointImpl(Short.parseShort(endpointId), clusters, clientClusters, desc);
-							}
-						}
-						createFakeEndpointsIfNeeded(ZEnpoints, endpointsLength, endpointUsedIds, enpointNb);
-					}
-
-					ZigBeeNodeDescriptor nodeDesc = getZigBeeNodeDescriptor(nodeElement);
-					ZigBeePowerDescriptor powerDesc = getZigBeePowerDescriptor(nodeElement);
-
-					nodes[i] = new ZigBeeNodeImpl(host, new BigInteger(ieeeAddress), ZEnpoints, nodeDesc, powerDesc, userDescription);
+					ZigBeeNodeImpl nodeConfig = parseNodeElement(nodeElement);
+					nodes[i] = nodeConfig;
 				}
 			}
 		}
 	}
 
-	private void createFakeEndpointsIfNeeded(ZigBeeEndpoint[] zEnpoints,
-			int endpointsLength, int[] endpointUsedIds, int enpointNb) {
-		int maxId = 0;
-		for (int i = 0; i < endpointsLength; i++) {
+	private ZigBeeNodeImpl parseNodeElement(Element nodeElement) throws Exception {
+		BigInteger ieeeAddress = ParserUtils.getAttribute(nodeElement, "ieeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
+		String userDescription = ParserUtils.getAttribute(nodeElement, "userDescription", ParserUtils.OPTIONAL, "");
+		int activeEndpointsNumber = ParserUtils.getAttribute(nodeElement, "activeEndpointsNumber", ParserUtils.MANDATORY, -1);
 
-			if (maxId < endpointUsedIds[i]) {
-				maxId = endpointUsedIds[i];
+		NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
+		Node endpoints = enpointsList.item(0);
+		ZigBeeEndpointImpl[] endpointsConfig = null;
+		if (endpoints != null && endpoints.getNodeType() == Node.ELEMENT_NODE) {
+			Element endpointsElement = (Element) endpoints;
+			NodeList enpointList = endpointsElement.getElementsByTagName("endpoint");
+
+			int endpointsLength = enpointList.getLength();
+			endpointsConfig = new ZigBeeEndpointImpl[endpointsLength];
+			for (int i = 0; i < endpointsLength; i++) {
+				Node enpointNode = enpointList.item(i);
+				if (enpointNode != null && enpointNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element enpointElement = (Element) enpointNode;
+					endpointsConfig[i] = parseEndpointElement(enpointElement);
+				}
 			}
 		}
 
-		for (int j = endpointsLength; j < enpointNb; j++) {
-			maxId++;
-			zEnpoints[j] = new ZigBeeEndpointImpl((short) maxId,
-					null,
-					null,
-					null);
-		}
+		ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(nodeElement);
+		ZigBeePowerDescriptor powerDescriptor = parsePowerDescriptorElement(nodeElement);
+
+		ZigBeeNodeImpl nodeConfig = new ZigBeeNodeImpl(host, ieeeAddress, nwkAddress++, endpointsConfig, nodeDescriptor, powerDescriptor, userDescription);
+		return nodeConfig;
 	}
 
-	private ZigBeeNodeDescriptor getZigBeeNodeDescriptor(Element nodeElement) {
-		ZigBeeNodeDescriptor result = null;
+	private ZigBeeEndpointImpl parseEndpointElement(Element endpointElement) throws Exception {
+		short endpointId = ParserUtils.getAttribute(endpointElement, "id", ParserUtils.MANDATORY, (short) -1);
+
+		ZigBeeSimpleDescriptor simpleDescriptor = parseSimpleDescriptorElement(endpointElement, endpointId);
+
+		/*
+		 * The simple descriptor contains the list of the clusters to ckeck.
+		 */
+
+		int[] inputClusters = simpleDescriptor.getInputClusters();
+
+		// FIXME: check if input <-> Server!!!
+		ZCLCluster[] serverClusters = new ZCLCluster[inputClusters.length];
+
+		for (int i = 0; i < inputClusters.length; i++) {
+			int clusterId = inputClusters[i];
+
+			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			serverClusters[i] = new ZCLClusterImpl(global, true);
+		}
+
+		int[] outputClusters = simpleDescriptor.getOutputClusters();
+		ZCLCluster[] clientClusters = new ZCLCluster[inputClusters.length];
+
+		// FIXME: check if output <-> Client!!!
+		for (int i = 0; i < outputClusters.length; i++) {
+			int clusterId = outputClusters[i];
+
+			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			clientClusters[i] = new ZCLClusterImpl(global, false);
+		}
+
+		return new ZigBeeEndpointImpl(endpointId, serverClusters, clientClusters, simpleDescriptor);
+	}
+
+	/**
+	 * Converts the DOM element into a ZigBeeNodeDescriptor object
+	 * 
+	 * @param nodeElement The DOM element
+	 * @return
+	 */
+
+	private ZigBeeNodeDescriptor parseNodeDescriptorElement(Element nodeElement) {
+		ZigBeeNodeDescriptor descriptor = null;
 		NodeList descList = nodeElement.getElementsByTagName("nodeDescriptor");
 		Node nodeDesc = descList.item(0);
 		if (nodeDesc != null && nodeDesc.getNodeType() == Node.ELEMENT_NODE) {
 			Element nodeDescElt = (Element) nodeDesc;
-			short type = Short.parseShort(nodeDescElt.getAttribute("type"));
-			short band = 0;
-			if (nodeDescElt.getAttribute("band") != null
-					&& !"".equals(nodeDescElt.getAttribute("band"))) {
-				band = Short.parseShort(nodeDescElt.getAttribute("band"));
-			}
-			Integer manufCode = null;
-			if (nodeDescElt.getAttribute("manufCode") != null
-					&& !"".equals(nodeDescElt.getAttribute("manufCode"))) {
-				manufCode = new Integer(nodeDescElt.getAttribute("manufCode"));
-			}
+			short type = ParserUtils.getAttribute(nodeDescElt, "type", ParserUtils.MANDATORY, (short) -1);
+			short band = ParserUtils.getAttribute(nodeDescElt, "frequencyBand", ParserUtils.MANDATORY, (short) -1);
+			int manufCode = ParserUtils.getAttribute(nodeDescElt, "manufacturerCode", ParserUtils.MANDATORY, -1);
+			int maxBufSize = ParserUtils.getAttribute(nodeDescElt, "maxBufferSize", ParserUtils.MANDATORY, -1);
+			boolean isComplexAvail = ParserUtils.getAttribute(nodeDescElt, "isComplexDescriptorAvailable", ParserUtils.MANDATORY, false);
+			boolean isUserAvail = ParserUtils.getAttribute(nodeDescElt, "isUserDescriptorAvailable", ParserUtils.MANDATORY, false);
 
-			int maxBufSize = 0;
-			if (nodeDescElt.getAttribute("maxBufSize") != null
-					&& !"".equals(nodeDescElt.getAttribute("maxBufSize"))) {
-				maxBufSize = Integer.parseInt(nodeDescElt
-						.getAttribute("maxBufSize"));
-			}
-
-			boolean isComplexAv = false;
-			if (nodeDescElt.getAttribute("isComplexAv") != null
-					&& !"".equals(nodeDescElt.getAttribute("isComplexAv"))) {
-				isComplexAv = new Boolean(
-						nodeDescElt.getAttribute("isComplexAv")).booleanValue();
-			}
-
-			boolean isUserAv = false;
-			if (nodeDescElt.getAttribute("isUserAv") != null
-					&& !"".equals(nodeDescElt.getAttribute("isUserAv"))) {
-				isUserAv = new Boolean(nodeDescElt.getAttribute("isUserAv"))
-						.booleanValue();
-			}
-
-			result = new ZigBeeNodeDescriptorImpl(type,
-					band,
-					manufCode,
-					maxBufSize,
-					isComplexAv,
-					isUserAv);
+			descriptor = new ZigBeeNodeDescriptorImpl(type, band, manufCode, maxBufSize, isComplexAvail, isUserAvail);
 		}
-		return result;
+		return descriptor;
 	}
 
-	public NetworkAttributeIds getFirstReportableAttribute() {
-		BigInteger ieeeAddresss;
-		short endpointId;
-		int clusterId;
-		int attributeId;
+	/**
+	 * Fill a ZigBeePowerDescriptor with the information from the DOM element
+	 * 
+	 * @param nodeElement The DOM element that conteins the siple descritor.
+	 * @return
+	 */
 
-		for (int i = 0; i < nodes.length; i++) {
-			ZigBeeEndpoint[] endpoints = nodes[i].getEndpoints();
-			ieeeAddresss = nodes[i].getIEEEAddress();
-			for (int j = 0; j < endpoints.length; j++) {
-				ZCLCluster[] serverClusters = endpoints[j].getServerClusters();
-				endpointId = endpoints[j].getId();
-				for (int k = 0; k < serverClusters.length; k++) {
-
-					// This is poor practice as we shouldn't block on a Promise
-					try {
-						ZCLAttribute[] attributes = (ZCLAttribute[]) ((ZCLClusterImpl) serverClusters[k]).getAttributes().getValue();
-						clusterId = serverClusters[k].getId();
-						for (int l = 0; l < attributes.length; l++) {
-							if (((ZCLAttributeImpl) attributes[l]).getAttributeDescription().isReportable()) {
-								attributeId = attributes[l].getId();
-								return new NetworkAttributeIds(ieeeAddresss, endpointId, clusterId, attributeId);
-							}
-						}
-					} catch (Exception e) {
-						throw new RuntimeException("A problem occurred!",
-								e instanceof InvocationTargetException ? ((InvocationTargetException) e).getTargetException() : e);
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	private ZigBeePowerDescriptor getZigBeePowerDescriptor(Element nodeElement) {
-		ZigBeePowerDescriptor result = null;
+	private ZigBeePowerDescriptor parsePowerDescriptorElement(Element nodeElement) {
+		ZigBeePowerDescriptor descriptor = null;
 
 		NodeList descList = nodeElement.getElementsByTagName("powerDescriptor");
 		Node nodeDesc = descList.item(0);
 		if (nodeDesc != null && nodeDesc.getNodeType() == Node.ELEMENT_NODE) {
 			Element powerDescElt = (Element) nodeDesc;
 
-			short powerMode = Short.parseShort(powerDescElt
-					.getAttribute("powerMode"));
-			short powerSource = Short.parseShort(powerDescElt
-					.getAttribute("powerSource"));
-			short powerSourceLevel = Short.parseShort(powerDescElt
-					.getAttribute("powerSourceLevel"));
+			short powerMode = ParserUtils.getAttribute(powerDescElt, "powerMode", ParserUtils.MANDATORY, (short) -1);
+			short powerSource = ParserUtils.getAttribute(powerDescElt, "powerSource", ParserUtils.MANDATORY, (short) -1);
+			short powerSourceLevel = ParserUtils.getAttribute(powerDescElt, "powerSourceLevel", ParserUtils.MANDATORY, (short) -1);
 
-			boolean isconstant = new Boolean(
-					powerDescElt.getAttribute("isconstant")).booleanValue();
+			boolean isconstant = ParserUtils.getAttribute(powerDescElt, "isconstant", ParserUtils.MANDATORY, false);
 
-			result = new ZigBeePowerDescriptorImpl(powerMode,
-					powerSource,
-					powerSourceLevel,
-					isconstant);
+			descriptor = new ZigBeePowerDescriptorImpl(powerMode, powerSource, powerSourceLevel, isconstant);
 		}
-		return result;
+		return descriptor;
 	}
 
-	private ZCLCluster[] getServerClusters(NodeList serverClusters) {
+	private ZigBeeSimpleDescriptorImpl parseSimpleDescriptorElement(Element endPoint, short endpointId) {
 
-		Node node = serverClusters.item(0);
-		ZCLCluster[] result = null;
-		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-			Element serverClustersElement = (Element) node;
-			NodeList clusterList = serverClustersElement
-					.getElementsByTagName("cluster");
+		ZigBeeSimpleDescriptorImpl simpleDescriptor = null;
 
-			int clusterLength = clusterList.getLength();
-			result = new ZCLCluster[clusterLength];
-			for (int i = 0; i < clusterLength; i++) {
-
-				ZCLClusterDescription serverClusterDescription = null;
-				int[] ids = null;
-				ZCLAttribute[] attributes = null;
-
-				Node clusterNode = clusterList.item(i);
-				if (clusterNode != null
-						&& node.getNodeType() == Node.ELEMENT_NODE) {
-					Element clusterElement = (Element) clusterNode;
-					String clusterId = clusterElement.getAttribute("id");
-
-					// get serverGlobalDescription
-					NodeList globalDescList = clusterElement
-							.getElementsByTagName("globalServerDescription");
-					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null
-							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
-						Element desc = (Element) globalDesc;
-						String id = desc.getAttribute("id");
-						String name = desc.getAttribute("name");
-						String domain = desc.getAttribute("domain");
-						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(
-								new Integer(id).intValue(),
-								name,
-								domain,
-								null,
-								null);
-						serverClusterDescription = new ZCLClusterDescriptionImpl(
-								new Integer(clusterId).intValue(),
-								ZCLGlobalDesc);
-					}
-
-					// get command ids
-					NodeList commandIdsList = clusterElement
-							.getElementsByTagName("commandIds");
-					Node commandIds = commandIdsList.item(0);
-					if (commandIds != null
-							&& commandIds.getNodeType() == Node.ELEMENT_NODE) {
-						Element commandIdsElt = (Element) commandIds;
-						NodeList idlist = commandIdsElt
-								.getElementsByTagName("id");
-
-						int length = idlist.getLength();
-						ids = new int[length];
-						for (int j = 0; j < length; j++) {
-							Node commandId = idlist.item(j);
-							if (commandId != null
-									&& commandId.getNodeType() == Node.ELEMENT_NODE) {
-								Element commandIdElt = (Element) commandId;
-								String idString = commandIdElt
-										.getAttribute("id");
-								ids[j] = new Integer(idString).intValue();
-							}
-						}
-					}
-
-					// get attributes
-					clusterElement.getElementsByTagName("attributes");
-					Node nodeAttributes = serverClusters.item(0);
-					if (nodeAttributes != null
-							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
-						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement
-								.getElementsByTagName("attribute");
-						int length = attributeList.getLength();
-						attributes = new ZCLAttribute[length];
-
-						for (int k = 0; k < length; k++) {
-							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null
-									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
-								Element attributeElement = (Element) attributeNode;
-								String tempId = attributeElement
-										.getAttribute("id");
-								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
-								attributes[k] = ZCLAttr;
-							}
-
-						}
-					}
-				}
-				ZCLClusterImpl clusterImpl = new ZCLClusterImpl(ids, attributes, serverClusterDescription);
-				result[i] = clusterImpl;
-			}
-		}
-
-		return result;
-	}
-
-	private ZCLAttribute getZCLAttribute(Element attrElt) {
-		ZCLAttribute attr = null;
-
-		NodeList attrList = attrElt.getElementsByTagName("attributeDescription");
-		Node attributeDescriptionNode = attrList.item(0);
-		if (attributeDescriptionNode != null && attributeDescriptionNode.getNodeType() == Node.ELEMENT_NODE) {
-			Element attrDescriptionsElement = (Element) attributeDescriptionNode;
-			String id = attrDescriptionsElement.getAttribute("id");
-			String isReadOnly = attrDescriptionsElement.getAttribute("isReadOnly");
-			String defaultValue = attrDescriptionsElement.getAttribute("defaultValue");
-			String name = attrDescriptionsElement.getAttribute("name");
-			String isMandatory = attrDescriptionsElement.getAttribute("isMandatory");
-			String isReportable = attrDescriptionsElement.getAttribute("isReportable");
-			String datatype = attrDescriptionsElement.getAttribute("dataType");
-
-			Class cls;
-
-			try {
-				cls = Class.forName("org.osgi.service.zigbee.types." + datatype);
-
-				Class[] classes = {};
-
-				Method method = cls.getMethod("getInstance", classes);
-
-				ZCLDataTypeDescription dataTypeDesc = (ZCLDataTypeDescription) method.invoke(null, null);
-
-				ZCLAttributeDescriptionImpl attributeDescription = new ZCLAttributeDescriptionImpl(
-						new Integer(id).intValue(),
-						new Boolean(isReadOnly).booleanValue(),
-						defaultValue,
-						name,
-						new Boolean(isMandatory).booleanValue(),
-						new Boolean(isReportable).booleanValue(),
-						dataTypeDesc);
-
-				attr = new ZCLAttributeImpl(attributeDescription);
-				if ("ZigBeeBoolean".equals(datatype)) {
-					firstBooleanAttribute = attr;
-				}
-
-			} catch (ClassNotFoundException e) {
-
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-
-		return attr;
-	}
-
-	private ZigBeeSimpleDescriptorImpl getSimpleDescriptor(Element endPoint) {
-
-		List serverClusterList = new ArrayList();
-		// List clientClusterList = new ArrayList();
-
-		ZigBeeSimpleDescriptorImpl result = null;
-		NodeList endpointDescList = endPoint
-				.getElementsByTagName("simpleDescriptor");
+		NodeList endpointDescList = endPoint.getElementsByTagName("simpleDescriptor");
 		Node descriptorNode = endpointDescList.item(0);
 		if (descriptorNode != null
 				&& descriptorNode.getNodeType() == Node.ELEMENT_NODE) {
 			Element descElt = (Element) descriptorNode;
-			String deviceId = descElt.getAttribute("deviceId");
-			String version = descElt.getAttribute("version");
-			String profileId = descElt.getAttribute("profileId");
-			String nbServerCluster = descElt.getAttribute("nbServerCluster");
-			String nbClientCluster = descElt.getAttribute("nbClientCluster");
-			result = new ZigBeeSimpleDescriptorImpl(
-					new Integer(deviceId).intValue(),
-					Byte.parseByte(version),
-					new Integer(profileId).intValue());
-			result.setInputClusters(new int[Integer.parseInt(nbServerCluster)]);
-			result.setOutputClusters(new int[Integer.parseInt(nbClientCluster)]);
+
+			int deviceId = ParserUtils.getAttribute(descElt, "deviceId", ParserUtils.MANDATORY, -1);
+			byte version = ParserUtils.getAttribute(descElt, "version", ParserUtils.MANDATORY, (byte) -1);
+			int profileId = ParserUtils.getAttribute(descElt, "profileId", ParserUtils.MANDATORY, -1);
+
+			// FIXME: where to store this????
+			int outputClustersNumber = ParserUtils.getAttribute(descElt, "outputClustersNumber", ParserUtils.MANDATORY, -1);
+			int inputClustersNumber = ParserUtils.getAttribute(descElt, "inputClustersNumber", ParserUtils.MANDATORY, -1);
+
+			String inputClustersList = ParserUtils.getAttribute(descElt, "inputClusters", ParserUtils.MANDATORY, "");
+			String outputClustersList = ParserUtils.getAttribute(descElt, "outputClusters", ParserUtils.MANDATORY, "");
+
+			int[] inputClusters = ParserUtils.toArray(inputClustersList);
+			int[] outputClusters = ParserUtils.toArray(outputClustersList);
+
+			simpleDescriptor = new ZigBeeSimpleDescriptorImpl(endpointId, deviceId, profileId, version, inputClusters, outputClusters);
 		}
-		return result;
+		return simpleDescriptor;
 	}
 
-	private ZCLCluster[] getClientClusters(NodeList clientClusters) {
-
-		Node node = clientClusters.item(0);
-		ZCLCluster[] result = null;
-		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-			Element serverClustersElement = (Element) node;
-			NodeList clusterList = serverClustersElement
-					.getElementsByTagName("cluster");
-
-			int clusterLength = clusterList.getLength();
-			result = new ZCLCluster[clusterLength];
-			for (int i = 0; i < clusterLength; i++) {
-
-				ZCLClusterDescription serverClusterDescription = null;
-				int[] ids = null;
-				ZCLAttribute[] attributes = null;
-
-				Node clusterNode = clusterList.item(i);
-				if (clusterNode != null
-						&& node.getNodeType() == Node.ELEMENT_NODE) {
-					Element clusterElement = (Element) clusterNode;
-					String clusterId = clusterElement.getAttribute("id");
-
-					// get serverGlobalDescription
-					NodeList globalDescList = clusterElement
-							.getElementsByTagName("globalServerDescription");
-					Node globalDesc = globalDescList.item(0);
-					if (globalDesc != null
-							&& globalDesc.getNodeType() == Node.ELEMENT_NODE) {
-						Element desc = (Element) globalDesc;
-						String id = desc.getAttribute("id");
-						String name = desc.getAttribute("name");
-						String domain = desc.getAttribute("domain");
-						ZCLGlobalClusterDescription ZCLGlobalDesc = new ZCLGlobalClusterDescriptionImpl(
-								new Integer(id).intValue(),
-								name,
-								domain,
-								null,
-								null);
-						serverClusterDescription = new ZCLClusterDescriptionImpl(
-								new Integer(clusterId).intValue(),
-								ZCLGlobalDesc);
-					}
-
-					// get attributes
-					clusterElement.getElementsByTagName("attributes");
-					Node nodeAttributes = clientClusters.item(0);
-					if (nodeAttributes != null
-							&& nodeAttributes.getNodeType() == Node.ELEMENT_NODE) {
-						Element attributesElement = (Element) nodeAttributes;
-						NodeList attributeList = attributesElement
-								.getElementsByTagName("attribute");
-
-						int length = attributeList.getLength();
-						attributes = new ZCLAttribute[length];
-
-						for (int k = 0; k < length; k++) {
-							Node attributeNode = attributeList.item(k);
-							if (attributeNode != null
-									&& attributeNode.getNodeType() == Node.ELEMENT_NODE) {
-								Element attributeElement = (Element) node;
-								ZCLAttribute ZCLAttr = getZCLAttribute(attributeElement);
-								attributes[k] = ZCLAttr;
-							}
-						}
-					}
-				}
-				ZCLClusterImpl clusterImpl = new ZCLClusterImpl(ids, attributes, serverClusterDescription);
-				result[i] = clusterImpl;
-			}
+	private void parseFrameInfo(Document doc) {
+		NodeList nList = doc.getElementsByTagName("frame");
+		Node node = nList.item(0);
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			Element frameElement = (Element) node;
+			headerMaxSize = ParserUtils.getAttribute(frameElement, "headerMaxSize", ParserUtils.MANDATORY, -1);
+			headerMinSize = ParserUtils.getAttribute(frameElement, "headerMinSize", ParserUtils.MANDATORY, -1);
 		}
-
-		return result;
 	}
 }

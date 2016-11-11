@@ -28,18 +28,24 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	private int		deviceId;
 	private byte	version;
 	private int		profileId;
-	private int[]	InputClusters;
-	private int[]	outputClusters;
+	private int[]	inputClusters	= new int[0];
+	private int[]	outputClusters	= new int[0];
 
-	/**
-	 * @param deviceId
-	 * @param version
-	 * @param profileId
-	 */
-	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, int profileId) {
+	private short	endpointId;
+
+	public ZigBeeSimpleDescriptorImpl(short endpointId, int deviceId, int profileId, byte version, int[] inputClusters, int[] outputClusters) {
 		this.deviceId = deviceId;
 		this.version = version;
 		this.profileId = profileId;
+		this.endpointId = endpointId;
+
+		if (inputClusters == null) {
+			inputClusters = new int[0];
+		}
+
+		if (outputClusters == null) {
+			outputClusters = new int[0];
+		}
 	}
 
 	public int getApplicationDeviceId() {
@@ -55,34 +61,51 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 	}
 
 	public short getEndpoint() {
-		return 0;
+		return endpointId;
 	}
 
 	public int[] getInputClusters() {
-		return InputClusters;
+		return this.inputClusters;
 	}
 
 	public int[] getOutputClusters() {
-		return outputClusters;
+		return this.outputClusters;
 	}
 
-	public void setInputClusters(int[] InputClusters) {
-		this.InputClusters = InputClusters;
+	public void setInputClusters(int[] inputClusters) {
+		if (inputClusters == null) {
+			throw new NullPointerException("input clusters array cannot be null");
+		}
+		this.inputClusters = inputClusters;
 	}
 
 	public void setOutputClusters(int[] outputClusters) {
+		if (outputClusters == null) {
+			throw new NullPointerException("output clusters array cannot be null");
+		}
 		this.outputClusters = outputClusters;
 	}
 
 	public boolean providesInputCluster(int clusterId) {
+		for (int i = 0; i < inputClusters.length; i++) {
+			if (inputClusters[i] == clusterId) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	public boolean providesOutputCluster(int clusterId) {
+		for (int i = 0; i < outputClusters.length; i++) {
+			if (outputClusters[i] == clusterId) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[deviceId: " + deviceId + ", version: " + version + ", profileId: " + profileId + "]";
+		return "" + this.getClass().getName() + "[deviceId: " + deviceId + ", version: " + version + ", profileId: "
+				+ profileId + "]";
 	}
 }
