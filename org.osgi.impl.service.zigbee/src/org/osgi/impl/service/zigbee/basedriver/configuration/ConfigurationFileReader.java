@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.impl.service.zigbee.basedriver.configuration;
 
@@ -69,6 +84,9 @@ public class ConfigurationFileReader {
 	 */
 
 	private void readXmlFile(InputStream is) throws Exception {
+
+		profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
+
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 
@@ -99,9 +117,6 @@ public class ConfigurationFileReader {
 		if (this.invokeTimeout <= 0) {
 			throw new Exception("please set the invokeTimeout attribute to a positive value");
 		}
-
-		profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
-
 	}
 
 	/**
@@ -204,7 +219,7 @@ public class ConfigurationFileReader {
 			invokeTimeout = ParserUtils.getAttribute(hostElement, "invokeTimeout", ParserUtils.MANDATORY, -1);
 
 			ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(hostElement);
-			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, null, nodeDescriptor, null, null);
+			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, nodeDescriptor, null, null);
 		}
 
 		throw new Exception("host element not found in the zigbee-ct configuration xml file");
@@ -283,11 +298,13 @@ public class ConfigurationFileReader {
 
 		// FIXME: check if input <-> Server!!!
 		ZCLCluster[] serverClusters = new ZCLCluster[inputClusters.length];
-
 		for (int i = 0; i < inputClusters.length; i++) {
 			int clusterId = inputClusters[i];
 
 			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			if (global == null) {
+				parserError(" the simpleDescriptor of endpoint " + endpointId + " refers to a input clusterId= " + clusterId + " that is not defined in file zcl.xml");
+			}
 			serverClusters[i] = new ZCLClusterImpl(global, true);
 		}
 
@@ -299,6 +316,9 @@ public class ConfigurationFileReader {
 			int clusterId = outputClusters[i];
 
 			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			if (global == null) {
+				parserError(" the simpleDescriptor of endpoint " + endpointId + " refers to a output clusterId= " + clusterId + " that is not defined in file zcl.xml");
+			}
 			clientClusters[i] = new ZCLClusterImpl(global, false);
 		}
 
@@ -345,11 +365,10 @@ public class ConfigurationFileReader {
 		if (nodeDesc != null && nodeDesc.getNodeType() == Node.ELEMENT_NODE) {
 			Element powerDescElt = (Element) nodeDesc;
 
-			short powerMode = ParserUtils.getAttribute(powerDescElt, "powerMode", ParserUtils.MANDATORY, (short) -1);
-			short powerSource = ParserUtils.getAttribute(powerDescElt, "powerSource", ParserUtils.MANDATORY, (short) -1);
-			short powerSourceLevel = ParserUtils.getAttribute(powerDescElt, "powerSourceLevel", ParserUtils.MANDATORY, (short) -1);
-
-			boolean isconstant = ParserUtils.getAttribute(powerDescElt, "isconstant", ParserUtils.MANDATORY, false);
+			short powerMode = ParserUtils.getAttribute(powerDescElt, "currentPowerMode", ParserUtils.MANDATORY, (short) -1);
+			short powerSource = ParserUtils.getAttribute(powerDescElt, "currentPowerSource", ParserUtils.MANDATORY, (short) -1);
+			short powerSourceLevel = ParserUtils.getAttribute(powerDescElt, "currentPowerSourceLevel", ParserUtils.MANDATORY, (short) -1);
+			boolean isconstant = ParserUtils.getAttribute(powerDescElt, "isConstantMainsPowerAvailable", ParserUtils.MANDATORY, false);
 
 			descriptor = new ZigBeePowerDescriptorImpl(powerMode, powerSource, powerSourceLevel, isconstant);
 		}
@@ -370,10 +389,6 @@ public class ConfigurationFileReader {
 			byte version = ParserUtils.getAttribute(descElt, "version", ParserUtils.MANDATORY, (byte) -1);
 			int profileId = ParserUtils.getAttribute(descElt, "profileId", ParserUtils.MANDATORY, -1);
 
-			// FIXME: where to store this????
-			int outputClustersNumber = ParserUtils.getAttribute(descElt, "outputClustersNumber", ParserUtils.MANDATORY, -1);
-			int inputClustersNumber = ParserUtils.getAttribute(descElt, "inputClustersNumber", ParserUtils.MANDATORY, -1);
-
 			String inputClustersList = ParserUtils.getAttribute(descElt, "inputClusters", ParserUtils.MANDATORY, "");
 			String outputClustersList = ParserUtils.getAttribute(descElt, "outputClusters", ParserUtils.MANDATORY, "");
 
@@ -393,5 +408,9 @@ public class ConfigurationFileReader {
 			headerMaxSize = ParserUtils.getAttribute(frameElement, "headerMaxSize", ParserUtils.MANDATORY, -1);
 			headerMinSize = ParserUtils.getAttribute(frameElement, "headerMinSize", ParserUtils.MANDATORY, -1);
 		}
+	}
+
+	private void parserError(String message) throws Exception {
+		throw new Exception("CT parser: " + message);
 	}
 }

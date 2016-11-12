@@ -40,11 +40,15 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 		this.endpointId = endpointId;
 
 		if (inputClusters == null) {
-			inputClusters = new int[0];
+			this.inputClusters = new int[0];
+		} else {
+			this.inputClusters = inputClusters;
 		}
 
 		if (outputClusters == null) {
-			outputClusters = new int[0];
+			this.outputClusters = new int[0];
+		} else {
+			this.outputClusters = outputClusters;
 		}
 	}
 

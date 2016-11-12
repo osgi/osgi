@@ -17,6 +17,8 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import org.osgi.impl.service.zigbee.event.EndResponse;
 import org.osgi.impl.service.zigbee.event.ZCLCommandResponseImpl;
 import org.osgi.impl.service.zigbee.event.ZCLCommandResponseStreamImpl;
@@ -26,6 +28,7 @@ import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZDPFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
+import org.osgi.service.zigbee.ZigBeeLinkQuality;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -44,12 +47,20 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	private BigInteger				IEEEAddress;
 	private int						nwkAddress;
 
-	private ZigBeeEndpointImpl[]	endpoints	= new ZigBeeEndpointImpl[0];
+	private ZigBeeEndpointImpl[]	endpoints		= new ZigBeeEndpointImpl[0];
 
 	private ZigBeeNodeDescriptor	nodeDescriptor;
 	private ZigBeePowerDescriptor	powerDescriptor;
 	private ZigBeeComplexDescriptor	complexDescriptor;
 	private String					userDescription;
+
+	private String					nodePid;
+
+	/**
+	 * If true enables the ZigBeeNode to fail for those methods that could file
+	 * because the feature is not available.
+	 */
+	private boolean					forceFailure	= true;
 
 	public ZigBeeNodeImpl(BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
 			ZigBeeNodeDescriptor nodeDescriptor, ZigBeePowerDescriptor powerDescriptor, String userdescription) {
@@ -63,6 +74,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		for (int i = 0; i < endpoints.length; i++) {
 			endpoints[i].setZigBeeNode(this);
 		}
+
 	}
 
 	public ZigBeeNodeImpl(ZigBeeHost host, BigInteger IEEEAddress, int nwkAddress, ZigBeeEndpointImpl[] endpoints,
@@ -70,6 +82,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		this(IEEEAddress, nwkAddress, endpoints, nodeDesc, powerDesc, userdescription);
 
 		this.host = host;
+
+		nodePid = IEEEAddress.toString() + "." + host.getHostPid() + ".node.pid";
 	}
 
 	public BigInteger getIEEEAddress() {
@@ -93,7 +107,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public Promise getNodeDescriptor() {
-		// FIXME: CT check type of returned value or exception
+		// TODO: CT check type of returned value or exception: DONE!
 		return Promises.resolved(nodeDescriptor);
 	}
 
@@ -103,17 +117,58 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public Promise getComplexDescriptor() {
-		// FIXME: CT check type of returned value or exception
-		return Promises.resolved(complexDescriptor);
+		// TODO: check on CT done. Remove this.
+		if (nodeDescriptor.isComplexDescriptorAvailable()) {
+			return Promises.resolved(complexDescriptor);
+		} else {
+			return Promises.failed(new ZDPException(ZDPException.NO_DESCRIPTOR, " descriptor is not available"));
+		}
 	}
 
 	public Promise getLinksQuality() throws ZDPException {
-		// FIXME: Implement it. CT check type of returned value or exception
-		return Promises.failed(new UnsupportedOperationException("Not implemented"));
+		// TODO: Add test of this. Better implementation using the right
+		// endpoints.
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+
+		/*
+		 * Return a fake content.
+		 */
+
+		ZigBeeLinkQuality linkQuality = new ZigBeeLinkQuality() {
+
+			public int getRelationship() {
+				return 0;
+			}
+
+			public String getNeighbor() {
+				return "neighbor";
+			}
+
+			public int getLQI() {
+				return 3;
+			}
+
+			public int getDepth() {
+
+				return 1;
+			}
+		};
+
+		Map linksQualityMap = new HashMap();
+		linksQualityMap.put(nodePid, linkQuality);
+
+		return Promises.resolved(linksQualityMap);
 	}
 
 	public Promise getRoutingTable() {
-		// FIXME: Implement it. CT check type of returned value or exception
+		// TODO: Add test of this. Better implementation using the right
+		// endpoints.
+		if (forceFailure) {
+			return Promises.failed(new ZDPException(ZDPException.NOT_SUPPORTED, ""));
+		}
+
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
 	}
 
@@ -135,12 +190,6 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	public Promise invoke(int clusterIdReq, ZDPFrame message) {
 		// FIXME: Implement it. CT check type of returned value or exception
 		return Promises.failed(new UnsupportedOperationException("Not implemented"));
-	}
-
-	public String toString() {
-		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
-				+ ", hostPId: " + host.getHostPid() + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
-				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
 	public Promise getUserDescription() {
@@ -186,4 +235,10 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		}
 		return endpoints;
 	}
+
+	public String toString() {
+		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress
+				+ ", hostPId: " + host.getHostPid() + "]";
+	}
+
 }

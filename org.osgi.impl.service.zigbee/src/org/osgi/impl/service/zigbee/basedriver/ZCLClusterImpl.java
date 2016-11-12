@@ -18,7 +18,9 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
@@ -42,6 +44,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 	private ZCLAttribute[]				attributes;
 	private int[]						commandIds;
 	private ZCLClusterDescription		description;
+	private ZCLAttributeDescription[]	attributeDescriptions;
 
 	private boolean						isServer;
 
@@ -52,7 +55,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 		this.global = global;
 		this.isServer = isServer;
 
-		ZCLAttributeDescription[] attributeDescriptions;
 		if (isServer) {
 			attributeDescriptions = global.getServerClusterDescription().getAttributeDescriptions();
 		} else {
@@ -68,10 +70,9 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 	public Promise getAttribute(int attributeId) {
 
-		for (int i = 0; i < attributes.length; i++) {
-			if (attributeId == attributes[i].getId()) {
-				return Promises.resolved(attributes[i]);
-			}
+		ZCLAttribute attribute = this.lookupAttribute(attributeId);
+		if (attribute != null) {
+			return Promises.resolved(attribute);
 		}
 
 		// FIXME: CT must check type of returned value or exception
@@ -88,7 +89,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 	public Promise getCommandIds() {
 		// FIXME: CT must check type of returned value or exception
 
-		// FIXME this implementation is wrong!!
+		// FIXME this implementation is wrong because the commands id are not
+		// here!
 
 		return Promises.resolved(this.commandIds.clone());
 	}
@@ -158,16 +160,63 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public Promise writeAttributes(boolean undivided, Map attributesIdsAndValues) {
-		return Promises.resolved(new UnsupportedOperationException("Not implemented"));
+		if (attributesIdsAndValues == null) {
+			return Promises.failed(new NullPointerException("the Map argument cannot be null."));
+		} else if (attributesIdsAndValues.size() == 0) {
+			return Promises.resolved(new HashMap());
+		}
+		boolean first = true;
+		boolean manufacturerSpecific = false;
+
+		Set keys = attributesIdsAndValues.keySet();
+		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
+			ZCLAttributeInfo attributeInfo = (ZCLAttributeInfo) iterator.next();
+			if (first) {
+				manufacturerSpecific = attributeInfo.isManufacturerSpecific();
+				first = false;
+			} else {
+				if (manufacturerSpecific != attributeInfo.isManufacturerSpecific()) {
+					return Promises.failed(new IllegalArgumentException("the passed attribute info map must contain all not or all manufacturer specific attributes"));
+				}
+			}
+		}
+
+		/*
+		 * Create the result map
+		 */
+
+		Map resultMap = new HashMap();
+		keys = attributesIdsAndValues.keySet();
+
+		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
+			ZCLAttributeInfo attributeInfo = (ZCLAttributeInfo) iterator.next();
+			ZCLAttribute attribute = lookupAttribute(attributeInfo.getId());
+			ZCLAttributeDescription attributeDescription = lookupAttributeDescription(attributeInfo.getId());
+			int status;
+			if (attribute != null) {
+				if (!attributeDescription.isReadOnly()) {
+					attribute.setValue(attributesIdsAndValues.get(attributeInfo));
+					continue;
+				} else {
+					status = ZCLException.READ_ONLY;
+				}
+
+			} else {
+				status = ZCLException.UNSUPPORTED_ATTRIBUTE;
+			}
+			resultMap.put(new Integer(attributeInfo.getId()), new Integer(status));
+		}
+
+		return Promises.resolved(resultMap);
 	}
 
 	public Promise invoke(ZCLFrame frame) {
-		// mocked invocation.
+		// FIXME: implement this!
 		return Promises.resolved(frame);
 	}
 
 	public Promise invoke(ZCLFrame frame, String exportedServicePID) {
-		// mocked invocation.
+		// FIXME: implement this!
 		return Promises.resolved(frame);
 	}
 
@@ -232,12 +281,30 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @return The array of corresponding ZCLAttribute objects
 	 */
 	private ZCLAttribute[] toZCLAttributes(ZCLAttributeDescription[] attributeDescriptions) {
-		ZCLAttribute[] attributes = new ZCLAttribute[attributeDescriptions.length];
+		ZCLAttribute[] a = new ZCLAttribute[attributeDescriptions.length];
 
 		for (int i = 0; i < attributeDescriptions.length; i++) {
-			ZCLAttributeImpl attribute = new ZCLAttributeImpl(attributeDescriptions[i]);
+			a[i] = new ZCLAttributeImpl(attributeDescriptions[i]);
 		}
 
-		return attributes;
+		return a;
+	}
+
+	private ZCLAttribute lookupAttribute(int attributeId) {
+		for (int i = 0; i < attributes.length; i++) {
+			if (attributeId == attributes[i].getId()) {
+				return attributes[i];
+			}
+		}
+		return null;
+	}
+
+	private ZCLAttributeDescription lookupAttributeDescription(int attributeId) {
+		for (int i = 0; i < attributeDescriptions.length; i++) {
+			if (attributeId == attributeDescriptions[i].getId()) {
+				return attributeDescriptions[i];
+			}
+		}
+		return null;
 	}
 }

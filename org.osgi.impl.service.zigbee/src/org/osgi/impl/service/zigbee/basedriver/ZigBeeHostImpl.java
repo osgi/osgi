@@ -25,6 +25,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private boolean		isStarted				= false;
 
+	private String		hostPid;
 	private int			currentChannel;
 	private int			securityLevel;
 	private int			panId;
@@ -45,14 +46,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	 * @param powerDescriptor
 	 * @param userdescription
 	 */
-	public ZigBeeHostImpl(String hostPid, int panId, int channel, int nwkAddress, int securityLevel, BigInteger IEEEAddress, ZigBeeEndpointImpl[] endpoints, ZigBeeNodeDescriptor nodeDescriptor,
+	public ZigBeeHostImpl(String hostPid, int panId, int channel, int nwkAddress, int securityLevel, BigInteger IEEEAddress, ZigBeeNodeDescriptor nodeDescriptor,
 			ZigBeePowerDescriptor powerDescriptor, String userdescription) {
-		super(IEEEAddress, nwkAddress, endpoints, nodeDescriptor, powerDescriptor, userdescription);
+		super(IEEEAddress, nwkAddress, new ZigBeeEndpointImpl[0], nodeDescriptor, powerDescriptor, userdescription);
 
 		this.currentChannel = channel;
 		this.securityLevel = securityLevel;
 		this.extendedPanId = new BigInteger("-1");
 		this.panId = panId;
+		this.hostPid = hostPid;
 	}
 
 	public void start() throws Exception {
@@ -75,6 +77,10 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return panId;
 	}
 
+	public String getHostPid() {
+		return hostPid;
+	}
+
 	public BigInteger getExtendedPanId() {
 		return extendedPanId;
 	}
@@ -84,6 +90,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public String getPreconfiguredLinkKey() throws Exception {
+		// FIXME: implement this method.
 		return null;
 	}
 

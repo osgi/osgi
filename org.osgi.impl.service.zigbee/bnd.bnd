@@ -1,7 +1,7 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-Vendor				= Orange
+Bundle-Vendor				= Orange and TIM
 Bundle-Activator			= ${p}.ZigBeeBundleActivator
 Bundle-Description			= The ZigBee bundle with Control Point stack
 

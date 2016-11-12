@@ -90,8 +90,6 @@ public class ZigBeeProfiles {
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 
-			System.out.println("Start Element :" + qName);
-
 			if (qName.equalsIgnoreCase("profiles")) {
 
 			} else if (qName.equalsIgnoreCase("profile")) {
@@ -165,7 +163,6 @@ public class ZigBeeProfiles {
 
 		public void endElement(String uri, String localName,
 				String qName) throws SAXException {
-			System.out.println("End Element :" + qName);
 
 			if (qName.equalsIgnoreCase("profiles")) {
 			} else if (qName.equalsIgnoreCase("profile")) {
@@ -212,6 +209,5 @@ public class ZigBeeProfiles {
 
 		public void characters(char ch[], int start, int length) throws SAXException {
 		}
-
 	};
 }

@@ -34,7 +34,7 @@ public class ParserUtils {
 	}
 
 	/**
-	 * Convert a list like "1, 2, 3" and array [ 1, 2, 3]
+	 * Converts a list like "1, 2, 3" into an array of int [ 1, 2, 3]
 	 * 
 	 * @param listString
 	 * @return the array.
@@ -87,8 +87,6 @@ public class ParserUtils {
 	}
 
 	public static int getAttribute(Element element, String attributeName, boolean required, final int defaultValue) {
-		System.out.println("reading attribute " + attributeName);
-
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
@@ -170,7 +168,7 @@ public class ParserUtils {
 			}
 		}
 
-		return Boolean.getBoolean(attributeValue);
+		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 
 	public static String getAttribute(Map element, String attributeName, boolean required, final String defaultValue) {
@@ -272,6 +270,8 @@ public class ParserUtils {
 			}
 		}
 
-		return Boolean.getBoolean(attributeValue);
+		boolean a = Boolean.valueOf(attributeValue).booleanValue();
+
+		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 }
