@@ -279,12 +279,12 @@ Include-Resource = \
 	wiring.ee.tb6.jar
 
 -buildpath							= \
-    org.osgi.test.support;                  version=project , \
 	org.osgi.dto;							version=project	, \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.cmpn;								version=4.3.1	, \
 	org.apache.servicemix.bundles.bcel;     version=5.2 , \
+    org.osgi.test.support;                  version=project , \
 	${junit}
 
 Test-Cases							= ${testcases}

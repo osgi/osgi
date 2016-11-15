@@ -132,6 +132,15 @@
         </listitem>
 
         <listitem>
+          <para>enum</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="org.osgi.framework.Version"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+
+        <listitem>
           <para>Data Transfer Objects</para>
         </listitem>
 
@@ -462,5 +471,15 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
       <bibliomixed xml:id="framework.dto.references-dto"><title>Data Transfer
       Object</title>https://en.wikipedia.org/wiki/Data_transfer_object</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added support for enums and Version fields in DTOs.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
