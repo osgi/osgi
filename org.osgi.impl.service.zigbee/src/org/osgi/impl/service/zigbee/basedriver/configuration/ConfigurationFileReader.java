@@ -182,12 +182,10 @@ public class ConfigurationFileReader {
 	}
 
 	/**
-	 * Retrieves the Endpoint objects available in a specific node
+	 * Retrieves the Endpoint objects available in a specific node.
 	 * 
-	 * FIXME: it is really necessary?
-	 * 
-	 * @param node
-	 * @return
+	 * @param node The node.
+	 * @return The endpoints belonging to this node.
 	 */
 
 	public ZigBeeEndpoint[] getEnpoints(ZigBeeNodeImpl node) {
@@ -209,14 +207,14 @@ public class ConfigurationFileReader {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element hostElement = (Element) node;
 
-			// FIXME: do we need the PID, unless getting the ieeeAddress?
-			String hostPid = ParserUtils.getAttribute(hostElement, "pid", ParserUtils.MANDATORY, "");
 			int panId = ParserUtils.getAttribute(hostElement, "panId", ParserUtils.MANDATORY, -1);
 			int channel = ParserUtils.getAttribute(hostElement, "channel", ParserUtils.MANDATORY, -1);
 			int securityLevel = ParserUtils.getAttribute(hostElement, "securityLevel", ParserUtils.MANDATORY, -1);
 			BigInteger ieeeAddress = ParserUtils.getAttribute(hostElement, "ieeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
 			discoveryTimeout = ParserUtils.getAttribute(hostElement, "discoveryTimeout", ParserUtils.MANDATORY, -1);
 			invokeTimeout = ParserUtils.getAttribute(hostElement, "invokeTimeout", ParserUtils.MANDATORY, -1);
+
+			String hostPid = "host.pid." + hostNetworkAddress;
 
 			ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(hostElement);
 			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, nodeDescriptor, null, null);
@@ -248,8 +246,8 @@ public class ConfigurationFileReader {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element nodeElement = (Element) node;
 
-					ZigBeeNodeImpl nodeConfig = parseNodeElement(nodeElement);
-					nodes[i] = nodeConfig;
+					nodes[i] = parseNodeElement(nodeElement);
+					host.add(nodes[i]);
 				}
 			}
 		}
@@ -257,8 +255,13 @@ public class ConfigurationFileReader {
 
 	private ZigBeeNodeImpl parseNodeElement(Element nodeElement) throws Exception {
 		BigInteger ieeeAddress = ParserUtils.getAttribute(nodeElement, "ieeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
+		BigInteger hostIeeeAddress = ParserUtils.getAttribute(nodeElement, "hostIeeeAddress", ParserUtils.MANDATORY, new BigInteger("-1"));
 		String userDescription = ParserUtils.getAttribute(nodeElement, "userDescription", ParserUtils.OPTIONAL, "");
 		int activeEndpointsNumber = ParserUtils.getAttribute(nodeElement, "activeEndpointsNumber", ParserUtils.MANDATORY, -1);
+
+		if (!hostIeeeAddress.equals(host.getIEEEAddress())) {
+			throw new Exception("node with ieeeAddress=" + ieeeAddress + " must have an hostIeeeAddress equal to that of the defined host.");
+		}
 
 		NodeList enpointsList = nodeElement.getElementsByTagName("endpoints");
 		Node endpoints = enpointsList.item(0);
@@ -296,7 +299,6 @@ public class ConfigurationFileReader {
 
 		int[] inputClusters = simpleDescriptor.getInputClusters();
 
-		// FIXME: check if input <-> Server!!!
 		ZCLCluster[] serverClusters = new ZCLCluster[inputClusters.length];
 		for (int i = 0; i < inputClusters.length; i++) {
 			int clusterId = inputClusters[i];
@@ -309,9 +311,8 @@ public class ConfigurationFileReader {
 		}
 
 		int[] outputClusters = simpleDescriptor.getOutputClusters();
-		ZCLCluster[] clientClusters = new ZCLCluster[inputClusters.length];
+		ZCLCluster[] clientClusters = new ZCLCluster[outputClusters.length];
 
-		// FIXME: check if output <-> Client!!!
 		for (int i = 0; i < outputClusters.length; i++) {
 			int clusterId = outputClusters[i];
 

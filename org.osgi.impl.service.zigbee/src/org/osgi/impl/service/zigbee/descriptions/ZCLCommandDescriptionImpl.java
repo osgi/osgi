@@ -34,6 +34,7 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	private boolean						isServerSide;
 	private int							manufacturerCode;
 	private boolean						isCusterSpecificCommand;
+	private int							responseCommandId;
 
 	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory) {
 		this.id = id;
@@ -48,6 +49,7 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 		this.isServerSide = isServerSide;
 		this.manufacturerCode = manufacturerCode;
 		this.isCusterSpecificCommand = isClusterSpecific;
+		this.responseCommandId = responseId;
 	}
 
 	public int getId() {
@@ -84,5 +86,15 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 
 	public boolean isManufacturerSpecific() {
 		return manufacturerCode >= 0;
+	}
+
+	/**
+	 * This method returns the response command id or -1 if the command response
+	 * is the defaultResponse.
+	 * 
+	 * @return
+	 */
+	public int getResponseCommandId() {
+		return responseCommandId;
 	}
 }

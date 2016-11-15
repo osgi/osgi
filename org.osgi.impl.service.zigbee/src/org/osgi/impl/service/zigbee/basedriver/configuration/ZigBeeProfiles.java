@@ -91,9 +91,9 @@ public class ZigBeeProfiles {
 				Attributes attributes) throws SAXException {
 
 			if (qName.equalsIgnoreCase("profiles")) {
-
+				// not parsed
 			} else if (qName.equalsIgnoreCase("profile")) {
-
+				// do not contain relevant attributes
 			} else if (qName.equalsIgnoreCase("cluster")) {
 				this.clusterAttributes = getAttributes(attributes);
 
@@ -165,8 +165,11 @@ public class ZigBeeProfiles {
 				String qName) throws SAXException {
 
 			if (qName.equalsIgnoreCase("profiles")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("profile")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("cluster")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("server") || qName.equalsIgnoreCase("client")) {
 
 				ZCLAttributeDescriptionImpl[] attributes = new ZCLAttributeDescriptionImpl[attributeDescriptions.size()];
@@ -174,9 +177,15 @@ public class ZigBeeProfiles {
 					attributes[i] = (ZCLAttributeDescriptionImpl) attributeDescriptions.get(i);
 				}
 
-				attributeDescriptions.clear();
+				ZCLCommandDescriptionImpl[] commands = new ZCLCommandDescriptionImpl[commandDescriptions.size()];
+				for (int i = 0; i < commands.length; i++) {
+					commands[i] = (ZCLCommandDescriptionImpl) commandDescriptions.get(i);
+				}
 
-				ZCLClusterDescriptionImpl clusterDescription = new ZCLClusterDescriptionImpl(attributes, gobalClusterDescription);
+				attributeDescriptions.clear();
+				commandDescriptions.clear();
+
+				ZCLClusterDescriptionImpl clusterDescription = new ZCLClusterDescriptionImpl(attributes, commands, gobalClusterDescription, isServerSide);
 
 				if (isServerSide) {
 					gobalClusterDescription.setServerClusterDescription(clusterDescription);

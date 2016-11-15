@@ -31,6 +31,7 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 	private int			clusterId;
 	private int			attributeId;
 	private Object		value;
+	private short		dataType;
 
 	/**
 	 * @param ieeeAddress
@@ -39,11 +40,12 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 	 * @param attributeId
 	 * @param value
 	 */
-	public ZigBeeEventImpl(BigInteger ieeeAddress, short endpointId, int clusterId, int attributeId, Object value) {
+	public ZigBeeEventImpl(BigInteger ieeeAddress, short endpointId, int clusterId, int attributeId, short dataType, Object value) {
 		this.ieeeAddress = ieeeAddress;
 		this.endpointId = endpointId;
 		this.clusterId = clusterId;
 		this.attributeId = attributeId;
+		this.dataType = dataType;
 		this.value = value;
 	}
 

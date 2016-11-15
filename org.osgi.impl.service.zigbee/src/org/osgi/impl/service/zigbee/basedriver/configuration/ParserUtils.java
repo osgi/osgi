@@ -274,4 +274,64 @@ public class ParserUtils {
 
 		return Boolean.valueOf(attributeValue).booleanValue();
 	}
+
+	public static BigInteger getParameter(Map properties, String parameterName, boolean required, BigInteger defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing attribute " + parameterName);
+			}
+		} else if (value instanceof BigInteger) {
+			return (BigInteger) value;
+		} else {
+			throw new RuntimeException("expected a BigInteger, got " + value.getClass().getName());
+		}
+	}
+
+	public static int getParameter(Map properties, String parameterName, boolean required, int defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing attribute " + parameterName);
+			}
+		} else if (value instanceof Integer) {
+			return ((Integer) value).intValue();
+		} else {
+			throw new RuntimeException("expected a Integer parameter, got " + value.getClass().getName());
+		}
+	}
+
+	public static short getParameter(Map properties, String parameterName, boolean required, short defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing attribute " + parameterName);
+			}
+		} else if (value instanceof Short) {
+			return ((Short) value).shortValue();
+		} else {
+			throw new RuntimeException("expected a Integer parameter, got " + value.getClass().getName());
+		}
+	}
 }

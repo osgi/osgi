@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.osgi.impl.service.zigbee.descriptions.ZCLCommandDescriptionImpl;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
@@ -29,6 +30,7 @@ import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
@@ -40,15 +42,15 @@ import org.osgi.util.promise.Promises;
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private int							id;
 	private ZCLAttribute[]				attributes;
-	private int[]						commandIds;
 	private ZCLClusterDescription		description;
 	private ZCLAttributeDescription[]	attributeDescriptions;
 
 	private boolean						isServer;
 
 	private ZCLGlobalClusterDescription	global;
+
+	private boolean						forceFailure	= true;
 
 	public ZCLClusterImpl(ZCLGlobalClusterDescription global, boolean isServer) {
 
@@ -75,28 +77,22 @@ public class ZCLClusterImpl implements ZCLCluster {
 			return Promises.resolved(attribute);
 		}
 
-		// FIXME: CT must check type of returned value or exception
-		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE,
-				ZCLException.FAILURE,
-				"the AttributeId is not valid"));
+		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "the AttributeId is not valid"));
 	}
 
 	public Promise getAttributes() {
-		// FIXME: CT must check type of returned value or exception
 		return Promises.resolved(attributes);
 	}
 
 	public Promise getCommandIds() {
-		// FIXME: CT must check type of returned value or exception
-
-		// FIXME this implementation is wrong because the commands id are not
-		// here!
-
-		return Promises.resolved(this.commandIds.clone());
+		if (forceFailure) {
+			return Promises.failed(new ZCLException(ZCLException.GENERAL_COMMAND_NOT_SUPPORTED, ""));
+		}
+		return Promises.resolved(this.getCommandIdsArray());
 	}
 
 	public Promise readAttributes(ZCLAttributeInfo[] attributesInfoArray) {
-		// FIXME: CT must check type of returned value or exception
+
 		if (attributesInfoArray == null) {
 			return Promises.failed(new NullPointerException("attributes cannot be null"));
 		} else if (attributesInfoArray.length == 0) {
@@ -211,13 +207,29 @@ public class ZCLClusterImpl implements ZCLCluster {
 	}
 
 	public Promise invoke(ZCLFrame frame) {
-		// FIXME: implement this!
-		return Promises.resolved(frame);
+		if (frame == null) {
+			return Promises.failed(new NullPointerException("frame argument cannot be null"));
+		}
+
+		ZCLCommandDescription requestCommand = lookupReceivedCommand(frame.getHeader().getCommandId());
+		ZCLCommandDescription responseCommand = getResponseCommand(requestCommand);
+
+		return Promises.resolved(new UnsupportedOperationException("This method is still not supported."));
 	}
 
 	public Promise invoke(ZCLFrame frame, String exportedServicePID) {
-		// FIXME: implement this!
-		return Promises.resolved(frame);
+		if (frame == null) {
+			return Promises.failed(new NullPointerException("frame argument cannot be null"));
+		}
+
+		if (exportedServicePID == null) {
+			return Promises.failed(new NullPointerException("exportedServicePID argument cannot be null"));
+		}
+		if (exportedServicePID.length() == 0) {
+			return Promises.failed(new IllegalArgumentException("exportedServicePID argument cannot be an empty string"));
+		}
+
+		return Promises.resolved(new UnsupportedOperationException("This method is still not supported."));
 	}
 
 	public String toString() {
@@ -233,6 +245,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 		}
 
 		String commandIdsAsAString = null;
+
+		int[] commandIds = this.getCommandIdsArray();
 		if (commandIds != null) {
 			commandIdsAsAString = "[";
 			int i = 0;
@@ -243,7 +257,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 			commandIdsAsAString = commandIdsAsAString + "]";
 		}
 
-		return "" + this.getClass().getName() + "[id: " + id + ", attributes: " + attributesAsAString + ", commandIds: "
+		return "" + this.getClass().getName() + "[id: " + this.global.getClusterId() + ", attributes: " + attributesAsAString + ", commandIds: "
 				+ commandIdsAsAString + ", description: " + description + "]";
 	}
 
@@ -251,7 +265,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 		if (code == -1) {
 			return getAttribute(attributeId);
 		}
-		return Promises.failed(new UnsupportedOperationException("getAttribute:Please implement it"));
+
+		return Promises.failed(new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "the AttributeId is not valid"));
 	}
 
 	public Promise getAttributes(int code) {
@@ -306,5 +321,60 @@ public class ZCLClusterImpl implements ZCLCluster {
 			}
 		}
 		return null;
+	}
+
+	private ZCLCommandDescription lookupReceivedCommand(int commandId) {
+		ZCLClusterDescription clusterDescription;
+		if (isServer) {
+			clusterDescription = global.getServerClusterDescription();
+		} else {
+			clusterDescription = global.getClientClusterDescription();
+		}
+		ZCLCommandDescription[] receivedCommandsDescriptions = clusterDescription.getReceivedCommandDescriptions();
+		for (int i = 0; i < receivedCommandsDescriptions.length; i++) {
+			if (commandId == receivedCommandsDescriptions[i].getId()) {
+				return receivedCommandsDescriptions[i];
+			}
+		}
+		return null;
+	}
+
+	public ZCLCommandDescription getResponseCommand(ZCLCommandDescription requestCommand) {
+		/*
+		 * Gets all the commands received by the client side of the cluster.
+		 * Then locates the response command.
+		 */
+
+		ZCLCommandDescription[] responsesCommandDescriptions;
+
+		if (isServer) {
+			responsesCommandDescriptions = global.getClientClusterDescription().getReceivedCommandDescriptions();
+		} else {
+			responsesCommandDescriptions = global.getServerClusterDescription().getReceivedCommandDescriptions();
+		}
+
+		for (int i = 0; i < responsesCommandDescriptions.length; i++) {
+			int responseCommandId = ((ZCLCommandDescriptionImpl) requestCommand).getResponseCommandId();
+			if (responsesCommandDescriptions[i].getId() == responseCommandId) {
+				return responsesCommandDescriptions[i];
+			}
+		}
+
+		return null;
+	}
+
+	public int[] getCommandIdsArray() {
+		ZCLCommandDescription[] commandDescriptions;
+		if (isServer) {
+			commandDescriptions = global.getServerClusterDescription().getReceivedCommandDescriptions();
+		} else {
+			commandDescriptions = global.getServerClusterDescription().getReceivedCommandDescriptions();
+		}
+
+		int[] commandIds = new int[commandDescriptions.length];
+		for (int i = 0; i < commandDescriptions.length; i++) {
+			commandIds[i] = commandDescriptions[i].getId();
+		}
+		return commandIds;
 	}
 }

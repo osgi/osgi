@@ -76,7 +76,7 @@ public class TestStepForZigBeeImpl implements TestStep {
 			return "success";
 
 		} else if (stepId.equals(EVENT_REPORTABLE)) {
-			baseDriver.startReportableEventing();
+
 		}
 
 		Logger.e(TAG, "The given command is UNKNOWN.");

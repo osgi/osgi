@@ -16,81 +16,80 @@
 
 package org.osgi.impl.service.zigbee.util.teststep;
 
-import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.zigbee.basedriver.RegistratonInfo;
+import org.osgi.impl.service.zigbee.basedriver.configuration.ParserUtils;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZigBeeEvent;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Mocked test event source.
+ * When start() is issued generates ZigBeeEvents and send them to the listener.
  * 
  * @author $Id$
  */
 public class ZigBeeEventSourceImpl implements Runnable {
 
-	private static final String	TAG	= ZigBeeEventSourceImpl.class.getName();
+	private static final String	TAG		= ZigBeeEventSourceImpl.class.getName();
 
-	private BundleContext		bc;
-	private ZigBeeEvent			zigbeeEvent;
+	private ZigBeeEvent			event;
 	private Thread				thread;
-	private ServiceTracker		serviceTracker;
+	private RegistratonInfo		registrationInfo;
 
-	/**
-	 * @param bc
-	 * @param zigbeeEvent
-	 */
-	public ZigBeeEventSourceImpl(BundleContext bc, ZigBeeEvent zigbeeEvent) {
-		this.bc = bc;
-		this.zigbeeEvent = zigbeeEvent;
+	private int					maxReportInterval;
+
+	private boolean				exit	= false;
+
+	public ZigBeeEventSourceImpl(RegistratonInfo registrationInfo, ZigBeeEvent event) {
+		this.registrationInfo = registrationInfo;
+		this.event = event;
+
+		maxReportInterval = ParserUtils.getParameter(registrationInfo.properties, ZCLEventListener.MAX_REPORT_INTERVAL, ParserUtils.OPTIONAL, 0);
 	}
 
 	/**
 	 * Launch this testEventSource.
 	 */
 	public void start() {
-		Logger.d(TAG, "start");
-		serviceTracker = new ServiceTracker(bc,
-				ZCLEventListener.class.getName(),
-				null);
-		serviceTracker.open();
-		thread = new Thread(this, ZigBeeEventSourceImpl.class.getName()
-				+ " - Whiteboard");
+		Logger.d(TAG, "start ZigBeeEvents source.");
+		thread = new Thread(this);
 		thread.start();
+	}
+
+	public void update() {
+		Logger.d(TAG, "update ZigBeeEvents source.");
+		maxReportInterval = ParserUtils.getParameter(registrationInfo.properties, ZCLEventListener.MAX_REPORT_INTERVAL, ParserUtils.OPTIONAL, 0);
+		if (thread != null) {
+			exit = false;
+			thread.interrupt();
+		}
 	}
 
 	/**
 	 * Terminate this testEventSource.
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void stop() {
-		Logger.d(TAG, "stop.");
-		serviceTracker.close();
-		thread = null;
+	public void stop() throws InterruptedException {
+		Logger.d(TAG, "stop ZigBeeEvents source.");
+		if (thread != null) {
+			exit = true;
+			this.thread.interrupt();
+			this.thread.join(10000);
+		}
 	}
 
 	public synchronized void run() {
-		Logger.d(TAG, "run");
-		Thread current = Thread.currentThread();
-		int n = 0;
-		while (current == thread) {
-			Object[] listeners = serviceTracker.getServices();
-
-			if (listeners != null && listeners.length > 0) {
-				if (n >= listeners.length) {
-					n = 0;
-				}
-				ZCLEventListener aZCLEventListener = (ZCLEventListener) listeners[n++];
-
-				Logger.d(TAG, "is sending the following event: " + zigbeeEvent);
-
-				aZCLEventListener.notifyEvent(zigbeeEvent);
-			}
+		while (!exit) {
+			this.registrationInfo.eventListener.notifyEvent(event);
 			try {
-				int waitinms = 1000;
-				Logger.d(TAG, "wait(" + waitinms + ")");
-				wait(waitinms);
+				if (Thread.interrupted() && exit) {
+					return;
+				}
+				Thread.sleep(maxReportInterval * 1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				if (exit) {
+					return;
+				}
 			}
 		}
 	}

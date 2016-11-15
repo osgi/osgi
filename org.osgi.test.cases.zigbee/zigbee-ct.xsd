@@ -45,8 +45,6 @@
           <xs:attribute type="xs:int" name="profileId" use="required" />
           <xs:attribute type="xs:string" name="inputClusters" use="required" />
           <xs:attribute type="xs:string" name="outputClusters" use="required" />
-          <xs:attribute type="xs:unsignedInt" name="inputClustersNumber" use="required" />
-          <xs:attribute type="xs:unsignedInt" name="outputClustersNumber" use="required" />
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
@@ -73,6 +71,8 @@
         <xs:element ref="zb:clusters" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
       <xs:attribute type="xs:unsignedShort" name="id" />
+      <xs:attribute type="xs:unsignedInt" name="inputClustersNumber" use="required" />
+      <xs:attribute type="xs:unsignedInt" name="outputClustersNumber" use="required" />
     </xs:complexType>
   </xs:element>
 
@@ -133,7 +133,7 @@
         <xs:element ref="zb:endpoints" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
       <xs:attribute type="xs:unsignedLong" name="ieeeAddress" use="required" />
-      <xs:attribute type="xs:unsignedShort" name="hostPanId" use="required" />
+      <xs:attribute type="xs:unsignedLong" name="hostIeeeAddress" use="required" />
       <xs:attribute type="xs:string" name="userDescription" use="required" />
       <xs:attribute type="xs:unsignedInt" name="activeEndpointsNumber" use="required" />
     </xs:complexType>
@@ -144,7 +144,6 @@
       <xs:sequence>
         <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
-      <xs:attribute type="xs:string" name="pid" use="required" />
       <xs:attribute type="xs:unsignedShort" name="panId" use="required" />
       <xs:attribute type="xs:unsignedShort" name="channel" use="required" />
       <xs:attribute type="xs:unsignedByte" name="securityLevel" use="required" />
@@ -170,28 +169,27 @@
     <xs:attribute type="xs:unsignedInt" name="headerMinSize" use="required" />
     <xs:attribute type="xs:unsignedInt" name="headerMaxSize" use="required" />
   </xs:element>
-</xs:schema>
 
-<xs:element name="configuration">
-  <xs:annotation>
-    <xs:documentation>
-      This configuration file describes the ZigBee device that the tester is going
-      to use to run the CT against a
-      RI. It must be filled properly, according to the ZigBee
-      devices that will be actually used for the compliant tests. This
-      template version is useful
-      to understand how to fill all the required information.
-      Keep in mind that the tests will fail
-      if
-      this file is not provided or properly filled. Timeouts are expressed in milliseconds.
-    </xs:documentation>
-  </xs:annotation>
-  <xs:complexType>
-    <xs:sequence>
-      <xs:element ref="zb:host" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
-      <xs:element ref="zb:nodes" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
-      <xs:element ref="zb:frame" xmlns:zb="http://org.osgi/zigbee-ct" />
-    </xs:sequence>
-  </xs:complexType>
-</xs:element>
+  <xs:element name="configuration">
+    <xs:annotation>
+      <xs:documentation>
+        This configuration file describes the ZigBee device that the tester is going
+        to use to run the CT against a
+        RI. It must be filled properly, according to the ZigBee
+        devices that will be actually used for the compliant tests. This
+        template version is useful
+        to understand how to fill all the required information.
+        Keep in mind that the tests will fail
+        if
+        this file is not provided or properly filled. Timeouts are expressed in milliseconds.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="zb:frame" xmlns:zb="http://org.osgi/zigbee-ct" />
+        <xs:element ref="zb:host" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="zb:nodes" xmlns:zb="http://org.osgi/zigbee-ct" minOccurs="1" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -26,25 +26,16 @@ import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
  */
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 
-	private ZCLGlobalClusterDescription	global;
-	private ZCLAttributeDescription[]	attributeDescriptions;
+	private ZCLGlobalClusterDescription		global;
+	private boolean							isServer;
+	private ZCLAttributeDescriptionImpl[]	attributeDescriptions;
+	private ZCLCommandDescription[]			commandDescriptions;
 
-	/**
-	 * 
-	 * @param id
-	 * @param attributesDescriptions
-	 * @param global
-	 * @deprecated because the id can be read from the global cluster
-	 *             description.
-	 */
-	public ZCLClusterDescriptionImpl(int id, ZCLAttributeDescription[] attributesDescriptions, ZCLGlobalClusterDescription global) {
-		this.attributeDescriptions = attributesDescriptions;
+	public ZCLClusterDescriptionImpl(ZCLAttributeDescriptionImpl[] attributeDescriptions, ZCLCommandDescription[] commandDescriptions, ZCLGlobalClusterDescription global, boolean isServer) {
 		this.global = global;
-	}
-
-	public ZCLClusterDescriptionImpl(ZCLAttributeDescription[] attributesDescriptions, ZCLGlobalClusterDescription global) {
-		this.attributeDescriptions = attributesDescriptions;
-		this.global = global;
+		this.isServer = isServer;
+		this.attributeDescriptions = attributeDescriptions;
+		this.commandDescriptions = commandDescriptions;
 	}
 
 	public int getId() {
@@ -55,20 +46,12 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 		return global;
 	}
 
-	/**
-	 * FIXME retrieve from the global....
-	 */
-
 	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
-		return null;
+		return commandDescriptions;
 	}
 
-	/**
-	 * FIXME retrieve from the global....
-	 */
-
 	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public ZCLAttributeDescription[] getAttributeDescriptions() {

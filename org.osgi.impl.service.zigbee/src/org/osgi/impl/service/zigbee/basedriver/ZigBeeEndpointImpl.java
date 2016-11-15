@@ -53,7 +53,6 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public Promise getSimpleDescriptor() {
-		// FIXME: check if CT checks returned value
 		return Promises.resolved(simpleDescriptor);
 	}
 
@@ -77,10 +76,6 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs;
 	}
 
-	/*
-	 * FIXME: decide whether to have it true or false. The spec states that have
-	 * to be false!
-	 */
 	private boolean checkParameter = false;
 
 	public ZCLCluster getClientCluster(int clusterId) {
@@ -94,11 +89,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 				return outputs[i];
 			}
 		}
-		if (checkParameter) {
-			return null;
-		} else {
-			throw new IllegalArgumentException("Client side cluster " + clusterId + " is not available in the endpoint.");
-		}
+
+		return null;
 	}
 
 	public ZCLCluster[] getServerClusters() {
