@@ -37,6 +37,7 @@ javac.profile           = compact1
 -sourcepath             = ${project}/${src}
 
 mainrepo                = ${build}/repo
+centralrepo             = https://repo.maven.apache.org/maven2/
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 
@@ -48,6 +49,11 @@ releaserepo             = ${build}/${target-dir}/repo
             name='Licensed'; \
             location="${licensedrepo}"; \
             readonly=true, \
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            releaseUrl="${centralrepo}";\
+            index=${.}/central.mvn;\
+            name='Central';\
+            readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             name='Local',\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
