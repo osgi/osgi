@@ -9,7 +9,7 @@ Import-Package: ${-signaturetest}, *
 -buildpath							= \
     org.osgi.test.support;          version=project , \
     org.osgi.service.tr069todmt;    version=project , \
-    osgi.residential;               version=4.3, \
+    osgi.cmpn;               version=4.3.1, \
     osgi.core;                      version=4.3.1	, \
     ${junit}
 

@@ -8,4 +8,4 @@ Private-Package		= ${p}.*
 -buildpath			= \
 	org.osgi.service.dmt;		version=project	, \
 	osgi.core;					version=4.3.1 , \
-	osgi.residential;			version=4.3
+	osgi.cmpn;			version=4.3.1
