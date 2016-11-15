@@ -97,11 +97,11 @@ build.version				= ${osgi.version}.${project.build}
 # Documentation
 -groupid: org.osgi
 Bundle-Copyright: ${copyright}
-Bundle-Vendor:    OSGi Alliance http://www.osgi.org/
+Bundle-Vendor:    OSGi Alliance https://www.osgi.org/
 # Uncomment the following line to build the non-snapshot version.
 #-snapshot:
 Bundle-Version:   ${build.version}-SNAPSHOT
-Bundle-DocURL:    http://www.osgi.org/
+Bundle-DocURL:    https://www.osgi.org/
 Git-Descriptor:   ${system-allow-fail;git describe --dirty --always}
 Git-SHA:          ${system-allow-fail;git rev-list -1 HEAD}
 Bundle-SCM:       url=https://osgi.org/gitweb/build.git, \
@@ -112,7 +112,7 @@ Bundle-Developers: osgi; \
                   email=info@osgi.org; \
                   name="OSGi Alliance"; \
                   organization="OSGi Alliance"; \
-                  organizationUrl=https://www.osgi.org
+                  organizationUrl=https://www.osgi.org/
 
 -removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
