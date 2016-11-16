@@ -108,7 +108,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	private void prepareTestStart() throws Exception {
 		TestStepLauncher launcher = TestStepLauncher.launch(getContext());
-		conf = launcher.getConfReader();
+		conf = launcher.getConfiguration();
 		minHeaderSize = conf.getHeaderMinSize();
 		maxHeaderSize = conf.getHeaderMaxSize();
 

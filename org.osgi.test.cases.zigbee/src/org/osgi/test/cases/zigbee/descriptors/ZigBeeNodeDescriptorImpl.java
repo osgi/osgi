@@ -36,11 +36,11 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	private boolean				isComplexDescriptorAvailable;
 	private boolean				isUserDescriptorAvailable;
 
-	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufCode, int maxBufSize, boolean isComplexAvailable, boolean isUserAvailable) {
+	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufacturerCode, int maxBufferSize, boolean isComplexAvailable, boolean isUserAvailable) {
 		this.logicalType = logicalType;
 		this.frequencyBand = new ZigBeeFrequencyBandImpl(band);
-		this.manufacturerCode = manufCode;
-		this.maxBufferSize = maxBufSize;
+		this.manufacturerCode = manufacturerCode;
+		this.maxBufferSize = maxBufferSize;
 		this.isComplexDescriptorAvailable = isComplexAvailable;
 		this.isUserDescriptorAvailable = isUserAvailable;
 	}

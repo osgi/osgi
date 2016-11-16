@@ -18,116 +18,380 @@ package org.osgi.test.cases.zigbee;
 
 import java.math.BigInteger;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Properties;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.device.Constants;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLEventListener;
+import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeHost;
+import org.osgi.service.zigbee.ZigBeeLinkQuality;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.ZigBeeRoute;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.test.cases.zigbee.config.file.AttributeCoordinates;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
+import org.osgi.test.cases.zigbee.config.file.ZigBeeHostConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
+import org.osgi.test.cases.zigbee.configuration.ParserUtils;
+import org.osgi.test.cases.zigbee.mock.StreamQueue;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
-import org.osgi.test.support.step.TestStepProxy;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Contain the ZigBee testcases.
+ * Contains the ZigBee testcases related to the control of the status of the
+ * service. They are testing the ZigBeeHost start() and stop() methods, and if
+ * after a restart of the ZigBee network the services registered have the same
+ * properties.
  * 
  * @author $Id$
  */
 public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
-	private static final String	TAG	= ZigBeeControlTestCase.class.getName();
-
-	private TestStepLauncher	launcher;
+	private static final String TAG = ZigBeeControlTestCase.class.getName();
 
 	/**
-	 * Timeout used for the timing out all the methods belonging to the
-	 * ZigBeeHost, ZigBeeNode, ZigBeeEndpoint, ZigBeeCluster interfaces, that
-	 * are also returning a Promise.
+	 * Tests any registered ZigBeeNode services. For those services that are
+	 * also defined in the CT configuration file more deeper checks are issued.
+	 * 
+	 * @throws Exception
 	 */
-	public static int			INVOKE_TIMEOUT;;
+	public void testZigBeeServices() throws Exception {
+		log(TAG, "test ZigBeeNodes and ZigBeeHost service methods and service properties");
 
-	/**
-	 * Timeout used to wait for a ZigBeeNode or a ZigBeeEndpoint to be seen in
-	 * the OSGi framework as a service. This constant is read from the
-	 * configuration file provided by the RI.
-	 */
-	public static int			DISCOVERY_TIMEOUT;
+		ZigBeeHostConfig hostConfig = conf.getZigBeeHost();
+		Thread.sleep(DISCOVERY_TIMEOUT);
 
-	ConfigurationFileReader		conf;
+		ServiceReference hostServiceRef = getContext().getServiceReference(ZigBeeHost.class.getName());
+		assertNotNull("the ZigBeeHost service was not found registered within the configured discovery timeout");
 
-	protected void setUp() throws Exception {
-		log(TAG, "Prepare for ZigBee Test Case");
+		ZigBeeHost host = (ZigBeeHost) getContext().getService(hostServiceRef);
 
-		prepareTestStart();
-		log(TAG, "Prepared for ZigBee Test Case");
-	}
-
-	protected void tearDown() throws Exception {
-		log(TAG, "Tear down ZigBee Test Case");
-	}
-
-	private void prepareTestStart() throws Exception {
-		launcher = TestStepLauncher.launch(getContext());
-		conf = launcher.getConfReader();
+		ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
 
 		/*
-		 * Initialize timeout constants relevant for the CT with the values read
-		 * from the ZigBee configuration file.
+		 * First of all we check the ZigBeeNode services.
 		 */
-		INVOKE_TIMEOUT = conf.getInvokeTimeout();
-		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
+		for (int i = 0; i < sRefs.length; i++) {
+			ServiceReference sRef = sRefs[i];
+			Map serviceProperties = getProperties(sRef);
+			ZigBeeNode node = (ZigBeeNode) getContext().getService(sRef);
+
+			ZigBeeNodeConfig nodeConfig = conf.getNodeConfig(node.getIEEEAddress());
+			_testZigBeeNode(host, node, serviceProperties, nodeConfig);
+			getContext().ungetService(sRef);
+		}
+
+		/*
+		 * Check the registered ZigBeeHost service.
+		 */
+
+		Map serviceProperties = getProperties(hostServiceRef);
+		_testZigBeeHost(host, serviceProperties, hostConfig, sRefs);
 	}
 
 	/**
-	 * Tests related to Node Discovery. We expect that a ZigBeeNode service
-	 * configured in the ZigBee CT configuration file is registered within a
-	 * specified timeout. Some checks about the ZigBeeNode service properties
-	 * are performed as well.
+	 * Test a ZigBeeHost service. It performs any cross check that it is
+	 * possible to do with the provided information. In particular:
+	 * <ul>
+	 * <li>If the hostConfig (that is the node ZigBeeHostConfig object created
+	 * by reading the CT configuration file, its content is compared with the
+	 * ZigBee host values returned by the ZigBeeHost interface methods.
+	 * <li>Compares the ZigBeeHost service properties with the information
+	 * retrieved by the ZigBeeHost interface methods.
+	 * </ul>
 	 * 
-	 * @throws Exception In case of failure of the this test case.
-	 * 
+	 * @throws Exception In case of unexpected exceptions.
 	 */
-	public void testNodeDiscovery() throws Exception {
-		log(TAG, "testNodeDiscovery");
+	private void _testZigBeeHost(ZigBeeHost host, Map serviceProperties, ZigBeeHostConfig hostConfig, ServiceReference[] nodesServiceReferences) throws Exception {
+		log(TAG, "test ZigBeeHost service and service properties of ZigBeeHost " + host.getIEEEAddress());
 
-		// get the endpoint values in the conf file
-		ZigBeeNodeConfig nodeConfig = conf.getFirstNode();
+		String name = "ZigBeeHost";
+		String context = name + ".getNodeDescriptor()";
 
-		ZigBeeEndpointConfig endpointConf = conf.getEnpoints(nodeConfig)[0];
+		log(TAG, "testing " + context);
 
-		ZigBeeNode node = waitForZigBeeNodeService(nodeConfig, DISCOVERY_TIMEOUT);
+		Promise p = host.getNodeDescriptor();
+		waitForPromise(p, INVOKE_TIMEOUT);
 
+		ZigBeeNodeDescriptor nodeDesc = null;
+
+		if (p.getFailure() == null) {
+			nodeDesc = (ZigBeeNodeDescriptor) assertPromiseValueClass(p, ZigBeeNodeDescriptor.class);
+			assertNotNull(context + ": cannot return null", nodeDesc);
+
+			if (hostConfig != null) {
+				this.checkNodeDescriptor(hostConfig.getNodeDescriptor(), nodeDesc);
+			}
+		} else {
+			fail(context + ": failure in retrieving the ZigBeeNodeDescriptor", p.getFailure());
+		}
+
+		context = name + ".setUserDescription()";
+
+		log(TAG, "testing " + context);
+
+		String expectedDescription = "my user descriptor";
+
+		p = host.setUserDescription(expectedDescription);
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				fail(context + ": ZigBeeNodeDescriptor states that the UserDescriptor must not be available, so we expects the promise to fail.");
+			}
+
+			assertNull(context + ": a successful user description set requires the promise to resolve to null", p.getValue());
+		} else {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
+		}
+
+		/*
+		 * If the UserDescriptor is supported, then tries to retrieve the
+		 * current value and compare it with the value set above.
+		 */
+
+		context = name + ".getUserDescription()";
+		log(TAG, "testing " + context);
+
+		p = host.getUserDescription();
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				fail(context + ": ZigBeeNodeDescriptor states that the UserDescriptor must not be available, so we expects the promise to fail.");
+			}
+
+			String userDescription = (String) assertPromiseValueClass(p, String.class);
+
+			assertNotNull(context + ": cannot return null.", userDescription);
+			assertEquals("user description mismatch", expectedDescription, userDescription);
+		} else {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
+		}
+
+		context = name + ".getPowerDescriptor()";
+
+		log(TAG, "testing " + context);
+
+		ZigBeePowerDescriptor powerDesc = null;
+		p = host.getPowerDescriptor();
+		waitForPromise(p, INVOKE_TIMEOUT);
+		if (p.getFailure() == null) {
+			powerDesc = (ZigBeePowerDescriptor) assertPromiseValueClass(p, ZigBeePowerDescriptor.class);
+			assertNotNull(context + " cannot return null", powerDesc);
+		} else {
+			fail(context + ": an exeption is not expected here", p.getFailure());
+		}
+
+		context = name + ".getComplexDescriptor()";
+
+		log(TAG, "testing " + context);
+
+		p = host.getComplexDescriptor();
+		waitForPromise(p, INVOKE_TIMEOUT);
+		ZigBeeComplexDescriptor complexDesc = null;
+
+		if (p.getFailure() == null) {
+			if (!nodeDesc.isComplexDescriptorAvailable()) {
+				fail(context + ": ZigBeeNodeDescriptor states that the ComplexDescriptor must not be available, so we expects the promise to fail.");
+			}
+
+			complexDesc = (ZigBeeComplexDescriptor) assertPromiseValueClass(p, ZigBeeComplexDescriptor.class);
+			assertNotNull(context + ": the descriptor cannot be null", complexDesc);
+		} else {
+			if (!nodeDesc.isComplexDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
+		}
+
+		context = name + ".getLinksQuality()";
+
+		log(TAG, "testing " + context);
+
+		p = host.getLinksQuality();
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			Map linksQualityMap = (Map) assertPromiseValueClass(p, Map.class);
+			assertNotNull(context + ": cannot return null", linksQualityMap);
+			assertMapContent(context, linksQualityMap, String.class, ZigBeeLinkQuality.class, -1);
+		} else {
+			assertPromiseZDPException(p, context + ": if not available, the promise must fail with a different error code", ZDPException.NOT_SUPPORTED);
+		}
+
+		p = host.getRoutingTable();
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		context = name + ".getRoutingTable()";
+
+		if (p.getFailure() == null) {
+			Map routingTable = (Map) assertPromiseValueClass(p, Map.class);
+			assertNotNull(context + ": cannot return null", routingTable);
+			assertMapContent(context, routingTable, String.class, ZigBeeRoute.class, -1);
+
+		} else {
+			assertPromiseZDPException(p, context + ": if not available, the promise must fail with a different error code", ZDPException.NOT_SUPPORTED);
+		}
+
+		context = name + ".getIEEEAddress()";
+		log(TAG, "testing " + context);
+		BigInteger ieeeAddress = host.getIEEEAddress();
+
+		assertNotNull(context + ": cannot return null", ieeeAddress);
+		assertEquals(context + ": returned IEEEAddress differs from the CT configuration one", ieeeAddress, hostConfig.getIEEEAddress());
+
+		context = name + ".getExtendedPanId()";
+		log(TAG, "testing " + context);
+		BigInteger extendedPanId = host.getExtendedPanId();
+		assertNotNull(context + ": cannot return null", extendedPanId);
+
+		context = name + ".getHostPid()";
+		log(TAG, "testing " + context);
+		String hostPid = host.getHostPid();
+
+		assertNotNull(context + ": cannot return null", hostPid);
+
+		context = name + ".getPanId()";
+		log(TAG, "testing " + context);
+		int panId = host.getPanId();
+		if (panId < 0 || panId > 0xffff) {
+			fail(context + ": panId must be in the range [0, 0xffff]");
+		}
+
+		/*
+		 * Checks the ZigBeeHost service properties.
+		 */
+		context = "ZigBeeHost serviceProperties";
+
+		log(context + ": checking service properties of node " + host.getIEEEAddress());
+
+		ieeeAddress = (BigInteger) getParameterChecked(context, serviceProperties, ZigBeeNode.IEEE_ADDRESS, ParserUtils.MANDATORY, BigInteger.class);
+		Short logicalType = (Short) getParameterChecked(context, serviceProperties, ZigBeeNode.LOGICAL_TYPE, ParserUtils.MANDATORY, Short.class);
+		Integer manufacturerCode = (Integer) getParameterChecked(context, serviceProperties, ZigBeeNode.MANUFACTURER_CODE, ParserUtils.MANDATORY, Integer.class);
+		Boolean receiverOnWhenIdle = (Boolean) getParameterChecked(context, serviceProperties, ZigBeeNode.RECEIVER_ON_WHEN_IDLE, ParserUtils.MANDATORY, Boolean.class);
+
+		Integer panIdProperty = (Integer) getParameterChecked(context, serviceProperties, ZigBeeNode.PAN_ID, ParserUtils.OPTIONAL, Integer.class);
+		extendedPanId = (BigInteger) getParameterChecked(context, serviceProperties, ZigBeeNode.EXTENDED_PAN_ID, ParserUtils.OPTIONAL, BigInteger.class);
+
+		if (panIdProperty == null && extendedPanId == null) {
+			/**
+			 * We need one of them or both.
+			 */
+
+			fail(context + ": ZigBeeNode.PAN_ID or ZigBeeNode.EXTENDED_PAN_ID have to be present.");
+		}
+
+		assertEquals(context + ": mismatch with ZigBeeHost.getIEEEAddress()", host.getIEEEAddress(), ieeeAddress);
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getLogicalType()", nodeDesc.getLogicalType(), logicalType.shortValue());
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getManufacturerCode()", nodeDesc.getManufacturerCode(), manufacturerCode.intValue());
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()",
+				nodeDesc.getMacCapabilityFlags().isReceiverOnWhenIdle(),
+				receiverOnWhenIdle.booleanValue());
+
+		if (panId != -1) {
+			assertEquals(context + ": mismatch with ZigBeeNode.getPanId()", panIdProperty.intValue(), host.getPanId());
+		}
+
+		if (extendedPanId != null) {
+			assertEquals(context + ": mismatch with ZigBeeNode.getExtendedPanId()", extendedPanId, host.getExtendedPanId());
+		}
+
+		/*
+		 * Check the DEVICE_CATEGORY service property.
+		 */
+
+		String deviceCategory = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_CATEGORY, ParserUtils.MANDATORY, String.class);
+		assertEquals(context + ": " + Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY, deviceCategory);
+
+		if (nodeDesc.isComplexDescriptorAvailable() && complexDesc != null) {
+			/*
+			 * Check the presence of the DEVICE_SERIAL and DEVICE_DESCRIPTION
+			 * properties.
+			 */
+
+			String serialNumber = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_SERIAL, ParserUtils.OPTIONAL, String.class);
+			assertNotNull(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_SERIAL service property is mandatory", serialNumber);
+			assertEquals(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_SERIAL property must match its SerialNumber", complexDesc.getSerialNumber(), serialNumber);
+
+			String description = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_SERIAL, ParserUtils.OPTIONAL, String.class);
+			assertNotNull(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_DESCRIPTION service property is mandatory", description);
+			assertEquals(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_DESCRIPTION property must match its SerialNumber", complexDesc.getModelName(), description);
+		}
+	}
+
+	/**
+	 * Test a ZigBeeNode service. It performs any cross check that it is
+	 * possible to do with the provided information. In particular:
+	 * <ul>
+	 * <li>If the nodeConfig (that is the node ZigBeeNodeConfig object created
+	 * by reading the CT configuration file, its content is compared with the
+	 * ZigBee node values returned by the ZigBeeNode interface methods.
+	 * <li>Compares the ZigBeeNode service properties with the information
+	 * retrieved by the ZigBeeNode interface methods.
+	 * </ul>
+	 * 
+	 * @throws Exception In case of unexpected exceptions.
+	 */
+	public void _testZigBeeNode(ZigBeeHost host, ZigBeeNode node, Map serviceProperties, ZigBeeNodeConfig nodeConfig) throws Exception {
+		log(TAG, "test ZigBeeNode service methods and service properties for ZigBeeNode " + node.getIEEEAddress());
+
+		String name = "ZigBeeNode";
 		/*
 		 * The ZigBeeNode services comes along with the expected number of
 		 * ZigBeeEndpoint services?
 		 */
-		int expectedZigBeeEndpointNumber = nodeConfig.getActualEndpointsNumber();
+		if (nodeConfig != null) {
+			int expectedZigBeeEndpointNumber = nodeConfig.getActualEndpointsNumber();
 
-		int registeredZigBeeEndpointsNumber = getZigBeeEndpointsNumber(nodeConfig.getIEEEAddress());
-		assertEquals(
-				"The number of registered endpoints by the baseDriver is not the same as declared in the configuration file for the node with IEEE Address:"
-						+ nodeConfig.getIEEEAddress(),
-				expectedZigBeeEndpointNumber,
-				registeredZigBeeEndpointsNumber);
+			int registeredZigBeeEndpointsNumber = getZigBeeEndpointsNumber(nodeConfig.getIEEEAddress());
+			assertEquals(
+					"The number of registered endpoints by the baseDriver is not the same as declared in the configuration file for the node with IEEE Address:"
+							+ nodeConfig.getIEEEAddress(),
+					expectedZigBeeEndpointNumber,
+					registeredZigBeeEndpointsNumber);
+		}
+
+		String context = name + ".getNodeDescriptor()";
+
+		log(TAG, "testing " + context);
 
 		Promise p = node.getNodeDescriptor();
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -136,69 +400,247 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 		if (p.getFailure() == null) {
 			nodeDesc = (ZigBeeNodeDescriptor) assertPromiseValueClass(p, ZigBeeNodeDescriptor.class);
-			assertNotNull("ZigBeeNodeDescriptor cannot be null", nodeDesc);
+			assertNotNull(context + ": cannot return null", nodeDesc);
 
-			this.checkNodeDescriptor(nodeConfig.getNodeDescriptor(), nodeDesc);
+			if (nodeConfig != null) {
+				this.checkNodeDescriptor(nodeConfig.getNodeDescriptor(), nodeDesc);
+			}
 		} else {
-			// FIXME: check for possible errors.
-			fail("unable to retrieve the ZigBeeNodeDescriptor");
+			fail(context + ": failure in retrieving the ZigBeeNodeDescriptor", p.getFailure());
 		}
 
-		String expectedUserDesc = nodeConfig.getUserDescription();
+		context = name + ".setUserDescription()";
+
+		log(TAG, "testing " + context);
+
+		String expectedDescription = "my user descriptor";
+
+		p = node.setUserDescription(expectedDescription);
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				fail(context + ": ZigBeeNodeDescriptor states that the UserDescriptor must not be available, so we expects the promise to fail.");
+			}
+
+			assertNull(context + ": a successful user description set requires the promise to resolve to null", p.getValue());
+		} else {
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
+		}
+
+		/*
+		 * If the UserDescriptor is supported, then tries to retrieve the
+		 * current value and compare it with the value set above.
+		 */
+
+		context = name + ".getUserDescription()";
+		log(TAG, "testing " + context);
 
 		p = node.getUserDescription();
 		waitForPromise(p, INVOKE_TIMEOUT);
 
 		if (p.getFailure() == null) {
 			if (!nodeDesc.isUserDescriptorAvailable()) {
-				fail("ZigBeeNodeDescriptor states that the UserDescription must not be available.");
+				fail(context + ": ZigBeeNodeDescriptor states that the UserDescriptor must not be available, so we expects the promise to fail.");
 			}
 
 			String userDescription = (String) assertPromiseValueClass(p, String.class);
 
-			// TODO: check if user description may be null.
-			assertNotNull("ZigbeeNode.getUserDescription() cannot return null.", userDescription);
-			assertEquals("user description mismatch", expectedUserDesc, userDescription);
+			assertNotNull(context + ": cannot return null.", userDescription);
+			assertEquals("user description mismatch", expectedDescription, userDescription);
 		} else {
-			// FIXME: check for possible errors.
+			if (!nodeDesc.isUserDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
 		}
+
+		context = name + ".getPowerDescriptor()";
+
+		log(TAG, "testing " + context);
 
 		p = node.getPowerDescriptor();
 		waitForPromise(p, INVOKE_TIMEOUT);
-
 		if (p.getFailure() == null) {
 			ZigBeePowerDescriptor powerDesc = (ZigBeePowerDescriptor) assertPromiseValueClass(p, ZigBeePowerDescriptor.class);
-			assertNotNull("ZigBeePowerDescriptor cannot be null", powerDesc);
+			assertNotNull(context + " cannot return null", powerDesc);
 
 			/*
 			 * Checks if the returned ZigBeePowerDescriptor matches the expected
 			 * one.
 			 */
-			ZigBeePowerDescriptor expectedPowerDesc = nodeConfig.getPowerDescriptor();
-			this.checkPowerDescriptor(expectedPowerDesc, powerDesc);
+			if (nodeConfig != null) {
+				ZigBeePowerDescriptor expectedPowerDesc = nodeConfig.getPowerDescriptor();
+				this.checkPowerDescriptor(expectedPowerDesc, powerDesc);
+			}
 		} else {
-			// FIXME: check for possible errors.
+			fail(context + ": an exeption is not expected here", p.getFailure());
 		}
 
-		p = node.getPowerDescriptor();
+		context = name + ".getComplexDescriptor()";
+
+		log(TAG, "testing " + context);
+
+		p = node.getComplexDescriptor();
 		waitForPromise(p, INVOKE_TIMEOUT);
+
+		ZigBeeComplexDescriptor complexDesc = null;
 
 		if (p.getFailure() == null) {
 			if (!nodeDesc.isComplexDescriptorAvailable()) {
-				fail("ZigBeeNodeDescriptor states that the ComplexDescriptor must not be available.");
+				fail(context + ": ZigBeeNodeDescriptor states that the ComplexDescriptor must not be available, so we expects the promise to fail.");
 			}
 
-			ZigBeeComplexDescriptor complexDesc = (ZigBeeComplexDescriptor) assertPromiseValueClass(p, ZigBeeComplexDescriptor.class);
-			assertNotNull("ZigBeeComplexDescriptor cannot be null", complexDesc);
+			complexDesc = (ZigBeeComplexDescriptor) assertPromiseValueClass(p, ZigBeeComplexDescriptor.class);
+			assertNotNull(context + ": the descriptor cannot be null", complexDesc);
 
-			/*
-			 * Checks if the returned ZigBeeComplexDescriptor matches the
-			 * expected one.
-			 */
-			ZigBeeComplexDescriptor expectedComplexDesc = nodeConfig.getComplexDescriptor();
-			this.checkComplexDescriptor(expectedComplexDesc, complexDesc);
+			if (nodeConfig != null) {
+				/*
+				 * Checks if the returned ZigBeeComplexDescriptor matches the
+				 * expected one.
+				 */
+
+				ZigBeeComplexDescriptor expectedComplexDesc = nodeConfig.getComplexDescriptor();
+				this.checkComplexDescriptor(expectedComplexDesc, complexDesc);
+			}
 		} else {
-			// FIXME: check for possible errors.
+			if (!nodeDesc.isComplexDescriptorAvailable()) {
+				/*
+				 * The complex descriptor is not available. We expect the
+				 * NO_DESCRIPTOR failure
+				 */
+				assertPromiseZDPException(p, context + ": if the descriptor is missing the promise must fail with a different error code", ZDPException.NO_DESCRIPTOR);
+			} else {
+				fail(context + ": we didn't this exception here", p.getFailure());
+			}
+		}
+
+		context = name + ".getLinksQuality()";
+
+		log(TAG, "testing " + context);
+
+		p = node.getLinksQuality();
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			Map linksQualityMap = (Map) assertPromiseValueClass(p, Map.class);
+			assertNotNull(context + ": cannot return null", linksQualityMap);
+			assertMapContent(context, linksQualityMap, String.class, ZigBeeLinkQuality.class, -1);
+		} else {
+			assertPromiseZDPException(p, context + ": if not available, the promise must fail with a different error code", ZDPException.NOT_SUPPORTED);
+		}
+
+		p = node.getRoutingTable();
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		context = name + ".getRoutingTable()";
+
+		if (p.getFailure() == null) {
+			Map routingTable = (Map) assertPromiseValueClass(p, Map.class);
+			assertNotNull(context + ": cannot return null", routingTable);
+			assertMapContent(context, routingTable, String.class, ZigBeeRoute.class, -1);
+
+		} else {
+			assertPromiseZDPException(p, context + ": if not available, the promise must fail with a different error code", ZDPException.NOT_SUPPORTED);
+		}
+
+		context = name + ".getIEEEAddress()";
+		log(TAG, "testing " + context);
+		BigInteger ieeeAddress = node.getIEEEAddress();
+
+		assertNotNull(context + ": cannot return null", ieeeAddress);
+		assertEquals(context + ": returned IEEEAddress differs from the CT configuration one", ieeeAddress, nodeConfig.getIEEEAddress());
+
+		context = name + ".getExtendedPanId()";
+		log(TAG, "testing " + context);
+		BigInteger extendedPanId = node.getExtendedPanId();
+		assertNotNull(context + ": cannot return null", extendedPanId);
+		assertEquals(context + ": returned EPID differs from the ZigBeeHost one.", extendedPanId, host.getExtendedPanId());
+
+		context = name + ".getHostPid()";
+		log(TAG, "testing " + context);
+		String hostPid = node.getHostPid();
+
+		assertNotNull(context + ": cannot return null", hostPid);
+		assertEquals(context + ": returned hostPid differs from the ZigBeeHost one.", hostPid, host.getHostPid());
+
+		context = name + ".getPanId()";
+		log(TAG, "testing " + context);
+		int panId = node.getPanId();
+
+		assertEquals(context + ": returned panId differs from the ZigBeeHost one.", panId, host.getPanId());
+
+		/*
+		 * Checks the ZigBeeNode service properties.
+		 */
+		context = "ZigBeeHost serviceProperties";
+
+		log(context + ": checking service properties of node " + host.getIEEEAddress());
+
+		ieeeAddress = (BigInteger) getParameterChecked(context, serviceProperties, ZigBeeNode.IEEE_ADDRESS, ParserUtils.MANDATORY, BigInteger.class);
+		Short logicalType = (Short) getParameterChecked(context, serviceProperties, ZigBeeNode.LOGICAL_TYPE, ParserUtils.MANDATORY, Short.class);
+		Integer manufacturerCode = (Integer) getParameterChecked(context, serviceProperties, ZigBeeNode.MANUFACTURER_CODE, ParserUtils.MANDATORY, Integer.class);
+		Boolean receiverOnWhenIdle = (Boolean) getParameterChecked(context, serviceProperties, ZigBeeNode.RECEIVER_ON_WHEN_IDLE, ParserUtils.MANDATORY, Boolean.class);
+
+		Integer panIdProperty = (Integer) getParameterChecked(context, serviceProperties, ZigBeeNode.PAN_ID, ParserUtils.OPTIONAL, Integer.class);
+		extendedPanId = (BigInteger) getParameterChecked(context, serviceProperties, ZigBeeNode.EXTENDED_PAN_ID, ParserUtils.OPTIONAL, BigInteger.class);
+
+		if (panIdProperty == null && extendedPanId == null) {
+			/**
+			 * We need one of them or both.
+			 */
+
+			fail(context + ": ZigBeeNode.PAN_ID or ZigBeeNode.EXTENDED_PAN_ID have to be present.");
+		}
+
+		assertEquals(context + ": mismatch with ZigBeeNode.getIEEEAddress()", node.getIEEEAddress(), ieeeAddress);
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getLogicalType()", nodeDesc.getLogicalType(), logicalType.shortValue());
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getManufacturerCode()", nodeDesc.getManufacturerCode(), manufacturerCode.intValue());
+		assertEquals(context + ": mismatch with ZigBeeNodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()",
+				nodeDesc.getMacCapabilityFlags().isReceiverOnWhenIdle(),
+				receiverOnWhenIdle.booleanValue());
+
+		if (panId != -1) {
+			assertEquals(context + ": mismatch with ZigBeeNode.getPanId()", panIdProperty.intValue(), host.getPanId());
+		}
+
+		if (extendedPanId != null) {
+			assertEquals(context + ": mismatch with ZigBeeNode.getExtendedPanId()", extendedPanId, host.getExtendedPanId());
+		}
+
+		/*
+		 * Check the DEVICE_CATEGORY service property.
+		 */
+
+		String deviceCategory = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_CATEGORY, ParserUtils.MANDATORY, String.class);
+		assertEquals(context + ": " + Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY, deviceCategory);
+
+		if (nodeDesc.isComplexDescriptorAvailable() && complexDesc != null) {
+			/*
+			 * Check the presence of the DEVICE_SERIAL and DEVICE_DESCRIPTION
+			 * properties.
+			 */
+
+			String serialNumber = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_SERIAL, ParserUtils.OPTIONAL, String.class);
+			assertNotNull(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_SERIAL service property is mandatory", serialNumber);
+			assertEquals(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_SERIAL property must match its SerialNumber", complexDesc.getSerialNumber(), serialNumber);
+
+			String description = (String) getParameterChecked(context, serviceProperties, Constants.DEVICE_SERIAL, ParserUtils.OPTIONAL, String.class);
+			assertNotNull(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_DESCRIPTION service property is mandatory", description);
+			assertEquals(context + ": since the ZigBeeComplexDescriptor is available, the DEVICE_DESCRIPTION property must match its SerialNumber", complexDesc.getModelName(), description);
 		}
 	}
 
@@ -215,6 +657,9 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 		try {
 			ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ieeeAddressFilter);
+			if (sRefs == null) {
+				return 0;
+			}
 			return sRefs.length;
 		} catch (InvalidSyntaxException e) {
 			fail("Internal error: filter expression is wrong", e);
@@ -229,33 +674,35 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	 * @throws Exception
 	 */
 
-	public void checkSimpleDescriptor(ZigBeeSimpleDescriptor expectedDescr, ZigBeeSimpleDescriptor desc) throws Exception {
+	public void checkSimpleDescriptor(ZigBeeSimpleDescriptor expectedDescr, ZigBeeSimpleDescriptor simpleDescriptor) throws Exception {
 		String context = "ZigBeeSimpleDescriptor";
 
-		assertEquals(context + ": application Profile Identifier not matched", expectedDescr.getApplicationProfileId(), desc.getApplicationProfileId());
-		assertEquals(context + ": application Device Identifier not matched", expectedDescr.getApplicationDeviceId(), desc.getApplicationDeviceId());
-		assertEquals(context + ": application Device Version  not matched", expectedDescr.getApplicationDeviceVersion(), desc.getApplicationDeviceVersion());
-		assertEquals(context + ": application endpointId not matched", expectedDescr.getEndpoint(), desc.getEndpoint());
+		assertEquals(context + ": application Profile Identifier not matched", expectedDescr.getApplicationProfileId(), simpleDescriptor.getApplicationProfileId());
+		assertEquals(context + ": application Device Identifier not matched", expectedDescr.getApplicationDeviceId(), simpleDescriptor.getApplicationDeviceId());
+		assertEquals(context + ": application Device Version  not matched", expectedDescr.getApplicationDeviceVersion(), simpleDescriptor.getApplicationDeviceVersion());
+		assertEquals(context + ": application endpointId not matched", expectedDescr.getEndpoint(), simpleDescriptor.getEndpoint());
 
-		int[] serverClusters = desc.getInputClusters();
-		int[] clientClusters = expectedDescr.getInputClusters();
+		int[] serverClusters = simpleDescriptor.getInputClusters();
+		int[] clientClusters = expectedDescr.getOutputClusters();
 
-		assertEquals(context + ": Wrong number of input clusters", expectedDescr.getInputClusters().length, serverClusters.length);
-		assertEquals(context + ": Wrong number of output clusters", expectedDescr.getOutputClusters().length, clientClusters.length);
+		assertEquals(context + ": wrong number of input clusters", expectedDescr.getInputClusters().length, serverClusters.length);
+		assertEquals(context + ": wrong number of output clusters", expectedDescr.getOutputClusters().length, clientClusters.length);
 
 		/*
 		 * Tests some specific methods of the ZigBeeSimpleDescriptor interface
 		 * implementation
 		 */
 
-		int[] clusters = desc.getInputClusters();
+		int[] clusters = simpleDescriptor.getInputClusters();
 		for (int i = 0; i < clusters.length; i++) {
-			assertTrue(context + ": error in providesInputCluster() implementation.", desc.providesInputCluster(clusters[i]));
+			boolean result = simpleDescriptor.providesInputCluster(clusters[i]);
+			assertTrue(context + ": error in providesInputCluster() implementation. Must assert the presence of clusterId=" + clusters[i], result);
 		}
 
-		clusters = desc.getOutputClusters();
+		clusters = simpleDescriptor.getOutputClusters();
 		for (int i = 0; i < clusters.length; i++) {
-			assertTrue(context + ": error in providesOutputCluster() implementation.", desc.providesOutputCluster(clusters[i]));
+			boolean result = simpleDescriptor.providesOutputCluster(clusters[i]);
+			assertTrue(context + ": error in providesOutputCluster() implementation. Must assert the presence of clusterId=" + clusters[i], result);
 		}
 	}
 
@@ -269,7 +716,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		assertEquals("ZigBeeNodeDescriptor Logical Type", expectedDesc.getLogicalType(), desc.getLogicalType());
 		assertEquals("ZigBeeNodeDescriptor Manufacturer Code", expectedDesc.getManufacturerCode(), desc.getManufacturerCode());
 		assertEquals("ZigBeeNodeDescriptor Maximum Buffer Size", expectedDesc.getMaxBufferSize(), desc.getMaxBufferSize());
-		assertEquals("ZigBeeNodeDescriptor Maximum Transfer Size", expectedDesc.getMaxIncomingTransferSize(), desc.getMaxIncomingTransferSize());
 	}
 
 	public void checkPowerDescriptor(ZigBeePowerDescriptor expectedDesc, ZigBeePowerDescriptor desc) throws Exception {
@@ -280,8 +726,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	}
 
 	protected void checkComplexDescriptor(ZigBeeComplexDescriptor expectedDesc, ZigBeeComplexDescriptor desc) {
-
-		// FIXME: check better this!
 		assertEquals("ZigBeeComplexDescriptor Model Name", expectedDesc.getModelName(), desc.getModelName());
 		assertEquals("ZigBeeComplexDescriptor Serial Number", expectedDesc.getSerialNumber(), desc.getSerialNumber());
 		assertEquals("ZigBeeComplexDescriptor Device URL", expectedDesc.getDeviceURL(), desc.getDeviceURL());
@@ -291,9 +735,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	 * Tests related to the discovery of the ZigBeeEndpoint services. The test
 	 * will also check that the registered endpoint match the information
 	 * retrieved from the CT configuration file.
-	 * 
-	 * TODO: check if it works.
-	 * 
 	 */
 	public void testEndpointDiscovery() throws Exception {
 		log(TAG, "testEndpointDiscovery");
@@ -305,7 +746,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
 
 		assertNotNull("ZigBeeEndpoint", endpoint);
-		log(TAG, "ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
 
 		assertEquals("Endpoint identifier not matched", expectedEndpoint.getId(), endpoint.getId());
 
@@ -323,7 +763,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			assertNotNull(context + ": null value returned", simpleDesc);
 			this.checkSimpleDescriptor(expectedEndpoint.getSimpleDescriptor(), simpleDesc);
 		} else {
-			// TODO: fail here?
+			fail(context + ": unexpected failure while retrieving the SimpleDescriptor", p.getFailure());
 		}
 	}
 
@@ -352,7 +792,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 		/* Client clusters */
 		this.testZigBeeEndpointClusterMethods(endpoint, expectedEndpoint, false);
-
 	}
 
 	/**
@@ -362,7 +801,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	 * <li>ZigBeeEndpoint.get<side>Cluster(clusterId)
 	 * </ul>
 	 * 
-	 * where <side> may be 'Server' or 'Client' accroding to the isServerSide
+	 * where <side> may be 'Server' or 'Client' according to the isServerSide
 	 * parameter.
 	 * 
 	 * @param isServerSide true if the test must be done on the 'Server' flavor
@@ -372,6 +811,13 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 	protected void testZigBeeEndpointClusterMethods(ZigBeeEndpoint endpoint, ZigBeeEndpointConfig expectedEndpoint, boolean isServerSide) {
 		String context;
+		String side;
+
+		if (isServerSide) {
+			side = "Server";
+		} else {
+			side = "Client";
+		}
 
 		/*
 		 * Checks if the ZigBeeEndpoint.getServerClusters() returns a valid
@@ -381,24 +827,33 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		ZCLCluster[] clusters;
 		ZCLClusterDescription[] expectedClusters;
 
+		// FIXME: probably this number is not used but it has to be. Verify why
+		// it is not used.
+
+		int expectedClustersNumber;
+
+		context = "ZigBeeEndpoint.get" + side + "Clusters()";
+
+		log(context + " checking that the number of clusters returned is the expected one and for duplicate and null entries.");
+
 		if (isServerSide) {
 			clusters = endpoint.getServerClusters();
 			expectedClusters = expectedEndpoint.getServerClusters();
-			context = "ZigBeeEndpoint.getServerClusters()";
-
+			expectedClustersNumber = expectedEndpoint.getServerClustersNumber();
 		} else {
 			clusters = endpoint.getClientClusters();
 			expectedClusters = expectedEndpoint.getClientClusters();
-			context = "ZigBeeEndpoint.getClientClusters()";
+			expectedClustersNumber = expectedEndpoint.getClientClustersNumber();
 		}
 
-		assertNotNull(context + " cannot return null", clusters);
-		assertEquals(context + " array size", expectedClusters.length, clusters.length);
+		assertNotNull(context + " cannot return null array.", clusters);
+		assertEquals(context + " returned clusters array length.", expectedClusters.length, clusters.length);
 
 		/*
 		 * checks for null entries, duplicate entries and duplicate clusterIds.
 		 * A Set is used to discover duplicates.
 		 */
+
 		Set clustersSet = new HashSet();
 		SortedSet clusterIdsSet = new TreeSet();
 		for (int i = 0; i < clusters.length; i++) {
@@ -423,7 +878,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		for (int i = 0; i < expectedClusters.length; i++) {
 			boolean containsExpectedCluster = clusterIdsSet.contains(new Integer(expectedClusters[i].getId()));
 			if (!containsExpectedCluster) {
-				fail(context + " do not return the cluster ids present in the CT configuration file.");
+				fail(context + " do not return the cluster ids that are defined in the CT configuration file.");
 			}
 		}
 
@@ -431,11 +886,10 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		 * Checks if the ZigBeeEndpoint.getServerCluster(clusterId) returns the
 		 * right cluster.
 		 */
-		if (isServerSide) {
-			context = "ZigBeeEndpoint.getServerCluster(clusterId)";
-		} else {
-			context = "ZigBeeEndpoint.getClientCluster(clusterId)";
-		}
+
+		context = "ZigBeeEndpoint.get" + side + "Cluster(clusterId)";
+
+		log(context + ": checks if the implementation is consistent with the get" + side + "Clusters()");
 
 		for (int i = 0; i < clusters.length; i++) {
 			ZCLCluster cluster;
@@ -446,34 +900,35 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			}
 
 			assertNotNull(context + " cannot return null if asking for a correct clusterId", cluster);
-			// FIXME: is the following test valid? Do we have the same
-			// constraint?
-			assertEquals(context + " must return the same object instances returned by the ZigBeeEndpoint.get<side>Clusters()", clusters[i], cluster);
+			assertSame(context + " must return the same object instances returned by the ZigBeeEndpoint.get" + side + "Clusters()", clusters[i], cluster);
 		}
 
 		/*
-		 * Checks if the ZigBeeEndpoint.getServerCluster(clusterId) throws the
-		 * correct exception if a wrong clusterId is passed as parameter.
+		 * Checks if the ZigBeeEndpoint.getServerCluster(clusterId) throws or
+		 * return the correct exception if a wrong clusterId is passed as
+		 * parameter.
 		 */
-
+		ZCLCluster cluster;
 		try {
 			/* clusterId too big */
 			if (isServerSide) {
-				endpoint.getServerCluster(0xFFFF + 1);
+				cluster = endpoint.getServerCluster(0xFFFF + 1);
 			} else {
-				endpoint.getClientCluster(0xFFFF + 1);
+				cluster = endpoint.getClientCluster(0xFFFF + 1);
 			}
-			fail(context + " must throw an IllegalArgumentException if the clusterId is outside the range [0, 0xffff]");
+
+			fail(context + ":  must throw an IllegalArgumentException if the clusterId is outside the range [0, 0xffff]");
 		} catch (IllegalArgumentException e) {
 			/* Success */
 		}
 
 		try {
 			/* negative clusterId */
+
 			if (isServerSide) {
-				endpoint.getServerCluster(-1);
+				cluster = endpoint.getServerCluster(-1);
 			} else {
-				endpoint.getClientCluster(-1);
+				cluster = endpoint.getClientCluster(-1);
 			}
 			fail(context + " must throw an IllegalArgumentException if the clusterId is outside the range [0, 0xffff]");
 		} catch (IllegalArgumentException e) {
@@ -490,101 +945,177 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		}
 
 		if (notExistentClusterId != -1) {
-			try {
-				/* not existent clusterId */
-				if (isServerSide) {
-					endpoint.getServerCluster(notExistentClusterId);
-				} else {
-					endpoint.getClientCluster(notExistentClusterId);
-				}
-				fail(context + " must throw an IllegalArgumentException if the cluster is not supported by the endpoint");
-			} catch (IllegalArgumentException e) {
-				/* Success */
+			/* not existent clusterId */
+			if (isServerSide) {
+				cluster = endpoint.getServerCluster(notExistentClusterId);
+			} else {
+				cluster = endpoint.getClientCluster(notExistentClusterId);
 			}
+
+			assertNotNull(context + "  must return null if the requested clusterId is not implemented in the endpoint");
 		} else {
 			/*
 			 * It it not really possible that the endpoints implements all the
-			 * possible clusterIds!
+			 * possible clusterIds, so it is always possible to find a cluster
+			 * that is not supported.
 			 */
+
+			fail(context + ": CT internal error: unable to find a non existent cluster");
 		}
 	}
 
 	/**
-	 * Test case related to events handling.
+	 * Test case related to events handling. It looks for a Boolean reportable
+	 * attribute and registers a ZCLEventListener to be notified about this
+	 * attribute.
 	 * 
-	 * TODO
+	 * It tries also to update the event listener service properties to verify
+	 * that the events will arrive at the correct interval.
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void testEventing() {
-		log("---- testEventing");
+	public void testEventing() throws InterruptedException {
 
-		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
-		ZigBeeEndpointConfig expectedEndpoint = conf.getEnpoints(expectedNode)[0];
-
-		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedNode, expectedEndpoint);
-
-		assertNotNull("ZigBeeEndpoint", endpoint);
-
-		ZCLCluster[] clusters = endpoint.getServerClusters();
-		ZCLCluster cluster = null;
-		if (clusters != null && clusters.length != 0) {
-			cluster = clusters[0];
-		}
-		assertNotNull("ZigBeeCluster", cluster);
-
-		AttributeCoordinates attrIds = conf.findAttribute(null, new Boolean(true), null);
-		// create, and launch a test event listener.
-		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(getContext());
-		Dictionary properties = new Properties();
-		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(3));
-		aZCLEventListenerImpl.start(properties);
-
-		TestStepProxy testStep = launcher.getTeststepProxy();
-
-		testStep.execute(TestStepLauncher.EVENT_REPORTABLE, "ensure that the first device with a reportable attribute defined in the configuration file is plugged and press [ENTER]");
 		/*
-		 * asserts that eventing works: the sent, and the received events must
-		 * be equal.
+		 * Find in the CT configuration file an endpoint that has a reportable
+		 * attribute of data type ZigBeeBoolean
 		 */
-		try {
-			/*
-			 * It takes several seconds for the event to "travel" inside the
-			 * test framework.
-			 */
-			int sleepinms = DISCOVERY_TIMEOUT;
-			log("Thread.sleep(" + sleepinms + ")");
-			Thread.sleep(sleepinms);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			fail("No exception is expected.");
+		AttributeCoordinates attributeCoordinates = conf.findAttribute(null, new Boolean(true), null);
+
+		assertNotNull("unable to find in the CT a ZigBee reportable attribute of Boolean ZCL data type.");
+
+		ZigBeeEndpoint endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
+		assertNotNull("service not found " + this.printScope(attributeCoordinates.expectedEndpoint));
+
+		ZCLAttributeDescription attribute = attributeCoordinates.expectedAttributeDescription;
+
+		Dictionary properties = new Hashtable();
+
+		int maxReportInterval = 20;
+
+		/*
+		 * Fill the field that represents the exact attribute that has to be
+		 * monitored.
+		 */
+		properties.put(ZigBeeNode.IEEE_ADDRESS, endpoint.getNodeAddress());
+		properties.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
+		properties.put(ZCLCluster.ID, new Integer(attributeCoordinates.expectedCluster.getId()));
+		properties.put(ZCLAttribute.ID, new Integer(attribute.getId()));
+		properties.put(ZCLEventListener.ATTRIBUTE_DATA_TYPE, new Short(attribute.getDataType().getId()));
+
+		/*
+		 * Configure the reporting.
+		 */
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(maxReportInterval));
+
+		long currentTime = System.currentTimeMillis();
+
+		ZCLEventListenerImpl eventListener = registerEventListener(properties);
+		StreamQueue stream = eventListener.getStreamQueue();
+
+		/*
+		 * We wait for an error coming from the ZB implementation.
+		 */
+		Thread.sleep(INVOKE_TIMEOUT);
+
+		if (eventListener.getFailure() != null) {
+			fail("event listener registration failed with exception" + eventListener.getFailure());
 		}
 
-		ZigBeeEvent lastReceivedZigBeeEvent = aZCLEventListenerImpl.getLastReceivedZigBeeEvent();
+		/*
+		 * We have now to verify that the first event arrives within
+		 * maxReportInterval seconds, and the next ones in less than
+		 * maxReportInterval.
+		 */
 
-		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
-		assertNotNull("aZigbeeEvent can not be null", lastReceivedZigBeeEvent);
-		log("aZigbeeEvent: " + lastReceivedZigBeeEvent);
+		int iterations = 3;
+		long previousEventTimestamp = -1;
+		long maxIntervalAllowed = 2 * maxReportInterval;
 
-		// FIXME: uncomment the lines below:
+		while (iterations-- > 0) {
+			ZigBeeEvent event = (ZigBeeEvent) stream.poll(maxIntervalAllowed * 1000);
+			assertNotNull("no ZigBeeEvents received within the maximum intervall allowed " + maxIntervalAllowed, event);
+			long timestamp = System.currentTimeMillis();
+			log(TAG, "arrived event at " + timestamp);
+			if (previousEventTimestamp > 0) {
+				if ((timestamp - previousEventTimestamp) > (maxIntervalAllowed * 1000)) {
+					fail("ZigBeeEvents must arrive within the maxReportInterval: " + maxReportInterval);
+				}
 
-		// assertEquals(lastReceivedZigBeeEvent.getIEEEAddress(),
-		// attrIds.getIeeeAddresss());
+				/*
+				 * Check the received ZigBeeEvent content.
+				 */
 
-		// assertEquals(lastReceivedZigBeeEvent.getClusterId(),
-		// attrIds.getClusterId());
+				assertEquals(event.getIEEEAddress(), attributeCoordinates.expectedEndpoint.getNodeAddress());
+				assertEquals(event.getClusterId(), attributeCoordinates.expectedCluster.getId());
+				assertEquals(event.getAttributeId(), attribute.getId());
 
-		// assertEquals(lastReceivedZigBeeEvent.getAttributeId(),
-		// attrIds.getAttributeId());
+			}
+			previousEventTimestamp = timestamp;
+		}
 
-		// stop/destroy the test event listener.
-		aZCLEventListenerImpl.stop();
+		/*
+		 * Update the Max Reporting Interval and issue the same checks.
+		 */
+
+		iterations = 3;
+		previousEventTimestamp = -1;
+		maxReportInterval = maxReportInterval / 2;
+		maxIntervalAllowed = 2 * maxReportInterval;
+
+		properties.put(ZCLEventListener.MAX_REPORT_INTERVAL, new Integer(maxReportInterval));
+		eventListener.update(properties);
+
+		/*
+		 * We wait for an error coming from the ZB implementation.
+		 */
+		Thread.sleep(INVOKE_TIMEOUT);
+
+		if (eventListener.getFailure() != null) {
+			fail("event listener registration failed with exception" + eventListener.getFailure());
+		}
+
+		/**
+		 * Issue the same checks as above but now the interval is decreased.
+		 */
+
+		while (iterations-- > 0) {
+			ZigBeeEvent event = (ZigBeeEvent) stream.poll(maxIntervalAllowed * 1000);
+			assertNotNull("no ZigBeeEvents received within the maximum intervall allowed " + maxIntervalAllowed);
+			long timestamp = System.currentTimeMillis();
+			log(TAG, "arrived event at " + timestamp);
+			if (previousEventTimestamp > 0) {
+				if ((timestamp - previousEventTimestamp) > maxIntervalAllowed * 1000) {
+					fail("ZigBeeEvents must arrive within the maxReportInterval: " + maxReportInterval);
+				}
+
+				/*
+				 * Check the received ZigBeeEvent content.
+				 */
+
+				assertEquals(event.getIEEEAddress(), attributeCoordinates.expectedEndpoint.getNodeAddress());
+				assertEquals(event.getClusterId(), attributeCoordinates.expectedCluster.getId());
+				assertEquals(event.getAttributeId(), attribute.getId());
+
+			}
+			previousEventTimestamp = timestamp;
+		}
+
+		/* stop and destroy the test event listener. */
+		eventListener.stop();
 	}
 
-	// ====================================================================
-	// ===========================EXCEPTIONS TEST==========================
-	// ===========================METHODS==================================
-	// ====================================================================
+	/**
+	 * Creates an event listener with the passed service properties.
+	 */
 
-	private int getInvalidId(ZCLCluster clusterConf) throws Exception {
+	private ZCLEventListenerImpl registerEventListener(Dictionary properties) {
+		ZCLEventListenerImpl eventListener = new ZCLEventListenerImpl(getContext());
+		eventListener.start(properties);
+		return eventListener;
+	}
+
+	private int getUnsupportedClusterId(ZCLCluster clusterConf) throws Exception {
 
 		ZCLAttribute[] attributesConf = (ZCLAttribute[]) clusterConf.getAttributes().getValue();
 
@@ -627,54 +1158,13 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		return result;
 	}
 
-	// ====================================================================
-	// ===========================HOST/COORDINATOR GETTERS/SETTERS TEST====
-	// ===========================METHODS==================================
-	// ====================================================================
-
-	public void testHost() throws Exception {
-		log("---- testHost");
-
-		boolean isCoordinator = false;
-		BigInteger hostieeeAddress = conf.getZigBeeHost().getIEEEAddress();
-		ZigBeeHost host = getZigBeeHost(conf.getZigBeeHost(), DISCOVERY_TIMEOUT);
-
-		Promise p = host.getNodeDescriptor();
-		waitForPromise(p, INVOKE_TIMEOUT);
-
-		ZigBeeNodeDescriptor zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) p.getValue();
-		assertNotNull("node descriptor", zigBeeNodeDescriptor);
-		if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
-			isCoordinator = true;
+	private Map getProperties(ServiceReference ref) {
+		Map map = new HashMap();
+		String[] keys = ref.getPropertyKeys();
+		for (int i = 0; i < keys.length; i++) {
+			Object value = ref.getProperty(keys[i]);
+			map.put(keys[i], value);
 		}
-
-		// logical type test
-		BundleContext bc = getContext();
-
-		ServiceTracker st = new ServiceTracker(
-				bc,
-				ZigBeeNode.class.getName(),
-				null);
-		st.open();
-		Object[] services = st.getServices();
-		for (int i = 0; i < services.length; i++) {
-			ZigBeeNode node = (ZigBeeNode) services[i];
-			p = node.getNodeDescriptor();
-
-			waitForPromise(p, INVOKE_TIMEOUT);
-
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) p.getValue();
-			assertNotNull("the node descriptor shouldn't be null",
-					zigBeeNodeDescriptor);
-			assertNotNull("the logical type shouldn't be null", new Short(
-					zigBeeNodeDescriptor.getLogicalType()));
-			if (zigBeeNodeDescriptor.getLogicalType() == ZigBeeNode.COORDINATOR) {
-				isCoordinator = true;
-			}
-		}
-
-		// coordinator test
-		assertTrue("there must be at least one coordinator", isCoordinator);
-
+		return map;
 	}
 }

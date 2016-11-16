@@ -28,61 +28,16 @@ import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
 import org.osgi.test.cases.zigbee.mock.TestNotExportedZigBeeEndpoint;
 import org.osgi.test.cases.zigbee.mock.ZCLClusterImpl;
 
 public class ZigBeeExportTestCase extends ZigBeeTestCases {
-	private static final String	TAG	= ZigBeeExportTestCase.class.getName();
-
-	private TestStepLauncher	launcher;
+	private static final String TAG = ZigBeeExportTestCase.class.getName();
 
 	/**
-	 * Timeout used for the timing out all the methods belonging to the
-	 * ZigBeeHost, ZigBeeNode, ZigBeeEndpoint, ZigBeeCluster interfaces, that
-	 * are also returning a Promise.
-	 */
-	public static int			INVOKE_TIMEOUT;;
-
-	/**
-	 * Timeout used to wait for a ZigBeeNode or a ZigBeeEndpoint to be seen in
-	 * the OSGi framework as a service. This constant is read from the
-	 * configuration file provided by the RI.
-	 */
-	public static int			DISCOVERY_TIMEOUT;
-
-	ConfigurationFileReader		conf;
-
-	protected void setUp() throws Exception {
-		log(TAG, "Prepare for ZigBee Test Case");
-
-		prepareTestStart();
-		log("Prepared for ZigBee Test Case");
-	}
-
-	protected void tearDown() throws Exception {
-		log(TAG, "Tear down ZigBee Test Case");
-	}
-
-	private void prepareTestStart() throws Exception {
-		launcher = TestStepLauncher.launch(getContext());
-		conf = launcher.getConfReader();
-
-		/*
-		 * Initialize timeout constants relevant for the CT with the values read
-		 * from the ZigBee configuration file.
-		 */
-		INVOKE_TIMEOUT = conf.getInvokeTimeout();
-		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
-
-		// TODO: we need to check here that the xml file contains all the info
-		// we need for starting the tests!
-	}
-
-	/**
-	 * This test try to verify if the base driver is correctly calling an
+	 * This test tries to verify if the base driver is correctly calling an
 	 * exported endpoint when it is detected, if this exported endpoint is not
 	 * suitable to be exported. It may happen because:
 	 * <ul>

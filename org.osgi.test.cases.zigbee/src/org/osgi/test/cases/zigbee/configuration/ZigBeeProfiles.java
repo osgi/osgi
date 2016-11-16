@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.configuration;
 
@@ -91,12 +106,10 @@ public class ZigBeeProfiles {
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 
-			System.out.println("Start Element :" + qName);
-
 			if (qName.equalsIgnoreCase("profiles")) {
-
+				// not parsed
 			} else if (qName.equalsIgnoreCase("profile")) {
-
+				// do not contain relevant attributes
 			} else if (qName.equalsIgnoreCase("cluster")) {
 				this.clusterAttributes = getAttributes(attributes);
 
@@ -166,7 +179,6 @@ public class ZigBeeProfiles {
 
 		public void endElement(String uri, String localName,
 				String qName) throws SAXException {
-			System.out.println("End Element :" + qName);
 
 			if (qName.equalsIgnoreCase("profiles")) {
 			} else if (qName.equalsIgnoreCase("profile")) {
@@ -178,9 +190,15 @@ public class ZigBeeProfiles {
 					attributes[i] = (ZCLAttributeDescriptionImpl) attributeDescriptions.get(i);
 				}
 
-				attributeDescriptions.clear();
+				ZCLCommandDescriptionImpl[] commands = new ZCLCommandDescriptionImpl[commandDescriptions.size()];
+				for (int i = 0; i < commands.length; i++) {
+					commands[i] = (ZCLCommandDescriptionImpl) commandDescriptions.get(i);
+				}
 
-				ZCLClusterDescriptionImpl clusterDescription = new ZCLClusterDescriptionImpl(attributes, gobalClusterDescription);
+				attributeDescriptions.clear();
+				commandDescriptions.clear();
+
+				ZCLClusterDescriptionImpl clusterDescription = new ZCLClusterDescriptionImpl(attributes, commands, gobalClusterDescription, isServerSide);
 
 				if (isServerSide) {
 					gobalClusterDescription.setServerClusterDescription(clusterDescription);
@@ -213,6 +231,5 @@ public class ZigBeeProfiles {
 
 		public void characters(char ch[], int start, int length) throws SAXException {
 		}
-
 	};
 }

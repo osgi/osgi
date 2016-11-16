@@ -24,9 +24,6 @@ import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * 
- * FIXME: reimplement this!!!
- * 
  * @author $Id$
  */
 public class ZCLAttributeImpl implements ZCLAttribute {

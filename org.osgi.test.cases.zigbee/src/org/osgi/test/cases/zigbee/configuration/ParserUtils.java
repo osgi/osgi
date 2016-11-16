@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.test.cases.zigbee.configuration;
 
@@ -34,7 +49,7 @@ public class ParserUtils {
 	}
 
 	/**
-	 * Convert a list like "1, 2, 3" and array [ 1, 2, 3]
+	 * Converts a list like "1, 2, 3" into an array of int [ 1, 2, 3]
 	 * 
 	 * @param listString
 	 * @return the array.
@@ -87,8 +102,6 @@ public class ParserUtils {
 	}
 
 	public static int getAttribute(Element element, String attributeName, boolean required, final int defaultValue) {
-		System.out.println("reading attribute " + attributeName);
-
 		if (element == null) {
 			throw new NullPointerException("element argument cannot be null");
 		}
@@ -170,7 +183,7 @@ public class ParserUtils {
 			}
 		}
 
-		return Boolean.getBoolean(attributeValue);
+		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 
 	public static String getAttribute(Map element, String attributeName, boolean required, final String defaultValue) {
@@ -272,6 +285,88 @@ public class ParserUtils {
 			}
 		}
 
-		return Boolean.getBoolean(attributeValue);
+		boolean a = Boolean.valueOf(attributeValue).booleanValue();
+
+		return Boolean.valueOf(attributeValue).booleanValue();
+	}
+
+	public static BigInteger getParameter(Map properties, String parameterName, boolean required, BigInteger defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing required property: " + parameterName);
+			}
+		} else if (value instanceof BigInteger) {
+			return (BigInteger) value;
+		} else {
+			throw new RuntimeException("expected a BigInteger, got " + value.getClass().getName());
+		}
+	}
+
+	public static boolean getParameter(Map properties, String parameterName, boolean required, boolean defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing required property: " + parameterName);
+			}
+		} else if (value instanceof Boolean) {
+			return ((Boolean) value).booleanValue();
+		} else {
+			throw new RuntimeException("expected a Boolean parameter, got " + value.getClass().getName());
+		}
+	}
+
+	public static int getParameter(Map properties, String parameterName, boolean required, int defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing required property: " + parameterName);
+			}
+		} else if (value instanceof Integer) {
+			return ((Integer) value).intValue();
+		} else {
+			throw new RuntimeException("expected a Integer parameter, got " + value.getClass().getName());
+		}
+	}
+
+	public static short getParameter(Map properties, String parameterName, boolean required, short defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing required property: " + parameterName);
+			}
+		} else if (value instanceof Short) {
+			return ((Short) value).shortValue();
+		} else {
+			throw new RuntimeException("expected a Short parameter, got " + value.getClass().getName());
+		}
 	}
 }

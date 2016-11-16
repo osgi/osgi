@@ -16,25 +16,37 @@
 
 package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
+import java.util.LinkedList;
 
-/**
- * ZCLFrame implementation class that may be initialized with a specific raw
- * frame.
- * 
- * @author portinaro
- *
- */
-public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
+public class StreamQueueImpl implements StreamQueue {
 
-	public ZCLFrameRaw(ZCLHeader header, byte[] fullFrame) {
-		super(header);
-		data = fullFrame;
-		zclHeader = header;
+	private final Object	lock	= new Object();
+
+	LinkedList				queue	= new LinkedList();
+
+	public void add(Object element) {
+		if (element == null) {
+			throw new NullPointerException("Adding null object is not allowed.");
+		}
+
+		synchronized (queue) {
+			queue.add(element);
+			queue.notify();
+		}
 	}
 
-	public byte[] getBytes() {
-		return (byte[]) data.clone();
+	public Object poll(long timeout) throws InterruptedException {
+		synchronized (lock) {
+			if (queue.size() == 0) {
+				synchronized (queue) {
+					queue.wait(timeout);
+				}
+				if (queue.size() == 0) {
+					// timeout
+					return null;
+				}
+			}
+			return queue.removeLast();
+		}
 	}
 }

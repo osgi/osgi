@@ -34,8 +34,6 @@ import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 
 /**
- * ZCLCluster interface mocked implementation.
- * 
  * @author $Id$
  */
 public class ZCLClusterImpl implements ZCLCluster {

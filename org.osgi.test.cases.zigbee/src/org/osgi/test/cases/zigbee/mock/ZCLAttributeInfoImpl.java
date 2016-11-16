@@ -17,6 +17,7 @@
 package org.osgi.test.cases.zigbee.mock;
 
 import org.osgi.service.zigbee.ZCLAttributeInfo;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 public class ZCLAttributeInfoImpl implements ZCLAttributeInfo {
@@ -37,6 +38,12 @@ public class ZCLAttributeInfoImpl implements ZCLAttributeInfo {
 		this.attributeId = attributeId;
 		this.manufacturerCode = manufacturerCode;
 		this.dataType = dataType;
+	}
+
+	public ZCLAttributeInfoImpl(ZCLAttributeDescription attributeDescription) {
+		this.attributeId = attributeDescription.getId();
+		this.manufacturerCode = attributeDescription.getManufacturerCode();
+		this.dataType = attributeDescription.getDataType();
 	}
 
 	public boolean isManufacturerSpecific() {

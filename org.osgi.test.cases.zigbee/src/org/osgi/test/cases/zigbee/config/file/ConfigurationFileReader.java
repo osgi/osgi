@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -30,6 +31,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.test.cases.zigbee.configuration.ParserUtils;
 import org.osgi.test.cases.zigbee.configuration.ZigBeeProfiles;
+import org.osgi.test.cases.zigbee.descriptions.ZCLCommandDescriptionImpl;
 import org.osgi.test.cases.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.test.cases.zigbee.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.test.cases.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
@@ -81,6 +83,9 @@ public class ConfigurationFileReader {
 	}
 
 	private void readXmlFile(InputStream is) throws Exception {
+
+		this.profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
+
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 
@@ -111,8 +116,6 @@ public class ConfigurationFileReader {
 		if (this.invokeTimeout <= 0) {
 			throw new Exception("please set the invokeTimeout attribute to a positive value");
 		}
-
-		profiles = ZigBeeProfiles.getInstance(new FileInputStream("zcl.xml"));
 	}
 
 	/**
@@ -172,14 +175,23 @@ public class ConfigurationFileReader {
 	}
 
 	/**
-	 * Returns all the ZigBeeEndpoints belonging to the specified ZigBeeNode.
+	 * Retrieves the ZigBeeEndpointConfig objects available in a specific node
 	 * 
-	 * @param node A ZigBeeNodeConfig object.
-	 * @return
+	 * @param node ZigBeeNodeConfig object.
+	 * @return The an array ZigBeeEndpointConfig objects belonging to the node.
 	 */
 
 	public ZigBeeEndpointConfig[] getEnpoints(ZigBeeNodeConfig node) {
 		return node.getEndpoints();
+	}
+
+	/**
+	 * Returns the ZigBeeNodeConfig read from the CT configuration file.
+	 * 
+	 * @return An array of the read ZigBeeNodeImpl instances.
+	 */
+	public ZigBeeNodeConfig[] getZigBeeNodes() {
+		return nodes;
 	}
 
 	private ZigBeeHostConfig parseHostElement(Document doc) throws Exception {
@@ -188,8 +200,6 @@ public class ConfigurationFileReader {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element hostElement = (Element) node;
 
-			// FIXME: do we need the PID, unless getting the ieeeAddress?
-			String hostPid = ParserUtils.getAttribute(hostElement, "pid", ParserUtils.MANDATORY, "");
 			int panId = ParserUtils.getAttribute(hostElement, "panId", ParserUtils.MANDATORY, -1);
 			int channel = ParserUtils.getAttribute(hostElement, "channel", ParserUtils.MANDATORY, -1);
 			int securityLevel = ParserUtils.getAttribute(hostElement, "securityLevel", ParserUtils.MANDATORY, -1);
@@ -199,7 +209,7 @@ public class ConfigurationFileReader {
 
 			ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(hostElement);
 
-			return new ZigBeeHostConfig(hostPid, panId, channel, securityLevel, ieeeAddress, nodeDescriptor, null, null);
+			return new ZigBeeHostConfig(panId, channel, securityLevel, ieeeAddress, nodeDescriptor, null, null);
 		}
 
 		throw new Exception("host element not found in the zigbee-ct configuration xml file");
@@ -268,7 +278,10 @@ public class ConfigurationFileReader {
 	}
 
 	private ZigBeeEndpointConfig parseEndpointElement(Element endpointElement) throws Exception {
+
 		short endpointId = ParserUtils.getAttribute(endpointElement, "id", ParserUtils.MANDATORY, (short) -1);
+		int clientClustersNumber = ParserUtils.getAttribute(endpointElement, "outputClustersNumber", ParserUtils.MANDATORY, -1);
+		int serverClustersNumber = ParserUtils.getAttribute(endpointElement, "inputClustersNumber", ParserUtils.MANDATORY, -1);
 
 		ZigBeeSimpleDescriptor simpleDescriptor = parseSimpleDescriptorElement(endpointElement, endpointId);
 
@@ -278,26 +291,30 @@ public class ConfigurationFileReader {
 
 		int[] inputClusters = simpleDescriptor.getInputClusters();
 
-		// FIXME: check if input <-> Server!!!
 		ZCLClusterDescription[] serverClustersDescriptions = new ZCLClusterDescription[inputClusters.length];
 		for (int i = 0; i < inputClusters.length; i++) {
 			int clusterId = inputClusters[i];
 
 			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			if (global == null) {
+				parserError(" the simpleDescriptor of endpoint " + endpointId + " refers to a input clusterId= " + clusterId + " that is not defined in file zcl.xml");
+			}
 			serverClustersDescriptions[i] = global.getServerClusterDescription();
 		}
 
-		// FIXME: check if output <-> Client!!!
 		int[] outputClusters = simpleDescriptor.getOutputClusters();
 		ZCLClusterDescription[] clientClustersDescriptions = new ZCLClusterDescription[outputClusters.length];
 		for (int i = 0; i < outputClusters.length; i++) {
 			int clusterId = outputClusters[i];
 
 			ZCLGlobalClusterDescription global = profiles.getZCLGlobalDescription(clusterId);
+			if (global == null) {
+				parserError(" the simpleDescriptor of endpoint " + endpointId + " refers to a output clusterId= " + clusterId + " that is not defined in file zcl.xml");
+			}
 			clientClustersDescriptions[i] = global.getClientClusterDescription();
 		}
 
-		return new ZigBeeEndpointConfig(endpointId, serverClustersDescriptions, clientClustersDescriptions, simpleDescriptor);
+		return new ZigBeeEndpointConfig(endpointId, serverClustersDescriptions, clientClustersDescriptions, simpleDescriptor, clientClustersNumber, serverClustersNumber);
 	}
 
 	/**
@@ -364,10 +381,6 @@ public class ConfigurationFileReader {
 			byte version = ParserUtils.getAttribute(descElt, "version", ParserUtils.MANDATORY, (byte) -1);
 			int profileId = ParserUtils.getAttribute(descElt, "profileId", ParserUtils.MANDATORY, -1);
 
-			// FIXME: where to store this????
-			int outputClustersNumber = ParserUtils.getAttribute(descElt, "outputClustersNumber", ParserUtils.MANDATORY, -1);
-			int inputClustersNumber = ParserUtils.getAttribute(descElt, "inputClustersNumber", ParserUtils.MANDATORY, -1);
-
 			String inputClustersList = ParserUtils.getAttribute(descElt, "inputClusters", ParserUtils.MANDATORY, "");
 			String outputClustersList = ParserUtils.getAttribute(descElt, "outputClusters", ParserUtils.MANDATORY, "");
 
@@ -389,13 +402,6 @@ public class ConfigurationFileReader {
 		}
 	}
 
-	/**
-	 * Not used anymore
-	 * 
-	 * FIXME: remove it!
-	 * 
-	 * @param doc
-	 */
 	private void parseFrameElement(Document doc) {
 		NodeList nList = doc.getElementsByTagName("frame");
 		Node node = nList.item(0);
@@ -486,6 +492,97 @@ public class ConfigurationFileReader {
 				}
 			}
 
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve the first attribute that satisfy the given requirements.
+	 * 
+	 * @param isWritable Ask for an attribute that may be writable or read only
+	 *        (pass null if you don't care).
+	 * 
+	 * @param isReportable Ask for an attribute that may be reportable or not
+	 *        (pass null if you don't care).
+	 * @return
+	 */
+
+	public ZigBeeEndpointConfig findEndpointWithCluster(boolean isServer) {
+
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
+
+			for (int j = 0; j < endpoints.length; j++) {
+				ZigBeeEndpointConfig endpoint = endpoints[j];
+				ZCLClusterDescription[] clusters;
+				if (isServer) {
+					clusters = endpoint.getServerClusters();
+				} else {
+					clusters = endpoint.getClientClusters();
+				}
+
+				if (clusters.length > 0) {
+					return endpoints[j];
+				}
+			}
+		}
+		return null;
+	}
+
+	public CommandCoordinates findCommand(boolean isServer) {
+		for (int i = 0; i < nodes.length; i++) {
+			ZigBeeEndpointConfig[] endpoints = nodes[i].getEndpoints();
+
+			for (int j = 0; j < endpoints.length; j++) {
+				ZigBeeEndpointConfig endpoint = endpoints[j];
+				ZCLClusterDescription[] clusters;
+				if (isServer) {
+					clusters = endpoint.getServerClusters();
+				} else {
+					clusters = endpoint.getClientClusters();
+				}
+
+				if (clusters.length > 0) {
+					for (int k = 0; k < clusters.length; k++) {
+						ZCLCommandDescription[] receivedCommandDescriptions = clusters[k].getReceivedCommandDescriptions();
+						if (receivedCommandDescriptions.length > 0) {
+							CommandCoordinates commandCoordinates = new CommandCoordinates();
+							commandCoordinates.expectedEndpoint = endpoint;
+							commandCoordinates.expectedCluster = clusters[k];
+							return commandCoordinates;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private void parserError(String message) throws Exception {
+		throw new Exception("CT parser: " + message);
+	}
+
+	public ZCLCommandDescription getResponseCommand(ZCLClusterDescription expectedCluster, ZCLCommandDescription requestCommand) {
+		/*
+		 * Gets all the commands received by the client side of the cluster.
+		 * Then locates the response command.
+		 */
+		ZCLCommandDescription[] responsesCommandDescriptions = expectedCluster.getGlobalClusterDescription().getClientClusterDescription().getReceivedCommandDescriptions();
+		for (int i = 0; i < responsesCommandDescriptions.length; i++) {
+			int responseCommandId = ((ZCLCommandDescriptionImpl) requestCommand).getResponseCommandId();
+			if (responsesCommandDescriptions[i].getId() == responseCommandId) {
+				return responsesCommandDescriptions[i];
+			}
+		}
+
+		return null;
+	}
+
+	public ZigBeeNodeConfig getNodeConfig(BigInteger ieeeAddress) {
+		for (int i = 0; i < nodes.length; i++) {
+			if (nodes[i].getIEEEAddress().equals(ieeeAddress)) {
+				return nodes[i];
+			}
 		}
 		return null;
 	}

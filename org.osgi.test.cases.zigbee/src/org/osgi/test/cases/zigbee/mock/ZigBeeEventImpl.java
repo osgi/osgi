@@ -32,13 +32,6 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 	private int			attributeId;
 	private Object		value;
 
-	/**
-	 * @param ieeeAddress
-	 * @param endpointId
-	 * @param clusterId
-	 * @param attributeId
-	 * @param value
-	 */
 	public ZigBeeEventImpl(BigInteger ieeeAddress, short endpointId, int clusterId, int attributeId, Object value) {
 		this.ieeeAddress = ieeeAddress;
 		this.endpointId = endpointId;
@@ -71,5 +64,4 @@ public class ZigBeeEventImpl implements ZigBeeEvent {
 		return ZigBeeEventImpl.class.getName() + "[ieeeAddress: " + ieeeAddress + ", endpointId:" + endpointId
 				+ ", clusterId:" + clusterId + ", attributeId:" + attributeId + ", value:" + value + "]";
 	}
-
 }

@@ -17,16 +17,24 @@
 package org.osgi.test.cases.zigbee;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.zigbee.ZCLAttribute;
+import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLException;
+import org.osgi.service.zigbee.ZCLReadStatusRecord;
+import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeHostConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
@@ -34,7 +42,44 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class ZigBeeTestCases extends DefaultTestBundleControl {
+abstract class ZigBeeTestCases extends DefaultTestBundleControl {
+
+	/**
+	 * Timeout used for the timing out all the methods belonging to the
+	 * ZigBeeHost, ZigBeeNode, ZigBeeEndpoint, ZigBeeCluster interfaces, that
+	 * are also returning a Promise.
+	 */
+	protected static int		INVOKE_TIMEOUT;;
+
+	/**
+	 * Timeout used to wait for a ZigBeeNode or a ZigBeeEndpoint to be seen in
+	 * the OSGi framework as a service. This constant is read from the
+	 * configuration file provided by the RI.
+	 */
+	protected static int		DISCOVERY_TIMEOUT;
+
+	ConfigurationFileReader		conf;
+
+	protected TestStepLauncher	launcher;
+
+	protected void setUp() throws Exception {
+		prepareTestStart();
+	}
+
+	protected void tearDown() throws Exception {
+	}
+
+	private void prepareTestStart() throws Exception {
+		launcher = TestStepLauncher.launch(getContext());
+		conf = launcher.getConfiguration();
+
+		/*
+		 * Initialize timeout constants relevant for the CT with the values read
+		 * from the ZigBee configuration file.
+		 */
+		INVOKE_TIMEOUT = conf.getInvokeTimeout();
+		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
+	}
 
 	/**
 	 * Wait till a ZigBeeHost service with the passed
@@ -134,15 +179,18 @@ public class ZigBeeTestCases extends DefaultTestBundleControl {
 	 */
 	protected ZigBeeEndpoint getZigBeeEndpointService(ZigBeeEndpointConfig endpoint) {
 
+		assertNotNull(endpoint);
+		assertNotNull(endpoint.getNodeAddress());
+
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + endpoint.getNodeAddress() + ")";
 		String endpointIdFilter = "(" + ZigBeeEndpoint.ENDPOINT_ID + "=" + endpoint.getId() + ")";
 
 		String filter = "(&" + ieeeAddressFilter + endpointIdFilter + ")";
 		try {
 			ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), filter);
-			if (sRefs.length > 1) {
+			if (sRefs != null && sRefs.length > 1) {
 				fail("we expect to have just one ZigBeeEndpoint service registered with the same ENDPOINT_ID and IEEE_ADDRESS.");
-			} else if (sRefs.length == 0) {
+			} else if (sRefs == null) {
 				fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 			}
 
@@ -176,6 +224,14 @@ public class ZigBeeTestCases extends DefaultTestBundleControl {
 		}
 	}
 
+	protected String printScope(ZigBeeEndpointConfig endpoint) {
+		return "[ ieeeAddress: " + endpoint.getNodeAddress() + ", ID: " + endpoint.getId() + "]";
+	}
+
+	protected String printScope(ZigBeeNodeConfig node) {
+		return "[ ieeeAddress: " + node.getIEEEAddress() + "]";
+	}
+
 	/**
 	 * Checks if the promise returns a value of the expected class. If not,
 	 * fails the test, otherwise returns the value. This method is intended to
@@ -194,19 +250,128 @@ public class ZigBeeTestCases extends DefaultTestBundleControl {
 			fail("internal CT error. The promise must never fail here.");
 		}
 
-		if (value != null && value.getClass().isAssignableFrom(clazz)) {
+		if (value != null && value.getClass().isInstance(clazz)) {
 			fail("promise did return a wrong class value. Expected " + clazz.getName() + " got " + value.getClass().getName());
 		}
 		return value;
 	}
 
-	protected void assertZCLException(String message, Throwable e, int errorCode) {
-		assertNotNull(message, e);
-
-		if (e instanceof ZCLException) {
-			assertEquals("wrong exception code", ((ZCLException) e).getErrorCode(), errorCode);
+	protected static void assertPromiseFailure(Promise p, String message, Class want) throws InterruptedException {
+		if (p.getFailure() != null) {
+			assertException(message, want, p.getFailure());
 		} else {
-			fail("expected a ZCLException, got " + e.getClass(), e);
+			fail(message + " " + "Promise resolved, but expected it to fail with exception: [" + want.getName() + "]");
+		}
+	}
+
+	protected static void assertPromiseZCLException(Promise p, String message, int errorCode) throws InterruptedException {
+
+		Class want = ZCLException.class;
+
+		if (p.getFailure() != null) {
+			assertException(message, want, p.getFailure());
+
+			ZCLException e = (ZCLException) p.getFailure();
+
+			assertEquals(message + " " + "The exception was correct but with a wrong error code", errorCode, e.getErrorCode());
+		} else {
+			fail(message + " " + "Promise resolved, but expected it to fail with exception: [" + want.getName() + "]");
+		}
+	}
+
+	protected static void assertPromiseZDPException(Promise p, String message, int errorCode) throws InterruptedException {
+
+		Class want = ZDPException.class;
+
+		if (p.getFailure() != null) {
+			assertException(message, want, p.getFailure());
+
+			ZDPException e = (ZDPException) p.getFailure();
+
+			assertEquals(message + " " + "The exception was correct but with a wrong error code", errorCode, e.getErrorCode());
+		} else {
+			fail(message + " " + "Promise resolved, but expected it to fail with exception: [" + want.getName() + "]");
+		}
+	}
+
+	/**
+	 * Asserts that the passed map is not null and contains keys and values of
+	 * the expected classes. If expectedSize is zero or positive, it checks also
+	 * for the map size. The map values cannot be null.
+	 * 
+	 * @param context A string that will be prefixed to the error messages.
+	 * @param map
+	 * @param key
+	 * @param value
+	 * @param length
+	 */
+
+	protected void assertMapContent(String context, Map map, Class keyClass, Class valueClass, int expectedSize) {
+		assertNotNull(context + ": cannot return a null Map.", map);
+		if (expectedSize >= 0) {
+			assertEquals(context + " returned map size is wrong", expectedSize, map.size());
+		}
+
+		Set keys = map.keySet();
+		for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
+			Object key = iterator.next();
+			if (!keyClass.isInstance(key)) {
+				fail(context + ": expected:[" + keyClass.getName() + "] but was:[" + key.getClass().getName() + "]");
+			}
+
+			Object value = map.get(key);
+
+			assertNotNull(context + ": map contains a null value");
+
+			if (!valueClass.isInstance(value)) {
+				fail(context + ": expected:[" + valueClass.getName() + "] but was:[" + value.getClass().getName() + "]");
+			}
+		}
+	}
+
+	public static Object getParameterChecked(String context, Map properties, String parameterName, boolean required, Class want) {
+		if (properties == null) {
+			throw new NullPointerException("CT internal errror, passing null 'properties' argument");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return null;
+			} else {
+				fail(context + ": missing required property: " + parameterName);
+			}
+		} else if (want.isInstance(value)) {
+			return value;
+		} else {
+			fail(context + ": expected:[" + value.getClass().getName() + "] but was:[" + value.getClass().getName() + "]");
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if the ZCLReadStatus record content is complient with the
+	 * specification.
+	 * 
+	 * @param context
+	 * @param readStatusRecord
+	 * @param expectedAttributeInfo
+	 * @param expectedErrorCode
+	 */
+	protected void assertReadStatusRecord(String context, ZCLReadStatusRecord readStatusRecord, ZCLAttributeInfo expectedAttributeInfo, int expectedErrorCode) {
+
+		assertNotNull(context + "; ReadStatusRecord cannot be null");
+
+		if (!expectedAttributeInfo.equals(readStatusRecord.getAttributeInfo())) {
+			fail(context + ": ReadStatusRecord.getAttributeInfo() differs in content from the expected.");
+		}
+
+		if (expectedErrorCode >= 0) {
+			ZigBeeException failure = readStatusRecord.getFailure();
+			assertNotNull(context + "the response is successful, BUT a failure is expected in this test case reading a invalid attribute.", failure);
+			assertException(context + ": wrong exception", ZCLException.class, failure);
+			assertEquals(context + ": the ZCL exception error code is not correct ", expectedErrorCode, ((ZCLException) failure).getErrorCode());
 		}
 	}
 

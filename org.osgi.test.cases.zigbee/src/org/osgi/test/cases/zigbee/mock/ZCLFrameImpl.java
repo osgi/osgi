@@ -36,6 +36,12 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	public static int	minHeaderSize;
 
 	/**
+	 * The maximum header size (when the frame is manufacturer specific) of the
+	 * ZCL command frame. The value is given by the configuration file.
+	 */
+	public static int	maxHeaderSize;
+
+	/**
 	 * Stores the ZCL Header
 	 */
 	protected ZCLHeader	zclHeader	= null;
@@ -100,7 +106,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 */
 
 	public byte[] getBytes() {
-		int size = zclHeader.isManufacturerSpecific() ? (minHeaderSize + 2) : minHeaderSize;
+		int size = zclHeader.isManufacturerSpecific() ? (maxHeaderSize) : minHeaderSize;
 		byte[] d = new byte[size + index];
 		System.arraycopy(data, 0, d, size, index);
 		return d;

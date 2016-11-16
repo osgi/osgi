@@ -22,21 +22,20 @@ import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.types.ZigBeeBoolean;
-import org.osgi.service.zigbee.types.ZigBeeCharacterString;
+import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger16;
 import org.osgi.test.cases.zigbee.config.file.AttributeCoordinates;
 import org.osgi.test.cases.zigbee.config.file.CommandCoordinates;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
-import org.osgi.test.cases.zigbee.config.file.ConfigurationUtils;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
-import org.osgi.test.cases.zigbee.mock.ZCLAttributeImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeInfoImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -47,72 +46,15 @@ import org.osgi.util.promise.Promise;
  */
 public class ZCLClusterTestCases extends ZigBeeTestCases {
 
-	private static final String	TAG	= ZCLClusterTestCases.class.getName();
-
-	private TestStepLauncher	launcher;
-
-	/**
-	 * Timeout used for the timing out all the methods belonging to the
-	 * ZigBeeHost, ZigBeeNode, ZigBeeEndpoint, ZigBeeCluster interfaces, that
-	 * are also returning a Promise.
-	 */
-	public static int			INVOKE_TIMEOUT;;
-
-	/**
-	 * Timeout used to wait for a ZigBeeNode or a ZigBeeEndpoint to be seen in
-	 * the OSGi framework as a service. This constant is read from the
-	 * configuration file provided by the RI.
-	 */
-	public static int			DISCOVERY_TIMEOUT;
-
-	ConfigurationFileReader		conf;
-
-	protected void setUp() throws Exception {
-		log(TAG, "Prepare for ZigBee Test Case");
-
-		prepareTestStart();
-		log("Prepared for ZigBee Test Case");
-	}
-
-	protected void tearDown() throws Exception {
-		log(TAG, "Tear down ZigBee Test Case");
-	}
-
-	private void prepareTestStart() throws Exception {
-		launcher = TestStepLauncher.launch(getContext());
-		conf = launcher.getConfReader();
-
-		/*
-		 * Initialize timeout constants relevant for the CT with the values read
-		 * from the ZigBee configuration file.
-		 */
-		INVOKE_TIMEOUT = conf.getInvokeTimeout();
-		DISCOVERY_TIMEOUT = conf.getDiscoveryTimeout();
-
-		// TODO: we need to check here that the xml file contains all the info
-		// we need for starting the tests!
-	}
-
-	/**
-	 * Tests the ZCLCluster.getAttribute() method.
-	 * 
-	 * TODO
-	 * 
-	 * @throws Exception
-	 */
-	public void testGetAttribute() throws Exception {
-
-		ConfigurationUtils.getUnsupportedServerAttribute();
-
-		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
-		ZigBeeEndpointConfig expectedEndpoint = conf.getEnpoints(expectedNode)[0];
-
-		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedNode, expectedEndpoint);
-		assertNotNull("ZigBeeEndpoint", endpoint);
-	}
+	private static final String TAG = ZCLClusterTestCases.class.getName();
 
 	/**
 	 * Tests the ZCLCluster.writeAttributes() method.
+	 * 
+	 * The currently implemented test cases are designed to be used in real
+	 * scenarios and with real ZigBee device. For instance just a few ZCL
+	 * clusters support more than one writable attributes, so a test that tries
+	 * to write 2 attributes cannot be actually performed.
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
@@ -121,27 +63,33 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		String context = "ZCLCluster.writeAttributes()";
 
-		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
-		ZigBeeEndpointConfig expectedEndpoint = conf.getEnpoints(expectedNode)[0];
+		/*
+		 * Locates an endpoint that have a at least one server cluster
+		 */
+		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
+		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
-		assertNotNull("ZigBeeEndpoint", endpoint);
+		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
 
 		/*
 		 * Get the first cluster present in the CT configuration file.
 		 */
-		ZCLCluster cluster = endpoint.getServerClusters()[0];
+		ZCLCluster[] clusters = endpoint.getServerClusters();
+		assertNotNull(context + ": getServerClusters() must never return null", clusters);
+
+		if (clusters.length == 0) {
+			fail(context + " the CT configuration file states that ZigBeeEndpoint service " + printScope(expectedEndpoint) + " contains at least one server cluster");
+		}
+
+		ZCLCluster cluster = clusters[0];
 
 		/*
 		 * Check exception thrown in case of null Map.
 		 */
 		Promise p = cluster.writeAttributes(false, null);
 		waitForPromise(p, INVOKE_TIMEOUT);
-		if (p.getFailure() != null) {
-			assertException(context + " wrong exception was thrown on passing null attributes map.", NullPointerException.class, p.getFailure());
-		} else {
-			fail(context + ": expected an NullPointerException when passing a null frame.");
-		}
+		assertPromiseFailure(p, context + ": passing null map argument.", NullPointerException.class);
 
 		/*
 		 * Check returned value in case of empty Map.
@@ -150,9 +98,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map map = (Map) assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected an empty map as result of asking to write no attributes", 0, map.size());
+			assertEquals(context + " expected an empty map as result of asking to write no attributes.", 0, map.size());
 		} else {
-			fail("unexpected failure", p.getFailure());
+			fail(context + " Promise failed unexpectly.", p.getFailure());
 		}
 
 		/*
@@ -170,28 +118,22 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		p = cluster.writeAttributes(false, wrongMap1);
 		waitForPromise(p, INVOKE_TIMEOUT);
-		if (p.getFailure() != null) {
-			assertException(context + " wrong exception was thrown on passing null attributes map.", IllegalArgumentException.class, p.getFailure());
-		} else {
-			fail(context + ": expected an IllegalArgumentException when passing a null frame.");
-		}
+		assertPromiseFailure(p, context + ": passing a map argument that contains a mix of not and maufacturer specific attributes.", IllegalArgumentException.class);
 
 		/*
-		 * Find a Boolean writable attribute inside the CT configuration file.
+		 * Find a CharacterString writable attribute inside the CT configuration
+		 * file.
 		 */
-		AttributeCoordinates attributeCoordinates = conf.findAttribute(new Boolean(true), null, ZigBeeCharacterString.getInstance());
+		AttributeCoordinates attributeCoordinates = conf.findAttribute(new Boolean(true), null, ZigBeeUnsignedInteger16.getInstance());
 
-		assertNotNull("unable to find in the CT file a CharacterSting writable attribute");
+		assertNotNull("unable to find in the CT file a CharacterSting writable attribute", attributeCoordinates);
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
-		ZCLAttribute writableAttribute = new ZCLAttributeImpl(attributeCoordinates.expectedAttributeDescription);
-		p = writableAttribute.getValue();
-
-		String writableAttributeValue = (String) p.getValue();
+		ZCLAttributeInfo writableAttributeInfo = new ZCLAttributeInfoImpl(attributeCoordinates.expectedAttributeDescription);
 
 		Map writeMap = new HashMap();
-		writeMap.put(writableAttribute, writableAttributeValue);
+		writeMap.put(writableAttributeInfo, new Integer(10));
 
 		p = cluster.writeAttributes(false, writeMap);
 		waitForPromise(p, INVOKE_TIMEOUT);
@@ -199,46 +141,32 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			Map map = (Map) assertPromiseValueClass(p, Map.class);
 			assertEquals(context + " expected an empty map as result of asking to write an attribute", 0, map.size());
 		} else {
-			fail("unexpected failure", p.getFailure());
-		}
-
-		p = cluster.writeAttributes(false, writeMap);
-		waitForPromise(p, INVOKE_TIMEOUT);
-		if (p.getFailure() == null) {
-			Map map = (Map) assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected an empty map as the successful result of asking to write an attribute", 0, map.size());
-		} else {
-			fail("unexpected failure", p.getFailure());
+			fail(context + " Promise failed unexpectly.", p.getFailure());
 		}
 
 		/*
-		 * Find an unsigned boolean attribute inside the CT configuration file.
-		 * Then tries to write the above attribute and this read only.
+		 * Find a read only boolean attribute inside the CT configuration file.
 		 */
 		attributeCoordinates = conf.findAttribute(new Boolean(false), null, ZigBeeBoolean.getInstance());
 
-		assertNotNull("unable to find in the CT configuration file a Boolean read-only attribute");
+		assertNotNull("unable to find in the CT configuration file a Boolean read-only attribute", attributeCoordinates);
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
-		ZCLAttribute readOnlyAttribute = new ZCLAttributeImpl(attributeCoordinates.expectedAttributeDescription);
-		p = writableAttribute.getValue();
+		ZCLAttributeInfo readOnlyAttributeInfo = new ZCLAttributeInfoImpl(attributeCoordinates.expectedAttributeDescription);
 
-		Boolean readOnlyAttributeValue = (Boolean) p.getValue();
+		Map readOnlyMap = new HashMap();
+		readOnlyMap.put(readOnlyAttributeInfo, new Boolean(false));
 
-		Map writeMixedMap = new HashMap();
-		writeMixedMap.put(writableAttribute, writableAttributeValue);
-		writeMixedMap.put(readOnlyAttribute, readOnlyAttributeValue);
-
-		p = cluster.writeAttributes(false, writeMixedMap);
+		p = cluster.writeAttributes(false, readOnlyMap);
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map map = (Map) assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected a map with size 1 as result of asking to write a writable and a read-only attribute", 1, map.size());
+			assertEquals(context + " expected a map with size 1 as result of asking to write a read-only attribute", 1, map.size());
 
-			Object s = map.get(new Integer(readOnlyAttribute.getId()));
-			if (s instanceof Short) {
-				short status = ((Short) s).shortValue();
+			Object s = map.get(new Integer(readOnlyAttributeInfo.getId()));
+			if (s instanceof Integer) {
+				short status = ((Integer) s).shortValue();
 				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
 			} else {
 				fail(context + " must return a Map<Integer, Short>");
@@ -247,8 +175,36 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			fail("unexpected failure", p.getFailure());
 		}
 
-		// TODO: undivided
-		// TODO: multiple writable attributes undivided.
+		ZCLAttributeInfo unsupportedAttributeInfo = new ZCLAttributeInfoImpl(0xfa11, -1, ZigBeeBoolean.getInstance());
+
+		Map readOnlyAndUndefinedMap = new HashMap();
+		readOnlyAndUndefinedMap.put(readOnlyAttributeInfo, new Boolean(false));
+		readOnlyAndUndefinedMap.put(unsupportedAttributeInfo, new Boolean(false));
+
+		p = cluster.writeAttributes(false, readOnlyAndUndefinedMap);
+		waitForPromise(p, INVOKE_TIMEOUT);
+		if (p.getFailure() == null) {
+			Map map = (Map) assertPromiseValueClass(p, Map.class);
+			assertEquals(context + " expected a map with size 2 as result of asking to write one read-only and one undefined attribute", 2, map.size());
+
+			Object s = map.get(new Integer(readOnlyAttributeInfo.getId()));
+			if (s instanceof Integer) {
+				short status = ((Integer) s).shortValue();
+				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
+			} else {
+				fail(context + " must return a Map<Integer, Short>");
+			}
+
+			s = map.get(new Integer(unsupportedAttributeInfo.getId()));
+			if (s instanceof Integer) {
+				short status = ((Integer) s).shortValue();
+				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.UNSUPPORTED_ATTRIBUTE, status);
+			} else {
+				fail(context + " must return a Map<Integer, Short>");
+			}
+		} else {
+			fail("unexpected failure", p.getFailure());
+		}
 	}
 
 	/**
@@ -268,30 +224,40 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 */
 
 	public void testReadAttributes() throws Exception {
+		log(TAG, "starting Test testReadAttributes.");
 
-		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
-		ZigBeeEndpointConfig expectedEndpoint = conf.getEnpoints(expectedNode)[0];
+		/*
+		 * Looks for a server side Boolean attribute that the test case will try
+		 * to read.
+		 */
+		AttributeCoordinates attributeCoord = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
+		assertNotNull("The CT configuration file must contain at least one server cluster with an attribute of boolean data type", attributeCoord);
 
-		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedNode, expectedEndpoint);
-		assertNotNull("ZigBeeEndpoint", endpoint);
+		ZigBeeEndpointConfig expectedEndpoint = attributeCoord.expectedEndpoint;
+		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
+		assertNotNull("expected ZigBeeEndpoint " + this.printScope(expectedEndpoint) + " not registered", endpoint);
 
-		ZCLCluster cluster = endpoint.getServerClusters()[0];
+		/*
+		 * Got the cluster where the attribute reside.
+		 */
+		ZCLCluster cluster = endpoint.getServerCluster(attributeCoord.expectedCluster.getId());
 
 		/*
 		 * ZCLCluster.readAttributes(AttributeInfo[]): check behavior when
 		 * passing a null argument.
 		 */
 
+		String context = "ZCLCluster.readAttributes()";
+
+		log(TAG, context + ": passing null argument.");
+
 		Promise p = cluster.readAttributes(null);
 		waitForPromise(p, INVOKE_TIMEOUT);
 
 		if (p.getFailure() == null) {
-			fail("ZCLCluster.readAttributes() must fail the promise with a NullPointerException");
+			fail(context + ": must fail the promise with a NullPointerException");
 		} else {
-			Throwable t = p.getFailure();
-			if (!(t instanceof NullPointerException)) {
-				fail("expected NullPointerException, got " + t.getClass().getName());
-			}
+			assertException(context + ": wrong type of failure.", NullPointerException.class, p.getFailure());
 		}
 
 		/*
@@ -299,18 +265,16 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * passing an empty array.
 		 */
 
+		log(TAG, context + ": passing empty array argument.");
 		ZCLAttributeInfo[] attributeInfos = new ZCLAttributeInfo[0];
 
 		p = cluster.readAttributes(attributeInfos);
 		waitForPromise(p, INVOKE_TIMEOUT);
 
 		if (p.getFailure() == null) {
-			fail("ZCLCluster.readAttributes() must fail the promise with a IllegalArgumentException if the passed array is empty.");
+			fail(context + ": must fail the promise with a IllegalArgumentException if the passed array is empty.");
 		} else {
-			Throwable t = p.getFailure();
-			if (!(t instanceof IllegalArgumentException)) {
-				fail("expected IllegalArgumentException, got " + t.getClass().getName());
-			}
+			assertException(context + ": wrong type of failure when passing empty array", IllegalArgumentException.class, p.getFailure());
 		}
 
 		/*
@@ -318,18 +282,17 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * passing an array with null entries.
 		 */
 
+		log(TAG, context + ": passing array with null entries.");
+
 		attributeInfos = new ZCLAttributeInfo[] {null, null};
 
 		p = cluster.readAttributes(attributeInfos);
 		waitForPromise(p, INVOKE_TIMEOUT);
 
 		if (p.getFailure() == null) {
-			fail("ZCLCluster.readAttributes() must fail the promise with a IllegalArgumentException if the passed array contains a null entry.");
+			fail(context + ": must fail the promise with a IllegalArgumentException if the passed array contains a null entry.");
 		} else {
-			Throwable t = p.getFailure();
-			if (!(t instanceof IllegalArgumentException)) {
-				fail("expected IllegalArgumentException, got " + t.getClass().getName());
-			}
+			assertException(context + ": wrong type of failure when passing array with null entries.", IllegalArgumentException.class, p.getFailure());
 		}
 
 		/*
@@ -337,8 +300,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * identifier
 		 */
 
-		// FIXME: locate an unsupported attribute.
-		int unsupportedAttributeId = -1;
+		log(TAG, context + ": reading an unsupported attribute.");
+
+		// This is an unsupported attributeId;
+		int unsupportedAttributeId = 244;
 
 		ZCLAttributeInfo[] zclAttributeInfos = {new ZCLAttributeInfoImpl(unsupportedAttributeId, -1, ZigBeeBoolean.getInstance())};
 		p = cluster.readAttributes(zclAttributeInfos);
@@ -347,80 +312,145 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		if (p.getFailure() == null) {
 			Map map = (Map) assertPromiseValueClass(p, Map.class);
 
-			assertNotNull("ZCLCluster.readAttributes() cannot return a null Map.", map);
-
-			/*
-			 * The returned promise must return a map with just one entry.
-			 */
-			if (map.size() != 1) {
-				assertEquals("as return from a readAttribute, expected a Map with a different size", 1, map.size());
-			}
+			assertMapContent(context, map, Integer.class, ZCLReadStatusRecord.class, zclAttributeInfos.length);
 
 			ZCLReadStatusRecord readStatusRecord = (ZCLReadStatusRecord) map.get(new Integer(unsupportedAttributeId));
-			Exception failure = readStatusRecord.getFailure();
-
-			assertNotNull("The response is successful, BUT a failure is expected in this test case reading a invalid attribute.", failure);
-			assertTrue("The exception is not a ZCL exception", failure instanceof ZCLException);
-			assertEquals("The ZCL exception is not an unsupported attribute exception", ZCLException.UNSUPPORTED_ATTRIBUTE, ((ZCLException) failure).getErrorCode());
+			assertReadStatusRecord(context, readStatusRecord, zclAttributeInfos[0], ZCLException.UNSUPPORTED_ATTRIBUTE);
 		} else {
-			// FIXME: check for valid exceptions.
+			fail(context + " promise resolved with an unexpected exception.", p.getFailure());
+		}
+
+		/*
+		 * ZCLCluster.readAttributes(): read an existing boolean attribute.
+		 */
+		log(TAG, context + ": reading an existing boolean attribute on cluster " + cluster.getId());
+
+		zclAttributeInfos = new ZCLAttributeInfo[] {new ZCLAttributeInfoImpl(attributeCoord.expectedAttributeDescription)};
+
+		p = cluster.readAttributes(zclAttributeInfos);
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			Map map = (Map) assertPromiseValueClass(p, Map.class);
+
+			assertMapContent(context, map, Integer.class, ZCLReadStatusRecord.class, zclAttributeInfos.length);
+
+			for (int i = 0; i < zclAttributeInfos.length; i++) {
+				int key = zclAttributeInfos[i].getId();
+				ZCLReadStatusRecord readStatusRecord = (ZCLReadStatusRecord) map.get(new Integer(key));
+				assertNotNull(context + ": requested attributeId " + zclAttributeInfos[i].getId() + " entry not found in the response map", readStatusRecord);
+
+				Object value = readStatusRecord.getValue();
+				assertReadStatusRecord(context, readStatusRecord, zclAttributeInfos[i], -1);
+			}
+		} else {
+			fail(context + " promise resolved with an unexpected exception.", p.getFailure());
+		}
+
+		/*
+		 * ZCLCluster.readAttributes(): read an existing boolean attribute but
+		 * pass a wrong data type.
+		 */
+		log(TAG, context + ": reading an existing boolean attribute on cluster " + cluster.getId());
+
+		int attributeId = attributeCoord.expectedAttributeDescription.getId();
+
+		/* WRONG data type ZigBeeUnsignedInteger16 instead of ZigBeeBoolean */
+		zclAttributeInfos = new ZCLAttributeInfo[] {new ZCLAttributeInfoImpl(attributeId, -1, ZigBeeUnsignedInteger16.getInstance())};
+
+		p = cluster.readAttributes(zclAttributeInfos);
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			Map map = (Map) assertPromiseValueClass(p, Map.class);
+
+			assertMapContent(context, map, Integer.class, ZCLReadStatusRecord.class, zclAttributeInfos.length);
+			ZCLReadStatusRecord readStatusRecord = (ZCLReadStatusRecord) map.get(new Integer(attributeId));
+			assertReadStatusRecord(context, readStatusRecord, zclAttributeInfos[0], ZCLException.INVALID_DATA_TYPE);
+
+		} else {
+			fail(context + " promise resolved with an unexpected exception.", p.getFailure());
 		}
 	}
 
 	/**
-	 * Test case for checking the the proper functioning of the ZCLAttribute
-	 * class instances returned by the ZCLCluster.getAttribute(attributeId)
-	 * method.
+	 * Checks the methods related to the ZCLAttribute class. Locates a boolean
+	 * type attribute and tries to read and write it.
 	 * 
-	 * TODO
-	 * 
-	 * @throws Exception In case of errors not handled by the test case.
+	 * @throws Exception In case of unexpected failure.
 	 */
-	public void testGetAttribute1() throws Exception {
 
-		AttributeCoordinates booleanAttributeCoordinates = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
+	public void testZCLAttribute() throws Exception {
 
-		assertNotNull("No attribute found with the Boolean datatype, please modify the configuration file to add a cluster with such an attribute", booleanAttributeCoordinates);
+		AttributeCoordinates uint16attribute = conf.findAttribute(new Boolean(true), null, ZigBeeUnsignedInteger16.getInstance());
 
-		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(booleanAttributeCoordinates.expectedEndpoint);
+		assertNotNull("No writeable ZigBeeUnsignedInteger16 attribute found, please modify the configuration file to add a cluster with such an attribute", uint16attribute);
+		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(uint16attribute.expectedEndpoint);
+		assertNotNull("expected endpoint " + uint16attribute.expectedEndpoint.getId() + " not registered.", endpoint);
 
-		assertNotNull("expected endpoint " + booleanAttributeCoordinates.expectedEndpoint.getId() + " not registered.", endpoint);
+		ZCLCluster cluster = endpoint.getServerCluster(uint16attribute.expectedCluster.getId());
 
-		ZCLCluster cluster = endpoint.getServerCluster(booleanAttributeCoordinates.expectedCluster.getId());
+		String context = "ZCLCluster.getAttribute(attributeId)";
 
-		Promise p = cluster.getAttribute(booleanAttributeCoordinates.expectedAttributeDescription.getId());
+		log(TAG, context + ": retrieve an existent writable unsigned integer 16 attribute");
+
+		/*
+		 * Read this Boolean attribute (we must not get a failure here!)
+		 */
+		Promise p = cluster.getAttribute(uint16attribute.expectedAttributeDescription.getId());
 		waitForPromise(p, INVOKE_TIMEOUT);
-
 		ZCLAttribute attribute = null;
 
 		if (p.getFailure() == null) {
 			attribute = (ZCLAttribute) assertPromiseValueClass(p, ZCLAttribute.class);
 			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
 		} else {
-			fail("ZCLCluster.getAttribute(attributeId) resolved unexpectly with a failure", p.getFailure().getCause());
+			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
 		}
 
 		/**
-		 * Now try to retrieve the value
+		 * Now try to retrieve the attribute value.
 		 */
+		log(TAG, "ZCLAttribute.getValue(): on the unsigned int 16 attribute");
 
 		p = attribute.getValue();
 		waitForPromise(p, INVOKE_TIMEOUT);
 
-		Boolean value;
-
+		Integer value = null;
 		if (p.getFailure() == null) {
-			value = (Boolean) assertPromiseValueClass(p, Boolean.class);
+			value = (Integer) assertPromiseValueClass(p, Integer.class);
 		} else {
-			fail("ZCLAttribute.getValue() resolved unexpectly with a failure", p.getFailure().getCause());
+			fail("ZCLAttribute.getValue(): resolved unexpectly with a failure", p.getFailure().getCause());
 		}
 
 		/*
-		 * Now try to write a value of a wrong java type. We expect a failure.
+		 * Now try to write a value of a wrong java type. We expect a failure
+		 * here
 		 */
+
+		log(TAG, "ZCLAttribute.setValue(): on the previously read writable uint16 attribute with a wrong class value (Float instead of Integer)");
+
 		p = attribute.setValue(new Float(4));
 		waitForPromise(p, INVOKE_TIMEOUT);
-		assertZCLException("check for ZCLException.INVALID_DATA_TYPE", p.getFailure(), ZCLException.INVALID_DATA_TYPE);
+		if (p.getFailure() != null) {
+			assertPromiseZCLException(p, "ZCLAttribute.setValue(): expected ZCLException.INVALID_DATA_TYPE", ZCLException.INVALID_DATA_TYPE);
+		} else {
+			fail("ZCLAttribute.setValue(): expected a falure with ZCLException.INVALID_DATA_TYPE, got success!");
+		}
+
+		/*
+		 * Now try to write a value. We expect a success here.
+		 */
+
+		log(TAG, context + ": issue ZCLAttribute.setValue() on the previously read ZCLAttribute.");
+
+		p = attribute.setValue(new Integer(4));
+		waitForPromise(p, INVOKE_TIMEOUT);
+		if (p.getFailure() != null) {
+			fail("ZCLAttribute.setValue(): we didn't expect to fail writing a writable attribute", p.getFailure());
+		} else {
+			assertNull("ZCLAttribute.setValue(): expecting the promise to resolve with null, since the write was successful", p.getValue());
+		}
 
 		/*
 		 * Check if the correct failure is returned in case of an attempt to
@@ -428,11 +458,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 */
 
 		/* find any read-only attribute */
+
 		AttributeCoordinates readOnlyAttribute = conf.findAttribute(new Boolean(false), null, null);
 		endpoint = this.getZigBeeEndpointService(readOnlyAttribute.expectedEndpoint);
-
-		assertNotNull("expected endpoint " + readOnlyAttribute.expectedEndpoint.getId() + " not registered.", endpoint);
-
+		assertNotNull("ZigBeeEndpoint service " + this.printScope(readOnlyAttribute.expectedEndpoint) + " not registered.", endpoint);
 		cluster = endpoint.getServerCluster(readOnlyAttribute.expectedCluster.getId());
 
 		p = cluster.getAttribute(readOnlyAttribute.expectedAttributeDescription.getId());
@@ -441,24 +470,81 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			attribute = (ZCLAttribute) assertPromiseValueClass(p, ZCLAttribute.class);
 			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
 		} else {
-			fail("ZCLCluster.getAttribute(attributeId) resolved unexpectly with a failure", p.getFailure().getCause());
+			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
 		}
 
 		/**
 		 * Now try to retrieve the value
 		 */
+
+		log(TAG, "ZCLAttribute.getValue(): on the boolean attribute");
+
 		p = attribute.getValue();
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() != null) {
-			fail("ZCLAttribute.getValue() resolved unexpectly with a failure", p.getFailure().getCause());
+			fail(context + "ZCLAttribute.getValue() resolved unexpectly with a failure", p.getFailure().getCause());
 		}
 
 		Object o = p.getValue();
 
-		/* set the value with what has been read to avoid range type problems */
+		/*
+		 * set the same value with what has been read to avoid range type
+		 * problems
+		 */
+
+		log(TAG, "ZCLAttribute.setValue(): on the read-only boolean attribute.");
+
 		p = attribute.setValue(o);
 		waitForPromise(p, INVOKE_TIMEOUT);
-		assertZCLException("check for ZCLException.INVALID_DATA_TYPE", p.getFailure(), ZCLException.READ_ONLY);
+		assertPromiseZCLException(p, "ZCLAttribute.setValue() check for ZCLException.READ_ONLY", ZCLException.READ_ONLY);
+	}
+
+	/**
+	 * Test case for checking the ZCLCluster.getAttribute() methods.
+	 * 
+	 * @throws Exception In case of errors not handled by the test case.
+	 */
+	public void testGetAttribute() throws Exception {
+
+		ZCLAttribute attribute = null;
+
+		String context = "ZCLCluster.getAttribute(attributeId)";
+
+		AttributeCoordinates booleanAttributeCoordinates = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
+		assertNotNull("No attribute found with the Boolean datatype, please modify the configuration file to add a cluster with such an attribute", booleanAttributeCoordinates);
+		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(booleanAttributeCoordinates.expectedEndpoint);
+		assertNotNull("expected endpoint " + booleanAttributeCoordinates.expectedEndpoint.getId() + " not registered.", endpoint);
+
+		ZCLCluster cluster = endpoint.getServerCluster(booleanAttributeCoordinates.expectedCluster.getId());
+
+		log(TAG, context + ": reading an unsupported attribute.");
+
+		// This is an unsupported attributeId;
+		int unsupportedAttributeId = 244;
+		Promise p = cluster.getAttribute(unsupportedAttributeId);
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() != null) {
+			assertPromiseZCLException(p, context, ZCLException.UNSUPPORTED_ATTRIBUTE);
+		} else {
+			fail(context + " promise resolved with an unexpected exception.", p.getFailure());
+		}
+
+		log(TAG, context + ": retrieve a boolean attribute");
+
+		/*
+		 * Read this Boolean attribute (we must not get a failure here!)
+		 */
+		p = cluster.getAttribute(booleanAttributeCoordinates.expectedAttributeDescription.getId());
+		waitForPromise(p, INVOKE_TIMEOUT);
+
+		if (p.getFailure() == null) {
+			attribute = (ZCLAttribute) assertPromiseValueClass(p, ZCLAttribute.class);
+			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
+		} else {
+			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
+		}
+
 	}
 
 	/**
@@ -481,8 +567,6 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			ZCLCluster cluster = endpoint.getServerCluster(expectedCluster.getId());
 			assertNotNull("ZigBeeEndpoint.getServerCluster(clusterId) returned a null value for clusterId=" + expectedCluster.getId(), cluster);
 
-			// FIXME: change documentation for getCommandIds(), because it
-			// states that the returned value is Integer[].
 			Promise p = cluster.getCommandIds();
 			waitForPromise(p, INVOKE_TIMEOUT);
 
@@ -517,7 +601,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 				 * The getCommandIds may fail with an exception if some the
 				 * specific general command is not supported by the cluster.
 				 */
-				assertZCLException("check for ZCLException.GENERAL_COMMAND_NOT_SUPPORTED", p.getFailure(), ZCLException.GENERAL_COMMAND_NOT_SUPPORTED);
+				assertPromiseZCLException(p, "check for ZCLException.GENERAL_COMMAND_NOT_SUPPORTED", ZCLException.GENERAL_COMMAND_NOT_SUPPORTED);
 			}
 		}
 	}
@@ -528,7 +612,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
-	public void testGetAttributesDescriptions() throws Exception {
+	public void testGetAttributes() throws Exception {
 		log(TAG, "testGetAttributesDescriptions");
 
 		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
@@ -539,7 +623,6 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		assertNotNull("ZigBeeEndpoint.getServerClusters()", clusters);
 
-		// TODO: do the same for the Client clusters.
 		ZCLClusterDescription[] expectedClusters = expectedEndpoint.getServerClusters();
 
 		for (int i = 0; i < clusters.length; i++) {
@@ -552,7 +635,6 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			}
 
 			Promise p = cluster.getAttributes();
-
 			waitForPromise(p, INVOKE_TIMEOUT);
 			if (p.getFailure() == null) {
 
@@ -572,7 +654,6 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 					expectedAttributesFound++;
 
 					assertEquals("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ", attributeDescription.getManufacturerCode(), attribute.getManufacturerCode());
-					// TODO: maybe it doesn't compare correctly the dataType.
 					assertEquals("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ", attributeDescription.getDataType(), attribute.getDataType());
 				}
 
@@ -598,59 +679,81 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 */
 	public void testInvoke() throws Exception {
 
-		// ZigBeeNodeConfig expectedNode = conf.getFirstNode();
-		// ZigBeeEndpointConfig expectedEndpoint =
-		// conf.getEnpoints(expectedNode)[0];
-		// ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedNode,
-		// expectedEndpoint);
-
 		String context = "ZCLCluster.invoke(ZCLFrame)";
+		/*
+		 * Locates an endpoint that have a at least one server cluster
+		 */
+		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
+		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
-		CommandCoordinates commandCoordinates = null;
-
-		assertNotNull("testInvoke(): unable to find in the CT configuration file a command element that include also a requestFrame and a responseFrame elements");
-
-		ZigBeeEndpoint endpoint = getZigBeeEndpointService(commandCoordinates.expectedEndpoint);
+		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
+		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
 
 		/*
-		 * Check for invalid parameters on the first node clusters.
+		 * Check for invalid arguments on the first node clusters.
 		 */
 
 		ZCLCluster[] clusters = endpoint.getServerClusters();
+
+		ZCLFrame frame = new ZCLFrameImpl(0x00);
 
 		for (int i = 0; i < clusters.length; i++) {
 			ZCLCluster cluster = clusters[i];
 
 			Promise p = cluster.invoke(null);
 			waitForPromise(p, INVOKE_TIMEOUT);
-			if (p.getFailure() != null) {
-				assertException(context + ": wrong exception got", NullPointerException.class, p.getFailure());
-			} else {
-				fail(context + ": expected an NullPointerException when passing a null frame.");
-			}
+			assertPromiseFailure(p, context + ": passing null argument.", NullPointerException.class);
 
-			// FIXME: pass an actual endpoint pid.
-
-			p = cluster.invoke(null, "");
+			p = cluster.invoke(frame, null);
 			waitForPromise(p, INVOKE_TIMEOUT);
-			if (p.getFailure() != null) {
-				assertException(context + ": wrong exception got", NullPointerException.class, p.getFailure());
-			} else {
-				fail(context + ": expected an IllegalArgumentException when passing a null frame.");
-			}
+			assertPromiseFailure(p, context + ": passing null exportedServicePid argument.", NullPointerException.class);
+
+			p = cluster.invoke(frame, "");
+			waitForPromise(p, INVOKE_TIMEOUT);
+			assertPromiseFailure(p, context + ": passing empty string exportedServicePid argument.", IllegalArgumentException.class);
 		}
 
 		/*
 		 * Issues real commands.
-		 * 
-		 * TODO
 		 */
 
-		ZCLClusterDescription[] expectedClusters = commandCoordinates.expectedEndpoint.getServerClusters();
+		CommandCoordinates commandCoordinates = conf.findCommand(true);
+		assertNotNull(context + " unable to find in the CT configuration file a cluster with a server command defined.", commandCoordinates);
 
-		for (int i = 0; i < expectedClusters.length; i++) {
-			ZCLClusterDescription expectedCluster = expectedClusters[i];
+		expectedEndpoint = conf.findEndpointWithCluster(true);
+		assertNotNull(context + " unable to find in the CT configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
 
+		endpoint = getZigBeeEndpointService(expectedEndpoint);
+		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
+
+		ZCLCommandDescription command = null;
+
+		/*
+		 * commandCoodinates.expectedCluster contains the cluster description of
+		 * a cluster that has at least received command. It is necessary to find
+		 * this command and then the resèpmse command definition.
+		 */
+
+		ZCLCommandDescription[] commandDescriptions = commandCoordinates.expectedCluster.getReceivedCommandDescriptions();
+
+		ZCLCommandDescription responseCommand = null;
+
+		for (int i = 0; i < commandDescriptions.length; i++) {
+			ZCLCommandDescription requestCommand = commandDescriptions[i];
+			if (requestCommand.isClusterSpecificCommand() && !requestCommand.isManufacturerSpecific()) {
+				// got it!
+				responseCommand = conf.getResponseCommand(commandCoordinates.expectedCluster, requestCommand);
+				break;
+			}
 		}
+
+		/*
+		 * If responseCommand is not null we can issue a requestCommand and
+		 * expects a responseCommand.
+		 */
+
+		ZCLCluster cluster = endpoint.getServerCluster(commandCoordinates.expectedCluster.getId());
+		cluster.invoke(null);
+
 	}
 }

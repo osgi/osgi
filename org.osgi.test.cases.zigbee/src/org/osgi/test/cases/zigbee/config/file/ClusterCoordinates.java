@@ -14,27 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.mock;
+package org.osgi.test.cases.zigbee.config.file;
 
-import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZCLHeader;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
-/**
- * ZCLFrame implementation class that may be initialized with a specific raw
- * frame.
- * 
- * @author portinaro
- *
- */
-public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
-
-	public ZCLFrameRaw(ZCLHeader header, byte[] fullFrame) {
-		super(header);
-		data = fullFrame;
-		zclHeader = header;
-	}
-
-	public byte[] getBytes() {
-		return (byte[]) data.clone();
-	}
+public class ClusterCoordinates {
+	public ZigBeeEndpointConfig		expectedEndpoint;
+	public ZCLClusterDescription	expectedCluster;
 }

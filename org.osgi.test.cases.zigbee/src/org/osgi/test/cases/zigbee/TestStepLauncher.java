@@ -58,7 +58,9 @@ public class TestStepLauncher {
 		InputStream is = new FileInputStream(configFilename);
 		confReader = ConfigurationFileReader.getInstance(is);
 		is.close();
+
 		ZCLFrameImpl.minHeaderSize = confReader.getHeaderMinSize();
+		ZCLFrameImpl.maxHeaderSize = confReader.getHeaderMaxSize();
 
 		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
 				"please please plug and setup all the ZigBee devices described in the " + configFilename + " file");
@@ -72,7 +74,7 @@ public class TestStepLauncher {
 		return instance;
 	}
 
-	public ConfigurationFileReader getConfReader() {
+	public ConfigurationFileReader getConfiguration() {
 		return confReader;
 	}
 

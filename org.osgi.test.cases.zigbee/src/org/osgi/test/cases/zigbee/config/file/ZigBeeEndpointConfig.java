@@ -33,12 +33,17 @@ public class ZigBeeEndpointConfig {
 	private ZCLClusterDescription[]	inputs;
 	private ZCLClusterDescription[]	outputs;
 	private ZigBeeNodeConfig		node;
+	private int						serverClustersNumber;
+	private int						clientClustersNumber;
 
-	public ZigBeeEndpointConfig(short endpointId, ZCLClusterDescription[] inputs, ZCLClusterDescription[] outputs, ZigBeeSimpleDescriptor simpleDescriptor) {
+	public ZigBeeEndpointConfig(short endpointId, ZCLClusterDescription[] inputs, ZCLClusterDescription[] outputs, ZigBeeSimpleDescriptor simpleDescriptor, int clientClustersNumber,
+			int serverClustersNumber) {
 		this.endpointId = endpointId;
 		this.inputs = inputs;
 		this.outputs = outputs;
 		this.simpleDescriptor = simpleDescriptor;
+		this.clientClustersNumber = clientClustersNumber;
+		this.serverClustersNumber = serverClustersNumber;
 	}
 
 	public short getId() {
@@ -71,5 +76,13 @@ public class ZigBeeEndpointConfig {
 
 	public void setZigBeeNodeConfig(ZigBeeNodeConfig node) {
 		this.node = node;
+	}
+
+	public int getServerClustersNumber() {
+		return serverClustersNumber;
+	}
+
+	public int getClientClustersNumber() {
+		return clientClustersNumber;
 	}
 }

@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.zigbee.config.file;
+package org.osgi.test.cases.zigbee.mock;
 
-import org.osgi.service.zigbee.ZCLAttributeInfo;
+public interface StreamQueue {
 
-/**
- * Utility functions to manimulate the ZigBee configuration model.
- *
- * @author portinaro
- */
-public class ConfigurationUtils {
+	public void add(Object element);
 
-	/**
-	 * Retrieves from the ZigBee configuration model an unsupported attribute.
-	 * 
-	 * @return The unsupported attribute informations.
-	 */
-	public static ZCLAttributeInfo getUnsupportedServerAttribute() {
-		return null;
-	}
+	public Object poll(long timeout) throws InterruptedException, RuntimeException;
 
 }

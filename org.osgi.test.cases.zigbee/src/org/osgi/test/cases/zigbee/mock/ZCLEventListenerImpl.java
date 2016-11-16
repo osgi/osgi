@@ -22,7 +22,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEvent;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Mocked test.
@@ -31,13 +30,17 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class ZCLEventListenerImpl implements ZCLEventListener {
 
-	private static final String	TAG						= ZCLEventListenerImpl.class.getName();
+	private static final String	TAG		= ZCLEventListenerImpl.class.getName();
 
 	private BundleContext		bc;
-	private ServiceRegistration	sr;
-	private ZigBeeEvent			lastReceivedZigBeeEvent	= null;
+	private ServiceRegistration	sReg;
 
-	public ZCLEventListenerImpl(BundleContext bc) {
+	private StreamQueueImpl		stream	= null;
+
+	private ZCLException		failure;
+
+	public ZCLEventListenerImpl(
+			BundleContext bc) {
 		this.bc = bc;
 	}
 
@@ -45,36 +48,57 @@ public class ZCLEventListenerImpl implements ZCLEventListener {
 	 * Register the test event listener in the OSGi Service Registry.
 	 */
 	public void start(Dictionary properties) {
-		bc.registerService(ZCLEventListener.class.getName(), this, properties);
+		sReg = bc.registerService(ZCLEventListener.class.getName(), this, properties);
 	}
 
 	/**
 	 * Unregister the test event listener from the OSGi Service Registry.
 	 */
 	public void stop() {
-		if (sr != null) {
-			sr.unregister();
+		synchronized (this) {
+			if (sReg != null) {
+				sReg.unregister();
+			}
 		}
 	}
 
 	public void notifyEvent(ZigBeeEvent zigbeeEvent) {
-		lastReceivedZigBeeEvent = zigbeeEvent;
-		DefaultTestBundleControl.log(TAG + " - just received the following event: " + lastReceivedZigBeeEvent);
+		synchronized (this) {
+			if (stream != null) {
+				stream.add(zigbeeEvent);
+			}
+		}
 	}
 
-	/**
-	 * @return the lastReceivedZigBeeEvent.
-	 */
-	public ZigBeeEvent getLastReceivedZigBeeEvent() {
-		return lastReceivedZigBeeEvent;
+	public ZCLException getFailure() {
+		synchronized (this) {
+			return failure;
+		}
 	}
 
 	public void onFailure(ZCLException e) {
-
+		synchronized (this) {
+			this.failure = e;
+		}
 	}
 
 	public void notifyTimeOut(int timeout) {
 
 	}
 
+	public void update(Dictionary newProperties) {
+		synchronized (this) {
+			this.failure = null;
+			if (sReg != null) {
+				sReg.setProperties(newProperties);
+			}
+		}
+	}
+
+	public StreamQueue getStreamQueue() {
+		synchronized (this) {
+			stream = new StreamQueueImpl();
+			return stream;
+		}
+	}
 }
