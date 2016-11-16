@@ -1,7 +1,11 @@
 Bundle-Description: OSGi Residential Release ${version;=;${build.version}} ZigBee Compliance Tests
 
 -includeresource: {legal}, \
- ${workspace}/org.osgi.test.cases.zigbee/zigbee-template.xml
+ ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct.xsd, \
+ ${workspace}/org.osgi.test.cases.zigbee/zigbee-ct-template.xml, \
+ ${workspace}/org.osgi.test.cases.zigbee/zcl.xsd, \
+ ${workspace}/org.osgi.test.cases.zigbee/zcl.xml, \
+ ${workspace}/org.osgi.test.cases.zigbee/README.md
 
 Bundle-SymbolicName: osgi.ct.zigbee
 -ctpack: ${build.zigbee.tests},${jar.zigbee.tests}
