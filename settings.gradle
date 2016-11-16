@@ -10,7 +10,7 @@ import aQute.bnd.osgi.Constants
 /* Add bnd gradle plugin as a script dependency */
 buildscript {
   repositories {
-    flatDir dirs: file('licensed/repo/biz.aQute.bnd.gradle')
+    mavenCentral()
   }
   dependencies {
     classpath bnd_plugin
