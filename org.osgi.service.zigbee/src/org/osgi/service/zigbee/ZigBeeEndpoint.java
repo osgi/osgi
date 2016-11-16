@@ -144,6 +144,8 @@ public interface ZigBeeEndpoint {
 	 * Returns the server (input) cluster identified by the given identifier.
 	 * 
 	 * @param serverClusterId The server(input) cluster identifier.
+	 * @throws IllegalArgumentException If the passed argument is outside the
+	 *         range [0, 0xffff].
 	 * @return the server (input) cluster identified by the given identifier, or
 	 *         null if the given id is not listed in the simple descriptor.
 	 */
@@ -161,8 +163,12 @@ public interface ZigBeeEndpoint {
 	 * Returns the client cluster identified by the cluster identifier.
 	 * 
 	 * @param clientClusterId The client(output) cluster identifier.
+	 * 
+	 * @throws IllegalArgumentException If the passed argument is outside the
+	 *         range [0, 0xffff].
 	 * @return the client(output) cluster identified by the cluster identifier,
 	 *         or null if the given id is not listed in the simple descriptor.
+	 * 
 	 */
 	public ZCLCluster getClientCluster(int clientClusterId);
 

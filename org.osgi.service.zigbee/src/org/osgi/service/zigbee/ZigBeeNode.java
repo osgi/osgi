@@ -238,7 +238,7 @@ public interface ZigBeeNode {
 	 * discovered.
 	 * 
 	 * <p>
-	 * In case of failure the target device may report error code
+	 * In case of failure, the target device may report error code
 	 * {@link ZDPException#NOT_SUPPORTED}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.

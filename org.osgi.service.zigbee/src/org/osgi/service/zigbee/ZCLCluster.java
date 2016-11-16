@@ -176,10 +176,14 @@ public interface ZCLCluster {
 	 * @param attributes An array of {@link ZCLAttributeInfo}.
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
-	 *         The promise may fail with an {@link IllegalArgumentException}, if
-	 *         some of {@link ZCLAttributeInfo} are manufacturer specific and
-	 *         other are standard, or even if there are mix of attributes with
-	 *         different manufacturer specific code.
+	 *         The promise may fail with an {@link IllegalArgumentException} if
+	 *         the array size is 0 or if one of the array entries is
+	 *         {@code null} or not valid. An {@link IllegalArgumentException} is
+	 *         also thrown if some of {@link ZCLAttributeInfo} are manufacturer
+	 *         specific and other are standard, or even if there are mix of
+	 *         attributes with different manufacturer specific code. If the
+	 *         passed argument is {@code null} the promise must fail with a
+	 *         {@code NullPointerException}.
 	 * 
 	 */
 	Promise /* <Map<Integer,ZCLReadStatusRecord>> */ readAttributes(ZCLAttributeInfo[] attributes);
@@ -214,7 +218,7 @@ public interface ZCLCluster {
 	 * 
 	 * @return A promise representing the completion of this asynchronous call.
 	 *         If resolved successfully the promise may return an empty {@code
-	 *         Map<Integer, Short>}. Otherwise the map will be filled with the
+	 *         Map<Integer, Integer>}. Otherwise the map will be filled with the
 	 *         status information about the attributes that were not written.
 	 *         The key represents the attributeID and the value the status
 	 *         present in the corresponding attribute record returned by the ZCL
