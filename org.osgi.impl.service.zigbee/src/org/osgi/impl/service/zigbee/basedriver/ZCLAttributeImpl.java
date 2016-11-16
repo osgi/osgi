@@ -39,7 +39,21 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 	 */
 	public ZCLAttributeImpl(ZCLAttributeDescription desc) {
 		id = desc.getId();
-		value = desc.getDefaultValue();
+		/*
+		 * Here we need to assign a value of the correct data type, so in order
+		 * to make it working we use null, so we are sure that it contains an
+		 * invalid value.
+		 */
+
+		Class javaType = desc.getDataType().getJavaDataType();
+
+		if (javaType.equals(Integer.class)) {
+			value = new Integer(0);
+		} else if (javaType.equals(String.class)) {
+			value = desc.getDefaultValue();
+		} else {
+			value = null;
+		}
 		description = desc;
 	}
 
@@ -55,17 +69,28 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return Promises.resolved(value);
 	}
 
+	protected Object getInternalValue() {
+		return value;
+	}
+
 	public Promise setValue(Object value) {
+		try {
+			this.setInternalValue(value);
+		} catch (Throwable e) {
+			return Promises.failed(e);
+		}
+		return Promises.resolved(null);
+	}
+
+	protected void setInternalValue(Object value) throws Throwable {
 		if (description.isReadOnly()) {
-			return Promises.failed(
-					new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute"));
+			throw new ZCLException(ZCLException.READ_ONLY, "can't set the value of a read only attribute");
 		}
 		if (!description.getDataType().getJavaDataType().isInstance(value)) {
-			return Promises.failed(
-					new ZCLException(ZCLException.INVALID_DATA_TYPE, "can't set the value, invalid dataType"));
+			throw new ZCLException(ZCLException.INVALID_DATA_TYPE, "can't set the value, invalid dataType");
 		}
+
 		this.value = value;
-		return Promises.resolved(null);
 	}
 
 	public String toString() {

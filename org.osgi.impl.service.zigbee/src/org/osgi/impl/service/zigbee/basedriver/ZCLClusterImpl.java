@@ -16,7 +16,6 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,7 +41,7 @@ import org.osgi.util.promise.Promises;
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private ZCLAttribute[]				attributes;
+	private ZCLAttributeImpl[]			attributes;
 	private ZCLClusterDescription		description;
 	private ZCLAttributeDescription[]	attributeDescriptions;
 
@@ -103,10 +102,20 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		ZCLReadStatusRecord[] readStatusRecords = new ZCLReadStatusRecord[attributesInfoArray.length];
 
+		ZCLAttributeInfo attributeInfo = attributesInfoArray[0];
+
+		if (attributeInfo == null) {
+			return Promises.failed(new IllegalArgumentException("null entry in the passed array."));
+		}
+
 		int manufacturerCode = attributesInfoArray[0].getManufacturerCode();
 
 		for (int i = 0; i < attributesInfoArray.length; i++) {
-			ZCLAttributeInfo attributeInfo = attributesInfoArray[i];
+			attributeInfo = attributesInfoArray[i];
+			if (attributeInfo == null) {
+				return Promises.failed(new IllegalArgumentException("null entry in the passed array."));
+			}
+
 			if (manufacturerCode != attributeInfo.getManufacturerCode()) {
 				return Promises.failed(new IllegalArgumentException(
 						attributeInfo.getId() + " has a different manufacturer code compared to the others"));
@@ -114,7 +123,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 			int attrId = attributeInfo.getId();
 
-			ZCLAttribute attribute = getAttributeFromId(attrId);
+			ZCLAttributeImpl attribute = getAttributeFromId(attrId);
 			if (attribute == null) {
 				ZCLException failure = new ZCLException(ZCLException.UNSUPPORTED_ATTRIBUTE, "unknown attributeId");
 				ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, failure);
@@ -130,24 +139,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 					continue;
 				}
 			}
-
-			Object value;
-			try {
-				value = attribute.getValue().getValue();
-			} catch (InvocationTargetException e) {
-				ZCLException failure = new ZCLException(ZCLException.SOFTWARE_FAILURE, "got InvocationTargetException: " + e.getMessage());
-				ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, failure);
-				readStatusRecords[i] = readStatusRecord;
-				readStatusMap.put(new Integer(attribute.getId()), readStatusRecord);
-				continue;
-			} catch (InterruptedException e) {
-				ZCLException failure = new ZCLException(ZCLException.SOFTWARE_FAILURE, "got InterruptedException: " + e.getMessage());
-				ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, failure);
-				readStatusRecords[i] = readStatusRecord;
-				readStatusMap.put(new Integer(attribute.getId()), readStatusRecord);
-				continue;
-			}
-
+			Object value = attribute.getInternalValue();
 			ZCLReadStatusRecordImpl readStatusRecord = new ZCLReadStatusRecordImpl(attributeInfo, null, value);
 			readStatusRecords[i] = readStatusRecord;
 			readStatusMap.put(new Integer(attribute.getId()), readStatusRecord);
@@ -276,10 +268,10 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return Promises.failed(new UnsupportedOperationException("getAttributes:Please implement it"));
 	}
 
-	private ZCLAttribute getAttributeFromId(int attrId) {
+	private ZCLAttributeImpl getAttributeFromId(int attrId) {
 		if (attributes != null) {
 			for (int i = 0; i < attributes.length; i++) {
-				ZCLAttribute attribute = attributes[i];
+				ZCLAttributeImpl attribute = attributes[i];
 				if (attribute != null && attribute.getId() == attrId) {
 					return attribute;
 				}
@@ -295,8 +287,8 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributeDescriptions An array of ZCLAttributeDescription objects.
 	 * @return The array of corresponding ZCLAttribute objects
 	 */
-	private ZCLAttribute[] toZCLAttributes(ZCLAttributeDescription[] attributeDescriptions) {
-		ZCLAttribute[] a = new ZCLAttribute[attributeDescriptions.length];
+	private ZCLAttributeImpl[] toZCLAttributes(ZCLAttributeDescription[] attributeDescriptions) {
+		ZCLAttributeImpl[] a = new ZCLAttributeImpl[attributeDescriptions.length];
 
 		for (int i = 0; i < attributeDescriptions.length; i++) {
 			a[i] = new ZCLAttributeImpl(attributeDescriptions[i]);

@@ -286,7 +286,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			Dictionary props = new Hashtable();
 
 			props.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
-			props.put(ZigBeeEndpoint.ENDPOINT_ID, String.valueOf(endpoint.getId()));
+			props.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
 
 			ServiceRegistration endpointServiceReg = bc.registerService(ZigBeeEndpoint.class.getName(), endpoint, props);
 			endpointsServiceRegs.add(endpointServiceReg);
@@ -301,6 +301,15 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		nodeProperties.put(ZigBeeNode.PAN_ID, new Integer(this.getPanId()));
 		nodeProperties.put(ZigBeeNode.EXTENDED_PAN_ID, this.getExtendedPanId());
 		nodeProperties.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
+		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
+		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
+		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+
+		nodeProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
+		if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {
+			nodeProperties.put(org.osgi.service.device.Constants.DEVICE_DESCRIPTION, complexDescriptor.getModelName());
+			nodeProperties.put(org.osgi.service.device.Constants.DEVICE_SERIAL, complexDescriptor.getSerialNumber());
+		}
 
 		nodeServiceReg = bc.registerService(ZigBeeNode.class.getName(), this, nodeProperties);
 	}

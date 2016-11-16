@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.impl.service.zigbee.basedriver;
 
@@ -106,7 +121,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 		this.currentChannel = channel;
 		this.securityLevel = securityLevel;
-		this.extendedPanId = new BigInteger("-1");
+		this.extendedPanId = BigInteger.ZERO;
 		this.panId = panId;
 		this.hostPid = hostPid;
 	}
@@ -381,6 +396,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 			hostProperties.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
 			hostProperties.put(Constants.SERVICE_PID, this.getHostPid());
+			hostProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
+			hostProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
+			hostProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+
+			hostProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
+			if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {
+				hostProperties.put(org.osgi.service.device.Constants.DEVICE_DESCRIPTION, complexDescriptor.getModelName());
+				hostProperties.put(org.osgi.service.device.Constants.DEVICE_SERIAL, complexDescriptor.getSerialNumber());
+			}
 
 			hostServiceReg = bc.registerService(ZigBeeHost.class.getName(), this, hostProperties);
 

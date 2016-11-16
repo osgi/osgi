@@ -30,20 +30,22 @@ import org.osgi.service.zigbee.descriptors.ZigBeeServerMask;
  */
 public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 
-	private short				logicalType;
-	private ZigBeeFrequencyBand	frequencyBand;
-	private int					manufacturerCode;
-	private int					maxBufferSize;
-	private boolean				isComplexDescriptorAvailable;
-	private boolean				isUserDescriptorAvailable;
+	private short					logicalType;
+	private ZigBeeFrequencyBand		frequencyBand;
+	private int						manufacturerCode;
+	private int						maxBufferSize;
+	private boolean					isComplexDescriptorAvailable;
+	private boolean					isUserDescriptorAvailable;
+	private ZigBeeMacCapabiliyFlags	flags;
 
-	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufCode, int maxBufSize, boolean isComplexAvail, boolean isUserAvail) {
+	public ZigBeeNodeDescriptorImpl(short logicalType, short band, int manufCode, int maxBufSize, boolean isComplexAvail, boolean isUserAvail, ZigBeeMacCapabiliyFlags flags) {
 		this.logicalType = logicalType;
 		this.frequencyBand = new ZigBeeFrequencyBandImpl(band);
 		this.manufacturerCode = manufCode;
 		this.maxBufferSize = maxBufSize;
 		this.isComplexDescriptorAvailable = isComplexAvail;
 		this.isUserDescriptorAvailable = isUserAvail;
+		this.flags = flags;
 	}
 
 	public ZigBeeFrequencyBand getFrequencyBand() {
@@ -91,6 +93,6 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	}
 
 	public ZigBeeMacCapabiliyFlags getMacCapabilityFlags() {
-		throw new UnsupportedOperationException("this field is not checked by the CT.");
+		return flags;
 	}
 }

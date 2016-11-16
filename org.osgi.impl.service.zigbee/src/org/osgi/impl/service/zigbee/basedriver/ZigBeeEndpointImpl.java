@@ -60,30 +60,26 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		if (clusterId < 0 || clusterId > 0xffff) {
 			throw new IllegalArgumentException("clusterId must be in the range [0, 0xffff]. Asked for clusterId " + clusterId);
 		}
+
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i].getId() == clusterId) {
 				return inputs[i];
 			}
 		}
-		if (checkParameter) {
-			return null;
-		} else {
-			throw new IllegalArgumentException("Server side cluster " + clusterId + " is not available in the endpoint.");
-		}
+
+		return null;
 	}
 
 	public ZCLCluster[] getClientClusters() {
 		return outputs;
 	}
 
-	private boolean checkParameter = false;
-
 	public ZCLCluster getClientCluster(int clusterId) {
-		if (checkParameter) {
-			if (clusterId < 0 || clusterId > 0xffff) {
-				throw new IllegalArgumentException("clusterId must be in the range [0, 0xffff]. Asked for clusterId " + clusterId);
-			}
+
+		if (clusterId < 0 || clusterId > 0xffff) {
+			throw new IllegalArgumentException("clusterId must be in the range [0, 0xffff]. Asked for clusterId " + clusterId);
 		}
+
 		for (int i = 0; i < outputs.length; i++) {
 			if (outputs[i].getId() == clusterId) {
 				return outputs[i];

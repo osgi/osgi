@@ -31,6 +31,7 @@ import org.osgi.impl.service.zigbee.basedriver.descriptors.ZigBeeSimpleDescripto
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
+import org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
@@ -217,7 +218,8 @@ public class ConfigurationFileReader {
 			String hostPid = "host.pid." + hostNetworkAddress;
 
 			ZigBeeNodeDescriptor nodeDescriptor = parseNodeDescriptorElement(hostElement);
-			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, nodeDescriptor, null, null);
+			ZigBeePowerDescriptor powerDescriptor = new ZigBeePowerDescriptorImpl(ZigBeePowerDescriptor.FULL_LEVEL, ZigBeePowerDescriptor.FULL_LEVEL, ZigBeePowerDescriptor.FULL_LEVEL, true);
+			return new ZigBeeHostImpl(hostPid, panId, channel, hostNetworkAddress, securityLevel, ieeeAddress, nodeDescriptor, powerDescriptor, "");
 		}
 
 		throw new Exception("host element not found in the zigbee-ct configuration xml file");
@@ -346,7 +348,34 @@ public class ConfigurationFileReader {
 			boolean isComplexAvail = ParserUtils.getAttribute(nodeDescElt, "isComplexDescriptorAvailable", ParserUtils.MANDATORY, false);
 			boolean isUserAvail = ParserUtils.getAttribute(nodeDescElt, "isUserDescriptorAvailable", ParserUtils.MANDATORY, false);
 
-			descriptor = new ZigBeeNodeDescriptorImpl(type, band, manufCode, maxBufSize, isComplexAvail, isUserAvail);
+			ZigBeeMacCapabiliyFlags flags = new ZigBeeMacCapabiliyFlags() {
+
+				public boolean isSecurityCapable() {
+					return true;
+				}
+
+				public boolean isReceiverOnWhenIdle() {
+					return true;
+				}
+
+				public boolean isMainsPower() {
+					return false;
+				}
+
+				public boolean isFullFunctionDevice() {
+					return true;
+				}
+
+				public boolean isAlternatePANCoordinator() {
+					return false;
+				}
+
+				public boolean isAddressAllocate() {
+					return false;
+				}
+			};
+
+			descriptor = new ZigBeeNodeDescriptorImpl(type, band, manufCode, maxBufSize, isComplexAvail, isUserAvail, flags);
 		}
 		return descriptor;
 	}
