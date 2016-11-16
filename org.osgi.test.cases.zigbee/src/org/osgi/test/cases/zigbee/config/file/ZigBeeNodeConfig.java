@@ -25,7 +25,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
  * This class is used to store the node configuration read from the ZigBee
  * configuration file.
  * 
- * @author portinaro
+ * @author $id$
  */
 public class ZigBeeNodeConfig {
 

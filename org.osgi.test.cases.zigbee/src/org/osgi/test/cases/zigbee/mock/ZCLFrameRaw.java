@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZCLHeader;
  * ZCLFrame implementation class that may be initialized with a specific raw
  * frame.
  * 
- * @author portinaro
+ * @author $id$
  *
  */
 public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {

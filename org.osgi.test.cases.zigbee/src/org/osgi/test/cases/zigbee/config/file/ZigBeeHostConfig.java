@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 /**
  * This class represent the expected host configuration.
  * 
- * @author portinaro
+ * @author $id$
  *
  */
 public class ZigBeeHostConfig extends ZigBeeNodeConfig {

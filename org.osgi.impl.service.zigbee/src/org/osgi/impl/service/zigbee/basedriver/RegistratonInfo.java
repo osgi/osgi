@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.ZCLEventListener;
 /**
  * Collect the registration infos related to a ZCLEventListener.
  * 
- * @author portinaro
+ * @author $id$
  *
  */
 public class RegistratonInfo {

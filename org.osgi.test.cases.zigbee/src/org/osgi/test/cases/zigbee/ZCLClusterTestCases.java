@@ -41,7 +41,7 @@ import org.osgi.util.promise.Promise;
 /**
  * Suite of test cases for testing if the ZCLCluster interface instances.
  * 
- * @author portinaro
+ * @author $id$
  *
  */
 public class ZCLClusterTestCases extends ZigBeeTestCases {

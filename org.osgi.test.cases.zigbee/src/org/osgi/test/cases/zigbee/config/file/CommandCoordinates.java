@@ -22,7 +22,7 @@ import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
  * Used to store the exact location of a specific commands in terms of
  * ZigBeeEndpoint and ZCLCluster
  * 
- * @author portinaro
+ * @author $id$
  *
  */
 public class CommandCoordinates {
