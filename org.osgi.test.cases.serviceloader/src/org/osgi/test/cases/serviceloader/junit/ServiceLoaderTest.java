@@ -283,18 +283,29 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			Bundle client1 = install("client1.jar");
 			Bundle client2 = install("client2.jar");
 			
-			client1.start();
-			client2.start();
-			
-			ServiceReference<?> ref1 = client1.getBundleContext().getServiceReference("org.osgi.test.cases.serviceloader.spi.ColorProvider");
-			assertNotNull(ref1);
-			Object service1 = client1.getBundleContext().getService(ref1);
-			
-			ServiceReference<?> ref2 = client2.getBundleContext().getServiceReference("org.osgi.test.cases.serviceloader.spi.ColorProvider");
-			assertNotNull(ref2);
-			Object service2 = client2.getBundleContext().getService(ref2);
-			
-			assertNotSame("provider must be registered as a ServiceFactory and return different objects to different clients", service1, service2);
+			try {
+				client1.start();
+				client2.start();
+
+				ServiceReference< ? > ref1 = client1.getBundleContext()
+						.getServiceReference(
+								"org.osgi.test.cases.serviceloader.spi.ColorProvider");
+				assertNotNull(ref1);
+				Object service1 = client1.getBundleContext().getService(ref1);
+
+				ServiceReference< ? > ref2 = client2.getBundleContext()
+						.getServiceReference(
+								"org.osgi.test.cases.serviceloader.spi.ColorProvider");
+				assertNotNull(ref2);
+				Object service2 = client2.getBundleContext().getService(ref2);
+
+				assertNotSame(
+						"provider must be registered as a ServiceFactory and return different objects to different clients",
+						service1, service2);
+			} finally {
+				client2.uninstall();
+				client1.uninstall();
+			}
 		} finally {
 			implBundle.stop();
 			implBundle.uninstall();
