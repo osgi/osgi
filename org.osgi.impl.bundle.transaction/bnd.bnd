@@ -30,6 +30,6 @@ Export-Package = \
 	org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1, \
 	osgi.core;version=4.3.1, \
 	org.apache.geronimo.transaction;version=2.1.2, \
-	slf4j.api;version=1.4.3, \
-	slf4j.simple;version=1.4.3
+	slf4j.api;version=1.7.7, \
+	slf4j.nop;version=1.7.7
 

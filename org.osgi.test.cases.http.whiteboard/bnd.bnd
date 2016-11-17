@@ -13,7 +13,7 @@ Include-Resource					= \
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
-	org.apache.felix.http.servlet-api;version=1.1.1,\
+	org.apache.felix.http.servlet-api;version=1.1.2,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=6.0.0,\
 	${junit}

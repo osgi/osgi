@@ -19,4 +19,4 @@ Export-Package 					= ${p}.perm, \
     org.osgi.service.deploymentadmin;				version= project, \
 	osgi.core;										version= 4.3.1, \
 	osgi.cmpn;										version= 4.3.1, \
-	org.eclipse.osgi;								version= 3.5
+	org.eclipse.osgi;								version=latest
