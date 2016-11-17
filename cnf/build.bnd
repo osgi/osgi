@@ -52,7 +52,12 @@ releaserepo             = ${build}/${target-dir}/repo
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             releaseUrl="${centralrepo}";\
             index=${.}/central.mvn;\
-            name='Central';\
+            name='Maven Central';\
+            readOnly=true,\
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            releaseUrl="http://repository.springsource.com/maven/bundles/external";\
+            index=${.}/springsource.mvn;\
+            name='SpringSource EBR';\
             readOnly=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             name='Local',\
