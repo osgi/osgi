@@ -21,4 +21,4 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
 javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
 
 saxon    = ${repo;com.icl.saxon;latest}
-log4j    = ${repo;org.apache.log4j;latest}
+log4j    = ${repo;log4j:log4j;latest}
