@@ -68,6 +68,14 @@ task wrapper(type: Wrapper) {
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
 }
 
+task buildscriptDependencies {
+  doLast {
+    println "bnd_plugin: ${bnd_plugin}"
+    println "bnd_repourl: ${bnd_repourl}"
+    println buildscript.configurations.classpath.asPath
+  }
+}
+
 def boolean parseBoolean(String value) {
   return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
 }
