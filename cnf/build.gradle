@@ -25,7 +25,8 @@ jar {
 }
 
 clean {
-  /* clean bnd cache */
+  /* clean bnd cache if not offline */
+  enabled !bndWorkspace.isOffline()
   doLast {
     project.delete(file('cache'))
   }
