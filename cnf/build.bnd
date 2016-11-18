@@ -37,7 +37,7 @@ javac.profile           = compact1
 -sourcepath             = ${project}/${src}
 
 mainrepo                = ${build}/repo
-centralrepo             = https://repo.maven.apache.org/maven2/
+centralrepo             = https://repo1.maven.org/maven2
 licensedrepo            = ${licensed}/repo
 releaserepo             = ${build}/${target-dir}/repo
 
