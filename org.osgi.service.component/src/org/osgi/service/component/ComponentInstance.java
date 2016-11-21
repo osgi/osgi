@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,16 @@ import org.osgi.annotation.versioning.ProviderType;
  * A ComponentInstance encapsulates a component instance of an activated
  * component configuration. ComponentInstances are created whenever a component
  * configuration is activated.
- * 
  * <p>
  * ComponentInstances are never reused. A new ComponentInstance object will be
  * created when the component configuration is activated again.
  * 
+ * @param <S> Type of Service
  * @ThreadSafe
  * @author $Id$
  */
 @ProviderType
-public interface ComponentInstance {
+public interface ComponentInstance<S> {
 	/**
 	 * Dispose of the component configuration for this component instance. The
 	 * component configuration will be deactivated. If the component
@@ -45,5 +45,5 @@ public interface ComponentInstance {
 	 * @return The component instance or {@code null} if the component
 	 *         configuration has been deactivated.
 	 */
-	public Object getInstance();
+	public S getInstance();
 }

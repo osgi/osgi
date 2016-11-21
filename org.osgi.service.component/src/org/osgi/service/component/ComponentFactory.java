@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -26,11 +27,12 @@ import org.osgi.annotation.versioning.ProviderType;
  * and activated rather than automatically creating and activating component
  * configuration as necessary.
  * 
+ * @param <S> Type of Service
  * @ThreadSafe
  * @author $Id$
  */
 @ProviderType
-public interface ComponentFactory {
+public interface ComponentFactory<S> {
 	/**
 	 * Create and activate a new component configuration. Additional properties
 	 * may be provided for the component configuration.
@@ -45,5 +47,5 @@ public interface ComponentFactory {
 	 * @throws ComponentException If Service Component Runtime is unable to
 	 *         activate the component configuration.
 	 */
-	public ComponentInstance newInstance(Dictionary<String, ?> properties);
+	public ComponentInstance<S> newInstance(Dictionary<String, ? > properties);
 }

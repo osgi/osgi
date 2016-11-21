@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -63,7 +64,7 @@ public interface ComponentContext {
 	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name);
+	public <S> S locateService(String name);
 
 	/**
 	 * Returns the service object for the specified reference name and
@@ -136,7 +137,7 @@ public interface ComponentContext {
 	 * 
 	 * @return The Component Instance object for the component instance.
 	 */
-	public ComponentInstance getComponentInstance();
+	public <S> ComponentInstance<S> getComponentInstance();
 
 	/**
 	 * Enables the specified component name. The specified component name must
