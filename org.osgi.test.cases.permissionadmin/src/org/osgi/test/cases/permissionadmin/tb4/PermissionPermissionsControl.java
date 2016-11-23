@@ -24,19 +24,20 @@
  */
 package org.osgi.test.cases.permissionadmin.tb4;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.*;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 
-public class PermissionPermissionsControl extends Assert implements
+public class PermissionPermissionsControl implements
 		BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		ServiceReference ref = context.getServiceReference(PermissionAdmin.class.getName());
-		PermissionAdmin	permissionAdmin = (PermissionAdmin) (ref == null ? null : context.getService(ref));
+		ServiceReference<PermissionAdmin> ref = context
+				.getServiceReference(PermissionAdmin.class);
+		PermissionAdmin	permissionAdmin = ref == null ? null : context.getService(ref);
 		assertNotNull("No Permission Admin", permissionAdmin);
 		try {
 			System.out.println(System.getSecurityManager());

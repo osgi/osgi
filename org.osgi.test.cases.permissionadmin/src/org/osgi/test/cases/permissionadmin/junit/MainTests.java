@@ -27,12 +27,14 @@ package org.osgi.test.cases.permissionadmin.junit;
 import java.io.FilePermission;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.permissionadmin.service.ContextSharer;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class MainTests extends DefaultTestBundleControl {
@@ -206,8 +208,8 @@ public class MainTests extends DefaultTestBundleControl {
 	 * PermissionAdmin service.
 	 */
 	public void testBundleZero() throws Exception {
-		ServiceReference serviceRef = getContext().getServiceReference(
-				PermissionAdmin.class.getName());
+		ServiceReference<PermissionAdmin> serviceRef = getContext()
+				.getServiceReference(PermissionAdmin.class);
 		Bundle bundle = serviceRef.getBundle();
 		assertEquals("Bundle that registered PermissionAdmin", 0L, bundle
 				.getBundleId());
@@ -218,9 +220,9 @@ public class MainTests extends DefaultTestBundleControl {
 	 */
 	public void testThereCanBeOnlyOne() throws Exception {
 		/* Get the references to all permissions admins */
-		ServiceReference[] serviceRefs = getContext().getServiceReferences(
-				PermissionAdmin.class.getName(), null);
-		assertEquals("only one PermissionAdmin", 1, serviceRefs.length);
+		Collection<ServiceReference<PermissionAdmin>> serviceRefs = getContext()
+				.getServiceReferences(PermissionAdmin.class, null);
+		assertEquals("only one PermissionAdmin", 1, serviceRefs.size());
 	}
 
 	/**	
@@ -259,14 +261,14 @@ public class MainTests extends DefaultTestBundleControl {
 			String contextBundleLocation = contextBundle.getLocation();
 
 			/* Get the context sharing service */
-			ServiceReference sr = getContext().getServiceReference(
-					ContextSharer.class.getName());
-			ContextSharer cs = (ContextSharer) (getContext().getService(sr));
+			ServiceReference<ContextSharer> sr = getContext()
+					.getServiceReference(ContextSharer.class);
+			ContextSharer cs = getContext().getService(sr);
 
 			/* Get the PermissionAdmin service */
-			ServiceReference paRef = getContext().getServiceReference(
-					PermissionAdmin.class.getName());
-			PermissionAdmin pa = (PermissionAdmin) getContext().getService(
+			ServiceReference<PermissionAdmin> paRef = getContext()
+					.getServiceReference(PermissionAdmin.class);
+			PermissionAdmin pa = getContext().getService(
 					paRef);
 
 			/* Set the permissions for the context sharing bundle */
@@ -311,7 +313,7 @@ public class MainTests extends DefaultTestBundleControl {
 	 * throws a correct exception.
 	 */
 	private void createBadPermissionInfo(String message, String encoded,
-			Class exceptionClass) throws Exception {
+			Class< ? extends Throwable> exceptionClass) throws Exception {
 		try {
 			new PermissionInfo(encoded);
 			fail(message + " did not result in a " + exceptionClass.getName());
@@ -326,7 +328,8 @@ public class MainTests extends DefaultTestBundleControl {
 	 * throws a correct exception.
 	 */
 	private void createBadPermissionInfo(String message, String type,
-			String name, String actions, Class exceptionClass) throws Exception {
+			String name, String actions,
+			Class< ? extends Throwable> exceptionClass) throws Exception {
 		try {
 			new PermissionInfo(type, name, actions);
 			fail(message + " did not result in a " + exceptionClass.getName());

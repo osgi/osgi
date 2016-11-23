@@ -25,13 +25,13 @@
 
 package org.osgi.test.cases.permissionadmin.tb1;
 
+import static junit.framework.TestCase.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -44,7 +44,7 @@ import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.permissionadmin.junit.PermissionSignatureTBCService;
+import org.osgi.test.cases.permissionadmin.service.PermissionSignatureTBCService;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.reflect.MethodCall;
 import org.osgi.test.support.wiring.Wiring;
@@ -84,18 +84,19 @@ public class Activator implements BundleActivator,
 	}
 
 	private Object getService(String serviceName) {
-		ServiceReference reference = bc.getServiceReference(serviceName);
+		ServiceReference< ? > reference = bc.getServiceReference(serviceName);
 		if (reference != null) {
 			return bc.getService(reference);
 		}
 		return null;
 	}
 
-	public Dictionary callBundle_getHeaders(Bundle bundle) {
+	public Dictionary<String,String> callBundle_getHeaders(Bundle bundle) {
 		return bundle.getHeaders();
 	}
 
-	public Dictionary callBundle_getHeaders(Bundle bundle, String localeString) {
+	public Dictionary<String,String> callBundle_getHeaders(Bundle bundle,
+			String localeString) {
 		return bundle.getHeaders(localeString);
 	}
 
@@ -107,7 +108,7 @@ public class Activator implements BundleActivator,
 		return bundle.getResource(name);
 	}
 
-	public Enumeration callBundle_getResources(Bundle bundle, String name)
+	public Enumeration<URL> callBundle_getResources(Bundle bundle, String name)
 			throws IOException {
 		return bundle.getResources(name);
 	}
@@ -116,11 +117,12 @@ public class Activator implements BundleActivator,
 		return bundle.getEntry(name);
 	}
 
-	public Enumeration callBundle_getEntryPaths(Bundle bundle, String path) {
+	public Enumeration<String> callBundle_getEntryPaths(Bundle bundle,
+			String path) {
 		return bundle.getEntryPaths(path);
 	}
 
-	public Class callBundle_loadClass(Bundle bundle, String name)
+	public Class< ? > callBundle_loadClass(Bundle bundle, String name)
 			throws ClassNotFoundException {
 		return bundle.loadClass(name);
 	}
@@ -168,7 +170,7 @@ public class Activator implements BundleActivator,
 	// from StartLevel service
 	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer level) {
 		if (startLevel == null) {
-			Assert.fail("No StartLevel service");
+			fail("No StartLevel service");
 		}
 		log("###StartLevel.setBundleStartLevel(" + bundle + "," + level + ")");
 		MethodCall setBundleStartLevel = new MethodCall(
@@ -193,7 +195,7 @@ public class Activator implements BundleActivator,
 
 	public void callStartLevel_setStartLevel(Integer level) {
 		if (startLevel == null) {
-			Assert.fail("No StartLevel service");
+			fail("No StartLevel service");
 		}
 		log("###StartLevel.setStartLevel(" + level + ")");
 		MethodCall setStartLevel = new MethodCall(
@@ -218,7 +220,7 @@ public class Activator implements BundleActivator,
 
 	public void callStartLevel_setInitialBundleStartLevel(Integer level) {
 		if (startLevel == null) {
-			Assert.fail("No StartLevel service");
+			fail("No StartLevel service");
 		}
 		log("###StartLevel.setInitialBundleStartLevel(" + level + ")");
 		MethodCall setInitialBundleStartLevel = new MethodCall(
@@ -282,7 +284,7 @@ public class Activator implements BundleActivator,
 	// from PackageAdmin service
 	public void callPackageAdmin_refreshPackages(Bundle[] bundles) {
 		if (packageAdmin == null) {
-			Assert.fail("No PackageAdmin service");
+			fail("No PackageAdmin service");
 		}
 		log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
 		MethodCall refreshPackages = new MethodCall(
@@ -307,7 +309,7 @@ public class Activator implements BundleActivator,
 
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles) {
 		if (packageAdmin == null) {
-			Assert.fail("No PackageAdmin service");
+			fail("No PackageAdmin service");
 		}
 		log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
 		MethodCall resolveBundles = new MethodCall(

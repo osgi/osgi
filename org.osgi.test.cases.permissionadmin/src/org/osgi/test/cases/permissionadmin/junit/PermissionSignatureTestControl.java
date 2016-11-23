@@ -26,8 +26,8 @@ package org.osgi.test.cases.permissionadmin.junit;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.PropertyPermission;
-import java.util.Vector;
 
 import org.osgi.framework.AdaptPermission;
 import org.osgi.framework.AdminPermission;
@@ -35,6 +35,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.permissionadmin.service.PermissionSignatureTBCService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.reflect.MethodCall;
 
@@ -88,7 +89,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	protected void setUp() throws Exception {
 		assertNotNull("Must have a security manager", System
 				.getSecurityManager());
-		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		permissionAdmin = getService(PermissionAdmin.class);
 		assertNotNull(permissionAdmin);
 
 		testBundle = installBundle("tb1.jar", false);
@@ -113,7 +114,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		extensionBundleName = SignatureResource
 				.getString("extensionBundle.name");
 
-		tbc = (PermissionSignatureTBCService) getService(PermissionSignatureTBCService.class);
+		tbc = getService(PermissionSignatureTBCService.class);
 		FrameworkStartLevel fsl = getContext().getBundle(0).adapt(
 				FrameworkStartLevel.class);
 		startLevel = fsl.getStartLevel();
@@ -353,14 +354,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionMetadata() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.METADATA, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = 0; i < permissions.size(); ++i) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
 			printPermissions(testBundleLocation);
@@ -428,14 +429,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionResource() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.RESOURCE, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = permissions.size() - 1; i >= 0; i--) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -529,14 +530,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionClass() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.CLASS, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = permissions.size() - 1; i >= 0; i--) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -630,14 +631,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionLifecycle() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.LIFECYCLE, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = 0; i < permissions.size(); ++i) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -710,7 +711,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		String message = "";
 		String extensionBundleLocation = getInstallBundleLocation(extensionBundleName);
 
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.EXTENSIONLIFECYCLE + ','
 						+ AdminPermission.LIFECYCLE, -1, // extension bundle is
 				// not yet installed
@@ -719,7 +720,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 		PermissionInfo info;
 		for (int i = 0; i < permissions.size(); ++i) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -802,14 +803,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionExecute() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.EXECUTE, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = permissions.size() - 1; i >= 0; i--) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -902,14 +903,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionListener() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.LISTENER, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(), testSignatureBundle
 						.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = 0; i < permissions.size(); ++i) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -987,14 +988,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 */
 	public void testAdminPermissionResolve() throws Throwable {
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.RESOLVE, testSignatureBundle.getBundleId(),
 				testSignatureBundle.getLocation(),
 				testSignatureBundle.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = permissions.size() - 1; i >= 0; i--) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -1090,13 +1091,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			// service detected
 		}
 		String message = "";
-		Vector permissions = utility.getPInfosForAdminPermisssion(
+		List<PermissionInfo> permissions = utility.getPInfosForAdminPermisssion(
 				AdminPermission.STARTLEVEL, 0, testSignatureBundle
 						.getLocation(), testSignatureBundle.getSymbolicName());
 
 		PermissionInfo info;
 		for (int i = 0; i < permissions.size(); ++i) {
-			info = (PermissionInfo) permissions.elementAt(i);
+			info = permissions.get(i);
 
 			permissionAdmin.setPermissions(testBundleLocation,
 					new PermissionInfo[] {info, adapt, property});
@@ -1181,7 +1182,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 	// returns true if 'method' failed
 	boolean not_allowed_call(String message, String methodName,
-			Class[] paramClasses, Object[] paramObjects, Class wanted)
+			Class< ? >[] paramClasses, Object[] paramObjects,
+			Class< ? extends Throwable> wanted)
 			throws Exception {
 		try {
 			MethodCall method = new MethodCall(null, methodName, paramClasses);
@@ -1196,7 +1198,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	}
 
 	boolean not_allowed_call_assertNull(String message, String methodName,
-			Class[] paramClasses, Object[] paramObjects) throws Throwable {
+			Class< ? >[] paramClasses, Object[] paramObjects) throws Throwable {
 		MethodCall method = new MethodCall(null, methodName, paramClasses);
 		Object result = method.invoke(tbc, paramObjects);
 		if (result == null) {
@@ -1210,7 +1212,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	}
 
 	boolean allowed_call_assertNotNull(String message, String methodName,
-			Class[] paramClasses, Object[] paramObjects) throws Throwable {
+			Class< ? >[] paramClasses, Object[] paramObjects) throws Throwable {
 		MethodCall method = new MethodCall(null, methodName, paramClasses);
 		Object result = method.invoke(tbc, paramObjects);
 		if (result == null) {
@@ -1224,7 +1226,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	}
 
 	Object allowed_call(String message, String methodName,
-			Class[] paramClasses, Object[] paramObjects) {
+			Class< ? >[] paramClasses, Object[] paramObjects) {
 		try {
 			MethodCall method = new MethodCall(null, methodName, paramClasses);
 			Object result = method.invoke(tbc, paramObjects);

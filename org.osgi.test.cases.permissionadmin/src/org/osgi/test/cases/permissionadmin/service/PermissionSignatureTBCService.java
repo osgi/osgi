@@ -23,7 +23,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.permissionadmin.junit;
+package org.osgi.test.cases.permissionadmin.service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,22 +45,24 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public interface PermissionSignatureTBCService {
 
 	// from Bundle class
-	public Dictionary callBundle_getHeaders(Bundle bundle);
+	public Dictionary<String,String> callBundle_getHeaders(Bundle bundle);
 
-	public Dictionary callBundle_getHeaders(Bundle bundle, String localeString);
+	public Dictionary<String,String> callBundle_getHeaders(Bundle bundle,
+			String localeString);
 
 	public String callBundle_getLocation(Bundle bundle);
 
 	public URL callBundle_getResource(Bundle bundle, String name);
 
-	public Enumeration callBundle_getResources(Bundle bundle, String name)
+	public Enumeration<URL> callBundle_getResources(Bundle bundle, String name)
 			throws IOException;
 
 	public URL callBundle_getEntry(Bundle bundle, String name);
 
-	public Enumeration callBundle_getEntryPaths(Bundle bundle, String path);
+	public Enumeration<String> callBundle_getEntryPaths(Bundle bundle,
+			String path);
 
-	public Class callBundle_loadClass(Bundle bundle, String name)
+	public Class< ? > callBundle_loadClass(Bundle bundle, String name)
 			throws ClassNotFoundException;
 
 	public void callBundle_stop(Bundle bundle) throws BundleException;

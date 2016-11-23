@@ -25,13 +25,16 @@
 package org.osgi.test.cases.permissionadmin.junit;
 
 import java.io.InputStream;
+import java.security.Permission;
+import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Vector;
+import java.util.List;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.permissionadmin.service.PermissionSignatureTBCService;
 
 public class PermissionSignatureUtility {
 
@@ -688,7 +691,7 @@ public class PermissionSignatureUtility {
 	}
 
 	public Object allowed_Configuration_update(String message, String pid,
-			Dictionary properties) throws Exception {
+			Dictionary< ? , ? > properties) throws Exception {
 		return control
 				.allowed_call("call Configuration.update(Dictionary) "
 						+ message, "callConfiguration_update", new Class[] {
@@ -697,7 +700,7 @@ public class PermissionSignatureUtility {
 	}
 
 	public boolean not_allowed_Configuration_update(String message, String pid,
-			Dictionary properties) throws Exception {
+			Dictionary< ? , ? > properties) throws Exception {
 		return control.not_allowed_call(
 				"call Configuration.update(Dictionary) " + message,
 				"callConfiguration_update", new Class[] {String.class,
@@ -722,9 +725,10 @@ public class PermissionSignatureUtility {
 				SecurityException.class);
 	}
 
-	Vector createWildcardPermissionInfo(Class permission, String name,
+	List<PermissionInfo> createWildcardPermissionInfo(
+			Class< ? extends Permission> permission, String name,
 			String action, String value) {
-		Vector infos = new Vector();
+		List<PermissionInfo> infos = new ArrayList<>();
 		if (value == null)
 			return infos;
 		String key = "";
@@ -734,7 +738,7 @@ public class PermissionSignatureUtility {
 
 		PermissionInfo info = new PermissionInfo(permission.getName(), key
 				+ value, action);
-		infos.addElement(info);
+		infos.add(info);
 
 		int index = value.indexOf(".");
 		int lastIndex;
@@ -743,37 +747,38 @@ public class PermissionSignatureUtility {
 			lastIndex = index + 1;
 			info = new PermissionInfo(permission.getName(), key
 					+ value.substring(0, lastIndex) + "*", action);
-			infos.addElement(info);
+			infos.add(info);
 			index = value.indexOf(".", lastIndex);
 		}
 
 		return infos;
 	}
 
-	Vector getPInfosForAdminPermisssion(String action, long bundleId,
+	List<PermissionInfo> getPInfosForAdminPermisssion(String action,
+			long bundleId,
 			String location, String symbolicName) {
-		Vector permissions = new Vector();
+		List<PermissionInfo> permissions = new ArrayList<>();
 
 		PermissionInfo info = new PermissionInfo(AdminPermission.class
 				.getName(), "*", action);
-		permissions.addElement(info);
+		permissions.add(info);
 
 		if (bundleId != -1) {
 			info = new PermissionInfo(AdminPermission.class.getName(), "(" + ID
 					+ "=" + bundleId + ")", action);
-			permissions.addElement(info);
+			permissions.add(info);
 		}
 
 		if (location != null) {
 			info = new PermissionInfo(AdminPermission.class.getName(), "("
 					+ LOCATION + "=" + location + ")", action);
-			permissions.addElement(info);
+			permissions.add(info);
 		}
 
 		if (symbolicName != null) {
 			info = new PermissionInfo(AdminPermission.class.getName(), "("
 					+ NAME + "=" + symbolicName + ")", action);
-			permissions.addElement(info);
+			permissions.add(info);
 		}
 		//		
 		// permissions.addAll(getSignerFilter(action));
@@ -781,21 +786,21 @@ public class PermissionSignatureUtility {
 		return permissions;
 	}
 
-	Vector getSignerFilter(String action) {
-		Vector dns = createWildcardDNs(SignatureResource.getString(DN_S));
-		Vector infos = new Vector();
+	List<PermissionInfo> getSignerFilter(String action) {
+		List<String> dns = createWildcardDNs(SignatureResource.getString(DN_S));
+		List<PermissionInfo> infos = new ArrayList<>();
 		PermissionInfo info;
 		for (int i = 0; i < dns.size(); ++i) {
 			info = new PermissionInfo(AdminPermission.class.getName(), SIGNER
-					+ "=" + dns.elementAt(i), action);
-			infos.addElement(info);
+					+ "=" + dns.get(i), action);
+			infos.add(info);
 		}
 
 		return infos;
 	}
 
-	private Vector createWildcardDNs(String value) {
-		Vector result = new Vector();
+	private List<String> createWildcardDNs(String value) {
+		List<String> result = new ArrayList<>();
 		String semicolon = ";";
 
 		int lastIndex = 0;
@@ -829,17 +834,18 @@ public class PermissionSignatureUtility {
 		return result;
 	}
 
-	private Vector addVector(Vector vec, String prefix, String suffix) {
-		Vector result = new Vector();
+	private List<String> addVector(List<String> vec, String prefix,
+			String suffix) {
+		List<String> result = new ArrayList<>();
 		for (int i = 0; i < vec.size(); ++i) {
-			result.addElement(prefix + (String) vec.elementAt(i) + suffix);
+			result.add(prefix + vec.get(i) + suffix);
 		}
 
 		return result;
 	}
 
-	private Vector createWildcardRDNs(String value) {
-		Vector result = new Vector();
+	private List<String> createWildcardRDNs(String value) {
+		List<String> result = new ArrayList<>();
 		String comma = ",";
 		String equal = "=";
 		String asterisk = "*";
@@ -849,9 +855,9 @@ public class PermissionSignatureUtility {
 		int equalIndex = value.indexOf(equal, lastIndex);
 
 		while (commaIndex != -1) {
-			result.addElement(asterisk + value.substring(commaIndex));
+			result.add(asterisk + value.substring(commaIndex));
 			if ((equalIndex != -1) && (equalIndex < commaIndex)) {
-				result.addElement(value.substring(0, equalIndex + 1) + asterisk
+				result.add(value.substring(0, equalIndex + 1) + asterisk
 						+ value.substring(commaIndex));
 			}
 			lastIndex = commaIndex + 1;
@@ -860,10 +866,10 @@ public class PermissionSignatureUtility {
 		}
 
 		if (lastIndex > 0) {
-			result.addElement(asterisk);
+			result.add(asterisk);
 		}
 		if (equalIndex > 0) {
-			result.addElement(value.substring(0, equalIndex + 1) + asterisk);
+			result.add(value.substring(0, equalIndex + 1) + asterisk);
 		}
 
 		return result;

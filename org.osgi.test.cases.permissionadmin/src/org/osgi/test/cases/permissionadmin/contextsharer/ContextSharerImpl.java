@@ -1,21 +1,23 @@
 package org.osgi.test.cases.permissionadmin.contextsharer;
 
-import java.lang.reflect.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.test.cases.permissionadmin.junit.ContextSharer;
+import java.lang.reflect.Method;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.permissionadmin.service.ContextSharer;
 
 public class ContextSharerImpl implements ContextSharer, BundleActivator {
 	BundleContext		bc;
-	ServiceRegistration	serviceRegistration;
-	Vector				objectsInUse	= new Vector();
+	ServiceRegistration<ContextSharer>	serviceRegistration;
 
 	public void start(BundleContext bc) {
 		this.bc = bc;
 		String location = bc.getBundle().getLocation();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("Bundle-Location", location);
-		serviceRegistration = bc.registerService(ContextSharer.class.getName(),
+		serviceRegistration = bc.registerService(ContextSharer.class,
 				this, props);
 		System.out.println("Hello world from the mighty CONTEXTSHARER!");
 		// System.out.println("location: " + bc.getBundle().getLocation());

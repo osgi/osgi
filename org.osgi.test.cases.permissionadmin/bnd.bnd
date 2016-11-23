@@ -2,7 +2,7 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Category: osgi,test
-Export-Package: ${p}.junit
+Export-Package: ${p}.service
 
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
