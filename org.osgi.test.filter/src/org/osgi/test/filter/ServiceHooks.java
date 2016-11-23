@@ -19,12 +19,14 @@ package org.osgi.test.filter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.hooks.service.EventListenerHook;
 import org.osgi.framework.hooks.service.FindHook;
+import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
 
 /**
  * Service Hooks to exclude services from use by the CT.
@@ -65,7 +67,9 @@ class ServiceHooks implements FindHook, EventListenerHook {
 	 *        collection will result in an {@code UnsupportedOperationException}
 	 *        . The map and the collections are not synchronized.
 	 */
-	public void event(ServiceEvent event, Map listeners) {
+	@Override
+	public void event(ServiceEvent event,
+			Map<BundleContext,Collection<ListenerInfo>> listeners) {
 		if (debug) {
 			System.out.println(">> EventListenerHook[" + serviceExcludeFilter + "].event(" + event.getServiceReference() + ")");
 		}
@@ -101,12 +105,15 @@ class ServiceHooks implements FindHook, EventListenerHook {
 	 *        an {@code UnsupportedOperationException}. The collection is not
 	 *        synchronized.
 	 */
-	public void find(BundleContext context, String name, String filter, boolean allServices, Collection references) {
+	@Override
+	public void find(BundleContext context, String name, String filter,
+			boolean allServices, Collection<ServiceReference< ? >> references) {
 		if (debug) {
 			System.out.println(">> FindHook[" + serviceExcludeFilter + "].find(" + references + ")");
 		}
-		for (Iterator iter = references.iterator(); iter.hasNext();) {
-			ServiceReference ref = (ServiceReference) iter.next();
+		for (Iterator<ServiceReference< ? >> iter = references.iterator(); iter
+				.hasNext();) {
+			ServiceReference< ? > ref = iter.next();
 			if (serviceExcludeFilter.match(ref)) {
 				if (debug) {
 					System.out.println("== FindHook[" + serviceExcludeFilter + "].find() filtered out " + ref);

@@ -31,8 +31,9 @@ public class Activator implements BundleActivator {
 	private boolean				debug;
 	private static final String	serviceExcludeProperty	= "org.osgi.test.filter.exclude.services";
 	private String				serviceExcludeFilter;
-	private ServiceRegistration	hookReg;
+	private ServiceRegistration< ? >	hookReg;
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		debug = Boolean.valueOf(context.getProperty(debugProperty)).booleanValue();
 		serviceExcludeFilter = context.getProperty(serviceExcludeProperty);
@@ -43,6 +44,7 @@ public class Activator implements BundleActivator {
 				new ServiceHooks(context.createFilter(serviceExcludeFilter), debug), null);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		if (serviceExcludeFilter == null) {
 			return; // no work to do!
