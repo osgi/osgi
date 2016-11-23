@@ -19,6 +19,7 @@ package org.osgi.test.cases.component.junit;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -217,11 +218,12 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 			Filter providerFilter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
 					+ "=org.osgi.test.cases.component.tb26.CoercionComponent))");
-			ServiceTracker<ComponentFactory, ComponentFactory> providerTracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
+			ServiceTracker<ComponentFactory<ObjectProvider1<Coercion>>,ComponentFactory<ObjectProvider1<Coercion>>> providerTracker = new ServiceTracker<>(
 					getContext(), providerFilter, null);
 			try {
 				providerTracker.open();
-				ComponentFactory f = providerTracker.waitForService(SLEEP * 3);
+				ComponentFactory<ObjectProvider1<Coercion>> f = providerTracker
+						.waitForService(SLEEP * 3);
 				assertNotNull("missing factory", f);
 				Dictionary<String, Object> props = new Hashtable<String, Object>();
 				props.put("stringCollection", Arrays.asList("list", "second"));
@@ -239,7 +241,7 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				props.put("enumCollection", Arrays.asList(TestEnum.ITEM1.name(),
 						TestEnum.AnotherItem.name()));
 				props.put("int$Collection", Arrays.asList(Integer.valueOf(64), Integer.valueOf(0)));
-				ObjectProvider1<Coercion> p = (ObjectProvider1<Coercion>) f.newInstance(props).getInstance();
+				ObjectProvider1<Coercion> p = f.newInstance(props).getInstance();
 				assertNotNull("missing provider", p);
 				Coercion config = p.get1();
 				assertNotNull("missing config", config);

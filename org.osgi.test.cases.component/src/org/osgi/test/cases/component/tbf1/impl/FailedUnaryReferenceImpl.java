@@ -26,8 +26,8 @@ public class FailedUnaryReferenceImpl implements BaseService {
 
 	private TestObject service;
 
-	public Dictionary getProperties() {
-		final Dictionary props = new Hashtable();
+	public Dictionary<String,Object> getProperties() {
+		final Dictionary<String,Object> props = new Hashtable<>();
 		final TestObject local = service;
 		if (local != null) {
 			props.put("service", local);

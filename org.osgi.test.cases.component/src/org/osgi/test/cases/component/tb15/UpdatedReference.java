@@ -26,15 +26,16 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
 
+@SuppressWarnings("unused")
 public class UpdatedReference implements BaseService {
 	private static final String	KEY			= "org.osgi.test.cases.component.tb15.serviceproperty";
-	private Dictionary			properties	= new Hashtable();
+	private Dictionary<String,Object>	properties	= new Hashtable<>();
 
 	private void activate(ComponentContext ctxt) {
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 	}
@@ -43,15 +44,15 @@ public class UpdatedReference implements BaseService {
 		// empty
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 
-	private void bind(TestObject svc, Map props) {
+	private void bind(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "bind" + props.get(KEY));
 	}
 
-	private void updatedSr(ServiceReference ref) {
+	private void updatedSr(ServiceReference<TestObject> ref) {
 		properties.put(KEY, "updatedSr" + ref.getProperty(KEY));
 	}
 
@@ -59,19 +60,19 @@ public class UpdatedReference implements BaseService {
 		properties.put(KEY, "updatedSvc");
 	}
 
-	private void updated(TestObject svc, Map props) {
+	private void updated(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "updatedSvcMap" + props.get(KEY));
 	}
 
-	private void updatedBadSig(Map props) {
+	private void updatedBadSig(Map<String,Object> props) {
 		properties.put(KEY, "updatedBadSig" + props.get(KEY));
 	}
 
-	private void updatedSvcMap(TestObject svc, Map props) {
+	private void updatedSvcMap(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "updatedSvcMap" + props.get(KEY));
 	}
 
-	private void updatedOverloaded1(ServiceReference ref) {
+	private void updatedOverloaded1(ServiceReference<TestObject> ref) {
 		properties.put(KEY, "updatedOverloaded1Sr" + ref.getProperty(KEY));
 	}
 
@@ -79,7 +80,7 @@ public class UpdatedReference implements BaseService {
 		properties.put(KEY, "updatedOverloaded1Svc");
 	}
 
-	private void updatedOverloaded1(TestObject svc, Map props) {
+	private void updatedOverloaded1(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "updatedOverloaded1SvcMap" + props.get(KEY));
 	}
 
@@ -87,11 +88,11 @@ public class UpdatedReference implements BaseService {
 		properties.put(KEY, "updatedOverloaded2Svc");
 	}
 
-	private void updatedOverloaded2(TestObject svc, Map props) {
+	private void updatedOverloaded2(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "updatedOverloaded2SvcMap" + props.get(KEY));
 	}
 
-	private void unbind(TestObject svc, Map props) {
+	private void unbind(TestObject svc, Map<String,Object> props) {
 		properties.put(KEY, "unbind" + props.get(KEY));
 	}
 }

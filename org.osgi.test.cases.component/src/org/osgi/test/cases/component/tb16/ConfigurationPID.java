@@ -23,14 +23,15 @@ import java.util.Hashtable;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
 
+@SuppressWarnings("unused")
 public class ConfigurationPID implements BaseService {
-	private Dictionary			properties	= new Hashtable();
+	private Dictionary<String,Object> properties = new Hashtable<>();
 
 	private void activate(ComponentContext ctxt) {
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 	}
@@ -39,7 +40,7 @@ public class ConfigurationPID implements BaseService {
 		// empty
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 }

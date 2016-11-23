@@ -75,6 +75,7 @@ import org.osgi.test.cases.component.service.ComponentEnabler;
 import org.osgi.test.cases.component.service.DSTestConstants;
 import org.osgi.test.cases.component.service.MultipleFieldTestService;
 import org.osgi.test.cases.component.service.ScalarFieldTestService;
+import org.osgi.test.cases.component.service.ServiceProvider;
 import org.osgi.test.cases.component.service.ServiceReceiver;
 import org.osgi.test.cases.component.service.TBCService;
 import org.osgi.test.cases.component.service.TestIdentitySet;
@@ -97,12 +98,11 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * @author $Id$
  */
+@SuppressWarnings("unchecked")
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {
 
 	private static final String	TEST_CASE_ROOT		= "org.osgi.test.cases.component";
-	private static final String	PROVIDER_CLASS		= TEST_CASE_ROOT
-															+ ".service.ServiceProvider";
 	private static final String	LOOKUP_CLASS		= TEST_CASE_ROOT
 															+ ".tb2.ServiceConsumerLookup";
 	private static final String	DYN_CLASS			= TEST_CASE_ROOT
@@ -161,12 +161,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	private Bundle				tb1, tb2, tb3;
 
-	private ServiceTracker		trackerProvider;
-	private ServiceTracker		trackerConsumerLookup;
-	private ServiceTracker		trackerDyn;
-	private ServiceTracker		trackerConsumerEvent;
-	private ServiceTracker		trackerNamedService;
-	private ServiceTracker		trackerNamedServiceFactory;
+	private ServiceTracker<ServiceProvider,ServiceProvider>					trackerProvider;
+	private ServiceTracker<Object,Object>										trackerConsumerLookup;
+	private ServiceTracker<Object,Object>										trackerDyn;
+	private ServiceTracker<Object,Object>										trackerConsumerEvent;
+	private ServiceTracker<Object,Object>										trackerNamedService;
+	private ServiceTracker<ComponentFactory<Object>,ComponentFactory<Object>>	trackerNamedServiceFactory;
 	private ServiceTracker<ConfigurationAdmin, ConfigurationAdmin>	trackerCM;
 	private ServiceTracker<BaseService, BaseService>	trackerBaseService;
 	private ServiceTracker<ServiceComponentRuntime, ServiceComponentRuntime>	scrTracker;
@@ -215,16 +215,16 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb3.start();
 
 		// init trackers
-		trackerProvider = new ServiceTracker(bc, PROVIDER_CLASS, null);
-		trackerConsumerLookup = new ServiceTracker(bc, LOOKUP_CLASS, null);
-		trackerDyn = new ServiceTracker(bc, DYN_CLASS, null);
-		trackerConsumerEvent = new ServiceTracker(bc, EVENT_CLASS, null);
-		trackerNamedService = new ServiceTracker(bc, NAMED_CLASS, null);
+		trackerProvider = new ServiceTracker<>(bc, ServiceProvider.class, null);
+		trackerConsumerLookup = new ServiceTracker<>(bc, LOOKUP_CLASS, null);
+		trackerDyn = new ServiceTracker<>(bc, DYN_CLASS, null);
+		trackerConsumerEvent = new ServiceTracker<>(bc, EVENT_CLASS, null);
+		trackerNamedService = new ServiceTracker<>(bc, NAMED_CLASS, null);
 		Filter filter = bc.createFilter("(&("
 				+ ComponentConstants.COMPONENT_FACTORY + '=' + NAMED_CLASS
 				+ ")(" + Constants.OBJECTCLASS + '='
 				+ ComponentFactory.class.getName() + "))");
-		trackerNamedServiceFactory = new ServiceTracker(bc, filter, null);
+		trackerNamedServiceFactory = new ServiceTracker<>(bc, filter, null);
 		trackerBaseService = new ServiceTracker<BaseService, BaseService>(bc, BaseService.class, null);
 
 		// start listening
@@ -300,7 +300,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testRegistration() throws Exception {
 		TBCService serviceProvider, serviceConsumerLookup, serviceConsumerEvent;
 
-		serviceProvider = (TBCService) trackerProvider.getService();
+		serviceProvider = trackerProvider.getService();
 		assertEquals("ServiceProvider bundle should be in active state",
 				Bundle.ACTIVE, tb1.getState());
 		assertNotNull("ServiceProvider service should be registered",
@@ -320,13 +320,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		tb1.uninstall();
 		Sleep.sleep(SLEEP);
-		serviceProvider = (TBCService) trackerProvider.getService();
+		serviceProvider = trackerProvider.getService();
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
 		tb1 = installBundle("tb1.jar", false);
 		Sleep.sleep(SLEEP);
-		serviceProvider = (TBCService) trackerProvider.getService();
+		serviceProvider = trackerProvider.getService();
 		assertTrue("ServiceProvider bundle should be in resolved state", (tb1
 				.getState() & (Bundle.RESOLVED | Bundle.INSTALLED)) != 0);
 		assertNull("ServiceProvider service should not be registered",
@@ -334,7 +334,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		tb1.start();
 		Sleep.sleep(SLEEP);
-		serviceProvider = (TBCService) trackerProvider.getService();
+		serviceProvider = trackerProvider.getService();
 		assertEquals("ServiceProvider bundle should be in active state",
 				Bundle.ACTIVE, tb1.getState());
 		assertNotNull("ServiceProvider service should be registered",
@@ -346,7 +346,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * directly.
 	 */
 	public void testGetServiceDirect() {
-		TBCService serviceProvider = (TBCService) trackerProvider.getService();
+		TBCService serviceProvider = trackerProvider.getService();
 		TestObject testObject = serviceProvider.getTestObject();
 		assertEquals("The return value should be an instance of TestObject",
 				TestObject.class, testObject.getClass());
@@ -383,7 +383,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testGetProperties() {
 		TBCService serviceConsumerLookup = (TBCService) trackerConsumerLookup
 				.getService();
-		Dictionary properties = serviceConsumerLookup.getProperties();
+		Dictionary<String,Object> properties = serviceConsumerLookup
+				.getProperties();
 		assertNotNull("Properties should not be empty", properties);
 		assertTrue("The size of properties should be at least 2", properties
 				.size() >= 2);
@@ -408,7 +409,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.",
 				scr);
 
-		ServiceReference refs[];
+		ServiceReference< ? > refs[];
 		BundleContext bc = getContext();
 		String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
 
@@ -537,13 +538,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		bundle.start();
 		Sleep.sleep(SLEEP);
 
-		Hashtable props;
+		Hashtable<String,Object> props;
 		int oldCount = trackerNamedService.getTrackingCount();
-		ComponentFactory factory = (ComponentFactory) trackerNamedServiceFactory
+		ComponentFactory<Object> factory = trackerNamedServiceFactory
 				.getService();
 
 		// create the first service
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put("name", "hello");
 		factory.newInstance(props);
 
@@ -552,9 +553,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		boolean serviceFound = false;
 		// find the service, the reference must have the properties set
 		// correctly
-		ServiceReference refs[] = trackerNamedService.getServiceReferences();
+		ServiceReference<Object> refs[] = trackerNamedService
+				.getServiceReferences();
 		for (int i = 0; refs != null && i < refs.length; i++) {
-			ServiceReference current = refs[i];
+			ServiceReference<Object> current = refs[i];
 			String name = (String) current.getProperty("name");
 			if ("hello".equals(name)) {
 				serviceFound = true;
@@ -568,9 +570,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertTrue("A service should be registered", serviceFound);
 
 		// create the second service
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put("name", "world");
-		ComponentInstance worldInstance = factory.newInstance(props);
+		ComponentInstance<Object> worldInstance = factory.newInstance(props);
 		Sleep.sleep(SLEEP);
 
 		// make sure that the new service is registered
@@ -643,7 +645,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				errorLog);
 
 		// make sure that the services are not registered
-		ServiceReference ref;
+		ServiceReference< ? > ref;
 		ref = bc.getServiceReference(TEST_CASE_ROOT + ".tb1.BadService1");
 		assertNull(
 				"The BadService1 shouldn't be registered because the XML contains two implementation classes",
@@ -674,7 +676,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private int getCount() {
 		TBCService serviceConsumerEvent = (TBCService) trackerConsumerEvent
 				.getService();
-		Dictionary props = serviceConsumerEvent.getProperties();
+		Dictionary<String,Object> props = serviceConsumerEvent.getProperties();
 		Integer x = (Integer) props.get("count");
 		return x.intValue();
 	}
@@ -691,19 +693,19 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("No instance created yet, so the bind count must be zero",
 				0, getCount());
 
-		ComponentFactory factory = (ComponentFactory) trackerNamedServiceFactory
+		ComponentFactory<Object> factory = trackerNamedServiceFactory
 				.getService();
 
 		// create the first service!
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", "hello");
-		ComponentInstance instance1 = factory.newInstance(props);
+		ComponentInstance<Object> instance1 = factory.newInstance(props);
 		Sleep.sleep(SLEEP);
 
 		assertEquals("The component should be bound to the first instance", 1,
 				getCount());
 
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put("name", "world");
 		// ComponentInstance instance2 =
 		factory.newInstance(props);
@@ -727,7 +729,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testCMUpdate() throws Exception {
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
-		ServiceReference ref;
+		ServiceReference<Object> ref;
 		Object service;
 		String cmprop;
 
@@ -741,7 +743,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"setFromXML", cmprop);
 
 		// update the properties
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("cmprop", "setFromCM");
 		// the line below will create the configuration if it doesn't exists!
 		// see CM api for details
@@ -796,11 +798,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		Configuration config1;
 		Configuration config2;
-		Hashtable props;
+		Hashtable<String,Object> props;
 
 		// create a new configuration
 		config1 = cm.createFactoryConfiguration(EVENT_CLASS, null);
-		props = new Hashtable(2);
+		props = new Hashtable<>(2);
 		props.put("instance", "1");
 		config1.update(props);
 		Sleep.sleep(SLEEP * 2); // let it finish update, CM + SCR
@@ -813,7 +815,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// create second configuration
 		config2 = cm.createFactoryConfiguration(EVENT_CLASS, null);
-		props = new Hashtable(2);
+		props = new Hashtable<>(2);
 		props.put("instance", "2");
 		config2.update(props);
 		Sleep.sleep(SLEEP * 2); // let it finish update, CM + SCR
@@ -868,7 +870,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb5.start();
 		waitBundleStart();
 
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("config.base.data", new Integer(1));
 
 		// component notsetNS100 - property not set by Configuration Admin; XML
@@ -998,7 +1000,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb5.start();
 		waitBundleStart();
 
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("config.base.data", new Integer(1));
 
 		// component notsetNS100 - property not set by Configuration Admin; XML
@@ -1314,9 +1316,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 		Configuration config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
-		Dictionary properties = config.getProperties();
+		Dictionary<String,Object> properties = config.getProperties();
 		if (properties == null) {
-			properties = new Hashtable();
+			properties = new Hashtable<>();
 		}
 		properties.put("configuration.dummy", "dummy");
 		log("configuration update " + CC_BC_MAP_INT_NS110);
@@ -1402,12 +1404,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			tb7.start();
 			Sleep.sleep(SLEEP * 3);
 
-			ServiceReference ref = getContext().getServiceReference(
-					ComponentEnabler.class.getName());
+			ServiceReference<ComponentEnabler> ref = getContext()
+					.getServiceReference(ComponentEnabler.class);
 			assertNotNull(
 					"Component Enabler Service Reference should be available",
 					ref);
-			ComponentEnabler enabler = (ComponentEnabler) getContext()
+			ComponentEnabler enabler = getContext()
 					.getService(ref);
 			assertNotNull("Component Enabler Service should be available",
 					enabler);
@@ -1519,12 +1521,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			tb18.start();
 			Sleep.sleep(SLEEP * 3);
 
-			ServiceReference ref = getContext().getServiceReference(
-					ComponentEnabler.class.getName());
+			ServiceReference<ComponentEnabler> ref = getContext()
+					.getServiceReference(ComponentEnabler.class);
 			assertNotNull(
 					"Component Enabler Service Reference should be available",
 					ref);
-			ComponentEnabler enabler = (ComponentEnabler) getContext()
+			ComponentEnabler enabler = getContext()
 					.getService(ref);
 			assertNotNull("Component Enabler Service should be available",
 					enabler);
@@ -1838,7 +1840,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Bundle tb13 = installBundle("tb13.jar", false);
 
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("config.dummy.data", new Integer(1));
 		cm.getConfiguration(MOD_NOTSET_NS100, null).update(props);
 		cm.getConfiguration(MOD_NOARGS_NS100, null).update(props);
@@ -1853,7 +1855,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		waitBundleStart();
 
 		props.put("config.dummy.data", new Integer(2));
-		Hashtable unsatisfyingProps = new Hashtable(10);
+		Hashtable<String,Object> unsatisfyingProps = new Hashtable<>(10);
 		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
 				+ ".tb13.unexisting.provider)");
 
@@ -1906,7 +1908,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Bundle tb13a = installBundle("tb13a.jar", false);
 
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("config.dummy.data", new Integer(1));
 		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
 		cm.getConfiguration(MOD_NOARGS_NS110, null).update(props);
@@ -1921,7 +1923,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		waitBundleStart();
 
 		props.put("config.dummy.data", new Integer(2));
-		Hashtable unsatisfyingProps = new Hashtable(10);
+		Hashtable<String,Object> unsatisfyingProps = new Hashtable<>(10);
 		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
 				+ ".tb13.unexisting.provider)");
 
@@ -2079,7 +2081,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Bundle tb13a = installBundle("tb13a.jar", false);
 
-		Hashtable props = new Hashtable(10);
+		Hashtable<String,Object> props = new Hashtable<>(10);
 		props.put("config.dummy.data", new Integer(1));
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
@@ -2164,7 +2166,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		final String COMP = TEST_CASE_ROOT + ".tb14.component";
 
-		ServiceReference ref = trackerBaseService.getServiceReference();
+		ServiceReference<BaseService> ref = trackerBaseService
+				.getServiceReference();
 		assertNotNull("Provided service of " + COMP + " should be available",
 				ref);
 		String[] keys = ref.getPropertyKeys();
@@ -2239,10 +2242,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					.get(KEY));
 
 			TestObject service = new TestObject();
-			Dictionary props = new Hashtable();
+			Dictionary<String,Object> props = new Hashtable<>();
 			props.put(KEY, "1");
-			ServiceRegistration reg = getContext().registerService(
-					TestObject.class.getName(), service, props);
+			ServiceRegistration<TestObject> reg = getContext()
+					.registerService(TestObject.class, service, props);
 			try {
 				Sleep.sleep(SLEEP * 3);
 				assertEquals("service property incorrect", "bind1", bsSvcMap
@@ -2324,15 +2327,15 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String TB16_100 = TEST_CASE_ROOT + ".tb16.configuration100";
 
 		Configuration config = cm.getConfiguration(PID, null);
-		Dictionary props = new Hashtable();
+		Dictionary<String,Object> props = new Hashtable<>();
 		props.put(KEY, "config1");
 		config.update(props);
 		config = cm.getConfiguration(TB16_REQUIRED, null);
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put(KEY, "bad1");
 		config.update(props);
 		config = cm.getConfiguration(TB16_NOTPRESENT, null);
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put(KEY, "bad2");
 		config.update(props);
 
@@ -2381,11 +2384,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String TB17_SR1N = TEST_CASE_ROOT + ".tb17.SR1N";
 
 		TestObject service = new TestObject();
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(KEY, "initial");
-		ServiceRegistration regInitial = getContext().registerService(
-				TestObject.class.getName(), service, serviceProps);
-		ServiceRegistration regHigher = null;
+		ServiceRegistration<TestObject> regInitial = getContext()
+				.registerService(TestObject.class, service, serviceProps);
+		ServiceRegistration<TestObject> regHigher = null;
 
 		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
@@ -2422,7 +2425,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			serviceProps.put(KEY, "higher");
 			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
 			regHigher = getContext().registerService(
-					TestObject.class.getName(), service, serviceProps);
+					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
 
 			/* reacquire since they may have been reactivated */
@@ -2469,11 +2472,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String TB17_SG1N = TEST_CASE_ROOT + ".tb17.SG1N";
 
 		TestObject service = new TestObject();
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(KEY, "initial");
-		ServiceRegistration regInitial = getContext().registerService(
-				TestObject.class.getName(), service, serviceProps);
-		ServiceRegistration regHigher = null;
+		ServiceRegistration<TestObject> regInitial = getContext()
+				.registerService(TestObject.class, service, serviceProps);
+		ServiceRegistration<TestObject> regHigher = null;
 
 		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
@@ -2510,7 +2513,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			serviceProps.put(KEY, "higher");
 			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
 			regHigher = getContext().registerService(
-					TestObject.class.getName(), service, serviceProps);
+					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
 
 			/* reacquire since they may have been reactivated */
@@ -2557,11 +2560,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String TB17_DR1N = TEST_CASE_ROOT + ".tb17.DR1N";
 
 		TestObject service = new TestObject();
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(KEY, "initial");
-		ServiceRegistration regInitial = getContext().registerService(
-				TestObject.class.getName(), service, serviceProps);
-		ServiceRegistration regHigher = null;
+		ServiceRegistration<TestObject> regInitial = getContext()
+				.registerService(TestObject.class, service, serviceProps);
+		ServiceRegistration<TestObject> regHigher = null;
 
 		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
@@ -2598,7 +2601,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			serviceProps.put(KEY, "higher");
 			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
 			regHigher = getContext().registerService(
-					TestObject.class.getName(), service, serviceProps);
+					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
 
 			/* reacquire since they may have been reactivated */
@@ -2645,11 +2648,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String TB17_DG1N = TEST_CASE_ROOT + ".tb17.DG1N";
 
 		TestObject service = new TestObject();
-		Dictionary serviceProps = new Hashtable();
+		Dictionary<String,Object> serviceProps = new Hashtable<>();
 		serviceProps.put(KEY, "initial");
-		ServiceRegistration regInitial = getContext().registerService(
-				TestObject.class.getName(), service, serviceProps);
-		ServiceRegistration regHigher = null;
+		ServiceRegistration<TestObject> regInitial = getContext()
+				.registerService(TestObject.class, service, serviceProps);
+		ServiceRegistration<TestObject> regHigher = null;
 
 		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
@@ -2686,7 +2689,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			serviceProps.put(KEY, "higher");
 			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
 			regHigher = getContext().registerService(
-					TestObject.class.getName(), service, serviceProps);
+					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
 
 			/* reacquire since they may have been reactivated */
@@ -2743,7 +2746,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	private long getBaseConfigData(BaseService s) {
-		Dictionary props = null;
+		Dictionary<String,Object> props = null;
 		long value = -1L;
 		if (s != null) {
 			value = 0;
@@ -2770,7 +2773,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		for (int i = 0; i < services.length; i++) {
 			if (services[i] instanceof BaseService) {
 				BaseService s = (BaseService) services[i];
-				Dictionary props = s.getProperties();
+				Dictionary<String,Object> props = s.getProperties();
 				if (props != null
 						&& ((String) props
 								.get(ComponentConstants.COMPONENT_NAME))
@@ -2784,7 +2787,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	private boolean checkAvailability(String service) {
 		BundleContext bc = getContext();
-		ServiceReference ref = bc.getServiceReference(service);
+		ServiceReference< ? > ref = bc.getServiceReference(service);
 		return ref != null;
 	}
 
@@ -3176,7 +3179,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentDescriptionDTO expected1 = newComponentDescriptionDTO(
 				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", newBundleDTO(tb1), null, "bundle",
 				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", true, false,
-				new String[] {"org.osgi.test.cases.component.service.ServiceProvider"}, Collections.EMPTY_MAP,
+				new String[] {
+						"org.osgi.test.cases.component.service.ServiceProvider"
+				}, Collections.emptyMap(),
 				new ReferenceDTO[] {}, "activate", "deactivate", null, "optional",
 				new String[] {"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"});
 		assertEquals("DTO wrong", expected1, description1);
@@ -4019,18 +4024,19 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
 					+ "=org.osgi.test.cases.component.tb23.SinglePIDFactory))");
-			ServiceTracker<ComponentFactory, ComponentFactory> base1Tracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
+			ServiceTracker<ComponentFactory<BaseService>,ComponentFactory<BaseService>> base1Tracker = new ServiceTracker<>(
 					getContext(), base1Filter, null);
 			try {
 				base1Tracker.open();
-				ComponentFactory f1 = base1Tracker.waitForService(SLEEP * 3);
+				ComponentFactory<BaseService> f1 = base1Tracker
+						.waitForService(SLEEP * 3);
 				assertNotNull("missing factory1", f1);
 				props = new Hashtable<String, Object>();
 				props.put(PID_ROOT, "factory");
 				props.put(PID2, "factory");
-				ComponentInstance i1 = f1.newInstance(props);
+				ComponentInstance<BaseService> i1 = f1.newInstance(props);
 				assertNotNull("missing ComponentInstance", i1);
-				BaseService b1 = (BaseService) i1.getInstance();
+				BaseService b1 = i1.getInstance();
 				assertNotNull("missing base1", b1);
 				props = b1.getProperties();
 				assertNotNull("props null", props);
@@ -4128,18 +4134,19 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			Filter base1Filter = getContext().createFilter("(&(" + Constants.OBJECTCLASS + "="
 					+ ComponentFactory.class.getName() + ")(" + ComponentConstants.COMPONENT_FACTORY
 					+ "=org.osgi.test.cases.component.tb23.MultiplePIDsFactory))");
-			ServiceTracker<ComponentFactory, ComponentFactory> base1Tracker = new ServiceTracker<ComponentFactory, ComponentFactory>(
+			ServiceTracker<ComponentFactory<BaseService>,ComponentFactory<BaseService>> base1Tracker = new ServiceTracker<>(
 					getContext(), base1Filter, null);
 			try {
 				base1Tracker.open();
-				ComponentFactory f1 = base1Tracker.waitForService(SLEEP * 3);
+				ComponentFactory<BaseService> f1 = base1Tracker
+						.waitForService(SLEEP * 3);
 				assertNotNull("missing factory1", f1);
 				props = new Hashtable<String, Object>();
 				props.put(PID_ROOT, "factory");
 				props.put(PID3, "factory");
-				ComponentInstance i1 = f1.newInstance(props);
+				ComponentInstance<BaseService> i1 = f1.newInstance(props);
 				assertNotNull("missing ComponentInstance", i1);
-				BaseService b1 = (BaseService) i1.getInstance();
+				BaseService b1 = i1.getInstance();
 				assertNotNull("missing base1", b1);
 				props = b1.getProperties();
 				assertNotNull("props null", props);

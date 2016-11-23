@@ -29,16 +29,16 @@ public class TypeReferenceTestImpl implements BaseService {
 
 	private TestObject service;
 
-	private ServiceReference ref;
+	private ServiceReference<TestObject>				ref;
 
-	private ComponentServiceObjects objects;
+	private ComponentServiceObjects<TestObject>			objects;
 
-	private Map properties;
+	private Map<String,Object>							properties;
 
-	private Map.Entry tuple;
+	private Map.Entry<Map<String,Object>,TestObject>	tuple;
 
-	public Dictionary getProperties() {
-		final Dictionary props = new Hashtable();
+	public Dictionary<String,Object> getProperties() {
+		final Dictionary<String,Object> props = new Hashtable<>();
 		props.put("service", service);
 		props.put("ref", ref);
 		props.put("map", properties);

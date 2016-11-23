@@ -17,6 +17,7 @@ package org.osgi.test.cases.component.tb11;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
@@ -24,9 +25,9 @@ import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 
 public class TargetProperties implements BaseService, ComponentContextExposer {
-  private Dictionary properties;
+  private Dictionary<String,Object> properties;
   private ComponentContext ctxt;
-  private ServiceRegistration sr;
+	private ServiceRegistration< ? >	sr;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
@@ -36,7 +37,8 @@ public class TargetProperties implements BaseService, ComponentContextExposer {
     if (prop != null) {
             Dictionary<String, Object> serviceProps = new Hashtable<String, Object>();
       serviceProps.put("serial.num", prop);
-      sr = ctxt.getBundleContext().registerService(getClass().getName(), this, serviceProps);
+			sr = ctxt.getBundleContext().registerService(getClass().getName(),
+					this, serviceProps);
     }
   }
 
@@ -47,7 +49,7 @@ public class TargetProperties implements BaseService, ComponentContextExposer {
     }
   }
 
-  public Dictionary getProperties() {
+  public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

@@ -32,7 +32,7 @@ public class ConfigurationPolicyComp implements BaseService {
 
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     if (ctxt == null)
       return null;
 

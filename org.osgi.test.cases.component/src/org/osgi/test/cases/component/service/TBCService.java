@@ -36,5 +36,5 @@ public interface TBCService {
 
   public TestObject getTestObject();
   
-  public Dictionary getProperties();
+	public Dictionary<String,Object> getProperties();
 }

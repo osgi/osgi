@@ -43,7 +43,7 @@ public class ServiceComponent implements BaseService {
 		properties = null;
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 }

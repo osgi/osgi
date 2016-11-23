@@ -26,7 +26,7 @@ public class ContExp implements ComponentContextExposer {
     return null;
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return null;
   }
 

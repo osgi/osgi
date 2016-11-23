@@ -17,7 +17,7 @@ package org.osgi.test.cases.component.tb10;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
@@ -27,15 +27,15 @@ import org.osgi.test.cases.component.service.ComponentContextExposer;
 public class Component1 implements BaseService, ComponentContextExposer {
   protected static int deactCount = 0;
   private int deactPos = -1;
-	private Dictionary			properties	= new Properties();
+	private Dictionary<String,Object>	properties	= new Hashtable<>();
   private ComponentContext ctxt;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
   }
@@ -45,7 +45,7 @@ public class Component1 implements BaseService, ComponentContextExposer {
     properties.put("config.base.data", new Integer(deactPos));
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

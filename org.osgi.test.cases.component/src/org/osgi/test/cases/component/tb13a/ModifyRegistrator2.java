@@ -17,15 +17,15 @@ package org.osgi.test.cases.component.tb13a;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class ModifyRegistrator2 implements ComponentContextExposer {
-	private Dictionary			properties		= new Properties();
+	private Dictionary<String,Object>	properties		= new Hashtable<>();
 	private ComponentContext ctxt;
 	public static final int		MODIFIED		= 1 << 0;
 	public static final int		MOD				= 1 << 1;
@@ -38,10 +38,10 @@ public class ModifyRegistrator2 implements ComponentContextExposer {
 
 	protected void activate(ComponentContext ctxt) {
 		this.ctxt = ctxt;
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 		log(getComponentName() + " activate");
@@ -73,12 +73,13 @@ public class ModifyRegistrator2 implements ComponentContextExposer {
 		setDataBits(MOD_BC);
 	}
 
-	protected void modMap(Map props) {
+	protected void modMap(Map<String,Object> props) {
 		log(getComponentName() + " modMap");
 		setDataBits(MOD_MAP);
 	}
 
-	protected void modCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
+	protected void modCcBcMap(ComponentContext ctxt, BundleContext bc,
+			Map<String,Object> props) {
 		log(getComponentName() + " modCcBcMap");
 		setDataBits(MOD_CC_BC_MAP);
 	}
@@ -88,7 +89,7 @@ public class ModifyRegistrator2 implements ComponentContextExposer {
     throw new RuntimeException("Test method throwException(ComponentContext) is called!");
   }
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 

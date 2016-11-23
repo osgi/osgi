@@ -37,11 +37,11 @@ import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
 public class ServiceConsumerEventImpl extends DefaultBindImpl implements
 		ServiceConsumerEvent {
 
-	private Hashtable	properties;
+	private Hashtable<String,Object>	properties;
 	int					count	= 0;
 
 	public ServiceConsumerEventImpl() {
-		properties = new Hashtable();
+		properties = new Hashtable<>();
 		properties.put("count", new Integer(count));
 	}
 
@@ -59,7 +59,7 @@ public class ServiceConsumerEventImpl extends DefaultBindImpl implements
 		return serviceProvider.getTestObject();
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 }

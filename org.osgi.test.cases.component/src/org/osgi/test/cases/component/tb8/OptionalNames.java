@@ -22,7 +22,7 @@ import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class OptionalNames implements BaseService, ComponentContextExposer {
-  private Dictionary properties;
+	private Dictionary<String,Object>	properties;
   private ComponentContext ctxt;
 
   protected void activate(ComponentContext ctxt) {
@@ -34,7 +34,7 @@ public class OptionalNames implements BaseService, ComponentContextExposer {
 
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

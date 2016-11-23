@@ -24,6 +24,7 @@
  */
 package org.osgi.test.cases.component.junit;
 
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -45,6 +46,7 @@ import org.osgi.test.support.sleep.Sleep;
  *
  * @author $Id$
  */
+@SuppressWarnings("unchecked")
 public class FieldInjectionControl extends DefaultTestBundleControl {
 
 	private static int			SLEEP			= 1000;
@@ -74,9 +76,9 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Static unary reference
+	 * Simple field injection test. Static unary reference
+	 * 
+	 * @throws Exception
 	 */
 	public void testFIStaticUnaryReference() throws Exception {
 		final TestObject service = new TestObject();
@@ -106,9 +108,9 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Dynamic unary reference
+	 * Simple field injection test. Dynamic unary reference
+	 * 
+	 * @throws Exception
 	 */
 	public void testFIDynamicUnaryReference() throws Exception {
 		final Bundle tb = installBundle("tbf1.jar", true);
@@ -144,13 +146,12 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Dynamic unary reference where field is not marked volatile
-	 * 
-	 * TODO I think we can remove this test as
-	 * {@link DeclarativeServicesControl#testDynamicNonVoltaileScalarFieldReference130}
+	 * Simple field injection test. Dynamic unary reference where field is not
+	 * marked volatile TODO I think we can remove this test as
+	 * {@link DeclarativeServicesControl#testDynamicNonVoltaileFieldReference130}
 	 * checks the same
+	 * 
+	 * @throws Exception
 	 */
 	public void testFIFailingUnaryReference() throws Exception {
 		final Bundle tb = installBundle("tbf1.jar", true);
@@ -161,10 +162,12 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 
 			// we get the reference and the service as it's not activated
 			// due to a non volatile field
-			final ServiceReference[] refs = getContext().getServiceReferences(
-					BaseService.class.getName(), "(type=failed)");
+			final Collection<ServiceReference<BaseService>> refs = getContext()
+					.getServiceReferences(BaseService.class, "(type=failed)");
 			assertNotNull(refs);
-			final Object service = getContext().getService(refs[0]);
+			assertFalse(refs.isEmpty());
+			final Object service = getContext()
+					.getService(refs.iterator().next());
 			assertNotNull(service);
 		} finally {
 			ungetAllServices();
@@ -173,17 +176,17 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Field type test
+	 * Simple field injection test. Field type test
+	 * 
+	 * @throws Exception
 	 */
 	public void testFITypeUnaryReference() throws Exception {
 		final TestObject service = new TestObject();
 		final Bundle tb = installBundle("tbf1.jar", false);
 		try {
 			this.registerService(TestObject.class.getName(), service, null);
-			final ServiceReference ref = this.getContext()
-					.getServiceReference(TestObject.class.getName());
+			final ServiceReference<TestObject> ref = this.getContext()
+					.getServiceReference(TestObject.class);
 
 			tb.start();
 
@@ -198,20 +201,22 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			assertEquals(0, ref.compareTo(bs.getProperties().get("ref")));
 
 			// for the properties map we just check the service id
-			final Map props = (Map) bs.getProperties().get("map");
+			final Map<String,Object> props = (Map<String,Object>) bs
+					.getProperties().get("map");
 			assertNotNull(props);
 			assertEquals(ref.getProperty(Constants.SERVICE_ID),
 					props.get(Constants.SERVICE_ID));
 
 			// tuple
-			final Map.Entry tuple = (Map.Entry) bs.getProperties().get("tuple");
-			final Map serviceProps = (Map) tuple.getKey();
+			final Map.Entry<Map<String,Object>,TestObject> tuple = (Map.Entry<Map<String,Object>,TestObject>) bs
+					.getProperties().get("tuple");
+			final Map<String,Object> serviceProps = tuple.getKey();
 			assertEquals(ref.getProperty(Constants.SERVICE_ID),
 					serviceProps.get(Constants.SERVICE_ID));
 			assertEquals(service, tuple.getValue());
 
 			// service objects
-			final ComponentServiceObjects objects = (ComponentServiceObjects) bs
+			final ComponentServiceObjects<TestObject> objects = (ComponentServiceObjects<TestObject>) bs
 					.getProperties()
 					.get("objects");
 			assertNotNull(objects);
@@ -225,9 +230,9 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Static multiple reference
+	 * Simple field injection test. Static multiple reference
+	 * 
+	 * @throws Exception
 	 */
 	public void testFIStaticMultipleReference() throws Exception {
 		final TestObject service = new TestObject();
@@ -242,9 +247,12 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 					BaseService.class, "(type=multiple-required)");
 			assertNotNull(bs.getProperties());
 			assertNotNull(bs.getProperties().get("services"));
-			assertEquals(1, ((List) bs.getProperties().get("services")).size());
+			assertEquals(1,
+					((List<TestObject>) bs.getProperties().get("services"))
+							.size());
 			assertEquals(service,
-					((List) bs.getProperties().get("services")).get(0));
+					((List<TestObject>) bs.getProperties().get("services"))
+							.get(0));
 
 			this.ungetService(bs);
 
@@ -261,20 +269,20 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Simple field injection test.
-	 *
-	 * Dynamic multiple reference
+	 * Simple field injection test. Dynamic multiple reference
+	 * 
+	 * @throws Exception
 	 */
 	public void testFIDynamicMultipleReference() throws Exception {
 		final TestObject service1 = new TestObject();
 		final TestObject service2 = new TestObject();
 		final TestObject service3 = new TestObject();
 
-		final Dictionary props1 = new Hashtable();
+		final Dictionary<String,Object> props1 = new Hashtable<>();
 		props1.put(Constants.SERVICE_RANKING, new Integer(5));
-		final Dictionary props2 = new Hashtable();
+		final Dictionary<String,Object> props2 = new Hashtable<>();
 		props2.put(Constants.SERVICE_RANKING, new Integer(10));
-		final Dictionary props3 = new Hashtable();
+		final Dictionary<String,Object> props3 = new Hashtable<>();
 		props3.put(Constants.SERVICE_RANKING, new Integer(15));
 
 		final Bundle tb = installBundle("tbf1.jar", false);
@@ -285,7 +293,9 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 					BaseService.class, "(type=multiple-dynamic)");
 			assertNotNull(bs.getProperties());
 			assertNotNull(bs.getProperties().get("services"));
-			assertEquals(0, ((List) bs.getProperties().get("services")).size());
+			assertEquals(0,
+					((List<TestObject>) bs.getProperties().get("services"))
+							.size());
 
 			this.registerService(TestObject.class.getName(), service1, props1);
 			this.registerService(TestObject.class.getName(), service3, props3);
@@ -294,13 +304,18 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			// unfortunately there is no event we can wait for
 			Sleep.sleep(SLEEP);
 
-			assertEquals(3, ((List) bs.getProperties().get("services")).size());
+			assertEquals(3,
+					((List<TestObject>) bs.getProperties().get("services"))
+							.size());
 			assertEquals(service1,
-					((List) bs.getProperties().get("services")).get(0));
+					((List<TestObject>) bs.getProperties().get("services"))
+							.get(0));
 			assertEquals(service2,
-					((List) bs.getProperties().get("services")).get(1));
+					((List<TestObject>) bs.getProperties().get("services"))
+							.get(1));
 			assertEquals(service3,
-					((List) bs.getProperties().get("services")).get(2));
+					((List<TestObject>) bs.getProperties().get("services"))
+							.get(2));
 
 			this.ungetService(bs);
 

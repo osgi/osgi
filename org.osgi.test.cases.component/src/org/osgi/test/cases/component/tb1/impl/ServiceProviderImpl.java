@@ -43,7 +43,7 @@ public class ServiceProviderImpl implements ServiceProvider {
     return new TestObject();
   }
   
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return null;
   }
 }

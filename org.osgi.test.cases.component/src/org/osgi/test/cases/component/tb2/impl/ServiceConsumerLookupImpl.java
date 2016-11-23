@@ -51,7 +51,7 @@ public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 		this.context = null;
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return context.getProperties();
 	}
 

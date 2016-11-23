@@ -19,8 +19,8 @@ import static org.osgi.test.cases.component.service.DSTestConstants.*;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -28,15 +28,15 @@ import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.ComponentEnabler;
 
 public class BindUnbind implements BaseService {
-  private Dictionary properties = new Properties();
+	private Dictionary<String,Object>	properties	= new Hashtable<>();
   private ComponentContext ctxt;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-    Dictionary props = ctxt.getProperties();
-    Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
     while (en.hasMoreElements()) {
-      Object key = en.nextElement();
+			String key = en.nextElement();
       properties.put(key, props.get(key));
     }
   }
@@ -45,11 +45,11 @@ public class BindUnbind implements BaseService {
 
   }
 
-  protected void bindSr(ServiceReference sr) {
+	protected void bindSr(ServiceReference<ComponentEnabler> sr) {
 		setDataBits(BIND_1);
   }
 
-  protected void unbindSr(ServiceReference sr) {
+	protected void unbindSr(ServiceReference<ComponentEnabler> sr) {
 		setDataBits(UNBIND_1);
   }
 
@@ -61,15 +61,15 @@ public class BindUnbind implements BaseService {
 		setDataBits(UNBIND_2);
   }
 
-  protected void bindCeMap(ComponentEnabler ce, Map props) {
+	protected void bindCeMap(ComponentEnabler ce, Map<String,Object> props) {
 		setDataBits(BIND_3);
   }
 
-  protected void unbindCeMap(ComponentEnabler ce, Map props) {
+	protected void unbindCeMap(ComponentEnabler ce, Map<String,Object> props) {
 		setDataBits(UNBIND_3);
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

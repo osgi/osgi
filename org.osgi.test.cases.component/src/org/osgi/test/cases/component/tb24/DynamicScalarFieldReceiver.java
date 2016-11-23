@@ -34,6 +34,7 @@ public class DynamicScalarFieldReceiver extends AbstractFieldReceiver implements
 	private volatile Map<String, Object>							properties;
 	private volatile Map.Entry<Map<String, Object>, BaseService>	tuple;
 	
+	@SuppressWarnings("unchecked")
 	public DynamicScalarFieldReceiver() {
 		service = MockFactory.newMock(BaseService.class, null);
 		assignable = new Object();

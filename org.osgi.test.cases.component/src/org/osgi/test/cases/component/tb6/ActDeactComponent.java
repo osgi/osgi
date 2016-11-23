@@ -17,9 +17,9 @@ package org.osgi.test.cases.component.tb6;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentConstants;
@@ -27,7 +27,7 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class ActDeactComponent implements ComponentContextExposer {
-	private Dictionary			properties;
+	private Dictionary<String,Object>	properties;
   private ComponentContext ctxt;
 	public static final int		ACTIVATE_CC			= 1 << 0;
 	public static final int		DEACTIVATE_CC		= 1 << 1;
@@ -46,11 +46,11 @@ public class ActDeactComponent implements ComponentContextExposer {
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-		properties = new Properties();
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		properties = new Hashtable<>();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 		log(getComponentName() + " activate");
@@ -63,7 +63,7 @@ public class ActDeactComponent implements ComponentContextExposer {
   }
 
   protected void act() {
-    properties = new Properties();
+		properties = new Hashtable<>();
     properties.put(ComponentConstants.COMPONENT_NAME, getName());
 		log(getComponentName() + " act");
     setDataBits(ACT);
@@ -76,11 +76,11 @@ public class ActDeactComponent implements ComponentContextExposer {
 
   protected void actCc(ComponentContext ctxt) {
     this.ctxt = ctxt;
-		properties = new Properties();
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		properties = new Hashtable<>();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 		log(getComponentName() + " actCc");
@@ -93,7 +93,7 @@ public class ActDeactComponent implements ComponentContextExposer {
   }
 
   protected void actBc(BundleContext bc) {
-    properties = new Properties();
+		properties = new Hashtable<>();
     properties.put(ComponentConstants.COMPONENT_NAME, getName());
 		log(getComponentName() + " actBc");
     setDataBits(ACT_BC);
@@ -104,36 +104,38 @@ public class ActDeactComponent implements ComponentContextExposer {
     setDataBits(DEACT_BC);
   }
 
-  protected void actMap(Map props) {
-    properties = new Properties();
-    Iterator it = props.keySet().iterator();
+	protected void actMap(Map<String,Object> props) {
+		properties = new Hashtable<>();
+		Iterator<String> it = props.keySet().iterator();
     while (it.hasNext()) {
-      Object key = it.next();
+			String key = it.next();
       properties.put(key, props.get(key));
     }
 		log(getComponentName() + " actMap");
     setDataBits(ACT_MAP);
   }
 
-  protected void deactMap(Map props) {
+	protected void deactMap(Map<String,Object> props) {
 		log(getComponentName() + " deactMap");
     setDataBits(DEACT_MAP);
   }
 
-	protected void actCcBcMap(ComponentContext ctxt, BundleContext bc, Map map) {
+	protected void actCcBcMap(ComponentContext ctxt, BundleContext bc,
+			Map<String,Object> map) {
     this.ctxt = ctxt;
-		properties = new Properties();
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		properties = new Hashtable<>();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 		log(getComponentName() + " actCcBcMap");
     setDataBits(ACT_CC_BC_MAP);
   }
 
-  protected void deactCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
+	protected void deactCcBcMap(ComponentContext ctxt, BundleContext bc,
+			Map<String,Object> props) {
 		log(getComponentName() + " deactCcBcMap");
     setDataBits(DEACT_CC_BC_MAP);
   }
@@ -144,12 +146,12 @@ public class ActDeactComponent implements ComponentContextExposer {
   }
 
   protected void deactCcBcMapInt(ComponentContext ctxt, BundleContext bc,
-      Map props, int reason) {
+			Map<String,Object> props, int reason) {
 		log(getComponentName() + " deactCcBcMapInt");
     setDataBits(DEACT_CC_BC_MAP_INT | reason << 16);
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

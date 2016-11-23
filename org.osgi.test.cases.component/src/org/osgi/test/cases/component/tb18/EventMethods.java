@@ -19,8 +19,8 @@ import static org.osgi.test.cases.component.service.DSTestConstants.*;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
@@ -30,15 +30,15 @@ import org.osgi.test.cases.component.service.ComponentEnabler;
 import org.osgi.test.cases.component.service.TBCService;
 
 public class EventMethods implements BaseService {
-	private Dictionary			properties	= new Properties();
+	private Dictionary<String,Object>	properties	= new Hashtable<>();
 	private ComponentContext	ctxt;
 
 	void activate(ComponentContext ctxt) {
 		this.ctxt = ctxt;
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 	}
@@ -46,20 +46,20 @@ public class EventMethods implements BaseService {
 	void deactivate(ComponentContext ctxt) {
 	}
 
-	void bind1(ComponentServiceObjects< ? > cso) {
+	void bind1(ComponentServiceObjects<ComponentEnabler> cso) {
 		setDataBits(ERROR_1);
 	}
 
-	void unbind1(ComponentServiceObjects< ? > cso) {
+	void unbind1(ComponentServiceObjects<ComponentEnabler> cso) {
 		setDataBits(ERROR_1);
 	}
 
-	void bind1(ServiceReference sr) {
+	void bind1(ServiceReference<ComponentEnabler> sr) {
 		check(sr);
 		setDataBits(BIND_1);
 	}
 
-	void unbind1(ServiceReference sr) {
+	void unbind1(ServiceReference<ComponentEnabler> sr) {
 		check(sr);
 		setDataBits(UNBIND_1);
 	}
@@ -82,47 +82,48 @@ public class EventMethods implements BaseService {
 		setDataBits(UNBIND_2);
 	}
 
-	void bind3(ComponentEnabler ce, Map props) {
+	void bind3(ComponentEnabler ce, Map<String,Object> props) {
 		setDataBits(BIND_3);
 	}
 
-	void unbind3(ComponentEnabler ce, Map props) {
+	void unbind3(ComponentEnabler ce, Map<String,Object> props) {
 		check(ce);
 		check(props);
 		setDataBits(UNBIND_3);
 	}
 
-	void bind4(ServiceReference sr, ComponentEnabler ce) {
+	void bind4(ServiceReference<ComponentEnabler> sr, ComponentEnabler ce) {
 		check(sr);
 		check(ce);
 		setDataBits(BIND_4);
 	}
 
-	void unbind4(ServiceReference sr, ComponentEnabler ce) {
+	void unbind4(ServiceReference<ComponentEnabler> sr, ComponentEnabler ce) {
 		check(sr);
 		check(ce);
 		setDataBits(UNBIND_4);
 	}
 
-	void bind5(ComponentEnabler ce, ServiceReference sr) {
+	void bind5(ComponentEnabler ce, ServiceReference<ComponentEnabler> sr) {
 		setDataBits(ERROR_5);
 	}
 
-	void unbind5(ComponentEnabler ce, ServiceReference sr) {
+	void unbind5(ComponentEnabler ce, ServiceReference<ComponentEnabler> sr) {
 		setDataBits(ERROR_5);
 	}
 
-	void bind5(Map props) {
+	void bind5(Map<String,Object> props) {
 		check(props);
 		setDataBits(BIND_5);
 	}
 
-	void unbind5(Map props) {
+	void unbind5(Map<String,Object> props) {
 		check(props);
 		setDataBits(UNBIND_5);
 	}
 
-	void bind6(Map props, ComponentEnabler ce, ServiceReference sr,
+	void bind6(Map<String,Object> props, ComponentEnabler ce,
+			ServiceReference<ComponentEnabler> sr,
 			ComponentServiceObjects< ? > cso, TBCService ce2) {
 		check(ce);
 		check(props);
@@ -137,7 +138,8 @@ public class EventMethods implements BaseService {
 		setDataBits(BIND_6);
 	}
 
-	void unbind6(Map props, ComponentEnabler ce, ServiceReference sr,
+	void unbind6(Map<String,Object> props, ComponentEnabler ce,
+			ServiceReference<ComponentEnabler> sr,
 			ComponentServiceObjects< ? > cso, TBCService ce2) {
 		check(ce);
 		check(props);
@@ -150,11 +152,11 @@ public class EventMethods implements BaseService {
 		setDataBits(UNBIND_6);
 	}
 
-	void bind7(Map props) {
+	void bind7(Map<String,Object> props) {
 		setDataBits(ERROR_7);
 	}
 
-	void unbind7(Map props) {
+	void unbind7(Map<String,Object> props) {
 		setDataBits(ERROR_7);
 	}
 
@@ -176,17 +178,17 @@ public class EventMethods implements BaseService {
 		setDataBits(ERROR_8);
 	}
 
-	void bind8(ComponentServiceObjects< ? > cso) {
+	void bind8(ComponentServiceObjects<ComponentEnabler> cso) {
 		check(cso);
 		setDataBits(BIND_8);
 	}
 
-	void unbind8(ComponentServiceObjects< ? > cso) {
+	void unbind8(ComponentServiceObjects<ComponentEnabler> cso) {
 		check(cso);
 		setDataBits(UNBIND_8);
 	}
 
-	private void check(ServiceReference sr) {
+	private void check(ServiceReference< ? > sr) {
 		if (sr == null)
 			throw new AssertionError("null");
 	}
@@ -201,7 +203,7 @@ public class EventMethods implements BaseService {
 			throw new AssertionError("null");
 	}
 
-	private void check(Map props) {
+	private void check(Map<String,Object> props) {
 		if (props == null)
 			throw new AssertionError("null");
 		if (!(props instanceof Comparable))
@@ -214,7 +216,7 @@ public class EventMethods implements BaseService {
 		}
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 

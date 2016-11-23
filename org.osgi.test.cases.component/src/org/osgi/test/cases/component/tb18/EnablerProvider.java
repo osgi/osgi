@@ -39,7 +39,7 @@ public class EnablerProvider implements ComponentEnabler {
 			ctxt.disableComponent(name);
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return ctxt.getProperties();
 	}
 

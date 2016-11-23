@@ -28,7 +28,7 @@ public class ScopedServiceComponent implements BaseService {
 		properties = context.getProperties();
 	}
 
-	public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
 		return properties;
 	}
 }

@@ -34,6 +34,7 @@ public class StaticScalarFieldReceiver extends AbstractFieldReceiver implements 
 	private Map<String, Object>							properties;
 	private Map.Entry<Map<String, Object>, BaseService>	tuple;
 	
+	@SuppressWarnings("unchecked")
 	public StaticScalarFieldReceiver() {
 		service = MockFactory.newMock(BaseService.class, null);
 		assignable = new Object();

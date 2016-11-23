@@ -17,24 +17,24 @@ package org.osgi.test.cases.component.tb6;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class ContExp implements ComponentContextExposer {
   private ComponentContext ctxt;
-  Dictionary properties;
+	Dictionary<String,Object>	properties;
 	public static final int		ACTIVATE	= 1 << 0;
 	public static final int		DEACTIVATE	= 1 << 1;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-		properties = new Properties();
-		Dictionary props = ctxt.getProperties();
-		Enumeration en = props.keys();
+		properties = new Hashtable<>();
+		Dictionary<String,Object> props = ctxt.getProperties();
+		Enumeration<String> en = props.keys();
 		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
+			String key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
 		log(getComponentName() + " activate");
@@ -59,7 +59,7 @@ public class ContExp implements ComponentContextExposer {
     return ctxt;
   }
 
-  public Dictionary getProperties() {
+	public Dictionary<String,Object> getProperties() {
     return properties;
   }
 

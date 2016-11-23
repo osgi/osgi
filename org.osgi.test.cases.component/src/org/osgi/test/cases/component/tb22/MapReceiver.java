@@ -29,6 +29,7 @@ import org.osgi.test.cases.component.service.ServiceReceiver;
 public class MapReceiver implements ServiceReceiver<BaseService> {
 	private Map<Map<String, Object>, BaseService> refs = new TreeMap<Map<String, Object>, BaseService>(
 			new Comparator<Map<String, Object>>() {
+				@SuppressWarnings("unchecked")
 				public int compare(Map<String, Object> var0, Map<String, Object> var1) {
 					return ((Comparable<Map<String, Object>>) var1).compareTo(var0);
 				}

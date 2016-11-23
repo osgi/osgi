@@ -21,14 +21,15 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.test.cases.component.service.BaseService;
+import org.osgi.test.cases.component.service.TestObject;
 
 public class MultipleReferenceImpl implements BaseService {
 
-	private volatile List services;
+	private volatile List<TestObject> services;
 
-	public Dictionary getProperties() {
-		final Dictionary props = new Hashtable();
-		final List local = services;
+	public Dictionary<String,Object> getProperties() {
+		final Dictionary<String,Object> props = new Hashtable<>();
+		final List<TestObject> local = services;
 		if (local != null) {
 			props.put("services", local);
 		}

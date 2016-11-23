@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -30,6 +31,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.test.support.OSGiTestCase;
@@ -2142,6 +2144,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	 * @param description
 	 * @param expr
 	 * @param value
+	 * @return boolean
 	 * @throws Exception
 	 */
 	public boolean assertXPathValueIfSet(Description description, String expr,
@@ -2184,6 +2187,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	}
 
 	/* For test debugging use */
+	@SuppressWarnings("unused")
 	private static String toString(Node node) throws Exception {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
