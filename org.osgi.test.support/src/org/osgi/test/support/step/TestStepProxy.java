@@ -55,6 +55,7 @@ public class TestStepProxy implements TestStep {
 	 * @see org.osgi.test.support.step.TestStep#execute(java.lang.String,
 	 *      java.lang.String)
 	 */
+	@Override
 	public String execute(String stepId, String userPrompt) {
 		TestStep testStep = this.testStepTracker.getService();
 		if (null != testStep) {

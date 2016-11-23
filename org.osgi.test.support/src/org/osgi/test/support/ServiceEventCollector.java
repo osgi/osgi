@@ -39,6 +39,7 @@ public class ServiceEventCollector extends EventCollector<ServiceEvent>
 		this.mask = typeMask;
 	}
 
+	@Override
 	public void serviceChanged(ServiceEvent event) {
 		if ((event.getType() & mask) != 0)
 			addEvent(event);
@@ -47,6 +48,7 @@ public class ServiceEventCollector extends EventCollector<ServiceEvent>
 	@Override
 	public Comparator<ServiceEvent> getComparator() {
 		return new Comparator<ServiceEvent>() {
+			@Override
 			public int compare(ServiceEvent event1, ServiceEvent event2) {
 
 				Long id1 = (Long) event1.getServiceReference().getProperty(Constants.SERVICE_ID);

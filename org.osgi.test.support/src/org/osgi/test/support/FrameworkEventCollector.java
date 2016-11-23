@@ -38,6 +38,7 @@ public class FrameworkEventCollector extends EventCollector<FrameworkEvent>
 		this.mask = typeMask;
 	}
 
+	@Override
 	public void frameworkEvent(FrameworkEvent event) {
 		if ((event.getType() & mask) != 0)
 			addEvent(event);
@@ -46,6 +47,7 @@ public class FrameworkEventCollector extends EventCollector<FrameworkEvent>
 	@Override
 	public Comparator<FrameworkEvent> getComparator() {
 		return new Comparator<FrameworkEvent>() {
+			@Override
 			public int compare(FrameworkEvent event1, FrameworkEvent event2) {
 				 
 				long lresult = event1.getBundle().getBundleId() - event2.getBundle().getBundleId();

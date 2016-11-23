@@ -25,10 +25,10 @@
 
 package org.osgi.test.support.reflect;
 
+import static junit.framework.TestCase.fail;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import junit.framework.Assert;
 
 /**
  * This class represents a method call.
@@ -93,7 +93,7 @@ public class MethodCall {
 				methodSource = methodSource.getSuperclass();
 			}
 			if (methodSource == null) {
-				Assert.fail("Interface " + methodInterface
+				fail("Interface " + methodInterface
 						+ " not found on target object.");
 			}
 		}

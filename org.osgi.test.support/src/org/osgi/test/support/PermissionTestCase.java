@@ -376,18 +376,22 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Set<String> getCriticalExtensionOIDs() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public byte[] getExtensionValue(String var0) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Set<String> getNonCriticalExtensionOIDs() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean hasUnsupportedCriticalExtension() {
 			throw new UnsupportedOperationException();
 		}
@@ -400,6 +404,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			this.name = name;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}

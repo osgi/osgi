@@ -17,14 +17,16 @@
 
 package org.osgi.test.support.wiring;
 
-import static junit.framework.Assert.*;
+import static junit.framework.TestCase.*;
 import static org.osgi.test.support.OSGiTestCase.fail;
 import static org.osgi.test.support.OSGiTestCaseProperties.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -60,6 +62,7 @@ public class Wiring {
 			done[0] = false;
 		}
 		FrameworkListener listener = new FrameworkListener() {
+			@Override
 			public void frameworkEvent(FrameworkEvent event) {
 				if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
 					synchronized (done) {
@@ -109,6 +112,7 @@ public class Wiring {
 		return fwkWiring.resolveBundles(bundles);
 	}
 
+	@SafeVarargs
 	private static <T> Collection<T> asCollection(T... items) {
 		if ((items == null) || (items.length == 0)) {
 			return null;

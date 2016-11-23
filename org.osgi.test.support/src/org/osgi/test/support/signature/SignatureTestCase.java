@@ -94,6 +94,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doAttribute(java.lang.String,
 	 *      byte[])
 	 */
+	@Override
 	public Object doAttribute(String name, byte[] data) {
 		return null;
 	}
@@ -109,6 +110,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doClass(int,
 	 *      java.lang.String, java.lang.String, java.lang.String[])
 	 */
+	@Override
 	public boolean doClass(int access, String name, String superName,
 			String[] interfaces) {
 		clazz = null;
@@ -216,6 +218,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		System.out.println(string);
 	}
 
+	@Override
 	public void doField(int access, String name, String desiredDescriptor,
 			Object constant) {
 		if (!isAPI(access))
@@ -281,6 +284,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		}
 	}
 
+	@Override
 	public void doMethod(int access, String name, String desc,
 			String[] exceptions) {
 
@@ -295,6 +299,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			checkMethod(access, name, desc, exceptions);
 	}
 
+	@Override
 	public void doEnd() {
 		/**
 		 * We removed the check to see if there is too much

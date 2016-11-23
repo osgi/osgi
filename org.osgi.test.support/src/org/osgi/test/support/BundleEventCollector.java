@@ -37,6 +37,7 @@ public class BundleEventCollector extends EventCollector<BundleEvent> implements
 		this.mask = typeMask;
 	}
 
+	@Override
 	public void bundleChanged(BundleEvent event) {
 		if ((event.getType() & mask) != 0)
 			addEvent(event);
@@ -45,6 +46,7 @@ public class BundleEventCollector extends EventCollector<BundleEvent> implements
 	@Override
 	public Comparator<BundleEvent> getComparator() {
 		return new Comparator<BundleEvent>() {
+			@Override
 			public int compare(BundleEvent event1, BundleEvent event2) {
 
 				long result = event1.getBundle().getBundleId()

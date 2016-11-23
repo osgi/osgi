@@ -26,6 +26,7 @@ import org.osgi.service.log.LogListener;
 public class LogEntryCollector implements LogListener {
 	private final List<LogEntry>	entries	= new ArrayList<LogEntry>();
 
+	@Override
 	public synchronized void logged(LogEntry entry) {
 		entries.add(entry);
 	}

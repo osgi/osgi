@@ -59,6 +59,7 @@ public class MockFactory {
 		final InvocationHandler handler = new InvocationHandler() {
 			final Class< ? >	delegateClass	= (delegate == null) ? null
 														: delegate.getClass();
+			@Override
 			public Object invoke(Object proxy, Method method, Object[] args)
 					throws Throwable {
 				if (delegate == null) {
