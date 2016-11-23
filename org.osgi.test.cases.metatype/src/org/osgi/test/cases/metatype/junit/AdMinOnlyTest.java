@@ -37,96 +37,96 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  */
 public class AdMinOnlyTest extends MetaTypeTest {
 	private Bundle bundle;
-	private ServiceReference ref;
+	private ServiceReference<MetaTypeService>		ref;
 	
-	private final Map ads = new HashMap();
+	private final Map<String,AttributeDefinition>	ads	= new HashMap<>();
 	
 	/**
 	 * AttributeDefinition.STRING
 	 */
 	public void testString() {
-		assertAttributeGood((AttributeDefinition)ads.get("string"), "1234");
-		assertAttributeGood((AttributeDefinition)ads.get("string"), "12345");
-		assertAttributeBad((AttributeDefinition)ads.get("string"), "123");
+		assertAttributeGood(ads.get("string"), "1234");
+		assertAttributeGood(ads.get("string"), "12345");
+		assertAttributeBad(ads.get("string"), "123");
 	}
 	
 	/**
 	 * AttributeDefinition.LONG
 	 */
 	public void testLong() {
-		assertAttributeGood((AttributeDefinition)ads.get("long"), "1000");
-		assertAttributeGood((AttributeDefinition)ads.get("long"), "1001");
-		assertAttributeBad((AttributeDefinition)ads.get("long"), "999");
+		assertAttributeGood(ads.get("long"), "1000");
+		assertAttributeGood(ads.get("long"), "1001");
+		assertAttributeBad(ads.get("long"), "999");
 	}
 	
 	/**
 	 * AttributeDefinition.DOUBLE
 	 */
 	public void testDouble() {
-		assertAttributeGood((AttributeDefinition)ads.get("double"), "3.141592653589");
-		assertAttributeGood((AttributeDefinition)ads.get("double"), "3.141592653590");
-		assertAttributeBad((AttributeDefinition)ads.get("double"), "3.141592653588");
+		assertAttributeGood(ads.get("double"), "3.141592653589");
+		assertAttributeGood(ads.get("double"), "3.141592653590");
+		assertAttributeBad(ads.get("double"), "3.141592653588");
 	}
 	
 	/**
 	 * AttributeDefinition.FLOAT
 	 */
 	public void testFloat() {
-		assertAttributeGood((AttributeDefinition)ads.get("float"), "3.1415");
-		assertAttributeGood((AttributeDefinition)ads.get("float"), "3.1416");
-		assertAttributeBad((AttributeDefinition)ads.get("float"), "3.1414");
+		assertAttributeGood(ads.get("float"), "3.1415");
+		assertAttributeGood(ads.get("float"), "3.1416");
+		assertAttributeBad(ads.get("float"), "3.1414");
 	}
 	
 	/**
 	 * AttributeDefinition.INTEGER
 	 */
 	public void testInteger() {
-		assertAttributeGood((AttributeDefinition)ads.get("integer"), "100");
-		assertAttributeGood((AttributeDefinition)ads.get("integer"), "101");
-		assertAttributeBad((AttributeDefinition)ads.get("integer"), "99");
+		assertAttributeGood(ads.get("integer"), "100");
+		assertAttributeGood(ads.get("integer"), "101");
+		assertAttributeBad(ads.get("integer"), "99");
 	}
 	
 	/**
 	 * AttributeDefinition.BYTE
 	 */
 	public void testByte() {
-		assertAttributeGood((AttributeDefinition)ads.get("byte"), "1");
-		assertAttributeGood((AttributeDefinition)ads.get("byte"), "2");
-		assertAttributeBad((AttributeDefinition)ads.get("byte"), "0");
+		assertAttributeGood(ads.get("byte"), "1");
+		assertAttributeGood(ads.get("byte"), "2");
+		assertAttributeBad(ads.get("byte"), "0");
 	}
 	
 	/**
 	 * AttributeDefinition.CHAR
 	 */
 	public void testChar() {
-		assertAttributeGood((AttributeDefinition)ads.get("char"), "P");
-		assertAttributeGood((AttributeDefinition)ads.get("char"), "Q");
-		assertAttributeBad((AttributeDefinition)ads.get("char"), "O");
+		assertAttributeGood(ads.get("char"), "P");
+		assertAttributeGood(ads.get("char"), "Q");
+		assertAttributeBad(ads.get("char"), "O");
 	}
 	
 	/**
 	 * AttributeDefinition.SHORT
 	 */
 	public void testShort() {
-		assertAttributeGood((AttributeDefinition)ads.get("short"), "10");
-		assertAttributeGood((AttributeDefinition)ads.get("short"), "11");
-		assertAttributeBad((AttributeDefinition)ads.get("short"), "9");
+		assertAttributeGood(ads.get("short"), "10");
+		assertAttributeGood(ads.get("short"), "11");
+		assertAttributeBad(ads.get("short"), "9");
 	}
 	
 	/**
 	 * AttributeDefinition.PASSWORD
 	 */
 	public void testPassword() {
-		assertAttributeGood((AttributeDefinition)ads.get("password"), "12345678");
-		assertAttributeGood((AttributeDefinition)ads.get("password"), "123456789");
-		assertAttributeBad((AttributeDefinition)ads.get("password"), "1234567");
+		assertAttributeGood(ads.get("password"), "12345678");
+		assertAttributeGood(ads.get("password"), "123456789");
+		assertAttributeBad(ads.get("password"), "1234567");
 	}
 	
 	protected void setUp() throws Exception {
-		ref = getContext().getServiceReference(MetaTypeService.class.getName());
+		ref = getContext().getServiceReference(MetaTypeService.class);
 		bundle = getTestBundle();
 		bundle.start();
-		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
+		MetaTypeService mts = getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
 		ObjectClassDefinition ocd = mti.getObjectClassDefinition("minOnly", null);
 		AttributeDefinition[] lads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);

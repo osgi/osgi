@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -32,6 +33,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.test.support.OSGiTestCase;
@@ -479,6 +481,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 	}
 
 	/* For test debugging use */
+	@SuppressWarnings("unused")
 	private static String toString(Node node) throws Exception {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();

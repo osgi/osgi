@@ -41,7 +41,7 @@ public class Bug1852Test extends MetaTypeTest {
 	
 	private Bundle bundle;
 	private MetaTypeInformation mti;
-	private ServiceReference ref;
+	private ServiceReference<MetaTypeService>	ref;
 	
 	public void test() {
 		String[] factoryPids = mti.getFactoryPids();
@@ -53,10 +53,10 @@ public class Bug1852Test extends MetaTypeTest {
 	}
 	
 	protected void setUp() throws Exception {
-		ref = getContext().getServiceReference(MetaTypeService.class.getName());
+		ref = getContext().getServiceReference(MetaTypeService.class);
 		bundle = getTestBundle();
 		bundle.start();
-		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
+		MetaTypeService mts = getContext().getService(ref);
 		mti = mts.getMetaTypeInformation(bundle);
 	}
 	

@@ -54,20 +54,18 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class TestControl extends DefaultTestBundleControl {
 
 	private Bundle			bundle;
-	private ServiceReference	ref;
+	private ServiceReference<MetaTypeService>	ref;
 	private MetaTypeService	mts;
 
 	/**
 	 * Install the test bundle
-	 * 
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#setState()
 	 */
 	protected void setUp() throws Exception {
-		ref = getContext().getServiceReference(MetaTypeService.class.getName());
+		ref = getContext().getServiceReference(MetaTypeService.class);
 		assertNotNull(
 				"Service MetaTypeService is required to run this test. Install the service and try again.",
 				ref);
-		mts = (MetaTypeService) getContext().getService(ref);
+		mts = getContext().getService(ref);
 		
 		bundle = getTestBundle();
 	}
@@ -78,8 +76,6 @@ public class TestControl extends DefaultTestBundleControl {
 
 	/**
 	 * Uninstall the test bundle
-	 * 
-	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#clearState()
 	 */
 	protected void tearDown() throws Exception {
 		getContext().ungetService(ref);
@@ -429,14 +425,14 @@ public class TestControl extends DefaultTestBundleControl {
 	public void testBundleMetaTypeProvider() throws Exception {
 		Bundle tb2;
 		MetaTypeInformation mti;
-		ServiceReference sr;
+		ServiceReference<MetaTypeProvider> sr;
 
 		tb2 = installBundle("tb2.jar");
 		tb2.start();
 
 		// Check if the service is registered
 		sr = getContext().getServiceReference(
-				"org.osgi.service.metatype.MetaTypeProvider");
+				MetaTypeProvider.class);
 		assertNotNull("Checking if the service is registered", sr);
 
 		// Get an object for tests
@@ -458,7 +454,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider1() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		String servicePid = "testBundleMetaTypeProvider1";
 		properties.put(
 				Constants.SERVICE_PID, 
@@ -467,8 +463,8 @@ public class TestControl extends DefaultTestBundleControl {
 		properties.put(
 				MetaTypeProvider.METATYPE_PID, 
 				metatypePid);
-		ServiceRegistration serviceRegistration = bundleContext.registerService(
-				MetaTypeProvider.class.getName(), 
+		ServiceRegistration<MetaTypeProvider> serviceRegistration = bundleContext
+				.registerService(MetaTypeProvider.class,
 				new MetaTypeProvider() {
 					public ObjectClassDefinition getObjectClassDefinition(
 							String id, String locale) {
@@ -501,20 +497,20 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider2() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		String servicePid = "testBundleMetaTypeProvider2";
 		properties.put(
 				Constants.SERVICE_PID, 
 				servicePid);
-		Collection metatypeFactoryPids = new ArrayList();
+		Collection<String> metatypeFactoryPids = new ArrayList<>();
 		metatypeFactoryPids.add("testBundleMetaTypeProvider2.1");
 		metatypeFactoryPids.add("testBundleMetaTypeProvider2.2");
 		metatypeFactoryPids.add("testBundleMetaTypeProvider2.3");
 		properties.put(
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatypeFactoryPids);
-		ServiceRegistration serviceRegistration = bundleContext.registerService(
-				MetaTypeProvider.class.getName(), 
+		ServiceRegistration<MetaTypeProvider> serviceRegistration = bundleContext
+				.registerService(MetaTypeProvider.class,
 				new MetaTypeProvider() {
 					public ObjectClassDefinition getObjectClassDefinition(
 							String id, String locale) {
@@ -547,7 +543,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider3() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		String servicePid = "testBundleMetaTypeProvider3";
 		properties.put(
 				Constants.SERVICE_PID, 
@@ -556,7 +552,7 @@ public class TestControl extends DefaultTestBundleControl {
 				"testBundleMetaTypeProvider3.1",
 				"testBundleMetaTypeProvider3.2"
 		};
-		Collection metatypeFactoryPids = new ArrayList();
+		Collection<String> metatypeFactoryPids = new ArrayList<>();
 		metatypeFactoryPids.add("testBundleMetaTypeProvider3.3");
 		metatypeFactoryPids.add("testBundleMetaTypeProvider3.4");
 		properties.put(
@@ -565,8 +561,8 @@ public class TestControl extends DefaultTestBundleControl {
 		properties.put(
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatypeFactoryPids);
-		ServiceRegistration serviceRegistration = bundleContext.registerService(
-				MetaTypeProvider.class.getName(), 
+		ServiceRegistration<MetaTypeProvider> serviceRegistration = bundleContext
+				.registerService(MetaTypeProvider.class,
 				new MetaTypeProvider() {
 					public ObjectClassDefinition getObjectClassDefinition(
 							String id, String locale) {
@@ -599,9 +595,9 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider4() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		String servicePid = "testBundleMetaTypeProvider4";
-		Collection metatypePids = new ArrayList();
+		Collection<String> metatypePids = new ArrayList<>();
 		metatypePids.add("testBundleMetaTypeProvider4.1");
 		metatypePids.add("testBundleMetaTypeProvider4.2");
 		metatypePids.add("testBundleMetaTypeProvider4.3");
@@ -619,7 +615,8 @@ public class TestControl extends DefaultTestBundleControl {
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatypeFactoryPids);
 		ManagedServiceMetaTypeProvider service = new ManagedServiceMetaTypeProvider();
-		ServiceRegistration serviceRegistration = bundleContext.registerService(
+		ServiceRegistration< ? > serviceRegistration = bundleContext
+				.registerService(
 				new String[] {
 						ManagedService.class.getName(),
 						MetaTypeProvider.class.getName()}, 
@@ -627,7 +624,7 @@ public class TestControl extends DefaultTestBundleControl {
 				properties);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
 		assertNotNull("The returned MetaTypeInformation was null", mti);
-		Collection pids = new ArrayList(metatypePids);
+		Collection<String> pids = new ArrayList<>(metatypePids);
 		pids.add(servicePid);
 		assertTrue("The pids returned by MetaTypeInformation did not match the SERVICE_PID and METATYPE_PID properties",
 				isArrayEquals(pids.toArray(new String[pids.size()]), mti.getPids()));
@@ -648,11 +645,11 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider5() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
-		Collection servicePids = new ArrayList();
+		Dictionary<String,Object> properties = new Hashtable<>();
+		Collection<String> servicePids = new ArrayList<>();
 		servicePids.add("testBundleMetaTypeProvider5.1");
 		servicePids.add("testBundleMetaTypeProvider5.2");
-		Collection metatypePids = new ArrayList();
+		Collection<String> metatypePids = new ArrayList<>();
 		metatypePids.add("testBundleMetaTypeProvider5.3");
 		metatypePids.add("testBundleMetaTypeProvider5.4");
 		metatypePids.add("testBundleMetaTypeProvider5.5");
@@ -667,7 +664,8 @@ public class TestControl extends DefaultTestBundleControl {
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatypeFactoryPid);
 		ManagedServiceFactoryMetaTypeProvider service = new ManagedServiceFactoryMetaTypeProvider();
-		ServiceRegistration serviceRegistration = bundleContext.registerService(
+		ServiceRegistration< ? > serviceRegistration = bundleContext
+				.registerService(
 				new String[] {
 						ManagedServiceFactory.class.getName(),
 						MetaTypeProvider.class.getName()}, 
@@ -677,7 +675,7 @@ public class TestControl extends DefaultTestBundleControl {
 		assertNotNull("The returned MetaTypeInformation was null", mti);
 		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID property",
 				isArrayEquals(metatypePids.toArray(new String[metatypePids.size()]), mti.getPids()));
-		Collection factoryPids = new ArrayList(servicePids);
+		Collection<String> factoryPids = new ArrayList<>(servicePids);
 		factoryPids.add(metatypeFactoryPid);
 		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
 				isArrayEquals(factoryPids.toArray(new String[factoryPids.size()]), mti.getFactoryPids()));
@@ -695,15 +693,15 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testBundleMetaTypeProvider6() throws Exception {
 		BundleContext bundleContext = getContext();
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		String servicePid = "testBundleMetaTypeProvider6";
 		properties.put(
 				Constants.SERVICE_PID, 
 				servicePid);
-		Collection metatype1pids = new ArrayList();
+		Collection<String> metatype1pids = new ArrayList<>();
 		metatype1pids.add("testBundleMetaTypeProvider6.1");
 		metatype1pids.add("testBundleMetaTypeProvider6.2");
-		Collection metatype1factoryPids = new ArrayList();
+		Collection<String> metatype1factoryPids = new ArrayList<>();
 		metatype1factoryPids.add("testBundleMetaTypeProvider6.3");
 		metatype1factoryPids.add("testBundleMetaTypeProvider6.4");
 		metatype1factoryPids.add("testBundleMetaTypeProvider6.5");
@@ -713,8 +711,8 @@ public class TestControl extends DefaultTestBundleControl {
 		properties.put(
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatype1factoryPids);
-		ServiceRegistration serviceRegistration1 = bundleContext.registerService(
-				MetaTypeProvider.class.getName(), 
+		ServiceRegistration<MetaTypeProvider> serviceRegistration1 = bundleContext
+				.registerService(MetaTypeProvider.class,
 				new MetaTypeProvider() {
 					public ObjectClassDefinition getObjectClassDefinition(
 							String id, String locale) {
@@ -726,22 +724,22 @@ public class TestControl extends DefaultTestBundleControl {
 					}
 				}, 
 				properties);
-		Collection metatype2pids = new ArrayList();
+		Collection<String> metatype2pids = new ArrayList<>();
 		metatype2pids.add("testBundleMetaTypeProvider6.6");
 		metatype2pids.add("testBundleMetaTypeProvider6.7");
 		metatype2pids.add("testBundleMetaTypeProvider6.8");
-		Collection metatype2factoryPids = new ArrayList();
+		Collection<String> metatype2factoryPids = new ArrayList<>();
 		metatype2factoryPids.add("testBundleMetaTypeProvider6.9");
 		metatype2factoryPids.add("testBundleMetaTypeProvider6.10");
-		properties = new Hashtable();
+		properties = new Hashtable<>();
 		properties.put(
 				MetaTypeProvider.METATYPE_PID, 
 				metatype2pids);
 		properties.put(
 				MetaTypeProvider.METATYPE_FACTORY_PID, 
 				metatype2factoryPids);
-		ServiceRegistration serviceRegistration2 = bundleContext.registerService(
-				MetaTypeProvider.class.getName(), 
+		ServiceRegistration<MetaTypeProvider> serviceRegistration2 = bundleContext
+				.registerService(MetaTypeProvider.class,
 				new MetaTypeProvider() {
 					public ObjectClassDefinition getObjectClassDefinition(
 							String id, String locale) {
@@ -755,11 +753,11 @@ public class TestControl extends DefaultTestBundleControl {
 				properties);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
 		assertNotNull("The returned MetaTypeInformation was null", mti);
-		Collection pids = new ArrayList(metatype1pids);
+		Collection<String> pids = new ArrayList<>(metatype1pids);
 		pids.addAll(metatype2pids);
 		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID properties from both MetaTypeProviders",
 				isArrayEquals(pids.toArray(new String[pids.size()]), mti.getPids()));
-		Collection factoryPids = new ArrayList(metatype1factoryPids);
+		Collection<String> factoryPids = new ArrayList<>(metatype1factoryPids);
 		factoryPids.addAll(metatype2factoryPids);
 		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID properties from both MetaTypeProviders",
 				isArrayEquals(factoryPids.toArray(new String[factoryPids.size()]), mti.getFactoryPids()));
@@ -778,7 +776,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	private boolean isArrayEquals(Object[] _array1, Object[] _array2) {
 		boolean result;
-		Collection collection;
+		Collection<Object> collection;
 
 		result = (_array1.length == _array2.length);
 
@@ -804,7 +802,7 @@ public class TestControl extends DefaultTestBundleControl {
 			return null;
 		}
 
-		public void updated(Dictionary properties)
+		public void updated(Dictionary<String, ? > properties)
 				throws ConfigurationException {
 			// noop
 		}
@@ -825,7 +823,7 @@ public class TestControl extends DefaultTestBundleControl {
 			return null;
 		}
 
-		public void updated(String pid, Dictionary properties)
+		public void updated(String pid, Dictionary<String, ? > properties)
 				throws ConfigurationException {
 			// noop
 		}

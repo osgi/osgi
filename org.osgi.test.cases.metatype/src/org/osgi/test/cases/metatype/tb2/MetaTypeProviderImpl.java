@@ -53,7 +53,7 @@ public class MetaTypeProviderImpl implements ManagedService, MetaTypeProvider {
 	 * @param properties The configuration for this service
 	 * @see org.osgi.service.cm.ManagedService#updated(java.util.Dictionary)
 	 */
-	public void updated(Dictionary properties) {
+	public void updated(Dictionary<String, ? > properties) {
 		// empty
 	}
 

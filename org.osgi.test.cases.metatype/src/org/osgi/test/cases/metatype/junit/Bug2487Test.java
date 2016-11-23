@@ -30,7 +30,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 public class Bug2487Test extends MetaTypeTest {
 	private Bundle bundle;
 	private MetaTypeInformation mti;
-	private ServiceReference ref;
+	private ServiceReference<MetaTypeService>	ref;
 	
 	public void testInvalidDefaultIgnored() {
 		ObjectClassDefinition ocd = mti.getObjectClassDefinition("car.1", null);
@@ -48,10 +48,10 @@ public class Bug2487Test extends MetaTypeTest {
 	}
 	
 	protected void setUp() throws Exception {
-		ref = getContext().getServiceReference(MetaTypeService.class.getName());
+		ref = getContext().getServiceReference(MetaTypeService.class);
 		bundle = getTestBundle();
 		bundle.start();
-		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
+		MetaTypeService mts = getContext().getService(ref);
 		mti = mts.getMetaTypeInformation(bundle);
 	}
 

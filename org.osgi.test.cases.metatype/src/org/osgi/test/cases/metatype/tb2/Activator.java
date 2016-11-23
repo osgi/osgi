@@ -44,7 +44,7 @@ import org.osgi.service.metatype.MetaTypeProvider;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration	sr;
+	private ServiceRegistration< ? > sr;
 
 	/**
 	 * Creates a new instance of Activator
@@ -58,12 +58,11 @@ public class Activator implements BundleActivator {
 	 * MetaTypeProvider
 	 * 
 	 * @param context The execution context of the bundle being started.
-	 * @see Bundle#start
 	 */
 	public void start(BundleContext context) {
-		Hashtable properties;
+		Hashtable<String,Object> properties;
 
-		properties = new Hashtable();
+		properties = new Hashtable<>();
 		properties.put(Constants.SERVICE_PID,
 				"org.osgi.test.cases.metatype.ocd1");
 
@@ -77,7 +76,6 @@ public class Activator implements BundleActivator {
 	 * Unregister the service
 	 * 
 	 * @param context The execution context of the bundle being stopped.
-	 * @see Bundle#stop
 	 */
 	public void stop(BundleContext context) {
 		sr.unregister();
