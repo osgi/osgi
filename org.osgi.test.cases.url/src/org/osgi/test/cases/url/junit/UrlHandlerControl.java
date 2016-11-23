@@ -29,36 +29,36 @@ public class UrlHandlerControl extends OSGiTestCase {
 	// url handlers
 	private CustomUrlHandler1		urlHandler1;
 	private CustomUrlHandler2		urlHandler2;
-	private ServiceRegistration		urlHandlerSerReg1;
-	private ServiceRegistration		urlHandlerSerReg2;
+	private ServiceRegistration<URLStreamHandlerService>	urlHandlerSerReg1;
+	private ServiceRegistration<URLStreamHandlerService>	urlHandlerSerReg2;
 	// properties of url handlers
-	private Hashtable				urlServiceProperty1;
-	private Hashtable				urlServiceProperty2;
+	private Hashtable<String,Object>	urlServiceProperty1;
+	private Hashtable<String,Object>	urlServiceProperty2;
 	// content handlers
 	private CustomContentHandler1	contentHandler1;
 	private CustomContentHandler2	contentHandler2;
-	private ServiceRegistration		contentHandlerSerReg1;
-	private ServiceRegistration		contentHandlerSerReg2;
+	private ServiceRegistration<ContentHandler>				contentHandlerSerReg1;
+	private ServiceRegistration<ContentHandler>				contentHandlerSerReg2;
 	// properties of content handlers
-	private Hashtable				contentServiceProperty1;
-	private Hashtable				contentServiceProperty2;
+	private Hashtable<String,Object>	contentServiceProperty1;
+	private Hashtable<String,Object>	contentServiceProperty2;
 
 	protected void setUp() {
-		urlServiceProperty1 = new Hashtable();
+		urlServiceProperty1 = new Hashtable<>();
 		urlServiceProperty1.put(URLConstants.URL_HANDLER_PROTOCOL,
 				new String[] {protocol1, protocol2});
 		urlServiceProperty1.put(Constants.SERVICE_RANKING, new Integer(10));
-		urlServiceProperty2 = new Hashtable();
+		urlServiceProperty2 = new Hashtable<>();
 		urlServiceProperty2.put(URLConstants.URL_HANDLER_PROTOCOL,
 				new String[] {protocol1});
 		urlServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(5));
 		urlHandler1 = new CustomUrlHandler1();
 		urlHandler2 = new CustomUrlHandler2();
-		contentServiceProperty1 = new Hashtable();
+		contentServiceProperty1 = new Hashtable<>();
 		contentServiceProperty1.put(URLConstants.URL_CONTENT_MIMETYPE,
 				new String[] {"osgi/test"});
 		contentServiceProperty1.put(Constants.SERVICE_RANKING, new Integer(10));
-		contentServiceProperty2 = new Hashtable();
+		contentServiceProperty2 = new Hashtable<>();
 		contentServiceProperty2.put(URLConstants.URL_CONTENT_MIMETYPE,
 				new String[] {"osgi/test"});
 		contentServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(5));
@@ -66,17 +66,17 @@ public class UrlHandlerControl extends OSGiTestCase {
 		contentHandler2 = new CustomContentHandler2();
 		// register services
 		urlHandlerSerReg1 = getContext().registerService(
-				URLStreamHandlerService.class.getName(), urlHandler1,
+				URLStreamHandlerService.class, urlHandler1,
 				urlServiceProperty1);
 		urlHandlerSerReg2 = getContext().registerService(
-				URLStreamHandlerService.class.getName(), urlHandler2,
+				URLStreamHandlerService.class, urlHandler2,
 				urlServiceProperty2);
 		// register services
 		contentHandlerSerReg1 = getContext().registerService(
-				ContentHandler.class.getName(), contentHandler1,
+				ContentHandler.class, contentHandler1,
 				contentServiceProperty1);
 		contentHandlerSerReg2 = getContext().registerService(
-				ContentHandler.class.getName(), contentHandler2,
+				ContentHandler.class, contentHandler2,
 				contentServiceProperty2);
 	}
 
@@ -87,7 +87,7 @@ public class UrlHandlerControl extends OSGiTestCase {
 		unregisterService(contentHandlerSerReg1);
 	}
 
-	private void unregisterService(ServiceRegistration reg) {
+	private void unregisterService(ServiceRegistration< ? > reg) {
 		if (reg == null) {
 			return;
 		}
