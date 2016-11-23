@@ -938,7 +938,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         to a map-like structure, the <code>getProperties()</code> result is used as the source. 
         To instruct the converter to view the object as an interface instead use <code>as()</code>
         <programlisting>  Map m = converter.convert(myClassObj).source().
-      as(MyInterface.class).to(Map.class);</programlisting>
+      as(MyInterface.class).to(Map.class);
+  long l = m.get("amount");</programlisting>
       </para>
     </section>
     
