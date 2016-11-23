@@ -96,8 +96,9 @@ long[] la = c.convert(ls).to(long[].class);
 
 // Map conversions
 Map someMap = new HashMap();
-someMap.put("mykey", 700); 
+someMap.put("timeout", "700"); 
 MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
+int t = mi.timeout(); // t=700
     </para>
     
   </section> 
@@ -110,7 +111,7 @@ MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
     <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
     requested target type.</para>
     
-    <para>In the case of Aggregates (Arrays and Collections) and Map-like structures a deep copy is always returned, 
+    <para>In the case of Aggregates (Arrays and Collections) and Map-like structures a new object is always returned, 
     even if the target type is compatible with the source type. This copy can be owned and optionally further
     modified by the caller.</para>
     
@@ -183,6 +184,9 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         <para>Where conversion is done from corresponding primitive types, these types
         are boxed before converting. Where conversion is done to corresponding boxed types,
         the types are boxed after converting.</para>     
+
+        <para>Direct between Enums and ints and between Dates and longs are also supported, see
+        the sections below.</para>
       </section>
   
       <section>
@@ -214,14 +218,14 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
             </listitem>
           </orderedlist>
           
-          Some types have special rules for converting from String
+          Some scalars have special rules for converting from String
           values. See below.
         </para>
       </section>
       <section xml:id="service.converter.special.cases.string">
         <title>Special cases converting from String</title>
         <table>
-          <title>Special cases converting from String</title>
+          <title>Special cases converting scalars from String</title>
           <tgroup cols="2">
             <thead>
               <row>
@@ -315,10 +319,10 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         </para>
           
         <para>Conversions from Calendar objects are done by converting the Calendar
-        to a Date via getTime() first, and then converting the resulting Date to the 
+        to a Date via <code>getTime()</code> first, and then converting the resulting Date to the 
         target type. Convertions to a Calendar object are done by converting the
         source to a Date object with the desired time (always in UTC) and then setting the 
-        time in the Calendar object via setTime().</para>
+        time in the Calendar object via <code>setTime()</code>.</para>
       </section>
         
         <section>
@@ -342,7 +346,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
               <row>
                 <entry><code>String</code></entry>
                 <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>. If no matching enum value can be found
-                a case-insensitive lookup if done for a matching enum value.
+                a case-insensitive lookup is done for a matching enum value.
                 </entry>
               </row>
             </tbody>
@@ -369,7 +373,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         </orderedlist>
         </para>
                         
-        <para>Conversion to <code>Map.Entry</code> from another type is not supported.</para>
+        <para>Conversion to <code>Map.Entry</code> from a scalar is not supported.</para>
       </section>
       </section>
     
@@ -431,7 +435,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
               <row>
                 <entry><code>Collection</code>, <code>List</code> or <code>Set</code></entry>
                 <entry>A live view over the backing object is created, changes to the backing
-                object will be reflected in view, unless overwritten by the client.</entry>
+                object will be reflected, unless the view object is modified by the client.</entry>
               </row>
               <row>
                 <entry>Other Collection interface</entry>
@@ -473,12 +477,11 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
     to(new TypeReference&lt;List&lt;Integer&gt;&gt;() {});</programlisting>
     
         The following example converts an array of <code>int</code>s into a set of <code>Double</code>s. Note that
-        the resulting set should preserve the same iteration order as the original array:
+        the resulting set must preserve the same iteration order as the original array:
         
         <programlisting>Set&lt;Double&gt; result =
   converter.convert(new int[] {3,2,1}).
-    to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
-        </programlisting>
+    to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})</programlisting>
         
         Values are inserted in the resulting Collection/array as follows:
         
@@ -528,21 +531,22 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       When converting to other structures, the map is converted into a collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
-     
-      <para>When converting to a <code>java.util.Map</code>
-        the converter will return a live view 
-        over the backing object that changes when the backing object changes. The live view can be 
-        prevented by providing the 
-        <xref linkend="org.osgi.util.converter.Converting.copy--" xrefstyle="hyperlink"/>
-        modifier. When converting to other collection types or arrays a copy is always produced.
-      </para>
-
-      <para>In all cases the object returned is a separate instance that
-        can be owned by the client. Once the client modifies
-        the returned object it will stop reflecting changes to the backing object.</para>
       
       <section>
         <title>Converting to a Map</title>
+        <para>When converting to a <code>java.util.Map</code>
+          the converter will return a live view 
+          over the backing object that changes when the backing object changes. The live view can be 
+          prevented by providing the 
+          <xref linkend="org.osgi.util.converter.Converting.copy--" xrefstyle="hyperlink"/>
+          modifier. When converting to other collection types or arrays a copy is always produced.
+        </para>
+
+        <remark>What will we say about shallow/deep copies?</remark>
+
+        <para>In all cases the object returned is a separate instance that
+          can be owned by the client. When the client modifies
+          the returned object it will stop reflecting changes to the backing object.</para>
         <table>
           <title>Map result creation</title>
           <tgroup cols="2">
@@ -557,7 +561,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
               <row>
                 <entry><code>java.util.Map</code></entry>
                 <entry>A map view over the backing object is created, changes to the backing
-                object will be reflected in the map, unless overwritten by the client.</entry>
+                object will be reflected in the map, unless the map is modified by the client.</entry>
               </row>
               <row>
                 <entry>Other Map interface</entry>
@@ -651,16 +655,11 @@ boolean val2 = cfg.my_other_value(); // val2=true
         <para>
         Whether a conversion source object is an interface is determined dynamically, taking the
         <xref linkend="service.converter-priorities"/> into account. When an object implements multiple interfaces
-        only the first interface from these is taken as the source type. 
-        </para>
-        <para>
-        When converting from an interface to another map-like structure, the converter returns 
-        a lazy map of which all the keys are pre-populated from any non-void no-arg methods in the interface. 
-        The mapping rules as described in
-        <xref linkend="service.converter-key.mapping"/> are taken into account when mapping the 
-        method names to keys in the map.
-        Values are retrieved from the underlying interface in a lazy manner. Only when the client looks up a
-        given key or iterates through all entries or values these are obtained from the underlying map. 
+        by default the first interface from these is taken as the source type. To select a different
+        interface use the 
+        <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.as-Class-" xrefstyle="hyperlink"/> modifier:
+        <programlisting>  Map m = converter.convert(myMultiInterface).source().
+      as(MyInterfaceB.class).to(Map.class);</programlisting>
         </para>
       </section>
       <section xml:id="service.converter-key.mapping">
@@ -813,6 +812,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         e.g. <code>getSize()</code> provides access to the property <code>size</code>. 
         For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
         is also permitted.</para> 
+        <para>
+        For the converter to consider an object as a Java Bean the 
+          <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.asBean--" xrefstyle="hyperlink"/>
+        modifier needs to be invoked, for example:
+          <programlisting>  Map m = converter.convert(myBean).source().asBean().to(Map.class);</programlisting></para>
         <para>When converting to a Java Bean, the bean is constructed eagerly. All available properties
             are set in the bean using the bean's write accessors, i.e. public setters methods with a single argument. 
             All methods of the bean class itself and its 
@@ -826,7 +830,6 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para><emphasis>Note: </emphasis>the <code>getClass()</code> method of the <code>java.lang.Object</code>
         class is not considered an accessor.
         </para>
-        <remark>Do we need explicitly call out certain types that are not treated as JavaBeans? E.g. String?</remark>
       </section>
       
       <section>
@@ -837,6 +840,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         however objects following the DTO rules that do not extend the DTO
         class are also treated as DTOs. 
         DTOs may have static fields, these are ignored by the converter.</para>
+
+        <remark>Is a class with private/package/protected fields a DTO?</remark>
         
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the map and then converting the value to the field type before assigning it. They key of
@@ -853,7 +858,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         
         <para>The converter uses reflection to find a <code>java.util.Map getProperties()</code> or 
         <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
-        the source object. This map view can be used to convert the source object to another map-like structure.</para>
+        the source object. This map view is used to convert the source object to another map-like structure.</para>
 
         <remark>TODO: Expand BundleContext to provide getProperties() </remark>
         
@@ -869,10 +874,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           in <xref linkend="service.converter.special.cases.map.entry"/>.
         </para>
         <para>
-          When converting other objects such as scalars and aggregates to a map-like structure, the objects are treated 
-          using the rules defined in <xref linkend="service.converter.special.cases.maps"/>. This means that if the object
-          has bean properties, it will be treated as a Java Bean, otherwise it will be treated as an interface, or the
-          getProperties() method will be used.
+          No other conversions to map-like structures are supported.
         </para>
       </section> 
 
@@ -895,14 +897,14 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             <tbody>
               <row>
                 <entry>1</entry>
-                <entry>Java bean</entry>
-              </row>
-              
-              <row>
-                <entry>2</entry>
                 <entry>annotation</entry>
               </row>
 
+              <row>
+                <entry>2</entry>
+                <entry>DTO</entry>
+              </row>
+              
               <row>
                 <entry>3</entry>
                 <entry><emphasis>entity.</emphasis><code>getProperties()</code></entry>
@@ -915,11 +917,6 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
 
               <row>
                 <entry>5</entry>
-                <entry>DTO</entry>
-              </row>
-              
-              <row>
-                <entry>6</entry>
                 <entry>scalar</entry>
               </row>
             </tbody>
@@ -927,16 +924,22 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </table>
 
         The priority rules defined in the above table can be overridden by using 
-        <xref linkend="org.osgi.util.converter.Converting.as-Class-" xrefstyle="hyperlink"/> 
-        to indicate as what class the source object should be treated: 
-        <programlisting>  Map m = converter.convert(myBean).as(MyInterface.class).to(Map.class);</programlisting>
-        In this example myBean is both a Java Bean as well as implementing an interface. 
-        To override the priority rules from treating it as a bean and converting it as an interface
-        instead the <code>as()</code> method is used.
-        
+        <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.as-Class-" xrefstyle="hyperlink"/> 
+        to indicate as what class the source or target object should be treated. 
+        Consider the following example:
+        <programlisting>  Class MyClass implements MyInterface {
+    @Override
+    long amount() { // returns amount }
+
+    Map getProperties() { // returns properties }
+  }</programlisting>
+        MyClass both implements an interface and provides the <code>getProperties()</code> method.
+        According to the priority rules, the default behaviour is that when converting an instance of this class 
+        to a map-like structure, the <code>getProperties()</code> result is used as the source. 
+        To instruct the converter to view the object as an interface instead use <code>as()</code>
+        <programlisting>  Map m = converter.convert(myClassObj).source().
+      as(MyInterface.class).to(Map.class);</programlisting>
       </para>
-      <remark>What if something is both a JavaBean and a scalar? E.g. String or UUID? How do we decide to that it is treated as a scalar vs a map-like structure?
-      Can we make it depend on the target class? I.e. UUID -&gt; scalar via toString() and UUID -&gt; map via JavaBean accessors?</remark>
     </section>
     
     <section>
@@ -962,7 +965,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <para>For example converting a Date to a String may require a specific format. The default 
     <code>Date</code> to <code>String</code> conversion produces a String in the format 
     <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
-    <code>yyMMddHHmmssZ</code> instead it can be done as follows. 
+    <code>yyMMddHHmmssZ</code> instead a custom converter can be applied:
     <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
