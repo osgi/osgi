@@ -97,8 +97,8 @@ long[] la = c.convert(ls).to(long[].class);
 // Map conversions
 Map someMap = new HashMap();
 someMap.put("timeout", "700"); 
-MyInterface mi = c.convert(someMap).to(MyInterface.class);</programlisting>
-int t = mi.timeout(); // t=700
+MyInterface mi = c.convert(someMap).to(MyInterface.class);
+int t = mi.timeout(); // t=700</programlisting>
     </para>
     
   </section> 
