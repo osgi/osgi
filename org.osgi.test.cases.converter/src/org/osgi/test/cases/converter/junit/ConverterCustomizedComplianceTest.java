@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
+import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.StandardConverter;
@@ -29,10 +31,22 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	 */
 	public void testCustomizedConversion()
 	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(Date.class,String.class, v->sdf.format(v), v -> sdf.parse(v));
+		cb.rule(Date.class,String.class,
+			new Function<Date,String>(){
+				@Override
+				public String apply(Date d) {
+				    return sdf.format(d);
+				}}, 
+			new Function<String,Date>(){
+				@Override
+				public Date apply(String s) {
+					return sdf.parse(s);
+				}}
+		); 
+		
 		Converter c = cb.build();
 		
 		String stringToBeConverted = "131124072100+0100";
@@ -57,10 +71,21 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		mb.setStartDate(new Date(Date.UTC(2013, 10, 24, 6, 21, 0)));
 		mb.setEnabled(true);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
-		
-		cb.rule(Date.class,String.class, v->sdf.format(v), v -> sdf.parse(v));
+
+		cb.rule(Date.class,String.class,
+			new Function<Date,String>(){
+				@Override
+				public String apply(Date d) {
+				    return sdf.format(d);
+				}}, 
+			new Function<String,Date>(){
+				@Override
+				public Date apply(String s) {
+					return sdf.parse(s);
+				}}
+		); 
 		Converter c = cb.build();
 
 		String dateConverted = "131124072100+0100";
@@ -89,21 +114,49 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	{
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 		
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class, 
-		Long.class, v -> {return ((long)v.getFirstInt() << 32)
-		| ((long)v.getSecondInt() & 0xFFFFFFFFL);}, v-> { return null;});
+		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class,Long.class,
+			new Function<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(){
+				@Override
+				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
+					return ((long)v.getFirstInt() << 32)
+							| ((long)v.getSecondInt() & 0xFFFFFFFFL);
+				}}, 
+			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
+				@Override
+				public ConverterComplianceTest.MyInterfaceProvidingTwoInts apply(Long v) {
+					return null;
+				}}
+		); 
 		
 		//delegate to the MyInterfaceProvidingTwoInts interface
-		cb.rule(ConverterComplianceTest.MyAbstractImplementation.class,
-		Long.class, v -> {return null;}, v-> { return null;});
+		cb.rule(ConverterComplianceTest.MyAbstractImplementation.class,Long.class,
+			new Function<ConverterComplianceTest.MyAbstractImplementation,Long>(){
+				@Override
+				public Long apply(ConverterComplianceTest.MyAbstractImplementation v) {
+					return null;
+				}}, 
+			new Function<Long,ConverterComplianceTest.MyAbstractImplementation>(){
+				@Override
+				public ConverterComplianceTest.MyAbstractImplementation apply(Long v) {
+					return null;
+				}}
+		); 
 		
 		//how can I chain rules to specify the fact that a 
 		//conversion from MyAbstractImplementation type to a 
 		//Date one has to pass by the step of the long conversion
 		
-		//cb.rule(MyAbstractImplementation.class, Date.class, 
-		//		v -> {return null;},
-		//		v-> { return null;});
+//		cb.rule(MyAbstractImplementation.class,Date.class,
+//			new Function<MyAbstractImplementation,Date>(){
+//				@Override
+//				public Date apply(MyAbstractImplementation v) {
+//					return null;
+//				}}, 
+//			new Function<Date,MyAbstractImplementation>(){
+//				@Override
+//				public MyAbstractImplementation apply(Date v) {
+//					return null;
+//				}});
 		
 		Date date = Date.from(Instant.parse("2013-11-24T07:21:00"));
 		
@@ -133,14 +186,41 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	{
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(Object.class, Long.class, v -> {return (long)v.hashCode();}, 
-				v-> { return null;});	
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingLong.class, 
-		Long.class, v -> {return v.getLong();},  v-> { return null;});	
-		
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class, 
-		Long.class, v -> {return ((long)v.getFirstInt() << 32)
-		| ((long)v.getSecondInt() & 0xFFFFFFFFL);}, v-> { return null;});
+		cb.rule(Object.class,Long.class,
+			new Function<Object,Long>(){
+				@Override
+				public Long apply(Object v) {
+					return (long)v.hashCode();
+				}}, 
+			new Function<Long,Object>(){
+				@Override
+				public Object apply(Long v) {
+					return null;
+				}});
+		cb.rule(ConverterComplianceTest.MyInterfaceProvidingLong.class,Long.class,
+			new Function<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(){
+				@Override
+				public Long apply(ConverterComplianceTest.MyInterfaceProvidingLong v) {
+					return v.getLong();
+				}}, 
+			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingLong>(){
+				@Override
+				public ConverterComplianceTest.MyInterfaceProvidingLong apply(Long v) {
+					return null;
+				}});
+
+		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class,Long.class,
+			new Function<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(){
+				@Override
+				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
+					return ((long)v.getFirstInt() << 32)
+							| ((long)v.getSecondInt() & 0xFFFFFFFFL);
+				}}, 
+			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
+				@Override
+				public ConverterComplianceTest.MyInterfaceProvidingTwoInts apply(Long v) {
+					return null;
+				}});
 		
 		ConverterComplianceTest.MyImplementation myImplementation = 
 		    new ConverterComplianceTest.MyImplementation();

@@ -25,5 +25,5 @@ Test-Cases = ${testcases}
 	org.osgi.util.promise;version=latest
 
 -runproperties = ${runproperties}
--runee: JavaSE-1.8
+-runee: JavaSE-1.7
 -runfw: org.osgi.impl.framework; version=latest
