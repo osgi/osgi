@@ -1,6 +1,8 @@
 package org.osgi.test.cases.pushstream.junit;
 
 import java.io.Closeable;
+import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -15,6 +17,7 @@ import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.TimeoutException;
 import org.osgi.util.pushstream.PushEvent;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
@@ -41,6 +44,8 @@ public class PushStreamIntermediateOperationTest
 	public void testTestingTools() throws Exception {
 
 		// push data till the end
+		// Simple event passing can be achieved by connecting
+		// a Push Event Consumer directly to a Push Event Source.
 		ExtGenerator gen = new ExtGenerator(5);
 		gen.open(e -> {
 			return 0;
@@ -132,6 +137,40 @@ public class PushStreamIntermediateOperationTest
 		assertTrue(end - start >= 1000);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
+	}
+
+	/**
+	 * 706.3.1: Simple Pipelines
+	 * <p/>
+	 * Once a Push Stream object has had an operation invoked on it then it may
+	 * not have any other operations chained to it
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void testUnableToChainNewOperationWhileIntermediateOperationRunning()
+			throws InterruptedException {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		Promise<Object[]> prm = ps.filter((i) -> {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return i % 3 == 0;
+		}).toArray();
+
+		try {
+			ps.map((i) -> {
+				return i * 2;
+			}).toArray();
+
+			fail("IllegalStateException expected");
+
+		} catch (IllegalStateException e) {}
+		gen.getExecutionThread().join();
 	}
 
 	/**
@@ -431,10 +470,79 @@ public class PushStreamIntermediateOperationTest
 		// is the close event sent immediatly ?
 		ExtGeneratorStatus status = gen.status();
 		assertNotNull(status);
-		assertTrue(status.failure == null);
-		// assertTrue(gen.closeCalled);
+		assertNull(status.failure);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 
+	}
+
+	/**
+	 * 706.3.6 : Time Limited Streams
+	 * <p/>
+	 * The limit() operation on a Stream can be used to limit the number of
+	 * elements that are processed, however on a Push Stream that number of
+	 * events may never be reached, even though the stream has not closed. Push
+	 * Streams therefore also have a limit method which takes a Duration. This
+	 * duration limits the time for which the stream is open, closing it after
+	 * the duration has elapsed
+	 */
+	public void testIntermediateOperationLimitWithDuration() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(10000);
+		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
+				.unbuffered()
+				.create();
+
+		Promise<Object[]> p = ps.limit(Duration.ofMillis(5)).toArray();
+		gen.getExecutionThread().join();
+		long elapse = (gen.stop - gen.start);
+		// System.out.println(elapse + " : " + Arrays.toString(p.getValue()));
+		ExtGeneratorStatus status = gen.status();
+		assertNotNull(status);
+		assertNull(status.failure);
+		assertTrue(gen.closeCalled);
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
+	}
+
+	/**
+	 * 706.3.6 : Time Limited Streams
+	 * <p/>
+	 * The timeout operation of a Push Stream can be used to end a stream if no
+	 * events are received for the given amount of time. If an event is received
+	 * then this resets the timeout counter. The timeout oper Tracks the time
+	 * since the last event was received. If no event is received within the
+	 * supplied Duration then an error event is propagated to the next stage of
+	 * the stream. The exception in the event will be an
+	 * org.osgi.util.promise.TimeoutException
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
+	 */
+	public void testIntermediateOperationTimeout()
+			throws InterruptedException, InvocationTargetException {
+
+		ExtGenerator gen = new ExtGenerator(100);
+		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
+				.unbuffered()
+				.create();
+
+		ps.timeout(Duration.ofMillis(50)).forEachEvent(e -> {
+			switch (e.getType()) {
+				case DATA :
+					return e.getData().intValue();
+				case ERROR :
+					throw e.getFailure();
+				case CLOSE :
+			}
+			return -1;
+		});
+
+		gen.getExecutionThread().join();
+		ExtGeneratorStatus status = gen.status();
+		assertNotNull(status);
+		assertNotNull(status.failure);
+		assertEquals(TimeoutException.class, status.failure.getClass());
+		assertFalse(gen.closeCalled);
+		assertEquals(PushEvent.EventType.ERROR, status.event.getType());
 	}
 
 	/**
@@ -1383,10 +1491,60 @@ public class PushStreamIntermediateOperationTest
 	 * <p/>
 	 * coalesce registers a coalescing function which aggregates one or more
 	 * data events into a single data event which will be passed to the next
-	 * stage of stream
+	 * stage of stream The [...] mechanism delegates all responsibility to the
+	 * coalescing function, which returns an Optional. The coalescing function
+	 * is called for every data event, and returns an optional which either has
+	 * a value, or is empty. If the optional has a value then this value is
+	 * passed to the next stage of the processing pipeline. If the optional is
+	 * empty then no data event is passed to the next stage.
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
 	 */
-	public void testIntermediateOperationCoalesce() {
-		// cf PushStreamTest
+	public void testIntermediateOperationCoalesce()
+			throws InterruptedException, InvocationTargetException {
+
+		ExtGenerator gen = new ExtGenerator(20);
+		PushStreamProvider psp = new PushStreamProvider();
+
+		AtomicInteger current = new AtomicInteger();
+
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		Promise<Object[]> pr = ps.<Integer> coalesce((c) -> {
+			current.set(current.get() + c);
+			if (current.get() > 10) {
+				Optional<Integer> opt = Optional.of(current.get());
+				current.set(0);
+				return opt;
+			}
+			return Optional.empty();
+		}).toArray();
+
+		gen.getExecutionThread().join();
+
+		ExtGeneratorStatus status = gen.status;
+		assertNotNull(status);
+		// [15, 13, 17, 21, 12, 13, 14, 15, 16, 17, 18, 19] expected
+		assertTrue(pr.getValue().length == 12);
+		assertTrue(gen.closeCalled);
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
+	}
+
+	/**
+	 * 706.3.4.1 : Coalescing
+	 * <p/>
+	 * [Coalescence mechanism ] to coalesce registers a coalescing function
+	 * which aggregates one or more data events into a single data event which
+	 * will be passed to the next stage of stream The [...] mechanism allows the
+	 * stream to be configured with a (potentially variable) buffer size. The
+	 * stream then stores values into this buffer. When the buffer is full then
+	 * the stream passes the buffer to the handler function, which returns data
+	 * to be passed to the next stage. If the stream finishes when a buffer is
+	 * partially filled then the partially filled buffer will be passed to the
+	 * handler function.
+	 */
+	public void testIntermediateOperationCoalesceUsingBuffer() {
+
 	}
 
 	/**
@@ -1395,8 +1553,109 @@ public class PushStreamIntermediateOperationTest
 	 * window collects events over the specified time-limit, passing them to the
 	 * registered handler function. If no events occur during the time limit
 	 * then no events are propagated
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
 	 */
-	public void testIntermediateOperationWindow() {
-		// cf PushStreamTest
+	public void testIntermediateOperationWindowNoEvent()
+			throws InterruptedException, InvocationTargetException {
+
+		ExtGenerator gen = new ExtGenerator(10);
+		PushStreamProvider psp = new PushStreamProvider();
+
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		Promise<Object[]> pr = ps.filter((i) -> {
+			return i > 10;
+		}).window(Duration.ofMillis(1000), (c) -> {
+			return c.size();
+		}).toArray();
+
+		gen.getExecutionThread().join();
+
+		ExtGeneratorStatus status = gen.status;
+		assertNotNull(status);
+
+		assertEquals(1l, pr.getValue().length);
+		assertEquals(0, pr.getValue()[0]);
+		assertTrue(gen.closeCalled);
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * window collects events over the specified time-limit, passing them to the
+	 * registered handler function. If no events occur during the time limit
+	 * then no events are propagated As windowing requires the collected events
+	 * to be delivered asynchronously there is no opportunity for back pressure
+	 * from the previous stage to be applied upstream. Windowing therefore
+	 * returns zero back-pressure in all cases except when a buffer size limit
+	 * has been declared and is reached
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
+	 */
+	public void testIntermediateOperationWindowEvents()
+			throws InterruptedException, InvocationTargetException {
+
+		ExtGenerator gen = new ExtGenerator(10000);
+		PushStreamProvider psp = new PushStreamProvider();
+
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		Promise<Object[]> pr = ps.window(Duration.ofMillis(10), (c) -> {
+			return c.size();
+		}).toArray();
+
+		gen.getExecutionThread().join();
+
+		ExtGeneratorStatus status = gen.status;
+		assertNotNull(status);
+
+		assertEquals(0l, gen.maxBackPressure);
+		assertTrue(pr.getValue().length > 0);
+		System.out.println(Arrays.toString(pr.getValue()));
+		assertTrue(gen.closeCalled);
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
+	}
+
+	/**
+	 * 706.3.1.2 : Stateless and Stateful Intermediate Operations
+	 * <p/>
+	 * window collects events over the specified time-limit, passing them to the
+	 * registered handler function. If no events occur during the time limit
+	 * then no events are propagated As windowing requires the collected events
+	 * to be delivered asynchronously there is no opportunity for back pressure
+	 * from the previous stage to be applied upstream. Windowing therefore
+	 * returns zero back-pressure in all cases except when a buffer size limit
+	 * has been declared and is reached. If a window size limit is reached then
+	 * the windowing stage returns the remaining window time as back pressure
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
+	 */
+	public void testIntermediateOperationWindowEventsBuffered()
+			throws InterruptedException, InvocationTargetException {
+
+		ExtGenerator gen = new ExtGenerator(500);
+		PushStreamProvider psp = new PushStreamProvider();
+
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		Promise<Object[]> pr = ps.window(() -> {
+			return Duration.ofMillis(200);
+		}, () -> {
+			return 5;
+		}, (t, u) -> {
+			return u.size();
+		}).toArray();
+
+		gen.getExecutionThread().join();
+
+		ExtGeneratorStatus status = gen.status;
+		assertNotNull(status);
+
+		assertTrue(gen.maxBackPressure > 0l);
+		assertTrue(pr.getValue().length > 2000);
+		assertTrue(gen.closeCalled);
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 }

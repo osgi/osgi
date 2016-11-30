@@ -74,14 +74,13 @@ public abstract class PushStreamComplianceTest extends TestCase {
 		long				minBackPressure		= 0;
 		long				maxBackPressure		= 0;
 		boolean				fixedBackPressure	= true;
+		long				start				= 0;
+		long				stop				= 0;
 		ExtGeneratorStatus	status		= null;
 		Thread				thread;
 
 		public ExtGenerator(int i) {
 			this.count = i;
-		}
-
-		public ExtGenerator() {
 		}
 
 		public ExtGeneratorStatus status() {
@@ -141,6 +140,7 @@ public abstract class PushStreamComplianceTest extends TestCase {
 				public void run() {
 
 					boolean closed = false;
+					start = System.currentTimeMillis();
 
 					try {
 						try {
@@ -185,9 +185,11 @@ public abstract class PushStreamComplianceTest extends TestCase {
 								l.accept(event);
 								pushStatus();
 							}
+							stop = System.currentTimeMillis();
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
+						stop = System.currentTimeMillis();
 					}
 				}
 			};

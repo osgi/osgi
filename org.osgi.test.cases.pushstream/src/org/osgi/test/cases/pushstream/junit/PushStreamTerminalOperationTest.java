@@ -136,6 +136,38 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	/**
 	 * 706.3.1.3 : Terminal Operations
 	 * <p/>
+	 * reduce uses a Binary Operator function to combine event data into a
+	 * single object. The promise is resolved with the final result when the
+	 * stream finishes
+	 */
+	public void testTerminalOperationReduceBis() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		Promise<String> p = ps.reduce(
+				"", (sum, b) -> {
+					return new StringBuilder().append(sum)
+							.append(new String(new char[] {
+									(char) ('a' + b.intValue())
+					}))
+							.toString();
+				},
+		(sum1, sum2) -> {return new StringBuilder().append(sum1).append(sum2).toString();});
+
+		gen.getExecutionThread().join();
+
+		int timeout = 5100;
+		while (!p.isDone() && (timeout -= 100) > 0)
+			Thread.sleep(100);
+
+		Assert.assertTrue(gen.fixedBackPressure());
+		Assert.assertEquals("abcde", p.getValue());
+	}
+
+	/**
+	 * 706.3.1.3 : Terminal Operations
+	 * <p/>
 	 * collect uses the Java Collector API to collect the data from events into
 	 * a single Collection, Map, or other type
 	 */
