@@ -1,0 +1,29 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description = A test case for Converter.
+
+Conditional-Package = org.osgi.test.support.*
+Private-Package =  \
+    ${p}.junit
+Import-Package: ${-signaturetest}, *
+
+Test-Cases = ${testcases}
+-signaturetest = org.osgi.util.converter
+
+-buildpath: \
+	osgi.core;version=5.0,\
+	org.osgi.test.support;version=project,\
+	org.osgi.util.converter;version=project,\
+	org.osgi.util.function;version=project,\
+	org.osgi.util.promise;version=project,\
+	${junit}
+
+-runbundles: \
+	org.osgi.util.converter;version=latest,\
+	org.osgi.util.function;version=latest,\
+	org.osgi.util.promise;version=latest
+
+-runproperties = ${runproperties}
+-runee: JavaSE-1.8
+-runfw: org.osgi.impl.framework; version=latest
