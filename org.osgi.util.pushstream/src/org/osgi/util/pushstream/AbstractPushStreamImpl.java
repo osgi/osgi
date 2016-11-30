@@ -835,6 +835,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			BiFunction<Long,Collection<T>,R> f) {
 
 		AtomicLong timestamp = new AtomicLong();
+		AtomicLong previousWindowSize = new AtomicLong();
 		AtomicLong counter = new AtomicLong();
 		Object lock = new Object();
 		AtomicReference<Queue<T>> queueRef = new AtomicReference<Queue<T>>(
@@ -849,10 +850,13 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				long count = counter.get();
 
 
+				long windowSize = time.get().toNanos();
+				previousWindowSize.set(windowSize);
 				scheduler.schedule(
 						getWindowTask(p, f, time, maxEvents, lock, count,
-								queueRef, timestamp, counter, ex),
-						time.get().toNanos(), NANOSECONDS);
+								queueRef, timestamp, counter,
+								previousWindowSize, ex),
+						windowSize, NANOSECONDS);
 			}
 
 			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
@@ -910,12 +914,17 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 					// call out to user code
 					queueRef.set(
 							getQueueForInternalBuffering(maxEvents.getAsInt()));
+					long nextWindow = time.get().toNanos();
+					long backpressure = previousWindowSize.getAndSet(nextWindow)
+							- elapsed;
 					scheduler.schedule(
 							getWindowTask(eventStream, f, time, maxEvents, lock,
-									newCount, queueRef, timestamp, counter, ex),
-							time.get().toNanos(), NANOSECONDS);
+									newCount, queueRef, timestamp, counter,
+									previousWindowSize, ex),
+							nextWindow, NANOSECONDS);
 
-					return CONTINUE;
+					return backpressure < 0 ? CONTINUE
+							: NANOSECONDS.toMillis(backpressure);
 				} else {
 					long elapsed;
 					synchronized (lock) {
@@ -1085,7 +1094,8 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			BiFunction<Long,Collection<T>,R> f, Supplier<Duration> time,
 			IntSupplier maxEvents, Object lock, long expectedCounter,
 			AtomicReference<Queue<T>> queueRef, AtomicLong timestamp,
-			AtomicLong counter, Executor executor) {
+			AtomicLong counter, AtomicLong previousWindowSize,
+			Executor executor) {
 		return () -> {
 
 			Queue<T> queue = null;
@@ -1122,12 +1132,14 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 			// These must happen outside the synchronized block as we
 			// call out to user code
+			long nextWindow = time.get().toNanos();
+			previousWindowSize.set(nextWindow);
 			queueRef.set(getQueueForInternalBuffering(maxEvents.getAsInt()));
 			scheduler.schedule(
 					getWindowTask(eventStream, f, time, maxEvents, lock,
 							expectedCounter + 1, queueRef, timestamp, counter,
-							executor),
-					time.get().toNanos(), NANOSECONDS);
+							previousWindowSize, executor),
+					nextWindow, NANOSECONDS);
 		};
 	}
 
