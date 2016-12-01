@@ -19,12 +19,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.async.services.MyService;
+
+import junit.framework.TestCase;
 
 public class MyServiceFactory implements ServiceFactory<MyService> {
 	private final CountDownLatch latch = new CountDownLatch(2);
@@ -59,7 +59,8 @@ public class MyServiceFactory implements ServiceFactory<MyService> {
 	public void awaitUngetService() throws InterruptedException {
 		latch.await(5, TimeUnit.SECONDS);
 		if (latch.getCount() != 0) {
-			Assert.fail("ServiceFactory.ungetService never called: " + latch.getCount());
+			TestCase.fail("ServiceFactory.ungetService never called: "
+					+ latch.getCount());
 		}
 	}
 
