@@ -53,16 +53,16 @@ public class IOControl extends OSGiTestCase {
 	 */
 	public void testOpen() throws Exception {
 		BundleContext bc = getContext();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf = new TestConnectionFactory();
-		ServiceRegistration reg = bc.registerService(ConnectionFactory.class
-				.getName(), cf, props);
-		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
-				.getName(), null);
+		ServiceRegistration<ConnectionFactory> reg = bc
+				.registerService(ConnectionFactory.class, cf, props);
+		ServiceTracker<ConnectorService,ConnectorService> st = new ServiceTracker<>(
+				bc, ConnectorService.class, null);
 		st.open();
 		Tracker.waitForService(st, 5000);
-		ConnectorService connector = (ConnectorService) st.getService();
+		ConnectorService connector = st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
 		assertNotNull("returned connection", c);
@@ -120,19 +120,19 @@ public class IOControl extends OSGiTestCase {
 	 */
 	public void testRanking1() throws Exception {
 		BundleContext bc = getContext();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf1 = new TestConnectionFactory();
-		ServiceRegistration reg1 = bc.registerService(ConnectionFactory.class
-				.getName(), cf1, props);
+		ServiceRegistration<ConnectionFactory> reg1 = bc
+				.registerService(ConnectionFactory.class, cf1, props);
 		TestConnectionFactory cf2 = new TestConnectionFactory();
-		ServiceRegistration reg2 = bc.registerService(ConnectionFactory.class
-				.getName(), cf2, props);
-		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
-				.getName(), null);
+		ServiceRegistration<ConnectionFactory> reg2 = bc
+				.registerService(ConnectionFactory.class, cf2, props);
+		ServiceTracker<ConnectorService,ConnectorService> st = new ServiceTracker<>(
+				bc, ConnectorService.class, null);
 		st.open();
 		Tracker.waitForService(st, 5000);
-		ConnectorService connector = (ConnectorService) st.getService();
+		ConnectorService connector = st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
 		assertNotNull("returned connection", c);
@@ -150,20 +150,20 @@ public class IOControl extends OSGiTestCase {
 	 */
 	public void testRanking2() throws Exception {
 		BundleContext bc = getContext();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
 		TestConnectionFactory cf1 = new TestConnectionFactory();
-		ServiceRegistration reg1 = bc.registerService(ConnectionFactory.class
-				.getName(), cf1, props);
+		ServiceRegistration<ConnectionFactory> reg1 = bc
+				.registerService(ConnectionFactory.class, cf1, props);
 		TestConnectionFactory cf2 = new TestConnectionFactory();
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration reg2 = bc.registerService(ConnectionFactory.class
-				.getName(), cf2, props);
-		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
-				.getName(), null);
+		ServiceRegistration<ConnectionFactory> reg2 = bc
+				.registerService(ConnectionFactory.class, cf2, props);
+		ServiceTracker<ConnectorService,ConnectorService> st = new ServiceTracker<>(
+				bc, ConnectorService.class, null);
 		st.open();
 		Tracker.waitForService(st, 5000);
-		ConnectorService connector = (ConnectorService) st.getService();
+		ConnectorService connector = st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
 		assertNotNull("returned connection", c);
@@ -180,16 +180,16 @@ public class IOControl extends OSGiTestCase {
 	 */
 	public void testMultipleSchemes() throws Exception {
 		BundleContext bc = getContext();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test", "test2"});
 		TestConnectionFactory cf = new TestConnectionFactory();
-		ServiceRegistration reg = bc.registerService(ConnectionFactory.class
-				.getName(), cf, props);
-		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
-				.getName(), null);
+		ServiceRegistration<ConnectionFactory> reg = bc
+				.registerService(ConnectionFactory.class, cf, props);
+		ServiceTracker<ConnectorService,ConnectorService> st = new ServiceTracker<>(
+				bc, ConnectorService.class, null);
 		st.open();
 		Tracker.waitForService(st, 5000);
-		ConnectorService connector = (ConnectorService) st.getService();
+		ConnectorService connector = st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
 		assertNotNull("returned connection", c);
