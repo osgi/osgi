@@ -525,12 +525,14 @@ public class PushStreamIntermediateOperationTest
 				.unbuffered()
 				.create();
 
+		final Throwable[] failure = new Throwable[1];
+
 		ps.timeout(Duration.ofMillis(50)).forEachEvent(e -> {
 			switch (e.getType()) {
 				case DATA :
 					return e.getData().intValue();
 				case ERROR :
-					throw e.getFailure();
+					failure[0] = e.getFailure();
 				case CLOSE :
 			}
 			return -1;
@@ -539,8 +541,8 @@ public class PushStreamIntermediateOperationTest
 		gen.getExecutionThread().join();
 		ExtGeneratorStatus status = gen.status();
 		assertNotNull(status);
-		assertNotNull(status.failure);
-		assertEquals(TimeoutException.class, status.failure.getClass());
+		assertNotNull(failure[0]);
+		assertEquals(TimeoutException.class, failure[0].getClass());
 		assertFalse(gen.closeCalled);
 		assertEquals(PushEvent.EventType.ERROR, status.event.getType());
 	}
