@@ -25,5 +25,3 @@ Test-Cases = ${testcases}
 	org.osgi.util.promise;version=latest
 
 -runproperties = ${runproperties}
--runee: JavaSE-1.8
--runfw: org.eclipse.osgi;version='[3.13.0,3.13.0]'
