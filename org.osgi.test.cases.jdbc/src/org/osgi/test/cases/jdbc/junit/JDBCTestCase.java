@@ -37,14 +37,14 @@ public class JDBCTestCase extends OSGiTestCase {
 	private String password = "pswd";
 	private String user = "usr";
 	
-	private ServiceReference	ref;
+	private ServiceReference<DataSourceFactory>	ref;
 	private DataSourceFactory	factory;
 
 	protected void setUp() {
 		ref = getContext()
-				.getServiceReference(DataSourceFactory.class.getName());
+				.getServiceReference(DataSourceFactory.class);
 		assertNotNull("No DataSourceFactory service available", ref);
-		factory = (DataSourceFactory) getContext().getService(ref);
+		factory = getContext().getService(ref);
 		assertNotNull(factory);
 		// TODO OSGi Compliance test *must* not rely on details in the reference
 		// implementation!
@@ -152,6 +152,7 @@ public class JDBCTestCase extends OSGiTestCase {
 	public void testCreateDriver() throws Exception {
 		Properties props = new Properties();
 
+		@SuppressWarnings("unused")
 		Driver driver = factory.createDriver( props );
 		// TODO OSGi Compliance test *must* not rely on details in the reference
 		// implementation!
