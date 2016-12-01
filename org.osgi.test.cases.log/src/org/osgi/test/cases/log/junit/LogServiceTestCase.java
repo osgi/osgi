@@ -68,6 +68,7 @@ public class LogServiceTestCase extends AbstractLogTestCase {
 	 * Tests that a LogEntry is fired to multiple LogListeners. All log levels
 	 * must be effective.
 	 */
+	@SuppressWarnings("deprecation")
 	public void testMultipleListeners() {
 		LogReader reader1 = new LogReader();
 		LogReader reader2 = new LogReader();

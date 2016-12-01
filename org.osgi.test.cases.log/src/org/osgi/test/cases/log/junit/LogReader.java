@@ -8,7 +8,7 @@ import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
 
-import junit.framework.Assert;
+import junit.framework.TestCase;
 
 public class LogReader implements LogListener {
 	final List<LogEntry> log = new ArrayList<>();
@@ -35,7 +35,7 @@ public class LogReader implements LogListener {
 				}
 			}
 			LogEntry entry = log.size() == 0 ? null : log.remove(0);
-			Assert.assertNotNull("No log entry found: " + message + " - "
+			TestCase.assertNotNull("No log entry found: " + message + " - "
 					+ getLogLevel(level), entry);
 			return entry;
 		}
