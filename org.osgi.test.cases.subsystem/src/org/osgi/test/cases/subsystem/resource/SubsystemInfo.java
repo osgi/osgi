@@ -31,13 +31,13 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.test.support.OSGiTestCase;
+
+import junit.framework.TestCase;
 
 public class SubsystemInfo {
 	/**
@@ -140,7 +140,8 @@ public class SubsystemInfo {
 	private static void createSubsystem(Map<String, String> sm, Map<String, String> dm, Map<String, URL> contents, File target) {
 		target.getParentFile().mkdirs();
 		Set<String> directories = new HashSet<String>();
-		Assert.assertTrue("Parent folder does not exist.", target.getParentFile().exists());
+		TestCase.assertTrue("Parent folder does not exist.",
+				target.getParentFile().exists());
 		try {
 			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
 			putManifest(SUBSYSTEM_MANIFEST, sm, zip, directories);
@@ -206,7 +207,8 @@ public class SubsystemInfo {
 
 	public static String getSymbolicName(String namedResource) {
 		int atIndex = namedResource.indexOf('@');
-		Assert.assertFalse("No @ in named resource: " + namedResource, atIndex == -1);
+		TestCase.assertFalse("No @ in named resource: " + namedResource,
+				atIndex == -1);
 		return namedResource.substring(0, atIndex);
 	}
 }

@@ -1,3 +1,5 @@
 Bundle-SymbolicName: require.ee.native
 Require-Capability: osgi.ee, osgi.native
 Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.0
+
+-fixupmessages.empty: The JAR is empty

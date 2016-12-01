@@ -1,3 +1,5 @@
 Bundle-SymbolicName: share.j
 Bundle-Version: 1.0.0
 Require-Bundle: share.a;resolution:=optional
+
+-fixupmessages.empty: The JAR is empty

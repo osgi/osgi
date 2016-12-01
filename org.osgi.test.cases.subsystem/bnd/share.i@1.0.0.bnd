@@ -1,3 +1,5 @@
 Bundle-SymbolicName: share.i
 Bundle-Version: 1.0.0
 Import-Package: x;resolution:=optional
+
+-fixupmessages.empty: The JAR is empty

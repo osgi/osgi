@@ -1,2 +1,4 @@
 Bundle-SymbolicName: weaving.c
 Import-Package: ${p}.weaving.a;bundle-symbolic-name=weaving.aa
+
+-fixupmessages.empty: The JAR is empty

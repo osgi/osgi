@@ -1,3 +1,5 @@
 Bundle-SymbolicName: app.service.dep.a
 Require-Capability: osgi.service;filter:="(objectClass=org.osgi.framework.Constants)";effective:=active
 Import-Package: org.osgi.framework
+
+-fixupmessages.empty: The JAR is empty

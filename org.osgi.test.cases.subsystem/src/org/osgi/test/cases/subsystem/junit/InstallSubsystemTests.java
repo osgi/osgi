@@ -33,8 +33,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
-import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.service.subsystem.Subsystem.State;
+import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.test.cases.subsystem.resource.TestResource;
 
 
@@ -419,6 +419,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 
 	public void test2B2g_succeedInsall() {
 		registerRepository(REPOSITORY_2B2g);
+		@SuppressWarnings("unused")
 		Subsystem s1 = doSubsystemInstall(getName(), getRootSubsystem(), getName(), SUBSYSTEM_2B2g_S2_APPLICATION, false);
 	}
 
@@ -661,21 +662,11 @@ public class InstallSubsystemTests extends SubsystemTest{
 	        dest.createNewFile();
 	    }
 
-	    FileChannel source = null;
-	    FileChannel destination = null;
-
-	    try {
-	        source = new FileInputStream(src).getChannel();
-	        destination = new FileOutputStream(dest).getChannel();
+		try (FileInputStream fis = new FileInputStream(src);
+				FileOutputStream fos = new FileOutputStream(dest)) {
+			FileChannel source = fis.getChannel();
+			FileChannel destination = fos.getChannel();
 	        destination.transferFrom(source, 0, source.size());
-	    }
-	    finally {
-	        if(source != null) {
-	            source.close();
-	        }
-	        if(destination != null) {
-	            destination.close();
-	        }
 	    }
 	}
 

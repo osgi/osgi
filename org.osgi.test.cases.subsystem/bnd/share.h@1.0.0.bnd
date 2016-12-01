@@ -1,3 +1,5 @@
 Bundle-SymbolicName: share.h
 Bundle-Version: 1.0.0
 Fragment-Host: share.a
+
+-fixupmessages.empty: The JAR is empty

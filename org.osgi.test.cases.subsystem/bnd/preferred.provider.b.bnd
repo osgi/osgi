@@ -1,2 +1,4 @@
 Bundle-SymbolicName: preferred.provider.b
 Export-Package: foo
+
+-fixupmessages.empty: The JAR is empty

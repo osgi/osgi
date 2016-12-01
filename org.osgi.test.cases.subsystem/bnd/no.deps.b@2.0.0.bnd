@@ -1,2 +1,4 @@
 Bundle-SymbolicName: no.deps.b
 Bundle-Version: 2.0.0
+
+-fixupmessages.empty: The JAR is empty

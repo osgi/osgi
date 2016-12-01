@@ -1,3 +1,5 @@
 Bundle-SymbolicName: share.c
 Bundle-Version: 1.0.0
 Import-Package: x
+
+-fixupmessages.empty: The JAR is empty
