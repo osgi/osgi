@@ -3,3 +3,4 @@ Bundle-Version: 1.0.0
 Bundle-SymbolicName: requirebundleE 
 Require-Bundle: requirebundleD 
 Import-Package: resources
+-fixupmessages.empty: The JAR is empty

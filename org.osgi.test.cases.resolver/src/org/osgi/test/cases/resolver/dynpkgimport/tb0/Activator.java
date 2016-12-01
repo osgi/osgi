@@ -35,11 +35,11 @@ import org.osgi.test.cases.resolver.dynpkgimport.exported.TestService;
 import org.osgi.test.cases.resolver.dynpkgimport.tlx.TestLib;
 
 public class Activator implements BundleActivator, TestService {
-	ServiceRegistration	testServiceReg	= null;
+	ServiceRegistration<TestService> testServiceReg = null;
 
 	public void start(BundleContext bc) {
-		Dictionary props = new Hashtable();
-		testServiceReg = bc.registerService(TestService.class.getName(), this,
+		Dictionary<String,Object> props = new Hashtable<>();
+		testServiceReg = bc.registerService(TestService.class, this,
 				props);
 	}
 
@@ -51,6 +51,7 @@ public class Activator implements BundleActivator, TestService {
 	public void test1() throws Exception {
 		//Object o =
 		// Class.forName("org.osgi.test.cases.resolver.dynpkgimport.tlx.TestLib").newInstance();
+		@SuppressWarnings("unused")
 		TestLib t = new TestLib();
 	}
 }
