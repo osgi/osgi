@@ -1,3 +1,4 @@
 Bundle-Name:                             ${p}.resolver.tb13
 Bundle-SymbolicName:                     ${p}.resolver.tb13; attr1="valueC"; attr2="valueD"; attr3="valueE"; mandatory:="attr1, attr2"
 Bundle-Version:                          1.0.1
+-fixupmessages.empty: The JAR is empty

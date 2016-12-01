@@ -18,7 +18,7 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator implements BundleActivator {
 
 	TestServiceImpl		service;
-	ServiceRegistration	serviceRegistration;
+	ServiceRegistration<TestService>	serviceRegistration;
 
 	/**
 	 * Installs several services later filtered by the tbc
@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		service = new TestServiceImpl();
 		serviceRegistration = bc
-				.registerService(TestService.class.getName(), service, null);
+				.registerService(TestService.class, service, null);
 	}
 
 	/**

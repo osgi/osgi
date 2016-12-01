@@ -59,12 +59,12 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 				"require");
 		invalidCapabilityPermission("a.b.c", null, null, "require");
 		invalidCapabilityPermission("(capability.namespace=a.b.c)",
-				Collections.EMPTY_MAP, null, "require");
-		invalidCapabilityPermission("a.b.c", Collections.EMPTY_MAP, null,
+				Collections.emptyMap(), null, "require");
+		invalidCapabilityPermission("a.b.c", Collections.emptyMap(), null,
 				"require");
-		invalidCapabilityPermission("a.b.c", Collections.EMPTY_MAP,
+		invalidCapabilityPermission("a.b.c", Collections.emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location", null), "provide");
-		invalidCapabilityPermission("a.b.c", Collections.EMPTY_MAP,
+		invalidCapabilityPermission("a.b.c", Collections.emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location", null),
 				"require, provide");
 	}
@@ -411,7 +411,7 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 		CapabilityPermission p46 = new CapabilityPermission("(attr1=foo*)",
 				"require");
 
-		Map attributes = new HashMap();
+		Map<String,Object> attributes = new HashMap<>();
 		attributes.put("attr1", "foo1");
 		CapabilityPermission p47 = new CapabilityPermission(
 				"com.foo.capability2", attributes,
@@ -529,11 +529,11 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 		CapabilityPermission p59 = new CapabilityPermission("*", "require");
 
 		CapabilityPermission p5a = new CapabilityPermission(
-				"com.foo.capability2", Collections.EMPTY_MAP,
+				"com.foo.capability2", Collections.emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location",
 						"cn=Bugs Bunny, o=ACME, c=US"), "require");
 		CapabilityPermission p5b = new CapabilityPermission(
-				"com.bar.capability2", Collections.EMPTY_MAP,
+				"com.bar.capability2", Collections.emptyMap(),
 				newMockBundle(3, "not.bsn", "not.location",
 						"cn=Bugs Bunny, o=NOT, c=US"), "require");
 
@@ -677,7 +677,7 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 				"require");
 		Bundle bundle = newMockBundle(2, "test.bsn", "test.location",
 				"cn=Bugs Bunny, o=ACME, c=US");
-		Map attributes = new HashMap();
+		Map<String,Object> attributes = new HashMap<>();
 		attributes.put("name", "expected");
 		attributes.put("capability.namespace", "expected");
 		attributes.put("@at", "atat");
@@ -697,7 +697,7 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 	}
 
 	private static void invalidCapabilityPermission(String name,
-			Map attributes, Bundle bundle, String actions) {
+			Map<String,Object> attributes, Bundle bundle, String actions) {
 		try {
 			CapabilityPermission p = new CapabilityPermission(name, attributes,
 					bundle, actions);

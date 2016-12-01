@@ -42,14 +42,14 @@ public class SetPermissionActivator implements BundleActivator {
 
 	public void stop(BundleContext context) throws Exception {
 
-		ServiceReference ref = context
-				.getServiceReference(PermissionAdmin.class.getName());
+		ServiceReference<PermissionAdmin> ref = context
+				.getServiceReference(PermissionAdmin.class);
 		if (ref == null) {
 			if (Util.debug)
 				System.out.println("Fail to get ServiceReference of "
 						+ PermissionAdmin.class.getName());
 		}
-		PermissionAdmin permAdmin = (PermissionAdmin) context.getService(ref);
+		PermissionAdmin permAdmin = context.getService(ref);
 		permAdmin.setDefaultPermissions(null);
 		String[] locations = permAdmin.getLocations();
 		if (locations == null) {

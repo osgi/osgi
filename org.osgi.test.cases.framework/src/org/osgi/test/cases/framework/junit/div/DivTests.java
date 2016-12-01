@@ -147,7 +147,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb1.jar");
 		try {
 			tb.start();
-			Dictionary h = tb.getHeaders("");
+			Dictionary<String,String> h = tb.getHeaders("");
 			assertEquals("numeric first char", h.get("5-"));
 			assertEquals(basePkg + "tb1.CheckManifest", h
 					.get("bundle-activator"));
@@ -201,7 +201,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb5.jar");
 		try {
 			tb.start();
-			Dictionary h = tb.getHeaders();
+			Dictionary<String,String> h = tb.getHeaders();
 			assertEquals(1, h.size());
 			assertEquals("1.0", h.get("manifest-version"));
 			tb.stop();
@@ -359,11 +359,12 @@ public class DivTests extends DefaultTestBundleControl {
 		getContext().addFrameworkListener(fec);
 		tb.start();
 		tb.uninstall();
-		List result = fec.getList(1, 10000 * OSGiTestCaseProperties
+		List<FrameworkEvent> result = fec.getList(1,
+				10000 * OSGiTestCaseProperties
 				.getScaling());
 		getContext().removeFrameworkListener(fec);
 		assertEquals("No FrameworkEvent received", 1, result.size());
-		FrameworkEvent fe = (FrameworkEvent) result.get(0);
+		FrameworkEvent fe = result.get(0);
 		assertEquals("No FrameworkEvent received", tb, fe.getBundle());
 		Throwable t = fe.getThrowable();
 		assertNotNull(t);
@@ -751,12 +752,13 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle bundle = getContext().installBundle(
 				getWebServer() + "div.tb10.jar");
 		try {
-			Enumeration enumeration = bundle.getEntryPaths(basePath + "tb10");
+			Enumeration<String> enumeration = bundle
+					.getEntryPaths(basePath + "tb10");
 			assertNotNull("Check if some resource is returned", enumeration);
 
 			int count = 0;
 			while (enumeration.hasMoreElements()) {
-				String entryPath = (String) enumeration.nextElement();
+				String entryPath = enumeration.nextElement();
 
 				for (int i = 0; i < expectedEntryPaths.length; i++) {
 					if (entryPath.equals(expectedEntryPaths[i])) {
@@ -931,7 +933,7 @@ public class DivTests extends DefaultTestBundleControl {
 				getWebServer() + "div.tb13.jar");
 
 		try {
-			Enumeration enumeration = bundle.getResources(basePath
+			Enumeration<URL> enumeration = bundle.getResources(basePath
 					+ "tb10/Foo.class");
 			assertNotNull(
 					"Testing the method invocation with an existing resource (using a absolute path)",
@@ -1084,7 +1086,7 @@ public class DivTests extends DefaultTestBundleControl {
 				getWebServer() + "div.tb10.jar");
 		try {
 			bundle.start();
-			Class clazz = null;
+			Class< ? > clazz = null;
 			try {
 				clazz = bundle.loadClass(basePkg + "tb10.Foo");
 			}
@@ -1094,7 +1096,8 @@ public class DivTests extends DefaultTestBundleControl {
 						ex);
 			}
 
-			ServiceReference sr = getContext().getServiceReference(
+			ServiceReference< ? > sr = getContext()
+					.getServiceReference(
 					basePkg + "tb10.TestService");
 
 			Object service = getContext().getService(sr);

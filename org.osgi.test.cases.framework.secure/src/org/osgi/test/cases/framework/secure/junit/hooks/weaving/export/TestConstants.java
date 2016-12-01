@@ -1,4 +1,4 @@
-package org.osgi.test.cases.framework.secure.junit.hooks.weaving;
+package org.osgi.test.cases.framework.secure.junit.hooks.weaving.export;
 
 import org.osgi.test.support.OSGiTestCaseProperties;
 

@@ -26,7 +26,7 @@
 package org.osgi.test.cases.framework.classloading.tb1b;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -41,7 +41,7 @@ import org.osgi.test.cases.framework.classloading.exports.service.SomeService;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration	sr;
+	private ServiceRegistration<SomeService> sr;
 
 	/**
 	 * Creates a new instance of Activator
@@ -58,12 +58,12 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		Dictionary props;
+		Dictionary<String,Object> props;
 
-		props = new Properties();
+		props = new Hashtable<>();
 		props.put("version", "1.0.0");
 
-		sr = context.registerService(SomeService.class.getName(),
+		sr = context.registerService(SomeService.class,
 				new SomeServiceImpl(context.getBundle()), props);
 	}
 

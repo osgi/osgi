@@ -4,3 +4,4 @@ Bundle-SymbolicName: ${p}.wiring.tb4
 Bundle-Version: 1.0
 Import-Package: org.osgi.test.cases.framework.wiring.tb1b, org.osgi.test.cases.framework.wiring.tb1c
 
+-fixupmessages.empty: The JAR is empty

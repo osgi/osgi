@@ -27,6 +27,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.weaving.WovenClassListener;
+import org.osgi.test.cases.framework.secure.junit.hooks.weaving.export.TestConstants;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 

@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.hooks.weaving.WovenClass;
 import org.osgi.framework.hooks.weaving.WovenClassListener;
+import org.osgi.test.cases.framework.secure.junit.hooks.weaving.export.TestConstants;
 
 public class TestWovenClassListener implements WovenClassListener {
 	private static final PackagePermission permission = new PackagePermission(TestConstants.DYNAMIC_IMPORT_PACKAGE, PackagePermission.IMPORT);

@@ -118,7 +118,7 @@ public class GetEntryResourceTests extends OSGiTestCase {
 	}
 
 	private void assertEntryPaths(Bundle bundle, String path, String[] expected) {
-		Enumeration paths = bundle.getEntryPaths(path);
+		Enumeration<String> paths = bundle.getEntryPaths(path);
 		if (expected != null)
 			assertNotNull(paths);
 		else {
@@ -126,7 +126,7 @@ public class GetEntryResourceTests extends OSGiTestCase {
 			return;
 		}
 
-		ArrayList expectedList = new ArrayList(expected.length);
+		ArrayList<String> expectedList = new ArrayList<>(expected.length);
 		for (int i = 0; i < expected.length; i++)
 			expectedList.add(expected[i]);
 
@@ -145,7 +145,7 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		assertWiringFindEntries(bundle, path, wildCard, recurse, expectedNum);
 	}
 	private void assertBundleFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
-		Enumeration entries = bundle.findEntries(path, wildCard, recurse);
+		Enumeration<URL> entries = bundle.findEntries(path, wildCard, recurse);
 		if (expectedNum > 0)
 			assertNotNull(entries);
 		else {
@@ -155,21 +155,22 @@ public class GetEntryResourceTests extends OSGiTestCase {
 
 		int numFound = 0;
 		while (entries.hasMoreElements()) {
-			assertURL((URL) entries.nextElement());
+			assertURL(entries.nextElement());
 			numFound++;
 		}
 		assertEquals("Unexpected number of entries", expectedNum, numFound);
 	}
 
 	private void assertWiringFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
-		BundleWiring wiring = (BundleWiring) bundle.adapt(BundleWiring.class);
-		List entries = wiring.findEntries(path, wildCard, recurse ? BundleWiring.FINDENTRIES_RECURSE : 0);
+		BundleWiring wiring = bundle.adapt(BundleWiring.class);
+		List<URL> entries = wiring.findEntries(path, wildCard,
+				recurse ? BundleWiring.FINDENTRIES_RECURSE : 0);
 		assertNotNull("Entries should not be null.", entries);
 
-		Iterator iEntries = entries.iterator();
+		Iterator<URL> iEntries = entries.iterator();
 		int numFound = 0;
 		while (iEntries.hasNext()) {
-			assertURL((URL) iEntries.next());
+			assertURL(iEntries.next());
 			numFound++;
 		}
 		assertEquals("Unexpected number of entries", expectedNum, numFound);

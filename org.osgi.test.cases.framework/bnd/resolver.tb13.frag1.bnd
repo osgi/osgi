@@ -2,3 +2,4 @@ Bundle-Name:                             ${p}.resolver.tb13.frag1
 Bundle-SymbolicName:                     ${p}.resolver.tb13.frag1
 Bundle-Version:                          1.0.0
 Fragment-Host:                           ${p}.resolver.tb13; attr1="noMatch"
+-fixupmessages.empty: The JAR is empty

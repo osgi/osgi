@@ -5,4 +5,5 @@ Bundle-Description: TB27 is part of the DIV test case. This bundle will \
 Bundle-Version: 1.0
 Provide-Capability: osgi.native; someattr=foo
 
--fixupmessages: "osgi.native namespace must not be specified with generic capabilities"
+-fixupmessages.generic: "osgi.native namespace must not be specified with generic capabilities"
+-fixupmessages.empty: The JAR is empty

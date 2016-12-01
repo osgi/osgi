@@ -53,8 +53,8 @@ public class ServicePermissionTests extends PermissionTestCase {
 		invalidServicePermission("(objectClass=a.b.c)", "register,GET");
 		invalidServicePermission("(objectClass=a.b.c)", "geT,Register");
 
-		invalidServicePermission((ServiceReference) null, "get");
-		Map properties = new HashMap();
+		invalidServicePermission((ServiceReference< ? >) null, "get");
+		Map<String,Object> properties = new HashMap<>();
 		properties.put("service.id", new Long(1));
 		properties.put("objectClass", new String[] {"test.Service"});
 		invalidServicePermission(newMockServiceReference(null, properties),
@@ -415,18 +415,18 @@ public class ServicePermissionTests extends PermissionTestCase {
 
 		Bundle b46 = newMockBundle(2, "test.bsn", "test.location",
 				"cn=Bugs Bunny, o=ACME, c=US");
-		Map m46 = new HashMap();
+		Map<String,Object> m46 = new HashMap<>();
 		m46.put("service.id", new Long(2));
 		m46.put("objectClass", new String[] {"com.foo.Service2"});
-		ServiceReference r46 = newMockServiceReference(b46, m46);
+		ServiceReference< ? > r46 = newMockServiceReference(b46, m46);
 		ServicePermission p46 = new ServicePermission(r46, "get");
 
 		Bundle b47 = newMockBundle(3, "not.bsn", "not.location",
 				"cn=Bugs Bunny, o=NOT, c=US");
-		Map m47 = new HashMap();
+		Map<String,Object> m47 = new HashMap<>();
 		m47.put("service.id", new Long(3));
 		m47.put("objectClass", new String[] {"com.bar.Service2"});
-		ServiceReference r47 = newMockServiceReference(b47, m47);
+		ServiceReference< ? > r47 = newMockServiceReference(b47, m47);
 		ServicePermission p47 = new ServicePermission(r47, "get");
 
 		assertImplies(p41, p46);
@@ -514,19 +514,19 @@ public class ServicePermissionTests extends PermissionTestCase {
 
 		Bundle b5a = newMockBundle(2, "test.bsn", "test.location",
 		"cn=Bugs Bunny, o=ACME, c=US");
-		Map m5a = new HashMap();
+		Map<String,Object> m5a = new HashMap<>();
 		m5a.put("service.id", new Long(2));
 		m5a.put("objectClass", new String[] {"com.foo.Service2"});
-		ServiceReference r5a = newMockServiceReference(b5a, m5a);
+		ServiceReference< ? > r5a = newMockServiceReference(b5a, m5a);
 		ServicePermission p5a = new ServicePermission(r5a, "get");
 		
 		Bundle b5b = newMockBundle(3, "not.bsn", "not.location",
 				"cn=Bugs Bunny, o=NOT, c=US");
-		Map m5b = new HashMap();
+		Map<String,Object> m5b = new HashMap<>();
 		m5b.put("service.id", new Long(3));
 		m5b.put("objectClass", new String[] {"com.bar.Service1",
 				"com.bar.Service2"});
-		ServiceReference r5b = newMockServiceReference(b5b, m5b);
+		ServiceReference< ? > r5b = newMockServiceReference(b5b, m5b);
 		ServicePermission p5b = new ServicePermission(r5b, "get");
 
 		PermissionCollection pc;
@@ -668,12 +668,12 @@ public class ServicePermissionTests extends PermissionTestCase {
 				"(&(@Name=expected)(@@AT=atat)(name=test.bsn))", "get");
 		Bundle b62 = newMockBundle(2, "test.bsn", "test.location",
 				"cn=Bugs Bunny, o=ACME, c=US");
-		Map m62 = new HashMap();
+		Map<String,Object> m62 = new HashMap<>();
 		m62.put("service.id", new Long(2));
 		m62.put("objectClass", new String[] {"com.foo.Service2"});
 		m62.put("name", "expected");
 		m62.put("@at", "atat");
-		ServiceReference r62 = newMockServiceReference(b62, m62);
+		ServiceReference< ? > r62 = newMockServiceReference(b62, m62);
 		ServicePermission p62 = new ServicePermission(r62, "get");
 		assertImplies(p61, p62);
 	}
@@ -688,7 +688,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		}
 	}
 	
-	private static void invalidServicePermission(ServiceReference service,
+	private static void invalidServicePermission(ServiceReference< ? > service,
 			String actions) {
 		try {
 			ServicePermission p = new ServicePermission(service, actions);

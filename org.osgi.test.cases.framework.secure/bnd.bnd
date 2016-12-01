@@ -10,8 +10,8 @@ Private-Package						=  \
 Export-Package						= \
 	${p}.permissions.util, \
 	${p}.lifecycle.servicereferencegetter, \
-	${p}.junit.adaptions, \
-	${p}.junit.hooks.weaving, \
+	${p}.junit.adaptions.export, \
+	${p}.junit.hooks.weaving.export, \
 	${p}.junit.serviceregistry.export
 
 Include-Resource = \

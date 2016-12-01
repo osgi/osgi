@@ -53,8 +53,8 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		ServiceReference sr;
-		ServiceReference[] srs;
+		ServiceReference< ? > sr;
+		ServiceReference< ? >[] srs;
 
 		srs = context.getServiceReferences("non.existent.service",
 				"(version=*)");

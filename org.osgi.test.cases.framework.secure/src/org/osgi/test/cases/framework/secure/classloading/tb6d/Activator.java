@@ -40,7 +40,7 @@ import org.osgi.test.cases.framework.secure.classloading.exports.service.SomeSer
  */
 public class Activator implements BundleActivator {
 
-	private ServiceReference	serviceReference;
+	private ServiceReference<SomeService> serviceReference;
 
 	/**
 	 * Creates a new instance of Activator
@@ -59,10 +59,9 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		SomeService someService;
 
-		serviceReference = context.getServiceReference(SomeService.class
-				.getName());
+		serviceReference = context.getServiceReference(SomeService.class);
 
-		someService = (SomeService) context.getService(serviceReference);
+		someService = context.getService(serviceReference);
 
 		try {
 			someService.getRegistrantBundle();

@@ -45,7 +45,7 @@ public class Activator implements BundleActivator {
 			if ("org.osgi.test.cases.framework.secure.permissions.admin2"
 					.equals(bundle.getSymbolicName())) {
 				String requestedClassName = "org.osgi.test.cases.framework.secure.permissions.admin2.TestClass";
-				Class testClass = bundle.loadClass(requestedClassName);
+				Class< ? > testClass = bundle.loadClass(requestedClassName);
 				if (requestedClassName.equals(testClass.getName())) {
 					return;
 				}

@@ -45,7 +45,7 @@ import junit.framework.AssertionFailedError;
 public class BundleHookTests extends OSGiTestCase {
 
 	private static final int num = 3;
-	private Bundle[] testBundles = new Bundle[3];
+	Bundle[]							testBundles		= new Bundle[3];
 	private BundleListener[][] asyncListeners = new BundleListener[num][num];
 	private SynchronousBundleListener[] syncListeners = new SynchronousBundleListener[num];
 

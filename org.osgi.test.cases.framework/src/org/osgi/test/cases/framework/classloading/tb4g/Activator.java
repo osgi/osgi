@@ -39,7 +39,7 @@ import org.osgi.test.cases.framework.classloading.exports.service.SomeService;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceReference	sr;
+	private ServiceReference< ? > sr;
 
 	/**
 	 * Creates a new instance of Activator

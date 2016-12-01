@@ -15,5 +15,5 @@ public interface ServiceReferenceGetter {
 	/**
 	 *  
 	 */
-	public void setServiceReference(ServiceReference serviceReference);
+	public void setServiceReference(ServiceReference< ? > serviceReference);
 }

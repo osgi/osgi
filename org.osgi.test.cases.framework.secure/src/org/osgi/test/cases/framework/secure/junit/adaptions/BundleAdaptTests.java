@@ -20,8 +20,6 @@ import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -33,7 +31,10 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleRevisions;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.test.cases.framework.secure.junit.adaptions.export.AdaptTestService;
 import org.osgi.test.support.OSGiTestCase;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Basic Bundle Wiring API security tests.
@@ -311,7 +312,8 @@ public class BundleAdaptTests extends OSGiTestCase {
 		Bundle testBundle = hasPermission ? withPerms : withoutPerms;
 		Bundle adaptBundle = fromSystemBundle ? getContext().getBundle(0) : getContext().getBundle();
 		AdaptTestService<T> service = new AdaptTestService<T>(adaptTo, hasPermission, adaptBundle);
-		ServiceRegistration<AdaptTestService> reg = getContext().registerService(AdaptTestService.class, service, null);
+		ServiceRegistration< ? > reg = getContext()
+				.registerService(AdaptTestService.class, service, null);
 		try {
 			testBundle.start();
 			AssertionFailedError error = service.getError();

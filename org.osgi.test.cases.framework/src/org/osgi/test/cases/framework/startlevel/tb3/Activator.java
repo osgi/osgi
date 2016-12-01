@@ -34,7 +34,7 @@ import org.osgi.framework.startlevel.BundleStartLevel;
 public class Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		Bundle b = bc.getBundle();
-		BundleStartLevel bsl = (BundleStartLevel) b.adapt(BundleStartLevel.class);
+		BundleStartLevel bsl = b.adapt(BundleStartLevel.class);
 		int bundleStartLevel = bsl.getStartLevel();
 		bsl.setStartLevel(bundleStartLevel + 10);
 	}

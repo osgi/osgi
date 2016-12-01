@@ -38,7 +38,8 @@ import org.osgi.test.cases.framework.classloading.exports.listener.ServiceListen
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration		sr;
+	@SuppressWarnings("unused")
+	private ServiceRegistration<ServiceListenerTester>	sr;
 	private ServiceListenerTester	serviceListenerTester;
 
 	/**
@@ -59,7 +60,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		serviceListenerTester = new ServiceListenerTesterImpl();
 		
-		sr = context.registerService(ServiceListenerTester.class.getName(),
+		sr = context.registerService(ServiceListenerTester.class,
 				serviceListenerTester, null);
 
 		context.addServiceListener(serviceListenerTester);

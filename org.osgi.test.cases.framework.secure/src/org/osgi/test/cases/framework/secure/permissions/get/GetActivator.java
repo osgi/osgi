@@ -49,10 +49,10 @@ public class GetActivator implements BundleActivator {
 		if (Util.debug)
 			System.out.println("GETTER BUNDLE is going to start.");
 
-		ServiceReference ref = null;
+		ServiceReference<IService1> ref = null;
 
 		String clazz = IService1.class.getName();
-		ref = context.getServiceReference(clazz);
+		ref = context.getServiceReference(IService1.class);
 		if (ref == null) {
 			throw new PermissionsFilterException(
 					"Fail to get ServiceReference of " + clazz);

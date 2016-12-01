@@ -43,7 +43,7 @@ public class SyncBundleListenerTests extends DefaultTestBundleControl {
 				 * wait to see if async event is delivered while we block sync
 				 * delivery.
 				 */
-				List async = ibec.getList(1, timeout); 
+				List<BundleEvent> async = ibec.getList(1, timeout);
 				if (async.isEmpty()) {
 					super.bundleChanged(event);
 				}
@@ -76,14 +76,14 @@ public class SyncBundleListenerTests extends DefaultTestBundleControl {
 			context.removeBundleListener(ibec);
 		}
 		
-		List expected = new ArrayList(5);
+		List<BundleEvent> expected = new ArrayList<>(5);
 		expected.add(new BundleEvent(BundleEvent.INSTALLED, tb));
 		expected.add(new BundleEvent(BundleEvent.STARTED, tb));
 		expected.add(new BundleEvent(BundleEvent.STOPPED, tb));
 		expected.add(new BundleEvent(BundleEvent.UPDATED, tb));
 		expected.add(new BundleEvent(BundleEvent.UNINSTALLED, tb));
-		List sresult = sbec.getList(5, 1);
-		List aresult = abec.getList(5, 1);
+		List<BundleEvent> sresult = sbec.getList(5, 1);
+		List<BundleEvent> aresult = abec.getList(5, 1);
 		assertEquals("SBL missed events", sbec.getComparator(), expected,
 				sresult);
 		assertEquals("BL missed events", abec.getComparator(), expected, aresult);

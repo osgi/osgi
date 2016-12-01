@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -49,6 +47,8 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
+
+import junit.framework.AssertionFailedError;
 
 public class ResolverHookTests extends OSGiTestCase {
 	private final List<Bundle> bundles = new ArrayList<Bundle>();
@@ -103,7 +103,8 @@ public class ResolverHookTests extends OSGiTestCase {
 		Wiring.synchronousRefreshBundles(getContext(), b);
 	}
 
-	private ServiceRegistration<ResolverHookFactory> registerHook(ResolverHookFactory hook, int ranking) {
+	ServiceRegistration<ResolverHookFactory> registerHook(
+			ResolverHookFactory hook, int ranking) {
 		Dictionary<String, Object> props = new Hashtable<String, Object>();
 		props.put(Constants.SERVICE_RANKING, new Integer(ranking));
 		ServiceRegistration<ResolverHookFactory> reg = getContext().registerService(ResolverHookFactory.class, hook, props);
@@ -280,6 +281,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		// insert a hook that throws an error on end()
 		RuntimeException error3 = new RuntimeException("Test end error");
 		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, null, error3);
+		@SuppressWarnings("unused")
 		ServiceRegistration<ResolverHookFactory> hook5Reg = registerHook(hook5, 50);
 
 		try {
@@ -1243,16 +1245,16 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	static class TestResolverHook implements ResolverHookFactory {
-		private int beginCalls = 0;
+		int									beginCalls	= 0;
 		int endCalls = 0;
 		AssertionFailedError error = null;
 		private final Set<BundleRevision> allTriggers = new HashSet<BundleRevision>();
 		private final RuntimeException throwException;
 		private final RuntimeException endException;
 		private final List<Long> callOrderBegin;
-		private final List<Long> callOrderEnd;
-		private final Long id;
-		private final Collection<Bundle> unresolvable;
+		final List<Long>					callOrderEnd;
+		final Long							id;
+		final Collection<Bundle>			unresolvable;
 		private final boolean factoryNull;
 		private final RuntimeException factoryThrow;
 
@@ -1290,6 +1292,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 
 		private class TestResolverHookImpl implements ResolverHook {
+			public TestResolverHookImpl() {}
 			public void end() {
 				endCalls++;
 				callOrderEnd.add(id);
@@ -1360,12 +1363,12 @@ public class ResolverHookTests extends OSGiTestCase {
 			allTriggers.clear();
 		}
 
-		private void throwException() {
+		void throwException() {
 			if (throwException != null)
 				throw throwException;
 		}
 
-		private void endException() {
+		void endException() {
 			if (endException != null)
 				throw endException;
 		}

@@ -35,7 +35,7 @@ public class FilterTests extends DefaultTestBundleControl {
 	
 	private void testFilter(String filter, String logtext, String[] ids)
 			throws Exception {
-		ServiceReference refs[] = getContext().getServiceReferences(
+		ServiceReference< ? >[] refs = getContext().getServiceReferences(
 				"org.osgi.test.cases.framework.filter.tb1.TestService", filter);
 		logRefList(logtext, refs, ids);
 	}
@@ -227,13 +227,13 @@ public class FilterTests extends DefaultTestBundleControl {
 	/**
 	 * Help function used to sort and log an array of service references.
 	 */
-	private void logRefList(String prefix, ServiceReference refs[],
-			String ids[]) {
+	private void logRefList(String prefix, ServiceReference< ? >[] refs,
+			String[] ids) {
 		
 		if ( refs == null && ids.length ==0 )
 			return;
 		
-		Set set = new TreeSet();
+		Set<String> set = new TreeSet<>();
 		set.addAll( Arrays.asList(ids));
 		
 		for ( int i=0; i<refs.length; i++ ) {

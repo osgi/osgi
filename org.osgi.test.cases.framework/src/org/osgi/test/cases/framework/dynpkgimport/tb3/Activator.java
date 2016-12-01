@@ -35,11 +35,11 @@ import org.osgi.test.cases.framework.dynpkgimport.exported.TestService;
 import org.osgi.test.cases.framework.dynpkgimport.tlx.TestLib;
 
 public class Activator implements BundleActivator, TestService {
-	ServiceRegistration	testServiceReg	= null;
+	ServiceRegistration<TestService> testServiceReg = null;
 
 	public void start(BundleContext bc) {
-		Dictionary props = new Hashtable();
-		testServiceReg = bc.registerService(TestService.class.getName(), this,
+		Dictionary<String,Object> props = new Hashtable<>();
+		testServiceReg = bc.registerService(TestService.class, this,
 				props);
 	}
 

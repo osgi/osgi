@@ -40,7 +40,7 @@ import org.osgi.test.cases.framework.div.tb24b.SomeServiceBuilder;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration sr;
+	private ServiceRegistration< ? > sr;
 	
 	/**
 	 * Starts Bundle.

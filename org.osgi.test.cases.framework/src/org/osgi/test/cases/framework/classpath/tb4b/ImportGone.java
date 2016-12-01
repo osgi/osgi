@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.classpath.tb4b;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * The importing bundle of the ImportGone test.
@@ -19,6 +20,7 @@ public class ImportGone implements BundleActivator {
 	 * "org.osgi.test.cases.framework.classpath.tb4a.exp.Exported".
 	 */
 	public void start(BundleContext bc) {
+		@SuppressWarnings("unused")
 		org.osgi.test.cases.framework.classpath.tb4a.exp.Exported e;
 		e = new org.osgi.test.cases.framework.classpath.tb4a.exp.Exported();
 	}

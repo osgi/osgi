@@ -2,3 +2,4 @@ Bundle-Name:                             ${p}.resolver.tb14
 Bundle-SymbolicName:                     ${p}.resolver.tb14
 Bundle-Version:                          1.0.0
 Require-Capability:                      test.fragment; filter:="(version>=1.0)"
+-fixupmessages.empty: The JAR is empty

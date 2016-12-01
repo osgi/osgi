@@ -23,7 +23,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.weaving.WeavingHook;
-import org.osgi.test.cases.framework.secure.junit.hooks.weaving.TestConstants;
+import org.osgi.test.cases.framework.secure.junit.hooks.weaving.export.TestConstants;
 import org.osgi.test.support.OSGiTestCase;
 
 import junit.framework.TestCase;

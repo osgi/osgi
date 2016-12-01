@@ -26,7 +26,7 @@ public class BundleReferenceTests extends OSGiTestCase {
 
 	public void testBundleReference() {
 		Bundle me = getContext().getBundle();
-		Class self = getClass();
+		Class< ? > self = getClass();
 		ClassLoader cl = self.getClassLoader();
 		assertTrue("classloader is not an instanceof BundleReference",
 				cl instanceof BundleReference);
@@ -36,7 +36,7 @@ public class BundleReferenceTests extends OSGiTestCase {
 
 	public void testGetBundle() {
 		Bundle me = getContext().getBundle();
-		Class self = getClass();
+		Class< ? > self = getClass();
 		assertEquals("wrong bundle returned", me, FrameworkUtil.getBundle(self));
 	}
 

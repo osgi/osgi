@@ -60,10 +60,11 @@ public class Activator implements BundleActivator {
 		int highestRanking;
 		long id;
 		long oid;
+		@SuppressWarnings("unused")
 		long lowestId;
 		Object rankingProperty;
-		ServiceReference sr;
-		ServiceReference[] srs;
+		ServiceReference< ? > sr;
+		ServiceReference< ? >[] srs;
 		
 		srs = context.getServiceReferences(SomeService.class.getName(),
 				"(version=*)");

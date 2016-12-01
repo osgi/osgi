@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClass;
-import org.osgi.test.cases.framework.secure.junit.hooks.weaving.TestConstants;
+import org.osgi.test.cases.framework.secure.junit.hooks.weaving.export.TestConstants;
 
 public class TestWeavingHook implements WeavingHook {
 	private volatile boolean called;

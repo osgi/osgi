@@ -18,16 +18,16 @@ import org.osgi.framework.ServiceRegistration;
  * @author Ericsson Radio Systems AB
  */
 public class EventTest implements BundleActivator {
-	ServiceRegistration	_sr;
+	ServiceRegistration<EventTest> _sr;
 
 	/**
 	 * Starts the bundle. Registers a service.
 	 */
 	public void start(BundleContext bc) {
-		Hashtable props;
-		props = new Hashtable();
+		Hashtable<String,Object> props;
+		props = new Hashtable<>();
 		props.put("Service-Name", "EventTest");
-		_sr = bc.registerService(EventTest.class.getName(), this, props);
+		_sr = bc.registerService(EventTest.class, this, props);
 	}
 
 	/**

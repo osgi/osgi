@@ -201,8 +201,9 @@ public class ExtensionBundleTests extends LaunchTest {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			String message = "expected extension bundle with Bundle-NativeCode to fail to install";
+			Bundle tb22 = null;
 			try {
-				installBundle(framework, "/fragments.tb22.jar");
+				tb22 = installBundle(framework, "/fragments.tb22.jar");
 				// should fail, since extension bundles are not able to
 				// declare native code headers
 				DefaultTestBundleControl.failException(message, 
@@ -211,6 +212,10 @@ public class ExtensionBundleTests extends LaunchTest {
 			catch (Exception e) {
 				DefaultTestBundleControl.assertException(message, 
 						BundleException.class, e);
+			} finally {
+				if (tb22 != null) {
+					tb22.uninstall();
+				}
 			}
 		}
 		else {

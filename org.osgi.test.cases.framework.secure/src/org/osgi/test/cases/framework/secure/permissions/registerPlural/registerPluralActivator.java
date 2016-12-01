@@ -49,7 +49,7 @@ public class registerPluralActivator implements BundleActivator {
 
 		if (Util.debug)
 			System.out.println("REGISTER BUNDLE is going to start.");
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("segment", "providerA");
 		props.put("vendor", "NTT");
 

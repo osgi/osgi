@@ -2,3 +2,4 @@ Bundle-Name:                             ${p}.wiring.ee.tb2
 Bundle-SymbolicName:                     ${p}.wiring.ee.tb2
 Bundle-Version:                          1.0.0
 Bundle-RequiredExecutionEnvironment:     J2SE-1.4
+-fixupmessages.empty: The JAR is empty

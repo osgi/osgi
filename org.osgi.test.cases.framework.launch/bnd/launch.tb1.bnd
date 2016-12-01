@@ -2,3 +2,4 @@ Bundle-SymbolicName: ${p}.launch.tb1
 Bundle-Name: ${p}.launch.tb1
 Bundle-Version: 4.2.0.${project.build}
 Import-Package: org.osgi.tests.pkg1, org.osgi.tests.pkg2
+-fixupmessages.empty: The JAR is empty

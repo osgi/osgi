@@ -2,3 +2,4 @@ Bundle-Name:                             ${p}.resolver.tb13.client2
 Bundle-SymbolicName:                     ${p}.resolver.tb13.client2
 Bundle-Version:                          1.0.0
 Require-Bundle:                          ${p}.resolver.tb13; attr1="valueA"; attr2="valueB"
+-fixupmessages.empty: The JAR is empty

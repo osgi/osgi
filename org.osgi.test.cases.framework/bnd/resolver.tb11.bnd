@@ -3,3 +3,4 @@ Bundle-SymbolicName:                     ${p}.resolver.tb11
 Bundle-Version:                          1.0.0
 Require-Capability: \
  test.optional; resolution:="optional"; filter:="(&(test.optional=extra)(version>=1.0))"
+-fixupmessages.empty: The JAR is empty

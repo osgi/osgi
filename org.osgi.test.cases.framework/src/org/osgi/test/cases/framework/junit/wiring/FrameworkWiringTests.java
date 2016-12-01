@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -42,6 +40,8 @@ import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
 import org.osgi.test.support.wiring.Wiring;
+
+import junit.framework.AssertionFailedError;
 
 public class FrameworkWiringTests extends WiringTest {
 	protected void tearDown() throws Exception {
@@ -283,7 +283,8 @@ public class FrameworkWiringTests extends WiringTest {
 	static class TestRequirement implements Requirement {
 		private final String namespace;
 		private final Map<String, String> directives;
-		private final Map<String, Object> attributes = Collections.EMPTY_MAP;
+		private final Map<String,Object>	attributes	= Collections
+				.emptyMap();
 
 		public TestRequirement(String namespace, String filter) {
 			this.namespace = namespace;
@@ -291,7 +292,7 @@ public class FrameworkWiringTests extends WiringTest {
 				this.directives = Collections.singletonMap(
 						Namespace.REQUIREMENT_FILTER_DIRECTIVE, filter);
 			} else {
-				this.directives = Collections.EMPTY_MAP;
+				this.directives = Collections.emptyMap();
 			}
 		}
 

@@ -34,6 +34,7 @@ import java.security.Permission;
  */
 public class SomePermission extends Permission {
 
+	private static final long	serialVersionUID	= 1L;
 	private boolean	deny;
 
 	/**

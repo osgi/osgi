@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.classpath.tb2;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Bundle for the Export test.
@@ -19,6 +20,7 @@ public class Export implements BundleActivator {
 	 * "org.osgi.test.cases.framework.classpath.tbc.exp.Exported".
 	 */
 	public void start(BundleContext bc) {
+		@SuppressWarnings("unused")
 		org.osgi.test.cases.framework.classpath.exported.Exported e;
 		e = new org.osgi.test.cases.framework.classpath.exported.Exported();
 	}

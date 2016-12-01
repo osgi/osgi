@@ -2,3 +2,4 @@ Bundle-Name:                             ${p}.wiring.ee.tb1
 Bundle-SymbolicName:                     ${p}.wiring.ee.tb1
 Bundle-Version:                          1.0.0
 Bundle-RequiredExecutionEnvironment:     OSGi/Minimum-1.1
+-fixupmessages.empty: The JAR is empty

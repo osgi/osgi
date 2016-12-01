@@ -33,13 +33,13 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
 
 public class Activator implements BundleActivator {
 	public void start(BundleContext bc) {
-		FrameworkStartLevel fsl = (FrameworkStartLevel) bc.getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel fsl = bc.getBundle(0).adapt(FrameworkStartLevel.class);
 		int activeStartLevel = fsl.getStartLevel();
 		fsl.setStartLevel(activeStartLevel + 5, (FrameworkListener[]) null);
 	}
 
 	public void stop(BundleContext bc) {
-		FrameworkStartLevel fsl = (FrameworkStartLevel) bc.getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel fsl = bc.getBundle(0).adapt(FrameworkStartLevel.class);
 		int activeStartLevel = fsl.getStartLevel();
 		fsl.setStartLevel(activeStartLevel - 5, (FrameworkListener[]) null);
 	}

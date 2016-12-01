@@ -34,15 +34,15 @@ public class ServiceExceptionTests extends OSGiTestCase {
 	public void testServiceException01() {
 		// test a service factory which returns wrong object types
 		ServiceExceptionServiceFactory wrongObjectFactory = new ServiceExceptionServiceFactory("A String"); //$NON-NLS-1$
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName()); //$NON-NLS-1$ 
-		ServiceRegistration reg = getContext().registerService(
+		ServiceRegistration< ? > reg = getContext().registerService(
 				Runnable.class.getName(), wrongObjectFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
 				getContext().getBundle(), null, ServiceException.FACTORY_ERROR);
 		getContext().addFrameworkListener(listener);
 		try {
-			ServiceReference[] refs = null;
+			ServiceReference< ? >[] refs = null;
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
@@ -75,15 +75,15 @@ public class ServiceExceptionTests extends OSGiTestCase {
 	public void testServiceException02() {
 		// test a service factory which returns null objects
 		ServiceExceptionServiceFactory nullObjectFactory = new ServiceExceptionServiceFactory(null);
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName()); //$NON-NLS-1$ 
-		ServiceRegistration reg = getContext().registerService(
+		ServiceRegistration< ? > reg = getContext().registerService(
 				Runnable.class.getName(), nullObjectFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
 				getContext().getBundle(), null, ServiceException.FACTORY_ERROR);
 		getContext().addFrameworkListener(listener);
 		try {
-			ServiceReference[] refs = null;
+			ServiceReference< ? >[] refs = null;
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
@@ -117,16 +117,16 @@ public class ServiceExceptionTests extends OSGiTestCase {
 		// test a service factory which throws a RuntimeException
 		RuntimeException cause = new RuntimeException(getName());
 		ServiceExceptionServiceFactory runtimeExceptionFactory = new ServiceExceptionServiceFactory(cause);
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName()); //$NON-NLS-1$ 
-		ServiceRegistration reg = getContext().registerService(
+		ServiceRegistration< ? > reg = getContext().registerService(
 				Runnable.class.getName(), runtimeExceptionFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
 				getContext().getBundle(), cause,
 				ServiceException.FACTORY_EXCEPTION);
 		getContext().addFrameworkListener(listener);
 		try {
-			ServiceReference[] refs = null;
+			ServiceReference< ? >[] refs = null;
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
@@ -160,16 +160,16 @@ public class ServiceExceptionTests extends OSGiTestCase {
 		// test a service factory which throws an Error
 		Error cause = new Error(getName());
 		ServiceExceptionServiceFactory errorFactory = new ServiceExceptionServiceFactory(cause);
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName()); //$NON-NLS-1$ 
-		ServiceRegistration reg = getContext().registerService(
+		ServiceRegistration< ? > reg = getContext().registerService(
 				Runnable.class.getName(), errorFactory, props);
 		ServiceExceptionFrameworkListener listener = new ServiceExceptionFrameworkListener(
 				getContext().getBundle(), cause,
 				ServiceException.FACTORY_EXCEPTION);
 		getContext().addFrameworkListener(listener);
 		try {
-			ServiceReference[] refs = null;
+			ServiceReference< ? >[] refs = null;
 			try {
 				refs = getContext().getServiceReferences(
 						Runnable.class.getName(),
@@ -199,7 +199,7 @@ public class ServiceExceptionTests extends OSGiTestCase {
 		}
 	}
 
-	class ServiceExceptionServiceFactory implements ServiceFactory {
+	class ServiceExceptionServiceFactory implements ServiceFactory<Object> {
 		private final Object serviceOrThrowable;
 		private Error ungetFailure;
 
@@ -207,7 +207,8 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			this.serviceOrThrowable = serviceOrThrowable;
 		}
 
-		public Object getService(Bundle bundle, ServiceRegistration registration) {
+		public Object getService(Bundle bundle,
+				ServiceRegistration<Object> registration) {
 			if (serviceOrThrowable instanceof RuntimeException)
 				throw (RuntimeException) serviceOrThrowable;
 			if (serviceOrThrowable instanceof Error)
@@ -215,7 +216,8 @@ public class ServiceExceptionTests extends OSGiTestCase {
 			return serviceOrThrowable;
 		}
 
-		public synchronized void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+		public synchronized void ungetService(Bundle bundle,
+				ServiceRegistration<Object> registration, Object service) {
 			try {
 				if (serviceOrThrowable instanceof RuntimeException)
 					fail("Unexpected call to ungetService: " + serviceOrThrowable); //$NON-NLS-1$

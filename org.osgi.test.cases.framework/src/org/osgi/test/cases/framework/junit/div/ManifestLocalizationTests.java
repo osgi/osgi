@@ -152,7 +152,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb1 = getContext().installBundle(getWebServer() + "div.tb1.jar");
 		try {
 			tb1.start();
-			Dictionary h = tb1.getHeaders();
+			Dictionary<String,String> h = tb1.getHeaders();
 
 			for (int i = 0; i < tb1_manifestHeadersValues.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -175,7 +175,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 	public void testGetHeaders002() throws Exception {
 
 		Bundle tb8 = getContext().installBundle(getWebServer() + "div.tb8.jar");
-		Dictionary h;
+		Dictionary<String,String> h;
 		try {
 			tb8.start();
 			h = tb8.getHeaders();
@@ -222,7 +222,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		try {
 
 			tb9.start();
-			Dictionary h = tb9.getHeaders();
+			Dictionary<String,String> h = tb9.getHeaders();
 
 			for (int i = 0; i < tb9_manifestHeadersValues_en_US.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -283,7 +283,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		try {
 			tb9.start();
-			Dictionary h = tb9.getHeaders();
+			Dictionary<String,String> h = tb9.getHeaders();
 
 			for (int i = 0; i < tb9_manifestHeadersValues_missingLocale.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -308,7 +308,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		try {
 			tb1.start();
 
-			Dictionary h = tb1.getHeaders("en_US");
+			Dictionary<String,String> h = tb1.getHeaders("en_US");
 			for (int i = 0; i < tb1_manifestHeadersValues.length; i++) {
 				assertEquals("Manifest header localization does not match",
 						tb1_manifestHeadersValues[i], h
@@ -332,7 +332,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb8 = getContext().installBundle(getWebServer() + "div.tb8.jar");
 		try {
 			tb8.start();
-			Dictionary h = tb8.getHeaders("en_US");
+			Dictionary<String,String> h = tb8.getHeaders("en_US");
 
 			for (int i = 0; i < tb8_manifestHeadersValues_default.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -355,7 +355,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		try {
 			tb9.start();
-			Dictionary h = tb9.getHeaders("en");
+			Dictionary<String,String> h = tb9.getHeaders("en");
 
 			for (int i = 0; i < tb9_manifestHeadersValues_en.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -379,7 +379,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		try {
 			tb9.start();
-			Dictionary h = tb9.getHeaders("pt_BR");
+			Dictionary<String,String> h = tb9.getHeaders("pt_BR");
 
 			for (int i = 0; i < tb9_manifestHeadersValues_en_US.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -403,7 +403,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 		Bundle tb9 = getContext().installBundle(getWebServer() + "div.tb9.jar");
 		try {
 			tb9.start();
-			Dictionary h = tb9.getHeaders("en");
+			Dictionary<String,String> h = tb9.getHeaders("en");
 
 			for (int i = 0; i < tb9_manifestHeadersValues_en.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -458,7 +458,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 			// it must first look in the fragment’s host bundle (with the lowest
 			// bundle id) and then look
 			// in the host’s currently attached fragment bundles.
-			Dictionary h = tb14.getHeaders("pt_BR");
+			Dictionary<String,String> h = tb14.getHeaders("pt_BR");
 
 			for (int i = 0; i < tb14_manifestHeadersValues_pt_BR.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -507,7 +507,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 			// When searching for a localization file of a host bundle,
 			// it must first look in the bundle and then look in the currently
 			// attached fragment bundles.
-			Dictionary h = tb9.getHeaders("pt_BR");
+			Dictionary<String,String> h = tb9.getHeaders("pt_BR");
 
 			for (int i = 0; i < tb9_manifestHeadersValues_pt_BR.length; i++) {
 				assertEquals("Manifest header localization does not match",
@@ -545,7 +545,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 			// resolve fragment bundle
 			tb9.start();
 			// manifest localization after bundle is resolved.
-			Dictionary h = tb14.getHeaders("en_US");
+			Dictionary<String,String> h = tb14.getHeaders("en_US");
 			for (int i = 0; i < tb14_manifestHeadersValues_en_US.length; i++) {
 				assertEquals("Manifest header localization does not match",
 						tb14_manifestHeadersValues_en_US[i], h
@@ -582,7 +582,7 @@ public class ManifestLocalizationTests extends DefaultTestBundleControl {
 			// will only include the first host (that is the host bundle with
 			// the
 			// lowest bundle id).
-			Dictionary h = tb14.getHeaders("fr_FR");
+			Dictionary<String,String> h = tb14.getHeaders("fr_FR");
 
 			for (int i = 0; i < tb14_manifestHeadersValues_missingLocale.length; i++) {
 				assertEquals("Manifest header localization does not match",

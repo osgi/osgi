@@ -35,7 +35,7 @@ public abstract class WiringTest extends OSGiTestCase {
 	
 	protected void setUp() throws Exception {
 		bundles.clear();
-		frameworkWiring = (FrameworkWiring) getContext().getBundle(0).adapt(FrameworkWiring.class);
+		frameworkWiring = getContext().getBundle(0).adapt(FrameworkWiring.class);
 	}
 
 	protected void tearDown() throws Exception {

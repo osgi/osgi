@@ -13,3 +13,4 @@ Require-Capability:                      test; filter:="(&(test=aName)(version>=
  test; filter:="(&(version>=1.1)(string.list3= aString )(string.list3= bString )(string.list3= cString ))", \
  test.effective; effective:="active"; filter:="(willResolve=false)", \
  test.no.attrs
+-fixupmessages.empty: The JAR is empty

@@ -18,8 +18,10 @@ package org.osgi.test.cases.framework.junit.frameworkutil;
 
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
+
 import org.osgi.framework.FrameworkUtil;
+
+import junit.framework.TestCase;
 
 public class MatchDNChainTests extends TestCase {
 
@@ -27,7 +29,7 @@ public class MatchDNChainTests extends TestCase {
 		String dn1 = "cn=Bugs Bunny, o=ACME, c=US";
 		String dn2 = "ou = Carrots, cn=Daffy Duck, o=ACME, c=US";
 		String dn3 = "street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR";
-		List chain = new ArrayList();
+		List<String> chain = new ArrayList<>();
 		chain.add(dn2);
 		chain.add(dn1);
 
@@ -126,10 +128,13 @@ public class MatchDNChainTests extends TestCase {
 		assertInvalidMatch("*, cn=Bugs Bunny, o=ACME,", dn);
 	}
 
+	@SuppressWarnings({
+			"rawtypes", "unchecked"
+	})
 	public void testInvalidDNChain() {
 		String pattern = "-";
 
-		assertInvalidMatch(pattern, (List) null);
+		assertInvalidMatch(pattern, (List<String>) null);
 		assertInvalidMatch(pattern, "");
 		assertInvalidMatch(pattern, "*bob");
 		assertInvalidMatch(pattern, ";`´$.,@");
@@ -141,45 +146,48 @@ public class MatchDNChainTests extends TestCase {
 		assertInvalidMatch(pattern, "*");
 		assertInvalidMatch(pattern, "-");
 
-		List bad = new ArrayList();
+		List<Object> bad = new ArrayList<>();
 		bad.add(Boolean.TRUE);
-		assertInvalidMatch(pattern, bad);
+		assertInvalidMatch(pattern, (List) bad);
 	}
 
 	public static void assertMatchDNChain(String pattern, String dn) {
-		List dnChain = new ArrayList();
+		List<String> dnChain = new ArrayList<>();
 		dnChain.add(dn);
 		assertMatchDNChain(pattern, dnChain);
 	}
 
 	public static void assertNotMatchDNChain(String pattern, String dn) {
-		List dnChain = new ArrayList();
+		List<String> dnChain = new ArrayList<>();
 		dnChain.add(dn);
 		assertNotMatchDNChain(pattern, dnChain);
 	}
 
-	public static void assertMatchDNChain(String pattern, List dnChain) {
-		List copy = new ArrayList(dnChain);
+	public static void assertMatchDNChain(String pattern,
+			List<String> dnChain) {
+		List<String> copy = new ArrayList<>(dnChain);
 		assertTrue("did not match", FrameworkUtil.matchDistinguishedNameChain(
 				pattern, dnChain));
 		assertEquals(copy, dnChain);
 	}
 
-	public static void assertNotMatchDNChain(String pattern, List dnChain) {
-		List copy = new ArrayList(dnChain);
+	public static void assertNotMatchDNChain(String pattern,
+			List<String> dnChain) {
+		List<String> copy = new ArrayList<>(dnChain);
 		assertFalse("did match", FrameworkUtil.matchDistinguishedNameChain(
 				pattern, dnChain));
 		assertEquals(copy, dnChain);
 	}
 
 	public static void assertInvalidMatch(String pattern, String dn) {
-		List dnChain = new ArrayList();
+		List<String> dnChain = new ArrayList<>();
 		dnChain.add(dn);
 		assertInvalidMatch(pattern, dnChain);
 	}
 
-	public static void assertInvalidMatch(String pattern, List dnChain) {
-		List copy = dnChain == null ? null : new ArrayList(dnChain);
+	public static void assertInvalidMatch(String pattern,
+			List<String> dnChain) {
+		List<String> copy = dnChain == null ? null : new ArrayList<>(dnChain);
 		try {
 			FrameworkUtil.matchDistinguishedNameChain(pattern, dnChain);
 			fail("invalid pattern or chain");

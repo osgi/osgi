@@ -19,8 +19,10 @@ package org.osgi.test.cases.framework.junit.permissions;
 import java.security.AccessControlException;
 import java.security.PermissionCollection;
 import java.security.Permissions;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.AdminPermission;
@@ -65,14 +67,14 @@ public class PermissionRecursionTests extends PermissionTestCase {
 
 		Bundle b1 = newMockBundle(1, "test.bsn", "test.location", pc);
 		Bundle b2 = newMockBundle(2, "test.bsn", "test2.location", pc);
-		Map m1 = new HashMap();
+		Map<String,Object> m1 = new HashMap<>();
 		m1.put("service.id", new Long(2));
 		m1.put("objectClass", new String[] {"com.foo.Service2"});
-		ServiceReference r1 = newMockServiceReference(b1, m1);
-		Map m2 = new HashMap();
+		ServiceReference< ? > r1 = newMockServiceReference(b1, m1);
+		Map<String,Object> m2 = new HashMap<>();
 		m2.put("service.id", new Long(3));
 		m2.put("objectClass", new String[] {"com.bar.Service2"});
-		ServiceReference r2 = newMockServiceReference(b2, m2);
+		ServiceReference< ? > r2 = newMockServiceReference(b2, m2);
 
 		assertImplies(pc, new ServicePermission(r1, "get"));
 		assertNotImplies(pc, new ServicePermission(r2, "get"));
@@ -113,16 +115,16 @@ public class PermissionRecursionTests extends PermissionTestCase {
 		Bundle b2 = newMockBundle(2, "test.bsn", "test2.location", pc);
 
 		assertImplies(pc, new CapabilityPermission("com.foo",
-				Collections.EMPTY_MAP, b1, "require"));
+				Collections.emptyMap(), b1, "require"));
 		assertNotImplies(pc, new CapabilityPermission("com.bar",
-				Collections.EMPTY_MAP, b2, "require"));
+				Collections.emptyMap(), b2, "require"));
 		assertNotImplies(pc, new CapabilityPermission("*", "require"));
 	}
 
 	public static Bundle newMockBundle(long id, String name, String location,
 			PermissionCollection pc) {
 		MockBundle mock = new MockBundle(id, name, location, pc);
-		Bundle bundle = (Bundle) MockFactory.newMock(Bundle.class, mock);
+		Bundle bundle = MockFactory.newMock(Bundle.class, mock);
 		// set the Bundle object into the mocked bundle
 		mock.setBundle(bundle);
 		return bundle;
@@ -149,10 +151,12 @@ public class PermissionRecursionTests extends PermissionTestCase {
 			this.bundle = bundle;
 		}
 
+		@SuppressWarnings("unused")
 		public long getBundleId() {
 			return id;
 		}
 
+		@SuppressWarnings("unused")
 		public String getLocation() {
 			synchronized (this) {
 				if (recursion > 5) {
@@ -173,12 +177,15 @@ public class PermissionRecursionTests extends PermissionTestCase {
 			}
 		}
 
+		@SuppressWarnings("unused")
 		public String getSymbolicName() {
 			return name;
 		}
 
-		public Map getSignerCertificates(int type) {
-			return Collections.EMPTY_MAP;
+		@SuppressWarnings("unused")
+		public Map<X509Certificate,List<X509Certificate>> getSignerCertificates(
+				int type) {
+			return Collections.emptyMap();
 		}
 	}
 }

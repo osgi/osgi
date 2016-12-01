@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -37,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class TestBundleControl extends DefaultTestBundleControl implements
 		BundleListener, ServiceListener {
-	private Vector			_eventQueue	= new Vector(16);
+	private Vector<Object> _eventQueue = new Vector<>(16);
 
 	/**
 	 * Tests normal Install/Uninstall/start/stop of a bundle.
@@ -274,14 +275,14 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	 */
 	public void testServiceRegistrations() throws Exception {
 		String clazzes[];
-		ServiceRegistration sr;
-		ServiceReference refs[];
-		Hashtable props;
+		ServiceRegistration< ? > sr;
+		ServiceReference< ? > refs[];
+		Hashtable<String,Object> props;
 		boolean found;
 		clazzes = new String[] {TestBundleControl.class.getName(),
 				DefaultTestBundleControl.class.getName(),
 				ServiceListener.class.getName()};
-		props = new Hashtable();
+		props = new Hashtable<>();
 		props.put("PropertyX", "TBC");
 		sr = getContext().registerService(clazzes, this, props);
 		refs = getContext().getServiceReferences(

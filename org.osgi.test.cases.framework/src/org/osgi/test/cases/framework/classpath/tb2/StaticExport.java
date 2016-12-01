@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.classpath.tb2;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  */
@@ -15,6 +16,7 @@ public class StaticExport implements BundleActivator {
 	 * Starts the bundle.
 	 */
 	public void start(BundleContext bc) {
+		@SuppressWarnings("unused")
 		org.osgi.test.cases.framework.classpath.exported.Exported e;
 		e = new org.osgi.test.cases.framework.classpath.exported.Exported();
 	}

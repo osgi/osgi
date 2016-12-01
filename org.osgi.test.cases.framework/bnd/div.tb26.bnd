@@ -17,4 +17,4 @@ Require-Capability: osgi.native; filter:="(|\
  (&(osgi.native.osname~=mac os x)(osgi.native.processor~=x86-64))\
  (&(osgi.native.osname~=mac os x)(osgi.native.processor~=ppc))\
  )"
-
+-fixupmessages.empty: The JAR is empty

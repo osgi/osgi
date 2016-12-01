@@ -6,8 +6,7 @@
  */
 package org.osgi.test.cases.framework.secure.lifecycle.tb10;
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
+import static junit.framework.TestCase.assertNotNull;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -18,13 +17,16 @@ import org.osgi.test.cases.framework.secure.lifecycle.servicereferencegetter.Ser
 import org.osgi.test.cases.framework.secure.lifecycle.servicereferencegetter.TestResult;
 import org.osgi.test.cases.framework.secure.lifecycle.tb5.EventTest;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+
 /**
  * Testing permissions in the framework
  * 
  * @author Ericsson Telecom AB
  */
 public class TestPermission implements ServiceReferenceGetter, TestResult, BundleActivator {
-	ServiceReference	_permServiceRef	= null;
+	ServiceReference< ? >	_permServiceRef	= null;
 	boolean				refSet			= false;
 	BundleContext		bc;
 	Throwable			_result 		= null;
@@ -47,7 +49,8 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 	public synchronized void doTest() {
 		//get the log service
 		try {
-			Assert.assertNotNull("Cannot test without security manager", System.getSecurityManager());
+			assertNotNull("Cannot test without security manager",
+					System.getSecurityManager());
 			//Wait for the service reference to be set
 			while (refSet == false)
 				wait(1000);
@@ -76,7 +79,8 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 	 * get the reference to the permission admin service, which we don't have
 	 * permission to get ourselves
 	 */
-	public synchronized void setServiceReference(ServiceReference serviceReference) {
+	public synchronized void setServiceReference(
+			ServiceReference< ? > serviceReference) {
 		_permServiceRef = serviceReference;
 		refSet = true;
 		notifyAll();
@@ -88,7 +92,7 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//stop
 		try {
 			bundle.stop();
-			Assert.fail("Didn't get security exception in stop(): FAIL");
+			TestCase.fail("Didn't get security exception in stop(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS.
@@ -99,7 +103,7 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//update
 		try {
 			bundle.update();
-			Assert.fail("Didn't get security exception in update(): FAIL");
+			TestCase.fail("Didn't get security exception in update(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS.
@@ -110,7 +114,7 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//start
 		try {
 			bundle.start();
-			Assert.fail("Didn't get security exception in start(): FAIL");
+			TestCase.fail("Didn't get security exception in start(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS
@@ -121,7 +125,7 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//uninstall
 		try {
 			bundle.uninstall();
-			Assert.fail("Didn't get security exception in uninstall(): FAIL");
+			TestCase.fail("Didn't get security exception in uninstall(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS
@@ -132,7 +136,8 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//getHeaders
 		try {
 			bundle.getHeaders();
-			Assert.fail("Didn't get security exception in getHeaders(): FAIL");
+			TestCase.fail(
+					"Didn't get security exception in getHeaders(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS
@@ -143,7 +148,8 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//getLocation
 		try {
 			bundle.getLocation();
-			Assert.fail("Didn't get security exception in getLocation(): FAIL");
+			TestCase.fail(
+					"Didn't get security exception in getLocation(): FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS
@@ -163,7 +169,8 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		}
 		try {
 			bc.registerService(TestPermission.class.getName(), this, null);
-			Assert.fail("Were able to register service without having permissions: FAIL");
+			TestCase.fail(
+					"Were able to register service without having permissions: FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS.
@@ -173,10 +180,11 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		}
 		//getReference
 		try {
-			ServiceReference permissionServiceRef = bc
-					.getServiceReference(PermissionAdmin.class.getName());
+			ServiceReference<PermissionAdmin> permissionServiceRef = bc
+					.getServiceReference(PermissionAdmin.class);
 			if (permissionServiceRef != null) {
-				Assert.fail("Were able to get service refernce to permission admin without permission: FAIL");
+				TestCase.fail(
+						"Were able to get service refernce to permission admin without permission: FAIL");
 			}
 		}
 		catch (Exception e) {
@@ -185,9 +193,10 @@ public class TestPermission implements ServiceReferenceGetter, TestResult, Bundl
 		//getService
 		//We got the service refernce earlier when tb10 had allPermissions
 		try {
-			Assert.assertNotNull("ServiceReference is null!", _permServiceRef);
+			assertNotNull("ServiceReference is null!", _permServiceRef);
 			bc.getService(_permServiceRef);
-			Assert.fail("Were able to get permission admin without permission: FAIL");
+			TestCase.fail(
+					"Were able to get permission admin without permission: FAIL");
 		}
 		catch (SecurityException se) {
 			// do nothing; PASS

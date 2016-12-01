@@ -54,12 +54,12 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 			Bundle tb0 = getContext().installBundle(
 					getWebServer() + "dynpkgimport.tb0.jar");
 			tb0.start();
-			ServiceReference tsR = getContext().getServiceReference(
-					TestService.class.getName());
+			ServiceReference<TestService> tsR = getContext()
+					.getServiceReference(TestService.class);
 			if (tsR == null) {
 				fail("failed to get TestService reference");
 			}
-			TestService ts = (TestService) getContext().getService(tsR);
+			TestService ts = getContext().getService(tsR);
 			if (ts == null) {
 				fail("failed to get TestService");
 			}
@@ -89,12 +89,12 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 			Bundle tb1 = getContext().installBundle(
 					getWebServer() + "dynpkgimport.tb1.jar");
 			tb1.start();
-			ServiceReference tsR = getContext().getServiceReference(
-					TestService.class.getName());
+			ServiceReference<TestService> tsR = getContext()
+					.getServiceReference(TestService.class);
 			if (tsR == null) {
 				fail("failed to get TestService reference");
 			}
-			TestService ts = (TestService) getContext().getService(tsR);
+			TestService ts = getContext().getService(tsR);
 			if (ts == null) {
 				fail("failed to get TestService");
 			}
@@ -118,12 +118,12 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 			Bundle tb2 = getContext().installBundle(
 					getWebServer() + "dynpkgimport.tb2.jar");
 			tb2.start();
-			ServiceReference tsR = getContext().getServiceReference(
-					TestService.class.getName());
+			ServiceReference<TestService> tsR = getContext()
+					.getServiceReference(TestService.class);
 			if (tsR == null) {
 				fail("failed to get TestService reference");
 			}
-			TestService ts = (TestService) getContext().getService(tsR);
+			TestService ts = getContext().getService(tsR);
 			if (ts == null) {
 				fail("failed to get TestService");
 			}
@@ -146,12 +146,12 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 		Bundle tb3 = getContext().installBundle(
 				getWebServer() + "dynpkgimport.tb3.jar");
 		tb3.start();
-		ServiceReference tsR = getContext().getServiceReference(
-				TestService.class.getName());
+		ServiceReference<TestService> tsR = getContext()
+				.getServiceReference(TestService.class);
 		if (tsR == null) {
 			fail("failed to get TestService reference");
 		}
-		TestService ts = (TestService) getContext().getService(tsR);
+		TestService ts = getContext().getService(tsR);
 		if (ts == null) {
 			fail("failed to get TestService");
 		}
@@ -172,12 +172,12 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 		Bundle tb2 = getContext().installBundle(
 				getWebServer() + "dynpkgimport.tb2.jar");
 		tb2.start();
-		ServiceReference tsR = getContext().getServiceReference(
-				TestService.class.getName());
+		ServiceReference<TestService> tsR = getContext()
+				.getServiceReference(TestService.class);
 		if (tsR == null) {
 			fail("failed to get TestService reference");
 		}
-		TestService ts = (TestService) getContext().getService(tsR);
+		TestService ts = getContext().getService(tsR);
 		if (ts == null) {
 			fail("failed to get TestService");
 		}

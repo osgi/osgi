@@ -38,7 +38,7 @@ import org.osgi.test.cases.framework.secure.permissions.util.Util;
  */
 public class RegisterModifyActivator implements BundleActivator {
 
-	ServiceRegistration	sr;
+	ServiceRegistration<IService1> sr;
 
 	/*
 	 * (non-Javadoc)
@@ -51,12 +51,13 @@ public class RegisterModifyActivator implements BundleActivator {
 
 		if (Util.debug)
 			System.out.println("REGISTER BUNDLE is going to start.");
-		final Hashtable props = new Hashtable();
+		final Hashtable<String,Object> props = new Hashtable<>();
 		props.put("segment", "providerA");
 		props.put("vendor", "NTT");
 		String clazz = IService1.class.getName();
 		try {
-			sr = context.registerService(clazz, new IServiceImpl(context),
+			sr = context.registerService(IService1.class,
+					new IServiceImpl(context),
 					props);
 			if (Util.debug)
 				System.out

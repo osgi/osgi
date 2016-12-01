@@ -74,8 +74,9 @@ public class ExtensionBundleTests extends LaunchTest {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			String message = "expected extension bundle to fail install due to lack of permission";
+			Bundle tb11 = null;
 			try {
-				Bundle tb11 = installBundle(framework, "/fragments.tb11.jar");
+				tb11 = installBundle(framework, "/fragments.tb11.jar");
 				// should fail, since extension bundles have to have
 				// AllPermission to be installed
 				DefaultTestBundleControl.failException(message, 
@@ -84,6 +85,10 @@ public class ExtensionBundleTests extends LaunchTest {
 			catch (Exception e) {
 				DefaultTestBundleControl.assertException(message, 
 						BundleException.class, e);
+			} finally {
+				if (tb11 != null) {
+					tb11.uninstall();
+				}
 			}
 		}
 		else {

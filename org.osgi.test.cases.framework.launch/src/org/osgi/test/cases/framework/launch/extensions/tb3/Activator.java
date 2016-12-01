@@ -42,6 +42,7 @@ public class Activator implements BundleActivator {
 	}
 
 	private static List<String> getResults(String test) {
+		@SuppressWarnings("unchecked")
 		Map<String, List<String>> resultMap = (Map<String, List<String>>) System
 				.getProperties().get(RESULTS);
 		if (resultMap == null) {

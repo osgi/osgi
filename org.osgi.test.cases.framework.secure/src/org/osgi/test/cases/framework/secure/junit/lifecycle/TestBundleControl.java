@@ -38,7 +38,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		try {
 			tb.start();
 			tbPerm.start();
-			ServiceReferenceGetter serviceReferenceGetter = (ServiceReferenceGetter) getService(ServiceReferenceGetter.class);
+			ServiceReferenceGetter serviceReferenceGetter = getService(
+					ServiceReferenceGetter.class);
 			serviceReferenceGetter.setServiceReference(getContext()
 					.getServiceReference(PermissionAdmin.class.getName()));
 			Throwable result = ((TestResult) serviceReferenceGetter).get();

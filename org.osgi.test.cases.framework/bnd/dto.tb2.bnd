@@ -2,3 +2,4 @@ Bundle-Name: ${p}.dto.tb2
 Bundle-SymbolicName: ${p}.dto.tb2
 Export-Package: ${p}.dto.dummy2
 Import-Package: ${p}.dto.dummy1
+-fixupmessages.empty: The JAR is empty

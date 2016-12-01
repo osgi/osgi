@@ -16,9 +16,9 @@
 
 package org.osgi.test.cases.framework.secure.wiring.tb3;
 
-import java.util.Arrays;
+import static junit.framework.TestCase.fail;
 
-import junit.framework.Assert;
+import java.util.Arrays;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -28,12 +28,12 @@ import org.osgi.framework.wiring.FrameworkWiring;
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		Bundle b = context.getBundle(0);
-		FrameworkWiring fw = (FrameworkWiring)b.adapt(FrameworkWiring.class);
+		FrameworkWiring fw = b.adapt(FrameworkWiring.class);
 		try {
 			fw.resolveBundles(Arrays.asList(context.getBundles()));
 		}
 		catch (SecurityException e) {
-			Assert.fail("A security exception should not have been thrown");
+			fail("A security exception should not have been thrown");
 		}
 	}
 

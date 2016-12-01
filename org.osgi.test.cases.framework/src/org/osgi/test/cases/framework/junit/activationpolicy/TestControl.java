@@ -213,7 +213,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests the lazy activation policy in relation to the start-level service.
 	 */
 	public void testActivationPolicy04() throws Exception {
-		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel startLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -333,7 +333,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.start(START_ACTIVATION_POLICY) in relation to the start-level service
 	 */
 	public void testActivationPolicy05() throws Exception {
-		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel startLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -342,7 +342,7 @@ public class TestControl extends DefaultTestBundleControl {
 		// make this a persistent start and ignore the activation policy;
 		// this should not activate the bundle because the start-level is not met.
 		tblazy2.start(0);
-		BundleStartLevel tblazy2StartLevel = (BundleStartLevel) tblazy2.adapt(BundleStartLevel.class);
+		BundleStartLevel tblazy2StartLevel = tblazy2.adapt(BundleStartLevel.class);
 		assertTrue("bundle is persistently started.", tblazy2StartLevel.isPersistentlyStarted());
 		assertTrue("bundle is not using activation policy.", !tblazy2StartLevel.isActivationPolicyUsed());
 		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
@@ -453,7 +453,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.start(START_TRANSIENT) in relation to the start-level service
 	 */
 	public void testStartTransient01() throws Exception {
-		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel startLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -565,7 +565,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.stop(STOP_TRANSIENT) in relation to the start-level service
 	 */
 	public void testStopTransient01() throws Exception {
-		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel startLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -580,7 +580,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			// persistently start the bundle
 			tblazy2.start();
-			BundleStartLevel tblazy2StartLevel = (BundleStartLevel) tblazy2.adapt(BundleStartLevel.class);
+			BundleStartLevel tblazy2StartLevel = tblazy2.adapt(BundleStartLevel.class);
 			assertTrue("bundle is persistently started.", tblazy2StartLevel.isPersistentlyStarted());
 
 			// test transient start Bundle.stop(START_TRANSIENT)

@@ -26,11 +26,13 @@ package org.osgi.test.cases.framework.junit.activationpolicy;
 
 import java.util.ArrayList;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.SynchronousBundleListener;
 
 public class SyncEventListenerTestResults extends EventListenerTestResults implements SynchronousBundleListener{
 	private boolean getBundleContext = false;
-	private ArrayList contexts = new ArrayList();
+	private ArrayList<BundleContext>	contexts			= new ArrayList<>();
 
 	public SyncEventListenerTestResults(int mask) {
 		super(mask);
@@ -48,7 +50,7 @@ public class SyncEventListenerTestResults extends EventListenerTestResults imple
 	}
 
 	public synchronized BundleContext[] getContexts() {
-		BundleContext[] results = (BundleContext[]) contexts.toArray(new BundleContext[contexts.size()]);
+		BundleContext[] results = contexts.toArray(new BundleContext[contexts.size()]);
 		contexts.clear();
 		return results;
 	}

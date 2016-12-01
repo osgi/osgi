@@ -303,6 +303,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Class<FrameworkFactory> loadFrameworkFactoryClass(String className)
 			throws ClassNotFoundException {
 		return (Class<FrameworkFactory>) frameworkClassLoader

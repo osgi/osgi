@@ -5,4 +5,5 @@ Bundle-Description: TB28 is part of the DIV test case. This bundle will \
 Bundle-Version: 1.0
 Provide-Capability: osgi.ee; osgi.ee=TestEE
 
--fixupmessages: "osgi.ee namespace must not be specified with generic capabilities"
+-fixupmessages.generic: "osgi.ee namespace must not be specified with generic capabilities"
+-fixupmessages.empty: The JAR is empty

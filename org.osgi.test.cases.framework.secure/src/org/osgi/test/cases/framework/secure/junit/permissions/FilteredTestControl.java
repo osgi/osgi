@@ -99,7 +99,7 @@ public class FilteredTestControl extends OSGiTestCase {
 	// private Bundle registerForServiceRegistrationTestBundle = null;
 	private Bundle				setPermBundle						= null;
 	private Bundle				exportBundle2						= null;
-	private LinkedList			list;
+	private LinkedList<PermissionInfo>	list;
 
 	private static final int	SLEEP_PERIOD_IN_MSEC				= 200;
 
@@ -118,7 +118,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		this.setAllpermission(RESET_PERMISSION_BUNDLE_LOCATION);
 		setPermBundle = this.installBundle(RESET_PERMISSION_BUNDLE_LOCATION);
 		setPermBundle.start();
-		list = new LinkedList();
+		list = new LinkedList<>();
 		this.registerBundle = this.installBundle(REGISTER_BUNDLE_LOCATION);
 		this.registerPluralBundle = this
 				.installBundle(REGISTER_PLURAL_BUNDLE_LOCATION);
@@ -1030,8 +1030,8 @@ public class FilteredTestControl extends OSGiTestCase {
 							default :
 								break;
 						}
+						break;
 					}
-					break;
 				}
 			}
 		};
@@ -1052,7 +1052,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, S_NAME_UTIL_ISERVICE1, "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			fail("Fail to get registered service under multiple name. It MUST succeed.");
 	}
@@ -1068,7 +1069,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "something.else", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			return;
 		fail("Succeed in getting registered service under multiple name. It MUST fail.");
@@ -1086,7 +1088,8 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ ")(vendor=NTT))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			fail("Fail to get registered service under multiple name. It MUST succeed.");
 	}
@@ -1103,7 +1106,8 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ ")(vendor=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			return;
 		fail("Succeed in getting registered service under multiple name. It MUST fail.");
@@ -1121,7 +1125,8 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ this.registerPluralBundle.getSymbolicName() + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			fail("Fail to get registered service under multiple name. It MUST succeed.");
 	}
@@ -1138,7 +1143,8 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ ")(name=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			return;
 		fail("Succeed in getting registered service under multiple name. It MUST fail.");
@@ -1156,7 +1162,8 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			fail("Fail to get registered service under multiple name. It MUST succeed.");
 	}
@@ -1172,7 +1179,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(name=something.else)", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
-		ServiceReference[] ref = registerPluralBundle.getRegisteredServices();
+		ServiceReference< ? >[] ref = registerPluralBundle
+				.getRegisteredServices();
 		if (ref == null || ref.length != 1)
 			return;
 		fail("Succeed in getting registered service under multiple name. It MUST fail.");
@@ -1190,7 +1198,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, S_NAME_UTIL_ISERVICE1, "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length != 1)
 			fail("Fail to getServicesInUse(). It MUST succeed.");
 	}
@@ -1207,7 +1215,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "something.else", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length == 1)
 			return;
 
@@ -1227,7 +1235,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=NTT))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length != 1)
 			fail("Fail to getServicesInUse(). It MUST succeed.");
 	}
@@ -1245,7 +1253,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length == 1)
 			return;
 
@@ -1265,7 +1273,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ this.registerPluralBundle.getSymbolicName() + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length != 1)
 			fail("Fail to getServicesInUse(). It MUST succeed.");
 	}
@@ -1283,7 +1291,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ "something.else" + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length == 1)
 			return;
 
@@ -1303,7 +1311,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, SP, "(location=" + this.registerPluralBundle.getLocation()
 				+ ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length != 1)
 			fail("Fail to getServicesInUse(). It MUST succeed.");
 	}
@@ -1320,7 +1328,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(location=" + "something.else" + ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
-		ServiceReference[] ref = getBundle.getServicesInUse();
+		ServiceReference< ? >[] ref = getBundle.getServicesInUse();
 		if (ref == null || ref.length == 1)
 			return;
 
@@ -1649,11 +1657,12 @@ public class FilteredTestControl extends OSGiTestCase {
     }
 
 	private void printoutHeader(Bundle bundle) {
-		Dictionary headers = bundle.getHeaders();
+		Dictionary<String,String> headers = bundle.getHeaders();
 		System.out.println("bundle=" + bundle);
 
-		for (Enumeration keys = headers.keys(); keys.hasMoreElements();) {
-			Object key = keys.nextElement();
+		for (Enumeration<String> keys = headers.keys(); keys
+				.hasMoreElements();) {
+			String key = keys.nextElement();
 			if (key.equals(Constants.IMPORT_PACKAGE)
 					|| key.equals(Constants.EXPORT_PACKAGE)
 					|| key.equals(Constants.BUNDLE_SYMBOLICNAME))
@@ -2020,6 +2029,7 @@ public class FilteredTestControl extends OSGiTestCase {
 	 * Utility methods.
 	 */
 
+	@SuppressWarnings("unused")
 	private static void sleep() {
 		try {
 			Sleep.sleep(SLEEP_PERIOD_IN_MSEC);
@@ -2030,23 +2040,23 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void setAllpermission(String bundleLocation) {
-		ServiceReference ref = getContext()
-				.getServiceReference(PermissionAdmin.class.getName());
+		ServiceReference<PermissionAdmin> ref = getContext()
+				.getServiceReference(PermissionAdmin.class);
 		if (ref == null) {
 			System.out.println("Fail to get ServiceReference of "
 					+ PermissionAdmin.class.getName());
 			return;
 		}
-		permAdmin = (PermissionAdmin) getContext().getService(ref);
+		permAdmin = getContext().getService(ref);
 		PermissionInfo[] pisAllPerm = new PermissionInfo[1];
 		pisAllPerm[0] = new PermissionInfo("(" + AllPermission.class.getName()
 				+ ")");
 		permAdmin.setPermissions(bundleLocation, pisAllPerm);
 	}
 
-	private void setBundlePermission(Bundle b, List list) {
+	private void setBundlePermission(Bundle b, List<PermissionInfo> list) {
 		PermissionInfo[] pis = new PermissionInfo[list.size()];
-		pis = (PermissionInfo[]) list.toArray(pis);
+		pis = list.toArray(pis);
 		permAdmin.setPermissions(b.getLocation(), pis);
 	}
 
@@ -2166,18 +2176,19 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private PermissionAdmin getPermissionAdmin() {
-		ServiceReference ref = getContext()
-				.getServiceReference(PermissionAdmin.class.getName());
+		ServiceReference<PermissionAdmin> ref = getContext()
+				.getServiceReference(PermissionAdmin.class);
 		if (ref == null)
 			throw new IllegalStateException("Fail to get ServiceReference of "
 					+ PermissionAdmin.class.getName());
 
-		PermissionAdmin permissionAdmin = (PermissionAdmin) getContext()
+		PermissionAdmin permissionAdmin = getContext()
 				.getService(ref);
 		return permissionAdmin;
 	}
 
-	private void add(List permissionsInfos, String clazz, String name, String actions) {
+	private void add(List<PermissionInfo> permissionsInfos, String clazz,
+			String name, String actions) {
 		permissionsInfos.add(new PermissionInfo(clazz, name, actions));
 	}
 

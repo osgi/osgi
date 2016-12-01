@@ -38,7 +38,7 @@ import org.osgi.test.cases.framework.classloading.exports.listener.AllServiceLis
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration			sr;
+	private ServiceRegistration<AllServiceListenerTester>	sr;
 	private AllServiceListenerTester	serviceListenerTester;
 
 	/**
@@ -59,7 +59,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		serviceListenerTester = new UnfilteredAllServiceListenerTesterImpl();
 
-		sr = context.registerService(AllServiceListenerTester.class.getName(),
+		sr = context.registerService(AllServiceListenerTester.class,
 				serviceListenerTester, null);
 
 		// add unfiltered listener with a filter that can never match

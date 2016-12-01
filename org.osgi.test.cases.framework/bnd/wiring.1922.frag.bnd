@@ -8,3 +8,5 @@ Fragment-Host: ${p}.wiring.1922;\
  filter:="(x=y)";\
  foo:=bar
 
+-fixupmessages.unknown: Unknown directive * in Fragment-Host
+-fixupmessages.empty: The JAR is empty

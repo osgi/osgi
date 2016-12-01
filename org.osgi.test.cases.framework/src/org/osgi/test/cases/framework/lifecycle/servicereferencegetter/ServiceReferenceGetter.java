@@ -6,7 +6,7 @@
  */
 package org.osgi.test.cases.framework.lifecycle.servicereferencegetter;
 
-import org.osgi.framework.*;
+import org.osgi.framework.ServiceReference;
 
 /**
  *  
@@ -15,5 +15,5 @@ public interface ServiceReferenceGetter {
 	/**
 	 *  
 	 */
-	public void setServiceReference(ServiceReference serviceReference);
+	public void setServiceReference(ServiceReference< ? > serviceReference);
 }

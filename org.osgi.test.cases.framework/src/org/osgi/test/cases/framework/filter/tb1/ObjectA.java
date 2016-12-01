@@ -33,7 +33,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * 
  * @author $Id$
  */
-public class ObjectA implements Comparable {
+public class ObjectA implements Comparable<ObjectA> {
 	String _value;
 	
 	public ObjectA(String value) {
@@ -45,7 +45,7 @@ public class ObjectA implements Comparable {
 	 * @return Always returns 0
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object object) {
+	public int compareTo(ObjectA object) {
 		return 0;
 	}
 }

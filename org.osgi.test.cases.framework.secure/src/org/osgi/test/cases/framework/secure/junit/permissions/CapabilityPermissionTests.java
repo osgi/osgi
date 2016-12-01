@@ -30,6 +30,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
@@ -42,10 +43,10 @@ import org.osgi.test.support.OSGiTestCase;
 
 public class CapabilityPermissionTests extends OSGiTestCase {
 	private static final PermissionInfo[] allPermissions = new PermissionInfo[] {new PermissionInfo(AllPermission.class.getName(), "*", "*")};
-	private final List bundles = new ArrayList();
+	private final List<Bundle>								bundles			= new ArrayList<>();
 	private FrameworkWiring frameworkWiring;
 	private ConditionalPermissionAdmin condPermAdmin;
-	private ServiceReference condPermAdminRef;
+	private ServiceReference<ConditionalPermissionAdmin>	condPermAdminRef;
 	private String CONDITION_PREFIX;
 
 	public Bundle install(String bundle) {
@@ -64,23 +65,25 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 
 	protected void setUp() throws Exception {
 		bundles.clear();
-		frameworkWiring = (FrameworkWiring) getContext().getBundle(0).adapt(FrameworkWiring.class);
+		frameworkWiring = getContext().getBundle(0).adapt(FrameworkWiring.class);
 		condPermAdminRef = getContext().getServiceReference(ConditionalPermissionAdmin.class);
 		assertNotNull("No ConditionalPermisionAdmin service", condPermAdminRef);
-		condPermAdmin = (ConditionalPermissionAdmin) getContext().getService(condPermAdminRef);
+		condPermAdmin = getContext().getService(condPermAdminRef);
 		assertNotNull("No ConditionalPermisionAdmin service", condPermAdmin);
 		CONDITION_PREFIX = getName();
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
 		ConditionalPermissionInfo info = condPermAdmin.newConditionalPermissionInfo(CONDITION_PREFIX + ".default", null, allPermissions, ConditionalPermissionInfo.ALLOW);
-		List infos = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> infos = update
+				.getConditionalPermissionInfos();
 		infos.add(info);
 		update.commit();
 	}
 
 	protected void tearDown() throws Exception {
-		for (Iterator iBundles = bundles.iterator(); iBundles.hasNext();)
+		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles
+				.hasNext();)
 			try {
-				((Bundle) iBundles.next()).uninstall();
+				iBundles.next().uninstall();
 			} catch (BundleException e) {
 				// nothing
 			} catch (IllegalStateException e) {
@@ -90,9 +93,11 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		bundles.clear();
 		if (condPermAdmin != null) {
 			ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-			List infos = update.getConditionalPermissionInfos();
-			for(Iterator iInfos = infos.iterator(); iInfos.hasNext();) {
-				ConditionalPermissionInfo info = (ConditionalPermissionInfo) iInfos.next();
+			List<ConditionalPermissionInfo> infos = update
+					.getConditionalPermissionInfos();
+			for (Iterator<ConditionalPermissionInfo> iInfos = infos
+					.iterator(); iInfos.hasNext();) {
+				ConditionalPermissionInfo info = iInfos.next();
 				if (info.getName() != null && info.getName().startsWith(CONDITION_PREFIX))
 					iInfos.remove();
 			}
@@ -105,7 +110,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		}
 	}
 
-	private void refreshBundles(List bundles) {
+	private void refreshBundles(List<Bundle> bundles) {
 		final boolean[] done = new boolean[] {false};
 		FrameworkListener listener = new FrameworkListener() {
 			public void frameworkEvent(FrameworkEvent event) {
@@ -134,7 +139,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 	public void testImpliedCapabilityPermission() {
 		// install bundle with osgi.ee requirement
 		Bundle requirer = install("resolver.tb2.jar");
-		List bundles = Arrays.asList(new Bundle[] {requirer});
+		List<Bundle> bundles = Arrays.asList(requirer);
 		assertTrue(frameworkWiring.resolveBundles(bundles));
 
 		// set no capability permission
@@ -153,7 +158,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 	public void testCapabilityPermission() {
 		Bundle provider = install("resolver.tb1.jar");
 		Bundle requirer = install("resolver.tb5.jar");
-		List testBundles = Arrays.asList(new Bundle[]{provider, requirer});
+		List<Bundle> testBundles = Arrays.asList(provider, requirer);
 
 		// simple test with all permissions
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
@@ -170,8 +175,9 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		assertEquals("Wrong state for provider", Bundle.RESOLVED, provider.getState());
 		assertEquals("Wrong state for requirer", Bundle.INSTALLED, requirer.getState());
 		// make sure the wiring does not indicate the capability is provided.
-		BundleWiring providerWiring = (BundleWiring) provider.adapt(BundleWiring.class);
-		List capabilities = providerWiring.getCapabilities("test");
+		BundleWiring providerWiring = provider.adapt(BundleWiring.class);
+		List<BundleCapability> capabilities = providerWiring
+				.getCapabilities("test");
 		assertEquals("Wrong number of capabilities", 0, capabilities.size());
 
 		// now grant permission to provide all
@@ -187,7 +193,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		assertEquals("Wrong state for provider", Bundle.RESOLVED, provider.getState());
 		assertEquals("Wrong state for requirer", Bundle.INSTALLED, requirer.getState());
 		// make sure the capability is provided.
-		providerWiring = (BundleWiring) provider.adapt(BundleWiring.class);
+		providerWiring = provider.adapt(BundleWiring.class);
 		capabilities = providerWiring.getCapabilities("test");
 		assertEquals("Wrong number of capabilities", 1, capabilities.size());
 
@@ -247,9 +253,11 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 	private void setPermissions(String location, PermissionInfo capabilityPermission) {
 		String name = CONDITION_PREFIX + '.' + location;
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List infos = update.getConditionalPermissionInfos();
-		for (Iterator iInfos = infos.iterator(); iInfos.hasNext();) {
-			ConditionalPermissionInfo info = (ConditionalPermissionInfo) iInfos.next();
+		List<ConditionalPermissionInfo> infos = update
+				.getConditionalPermissionInfos();
+		for (Iterator<ConditionalPermissionInfo> iInfos = infos
+				.iterator(); iInfos.hasNext();) {
+			ConditionalPermissionInfo info = iInfos.next();
 			if (info.getName() != null && info.getName().startsWith(name))
 				iInfos.remove();
 		}

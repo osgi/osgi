@@ -17,6 +17,7 @@
 
 package javax.security.auth.x500;
 public final class X500Principal implements java.io.Serializable, java.security.Principal {
+	private static final long serialVersionUID = 1L;
 	public X500Principal(java.io.InputStream var0) { }
 	public X500Principal(java.lang.String var0) { }
 	public X500Principal(byte[] var0) { }

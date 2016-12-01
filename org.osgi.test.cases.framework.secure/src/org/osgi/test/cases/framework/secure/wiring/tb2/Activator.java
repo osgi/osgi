@@ -16,7 +16,8 @@
 
 package org.osgi.test.cases.framework.secure.wiring.tb2;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.fail;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -30,7 +31,7 @@ public class Activator implements BundleActivator {
             fw.refreshBundles(null);
 		}
 		catch (SecurityException e) {
-			Assert.fail("A security exception should not have been thrown");
+			fail("A security exception should not have been thrown");
 		}
 	}
 

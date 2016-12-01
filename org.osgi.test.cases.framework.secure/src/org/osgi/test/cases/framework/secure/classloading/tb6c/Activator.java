@@ -38,7 +38,7 @@ import org.osgi.test.cases.framework.secure.classloading.exports.service.SomeSer
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration	sr;
+	private ServiceRegistration<SomeService> sr;
 
 	/**
 	 * Creates a new instance of Activator
@@ -55,7 +55,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		sr = context.registerService(SomeService.class.getName(),
+		sr = context.registerService(SomeService.class,
 				new SomeServiceImpl(context.getBundle()), null);
 	}
 

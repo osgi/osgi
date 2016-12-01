@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Hashtable;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -48,15 +49,15 @@ import org.osgi.test.support.wiring.Wiring;
 public class TestControl extends DefaultTestBundleControl implements
 		BundleListener, FrameworkListener {
 
-	private Hashtable			events		= new Hashtable();
+	private Hashtable<String,Bundle>	events		= new Hashtable<>();
 	private static final String	SEPARATOR	= "#";
-	private ServiceRegistration	bundleReg;
+	private ServiceRegistration<Bundle>	bundleReg;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		Hashtable props = new Hashtable();
+		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("bundle", "fragments.tests");
-		bundleReg = getContext().registerService(Bundle.class.getName(),
+		bundleReg = getContext().registerService(Bundle.class,
 				getContext().getBundle(), props);
 	}
 
@@ -109,8 +110,8 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @spec Bundle.loadClass(String)
 	 */
 	public void testAppendClasspath01() throws Exception {
-		Class classObj1;
-		Class classObj2;
+		Class< ? > classObj1;
+		Class< ? > classObj2;
 
 		// Install fragment bundle
 		Bundle tb1b = getContext().installBundle(
@@ -323,9 +324,9 @@ public class TestControl extends DefaultTestBundleControl implements
 			Wiring.resolveBundles(getContext(), tb3d);
 			tb3a.start();
 			tb3c.start();
-			Class a = tb3a
+			Class< ? > a = tb3a
 					.loadClass("org.osgi.test.cases.framework.fragments.tb3d.SomeClass");
-			Class c = tb3c
+			Class< ? > c = tb3c
 					.loadClass("org.osgi.test.cases.framework.fragments.tb3d.SomeClass");
 			assertEquals("class from fragment does not have the same name", a
 					.getName(), c.getName());
@@ -751,7 +752,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @spec Bundle.uninstall()
 	 */
 	public void testFragmentBundleDetach() throws Exception {
-		URL url;
 		InputStream ins;
 		BufferedReader bufr;
 		String line;
@@ -859,7 +859,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @param eventClass Class of the event object
 	 * @param eventType Event type published
 	 */
-	public void addEvent(Bundle bundle, Class eventClass, int eventType) {
+	public void addEvent(Bundle bundle, Class< ? > eventClass, int eventType) {
 		trace("Captured " + eventClass.getName() + " for bundle "
 				+ bundle.getSymbolicName() + " of type " + eventType);
 		String key = bundle.getSymbolicName() + SEPARATOR
@@ -882,7 +882,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @param eventType Event type published
 	 * @return
 	 */
-	public boolean hasEventOccurred(Bundle bundle, Class eventClass,
+	public boolean hasEventOccurred(Bundle bundle, Class< ? > eventClass,
 			int eventType) {
 		boolean retVal = false;
 		String key = bundle.getSymbolicName() + SEPARATOR

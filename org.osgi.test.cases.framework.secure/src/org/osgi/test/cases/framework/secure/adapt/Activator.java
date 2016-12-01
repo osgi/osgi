@@ -17,7 +17,7 @@ package org.osgi.test.cases.framework.secure.adapt;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.framework.secure.junit.adaptions.AdaptTestService;
+import org.osgi.test.cases.framework.secure.junit.adaptions.export.AdaptTestService;
 
 public class Activator implements BundleActivator {
 

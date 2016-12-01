@@ -15,8 +15,9 @@
  */
 package org.osgi.test.cases.framework.junit.version;
 
-import junit.framework.TestCase;
 import org.osgi.framework.Version;
+
+import junit.framework.TestCase;
 
 /**
  * Tests for the Version class.
@@ -363,6 +364,7 @@ public class VersionTests extends TestCase {
 				"", version.getQualifier());
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void testCompareTo() {
 		/**
 		 * Test the method compareTo() with first version number less than
@@ -453,10 +455,11 @@ public class VersionTests extends TestCase {
 		 */
 		Object incorrect = "";
 		version1 = new Version(1, 1, 1);
-		Comparable testVersion = version1;
 		try {
-			@SuppressWarnings({"unused", "unchecked"})
-			int result = testVersion.compareTo(incorrect);
+			@SuppressWarnings({
+					"unused", "unchecked"
+			})
+			int result = ((Comparable) version1).compareTo(incorrect);
 			fail("Testing the method compareTo() with an incorrect object");
 		}
 		catch (ClassCastException ex) {

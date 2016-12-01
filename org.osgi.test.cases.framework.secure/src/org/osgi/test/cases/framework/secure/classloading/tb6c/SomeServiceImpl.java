@@ -39,6 +39,7 @@ import org.osgi.test.cases.framework.secure.classloading.exports.service.SomeSer
  */
 public class SomeServiceImpl implements SomeService {
 
+	@SuppressWarnings("unused")
 	private Bundle	registeringBundle;
 
 	/**
@@ -59,12 +60,8 @@ public class SomeServiceImpl implements SomeService {
 		permission = new SomePermission("", "");
 		AccessController.checkPermission(permission);
 
-		if (true) {
-			throw new IllegalStateException(
-					"The permission class is loaded from the incorrect bundle");
-		}
-
-		return registeringBundle;
+		throw new IllegalStateException(
+				"The permission class is loaded from the incorrect bundle");
 	}
 
 }

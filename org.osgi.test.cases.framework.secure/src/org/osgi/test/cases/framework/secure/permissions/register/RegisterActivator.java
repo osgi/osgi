@@ -49,7 +49,7 @@ public class RegisterActivator implements BundleActivator {
 		if (Util.debug)
 			System.out.println("REGISTER BUNDLE is going to start.");
 
-		final Hashtable props = new Hashtable();
+		final Hashtable<String,Object> props = new Hashtable<>();
 		props.put("segment", "providerA");
 		props.put("vendor", "NTT");
 		props.put("id", "id.NTT");

@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.StringTokenizer;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -370,7 +371,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		Bundle tb5a;
 		Method method;
 		Object service;
-		ServiceReference serviceReference;
+		ServiceReference< ? > serviceReference;
 
 		tb1 = installBundle("classloading.tb1.jar");
 		tb1.start();
@@ -439,7 +440,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		Bundle tb5b;
 		Method method;
 		Object service;
-		ServiceReference serviceReference;
+		ServiceReference< ? > serviceReference;
 
 		tb1 = installBundle("classloading.tb1.jar");
 		tb1.start();
@@ -508,7 +509,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		Bundle tb5c;
 		Method method;
 		Object service;
-		ServiceReference serviceReference;
+		ServiceReference< ? > serviceReference;
 
 		tb1 = installBundle("classloading.tb1.jar");
 		tb1.start();
@@ -611,7 +612,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		Bundle tb5d;
 		Method method;
 		Object service;
-		ServiceReference serviceReference;
+		ServiceReference< ? > serviceReference;
 
 		tb1 = installBundle("classloading.tb1.jar");
 		tb1.start();
@@ -802,7 +803,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		Bundle tb8b;
 		Bundle tb8c;
 		Bundle tb8d;
-		Class clazz;
+		Class< ? > clazz;
 
 		tb8a = installBundle("classloading.tb8a.jar");
 		tb8b = installBundle("classloading.tb8b.jar");
@@ -1105,7 +1106,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	public void testClassLoadingSearchOrder006() throws Exception {
 		Bundle tb9a;
 		Bundle tb9b;
-		Class clazz;
+		Class< ? > clazz;
 
 		tb9a = installBundle("classloading.tb9a.jar");
 

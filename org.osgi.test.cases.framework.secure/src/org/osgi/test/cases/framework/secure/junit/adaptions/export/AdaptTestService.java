@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.framework.secure.junit.adaptions;
+package org.osgi.test.cases.framework.secure.junit.adaptions.export;
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
+import static junit.framework.TestCase.*;
 
 import org.osgi.framework.Bundle;
+
+import junit.framework.AssertionFailedError;
 
 public class AdaptTestService<T> {
 	private final Class<T> serviceClazz;
@@ -32,7 +33,7 @@ public class AdaptTestService<T> {
 		this.adaptBundle = adaptBundle;
 	}
 
-	AssertionFailedError getError() {
+	public AssertionFailedError getError() {
 		return error;
 	}
 
@@ -48,11 +49,17 @@ public class AdaptTestService<T> {
 		error = null;
 		try {
 			T adapted = adaptBundle.adapt(serviceClazz);
-			Assert.assertTrue("Expected a security exception adapting: " + serviceClazz, hasPermission);
-			Assert.assertNotNull("Adapted type is null: " + serviceClazz.getName(), adapted);	
-			Assert.assertTrue("Wrong adapted type: " + adapted.getClass(), serviceClazz.isAssignableFrom(adapted.getClass()));
+			assertTrue(
+					"Expected a security exception adapting: " + serviceClazz,
+					hasPermission);
+			assertNotNull("Adapted type is null: " + serviceClazz.getName(),
+					adapted);
+			assertTrue("Wrong adapted type: " + adapted.getClass(),
+					serviceClazz.isAssignableFrom(adapted.getClass()));
 		} catch (SecurityException e) {
-			Assert.assertFalse("Expected a security exception adapting: " + serviceClazz, hasPermission);
+			assertFalse(
+					"Expected a security exception adapting: " + serviceClazz,
+					hasPermission);
 		}
 	}
 }

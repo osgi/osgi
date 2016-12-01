@@ -26,7 +26,7 @@ package org.osgi.test.cases.framework.junit.activationpolicy;
 
 import java.util.ArrayList;
 public class TestResults {
-	ArrayList events = new ArrayList();
+	ArrayList<Object> events = new ArrayList<>();
 	
 	synchronized public void addEvent(Object event) {
 		events.add(event);

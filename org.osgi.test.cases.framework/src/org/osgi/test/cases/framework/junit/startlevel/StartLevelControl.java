@@ -28,6 +28,7 @@ package org.osgi.test.cases.framework.junit.startlevel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -118,9 +119,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testInitialBundleStartLevel() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<>();
 
 		fsl.setInitialBundleStartLevel(sl_20);
 		assertEquals("getInitialBundleStartLevel", sl_20, fsl
@@ -170,9 +171,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testStartOrder() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<>();
 
 		fsl.setInitialBundleStartLevel(sl_20);
 		fsl.setStartLevel(sl_10, (FrameworkListener[]) null);
@@ -330,9 +331,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testSetBundleStartLevel() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<>();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
@@ -396,9 +397,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testPersistentlyStarted() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<>();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
@@ -481,9 +482,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testExceptionInActivator() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedFrameworkError1 = new ArrayList();
-		ArrayList expectedFrameworkError2 = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<FrameworkEvent> expectedFrameworkError1 = new ArrayList<>();
+		ArrayList<FrameworkEvent> expectedFrameworkError2 = new ArrayList<>();
 
 		FrameworkEventCollector fec2 = new FrameworkEventCollector(
 				FrameworkEvent.STARTLEVEL_CHANGED | FrameworkEvent.ERROR);
@@ -555,8 +556,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testActivatorChangeBundleStartLevel() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleEvents = new ArrayList<>();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
@@ -586,9 +587,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testActivatorChangeStartLevel() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<>();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),

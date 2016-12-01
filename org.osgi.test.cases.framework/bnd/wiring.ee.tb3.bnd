@@ -2,3 +2,5 @@ Bundle-Name:                             ${p}.wiring.ee.tb3
 Bundle-SymbolicName:                     ${p}.wiring.ee.tb3
 Bundle-Version:                          1.0.0
 Bundle-RequiredExecutionEnvironment:     AA/BB
+-fixupmessages.bree: Invalid value for Bundle-RequiredExecutionEnvironment
+-fixupmessages.empty: The JAR is empty

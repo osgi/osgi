@@ -2,6 +2,6 @@
 Bundle-Name:                             ${p}.hooks.tb4
 Bundle-SymbolicName:                     ${p}.hooks.tb4
 Bundle-Version:                          4
-Private-Package:                         ${p}.hooks.tb
 
 Export-Package: ${p}.hooks.tb;version="1.0.0";-noimport:=true
+-fixupmessages.empty: The JAR is empty
