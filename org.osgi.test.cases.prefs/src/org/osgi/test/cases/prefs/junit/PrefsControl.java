@@ -20,7 +20,7 @@ public class PrefsControl extends DefaultTestBundleControl {
 	private PreferencesService	prefs;
 
 	protected void setUp() {
-		prefs = (PreferencesService) getService(PreferencesService.class);
+		prefs = getService(PreferencesService.class);
 		assertNotNull(prefs);
 	}
 
@@ -477,7 +477,7 @@ public class PrefsControl extends DefaultTestBundleControl {
 			theNode.put("somekey", "somevalue");
 			theNode.put("someotherkey", "someothervalue");
 
-			List keys = Arrays.asList(theNode.keys());
+			List<String> keys = Arrays.asList(theNode.keys());
 			assertEquals(2, keys.size());
 			assertTrue(keys.contains("somekey"));
 			assertTrue(keys.contains("someotherkey"));
