@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.serviceloader.junit.TestBridge;
+import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.cases.serviceloader.spi.ColorProvider;
 
 /**
@@ -30,7 +30,7 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
     /**
      * 134.4.2 look up the Provider from the service registry.
      * 
-     * @see org.osgi.test.cases.serviceloader.junit.TestBridge#run()
+     * @see org.osgi.test.cases.serviceloader.export.TestBridge#run()
      */
     public void run(String result) throws Exception {
         ServiceReference<ColorProvider> reference = this.context.getServiceReference(ColorProvider.class);

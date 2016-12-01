@@ -3,7 +3,7 @@
 
 Bundle-Description: Test Bundle for ServiceLoader
 
-Export-Package: ${p}.junit
+Export-Package: ${p}.export
 
 Bundle-Category: osgi,test
 
@@ -45,3 +45,5 @@ Include-Resource                    = \
 Test-Cases							= ${testcases}
 
 -runproperties: ${runproperties}
+
+-fixupmessages.directive: "Unknown directive register: in Provide-Capability"

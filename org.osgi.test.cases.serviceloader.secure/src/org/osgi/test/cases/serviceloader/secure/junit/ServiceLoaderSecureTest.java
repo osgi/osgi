@@ -12,6 +12,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
+import org.osgi.test.cases.serviceloader.secure.export.TestBridge;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.sleep.Sleep;
 

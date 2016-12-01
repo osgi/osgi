@@ -18,6 +18,7 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
+import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.support.OSGiTestCase;
 
 /**

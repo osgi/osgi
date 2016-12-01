@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.serviceloader.junit.TestBridge;
+import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.cases.serviceloader.spi.ColorProvider;
 
 /**
@@ -28,7 +28,7 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
     /**
      * Use the ServiceLoader to obtain the provider.
      * 
-     * @see org.osgi.test.cases.serviceloader.junit.TestBridge#run(java.lang.String)
+     * @see org.osgi.test.cases.serviceloader.export.TestBridge#run(java.lang.String)
      */
 	public void run(String result) throws Exception {
 		System.out.println("client run - begin");

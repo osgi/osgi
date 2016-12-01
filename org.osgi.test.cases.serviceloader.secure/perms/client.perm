@@ -7,7 +7,7 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
-(org.osgi.framework.ServicePermission "${p}.junit.TestBridge" "register")
+(org.osgi.framework.ServicePermission "${p}.export.TestBridge" "register")
 (org.osgi.framework.CapabilityPermission "osgi.extender" "require")
 (org.osgi.framework.CapabilityPermission "osgi.serviceloader" "require")
 

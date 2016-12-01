@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.cases.serviceloader.junit.TestBridge;
+import org.osgi.test.cases.serviceloader.export.TestBridge;
 import org.osgi.test.cases.serviceloader.spi.ColorProvider;
 
 /**

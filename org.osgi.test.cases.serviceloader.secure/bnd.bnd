@@ -3,7 +3,7 @@
 
 Bundle-Description: Secure Test Bundle for ServiceLoader
 
-Export-Package: ${p}.junit
+Export-Package: ${p}.export
 
 Bundle-Vendor: TIBCO Software Inc.
 Bundle-DocURL: http://www.osgi.org/
@@ -36,3 +36,5 @@ Include-Resource                    = \
 Test-Cases							= ${testcases}
 
 -runproperties: ${runsecureproperties}
+
+-fixupmessages.directive: "Unknown directive register: in Provide-Capability"

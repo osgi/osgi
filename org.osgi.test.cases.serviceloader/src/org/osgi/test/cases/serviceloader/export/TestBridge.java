@@ -3,7 +3,7 @@
  * All Rights Reserved.
  */
 
-package org.osgi.test.cases.serviceloader.junit;
+package org.osgi.test.cases.serviceloader.export;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>

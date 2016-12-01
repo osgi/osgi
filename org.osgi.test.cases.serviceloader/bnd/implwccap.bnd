@@ -10,7 +10,7 @@ Provide-Capability: osgi.serviceloader; \
  provider="CT"; \
  .hint="by TIBCO"; \
  osgi.serviceloader="${p}.spi.ColorProvider"; \
- register:="*"
+ register:=""
 
 Include-Resource = \
  {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
