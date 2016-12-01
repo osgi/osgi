@@ -1,16 +1,16 @@
 package org.osgi.test.cases.converter.junit;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
-import org.osgi.util.function.Function;
 
-import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
+import org.osgi.util.function.Function;
 
 import junit.framework.TestCase;
 
@@ -43,7 +43,12 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 			new Function<String,Date>(){
 				@Override
 				public Date apply(String s) {
-					return sdf.parse(s);
+						try {
+							return sdf.parse(s);
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						return null;
 				}}
 		); 
 		
@@ -83,7 +88,12 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 			new Function<String,Date>(){
 				@Override
 				public Date apply(String s) {
-					return sdf.parse(s);
+						try {
+							return sdf.parse(s);
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						return null;
 				}}
 		); 
 		Converter c = cb.build();
@@ -119,7 +129,7 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 				@Override
 				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
 					return ((long)v.getFirstInt() << 32)
-							| ((long)v.getSecondInt() & 0xFFFFFFFFL);
+							| (v.getSecondInt() & 0xFFFFFFFFL);
 				}}, 
 			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
 				@Override
@@ -214,7 +224,7 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 				@Override
 				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
 					return ((long)v.getFirstInt() << 32)
-							| ((long)v.getSecondInt() & 0xFFFFFFFFL);
+							| (v.getSecondInt() & 0xFFFFFFFFL);
 				}}, 
 			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
 				@Override
@@ -228,9 +238,9 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		Long longConverted = cb.build().convert(myImplementation).to(Long.class);
 		
 		//which one is expected ?
-		assertTrue(((long)myImplementation.hashCode()) == longConverted);
-		assertTrue(((long)((myImplementation.getFirstInt() << 16) 
-		| myImplementation.getSecondInt())) == longConverted);
+		assertTrue((myImplementation.hashCode()) == longConverted);
+		assertTrue(((myImplementation.getFirstInt() << 16) 
+		| myImplementation.getSecondInt()) == longConverted);
 		assertTrue(myImplementation.getLong() == longConverted);
 	}
 }
