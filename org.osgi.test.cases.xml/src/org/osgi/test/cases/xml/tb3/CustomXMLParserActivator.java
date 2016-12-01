@@ -5,15 +5,16 @@ import java.util.Hashtable;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Constants;
 import org.osgi.util.xml.XMLParserActivator;
 
+import junit.framework.TestCase;
+
 public class CustomXMLParserActivator extends XMLParserActivator {
-	public void setSAXProperties(SAXParserFactory factory, Hashtable props) {
+	public void setSAXProperties(SAXParserFactory factory,
+			Hashtable<String,Object> props) {
 		if ((factory instanceof SimpleSAXParserFactory) == false) {
-			Assert.fail(
+			TestCase.fail(
 					"factory is not a SimpleSAXParserFactory");
 		}
 		super.setSAXProperties(factory, props);
@@ -21,9 +22,10 @@ public class CustomXMLParserActivator extends XMLParserActivator {
 		props.put("marsupial", "kangaroo");
 	}
 
-	public void setDOMProperties(DocumentBuilderFactory factory, Hashtable props) {
+	public void setDOMProperties(DocumentBuilderFactory factory,
+			Hashtable<String,Object> props) {
 		if ((factory instanceof SimpleDocumentBuilderFactory) == false) {
-			Assert.fail(
+			TestCase.fail(
 					"factory is not a SimpleDocumentBuilderFactory");
 		}
 		super.setDOMProperties(factory, props);

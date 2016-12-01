@@ -29,3 +29,4 @@ Test-Cases							= ${testcases}
     org.osgi.util.xml; version=latest
 
 -runproperties = ${runproperties}
+-fixupmessages.activator: "Bundle-Activator * is being imported into the bundle"

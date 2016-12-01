@@ -24,9 +24,13 @@
  */
 package org.osgi.test.cases.xml.junit;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -43,18 +47,19 @@ public class XMLControl extends DefaultTestBundleControl {
 	 * capabilities
 	 */
 	public void testSAXParserFactories() throws Exception {
-		ServiceReference[] references = getContext().getServiceReferences(
-				SAXParserFactory.class.getName(), null);
-		if (references == null) {
+		Collection<ServiceReference<SAXParserFactory>> references = getContext()
+				.getServiceReferences(SAXParserFactory.class, null);
+		if (references.isEmpty()) {
 			log("[WARNING: No SAXParserFactories found; testSAXParserFactories will not run]");
 			return;
 		}
-		for (int i = 0; i < references.length; i++) {
-			checkSAXParserFactory(references[i]);
+		for (ServiceReference<SAXParserFactory> reference : references) {
+			checkSAXParserFactory(reference);
 		}
 	}
 
-	private void checkSAXParserFactory(ServiceReference reference)
+	private void checkSAXParserFactory(
+			ServiceReference<SAXParserFactory> reference)
 			throws Exception {
 		log("[Found: " + summarize(reference) + "]");
 		Boolean ns = (Boolean) reference
@@ -65,7 +70,7 @@ public class XMLControl extends DefaultTestBundleControl {
 				.getProperty(XMLParserActivator.PARSER_VALIDATING);
 		boolean validating = Boolean.TRUE.equals(v);
 		log("[Validating? " + validating + "]");
-		SAXParserFactory factory = (SAXParserFactory) getContext().getService(
+		SAXParserFactory factory = getContext().getService(
 				reference);
 		try {
 			factory.setNamespaceAware(namespaceAware);
@@ -85,18 +90,19 @@ public class XMLControl extends DefaultTestBundleControl {
 	 * capabilities
 	 */
 	public void testDocumentBuilderFactories() throws Exception {
-		ServiceReference[] references = getContext().getServiceReferences(
-				DocumentBuilderFactory.class.getName(), null);
-		if (references == null) {
+		Collection<ServiceReference<DocumentBuilderFactory>> references = getContext()
+				.getServiceReferences(DocumentBuilderFactory.class, null);
+		if (references.isEmpty()) {
 			log("[WARNING: No DocumentBuilderFactories found; testDocumentBuilderFactories will not run]");
 			return;
 		}
-		for (int i = 0; i < references.length; i++) {
-			checkDocumentBuilderFactory(references[i]);
+		for (ServiceReference<DocumentBuilderFactory> reference : references) {
+			checkDocumentBuilderFactory(reference);
 		}
 	}
 
-	private void checkDocumentBuilderFactory(ServiceReference reference)
+	private void checkDocumentBuilderFactory(
+			ServiceReference<DocumentBuilderFactory> reference)
 			throws Exception {
 		log("[Found: " + summarize(reference) + "]");
 		Boolean ns = (Boolean) reference
@@ -107,7 +113,7 @@ public class XMLControl extends DefaultTestBundleControl {
 				.getProperty(XMLParserActivator.PARSER_VALIDATING);
 		boolean validating = Boolean.TRUE.equals(v);
 		log("[Validating? " + validating + "]");
-		DocumentBuilderFactory factory = (DocumentBuilderFactory) getContext()
+		DocumentBuilderFactory factory = getContext()
 				.getService(reference);
 		try {
 			factory.setNamespaceAware(namespaceAware);
@@ -132,7 +138,7 @@ public class XMLControl extends DefaultTestBundleControl {
 		Bundle tb1 = installBundle("tb1.jar");
 		try {
 			tb1.start();
-			ServiceReference[] references = getServiceReferences(
+			ServiceReference< ? >[] references = getServiceReferences(
 					SAXParserFactory.class.getName(), tb1);
 			assertEquals("Wrong number of services registered", 4,
 					references.length); // Issue 153
@@ -189,7 +195,7 @@ public class XMLControl extends DefaultTestBundleControl {
 		Bundle tb2 = installBundle("tb2.jar");
 		try {
 			tb2.start();
-			ServiceReference[] references = getServiceReferences(
+			ServiceReference< ? >[] references = getServiceReferences(
 					DocumentBuilderFactory.class.getName(), tb2);
 			assertEquals("Wrong number of services registered", 4,
 					references.length); // Issue 153
@@ -242,12 +248,12 @@ public class XMLControl extends DefaultTestBundleControl {
 		Bundle tb3 = installBundle("tb3.jar");
 		try {
 			// Check the SAXParserFactory first
-			ServiceReference[] references = getServiceReferences(
+			ServiceReference< ? >[] references = getServiceReferences(
 					SAXParserFactory.class.getName(), tb3);
 			assertEquals(
 					"There should be just one SAX parser, but there isn't", 1,
 					references.length);
-			ServiceReference ref = references[0];
+			ServiceReference< ? > ref = references[0];
 			checkProperties(ref, true, true);
 			assertEquals("service.description property has the wrong value",
 					"A simple SAX parser", ref
@@ -277,12 +283,12 @@ public class XMLControl extends DefaultTestBundleControl {
 	 * Verifies that the properties that should be set by the XMLParserActivator
 	 * are set and that they have appropriate values.
 	 */
-	private void checkProperties(ServiceReference reference,
+	private void checkProperties(ServiceReference< ? > reference,
 			boolean validating, boolean namespaceAware) throws Exception {
 		log("[Checking: " + summarize(reference) + "]");
 		assertNotNull("service.pid property is not set", reference
 				.getProperty(Constants.SERVICE_PID));
-		ServiceReference[] references = getContext().getServiceReferences(
+		ServiceReference< ? >[] references = getContext().getServiceReferences(
                 (String) null,
 				"(service.pid=" + reference.getProperty(Constants.SERVICE_PID)
 						+ ")");
@@ -301,7 +307,7 @@ public class XMLControl extends DefaultTestBundleControl {
 				new Boolean(namespaceAware), ns);
 	}
 
-	private String summarize(ServiceReference reference) {
+	private String summarize(ServiceReference< ? > reference) {
 		StringBuffer buffer = new StringBuffer();
 		Object service = getContext().getService(reference);
 		try {
@@ -336,20 +342,20 @@ public class XMLControl extends DefaultTestBundleControl {
 	 * Filters the service references from the OSGi registry and returns only
 	 * those that were registered by the given bundle.
 	 */
-	private ServiceReference[] getServiceReferences(String clazz, Bundle bundle)
+	private ServiceReference< ? >[] getServiceReferences(String clazz,
+			Bundle bundle)
 			throws Exception {
-		ServiceReference[] references = getContext().getServiceReferences(
+		ServiceReference< ? >[] references = getContext().getServiceReferences(
 				clazz, null);
-		Vector v = new Vector(references.length);
-		if (references != null) {
-			for (int i = 0; i < references.length; i++) {
-				if (references[i].getBundle() == bundle) {
-					v.addElement(references[i]);
-				}
+		if (references == null) {
+			return new ServiceReference< ? >[0];
+		}
+		List<ServiceReference< ? >> v = new ArrayList<>(references.length);
+		for (int i = 0; i < references.length; i++) {
+			if (references[i].getBundle() == bundle) {
+				v.add(references[i]);
 			}
 		}
-		ServiceReference[] result = new ServiceReference[v.size()];
-		v.copyInto(result);
-		return result;
+		return v.toArray(new ServiceReference< ? >[0]);
 	}
 }
