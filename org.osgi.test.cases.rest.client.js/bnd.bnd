@@ -40,3 +40,5 @@ Test-Cases              = ${testcases}
 #  rest.ct.validate.xmls=false,\
 #  rest.ct.base.uri="http://localhost:8888,\
 #  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+
+-fixupmessages.extends: While traversing the type tree while searching EXTENDS
