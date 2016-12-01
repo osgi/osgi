@@ -34,6 +34,7 @@ import java.util.stream.Collector;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.TimeoutException;
 
 /**
  * A Push Stream fulfills the same role as the Java 8 stream but it reverses the
@@ -146,8 +147,9 @@ public interface PushStream<T> extends AutoCloseable {
 	PushStream<T> limit(Duration maxTime);
 
 	/**
-	 * Automatically close the channel if no events are received for the
-	 * indicated length of time
+	 * Automatically fail the channel if no events are received for the
+	 * indicated length of time. If the timeout is reached then a failure event
+	 * containing a {@link TimeoutException} will be sent.
 	 * 
 	 * @param idleTime The length of time that the stream should remain open
 	 *            when no events are being received.

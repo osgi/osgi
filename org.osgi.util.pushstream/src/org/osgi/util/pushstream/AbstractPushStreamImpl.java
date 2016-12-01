@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.TimeoutException;
 import org.osgi.util.pushstream.PushEvent.EventType;
 
 abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
@@ -410,7 +411,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 			scheduler.schedule(() -> check(lastTime, timeout),
 					timeout - elapsed, NANOSECONDS);
 		} else {
-			close();
+			close(PushEvent.error(new TimeoutException()));
 		}
 	}
 
