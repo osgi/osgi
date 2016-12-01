@@ -7,4 +7,6 @@ Provide-Capability: osgi.unresolvable
 Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -buildpath = \
+    osgi.core; version=5, \
+    osgi.annotation; version=6.0.1, \
     org.osgi.service.metatype; version=latest
