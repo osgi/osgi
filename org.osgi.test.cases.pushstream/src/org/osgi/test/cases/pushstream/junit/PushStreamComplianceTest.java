@@ -13,7 +13,7 @@ import junit.framework.TestCase;
  * Section 706.3 The Push Stream
  */
 @SuppressWarnings({
-		"boxing", "rawtypes", "hiding", "unchecked"
+		"boxing", "rawtypes", "unchecked"
 })
 public abstract class PushStreamComplianceTest extends TestCase {
 

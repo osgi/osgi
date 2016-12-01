@@ -10,7 +10,7 @@ import org.osgi.util.promise.Promise;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
 
-import junit.framework.Assert;
+import junit.framework.TestCase;
 
 /**
  * Section 706.3 The Push Stream
@@ -44,8 +44,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(5, done);
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(5, done);
 	}
 
 	/**
@@ -73,13 +73,14 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
+		@SuppressWarnings("unused")
 		ExtGeneratorStatus status = gen.status();
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(5, done);
-		Assert.assertTrue(gen.fixedBackPressure());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(5, done);
+		TestCase.assertTrue(gen.fixedBackPressure());
 		// what becomes the returned back pressure ?
-		// Assert.assertEquals(5, status.bp);
+		// TestCase.assertEquals(5, status.bp);
 	}
 
 	/**
@@ -101,8 +102,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(gen.fixedBackPressure());
-		Assert.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
+		TestCase.assertTrue(gen.fixedBackPressure());
+		TestCase.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
 				Arrays.asList(p.getValue()));
 	}
 
@@ -128,8 +129,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(gen.fixedBackPressure());
-		Assert.assertEquals(10, (int) p.getValue().get());
+		TestCase.assertTrue(gen.fixedBackPressure());
+		TestCase.assertEquals(10, (int) p.getValue().get());
 	}
 
 	/**
@@ -159,8 +160,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(Arrays.asList(0, 1, 2, 3, 4), p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(Arrays.asList(0, 1, 2, 3, 4), p.getValue());
 	}
 
 	/**
@@ -188,8 +189,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(0, (int) p.getValue().get());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(0, (int) p.getValue().get());
 	}
 
 	/**
@@ -215,8 +216,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(4, (int) p.getValue().get());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(4, (int) p.getValue().get());
 	}
 
 	/**
@@ -238,8 +239,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(5l, (long) p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(5l, (long) p.getValue());
 	}
 
 	/**
@@ -265,8 +266,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertFalse(p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertFalse(p.getValue());
 
 		p = ps.allMatch(i -> {
 			return i.intValue() > -1;
@@ -278,8 +279,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertTrue(p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertTrue(p.getValue());
 	}
 
 	/**
@@ -307,8 +308,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertTrue(p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertTrue(p.getValue());
 	}
 
 	/**
@@ -331,8 +332,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertFalse(p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertFalse(p.getValue());
 
 		p = ps.noneMatch(i -> {
 			return i.intValue() < 0;
@@ -344,8 +345,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertTrue(p.getValue());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertTrue(p.getValue());
 	}
 
 	/**
@@ -369,8 +370,8 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertEquals(0, (int) p.getValue().get());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertEquals(0, (int) p.getValue().get());
 
 		gen = new ExtGenerator(0);
 		ps = new PushStreamProvider().createStream(gen);
@@ -383,7 +384,7 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		Assert.assertTrue(p.isDone());
-		Assert.assertFalse(p.getValue().isPresent());
+		TestCase.assertTrue(p.isDone());
+		TestCase.assertFalse(p.getValue().isPresent());
 	}
 }
