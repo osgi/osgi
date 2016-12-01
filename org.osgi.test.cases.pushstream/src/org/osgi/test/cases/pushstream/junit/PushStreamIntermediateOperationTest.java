@@ -544,7 +544,7 @@ public class PushStreamIntermediateOperationTest
 		assertNotNull(failure[0]);
 		assertEquals(TimeoutException.class, failure[0].getClass());
 		assertFalse(gen.closeCalled);
-		assertEquals(PushEvent.EventType.ERROR, status.event.getType());
+		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
 
 	/**
