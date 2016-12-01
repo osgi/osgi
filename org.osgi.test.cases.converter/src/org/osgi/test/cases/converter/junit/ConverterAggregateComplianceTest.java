@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
+import org.osgi.util.function.Function;
 
 import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;

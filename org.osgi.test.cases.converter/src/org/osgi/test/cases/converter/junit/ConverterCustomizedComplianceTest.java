@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
-import java.util.function.Function;
+import org.osgi.util.function.Function;
 
 import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;
