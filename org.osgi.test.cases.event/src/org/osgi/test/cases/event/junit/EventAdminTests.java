@@ -24,12 +24,11 @@
  */
 package org.osgi.test.cases.event.junit;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
@@ -66,7 +65,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		tb1.start();
 		tb2 = installBundle("tb2.jar");
 		tb2.start();
-		eventAdmin = (EventAdmin) getService(EventAdmin.class);
+		eventAdmin = getService(EventAdmin.class);
 	}
 
 	/**
@@ -96,23 +95,26 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * @specificationSection system.bundle
 	 */
 	public void testInstallation() throws Exception {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 		assertNotNull("TBCService service in tb1 should be registered",
 				tbcService1);
 		trackerProvider1.close();
 
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider2 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb2.Activator", null);
 		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+		TBCService tbcService2 = trackerProvider2.getService();
 		assertNotNull("TBCService service in tb2 should be registered",
 				tbcService2);
 		trackerProvider2.close();
 
-		ServiceReference[] eventAdminSRs = getContext().getServiceReferences(
+		ServiceReference< ? >[] eventAdminSRs = getContext()
+				.getServiceReferences(
 				EventAdmin.class.getName(), null);
 		if (eventAdminSRs != null) {
 			assertEquals(
@@ -127,15 +129,17 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * listeners).
 	 */
 	public void testSendEvent() { // TC4
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider2 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb2.Activator", null);
 		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+		TBCService tbcService2 = trackerProvider2.getService();
 
 		String[] topics;
 		topics = new String[] { "org/osgi/test/*", "org/osgi/newtest1/*",
@@ -159,7 +163,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event event;
 		for (int i = 0; i < events.length; i++) {
-			event = new Event(events[i], (Dictionary) new Hashtable());
+			event = new Event(events[i],
+					(Dictionary<String, ? >) new Hashtable<String,Object>());
 			eventAdmin.sendEvent(event);
 			pass("before 1");
 			assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
@@ -175,15 +180,17 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * listeners).
 	 */
 	public void testPostEvent() { // TC5
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider2 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb2.Activator", null);
 		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+		TBCService tbcService2 = trackerProvider2.getService();
 
 		String[] topics = new String[] { "test/*" };
 		String[] delivery = new String[] {EventConstants.DELIVERY_ASYNC_ORDERED};
@@ -193,7 +200,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
 			events[i] = new Event("test/Event" + i,
-					(Dictionary) new Hashtable());
+					(Dictionary<String, ? >) new Hashtable<String,Object>());
 		}
 
 		for (int i = 0; i < events.length; i++) {
@@ -205,8 +212,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		} catch (InterruptedException e) {
 		}
 
-		Vector tbc1Events = tbcService1.getLastReceivedEvents();
-		Vector tbc2Events = tbcService2.getLastReceivedEvents();
+		List<Event> tbc1Events = tbcService1.getLastReceivedEvents();
+		List<Event> tbc2Events = tbcService2.getLastReceivedEvents();
 		String message = "Events should be recieved in the same order as they are post ";
 
 		if (tbc1Events == null || tbc1Events.size() == 0) {
@@ -218,7 +225,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 		Event event;
 		for (int i = 0; i < tbc1Events.size(); i++) {
-			event = (Event) tbc1Events.elementAt(i);
+			event = tbc1Events.get(i);
 			if (event == null) {
 				fail("tbc1: Event with topic [test/Event" + i
 						+ "] not recieved");
@@ -226,7 +233,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 			assertEquals(message, "test/Event" + i, event.getTopic());
 		}
 		for (int i = 0; i < tbc2Events.size(); i++) {
-			event = (Event) tbc2Events.elementAt(i);
+			event = tbc2Events.get(i);
 			if (event == null) {
 				fail("tbc2: Event with topic [test/Event" + i
 						+ "] not recieved");
@@ -242,15 +249,17 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * listeners).
 	 */
 	public void testPostEventUnordered() { // TC5
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider2 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb2.Activator", null);
 		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+		TBCService tbcService2 = trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
 		String[] delivery = new String[] {EventConstants.DELIVERY_ASYNC_UNORDERED};
@@ -260,7 +269,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
 			events[i] = new Event("test/Event" + i,
-					(Dictionary) new Hashtable());
+					(Dictionary<String, ? >) new Hashtable<String,Object>());
 		}
 
 		for (int i = 0; i < events.length; i++) {
@@ -274,8 +283,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 			// ignored
 		}
 
-		Vector tbc1Events = tbcService1.getLastReceivedEvents();
-		Vector tbc2Events = tbcService2.getLastReceivedEvents();
+		List<Event> tbc1Events = tbcService1.getLastReceivedEvents();
+		List<Event> tbc2Events = tbcService2.getLastReceivedEvents();
 
 		if (tbc1Events == null || tbc1Events.size() == 0) {
 			fail("tbc1: No events recived");
@@ -366,15 +375,17 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * threads (if they match of the listeners).
 	 */
 	private void testMultiThreads(final int count, final String method) {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider2 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb2.Activator", null);
 		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+		TBCService tbcService2 = trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
 		tbcService1.setProperties(topics,
@@ -385,7 +396,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		Event[] events = new Event[count];
 		for (int i = 0; i < events.length; i++) {
 			events[i] = new Event("test/Event" + i,
-					(Dictionary) new Hashtable());
+					(Dictionary<String, ? >) new Hashtable<String,Object>());
 		}
 
 		MultiThread[] mpts = new MultiThread[events.length];
@@ -436,8 +447,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 			// ignored
 		}
 
-		Vector tbc1Events = tbcService1.getLastReceivedEvents();
-		Vector tbc2Events = tbcService2.getLastReceivedEvents();
+		List<Event> tbc1Events = tbcService1.getLastReceivedEvents();
+		List<Event> tbc2Events = tbcService2.getLastReceivedEvents();
 
 		if (tbc1Events == null || tbc1Events.size() == 0) {
 			fail("tbc1: No events received");
@@ -491,15 +502,16 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * An implementation passes this test if an event is received on the topic.
 	 */
 	public void testEventTopicsPropertyString() {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 		String topic = "org/osgi/test/Event";
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(EventConstants.EVENT_TOPIC, topic);
 		tbcService1.setProperties(properties);
-		Event event = new Event(topic, (Dictionary)null);
+		Event event = new Event(topic, (Dictionary<String, ? >) null);
 		eventAdmin.sendEvent(event);
 		assertEvent(event, tb1, tbcService1, true);
 		trackerProvider1.close();
@@ -510,19 +522,20 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * An implementation passes this test if an event is received on each topic.
 	 */
 	public void testEventTopicsPropertyStringArray() {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		TBCService tbcService1 = trackerProvider1.getService();
 		String[] topics = new String[] {
 				"org/osgi/test/Event1",
 				"org/osgi/test/Event2"
 		};
-		Dictionary properties = new Hashtable();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(EventConstants.EVENT_TOPIC, topics);
 		tbcService1.setProperties(properties);
 		for (int i = 0; i < topics.length; i++) {
-			Event event = new Event(topics[i], (Dictionary)null);
+			Event event = new Event(topics[i], (Dictionary<String, ? >) null);
 			eventAdmin.sendEvent(event);
 			assertEvent(event, tb1, tbcService1, true);
 		}
@@ -534,19 +547,20 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * An implementation passes this test if an event is received on each topic.
 	 */
 	public void testEventTopicsPropertyStringCollection() {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
-		Collection topics = new ArrayList(3);
-		topics.add("org/osgi/test/Event1");
-		topics.add("org/osgi/test/Event2");
-		topics.add("org/osgi/test/Event3");
-		Dictionary properties = new Hashtable();
+		TBCService tbcService1 = trackerProvider1.getService();
+		Collection<String> topics = Arrays.asList("org/osgi/test/Event1",
+				"org/osgi/test/Event2",
+				"org/osgi/test/Event3");
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(EventConstants.EVENT_TOPIC, topics);
 		tbcService1.setProperties(properties);
-		for (Iterator i = topics.iterator(); i.hasNext();) {
-			Event event = new Event((String)i.next(), (Dictionary)null);
+		for (String topic : topics) {
+			Event event = new Event(topic,
+					(Dictionary<String, ? >) null);
 			eventAdmin.sendEvent(event);
 			assertEvent(event, tb1, tbcService1, true);
 		}
@@ -558,14 +572,15 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * to an EventHandler listening to topic a/b/c/*.
 	 */
 	public void testEventDeliveryForWildcardTopic1() {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
-		Dictionary properties = new Hashtable();
+		TBCService tbcService1 = trackerProvider1.getService();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(EventConstants.EVENT_TOPIC, "a/b/c/*");
 		tbcService1.setProperties(properties);
-		Event event = new Event("a/b/c", (Dictionary) null);
+		Event event = new Event("a/b/c", (Dictionary<String, ? >) null);
 		eventAdmin.sendEvent(event);
 		assertEvent(event, tb1, tbcService1, false);
 		trackerProvider1.close();
@@ -576,17 +591,18 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * "a/b/c/d" to an EventHandler listening to topics "a/b/c" and "a/b/c/*".
 	 */
 	public void testEventDeliveryForWildcardTopic2() {
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+		ServiceTracker<TBCService,TBCService> trackerProvider1 = new ServiceTracker<>(
+				getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
-		Dictionary properties = new Hashtable();
+		TBCService tbcService1 = trackerProvider1.getService();
+		Dictionary<String,Object> properties = new Hashtable<>();
 		properties.put(EventConstants.EVENT_TOPIC, new String[] {"a/b/c", "a/b/c/*"});
 		tbcService1.setProperties(properties);
-		Event event = new Event("a/b/c", (Dictionary) null);
+		Event event = new Event("a/b/c", (Dictionary<String, ? >) null);
 		eventAdmin.sendEvent(event);
 		assertEvent(event, tb1, tbcService1, true);
-		event = new Event("a/b/c/d", (Dictionary) null);
+		event = new Event("a/b/c/d", (Dictionary<String, ? >) null);
 		eventAdmin.sendEvent(event);
 		assertEvent(event, tb1, tbcService1, true);
 		trackerProvider1.close();

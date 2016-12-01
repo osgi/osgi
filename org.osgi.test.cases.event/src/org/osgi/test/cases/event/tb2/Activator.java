@@ -25,10 +25,11 @@
 
 package org.osgi.test.cases.event.tb2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -48,8 +49,8 @@ import org.osgi.test.cases.event.service.TBCService;
 public class Activator implements BundleActivator, TBCService, EventHandler {
   
   private BundleContext context;
-  private Vector lastEvents = null;
-  private ServiceRegistration serviceReg;
+	private List<Event>			lastEvents	= null;
+	private ServiceRegistration< ? >	serviceReg;
   private String[] topics;
   
   /**
@@ -80,7 +81,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @see org.osgi.test.cases.event.service.TBCService#setTopics(java.lang.String[])
    */
 	public void setProperties(String[] topics, String[] delivery) {
-    Hashtable ht = new Hashtable();
+		Hashtable<String,Object> ht = new Hashtable<>();
 	  if (topics.length == 1) {
 		  ht.put(EventConstants.EVENT_TOPIC, topics[0]);
 	  }
@@ -108,15 +109,16 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
 	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
 	 * @see org.osgi.test.cases.event.service.TBCService#setProperties(Dictionary)
 	 */
-	public void setProperties(Dictionary properties) {
+	public void setProperties(Dictionary<String, ? > properties) {
 		Object topics = properties.get(EventConstants.EVENT_TOPIC);
 		if (topics instanceof String)
 			this.topics = new String[]{(String)topics};
 		else if (topics instanceof String[])
 			this.topics = (String[])topics;
 		else if (topics instanceof Collection/*<String>*/) {
-			Collection/*<String>*/ collection = (Collection/*<String>*/)topics;
-			this.topics = (String[])collection.toArray(new String[collection.size()]);
+			@SuppressWarnings("unchecked")
+			Collection<String> collection = (Collection<String>) topics;
+			this.topics = collection.toArray(new String[0]);
 		}
 		else
 			this.topics = null;
@@ -142,9 +144,9 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    */
   public synchronized void handleEvent(Event event) {
     if (lastEvents == null) {
-      lastEvents = new Vector();
+			lastEvents = new ArrayList<>();
     }
-    lastEvents.addElement(event);
+		lastEvents.add(event);
   }
   
   /**
@@ -153,8 +155,8 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    */
   public synchronized Event getLastReceivedEvent() {
     if (lastEvents == null || lastEvents.size() < 1) return null;
-    Event event = (Event) lastEvents.lastElement();
-    lastEvents.removeAllElements();
+		Event event = lastEvents.get(lastEvents.size() - 1);
+		lastEvents.clear();
     return event;
   }
   
@@ -162,11 +164,11 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * Returns the last received events and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
-  public synchronized Vector getLastReceivedEvents() {
+	public synchronized List<Event> getLastReceivedEvents() {
 		if (lastEvents == null || lastEvents.size() < 1)
 			return null;
-    Vector events = (Vector) lastEvents.clone();
-    lastEvents.removeAllElements();
+		List<Event> events = new ArrayList<>(lastEvents);
+		lastEvents.clear();
     return events;
   }
 }

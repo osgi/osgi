@@ -26,7 +26,7 @@
 package org.osgi.test.cases.event.service;
 
 import java.util.Dictionary;
-import java.util.Vector;
+import java.util.List;
 
 import org.osgi.service.event.Event;
 
@@ -52,7 +52,7 @@ public interface TBCService {
 	 * @param properties The service properties to register.
 	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
 	 */
-	public void setProperties(Dictionary properties);
+	public void setProperties(Dictionary<String, ? > properties);
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.
@@ -72,5 +72,5 @@ public interface TBCService {
    * Returns the last received events and then elements in the vector with last events are removed.
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
-  public Vector getLastReceivedEvents();
+	public List<Event> getLastReceivedEvents();
 }

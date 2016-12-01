@@ -34,12 +34,12 @@ public class EventTests extends OSGiTestCase {
 		String[] illegalTopics = new String[] {"", "*", "/error_topic",
 				"//error_topic1", "é/error_topic2", "topic/error_topic3/",
 				"error_topic&", "topic//error-topic4", "topic\\error_topic5"};
-		Hashtable properties = new Hashtable();
+		Hashtable<String,Object> properties = new Hashtable<>();
 		// illegal topics tested
 		for (int i = 0; i < illegalTopics.length; i++) {
 			String topic = illegalTopics[i];
 			try {
-				new Event(topic, (Dictionary) properties);
+				new Event(topic, (Dictionary<String, ? >) properties);
 				fail("Excepted IllegalArgumentException for topic:[" + topic
 						+ "]");
 			}
@@ -59,7 +59,7 @@ public class EventTests extends OSGiTestCase {
 			String topic = legalTopics[i];
 			Event event = null;
 			try {
-				event = new Event(topic, (Dictionary) null);
+				event = new Event(topic, (Dictionary<String, ? >) null);
 			}
 			catch (Throwable e) {
 				fail("Exception in event construction with topic:[" + topic
@@ -78,26 +78,29 @@ public class EventTests extends OSGiTestCase {
 	public void testProperties() throws Exception {
 		assertConstant("event.topics", "EVENT_TOPIC", EventConstants.class);
 		String t1 = "a/b";
-		Map m1 = new HashMap();
+		Map<Object,Object> m1 = new HashMap<>();
 		m1.put("foo", "bar");
 		String[] a1 = new String[] {"foo", "bar"};
 		m1.put("baz", a1);
 		m1.put(Boolean.TRUE, "baz"); // non-string key must not cause error
 		m1.put("event.topics", "b/a"); // event.topics in properties is
 										// overridden
-		Hashtable m2 = new Hashtable();
+		Hashtable<String,Object> m2 = new Hashtable<>();
 		m2.put("foo", "bar");
 		m2.put("baz", a1);
 		m2.put("event.topics", "b/a"); // event.topics in properties is
 										// overridden
-		Dictionary m3 = new Hashtable();
+		Dictionary<String,Object> m3 = new Hashtable<>();
 		m3.put("foo", "bar");
 		m3.put("baz", a1);
 		m3.put("event.topics", "b/a"); // event.topics in properties is
 										// overridden
 
-		Event e1 = new Event(t1, m1);
-		Event e2 = new Event(t1, (Dictionary) m2);
+		@SuppressWarnings({
+				"rawtypes", "unchecked"
+		})
+		Event e1 = new Event(t1, (Map) m1);
+		Event e2 = new Event(t1, (Dictionary<String, ? >) m2);
 		Event e3 = new Event(t1, m3);
 
 		assertEquals("topic not set", new String(t1), e1.getTopic());
@@ -149,24 +152,24 @@ public class EventTests extends OSGiTestCase {
 
 	public void testEventsEquals() {
 		String t1 = "a/b";
-		Map m1 = new HashMap();
+		Map<String,Object> m1 = new HashMap<>();
 		m1.put("foo", "bar");
 		m1.put("baz", new String[] {"foo", "bar"});
 		m1.put("event.topics", "b/a"); // event.topics in properties is
 		// overridden
-		Hashtable m2 = new Hashtable();
+		Hashtable<String,Object> m2 = new Hashtable<>();
 		m2.put("foo", "bar");
 		m2.put("baz", new String[] {"foo", "bar"});
 		m2.put("event.topics", "b/a"); // event.topics in properties is
 		// overridden
-		Dictionary m3 = new Hashtable();
+		Dictionary<String,Object> m3 = new Hashtable<>();
 		m3.put("foo", "bar");
 		m3.put("baz", new String[] {"foo", "bar"});
 		m3.put("event.topics", "b/a"); // event.topics in properties is
 		// overridden
 
 		Event e1 = new Event(t1, m1);
-		Event e2 = new Event(t1, (Dictionary) m2);
+		Event e2 = new Event(t1, (Dictionary<String, ? >) m2);
 		Event e3 = new Event(t1, m3);
 
 		assertFalse("events equal", e1.equals(e2));
@@ -187,20 +190,23 @@ public class EventTests extends OSGiTestCase {
 
 	public void testContainsProperty() {
 		String t1 = "a/b";
-		Map m1 = new HashMap();
+		Map<Object,Object> m1 = new HashMap<>();
 		m1.put("foo", null);
 		String[] a1 = new String[] {"foo", "bar"};
 		m1.put("baz", a1);
 		m1.put(Boolean.TRUE, "baz"); // non-string key must not cause error
-		Hashtable m2 = new Hashtable();
+		Hashtable<String,Object> m2 = new Hashtable<>();
 		m2.put("foo", "bar");
 		m2.put("baz", a1);
-		Dictionary m3 = new Hashtable();
+		Dictionary<String,Object> m3 = new Hashtable<>();
 		m3.put("foo", "bar");
 		m3.put("baz", a1);
 
-		Event e1 = new Event(t1, m1);
-		Event e2 = new Event(t1, (Dictionary) m2);
+		@SuppressWarnings({
+				"unchecked", "rawtypes"
+		})
+		Event e1 = new Event(t1, (Map) m1);
+		Event e2 = new Event(t1, (Dictionary<String, ? >) m2);
 		Event e3 = new Event(t1, m3);
 		assertTrue("foo property not in properties", e1.containsProperty("foo"));
 		assertTrue("foo property not in properties", e2.containsProperty("foo"));
@@ -216,7 +222,7 @@ public class EventTests extends OSGiTestCase {
 
 	public void testEventProperties() throws Exception {
 		String t1 = "a/b";
-		Map m1 = new HashMap();
+		Map<Object,Object> m1 = new HashMap<>();
 		m1.put("foo", "bar");
 		String[] a1 = new String[] {"foo", "bar"};
 		m1.put("baz", a1);
@@ -224,8 +230,14 @@ public class EventTests extends OSGiTestCase {
 		m1.put("event.topics", "b/a"); // event.topics in properties is
 		// overridden
 
-		EventProperties p1 = new EventProperties(m1);
-		EventProperties p2 = new EventProperties(m1);
+		@SuppressWarnings({
+				"unchecked", "rawtypes"
+		})
+		EventProperties p1 = new EventProperties((Map) m1);
+		@SuppressWarnings({
+				"unchecked", "rawtypes"
+		})
+		EventProperties p2 = new EventProperties((Map) m1);
 
 		assertTrue("eventproperties not equal", p1.equals(p2));
 		assertTrue("eventproperties not equal", p2.equals(p1));
@@ -263,7 +275,11 @@ public class EventTests extends OSGiTestCase {
 		}
 
 		try {
-			p1.putAll(m1);
+			@SuppressWarnings({
+					"rawtypes", "unchecked"
+			})
+			Map<String, ? > m12 = (Map) m1;
+			p1.putAll(m12);
 			fail("did not throw exception");
 		}
 		catch (UnsupportedOperationException e) {
