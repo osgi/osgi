@@ -3,10 +3,9 @@ package org.osgi.test.cases.condpermadmin.junit;
 
 import java.lang.reflect.Constructor;
 import java.security.Permission;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
-import junit.framework.AssertionFailedError;
+import java.util.List;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -17,10 +16,13 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
 
+import junit.framework.AssertionFailedError;
 
+
+@SuppressWarnings("deprecation")
 public class ConditionalUtility {
 
-	private ConditionalTestControl 		testControl;
+	private ConditionalTestControl		testControl;
 	private PermissionAdmin		   		  pAdmin;
 	private ConditionalPermissionAdmin 	cpAdmin;
 	private Bundle	 testBundle;
@@ -41,8 +43,8 @@ public class ConditionalUtility {
 	
 	static String BUNDLE_VERSION 			= "Bundle-Version";
 
-	public ConditionalUtility(ConditionalTestControl testControl, 
-							  PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin) {
+	public ConditionalUtility(ConditionalTestControl testControl,
+			PermissionAdmin pAdmin, ConditionalPermissionAdmin cpAdmin) {
 		this.testControl = testControl;
 		this.pAdmin = pAdmin;
 		this.cpAdmin = cpAdmin;
@@ -64,21 +66,24 @@ public class ConditionalUtility {
 	}
 	
 	
-	void createBadConditionInfo(String message, String encoded, Class exceptionClass) throws Exception {
+	void createBadConditionInfo(String message, String encoded,
+			Class< ? extends Throwable> exceptionClass) throws Exception {
 		try {
 			new ConditionInfo(encoded);
-			testControl.fail(message + " did not result in a " + exceptionClass.getName());
+			ConditionalTestControl.fail(message + " did not result in a "
+					+ exceptionClass.getName());
 		} catch (Exception e) {
-			testControl.assertException(message, exceptionClass, e);
+			ConditionalTestControl.assertException(message, exceptionClass, e);
 		}
 	}
 
-	void createBadConditionInfo(String message, String type, String[] args, Class exceptionClass) throws Exception {
+	void createBadConditionInfo(String message, String type, String[] args,
+			Class< ? extends Throwable> exceptionClass) throws Exception {
 		try {
 			new ConditionInfo(type, args);
-			testControl.fail(message + " did not result in a " + exceptionClass.getName());
+			ConditionalTestControl.fail(message + " did not result in a " + exceptionClass.getName());
 		} catch (Exception e) {
-			testControl.assertException(message, exceptionClass, e);
+			ConditionalTestControl.assertException(message, exceptionClass, e);
 		}
 	}
 
@@ -86,23 +91,24 @@ public class ConditionalUtility {
     String message = "allowed " + permToString(permission);
 		try {
 			checkPermission(permission);
-			testControl.pass(message);
+			ConditionalTestControl.pass(message);
 		} catch (Throwable e) {
-			testControl.fail(message + " but " + e.getClass().getName() + " was thrown");
+			ConditionalTestControl.fail(message + " but " + e.getClass().getName() + " was thrown");
 		}
 	}
 	
-	void notAllowed(AdminPermission permission, Class wanted) {
+	void notAllowed(AdminPermission permission,
+			Class< ? extends Throwable> wanted) {
     String message = "not allowed " + permToString(permission);
 		try {
 			checkPermission(permission);
-      //testControl.pass("FAIL>>>>" + message);
-			testControl.failException(message, wanted);
+      //ConditionalTestControl.pass("FAIL>>>>" + message);
+			ConditionalTestControl.failException(message, wanted);
 		} catch (Throwable e) {
       if (!e.getClass().equals(wanted.getClass()) && (wanted.isInstance(e))) {
-        testControl.pass(message + " and [" + e.getClass() + "] was thrown");
+        ConditionalTestControl.pass(message + " and [" + e.getClass() + "] was thrown");
       } else {
-        testControl.assertException(message, wanted, e);
+        ConditionalTestControl.assertException(message, wanted, e);
       }
 		}
 	}
@@ -131,15 +137,15 @@ public class ConditionalUtility {
 	private void checkPermission(AdminPermission permission) throws Throwable {
 		Permission p = getPermission(permission, testBundle);
 		if (hasPermissionsPerm) {
-      testControl.permTBC.checkPermission(p);
+			testControl.permTBC.checkPermission(p);
 		} else {
-      testControl.tbc.checkPermission(p);
+			testControl.tbc.checkPermission(p);
 		}
 	}
 	
-  Vector getWildcardString(String value) {
-    Vector result = new Vector();
-    result.addElement(value);
+	List<String> getWildcardString(String value) {
+		List<String> result = new ArrayList<>();
+		result.add(value);
     int beginIndex = 0;
     if (value.startsWith("http://")) {
       beginIndex = "http://".length();
@@ -149,7 +155,7 @@ public class ConditionalUtility {
     
     while (index != -1) {
       lastIndex = index + 1;
-      result.addElement(value.substring(0, lastIndex) + "*");
+			result.add(value.substring(0, lastIndex) + "*");
       index = value.indexOf("/", lastIndex); 
     }               
     return result;
@@ -157,38 +163,40 @@ public class ConditionalUtility {
 
 	
 	// Returns vector whose values are version-ranges, where version belong 
-	Vector getCorrectVersionRanges(String version, String floor, String ceiling) {
-		Vector result = new Vector();
+	List<String> getCorrectVersionRanges(String version, String floor,
+			String ceiling) {
+		List<String> result = new ArrayList<>();
 		
-		result.addElement(new String("\"" + floor + "\""));
-		result.addElement(new String("\"" + version + "\""));
+		result.add(new String("\"" + floor + "\""));
+		result.add(new String("\"" + version + "\""));
 		
-		result.addElement(new String("\"[" + floor + "," + ceiling + "\"]"));
-		result.addElement(new String("\"[" + floor + "," + ceiling + "\")"));
-		result.addElement(new String("\"(" + floor + "," + ceiling + "\"]"));
-		result.addElement(new String("\"(" + floor + "," + ceiling + "\")"));
+		result.add(new String("\"[" + floor + "," + ceiling + "\"]"));
+		result.add(new String("\"[" + floor + "," + ceiling + "\")"));
+		result.add(new String("\"(" + floor + "," + ceiling + "\"]"));
+		result.add(new String("\"(" + floor + "," + ceiling + "\")"));
 
-		result.addElement(new String("\"[" + version + "," + ceiling + "\"]"));
-		result.addElement(new String("\"[" + version + "," + ceiling + "\")"));
+		result.add(new String("\"[" + version + "," + ceiling + "\"]"));
+		result.add(new String("\"[" + version + "," + ceiling + "\")"));
 
-		result.addElement(new String("\"[" + floor + "," + version + "\"]"));
-		result.addElement(new String("\"(" + floor + "," + version + "\"]"));
+		result.add(new String("\"[" + floor + "," + version + "\"]"));
+		result.add(new String("\"(" + floor + "," + version + "\"]"));
 
 		
 		return result;
 	}
 	
 	// Returns vector whose values are version-ranges, where version not belong 
-	Vector getNotCorrectVersionRanges(String version, String floor, String ceiling) {
-		Vector result = new Vector();
+	List<String> getNotCorrectVersionRanges(String version, String floor,
+			String ceiling) {
+		List<String> result = new ArrayList<>();
 		
-		result.addElement(new String("\"" + ceiling + "\""));
+		result.add(new String("\"" + ceiling + "\""));
 
-		result.addElement(new String("\"(" + version + "," + ceiling + "\"]"));
-		result.addElement(new String("\"(" + version + "," + ceiling + "\")"));
+		result.add(new String("\"(" + version + "," + ceiling + "\"]"));
+		result.add(new String("\"(" + version + "," + ceiling + "\")"));
 
-		result.addElement(new String("\"[" + floor + "," + version + "\")"));
-		result.addElement(new String("\"(" + floor + "," + version + "\")"));
+		result.add(new String("\"[" + floor + "," + version + "\")"));
+		result.add(new String("\"(" + floor + "," + version + "\")"));
 
 		
 		return result;
@@ -205,8 +213,8 @@ public class ConditionalUtility {
 		String name = pi.getName();
 		String type = pi.getType();
 		
-		Class pClass = Class.forName(type);
-		Constructor constructor = pClass.getConstructor(new Class[]{
+		Class< ? > pClass = Class.forName(type);
+		Constructor< ? > constructor = pClass.getConstructor(new Class[] {
 				String.class, String.class});
 		AdminPermission permission = (AdminPermission)constructor.newInstance(
 				new Object[] {name, actions});
@@ -248,35 +256,35 @@ public class ConditionalUtility {
   
   void testPermissions(ConditionInfo[] conditions, Permission[] permissions, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
-    testControl.trace("Test " + cpInfoToString(cpInfo));
-    testControl.trace("Test for allowed permissions:");
+    ConditionalTestControl.trace("Test " + cpInfoToString(cpInfo));
+    ConditionalTestControl.trace("Test for allowed permissions:");
     for (int i = 0; i < allowedPermission.length; i++) {
       allowed(allowedPermission[i]);
     }
-    testControl.trace("Test for not allowed permissions:");
+    ConditionalTestControl.trace("Test for not allowed permissions:");
     for (int k = 0; k < notAllowedPermission.length; k++) {
       notAllowed(notAllowedPermission[k], SecurityException.class);
     }
     cpInfo.delete();
   }
   
-  void testPermissions(ConditionInfo[] conditions, Permission[] permissions,
+	void testPermissions(ConditionInfo[] conditions, Permission[] permissions,
       AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission, String[] order1, String[] order2) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, permissions);
-    testControl.trace("Test " + cpInfoToString(cpInfo));
+    ConditionalTestControl.trace("Test " + cpInfoToString(cpInfo));
     boolean testForAllowed = allowedPermission.length>0;
-    testControl.trace("Test for allowed permissions:");
+    ConditionalTestControl.trace("Test for allowed permissions:");
     for (int i = 0; i < allowedPermission.length; i++) {
       allowed(allowedPermission[i]);
     }
     if (testForAllowed) testEqualArrays(order1, order2, TestCondition.getSatisfOrder());
-    testControl.trace("Test for not allowed permissions:");
+    ConditionalTestControl.trace("Test for not allowed permissions:");
     for (int k = 0; k < notAllowedPermission.length; k++) {
       notAllowed(notAllowedPermission[k], SecurityException.class);
     }
     if (testForAllowed) {
       //already order is tested, so only clear the vector
-      TestCondition.satisfOrder.removeAllElements();
+			TestCondition.satisfOrder.clear();
     } else {
       //order not tested yet, test it here
       testEqualArrays(order1, order2, TestCondition.getSatisfOrder());
@@ -298,35 +306,36 @@ public class ConditionalUtility {
 
 void deletePermissions(ConditionInfo[] conditions, Permission permission) {
     ConditionalPermissionInfo cpInfo = setPermissionsByCPermissionAdmin(conditions, new Permission[] {permission});
-    testControl.pass("New permissions are set: " + cpInfoToString(cpInfo));
-    Enumeration infos = cpAdmin.getConditionalPermissionInfos();
-    testControl.pass("All set conditional permissions are: ");
+    ConditionalTestControl.pass("New permissions are set: " + cpInfoToString(cpInfo));
+		Enumeration<ConditionalPermissionInfo> infos = cpAdmin
+				.getConditionalPermissionInfos();
+    ConditionalTestControl.pass("All set conditional permissions are: ");
     while (infos.hasMoreElements()) {
-      testControl.pass(cpInfoToString((ConditionalPermissionInfo)infos.nextElement()));
+      ConditionalTestControl.pass(cpInfoToString(infos.nextElement()));
     }
     cpInfo.delete();
-    testControl.pass("ConditionalPermissionInfo deleted");
+    ConditionalTestControl.pass("ConditionalPermissionInfo deleted");
     int cpCounter = 0;
     while (infos.hasMoreElements()) {
       cpCounter++;
-      testControl.pass(cpInfoToString((ConditionalPermissionInfo)infos.nextElement()));
+      ConditionalTestControl.pass(cpInfoToString(infos.nextElement()));
     }
-    testControl.assertEquals("After delete there have to be no conditional permissions: ", 0, cpCounter);
+    ConditionalTestControl.assertEquals("After delete there have to be no conditional permissions: ", 0, cpCounter);
   }
   
   protected void testEqualArrays(String[] array1, String[] array2) {
     if (array1 != null && array2 != null) {
-      testControl.assertEquals("The number of checked TestConditions: ", array1.length, array2.length);
+      ConditionalTestControl.assertEquals("The number of checked TestConditions: ", array1.length, array2.length);
       for (int i=0; i<array1.length; i++) {
-        testControl.assertEquals("checked condition: ", array1[i], array2[i]);
+        ConditionalTestControl.assertEquals("checked condition: ", array1[i], array2[i]);
       }
     } else {
-      testControl.fail("Not correct check of TestConditions.");
+      ConditionalTestControl.fail("Not correct check of TestConditions.");
     }
   }
   
-	Vector createWildcardDNs(String value) {
-		Vector result = new Vector();
+	List<String> createWildcardDNs(String value) {
+		List<String> result = new ArrayList<>();
 		String semicolon = ";";
 		//String asterisk = "*";		
 		
@@ -342,7 +351,7 @@ void deletePermissions(ConditionInfo[] conditions, Permission permission) {
 			suffix = value.substring(semicolonIndex);
 			
 			//result.addElement(prefix + asterisk + suffix);
-			result.addAll(addVector(createWildcardRDNs(element), prefix, suffix));
+			result.addAll(addList(createWildcardRDNs(element), prefix, suffix));
 			
 			lastIndex = semicolonIndex + 1;
 			semicolonIndex = value.indexOf(semicolon, lastIndex);
@@ -353,7 +362,7 @@ void deletePermissions(ConditionInfo[] conditions, Permission permission) {
 			element = value.substring(lastIndex);
 			
 			//result.addElement(prefix + asterisk);
-			result.addAll(addVector(createWildcardRDNs(element), prefix, ""));
+			result.addAll(addList(createWildcardRDNs(element), prefix, ""));
 		} else {
 			result.addAll(createWildcardRDNs(value));
 		}
@@ -361,18 +370,19 @@ void deletePermissions(ConditionInfo[] conditions, Permission permission) {
 		return result;
 	}
 	
-	private Vector addVector(Vector vec, String prefix, String suffix) {
-		Vector result = new Vector();
+	private List<String> addList(List<String> vec, String prefix,
+			String suffix) {
+		List<String> result = new ArrayList<>();
 		for (int i = 0; i < vec.size(); ++i) {
-			result.addElement(prefix + (String)vec.elementAt(i) + suffix);
+			result.add(prefix + vec.get(i) + suffix);
 		}
 		
 		return result;
 	}
 	
 	
-	private Vector createWildcardRDNs(String value) {
-		Vector result = new Vector();
+	private List<String> createWildcardRDNs(String value) {
+		List<String> result = new ArrayList<>();
 		String comma = ",";
 		//String semicolon = ";";
 		String equal = "=";
@@ -383,9 +393,9 @@ void deletePermissions(ConditionInfo[] conditions, Permission permission) {
 		int equalIndex = value.indexOf(equal, lastIndex);
 		
 		while (commaIndex != -1) {
-			result.addElement(asterisk + value.substring(commaIndex));
+			result.add(asterisk + value.substring(commaIndex));
 			if ((equalIndex != -1) && (equalIndex < commaIndex)) {
-				result.addElement(value.substring(0, equalIndex + 1) + asterisk + 
+				result.add(value.substring(0, equalIndex + 1) + asterisk +
 								  value.substring(commaIndex));
 			}
 			lastIndex = commaIndex + 1;
@@ -394,10 +404,10 @@ void deletePermissions(ConditionInfo[] conditions, Permission permission) {
 		}
 		
 		if (lastIndex > 0) {
-			result.addElement(asterisk);
+			result.add(asterisk);
 		}
 		if (equalIndex > 0) {
-			result.addElement(value.substring(0, equalIndex + 1) + asterisk);
+			result.add(value.substring(0, equalIndex + 1) + asterisk);
 		}
 		return result;
   }

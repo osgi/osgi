@@ -35,7 +35,7 @@ public class TestConditionRecursive extends TestCondition {
   
 	public boolean isSatisfied() {
 		// System.out.println("#isSatisfied method checked of " + info);
-		satisfOrder.addElement(name);
+		satisfOrder.add(name);
 		try {
 			try {
 				Method method = service.getClass().getMethod("checkPermission",
@@ -47,15 +47,16 @@ public class TestConditionRecursive extends TestCondition {
 			}
 		}
 		catch (SecurityException e) {
-			satisfOrder.addElement(SecurityException.class.getName());
+			satisfOrder.add(SecurityException.class.getName());
 		}
 		catch (Throwable t) {
-			satisfOrder.addElement(t.toString());
+			satisfOrder.add(t.toString());
 		}
 		return satisfied;
 	}
 
-  public boolean isSatisfied(Condition[] conds, Dictionary context) {
+	public boolean isSatisfied(Condition[] conds,
+			Dictionary<Object,Object> context) {
     for (int i = 0; i < conds.length; i++) {
       if (!conds[i].isSatisfied()) {
         return false;

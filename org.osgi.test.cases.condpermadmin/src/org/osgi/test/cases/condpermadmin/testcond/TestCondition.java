@@ -1,19 +1,20 @@
 
 package org.osgi.test.cases.condpermadmin.testcond;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Vector;
+import java.util.List;
 
+import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.framework.Bundle;
 
 
 public class TestCondition implements Condition {
   private static final String CONDITION_TYPE = TestCondition.class.getName();
   private static final String CONDITION_TYPE2 = TestConditionRecursive.class.getName();
   
-  public    static Vector satisfOrder = new Vector();
+	public static List<String>	satisfOrder		= new ArrayList<>();
   private   static boolean varmutable;
   
   protected boolean postponed;
@@ -54,7 +55,7 @@ public class TestCondition implements Condition {
 	public boolean isSatisfied() {
 //    System.out.println("#isSatisfied method checked of " + info);
     if (varmutable) mutable = false;
-    satisfOrder.addElement(name);
+		satisfOrder.add(name);
 		return satisfied;
 	}
 
@@ -87,7 +88,8 @@ public class TestCondition implements Condition {
     return obj instanceof TestCondition && name.equals(((TestCondition) obj).name);
   }
   
-	public boolean isSatisfied(Condition[] conds, Dictionary context) {
+	public boolean isSatisfied(Condition[] conds,
+			Dictionary<Object,Object> context) {
 		for (int i = 0; i < conds.length; i++) {
       Boolean isSatisfied = (Boolean) context.get(conds[i]);
       if (isSatisfied == null) {
@@ -102,9 +104,8 @@ public class TestCondition implements Condition {
 	}
   
   public static String[] getSatisfOrder() {
-    String[] result = new String[satisfOrder.size()];
-    satisfOrder.copyInto(result);
-    satisfOrder.removeAllElements();
+		String[] result = satisfOrder.toArray(new String[0]);
+		satisfOrder.clear();
     return result;
   }	
 }

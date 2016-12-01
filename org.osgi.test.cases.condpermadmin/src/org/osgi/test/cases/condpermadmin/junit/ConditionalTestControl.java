@@ -31,9 +31,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
-import junit.framework.AssertionFailedError;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -47,10 +44,15 @@ import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.condpermadmin.service.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.service.ConditionalPermTBCService;
+import org.osgi.test.cases.condpermadmin.service.ConditionalTBCService;
 import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
 import org.osgi.test.cases.condpermadmin.testcond.TestConditionRecursive;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.wiring.Wiring;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Contains the test methods of the conditional permission test case.
@@ -58,6 +60,7 @@ import org.osgi.test.support.wiring.Wiring;
  * @author Petia Sotirova
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class ConditionalTestControl extends DefaultTestBundleControl {
 
   private String            testBundleLocation;
@@ -134,7 +137,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    * Check if ConditionalPermissionInfos added in CoditionalPermissionAdmin
    * are identical to the original.
    */
-  public void testConditionalPermissionAdmin() {//TC2
+	public void testConditionalPermissionAdmin() {// TC2
     ConditionInfo cInfo1 = new ConditionInfo(BUNDLE_LOCATION_CONDITION,
         new String[]{testBundleLocation});
     ConditionInfo cInfo2 = new ConditionInfo(BUNDLE_SIGNER_CONDITION,
@@ -153,12 +156,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     assertEquals("PermissionInfos ", arrayToString(cpInfo.getPermissionInfos()),
                                      arrayToString(permissions));
 
-    Enumeration infos = conditionalAdmin.getConditionalPermissionInfos();
+		Enumeration<ConditionalPermissionInfo> infos = conditionalAdmin
+				.getConditionalPermissionInfos();
 
     boolean addConditionalPermission = false;
     ConditionalPermissionInfo addedCpInfo = null;
     while (infos.hasMoreElements()) {
-      addedCpInfo = (ConditionalPermissionInfo)infos.nextElement();
+      addedCpInfo = infos.nextElement();
       if (addedCpInfo.equals(cpInfo)) {
         addConditionalPermission = true;
         break;
@@ -213,7 +217,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       for (int i = 0; i < cpInfos.length; i++) {
         cpInfos[i].delete();
       }
-      TestCondition.satisfOrder.removeAllElements();
+			TestCondition.satisfOrder.clear();
     }
 
     //2: Test set (or create) a Conditional Permission Info with conditions and permissions
@@ -239,7 +243,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       //create second with the same name (so only change the condition infos)
       cpInfo2 = conditionalAdmin.setConditionalPermissionInfo("cpInfo", conditions2, new PermissionInfo[]{pInfo2});
 
-      Enumeration infos = conditionalAdmin.getConditionalPermissionInfos();
+			Enumeration<ConditionalPermissionInfo> infos = conditionalAdmin
+					.getConditionalPermissionInfos();
       int setInfosNumber = 0;
       while (infos.hasMoreElements()) {
         setInfosNumber++;
@@ -294,11 +299,13 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission permission = new AdminPermission("*", AdminPermission.LIFECYCLE);
     AdminPermission allPermissions = new AdminPermission("*", "*");
 
-    Vector locations = utility.getWildcardString(testBundleLocation);
+		List<String> locations = utility.getWildcardString(testBundleLocation);
     for (int i = 0; i < locations.size(); ++i) {
       //permissionAdmin.setPermissions((String)locations.elementAt(i), null);
       cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION,
-                                new String[]{(String)locations.elementAt(i)});
+					new String[] {
+							locations.get(i)
+					});
       utility.testPermissions(new ConditionInfo[]{cInfo}, permission,
                new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
     }
@@ -329,11 +336,11 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     //test with appropriate certificates
     pass("Test with appropriate certificates");
     String dn_s_value = ConditionResource.getString(ConditionalUtility.DN_S);
-    Vector dn_s = utility.createWildcardDNs(dn_s_value);
+		List<String> dn_s = utility.createWildcardDNs(dn_s_value);
 
     String element;
     for (int i = 0; i < dn_s.size(); ++i) {
-      element = (String)dn_s.elementAt(i);
+			element = dn_s.get(i);
       cInfo = new ConditionInfo(BUNDLE_SIGNER_CONDITION, new String[]{element});
       utility.testPermissions(new ConditionInfo[]{cInfo}, permission,
           new AdminPermission[]{permission}, new AdminPermission[]{allPermissions});
@@ -562,7 +569,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     //install bundle again and see if the conditions permissions are applied to it
     try {
       testBundle = installBundle("tb1.jar");
-      tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
+      tbc = getService(ConditionalTBCService.class);
       utility.setTestBunde(testBundle, false);
       utility.allowed(execPermissions);
       utility.notAllowed(allPermissions, SecurityException.class);
@@ -661,7 +668,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 
     // Using update to get the correct ordering of conditions
     ConditionalPermissionUpdate update = conditionalAdmin.newConditionalPermissionUpdate();
-    List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 
     ConditionInfo blcA = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
     ConditionInfo blcB = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
@@ -805,7 +813,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 
     // No need to delete CPinfos they get cleared in clearState()
 
-    TestCondition.satisfOrder.removeAllElements();
+		TestCondition.satisfOrder.clear();
   }
 
   /**
@@ -864,7 +872,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 	// This test assumes an implementation ordering of the calls to isMutable and then isSatisfied
 	// TODO this testcase mandates that implementations optimize out immutable conditions, this is optional in the spec.
     utility.setTestBunde(testBundle, false);
-    TestCondition.satisfOrder.removeAllElements();
+		TestCondition.satisfOrder.clear();
     
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
     ConditionInfo tc1  = utility.createTestCInfo(false, false, true, "TestCondition_200", testBundle.getBundleId()); // not postponed, not satisfied, mutable
@@ -941,11 +949,11 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     domBundle = installBundle("tb3.jar");
     domBundleLocation = domBundle.getLocation();
 
-    permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class);
-    conditionalAdmin = (ConditionalPermissionAdmin)getService(ConditionalPermissionAdmin.class);
-    tbc = (ConditionalTBCService)getService(ConditionalTBCService.class);
-    permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class);
-    domTBC = (ConditionalDomTBCService)getService(ConditionalDomTBCService.class);
+    permissionAdmin = getService(PermissionAdmin.class);
+    conditionalAdmin = getService(ConditionalPermissionAdmin.class);
+    tbc = getService(ConditionalTBCService.class);
+    permTBC = getService(ConditionalPermTBCService.class);
+    domTBC = getService(ConditionalDomTBCService.class);
 
     utility = new ConditionalUtility(this, permissionAdmin, conditionalAdmin);
     // make sure this bundle has all permissions

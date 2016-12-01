@@ -18,6 +18,8 @@ package org.osgi.test.cases.condpermadmin.testcond;
 
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -33,7 +35,7 @@ public class TestPostPonedCondition implements Condition {
 	private boolean curSatisfied;
 	private final Bundle bundle;
 
-	private static final HashMap conditionIDs = new HashMap();
+	private static final Map<String,TestPostPonedCondition>	conditionIDs	= new HashMap<>();
 
 	private TestPostPonedCondition(String id, boolean mutable, boolean postponed, boolean satisfied, Bundle bundle) {
 		this.id = id;
@@ -52,9 +54,9 @@ public class TestPostPonedCondition implements Condition {
 		String identity = args[0] + '_' + bundle.getBundleId();
 		boolean mut = Boolean.valueOf(args[1]).booleanValue();
 		boolean post = Boolean.valueOf(args[2]).booleanValue();
-		boolean sat = Boolean.valueOf(args[3]).booleanValue();;
+		boolean sat = Boolean.valueOf(args[3]).booleanValue();
 		synchronized (conditionIDs) {
-			TestPostPonedCondition condition = (TestPostPonedCondition) conditionIDs.get(identity);
+			TestPostPonedCondition condition = conditionIDs.get(identity);
 			if (condition == null) {
 				condition = new TestPostPonedCondition(identity, mut, post, sat, bundle);
 				conditionIDs.put(identity, condition);
@@ -65,7 +67,7 @@ public class TestPostPonedCondition implements Condition {
 
 	static public TestPostPonedCondition getTestCondition(String id) {
 		synchronized (conditionIDs) {
-			return (TestPostPonedCondition) conditionIDs.get(id);
+			return conditionIDs.get(id);
 		}
 	}
 
@@ -87,7 +89,8 @@ public class TestPostPonedCondition implements Condition {
 		return curSatisfied;
 	}
 
-	public boolean isSatisfied(Condition[] conditions, Dictionary context) {
+	public boolean isSatisfied(Condition[] conditions,
+			Dictionary<Object,Object> context) {
 		if (!isPostponed())
 			throw new IllegalStateException("Should not call isSatisfied(Condition[] conditions, Dictionary context)"); //$NON-NLS-1$
 		for (int i = 0; i < conditions.length; i++) {

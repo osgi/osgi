@@ -23,9 +23,9 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.condpermadmin.junit;
+package org.osgi.test.cases.condpermadmin.service;
 
 
-public interface ConditionalPermTBCService extends ConditionalTBCService{
+public interface ConditionalDomTBCService extends ConditionalTBCService{
 	// empty
 }

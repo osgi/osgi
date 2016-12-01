@@ -28,9 +28,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.condpermadmin.junit.ConditionalDomTBCService;
-import org.osgi.test.cases.condpermadmin.junit.ConditionalPermTBCService;
-import org.osgi.test.cases.condpermadmin.junit.ConditionalTBCService;
+import org.osgi.test.cases.condpermadmin.service.ConditionalTBCService;
 import org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition;
 import org.osgi.test.support.wiring.Wiring;
 
@@ -54,8 +52,6 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 	private Bundle tb2;
 	private Bundle tb3;
 	private ConditionalTBCService	tbc;
-	private ConditionalPermTBCService	permTBC;
-	private ConditionalDomTBCService	domTBC;
 	private FilePermission fileWrite;
 	private FilePermission fileRead;
 	protected void setUp() throws Exception {
@@ -67,9 +63,7 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 				getContext(),
 				new Bundle[] {installBundle("testcond.jar", false)}));
 
-	    tbc = (ConditionalTBCService)getService(ConditionalTBCService.class.getName());
-	    permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class.getName());
-	    domTBC = (ConditionalDomTBCService)getService(ConditionalDomTBCService.class.getName());
+		tbc = getService(ConditionalTBCService.class);
 
 	    fileWrite = new FilePermission(getContext().getDataFile("test").getAbsolutePath(), "write");
 	    fileRead = new FilePermission(getContext().getDataFile("test").getAbsolutePath(), "read");
@@ -81,8 +75,6 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		tb3.uninstall();
 
 		tbc = null;
-		permTBC = null;
-		domTBC = null;
 
 		super.tearDown();
 	}
@@ -120,14 +112,16 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testUpdate01() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		assertTrue("table is not empty", rows.isEmpty()); //$NON-NLS-1$
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
 	}
 
 	public void testUpdate02() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo info = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.ALLOW);
 		rows.add(info);
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -147,7 +141,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testUpdate03() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo info1 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READWRITE_INFOS, ConditionalPermissionInfo.DENY);
 		ConditionalPermissionInfo info2 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.ALLOW);
 		rows.add(info1);
@@ -177,7 +172,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testUpdate04() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo info1 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READWRITE_INFOS, ConditionalPermissionInfo.DENY);
 		ConditionalPermissionInfo info2 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.ALLOW);
 		rows.add(info1);
@@ -185,11 +181,13 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
 
 		ConditionalPermissionUpdate update1 = condPermAdmin.newConditionalPermissionUpdate();
-		List rows1 = update1.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows1 = update1
+				.getConditionalPermissionInfos();
 		rows1.remove(0);
 
 		ConditionalPermissionUpdate update2 = condPermAdmin.newConditionalPermissionUpdate();
-		List rows2 = update2.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows2 = update2
+				.getConditionalPermissionInfos();
 		rows2.remove(0);
 		assertTrue("failed to commit", update2.commit()); //$NON-NLS-1$
 
@@ -214,7 +212,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		permAdmin.setPermissions(tb1.getLocation(), READWRITE_INFOS);
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo condPermInfo = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, SOCKET_INFOS, ConditionalPermissionInfo.ALLOW);
 		rows.add(condPermInfo);
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -251,7 +250,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testNotLocationCondition01() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo condPermInfo = condPermAdmin.newConditionalPermissionInfo(null, getLocationConditions("xxx", true), SOCKET_INFOS, ConditionalPermissionInfo.ALLOW); //$NON-NLS-1$
 		rows.add(condPermInfo);
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -270,7 +270,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testNotLocationCondition02() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		ConditionalPermissionInfo condPermInfo = condPermAdmin.newConditionalPermissionInfo(null, getLocationConditions(tb1.getLocation(), true), SOCKET_INFOS, ConditionalPermissionInfo.ALLOW);
 		rows.add(condPermInfo);
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -289,7 +290,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testMultipleLocationConditions01() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 
 		ConditionalPermissionInfo condPermInfo1 = condPermAdmin.newConditionalPermissionInfo(null, getLocationConditions("xxx", false), SOCKET_INFOS, ConditionalPermissionInfo.ALLOW); //$NON-NLS-1$
 		ConditionalPermissionInfo condPermInfo2 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.ALLOW);
@@ -322,7 +324,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 
 	public void testMultipleLocationConditions02() {
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 
 		ConditionalPermissionInfo condPermInfo1 = condPermAdmin.newConditionalPermissionInfo(null, getLocationConditions("xxx", false), SOCKET_INFOS, ConditionalPermissionInfo.ALLOW); //$NON-NLS-1$
 		ConditionalPermissionInfo condPermInfo2 = condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.ALLOW);
@@ -373,7 +376,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		TestPostPonedCondition.clearConditions();
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_UNSAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, ALLLOCATION_CONDS, READONLY_INFOS, ConditionalPermissionInfo.DENY));
@@ -421,7 +425,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		TestPostPonedCondition.clearConditions();
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_UNSAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
@@ -456,7 +461,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		TestPostPonedCondition.clearConditions();
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_UNSAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
@@ -491,7 +497,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		TestPostPonedCondition.clearConditions();
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_UNSAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
@@ -526,7 +533,8 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 		TestPostPonedCondition.clearConditions();
 
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_UNSAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {POST_MUT_SAT}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));

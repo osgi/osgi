@@ -29,8 +29,7 @@ import java.security.Permission;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.condpermadmin.junit.ConditionalDomTBCService;
+import org.osgi.test.cases.condpermadmin.service.ConditionalDomTBCService;
 
 
 public class Activator implements BundleActivator, ConditionalDomTBCService {

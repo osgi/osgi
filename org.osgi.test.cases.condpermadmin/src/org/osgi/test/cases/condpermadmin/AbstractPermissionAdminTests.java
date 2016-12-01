@@ -35,15 +35,15 @@ import org.osgi.test.support.OSGiTestCase;
 public abstract class AbstractPermissionAdminTests extends OSGiTestCase {
 	protected ConditionalPermissionAdmin condPermAdmin;
 	protected PermissionAdmin permAdmin;
-	private Collection serviceRefs = new ArrayList();
+	private Collection<ServiceReference< ? >>	serviceRefs;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		serviceRefs.clear();
+		serviceRefs = new ArrayList<>();
 		// get condpermadmin
-		condPermAdmin = (ConditionalPermissionAdmin) getService(ConditionalPermissionAdmin.class.getName());
+		condPermAdmin = getService(ConditionalPermissionAdmin.class);
 		// get permadmin
-		permAdmin = (PermissionAdmin) getService(PermissionAdmin.class.getName());
+		permAdmin = getService(PermissionAdmin.class);
 		
 	    // make sure this bundle has all permissions
 	    permAdmin.setPermissions(getContext().getBundle().getLocation(), new PermissionInfo[] {new PermissionInfo("(" + AllPermission.class.getName() +")")});
@@ -61,10 +61,11 @@ public abstract class AbstractPermissionAdminTests extends OSGiTestCase {
 	    	for (int i = 0; i < locations.length; i++)
 	    		permAdmin.setPermissions(locations[i], null);
 
-	    for (Iterator iRefs = serviceRefs.iterator(); iRefs.hasNext();) {
-	    	getContext().ungetService((ServiceReference) iRefs.next());
+		for (Iterator<ServiceReference< ? >> iRefs = serviceRefs
+				.iterator(); iRefs.hasNext();) {
+	    	getContext().ungetService(iRefs.next());
 	    }
-	    serviceRefs.clear();
+		serviceRefs = null;
 
 	    condPermAdmin = null;
 	    permAdmin = null;
@@ -81,10 +82,10 @@ public abstract class AbstractPermissionAdminTests extends OSGiTestCase {
 		return b;
 	}
 
-    public Object getService(String clazz)  {
-        ServiceReference ref = getContext().getServiceReference(clazz);
+	public <T> T getService(Class<T> clazz) {
+		ServiceReference<T> ref = getContext().getServiceReference(clazz);
         assertNotNull("No service found: " + clazz, ref);
-        Object service = getContext().getService(ref);
+		T service = getContext().getService(ref);
         assertNotNull("No service found: " + clazz, service);
         serviceRefs.add(ref);
         return service;

@@ -8,9 +8,9 @@
 
 (org.osgi.framework.AdminPermission "*" "lifecycle,execute,listener,extensionLifecycle")
 (org.osgi.framework.PackagePermission "org.osgi.framework" "import")
-(org.osgi.framework.PackagePermission "${p}.junit" "import")
+(org.osgi.framework.PackagePermission "${p}.service" "import")
 (org.osgi.framework.PackagePermission "${p}.tb2" "export")
-(org.osgi.framework.ServicePermission "${p}.junit.ConditionalPermTBCService" "register")
-(org.osgi.framework.ServicePermission "${p}.junit.ConditionalDomTBCService" "get")
+(org.osgi.framework.ServicePermission "${p}.service.ConditionalPermTBCService" "register")
+(org.osgi.framework.ServicePermission "${p}.service.ConditionalDomTBCService" "get")
 
 

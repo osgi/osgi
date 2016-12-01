@@ -41,7 +41,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testSingleSignerRowAllow() {
 		// test single row with signer condition
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
 
@@ -62,7 +63,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testSingleSignerMultiRowDeny() {
 		// test with DENY row
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READWRITE_INFOS, ConditionalPermissionInfo.DENY));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READWRITE_INFOS, ConditionalPermissionInfo.ALLOW));
@@ -85,7 +87,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testMultiSignerMultiRowAllow() {
 		// test multiple signer conditions
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
 
@@ -124,7 +127,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testMultiSignerGet() {
 		// test multiple signer conditions
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1, SIGNER_CONDITION2}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READWRITE_INFOS, ConditionalPermissionInfo.ALLOW));
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -186,7 +190,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testEmptyConditionRows() {
 		// test with empty condition rows
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {SIGNER_CONDITION1}, READWRITE_INFOS, ConditionalPermissionInfo.ALLOW));
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
@@ -208,7 +213,8 @@ public class AccessControlContextTests extends AbstractPermissionAdminTests {
 	public void testNotSignerRowAllow() {
 		// test ! signer condition
 		ConditionalPermissionUpdate update = condPermAdmin.newConditionalPermissionUpdate();
-		List rows = update.getConditionalPermissionInfos();
+		List<ConditionalPermissionInfo> rows = update
+				.getConditionalPermissionInfos();
 		rows.add(condPermAdmin.newConditionalPermissionInfo(null, new ConditionInfo[] {NOT_SIGNER_CONDITION1}, READONLY_INFOS, ConditionalPermissionInfo.ALLOW));
 		assertTrue("failed to commit", update.commit()); //$NON-NLS-1$
 		AccessControlContext acc = condPermAdmin.getAccessControlContext(new String[] {"cn=t1,cn=FR;cn=test1,c=US"}); //$NON-NLS-1$
