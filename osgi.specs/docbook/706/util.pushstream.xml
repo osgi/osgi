@@ -171,7 +171,7 @@
   
       <para>A Push Event Source object represents a source of asynchronous
       Push Events. The event source defines a single method <xref
-      linkend="org.osgi.util.pushstream.PushEventSource.open--" 
+      linkend="org.osgi.util.pushstream.PushEventSource.open-PushEventConsumer-" 
       xrefstyle="hyperlink"/> which can be used to connect to the source
       and begin receiving a stream of events.</para>
       
@@ -189,7 +189,7 @@
   
       <para>A Push Event Consumer object represents a sink for 
       asynchronous Push Events. The event consumer defines a single method 
-      <xref linkend="org.osgi.util.pushstream.PushEventConsumer.accept--" 
+      <xref linkend="org.osgi.util.pushstream.PushEventConsumer.accept-PushEvent-" 
       xrefstyle="hyperlink"/> which can be used to receive a stream of 
       events.</para>
       
