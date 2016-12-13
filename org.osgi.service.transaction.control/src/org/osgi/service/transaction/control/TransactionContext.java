@@ -71,18 +71,38 @@ public interface TransactionContext {
 	TransactionStatus getTransactionStatus();
 
 	/**
-	 * Register a callback that will be made before a call to commit or rollback
+	 * Register a callback that will be made before a scope completes.
+	 * <p>
+	 * For transactional scopes the state of the scope will be either
+	 * {@link TransactionStatus#ACTIVE} or
+	 * {@link TransactionStatus#MARKED_ROLLBACK}. Pre-completion callbacks may
+	 * call {@link #setRollbackOnly()} to prevent a commit from proceeding.
+	 * <p>
+	 * For no-transaction scopes the state of the scope will always be
+	 * {@link TransactionStatus#NO_TRANSACTION}.
+	 * <p>
+	 * Exceptions thrown by pre-completion callbacks are treated as if they were
+	 * thrown by the scoped work, including any configured commit or rollback
+	 * behaviours for transactional scopes.
 	 * 
-	 * @param job
-	 * @throws IllegalStateException if no transaction is active or the
-	 *             transaction has already passed beyond the
-	 *             {@link TransactionStatus#MARKED_ROLLBACK} state
+	 * @param job The action to perform before completing the scope
+	 * @throws IllegalStateException if the transaction has already passed
+	 *             beyond the {@link TransactionStatus#MARKED_ROLLBACK} state
 	 */
 	void preCompletion(Runnable job) throws IllegalStateException;
 
 	/**
-	 * Register a callback that will be made after the decision to commit or
-	 * rollback
+	 * Register a callback that will be made after the scope completes
+	 * <p>
+	 * For transactional scopes the state of the scope will be either
+	 * {@link TransactionStatus#COMMITTED} or
+	 * {@link TransactionStatus#ROLLED_BACK}.
+	 * <p>
+	 * For no-transaction scopes the state of the scope will always be
+	 * {@link TransactionStatus#NO_TRANSACTION}.
+	 * <p>
+	 * Post-completion callbacks should not throw {@link Exception}s and cannot
+	 * affect the outcome of a piece of scoped work
 	 * 
 	 * @param job
 	 * @throws IllegalStateException if no transaction is active
@@ -125,11 +145,11 @@ public interface TransactionContext {
 			throws IllegalStateException;
 
 	/**
-	 * Register an XA resource with the current transaction
+	 * Register a Local resource with the current transaction
 	 * 
 	 * @param resource
 	 * @throws IllegalStateException if no transaction is active, or the current
-	 *             transaction is not XA capable
+	 *             transaction does not support local resources.
 	 */
 	void registerLocalResource(LocalResource resource)
 			throws IllegalStateException;

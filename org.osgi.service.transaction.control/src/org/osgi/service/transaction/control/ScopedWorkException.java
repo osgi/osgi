@@ -19,7 +19,11 @@ import java.io.Serializable;
 
 /**
  * An Exception that is thrown when a piece of scoped work exits with an
- * {@link Exception}
+ * {@link Exception}.
+ * <p>
+ * If the scope was inherited and therefore is still active when this exception
+ * is raised then the current {@link TransactionContext} will be available from
+ * the {@link #ongoingContext()} method.
  */
 public class ScopedWorkException extends RuntimeException {
 

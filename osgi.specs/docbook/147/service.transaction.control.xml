@@ -726,6 +726,33 @@ txControl.required(() -> {
       </section>
       
       <section>
+        <title>Rollback in inherited transactions</title>
+        
+          <para>If a piece of scoped work inherits a transaction scope then the transaction
+          is not committed until the inherited scope completes. Therefore if the nested scoped 
+          work throws an exception then this must mark the transaction for rollback, unless the
+          exception has been explicitly ignored or configured not to cause rollback.</para>
+          
+          <para>Any exception thrown by the nested scoped work must result in a 
+          <code>ScopedWorkException</code> in exactly the same way as it would when not nested.</para>
+      
+        <programlisting>
+txControl.required(() -> {
+            // Do some work in here
+            ...
+            try {
+                txControl.required(() -> {
+                            // The outer transaction is inherited
+                            throw new RuntimeException();
+                    });
+            } catch (ScopedWorkException swe) {
+                // The transaction is still active, but now marked for rollback
+            }
+    });  
+        </programlisting>
+      </section>
+      
+      <section>
         <title>Read Only transactions</title>
         <para>Resources accessed within a transaction are frequently used to update persistent 
         data, however in some cases it is known in advance that no changes will be made to the 
