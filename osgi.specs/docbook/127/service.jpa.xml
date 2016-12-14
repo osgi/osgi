@@ -174,93 +174,51 @@
     <section xml:id="i3113425">
       <title>Dependencies</title>
 
-      <para>This specification is based on JPA 1.0 and JPA 2.0. JPA 2.0 is
-      backward compatible with JPA 1.0. For this reason, the versions of the
-      packages follow the OSGi recommended version policy with the addition of
-      a special JPA marker that annotates the specification version for JPA.
-      All JPA Packages must also have an attribute called <code>jpa</code>
-      that specifies the JPA version. The purpose of this attribute is to make
-      it clear what JPA version belongs to this package.</para>
+      <para>This specification is based on JPA 2.1. Both JPA 2.1 and JPA 2.0 are
+      backward compatible with JPA 1.0. </para>
+      
+      <para>Previous versions of this specification recommended that the JPA 
+      API packages were versioned using the OSGi recommended semantic versioning 
+      policy. Whilst this would have been an excellent way to ensure compatibility
+      between JPA persistence bundles, client bundles, and JPA providers, in 
+      practice few bundles followed this versioning policy. As a result 
+      the various actors in the JPA service can easily be created with have 
+      clashing version ranges.</para>
+      
+      <para>In order to permit JPA clients to reliably work when paired with 
+      newer versions of JPA there needs to be a defined contract upon which the 
+      clients and persistence units can rely, otherwise a JPA 1.0 compatible client
+      cannot declare a dependency which also accepts the backward compatible JPA 
+      2.0 API. For JPA the following three contracts exist:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para><code>osgi.contract;osgi.contract=JavaJPA;version:Version=1;
+          uses:="javax.persistence,javax.persistence.spi"</code></para>
+        </listitem>
+        <listitem>
+          <para><code>osgi.contract;osgi.contract=JavaJPA;version:Version=2;
+          uses:=""javax.persistence,javax.persistence.criteria,
+          javax.persistence.metamodel,javax.persistence.spi""</code></para>
+        </listitem>
+        <listitem>
+          <para><code>osgi.contract;osgi.contract=JavaJPA;version:Version=2.1;
+          uses:=""javax.persistence,javax.persistence.criteria,
+          javax.persistence.metamodel,javax.persistence.spi""</code></para>
+        </listitem>
+      </itemizedlist>
+      
+      <para>JPA API providers must declare the full set of API contract versions
+      with which they are compatible. As JPA API versions are backward compatible
+      this will typically result in the provider exposing all versions of the
+      contract. Clients can therefore safely import the API using the contract and
+      no import version.</para>
 
-      <table>
-        <title>Dependency versions</title>
+      <programlisting>
+Import-Package: javax.persistence,javax.persistence.criteria
+Require-Capability: osgi.contract;filter:="(&amp;(osgi.contract=JavaJPA)(version=2.1))"
+      </programlisting>
 
-        <tgroup cols="5">
-          <colspec colnum="1" colwidth="1*"/>
-
-          <colspec colnum="2" colwidth="2.2*"/>
-
-          <colspec colnum="3" colwidth="1.8*"/>
-
-          <colspec colnum="4" colwidth="2*"/>
-
-          <colspec colnum="5" colwidth="2*"/>
-
-          <thead>
-            <row>
-              <entry>JPA</entry>
-
-              <entry>Packages</entry>
-
-              <entry>Export Version</entry>
-
-              <entry>Client Import Range</entry>
-
-              <entry>Provider Imp. Range</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry morerows="1">JPA 1.0</entry>
-
-              <entry><code>javax.persistence</code></entry>
-
-              <entry><code>1.0</code></entry>
-
-              <entry><code>[1.0,2.0)</code></entry>
-
-              <entry><code>[1.0,1.1)</code></entry>
-            </row>
-
-            <row>
-              <entry><code>javax.persistence.spi</code></entry>
-
-              <entry><code>1.0</code></entry>
-
-              <entry><code>[1.0,2.0)</code></entry>
-
-              <entry><code>[1.0,1.1)</code></entry>
-            </row>
-
-            <row>
-              <entry morerows="1">JPA 2.0</entry>
-
-              <entry><code>javax.persistence</code></entry>
-
-              <entry><code>1.1</code></entry>
-
-              <entry><code>[1.1,2.0)</code></entry>
-
-              <entry><code>[1.1,1.2)</code></entry>
-            </row>
-
-            <row>
-              <entry><code>javax.persistence.spi</code></entry>
-
-              <entry><code>1.1</code></entry>
-
-              <entry><code>[1.1,2.0)</code></entry>
-
-              <entry><code>[1.1,1.2)</code></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <para>For example, JPA should have an export declaration like:</para>
-
-      <programlisting>Export-Package: javax.persistence; version=1.1; jpa=2.0, ...</programlisting>
     </section>
 
     <section>
@@ -787,6 +745,20 @@ if ( refs != null ) {
 
       <para>The example does not handle the dynamic dependencies on the
       associated Data Source Factory service.</para>
+      
+      <section>
+        <title>Supported configuration properties</title>
+        
+        <para>The JPA 2.1 specification adds a significant number of standard 
+        property names. These properties are used both for runtime control, and 
+        also for configuring JPA persistence units as they are created.</para>
+        
+         
+        <para>The EntityManagerFactoryBuilder service must support the defined 
+        property names as per the JPA 2.1 specification. In most cases this will 
+        be accomplished by passing the values directly to the Persistence 
+        Provider.</para>
+      </section>
     </section>
   </section>
 
@@ -820,6 +792,21 @@ if ( refs != null ) {
       class space for the <code>javax.persistence.*</code> packages. Such a
       JPA Provider cannot create JPA Services that would be visible and usable
       by the Client Bundles.</para>
+    </section>
+
+    <section>
+      <title>The Extender Capability</title>
+
+      <para>A JPA Service Extender bundle must advertise an 
+      <code>osg.extender</code> capability with the name <code>osgi.jpa</code>
+      and version <code>1.1.0</code>.</para>
+      
+      <para>Persistence Bundles should require this extender capability. If a
+      persistence bundle does require the JPA Service extender then only the
+      JPA service extender to which the persistence bundle is wired should
+      process the persistence units. JPA Service extender implementations 
+      must ignore the persistence bundles which are wired to other extender
+      implementations.</para>
     </section>
 
     <section xml:id="i3088219">
@@ -1088,6 +1075,18 @@ suffix:     META-INF/persistence.xml</programlisting>
       Client Bundle could still provide JDBC configuration properties for the
       <code>createEntityManager(Map)</code> method. This not always possible,
       see <xref linkend="i3115644"/>.</para>
+      
+      <para>In the case of an incomplete Persistence Unit no Entity Manager Factory
+      can be initially registered, however once configured using an Entity Manager 
+      Factory Builder service the JPA Service must register the created Entity Manager
+      Factory as a service. The registered service must include any supplied configuration 
+      properties that match the recommended OSGi service property types as service properties.
+      The <code>javax.persistence.jdbc.password</code> property must be omitted from 
+      these service properties.</para>
+      
+      <para>If the Entity Manager Factory Builder service is later used to change the 
+      configuration being used by the Entity Manager Factory Service then the registered 
+      Entity Manager Factory service must be unregistered and the new object registered.</para>
     </section>
 
     <section>

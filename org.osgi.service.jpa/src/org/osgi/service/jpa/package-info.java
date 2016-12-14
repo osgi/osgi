@@ -15,8 +15,7 @@
  */
 
 /**
- * JPA Package Version 1.0.
- * 
+ * JPA Package Version 1.1.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -26,16 +25,16 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.jpa; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.jpa; version="[1.1,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.jpa; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.jpa; version="[1.1,1.2)"}
  * 
  * @author $Id$
  */
 
-@Version("1.0")
+@Version("1.1")
 package org.osgi.service.jpa;
 
 import org.osgi.annotation.versioning.Version;
