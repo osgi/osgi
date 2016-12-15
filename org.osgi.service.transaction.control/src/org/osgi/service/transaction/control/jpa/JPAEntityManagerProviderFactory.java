@@ -88,4 +88,19 @@ public interface JPAEntityManagerProviderFactory {
 	JPAEntityManagerProvider getProviderFor(EntityManagerFactory emf,
 			Map<String,Object> resourceProviderProperties);
 
+	/**
+	 * Release a {@link JPAEntityManagerProvider} instance that has been created
+	 * by this factory. Released instances are eligible to be shut down and have
+	 * any remaining open connections closed.
+	 * <p>
+	 * Note that all {@link JPAEntityManagerProvider} instances created by this
+	 * factory service are implicitly released when the factory service is
+	 * released by this bundle.
+	 * 
+	 * @param provider
+	 * @throws IllegalArgumentException if the supplied resource was not created
+	 *             by this factory service instance.
+	 */
+	void releaseProvider(JPAEntityManagerProvider provider);
+
 }

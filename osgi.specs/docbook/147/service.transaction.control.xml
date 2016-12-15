@@ -1234,16 +1234,17 @@ public &lt;T&gt; T getResource(TransactionControl txControl);
       for a specific subclass instead, which reifies the type parameter <code>T</code>.
       This allows for type safe access to resources, and ensures that the correct
       ResourceProvider implementation has been found.</para>
-      
-      <para>Resources returned by a Resource Provider are proxies to an underlying resource
-      factory. When the resource is accessed then then the proxy will check the current 
-      transaction scope. If this is the first time the resource has been accessed in the scope
-      then the factory returns a new copy of the resource. If the scope is a Transaction scope
-      then the resource must also be enlisted into the transaction at this point. 
-      Subsequent resource access within the same scope must use the same backing resource.</para>
 
       <section>
-        <title>Resource Lifecycle</title>
+        <title>The Basic Resource Lifecycle</title>
+        
+        <para>Resources returned by a Resource Provider are proxies to an underlying factory
+        for physical resources. Whenever the proxy is accessed then it should check the current
+        transaction scope. If this is the first time the proxy has been accessed in the scope
+        then the proxy should associate a new physical resource with the scope. If the scope 
+        is a Transaction scope then the resource must also be enlisted into the transaction
+        at this point. Subsequent uses of the proxy within the same scope must use the same 
+        backing physical resource.</para>
         
         <para>When a scope finishes any resources associated with the scope must be cleaned up 
         without action required by the client. This rule applies to both the Transaction scope 
@@ -1254,8 +1255,8 @@ public &lt;T&gt; T getResource(TransactionControl txControl);
       <section>
         <title>Unscoped Resource Access</title>
         
-        <para>If a resource is accessed by unscoped code then it may throw a TransactionException 
-        to indicate that it cannot be used.</para>
+        <para>If a resource is accessed by unscoped code then it must throw a TransactionException 
+        to indicate that it cannot be used wuthout an active scope.</para>
       </section>
 
       <section>
@@ -1276,6 +1277,35 @@ public &lt;T&gt; T getResource(TransactionControl txControl);
         not delegate to the real resource and must throw a TransactionException instead.</para>
       </section>
 
+      <section>
+        <title>Releasing Resource Providers</title>
+        
+        <para>Resource Provider instances typically hold references to one or more physical
+        resources, often in a pool. When a Resource Provider is no longer needed then it
+        is important that these physical resources can be released to avoid resource leaks. 
+        The way in which a Resource Provider can determine it is no longer needed depends
+        upon how the Resource Provider is created.</para>
+        
+        <para>If the Resource Provider is registered directly as a service then it may
+        release its physical resources when it is no longer used by any bundles. One way to
+        achieve this is through the use of an OSGi Service Factory.</para>
+        
+        <para>In some cases a Resource Provider is created by the client using a service
+        from the service registry. In this case the lifecycle of the Resource Provider must
+        be bounded by the lifecycle of the service that created it. In particular if the
+        client bundle releases the service which created the Resource Provider then the
+        Resource Provider must also be released. This mechanism ensures that Resource Providers 
+        do not need to be explicitly released by a client bundle when it stops. In addition 
+        services which create Resource Provider instances should provide a method which can be 
+        used to immediately release a particular Resource Provider instance without releasing 
+        service which created it. This allows client bundles to independently manage the 
+        lifecycle of multiple Resource Providers, and also to dynamically replace a Resource 
+        Provider instance.</para>
+        
+        <para>Once a Resource Provider has been released then all proxy instances associated
+        with it must be invalidated, and all methods on the proxies throw 
+        <code>TransactionException</code>.</para>
+      </section>
     </section>
 
     <section>
@@ -1406,6 +1436,15 @@ public &lt;T&gt; T getResource(TransactionControl txControl);
           along with the properties that should be used to create the JDBC connection. The JDBC
           properties must include a JDBC url to use when connecting to the database. 
           XA transactions may not be enabled when using a Driver instance.</para>
+        </section>
+        
+        <section>
+          <title>Releasing a JDBCConnectionProvider</title>
+          
+          <para>In some cases a client of the JDBCConnectionProviderFactory may wish to release
+          a created JDBCConnectionProvider without releasing the JDBCConnectionProviderFactory
+          service. In this case the JDBCConnectionProvider instance should be passed to the
+          <code>releaseProvider</code> method, which will immediately release the Resource Provider.</para>
         </section>
       </section>
       
@@ -1561,6 +1600,15 @@ txControl.required(() ->
           should be used, along with the properties that should be used to create the 
           EntityManager.</para>
         
+        </section>
+        
+        <section>
+          <title>Releasing a JPAEntityManagerProvider</title>
+          
+          <para>In some cases a client of the JPAEntityManagerProviderFactory may wish to release
+          a created JPAEntityManagerProvider without releasing the JPAEntityManagerProviderFactory
+          service. In this case the JPAEntityManagerProvider instance should be passed to the
+          <code>releaseProvider</code> method, which will immediately release the Resource Provider.</para>
         </section>
       </section>
     </section> 
