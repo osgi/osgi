@@ -133,7 +133,9 @@
 
       Configuration resources provide an array of configurations with the <code>configurations</code> key. 
       Each configuration has a <code>service.pid</code> to target a specific PID in the Configuration Admin
-      Service. 
+      Service and zero or more configuration values for this PID. Comments in the form of JSMin comments are 
+      supported, i.e. any text after <code>//</code> is ignored and any text between <code>/* */</code> is
+      ignored. 
     </para>
       
     <para>Configuration objects can define one or more environments by specifying the special key
@@ -141,6 +143,52 @@
       environments are active. For more information see the <remark>link environments section</remark>. 
     </para>
 
+    <para>This Configurator specification supports configuration resources in version 1. This is specified 
+      as <code>":configurator:version": 1</code>. If the configurator version is ommitted, 1 is assumed.
+      <remark>This is a bit misleading as we are specifying the configuration resource version. The configurator
+      itself might be version 10, but still support configuration resource version 1!</remark>
+    </para>
+    
+    <para>The configurator visits all files in the locations defined with the <code>configurations</code>
+      attribute on the <code>osgi.configurator</code> implementation requirement when a bundle that has 
+      opted in to be extended by the configurator is <emphasis>installed</emphasis>. By default this directory
+      if <code>OSGI-INF/configurations</code>. The files are processed in lexical order.
+    </para> 
+      
+    <para>
+      If multiple bundles provide configuration for the same PID ranking rules are used to decide which configuration
+      gets applied <remark>see ranking</remark>.   
+      The configurator removes the <code>service.pid</code>, any comments and the special 
+   	  <code>:configurator:</code> keys from the configuration before providing it to the Configuration Admin Service.
+   	  The configurator uses the <code>Configuration.updateIfDifferent()</code> method on the Configuration object
+   	  to avoid any volatility in the system if the configuration applied has not been changed.
+    </para>
+    
+    <para>The configurator defines the following special keys in the configuration resources:
+    </para>
+      <table>
+          <title>Configurator keys</title>
+          <tgroup cols="4">
+            <thead>
+              <row>
+                <entry>Key</entry>
+                <entry>Value type</entry>
+                <entry>Scope</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>         
+            <tbody>
+              <row>
+                <entry><code>:configurator:version</code></entry>
+                <entry>Number</entry>
+                <entry>Resource</entry>
+                <entry>The version of the configuration resource format. This specification only supports version 1. If
+                this entry is ommitted then version 1 is assumed.</entry>
+                
+              </row>
+            </tbody>
+         </tgroup>
+      </table>
   </section> 
   <section>
     <title>Factory Configurations</title>
