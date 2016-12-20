@@ -94,7 +94,52 @@
   <section>
     <title>Configurator Resources</title>
     
-    <para>...</para>
+    <para>
+      The configurator follows the OSGi extender model and looks for JSON configuration files in
+      installed bundles, if the bundle has opted-in to be processed.
+      In order to get processed, a bundle must require the configurator implementation:
+      
+      <programlisting>Require-Capability: osgi.implementation;
+  filter := (&amp;(osgi.implementation="osgi.configurator"))
+              (version&gt;=1.0)(!(version&gt;=2.0)))
+      </programlisting>
+      
+      By default the configuration resources are in the <code>OSGI-INF/configurations</code>
+      directory in the bundle.
+    </para>
+      
+    <para>Configuration files are in UTF-8 encoded and have the <code>.json</code> file extension.
+      An example configuration resource has the following structure:
+      
+    <programlisting>{
+    // Global Settings
+    ":configurator:version" : 1,
+    
+    // Configurations
+    "configurations": [
+      {
+           "service.pid": "pid.a",
+           "key": "val",
+           "some_number": 123,
+           ":configurator:environments": ["dev","demo"]
+      },
+      {
+           "service.pid": "pid.b",
+           "a_boolean" : true
+           // No environments specified, always enabled
+      }
+    ]
+}</programlisting>
+
+      Configuration resources provide an array of configurations with the <code>configurations</code> key. 
+      Each configuration has a <code>service.pid</code> to target a specific PID in the Configuration Admin
+      Service. 
+    </para>
+      
+    <para>Configuration objects can define one or more environments by specifying the special key
+      <code>:configurator:environments</code>. These configurations are only applied if one or more of these
+      environments are active. For more information see the <remark>link environments section</remark>. 
+    </para>
 
   </section> 
   <section>
