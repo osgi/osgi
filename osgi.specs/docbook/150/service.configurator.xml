@@ -9,17 +9,54 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Configurator Service Specification</title>
+  <title>Configurator Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.service.configurator-version"
-    linkend="org.osgi.service.configurator"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.configurator-version"
+    linkend="org.osgi.configurator"/></releaseinfo>
   </info>
 
   <section>
     <title>Introduction</title>
     
-    <para>...
+    <para>OSGi provides a standardized model to provide bundles with configurations. This is specified in 
+      the Configuration Admin specification. In this specification, A configuration is identified by a 
+      persistent identity (PID). A PID is a unique token, recommended to be conforming to the symbolic 
+      name syntax. A configuration consists of a set of properties, where a property consists of a 
+      string key and a corresponding value. The type of the value is limited to the primitive types and
+      their wrappers, Strings, or Java Arrays/List/Vector of these.
+    </para>
+
+    <para>
+      Sometimes it is necessary to store binary large objects (BLOB) in configuration. For example, a keystore 
+      with certificates. Since configuration admin is not suitable for this, these BLOBs are often stored on
+      the files system. The application developers then must manage the life cycles of these files.
+    </para>
+      
+    <para>
+      Configurations can be grouped with a factory PID. Configurations with a factory PID are called 
+      factory configurations and without it they are called singleton configurations.
+    </para>
+      
+    <para>
+      The original specification specified that the configurations were sent to a Managed Service for 
+      the singletons and Managed Service Factory services for the factory instances. However, over time 
+      component models became popular and a component can rely on configuration. For example, Declarative 
+      Services is tightly integrated with Configuration Admin. For these heavy users of configurations 
+      a Configuration Listener whiteboard service was added. Configuration update, delete, and bundle 
+      location change events are forwarded to this whiteboard service on a background thread.
+    </para>
+
+    <para>
+      This specification defines a mechanism to feed configurations into the system
+      through configuration resources. A single configuration resource can feed multiple PIDs with configuration
+      and multiple configuration resources can be provided in a running system.
+    </para>
+
+    <para>
+      Configuration resources can define configurations for more than one environment, allowing a single set 
+      of resources to be used in multiple contexts, such as development, test and production, each of which may 
+      have different configuration values.
     </para>
   </section> 
   
@@ -34,12 +71,20 @@
       </listitem>
     
       <listitem>
-          <para><emphasis>Configuration resource</emphasis> - A YAML resource containing
+          <para><emphasis>Configuration Resource</emphasis> - A YAML resource containing
               configuration.</para>
       </listitem>
     
       <listitem>
-        <para><emphasis>xxx</emphasis> - yyy.</para>
+        <para><emphasis>Configurator</emphasis> - yyy.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Coordinator Service</emphasis> - yyy.</para>
+      </listitem>
+    
+      <listitem>
+        <para><emphasis>Persistent Identity (PID)</emphasis> - yyy.</para>
       </listitem>
     
     </itemizedlist>
@@ -47,21 +92,72 @@
   </section> 
 
   <section>
-    <title>Configurator Service</title>
+    <title>Configurator Resources</title>
+    
+    <para>...</para>
+
+  </section> 
+  <section>
+    <title>Factory Configurations</title>
+    <para>...</para>
+  </section>
+
+  <section>
+    <title>Datatypes</title>
+    <para>...</para>
+
+    <section>
+      <title>Binary Data</title>
+      <para>...</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Environments</title>
+    <para>...</para>
+  </section>
+    
+  <section>
+    <title>Ranking</title>
+    <para>...</para>
+
+  </section>
+  <section>
+    <title>Overwrite Policies</title>
+    <para>...</para>
+  </section>
+    
+  <section>
+    <title>Runtime Environment</title>
+    <para>...</para>
+  </section>
+    
+  <section>
+    <title>Lifecycle</title>
     
     <para>...</para>
   </section> 
 
   <section>
+    <title>Grouping and Coordinations</title>
+    <para>...</para>
+  </section>
+    
+  <section>
     <title>Security</title>
     <para>...</para>
   </section> 
 
-  <!--
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.xml"/>
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.converter.util.xml"/>
-  -->
- 
+  <section>
+    <title>Capabilities</title>
+    <para>...</para>
+  </section>
+  
+  <section>
+    <title>Standalone Configurations</title>
+    <para>...</para>
+  </section>
+    
   <section>
     <title>References</title>
 
