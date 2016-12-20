@@ -59,6 +59,11 @@ releaserepo             = ${build}/${target-dir}/repo
             index=${.}/springsource.mvn;\
             name='SpringSource EBR';\
             readOnly=true,\
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+            snapshotUrl="https://repository.apache.org/content/repositories/snapshots/";\
+            index=${.}/apache-snapshots.mvn;\
+            name='Apache Snapshots';\
+            readOnly=true,\
           aQute.bnd.repository.osgi.OSGiRepository;\
             name='Amdatu';\
             locations="https://repository.amdatu.org/release/index.xml.gz";\

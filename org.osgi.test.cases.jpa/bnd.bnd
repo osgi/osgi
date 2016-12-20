@@ -7,8 +7,8 @@ Private-Package						=  \
 	
 Import-Package						= \
 	${-signaturetest};          version="[1.0,2.0)", \
-	javax.persistence;			version="[1.0,2.1)" , \
-	javax.persistence.spi;		version="[1.0,2.1)" , \
+	javax.persistence;			version="[1.0,2.2)" , \
+	javax.persistence.spi;		version="[1.0,2.2)" , \
 	*
 	
 Include-Resource 					= \
@@ -36,6 +36,7 @@ Include-Resource 					= \
 	osgi.core;						    version=4.3.1	, \
 	osgi.cmpn;						    version=4.3.1	, \
 	org.eclipse.persistence.jpa_spec;	version=2.0, \
+	org.apache.aries.jpa.container;	version=2.6.0.SNAPSHOT, \
 	${junit}
 	
 # If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
