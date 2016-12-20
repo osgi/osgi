@@ -176,6 +176,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		try {
 			emf1 = getService(EntityManagerFactory.class, "(osgi.unit.name=emfRebindingWithBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf1);
+			assertTrue(emf1.isOpen());
+
 			emfBuilder = getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfRebindingWithBuilderTestUnit)");
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", "fake.driver.class");

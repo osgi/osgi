@@ -6,7 +6,8 @@
 	<persistence-unit name="emfTestUnit">
 		<description>Persistence unit for testing EntityManagerFactory registration</description>
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:"/>
 		</properties>
 	</persistence-unit>
 </persistence>
