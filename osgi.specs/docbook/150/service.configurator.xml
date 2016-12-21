@@ -166,10 +166,7 @@
    	  by multiple bundles.
    	  <remark>can we force a bundle location?</remark>
     </para>
-    
-    <remark>What happens if there are multiple configuration admin services available? And what happens when 
-    config admin arrives late, or disappears and is replaced?</remark>
-    
+        
     <para>The configurator defines the following special keys in the configuration resources:
     </para>
       <table pgwide="1">
@@ -236,7 +233,7 @@
     <para>Configurations values support the datatypes as specified with the 
       <emphasis>Filter Syntax</emphasis> in the OSGi Core Specification.
       Configuration resources are specified in JSON, which supports a more 
-      basic set of data types. The following table describes how values are 
+      basic set of datatypes. The following table describes how values are 
       converted between configuration values and JSON values.
       <table>
         <title>JSON Conversions</title>
@@ -280,19 +277,29 @@
             </row>
             <row>
               <entry><emphasis>other</emphasis></entry>
-              <entry>String (via <code>object.toString()</code>)</entry>
+              <entry>String, conversion according to Converter rules</entry>
               <entry>String</entry>
             </row>
           </tbody>
         </tgroup>
       </table>
       
-      Because of the conversions between Java and JSON the configuration object produced by the Configurator
-      may not have the desired data type for the application. Consumers of configuration should convert
-      the configuration values to the desired type. A convenient way to achieve this is by converting the 
-      configuration map to an annotation instance with the Converter <remark>xref</remark>, or by using 
-      Declarative Services configuration property type.  
-      
+      If a specific datatype is required for a configuration, the configurator can be instructed to 
+      convert the JSON value to a given datatype. The target type can be specified by adding a colon 
+      <code>:</code> and the desired data type to the property name. Supported datatypes are
+      <code>String</code>, <code>Integer</code>, <code>Long</code>, <code>Float</code>, <code>Double</code>,
+      <code>Byte</code>, <code>Short</code>, <code>Character</code> and <code>Boolean</code>. Additionally
+      arrays of Scalar or primitive types are supported and <code>Collection</code> of scalar. The primitive
+      types that can be specified for arrays are: <code>int</code>, <code>long</code>, <code>float</code>,
+      <code>double</code>, <code>byte</code>, <code>short</code>, <code>char</code>, <code>boolean</code>. For 
+      <code>Collection</code> the configurator picks a suitable implementation that preserves order. 
+    </para>
+    
+    <para>
+      As an alternative of specifying datatypes for the configurator, consumers of configuration can convert
+      the configuration values to the desired type by using the OSGi Converter <remark>xref</remark>. A convenient way to convert a
+      configuration map to the desired datatypes is by converting it to an annotation instance or by using
+      a Declarative Services configuration property type.  
     </para>
 
     <section>
@@ -384,9 +391,12 @@
     to be applied was set by another entity in the system, or if it was modified from the values set by the 
     configurator.
     
-      <table rowheader="firstcol">
-        <title>Applying Configuration: Overwrite Policies</title>
+      <table>
+        <title>Applying Configurations: Overwrite Policies</title>
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.25*"/>
+          <colspec colnum="2" colwidth="0.75*"/>
+          <colspec colnum="3" colwidth="0.75*"/>
           <thead>
             <row>
               <entry>State</entry>
@@ -427,9 +437,12 @@
       When configuration resources are removed, the configurator removes the applicable configurations from
       the system. The configurator policy is also used here to define the removal behavior when configurations 
       were modified outside of the configurator.
-      <table rowheader="firstcol">
-        <title>Removing Configuration: Overwrite Policies</title>
+      <table>
+        <title>Removing Configurations: Overwrite Policies</title>
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.25*"/>
+          <colspec colnum="2" colwidth="0.75*"/>
+          <colspec colnum="3" colwidth="0.75*"/>
           <thead>
             <row>
               <entry>State</entry>
@@ -463,7 +476,7 @@
   </section>
     
   <section>
-    <title>Runtime Environment</title>
+    <title>Intial Configurations</title>
     <para>When the configurator starts it obtains the <code>configurator.initial</code> framework property to prime 
     its state from the runtime environment. If this property is available its value is processed as follows:
     
@@ -486,7 +499,8 @@
     should require the Configuration Admin service through a service requirement.
     </para>
     
-    <remark>how does it deal with multiple config admins?</remark>
+    <remark>What happens if there are multiple configuration admin services available? And what happens when 
+    config admin arrives late, or disappears and is replaced?</remark>    
     
     <para>
     When the configurator starts it processes all installed bundles and applies configurations provided by those bundles.
@@ -547,7 +561,7 @@
 
       <programlisting>Require-Capability: osgi.implementation;
        filter:=(&amp;(osgi.implementation="osgi.configurator")
-                 (version&gt;=1.0)(!(version&gt;>=2.0)));
+                 (version&gt;=1.0)(!(version&gt;=2.0)));
        configurations=resources/configs</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
