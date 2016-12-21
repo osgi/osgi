@@ -293,6 +293,19 @@
       types that can be specified for arrays are: <code>int</code>, <code>long</code>, <code>float</code>,
       <code>double</code>, <code>byte</code>, <code>short</code>, <code>char</code>, <code>boolean</code>. For 
       <code>Collection</code> the configurator picks a suitable implementation that preserves order. 
+      An example configuration resource with typed data:
+      <programlisting>{
+  "configurations": [{      
+    "port:Integer" : 300,
+    "an.int.array:int[]" : [2, 3, 4],
+    "an.Integer.collection:Collection&lt;Integer&gt;" : [2,3,4],
+    "complex": {
+      "a" : 1,
+      "b" : "two"
+    }
+  }]
+}</programlisting>
+<remark>Do we support the complex configuration above?</remark>
     </para>
     
     <para>
@@ -304,7 +317,39 @@
 
     <section>
       <title>Binary Data</title>
-      <para>...</para>
+      <para>In some cases binary data is associated with configurations such as certificates, security keys or 
+      other resources. The configurator can manage this binary data. 
+      The bundle developer places the binary data in a location in the configuration bundle and references it from 
+      the configuration resource, marking its type as <code>binary</code>:
+      
+      <programlisting>{
+  "configurations": [{
+    "service.pid" : "my.config",
+    "public.key:binary" : "/OSGI-INF/files/mykey.pub"
+  }]
+}</programlisting>
+
+      When the configurator applies the configuration, it extracts the binary file to a public area on the file system.
+      It then applies the configuration with as value the absolute path of the extracted binary file.
+      </para> 
+      
+      <para>
+      A binary data property can also specify an array of binary resources by declaring the <code>binary[]</code> datatype.
+      Each resource referenced is extracted as a separate file on the filesystem and the value of the property will be an 
+      array of strings, each string being the full path of one extracted binary.
+      </para>
+      
+      <para>
+      By default a directory called <code>binaries</code> in the bundle data area is used. An alternative location can 
+      be specified via the <code>configurator.binaries</code> framework property. The value of this property must be 
+      an absolute path on the file system to which the configurator has write access. If the directory does not exist
+      or the configurator cannot write to this location, it logs an error and uses the default location instead.
+      </para>  
+      <remark>I renamed configurator.director to configurator.binaries, hope thats ok</remark>
+      <para>When a configuration is removed, its associated binary files are also removed from the file system.
+      When a configuration is updated, associated binary files are updated, if necessary. In the case of an update
+      the configurator should use a different filename for the extracted binary file to avoid any open file lock issues.
+      </para>      
     </section>
   </section>
 
@@ -325,7 +370,7 @@
     <para>
       An example configuration resource for multiple environments can look like this:
       <programlisting>{
-  configurations: [
+  "configurations": [
     {
       "service.pid" : "my.service.pid",
       "foo" : 1,
