@@ -104,7 +104,7 @@
               (version&gt;=1.0)(!(version&gt;=2.0)))
       </programlisting>
       
-      By default the configuration resources are in the <code>OSGI-INF/configurations</code>
+      By default the configuration resources are in the <code>OSGI-INF/configurator</code>
       directory in the bundle.
     </para>
       
@@ -152,7 +152,7 @@
     <para>The configurator visits all files in the locations defined with the <code>configurations</code>
       attribute on the <code>osgi.configurator</code> implementation requirement when a bundle that has 
       opted in to be extended by the configurator is <emphasis>installed</emphasis>. By default this directory
-      if <code>OSGI-INF/configurations</code>. The files are processed in lexical order.
+      if <code>OSGI-INF/configurator</code>. The files are processed in lexical order.
     </para> 
       
     <para>
@@ -161,7 +161,10 @@
       The configurator removes the <code>service.pid</code>, any comments and the special 
    	  <code>:configurator:</code> keys from the configuration before providing it to the Configuration Admin Service.
    	  The configurator uses the <code>Configuration.updateIfDifferent()</code> method on the Configuration object
-   	  to avoid any volatility in the system if the configuration applied has not been changed.
+   	  to avoid any volatility in the system if the configuration applied has not been changed. The configurator
+   	  obtains any configurations with the location value of <code>?</code> to allow the configurations to be received
+   	  by multiple bundles.
+   	  <remark>can we force a bundle location?</remark>
     </para>
     
     <remark>What happens if there are multiple configuration admin services available? And what happens when 
@@ -194,7 +197,7 @@
               
               <row>
                 <entry><code>:configurator:policy</code></entry>
-                <entry>String</entry>
+                <entry>String <code>default</code> or <code>force</code></entry>
                 <entry>Configuration</entry>
                 <entry>Specifies the overwrite policy on configurations set through non-configurator sources.
                 See <xref linkend="service.configurator.policy"/>.</entry>
@@ -357,30 +360,155 @@
       
     <para>The ranking of a configuration can be specified by adding the <code>:configurator:ranking</code>
       property. The value of this property is converted to an Integer as defined by the Converter specification.
-      If the value cannot be converted a warning should be logged.
+      If the value cannot be converted a warning should be logged. When multiple configurations for a given PID
+      have the same ranking
+      the bundle providing the configuration with the lowest bundle ID is preferred. 
+      If multiple configurations for the same PID with the same ranking are specified within a single bundle, 
+      the first one encountered is used.
     </para>
 
   </section>
   
   <section xml:id="service.configurator.policy">
     <title>Overwrite Policies</title>
-    <para>...</para>
+    <para>In an IT operations scenario configurations are often updated by a systems administrator to suit the
+    deployments requirements. In such scenarios it may be undesirable to have these modifications overwritten 
+    by a software update which includes a configuration resource. In some other cases, bundles with configuration
+    resources are used to enforce company best practices or compliance with corporate guidelines. 
+    This specification defines policies to define the overwrite behavior of the configurator when PIDs are 
+    found to be set or modified by another entity.
+    </para>
+    
+    <para>Configuration policies are set by specifying the <code>:configurator:policy</code> property. Accepted 
+    values are <code>default</code> and <code>force</code>. This policy defines the behavior if a configuration
+    to be applied was set by another entity in the system, or if it was modified from the values set by the 
+    configurator.
+    
+      <table rowheader="firstcol">
+        <title>Applying Configuration: Overwrite Policies</title>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>State</entry>
+              <entry>Policy <code>default</code></entry>
+              <entry>Policy <code>force</code></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>No existing configuration</entry>
+              <entry>Configuration is added</entry>
+              <entry>Configuration is added</entry>
+            </row>
+            <row>
+              <entry>Configurator set with higher ranking</entry>
+              <entry>No action</entry>
+              <entry>No action</entry>
+            </row>
+            <row>
+              <entry>Configurator set with lower or equal ranking</entry>
+              <entry>Configuration is added</entry>
+              <entry>Configuration is added</entry>              
+            </row>
+            <row>
+              <entry>Not set by configurator or modified</entry>
+              <entry>No action</entry>
+              <entry>Configuration is added</entry>              
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      
+      The configurator needs to keep track of configuration change count values to identify configurations 
+      that were changed by other entities or administrators.
+    </para>
+    
+    <para>
+      When configuration resources are removed, the configurator removes the applicable configurations from
+      the system. The configurator policy is also used here to define the removal behavior when configurations 
+      were modified outside of the configurator.
+      <table rowheader="firstcol">
+        <title>Removing Configuration: Overwrite Policies</title>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>State</entry>
+              <entry>Policy <code>default</code></entry>
+              <entry>Policy <code>force</code></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>Configurator set with higher ranking</entry>
+              <entry>No action</entry>
+              <entry>No action</entry>
+            </row>
+            <row>
+              <entry>Configurator set with lower of equal ranking</entry>
+              <entry>Configuration is removed</entry>
+              <entry>Configuration is removed</entry>
+            </row>
+            <row>
+              <entry>Not set by configurator or modified</entry>
+              <entry>No action</entry>
+              <entry>Configuration is removed</entry>              
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      
+      When a configuration is removed the configurator checks whether another, lower ranked, configuration resource is 
+      available. If present the configurator sets this configuration. 
+    </para>
   </section>
     
   <section>
     <title>Runtime Environment</title>
-    <para>...</para>
+    <para>When the configurator starts it obtains the <code>configurator.initial</code> framework property to prime 
+    its state from the runtime environment. If this property is available its value is processed as follows:
+    
+    <orderedlist>
+      <listitem><para>If the value starts with a curly bracket <code>{</code>, ignoring any leading white space,
+      the configurator will interpret the value as a literal configuration JSON resource.</para></listitem>
+      
+      <listitem><para>Otherwise the value is treated as a comma-separated list of URLs. The configurator will
+      read the resource at each URL and parse it as a JSON Configuration resource. If any errors occur during 
+      this process they are logged and the URL is skipped.</para></listitem>
+    </orderedlist>
+    
+    </para>
   </section>
     
   <section>
     <title>Lifecycle</title>
     
-    <para>...</para>
+    <para>The configurator requires access to the Configuration Admin service. Therefore the configurator implementation
+    should require the Configuration Admin service through a service requirement.
+    </para>
+    
+    <remark>how does it deal with multiple config admins?</remark>
+    
+    <para>
+    When the configurator starts it processes all installed bundles and applies configurations provided by those bundles.
+    The configurator should process as many bundles as possible in a single pass to minimize volatility for PIDs
+    where multiple configurations with different rankings are provided.
+    </para>
+    
+    <para>
+    The configurator must also check whether configurations that have been installed are still valid. If the bundles that provided
+    these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
+    the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
+    to avoid volatility in the system if the actual configuration values did not change.
+    </para>
+    
+    <para>
+    When the configurator is stopped the configurations applied will remain in the system.
+    </para>
   </section> 
 
   <section>
     <title>Grouping and Coordinations</title>
-    <para>...</para>
+    <para>... decide whether this is done here or in configadmin ...</para>
   </section>
     
   <section>
@@ -390,7 +518,41 @@
 
   <section>
     <title>Capabilities</title>
-    <para>...</para>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The Configurator implementation bundle must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.configurator</code> with the version of this specification:
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.configurator";
+       version:Version="1.0"</programlisting>
+      </para>
+      
+      <para>
+      Bundles providing configuration resources must require the <code>osgi.implementation</code>
+      capability to opt in to being processed by the configurator. The default location for 
+      configuration resources is in <code>OSGI-INF/configurator</code>. A bundle can specify 
+      alternate locations for configuration resources through the <code>configurations</code> attribute.
+      The value of this attribute is <code>String</code> or <code>List&lt;String&gt;</code>.
+      Each value represents a path inside the bundle. This path is always relative to the root of the bundle and
+      may start with a slash <code>/</code>. A path value of <code>/</code> indicates the root of the bundle.
+      The configurator uses <code>Bundle.findEntries()</code> to find all resources with the 
+      <code>.json</code> extension. If the <code>configuration</code> attribute specifies multiple paths, these
+      are visited in the order specified. Duplicate paths are ignored. Paths that do not exist in the bundle
+      are logged as an error and skipped.
+      Resources in a single directory are processed in alphabetical order.
+      </para>
+
+      <programlisting>Require-Capability: osgi.implementation;
+       filter:=(&amp;(osgi.implementation="osgi.configurator")
+                 (version&gt;=1.0)(!(version&gt;>=2.0)));
+       configurations=resources/configs</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
   </section>
   
   <section>
