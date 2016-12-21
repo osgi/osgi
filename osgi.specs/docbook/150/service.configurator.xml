@@ -164,6 +164,9 @@
    	  to avoid any volatility in the system if the configuration applied has not been changed.
     </para>
     
+    <remark>What happens if there are multiple configuration admin services available? And what happens when 
+    config admin arrives late, or disappears and is replaced?</remark>
+    
     <para>The configurator defines the following special keys in the configuration resources:
     </para>
       <table pgwide="1">
@@ -184,7 +187,7 @@
             <tbody>              
               <row>
                 <entry><code>:configurator:environments</code></entry>
-                <entry>Array of String</entry>
+                <entry>String <emphasis>or</emphasis> Array of String<remark>yes?</remark></entry>
                 <entry>Configuration</entry>
                 <entry>Environments that this configuration applies to. See <xref linkend="service.configurator.environments"/>.</entry>
               </row>
@@ -285,7 +288,7 @@
       may not have the desired data type for the application. Consumers of configuration should convert
       the configuration values to the desired type. A convenient way to achieve this is by converting the 
       configuration map to an annotation instance with the Converter <remark>xref</remark>, or by using 
-      Declarative Service configuration property type.  
+      Declarative Services configuration property type.  
       
     </para>
 
@@ -297,12 +300,65 @@
 
   <section xml:id="service.configurator.environments">
     <title>Environments</title>
-    <para>...</para>
+    <para>A single configuration resource or set of configuration resources
+      can contain configurations for more than one runtime context for a given 
+      PID. These contexts are named <emphasis>environments</emphasis>. Example environments could be 
+      <emphasis>test</emphasis> and <emphasis>production</emphasis>. At runtime the active environments are
+      obtained from the <code>configurator.environment</code> framework property. This property must be specified
+      as a comma-separated string which defines the set of active environments. 
+      White space before and after the individual environment 
+      names are ignored.
+      <remark>Can I chance environments dynamically at runtime? I guess I can change the system property, but how
+      will the configuration notice? Do I need to restart the configuration implementation bundle?</remark>
+    </para>
+    
+    <para>
+      An example configuration resource for multiple environments can look like this:
+      <programlisting>{
+  configurations: [
+    {
+      "service.pid" : "my.service.pid",
+      "foo" : 1,
+      ":configurator:environments" : "test"
+    },
+    {
+      "service.pid" : "my.service.pid",
+      "foo" : 2,
+      ":configurator:environments" : ["stage", "prod"]
+    },
+    {
+      "service.pid" : "my.service.pid",
+      "foo" : 100
+    }
+  ]      
+}</programlisting>
+
+      If more than one configuration for a PID can be applied, the one with the highest configuration ranking 
+      is applied. All others are ignored for this PID. If two configurations have the same ranking, the first 
+      one found is used. In the example above all configurations have the same ranking. If the environment 
+      <code>test</code> is active, the first configuration is used, if <code>prod</code> is active, the second 
+      configuration is used.
+      If neither <code>test</code> nor <code>prod</code> are active, the third configuration is used. If both 
+      <code>test</code> and <code>prod</code> are active, the first configuration is used.
+    </para>
   </section>
     
   <section xml:id="service.configurator.ranking">
     <title>Ranking</title>
-    <para>...</para>
+    <para>The order in which the Configurator processes configuration resources in bundles is undefined. To control
+      which configurations are in effect configuration ranking can be used. Configuration ranking is similar to
+      service ranking; it is an integer which defaults to 0. Configurations with a higher ranking are preferred 
+      over configurations with a lower ranking.
+      When multiple configurations arrive over time it is possible that the configurator changes the effective
+      configuration when a higher ranked configuration arrives later. The design of the configurator is such that
+      the effective set of configurations once the system stabilizes is consistent, regardless of the order
+      in which bundles are installed and processed.
+    </para>
+      
+    <para>The ranking of a configuration can be specified by adding the <code>:configurator:ranking</code>
+      property. The value of this property is converted to an Integer as defined by the Converter specification.
+      If the value cannot be converted a warning should be logged.
+    </para>
 
   </section>
   
