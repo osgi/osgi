@@ -140,7 +140,7 @@
       
     <para>Configuration objects can define one or more environments by specifying the special key
       <code>:configurator:environments</code>. These configurations are only applied if one or more of these
-      environments are active. For more information see the <remark>link environments section</remark>. 
+      environments are active. For more information see <xref linkend="service.configurator.environments"/>. 
     </para>
 
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
@@ -166,9 +166,13 @@
     
     <para>The configurator defines the following special keys in the configuration resources:
     </para>
-      <table>
+      <table pgwide="1">
           <title>Configurator keys</title>
           <tgroup cols="4">
+            <colspec colnum="1" colwidth="1*"/>
+            <colspec colnum="2" colwidth="0.75*"/>
+            <colspec colnum="3" colwidth="0.75*"/>
+            <colspec colnum="4" colwidth="2*"/>
             <thead>
               <row>
                 <entry>Key</entry>
@@ -177,27 +181,113 @@
                 <entry>Description</entry>
               </row>
             </thead>         
-            <tbody>
+            <tbody>              
+              <row>
+                <entry><code>:configurator:environments</code></entry>
+                <entry>Array of String</entry>
+                <entry>Configuration</entry>
+                <entry>Environments that this configuration applies to. See <xref linkend="service.configurator.environments"/>.</entry>
+              </row>
+              
+              <row>
+                <entry><code>:configurator:policy</code></entry>
+                <entry>String</entry>
+                <entry>Configuration</entry>
+                <entry>Specifies the overwrite policy on configurations set through non-configurator sources.
+                See <xref linkend="service.configurator.policy"/>.</entry>
+              </row>
+              
+              <row>
+                <entry><code>:configurator:ranking</code></entry>
+                <entry>Number</entry>
+                <entry>Configuration</entry>
+                <entry>The ranking for this configuration. See <xref linkend="service.configurator.ranking"/>.</entry>
+              </row>
+
               <row>
                 <entry><code>:configurator:version</code></entry>
                 <entry>Number</entry>
                 <entry>Resource</entry>
                 <entry>The version of the configuration resource format. This specification only supports version 1. If
                 this entry is ommitted then version 1 is assumed.</entry>
-                
               </row>
             </tbody>
          </tgroup>
       </table>
   </section> 
+  
   <section>
     <title>Factory Configurations</title>
-    <para>...</para>
+    <para>Factory configurations can be addressed in the configuration PID using 
+      <code>PID#name</code> structure. This ensures a well-known name for the 
+      factory configuration instance. The configurator must use the 
+      <code>getFactoryConfiguration()</code> methods on Configuration Admin to 
+      create or obtain configurations with the given PID and name.</para>
   </section>
 
   <section>
     <title>Datatypes</title>
-    <para>...</para>
+    <para>Configurations values support the datatypes as specified with the 
+      <emphasis>Filter Syntax</emphasis> in the OSGi Core Specification.
+      Configuration resources are specified in JSON, which supports a more 
+      basic set of data types. The following table describes how values are 
+      converted between configuration values and JSON values.
+      <table>
+        <title>JSON Conversions</title>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>From Java type</entry>
+              <entry>JSON type</entry>
+              <entry>To Java type</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><code>Boolean</code></entry>
+              <entry>Boolean</entry>
+              <entry><code>Boolean</code></entry>
+            </row>
+            <row>
+              <entry><code>Number</code> or subclass</entry>
+              <entry>Number</entry>
+              <entry>If the number is a whole number an <code>Integer</code> is created. 
+                If the number is too large
+                for an <code>Integer</code> a <code>Long</code> is used. 
+                If the number is a floating point number a 
+                <code>Double</code> is used.</entry>
+            </row>
+            <row>
+              <entry><code>String</code></entry>
+              <entry>String</entry>
+              <entry><code>String</code></entry>
+            </row>
+            <row>
+              <entry>Array</entry>
+              <entry>Array</entry>
+              <entry>Array, contents are boxed</entry>
+            </row>
+            <row>
+              <entry><code>Collection</code> or subclass</entry>
+              <entry>Array</entry>
+              <entry>Array, contents are boxed</entry>
+            </row>
+            <row>
+              <entry><emphasis>other</emphasis></entry>
+              <entry>String (via <code>object.toString()</code>)</entry>
+              <entry>String</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      
+      Because of the conversions between Java and JSON the configuration object produced by the Configurator
+      may not have the desired data type for the application. Consumers of configuration should convert
+      the configuration values to the desired type. A convenient way to achieve this is by converting the 
+      configuration map to an annotation instance with the Converter <remark>xref</remark>, or by using 
+      Declarative Service configuration property type.  
+      
+    </para>
 
     <section>
       <title>Binary Data</title>
@@ -205,17 +295,18 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.configurator.environments">
     <title>Environments</title>
     <para>...</para>
   </section>
     
-  <section>
+  <section xml:id="service.configurator.ranking">
     <title>Ranking</title>
     <para>...</para>
 
   </section>
-  <section>
+  
+  <section xml:id="service.configurator.policy">
     <title>Overwrite Policies</title>
     <para>...</para>
   </section>
