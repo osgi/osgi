@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,7 +38,8 @@ import org.osgi.framework.Filter;
  * Configuration Admin.
  * 
  * @ThreadSafe
- * @author $Id$
+ * @author $Id: ConfigurationPermission.java 1750478 2016-06-28 11:34:40Z
+ *         cziegeler $
  * @since 1.2
  */
 
@@ -53,14 +54,23 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * The permission to be updated, that is, act as a Managed Service or
 	 * Managed Service Factory. The action string {@value #TARGET}.
-	 * 
+	 *
 	 * @since 1.4
 	 */
 	public final static String		TARGET				= "target";
 
-	private final static int		ACTION_CONFIGURE	= 0x00000001;
+    /**
+     * Provides permission to set or remove an attribute on the configuration.
+     * The action string {@value #ATTRIBUTE}.
+     *
+     * @since 1.6
+     */
+    public final static String      ATTRIBUTE              = "attribute";
+
+    private final static int		ACTION_CONFIGURE	= 0x00000001;
 	private final static int		ACTION_TARGET		= 0x00000002;
-	private final static int		ACTION_ALL			= ACTION_CONFIGURE | ACTION_TARGET;
+	private final static int		ACTION_ATTRIBUTE    = 0x00000004;
+	private final static int		ACTION_ALL			= ACTION_CONFIGURE | ACTION_TARGET | ACTION_ATTRIBUTE;
 	final static int				ACTION_NONE			= 0;
 
 	/**
@@ -70,7 +80,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * The actions in canonical form.
-	 * 
+	 *
 	 * @serial
 	 */
 	private volatile String			actions				= null;
@@ -82,7 +92,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Create a new ConfigurationPermission.
-	 * 
+	 *
 	 * @param name Name of the permission. Wildcards ({@code '*'}) are allowed
 	 *        in the name. During {@link #implies(Permission)}, the name is
 	 *        matched to the requested permission using the substring matching
@@ -97,7 +107,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Package private constructor used by ConfigurationPermissionCollection.
-	 * 
+	 *
 	 * @param name location string
 	 * @param mask action mask
 	 */
@@ -108,7 +118,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Called by constructors and when deserialized.
-	 * 
+	 *
 	 * @param mask action mask
 	 */
 	private void setTransients(int mask) {
@@ -121,7 +131,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Parse action string into action mask.
-	 * 
+	 *
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
@@ -172,10 +182,23 @@ public final class ConfigurationPermission extends BasicPermission {
 					matchlen = 9;
 					mask |= ACTION_CONFIGURE;
 
-				} else {
-					// parse error
-					throw new IllegalArgumentException("invalid actions: " + actions);
-				}
+    			} else
+	    			if (i >= 8 && (a[i - 8] == 'a' || a[i - 8] == 'A')
+		    				&& (a[i - 7] == 't' || a[i - 7] == 'T')
+			    			&& (a[i - 6] == 't' || a[i - 6] == 'T')
+				    		&& (a[i - 5] == 'r' || a[i - 5] == 'R')
+					    	&& (a[i - 4] == 'i' || a[i - 4] == 'I')
+						    && (a[i - 3] == 'b' || a[i - 3] == 'B')
+						    && (a[i - 2] == 'u' || a[i - 2] == 'U')
+    						&& (a[i - 1] == 't' || a[i - 1] == 'T')
+	     					&& (a[i] == 'e' || a[i] == 'E')) {
+		    			matchlen = 9;
+			    		mask |= ACTION_ATTRIBUTE;
+				    } else {
+					   // parse error
+    					throw new IllegalArgumentException("invalid actions: " + actions);
+	    			}
+	    		
 
 			// make sure we didn't just match the tail of a word
 			// like "ackbarftarget". Also, skip to the comma.
@@ -210,7 +233,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Parse the name for wildcard processing.
-	 * 
+	 *
 	 * @param name The name of the permission.
 	 * @return {@code null} is the name has no wildcards or a
 	 *         {@code List<String>} where element is a substring to match or
@@ -273,7 +296,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * Determines if a {@code ConfigurationPermission} object "implies" the
 	 * specified permission.
-	 * 
+	 *
 	 * @param p The target permission to check.
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
@@ -291,7 +314,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * Internal implies method. Used by the implies and the permission
 	 * collection implies methods.
-	 * 
+	 *
 	 * @param requested The requested ConfigurationPermission which has already
 	 *        be validated as a proper argument.
 	 * @param effective The effective actions with which to start.
@@ -356,7 +379,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * Determines the equality of two {@code ConfigurationPermission} objects.
 	 * <p>
 	 * Two {@code ConfigurationPermission} objects are equal.
-	 * 
+	 *
 	 * @param obj The object being compared for equality with this object.
 	 * @return {@code true} if {@code obj} is equivalent to this
 	 *         {@code ConfigurationPermission}; {@code false} otherwise.
@@ -378,7 +401,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Returns the hash code value for this object.
-	 * 
+	 *
 	 * @return Hash code value for this object.
 	 */
 
@@ -392,11 +415,11 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * Returns the canonical string representation of the
 	 * {@code ConfigurationPermission} actions.
-	 * 
+	 *
 	 * <p>
 	 * Always returns present {@code ConfigurationPermission} actions in the
 	 * following order: {@value #CONFIGURE}, {@value #TARGET}
-	 * 
+	 *
 	 * @return Canonical string representation of the
 	 *         {@code ConfigurationPermission} actions.
 	 */
@@ -417,6 +440,13 @@ public final class ConfigurationPermission extends BasicPermission {
 				if (comma)
 					sb.append(',');
 				sb.append(TARGET);
+				comma = true;
+			}
+
+			if ((mask & ACTION_ATTRIBUTE) == ACTION_ATTRIBUTE) {
+				if (comma)
+					sb.append(',');
+				sb.append(ATTRIBUTE);
 			}
 
 			actions = result = sb.toString();
@@ -428,7 +458,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * Returns a new {@code PermissionCollection} object suitable for storing
 	 * {@code ConfigurationPermission}s.
-	 * 
+	 *
 	 * @return A new {@code PermissionCollection} object.
 	 */
 	@Override
@@ -462,7 +492,7 @@ public final class ConfigurationPermission extends BasicPermission {
 
 /**
  * Stores a set of {@code ConfigurationPermission} permissions.
- * 
+ *
  * @see java.security.Permission
  * @see java.security.Permissions
  * @see java.security.PermissionCollection
@@ -471,7 +501,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	static final long								serialVersionUID	= -6917638867081695839L;
 	/**
 	 * Collection of permissions.
-	 * 
+	 *
 	 * @serial
 	 * @GuardedBy this
 	 */
@@ -479,7 +509,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Boolean saying if "*" is in the collection.
-	 * 
+	 *
 	 * @serial
 	 * @GuardedBy this
 	 */
@@ -487,7 +517,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Creates an empty {@code ConfigurationPermissionCollection} object.
-	 * 
+	 *
 	 */
 	public ConfigurationPermissionCollection() {
 		permissions = new HashMap<String, ConfigurationPermission>();
@@ -498,12 +528,12 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 * Adds the specified permission to the
 	 * {@code ConfigurationPermissionCollection}. The key for the hash is the
 	 * interface name of the service.
-	 * 
+	 *
 	 * @param permission The {@code Permission} object to add.
-	 * 
+	 *
 	 * @exception IllegalArgumentException If the permission is not an
 	 *            {@code ConfigurationPermission}.
-	 * 
+	 *
 	 * @exception SecurityException If this ConfigurationPermissionCollection
 	 *            object has been marked read-only.
 	 */
@@ -543,7 +573,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	/**
 	 * Determines if the specified permissions implies the permissions expressed
 	 * in {@code permission}.
-	 * 
+	 *
 	 * @param permission The Permission object to compare with this
 	 *        {@code ConfigurationPermission} object.
 	 * @return {@code true} if {@code permission} is a proper subset of a
@@ -585,7 +615,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	/**
 	 * Returns an enumeration of all {@code ConfigurationPermission} objects in
 	 * the container.
-	 * 
+	 *
 	 * @return Enumeration of all {@code ConfigurationPermission} objects.
 	 */
 	@Override

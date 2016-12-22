@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2012, 2016). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,7 +22,6 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Synchronous Listener for Configuration Events. When a
  * {@code ConfigurationEvent} is fired, it is synchronously delivered to all
  * {@code SynchronousConfigurationListener}s.
- * 
  * <p>
  * {@code SynchronousConfigurationListener} objects are registered with the
  * Framework service registry and are synchronously notified with a
@@ -32,14 +31,14 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@code ConfigurationEvent} object to determine its type, the PID of the
  * {@code Configuration} object with which it is associated, and the
  * Configuration Admin service that fired the event.
- * 
  * <p>
  * Security Considerations. Bundles wishing to synchronously monitor
  * configuration events will require
  * {@code ServicePermission[SynchronousConfigurationListener,REGISTER]} to
  * register a {@code SynchronousConfigurationListener} service.
- * 
- * @author $Id$
+ *
+ * @author $Id: SynchronousConfigurationListener.java 1750312 2016-06-27
+ *         08:20:58Z cziegeler $
  * @since 1.5
  * @ThreadSafe
  */

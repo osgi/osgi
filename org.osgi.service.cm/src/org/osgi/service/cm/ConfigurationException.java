@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.osgi.service.cm;
 /**
  * An {@code Exception} class to inform the Configuration Admin service of
  * problems with configuration data.
- * 
+ *
  * @author $Id$
  */
 public class ConfigurationException extends Exception {
@@ -30,7 +30,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Create a {@code ConfigurationException} object.
-	 * 
+	 *
 	 * @param property name of the property that caused the problem,
 	 *        {@code null} if no specific property was the cause
 	 * @param reason reason for failure
@@ -43,7 +43,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Create a {@code ConfigurationException} object.
-	 * 
+	 *
 	 * @param property name of the property that caused the problem,
 	 *        {@code null} if no specific property was the cause
 	 * @param reason reason for failure
@@ -58,7 +58,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Return the property name that caused the failure or null.
-	 * 
+	 *
 	 * @return name of property or null if no specific property caused the
 	 *         problem
 	 */
@@ -68,7 +68,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Return the reason for this exception.
-	 * 
+	 *
 	 * @return reason of the failure
 	 */
 	public String getReason() {
@@ -77,7 +77,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Returns the cause of this exception or {@code null} if no cause was set.
-	 * 
+	 *
 	 * @return The cause of this exception or {@code null} if no cause was set.
 	 * @since 1.2
 	 */
@@ -88,7 +88,7 @@ public class ConfigurationException extends Exception {
 
 	/**
 	 * Initializes the cause of this exception to the specified value.
-	 * 
+	 *
 	 * @param cause The cause of this exception.
 	 * @return This exception.
 	 * @throws IllegalArgumentException If the specified cause is this

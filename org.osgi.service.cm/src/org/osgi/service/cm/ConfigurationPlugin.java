@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2016). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
+
 import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.ServiceReference;
 
 /**
  * A service interface for processing configuration dictionary before the
  * update.
- * 
  * <p>
  * A bundle registers a {@code ConfigurationPlugin} object in order to process
  * configuration updates before they reach the Managed Service or Managed
@@ -33,11 +33,9 @@ import org.osgi.framework.ServiceReference;
  * {@code updated} method. The Configuration Plugin service thus has the
  * opportunity to view and modify the properties before they are passed to the
  * Managed Service or Managed Service Factory.
- * 
  * <p>
  * Configuration Plugin (plugin) services have full read/write access to all
  * configuration information that passes through them.
- * 
  * <p>
  * The {@code Integer} {@code service.cmRanking} registration property may be
  * specified. Not specifying this registration property, or setting it to
@@ -47,18 +45,15 @@ import org.osgi.framework.ServiceReference;
  * higher ranked ones. In the event of more than one plugin having the same
  * value of {@code service.cmRanking}, then the Configuration Admin service
  * arbitrarily chooses the order in which they are called.
- * 
  * <p>
  * By convention, plugins with {@code service.cmRanking < 0} or
  * {@code service.cmRanking > 1000} should not make modifications to the
  * properties.
- * 
  * <p>
  * The Configuration Admin service has the right to hide properties from
  * plugins, or to ignore some or all the changes that they make. This might be
  * done for security reasons. Any such behavior is entirely implementation
  * defined.
- * 
  * <p>
  * A plugin may optionally specify a {@code cm.target} registration property
  * whose value is the PID of the Managed Service or Managed Service Factory
@@ -67,8 +62,9 @@ import org.osgi.framework.ServiceReference;
  * Managed Service or Managed Service Factory with the specified PID. Omitting
  * the {@code cm.target} registration property means that the plugin is called
  * for all configuration updates.
- * 
- * @author $Id$
+ *
+ * @author $Id: ConfigurationPlugin.java 1750312 2016-06-27 08:20:58Z cziegeler
+ *         $
  * @ThreadSafe
  */
 @ConsumerType
@@ -77,7 +73,7 @@ public interface ConfigurationPlugin {
 	 * A service property to limit the Managed Service or Managed Service
 	 * Factory configuration dictionaries a Configuration Plugin service
 	 * receives.
-	 * 
+	 *
 	 * This property contains a {@code String[]} of PIDs. A Configuration Admin
 	 * service must call a Configuration Plugin service only when this property
 	 * is not set, or the target service's PID is listed in this property.
@@ -85,13 +81,13 @@ public interface ConfigurationPlugin {
 	public static final String	CM_TARGET	= "cm.target";
 	/**
 	 * A service property to specify the order in which plugins are invoked.
-	 * 
+	 *
 	 * This property contains an {@code Integer} ranking of the plugin. Not
 	 * specifying this registration property, or setting it to something other
 	 * than an {@code Integer}, is the same as setting it to the {@code Integer}
 	 * zero. This property determines the order in which plugins are invoked.
 	 * Lower ranked plugins are called before higher ranked ones.
-	 * 
+	 *
 	 * @since 1.2
 	 */
 	public static final String	CM_RANKING	= "service.cmRanking";
@@ -102,7 +98,7 @@ public interface ConfigurationPlugin {
 	 * Configuration Plugin services are called in increasing order of their
 	 * {@code service.cmRanking} property. If this property is undefined or is a
 	 * non- {@code Integer} type, 0 is used.
-	 * 
+	 *
 	 * <p>
 	 * This method should not modify the properties unless the
 	 * {@code service.cmRanking} of this plugin is in the range
@@ -110,13 +106,13 @@ public interface ConfigurationPlugin {
 	 * <p>
 	 * If this method throws any {@code Exception}, the Configuration Admin
 	 * service must catch it and should log it.
-	 * 
+	 *
 	 * <p>
 	 * A Configuration Plugin will only be called for properties from
 	 * configurations that have a location for which the Configuration Plugin
 	 * has permission when security is active. When security is not active, no
 	 * filtering is done.
-	 * 
+	 *
 	 * @param reference reference to the Managed Service or Managed Service
 	 *        Factory
 	 * @param properties The configuration properties. This argument must not

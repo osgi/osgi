@@ -37,6 +37,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
@@ -399,6 +400,46 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Test calling plugins through Configuration object
+	 */
+	public void testGetProcessedProperties() throws Exception {
+		// create configuration
+		final String pid = Util.createPid("mspid");
+		final Configuration conf = cm.getConfiguration(pid);
+		conf.update(Util.singletonDictionary("key", "val"));
+
+		final PluginContext context = new PluginContext();
+		context.pid = pid;
+		createConfigurationPlugin(context, 1, -1, null);
+		createConfigurationPlugin(context, 2, null, null);
+		createConfigurationPlugin(context, 3, 5, null);
+		createConfigurationPlugin(context, 4, 1000, null);
+		createConfigurationPlugin(context, 5, 1001, null);
+
+		final ServiceRegistration<ManagedService> reg = this.getContext()
+				.registerService(ManagedService.class, new ManagedService() {
+
+					@Override
+					public void updated(Dictionary<String, ? > properties)
+							throws ConfigurationException {
+						// nothing to do
+
+					}
+				}, null);
+
+		try {
+			final Dictionary<String,Object> props = conf
+					.getProcessedProperties(reg.getReference());
+			assertEquals("val", props.get("key"));
+
+			verifyPlugins(props, false, Arrays.asList(1, 2, 3, 4, 5),
+					Arrays.asList(2, 3, 4), context);
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
 	 * Verify that the plugins are called in the correct order and that only
 	 * modifications from plugins in the modification set got accepted.
 	 * 
@@ -452,7 +493,8 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 				modifications.add(id);
 			}
 		}
-		assertTrue(modifications.equals(new HashSet<>(modifyOrder)));
+		assertTrue("Expected " + modifyOrder + ", got: " + modifications,
+				modifications.equals(new HashSet<>(modifyOrder)));
 	}
 
 	/**
