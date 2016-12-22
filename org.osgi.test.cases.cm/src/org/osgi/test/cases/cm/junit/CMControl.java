@@ -72,7 +72,7 @@ import junit.framework.AssertionFailedError;
 
 /**
  * @author Ikuo YAMASAKI, NTT Corporation, added many tests.
- * @author Carsten Ziegeler, Adobe, added ConfigAdmin 1.5 tests
+ * @author Carsten Ziegeler, Adobe, added ConfigAdmin 1.5/1.6 tests
  */
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
@@ -2231,6 +2231,25 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Test the update if different method TODO - verify managed service is not
+	 * called - verify listener is not called - arrays etc.
+	 */
+	public void testUpdateIfDifferent() throws Exception {
+		final String pid = Util.createPid();
+		final Configuration conf = cm.getConfiguration(pid);
+
+		final long startLevel = conf.getChangeCount();
+		Hashtable<String,Object> newprops = new Hashtable<String,Object>();
+		newprops.put("somekey", "somevalue");
+		conf.updateIfDifferent(newprops);
+		assertEquals(startLevel + 1, conf.getChangeCount());
+
+		// update again
+		conf.updateIfDifferent(newprops);
+		assertEquals(startLevel + 1, conf.getChangeCount());
+	}
+
+	/**
 	 * Tests if we really get the same configuration.
 	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
@@ -3618,6 +3637,59 @@ public class CMControl extends DefaultTestBundleControl {
 	public void testCreateFactoryConfigurationWithNullLocation()
 			throws Exception {
 		commonTestCreateFactoryConfiguration(true, null);
+	}
+
+	/**
+	 * Test creating a factory configuration with an alias
+	 * 
+	 * @throws Exception
+	 * @since 1.6
+	 */
+	public void testGetFactoryConfigurationWithAlias() throws Exception {
+		final int NUMBER_OF_CONFIGS = 3;
+		final String factorypid = Util.createPid("factorypidforalias");
+		final List<String> pids = new ArrayList<>();
+		final List<Configuration> configs = new ArrayList<>();
+
+		this.setAppropriatePermission();
+		pids.add(factorypid);
+		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
+			Configuration conf = cm.getFactoryConfiguration(factorypid,
+					String.valueOf(i), null);
+			final Dictionary<String,Object> props = new Hashtable<>();
+			props.put("val", String.valueOf(i));
+			conf.update(props);
+			configs.add(conf);
+			trace("pid: " + conf.getPid());
+			assertTrue("Unique pid", !pids.contains(conf.getPid()));
+			assertEquals("Correct factory pid", factorypid,
+					conf.getFactoryPid());
+			assertEquals("Correct pid", factorypid + "#" + String.valueOf(i),
+					conf.getPid());
+			assertEquals("Correct location", null,
+					getBundleLocationForCompare(conf));
+			pids.add(conf.getPid());
+		}
+		assertEquals(NUMBER_OF_CONFIGS, cm
+				.listConfigurations(
+						"(service.factoryPid=" + factorypid + ")").length);
+		for (int i = 0; i < configs.size(); i++) {
+			Configuration[] cfgs = cm.listConfigurations(
+					"(service.pid=" + configs.get(i).getPid() + ")");
+			assertEquals(1, cfgs.length);
+			assertEquals(configs.get(i).getFactoryPid(),
+					cfgs[0].getFactoryPid());
+			assertEquals(configs.get(i).getPid(), cfgs[0].getPid());
+		}
+		for (int i = 0; i < configs.size(); i++) {
+			Configuration conf = configs.get(i);
+			conf.delete();
+		}
+		for (final String p : pids) {
+			Configuration[] cfgs = cm.listConfigurations(
+					"(service.pid=" + p + ")");
+			assertNull(cfgs);
+		}
 	}
 
 	private void commonTestCreateFactoryConfiguration(boolean withLocation,
