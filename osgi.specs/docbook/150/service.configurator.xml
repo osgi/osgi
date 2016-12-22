@@ -15,12 +15,14 @@
     <releaseinfo><xref endterm="org.osgi.configurator-version"
     linkend="org.osgi.configurator"/></releaseinfo>
   </info>
+  
+  <remark>Pick up version from to-be-created package?</remark>
 
   <section>
     <title>Introduction</title>
     
-    <para>OSGi provides a standardized model to provide bundles with configurations. This is specified in 
-      the Configuration Admin specification. In this specification, A configuration is identified by a 
+    <para>OSGi specifies a standardized model to provide bundles with configurations. This is specified in 
+      the Configuration Admin specification where a configuration is identified by a 
       persistent identity (PID). A PID is a unique token, recommended to be conforming to the symbolic 
       name syntax. A configuration consists of a set of properties, where a property consists of a 
       string key and a corresponding value. The type of the value is limited to the primitive types and
@@ -31,11 +33,6 @@
       Sometimes it is necessary to store binary large objects (BLOB) in configuration. For example, a keystore 
       with certificates. Since configuration admin is not suitable for this, these BLOBs are often stored on
       the files system. The application developers then must manage the life cycles of these files.
-    </para>
-      
-    <para>
-      Configurations can be grouped with a factory PID. Configurations with a factory PID are called 
-      factory configurations and without it they are called singleton configurations.
     </para>
       
     <para>
@@ -50,7 +47,7 @@
     <para>
       This specification defines a mechanism to feed configurations into the system
       through configuration resources. A single configuration resource can feed multiple PIDs with configuration
-      and multiple configuration resources can be provided in a running system.
+      and multiple configuration resources can be provided in one ore more bundles.
     </para>
 
     <para>
@@ -58,6 +55,8 @@
       of resources to be used in multiple contexts, such as development, test and production, each of which may 
       have different configuration values.
     </para>
+    
+    <remark>Revisit, maybe a little less history?</remark>
   </section> 
   
   <section>
@@ -69,12 +68,10 @@
       <listitem>
         <para><emphasis>Configuration Admin Service</emphasis> - yyy.</para>
       </listitem>
-    
       <listitem>
-          <para><emphasis>Configuration Resource</emphasis> - A YAML resource containing
+          <para><emphasis>Configuration Resource</emphasis> - A JSON resource in a bundle containing
               configuration.</para>
       </listitem>
-    
       <listitem>
         <para><emphasis>Configurator</emphasis> - yyy.</para>
       </listitem>
@@ -104,11 +101,17 @@
               (version&gt;=1.0)(!(version&gt;=2.0)))
       </programlisting>
       
+      The configurator must ensure to only process bundles that it is wired to it by the resolver.
+    </para>
+
+    <para>
       By default the configuration resources are in the <code>OSGI-INF/configurator</code>
       directory in the bundle.
     </para>
       
-    <para>Configuration files are in UTF-8 encoded and have the <code>.json</code> file extension.
+    <para>Configuration files are UTF-8 encoded and have the <code>.json</code> file extension.
+      The Configurator processes the configuration resources within a single bundle directory in lexical
+      order.
       An example configuration resource has the following structure:
       
     <programlisting>{
@@ -144,20 +147,15 @@
     </para>
 
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
-      as <code>":configurator:version": 1</code>. If the configurator version is ommitted, 1 is assumed.
-      <remark>This is a bit misleading as we are specifying the configuration resource version. The configurator
+      as <code>":configurator:version": 1</code>. If the configurator version is omitted, 1 is assumed.
+      <remark>This is a bit misleading as we are specifying the configuration resource version, not the 
+      configurator version. The configurator
       itself might be version 10, but still support configuration resource version 1!</remark>
     </para>
     
-    <para>The configurator visits all files in the locations defined with the <code>configurations</code>
-      attribute on the <code>osgi.configurator</code> implementation requirement when a bundle that has 
-      opted in to be extended by the configurator is <emphasis>installed</emphasis>. By default this directory
-      if <code>OSGI-INF/configurator</code>. The files are processed in lexical order.
-    </para> 
-      
     <para>
       If multiple bundles provide configuration for the same PID ranking rules are used to decide which configuration
-      gets applied <remark>see ranking</remark>.   
+      gets applied, see <xref linkend="service.configurator.ranking"/>.   
       The configurator removes the <code>service.pid</code>, any comments and the special 
    	  <code>:configurator:</code> keys from the configuration before providing it to the Configuration Admin Service.
    	  The configurator uses the <code>Configuration.updateIfDifferent()</code> method on the Configuration object
@@ -167,7 +165,7 @@
    	  <remark>can we force a bundle location?</remark>
     </para>
         
-    <para>The configurator defines the following special keys in the configuration resources:
+    <para>The configurator defines the following special keys:
     </para>
       <table pgwide="1">
           <title>Configurator keys</title>
@@ -186,7 +184,7 @@
             </thead>         
             <tbody>              
               <row>
-                <entry><code>:configurator:environments</code></entry>
+                <entry><para><code>:configurator:«</code></para><para><code>&#160;environments</code></para></entry>
                 <entry>String <emphasis>or</emphasis> Array of String<remark>yes?</remark></entry>
                 <entry>Configuration</entry>
                 <entry>Environments that this configuration applies to. See <xref linkend="service.configurator.environments"/>.</entry>
@@ -196,7 +194,7 @@
                 <entry><code>:configurator:policy</code></entry>
                 <entry>String <code>default</code> or <code>force</code></entry>
                 <entry>Configuration</entry>
-                <entry>Specifies the overwrite policy on configurations set through non-configurator sources.
+                <entry>Specifies the overwrite policy on configurations set by non-configurator sources.
                 See <xref linkend="service.configurator.policy"/>.</entry>
               </row>
               
@@ -204,7 +202,7 @@
                 <entry><code>:configurator:ranking</code></entry>
                 <entry>Number</entry>
                 <entry>Configuration</entry>
-                <entry>The ranking for this configuration. See <xref linkend="service.configurator.ranking"/>.</entry>
+                <entry>The ranking of this configuration. See <xref linkend="service.configurator.ranking"/>.</entry>
               </row>
 
               <row>
@@ -230,29 +228,26 @@
 
   <section>
     <title>Datatypes</title>
-    <para>Configurations values support the datatypes as specified with the 
+    <para>Configuration values support datatypes as specified with the 
       <emphasis>Filter Syntax</emphasis> in the OSGi Core Specification.
       Configuration resources are specified in JSON, which supports a more 
       basic set of datatypes. The following table describes how values are 
-      converted between configuration values and JSON values.
+      converted from JSON to configuration values.
       <table>
         <title>JSON Conversions</title>
-        <tgroup cols="3">
+        <tgroup cols="2">
           <thead>
             <row>
-              <entry>From Java type</entry>
               <entry>JSON type</entry>
               <entry>To Java type</entry>
             </row>
           </thead>
           <tbody>
             <row>
-              <entry><code>Boolean</code></entry>
               <entry>Boolean</entry>
               <entry><code>Boolean</code></entry>
             </row>
             <row>
-              <entry><code>Number</code> or subclass</entry>
               <entry>Number</entry>
               <entry>If the number is a whole number an <code>Integer</code> is created. 
                 If the number is too large
@@ -261,24 +256,16 @@
                 <code>Double</code> is used.</entry>
             </row>
             <row>
-              <entry><code>String</code></entry>
               <entry>String</entry>
               <entry><code>String</code></entry>
             </row>
             <row>
               <entry>Array</entry>
-              <entry>Array</entry>
               <entry>Array, contents are boxed</entry>
             </row>
             <row>
-              <entry><code>Collection</code> or subclass</entry>
-              <entry>Array</entry>
-              <entry>Array, contents are boxed</entry>
-            </row>
-            <row>
-              <entry><emphasis>other</emphasis></entry>
-              <entry>String, conversion according to Converter rules</entry>
-              <entry>String</entry>
+              <entry>Object</entry>
+              <entry><emphasis>not supported</emphasis></entry>
             </row>
           </tbody>
         </tgroup>
@@ -286,7 +273,7 @@
       
       If a specific datatype is required for a configuration, the configurator can be instructed to 
       convert the JSON value to a given datatype. The target type can be specified by adding a colon 
-      <code>:</code> and the desired data type to the property name. Supported datatypes are
+      <code>:</code> and the desired datatype to the property name. Supported datatypes are
       <code>String</code>, <code>Integer</code>, <code>Long</code>, <code>Float</code>, <code>Double</code>,
       <code>Byte</code>, <code>Short</code>, <code>Character</code> and <code>Boolean</code>. Additionally
       arrays of Scalar or primitive types are supported and <code>Collection</code> of scalar. The primitive
@@ -305,7 +292,7 @@
     }
   }]
 }</programlisting>
-<remark>Do we support the complex configuration above?</remark>
+<remark>Do we support the 'complex' thing above?</remark>
     </para>
     
     <para>
@@ -319,7 +306,7 @@
       <title>Binary Data</title>
       <para>In some cases binary data is associated with configurations such as certificates, security keys or 
       other resources. The configurator can manage this binary data. 
-      The bundle developer places the binary data in a location in the configuration bundle and references it from 
+      The bundle developer places the binaries in a location in the configuration bundle and references it from 
       the configuration resource, marking its type as <code>binary</code>:
       
       <programlisting>{
@@ -340,12 +327,14 @@
       </para>
       
       <para>
-      By default a directory called <code>binaries</code> in the bundle data area is used. An alternative location can 
+      By default a directory called <code>binaries</code> in the bundle data area of the configurator implementation
+      is used. An alternative location can 
       be specified via the <code>configurator.binaries</code> framework property. The value of this property must be 
       an absolute path on the file system to which the configurator has write access. If the directory does not exist
       or the configurator cannot write to this location, it logs an error and uses the default location instead.
       </para>  
       <remark>I renamed configurator.director to configurator.binaries, hope thats ok</remark>
+      <remark>Should we maybe add a package in the OSGi to hold these constants?</remark>
       <para>When a configuration is removed, its associated binary files are also removed from the file system.
       When a configuration is updated, associated binary files are updated, if necessary. In the case of an update
       the configurator should use a different filename for the extracted binary file to avoid any open file lock issues.
@@ -363,7 +352,7 @@
       as a comma-separated string which defines the set of active environments. 
       White space before and after the individual environment 
       names are ignored.
-      <remark>Can I chance environments dynamically at runtime? I guess I can change the system property, but how
+      <remark>Can I change environments dynamically at runtime? I guess I can change the system property, but how
       will the configuration notice? Do I need to restart the configuration implementation bundle?</remark>
     </para>
     
@@ -400,12 +389,12 @@
     
   <section xml:id="service.configurator.ranking">
     <title>Ranking</title>
-    <para>The order in which the Configurator processes configuration resources in bundles is undefined. To control
+    <para>The order in which the Configurator processes bundles is undefined. To control
       which configurations are in effect configuration ranking can be used. Configuration ranking is similar to
       service ranking; it is an integer which defaults to 0. Configurations with a higher ranking are preferred 
       over configurations with a lower ranking.
       When multiple configurations arrive over time it is possible that the configurator changes the effective
-      configuration when a higher ranked configuration arrives later. The design of the configurator is such that
+      configuration if a higher ranked configuration arrives later. The design of the configurator is such that
       the effective set of configurations once the system stabilizes is consistent, regardless of the order
       in which bundles are installed and processed.
     </para>
@@ -426,14 +415,14 @@
     <para>In an IT operations scenario configurations are often updated by a systems administrator to suit the
     deployments requirements. In such scenarios it may be undesirable to have these modifications overwritten 
     by a software update which includes a configuration resource. In some other cases, bundles with configuration
-    resources are used to enforce company best practices or compliance with corporate guidelines. 
-    This specification defines policies to define the overwrite behavior of the configurator when PIDs are 
-    found to be set or modified by another entity.
+    resources are used to enforce best practices or compliance with corporate guidelines. 
+    This specification defines policies to define the overwrite behavior of the configurator when 
+	configurations have been set or modified by another entity.
     </para>
     
     <para>Configuration policies are set by specifying the <code>:configurator:policy</code> property. Accepted 
     values are <code>default</code> and <code>force</code>. This policy defines the behavior if a configuration
-    to be applied was set by another entity in the system, or if it was modified from the values set by the 
+    to be applied was set by another entity in the system, or if it was modified by someone from the values set by the 
     configurator.
     
       <table>
@@ -474,13 +463,14 @@
         </tgroup>
       </table>
       
-      The configurator needs to keep track of configuration change count values to identify configurations 
+      The configurator must keep track of configuration change count values to identify configurations 
       that were changed by other entities or administrators.
     </para>
     
     <para>
-      When configuration resources are removed, the configurator removes the applicable configurations from
-      the system. The configurator policy is also used here to define the removal behavior when configurations 
+      When a bundle that provides configuration resources is uninstalled,
+      the configurator removes any configurations that is has provided from the system. 
+      The configurator policy is also used here to define the removal behavior when configurations 
       were modified outside of the configurator.
       <table>
         <title>Removing Configurations: Overwrite Policies</title>
@@ -502,7 +492,7 @@
               <entry>No action</entry>
             </row>
             <row>
-              <entry>Configurator set with lower of equal ranking</entry>
+              <entry>Configurator set with lower or equal ranking</entry>
               <entry>Configuration is removed</entry>
               <entry>Configuration is removed</entry>
             </row>
@@ -515,13 +505,17 @@
         </tgroup>
       </table>
       
+      <remark>'Configurator set with lower ranking' is not really possible or would indicate a bug
+      in the system, so maybe we should change this in the table to 
+      'Configurator set for this bundle' vs 'Configurator set for another bundle'?</remark>
+      
       When a configuration is removed the configurator checks whether another, lower ranked, configuration resource is 
       available. If present the configurator sets this configuration. 
     </para>
   </section>
     
   <section>
-    <title>Intial Configurations</title>
+    <title>Initial Configurations</title>
     <para>When the configurator starts it obtains the <code>configurator.initial</code> framework property to prime 
     its state from the runtime environment. If this property is available its value is processed as follows:
     
@@ -541,7 +535,8 @@
     <title>Lifecycle</title>
     
     <para>The configurator requires access to the Configuration Admin service. Therefore the configurator implementation
-    should require the Configuration Admin service through a service requirement.
+    should require the Configuration Admin service through a service requirement. The configurator should not start
+    processing configuration resources until it as runtime access to the Configuration Admin service.
     </para>
     
     <remark>What happens if there are multiple configuration admin services available? And what happens when 
@@ -554,14 +549,14 @@
     </para>
     
     <para>
-    The configurator must also check whether configurations that have been installed are still valid. If the bundles that provided
+    The configurator must also check whether configurations that it installed previously are still valid. If the bundles that provided
     these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
     the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
     to avoid volatility in the system if the actual configuration values did not change.
     </para>
     
     <para>
-    When the configurator is stopped the configurations applied will remain in the system.
+    When the configurator is stopped or uninstalled the configurations applied will remain in the system.
     </para>
   </section> 
 
@@ -594,14 +589,15 @@
       capability to opt in to being processed by the configurator. The default location for 
       configuration resources is in <code>OSGI-INF/configurator</code>. A bundle can specify 
       alternate locations for configuration resources through the <code>configurations</code> attribute.
-      The value of this attribute is <code>String</code> or <code>List&lt;String&gt;</code>.
+      The value of this attribute is of type <code>String</code> or <code>List&lt;String&gt;</code>.
       Each value represents a path inside the bundle. This path is always relative to the root of the bundle and
       may start with a slash <code>/</code>. A path value of <code>/</code> indicates the root of the bundle.
       The configurator uses <code>Bundle.findEntries()</code> to find all resources with the 
-      <code>.json</code> extension. If the <code>configuration</code> attribute specifies multiple paths, these
+      <code>.json</code> extension in this location. Sub directories are not considered. 
+      If the <code>configuration</code> attribute specifies multiple paths, these
       are visited in the order specified. Duplicate paths are ignored. Paths that do not exist in the bundle
       are logged as an error and skipped.
-      Resources in a single directory are processed in alphabetical order.
+      Resources in a single directory are processed in alphabetical order. For example:
       </para>
 
       <programlisting>Require-Capability: osgi.implementation;
