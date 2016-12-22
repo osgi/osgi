@@ -221,12 +221,12 @@ public interface Configuration {
 	 * provided properties are different than the currently stored set
 	 * Properties are compared as follows.
 	 * <ul>
-	 * <li>scalars are compared using equals()
-	 * <li>arrays are compared using Arrays.equals()
-	 * <li>Collections are compared using equals()
+	 * <li>scalars are compared using equals()</li>
+	 * <li>arrays are compared using Arrays.equals()</li>
+	 * <li>Collections are compared using equals()</li>
 	 * </ul>
 	 * If the properties compare the same, no operation is performed, otherwise
-	 * the behaviour is identical to the update(Dictionary) method.
+	 * the behavior is identical to the update(Dictionary) method.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws ReadOnlyConfigurationException If the configuration is locked
