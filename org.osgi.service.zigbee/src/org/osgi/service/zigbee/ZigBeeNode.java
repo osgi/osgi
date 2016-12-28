@@ -60,18 +60,21 @@ public interface ZigBeeNode {
 	public static final String	IEEE_ADDRESS			= "zigbee.node.ieee.address";
 
 	/**
-	 * Property key for the device logical type.
+	 * Property name for the device logical type. The property value is of type
+	 * {@link Short}.
 	 */
 	public static final String	LOGICAL_TYPE			= "zigbee.node.description.node.type";
 
 	/**
-	 * Property key for a manufacturer code that is allocated by the ZigBee
-	 * Alliance, relating the manufacturer to the device.
+	 * Property name for a manufacturer code that is allocated by the ZigBee
+	 * Alliance, relating the manufacturer to the device. The property is of
+	 * type {@link Integer}.
 	 */
 	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
-	 * Key of {@link String} containing the device node network PAN ID.
+	 * Property containing the ZigBee network PAN ID. The property is of type
+	 * {@link Integer}.
 	 */
 	public static final String	PAN_ID					= "zigbee.node.pan.id";
 
@@ -80,35 +83,45 @@ public interface ZigBeeNode {
 	 * If the device type is "Coordinator", the extended pan id may be available
 	 * only after the network is started. It means that internally the
 	 * ZigBeeHost interface must update the service properties.
+	 * <p>
+	 * This property is of type {@link BigInteger}
 	 */
 	public static final String	EXTENDED_PAN_ID			= "zigbee.node.extended.pan.id";
 
 	/**
 	 * ZigBee power source, that is, 3rd bit of "MAC Capabilities" in Node
-	 * Descriptor. Set to 1 if the current power source is mains power, set to 0
-	 * otherwise.
+	 * Descriptor. Set to <code>true</code> if the current power source is mains
+	 * power, set to <code>false</code>, otherwise.
+	 * <p>
+	 * This property is of type {@type Boolean}.
 	 */
 	public static final String	POWER_SOURCE			= "zigbee.node.power.source";
 
 	/**
 	 * ZigBee receiver on when idle, that is, 4th bit of "MAC Capabilities" in
-	 * Node Descriptor. Set to 1 if the device does not disable its receiver to
-	 * conserve power during idle periods, set to 0 otherwise.
+	 * Node Descriptor. Set to to <code>true</code> if the device does not
+	 * disable its receiver to conserve power during idle periods, set to
+	 * <code>false</code> otherwise.
+	 * <p>
+	 * This property is of type {@type Boolean}.
 	 */
 	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
 
 	/**
-	 * The Node is a ZigBee End Device.
+	 * Constant value used as logical type value when the ZigBee device is an
+	 * End Device.
 	 */
 	public static final short	ZED						= 0x01;
 
 	/**
-	 * The Node is a ZigBee Coordinator.
+	 * Constant value used as logical type value when the ZigBee device is a
+	 * Coordinator.
 	 */
 	public static final short	COORDINATOR				= 0x02;
 
 	/**
-	 * The Node is a ZigBee Router.
+	 * Constant value used as logical type value when the ZigBee device is a
+	 * Router.
 	 */
 	public static final short	ROUTER					= 0x03;
 
@@ -120,7 +133,7 @@ public interface ZigBeeNode {
 	public BigInteger getIEEEAddress();
 
 	/**
-	 * Returns the current network address of this node.
+	 * Returns the current network address (alias short-address) of this node.
 	 * 
 	 * @return the current network address of this node.
 	 */

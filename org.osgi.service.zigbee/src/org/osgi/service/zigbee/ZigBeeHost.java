@@ -57,7 +57,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * The host status must be persistent, that is, if the host was started,
 	 * then the host must starts again when the bundle restarts. In addition,
-	 * the values of channel, pan id, extended pan id, and host pid must remain
+	 * the values of channel, pan id, extended pan id, and host PID must remain
 	 * the same.
 	 * 
 	 * @throws Exception Any exception related to the communication with the

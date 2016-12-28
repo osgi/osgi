@@ -27,7 +27,7 @@ public interface ZCLCommandDescription {
 	 * 
 	 * @return the command identifier.
 	 */
-	int getId();
+	short getId();
 
 	/**
 	 * Returns the command name.
@@ -80,7 +80,8 @@ public interface ZCLCommandDescription {
 	public boolean isManufacturerSpecific();
 
 	/**
-	 * Checks if this is a client-server direction.
+	 * Checks if this is a server-side command (that is going from the client to
+	 * server direction).
 	 * 
 	 * @return the isClientServerDirection value.
 	 */

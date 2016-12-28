@@ -245,10 +245,10 @@ public interface ZCLCluster {
 	 * 
 	 * @return A {@link Promise} representing the completion of this
 	 *         asynchronous call. The promise will be resolved with
-	 *         {@code int[]} containing the command identifiers supported by the
-	 *         cluster.
+	 *         {@code short[]} containing the command identifiers supported by
+	 *         the cluster.
 	 */
-	Promise /* <int[]> */ getCommandIds();
+	Promise /* <short[]> */ getCommandIds();
 
 	/**
 	 * Invokes a command on this cluster with a {@link ZCLFrame}. The returned

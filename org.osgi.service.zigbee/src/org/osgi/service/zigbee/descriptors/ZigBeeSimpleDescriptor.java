@@ -49,9 +49,9 @@ public interface ZigBeeSimpleDescriptor {
 	public short getEndpoint();
 
 	/**
-	 * Returns the version of the application.
+	 * Returns the version of the endpoint application.
 	 * 
-	 * @return the version of the application.
+	 * @return the version of the endpoint application.
 	 */
 	public byte getApplicationDeviceVersion();
 

@@ -40,7 +40,7 @@ public interface ZigBeeEvent {
 	public short getEndpointId();
 
 	/**
-	 * Returns the cluster id.
+	 * Returns the cluster id associated to this ZigBeeEvent.
 	 * 
 	 * @return the cluster id.
 	 */

@@ -28,7 +28,7 @@ public interface ZCLHeader {
 	 * 
 	 * @return the command identifier of this frame.
 	 */
-	int getCommandId();
+	short getCommandId();
 
 	/**
 	 * Returns the manufacturer code of this frame.

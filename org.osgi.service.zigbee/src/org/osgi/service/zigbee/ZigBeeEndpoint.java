@@ -31,76 +31,86 @@ import org.osgi.util.promise.Promise;
 public interface ZigBeeEndpoint {
 
 	/**
-	 * Key of the {@link String} property containing the EndPoint ID of the
-	 * device.
+	 * Property containing the EndPoint ID of the device. This property is of
+	 * type {@link Short} and its value must be in the range allowed by the
+	 * ZigBee specifications for Zigbee endpoints identifiers.
 	 * <p>
-	 * It is <b>mandatory</b> property for this service.
+	 * It is <b>mandatory</b> service property for ZigBeeEndpoint services.
 	 */
 	public static final String	ENDPOINT_ID		= "zigbee.endpoint.id";
 
 	/**
-	 * Key of the {@link String} property containing the profile id implemented
-	 * by the device.
+	 * Property containing the application profile identifier also contained in
+	 * the ZigBee Simple Descriptor. This property is of type {@link Integer}.
 	 * <p>
-	 * It is <b>mandatory</b> property for this service.
+	 * It is <b>mandatory</b> service property for this service.
 	 */
 	public static final String	PROFILE_ID		= "zigbee.device.profile.id";
 
 	/**
-	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.
+	 * Property containing the {@link ZigBeeHost}'s pid. This property is of
+	 * type {@link String}.
 	 * <p>
 	 * The ZigBee local host identifier is intended to uniquely identify the
 	 * ZigBee local host, since there could be many hosts on the same platform.
-	 * All the nodes that belong to a specific network MUST specify the value of
-	 * the associated host number. It is mandatory for imported endpoints,
+	 * <p>
+	 * All the endpoints that belong to a specific network MUST specify the
+	 * value of the associated host pid. It is mandatory for imported endpoints,
 	 * optional for exported endpoints.
 	 */
 	public static final String	HOST_PID		= "zigbee.endpoint.host.pid";
 
 	/**
-	 * Key of the {@link String} property containing the DeviceId of the device.
+	 * Property containing the application device identifier. This identifier is
+	 * also contained in the ZigBee Simple Descriptor. This property is of type
+	 * {@link Integer}.
 	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	DEVICE_ID		= "zigbee.device.id";
 
 	/**
-	 * Key of the {@link String} property containing the DeviceVersion of the
-	 * device.
+	 * Property containing the application device version. The application
+	 * device version is also contained in the ZigBee endpoint Simple
+	 * Descriptor. This property is of type {@link Byte}.
 	 * <p>
 	 * It is <b>mandatory</b> property for this service.
 	 */
 	public static final String	DEVICE_VERSION	= "zigbee.device.version";
 
 	/**
-	 * Key of the int array of containing the ids of each input cluster.
+	 * Property containing a list of input clusters. This list is contained also
+	 * in the ZigBee Simple Descriptor returned by the ZigBeeEndpoint service.
+	 * This property is of type int[].
 	 * <p>
-	 * It is <b>mandatory</b> property for this service.
+	 * It is <b>mandatory</b> service property for this service.
 	 */
 	public static final String	INPUT_CLUSTERS	= "zigbee.endpoint.clusters.input";
 
 	/**
-	 * Key of the int array of containing the ids of each output cluster.
+	 * Property containing a list of output clusters. This list is contained
+	 * also in the ZigBee Simple Descriptor of the ZigBeeEndpoint service.
+	 * property is of type int[].
 	 * <p>
-	 * It is <b>mandatory</b> property for this service.
+	 * It is a <b>mandatory</b> service property for this service.
 	 */
 	public static final String	OUTPUT_CLUSTERS	= "zigbee.endpoint.clusters.output";
 
 	/**
 	 * Property used to mark if a ZigBeeEndPoint service is an exported one or
 	 * not. Imported endpoints do not have this property set. This service
-	 * property requires no value.
+	 * property requires no specific values.
 	 */
 	public static final String	ZIGBEE_EXPORT	= "zigbee.export";
 
 	/**
 	 * Constant used by all ZigBee devices indicating the device category. It is
-	 * a <b>mandatory</b> property for this service.
+	 * a <b>mandatory</b> service property for this service.
 	 */
 	public static final String	DEVICE_CATEGORY	= "ZigBee";
 
 	/**
-	 * Returns the identifier of this endpoint.
+	 * Returns the identifier of this endpoint, that is the Endpoint ID.
 	 * 
 	 * @return the identifier of this endpoint, value ranges from 1 to 240.
 	 */
