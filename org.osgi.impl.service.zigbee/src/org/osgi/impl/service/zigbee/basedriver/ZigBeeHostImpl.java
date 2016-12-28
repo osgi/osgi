@@ -401,6 +401,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 			hostProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
 			hostProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
 			hostProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+			hostProperties.put(ZigBeeNode.POWER_SOURCE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
 
 			hostProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
 			if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {

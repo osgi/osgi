@@ -158,7 +158,6 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			}
 
 			public int getDepth() {
-
 				return 1;
 			}
 		};
@@ -312,6 +311,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
 		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
 		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+		nodeProperties.put(ZigBeeNode.POWER_SOURCE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isMainsPower()));
 		nodeProperties.put("service.pid", nodePid);
 
 		nodeProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
@@ -333,7 +333,6 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		for (Iterator iterator = endpointsServiceRegs.iterator(); iterator.hasNext();) {
 			ServiceRegistration sReg = (ServiceRegistration) iterator.next();
 			sReg.unregister();
-
 		}
 	}
 

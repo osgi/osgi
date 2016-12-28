@@ -214,7 +214,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		byte[] otherRawFrame = frame.getBytes();
 
 		assertNotNull("ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
-		assertSame("ZCLFrame.getBytes(): must return a different array each time it is called", otherRawFrame, rawFrame);
+		assertNotSame("ZCLFrame.getBytes(): must return a different array each time it is called", otherRawFrame, rawFrame);
 
 		ZigBeeDataInput is = frame.getDataInput();
 		assertNotNull("ZCLFrame.getInputStream() must not return null", is);
