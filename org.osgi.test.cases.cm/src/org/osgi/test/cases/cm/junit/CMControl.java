@@ -2236,17 +2236,40 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testUpdateIfDifferent() throws Exception {
 		final String pid = Util.createPid();
-		final Configuration conf = cm.getConfiguration(pid);
+		final List<ConfigurationEvent> events = new ArrayList<>();
 
-		final long startLevel = conf.getChangeCount();
-		Hashtable<String,Object> newprops = new Hashtable<String,Object>();
-		newprops.put("somekey", "somevalue");
-		conf.updateIfDifferent(newprops);
-		assertEquals(startLevel + 1, conf.getChangeCount());
+		final SynchronousConfigurationListener listener = new SynchronousConfigurationListener() {
 
-		// update again
-		conf.updateIfDifferent(newprops);
-		assertEquals(startLevel + 1, conf.getChangeCount());
+			@Override
+			public void configurationEvent(final ConfigurationEvent event) {
+				if (pid.equals(event.getPid())) {
+					synchronized (events) {
+						events.add(event);
+					}
+				}
+
+			}
+		};
+		this.registerService(
+				SynchronousConfigurationListener.class.getName(),
+				listener, null);
+		try {
+			final Configuration conf = cm.getConfiguration(pid);
+
+			final long startLevel = conf.getChangeCount();
+			Hashtable<String,Object> newprops = new Hashtable<String,Object>();
+			newprops.put("somekey", "somevalue");
+			conf.updateIfDifferent(newprops);
+			assertEquals(startLevel + 1, conf.getChangeCount());
+
+			assertEquals(1, events.size());
+
+			// update again
+			conf.updateIfDifferent(newprops);
+			assertEquals(startLevel + 1, conf.getChangeCount());
+		} finally {
+			this.unregisterService(listener);
+		}
 	}
 
 	/**
@@ -3668,6 +3691,7 @@ public class CMControl extends DefaultTestBundleControl {
 					conf.getPid());
 			assertEquals("Correct location", null,
 					getBundleLocationForCompare(conf));
+
 			pids.add(conf.getPid());
 		}
 		assertEquals(NUMBER_OF_CONFIGS, cm
@@ -3681,15 +3705,34 @@ public class CMControl extends DefaultTestBundleControl {
 					cfgs[0].getFactoryPid());
 			assertEquals(configs.get(i).getPid(), cfgs[0].getPid());
 		}
+		// get factory configuration with same alias again
+		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
+			Configuration conf = cm.getFactoryConfiguration(factorypid,
+					String.valueOf(i), null);
+			assertEquals("Correct factory pid", factorypid,
+					conf.getFactoryPid());
+			assertEquals("Correct pid", factorypid + "#" + String.valueOf(i),
+					conf.getPid());
+			assertEquals(String.valueOf(i), conf.getProperties().get("val"));
+		}
+		// and verify count of factory configs
+		// (should still be NUMBER_OF_CONFIGS)
+		assertEquals(NUMBER_OF_CONFIGS, cm.listConfigurations(
+				"(service.factoryPid=" + factorypid + ")").length);
+
+		// delete configurations
 		for (int i = 0; i < configs.size(); i++) {
 			Configuration conf = configs.get(i);
 			conf.delete();
 		}
+		// ensure that no factory configs are available anymore
 		for (final String p : pids) {
 			Configuration[] cfgs = cm.listConfigurations(
 					"(service.pid=" + p + ")");
 			assertNull(cfgs);
 		}
+		assertNull(cm
+				.listConfigurations("(service.factoryPid=" + factorypid + ")"));
 	}
 
 	private void commonTestCreateFactoryConfiguration(boolean withLocation,
@@ -3895,7 +3938,7 @@ public class CMControl extends DefaultTestBundleControl {
 		final int NUMBER_OF_CONFIGS = 3;
 		String factorypid = Util.createPid("somefactorypid");
 		Hashtable<String,Object> configs = new Hashtable<>();
-		/* Create some factory configurations */
+		// Create some factory configurations
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 			Configuration conf = cm.createFactoryConfiguration(factorypid);
 			Hashtable<String,Object> ht = new Hashtable<>();
@@ -3904,9 +3947,19 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("pid: " + conf.getPid());
 			configs.put(conf.getPid(), conf);
 		}
+		// Create some more factory configurations using alias
+		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
+			Configuration conf = cm.getFactoryConfiguration(factorypid,
+					String.valueOf(i));
+			Hashtable<String,Object> ht = new Hashtable<>();
+			ht.put("test.field", String.valueOf(NUMBER_OF_CONFIGS + i) + "");
+			conf.update(ht);
+			trace("pid: " + conf.getPid());
+			configs.put(conf.getPid(), conf);
+		}
 		try {
 			Semaphore semaphore = new Semaphore();
-			/* Register a factory */
+			// Register a factory
 			ManagedServiceFactoryImpl msf = new ManagedServiceFactoryImpl(
 					"msf", "testprop", semaphore);
 			Hashtable<String,Object> properties = new Hashtable<>();
@@ -3914,7 +3967,7 @@ public class CMControl extends DefaultTestBundleControl {
 			properties.put(ConfigurationAdmin.SERVICE_FACTORYPID, factorypid);
 			registerService(ManagedServiceFactory.class.getName(), msf,
 					properties);
-			for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
+			for (int i = 0; i < 2 * NUMBER_OF_CONFIGS; i++) {
 				trace("Wait for signal #" + i);
 				semaphore.waitForSignal();
 				trace("Signal #" + i + " arrived");
