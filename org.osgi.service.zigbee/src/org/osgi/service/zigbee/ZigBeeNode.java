@@ -93,7 +93,7 @@ public interface ZigBeeNode {
 	 * Descriptor. Set to <code>true</code> if the current power source is mains
 	 * power, set to <code>false</code>, otherwise.
 	 * <p>
-	 * This property is of type {@type Boolean}.
+	 * This property is of type {@link Boolean}.
 	 */
 	public static final String	POWER_SOURCE			= "zigbee.node.power.source";
 
@@ -103,7 +103,7 @@ public interface ZigBeeNode {
 	 * disable its receiver to conserve power during idle periods, set to
 	 * <code>false</code> otherwise.
 	 * <p>
-	 * This property is of type {@type Boolean}.
+	 * This property is of type {@link Boolean}.
 	 */
 	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
 
