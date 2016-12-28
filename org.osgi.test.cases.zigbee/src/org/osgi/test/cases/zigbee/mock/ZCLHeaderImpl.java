@@ -28,7 +28,7 @@ import org.osgi.service.zigbee.ZCLHeader;
  */
 public class ZCLHeaderImpl implements ZCLHeader {
 
-	private int		commandId;
+	private short	commandId;
 
 	private int		manufacturerCode			= -1;
 
@@ -62,7 +62,7 @@ public class ZCLHeaderImpl implements ZCLHeader {
 	 *
 	 */
 
-	public ZCLHeaderImpl(int commandId, boolean isClusterSpecificCommand, boolean isClientServerDirection,
+	public ZCLHeaderImpl(short commandId, boolean isClusterSpecificCommand, boolean isClientServerDirection,
 			boolean disableDefaultResponse, byte sequenceNumber) {
 		this.isClusterSpecificCommand = isClusterSpecificCommand;
 		this.isClientServerDirection = isClientServerDirection;
@@ -91,7 +91,7 @@ public class ZCLHeaderImpl implements ZCLHeader {
 	 * 
 	 * @param manufacturerCode The manufacturer code of the command.
 	 */
-	public ZCLHeaderImpl(int commandId, boolean isClusterSpecificCommand, boolean isClientServerDirection,
+	public ZCLHeaderImpl(short commandId, boolean isClusterSpecificCommand, boolean isClientServerDirection,
 			boolean disableDefaultResponse, byte sequenceNumber, int manufacturerCode) {
 
 		this(commandId, isClusterSpecificCommand, isClientServerDirection, disableDefaultResponse, sequenceNumber);
@@ -100,7 +100,7 @@ public class ZCLHeaderImpl implements ZCLHeader {
 		this.manufacturerCode = manufacturerCode;
 	}
 
-	public int getCommandId() {
+	public short getCommandId() {
 		return this.commandId;
 	}
 

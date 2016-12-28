@@ -40,6 +40,10 @@ public class ParserUtils {
 
 	public static byte[] hexStringToByteArray(String s) {
 		int len = s.length();
+
+		if ((len % 2) != 0) {
+			throw new IllegalArgumentException("The passed argument must contain an even number of hex digits.");
+		}
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
 			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
@@ -114,8 +118,11 @@ public class ParserUtils {
 				throw new RuntimeException("parse error: missing attribute " + attributeName);
 			}
 		}
-
-		return Integer.parseInt(attributeValue);
+		if (attributeValue.startsWith("0x")) {
+			return Integer.parseInt(attributeValue.substring(2), 16);
+		} else {
+			return Integer.parseInt(attributeValue);
+		}
 	}
 
 	public static short getAttribute(Element element, String attributeName, boolean required, final short defaultValue) {
@@ -166,7 +173,8 @@ public class ParserUtils {
 			}
 		}
 
-		return new BigInteger(attributeValue);
+		return new BigInteger(attributeValue, 16);
+
 	}
 
 	public static boolean getAttribute(Element element, String attributeName, boolean required, boolean defaultValue) {
@@ -217,7 +225,11 @@ public class ParserUtils {
 			}
 		}
 
-		return Integer.parseInt(attributeValue);
+		if (attributeValue.startsWith("0x")) {
+			return Integer.parseInt(attributeValue.substring(2), 16);
+		} else {
+			return Integer.parseInt(attributeValue);
+		}
 	}
 
 	public static short getAttribute(Map element, String attributeName, boolean required, final short defaultValue) {
@@ -233,8 +245,11 @@ public class ParserUtils {
 				throw new RuntimeException("parse error: missing attribute " + attributeName);
 			}
 		}
-
-		return Short.parseShort(attributeValue);
+		if (attributeValue.startsWith("0x")) {
+			return (short) Integer.parseInt(attributeValue.substring(2), 16);
+		} else {
+			return Short.parseShort(attributeValue);
+		}
 	}
 
 	public static byte getAttribute(Map element, String attributeName, boolean required, final byte defaultValue) {
@@ -250,8 +265,11 @@ public class ParserUtils {
 				throw new RuntimeException("parse error: missing attribute " + attributeName);
 			}
 		}
-
-		return Byte.parseByte(attributeValue);
+		if (attributeValue.startsWith("0x")) {
+			return (byte) Integer.parseInt(attributeValue.substring(2), 16);
+		} else {
+			return Byte.parseByte(attributeValue);
+		}
 	}
 
 	public static BigInteger getAttribute(Map element, String attributeName, boolean required, final BigInteger defaultValue) {
@@ -284,9 +302,6 @@ public class ParserUtils {
 				throw new RuntimeException("parse error: missing attribute " + attributeName);
 			}
 		}
-
-		boolean a = Boolean.valueOf(attributeValue).booleanValue();
-
 		return Boolean.valueOf(attributeValue).booleanValue();
 	}
 
@@ -301,12 +316,32 @@ public class ParserUtils {
 			if (!required) {
 				return defaultValue;
 			} else {
-				throw new RuntimeException("missing attribute " + parameterName);
+				throw new RuntimeException("missing required property: " + parameterName);
 			}
 		} else if (value instanceof BigInteger) {
 			return (BigInteger) value;
 		} else {
 			throw new RuntimeException("expected a BigInteger, got " + value.getClass().getName());
+		}
+	}
+
+	public static boolean getParameter(Map properties, String parameterName, boolean required, boolean defaultValue) {
+		if (properties == null) {
+			throw new NullPointerException("properties argument cannot be null");
+		}
+
+		Object value = properties.get(parameterName);
+
+		if (value == null) {
+			if (!required) {
+				return defaultValue;
+			} else {
+				throw new RuntimeException("missing required property: " + parameterName);
+			}
+		} else if (value instanceof Boolean) {
+			return ((Boolean) value).booleanValue();
+		} else {
+			throw new RuntimeException("expected a Boolean parameter, got " + value.getClass().getName());
 		}
 	}
 
@@ -321,7 +356,7 @@ public class ParserUtils {
 			if (!required) {
 				return defaultValue;
 			} else {
-				throw new RuntimeException("missing attribute " + parameterName);
+				throw new RuntimeException("missing required property: " + parameterName);
 			}
 		} else if (value instanceof Integer) {
 			return ((Integer) value).intValue();
@@ -341,7 +376,7 @@ public class ParserUtils {
 			if (!required) {
 				return defaultValue;
 			} else {
-				throw new RuntimeException("missing attribute " + parameterName);
+				throw new RuntimeException("missing required property: " + parameterName);
 			}
 		} else if (value instanceof Short) {
 			return ((Short) value).shortValue();

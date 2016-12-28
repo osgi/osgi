@@ -1,5 +1,64 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
+  <xs:simpleType name="ProfileID" id="ProfileID">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="ManufacturerCode" id="ManufacturerCode">
+    <xs:union memberTypes="xs:unsignedInt">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="ClusterID">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="AttributeID">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="CommandID">
+    <xs:union memberTypes="xs:unsignedByte">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{2}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="HexString" id="HexString">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="[0-9a-fA-F]+" />
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:element name="param">
     <xs:complexType>
       <xs:attribute name="name" type="xs:NCName" />
@@ -12,11 +71,13 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="param" />
       </xs:sequence>
-      <xs:attribute name="id"  type="xs:unsignedShort" use="required" />
+      <xs:attribute name="id" use="required" type="CommandID" />
       <xs:attribute name="name" type="xs:string" use="required" />
       <xs:attribute name="mandatory" type="xs:boolean" default="true" />
-      <xs:attribute name="responseId" type="xs:string" />
-      <xs:attribute name="zclFrame" type="xs:string"/>
+      <xs:attribute name="responseId" type="CommandID" />
+      <xs:attribute name="zclFrame" type="HexString" />
+      <xs:attribute name="isClusterSpecificCommand" type="xs:boolean" default="true" />
+
     </xs:complexType>
   </xs:element>
 
@@ -33,11 +94,11 @@
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          <xs:attribute type="xs:unsignedShort" name="id" use="required" />
-          <xs:attribute type="xs:boolean" name="readOnly" use="required" />
-          <xs:attribute type="xs:string" name="name" use="required" />
-          <xs:attribute type="xs:boolean" name="reportable" use="required" />
-          <xs:attribute type="xs:string" name="dataType" use="required" />
+          <xs:attribute name="id" type="AttributeID" use="required" />
+          <xs:attribute name="readOnly" type="xs:boolean" use="required" />
+          <xs:attribute name="name" type="xs:string" use="required" />
+          <xs:attribute name="reportable" type="xs:boolean" use="required" />
+          <xs:attribute name="dataType" type="xs:string" use="required" />
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
@@ -85,7 +146,7 @@
         <xs:element ref="client" minOccurs="0" maxOccurs="1" />
       </xs:sequence>
       <xs:attribute type="xs:string" name="name" use="required" />
-      <xs:attribute type="xs:unsignedShort" name="id" use="required" />
+      <xs:attribute type="ClusterID" name="id" use="required" />
       <xs:attribute type="xs:string" name="domain" />
     </xs:complexType>
   </xs:element>
@@ -113,7 +174,7 @@
         <xs:element ref="clusters" minOccurs="0" maxOccurs="1" />
       </xs:sequence>
       <xs:attribute type="xs:string" name="name" use="required" />
-      <xs:attribute type="xs:unsignedShort" name="profileId" use="required" />
+      <xs:attribute type="ProfileID" name="profileId" use="required" />
     </xs:complexType>
   </xs:element>
 
@@ -129,8 +190,4 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-
-
-
-
 </xs:schema>

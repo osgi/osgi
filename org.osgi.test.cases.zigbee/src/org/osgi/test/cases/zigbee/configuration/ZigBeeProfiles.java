@@ -181,8 +181,11 @@ public class ZigBeeProfiles {
 				String qName) throws SAXException {
 
 			if (qName.equalsIgnoreCase("profiles")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("profile")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("cluster")) {
+				// do not contain attributes
 			} else if (qName.equalsIgnoreCase("server") || qName.equalsIgnoreCase("client")) {
 
 				ZCLAttributeDescriptionImpl[] attributes = new ZCLAttributeDescriptionImpl[attributeDescriptions.size()];
@@ -213,17 +216,25 @@ public class ZigBeeProfiles {
 				 */
 			} else if (qName.equalsIgnoreCase("command")) {
 
-				int id = ParserUtils.getAttribute(commandAttributes, "id", ParserUtils.MANDATORY, -1);
+				short id = ParserUtils.getAttribute(commandAttributes, "id", ParserUtils.MANDATORY, (short) -1);
+				boolean isClusterSpecificCommand = ParserUtils.getAttribute(commandAttributes, "isClusterSpecificCommand", ParserUtils.OPTIONAL, true);
+				int manufacturerCode = ParserUtils.getAttribute(commandAttributes, "manufacturerCode", ParserUtils.OPTIONAL, -1);
+
 				int responseId = ParserUtils.getAttribute(commandAttributes, "responseId", ParserUtils.OPTIONAL, -1);
 				boolean isMandatory = ParserUtils.getAttribute(commandAttributes, "mandatory", ParserUtils.OPTIONAL, true);
 				String name = ParserUtils.getAttribute(commandAttributes, "name", ParserUtils.MANDATORY, "");
+				String zclFrame = ParserUtils.getAttribute(commandAttributes, "zclFrame", ParserUtils.MANDATORY, "");
 
 				ZCLParameterDescriptionImpl[] parameters = new ZCLParameterDescriptionImpl[parameterDescriptions.size()];
 				for (int i = 0; i < parameters.length; i++) {
 					parameters[i] = (ZCLParameterDescriptionImpl) parameterDescriptions.get(i);
 				}
 
-				ZCLCommandDescriptionImpl commandDescription = new ZCLCommandDescriptionImpl(id, name, isMandatory, isServerSide, -1, true, responseId, parameters);
+				byte[] rawFrame = ParserUtils.hexStringToByteArray(zclFrame);
+
+				ZCLCommandDescriptionImpl commandDescription = new ZCLCommandDescriptionImpl(id, name, isMandatory, isServerSide, manufacturerCode, isClusterSpecificCommand, responseId, parameters);
+				commandDescription.setFrame(rawFrame);
+
 				commandDescriptions.add(commandDescription);
 				parameterDescriptions.clear();
 			}

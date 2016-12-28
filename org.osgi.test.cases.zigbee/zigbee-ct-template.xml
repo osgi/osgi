@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration xmlns="http://org.osgi/zigbee-ct" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://org.osgi/zigbee-ct zigbee-ct.xsd">
-  <frame headerMaxSize="5" headerMinSize="3"/>
-  <host panId="33" channel="16" securityLevel="0" ieeeAddress="8123456899" discoveryTimeout="1000" invokeTimeout="3000">
-    <nodeDescriptor type="2" frequencyBand="868" manufacturerCode="45" maxBufferSize="36"
+  <frame headerMaxSize="5" headerMinSize="3" />
+  <host panId="0x0033" channel="16" securityLevel="0" ieeeAddress="30DE8600004000F4" discoveryTimeout="1000" invokeTimeout="3000">
+    <nodeDescriptor type="2" frequencyBand="868" manufacturerCode="0x0045" maxBufferSize="36"
       isComplexDescriptorAvailable="false" isUserDescriptorAvailable="true" />
   </host>
   <nodes>
-    <node ieeeAddress="6628417766" hostIeeeAddress="8123456899" userDescription="user description" activeEndpointsNumber="1">
-      <nodeDescriptor type="1" frequencyBand="868" manufacturerCode="45" maxBufferSize="36"
+    <node ieeeAddress="30DE8600004000F3" hostIeeeAddress="30DE8600004000F4" userDescription="user description"
+      activeEndpointsNumber="1">
+
+      <nodeDescriptor type="1" frequencyBand="868" manufacturerCode="0x0045" maxBufferSize="36"
         isComplexDescriptorAvailable="false" isUserDescriptorAvailable="true" />
 
       <powerDescriptor currentPowerMode="2" currentPowerSource="1" currentPowerSourceLevel="1"
         isConstantMainsPowerAvailable="true" />
 
       <endpoints>
-        <endpoint id="25" inputClustersNumber="4" outputClustersNumber="2">
+        <endpoint id="25" inputClustersNumber="2" outputClustersNumber="1">
           <simpleDescriptor deviceId="8" version="4" profileId="7" inputClusters="3,4" outputClusters="4">
           </simpleDescriptor>
         </endpoint>

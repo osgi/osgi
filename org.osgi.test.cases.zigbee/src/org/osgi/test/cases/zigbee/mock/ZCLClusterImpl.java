@@ -79,7 +79,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 	public Promise getCommandIds() {
 		ZCLCommandDescription[] receivedCommandDescriptions = description.getReceivedCommandDescriptions();
-		int[] commandIds = new int[receivedCommandDescriptions.length];
+		short[] commandIds = new short[receivedCommandDescriptions.length];
 		for (int i = 0; i < commandIds.length; i++) {
 			commandIds[i] = receivedCommandDescriptions[i].getId();
 		}

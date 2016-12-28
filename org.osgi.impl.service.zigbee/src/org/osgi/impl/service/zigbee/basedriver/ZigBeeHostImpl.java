@@ -178,6 +178,8 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 				node.deactivate(bc);
 			}
 		}
+
+		this.state = STOPPED;
 	}
 
 	public boolean isStarted() {

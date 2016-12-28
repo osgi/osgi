@@ -52,7 +52,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 * 
 	 * @param commandId The command identifier of the ZCL Frame.
 	 */
-	public ZCLFrameImpl(int commandId) {
+	public ZCLFrameImpl(short commandId) {
 		super();
 		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false, (byte) 0);
 	}

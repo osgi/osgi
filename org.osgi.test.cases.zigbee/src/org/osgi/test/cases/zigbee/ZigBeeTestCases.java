@@ -17,6 +17,7 @@
 package org.osgi.test.cases.zigbee;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +71,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	}
 
 	private void prepareTestStart() throws Exception {
-		launcher = TestStepLauncher.launch(getContext());
+		launcher = TestStepLauncher.getInstance(getContext());
 		conf = launcher.getConfiguration();
 
 		/*
@@ -93,7 +94,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 * @throws InterruptedException
 	 */
 
-	protected ZigBeeHost getZigBeeHost(ZigBeeHostConfig host, long timeout) throws InterruptedException {
+	protected ZigBeeHost getZigBeeHost(ZigBeeHostConfig host, long timeout) {
 
 		String classFilter = "(objectClass=" + ZigBeeHost.class.getName() + ")";
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + host.getIEEEAddress() + ")";
@@ -111,9 +112,14 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		ServiceTracker st = new ServiceTracker(bc, filter, null);
 		st.open();
 
-		ZigBeeHost hostService = (ZigBeeHost) st.waitForService(timeout);
-		return hostService;
-
+		ZigBeeHost service = null;
+		try {
+			service = (ZigBeeHost) st.waitForService(timeout);
+		} catch (InterruptedException e) {
+		} finally {
+			st.close();
+		}
+		return service;
 	}
 
 	/**
@@ -126,7 +132,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 * @throws InterruptedException
 	 */
 
-	protected ZigBeeNode waitForZigBeeNodeService(ZigBeeNodeConfig node, long timeout) throws InterruptedException {
+	protected ZigBeeNode waitForZigBeeNodeService(ZigBeeNodeConfig node, long timeout) {
 
 		String classFilter = "(objectClass=" + ZigBeeNode.class.getName() + ")";
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + node.getIEEEAddress() + ")";
@@ -144,8 +150,39 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		ServiceTracker st = new ServiceTracker(bc, filter, null);
 		st.open();
 
-		ZigBeeNode nodeService = (ZigBeeNode) st.waitForService(timeout);
-		return nodeService;
+		ZigBeeNode service = null;
+
+		try {
+			service = (ZigBeeNode) st.waitForService(timeout);
+		} catch (InterruptedException e) {
+		} finally {
+			st.close();
+		}
+		return service;
+	}
+
+	protected ServiceReference waitForServiceReference(String clazz, String filter, long timeout) {
+
+		BundleContext bc = getContext();
+
+		ServiceTracker st = new ServiceTracker(bc, clazz, null);
+		st.open();
+
+		ServiceReference sRef = null;
+		try {
+			if (st.waitForService(timeout) != null) {
+				ServiceReference[] sRefs = bc.getServiceReferences(clazz, filter);
+				if (sRefs.length > 0) {
+					return sRefs[0];
+				}
+			}
+		} catch (InterruptedException e) {
+		} catch (InvalidSyntaxException e) {
+
+		} finally {
+			st.close();
+		}
+		return sRef;
 	}
 
 	/**
@@ -225,11 +262,15 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	}
 
 	protected String printScope(ZigBeeEndpointConfig endpoint) {
-		return "[ ieeeAddress: " + endpoint.getNodeAddress() + ", ID: " + endpoint.getId() + "]";
+		return "[ ieeeAddress: " + toHexString(endpoint.getNodeAddress(), 16) + ", ID: " + endpoint.getId() + "]";
+	}
+
+	protected String printScope(ZigBeeEndpoint endpoint) {
+		return "[ ieeeAddress: " + toHexString(endpoint.getNodeAddress(), 16) + ", ID: " + endpoint.getId() + "]";
 	}
 
 	protected String printScope(ZigBeeNodeConfig node) {
-		return "[ ieeeAddress: " + node.getIEEEAddress() + "]";
+		return "[ ieeeAddress: " + toHexString(node.getIEEEAddress(), 16) + "]";
 	}
 
 	/**
@@ -395,5 +436,17 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 	public static void log(String TAG, String message) {
 		log(TAG + " - " + message);
+	}
+
+	protected String toHexString(BigInteger number, int hexDigits) {
+		String s = number.toString(16);
+		if (s.length() >= hexDigits) {
+			return s;
+		}
+
+		for (int i = 0; i < (hexDigits - s.length()); i++) {
+			s = " " + s;
+		}
+		return s;
 	}
 }

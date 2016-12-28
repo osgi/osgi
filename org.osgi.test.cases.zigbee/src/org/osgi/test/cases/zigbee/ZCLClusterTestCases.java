@@ -23,6 +23,7 @@ import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
@@ -34,8 +35,11 @@ import org.osgi.test.cases.zigbee.config.file.AttributeCoordinates;
 import org.osgi.test.cases.zigbee.config.file.CommandCoordinates;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
+import org.osgi.test.cases.zigbee.descriptions.ZCLCommandDescriptionImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLAttributeInfoImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
+import org.osgi.test.cases.zigbee.mock.ZCLFrameRaw;
+import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -571,7 +575,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			waitForPromise(p, INVOKE_TIMEOUT);
 
 			if (p.getFailure() == null) {
-				int[] commandIds = (int[]) this.assertPromiseValueClass(p, int[].class);
+				short[] commandIds = (short[]) this.assertPromiseValueClass(p, short[].class);
 				assertNotNull("ZigBeeEndpoint.getCommandIds() cannot return null", commandIds);
 				if (commandIds.length == 0) {
 					fail("ZigBeeCluster is empty");
@@ -679,7 +683,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 */
 	public void testInvoke() throws Exception {
 
+		log(TAG, "testInvoke()");
+
 		String context = "ZCLCluster.invoke(ZCLFrame)";
+
 		/*
 		 * Locates an endpoint that have a at least one server cluster
 		 */
@@ -693,9 +700,11 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Check for invalid arguments on the first node clusters.
 		 */
 
+		log(TAG, "test " + context + ": passing an invalid argument.");
+
 		ZCLCluster[] clusters = endpoint.getServerClusters();
 
-		ZCLFrame frame = new ZCLFrameImpl(0x00);
+		ZCLFrame frame = new ZCLFrameImpl((short) 0x00);
 
 		for (int i = 0; i < clusters.length; i++) {
 			ZCLCluster cluster = clusters[i];
@@ -717,6 +726,8 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Issues real commands.
 		 */
 
+		log(TAG, "test " + context + ": issuing a command and check the response, received on endpoint " + printScope(expectedEndpoint));
+
 		CommandCoordinates commandCoordinates = conf.findCommand(true);
 		assertNotNull(context + " unable to find in the CT configuration file a cluster with a server command defined.", commandCoordinates);
 
@@ -730,16 +741,17 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		/*
 		 * commandCoodinates.expectedCluster contains the cluster description of
-		 * a cluster that has at least received command. It is necessary to find
-		 * this command and then the resèpmse command definition.
+		 * a cluster that receives at least a command. It is necessary to find
+		 * this command and then the response command definition.
 		 */
 
 		ZCLCommandDescription[] commandDescriptions = commandCoordinates.expectedCluster.getReceivedCommandDescriptions();
 
 		ZCLCommandDescription responseCommand = null;
+		ZCLCommandDescription requestCommand = null;
 
 		for (int i = 0; i < commandDescriptions.length; i++) {
-			ZCLCommandDescription requestCommand = commandDescriptions[i];
+			requestCommand = commandDescriptions[i];
 			if (requestCommand.isClusterSpecificCommand() && !requestCommand.isManufacturerSpecific()) {
 				// got it!
 				responseCommand = conf.getResponseCommand(commandCoordinates.expectedCluster, requestCommand);
@@ -747,13 +759,60 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			}
 		}
 
+		ZCLFrame requestFrame = getZCLFrame(requestCommand);
+
 		/*
 		 * If responseCommand is not null we can issue a requestCommand and
 		 * expects a responseCommand.
 		 */
 
 		ZCLCluster cluster = endpoint.getServerCluster(commandCoordinates.expectedCluster.getId());
-		cluster.invoke(null);
 
+		Promise p = cluster.invoke(requestFrame);
+		waitForPromise(p, INVOKE_TIMEOUT);
+		frame = (ZCLFrame) assertPromiseValueClass(p, ZCLFrame.class);
+		ZCLHeader header = frame.getHeader();
+
+		/*
+		 * check if the returned command is compliant to the expected one
+		 * described in the responseCommand ZCLCommandDescriptor instance.
+		 */
+
+		assertEquals(context + ": check on response ZCLHeader.getCommandId()", responseCommand.getId(), header.getCommandId());
+		assertEquals(context + ": check on response ZCLHeader.getManufacturerCode()", responseCommand.getManufacturerCode(), header.getManufacturerCode());
+		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isClientServerDirection(), header.isClientServerDirection());
+		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isClusterSpecificCommand(), header.isClusterSpecificCommand());
+		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isManufacturerSpecific(), header.isManufacturerSpecific());
+
+		/*
+		 * Compares the raw frame of the actual response with the zclFrame that
+		 * was found in the xml file. Skips the ZCLHeader.
+		 */
+		ZCLCommandDescriptionImpl responseCommandImpl = (ZCLCommandDescriptionImpl) responseCommand;
+
+		byte[] expectedRawFrame = responseCommandImpl.getFrame();
+		byte[] actualRawFrame = frame.getBytes();
+
+		assertEquals(context + ": invalid size of returned ZCLFrame", expectedRawFrame.length, actualRawFrame.length);
+
+		int minHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
+
+		if (actualRawFrame.length < minHeaderSize) {
+			fail(context + ": ZCLFrame.getBytes() on the returned frame must return an array of at least " + minHeaderSize + ", got " + actualRawFrame.length);
+		}
+
+		/* we skip the header */
+		for (int i = minHeaderSize; i < expectedRawFrame.length; i++) {
+			assertEquals(context + ": expected and actual returned ZCL raw frames differs at index " + i, expectedRawFrame[i], actualRawFrame[i]);
+		}
+	}
+
+	private ZCLFrame getZCLFrame(ZCLCommandDescription command) {
+		ZCLCommandDescriptionImpl c = (ZCLCommandDescriptionImpl) command;
+		ZCLHeader header = new ZCLHeaderImpl(c.getId(), c.isClusterSpecificCommand(), c.isClientServerDirection(), false, (byte) 0x05);
+
+		ZCLFrame frame = new ZCLFrameRaw(header, c.getFrame());
+
+		return frame;
 	}
 }

@@ -56,6 +56,10 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return Promises.resolved(simpleDescriptor);
 	}
 
+	public ZigBeeSimpleDescriptor getSimpleDescriptorInternal() {
+		return simpleDescriptor;
+	}
+
 	public ZCLCluster getServerCluster(int clusterId) {
 		if (clusterId < 0 || clusterId > 0xffff) {
 			throw new IllegalArgumentException("clusterId must be in the range [0, 0xffff]. Asked for clusterId " + clusterId);

@@ -417,7 +417,7 @@ public class ConfigurationFileReader {
 				String payloadString = ParserUtils.getAttribute(requestFullFrameElement, "hex", ParserUtils.MANDATORY, "");
 				byte[] requestFullFrame = ParserUtils.hexStringToByteArray(payloadString);
 
-				int commandId = ParserUtils.getAttribute(requestFullFrameElement, "commandId", ParserUtils.MANDATORY, -1);
+				short commandId = ParserUtils.getAttribute(requestFullFrameElement, "commandId", ParserUtils.MANDATORY, (short) -1);
 
 				boolean isClusterSpecificCommand = ParserUtils.getAttribute(requestFullFrameElement, "isClusterSpecificCommand", ParserUtils.MANDATORY, false);
 				boolean isClientServerDirection = ParserUtils.getAttribute(requestFullFrameElement, "isClientServerDirection", ParserUtils.MANDATORY, false);
@@ -440,10 +440,10 @@ public class ConfigurationFileReader {
 	 * Retrieve the first attribute that satisfy the given requirements.
 	 * 
 	 * @param isWritable Ask for an attribute that may be writable or read only
-	 *        (pass null if you don't care).
+	 *        (passing null means 'don't care').
 	 * 
 	 * @param isReportable Ask for an attribute that may be reportable or not
-	 *        (pass null if you don't care).
+	 *        (passing null means 'don't care').
 	 * @return
 	 */
 
@@ -491,7 +491,6 @@ public class ConfigurationFileReader {
 					}
 				}
 			}
-
 		}
 		return null;
 	}
@@ -582,6 +581,16 @@ public class ConfigurationFileReader {
 		for (int i = 0; i < nodes.length; i++) {
 			if (nodes[i].getIEEEAddress().equals(ieeeAddress)) {
 				return nodes[i];
+			}
+		}
+		return null;
+	}
+
+	public ZigBeeEndpointConfig getEndpointConfig(ZigBeeNodeConfig nodeConfig) {
+		ZigBeeEndpointConfig[] endpointsConfig = nodeConfig.getEndpoints();
+		for (int i = 0; i < endpointsConfig.length; i++) {
+			if (endpointsConfig[i].getNodeAddress().equals(nodeConfig.getIEEEAddress())) {
+				return endpointsConfig[i];
 			}
 		}
 		return null;

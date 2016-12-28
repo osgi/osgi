@@ -52,7 +52,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 * 
 	 * @param commandId The command identifier of the ZCL Frame.
 	 */
-	public ZCLFrameImpl(int commandId) {
+	public ZCLFrameImpl(short commandId) {
 		super();
 		this.zclHeader = new ZCLHeaderImpl(commandId, false, true, false, (byte) 0);
 	}
@@ -102,7 +102,7 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	/**
 	 * Returns the ZCL Frame + ZCL payload in a byte array. In this mock
 	 * implementation of the ZCLFrame the ZCL Header is not copied in the
-	 * returned byte array (@see ZCLFrameImpl}
+	 * returned byte array (@see ZCLFrameImpl} and left empty.
 	 */
 
 	public byte[] getBytes() {

@@ -24,7 +24,6 @@ import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.cases.zigbee.mock.ZCLHeaderImpl;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Test Cases to test the internal ZCLFrame and ZCLHeader interfaces
@@ -32,7 +31,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author $Id$
  */
-public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
+public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 	private static final String	TAG					= ZCLFrameImplTestCase.class.getName();
 
@@ -96,29 +95,30 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 	ConfigurationFileReader		conf;
 
 	protected void setUp() throws Exception {
-		log("Prepare for ZigBee Test Case");
+		log(TAG, "Prepare for ZigBee Test Case");
 
 		prepareTestStart();
-		log("Prepared for ZigBee Test Case");
+		log(TAG, "Prepared for ZigBee Test Case");
 	}
 
 	protected void tearDown() throws Exception {
-		log("Tear down ZigBee Test Case");
+		log(TAG, "Tear down ZigBee Test Case");
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.launch(getContext());
+		TestStepLauncher launcher = TestStepLauncher.getInstance(getContext());
+
 		conf = launcher.getConfiguration();
 		minHeaderSize = conf.getHeaderMinSize();
 		maxHeaderSize = conf.getHeaderMaxSize();
 
-		System.out.println("minHeaderSize = " + minHeaderSize);
-		System.out.println("maxHeaderSize = " + maxHeaderSize);
+		log(TAG, "minHeaderSize = " + minHeaderSize);
+		log(TAG, "maxHeaderSize = " + maxHeaderSize);
 	}
 
 	public void testZCLHeader() {
 
-		int commandId = 0x10;
+		short commandId = 0x10;
 		boolean isClusterSpecificCommand = true;
 		boolean isClientServerDirection = false;
 		boolean disableDefaultResponse = true;
@@ -160,7 +160,9 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	public void testInternalZCLFrameImplManufacturerSpecific() {
 
-		int commandId = 0x10;
+		log(TAG, "testInternalZCLFrameImpl");
+
+		short commandId = 0x10;
 		boolean isClusterSpecificCommand = false;
 		boolean isClientServerDirection = true;
 		boolean disableDefaultResponse = false;
@@ -202,8 +204,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		ZCLHeader header = frame.getHeader();
 
 		byte[] rawFrame = frame.getBytes();
-
-		assertNotNull("the getBytes() must return a valid byte array", rawFrame);
+		assertNotNull("ZCLHeader.getBytes(): must return a valid byte array", rawFrame);
 
 		int minFrameSize = getMinFrameSize(frame.getHeader());
 		if (rawFrame.length < minFrameSize) {
@@ -212,28 +213,22 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 		byte[] otherRawFrame = frame.getBytes();
 
-		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
-
-		if (otherRawFrame == rawFrame) {
-			fail("the getBytes() must return a different array each time it is called");
-		}
+		assertNotNull("ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
+		assertSame("ZCLFrame.getBytes(): must return a different array each time it is called", otherRawFrame, rawFrame);
 
 		ZigBeeDataInput is = frame.getDataInput();
-
-		assertNotNull("getInputStream() must not return null", is);
+		assertNotNull("ZCLFrame.getInputStream() must not return null", is);
 
 		ZigBeeDataInput isOther = frame.getDataInput();
-
-		assertNotNull("calling ZCLFrame.getDataInput() twice must not return null", isOther);
-
-		if (is == isOther) {
-			fail("calling ZCLFrame.getDataInput() twice must not return differenct ZigBeeDataInput instances");
-		}
+		assertNotNull("ZCLFrame.getDataInput(): calling this method twice must not return null", isOther);
+		assertNotSame("ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.", is, isOther);
 	}
 
 	public void testDataInput() {
 
-		int commandId = 0x10;
+		log(TAG, "testDataInput()");
+
+		short commandId = 0x10;
 		boolean isClusterSpecificCommand = true;
 		boolean isClientServerDirection = true;
 		boolean disableDefaultResponse = false;
@@ -264,7 +259,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		 */
 
 		try {
-			assertEquals(payloadTestBasic[0], dataInput.readByte());
+			assertEquals("ZigBeeDataInput.readByte(): wrong value retrieved.", payloadTestBasic[0], dataInput.readByte());
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
@@ -277,13 +272,15 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
 
+		log(TAG, "test ZigBeeDataInput.readInt()");
+
 		try {
 			int v = dataInput.readInt(0);
 			fail("we expected an IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading int, we expected an IllegalArgumentException");
+			fail("ZigBeeDataInput.readInt(): got an unexpected exception while reading int, we expected an IllegalArgumentException");
 		}
 
 		try {
@@ -292,16 +289,16 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		} catch (IllegalArgumentException e) {
 			// We expect this exception
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading int, we expected an IllegalArgumentException");
+			fail("ZigBeeDataInput.readInt(): got an unexpected exception while reading int, we expected an IllegalArgumentException");
 		}
 
 		try {
-			assertEquals(0xfffffffa, dataInput.readInt(1));
-			assertEquals(0xfffff2f1, dataInput.readInt(2));
-			assertEquals(0xfff3f2f1, dataInput.readInt(3));
-			assertEquals(0xf4f3f2f1, dataInput.readInt(4));
+			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfffffffa, dataInput.readInt(1));
+			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfffff2f1, dataInput.readInt(2));
+			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfff3f2f1, dataInput.readInt(3));
+			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xf4f3f2f1, dataInput.readInt(4));
 		} catch (Exception e) {
-			fail("got an unexpected exception while reading from data input, ");
+			fail("ZigBeeDataInput.readInt(): got an unexpected exception while reading from data input, ");
 		}
 
 		/*
@@ -311,6 +308,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
+
+		log(TAG, "test ZigBeeDataInput.readLong()");
 
 		try {
 			long v = dataInput.readLong(0);
@@ -347,6 +346,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		 * Test ########## ZigBeeDataInput.readBytes()
 		 */
 
+		log(TAG, "test ZigBeeDataInput.readBytes()");
+
 		try {
 			byte[] b = dataInput.readBytes(bytes1.length);
 			assertNotNull("ZigbeeDataInput.getBytes() returned a null array", b);
@@ -378,6 +379,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Test ########## ZigBeeDataInput.readFloat()
 		 */
+
+		log(TAG, "test ZigBeeDataInput.readFloat()");
 
 		/*
 		 * Checks on IllegalArgumentException on wrong value of the size
@@ -477,6 +480,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		 * Test ########## readDouble()
 		 */
 
+		log(TAG, "test ZigBeeDataInput.readDouble()");
+
 		try {
 			// NaN
 			double d = dataInput.readDouble();
@@ -504,6 +509,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 			fail("got an unexpected exception while reading from data input");
 		}
 
+		log(TAG, "test ZigBeeDataInput.readByte()");
+
 		try {
 			dataInput.readByte();
 			fail("we expected EOFException");
@@ -520,7 +527,7 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 
 	public void testDataOutput() {
 
-		int commandId = 0x10;
+		short commandId = 0x10;
 		boolean isClusterSpecificCommand = true;
 		boolean isClientServerDirection = true;
 		boolean disableDefaultResponse = false;
@@ -552,6 +559,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		 * Checks on IllegalArgumentException on wrong size parameter
 		 */
 
+		log(TAG, "test ZigBeeDataInput.writeInt()");
+
 		try {
 			dataOutput.writeInt(0, 0);
 			fail("we expected an IllegalArgumentException");
@@ -569,6 +578,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		} catch (Throwable e) {
 			fail("got an unexpected exception in the writeInt(), we expected an IllegalArgumentException");
 		}
+
+		log(TAG, "test ZigBeeDataInput.writeLong()");
 
 		try {
 			dataOutput.writeLong(0, 0);
@@ -591,6 +602,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Test writeByte() methods of ZigBeeDataOutput interface
 		 */
+
+		log(TAG, "test ZigBeeDataInput.writeByte()");
 
 		try {
 			dataOutput.writeByte(payloadTestBasic[0]);
@@ -631,6 +644,8 @@ public class ZCLFrameImplTestCase extends DefaultTestBundleControl {
 		/*
 		 * Test writeBytes() method of ZigBeeDataOutput interface
 		 */
+
+		log(TAG, "test ZigBeeDataInput.writeBytes()");
 
 		try {
 			dataOutput.writeBytes(bytes1, bytes1.length);

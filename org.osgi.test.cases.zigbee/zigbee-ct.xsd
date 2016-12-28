@@ -1,13 +1,70 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://org.osgi/zigbee-ct"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+
+  <xs:simpleType name="EndpointID">
+    <xs:union memberTypes="xs:unsignedByte">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{2}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="ProfileID" id="ProfileID">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="ManufacturerCode" id="ManufacturerCode">
+    <xs:union memberTypes="xs:unsignedInt">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="UnsignedInt16HexDec">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="DeviceID" id="DeviceID">
+    <xs:union memberTypes="xs:unsignedShort">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="0x[0-9a-fA-F]{4}" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="IEEEAddress" id="IEEEAddress">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="[0-9a-fA-F]{8}" />
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:element name="nodeDescriptor">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
           <xs:attribute type="xs:short" name="type" use="required" />
           <xs:attribute type="xs:short" name="frequencyBand" use="required" />
-          <xs:attribute type="xs:int" name="manufacturerCode" use="required" />
+          <xs:attribute type="ManufacturerCode" name="manufacturerCode" use="required" />
           <xs:attribute type="xs:int" name="maxBufferSize" use="required" />
           <xs:attribute type="xs:boolean" name="isUserDescriptorAvailable" use="required" />
           <xs:attribute type="xs:boolean" name="isComplexDescriptorAvailable" use="required" />
@@ -40,9 +97,9 @@
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          <xs:attribute type="xs:int" name="deviceId" use="required" />
+          <xs:attribute type="DeviceID" name="deviceId" use="required" />
           <xs:attribute type="xs:int" name="version" use="required" />
-          <xs:attribute type="xs:int" name="profileId" use="required" />
+          <xs:attribute type="ProfileID" name="profileId" use="required" />
           <xs:attribute type="xs:string" name="inputClusters" use="required" />
           <xs:attribute type="xs:string" name="outputClusters" use="required" />
         </xs:extension>
@@ -70,7 +127,7 @@
         <xs:element ref="zb:simpleDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
         <xs:element ref="zb:clusters" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
-      <xs:attribute type="xs:unsignedShort" name="id" />
+      <xs:attribute type="EndpointID" name="id" />
       <xs:attribute type="xs:unsignedInt" name="inputClustersNumber" use="required" />
       <xs:attribute type="xs:unsignedInt" name="outputClustersNumber" use="required" />
     </xs:complexType>
@@ -132,8 +189,8 @@
         <xs:element ref="zb:powerDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
         <xs:element ref="zb:endpoints" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
-      <xs:attribute type="xs:unsignedLong" name="ieeeAddress" use="required" />
-      <xs:attribute type="xs:unsignedLong" name="hostIeeeAddress" use="required" />
+      <xs:attribute type="IEEEAddress" name="ieeeAddress" use="required" />
+      <xs:attribute type="IEEEAddress" name="hostIeeeAddress" use="required" />
       <xs:attribute type="xs:string" name="userDescription" use="required" />
       <xs:attribute type="xs:unsignedInt" name="activeEndpointsNumber" use="required" />
     </xs:complexType>
@@ -144,10 +201,10 @@
       <xs:sequence>
         <xs:element ref="zb:nodeDescriptor" xmlns:zb="http://org.osgi/zigbee-ct" />
       </xs:sequence>
-      <xs:attribute type="xs:unsignedShort" name="panId" use="required" />
+      <xs:attribute type="UnsignedInt16HexDec" name="panId" use="required" />
       <xs:attribute type="xs:unsignedShort" name="channel" use="required" />
       <xs:attribute type="xs:unsignedByte" name="securityLevel" use="required" />
-      <xs:attribute type="xs:unsignedLong" name="ieeeAddress" use="required" />
+      <xs:attribute type="IEEEAddress" name="ieeeAddress" use="required" />
       <xs:attribute type="xs:long" name="discoveryTimeout" use="required" />
       <xs:attribute type="xs:long" name="invokeTimeout" use="required" />
     </xs:complexType>

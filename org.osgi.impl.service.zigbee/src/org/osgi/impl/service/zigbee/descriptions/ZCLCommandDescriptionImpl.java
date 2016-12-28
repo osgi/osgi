@@ -27,7 +27,7 @@ import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
  */
 public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 
-	private int							id;
+	private short						id;
 	private String						name;
 	private boolean						isMandatory;
 	private ZCLParameterDescription[]	parameterDescription	= null;
@@ -35,14 +35,15 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	private int							manufacturerCode;
 	private boolean						isCusterSpecificCommand;
 	private int							responseCommandId;
+	private byte[]						frame;
 
-	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory) {
+	public ZCLCommandDescriptionImpl(short id, String name, boolean mandatory) {
 		this.id = id;
 		this.name = name;
 		this.isMandatory = mandatory;
 	}
 
-	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory, boolean isServerSide, int manufacturerCode, boolean isClusterSpecific, int responseId,
+	public ZCLCommandDescriptionImpl(short id, String name, boolean mandatory, boolean isServerSide, int manufacturerCode, boolean isClusterSpecific, int responseId,
 			ZCLParameterDescription[] parameterDescription) {
 		this(id, name, mandatory);
 		this.parameterDescription = parameterDescription;
@@ -52,7 +53,7 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 		this.responseCommandId = responseId;
 	}
 
-	public int getId() {
+	public short getId() {
 		return id;
 	}
 
@@ -96,5 +97,27 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	 */
 	public int getResponseCommandId() {
 		return responseCommandId;
+	}
+
+	/**
+	 * Return the raw frame.
+	 * 
+	 * @return Returns the raw ZCLFrame or null if the command descriptor do not
+	 *         contain any raw frame.
+	 */
+	public byte[] getFrame() {
+		return frame;
+	}
+
+	/**
+	 * Allows to assign a raw frame to the ZCL Command. The passed byte array
+	 * must be a full ZCL frame and the ZCL header part of this frame MUST be
+	 * compatible with the other ZCLCommandDescriptor fields.
+	 * 
+	 * @param frame
+	 */
+
+	public void setFrame(byte[] frame) {
+		this.frame = frame;
 	}
 }

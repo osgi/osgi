@@ -94,7 +94,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 		this.host = host;
 
-		nodePid = IEEEAddress.toString() + "." + host.getHostPid() + ".node.pid";
+		nodePid = IEEEAddress.toString() + ".node.pid";
 	}
 
 	public BigInteger getIEEEAddress() {
@@ -282,11 +282,19 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 */
 	public void activate(BundleContext bc) {
 		for (int j = 0; j < endpoints.length; j++) {
-			ZigBeeEndpoint endpoint = endpoints[j];
+			ZigBeeEndpointImpl endpoint = endpoints[j];
 			Dictionary props = new Hashtable();
 
 			props.put(ZigBeeNode.IEEE_ADDRESS, this.getIEEEAddress());
 			props.put(ZigBeeEndpoint.ENDPOINT_ID, new Short(endpoint.getId()));
+			props.put(ZigBeeEndpoint.PROFILE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationProfileId()));
+			props.put(ZigBeeEndpoint.DEVICE_ID, new Integer(endpoint.getSimpleDescriptorInternal().getApplicationDeviceId()));
+			props.put(ZigBeeEndpoint.DEVICE_VERSION, new Byte(endpoint.getSimpleDescriptorInternal().getApplicationDeviceVersion()));
+			props.put(ZigBeeEndpoint.HOST_PID, this.getHostPid());
+			props.put(ZigBeeEndpoint.OUTPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getOutputClusters());
+			props.put(ZigBeeEndpoint.INPUT_CLUSTERS, endpoint.getSimpleDescriptorInternal().getInputClusters());
+			props.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
+			props.put("service.pid", getEndpointServicePid(endpoint));
 
 			ServiceRegistration endpointServiceReg = bc.registerService(ZigBeeEndpoint.class.getName(), endpoint, props);
 			endpointsServiceRegs.add(endpointServiceReg);
@@ -304,6 +312,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		nodeProperties.put(ZigBeeNode.LOGICAL_TYPE, new Short(nodeDescriptor.getLogicalType()));
 		nodeProperties.put(ZigBeeNode.MANUFACTURER_CODE, new Integer(nodeDescriptor.getManufacturerCode()));
 		nodeProperties.put(ZigBeeNode.RECEIVER_ON_WHEN_IDLE, new Boolean(nodeDescriptor.getMacCapabilityFlags().isReceiverOnWhenIdle()));
+		nodeProperties.put("service.pid", nodePid);
 
 		nodeProperties.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, ZigBeeEndpoint.DEVICE_CATEGORY);
 		if (nodeDescriptor.isComplexDescriptorAvailable() && complexDescriptor != null) {
@@ -326,5 +335,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 			sReg.unregister();
 
 		}
+	}
+
+	public String getEndpointServicePid(ZigBeeEndpointImpl endpoint) {
+		return this.getIEEEAddress() + "." + endpoint.getId() + ".endpoint.pid";
 	}
 }

@@ -59,26 +59,59 @@ know about some semantic-related information:
   the activeEndpointsNumber attribute. the CT will perform a check.
   
 The `zcl.xml` allows to define the clusters used inside the ZigBee devices 
-configured for issuing the tests. In this distribution the zcl.xml file 
+configured for issuing the tests. In this distribution the `zcl.xml` file 
 contains only fake clusters, because for licensing issues OSGi Alliance 
-cannot disclosure the ZCL specification details.
+cannot disclosure any ZCL commands specification details.
 
 The tester must replace the current `zcl.xml` file content the actual cluster 
 definitions. Only the cluster identifiers listed in the inputClusters and 
-outputClusters attributes of the <simpleDescriptor> element in file 
+outputClusters attributes of the `<simpleDescriptor>` element in file 
 zigbee-ct-template.xml have to be defined.
 
-Please note that all the attributes and commands defined in the zcl.xml 
-must be implemented.
+Please note that all the attributes and commands defined in file `zcl.xml` 
+are meant to be actually implemented on the ZigBee devices used for the test, 
+if they are referenced by any `simpleDescriptor` element of the 
+`zigbee-ct-template.xml` file.
 
-# How the CT perform the tests
+As it happens with the other xml file a  attention has to be payed in filling the 
+`zcl.xml` file because any discrepancy between the file content and the ZigBee 
+devices  let the CT to fail. 
+
+Here some constraints on the `command` xml element:
+
+* The `id` attribute is mandatory and represents the command identifier.
+
+* `manufacturerCode` is the command manufacturer code ([0, 0xffff]. If missing the
+   command is considered not manufacturer specific. 
+ 
+* `isClusterSpecificCommand` is an optional boolean attribute that states if the command
+  is cluster specific (`true`) or general (`false`). Its value defaults to "true".
+  
+* `response_id` is a mandatory attribute that contains the identifier of the command
+  that the cluster uses to answer to the current one. Please note that if the response
+  command is the Default Response general command, the tester **must** define in the
+  cluster (under the client side) a command with the id corresponding to the Default Response
+  command and a `isClusterSpecificCommand` attribute set to "false". 
+
+* The `zclFrame` (that is a raw frame) attribute. Contains an even size hex digits 
+  string. The first couple of digits represents the frame control field of the ZCL frame.
+  This attribute must contain an example of this command. The CT will try to 
+  create a ZCLFrame from this raw frame and send it to the real ZigBee device. 
+  It is important that this raw frame is consistent with the other attributes
+  defined for the `command` element (see above). If the `command` element contains
+  also a `response_id`, the response to this raw frame will be compared with 
+  the raw frame (that is the `zclFrame` defined for that response command (only the
+  sequence number is not taken into account in this comparison.
+
+
+# How the CT performs the tests
 
 The compliant tests bundle starts by loading the 
 `zigbee-ct-template.xml` and `zcl.xml` files. If these files do not
 contain all the minimum set of information required to perform 
 the tests the CT exit with a failure.
 
-This is the list of constraint that MUST be satisfied (some of them are 
+This is the list of additional constraints that **MUST** be satisfied (some of them are 
 also formalized in the schema files:
 
 * At least one <node> element have to be defined.
@@ -98,6 +131,15 @@ also formalized in the schema files:
 * Throughout the xml file there must be at least one endpoint with a server 
   cluster having a command and the respective response defined (if the response
   is not the default one).
+* Each cluster element in zcl.xml file must define at least one server side 
+  command.
+* The CT will call the ZCLCluster.invoke() method with the raw frame specified 
+  by the zclFrame attribute of a command definition in the zcl.xml file. 
+  The returned ZCLFrame.getBytes() byte array, will be then compared with the raw 
+  frame specified in the xml file for the response command (if response_id is specified).
+  If response_id is not specified, the CT will assume that the response **must** be
+  the Default Response.
+   
   
 If the nodes have a UserDescriptor, the CT will change it.
 
@@ -108,25 +150,10 @@ clusters.
 # Constraints on the ZBI for being testable with the CT.
 
 Because of ZigBee licensing issues, the ZCLFrame implementation 
-provided with the RI and the CT is not complete. In particular
-this implementation cannot marshal and unmarshal a `ZCLHeader`.
+provided with the RI and the CT is not complete. In particular,
+this implementation, cannot correctly marshal and unmarshal a `ZCLHeader`.
 
-For this reason ZBI in order to be tested with the OSGi CT must
-use the `ZCLFrame.getBytes()` method to retrieve the full ZigBee Frame
-when the `ZCLFrame` is created by the CT.
-
-The CT works only with just one ZigBeeHost service registered.
-
-
-
-
-
-
-
-
-
-
-
+The CT works only with the presence of just one ZigBeeHost service.
 
 
 

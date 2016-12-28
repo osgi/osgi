@@ -25,6 +25,10 @@ import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class TestStepLauncher {
+
+	/**
+	 * The singleton instance.
+	 */
 	private static TestStepLauncher	instance;
 
 	/**
@@ -45,8 +49,13 @@ public class TestStepLauncher {
 	private static final String		configFilename			= "zigbee-ct-template.xml";
 
 	private ConfigurationFileReader	confReader;
-	private TestStepProxy			tproxy;
+	private static TestStepProxy	tproxy;
 
+	private static Object			lock					= new Object();
+
+	/*
+	 * Constructor
+	 */
 	private TestStepLauncher(BundleContext bc) throws Exception {
 		tproxy = new TestStepProxy(bc);
 
@@ -63,22 +72,24 @@ public class TestStepLauncher {
 		ZCLFrameImpl.maxHeaderSize = confReader.getHeaderMaxSize();
 
 		tproxy.execute(ACTIVATE_ZIGBEE_DEVICES,
-				"please please plug and setup all the ZigBee devices described in the " + configFilename + " file");
+				"Please ensure that the ZigBee Device Service and the ZigBee devices reported on the " + configFilename + " file have been properly paired with the coordinator");
 
 	}
 
-	public static TestStepLauncher launch(BundleContext bc) throws Exception {
-		if (instance == null) {
-			instance = new TestStepLauncher(bc);
+	/*
+	 * Returns the TestStepLauncher singleton.
+	 */
+
+	public static TestStepLauncher getInstance(BundleContext bc) throws Exception {
+		synchronized (lock) {
+			if (instance == null) {
+				instance = new TestStepLauncher(bc);
+			}
+			return instance;
 		}
-		return instance;
 	}
 
 	public ConfigurationFileReader getConfiguration() {
 		return confReader;
-	}
-
-	public TestStepProxy getTeststepProxy() {
-		return tproxy;
 	}
 }

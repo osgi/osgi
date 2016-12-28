@@ -26,6 +26,7 @@ import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
@@ -203,10 +204,42 @@ public class ZCLClusterImpl implements ZCLCluster {
 			return Promises.failed(new NullPointerException("frame argument cannot be null"));
 		}
 
+		String side;
+
+		if (this.isServer) {
+			side = "Server";
+		} else {
+			side = "Client";
+		}
+
 		ZCLCommandDescription requestCommand = lookupReceivedCommand(frame.getHeader().getCommandId());
 		ZCLCommandDescription responseCommand = getResponseCommand(requestCommand);
 
-		return Promises.resolved(new UnsupportedOperationException("This method is still not supported."));
+		if (requestCommand == null) {
+			throw new RuntimeException(
+					"CT configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+		}
+
+		byte[] rawRequestFrame = ((ZCLCommandDescriptionImpl) requestCommand).getFrame();
+		if (rawRequestFrame == null) {
+			throw new RuntimeException("CT configuration error. Unable to find a raw frame for commmand id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+
+		}
+
+		if (responseCommand == null) {
+			throw new RuntimeException(
+					"CT configuration error.  Unable to find any ZCL command definition for command Id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+		}
+
+		byte[] rawResponseCommand = ((ZCLCommandDescriptionImpl) requestCommand).getFrame();
+		if (rawRequestFrame == null) {
+			throw new RuntimeException("CT configuration error. Unable to find a raw frame for commmand id " + frame.getHeader().getCommandId() + " of " + side + " Cluster id" + this.getId());
+
+		}
+
+		ZCLFrame responseFrame = this.createResponseFrame(frame, responseCommand);
+
+		return Promises.resolved(responseFrame);
 	}
 
 	public Promise invoke(ZCLFrame frame, String exportedServicePID) {
@@ -238,7 +271,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 		String commandIdsAsAString = null;
 
-		int[] commandIds = this.getCommandIdsArray();
+		short[] commandIds = this.getCommandIdsArray();
 		if (commandIds != null) {
 			commandIdsAsAString = "[";
 			int i = 0;
@@ -355,7 +388,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return null;
 	}
 
-	public int[] getCommandIdsArray() {
+	public short[] getCommandIdsArray() {
 		ZCLCommandDescription[] commandDescriptions;
 		if (isServer) {
 			commandDescriptions = global.getServerClusterDescription().getReceivedCommandDescriptions();
@@ -363,10 +396,19 @@ public class ZCLClusterImpl implements ZCLCluster {
 			commandDescriptions = global.getServerClusterDescription().getReceivedCommandDescriptions();
 		}
 
-		int[] commandIds = new int[commandDescriptions.length];
+		short[] commandIds = new short[commandDescriptions.length];
 		for (int i = 0; i < commandDescriptions.length; i++) {
 			commandIds[i] = commandDescriptions[i].getId();
 		}
 		return commandIds;
+	}
+
+	private ZCLFrame createResponseFrame(ZCLFrame requestFrame, ZCLCommandDescription responseCommand) {
+		ZCLCommandDescriptionImpl r = (ZCLCommandDescriptionImpl) responseCommand;
+
+		ZCLHeader requestHeader = requestFrame.getHeader();
+		ZCLHeader responseHeader = new ZCLHeaderImpl(r.getId(), r.isClusterSpecificCommand(), !requestHeader.isClientServerDirection(), true, requestHeader.getSequenceNumber());
+		ZCLFrame frame = new ZCLFrameRaw(responseHeader, r.getFrame());
+		return frame;
 	}
 }
