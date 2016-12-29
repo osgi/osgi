@@ -39,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyPermission;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -52,6 +53,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
 import org.osgi.service.cm.ManagedService;
@@ -2231,12 +2233,14 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test the update if different method TODO - verify managed service is not
-	 * called - verify listener is not called - arrays etc.
+	 * Test the update if different method.
+	 * Tests synchronous listeners and managed service.
 	 */
 	public void testUpdateIfDifferent() throws Exception {
 		final String pid = Util.createPid();
 		final List<ConfigurationEvent> events = new ArrayList<>();
+		final List<Dictionary<String, ?>> updates = new ArrayList<>();
+		final CountDownLatch updateLatch = new CountDownLatch(3);
 
 		final SynchronousConfigurationListener listener = new SynchronousConfigurationListener() {
 
@@ -2250,25 +2254,62 @@ public class CMControl extends DefaultTestBundleControl {
 
 			}
 		};
+		final ManagedService ms = new ManagedService() {
+
+			@Override
+			public void updated(final Dictionary<String, ?> properties) throws ConfigurationException {
+    			updates.add(properties);
+    			updateLatch.countDown();
+			}
+
+		};
 		this.registerService(
 				SynchronousConfigurationListener.class.getName(),
 				listener, null);
+	    final Hashtable<String,Object> msProps = new Hashtable<String,Object>();
+	    msProps.put(Constants.SERVICE_PID, pid);
+		this.registerService(
+				ManagedService.class.getName(),
+				ms, msProps);
 		try {
 			final Configuration conf = cm.getConfiguration(pid);
 
 			final long startLevel = conf.getChangeCount();
-			Hashtable<String,Object> newprops = new Hashtable<String,Object>();
+			final Hashtable<String,Object> newprops = new Hashtable<String,Object>();
 			newprops.put("somekey", "somevalue");
+			newprops.put("array", new long[] {1, 2});
 			conf.updateIfDifferent(newprops);
 			assertEquals(startLevel + 1, conf.getChangeCount());
 
 			assertEquals(1, events.size());
 
-			// update again
+			// update again with same props
 			conf.updateIfDifferent(newprops);
 			assertEquals(startLevel + 1, conf.getChangeCount());
+			assertEquals(1, events.size());
+
+            // check array compare
+            newprops.put("array", new Long[] {1L, 2L});
+			conf.updateIfDifferent(newprops);
+			assertEquals(startLevel + 1, conf.getChangeCount());
+			assertEquals(1, events.size());
+            
+            // update once more with different props
+			final Hashtable<String,Object> props2 = new Hashtable<String,Object>();
+			props2.put("somekey", "newvalue");
+			conf.updateIfDifferent(props2);
+			assertEquals(startLevel + 2, conf.getChangeCount());
+
+			assertEquals(2, events.size());
+			
+			// check updates to managed service
+			updateLatch.await();
+			assertNull(updates.get(0));
+			assertEquals("somevalue", updates.get(1).get("somekey"));
+			assertEquals("newvalue", updates.get(2).get("somekey"));
 		} finally {
 			this.unregisterService(listener);
+			this.unregisterService(ms);
 		}
 	}
 
