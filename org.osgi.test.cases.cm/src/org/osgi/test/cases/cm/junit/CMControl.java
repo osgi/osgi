@@ -50,6 +50,14 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.framework.namespace.PackageNamespace;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.namespace.contract.ContractNamespace;
+import org.osgi.namespace.implementation.ImplementationNamespace;
+import org.osgi.namespace.service.ServiceNamespace;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
@@ -58,6 +66,7 @@ import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.service.cm.ReadOnlyConfigurationException;
 import org.osgi.service.cm.SynchronousConfigurationListener;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -3897,7 +3906,8 @@ public class CMControl extends DefaultTestBundleControl {
 
 	}
 
-    public void testFactoryConfigurationCollision() throws IOException, InvalidSyntaxException, BundleException {
+	public void testFactoryConfigurationCollision()
+			throws IOException, InvalidSyntaxException, BundleException {
         final String factoryPid = Util.createPid("factoryPid1");
 
         final Configuration cf = cm.createFactoryConfiguration( factoryPid, null );
@@ -8962,4 +8972,146 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Configuration attributes - locking
+	 * @since 1.6
+	 */
+	public void testConfigurationLocking() throws Exception {
+		final String pid = Util.createPid();
+		final List<ConfigurationEvent> events = new ArrayList<>();
+		final List<Dictionary<String, ?>> updates = new ArrayList<>();
+		final CountDownLatch updateLatch = new CountDownLatch(3);
+
+		final SynchronousConfigurationListener listener = new SynchronousConfigurationListener() {
+
+			@Override
+			public void configurationEvent(final ConfigurationEvent event) {
+				if (pid.equals(event.getPid())) {
+					synchronized (events) {
+						events.add(event);
+					}
+				}
+
+			}
+		};
+		final ManagedService ms = new ManagedService() {
+
+			@Override
+			public void updated(final Dictionary<String, ?> properties) throws ConfigurationException {
+    			updates.add(properties);
+    			updateLatch.countDown();
+			}
+
+		};
+		this.registerService(
+				SynchronousConfigurationListener.class.getName(),
+				listener, null);
+	    final Hashtable<String,Object> msProps = new Hashtable<String,Object>();
+	    msProps.put(Constants.SERVICE_PID, pid);
+		this.registerService(
+				ManagedService.class.getName(),
+				ms, msProps);
+		try {
+			final Configuration conf = cm.getConfiguration(pid);
+			cm.getConfiguration(pid);
+			final long startLevel = conf.getChangeCount();
+			final Hashtable<String,Object> newprops = new Hashtable<String,Object>();
+			newprops.put("somekey", "somevalue");
+			conf.update(newprops);
+			assertEquals(startLevel + 1, conf.getChangeCount());
+			assertEquals(1, events.size());
+
+			// check attributes
+			assertTrue(conf.getAttributes().isEmpty());
+			
+			// lock configuration
+			conf.addAttributes(Configuration.ConfigurationAttribute.READ_ONLY);
+			assertEquals(1, conf.getAttributes().size());
+			assertTrue(conf.getAttributes().contains(Configuration.ConfigurationAttribute.READ_ONLY));
+
+			// try to update
+			try {
+				conf.update(newprops);
+				fail();
+			} catch ( final ReadOnlyConfigurationException e) {
+				// expected
+			}
+			// nothing should have changed
+			assertEquals(startLevel + 1, conf.getChangeCount());
+			assertEquals(1, events.size());
+
+            // unlock
+			conf.removeAttributes(Configuration.ConfigurationAttribute.READ_ONLY);
+			assertTrue(conf.getAttributes().isEmpty());
+			
+            // try update 
+			conf.update(newprops);
+			assertEquals(startLevel + 2, conf.getChangeCount());
+			assertEquals(2, events.size());
+			
+			// check updates to managed service
+			updateLatch.await();
+			assertNull(updates.get(0));
+			assertNotNull(updates.get(1));
+			assertNotNull(updates.get(2));
+		} finally {
+			this.unregisterService(listener);
+			this.unregisterService(ms);
+		}		
+	}
+
+	public void testProvideImplementationCapability() throws Exception {
+	    // get the bundle revision for the CA bundle by obtaining the CA service
+		final ServiceReference<ConfigurationAdmin> srA = getContext().getServiceReference(ConfigurationAdmin.class);
+		final BundleRevision rev = srA.getBundle().adapt(BundleRevision.class);
+
+		final List<Capability> capabilities = rev.getCapabilities(ImplementationNamespace.IMPLEMENTATION_NAMESPACE);
+
+		boolean found = false;
+
+		for (final Capability capability : capabilities) {
+			final Map<String, Object> attributes = capability.getAttributes();
+			final String name = (String) attributes.get(ImplementationNamespace.IMPLEMENTATION_NAMESPACE);
+
+			if ("osgi.cm".equals(name) ) {
+				final Version version = (Version)attributes.get("version");
+
+				if (version != null && version.equals(new Version("1.6.0"))) {
+    				final Map<String, String> directives = capability.getDirectives();
+	    			final List<String> packages = Arrays.asList(directives.get("uses").split(","));
+
+					assertTrue(packages.contains("org.osgi.service.cm"));
+
+					found = true;
+				}
+			}
+		}
+
+		assertTrue(found);
+	}
+
+	public void testProvideServiceCapability() throws Exception {
+	    // get the bundle revision for the CA bundle by obtaining the CA service
+		final ServiceReference<ConfigurationAdmin> srA = getContext().getServiceReference(ConfigurationAdmin.class);
+		final BundleRevision rev = srA.getBundle().adapt(BundleRevision.class);
+		final List<Capability> capabilities = rev.getCapabilities(ServiceNamespace.SERVICE_NAMESPACE);
+
+		boolean found = false;
+
+		for (final Capability capability : capabilities) {
+			final Map<String, Object> attributes = capability.getAttributes();
+			final List<String> objectClasses = (List<String>) attributes.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
+
+			if ((objectClasses != null) && objectClasses.contains(ConfigurationAdmin.class.getName())) {
+				final Map<String, String> directives = capability.getDirectives();
+				final List<String> packages = Arrays.asList(directives.get("uses").split(","));
+
+				assertTrue(packages.contains("org.osgi.service.cm"));
+
+				found = true;
+			}
+		}
+
+		assertTrue(found);
+	}
 }
