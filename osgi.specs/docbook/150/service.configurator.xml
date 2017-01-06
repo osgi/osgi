@@ -12,12 +12,9 @@
   <title>Configurator Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.configurator-version"
-    linkend="org.osgi.configurator"/></releaseinfo>
+    <releaseinfo xml:id="service.configurator-version">Version 1.0</releaseinfo>    
   </info>
   
-  <remark>Pick up version from to-be-created package?</remark>
-
   <section>
     <title>Introduction</title>
     
@@ -32,11 +29,11 @@
     <para>
       Sometimes it is necessary to store binary large objects (BLOB) in configuration. For example, a keystore 
       with certificates. Since configuration admin is not suitable for this, these BLOBs are often stored on
-      the files system. The application developers then must manage the life cycles of these files.
+      the files system. Then application developers must manage the life cycle of these files manually.
     </para>
       
     <para>
-      The original specification specified that the configurations were sent to a Managed Service for 
+      The original Configuration Admin specification specified that the configurations were sent to a Managed Service for 
       the singletons and Managed Service Factory services for the factory instances. However, over time 
       component models became popular and a component can rely on configuration. For example, Declarative 
       Services is tightly integrated with Configuration Admin. For these heavy users of configurations 
@@ -45,7 +42,7 @@
     </para>
 
     <para>
-      This specification defines a mechanism to feed configurations into the system
+      This specification defines a mechanism to feed configurations into the Configuration Admin service
       through configuration resources. A single configuration resource can feed multiple PIDs with configuration
       and multiple configuration resources can be provided in one ore more bundles.
     </para>
@@ -116,7 +113,7 @@
       
     <programlisting>{
     // Global Settings
-    ":configurator:version" : 1,
+    ":configurator:json-version" : 1,
     
     // Configurations
     "configurations": [
@@ -147,22 +144,22 @@
     </para>
 
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
-      as <code>":configurator:version": 1</code>. If the configurator version is omitted, 1 is assumed.
-      <remark>This is a bit misleading as we are specifying the configuration resource version, not the 
-      configurator version. The configurator
-      itself might be version 10, but still support configuration resource version 1!</remark>
+      as <code>":configurator:json-version": 1</code>. If the configurator version is omitted, 1 is assumed.
+      <remark>Note: changed :configurator:version to :configurator:json-version</remark>
     </para>
     
     <para>
       If multiple bundles provide configuration for the same PID ranking rules are used to decide which configuration
       gets applied, see <xref linkend="service.configurator.ranking"/>.   
+    </para>
+
+    <para>
       The configurator removes the <code>service.pid</code>, any comments and the special 
    	  <code>:configurator:</code> keys from the configuration before providing it to the Configuration Admin Service.
    	  The configurator uses the <code>Configuration.updateIfDifferent()</code> method on the Configuration object
    	  to avoid any volatility in the system if the configuration applied has not been changed. The configurator
-   	  obtains any configurations with the location value of <code>?</code> to allow the configurations to be received
+   	  obtains all configurations with the location value of <code>?</code> to allow the configurations to be received
    	  by multiple bundles.
-   	  <remark>can we force a bundle location?</remark>
     </para>
         
     <para>The configurator defines the following special keys:
@@ -184,8 +181,8 @@
             </thead>         
             <tbody>              
               <row>
-                <entry><para><code>:configurator:«</code></para><para><code>&#160;environments</code></para></entry>
-                <entry>String <emphasis>or</emphasis> Array of String<remark>yes?</remark></entry>
+                <entry><para><code>:configurator:«</code></para><para><code>&#160;&#160;environments</code></para></entry>
+                <entry><para>String <emphasis>or</emphasis></para><para>Array of String</para></entry>
                 <entry>Configuration</entry>
                 <entry>Environments that this configuration applies to. See <xref linkend="service.configurator.environments"/>.</entry>
               </row>
@@ -206,7 +203,7 @@
               </row>
 
               <row>
-                <entry><code>:configurator:version</code></entry>
+                <entry><code>:configurator:json-version</code></entry>
                 <entry>Number</entry>
                 <entry>Resource</entry>
                 <entry>The version of the configuration resource format. This specification only supports version 1. If
@@ -224,6 +221,9 @@
       factory configuration instance. The configurator must use the 
       <code>getFactoryConfiguration()</code> methods on Configuration Admin to 
       create or obtain configurations with the given PID and name.</para>
+      
+      <remark>Need to ensure that the factory configuration name lines up with
+      the terminology in ConfigAdmin spec. Possibly it should be renamed to 'alias'</remark>
   </section>
 
   <section>
@@ -249,11 +249,8 @@
             </row>
             <row>
               <entry>Number</entry>
-              <entry>If the number is a whole number an <code>Integer</code> is created. 
-                If the number is too large
-                for an <code>Integer</code> a <code>Long</code> is used. 
-                If the number is a floating point number a 
-                <code>Double</code> is used.</entry>
+              <entry><para>Whole number: <code>Long</code></para>
+              <para>Floating point number: <code>Double</code></para></entry>
             </row>
             <row>
               <entry>String</entry>
@@ -265,7 +262,7 @@
             </row>
             <row>
               <entry>Object</entry>
-              <entry><emphasis>not supported</emphasis></entry>
+              <entry>Literal object as JSON String</entry>
             </row>
           </tbody>
         </tgroup>
@@ -292,13 +289,13 @@
     }
   }]
 }</programlisting>
-<remark>Do we support the 'complex' thing above?</remark>
+
     </para>
     
     <para>
       As an alternative of specifying datatypes for the configurator, consumers of configuration can convert
       the configuration values to the desired type by using the OSGi Converter <remark>xref</remark>. A convenient way to convert a
-      configuration map to the desired datatypes is by converting it to an annotation instance or by using
+      configuration map to the desired datatypes is by using the Converter to convert it to an annotation instance or by using
       a Declarative Services configuration property type.  
     </para>
 
@@ -333,8 +330,8 @@
       an absolute path on the file system to which the configurator has write access. If the directory does not exist
       or the configurator cannot write to this location, it logs an error and uses the default location instead.
       </para>  
-      <remark>I renamed configurator.director to configurator.binaries, hope thats ok</remark>
-      <remark>Should we maybe add a package in the OSGi to hold these constants?</remark>
+      <remark>I renamed configurator.directory to configurator.binaries</remark>
+
       <para>When a configuration is removed, its associated binary files are also removed from the file system.
       When a configuration is updated, associated binary files are updated, if necessary. In the case of an update
       the configurator should use a different filename for the extracted binary file to avoid any open file lock issues.
@@ -348,12 +345,10 @@
       can contain configurations for more than one runtime context for a given 
       PID. These contexts are named <emphasis>environments</emphasis>. Example environments could be 
       <emphasis>test</emphasis> and <emphasis>production</emphasis>. At runtime the active environments are
-      obtained from the <code>configurator.environment</code> framework property. This property must be specified
+      obtained from the <code>configurator.environments</code> framework property. This property must be specified
       as a comma-separated string which defines the set of active environments. 
       White space before and after the individual environment 
       names are ignored.
-      <remark>Can I change environments dynamically at runtime? I guess I can change the system property, but how
-      will the configuration notice? Do I need to restart the configuration implementation bundle?</remark>
     </para>
     
     <para>
@@ -400,7 +395,7 @@
     </para>
       
     <para>The ranking of a configuration can be specified by adding the <code>:configurator:ranking</code>
-      property. The value of this property is converted to an Integer as defined by the Converter specification.
+      property. The value of this property is converted to an <code>Integer</code> as defined by the Converter specification.
       If the value cannot be converted a warning should be logged. When multiple configurations for a given PID
       have the same ranking
       the bundle providing the configuration with the lowest bundle ID is preferred. 
@@ -414,8 +409,9 @@
     <title>Overwrite Policies</title>
     <para>In an IT operations scenario configurations are often updated by a systems administrator to suit the
     deployments requirements. In such scenarios it may be undesirable to have these modifications overwritten 
-    by a software update which includes a configuration resource. In some other cases, bundles with configuration
-    resources are used to enforce best practices or compliance with corporate guidelines. 
+    by a software update which includes a configuration resource. In other cases, bundles with configuration
+    resources are used to enforce best practices or compliance with corporate guidelines, which should replace
+    any previous manual settings. 
     This specification defines policies to define the overwrite behavior of the configurator when 
 	configurations have been set or modified by another entity.
     </para>
@@ -536,12 +532,9 @@
     
     <para>The configurator requires access to the Configuration Admin service. Therefore the configurator implementation
     should require the Configuration Admin service through a service requirement. The configurator should not start
-    processing configuration resources until it as runtime access to the Configuration Admin service.
+    processing configuration resources until it has runtime access to the Configuration Admin service.
     </para>
-    
-    <remark>What happens if there are multiple configuration admin services available? And what happens when 
-    config admin arrives late, or disappears and is replaced?</remark>    
-    
+        
     <para>
     When the configurator starts it processes all installed bundles and applies configurations provided by those bundles.
     The configurator should process as many bundles as possible in a single pass to minimize volatility for PIDs
@@ -562,7 +555,9 @@
 
   <section>
     <title>Grouping and Coordinations</title>
-    <para>... decide whether this is done here or in configadmin ...</para>
+    <para>The configurator uses the coordinator, if available: if a thread coordination is available, 
+    it adds itself as a participant, otherwise it starts a coordination and ends it once the work is done.</para>
+    <remark>Does the coordinator delay doing its work until the coordination is ended?</remark>
   </section>
     
   <section>
