@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,7 @@ import org.osgi.framework.Filter;
  * Configuration Admin.
  * 
  * @ThreadSafe
- * @author $Id: ConfigurationPermission.java 1750478 2016-06-28 11:34:40Z
- *         cziegeler $
+ * @author $Id$
  * @since 1.2
  */
 

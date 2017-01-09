@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +37,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@code ServicePermission[SynchronousConfigurationListener,REGISTER]} to
  * register a {@code SynchronousConfigurationListener} service.
  *
- * @author $Id: SynchronousConfigurationListener.java 1750312 2016-06-27
- *         08:20:58Z cziegeler $
+ * @author $Id$
  * @since 1.5
  * @ThreadSafe
  */

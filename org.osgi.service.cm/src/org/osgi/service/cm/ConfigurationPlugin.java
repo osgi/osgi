@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,7 @@ import org.osgi.framework.ServiceReference;
  * the {@code cm.target} registration property means that the plugin is called
  * for all configuration updates.
  *
- * @author $Id: ConfigurationPlugin.java 1750312 2016-06-27 08:20:58Z cziegeler
- *         $
+ * @author $Id$
  * @ThreadSafe
  */
 @ConsumerType

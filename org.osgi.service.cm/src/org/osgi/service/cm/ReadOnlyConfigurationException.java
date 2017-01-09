@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@ package org.osgi.service.cm;
  * An {@code Exception} class to inform the client of a {@code Configuration}
  * about the locked state of a configuration object.
  *
- * @author $Id: LockedConfigurationException.java 1750478 2016-06-28 11:34:40Z
- *         cziegeler $
+ * @author $Id$
  * @since 1.6
  */
 public class ReadOnlyConfigurationException extends RuntimeException {
