@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,4 +181,15 @@ public class ComponentDescriptionDTO extends DTO {
 	 * @since 1.4
 	 */
 	public Map<String,Object>	factoryProperties;
+
+	/**
+	 * The activation fields.
+	 * <p>
+	 * These are declared in the {@code activation-fields} attribute of the
+	 * {@code component} element. The array must be empty if the component
+	 * description does not declare any activation fields.
+	 * 
+	 * @since 1.4
+	 */
+	public String[]				activationFields;
 }
