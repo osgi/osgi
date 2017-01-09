@@ -981,8 +981,11 @@
       <para>Only instance fields of the field types above are supported. If a
       referenced field is declared with the <code>static</code> modifier or
       has a type other than one of the above, SCR must log an error message
-      with the Log Service, if present, and the field must not be
-      modified.</para>
+      with the Log Service, if present, and the field must not be modified.
+      SCR must locate field as specified in <xref linkend="i1641644"/>. If no
+      suitable field is located, SCR must log an error message with the Log
+      Service, if present, and a field will not be modified for the
+      reference.</para>
 
       <para>Care must be taken by the component implementation regarding the
       field. SCR has no way to know if the component implementation itself may
