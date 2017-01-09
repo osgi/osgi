@@ -43,7 +43,7 @@ import org.osgi.framework.Filter;
  */
 
 public final class ConfigurationPermission extends BasicPermission {
-	static final long				serialVersionUID	= 5716868734811965383L;
+	private static final long		serialVersionUID	= 5716868734811965383L;
 	/**
 	 * Provides permission to create new configurations for other bundles as
 	 * well as manipulate them. The action string {@value #CONFIGURE}.
@@ -93,11 +93,11 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * Create a new ConfigurationPermission.
 	 *
 	 * @param name Name of the permission. Wildcards ({@code '*'}) are allowed
-	 *        in the name. During {@link #implies(Permission)}, the name is
-	 *        matched to the requested permission using the substring matching
-	 *        rules used by {@link Filter}s.
+	 *            in the name. During {@link #implies(Permission)}, the name is
+	 *            matched to the requested permission using the substring
+	 *            matching rules used by {@link Filter}s.
 	 * @param actions Comma separated list of {@link #CONFIGURE},
-	 *        {@link #TARGET} (case insensitive).
+	 *            {@link #TARGET}, {@link #ATTRIBUTE} (case insensitive).
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
@@ -414,10 +414,10 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * Returns the canonical string representation of the
 	 * {@code ConfigurationPermission} actions.
-	 *
 	 * <p>
 	 * Always returns present {@code ConfigurationPermission} actions in the
-	 * following order: {@value #CONFIGURE}, {@value #TARGET}
+	 * following order: {@value #CONFIGURE}, {@value #TARGET},
+	 * {@value #ATTRIBUTE}.
 	 *
 	 * @return Canonical string representation of the
 	 *         {@code ConfigurationPermission} actions.

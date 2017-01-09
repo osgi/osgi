@@ -16,18 +16,21 @@
 
 package org.osgi.service.cm;
 
+import org.osgi.service.cm.Configuration.ConfigurationAttribute;
+
 /**
  * An {@code Exception} class to inform the client of a {@code Configuration}
- * about the locked state of a configuration object.
+ * about the {@link ConfigurationAttribute#READ_ONLY read only} state of a
+ * configuration object.
  *
  * @author $Id$
  * @since 1.6
  */
 public class ReadOnlyConfigurationException extends RuntimeException {
-    static final long       serialVersionUID    = 1898442024230518832L;
+	private static final long serialVersionUID = 1898442024230518832L;
 
     /**
-	 * Create a {@code LockedConfigurationException} object.
+	 * Create a {@code ReadOnlyConfigurationException} object.
 	 *
 	 * @param reason reason for failure
 	 */
