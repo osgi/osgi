@@ -433,7 +433,7 @@ public class HttpServiceRuntimeTestCase extends BaseHttpWhiteboardTestCase {
 			if (name != null) {
 				Version version = (Version)attributes.get("version");
 
-				if (name.equals("osgi.http") && (version != null) && (version.equals(new Version("1.0.0")))) {
+				if (name.equals("osgi.http") && (version != null) && (version.equals(new Version("1.1.0")))) {
 					Map<String, String> directives = capability.getDirectives();
 
 					String uses = directives.get(Namespace.CAPABILITY_USES_DIRECTIVE);

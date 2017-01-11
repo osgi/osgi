@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,4 +33,34 @@ public class ServletDTO extends BaseServletDTO {
 	 * to the servlet. This array is never empty.
 	 */
 	public String[]				patterns;
+
+	/**
+	 * Specifies whether multipart support is enabled.
+	 * @since 1.1
+	 */
+	public boolean				multipartEnabled;
+
+	/**
+	 * Specifies the size threshold after which the file will be written to disk.
+	 * @since 1.1
+	 */
+	public int					multipartFileSizeThreshold;
+
+	/**
+	 * Specifies the location where the files can be stored on disk.
+	 * @since 1.1
+	 */
+	public String				multipartLocation;
+
+	/**
+	 * Specifies the maximum size of a file being uploaded.
+	 * @since 1.1
+	 */
+	public long					multipartMaxFileSize;
+
+	/**
+	 * Specifies the maximum request size.
+	 * @since 1.1
+	 */
+	public long					multipartMaxRequestSize;
 }

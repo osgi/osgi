@@ -17,6 +17,7 @@
 package org.osgi.service.http.whiteboard;
 
 import javax.servlet.Servlet;
+
 import org.osgi.framework.Filter;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntimeConstants;
@@ -137,19 +138,19 @@ public final class HttpWhiteboardConstants {
 	/**
 	 * Service property specifying the servlet name of a {@code Servlet}
 	 * service.
-	 * 
 	 * <p>
-	 * This name is used as the value for the
+	 * The servlet is registered with this name and the name can be used as a
+	 * reference to the servlet for filtering or request dispatching.
+	 * <p>
+	 * This name is in addition used as the value for the
 	 * {@code ServletConfig.getServletName()} method. If this service property
 	 * is not specified, the fully qualified name of the service object's class
 	 * is used as the servlet name. Filter services may refer to servlets by
 	 * this name in their {@link #HTTP_WHITEBOARD_FILTER_SERVLET} service
 	 * property to apply the filter to the servlet.
-	 * 
 	 * <p>
 	 * Servlet names should be unique among all servlet services associated with
 	 * a single {@link ServletContextHelper}.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
 	 */
@@ -158,12 +159,11 @@ public final class HttpWhiteboardConstants {
 	/**
 	 * Service property specifying the request mappings for a {@code Servlet}
 	 * service.
-	 * 
 	 * <p>
 	 * The specified patterns are used to determine whether a request should be
-	 * mapped to the servlet. Servlet services without this service property or
-	 * {@link #HTTP_WHITEBOARD_SERVLET_ERROR_PAGE} are ignored.
-	 * 
+	 * mapped to the servlet. Servlet services without this service property,
+	 * {@link #HTTP_WHITEBOARD_SERVLET_ERROR_PAGE} or
+	 * {@link #HTTP_WHITEBOARD_SERVLET_NAME} are ignored.
 	 * <p>
 	 * The value of this service property must be of type {@code String},
 	 * {@code String[]}, or {@code Collection<String>}.
@@ -219,6 +219,71 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 */
 	public static final String	HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX	= "servlet.init.";
+
+	/**
+	 * Service property specifying whether a {@code Servlet} service has enabled
+	 * multipart request processing.
+	 * <p>
+	 * By default servlet services do not have multipart request processing
+	 * enabled.
+	 * <p>
+	 * The value of this service property must be of type {@code Boolean}.
+	 *
+	 * @see "Java Servlet Specification Version 3.0, Section 8.1.5 @MultipartConfig"
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED	= "osgi.http.whiteboard.servlet.multipart.enabled";
+
+	/**
+	 * Service property specifying the size threshold after which the file will
+	 * be written to disk.
+	 * <p>
+	 * When not set the default threshold is determined by the implementation.
+	 * <p>
+	 * The value of this service property must be of type {@code Integer}.
+	 *
+	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD	= "osgi.http.whiteboard.servlet.multipart.fileSizeThreshold";
+
+	/**
+	 * Service property specifying the location where the files can be stored on
+	 * disk.
+	 * <p>
+	 * When not set the default location is defined by the value of the system
+	 * property "java.io.tmpdir".
+	 * <p>
+	 * The value of this service property must be of type {@code String}.
+	 *
+	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION	= "osgi.http.whiteboard.servlet.multipart.location";
+
+	/**
+	 * Service property specifying the maximum size of a file being uploaded.
+	 * <p>
+	 * When not set the default maximum size is -1 (no maximum size).
+	 * <p>
+	 * The value of this service property must be of type {@code Long}.
+	 *
+	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE	= "osgi.http.whiteboard.servlet.multipart.maxFileSize";
+
+	/**
+	 * Service property specifying the maximum request size.
+	 * <p>
+	 * When not set the default maximum request size is -1 (no maximum size).
+	 * <p>
+	 * The value of this service property must be of type {@code Long}.
+	 *
+	 * @see "Java Servlet Specification Version 3.0, Section 14.4 Deployment Descriptor Diagram"
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE	= "osgi.http.whiteboard.servlet.multipart.maxRequestSize";
 
 	/**
 	 * Service property specifying the servlet filter name of a {@code Filter}
@@ -344,6 +409,22 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX	= "filter.init.";
 
 	/**
+	 * Service property prefix referencing a {@link Preprocessor} service.
+	 * <p>
+	 * For {@link Preprocessor} services this prefix can be used for service
+	 * properties to mark them as initialization parameters which can be
+	 * retrieved from the associated filter configuration. The prefix is removed
+	 * from the service property name to build the initialization parameter
+	 * name.
+	 * <p>
+	 * For {@link Preprocessor} services, the value of each initialization
+	 * parameter service property must be of type {@code String}.
+	 * 
+	 * @since 1.1
+	 */
+	public static final String	HTTP_WHITEBOARD_PREPROCESSOR_INIT_PARAM_PREFIX		= "preprocessor.init.";
+
+	/**
 	 * Service property to mark a Listener service as a Whiteboard service.
 	 * Listener services with this property set to the string value "true" will
 	 * be treated as Whiteboard services opting in to being handled by the Http
@@ -351,7 +432,6 @@ public final class HttpWhiteboardConstants {
 	 * is opting out and this case is treated exactly the same as if this
 	 * property is missing. If an invalid value is specified this is treated as
 	 * a failure.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}. Valid
 	 * values are "true" and "false" ignoring case.
@@ -462,4 +542,16 @@ public final class HttpWhiteboardConstants {
 	 * a valid {@link Filter filter string}.
 	 */
 	public static final String	HTTP_WHITEBOARD_TARGET						= "osgi.http.whiteboard.target";
+
+	/**
+	 * If a servlet filter, error page or listener wants to be registered with
+	 * the Http Context(s) managed by the Http Service, they can select the
+	 * contexts having this property.
+	 * <p>
+	 * Servlets or resources registered using this property are treated as an
+	 * invalid registration.
+	 * 
+	 * @since 1.1
+	 */
+	public static final String	HTTP_SERVICE_CONTEXT_PROPERTY						= "osgi.http.whiteboard.context.httpservice";
 }

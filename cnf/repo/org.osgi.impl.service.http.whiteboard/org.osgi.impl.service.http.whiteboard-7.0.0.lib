@@ -1,0 +1,4 @@
+org.apache.felix.http.servlet-api; version=1.1.2
+org.apache.felix.http.jetty; version=3.4.3
+org.osgi.service.cm; version=latest
+org.osgi.service.event; version=latest
