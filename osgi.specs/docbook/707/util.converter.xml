@@ -185,7 +185,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         are boxed before converting. Where conversion is done to corresponding boxed types,
         the types are boxed after converting.</para>     
 
-        <para>Direct between Enums and ints and between Dates and longs are also supported, see
+        <para>Direct conversions between Enums and ints and between Dates and longs are also supported, see
         the sections below.</para>
       </section>
   
@@ -210,7 +210,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         
           <orderedlist>
             <listitem>
-              <para><code>static valueOf(String s)</code></para>
+              <para><code>public static valueOf(String s)</code></para>
             </listitem>
   
             <listitem>
@@ -224,6 +224,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       </section>
       <section xml:id="service.converter.special.cases.string">
         <title>Special cases converting from String</title>
+        <remark>Removed from the following table: Boolean.parseBoolean(v) and Number.parseNumber(v) as both Boolean and Number have static valueOf()</remark>
         <table>
           <title>Special cases converting scalars from String</title>
           <tgroup cols="2">
@@ -235,20 +236,10 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
             </thead>         
             <tbody>
               <row>
-                <entry><code>boolean / Boolean</code></entry>
-                <entry><code>Boolean.parseBoolean(v)</code></entry>
-              </row>
-                
-              <row>
                 <entry><code>char / Character</code></entry>
                 <entry><code>v.length() > 0 ? v.charAt(0) : 0</code></entry>
               </row>
                 
-              <row>
-                <entry><emphasis><code>number / Number</code></emphasis></entry>
-                <entry><emphasis>Number</emphasis><code>.parse</code><emphasis>Number</emphasis><code>(v) </code></entry>
-              </row>
-  
               <row>
                 <entry><code>java.time.Instant</code></entry>
                 <entry><code>Instant.parse(v)</code></entry>
@@ -360,14 +351,14 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       <section xml:id="service.converter.special.cases.map.entry">
         <title>Map.Entry</title>
         <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target scalar type is done by evaluating the compatibility of the 
-        target type with both the key and the value in the entry and then using the best match. This is done in this order:
+        target type with both the key and the value in the entry and then using the best match. This is done in the following order:
         <orderedlist>
           <listitem><para>If one of the key or value is the same as the target type, then this is used.
-          If both match, the key is used.</para></listitem>
+          If both are the same, the key is used.</para></listitem>
           <listitem><para>If one of the key or value type is assignable to the target type, then this is used.
-          If both are assignable the most specific is used. If key and value type are both assignable and equal
+          If both are assignable the most specific is used. If key and value type are both equally assignable
           the key is used.</para></listitem>
-  <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type. If both are of type <code>String</code> the key is used.</para></listitem>
+          <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type. If both are of type <code>String</code> the key is used.</para></listitem>
           <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
           value is then converted to the target type.</para></listitem>
         </orderedlist>
@@ -462,7 +453,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         </table>
         
         <para>Before inserting values into the resulting collection/array they are converted to the desired
-        target type first. In the case of arrays this is the type of the array. When inserting into a 
+        target type. In the case of arrays this is the type of the array. When inserting into a 
         Collection generic type information about the target type can be made available by using the
         <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
@@ -523,12 +514,13 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
     <section xml:id="service.converter.special.cases.maps">
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
-      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We will call these map-like types.
+      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We call these 
+      <emphasis>map-like</emphasis> types.
       Additionally objects that provide a map view
       are supported.</para>
       
       <para>When converting between map-like types, a <code>Map</code> can be used as intermediary.
-      When converting to other structures, the map is converted into a collection of
+      When converting to other structures, the map is converted into an iteration order preserving collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
       
@@ -541,8 +533,6 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
           <xref linkend="org.osgi.util.converter.Converting.copy--" xrefstyle="hyperlink"/>
           modifier. When converting to other collection types or arrays a copy is always produced.
         </para>
-
-        <remark>What will we say about shallow/deep copies?</remark>
 
         <para>In all cases the object returned is a separate instance that
           can be owned by the client. When the client modifies
@@ -582,7 +572,8 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
           </tgroup>
         </table>
         
-        <para>Each key-value pair in the source map is converted to desired types of the target map
+        <para>When converting from a map-like object to a <code>Map</code> or sub-type, each key-value pair 
+        in the source map is converted to desired types of the target map
         using the generic information if available.
         
         Map type information for the target type can be made available by using the
