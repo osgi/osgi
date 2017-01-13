@@ -593,12 +593,13 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       
       <section>
         <title>Interface</title>
-        <para>Conversions to and from an interface are done in a lazy fashion meaning that
-        values are only obtained when they are actually needed. When converting to an interface, 
-        defaults can be specified using the one-arg overloads in the interface. Converting from an 
-        interface does not provide this mechanism for defaults. Annotations can provide a good
-        alternative to interfaces as they make it possible to specify the default in the annotation
-        code.</para>
+        <para>Converting a map-like structure into an interface can be a useful way to give a map of 
+        untyped data a typed API. The converter synthesizes an interface instance to represent the
+        conversion.</para>
+        
+        <para>Note that converting to annotations provides similar functionality as converting to 
+        interfaces with the added benefit of being able to specify default values in the annotation code.
+        </para>
         <section>
         <title>Converting to an Interface</title>
         <para>When converting into an interface the converter will create a dynamic proxy to 
@@ -648,9 +649,9 @@ boolean val2 = cfg.my_other_value(); // val2=true
         <xref linkend="service.converter-priorities"/> into account. When an object implements multiple interfaces
         by default the first interface from these is taken as the source type. To select a different
         interface use the 
-        <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.as-Class-" xrefstyle="hyperlink"/> modifier:
-        <programlisting>  Map m = converter.convert(myMultiInterface).source().
-      as(MyInterfaceB.class).to(Map.class);</programlisting>
+        <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/> modifier:
+        <programlisting>  Map m = converter.convert(myMultiInterface).
+      sourceAs(MyInterfaceB.class).to(Map.class);</programlisting>
         </para>
       </section>
       <section xml:id="service.converter-key.mapping">
@@ -767,6 +768,13 @@ boolean val2 = cfg.my_other_value(); // val2=true
         interface conversion with the added capability of specifying a default in the annotation definition.
         </para>
         
+        <para>When converting to an annotation type, the converter will return an instance of the requested
+        annotation class. As with interfaces, values are only obtained from the conversion source when the 
+        annotation method is actually called. If the requested value is not available, the default as 
+        specified in the annotation class is used. If no default is specified a <code>ConversionException</code>
+        is thrown.
+        </para>
+        
         <para>Below a few examples of conversions to an annotation:
         <programlisting>@interface MyAnnotation {
   String[] args() default {"arg1", "arg2"};
@@ -799,21 +807,22 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         public getters and setters to
         access their properties and have a public no-arg constructor. When converting from a Java Bean introspection
         is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
-        value. The method name must start with get followed by a capitalized property name, 
+        value. The method name must start with <code>get</code> followed by a capitalized property name, 
         e.g. <code>getSize()</code> provides access to the property <code>size</code>. 
         For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
         is also permitted.</para> 
         <para>
         For the converter to consider an object as a Java Bean the 
-          <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.asBean--" xrefstyle="hyperlink"/>
+          <xref linkend="org.osgi.util.converter.Converting.sourceAsBean--" xrefstyle="hyperlink"/>
         modifier needs to be invoked, for example:
-          <programlisting>  Map m = converter.convert(myBean).source().asBean().to(Map.class);</programlisting></para>
+          <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
         <para>When converting to a Java Bean, the bean is constructed eagerly. All available properties
             are set in the bean using the bean's write accessors, i.e. public setters methods with a single argument. 
             All methods of the bean class itself and its 
             super classes are considered. 
             If a property cannot be converted this will cause a 
             <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
+            <remark>Discuss: so if any of the JavaBean's properties is missing that will cause a conversion exception!</remark>
             </para>
         <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
         find out the size of the array via these accessors.
@@ -835,12 +844,14 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <remark>Is a class with private/package/protected fields a DTO?</remark>
         
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
-        entry in the map and then converting the value to the field type before assigning it. They key of
+        entry in the source map and then converts the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
         <xref linkend="service.converter-key.mapping"/>.</para>
         
-        <para>When converting from a DTO the value of each public non-static field is put in the target 
-        map, taking the field name as its String key.
+        <para>The DTO is constructed using its no-arg constructor and each public 
+        field is filled with data from the source eagerly. Fields present in the DTO but missing in the source
+        object will cause a <code>ConversionException</code>. 
+        <remark>yes?</remark>
         </para>
       </section>
       
@@ -850,8 +861,6 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>The converter uses reflection to find a <code>java.util.Map getProperties()</code> or 
         <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
         the source object. This map view is used to convert the source object to another map-like structure.</para>
-
-        <remark>TODO: Expand BundleContext to provide getProperties() </remark>
         
         <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
         The reverse is not supported</para>
@@ -915,7 +924,9 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </table>
 
         The priority rules defined in the above table can be overridden by using 
-        <xref linkend="org.osgi.util.converter.ConvertingTypeSettings.as-Class-" xrefstyle="hyperlink"/> 
+        <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/>
+        or         
+        <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/> 
         to indicate as what class the source or target object should be treated. 
         Consider the following example:
         <programlisting>  Class MyClass implements MyInterface {
@@ -928,10 +939,36 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         According to the priority rules, the default behaviour is that when converting an instance of this class 
         to a map-like structure, the <code>getProperties()</code> result is used as the source. 
         To instruct the converter to view the object as an interface instead use <code>as()</code>
-        <programlisting>  Map m = converter.convert(myClassObj).source().
-      as(MyInterface.class).to(Map.class);
+        <programlisting>  Map m = converter.convert(myClassObj).
+      sourceAs(MyInterface.class).to(Map.class);
   long l = m.get("amount");</programlisting>
       </para>
+      
+      <section>
+        <title>Specifying target types</title>
+        <para>The converter always produces an instance of the target type as specified with the
+        <xref linkend="org.osgi.util.converter.Converting.to-Class-" xrefstyle="hyperlink"/>,
+        <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> or
+        <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> method.
+        In some cases the converter needs to be instructed how to treat this target object.
+        For example the desired target type might extend a DTO class adding some methods and behavior to 
+        the DTO. As this target class now has methods, the converter will not recognize as a DTO.
+        The <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>
+        and <xref linkend="org.osgi.util.converter.Converting.targetAsBean--" xrefstyle="hyperlink"/>
+        methods can be used here to instruct the converter to treat the target object as certain type
+        of object to guide the conversion.
+        </para>
+        
+        <para>For example:
+        <programlisting>  MyExtendedDTO med = converter.convert(someMap).
+      targetAs(MyDTO.class).to(MyExtendedDTO.class)</programlisting>
+        In this example the converter will return a <code>MyExtendedDTO</code> instance
+        but it will treat is as a <code>MyDTO</code> type. The target class must provide
+        the same public API as the class specified with 
+        <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>.      
+      </para>
+        <remark>Do we need a targetAsDTO()? Or is targetAs() sufficient?</remark>
+      </section>
     </section>
     
     <section>
@@ -977,7 +1014,8 @@ MyBean mb = new MyBean();
 mb.setStartDate(new Date());
 mb.setEnabled(true);
 
-Map&lt;String, String&gt; m = c.convert(mb).to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
+Map&lt;String, String&gt; m = c.convert(mb).sourceAsBean().
+    to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
 String en = m.get("enabled");   // en = "true"
 String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
 	Rules will only be invoked when an actual object needs to be converted, <code>null</code> values are never 
@@ -990,7 +1028,7 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
 	<section>
 	  <title>Abstract converter rules</title>
 	  <para>
-	  When specifying the types for the converter rules, abstract or supertypes can be used. When the converter looks for 
+	  When specifying the types for the converter rules, types higher in the hierarchy can be used. When the converter looks for 
 	  a customized converter rule, it first looks for a converter rule for the most specific types. If it cannot 
 	  find a matching rule, it will look for matching converters for the supertypes of the provided objects. It will 
 	  continue to go up the type hierarchy until it reaches <code>java.lang.Object</code>. Therefore converter 
