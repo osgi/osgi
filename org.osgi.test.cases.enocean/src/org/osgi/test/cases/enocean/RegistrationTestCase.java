@@ -92,9 +92,6 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 	if ("".equals(manufAsAString)) {
 	    fail("The EnOceanDevice.MANUFACTURER is expected to be a defined String; \"\" is not an acceptable value.");
 	}
-
-	tlog("Unget service with service reference: " + ref);
-	getContext().ungetService(ref);
     }
     
 }
