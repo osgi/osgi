@@ -22,27 +22,24 @@
     <para>Object Serialization has been part of Java since version 1.1 and has been widely used.
       However over time the realization became that making the fact that an object was serializable
       should not necessarily be part of its own definition and the <code>java.io.Serializable</code>
-      interface, which marks an object as suitable for Java Serialization, became less and less
+      interface, which marks an object as suitable for Java Serialization, became less
       used by developers. The desire was to keep the object's class clean and support serializations
       of these objects outside of their own code. Additionally patterns such as Java Beans and 
       Injection became popular. These mechanisms allowed entities outside of the objects to perform
       operations on behalf of the objects. 
     </para>
-    <para>External parsers came up that provided ways to serialize and de-serialize 
+    <para>External parsers appeared, providing ways to serialize and de-serialize 
       objects to formats such as XML and 
       JSON without the need to have the object declared Serializable. OSGi introduced 
       <emphasis>Data Transfer Objects</emphasis> (DTOs)
       to support serialization of arbirtrary data. 
     </para>
-    <para>With OSGi R7 the Object Converter has been introduced. This converter can convert many 
+    <para>With OSGi R7 the Converter Specification has been introduced. This converter can convert many 
       Java types into many other Java types and it can also be customized to literally support any
       object conversion that a developer might need. 
       This specification defines an OSGi Service that can, with the help of the Converter, 
       serialize and
-      de-serialize Java Objects to representations such as JSON and YAML. The Serializer service
-      is found by looking for the MIME-type of the serialization on the service properties. 
-      Additional service objects can be registered to support
-      any other serialization formats.
+      de-serialize Java Objects to representations such as JSON.
     </para>
   </section> 
 
@@ -63,7 +60,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Serialized Resource</emphasis> - A YAML, JSON or orther resource
+        <para><emphasis>Serialized Resource</emphasis> - A JSON or orther resource
           containing the serialized representation of an object.</para>
       </listitem>
 
