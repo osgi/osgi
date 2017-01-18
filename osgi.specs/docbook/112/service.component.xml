@@ -3128,7 +3128,7 @@ public class FooImpl implements Foo {
       </figure>
     </section>
 
-    <section>
+    <section xml:id="service.component-delayed.component">
       <title>Delayed Component</title>
 
       <para>A key attribute of a delayed component is the delaying of class
@@ -3178,10 +3178,19 @@ public class FooImpl implements Foo {
       a delayed component specifies a service <code>scope</code> set to a
       value other than <code>singleton</code>.</para>
 
-      <para>If the service registered by a component configuration becomes
-      unused because there are no more bundles using it, then SCR should
-      deactivate that component configuration. This allows SCR implementations
-      to eagerly reclaim activated component configurations.</para>
+      <para>If the service has the <code>scope</code> attribute set to
+      <code>prototype</code>, SCR must deactivate a component configuration
+      when it stops being used as a service object since the component
+      configuration must not be reused as a service object. If the service has
+      the <code>scope</code> attribute set to <code>singleton</code> or
+      <code>bundle</code>, SCR must deactivate a component configuration when
+      it stops being used as a service object after a delay since the
+      component configuration may be reused as a service object in the near
+      future. This allows SCR implementations to reclaim component
+      configurations not in use while attempting to avoid deactivating a
+      component configuration only to have to quickly activate a new component
+      configuration for a new service request. The delay amount is
+      implementation specific and may be zero.</para>
 
       <figure xml:id="i1462979">
         <title>Delayed Component Configuration</title>
@@ -5533,6 +5542,11 @@ public class MyComponent {
         xrefstyle="hyperlink"/> along with a <xref
         linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO.failure"
         xrefstyle="hyperlink"/> field to hold the failure exception.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="service.component-delayed.component"/> is updated
+        to clarify when a component configuration may be reclaimed.</para>
       </listitem>
     </itemizedlist>
   </section>
