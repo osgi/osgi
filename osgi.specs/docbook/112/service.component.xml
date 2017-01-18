@@ -461,7 +461,7 @@
       the topic to which the component subscribed.</para>
     </section>
 
-    <section xml:id="i1461154">
+    <section xml:id="service.component-factorycomponent">
       <title>Factory Component</title>
 
       <para>Certain software patterns require the creation of component
@@ -477,7 +477,14 @@
 
       <para>SCR must register a Component Factory service on behalf of the
       component as soon as the component factory is satisfied. The service
-      properties must be:</para>
+      properties for the Component Factory service are the <emphasis>factory
+      properties</emphasis> as specified by the <code>factory-property</code>
+      and <code>factory-properties</code> elements of the component
+      description. See <xref
+      linkend="service.component-factoryproperty.factoryproperties.elements"/>.
+      The service properties of the Component Factory service must not include
+      the component properties. SCR always adds the following factory
+      properties, which cannot be overridden:</para>
 
       <itemizedlist>
         <listitem>
@@ -490,9 +497,6 @@
           identifier.</para>
         </listitem>
       </itemizedlist>
-
-      <para>The service properties of the Component Factory service must not
-      include the component properties.</para>
 
       <para>New configurations of the component can be created and activated
       by calling the <code>newInstance</code> method on this Component Factory
@@ -1838,7 +1842,8 @@ public class HttpResourceImpl {
               <entry><para>If set to a non-empty string, it indicates that
               this component is a <emphasis>factory component</emphasis>. SCR
               must register a Component Factory service for each factory
-              component. See <xref linkend="i1461154"/>.</para></entry>
+              component. See <xref
+              linkend="service.component-factorycomponent"/>.</para></entry>
             </row>
 
             <row>
@@ -2039,7 +2044,7 @@ public class HttpResourceImpl {
       <title>Property and Properties Elements</title>
 
       <para>A component description can define a number of properties. These
-      can defined inline or from a resource in the bundle. The
+      can be defined inline or from a resource in the bundle. The
       <code>property</code> and <code>properties</code> elements can occur
       multiple times and they can be interleaved. This interleaving is
       relevant because the properties are processed from top to bottom. Later
@@ -2154,7 +2159,7 @@ public class HttpResourceImpl {
 
               <entry><para/></entry>
 
-              <entry><para> If the <code>value</code> attribute is not
+              <entry><para>If the <code>value</code> attribute is not
               specified, the body of the property element must contain one or
               more values. The value of the property is then an array of the
               specified type. Except for <code>String</code> objects, the
@@ -2187,9 +2192,10 @@ public class HttpResourceImpl {
 
       <para>A property can also be set with the <xref
       linkend="org.osgi.service.component.annotations.Component.property--"
-      xrefstyle="hyperlink"/> annotation element of <code>Component</code>.
-      This element is an array of strings that must follow the following
-      syntax:</para>
+      xrefstyle="hyperlink"/> annotation element of <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/>. This element is an array of strings that must
+      follow the following syntax:</para>
 
       <programlisting>property ::= name ( ':' type )? '=' value</programlisting>
 
@@ -2254,16 +2260,16 @@ public class FooImpl {
 
       <programlisting>&lt;properties entry="OSGI-INF/vendor.properties"/&gt;</programlisting>
 
-      <para>The <code><xref
-      linkend="org.osgi.service.component.annotations.Component"
-      xrefstyle="hyperlink"/> <xref
+      <para>The <xref
       linkend="org.osgi.service.component.annotations.Component.properties--"
-      xrefstyle="hyperlink"/></code> element can be used to provide the same
-      information, this element consists of an array of strings where each
-      string defines an entry. The order within the array is the order that
-      must be used for the XML. However, the annotations do not support
-      interleaving of the generated <code>property</code> and
-      <code>properties</code> elements.</para>
+      xrefstyle="hyperlink"/> annotation element of <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> can be used to provide the same information.
+      This element consists of an array of strings where each string defines
+      an entry. The order within the array is the order that must be used for
+      the XML. However, the annotations do not support interleaving of the
+      generated <code>property</code> and <code>properties</code>
+      elements.</para>
 
       <para>For example:</para>
 
@@ -2670,16 +2676,28 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>field-collection-type</code></entry>
 
-              <entry/>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.collectionType--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.CollectionType.SERVICE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.CollectionType.REFERENCE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.CollectionType.SERVICEOBJECTS"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.CollectionType.PROPERTIES"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.CollectionType.TUPLE"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Defines the types of elements in the collection
               referenced by the field value. This is ignored if the
               <code>field</code> attribute is not set or the cardinality is
               unary. See <xref linkend="service.component-field.strategy"/>
               for more information.</para><para>The <code>Reference</code>
-              annotation can infer the value of the collection elements from
-              the generic type information of the annotated
-              field.</para></entry>
+              annotation can generally infer the value of the collection
+              elements from the generic type information of the annotated
+              field but it can be explicitly defined if needed.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2760,6 +2778,244 @@ public class FooImpl implements Foo {
   @Deactivate
   void close() { ... }
 }</programlisting>
+    </section>
+
+    <section xml:id="service.component-factoryproperty.factoryproperties.elements">
+      <title>Factory Property and Factory Properties Elements</title>
+
+      <para>If the component is a factory component, see <xref
+      linkend="service.component-factorycomponent"/>, the component
+      description can define a number of factory properties. These can be
+      defined inline or from a resource in the bundle. The
+      <code>factory-property</code> and <code>factory-properties</code>
+      elements can occur multiple times and they can be interleaved. This
+      interleaving is relevant because the factory properties are processed
+      from top to bottom. Later factory properties override earlier factory
+      properties that have the same name.</para>
+
+      <para>The <code>factory-property</code> element has the attributes and
+      annotations defined in the following table.</para>
+
+      <table pgwide="1">
+        <title>Factory Property Element and Annotations</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Annotation</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>name</code></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.component.annotations.Component"
+              xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.component.annotations.Component.factoryProperty--"
+              xrefstyle="hyperlink"/></code></para></entry>
+
+              <entry><para>The name of the factory property.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>value</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>The value of the factory property. This value is
+              parsed according to the property type. If the value attribute is
+              specified, the body of the element is ignored. If the type of
+              the factory property is not <code>String</code>, parsing of the
+              value is done by the static <code>valueOf(String)</code> method
+              in the given type. For <code>Character</code> types, the
+              conversion must be handled by <code>Integer.valueOf</code>
+              method, a Character is always represented by its Unicode
+              value.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>type</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>The type of the factory property. Defines how to
+              interpret the value. The type must be one of the following Java
+              types:</para><itemizedlist>
+                  <listitem>
+                    <para><code>String</code> (default)</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Long</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Double</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Float</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Integer</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Byte</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Character</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Boolean</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>Short</code></para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+
+            <row>
+              <entry><code>&lt;body&gt;</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>If the <code>value</code> attribute is not
+              specified, the body of the factory-property element must contain
+              one or more values. The value of the factory property is then an
+              array of the specified type. Except for <code>String</code>
+              objects, the result will be translated to an array of primitive
+              types. For example, if the type attribute specifies
+              <code>Integer</code>, then the resulting array must be
+              <code>int[]</code>.</para><para>Values must be placed one per
+              line and blank lines are ignored. Parsing of the value is done
+              by the <code>parse</code> methods in the class identified by the
+              type, after trimming the line of any beginning and ending white
+              space. <code>String</code> values are also trimmed of beginning
+              and ending white space before being placed in the
+              array.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>A factory property can also be set with the <xref
+      linkend="org.osgi.service.component.annotations.Component.factoryProperty--"
+      xrefstyle="hyperlink"/> annotation element of <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/>. This element is an array of strings that must
+      follow the following syntax:</para>
+
+      <programlisting>factory-property ::= name ( ':' type )? '=' value</programlisting>
+
+      <para>In this case <code>name</code>, <code>type</code>, and
+      <code>value</code> parts map to the attributes of the
+      <code>factory-property</code> element. If multiple values must be
+      specified then the same name can be repeated multiple times.</para>
+
+      <para>The <code>factory-properties</code> element references an entry in
+      the bundle whose contents conform to a standard <xref
+      linkend="i1567926"/>.</para>
+
+      <para>At runtime, SCR reads the entry to obtain the factory properties
+      and their values. The <code>factory-properties</code> element attributes
+      are defined in the following table.</para>
+
+      <table pgwide="1">
+        <title>Factory Properties Element and Annotations</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Annotation</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>entry</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Component"
+              xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.component.annotations.Component.factoryProperties--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The entry path relative to the root of the
+              bundle</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>For example, to include properties that are stored in the OSGI-INF
+      directory, the following definition could be used:</para>
+
+      <programlisting>&lt;<code>factory-properties</code> entry="OSGI-INF/factory.properties"/&gt;</programlisting>
+
+      <para>The <xref
+      linkend="org.osgi.service.component.annotations.Component.factoryProperties--"
+      xrefstyle="hyperlink"/> annotation element of <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> can be used to provide the same information.
+      This element consists of an array of strings where each string defines
+      an entry. The order within the array is the order that must be used for
+      the XML. However, the annotations do not support interleaving of the
+      generated <code>factory-property</code> and
+      <code>factory-properties</code> elements.</para>
+
+      <para>For example:</para>
+
+      <programlisting>@Component(factoryProperties="OSGI-INF/factory.properties")</programlisting>
+
+      <para>When using annotation elements to specify factory properties, a
+      tool processing the Component annotations must write the defined factory
+      properties into the generated component description in the following
+      order.</para>
+
+      <orderedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.factoryProperty--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.factoryProperties--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+      </orderedlist>
     </section>
   </section>
 
@@ -5242,5 +5498,42 @@ public class MyComponent {
       <bibliomixed xml:id="i1655737"><title>OSGi XML
       Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added support for factory properties on Component Factory
+        service. See <xref linkend="service.component-factorycomponent"/> and
+        <xref
+        linkend="service.component-factoryproperty.factoryproperties.elements"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified that if SCR cannot locate a referenced field, an error
+        must be logged.</para>
+      </listitem>
+
+      <listitem>
+        <para>The <code>Reference</code> annotation is updated to allow the
+        <code>field-collection-type</code> to be set if the desired type
+        cannot be properly inferred by the annotation processing tool. See
+        <xref
+        linkend="org.osgi.service.component.annotations.Reference.collectionType--"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>A new <xref
+        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO.FAILED_ACTIVATION"
+        xrefstyle="hyperlink"/> state is added to <xref
+        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
+        xrefstyle="hyperlink"/> along with a <xref
+        linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO.failure"
+        xrefstyle="hyperlink"/> field to hold the failure exception.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

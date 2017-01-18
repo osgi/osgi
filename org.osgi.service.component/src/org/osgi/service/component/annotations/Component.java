@@ -137,14 +137,12 @@ public @interface Component {
 
 	/**
 	 * Properties for this Component.
-	 * 
 	 * <p>
 	 * Each property string is specified as {@code "name=value"}. The type of
 	 * the property value can be specified in the name as
 	 * {@code name:type=value}. The type must be one of the property types
-	 * supported by the type attribute of the property element of a Component
-	 * Description.
-	 * 
+	 * supported by the {@code type} attribute of the {@code property} element
+	 * of a Component Description.
 	 * <p>
 	 * To specify a property with multiple values, use multiple name, value
 	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
@@ -291,8 +289,8 @@ public @interface Component {
 	 * Each factory property string is specified as {@code "name=value"}. The
 	 * type of the factory property value can be specified in the name as
 	 * {@code name:type=value}. The type must be one of the factory property
-	 * types supported by the type attribute of the factoryProperty element of a
-	 * Component Description.
+	 * types supported by the {@code type} attribute of the
+	 * {@code factory-property} element of a Component Description.
 	 * <p>
 	 * To specify a factory property with multiple values, use multiple name,
 	 * value pairs. For example, {@code "foo=bar", "foo=baz"}.
@@ -300,7 +298,7 @@ public @interface Component {
 	 * If specified, the {@link #factory()} element must also be specified to
 	 * indicate the component is a Factory Component.
 	 * 
-	 * @see "The factoryProperty element of a Component Description."
+	 * @see "The factory-property element of a Component Description."
 	 * @since 1.4
 	 */
 	String[] factoryProperty() default {};
@@ -315,7 +313,7 @@ public @interface Component {
 	 * If specified, the {@link #factory()} element must also be specified to
 	 * indicate the component is a Factory Component.
 	 * 
-	 * @see "The factoryProperties element of a Component Description."
+	 * @see "The factory-properties element of a Component Description."
 	 * @since 1.4
 	 */
 	String[] factoryProperties() default {};

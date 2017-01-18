@@ -371,14 +371,14 @@ public @interface Reference {
 	 * <ul>
 	 * <li>Annotated method - There is no collection type.</li>
 	 * <li>Annotated field - The collection type is based upon the cardinality
-	 * of the reference and the generic type of the field. If the the
-	 * cardinality is {@link ReferenceCardinality#MULTIPLE 0..n} or
+	 * of the reference and the generic type of the field. If the cardinality is
+	 * {@link ReferenceCardinality#MULTIPLE 0..n} or
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection type is
 	 * inferred from the generic type of the list or collection. Otherwise,
 	 * there is no collection type</li>
 	 * <li>Annotated constructor parameter - The collection type is based upon
 	 * the cardinality of the reference and the generic type of the parameter.
-	 * If the the cardinality is {@link ReferenceCardinality#MULTIPLE 0..n} or
+	 * If the cardinality is {@link ReferenceCardinality#MULTIPLE 0..n} or
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection type is
 	 * inferred from the generic type of the list or collection. Otherwise,
 	 * there is no collection type</li>
