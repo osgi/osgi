@@ -4543,30 +4543,70 @@ volatile Collection&lt;LogService&gt; log;</programlisting>
       defined annotation type, called a <emphasis>component property
       type</emphasis>, containing the property names, property types and
       default values. A component property type allows properties to be
-      defined and accessed in a type safe manner. The following example shows
-      the definition of a component property type called <code>Config</code>
-      which defines three properties where the name of the property is the
-      name of the method, the type of the property is the return type of the
-      method and the default value for the property is the default value of
-      the method.</para>
+      defined and accessed in a type safe manner. Component property types can
+      themselves be annotated with the <xref
+      linkend="org.osgi.service.component.annotations.ComponentPropertyType"
+      xrefstyle="hyperlink"/> meta-annotation.</para>
 
-      <programlisting>@interface Config {
+      <para>The following example shows the definition of a component property
+      type called <code>Config</code> which defines three properties where the
+      name of the property is the name of the method, the type of the property
+      is the return type of the method and the default value for the property
+      is the default value of the method.</para>
+
+      <programlisting>@ComponentPropertyType
+public @interface Config {
   boolean enabled() default true;
   String[] names() default {"a", "b"};
   String topic() default "default/topic";
 }</programlisting>
 
-      <para>Component property types can be referenced as argument types in
-      the component's life cycle methods, activate, deactivate, and modified,
-      and used in the method implementation to access component property
-      values in a type safe manner. The following example shows the activate
-      method taking the example <code>Config</code> component property type as
-      an argument type and the method implementation accesses component
-      property values by invoking methods on the component property type
-      argument.</para>
+      <para>Component property types can be used in two ways:<itemizedlist>
+          <listitem>
+            <para>Component property types can be used to annotate the
+            component implementation class, along side the <xref
+            linkend="org.osgi.service.component.annotations.Component"
+            xrefstyle="hyperlink"/> annotation. The annotation usage can
+            specify property values which can be different than the default
+            values declared in the component property type.</para>
+
+            <para>To be used in this way, the component property type must be
+            annotated with the <xref
+            linkend="org.osgi.service.component.annotations.ComponentPropertyType"
+            xrefstyle="hyperlink"/> meta-annotation so that, at build time,
+            the annotation is recognized as a component property type.</para>
+          </listitem>
+
+          <listitem>
+            <para>Component property types can be argument types in the
+            component's life cycle methods, activate, deactivate, and
+            modified. The life cycle method implementation can use these
+            arguments at runtime to access component property values in a type
+            safe manner. </para>
+
+            <para>To be used in this way, it is recommended the component
+            property type be annotated with the <xref
+            linkend="org.osgi.service.component.annotations.ComponentPropertyType"
+            xrefstyle="hyperlink"/> meta-annotation but it is not
+            required.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>Both ways define property names, types and values for the
+      component.</para>
+
+      <para>The following example shows the component implementation annotated
+      with the example <code>Config</code> component property type which
+      specifies a property value for the component which is different than the
+      default value. The example also shows the activate method taking the
+      example <code>Config</code> component property type as an argument type
+      and the method implementation accesses component property values by
+      invoking methods on the component property type argument.</para>
 
       <programlisting>@Component
+@Config(names="myapp")
 public class MyComponent {
+  @Activate
   void activate(Config config) {
     if (config.enabled()) {
       // do something
@@ -4584,6 +4624,7 @@ public class MyComponent {
 
       <programlisting>@Component
 public class MyComponent {
+  @Activate
   void activate(Config config, Map&lt;String, ?&gt; allProperties) {
     if (config.enabled()) {
       // do something
@@ -4594,15 +4635,14 @@ public class MyComponent {
   }
 }</programlisting>
 
-      <para>Component property types must be defined as annotation types even
-      though they are not applied as annotations but are rather used as life
-      cycle method argument types. This is done for two reasons. First, the
-      limitations on annotation type definitions make them well suited for
-      component property types. The methods must have no arguments and the
-      return types supported are limited to a set which is well suited for
-      component properties. Second, annotation types support default values
-      which is useful for defining the default value of a component
-      property.</para>
+      <para>Component property types must be defined as annotation types. This
+      is done for several reasons. First, the limitations on annotation type
+      definitions make them well suited for component property types. The
+      methods must have no arguments and the return types supported are
+      limited to a set which is well suited for component properties. Second,
+      annotation types support default values which is useful for defining the
+      default value of a component property. Finally, as annotations, they can
+      be used to annotate component implementation classes.</para>
 
       <para>At build time, the component property types must be processed to
       potentially generate <code>property</code> elements in the component
@@ -4727,7 +4767,7 @@ public class MyComponent {
         method. All types supported for annotation elements can be used except
         for annotation types. Method types of an annotation type or array
         thereof are not supported. A tool processing the component property
-        types must declare an error during processing in this case.</para>
+        types must ignore such methods.</para>
 
         <para>If the method type is <code>Class</code> or
         <code>Class[]</code>, then the property type must be
@@ -4957,10 +4997,49 @@ public class MyComponent {
           </listitem>
         </itemizedlist>
       </section>
+
+      <section xml:id="service.component-standard.component.property.types">
+        <title>Standard Component Property Types</title>
+
+        <para>Component property types for standard service properties are
+        specified in the <xref
+        linkend="org.osgi.service.component.propertytypes"
+        xrefstyle="hyperlink"/> package.</para>
+
+        <para>The <xref
+        linkend="org.osgi.service.component.propertytypes.ServiceDescription"
+        xrefstyle="hyperlink"/> component property type can be used to add the
+        <code>service.description</code> service property to a component. The
+        <xref
+        linkend="org.osgi.service.component.propertytypes.ServiceRanking"
+        xrefstyle="hyperlink"/> component property type can be used to add the
+        <code>service.ranking</code> service property to a component. The
+        <xref linkend="org.osgi.service.component.propertytypes.ServiceVendor"
+        xrefstyle="hyperlink"/> component property type can be used to add the
+        <code>service.vendor</code> service property to a component. For
+        example, using these component property types as annotations:</para>
+
+        <programlisting>@Component
+@ServiceDescription(service_description=”My Acme Service implementation”)
+@ServiceRanking(service_ranking=100)
+@ServiceVendor(service_vendor="My Corp")
+public class MyComponent implements AcmeService {}</programlisting>
+
+        <para>will result in the following component properties:</para>
+
+        <programlisting>&lt;property name=”service.description” value=”My Acme Service implementation”/&gt;
+&lt;property name=”service.ranking” type=”Integer” value=”100”/&gt;
+&lt;property name=”service.vendor” value=”My Corp”/&gt;</programlisting>
+
+        <para>The <xref
+        linkend="org.osgi.service.component.propertytypes.ExportedService"
+        xrefstyle="hyperlink"/> component property type can be used to specify
+        service properties for remote services.</para>
+      </section>
     </section>
 
     <section xml:id="service.component-ordering.generated.properties">
-      <title>Ordering of Generated Properties</title>
+      <title>Ordering of Generated Component Properties</title>
 
       <para>The <xref
       linkend="org.osgi.service.component.annotations.Component"
@@ -4973,8 +5052,9 @@ public class MyComponent {
       linkend="service.component-property.properties.elements"/>. If Component
       Annotations are used to describe the component, then any component
       property types referenced in the signatures of the component's life
-      cycle methods must also be processed since component property types can
-      be used to define component property values as well. See <xref
+      cycle methods or annotating the component implementation class must also
+      be processed since component property types can be used to define
+      component property values as well. See <xref
       linkend="service.component-component.property.types"/>. A tool
       processing the Component Annotations and the component property types
       must write the defined component properties into the generated component
@@ -4993,17 +5073,43 @@ public class MyComponent {
           default value. See <xref
           linkend="service.component-component.property.mapping"/>. The
           generated <code>property</code> elements must be added to the
-          component description by processing the component property types in
-          the following order. First, the component property types used as
-          arguments to the activate method, followed by the component property
-          types used as arguments to the modified method and finally the
-          component property types used as arguments to the deactivate method.
-          If a method has more than one component property type argument, the
-          component property types are processed in the order of the method
+          component description by processing the component property types
+          used in the signatures of the life cycle methods in the following
+          order. First, the component property types used as arguments to the
+          activate method, followed by the component property types used as
+          arguments to the modified method and finally the component property
+          types used as arguments to the deactivate method. If a method has
+          more than one component property type argument, the component
+          property types are processed in the order of the method
           arguments.</para>
 
-          <para>For component property type methods without a default value, a
-          <code>property</code> element must not be generated.</para>
+          <para>For component property type methods without a default value or
+          with a default value of an empty array, a <code>property</code>
+          element must not be generated.</para>
+        </listitem>
+
+        <listitem>
+          <para>Properties defined through component property types annotating
+          the component implementation class.</para>
+
+          <para>The generated component description must include a
+          <code>property</code> element for each such method with the property
+          name mapped from the method name, the property type mapped from the
+          method type, and the property value set to the method's value. See
+          <xref linkend="service.component-component.property.mapping"/>. The
+          generated <code>property</code> elements must be added to the
+          component description by processing the component property types
+          annotating the component implementation class in the order that the
+          annotations appear in the component implementation's class file.
+          However, the order of the <code>RuntimeVisibleAnnotations</code> and
+          <code>RuntimeInvisibleAnnotations</code> attributes in the class
+          file is unspecified by <xref linkend="service.component-jvms.ref"/>
+          so care must be taken when using component property types of
+          different <code>RetentionPolicy</code> that have method names in
+          common.</para>
+
+          <para>For component property type methods with a value of an empty
+          array, a <code>property</code> element must not be generated.</para>
         </listitem>
 
         <listitem>
@@ -5048,8 +5154,7 @@ public class MyComponent {
       xrefstyle="hyperlink"/> element of the <xref
       linkend="org.osgi.service.component.annotations.Component"
       xrefstyle="hyperlink"/> annotation which can override values defined by
-      default values in the component property types used in life cycle method
-      signatures.</para>
+      values in the component property types.</para>
     </section>
   </section>
 
@@ -5486,6 +5591,8 @@ public class MyComponent {
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.runtime.dto.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.propertytypes.xml"/>
+
   <section>
     <title>References</title>
 
@@ -5506,6 +5613,10 @@ public class MyComponent {
 
       <bibliomixed xml:id="i1655737"><title>OSGi XML
       Schemas</title>https://www.osgi.org/developer/specifications/</bibliomixed>
+
+      <bibliomixed xml:id="service.component-jvms.ref"><title>The Java Virtual
+      Machine Specification, Java SE 8
+      Edition</title>https://docs.oracle.com/javase/specs/jvms/se8/html/index.html</bibliomixed>
     </bibliolist>
   </section>
 
@@ -5547,6 +5658,18 @@ public class MyComponent {
       <listitem>
         <para><xref linkend="service.component-delayed.component"/> is updated
         to clarify when a component configuration may be reclaimed.</para>
+      </listitem>
+
+      <listitem>
+        <para>Component property types can be used as annotations on a
+        component implementation class. See <xref
+        linkend="service.component-component.property.types"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>A set of standard component property types for standard service
+        properties has been defined. See <xref
+        linkend="service.component-standard.component.property.types"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
