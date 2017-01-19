@@ -48,7 +48,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Converter</emphasis> - The <xref linkend="service.converter"/> is
+        <para><emphasis>Converter</emphasis> - The <xref linkend="util.converter"/> is
           used to assist the serializer in converting Java objects to types supported by
           the serialized type.</para>
       </listitem>
@@ -78,7 +78,7 @@
       For example JSON does not have the distinction between different types of numbers. So an 
       Integer serialized from a Java Map may be deserialized as a Long if no additional help is 
       provided to the serializer.
-      However, serializer services are designed to use the <xref linkend="service.converter"/>.
+      However, serializer services are designed to use the <xref linkend="util.converter"/>.
     </para>
     <para>
       Providing a customized converter can assist the serialization process.
@@ -190,7 +190,7 @@
         <para>
           Other types are converted to JSON with the help of the Converter. If the source type is a 
           map-like structure, as described
-          in <xref linkend="service.converter.special.cases.maps"/>, 
+          in <xref linkend="util.converter-special.cases.maps"/>, 
           the object is converted into a map
           before it is converted to a JSON Object. Otherwise it is converted to String before it is 
           inserted in the JSON. 
@@ -313,7 +313,7 @@ private void myMethod() {
         <para>
           Other types are converted to YAML with the help of the Converter. If the source type is a 
           map-like structure, as described
-          in <xref linkend="service.converter.special.cases.maps"/>, 
+          in <xref linkend="util.converter-special.cases.maps"/>, 
           the object is converted into a map
           before it is converted to a YAML serialization. Otherwise it is converted to String before it is 
           inserted in the YAML stream. 

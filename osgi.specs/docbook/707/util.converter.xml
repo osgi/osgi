@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="707"
          revision="$Id$"
-         version="5" xml:id="service.converter"
+         version="5" xml:id="util.converter"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -199,7 +199,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         
         <para><emphasis>Exception: </emphasis><code>java.util.Calendar</code> and 
         <code>java.util.Date</code> are converted to <code>String</code> as described in 
-        <xref linkend="service.converter.date.calendar"/>.
+        <xref linkend="util.converter-date.calendar"/>.
         </para>
       </section>
       
@@ -222,7 +222,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
           values. See below.
         </para>
       </section>
-      <section xml:id="service.converter.special.cases.string">
+      <section xml:id="util.converter-special.cases.string">
         <title>Special cases converting from String</title>
         <remark>Removed from the following table: Boolean.parseBoolean(v) and Number.parseNumber(v) as both Boolean and Number have static valueOf()</remark>
         <table>
@@ -272,7 +272,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
               
               <row>
                 <entry><code>java.util.Calendar</code></entry>
-                <entry>See <xref linkend="service.converter.date.calendar"/>.</entry>
+                <entry>See <xref linkend="util.converter-date.calendar"/>.</entry>
               </row>
 
               <row>
@@ -294,7 +294,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         </table>
       </section>
       
-      <section xml:id="service.converter.date.calendar">
+      <section xml:id="util.converter-date.calendar">
         <title>Date and Calendar</title>
         <para>A <code>java.util.Date</code> instance is converted to 
         a <code>long</code> value by calling <code>Date.getTime()</code>.
@@ -348,7 +348,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
           Other source types are converted to String before converting to Enum.</para>
       </section>
         
-      <section xml:id="service.converter.special.cases.map.entry">
+      <section xml:id="util.converter-special.cases.map.entry">
         <title>Map.Entry</title>
         <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target scalar type is done by evaluating the compatibility of the 
         target type with both the key and the value in the entry and then using the best match. This is done in the following order:
@@ -483,7 +483,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             
             <listitem>
               <para>If the value is not a Collection, Array or Map-like structure (as described
-              in <xref linkend="service.converter.special.cases.maps"/>) a result with
+              in <xref linkend="util.converter-special.cases.maps"/>) a result with
               a single element is produced. The value is first converted into the desired
               target type, if the target type is known.</para>
             </listitem>
@@ -496,7 +496,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             
             <listitem>
               <para>If the value is a Map-like structure (as described
-              in <xref linkend="service.converter.special.cases.maps"/>) then <code>Map.Entry</code> elements 
+              in <xref linkend="util.converter-special.cases.maps"/>) then <code>Map.Entry</code> elements 
               are obtained from it via <code>Map.entrySet()</code>. 
               Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
               result.</para>
@@ -511,7 +511,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       </section>
     </section>
     
-    <section xml:id="service.converter.special.cases.maps">
+    <section xml:id="util.converter-special.cases.maps">
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
       include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We call these 
@@ -605,7 +605,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         <para>When converting into an interface the converter will create a dynamic proxy to 
         implement the interface. The name of the method returning the value should match the key 
         of the map entry, taking into account the mapping rules specified in 
-        <xref linkend="service.converter-key.mapping"/>.
+        <xref linkend="util.converter-key.mapping"/>.
         The key of the map may need to be converted into a <code>String</code> first.</para>
         
         <para>Conversion is done <emphasis>on demand</emphasis>: only when the method on 
@@ -646,7 +646,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
         <title>Converting from an Interface</title>
         <para>
         Whether a conversion source object is an interface is determined dynamically, taking the
-        <xref linkend="service.converter-priorities"/> into account. When an object implements multiple interfaces
+        <xref linkend="util.converter-priorities"/> into account. When an object implements multiple interfaces
         by default the first interface from these is taken as the source type. To select a different
         interface use the 
         <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/> modifier:
@@ -654,7 +654,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
       sourceAs(MyInterfaceB.class).to(Map.class);</programlisting>
         </para>
       </section>
-      <section xml:id="service.converter-key.mapping">
+      <section xml:id="util.converter-key.mapping">
         <title>Key Mapping</title>
 
         <para>The key name is derived from the method name.
@@ -682,10 +682,10 @@ boolean val2 = cfg.my_other_value(); // val2=true
           </itemizedlist></para>
 
         <para><xref
-        linkend="service.converter-key.name.mapping"/> contains
+        linkend="util.converter-key.name.mapping"/> contains
         some name mapping examples.</para>
 
-        <table xml:id="service.converter-key.name.mapping">
+        <table xml:id="util.converter-key.name.mapping">
           <title>Name Mapping Examples</title>
 
           <tgroup cols="2">
@@ -846,7 +846,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the source map and then converts the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
-        <xref linkend="service.converter-key.mapping"/>.</para>
+        <xref linkend="util.converter-key.mapping"/>.</para>
         
         <para>The DTO is constructed using its no-arg constructor and each public 
         field is filled with data from the source eagerly. Fields present in the DTO but missing in the source
@@ -871,7 +871,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <para>
           When converting from a map-like structure to other types, the map is first converted in an ordered collection 
           of <code>Map.Entry</code> objects. This collection is then converted to the target type using the rules specified
-          in <xref linkend="service.converter.special.cases.map.entry"/>.
+          in <xref linkend="util.converter-special.cases.map.entry"/>.
         </para>
         <para>
           No other conversions to map-like structures are supported.
@@ -881,7 +881,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
 
     </section>
     
-    <section xml:id="service.converter-priorities">
+    <section xml:id="util.converter-priorities">
       <title>Priority</title>
       
       <para>In case multiple conversion rules match, the rule with the highest priority is used, where 1 is the highest overall priority.

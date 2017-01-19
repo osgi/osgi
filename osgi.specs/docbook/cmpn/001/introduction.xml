@@ -535,18 +535,7 @@
               linkend="service.transaction.control"/></code></entry>
             </row>
 
-            <row>
-              <entry><xref linkend="service.converter"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.converter"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.converter-version"
-              linkend="service.resolver"/></code></entry>
-            </row>
-
-<!--
+            <!--
             <row>
               <entry><xref linkend="service.configurator"
               xrefstyle="template:%n %t"/></entry>
@@ -614,6 +603,17 @@
 
               <entry><code><xref endterm="org.osgi.util.pushstream-version"
               linkend="util.pushstream"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="util.converter"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.util.converter"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.util.converter-version"
+              linkend="util.converter"/></code></entry>
             </row>
           </tbody>
         </tgroup>
