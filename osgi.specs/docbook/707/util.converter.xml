@@ -647,7 +647,8 @@ boolean val2 = cfg.my_other_value(); // val2=true
         <para>
         Whether a conversion source object is an interface is determined dynamically, taking the
         <xref linkend="util.converter-priorities"/> into account. When an object implements multiple interfaces
-        by default the first interface from these is taken as the source type. To select a different
+        by default the first interface from these that has no-arg methods 
+        is taken as the source type. To select a different
         interface use the 
         <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/> modifier:
         <programlisting>  Map m = converter.convert(myMultiInterface).
