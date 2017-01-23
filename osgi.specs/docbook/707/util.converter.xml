@@ -33,7 +33,7 @@
 	
     <para>This specification defines the OSGi Converter that makes it easy to convert many types to other types, including scalars,
     Collections, Maps, Beans, Interfaces and DTOs without having to write the boilerplate conversion code. The converter
-    strictly adheres to the rule specified in this chapter. Converters can also be customized using converter
+    strictly adheres to the rules specified in this chapter. Converters can also be customized using converter
     builders. 
     </para>
   </section> 
@@ -41,7 +41,7 @@
   <section>
     <title>Entities</title>
     
-    <para>The following entities are used in this specification</para>
+    <para>The following entities are used in this specification:</para>
     
     <itemizedlist>
       <listitem>
@@ -61,7 +61,7 @@
       </listitem>
     
       <listitem>
-        <para><emphasis>Result</emphasis> - the result of the conversion.</para>
+        <para><emphasis>Target</emphasis> - the target of the conversion.</para>
       </listitem>
     
       <listitem>
@@ -69,7 +69,7 @@
       </listitem>
       
       <listitem>
-        <para><emphasis>Target Type</emphasis> - the desired type of the conversion result.</para>
+        <para><emphasis>Target Type</emphasis> - the desired type of the conversion target.</para>
       </listitem>
     </itemizedlist>
     <remark>Add entity diagram</remark>
@@ -336,7 +336,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
                 
               <row>
                 <entry><code>String</code></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>. If no matching enum value can be found
+                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>. If this does not produce a result
                 a case-insensitive lookup is done for a matching enum value.
                 </entry>
               </row>
@@ -413,7 +413,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
           the returned object it will stop reflecting changes to the backing object.</para>
         
         <table>
-          <title>Collection / Array result creation</title>
+          <title>Collection / Array target creation</title>
           <tgroup cols="2">
             <colspec colnum="1" colwidth="0.5*"/>
             <thead>
@@ -483,7 +483,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             
             <listitem>
               <para>If the value is not a Collection, Array or Map-like structure (as described
-              in <xref linkend="util.converter-special.cases.maps"/>) a result with
+              in <xref linkend="util.converter-special.cases.maps"/>) a target with
               a single element is produced. The value is first converted into the desired
               target type, if the target type is known.</para>
             </listitem>
@@ -499,7 +499,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
               in <xref linkend="util.converter-special.cases.maps"/>) then <code>Map.Entry</code> elements 
               are obtained from it via <code>Map.entrySet()</code>. 
               Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
-              result.</para>
+              target.</para>
             </listitem>
           </itemizedlist>         
         </para>
@@ -538,7 +538,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
           can be owned by the client. When the client modifies
           the returned object it will stop reflecting changes to the backing object.</para>
         <table>
-          <title>Map result creation</title>
+          <title>Map target creation</title>
           <tgroup cols="2">
             <colspec colnum="1" colwidth="0.5*"/>
             <thead>
@@ -586,7 +586,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       <section>
         <title>Dictionary</title>
         <para>Converting between a map and a <code>Dictionary</code> is done by iterating over the
-        source and inserting the key value pairs in the result, converting them to the requested target 
+        source and inserting the key value pairs in the target, converting them to the requested target 
         type, if known. As with other generic types, target type information for Dictionaries can be provided
         via a <xref linkend="org.osgi.util.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
       </section>
@@ -615,7 +615,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         
         <para>Note that the converter will not copy the source map when converting to an interface
         so any changes to the source map will be reflected live to the proxy. 
-        The proxy cannot cache the conversion results.</para>
+        The proxy cannot cache the conversions.</para>
         
         <para>Interfaces can provide methods for default values by providing a single-argument method
         override in addition to the no-arg method matching the key name. If the type of the default
@@ -982,7 +982,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <title>Customizing converters</title>
     <para>The Standard Converter applies the conversion rules described in this specification. While this is 
     useful for many applications, in some cases deviations from the specified rules may be necessary.
-    This can be done by creating customized converter. 
+    This can be done by creating a customized converter. 
     Customized converters are created based on an existing converter with additional rules specified that
     override the existing converter's behavior.
     A customized converter is created through a 
