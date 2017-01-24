@@ -1,0 +1,12 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath: \
+	osgi.core;			version=5.0.0, \
+	osgi.annotation; version=6.0.1, \
+	org.glassfish.hk2.external.javax.inject;	version=2.4.0, \
+	javax.enterprise.cdi-api;	version=1.2.0
+
+
