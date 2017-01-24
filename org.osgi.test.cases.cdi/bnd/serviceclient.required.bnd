@@ -1,0 +1,11 @@
+Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+Include-Resource = {META-INF/beans.xml=resources/empty-beans.xml}
+Bundle-SymbolicName: ${p}.serviceclient.required
+Bundle-Version: 1.0.0.test
+Private-Package: org.osgi.test.cases.cdi.serviceclient.required
+Import-Package: \
+	org.osgi.service.cdi,\
+	org.osgi.service.cdi.annotations,\
+	javax.enterprise.inject,\
+	javax.inject,\
+	org.osgi.test.cases.tb.serviceapi

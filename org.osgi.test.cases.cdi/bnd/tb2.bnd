@@ -1,0 +1,9 @@
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Version: 1.0.0.test
+Export-Package: org.osgi.test.cases.cdi.tb2.pkg2
+Include-Resource = {META-INF/beans.xml=resources/empty-beans.xml}
+Import-Package: \
+	org.osgi.service.cdi,\
+	org.osgi.service.cdi.annotations,\
+	javax.inject
