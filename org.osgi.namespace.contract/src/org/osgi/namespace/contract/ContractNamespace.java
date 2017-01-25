@@ -42,9 +42,9 @@ public final class ContractNamespace extends Namespace {
 	public static final String	CONTRACT_NAMESPACE				= "osgi.contract";
 
 	/**
-	 * The capability attribute contains the {@code Version} of the
+	 * The capability attribute contains the {@code Version}s of the
 	 * specification of the contract. The value of this attribute must be of
-	 * type {@code Version}.
+	 * type {@code Version}, {@code Version[]}, or {@code List<Version>}.
 	 */
 	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
