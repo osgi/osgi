@@ -20,8 +20,6 @@ Test-Cases = ${testcases}
 	${junit}
 
 -runbundles: \
-	org.osgi.util.converter;version=latest,\
-	org.osgi.util.function;version=latest,\
-	org.osgi.util.promise;version=latest
+	org.apache.felix.converter;version=latest
 
 -runproperties = ${runproperties}

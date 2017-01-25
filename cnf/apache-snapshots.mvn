@@ -1,3 +1,4 @@
 
 # 3rd party artifacts
 org.apache.aries.jpa:org.apache.aries.jpa.container:2.6.0-SNAPSHOT
+org.apache.felix:org.apache.felix.converter:0.1.0-SNAPSHOT
