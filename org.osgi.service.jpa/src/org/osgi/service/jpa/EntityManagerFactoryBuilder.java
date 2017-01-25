@@ -17,6 +17,7 @@
 package org.osgi.service.jpa;
 
 import java.util.Map;
+
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -48,6 +49,11 @@ public interface EntityManagerFactoryBuilder {
 	 * the JPA javax.persistence.PersistenceProvider interface.
 	 */
 	public static final String	JPA_UNIT_PROVIDER	= "osgi.unit.provider";
+
+	/**
+	 * The name of the JPA extender capability
+	 */
+	public static final String	JPA_CAPABILITY_NAME	= "osgi.jpa";
 
 	/**
 	 * Return an EntityManagerFactory instance configured according to the
