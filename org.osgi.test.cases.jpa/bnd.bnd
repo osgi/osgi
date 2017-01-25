@@ -27,22 +27,30 @@ Include-Resource 					= \
 	specificProviderBundle.jar , \
 	staticAccessBundle.jar , \
 	staticAccessWithMapBundle.jar , \
-	unavailableDatasourceBundle.jar
+	unavailableDatasourceBundle.jar,\
+	ctExtenderCapProvidingBundle.jar,\
+	ctExtenderCapRequiringBundle.jar,\
+	extenderCapRequiringBundle.jar
 
--buildpath							    = \
-    org.osgi.test.support;              version=project , \
-	org.osgi.service.jpa;			    version=project	, \
-	org.osgi.service.jdbc;			    version=project , \
-	osgi.core;						    version=4.3.1	, \
-	osgi.cmpn;						    version=4.3.1	, \
-	org.eclipse.persistence.jpa_spec;	version=2.0, \
-	org.apache.aries.jpa.container;	version=2.6.0.SNAPSHOT, \
-	${junit}
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.jpa;version=project,\
+	org.osgi.service.jdbc;version=project,\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	org.eclipse.persistence.jpa_spec;version=2.0,\
+	org.apache.aries.jpa.container;version=2.6.0.SNAPSHOT,\
+	${junit},\
+	org.osgi.namespace.extender;version=latest,\
+	org.osgi.namespace.contract;version=latest,\
+	org.osgi.resource;version=latest
 	
 # If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
 # Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
-	org.osgi.impl.service.jpa;			version=latest
+	org.osgi.service.jdbc; version=latest, \
+	org.h2; version="[1.4.193,2)", \
+	org.osgi.impl.service.jpa; version=latest
 		
 -runproperties					= ${runproperties}
 
