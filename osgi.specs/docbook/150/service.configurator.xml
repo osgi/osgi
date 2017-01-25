@@ -134,7 +134,7 @@
       Configuration resources provide an array of configurations with the <code>configurations</code> key. 
       Each configuration has a <code>service.pid</code> to target a specific PID in the Configuration Admin
       Service and zero or more configuration values for this PID. Comments in the form of JSMin comments are 
-      supported, i.e. any text after <code>//</code> is ignored and any text between <code>/* */</code> is
+      supported, that is, any text after <code>//</code> is ignored and any text between <code>/* */</code> is
       ignored. 
     </para>
       
@@ -145,7 +145,6 @@
 
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
       as <code>":configurator:json-version": 1</code>. If the configurator version is omitted, 1 is assumed.
-      <remark>Note: changed :configurator:version to :configurator:json-version</remark>
     </para>
     
     <para>
@@ -221,9 +220,6 @@
       factory configuration instance. The configurator must use the 
       <code>getFactoryConfiguration()</code> methods on Configuration Admin to 
       create or obtain configurations with the given PID and name.</para>
-      
-      <remark>Need to ensure that the factory configuration name lines up with
-      the terminology in ConfigAdmin spec. Possibly it should be renamed to 'alias'</remark>
   </section>
 
   <section>
@@ -314,7 +310,10 @@
 }</programlisting>
 
       When the configurator applies the configuration, it extracts the binary file to a public area on the file system.
-      It then applies the configuration with as value the absolute path of the extracted binary file.
+      The configurator creates a subdirectory with as name the PID of the configuration. The PID must be URL-encoded to 
+      ensure that it does not contain characters that are illegal on a filesystem. The binary file is extracted 
+      in this subdirectory. 
+      The configurator then applies the configuration with as value for the binary entry the absolute path of the extracted binary file.
       </para> 
       
       <para>
@@ -330,7 +329,6 @@
       an absolute path on the file system to which the configurator has write access. If the directory does not exist
       or the configurator cannot write to this location, it logs an error and uses the default location instead.
       </para>  
-      <remark>I renamed configurator.directory to configurator.binaries</remark>
 
       <para>When a configuration is removed, its associated binary files are also removed from the file system.
       When a configuration is updated, associated binary files are updated, if necessary. In the case of an update
@@ -384,7 +382,7 @@
     
   <section xml:id="service.configurator.ranking">
     <title>Ranking</title>
-    <para>The order in which the Configurator processes bundles is undefined. To control
+    <para>The order in which the Configurator processes bundles is not defined. To control
       which configurations are in effect configuration ranking can be used. Configuration ranking is similar to
       service ranking; it is an integer which defaults to 0. Configurations with a higher ranking are preferred 
       over configurations with a lower ranking.
@@ -417,42 +415,26 @@
     </para>
     
     <para>Configuration policies are set by specifying the <code>:configurator:policy</code> property. Accepted 
-    values are <code>default</code> and <code>force</code>. This policy defines the behavior if a configuration
+    values are <code>default</code> and <code>force</code>. This policy defines the behavior when a configuration
     to be applied was set by another entity in the system, or if it was modified by someone from the values set by the 
     configurator.
     
       <table>
         <title>Applying Configurations: Overwrite Policies</title>
-        <tgroup cols="3">
-          <colspec colnum="1" colwidth="1.25*"/>
-          <colspec colnum="2" colwidth="0.75*"/>
-          <colspec colnum="3" colwidth="0.75*"/>
+        <tgroup cols="2">
           <thead>
             <row>
-              <entry>State</entry>
-              <entry>Policy <code>default</code></entry>
-              <entry>Policy <code>force</code></entry>
+              <entry>Policy value</entry>
+              <entry>Action</entry>
             </row>
           </thead>
           <tbody>
             <row>
-              <entry>No existing configuration</entry>
-              <entry>Configuration is added</entry>
-              <entry>Configuration is added</entry>
-            </row>
-            <row>
-              <entry>Configurator set with higher ranking</entry>
-              <entry>No action</entry>
+              <entry><code>default</code></entry>
               <entry>No action</entry>
             </row>
             <row>
-              <entry>Configurator set with lower or equal ranking</entry>
-              <entry>Configuration is added</entry>
-              <entry>Configuration is added</entry>              
-            </row>
-            <row>
-              <entry>Not set by configurator or modified</entry>
-              <entry>No action</entry>
+              <entry><code>force</code></entry>
               <entry>Configuration is added</entry>              
             </row>
           </tbody>
@@ -465,46 +447,38 @@
     
     <para>
       When a bundle that provides configuration resources is uninstalled,
-      the configurator removes any configurations that is has provided from the system. 
-      The configurator policy is also used here to define the removal behavior when configurations 
-      were modified outside of the configurator.
+      the configurator removes any configurations that is has provided on 
+      behalf of this bundle from the system. 
+      
+      Before it removes The configurator checks with Configuration Admin 
+      whether the configuration it has provided has been changed by another entity.
+      
+      If the configuration has not been changed by another entity it is removed.
+      If it has been changed then whether the configuration is removed depends on 
+      the value of the <code>configurator:policy</code> property:
+      
       <table>
-        <title>Removing Configurations: Overwrite Policies</title>
-        <tgroup cols="3">
-          <colspec colnum="1" colwidth="1.25*"/>
-          <colspec colnum="2" colwidth="0.75*"/>
-          <colspec colnum="3" colwidth="0.75*"/>
+        <title>Removing externally modified configurations</title>
+        <tgroup cols="2">
           <thead>
             <row>
-              <entry>State</entry>
-              <entry>Policy <code>default</code></entry>
-              <entry>Policy <code>force</code></entry>
+              <entry>Policy value</entry>
+              <entry>Action</entry>
             </row>
           </thead>
           <tbody>
             <row>
-              <entry>Configurator set with higher ranking</entry>
-              <entry>No action</entry>
+              <entry><code>default</code></entry>
               <entry>No action</entry>
             </row>
             <row>
-              <entry>Configurator set with lower or equal ranking</entry>
-              <entry>Configuration is removed</entry>
-              <entry>Configuration is removed</entry>
-            </row>
-            <row>
-              <entry>Not set by configurator or modified</entry>
-              <entry>No action</entry>
+              <entry><code>force</code></entry>
               <entry>Configuration is removed</entry>              
             </row>
           </tbody>
         </tgroup>
       </table>
-      
-      <remark>'Configurator set with lower ranking' is not really possible or would indicate a bug
-      in the system, so maybe we should change this in the table to 
-      'Configurator set for this bundle' vs 'Configurator set for another bundle'?</remark>
-      
+            
       When a configuration is removed the configurator checks whether another, lower ranked, configuration resource is 
       available. If present the configurator sets this configuration. 
     </para>
@@ -516,7 +490,7 @@
     its state from the runtime environment. If this property is available its value is processed as follows:
     
     <orderedlist>
-      <listitem><para>If the value starts with a curly bracket <code>{</code>, ignoring any leading white space,
+      <listitem><para>If the value starts with a left curly bracket ('{' <code>\u007B</code>), ignoring any leading white space,
       the configurator will interpret the value as a literal configuration JSON resource.</para></listitem>
       
       <listitem><para>Otherwise the value is treated as a comma-separated list of URLs. The configurator will
@@ -555,9 +529,17 @@
 
   <section>
     <title>Grouping and Coordinations</title>
-    <para>The configurator uses the coordinator, if available: if a thread coordination is available, 
-    it adds itself as a participant, otherwise it starts a coordination and ends it once the work is done.</para>
-    <remark>Does the coordinator delay doing its work until the coordination is ended?</remark>
+    <para>If a coordinator is available the configurator ensures that a coordination is active while 
+    it's applying configurations. For this, the configurator checks if a coordinator is there. If 
+    it is, it checks whether a current implicit coordination is present on the thread. If no
+    coordination is present the configurator starts an implicit coordination on the current thread
+    and ends it when it is finished doing its work.</para>
+     
+    <para>If no coordinator is present or is there is already an implicit coordination, the configurator
+    does not need to do anything.</para>
+    
+    <para>The configurator does not need to delay applying 
+    any changes to the Configuration Admin until the coordination ends.</para>   
   </section>
     
   <section>
