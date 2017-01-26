@@ -29,11 +29,13 @@ package org.osgi.service.jaxrs.runtime.dto;
 public class FailedResourceDTO extends ResourceDTO {
 
 	/**
-	 * The reason why the servlet represented by this DTO is not used.
+	 * The reason why the resource represented by this DTO is not used.
 	 * 
 	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
 	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
+	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
 	 * @see DTOConstants#FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE
+	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
 	 */
 	public int	failureReason;
 }

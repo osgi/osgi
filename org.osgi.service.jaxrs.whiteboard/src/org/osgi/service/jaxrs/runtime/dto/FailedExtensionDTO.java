@@ -21,19 +21,21 @@ package org.osgi.service.jaxrs.runtime.dto;
  * problem.
  * <p>
  * As the service represented by this DTO is not used due to a failure, the
- * field {@link FilterDTO#filteredByName} always returns {null}.
+ * field {@link ExtensionDTO#filteredByName} always returns {null}.
  * 
  * @NotThreadSafe
  * @author $Id$
  */
-public class FailedFilterDTO extends FilterDTO {
+public class FailedExtensionDTO extends ExtensionDTO {
 
 	/**
 	 * The reason why the servlet filter represented by this DTO is not used.
 	 * 
 	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
 	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
-	 * @see DTOConstants#FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE
+	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
+	 * @see DTOConstants#FAILURE_REASON_NOT_AN_EXTENSION_TYPE
+	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
 	 */
 	public int	failureReason;
 

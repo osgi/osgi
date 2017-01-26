@@ -21,13 +21,12 @@ import org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO;
 import org.osgi.service.jaxrs.runtime.dto.RuntimeDTO;
 
 /**
- * The HttpServiceRuntime service represents the runtime information of an Http
- * Whiteboard implementation.
- *
+ * The JaxRSServiceRuntime service represents the runtime information of a
+ * JAX-RS Whiteboard implementation.
  * <p>
  * It provides access to DTOs representing the current state of the service.
  * <p>
- * The HttpServiceRuntime service must be registered with the
+ * The JaxRSServiceRuntime service must be registered with the
  * {@link JaxRSServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT} service
  * property.
  *

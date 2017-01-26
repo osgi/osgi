@@ -44,49 +44,30 @@ public class RuntimeDTO extends DTO {
 
 	/**
 	 * Returns the representations of the JAX-RS resource services associated
-	 * with this Runtime.
-	 * 
-	 * The returned array may be empty if this context is currently not
-	 * associated with any JAX-RS Resource services.
+	 * with this Runtime. The returned array may be empty if this whiteboard is
+	 * currently not associated with any JAX-RS Resource services.
 	 */
 	public ResourceDTO[]			resourceDTOs;
 
 	/**
-	 * Returns the representations of the JAX-RS Filter services associated with
-	 * this Runtime.
-	 * 
-	 * The returned array may be empty if this context is currently not
-	 * associated with any JAX-RS Filter services.
+	 * Returns the representations of the JAX-RS extension services associated
+	 * with this Runtime. The returned array may be empty if this whiteboard is
+	 * currently not associated with any JAX-RS extension services.
 	 */
-	public FilterDTO[]				filterDTOs;
-
-	/**
-	 * Returns the representations of the JAX-RS Interceptor services associated
-	 * with this Runtime.
-	 * 
-	 * The returned array may be empty if this context is currently not
-	 * associated with any JAX-RS Filter services.
-	 */
-	public InterceptorDTO[]			interceptorDTOs;
+	public ExtensionDTO[]		extensionDTOs;
 
 	/**
 	 * Returns the representations of the JAX-RS resource services associated
 	 * with this runtime but currently not used due to some problem. The
 	 * returned array may be empty.
 	 */
-	public FailedResourceDTO[]		failedServletDTOs;
+	public FailedResourceDTO[]	failedResourceDTOs;
 
 	/**
-	 * Returns the representations of the JAX-RS Filter services associated with
-	 * this runtime but currently not used due to some problem. The returned
-	 * array may be empty.
-	 */
-	public FailedFilterDTO[]		failedFilterDTOs;
-
-	/**
-	 * Returns the representations of the JAX-RS Interceptor services associated
+	 * Returns the representations of the JAX-RS extension services associated
 	 * with this runtime but currently not used due to some problem. The
 	 * returned array may be empty.
 	 */
-	public FailedInterceptorDTO[]	failedErrorPageDTOs;
+	public FailedExtensionDTO[]	failedExtensionDTOs;
+
 }

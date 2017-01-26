@@ -17,6 +17,19 @@
 package org.osgi.service.jaxrs.whiteboard;
 
 import java.nio.file.DirectoryStream.Filter;
+
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.DynamicFeature;
+import javax.ws.rs.core.Feature;
+import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.ParamConverterProvider;
+import javax.ws.rs.ext.ReaderInterceptor;
+import javax.ws.rs.ext.WriterInterceptor;
+
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants;
 
 /**
@@ -31,17 +44,14 @@ public final class JaxRSWhiteboardConstants {
 
 	/**
 	 * Service property specifying the name of a JAX-RS resource.
-	 * 
 	 * <p>
 	 * This name is provided as a property on the registered Endpoint service so
 	 * that the URI for a particular JAX-RS service can be identified. If this
 	 * service property is not specified, then no Endpoint information will be
 	 * registered for this resource.
-	 * 
 	 * <p>
 	 * Resource names should be unique among all resource service associated
 	 * with a single Whiteboard implementation.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
 	 */
@@ -50,11 +60,9 @@ public final class JaxRSWhiteboardConstants {
 	/**
 	 * Service property specifying the base URI mapping for a JAX-RS resource
 	 * service.
-	 * 
 	 * <p>
 	 * The specified uri is used to determine whether a request should be mapped
 	 * to the resource. Services without this service property are ignored.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}, and
 	 * will have a "/" prepended if no "/" exists.
@@ -62,39 +70,58 @@ public final class JaxRSWhiteboardConstants {
 	public static final String	JAX_RS_RESOURCE_BASE		= "osgi.jaxrs.resource.base";
 
 	/**
-	 * Service property specifying the request mappings for a JAX-RS filter
-	 * service.
-	 * 
+	 * Service property specifying the name of a JAX-RS extension service.
 	 * <p>
-	 * The specified patterns are used to determine whether a request should be
-	 * mapped to the filter. Filter services without this service property are
-	 * ignored.
-	 * 
+	 * A service providing this property must be registered as one or more of
+	 * the following types:
+	 * <ul>
+	 * <li>{@link MessageBodyReader}</li>
+	 * <li>{@link MessageBodyWriter}</li>
+	 * <li>{@link ContainerRequestFilter}</li>
+	 * <li>{@link ContainerResponseFilter}</li>
+	 * <li>{@link ReaderInterceptor}</li>
+	 * <li>{@link WriterInterceptor}</li>
+	 * <li>{@link ContextResolver}</li>
+	 * <li>{@link ExceptionMapper}</li>
+	 * <li>{@link ParamConverterProvider}</li>
+	 * <li>{@link Feature}</li>
+	 * <li>{@link DynamicFeature}</li>
+	 * </ul>
 	 * <p>
-	 * The value of this service property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection<String>}.
+	 * If a service with this property does not match any of the defined types
+	 * then it is registered as a failure DTO,
 	 */
-	public static final String	JAX_RS_FILTER_BASE			= "osgi.jaxrs.filter.base";
+	public static final String	JAX_RS_EXTENSION_NAME		= "osgi.jaxrs.extension.name";
 
 	/**
-	 * Service property specifying the request mappings for a JAX-RS interceptor
+	 * A Service property specifying one or more target filters used to select
+	 * the set of JAX-RS extension services required to support this whiteboard
 	 * service.
-	 * 
 	 * <p>
-	 * The specified patterns are used to determine whether a request should be
-	 * mapped to the interceptor. Interceptor services without this service
-	 * property are ignored.
-	 * 
+	 * A JAX-RS Whiteboard service may require one or more extensions to be
+	 * available so that it can function. For example a resource which declares
+	 * that it <code>@Produces("text/json")</code> requires a
+	 * {@link MessageBodyWriter} which supports JSON to be available.
 	 * <p>
-	 * The value of this service property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection<String>}.
+	 * This service property provides a String+ set of LDAP filters which will
+	 * be applied to the service properties of all extensions available in the
+	 * JAX-RS container. If all of the filters are satisfied then this service
+	 * is eligible to be hosted by the JAX-RS container.
+	 * <p>
+	 * This service property may be declared by any JAX-RS whiteboard service,
+	 * whether it is a resource, or an extension.
+	 * <p>
+	 * If this service property is not specified, then no extensions are
+	 * required.
+	 * <p>
+	 * The value of this service property must be of type {@code String} and be
+	 * a valid {@link Filter filter string}.
 	 */
-	public static final String	JAX_RS_INTERCEPTOR_BASE		= "osgi.jaxrs.interceptor.base";
+	public static final String	JAX_RS_EXTENSION_SELECT		= "osgi.jaxrs.extension.select";
 
 	/**
 	 * Service property specifying the target filter to select the JAX-RS
 	 * Whiteboard implementation to process the service.
-	 * 
 	 * <p>
 	 * A JAX-RS Whiteboard implementation can define any number of service
 	 * properties which can be referenced by the target filter. The service
@@ -102,11 +129,9 @@ public final class JaxRSWhiteboardConstants {
 	 * {@link JaxRSServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT
 	 * osgi.http.endpoint} service property if the endpoint information is
 	 * known.
-	 * 
 	 * <p>
 	 * If this service property is not specified, then all JAX-RS Whiteboard
 	 * implementations can process the service.
-	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String} and be
 	 * a valid {@link Filter filter string}.

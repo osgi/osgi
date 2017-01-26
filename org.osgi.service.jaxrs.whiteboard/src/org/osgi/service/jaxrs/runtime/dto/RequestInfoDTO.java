@@ -31,22 +31,10 @@ public class RequestInfoDTO extends DTO {
 	public String			path;
 
 	/**
-	 * The service id of the servlet context processing the request represented
-	 * by this DTO.
-	 */
-	public long				servletContextId;
-
-	/**
 	 * The JAX-RS filters processing this request. If no filters are called for
 	 * processing this request, an empty array is returned.
 	 */
-	public FilterDTO[]		filterDTOs;
-
-	/**
-	 * The JAX-RS interceptors processing this request. If no interceptors are
-	 * called for processing this request, an empty array is returned.
-	 */
-	public InterceptorDTO[]	interceptorDTOs;
+	public ExtensionDTO[]	extensionDTOs;
 
 	/**
 	 * The resource processing this request.

@@ -16,37 +16,54 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.NameBinding;
+import javax.ws.rs.Produces;
+
 import org.osgi.dto.DTO;
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 
 /**
- * Represents a JAX-RS Interceptor service currently being hosted by the
+ * Represents a JAX-RS Filter service currently being hosted by the
  * {@link JaxRSServiceRuntime}
  * 
  * @NotThreadSafe
  * @author $Id$
  */
-public class InterceptorDTO extends DTO {
+public class ExtensionDTO extends DTO {
 
 	/**
-	 * The request mappings for the interceptor, as declared in
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_INTERCEPTOR_BASE}
-	 * 
-	 * <p>
-	 * The specified patterns are used to determine whether a request is mapped
-	 * to the interceptor. This array might be empty.
+	 * The {@link JaxRSWhiteboardConstants#JAX_RS_EXTENSION_NAME} for this
+	 * extension
 	 */
-	public String[]			baseUris;
+	public String			name;
 
 	/**
-	 * The resourceDTOs that are mapped to this interceptor using a named
-	 * annotation
+	 * The extension types recognized for this service.
 	 */
-	public ResourceDTO[]	interceptedByName;
+	public String[]			extensionTypes;
 
 	/**
-	 * Service property identifying the JAX-RS interceptor service.
+	 * The media types produced by this service, if provided in an
+	 * {@link Produces} annotation
+	 */
+	public String[]			produces;
+
+	/**
+	 * The media types consumed by this service, if provided in an
+	 * {@link Consumes} annotation
+	 */
+	public String[]			consumes;
+
+	/**
+	 * The resourceDTOs that are mapped to this extension using a
+	 * {@link NameBinding} annotation
+	 */
+	public ResourceDTO[]	filteredByName;
+
+	/**
+	 * Service property identifying the JAX-RS extension service.
 	 */
 	public long				serviceId;
 }

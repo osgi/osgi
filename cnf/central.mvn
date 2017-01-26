@@ -48,6 +48,7 @@ org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:2.0.0
 org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6
 org.apache.geronimo.specs:geronimo-jaxb_2.1_spec:1.0
 org.apache.geronimo.specs:geronimo-jaxrpc_1.1_spec:2.0.0
+org.apache.geronimo.specs:geronimo-jaxrs_2.0_spec:1.0-alpha-1
 org.apache.geronimo.specs:geronimo-jaxws_2.1_spec:1.0
 org.apache.geronimo.specs:geronimo-jpa_1.0_spec:1.1.2
 org.apache.geronimo.specs:geronimo-jsp_2.2_spec:1.2

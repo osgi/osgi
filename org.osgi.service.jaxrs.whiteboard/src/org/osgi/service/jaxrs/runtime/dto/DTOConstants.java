@@ -16,11 +16,11 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
+import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+
 /**
- * Defines standard constants for the DTOs.
- * 
- * The error codes are defined to take the same values as used by the Http
- * Service Whiteboard
+ * Defines standard constants for the DTOs. The error codes are defined to take
+ * the same values as used by the Http Service Whiteboard
  */
 public final class DTOConstants {
 	private DTOConstants() {
@@ -30,7 +30,7 @@ public final class DTOConstants {
 	/**
 	 * Failure reason is unknown.
 	 */
-	public static final int	FAILURE_REASON_UNKNOWN						= 0;
+	public static final int	FAILURE_REASON_UNKNOWN							= 0;
 
 	/**
 	 * Service is shadowed by another service.
@@ -38,18 +38,31 @@ public final class DTOConstants {
 	 * For example, a service with the same service properties but a higher
 	 * service ranking.
 	 */
-	public static final int	FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE	= 3;
+	public static final int	FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE		= 1;
 
 	/**
 	 * The service is registered in the service registry but getting the service
 	 * fails as it returns {@code null}.
 	 */
-	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE			= 5;
+	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE				= 2;
 
 	/**
 	 * The service is registered in the service registry but the service
 	 * properties are invalid.
 	 */
-	public static final int	FAILURE_REASON_VALIDATION_FAILED			= 6;
+	public static final int	FAILURE_REASON_VALIDATION_FAILED				= 3;
+
+	/**
+	 * The extension service is registered in the service registry but the
+	 * service is not registered using a recognised extension type
+	 */
+	public static final int	FAILURE_REASON_NOT_AN_EXTENSION_TYPE			= 4;
+
+	/**
+	 * The service is registered in the service registry with the
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_EXTENSION_SELECT} property and one
+	 * or more of the filters is not matched.
+	 */
+	public static final int	FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE	= 5;
 
 }
