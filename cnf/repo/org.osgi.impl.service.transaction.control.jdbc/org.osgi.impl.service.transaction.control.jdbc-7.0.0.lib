@@ -1,0 +1,5 @@
+tx-control-provider-jdbc-xa;    version=0.0.2
+org.osgi.impl.service.cm; version=7
+
+slf4j.api;  version=1.7.7
+slf4j.simple;  version=1.7.7
