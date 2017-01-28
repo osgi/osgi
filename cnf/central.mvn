@@ -14,8 +14,6 @@ biz.aQute.bnd:biz.aQute.junit:3.3.0
 biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0
 
 # 3rd party artifacts
-javax.enterprise:cdi-api:1.2
-
 org.apache.aries:org.apache.aries.util:1.1.1
 org.apache.aries.application:org.apache.aries.application.api:1.0.0
 org.apache.aries.application:org.apache.aries.application.modeller:1.0.0
@@ -32,13 +30,9 @@ org.apache.aries.tx-control:tx-control-provider-jpa-xa:0.0.2
 
 org.apache.felix:org.apache.felix.configadmin:1.8.12
 org.apache.felix:org.apache.felix.dependencymanager:3.1.0
-org.apache.felix:org.apache.felix.gogo.command:1.0.2
-org.apache.felix:org.apache.felix.gogo.runtime:1.0.2
-org.apache.felix:org.apache.felix.gogo.shell:1.0.0
 org.apache.felix:org.apache.felix.http.servlet-api:1.1.2
 org.apache.felix:org.apache.felix.http.jetty:3.1.4
 org.apache.felix:org.apache.felix.scr:2.0.6
-
 
 org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2
 org.apache.geronimo.specs:geronimo-annotation_1.1_spec:1.0.1
@@ -60,23 +54,12 @@ org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1
 
 org.apache.geronimo.components:geronimo-transaction:2.1.2
 
-org.apache.logging.log4j:log4j-api:2.7
-
 org.eclipse.persistence:javax.persistence:2.1.1
 org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.0
 org.eclipse.persistence:org.eclipse.persistence.core:2.6.0
 org.eclipse.persistence:org.eclipse.persistence.asm:2.6.0
 org.eclipse.persistence:org.eclipse.persistence.antlr:2.6.0
 org.eclipse.persistence:org.eclipse.persistence.jpa.jpql:2.6.0
-
-org.glassfish.hk2.external:javax.inject:2.4.0
-
-org.jboss.classfilewriter:jboss-classfilewriter:1.2.1.Final
-org.jboss.logging:jboss-logging:3.2.1.Final
-org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec:1.0.0.Final
-org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.7.Final
-org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:1.0.0.Final
-org.jboss.weld:weld-osgi-bundle:2.4.1.Final
 
 log4j:log4j:1.2.15
 
