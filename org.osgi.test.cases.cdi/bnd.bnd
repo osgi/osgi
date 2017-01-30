@@ -9,29 +9,31 @@ Private-Package						=  \
 Import-Package: ${-signaturetest}, *
 
 Include-Resource: \
-    tb1.jar, \
-    tb2.jar, \
-    tb3.jar, \
-    tf3.jar, \
-    tb4.jar, \
-    tb5.jar, \
-    tb6.jar, \
-    serviceapi.jar,\
-    serviceclient.jar,\
-    serviceclient.required.jar,\
-    serviceclient.manifest.jar,\
-    serviceprovider.jar
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar, \
+	tf3.jar, \
+	tb4.jar, \
+	tb5.jar, \
+	tb6.jar, \
+	serviceapi.jar,\
+	serviceclient.jar,\
+	serviceclient.required.jar,\
+	serviceclient.manifest.jar,\
+	serviceprovider.jar
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.cdi 
+-signaturetest                      = org.osgi.service.cdi
+
+javac.profile=
 
 -buildpath							= \
-    org.osgi.service.cdi;                   version=project, \
-    org.osgi.test.support;                  version=project, \
+	org.osgi.service.cdi;                   version=project, \
+	org.osgi.test.support;                  version=project, \
 	osgi.core;                              version=6.0, \
-	org.glassfish.hk2.external.javax.inject;	version=2.4.0, \
-	javax.enterprise.cdi-api;	version=1.2.0, \
-	org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec; version=1.0.0, \
+	javax.inject;                           version=1.0.0, \
+	javax.enterprise.cdi-api;               version=1.2.0, \
+	org.apache.geronimo.specs.geronimo-annotation_1.2_spec; version=1.0, \
 	${junit}
 
 -runbundles							= \
