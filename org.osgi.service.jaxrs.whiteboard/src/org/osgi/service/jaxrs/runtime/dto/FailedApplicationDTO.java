@@ -16,36 +16,26 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
-import org.osgi.dto.DTO;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
-
 /**
- * Represents common information about a JAX-RS resource service.
- *
+ * Represents a JAX-RS service which is currently not being used due to a
+ * problem.
+ * <p>
+ * As the service represented by this DTO is not used due to a failure, the
+ * field {@link ResourceDTO#resourceMethods} always returns null.
+ * 
  * @NotThreadSafe
  * @author $Id$
  */
-public abstract class ResourceDTO extends DTO {
-	/**
-	 * The name of the resource if it set one using
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, {@code null}
-	 * otherwise.
-	 */
-	public String					name;
+public class FailedApplicationDTO extends ApplicationDTO {
 
 	/**
-	 * The base URI of the resource defined by
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_RESOURCE_BASE}.
+	 * The reason why the resource represented by this DTO is not used.
+	 * 
+	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
+	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
+	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
+	 * @see DTOConstants#FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE
+	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
 	 */
-	public String					base;
-
-	/**
-	 * The RequestPaths handled by this resource
-	 */
-	public ResourceMethodInfoDTO[]	resourceMethods;
-
-	/**
-	 * Service property identifying the JAX-RS resource service
-	 */
-	public long						serviceId;
+	public int	failureReason;
 }

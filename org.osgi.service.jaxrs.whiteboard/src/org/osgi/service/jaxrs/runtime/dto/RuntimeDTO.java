@@ -54,20 +54,34 @@ public class RuntimeDTO extends DTO {
 	 * with this Runtime. The returned array may be empty if this whiteboard is
 	 * currently not associated with any JAX-RS extension services.
 	 */
-	public ExtensionDTO[]		extensionDTOs;
+	public ExtensionDTO[]			extensionDTOs;
+
+	/**
+	 * Returns the representations of the JAX-RS Application services associated
+	 * with this Runtime. The returned array may be empty if this whiteboard is
+	 * currently not associated with any JAX-RS application services.
+	 */
+	public ApplicationDTO[]			applicationDTOs;
 
 	/**
 	 * Returns the representations of the JAX-RS resource services associated
 	 * with this runtime but currently not used due to some problem. The
 	 * returned array may be empty.
 	 */
-	public FailedResourceDTO[]	failedResourceDTOs;
+	public FailedResourceDTO[]		failedResourceDTOs;
 
 	/**
 	 * Returns the representations of the JAX-RS extension services associated
 	 * with this runtime but currently not used due to some problem. The
 	 * returned array may be empty.
 	 */
-	public FailedExtensionDTO[]	failedExtensionDTOs;
+	public FailedExtensionDTO[]		failedExtensionDTOs;
+
+	/**
+	 * Returns the representations of the JAX-RS extension services associated
+	 * with this runtime but currently not used due to some problem. The
+	 * returned array may be empty.
+	 */
+	public FailedApplicationDTO[]	failedApplicationDTOs;
 
 }

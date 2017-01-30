@@ -65,4 +65,11 @@ public final class DTOConstants {
 	 */
 	public static final int	FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE	= 5;
 
+	/**
+	 * The service is registered in the service registry with the
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME} property and a service with
+	 * that name already exists in the runtime
+	 */
+	public static final int	FAILURE_REASON_DUPLICATE_NAME					= 6;
+
 }

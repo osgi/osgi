@@ -55,7 +55,7 @@ public final class JaxRSWhiteboardConstants {
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
 	 */
-	public static final String	JAX_RS_RESOURCE_NAME		= "osgi.jaxrs.name";
+	public static final String	JAX_RS_NAME		= "osgi.jaxrs.name";
 
 	/**
 	 * Service property specifying the base URI mapping for a JAX-RS resource
@@ -68,6 +68,18 @@ public final class JaxRSWhiteboardConstants {
 	 * will have a "/" prepended if no "/" exists.
 	 */
 	public static final String	JAX_RS_RESOURCE_BASE		= "osgi.jaxrs.resource.base";
+
+	/**
+	 * Service property specifying the base URI mapping for a JAX-RS application
+	 * service.
+	 * <p>
+	 * The specified uri is used to determine whether a request should be mapped
+	 * to the resource. Services without this service property are ignored.
+	 * <p>
+	 * The value of this service property must be of type {@code String}, and
+	 * will have a "/" prepended if no "/" exists.
+	 */
+	public static final String	JAX_RS_APPLICATION_BASE		= "osgi.jaxrs.application.base";
 
 	/**
 	 * Service property specifying the name of a JAX-RS extension service.
