@@ -46,6 +46,7 @@ public class ServletDTO extends BaseServletDTO {
 	 * returned.
 	 * 
 	 * @since 1.1
+	 * @see #multipartEnabled
 	 */
 	public int					multipartFileSizeThreshold;
 
@@ -54,6 +55,7 @@ public class ServletDTO extends BaseServletDTO {
 	 * multipart is not enabled for this servlet, {@code null} is returned.
 	 * 
 	 * @since 1.1
+	 * @see #multipartEnabled
 	 */
 	public String				multipartLocation;
 
@@ -62,6 +64,7 @@ public class ServletDTO extends BaseServletDTO {
 	 * enabled for this servlet, {@code 0} is returned.
 	 * 
 	 * @since 1.1
+	 * @see #multipartEnabled
 	 */
 	public long					multipartMaxFileSize;
 
@@ -70,6 +73,7 @@ public class ServletDTO extends BaseServletDTO {
 	 * servlet, {@code 0} is returned.
 	 * 
 	 * @since 1.1
+	 * @see #multipartEnabled
 	 */
 	public long					multipartMaxRequestSize;
 }
