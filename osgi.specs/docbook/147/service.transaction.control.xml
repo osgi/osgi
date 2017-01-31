@@ -91,6 +91,17 @@
           the state of a Scope</para>          
         </listitem>
       </itemizedlist>
+      
+      <figure>
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.100in"
+                       contentwidth="7.000in" fileref="transaction-control-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
     </section>
     
     <section>
