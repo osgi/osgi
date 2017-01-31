@@ -13,4 +13,4 @@ org.jboss.logging.jboss-logging; version=3.2.1
 org.jboss.weld.osgi-bundle; version=2.4.1
 slf4j.api; version=1.7.7
 slf4j.nop; version=1.7.7
-org.osgi.service.cdi
+org.osgi.service.cdi;version=latest
