@@ -63,22 +63,29 @@
     
     <itemizedlist>
       <listitem>
-        <para><emphasis>Configuration Admin Service</emphasis> - yyy.</para>
+        <para><emphasis>Configuration Admin Service</emphasis> - Standard service to configure
+              OSGi-based systems.<remark>todo XREF</remark></para>
       </listitem>
       <listitem>
           <para><emphasis>Configuration Resource</emphasis> - A JSON resource in a bundle containing
-              configuration.</para>
+              configuration. This resource is processed, or <emphasis>extended</emphasis>, by an 
+              implementation of this specification.</para>
       </listitem>
       <listitem>
-        <para><emphasis>Configurator</emphasis> - yyy.</para>
+        <para><emphasis>Configurator</emphasis> - The configurator implements the behavior specified
+        in this specification. It processes configuration resources found in bundles and passes the
+        configuration data on to the Configuration Admin Service.</para>
       </listitem>
     
       <listitem>
-        <para><emphasis>Coordinator Service</emphasis> - yyy.</para>
+        <para><emphasis>Coordinator Service</emphasis> - The coordinator groups related operations 
+        to optimize handling of these operations. Using the coordinator with configuration updates
+        can minimize the volatility in the system. <remark>todo XREF</remark></para>
       </listitem>
     
       <listitem>
-        <para><emphasis>Persistent Identity (PID)</emphasis> - yyy.</para>
+        <para><emphasis>Persistent Identity (PID)</emphasis> - Configuration data is associated with 
+        a PID to identify the destination of this data. See <remark>todo XREF</remark></para>
       </listitem>
     
     </itemizedlist>
