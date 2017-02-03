@@ -28,7 +28,7 @@ public class CdiEvent {
 	 * An enum defining the states of a CDI container.
 	 *
 	 */
-	public static enum State {
+	public static enum Type {
 
 		/**
 		 * The CDI container has started being created.
@@ -49,6 +49,11 @@ public class CdiEvent {
 		 * The CDI container is completely destroyed.
 		 */
 		DESTROYED,
+
+		/**
+		 * The CDI container is waiting for dependent configurations.
+		 */
+		WAITING_FOR_CONFIGURATIONS,
 
 		/**
 		 * The CDI container is waiting for dependent extensions.
@@ -76,7 +81,7 @@ public class CdiEvent {
 	 * @param bundle
 	 * @param extenderBundle
 	 */
-	public CdiEvent(State type, Bundle bundle, Bundle extenderBundle) {
+	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle) {
 		this(type, bundle, extenderBundle, null, null);
 	}
 
@@ -84,24 +89,24 @@ public class CdiEvent {
 	 * @param type
 	 * @param bundle
 	 * @param extenderBundle
-	 * @param payload
+	 * @param dependencies
 	 */
-	public CdiEvent(State type, Bundle bundle, Bundle extenderBundle, String payload) {
-		this(type, bundle, extenderBundle, payload, null);
+	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle, String dependencies) {
+		this(type, bundle, extenderBundle, dependencies, null);
 	}
 
 	/**
 	 * @param type
 	 * @param bundle
 	 * @param extenderBundle
-	 * @param payload
+	 * @param dependencies
 	 * @param cause
 	 */
-	public CdiEvent(State type, Bundle bundle, Bundle extenderBundle, String payload, Throwable cause) {
+	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle, String dependencies, Throwable cause) {
 		this.type = type;
 		this.bundle = bundle;
 		this.extenderBundle = extenderBundle;
-		this.payload = payload;
+		this.dependencies = dependencies;
 		this.cause = cause;
 		this.timestamp = System.currentTimeMillis();
 
@@ -115,9 +120,9 @@ public class CdiEvent {
 		sb.append(this.bundle);
 		sb.append("',extenderBundle:'");
 		sb.append(this.extenderBundle);
-		if (this.payload != null) {
+		if (this.dependencies != null) {
 			sb.append("',payload:'");
-			sb.append(this.payload);
+			sb.append(this.dependencies);
 		}
 		if (this.cause != null) {
 			sb.append("',cause:'");
@@ -152,8 +157,8 @@ public class CdiEvent {
 	/**
 	 * @return the payload associated with this event
 	 */
-	public String getPayload() {
-		return payload;
+	public String getDependencies() {
+		return dependencies;
 	}
 
 	/**
@@ -166,7 +171,7 @@ public class CdiEvent {
 	/**
 	 * @return the state of this event
 	 */
-	public State getState() {
+	public Type getType() {
 		return type;
 	}
 
@@ -178,9 +183,9 @@ public class CdiEvent {
 	private final Bundle bundle;
 	private final Throwable cause;
 	private final Bundle extenderBundle;
-	private final String payload;
+	private final String dependencies;
 	private final long timestamp;
-	private final State type;
+	private final Type type;
 	private final String string;
 
 }

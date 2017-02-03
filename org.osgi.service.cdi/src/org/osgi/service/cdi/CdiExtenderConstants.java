@@ -40,32 +40,22 @@ public class CdiExtenderConstants {
 	public static final String	CDI_EXTENSION						= "osgi.cdi.extension";
 
 	/**
-	 * The 'beans' directive on the CDI extender requirement.
+	 * The 'beans' attribute on the CDI extender requirement.
 	 *
 	 * <p>
-	 * The value of this directive is a comma delimited list of bean class names
-	 * that should be processed by the CDI container. When used, no other
-	 * classes in the bundle should be instantiated as beans. This set of class
-	 * names may be further reduced by exclusions in the beans.xml file.
+	 * The value of this attribute is a comma delimited list of bean CDI bean
+	 * descriptor files to be searched on the <code>Bundle-ClassPath</code>.
 	 */
-	public static final String	REQUIREMENT_BEANS_DIRECTIVE			= "beans";
+	public static final String	REQUIREMENT_BEANS_ATTRIBUTE			= "beans";
 
 	/**
-	 * The 'references' directive on the CDI extender requirement.
+	 * The 'osgi-beans' attribute on the CDI extender requirement.
 	 *
 	 * <p>
-	 * The value of this directive is a comma delimited list of bean class names
-	 * who's injection points should be satisfied by OSGi services.
+	 * The value of this attribute is the name of the OSGi Beans Description
+	 * file. The default value when unspecified is
+	 * <code>OSGI-INF/cdi/osgi-beans.xml</code>.
 	 */
-	public static final String	REQUIREMENT_REFERENCES_DIRECTIVE	= "references";
-
-	/**
-	 * The 'services' directive on the CDI extender requirement.
-	 *
-	 * <p>
-	 * The value of this directive is a comma delimited list of bean class names
-	 * that should be published as OSGi services.
-	 */
-	public static final String	REQUIREMENT_SERVICES_DIRECTIVE		= "services";
+	public static final String	REQUIREMENT_OSGI_BEANS_ATTRIBUTE	= "osgi-beans";
 
 }

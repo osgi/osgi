@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,22 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.inject.Qualifier;
-import javax.inject.Scope;
+import javax.inject.Inject;
 
 /**
- * When a bean is registered as a service, it must be registered with prototype
- * scope and an instance of the bean must be created for each distinct request
- * for the service.
+ * Annotation used with {@link Inject} in order to have Configuration Admin
+ * configurations injected into CDI beans.
+ *
+ * The values are PIDs of required configurations. The special value
+ * <code>$</code> is used to refer to the host bean class name.
  */
-@Qualifier
-@Target(value = { ElementType.TYPE })
+@Target(value = ElementType.ANNOTATION_TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
-@Scope
-public @interface PrototypeScoped {
+public @interface Configuration {
+
+	/**
+	 * @return the PIDs of the required configurations
+	 */
+	String[] value() default "$";
 }
