@@ -30,7 +30,7 @@ import javax.inject.Inject;
  * The values are PIDs of required configurations. The special value
  * <code>$</code> is used to refer to the host bean class name.
  */
-@Target(value = ElementType.ANNOTATION_TYPE)
+@Target(value = {ElementType.FIELD, ElementType.PARAMETER})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 public @interface Configuration {

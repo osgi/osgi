@@ -34,11 +34,11 @@ public @interface ServiceProperty {
 	String key();
 
 	/**
-	 * The value of the property.
+	 * The value(s) of the property.
 	 *
-	 * @return the value
+	 * @return the value(s)
 	 */
-	String value();
+	String[] value();
 
 	/**
 	 * The type of the property.
