@@ -51,13 +51,10 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
-import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.namespace.contract.ContractNamespace;
 import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.namespace.service.ServiceNamespace;
 import org.osgi.resource.Capability;
-import org.osgi.resource.Namespace;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
@@ -2287,26 +2284,26 @@ public class CMControl extends DefaultTestBundleControl {
 			final Hashtable<String,Object> newprops = new Hashtable<String,Object>();
 			newprops.put("somekey", "somevalue");
 			newprops.put("array", new long[] {1, 2});
-			conf.updateIfDifferent(newprops);
+			assertTrue(conf.updateIfDifferent(newprops));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 
 			assertEquals(1, events.size());
 
 			// update again with same props
-			conf.updateIfDifferent(newprops);
+			assertFalse(conf.updateIfDifferent(newprops));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 			assertEquals(1, events.size());
 
             // check array compare
             newprops.put("array", new Long[] {1L, 2L});
-			conf.updateIfDifferent(newprops);
+			assertFalse(conf.updateIfDifferent(newprops));
 			assertEquals(startLevel + 1, conf.getChangeCount());
 			assertEquals(1, events.size());
             
             // update once more with different props
 			final Hashtable<String,Object> props2 = new Hashtable<String,Object>();
 			props2.put("somekey", "newvalue");
-			conf.updateIfDifferent(props2);
+			assertTrue(conf.updateIfDifferent(props2));
 			assertEquals(startLevel + 2, conf.getChangeCount());
 
 			assertEquals(2, events.size());
@@ -3737,7 +3734,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue("Unique pid", !pids.contains(conf.getPid()));
 			assertEquals("Correct factory pid", factorypid,
 					conf.getFactoryPid());
-			assertEquals("Correct pid", factorypid + "#" + String.valueOf(i),
+			assertEquals("Correct pid", factorypid + "~" + String.valueOf(i),
 					conf.getPid());
 			assertEquals("Correct location", null,
 					getBundleLocationForCompare(conf));
@@ -3761,7 +3758,7 @@ public class CMControl extends DefaultTestBundleControl {
 					String.valueOf(i), null);
 			assertEquals("Correct factory pid", factorypid,
 					conf.getFactoryPid());
-			assertEquals("Correct pid", factorypid + "#" + String.valueOf(i),
+			assertEquals("Correct pid", factorypid + "~" + String.valueOf(i),
 					conf.getPid());
 			assertEquals(String.valueOf(i), conf.getProperties().get("val"));
 		}
