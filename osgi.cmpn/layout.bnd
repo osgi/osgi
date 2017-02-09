@@ -32,11 +32,14 @@ osgi.cmpn.specs = \
      org.osgi.service.repository, \
      org.osgi.service.resolver, \
      org.osgi.service.rest, \
+     org.osgi.service.serializer, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
+     org.osgi.service.transaction.control, \
      org.osgi.service.upnp, \
      org.osgi.service.useradmin, \
      org.osgi.service.wireadmin, \
+     org.osgi.util.converter, \
      org.osgi.util.function, \
      org.osgi.util.measurement, \
      org.osgi.util.position, \
