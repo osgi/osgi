@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * Specify the key name for a type member.
  * <p>
  * When mapping a member name to a key name, the value of this annotation will
- * be used, if specified, instead of the method name to key name mapping rules
+ * be used, if specified, instead of the member name to key name mapping rules
  * in the <i>Converter Specification</i>.
  * 
  * <pre>
