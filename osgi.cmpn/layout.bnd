@@ -40,6 +40,7 @@ osgi.cmpn.specs = \
      org.osgi.service.useradmin, \
      org.osgi.service.wireadmin, \
      org.osgi.util.converter, \
+     org.osgi.util.converter.annotations, \
      org.osgi.util.function, \
      org.osgi.util.measurement, \
      org.osgi.util.position, \

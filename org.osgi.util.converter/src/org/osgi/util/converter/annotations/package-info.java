@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Converter Package Version 1.0.
+ * Converter Package Annotations Version 1.0.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
@@ -24,15 +24,15 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.converter; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.util.converter.annotations; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.util.converter; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.util.converter.annotations; version="[1.0,1.1)"}
  * 
  * @author $Id$
  */
 @Version("1.0")
-package org.osgi.util.converter;
+package org.osgi.util.converter.annotations;
 
 import org.osgi.annotation.versioning.Version;
