@@ -5020,9 +5020,9 @@ public class MyComponent {
         example, using these component property types as annotations:</para>
 
         <programlisting>@Component
-@ServiceDescription(service_description=”My Acme Service implementation”)
-@ServiceRanking(service_ranking=100)
-@ServiceVendor(service_vendor="My Corp")
+@ServiceDescription(”My Acme Service implementation”)
+@ServiceRanking(100)
+@ServiceVendor("My Corp")
 public class MyComponent implements AcmeService {}</programlisting>
 
         <para>will result in the following component properties:</para>
