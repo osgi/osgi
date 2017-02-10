@@ -31,7 +31,6 @@ osgi.enterprise.specs = \
      org.osgi.service.transaction.control, \
      org.osgi.service.useradmin, \
      org.osgi.util.converter, \
-     org.osgi.util.converter.annotations, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
      org.osgi.util.pushstream, \

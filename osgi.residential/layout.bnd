@@ -25,7 +25,6 @@ osgi.residential.specs = \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.usbinfo, \
 	 org.osgi.service.useradmin, \
-     org.osgi.util.converter.annotations, \
      org.osgi.util.function, \
      org.osgi.util.promise, \
      org.osgi.util.pushstream, \
