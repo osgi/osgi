@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -215,7 +215,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 4, 1000, null);
 		createConfigurationPlugin(context, 5, 1001, null);
 
-		registerManagerService(pid, synchronizer);
+		registerManagedService(pid, synchronizer);
 
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -293,7 +293,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 4, 1000, null);
 		createConfigurationPlugin(context, 5, 1001, null);
 
-		registerManagerServiceFactory(pid, synchronizer);
+		registerManagedServiceFactory(pid, synchronizer);
 
 		trace("Wait until the ManagedServiceFactory has gotten the update");
 
@@ -359,7 +359,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 3, 3, "foo");
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		registerManagerService(pid, synchronizer);
+		registerManagedService(pid, synchronizer);
 
 		trace("Wait until the ManagedService has gotten the update");
 
@@ -387,7 +387,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 		createConfigurationPlugin(context, 3, 3, "foo");
 
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		registerManagerServiceFactory(factoryPid, synchronizer);
+		registerManagedServiceFactory(factoryPid, synchronizer);
 
 		trace("Wait until the ManagedServiceFactory has gotten the update");
 
@@ -504,7 +504,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * @param synchronizer The synchronizer
 	 * @throws Exception if something goes wrong
 	 */
-	private void registerManagerService(final String pid,
+	private void registerManagedService(final String pid,
 			final Synchronizer synchronizer) throws Exception {
 		trace("Create and register a new ManagedService");
 
@@ -527,7 +527,7 @@ public class ConfigurationPluginTests extends DefaultTestBundleControl {
 	 * @param synchronizer The synchronizer
 	 * @throws Exception if something goes wrong
 	 */
-	private void registerManagerServiceFactory(final String factoryPid,
+	private void registerManagedServiceFactory(final String factoryPid,
 			final Synchronizer synchronizer) throws Exception {
 		trace("Create and register a new ManagedServiceFactory");
 
