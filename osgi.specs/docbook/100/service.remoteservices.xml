@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo xml:id="service.remoteservices-version">Version
-    1.0</releaseinfo>
+    1.1</releaseinfo>
   </info>
 
   <para>The OSGi framework provides a <emphasis>local</emphasis> service
@@ -579,6 +579,29 @@ tracker.open();</programlisting>
     linkend="i1674930"/>. When designing a vocabulary for a distribution
     provider it is recommended to closely follow the vocabulary of intents
     defined in the SCA Policy Framework.</para>
+    
+    <section>
+      <title>Private Remote Services: osgi.private</title>
+      
+      <para>In many deployment scenarios, including cloud, embedded or IoT deployments, hosts may be 
+      accessible via a public 
+      network and via a private network. In such cases hosts will have multiple IP addresses 
+      to separate public network access from private network access.
+      Private IP addresses normally 
+      in one of the following blocks: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> or 
+      <code>192.168.0.0/16</code>.</para>
+  
+      <para>In many cases it is desirable to expose remote services only on the private 
+      network so that these services cannot be accessed from the outside world. This is especially 
+      useful if this service is used as a microservice within a larger application. The 
+      <code>osgi.private</code> intent can be specified for this purpose. </para>
+      
+      <para>If the <code>osgi.private</code> intent is required on the remote service, it will only be 
+      exposed as a remote service on a private network on the host. If the host does not support
+      a private IP address or if the Remote Services implementation does not have the information
+      to decide whether a host IP is private, the service should not be exposed.
+      </para>
+    </section>
   </section>
 
   <section>
@@ -1169,5 +1192,15 @@ com.acme.rmi.path = service-id/24</programlisting>
       <bibliomixed xml:id="i1721171"><title>Java Language
       Specification</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
+  </section>
+  
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added intents: <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
