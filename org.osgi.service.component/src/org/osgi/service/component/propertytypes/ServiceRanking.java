@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ComponentPropertyType;
-import org.osgi.util.converter.annotations.KeyName;
 
 /**
  * Component Property Type for the {@code service.ranking} service property.
@@ -46,6 +45,5 @@ public @interface ServiceRanking {
 	 * @return The service ranking.
 	 * @see Constants#SERVICE_RANKING
 	 */
-	@KeyName(Constants.SERVICE_RANKING)
-	int value();
+	int service_ranking();
 }
