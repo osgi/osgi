@@ -4991,8 +4991,11 @@ public class MyComponent {
           </listitem>
 
           <listitem>
-            <para>Return <code>null</code> for String, Class, enum and array
-            method types.</para>
+            <para>Return <code>null</code> for String, Class, and enum.</para>
+          </listitem>
+
+          <listitem>
+            <para>Return an empty array for array method types.</para>
           </listitem>
 
           <listitem>
@@ -5674,6 +5677,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         <para>A set of standard component property types for standard service
         properties has been defined. See <xref
         linkend="service.component-standard.component.property.types"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>If there is no corresponding component property for a component
+        property type method returning an array type, the component property
+        type method must return an empty array instead of null. See <xref
+        linkend="service.component-component.property.value.coercion"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
