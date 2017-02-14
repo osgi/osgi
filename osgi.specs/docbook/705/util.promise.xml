@@ -244,7 +244,8 @@
 
     <para>To be notified when a Promise has been resolved, callbacks are used.
     The Promise API provides two forms of callbacks: the basic
-    <code>Runnable</code> callback and the more specialized <xref
+    <code>Runnable</code> and <xref linkend="org.osgi.util.function.Callback"
+    xrefstyle="hyperlink"/> callbacks and the more specialized <xref
     linkend="org.osgi.util.promise.Success" xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Failure" xrefstyle="hyperlink"/>
     callbacks.</para>
@@ -291,6 +292,33 @@ answer.onResolve(new Runnable() {
       linkend="org.osgi.util.promise.Promise.onResolve-Runnable-"
       xrefstyle="hyperlink"/> method returns the Promise object upon which it
       is called.</para>
+    </section>
+
+    <section xml:id="util.promise-callbacks.callback">
+      <title>Callback</title>
+
+      <para>The <xref linkend="org.osgi.util.promise.Promise.then-Callback-"
+      xrefstyle="hyperlink"/> method is used to register a <xref
+      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/> with
+      the Promise which must be called when the Promise is resolved either
+      successfully with a value or unsuccessfully with a failure. The resolved
+      Promise is not passed to the <xref
+      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/>, so if
+      the <xref linkend="org.osgi.util.function.Callback"
+      xrefstyle="hyperlink"/> implementation needs access to the resolved
+      Promise, it must take care to ensure it has access.</para>
+
+      <programlisting>final Promise&lt;String&gt; answer = getTimeConsumingAnswer().then(new Callback() {
+  public void run() throws Exception {
+    doSomethingWithAnswer(answer);
+  }
+});</programlisting>
+
+      <para>The <xref linkend="org.osgi.util.promise.Promise.then-Callback-"
+      xrefstyle="hyperlink"/> method returns a new Promise which will be
+      resolved with either the exception thrown from the <xref
+      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/>, if
+      one is thrown, or with the Promise.</para>
     </section>
 
     <section>
@@ -480,6 +508,29 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         returned by the fallbackTo method is unsuccessfully resolved with the
         failure of the Promise.</para>
       </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.util.promise.Promise.timeout-long-"
+        xrefstyle="hyperlink"/> - Time out the resolution of the
+        Promise.</para>
+
+        <para>If the Promise is successfully resolved before the timeout, the
+        returned Promise is resolved with the value of the Promise. If the
+        Promise is resolved with a failure before the timeout, the returned
+        Promise is resolved with the failure of the Promise. If the timeout is
+        reached before the Promise is resolved, the returned Promise is failed
+        with a <xref linkend="org.osgi.util.promise.TimeoutException"
+        xrefstyle="hyperlink"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.util.promise.Promise.delay-long-"
+        xrefstyle="hyperlink"/> - Delay after the resolution of the
+        Promise.</para>
+
+        <para>Once the Promise is resolved, resolve the returned Promise with
+        the Promise after the specified delay.</para>
+      </listitem>
     </itemizedlist>
 
     <para>These functions can be used to build pipelines of chained Promises
@@ -512,12 +563,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     These are equivalent to functional interfaces which are part of the
     <code>java.util.function</code> package introduced in Java 8. Since OSGi
     intends the Promise API to be usable on versions of Java prior to Java 8,
-    we define our own interfaces. In the future, if Java 8 or later, becomes
-    the base supported Java level for this specification, OSGi can update the
-    <xref linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
-    interface to add default methods which accept the
-    <code>java.util.function</code> versions of these functional
-    interfaces.</para>
+    we define our own interfaces.</para>
   </section>
 
   <section>
@@ -592,7 +638,13 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
         <listitem>
           <para>The Callback functional interface is added to the
-          org.osgi.util.function package.</para>
+          org.osgi.util.function package. A new method is added to Promise
+          which accepts a Callback. See <xref
+          linkend="util.promise-callbacks.callback"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>New timeout and delay methods are added to Promise.</para>
         </listitem>
       </itemizedlist></para>
   </section>
