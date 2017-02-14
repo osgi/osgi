@@ -64,7 +64,6 @@ public class Rasterizer {
 	/**
 	 * @param svgPaths
 	 * @param outputPath
-	 * @param type
 	 * @param scale
 	 * @param dpi
 	 */
@@ -91,7 +90,6 @@ public class Rasterizer {
 	 *
 	 * @param inputPath the full path to an SVG image
 	 * @param outputPath a directory in which to output the PNG image
-	 * @param type
 	 * @param scale
 	 * @param dpi
 	 * @throws Exception if there was a processing exception
