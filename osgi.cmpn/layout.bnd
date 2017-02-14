@@ -11,6 +11,7 @@ osgi.cmpn.specs = \
      org.osgi.service.cm, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
+     org.osgi.service.configurator, \
      org.osgi.service.coordinator, \
      org.osgi.service.deploymentadmin, \
      org.osgi.service.device, \
