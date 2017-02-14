@@ -14,6 +14,7 @@ companion.code = true
 Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${replace;${osgi.enterprise.packages};.+;$0\\;-split-package:=first}
+-fixupmessages.export: Unused Export-Package instructions
 
 -includeresource 				: ${osgi.enterprise.resources}
 
