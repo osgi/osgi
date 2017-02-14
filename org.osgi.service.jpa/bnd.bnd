@@ -6,4 +6,6 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath = \
     osgi.annotation; version=6.0.1, \
     osgi.core; version=4.3.1, \
-    org.eclipse.persistence.jpa_spec; version=2.0
+    org.eclipse.persistence.jpa_spec; version=2.0; packages=javax.persistence.*
+
+-fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values
