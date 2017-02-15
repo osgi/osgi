@@ -12,7 +12,8 @@
   <title>Configurator Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.configurator-version">Version 1.0</releaseinfo>    
+    <releaseinfo><xref endterm="org.osgi.service.configurator-version"
+    linkend="org.osgi.service.configurator"/></releaseinfo>    
   </info>
   
   <section>
@@ -599,6 +600,8 @@
     <para>...</para>
   </section>
     
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.configurator.xml"/>
+
   <section>
     <title>References</title>
 
