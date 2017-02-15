@@ -293,6 +293,11 @@
           </imageobject>
         </mediaobject>
       </figure>
+
+      <para><xref linkend="org.osgi.framework.wiring.dto.FrameworkWiringDTO"
+      xrefstyle="hyperlink"/> represents the complete capabilities and
+      requirements wiring information for all the bundles in the
+      framework.</para>
     </section>
 
     <section>
@@ -439,6 +444,16 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
             the System Bundle. If the bundle is not the System Bundle, the
             result is <code>null</code>.</para></entry>
           </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.wiring.dto.FrameworkWiringDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Framework Wiring Data Transfer Object if the
+            bundle is the System Bundle. If the bundle is not the System
+            Bundle, the result is <code>null</code>.</para></entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -479,6 +494,12 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
     <itemizedlist>
       <listitem>
         <para>Added support for enums and Version fields in DTOs.</para>
+      </listitem>
+
+      <listitem>
+        <para>A new DTO for the complete framework wiring, <xref
+        linkend="org.osgi.framework.wiring.dto.FrameworkWiringDTO"
+        xrefstyle="hyperlink"/>, is added.</para>
       </listitem>
     </itemizedlist>
   </section>
