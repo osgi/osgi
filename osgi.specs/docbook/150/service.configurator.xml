@@ -123,7 +123,6 @@
     // Global Settings
     ":configurator:json-version" : 1,
     
-    // Configurations
     "configurations": [
       {
            "service.pid": "pid.a",
@@ -134,7 +133,6 @@
       {
            "service.pid": "pid.b",
            "a_boolean" : true
-           // No environments specified, always enabled
       }
     ]
 }</programlisting>
@@ -142,8 +140,8 @@
       Configuration resources provide an array of configurations with the <code>configurations</code> key. 
       Each configuration has a <code>service.pid</code> to target a specific PID in the Configuration Admin
       Service and zero or more configuration values for this PID. Comments in the form of JSMin comments are 
-      supported, that is, any text after <code>//</code> is ignored and any text between <code>/* */</code> is
-      ignored. 
+      supported, that is, any text on the same line after <code>//</code> is ignored and any text between 
+      <code>/* */</code> is ignored. 
     </para>
       
     <para>Configuration objects can define one or more environments by specifying the special key
@@ -224,7 +222,7 @@
   <section>
     <title>Factory Configurations</title>
     <para>Factory configurations can be addressed in the configuration PID using 
-      <code>PID#name</code> structure. This ensures a well-known name for the 
+      <code>PID~name</code> structure. This ensures a well-known name for the 
       factory configuration instance. The configurator must use the 
       <code>getFactoryConfiguration()</code> methods on Configuration Admin to 
       create or obtain configurations with the given PID and name.</para>
@@ -335,7 +333,7 @@
       is used. An alternative location can 
       be specified via the <code>configurator.binaries</code> framework property. The value of this property must be 
       an absolute path on the file system to which the configurator has write access. If the directory does not exist
-      or the configurator cannot write to this location, it logs an error and uses the default location instead.
+      the configurator will create it. If the configurator cannot write to this location, it logs an error and uses the default location instead.
       </para>  
 
       <para>When a configuration is removed, its associated binary files are also removed from the file system.
@@ -351,7 +349,8 @@
       can contain configurations for more than one runtime context for a given 
       PID. These contexts are named <emphasis>environments</emphasis>. Example environments could be 
       <emphasis>test</emphasis> and <emphasis>production</emphasis>. At runtime the active environments are
-      obtained from the <code>configurator.environments</code> framework property. This property must be specified
+      obtained using the <code>bundleContext.getProperty("configurator.environments")</code> method. 
+      This property must be specified
       as a comma-separated string which defines the set of active environments. 
       White space before and after the individual environment 
       names are ignored.
@@ -379,7 +378,8 @@
 }</programlisting>
 
       If more than one configuration for a PID can be applied, the one with the highest configuration ranking 
-      is applied. All others are ignored for this PID. If two configurations have the same ranking, the first 
+      is applied, see <xref linkend="service.configurator.ranking"/>. 
+      All others are ignored for this PID. If two configurations have the same ranking, the first 
       one found is used. In the example above all configurations have the same ranking. If the environment 
       <code>test</code> is active, the first configuration is used, if <code>prod</code> is active, the second 
       configuration is used.
@@ -425,7 +425,8 @@
     <para>Configuration policies are set by specifying the <code>:configurator:policy</code> property. Accepted 
     values are <code>default</code> and <code>force</code>. This policy defines the behavior when a configuration
     to be applied was set by another entity in the system, or if it was modified by someone from the values set by the 
-    configurator.
+    configurator. The default value for this property is <code>default</code>. If the specified value is invalid
+    an error is logged and the default value is used.
     
       <table>
         <title>Applying Configurations: Overwrite Policies</title>
@@ -449,6 +450,8 @@
         </tgroup>
       </table>
       
+      <remark>TODO add example</remark>
+      
       The configurator must keep track of configuration change count values to identify configurations 
       that were changed by other entities or administrators.
     </para>
@@ -458,7 +461,7 @@
       the configurator removes any configurations that is has provided on 
       behalf of this bundle from the system. 
       
-      Before it removes The configurator checks with Configuration Admin 
+      Before it removes a configuration the configurator checks with Configuration Admin 
       whether the configuration it has provided has been changed by another entity.
       
       If the configuration has not been changed by another entity it is removed.
@@ -494,8 +497,8 @@
     
   <section>
     <title>Initial Configurations</title>
-    <para>When the configurator starts it obtains the <code>configurator.initial</code> framework property to prime 
-    its state from the runtime environment. If this property is available its value is processed as follows:
+    <para>When the configurator starts it calls <code>bundleContext.getProperty("configurator.initial")</code> 
+    to obtain initial configurations from the runtime environment. If this property is available its value is processed as follows:
     
     <orderedlist>
       <listitem><para>If the value starts with a left curly bracket ('{' <code>\u007B</code>), ignoring any leading white space,
@@ -523,6 +526,9 @@
     where multiple configurations with different rankings are provided.
     </para>
     
+    <remark>Carsten: As we had the recent discussion with config admin and DS, I'm wondering if we should specify that the configurator uses the bundle context of the processed bundle to get the configuration admin. I somehow feel that this would make sense, but would make the implementation harder as there might be multiple configuration admins.
+    </remark>
+    
     <para>
     The configurator must also check whether configurations that it installed previously are still valid. If the bundles that provided
     these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
@@ -543,7 +549,7 @@
     coordination is present the configurator starts an implicit coordination on the current thread
     and ends it when it is finished doing its work.</para>
      
-    <para>If no coordinator is present or is there is already an implicit coordination, the configurator
+    <para>If no coordinator service is present or if there is already an implicit coordination, the configurator
     does not need to do anything.</para>
     
     <para>The configurator does not need to delay applying 
