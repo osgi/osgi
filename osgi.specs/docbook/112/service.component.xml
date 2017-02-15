@@ -5412,6 +5412,22 @@ public class MyComponent implements AcmeService {}</programlisting>
       some Satisfied Reference DTOs and some Unsatisfied Reference DTOs. This
       information can be used to diagnose why the component configuration is
       not satisfied.</para>
+
+      <para>SCR must register the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service with the
+      <code>service.changecount</code> service property. See
+      <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>. Whenever the
+      Service Component Runtime DTOs available from the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service change, SCR modify the
+      <code>service.changecount</code> service property with an updated change
+      count value. This allows interested parties to be notified of changes to
+      the DTOs by observing Service Events of type <code>MODIFIED</code> for
+      the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service.</para>
     </section>
 
     <section xml:id="service.component-capabilities">
