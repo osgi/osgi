@@ -146,7 +146,7 @@
       
     <para>Configuration objects can define one or more environments by specifying the special key
       <code>:configurator:environments</code>. These configurations are only applied if one or more of these
-      environments are active. For more information see <xref linkend="service.configurator.environments"/>. 
+      environments are active. For more information see <xref linkend="service.configurator-environments"/>. 
     </para>
 
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
@@ -155,7 +155,7 @@
     
     <para>
       If multiple bundles provide configuration for the same PID ranking rules are used to decide which configuration
-      gets applied, see <xref linkend="service.configurator.ranking"/>.   
+      gets applied, see <xref linkend="service.configurator-ranking"/>.   
     </para>
 
     <para>
@@ -189,7 +189,7 @@
                 <entry><para><code>:configurator:«</code></para><para><code>&#160;&#160;environments</code></para></entry>
                 <entry><para>String <emphasis>or</emphasis></para><para>Array of String</para></entry>
                 <entry>Configuration</entry>
-                <entry>Environments that this configuration applies to. See <xref linkend="service.configurator.environments"/>.</entry>
+                <entry>Environments that this configuration applies to. See <xref linkend="service.configurator-environments"/>.</entry>
               </row>
               
               <row>
@@ -197,14 +197,14 @@
                 <entry>String <code>default</code> or <code>force</code></entry>
                 <entry>Configuration</entry>
                 <entry>Specifies the overwrite policy on configurations set by non-configurator sources.
-                See <xref linkend="service.configurator.policy"/>.</entry>
+                See <xref linkend="service.configurator-policy"/>.</entry>
               </row>
               
               <row>
                 <entry><code>:configurator:ranking</code></entry>
                 <entry>Number</entry>
                 <entry>Configuration</entry>
-                <entry>The ranking of this configuration. See <xref linkend="service.configurator.ranking"/>.</entry>
+                <entry>The ranking of this configuration. See <xref linkend="service.configurator-ranking"/>.</entry>
               </row>
 
               <row>
@@ -343,7 +343,7 @@
     </section>
   </section>
 
-  <section xml:id="service.configurator.environments">
+  <section xml:id="service.configurator-environments">
     <title>Environments</title>
     <para>A single configuration resource or set of configuration resources
       can contain configurations for more than one runtime context for a given 
@@ -378,7 +378,7 @@
 }</programlisting>
 
       If more than one configuration for a PID can be applied, the one with the highest configuration ranking 
-      is applied, see <xref linkend="service.configurator.ranking"/>. 
+      is applied, see <xref linkend="service.configurator-ranking"/>. 
       All others are ignored for this PID. If two configurations have the same ranking, the first 
       one found is used. In the example above all configurations have the same ranking. If the environment 
       <code>test</code> is active, the first configuration is used, if <code>prod</code> is active, the second 
@@ -388,7 +388,7 @@
     </para>
   </section>
     
-  <section xml:id="service.configurator.ranking">
+  <section xml:id="service.configurator-ranking">
     <title>Ranking</title>
     <para>The order in which the Configurator processes bundles is not defined. To control
       which configurations are in effect configuration ranking can be used. Configuration ranking is similar to
@@ -411,7 +411,7 @@
 
   </section>
   
-  <section xml:id="service.configurator.policy">
+  <section xml:id="service.configurator-policy">
     <title>Overwrite Policies</title>
     <para>In an IT operations scenario configurations are often updated by a systems administrator to suit the
     deployments requirements. In such scenarios it may be undesirable to have these modifications overwritten 
