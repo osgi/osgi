@@ -87,7 +87,7 @@
   <xi:include href="../147/service.transaction.control.xml"/>
 
   <xi:include href="../150/service.configurator.xml"/>
-  
+
   <xi:include href="../151/service.serializer.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
@@ -95,6 +95,6 @@
   <xi:include href="../705/util.promise.xml"/>
 
   <xi:include href="../706/util.pushstream.xml"/>
-  
+
   <xi:include href="../707/util.converter.xml"/>
 </book>

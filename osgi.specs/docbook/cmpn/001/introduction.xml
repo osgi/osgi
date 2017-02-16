@@ -535,20 +535,17 @@
               linkend="service.transaction.control"/></code></entry>
             </row>
 
-            <!--
             <row>
               <entry><xref linkend="service.configurator"
               xrefstyle="template:%n %t"/></entry>
 
               <entry><para><code><xref
-              linkend="org.osgi.service.configurator"/></code></para><para><code><xref
-              linkend="org.osgi.service.configurator.util"/></code></para></entry>
+              linkend="org.osgi.service.configurator"/></code></para></entry>
 
               <entry><code><xref
               endterm="org.osgi.service.configurator-version"
               linkend="service.configurator"/></code></entry>
             </row>
--->
 
             <row>
               <entry><xref linkend="util.xml"
