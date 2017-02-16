@@ -389,7 +389,8 @@ String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</progr
           <programlisting>// Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
 cb.rule(int[].class, String.class,
-  v -> Arrays.stream(v).mapToObj(Integer::toString).collect(Collectors.joining(",")),
+  v -> Arrays.stream(v).mapToObj(Integer::toString).
+      collect(Collectors.joining(",")),
   v -> Arrays.stream(v.split(",")).mapToInt(Integer::parseInt).toArray());
 Converter c = cb.build();
 
@@ -1001,7 +1002,8 @@ ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
 Converter c = cb.build();
     
-String s = c.convert(new Date()).to(String.class); // s = "160923102853+0100" or similar</programlisting>
+String s = c.convert(new Date()).to(String.class);
+// s = "160923102853+0100" or similar</programlisting>
     Custom conversions are also applied to embedded conversions that are part of a map or other enclosing object:
     <programlisting>class MyBean {
   //... fields ommitted
