@@ -255,12 +255,12 @@ public abstract class ResolveContext {
 
 	/**
 	 * Returns the subset of {@link Wiring#getRequiredResourceWires(String)
-	 * require wires} that provide wires to {@link Capability capabilities}
+	 * required} wires that provide wires to {@link Capability capabilities}
 	 * which substitute capabilities of the wiring. For example, when a
 	 * {@link PackageNamespace package} name is both provided and required by
 	 * the same resource. If the package requirement is resolved to a capability
-	 * hosted by a different wiring then the package capability is considered to
-	 * be substituted.
+	 * provided by a different wiring then the package capability is considered
+	 * to be substituted.
 	 * <p>
 	 * The resolver asks the resolve context to return substitution wires for
 	 * each wiring that {@link Wiring#getResourceCapabilities(String) provides}
@@ -270,21 +270,24 @@ public abstract class ResolveContext {
 	 * Note that this method searches all the {@link PackageNamespace package}
 	 * capabilities declared as {@link Resource#getCapabilities(String)
 	 * provided} by the resource associated with the wiring and fragment
-	 * resources wired to the wiring. The provided package names are compared
-	 * against the {@link Wiring#getRequiredResourceWires(String) required}
-	 * package wires to determine which wires are substitution wires. Subclasses
-	 * of <code>ResolveContext</code> should provide a more efficient
+	 * resources wired to the wiring with the {@link HostNamespace host}
+	 * namespace. The provided package names are compared against the
+	 * {@link Wiring#getRequiredResourceWires(String) required} package wires to
+	 * determine which wires are substitution wires. Subclasses of
+	 * <code>ResolveContext</code> should provide a more efficient
 	 * implementation of this method.
 	 *
 	 * @param wiring the wiring to get the substitution wires for. Must not be
 	 *            {@code null}.
-	 * @return A collection containing a snapshot of the substitution
-	 *         {@link Wire}s for the {@link Requirement requirements} of this
-	 *         wiring, or an empty list if this wiring has no substitution
-	 *         wires.
+	 * @return A list containing a snapshot of the substitution {@link Wire}s
+	 *         for the {@link Requirement requirements} of the wiring, or an
+	 *         empty list if the wiring has no substitution wires. The list
+	 *         contains the wires in the order they are found in the
+	 *         {@link Wiring#getRequiredResourceWires(String) required} wires of
+	 *         the wiring.
 	 * @since 1.1
 	 */
-	public Collection<Wire> getSubstitutionWires(Wiring wiring) {
+	public List<Wire> getSubstitutionWires(Wiring wiring) {
 		// Keep track of the declared capability package names
 		Set<String> exportNames = new HashSet<String>();
 
@@ -311,9 +314,9 @@ public abstract class ResolveContext {
 			}
 		}
 
-		// collect the packages wires that substitute one of the declared
-		// exports
-		Collection<Wire> substitutionWires = new ArrayList<Wire>();
+		// collect the package wires that substitute one of the declared
+		// export package names
+		List<Wire> substitutionWires = new ArrayList<Wire>();
 		for (Wire wire : wiring.getRequiredResourceWires(null)) {
 			if (PackageNamespace.PACKAGE_NAMESPACE
 					.equals(wire.getCapability().getNamespace())) {
