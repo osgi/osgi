@@ -112,7 +112,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 	 * this resource is not effectively immutable but that makes testing more
 	 * convenient.
 	 */
-	protected final class TestResource implements Resource {
+	static protected final class TestResource implements Resource {
 
 		private Map<String, List<Requirement>> requirements = new HashMap<String, List<Requirement>>();
 		private Map<String, List<Capability>> capabilities = new HashMap<String, List<Capability>>();
@@ -324,10 +324,18 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected class TestWiring implements Wiring {
 			final List<Wire>	providedWires	= new ArrayList<>();
 			final List<Wire>	requiredWires	= new ArrayList<>();
+			final Set<Capability>	substituted		= new HashSet<>();
 
 			@Override
 			public List<Capability> getResourceCapabilities(String namespace) {
-				return TestResource.this.getCapabilities(namespace);
+				List<Capability> result = TestResource.this
+						.getCapabilities(namespace);
+				if (substituted.isEmpty()) {
+					return result;
+				}
+				result = new ArrayList<>(result);
+				result.removeAll(substituted);
+				return result;
 			}
 
 			@Override
@@ -337,11 +345,31 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 
 			@Override
 			public List<Wire> getProvidedResourceWires(String namespace) {
+				if (namespace != null) {
+					List<Wire> wires = new ArrayList<Wire>();
+					for (Wire wire : providedWires) {
+						if (namespace
+								.equals(wire.getRequirement().getNamespace())) {
+							wires.add(wire);
+						}
+					}
+					return wires;
+				}
 				return Collections.unmodifiableList(providedWires);
 			}
 
 			@Override
 			public List<Wire> getRequiredResourceWires(String namespace) {
+				if (namespace != null) {
+					List<Wire> wires = new ArrayList<Wire>();
+					for (Wire wire : requiredWires) {
+						if (namespace
+								.equals(wire.getCapability().getNamespace())) {
+							wires.add(wire);
+						}
+					}
+					return wires;
+				}
 				return Collections.unmodifiableList(requiredWires);
 			}
 
@@ -354,10 +382,10 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 	}
 
 	protected static enum ResolveContextMethod {
-		findProviders, findRelatedResources, getMandatoryResources, getOptionalResources, getWirings, insertHostedCapability, isEffective, onCancel
+		findProviders, findRelatedResources, getMandatoryResources, getOptionalResources, getSubtitutionWires, getWirings, insertHostedCapability, isEffective, onCancel
 	}
 
-	protected class TestResolveContext extends ResolveContext {
+	static protected class TestResolveContext extends ResolveContext {
 
 
 		protected final Collection<Resource> mandatoryResources;
@@ -367,6 +395,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected final Map<Requirement,List<Capability>>	matchingCapabilities	= new HashMap<>();
 		protected final Map<Resource,Collection<Resource>>	relatedResources		= new HashMap<>();
 		protected final Set<Requirement> callbackMemory = new HashSet<Requirement>();
+		protected final Set<Wiring>								callGetSubstitutionWires	= new HashSet<>();
 		protected boolean insertHostedCapabilityCalled;
 
 		protected final AtomicReference<ResolveContextMethod>	firstCalled				= new AtomicReference<>();
@@ -440,6 +469,15 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				assertTrue(callbackMemory.remove(req));
 			}
 			assertTrue(callbackMemory.isEmpty());
+		}
+
+		protected void checkGetSubstitutionWires(final Wiring... wirings) {
+			for (Wiring wiring : wirings) {
+				assertTrue(callGetSubstitutionWires.remove(wiring));
+			}
+			// Don't assert that the set is drained because it should be
+			// allowed to call this method for all wirings.
+			// Only check that the required wirings were used.
 		}
 
 		protected void checkInsertHostedCapabilityCalled() {
@@ -573,6 +611,14 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		public boolean isEffective(final Requirement requirement) {
 			firstCalled.compareAndSet(null, ResolveContextMethod.isEffective);
 			return true;
+		}
+
+		@Override
+		public List<Wire> getSubstitutionWires(Wiring wiring) {
+			firstCalled.compareAndSet(null,
+					ResolveContextMethod.getSubtitutionWires);
+			callGetSubstitutionWires.add(wiring);
+			return super.getSubstitutionWires(wiring);
 		}
 
 		@Override
