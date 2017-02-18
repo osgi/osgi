@@ -58,8 +58,8 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 
 		@Override
 		public List<Capability> findProviders(Requirement requirement) {
-			return candidates.getOrDefault(requirement,
-					Collections.emptyList());
+			List<Capability> result = candidates.get(requirement);
+			return result == null ? new ArrayList<>() : result;
 		}
 	}
 
