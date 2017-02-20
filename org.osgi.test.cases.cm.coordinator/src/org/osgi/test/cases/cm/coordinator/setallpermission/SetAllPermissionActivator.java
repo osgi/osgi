@@ -1,4 +1,4 @@
-package org.osgi.test.cases.cm.setallpermission;
+package org.osgi.test.cases.cm.coordinator.setallpermission;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

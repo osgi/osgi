@@ -69,7 +69,6 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
-import org.osgi.test.cases.cm.junit.CMControl.SyncEventListener;
 import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
@@ -3711,14 +3710,14 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test creating a factory configuration with an alias
+	 * Test creating a factory configuration with a name
 	 * 
 	 * @throws Exception
 	 * @since 1.6
 	 */
-	public void testGetFactoryConfigurationWithAlias() throws Exception {
+	public void testGetFactoryConfigurationWithName() throws Exception {
 		final int NUMBER_OF_CONFIGS = 3;
-		final String factorypid = Util.createPid("factorypidforalias");
+		final String factorypid = Util.createPid("factorypidforname");
 		final List<String> pids = new ArrayList<>();
 		final List<Configuration> configs = new ArrayList<>();
 
@@ -3753,7 +3752,7 @@ public class CMControl extends DefaultTestBundleControl {
 					cfgs[0].getFactoryPid());
 			assertEquals(configs.get(i).getPid(), cfgs[0].getPid());
 		}
-		// get factory configuration with same alias again
+		// get factory configuration with same name again
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 			Configuration conf = cm.getFactoryConfiguration(factorypid,
 					String.valueOf(i), null);
@@ -3763,7 +3762,7 @@ public class CMControl extends DefaultTestBundleControl {
 					conf.getPid());
 			assertEquals(String.valueOf(i), conf.getProperties().get("val"));
 		}
-		// and verify count of factory configs
+		// and verify count of factory configurations
 		// (should still be NUMBER_OF_CONFIGS)
 		assertEquals(NUMBER_OF_CONFIGS, cm.listConfigurations(
 				"(service.factoryPid=" + factorypid + ")").length);
@@ -3773,7 +3772,7 @@ public class CMControl extends DefaultTestBundleControl {
 			Configuration conf = configs.get(i);
 			conf.delete();
 		}
-		// ensure that no factory configs are available anymore
+		// ensure that no factory configurations are available anymore
 		for (final String p : pids) {
 			Configuration[] cfgs = cm.listConfigurations(
 					"(service.pid=" + p + ")");
@@ -3996,7 +3995,7 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("pid: " + conf.getPid());
 			configs.put(conf.getPid(), conf);
 		}
-		// Create some more factory configurations using alias
+		// Create some more factory configurations using names
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 			Configuration conf = cm.getFactoryConfiguration(factorypid,
 					String.valueOf(i));

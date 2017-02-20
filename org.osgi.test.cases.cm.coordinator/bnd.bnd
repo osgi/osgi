@@ -1,0 +1,38 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description: Configuration Management Test R7
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
+	
+Include-Resource					= \
+	setallpermission.jar
+	
+Import-Package: ${-signaturetest}, *
+	
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.cm
+
+-buildpath							= \
+	org.osgi.service.cm;			version=project, \
+    org.osgi.test.support;			version=project, \
+	osgi.core;						version=6.0.0, \
+    osgi.cmpn;                      version=6.0.0, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.coordinator; version=latest
+	
+-runproperties = ${runsecureproperties}
+
+
+
+
