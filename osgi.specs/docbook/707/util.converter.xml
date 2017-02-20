@@ -45,7 +45,7 @@
     
     <itemizedlist>
       <listitem>
-        <para><emphasis>Converter</emphasis> - a converter implements the Converter interface and can perform conversion operations.</para>
+        <para><emphasis>Converter</emphasis> - a converter can perform conversion operations.</para>
       </listitem>
       
       <listitem>
@@ -131,7 +131,9 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       <section>
         <title>Direct conversion between scalars</title>
         
-        <para>Direct conversion between certain scalar types is supported. For all other 
+        <para>Direct conversion between certain scalar types is supported. Except conversions from
+        <code>Map.Entry</code>, see <xref linkend="util.converter-special.cases.map.entry"/>,
+        all other 
         scalar types conversion is done by converting to <code>String</code> and then converting 
         into the target type.
         </para>
@@ -224,7 +226,8 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       </section>
       <section xml:id="util.converter-special.cases.string">
         <title>Special cases converting from String</title>
-        <remark>Removed from the following table: Boolean.parseBoolean(v) and Number.parseNumber(v) as both Boolean and Number have static valueOf()</remark>
+        <remark>Note this table contains Java 8 classes as discussed before. There was a desire
+        to make the converter compatible with Java 7 - need to discuss</remark>
         <table>
           <title>Special cases converting scalars from String</title>
           <tgroup cols="2">
@@ -240,6 +243,11 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
                 <entry><code>v.length() > 0 ? v.charAt(0) : 0</code></entry>
               </row>
                 
+              <row>
+                <entry><code>java.time.Duration</code></entry>
+                <entry><code>Duration.parse(v)</code></entry>
+              </row>
+
               <row>
                 <entry><code>java.time.Instant</code></entry>
                 <entry><code>Instant.parse(v)</code></entry>
@@ -261,8 +269,28 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
               </row>
   
               <row>
+                <entry><code>java.time.MonthDay</code></entry>
+                <entry><code>MonthDay.parse(v)</code></entry>
+              </row>
+
+              <row>
                 <entry><code>java.time.OffsetTime</code></entry>
                 <entry><code>OffsetTime.parse(v)</code></entry>
+              </row>
+  
+              <row>
+                <entry><code>java.time.OffsetDateTime</code></entry>
+                <entry><code>OffsetDateTime.parse(v)</code></entry>
+              </row>
+  
+              <row>
+                <entry><code>java.time.Year</code></entry>
+                <entry><code>Year.parse(v)</code></entry>
+              </row>
+  
+              <row>
+                <entry><code>java.time.YearMonth</code></entry>
+                <entry><code>YearMonth.parse(v)</code></entry>
               </row>
   
               <row>
@@ -371,7 +399,8 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
     <section>
       <title>Aggregates</title>
   
-      <para>Aggregates represent Collections and Arrays, including Lists and Sets.</para>
+      <para>Aggregates represent Collections and Arrays, including Lists, Sets, Queues and 
+      Double-ended Queues (<emphasis>Deques</emphasis>).</para>
       
       <section>
         <title>Converting to a scalar</title>
@@ -390,7 +419,7 @@ String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</progr
 ConverterBuilder cb = converter.newConverterBuilder();
 cb.rule(int[].class, String.class,
   v -> Arrays.stream(v).mapToObj(Integer::toString).
-      collect(Collectors.joining(",")),
+              collect(Collectors.joining(",")),
   v -> Arrays.stream(v.split(",")).mapToInt(Integer::parseInt).toArray());
 Converter c = cb.build();
 
@@ -411,7 +440,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
 
         <para>In all cases the object returned is a separate instance that
           can be owned by the client. Once the client modifies
-          the returned object it will stop reflecting changes to the backing object.</para>
+          the returned object a live view will stop reflecting changes to the backing object.</para>
         
         <table>
           <title>Collection / Array target creation</title>
@@ -431,16 +460,16 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
               </row>
               <row>
                 <entry>Other Collection interface</entry>
-                <entry>A mutable implementation is created. E.g. if the target type is 
-                <code>java.util.List</code> then the converter can create a
-                <code>java.util.ArrayList</code>. When converting to a <code>java.util.Set</code>
+                <entry>A mutable implementation is created. For example, if the target type is 
+                <code>java.util.Queue</code> then the converter can create a
+                <code>java.util.LinkedList</code>. When converting to a <code>java.util.Set</code>
                 the converter must choose a set implementation that preserves iteration order.</entry>
               </row>
               <row>
                 <entry>Collection concrete type</entry>
                 <entry>A new instance is created by calling <code>Class.newInstance()</code> on the 
-                provided type. For example if the target type is <code>LinkedList</code> then the 
-                converter creates a target object by calling <code>LinkedList.class.newInstance()</code>.
+                provided type. For example if the target type is <code>ArrayDeque</code> then the 
+                converter creates a target object by calling <code>ArrayDeque.class.newInstance()</code>.
                 The converter may choose to use a call a well-known constructor to optimize the
                 creation of the collection.</entry>
               </row>
@@ -459,7 +488,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
         methods. If no type information is available, source elements are inserted into the target 
-        aggregate as-is.</para>
+        aggregate as-is without further treatment.</para>
         
         <para>Example: 
         to convert an array of <code>String</code>s into a list of <code>Integer</code>s:
@@ -472,10 +501,11 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         the resulting set must preserve the same iteration order as the original array:
         
         <programlisting>Set&lt;Double&gt; result =
-  converter.convert(new int[] {3,2,1}).
-    to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})</programlisting>
+  converter.convert(new int[] {2,3,2,1}).
+    to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
+// result is 2,3,1</programlisting>
         
-        Values are inserted in the resulting Collection/array as follows:
+        Values are inserted in the target Collection/array as follows:
         
           <itemizedlist>
             <listitem>
@@ -483,23 +513,25 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             </listitem>
             
             <listitem>
-              <para>If the value is not a Collection, Array or Map-like structure (as described
+              <para>If the source is not a Collection, Array or Map-like structure (as described
               in <xref linkend="util.converter-special.cases.maps"/>) a target with
               a single element is produced. The value is first converted into the desired
               target type, if the target type is known.</para>
             </listitem>
             
             <listitem>
-              <para>If the value is a Collection or Array, then each of its elements is converted 
+              <para>If the source is a Collection or Array, then each of its elements is converted 
               into desired target type, if known, before inserting. Elements are inserted into the target
               collection in their normal iteration order.</para>
             </listitem>
             
             <listitem>
-              <para>If the value is a Map-like structure (as described
+              <para>If the source is a Map-like structure (as described
               in <xref linkend="util.converter-special.cases.maps"/>) then <code>Map.Entry</code> elements 
               are obtained from it via <code>Map.entrySet()</code>. 
-              Each <code>Map.Entry</code> element is then converted into the target type before inserting in the
+              Each <code>Map.Entry</code> element is then converted into the target type 
+              as described in <xref linkend="util.converter-special.cases.map.entry"/> 
+              before inserting in the
               target.</para>
             </listitem>
           </itemizedlist>         
@@ -517,7 +549,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
       include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We call these 
       <emphasis>map-like</emphasis> types.
-      Additionally objects that provide a map view
+      Additionally objects that provide a map view via <code>getProperties()</code>
       are supported.</para>
       
       <para>When converting between map-like types, a <code>Map</code> can be used as intermediary.
@@ -532,12 +564,12 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
           over the backing object that changes when the backing object changes. The live view can be 
           prevented by providing the 
           <xref linkend="org.osgi.util.converter.Converting.copy--" xrefstyle="hyperlink"/>
-          modifier. When converting to other collection types or arrays a copy is always produced.
+          modifier. When converting to other map types a copy is always produced.
         </para>
 
         <para>In all cases the object returned is a separate instance that
           can be owned by the client. When the client modifies
-          the returned object it will stop reflecting changes to the backing object.</para>
+          the returned object a live view will stop reflecting changes to the backing object.</para>
         <table>
           <title>Map target creation</title>
           <tgroup cols="2">
@@ -556,7 +588,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
               </row>
               <row>
                 <entry>Other Map interface</entry>
-                <entry>A mutable implementation is created. E.g. if the target type is 
+                <entry>A mutable implementation is created. For example, if the target type is 
                 <code>ConcurrentNavigableMap</code> then the implementation can create a 
                 <code>ConcurrentSkipListMap</code>.</entry>
               </row>
@@ -766,7 +798,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
       
       <section>
         <title>Annotation</title>
-        <para>Conversion to and from annotations behaves identical to 
+        <para>Conversion to and from annotations behaves similar to 
         interface conversion with the added capability of specifying a default in the annotation definition.
         </para>
         
@@ -810,21 +842,22 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         access their properties and have a public no-arg constructor. When converting from a Java Bean introspection
         is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
         value. The method name must start with <code>get</code> followed by a capitalized property name, 
-        e.g. <code>getSize()</code> provides access to the property <code>size</code>. 
+        for example <code>getSize()</code> provides access to the property <code>size</code>. 
         For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
         is also permitted.</para> 
         <para>
         For the converter to consider an object as a Java Bean the 
-          <xref linkend="org.osgi.util.converter.Converting.sourceAsBean--" xrefstyle="hyperlink"/>
+          <xref linkend="org.osgi.util.converter.Converting.sourceAsBean--" xrefstyle="hyperlink"/> or
+          <xref linkend="org.osgi.util.converter.Converting.targetAsBean--" xrefstyle="hyperlink"/>
         modifier needs to be invoked, for example:
           <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
         <para>When converting to a Java Bean, the bean is constructed eagerly. All available properties
-            are set in the bean using the bean's write accessors, i.e. public setters methods with a single argument. 
+            are set in the bean using the bean's write accessors, that is public setters methods with a single argument. 
             All methods of the bean class itself and its 
             super classes are considered. 
-            If a property cannot be converted this will cause a 
+            When a property cannot be converted this will cause a 
             <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
-            <remark>Discuss: so if any of the JavaBean's properties is missing that will cause a conversion exception!</remark>
+            If a property is missing in the source, the property will not be set in the bean.
             </para>
         <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
         find out the size of the array via these accessors.
@@ -841,10 +874,8 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class,
         however objects following the DTO rules that do not extend the DTO
         class are also treated as DTOs. 
-        DTOs may have static fields, these are ignored by the converter.</para>
+        DTOs may have static fields, or non-public instance fields. These are ignored by the converter.</para>
 
-        <remark>Is a class with private/package/protected fields a DTO?</remark>
-        
         <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
         entry in the source map and then converts the value to the field type before assigning it. They key of
         the map entries may need to be converted into a String first. Keys are mapped according to 
@@ -852,8 +883,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         
         <para>The DTO is constructed using its no-arg constructor and each public 
         field is filled with data from the source eagerly. Fields present in the DTO but missing in the source
-        object will cause a <code>ConversionException</code>. 
-        <remark>yes?</remark>
+        object not be set. 
         </para>
       </section>
       
@@ -862,7 +892,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         
         <para>The converter uses reflection to find a <code>java.util.Map getProperties()</code> or 
         <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
-        the source object. This map view is used to convert the source object to another map-like structure.</para>
+        the source object. This map view is used to convert the source object to a map-like structure.</para>
         
         <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
         The reverse is not supported</para>
@@ -955,21 +985,19 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         In some cases the converter needs to be instructed how to treat this target object.
         For example the desired target type might extend a DTO class adding some methods and behavior to 
         the DTO. As this target class now has methods, the converter will not recognize as a DTO.
-        The <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>
-        and <xref linkend="org.osgi.util.converter.Converting.targetAsBean--" xrefstyle="hyperlink"/>
+        The <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>,
+        <xref linkend="org.osgi.util.converter.Converting.targetAsBean--" xrefstyle="hyperlink"/>
+        and <xref linkend="org.osgi.util.converter.Converting.targetAsDTO--" xrefstyle="hyperlink"/>
         methods can be used here to instruct the converter to treat the target object as certain type
         of object to guide the conversion.
         </para>
         
         <para>For example:
         <programlisting>  MyExtendedDTO med = converter.convert(someMap).
-      targetAs(MyDTO.class).to(MyExtendedDTO.class)</programlisting>
+      targetDTO().to(MyExtendedDTO.class)</programlisting>
         In this example the converter will return a <code>MyExtendedDTO</code> instance
-        but it will treat is as a <code>MyDTO</code> type. The target class must provide
-        the same public API as the class specified with 
-        <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>.      
+        but it will treat is as a <code>MyDTO</code> type.      
       </para>
-        <remark>Do we need a targetAsDTO()? Or is targetAs() sufficient?</remark>
       </section>
     </section>
     
