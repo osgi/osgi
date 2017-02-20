@@ -35,13 +35,16 @@ import java.util.Set;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.SynchronousConfigurationListener;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationPermission;
@@ -209,7 +212,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 
 	/**
-	 * Test synchronous configuration listener This test
+	 * This test tests synchronous and plain configuration listeners. It
 	 * <ol>
 	 * <li>starts a coordination
 	 * <li>adds a synchronous listener
@@ -310,6 +313,82 @@ public class CMControl extends DefaultTestBundleControl {
 		assertEquals(ConfigurationEvent.CM_UPDATED, plainList.get(0).getType());
 		assertEquals(ConfigurationEvent.CM_UPDATED, plainList.get(1).getType());
 		assertEquals(ConfigurationEvent.CM_DELETED, plainList.get(2).getType());
+
+	}
+
+	/**
+	 * This test tests a managed service. It
+	 * <ol>
+	 * <li>starts a coordination
+	 * <li>adds a synchronous listener
+	 * <li>adds a plain listener
+	 * <li>creates/updates/deletes a configuration
+	 * <li>ends the coordination
+	 * <li>checks that synchronous listener is informed immediately
+	 * <li>plain listener is informed once coordination ends
+	 * </ol>
+	 *
+	 * @throws Exception
+	 * @since 1.6
+	 */
+	public void testManagedService() throws Exception {
+		// start a coordination
+		final Coordinator c = this.getService(Coordinator.class);
+		final Coordination coord = c.begin("cm-test", 0);
+		final List<Boolean> events = new ArrayList<>();
+
+		final String pid = this.getClass().getName() + ".mstestpid";
+
+		try {
+			// add managed service
+			final Dictionary<String,Object> msProps = new Hashtable<>();
+			msProps.put(Constants.SERVICE_PID, pid);
+
+			this.registerService(
+					ManagedService.class.getName(), new ManagedService() {
+
+						@Override
+						public void updated(Dictionary<String, ? > properties)
+								throws ConfigurationException {
+							events.add(properties != null);
+						}
+
+					}, msProps);
+
+
+			// create the configuration
+			final Dictionary<String,Object> props = new Hashtable<>();
+			props.put("key", "value");
+
+			final Configuration conf = this.cm.getConfiguration(pid);
+			conf.update(props);
+
+			sleep();
+			assertEquals(0, events.size());
+
+			// update configuration
+			props.put("key2", "value2");
+			conf.update(props);
+
+			sleep();
+			assertEquals(0, events.size());
+
+			// delete configuration
+			conf.delete();
+
+			sleep();
+			assertEquals(0, events.size());
+		} finally {
+			coord.end();
+		}
+
+		// wait and verify listener
+		sleep();
+		assertEquals(4, events.size());
+		assertFalse(events.get(0));
+		assertTrue(events.get(1));
+		assertTrue(events.get(2));
+		assertFalse(events.get(3));
 
 	}
 }
