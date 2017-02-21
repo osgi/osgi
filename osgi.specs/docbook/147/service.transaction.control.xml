@@ -1846,8 +1846,8 @@ txControl.required(() ->
         <code>org.osgi.service.transaction.control</code> package, and attributes
         indicating whether the service supports local and/or XA transactions. For example:</para>
 
-        <programlisting>Provide-Capability: osgi.service;
-    objectClass:List&lt;String&gt;="org.osgi.service.transaction.control.TransactionControl";
+        <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
+    "org.osgi.service.transaction.control.TransactionControl";
     uses:="org.osgi.service.transaction.control";osgi.local.enabled="true"</programlisting>
 
    <para>Resource Provider Implementations must provide capabilities in the <link
@@ -1864,13 +1864,13 @@ txControl.required(() ->
         For example:</para>
 
         <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
-    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider";uses:=
-    "org.osgi.service.transaction.control,org.osgi.service.transaction.control.jdbc";
-    osgi.local.enabled="true", 
+    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider";
+    uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
+    control.jdbc";osgi.local.enabled="true", 
     osgi.service;objectClass:List&lt;String&gt;=
-    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory";uses:=
-    "org.osgi.service.transaction.control,org.osgi.service.transaction.control.jdbc";
-    osgi.local.enabled="true"</programlisting>
+    "org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory";
+    uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
+    control.jdbc";osgi.local.enabled="true"</programlisting>
 
         <para>These capabilities must follow the rules defined for the <xref
         linkend="service.namespaces-osgi.service.namespace"/>.</para>
