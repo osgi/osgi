@@ -9,6 +9,7 @@ Bundle-Name: ${-groupid}:${bsn}
 
 -buildrepo: Local
 -releaserepo: Release
+-releaserepo.publish: ${env;PUBLISH_REPO}
 companion.code = true
 
 Export-Package: ${osgi.annotation.packages}

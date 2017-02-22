@@ -90,6 +90,13 @@ releaserepo             = ${build}/${target-dir}/repo
             path:="${build}/${bin}"; \
             command:="-signaturetest"
 
+-plugin.osgi.nexus: \
+    aQute.bnd.repository.maven.provider.MavenBndRepository; \
+        snapshotUrl="https://oss.sonatype.org/content/repositories/osgi-snapshots/"; \
+        releaseUrl="https://oss.sonatype.org/service/local/staging/deploy/maven2/"; \
+        index=${.}/osgi-nexus.mvn; \
+        name='OSGiNexus'
+
 -releaserepo:
 -maven-release: javadoc;path=${target}/docs/javadoc
 
