@@ -10,6 +10,8 @@ Bundle-Name: ${-groupid}:${bsn}
 -buildrepo: Local
 -releaserepo: Release
 -releaserepo.publish: ${env;PUBLISH_REPO}
+-baseline: *
+-fixupmessages.baseline.warning: Baseline mismatch;is:=warning
 companion.code = true
 
 Export-Package: ${osgi.promise.packages}

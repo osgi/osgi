@@ -75,6 +75,11 @@ releaserepo             = ${build}/${target-dir}/repo
             name='Release';\
             releaseUrl="${fileuri;${releaserepo}}";\
             snapshotUrl="${fileuri;${releaserepo}}",\
+          aQute.bnd.repository.maven.provider.MavenBndRepository;\
+           releaseUrl="${centralrepo}";\
+           index=${.}/baseline.mvn;\
+           name='Baseline';\
+           readOnly=true,\
           aQute.bnd.signing.JartoolSigner; \
             keystore="${build}/keystore"; \
             keypass=testtest; \
@@ -98,6 +103,7 @@ releaserepo             = ${build}/${target-dir}/repo
         name='OSGiNexus'
 
 -releaserepo:
+-baselinerepo: Baseline
 -maven-release: javadoc;path=${target}/docs/javadoc
 
 -make                   =  \
