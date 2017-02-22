@@ -226,8 +226,6 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       </section>
       <section xml:id="util.converter-special.cases.string">
         <title>Special cases converting from String</title>
-        <remark>Note this table contains Java 8 classes as discussed before. There was a desire
-        to make the converter compatible with Java 7 - need to discuss</remark>
         <table>
           <title>Special cases converting scalars from String</title>
           <tgroup cols="2">
@@ -320,6 +318,13 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
             </tbody>   
           </tgroup>
         </table>
+        
+        <para><emphasis>Note to implementors:</emphasis> some of the classes mentioned in table 
+        <xref linkend="util.converter-special.cases.string"/> are introduced 
+        in Java 8. However, a converter implementation does not need to depend on 
+        Java 8 in order to function. An implementation of the converter
+        specification could determine its Java runtime dynamically and 
+        handle classes in this table depending on availability.</para>
       </section>
       
       <section xml:id="util.converter-date.calendar">
