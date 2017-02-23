@@ -15,7 +15,7 @@
  */
 
 /**
- * CDI Integration Package Version 0.0.1.
+ * CDI Integration Package Version 1.0.0.
  *
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -33,7 +33,7 @@
  * {@code  Import-Package: org.osgi.service.cdi; version="[1.0,1.1)"}
  */
 
-@Version("0.0.1")
+@Version("1.0.0")
 package org.osgi.service.cdi;
 
 import org.osgi.annotation.versioning.Version;
