@@ -15,7 +15,7 @@
  */
 
 /**
- * CDI Integration Package Version 1.0.0.
+ * CDI Integration Package Version 1.0.
  *
  * <p>
  * Bundles wishing to use this package must list the package in the
