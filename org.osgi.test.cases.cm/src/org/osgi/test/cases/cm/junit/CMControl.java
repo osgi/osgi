@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.PropertyPermission;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -69,6 +70,7 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
+import org.osgi.test.cases.cm.junit.CMControl.SyncEventListener;
 import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
@@ -2243,7 +2245,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests synchronous listeners and managed service.
 	 */
 	public void testUpdateIfDifferent() throws Exception {
-		final String pid = Util.createPid();
+		final String pid = Util.createPid("uid");
 		final List<ConfigurationEvent> events = new ArrayList<>();
 		final List<Dictionary<String, ?>> updates = new ArrayList<>();
 		final CountDownLatch updateLatch = new CountDownLatch(3);
@@ -2264,6 +2266,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			@Override
 			public void updated(final Dictionary<String, ?> properties) throws ConfigurationException {
+				System.out.println("Updating managed service " + properties);
     			updates.add(properties);
     			updateLatch.countDown();
 			}
@@ -2309,7 +2312,8 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(2, events.size());
 			
 			// check updates to managed service
-			updateLatch.await();
+			System.out.println("Waiting for managed service updates");
+			updateLatch.await(10, TimeUnit.SECONDS);
 			assertNull(updates.get(0));
 			assertEquals("somevalue", updates.get(1).get("somekey"));
 			assertEquals("newvalue", updates.get(2).get("somekey"));
@@ -8974,7 +8978,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @since 1.6
 	 */
 	public void testConfigurationLocking() throws Exception {
-		final String pid = Util.createPid();
+		final String pid = Util.createPid("locking");
 		final List<ConfigurationEvent> events = new ArrayList<>();
 		final List<Dictionary<String, ?>> updates = new ArrayList<>();
 		final CountDownLatch updateLatch = new CountDownLatch(3);
@@ -9047,7 +9051,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(2, events.size());
 			
 			// check updates to managed service
-			updateLatch.await();
+			updateLatch.await(10, TimeUnit.SECONDS);
 			assertNull(updates.get(0));
 			assertNotNull(updates.get(1));
 			assertNotNull(updates.get(2));
