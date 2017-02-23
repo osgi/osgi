@@ -8,6 +8,7 @@ osgi.cmpn.specs = \
      org.osgi.service.async, \
      org.osgi.service.application, \
      org.osgi.service.blueprint, \
+     org.osgi.service.cdi, \
      org.osgi.service.cm, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
@@ -20,6 +21,7 @@ osgi.cmpn.specs = \
      org.osgi.service.http, \
      org.osgi.service.http.whiteboard, \
      org.osgi.service.io, \
+     org.osgi.service.jaxrs.whiteboard, \
      org.osgi.service.jdbc, \
      org.osgi.service.jndi, \
      org.osgi.service.jpa, \

@@ -7,6 +7,7 @@ osgi.enterprise.specs = \
      org.osgi.namespace.unresolvable, \
      org.osgi.service.async, \
      org.osgi.service.blueprint, \
+     org.osgi.service.cdi, \
      org.osgi.service.cm, \
      org.osgi.service.component, \
      org.osgi.service.component.annotations, \
@@ -15,6 +16,7 @@ osgi.enterprise.specs = \
      org.osgi.service.event, \
      org.osgi.service.http, \
      org.osgi.service.http.whiteboard, \
+     org.osgi.service.jaxrs.whiteboard, \
      org.osgi.service.jdbc, \
      org.osgi.service.jndi, \
      org.osgi.service.jpa, \
