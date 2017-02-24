@@ -39,8 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyPermission;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -70,7 +70,6 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
 import org.osgi.test.cases.cm.common.SynchronizerImpl;
-import org.osgi.test.cases.cm.junit.CMControl.SyncEventListener;
 import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
@@ -2248,8 +2247,7 @@ public class CMControl extends DefaultTestBundleControl {
 		final String pid = Util.createPid("uid");
 		final List<ConfigurationEvent> events = new ArrayList<>();
 		final List<Dictionary<String, ?>> updates = new ArrayList<>();
-		final CountDownLatch updateLatch = new CountDownLatch(3);
-
+		final CyclicBarrier barrier = new CyclicBarrier(2);
 		final SynchronousConfigurationListener listener = new SynchronousConfigurationListener() {
 
 			@Override
@@ -2268,7 +2266,11 @@ public class CMControl extends DefaultTestBundleControl {
 			public void updated(final Dictionary<String, ?> properties) throws ConfigurationException {
 				System.out.println("Updating managed service " + properties);
     			updates.add(properties);
-    			updateLatch.countDown();
+				try {
+					barrier.await();
+				} catch (InterruptedException | BrokenBarrierException e) {
+					throw new RuntimeException(e);
+				}
 			}
 
 		};
@@ -2280,6 +2282,9 @@ public class CMControl extends DefaultTestBundleControl {
 		this.registerService(
 				ManagedService.class.getName(),
 				ms, msProps);
+		// wait for managed service to get configured with null
+		barrier.await();
+		barrier.reset();
 		try {
 			final Configuration conf = cm.getConfiguration(pid);
 
@@ -2291,6 +2296,9 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(startLevel + 1, conf.getChangeCount());
 
 			assertEquals(1, events.size());
+			// wait for managed service
+			barrier.await();
+			barrier.reset();
 
 			// update again with same props
 			assertFalse(conf.updateIfDifferent(newprops));
@@ -2313,7 +2321,9 @@ public class CMControl extends DefaultTestBundleControl {
 			
 			// check updates to managed service
 			System.out.println("Waiting for managed service updates");
-			updateLatch.await(10, TimeUnit.SECONDS);
+			// wait for managed service
+			barrier.await();
+
 			assertNull(updates.get(0));
 			assertEquals("somevalue", updates.get(1).get("somekey"));
 			assertEquals("newvalue", updates.get(2).get("somekey"));
@@ -8981,7 +8991,7 @@ public class CMControl extends DefaultTestBundleControl {
 		final String pid = Util.createPid("locking");
 		final List<ConfigurationEvent> events = new ArrayList<>();
 		final List<Dictionary<String, ?>> updates = new ArrayList<>();
-		final CountDownLatch updateLatch = new CountDownLatch(3);
+		final CyclicBarrier barrier = new CyclicBarrier(2);
 
 		final SynchronousConfigurationListener listener = new SynchronousConfigurationListener() {
 
@@ -9000,7 +9010,11 @@ public class CMControl extends DefaultTestBundleControl {
 			@Override
 			public void updated(final Dictionary<String, ?> properties) throws ConfigurationException {
     			updates.add(properties);
-    			updateLatch.countDown();
+				try {
+					barrier.await();
+				} catch (InterruptedException | BrokenBarrierException e) {
+					throw new RuntimeException(e);
+				}
 			}
 
 		};
@@ -9012,6 +9026,9 @@ public class CMControl extends DefaultTestBundleControl {
 		this.registerService(
 				ManagedService.class.getName(),
 				ms, msProps);
+		// wait for managed service to get null
+		barrier.await();
+		barrier.reset();
 		try {
 			final Configuration conf = cm.getConfiguration(pid);
 			cm.getConfiguration(pid);
@@ -9021,6 +9038,10 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.update(newprops);
 			assertEquals(startLevel + 1, conf.getChangeCount());
 			assertEquals(1, events.size());
+
+			// wait for managed service
+			barrier.await();
+			barrier.reset();
 
 			// check attributes
 			assertTrue(conf.getAttributes().isEmpty());
@@ -9051,7 +9072,8 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(2, events.size());
 			
 			// check updates to managed service
-			updateLatch.await(10, TimeUnit.SECONDS);
+			barrier.await();
+
 			assertNull(updates.get(0));
 			assertNotNull(updates.get(1));
 			assertNotNull(updates.get(2));

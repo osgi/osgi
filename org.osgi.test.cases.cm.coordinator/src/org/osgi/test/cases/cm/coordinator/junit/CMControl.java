@@ -29,25 +29,19 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.PropertyPermission;
 import java.util.Set;
 
-import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.PackagePermission;
-import org.osgi.framework.ServicePermission;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
-import org.osgi.service.cm.ConfigurationPermission;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.SynchronousConfigurationListener;
 import org.osgi.service.coordinator.Coordination;
-import org.osgi.service.coordinator.CoordinationPermission;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -156,39 +150,6 @@ public class CMControl extends DefaultTestBundleControl {
     private void assignCm() {
         cm = getService(ConfigurationAdmin.class);
     }
-
-	private void setBundlePermission(Bundle b, List<PermissionInfo> list) {
-		if (permAdmin == null)
-			return;
-		PermissionInfo[] pis = new PermissionInfo[list.size()];
-		pis = list.toArray(pis);
-		permAdmin.setPermissions(b.getLocation(), pis);
-		this.printoutPermissions();
-	}
-
-	private void add(List<PermissionInfo> permissionsInfos, String clazz,
-			String name, String actions) {
-		permissionsInfos.add(new PermissionInfo(clazz, name, actions));
-	}
-
-	private void setAppropriatePermission() throws BundleException {
-		if (permAdmin == null)
-			return;
-		this.resetPermissions();
-		final List<PermissionInfo> infos = new ArrayList<>();
-		add(infos, PropertyPermission.class.getName(), "*", "READ,WRITE");
-		add(infos, PackagePermission.class.getName(), "*",
-				PackagePermission.IMPORT + "," + PackagePermission.EXPORTONLY);
-		add(infos, ServicePermission.class.getName(), "*",
-				ServicePermission.GET + "," + ServicePermission.REGISTER);
-		add(infos, ConfigurationPermission.class.getName(), "*",
-				ConfigurationPermission.CONFIGURE);
-		add(infos, AdminPermission.class.getName(), "*", "*");
-		add(infos, CoordinationPermission.class.getName(), "*",
-				CoordinationPermission.INITIATE);
-		this.setBundlePermission(super.getContext().getBundle(), infos);
-
-	}
 
 	/**
 	 * Removes any configurations made by this bundle.
