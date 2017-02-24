@@ -1,11 +1,7 @@
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb4
 Bundle-Version: 1.0.0.test
-Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
-Import-Package: \
-	org.osgi.service.cdi,\
-	org.osgi.service.cdi.annotations,\
-	javax.inject,\
-	org.osgi.test.cases.cdi.tb2.pkg2
-Include-Resource = {META-INF/beans.xml=resources/empty-beans.xml}
 Export-Package: org.osgi.test.cases.cdi.tb4.pkg4
+Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+
+-includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb4-beans.xml}

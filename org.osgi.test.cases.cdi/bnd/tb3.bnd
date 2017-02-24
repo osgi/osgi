@@ -1,5 +1,5 @@
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb3
 Bundle-Version: 1.0.0.test
-Bundle-Activator: org.osgi.test.cases.cdi.tb3.pkg3.Activator
-Private-Package: org.osgi.test.cases.cdi.tb3.pkg3
+
+-resourceonly: true

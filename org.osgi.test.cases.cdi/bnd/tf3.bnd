@@ -1,11 +1,8 @@
 Bundle-ManifestVersion: 2
-Fragment-Host: ${p}.tb3
 Bundle-SymbolicName: ${p}.tf3
 Bundle-Version: 1.0.0.test
 Export-Package: org.osgi.test.cases.cdi.tf3.pkg3
+Fragment-Host: ${p}.tb3
 Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
-Include-Resource = {META-INF/beans.xml=resources/empty-beans.xml}
-Import-Package: \
-	org.osgi.service.cdi,\
-	org.osgi.service.cdi.annotations,\
-	javax.inject
+
+-includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tf3-beans.xml}

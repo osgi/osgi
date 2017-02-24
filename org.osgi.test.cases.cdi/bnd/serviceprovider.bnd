@@ -1,10 +1,6 @@
-Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
-Include-Resource = {META-INF/beans.xml=resources/empty-beans.xml}
 Bundle-SymbolicName: ${p}.serviceprovider
 Bundle-Version: 1.0.0.test
 Private-Package: org.osgi.test.cases.cdi.tb.serviceprovider
-Import-Package: \
-	org.osgi.service.cdi,\
-	org.osgi.service.cdi.annotations,\
-	javax.inject,\
-	org.osgi.test.cases.tb.serviceapi
+Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+
+-includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/serviceprovider-beans.xml}

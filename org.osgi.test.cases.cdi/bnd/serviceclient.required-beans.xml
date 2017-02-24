@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cdi:beans xmlns:cdi="http://www.osgi.org/xmlns/cdi/v1.0.0">
+	<bean class="org.osgi.test.cases.cdi.serviceclient.required.Client" />
+</cdi:beans>
