@@ -87,5 +87,3 @@ org.springframework:spring-core:3.1.0.RELEASE
 org.slf4j:slf4j-api:1.7.7
 org.slf4j:slf4j-nop:1.7.7
 org.slf4j:slf4j-simple:1.7.7
-
-javax.inject:javax.inject:1
