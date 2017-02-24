@@ -580,6 +580,168 @@ tracker.open();</programlisting>
     provider it is recommended to closely follow the vocabulary of intents
     defined in the SCA Policy Framework.</para>
     
+    <section xml:id="service.remoteservices-osgi.basic">
+      <title>Basic Remote Services: osgi.basic</title>
+      
+      <para>Remote Services implementations have a large amound of freedom. 
+      For example, they may use any mechnanism that they choose to transmit 
+      data between the caller of the remote service and the provider of the 
+      service. This freedom means that there can be a large variation in
+      the behaviours supported by different Remote Services implementations.</para>
+  
+      <para>The purpose of the <code xml:id="service.remoteservices-osgi.basic-name">osgi.basic</code> 
+      intent is to provide a common set of rules that can be relied upon when exporting a simple 
+      remote service. This includes rules about the service interface, including supported 
+      parameter and return types, as well as a means of configuring a timeout for remote 
+      invocations.</para>
+      
+      <section>
+        <title>Minimum Supported Service Signature</title>
+        
+        <para> Remote Services implementations which offer the <code>osgi.basic</code>
+        intent must support remote services which advertise a single Java interface 
+        containing zero or more methods.</para>
+        
+        <para>The following types must be supported as declared parameters or returns
+        from methods on the remote service:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para>Primitive values</para>
+          </listitem>
+          
+          <listitem>
+            <para>The OSGi scalar types, OSGi Version objects, Java enums,
+            and types which conform to the OSGi DTO rules as described in
+            the OSGi core specification. In the rest of this section these
+            will be known as the <emphasis>basic types</emphasis>.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Arrays of primitive values or the basic types</para>
+          </listitem>
+          
+          <listitem>
+            <para>Lists, Collections or Iterables of the basic types, however the
+            implementation of the collection may not be preserved in transit. For example a
+            <code>LinkedList</code> may be converted to an <code>ArrayList</code>.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Sets of the OSGi basic types where <code>equals</code> is used to
+            determine identity. <code>SortedSet</code> is not required to be supported
+            due to the difficulties associated with serializing comparators. The
+            implementation of the set may not be preserved in transit. For example a
+            <code>LinkedHashSet</code> may be converted to a <code>HashSet</code>.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Maps where the keys and values are the OSGi basic types, and 
+            <code>equals</code> is used to determine identity for the keys.
+            <code>SortedMap</code> is not required to be supported
+            due to the difficulties associated with serializing comparators. The
+            implementation of the map may not be preserved in transit. For example a
+            <code>LinkedHashMap</code> may be converted to a <code>HashMap</code>.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Methods with no arguments, and methods with a <code>void</code> return</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+      
+      <section>
+        <title>Remote Invocation Timeout</title>
+        
+        <para>The implementation of a Remote Services provider is entirely opaque.
+        In many cases there will be no feedback feedback mechanism if the remote call hangs, 
+        or if the remote node fails. The local client must therefore decide at what point to
+        fail after a certain amount of time has elapsed.</para>
+        
+        <para>A single Remote Services implementation must be able to handle a wide variety 
+        of different remote service invocations across many services, therefore it is difficult 
+        to identify a sensible timeout for the remote service invocation. Some calls may be 
+        quick, and so a ten second timeout is desirable for rapid failure detection, other calls 
+        may be long-running, and a two minute timeout too short. The remote service must therefore
+        be able to declare its own timeout.</para>
+        
+        <para>To declare a timeout the remoteable service may provide a service property 
+        <code>osgi.basic.timeout</code> which provides a timeout value in milliseconds. 
+        The value may be declared as a <code>String</code> or as a <code>Number</code>, 
+        which will be converted into a Long. The timeout value is used to limit the maximum 
+        time for which a remote service client will be blocked waiting for a response. The
+        same timeout value applies to all methods on the service. In the event that the 
+        invocation reaches the timeout value the client must fail the method call with
+        a ServiceException with its type set to REMOTE.</para>
+      </section>
+    </section>
+    
+    <section>
+      <title>Asynchronous Remote Services: osgi.async</title>
+      
+      <para>Some service invocations operate asynchronously, returning quickly and 
+      continuing to process in the background. For void methods with no completion 
+      notifications this is simple to achieve remotely, but more useful scenarios are 
+      difficult to support without using higher-level abstractions to represent the 
+      eventual result.</para>
+  
+      <para>The purpose of the <code>osgi.async</code> intent is to provide a 
+      common set of rules that can be relied upon for remote services which 
+      return types representing an asynchronously executing method.</para>
+      
+      <para>The <code>osgi.async</code> intent makes no guarantees about the
+      service interface(s) or method parameters supported by the remote services
+      implementation. It is therefore recommended that it be used in conjunction
+      with another intent, such as the <xref linkend="service.remoteservices-osgi.basic"
+      endterm="service.remoteservices-osgi.basic-name"/> intent.</para>
+      
+      <section>
+        <title>Supported Return Types</title>
+        
+        <para>Asynchronous returns are implemented using a holder type. The holder
+        represents the state of the asynchronous execution, and can be queried for
+        its completion state. When the execution is complete the holder can be
+        queried for the result of the execution, or for its failure.</para>
+        
+        <para>The following holder types must be supported as return types
+        from methods on the remote service:</para>
+        
+        <itemizedlist>
+          <listitem>
+            <para><code>org.osgi.util.promise.Promise</code></para>
+          </listitem>
+          <listitem>
+            <para><code>java.util.concurrent.Future</code></para>
+          </listitem>
+          <listitem>
+            <para><code>java.util.concurrent.CompletionStage</code></para>
+          </listitem>
+          <listitem>
+            <para><code>java.util.concurrent.CompletableFuture</code></para>
+          </listitem>
+        </itemizedlist>
+        
+        <para>The full set of supported types for the eventual return value 
+        encapsulated by the holder object are not defined by the <code>osgi.async</code>
+        intent. Instead the full set of supported types can be inferred from the other
+        supported intents supported by the Remote Services implementation. For example
+        the <xref linkend="service.remoteservices-osgi.basic"
+        endterm="service.remoteservices-osgi.basic-name"/> intent would ensure support
+        for a return value of <code>Promise&lt;List&lt;String&gt;&gt;</code></para>
+       </section>
+       
+       <section>
+         <title>Asynchronous Failures</title>
+         
+         <para>If an asynchronous remote execution fails then the holder type must be 
+         failed with the same exception that would have been thrown in a synchronous 
+         call.</para>
+         
+         <para>The reason for the failure may be as a result of a failure in communications,
+         a timeout, or because the remote invocation resulted in an exception</para>
+       </section>
+    </section>
+    
     <section>
       <title>Private Remote Services: osgi.private</title>
       
