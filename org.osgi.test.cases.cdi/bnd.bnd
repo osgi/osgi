@@ -31,7 +31,7 @@ javac.profile=
 	org.osgi.service.cdi;                   version=project, \
 	org.osgi.test.support;                  version=project, \
 	osgi.core;                              version=6.0, \
-	javax.inject;                           version=1.0.0, \
+	javax.inject:javax.inject;              version=1.0.0, \
 	javax.enterprise.cdi-api;               version=1.2.0, \
 	org.apache.geronimo.specs.geronimo-annotation_1.2_spec; version=1.0, \
 	${junit}

@@ -6,7 +6,7 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath: \
 	osgi.core;			version=5.0.0, \
 	osgi.annotation; version=6.0.1, \
-	javax.inject; version=1.0.0, \
+	javax.inject:javax.inject; version=1.0.0, \
 	javax.enterprise.cdi-api;	version=1.2.0
 
 
