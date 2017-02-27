@@ -16,7 +16,7 @@ osgi.enterprise.specs = \
      org.osgi.service.event, \
      org.osgi.service.http, \
      org.osgi.service.http.whiteboard, \
-     org.osgi.service.jaxrs.whiteboard, \
+     org.osgi.service.jaxrs, \
      org.osgi.service.jdbc, \
      org.osgi.service.jndi, \
      org.osgi.service.jpa, \
