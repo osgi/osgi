@@ -23,13 +23,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A type implemented by the Consumer Role.
+ * A type implemented by, or extended by, the Consumer Role.
  * <p>
- * A non-binary compatible change to a consumer type normally requires
+ * A non-binary compatible change to a consumer type, or a binary compatible
+ * change to a consumer type affecting abstract methods normally requires
  * incrementing the major version of the type's package. This change will
  * require all providers and all consumers to be updated to handle the change
- * since consumers implement the consumer type and all providers must understand
- * the change in the consumer type.
+ * since consumers implement or extend the consumer type and all providers must
+ * understand the change in the consumer type.
+ * <p>
+ * A binary compatible change to a consumer type not affecting abstract methods
+ * normally requires incrementing the minor version of the type's package. This
+ * change will require all providers to be updated to handle the change, but
+ * consumers of that package will not require changes since no abstract methods
+ * requiring implementation by the consumer are affected.
  * <p>
  * A type can be marked {@link ConsumerType} or {@link ProviderType} but not
  * both. A type is assumed to be {@link ConsumerType} if it is not marked either

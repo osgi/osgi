@@ -2314,7 +2314,8 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
         <listitem>
           <para><code>micro</code> - A change that does not affect the API,
-          for example, a typo in a comment.</para>
+          for example, a typo in a comment or a bug fix in an
+          implementation.</para>
         </listitem>
       </itemizedlist>
 
@@ -2338,12 +2339,12 @@ B: Export-Package: p; version=1.5.1</programlisting>
       <para>As mentioned in <xref
       linkend="framework.module-semantic.versioning"/>, there are two roles
       for clients of an API package: API consumers and API providers. API
-      consumers use the API and API providers implement the API. For the
-      interface and abstract class types in an API, it is important that the
-      API clearly document which of those types are only to be implemented by
-      API providers and which of those types can be implemented by API
-      consumers. For example, listener interfaces are generally implemented by
-      API consumers and instances of them passed to API providers.</para>
+      consumers use the API and API providers implement the API. For the types
+      in an API, it is important that the API clearly document which of those
+      types are only to be implemented or extended by API providers and which
+      of those types can be implemented or extended by API consumers. For
+      example, listener interfaces are generally implemented by API consumers
+      and instances of them passed to API providers.</para>
 
       <para>API providers are sensitive to changes in types implemented by
       both API consumers and API providers. An API provider must implement any
@@ -2385,10 +2386,12 @@ B: Export-Package: p; version=1.5.1</programlisting>
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.annotation.versioning.ConsumerType"
       xrefstyle="hyperlink"/> annotations can be used in source files to
-      document the roles of interface and abstract class types in a package.
-      These annotations can be processed by bundle assembly tools that support
-      Semantic Versioning when generating the version range information for a
-      bundle's Import-Package manifest header.</para>
+      document the roles of types in a package. API types marked <xref
+      linkend="org.osgi.annotation.versioning.ProviderType"
+      xrefstyle="hyperlink"/> must not be implemented or extended by API
+      consumers. These annotations can be processed by bundle assembly tools
+      that support Semantic Versioning when generating the version range
+      information for a bundle's Import-Package manifest header.</para>
     </section>
 
     <section xml:id="i2548181">
