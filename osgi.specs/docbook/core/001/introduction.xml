@@ -772,6 +772,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
             endterm="org.osgi.annotation.versioning-version"
             linkend="org.osgi.annotation.versioning"/></code></entry>
           </row>
+
+          <row>
+            <entry><link linkend="org.osgi.annotation.bundle">Bundle
+            Annotations</link></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.annotation.bundle"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.annotation.bundle-version"
+            linkend="org.osgi.annotation.bundle"/></code></entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -819,6 +830,10 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
         <para>Added <xref linkend="framework.numbered.lists"/> to specify the
         <emphasis>happens-before</emphasis> relationship between items in
         numbered lists.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="org.osgi.annotation.bundle"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

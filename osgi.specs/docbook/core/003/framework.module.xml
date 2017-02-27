@@ -565,6 +565,12 @@ tag                  ::= 'tag' '=' argument</programlisting>
       <para>Organizations external to the OSGi Alliance can request header
       names in the OSGi namespace. The OSGi Alliance maintains a registry of
       such names at <xref linkend="i3215677"/>.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.bundle.Header"
+      xrefstyle="hyperlink"/> annotation can be used on a class or package to
+      specify a header for a bundle. This annotation can be processed by
+      bundle assembly tools to generate the specified header information in
+      the bundle's manifest.</para>
     </section>
 
     <section>
@@ -1173,6 +1179,12 @@ scalar              ::= 'String' | 'Version' | 'Long'
                             |   'Double' 
 list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
 
+      <para>The <xref linkend="org.osgi.annotation.bundle.Capability"
+      xrefstyle="hyperlink"/> annotation can be used on a class or package to
+      specify a capability to be provided by the bundle. This annotation can
+      be processed by bundle assembly tools to add the capability to the
+      Provide-Capability header in the bundle's manifest.</para>
+
       <para>The header has the following directives architected:</para>
 
       <itemizedlist>
@@ -1312,6 +1324,12 @@ requirement        ::= name-space ( ';' directive | typed-attr )*</programlistin
       assertions as they are in the Import-Package, Require-Bundle, and
       Fragment-Host headers. The attributes of these headers are mapped to the
       <code>filter</code> directive in their corresponding namespaces.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.bundle.Requirement"
+      xrefstyle="hyperlink"/> annotation can be used on a class or package to
+      specify a capability to be required by the bundle. This annotation can
+      be processed by bundle assembly tools to add the requirement to the
+      Require-Capability header in the bundle's manifest.</para>
 
       <para>The following directives are architected for the
       Require-Capability header:</para>
@@ -1947,7 +1965,11 @@ package-names   ::= package-name                // See <xref
       multiple packages in one clause by separating the package names with a
       semi-colon. Multiple export definitions for the same package are allowed
       for example, when different attributes are needed for different
-      importers.</para>
+      importers. The <xref linkend="org.osgi.annotation.bundle.Export"
+      xrefstyle="hyperlink"/> annotation can be applied to a package to
+      specify the package is to be exported. This annotation can be processed
+      by bundle assembly tools to add the annotated package to the
+      Export-Package header in the bundle's manifest.</para>
 
       <para>Export directives are:</para>
 
@@ -2364,7 +2386,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
       linkend="org.osgi.annotation.versioning.ConsumerType"
       xrefstyle="hyperlink"/> annotations can be used in source files to
       document the roles of interface and abstract class types in a package.
-      These annotation can be processed by bundle assembly tools that support
+      These annotations can be processed by bundle assembly tools that support
       Semantic Versioning when generating the version range information for a
       bundle's Import-Package manifest header.</para>
     </section>
@@ -5680,6 +5702,11 @@ URL(String protocol, String host, String file)</programlisting>
         <para>Added <xref linkend="framework.module-bundle-scm"/> to hold
         information about the bundle's software configuration management
         system.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated to reference the new bundle annotations in <xref
+        linkend="org.osgi.annotation.bundle"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

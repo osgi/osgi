@@ -23,4 +23,6 @@
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.namespace.xml"/>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.annotation.versioning.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.annotation.bundle.xml"/>
 </chapter>
