@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -55,6 +56,7 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/* set this to true to compile in debug messages */
 	static final boolean					DEBUG	= false;

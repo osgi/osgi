@@ -19,6 +19,7 @@ package org.osgi.util.tracker;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -48,6 +49,7 @@ import org.osgi.framework.SynchronousBundleListener;
  * @author $Id$
  * @since 1.4
  */
+@ConsumerType
 public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	/* set this to true to compile in debug messages */
 	static final boolean				DEBUG	= false;
