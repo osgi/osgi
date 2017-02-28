@@ -17,7 +17,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
   ext.javadocxml = new File(destinationDir, 'javadoc.xml')
   ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
   inputs.file stylesheet
-  classpath = configurations.compile
+  classpath = compileJava.classpath
   source bnd.allSrcDirs
   bnd.javadoc_specs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
@@ -63,7 +63,7 @@ task('rdmtsummary') {
   doLast {
     treesummaryxml.withOutputStream { os ->
       javaexec {
-        classpath configurations.runtime
+        classpath sourceSets.main.runtimeClasspath
         main = 'org.osgi.tools.dmt.TreeSummary'
         standardOutput new BufferedOutputStream(os)
         args 'org.osgi.dmt.residential.$'
@@ -121,7 +121,7 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
         javaexec {
-          classpath configurations.runtime
+          classpath sourceSets.main.runtimeClasspath
           main = 'org.osgi.tools.xmlvalidation.XmlValidator'
           args rootProject.file('licensed/docbook-xsd/docbook.xsd')
           args bookxml
@@ -311,7 +311,7 @@ task('rasterize') {
       systemProperty('scale', '2')
       systemProperty('dpi', '300')
       systemProperty('JAVA_FONTS', fontbasedir)
-      classpath configurations.runtime
+      classpath sourceSets.main.runtimeClasspath
       main = 'org.osgi.tools.rasterizer.RasterizerMain'
       minHeapSize = '512m'
       maxHeapSize = '1024m'
