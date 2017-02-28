@@ -178,8 +178,8 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
         javaexec {
           classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
           main = 'net.sf.diffmk.DiffMk'
-          minHeapSize = '512m'
-          maxHeapSize = '1024m'
+          minHeapSize = '1024m'
+          maxHeapSize = '2048m'
           args '--verbose'
           args '1'
           args '--words'
@@ -266,8 +266,8 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
           classpath bnd.log4j
           classpath fop_classpath
           main = 'org.osgi.tools.fop.FOPMain'
-          minHeapSize = '512m'
-          maxHeapSize = '1024m'
+          minHeapSize = '1024m'
+          maxHeapSize = '2048m'
           args '-c', new File(temporaryDir, fopxconf.name)
           args '-fo', fotask.bookfo
           args '-pdf', bookpdf
@@ -313,8 +313,8 @@ task('rasterize') {
       systemProperty('JAVA_FONTS', fontbasedir)
       classpath sourceSets.main.runtimeClasspath
       main = 'org.osgi.tools.rasterizer.RasterizerMain'
-      minHeapSize = '512m'
-      maxHeapSize = '1024m'
+      minHeapSize = '1024m'
+      maxHeapSize = '2048m'
       args destinationDir
       args svgFiles.files
     }.assertNormalExitValue()
