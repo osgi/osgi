@@ -33,6 +33,9 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     osgi.core;version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
+    javax.inject:javax.inject; version=1.0.0, \
+    javax.enterprise.cdi-api;   version=1.2.0, \
+    org.apache.geronimo.specs:geronimo-jaxrs_2.0_spec, \
     com.icl.saxon;version=latest
 -fixupmessages.jpa_spec: Version for package org\.osgi\.service\.jpa is set to different values
 
