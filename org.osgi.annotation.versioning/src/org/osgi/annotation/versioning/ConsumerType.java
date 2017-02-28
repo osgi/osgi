@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,17 +25,17 @@ import java.lang.annotation.Target;
 /**
  * A type implemented by, or extended by, the Consumer Role.
  * <p>
- * A non-binary compatible change to a consumer type, or a binary compatible
- * change to a consumer type affecting abstract methods normally requires
+ * A non-binary-compatible change to a consumer type or a binary-compatible
+ * change to a consumer type affecting an abstract method normally requires
  * incrementing the major version of the type's package. This change will
  * require all providers and all consumers to be updated to handle the change
- * since consumers implement or extend the consumer type and all providers must
- * understand the change in the consumer type.
+ * since consumers that implement or extend the consumer type and all providers
+ * must understand the change in the consumer type.
  * <p>
- * A binary compatible change to a consumer type not affecting abstract methods
- * normally requires incrementing the minor version of the type's package. This
- * change will require all providers to be updated to handle the change, but
- * consumers of that package will not require changes since no abstract methods
+ * A binary-compatible change to a consumer type not affecting an abstract
+ * method normally requires incrementing the minor version of the type's
+ * package. This change will require all providers to be updated to handle the
+ * change, but consumers will not require changes since no abstract methods
  * requiring implementation by the consumer are affected.
  * <p>
  * A type can be marked {@link ConsumerType} or {@link ProviderType} but not

@@ -2266,10 +2266,10 @@ B: Export-Package: p; version=1.5.1</programlisting>
     <section xml:id="framework.module-semantic.versioning">
       <title>Semantic Versioning</title>
 
-      <para>Version ranges encode the assumptions about
-      <emphasis>compatibility</emphasis>. Though the OSGi frameworks do not
-      enforce a specific encoding, for a compatibility policy, it is strongly
-      recommended to use the following semantics.</para>
+      <para>Version ranges encode the assumptions about <emphasis>binary
+      compatibility</emphasis>. Though the OSGi frameworks do not enforce a
+      specific encoding for a compatibility policy, it is strongly recommended
+      to use the following semantics.</para>
 
       <para>Traditionally, compatibility has always been between two parties.
       One is the consumer of the code and the other is the provider of the
@@ -2346,20 +2346,20 @@ B: Export-Package: p; version=1.5.1</programlisting>
       example, listener interfaces are generally implemented by API consumers
       and instances of them passed to API providers.</para>
 
-      <para>API providers are sensitive to changes in types implemented by
-      both API consumers and API providers. An API provider must implement any
-      new changes in API provider types and must understand and likely invoke
-      any new changes in API consumer types. An API consumer can generally
-      ignore compatible changes in API provider types unless it wants to
-      invoke the new function. But an API consumer is sensitive to changes in
-      API consumer types and will probably need modification to implement the
-      new function. For example, in the <xref linkend="org.osgi.framework"
-      xrefstyle="hyperlink"/> package, the <xref
+      <para>API providers are sensitive to changes in types implemented or
+      extended by both API consumers and API providers. An API provider must
+      implement any new changes in API provider types and must understand and
+      likely invoke any new changes in API consumer types. An API consumer can
+      generally ignore compatible changes in API provider types unless it
+      wants to invoke the new function. But an API consumer is sensitive to
+      changes in API consumer types and will probably need modification to
+      implement the new function. For example, in the <xref
+      linkend="org.osgi.framework" xrefstyle="hyperlink"/> package, the <xref
       linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/> type
       is implemented by the Framework which is the API provider. Adding a new
       method to <xref linkend="org.osgi.framework.BundleContext"
       xrefstyle="hyperlink"/> will require all Framework implementations to be
-      updated to implement the new method but bundles, which are the API
+      updated to implement the new method. Bundles, which are the API
       consumers, do not have to change unless they wish to call the new
       method. However, the <xref linkend="org.osgi.framework.BundleActivator"
       xrefstyle="hyperlink"/> type is implemented by bundles and adding a new
@@ -2371,7 +2371,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
       xrefstyle="hyperlink"/> type has an API provider role and the <xref
       linkend="org.osgi.framework.BundleActivator" xrefstyle="hyperlink"/>
       type has an API consumer role in the <xref linkend="org.osgi.framework"
-      xrefstyle="hyperlink"/> package.</para>
+      xrefstyle="hyperlink"/> API package.</para>
 
       <para>Since there are generally many API consumer and few API providers,
       API evolution must be very careful when considering changes to API

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +25,21 @@ import java.lang.annotation.Target;
 /**
  * A type implemented by, or extended by, the Provider Role.
  * <p>
- * A binary compatible change to a provider type normally requires incrementing
- * the minor version of the type's package. This change will require all
- * providers to be updated to handle the change, but consumers of that package
- * will not require changes since they only use, and do not implement or extend,
- * the provider type.
- * <p>
- * A non-binary compatible change to a provider type normally requires
+ * A non-binary-compatible change to a provider type normally requires
  * incrementing the major version of the type's package. This change will
  * require all providers and all consumers to be updated to handle the change.
- * However, a non-binary compatible change affecting just {@code protected}
- * access members only requires incrementing the minor version of the type's
- * package. This change will require all providers to be updated to handle the
- * change, but consumers of that package will not require changes since they
- * only use and do not extend the provider type and thus could not access any
- * {@code protected} members of the provider type.
+ * However, a non-binary-compatible change affecting a {@code protected} access
+ * member only requires incrementing the minor version of the type's package.
+ * This change will require all providers to be updated to handle the change,
+ * but consumers will not require changes since they only use, and do not
+ * extend, the provider type and thus could not access {@code protected} access
+ * members of the provider type.
+ * <p>
+ * A binary-compatible change to a provider type normally requires incrementing
+ * the minor version of the type's package. This change will require all
+ * providers to be updated to handle the change, but consumers will not require
+ * changes since they only use, and do not implement or extend, the provider
+ * type.
  * <p>
  * A type can be marked {@link ConsumerType} or {@link ProviderType} but not
  * both. A type is assumed to be {@link ConsumerType} if it is not marked either
