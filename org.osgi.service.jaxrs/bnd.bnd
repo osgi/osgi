@@ -1,4 +1,5 @@
 # Set javac settings from JDT prefs
+spec.package = ${p}.whiteboard
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
 Export-Package: ${p}.*; -split-package:=first
