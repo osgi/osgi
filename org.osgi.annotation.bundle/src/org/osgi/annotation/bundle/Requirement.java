@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.osgi.resource.Namespace;
 
 /**
  * Define a requirement for a bundle.
@@ -93,7 +91,7 @@ public @interface Requirement {
 	 * If not specified, the {@code effective} directive is omitted from the
 	 * requirement clause.
 	 */
-	String effective() default Namespace.EFFECTIVE_RESOLVE;
+	String effective() default "resolve"; // Namespace.EFFECTIVE_RESOLVE
 
 	/**
 	 * A list of attribute or directive names and values.
