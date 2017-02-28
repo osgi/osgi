@@ -25,11 +25,11 @@ import java.lang.annotation.Target;
 /**
  * Annotation applied to {@link javax.inject.Qualifier} for use on
  * {@link Reference} for conversion to service filters.
- *
- * The qualifier is converted to Map<String, String> following the rules defined
- * by the converter specification along with name mangling. The key/value pairs
- * are then 'ANDed' together.
- *
+ * <p>
+ * The qualifier is converted to {@code Map<String, String>} following the rules
+ * defined by the converter specification along with name mangling. The
+ * key/value pairs are then 'ANDed' together.
+ * <p>
  * Multiple such Qualifiers' on a single Reference are 'ANDed' together and as
  * such can be combined.
  */

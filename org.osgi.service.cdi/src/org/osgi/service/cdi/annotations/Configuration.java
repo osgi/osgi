@@ -26,7 +26,7 @@ import javax.inject.Inject;
 /**
  * Annotation used with {@link Inject} in order to have Configuration Admin
  * configurations injected into CDI beans.
- *
+ * <p>
  * The values are PIDs of required configurations. The special value
  * <code>$</code> is used to refer to the host bean class name.
  */
