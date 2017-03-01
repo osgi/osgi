@@ -2,7 +2,6 @@
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
 Export-Package: !${p}.annotations, ${p}.*; -split-package:=first
-Private-Package: ${p}.annotations
 
 -buildpath = \
     osgi.core; version=5, \
