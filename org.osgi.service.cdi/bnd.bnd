@@ -3,10 +3,10 @@
 
 Export-Package: ${p}.*; -split-package:=first
 
+-contract: JavaCDI, JavaInject
+
 -buildpath: \
-	osgi.core;			version=5.0.0, \
-	osgi.annotation; version=6.0.1, \
-	javax.inject:javax.inject; version=1.0.0, \
-	javax.enterprise.cdi-api;	version=1.2.0
-
-
+	osgi.core;                         version=5.0.0, \
+	osgi.annotation;                   version=6.0.1, \
+	org.apache.aries.javax.inject-api; version=0.0.1, \
+	org.apache.aries.javax.cdi-api;    version=0.0.1

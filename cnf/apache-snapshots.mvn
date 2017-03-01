@@ -1,4 +1,9 @@
 
 # 3rd party artifacts
+org.apache.aries.cdi:org.apache.aries.cdi.extender:0.0.1-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.javax.cdi-api:0.0.1-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.javax.el-api:0.0.1-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.javax.inject-api:0.0.1-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.javax.interceptor-api:0.0.1-SNAPSHOT
 org.apache.aries.jpa:org.apache.aries.jpa.container:2.6.0-SNAPSHOT
 org.apache.felix:org.apache.felix.converter:0.1.0-SNAPSHOT

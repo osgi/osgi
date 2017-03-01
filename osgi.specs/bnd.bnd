@@ -14,8 +14,8 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
     com.sun.tools;   version=1.5.0, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
     org.eclipse.persistence.jpa_spec; version=latest, \
-    javax.inject:javax.inject; version=1.0.0, \
-    javax.enterprise.cdi-api;   version=1.2.0, \
+    org.apache.aries.javax.inject-api;version=0.0.1, \
+    org.apache.aries.javax.cdi-api;version=0.0.1, \
     org.apache.geronimo.specs:geronimo-jaxrs_2.0_spec, \
     com.icl.saxon; version=latest, \
     org.osgi.service.io; version=project, \
