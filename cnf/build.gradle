@@ -10,7 +10,7 @@ task('refresh') {
     compileJava.didWork || processResources.didWork
   }
   doLast {
-    logger.info "Refresh bnd Projects after building bnd plugins in ${project.name}"
+    logger.info 'Refresh bnd Projects after building bnd plugins in {}', project.name
     bnd.project.refresh()
     rootProject.subprojects {
       if (project != cnfProject) {

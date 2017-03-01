@@ -53,9 +53,9 @@ javadoc {
   }
   doFirst {
     project.delete(destinationDir)
-    logger.info "Title         : ${options.windowTitle}"
-    logger.info "Packages      : ${javadocSpecs}"
-    logger.info "Destdir       : ${destinationDir}"
+    logger.info 'Title         : {}', options.windowTitle
+    logger.info 'Packages      : {}', includes
+    logger.info 'Destdir       : {}', destinationDir
   }
   def legal = rootProject.file('osgi.companion/legal/javadoc')
   inputs.dir legal
