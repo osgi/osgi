@@ -47,6 +47,9 @@ javadoc {
   if (JavaVersion.current().isJava8Compatible()) {
     options.addStringOption('Xdoclint:none', '-quiet') 
   }
+  onlyIf {
+    jar.didWork
+  }
   doFirst {
     project.delete(destinationDir)
     include bnd.project.getExports().collect { packageRef, attrs ->
