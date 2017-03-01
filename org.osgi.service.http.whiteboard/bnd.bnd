@@ -1,9 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
-# Since the packages don't start with the project name, we need to tell javadoc the packages
-org.osgi.service.http.whiteboard.specs = org.osgi.service.http.*
-
 Export-Package:  \
 	org.osgi.service.http.*;-split-package:=first
 

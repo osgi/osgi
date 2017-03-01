@@ -2,14 +2,10 @@
  * OSGi companion code Gradle script
  */
 
-ext.javadocSpecs = bnd("${project.name}.specs", project.name)
-ext.javadocTitle = bnd('javadoc.title', project.name)
-
 javadoc {
+  inputs.files jar
   source bnd.allSrcDirs
-  javadocSpecs.split(/\s*,\s*/).each {
-    include it.replace('.','/')+'/**/*.java'
-  }
+  ext.javadocTitle = bnd('javadoc.title', project.name)
   configure(options) {
     docTitle = "OSGi&trade; ${javadocTitle} Release ${bnd.osgi_release}"
     windowTitle = "OSGi ${javadocTitle} Release ${bnd.osgi_release}"
@@ -53,6 +49,9 @@ javadoc {
   }
   doFirst {
     project.delete(destinationDir)
+    include bnd.project.getExports().collect { packageRef, attrs ->
+       "${packageRef.getBinary()}/*.java"
+    }
     logger.info 'Title         : {}', options.windowTitle
     logger.info 'Packages      : {}', includes
     logger.info 'Destdir       : {}', destinationDir
