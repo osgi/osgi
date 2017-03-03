@@ -582,8 +582,10 @@
               <entry><xref linkend="service.log"
               xrefstyle="template:%n %t"/></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.log"/></code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.log"/></code></para><para><code><xref
+              linkend="org.osgi.service.log.admin"/></code></para><para><code><xref
+              linkend="org.osgi.service.log.stream"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.log-version"
               linkend="service.log"/></code></entry>
@@ -653,6 +655,7 @@
               <entry><para><code><xref
               linkend="org.osgi.service.component"/></code></para><para><code><xref
               linkend="org.osgi.service.component.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.propertytypes"/></code></para><para><code><xref
               linkend="org.osgi.service.component.runtime"/></code></para><para><code><xref
               linkend="org.osgi.service.component.runtime.dto"/></code></para></entry>
 
