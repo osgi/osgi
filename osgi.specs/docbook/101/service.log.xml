@@ -760,4 +760,8 @@ LOG_OTHER  (when event is not recognized)</programlisting>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.admin.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.stream.xml"/>
 </chapter>
