@@ -4660,14 +4660,13 @@ public class MyComponent {
       <section xml:id="service.component-component.property.mapping">
         <title>Component Property Mapping</title>
 
-        <para><remark>BJH Replace section with reference to Converter spec for
-        mapping. Mapping must handle single-element annotation. </remark>Each
-        method of a configuration property type is mapped to a component
-        property. The property name is derived from the method name. Certain
-        common property name characters, such as full stop (<code>'.'
-        \u002E</code>) are not valid in Java identifiers. So the name of a
-        method must be converted to its corresponding property name as
-        follows:<itemizedlist>
+        <para><remark>BJH Mapping must handle single-element annotation. Also
+        '-'. </remark>Each method of a configuration property type is mapped
+        to a component property. The property name is derived from the method
+        name. Certain common property name characters, such as full stop
+        (<code>'.' \u002E</code>) are not valid in Java identifiers. So the
+        name of a method must be converted to its corresponding property name
+        as follows:<itemizedlist>
             <listitem>
               <para>A single dollar sign (<code>'$' \u0024</code>) is removed
               unless it is followed by another dollar sign in which case the
@@ -4787,27 +4786,25 @@ public class MyComponent {
       <section xml:id="service.component-component.property.value.coercion">
         <title>Coercing Component Property Values</title>
 
-        <para><remark>BJH Replace section with reference to Converter spec.
-        Plus we need an addition rule for Class target type. Also there are
-        mismatches on handling missing properties. </remark>When a component
-        property type is used as an argument for a life cycle method, SCR must
-        create an object that implements the component property type and maps
-        the methods of the component property type to component properties.
-        The name of the method is converted to the property name as described
-        in <xref linkend="service.component-component.property.mapping"/>. The
-        property value may need to be coerced to the type of the method. In
-        <xref linkend="service.component-coercion.table"/>, the columns are
-        source types, that is, the type of the component property value, and
-        the rows are target types, that is, the method types. The property
-        value is <emphasis>v</emphasis>; <emphasis>number</emphasis> is a
-        primitive numerical type and <emphasis>Number</emphasis> is a wrapper
-        numerical type. An invalid coercion is represented by
-        <code>throw</code>. Such a coercion attempt must result in throwing a
-        Component Exception when the component property type method is called.
-        Any other coercion error, such as parsing a non-numerical string to a
-        number or the inability to coerce a string into a Class or enum
-        object, must be wrapped in a Component Exception and thrown when the
-        component property type method is called.</para>
+        <para>When a component property type is used as an argument for a life
+        cycle method, SCR must create an object that implements the component
+        property type and maps the methods of the component property type to
+        component properties. The name of the method is converted to the
+        property name as described in <xref
+        linkend="service.component-component.property.mapping"/>. The property
+        value may need to be coerced to the type of the method. In <xref
+        linkend="service.component-coercion.table"/>, the columns are source
+        types, that is, the type of the component property value, and the rows
+        are target types, that is, the method types. The property value is
+        <emphasis>v</emphasis>; <emphasis>number</emphasis> is a primitive
+        numerical type and <emphasis>Number</emphasis> is a wrapper numerical
+        type. An invalid coercion is represented by <code>throw</code>. Such a
+        coercion attempt must result in throwing a Component Exception when
+        the component property type method is called. Any other coercion
+        error, such as parsing a non-numerical string to a number or the
+        inability to coerce a string into a Class or enum object, must be
+        wrapped in a Component Exception and thrown when the component
+        property type method is called.</para>
 
         <table pgwide="1" rowheader="firstcol"
                xml:id="service.component-coercion.table">
