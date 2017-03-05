@@ -7,7 +7,7 @@ version bnd('osgi.version')
 
 ext.fop_home = new File(bnd.licensed, 'fop')
 ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
-  fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
+  fileTree('dir': new File(fop_home, 'build'), 'include': 'fop.jar'))
 
 task javadoc('overwrite': true, 'type': Javadoc) {
   description 'Build the docbook flavored javadoc.'
@@ -99,7 +99,7 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file('docbook/xsl/identity.xsl')
       ext.bookxml = new File(destinationDir, taskName)
-      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml')
+      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml', 'exclude': 'hyph')
       outputs.file bookxml
       doFirst {
         project.mkdir(destinationDir)
@@ -236,7 +236,7 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       description "Generate the docbook pdf file for the book ${book}."
       group 'documentation'
       def fotask = tasks.getByPath("${book}.fo")
-      dependsOn fotask
+      dependsOn fotask, hyph
       ext.destinationDir = buildDir
       ext.bookpdf = new File(destinationDir, "osgi.${book}-${version}.pdf")
       def fontbasedir = file('fonts')
@@ -244,6 +244,9 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       def log4jprops = file('docbook/fop/log4j.properties')
       inputs.files fopxconf, log4jprops, fotask, fileTree('dir': 'docbook', 'include': '**/*.svg')
       inputs.dir fontbasedir
+      inputs.dir {
+        hyph.destinationDir
+      }
       outputs.file bookpdf
       doFirst {
         project.mkdir(destinationDir)
@@ -265,6 +268,7 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
           classpath compileJava.destinationDir
           classpath bnd.log4j
           classpath fop_classpath
+          classpath hyph.destinationDir
           main = 'org.osgi.tools.fop.FOPMain'
           minHeapSize = '1024m'
           maxHeapSize = '2048m'
@@ -378,6 +382,27 @@ task('fontmetrics') {
         args ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/)
       }.assertNormalExitValue()
     }
+  }
+}
+
+task('hyph') {
+  description 'Build the hyphenation file.'
+  group 'documentation'
+  def hyphDir = file('docbook/hyph')
+  ext.destinationDir = new File(buildDir, 'hyph')
+  def hyphOutput = new File(destinationDir, 'hyph')
+  inputs.dir hyphDir
+  outputs.dir destinationDir
+  doFirst {
+    project.mkdir(hyphOutput)
+  }
+  doLast {
+    javaexec {
+      classpath fop_classpath
+      main = 'org.apache.fop.hyphenation.SerializeHyphPattern'
+      args hyphDir
+      args hyphOutput
+    }.assertNormalExitValue()
   }
 }
 
