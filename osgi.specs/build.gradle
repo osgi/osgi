@@ -209,7 +209,7 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
       ext.destinationDir = new File(buildDir, 'fo')
       ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
       ext.bookfo = new File(destinationDir, taskName)
-      ext.watermark = 'docbook/graphics/draft.svg'
+      ext.watermark = uri('docbook/graphics/draft.svg')
       inputs.files stylesheet, booktask
       outputs.file bookfo
       doFirst {
@@ -259,7 +259,6 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
               'font.base.dir': fontbasedir.absolutePath])
         }
         javaexec {
-          systemProperty('java.awt.headless', 'true')
           systemProperty('JAVA_FONTS', fontbasedir)
           systemProperty('log4j.configuration', log4jprops.toURI())
           classpath compileJava.destinationDir
@@ -332,7 +331,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
       ext.destinationDir = new File(buildDir, "html/${book}")
       def stylesheet = file('docbook/xsl/custom-html.xsl')
       def profiler = file('docbook/xsl/custom-html-profile.xsl')
-      def watermark = 'draft.png'
+      def watermark = uri('draft.png')
       inputs.files stylesheet, profiler, booktask
       outputs.dir destinationDir
       doFirst {

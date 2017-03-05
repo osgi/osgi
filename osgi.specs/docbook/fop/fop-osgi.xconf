@@ -48,50 +48,6 @@ the location of this file.
       <fonts>
         <directory>@font.base.dir@</directory>
 
-        <!-- body font -->
-        <font metrics-url="PROBK___.xml" embed-url="PROBK___.ttf" kerning="yes">
-          <font-triplet name="Proforma-Book" style="normal" weight="normal"/>
-        </font>
-        <font metrics-url="PROBKI__.xml" embed-url="PROBKI__.ttf" kerning="yes">
-          <font-triplet name="Proforma-Book" style="italic" weight="normal"/>
-        </font>
-        <font metrics-url="PROSBD__.xml" embed-url="PROSBD__.ttf" kerning="yes">
-          <font-triplet name="Proforma-Book" style="normal" weight="bold"/>
-        </font>
-        <font metrics-url="PROSBDI_.xml" embed-url="PROSBDI_.ttf" kerning="yes">
-          <font-triplet name="Proforma-Book" style="italic" weight="bold"/>
-        </font>
-
-        <!-- code fonts -->
-        <font metrics-url="PRODOM__.xml" embed-url="PRODOM__.ttf" kerning="yes">
-          <font-triplet name="ProductusOSGiMonoc" style="normal" weight="normal"/>
-        </font>
-        <!-- We don't an italic OSGiMonoc, so we substitute OSGiBookcItalic -->
-        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
-          <font-triplet name="ProductusOSGiMonoc" style="italic" weight="normal"/>
-        </font>
-        <font metrics-url="PRODOBookc__.xml" embed-url="PRODOBookc__.ttf" kerning="yes">
-          <font-triplet name="ProductusOSGiBookc" style="normal" weight="normal"/>
-        </font>
-        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
-          <font-triplet name="ProductusOSGiBookc" style="italic" weight="normal"/>
-        </font>
-
-        <!-- title font -->
-        <font metrics-url="PRODS___.xml" embed-url="PRODS___.ttf" kerning="yes">
-          <font-triplet name="ProductusSemibold" style="normal" weight="normal"/>
-        </font>
-        <font metrics-url="PRODSI__.xml" embed-url="PRODSI__.ttf" kerning="yes">
-          <font-triplet name="ProductusSemibold" style="italic" weight="normal"/>
-        </font>
-        <font metrics-url="PRODB___.xml" embed-url="PRODB___.ttf" kerning="yes">
-          <font-triplet name="ProductusSemibold" style="normal" weight="bold"/>
-        </font>
-
-        <font metrics-url="ARIALUNI.xml" embed-url="ARIALUNI.ttf" kerning="yes">
-          <font-triplet name="ArialUnicodeMS" style="normal" weight="normal"/>
-        </font>
-
         <!-- embedded fonts -->
         <!--
         This information must exactly match the font specified

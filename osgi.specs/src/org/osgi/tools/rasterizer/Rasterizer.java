@@ -30,13 +30,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
+import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
+import org.apache.batik.anim.dom.SVGOMDocument;
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.bridge.DocumentLoader;
 import org.apache.batik.bridge.GVTBuilder;
 import org.apache.batik.bridge.UserAgent;
 import org.apache.batik.bridge.UserAgentAdapter;
-import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
-import org.apache.batik.dom.svg.SVGOMDocument;
 import org.apache.batik.gvt.GraphicsNode;
 import org.apache.batik.gvt.renderer.ImageRenderer;
 import org.apache.batik.transcoder.Transcoder;

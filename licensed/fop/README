@@ -1,4 +1,4 @@
-$Id: README 1395624 2012-10-08 15:43:53Z vhennebert $
+$Id: README 1723323 2016-01-06 13:51:04Z ssteiner $
 
 ==============================================================================
   APACHE FOP  -  README
@@ -92,6 +92,45 @@ http://xmlgraphics.apache.org/fop/stable/running.html
 ==============================================================================
   RELEASE NOTES
 ==============================================================================
+
+Version 2.1
+===========
+
+Major Changes in Version 2.1
+----------------------------
+
+* Add PreloaderRawPNG to handle images ImageIO cant
+* Support Barcode4J page number
+* Support CMYK JPEG in AFP
+* Support IPD change on last page
+* Support PDF/UA
+* Support TrueType fonts in PCL
+* Support Truetype for AFP
+* Support for PDF/A-3
+
+This release also contains a number of bug fixes.
+
+Version 2.0
+===========
+
+Java 6 or later is the minimum runtime environment needed.
+
+Because of changes to the API, the version number has been bumped to 2.0.
+
+Major Changes in Version 2.0
+----------------------------
+
+* Side float support
+* Whitespace Management Extension
+* fo:inline-container partial support
+* Improved support for complex scripts
+* PDF Linearization
+* Support OpenType CFF fonts
+* Subset support for Type 1 fonts
+* Support for AES 256 PDF encryption
+* SVG graphics can use FOP custom fonts
+
+This release also contains a number of bug fixes.
 
 Version 1.1
 ===========
