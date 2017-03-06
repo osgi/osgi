@@ -40,7 +40,6 @@ Include-Resource 					= \
 	osgi.core;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
 	org.eclipse.persistence.jpa_spec;version=2.0,\
-	org.apache.aries.jpa.container;version=2.6.0.SNAPSHOT,\
 	${junit},\
 	org.osgi.namespace.extender;version=latest,\
 	org.osgi.namespace.contract;version=latest,\
