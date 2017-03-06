@@ -59,7 +59,6 @@ public class SignatureTest implements AnalyzerPlugin {
             }
         }
         if ( classes.size() > 0 ) {
-        	analyzer.setProperty("Bnd-AddXMLToTest", "OSGI-INF/coverage.xml");        	
         	analyzer.getJar().putResource("OSGI-INF/coverage.xml",  new CoverageResource(analyzer.getClassspace().values(), classes));
         }
         return false;
