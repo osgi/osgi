@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,9 @@ public interface EntityManagerFactoryBuilder {
 	public static final String	JPA_UNIT_PROVIDER	= "osgi.unit.provider";
 
 	/**
-	 * The name of the JPA extender capability
+	 * The name of the JPA extender capability.
+	 * 
+	 * @since 1.1
 	 */
 	public static final String	JPA_CAPABILITY_NAME	= "osgi.jpa";
 
