@@ -1445,10 +1445,9 @@ Provide-Capability: osgi.contract;osgi.contract=JavaJPA;
       <para>The contract capability means that clients can safely import the
       API using the contract and no import version. For example:</para>
 
-      <programlisting>
-Import-Package: javax.persistence,javax.persistence.criteria
-Require-Capability: osgi.contract;filter:="(&amp;(osgi.contract=JavaJPA)(version=2.1))"
-      </programlisting>
+      <programlisting>Import-Package: javax.persistence,javax.persistence.criteria
+Require-Capability: osgi.contract;
+ filter:="(&amp;(osgi.contract=JavaJPA)(version=2.1))"</programlisting>
     </section>
 
     <section>
