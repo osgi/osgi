@@ -1470,9 +1470,9 @@ public class HttpResourceImpl {
         SCR must log an error message with the Log Service, if present, and
         the field must not be modified.</para>
 
-        <para>For a static reference, SCR must set the value of the field
-        before the component instance is activated and must not change the
-        field while the component is active. This means there is a
+        <para>For a static reference, SCR must set the field value before the
+        component instance is activated and must not change the field while
+        the component is active. This means there is a
         <emphasis>happens-before</emphasis> relationship between setting the
         field and activating the component instance, so the active component
         can safely read the field.</para>
@@ -1483,32 +1483,34 @@ public class HttpResourceImpl {
         <code>volatile</code> modifier, SCR must log an error message with the
         Log Service, if present, and the field must not be modified.</para>
 
-        <para>For a dynamic reference with unary cardinality, SCR must set the
-        field with initial bound service, if any, before the component
-        instance is activated. When there is a new bound service or the
-        service properties of the bound service are modified and the field
-        holds service properties, SCR must replace the field value. If the
-        reference has optional cardinality and there is no bound service, SCR
-        must set the field value to <code>null</code>.</para>
+        <para>For a reference with unary cardinality, SCR must set the field
+        value with initial bound service, if any, before the component
+        instance is activated. If the reference has optional cardinality and
+        there is no bound service, SCR must set the field value to
+        <code>null</code>. If the reference is dynamic, when there is a new
+        bound service or the service properties of the bound service are
+        modified and the field holds service properties, SCR must replace the
+        field value. If the reference has optional cardinality and there is no
+        bound service, SCR must set the field value to
+        <code>null</code>.</para>
 
-        <para>For a dynamic reference with multiple cardinality, the type of
-        the field must be <code>Collection</code> or <code>List</code>. If the
-        field has a different type, SCR must log an error message with the Log
-        Service, if present, and the field must not be modified. Before the
-        component instance is activated, SCR must set the field with a new
-        mutable collection that must contain the initial set of bound services
-        sorted using the same ordering as
+        <para>For a reference with multiple cardinality, the type of the field
+        must be <code>Collection</code> or <code>List</code>. If the field has
+        a different type, SCR must log an error message with the Log Service,
+        if present, and the field must not be modified. Before the component
+        instance is activated, SCR must set the field value with a new mutable
+        collection that must contain the initial set of bound services sorted
+        using the same ordering as <code>ServiceReference.compareTo</code>
+        based upon service ranking and service id. The collection may be empty
+        if the reference has optional cardinality and there are no bound
+        services. If the reference is dynamic, when there is a change in the
+        set of bound services or the service properties of a bound service are
+        modified and the collection holds service properties, SCR must replace
+        the field value with a new mutable collection that must contain the
+        updated set of bound services sorted using the same ordering as
         <code>ServiceReference.compareTo</code> based upon service ranking and
         service id. The new collection may be empty if the reference has
-        optional cardinality and there are no bound services. When there is a
-        change in the set of bound services or the service properties of a
-        bound service are modified and the collection holds service
-        properties, SCR must replace the field value with a new mutable
-        collection that must contain the updated set of bound services sorted
-        using the same ordering as <code>ServiceReference.compareTo</code>
-        based upon service ranking and service id. The new collection may be
-        empty if the reference has optional cardinality and there are no bound
-        services.</para>
+        optional cardinality and there are no bound services.</para>
       </section>
 
       <section>
@@ -1530,11 +1532,11 @@ public class HttpResourceImpl {
         <itemizedlist>
           <listitem>
             <para>If the type of the field is <code>Collection</code> or
-            <code>List</code>, SCR will set the field to a new mutable empty
-            collection or list object, respectively. If the field is declared
-            with the <code>final</code> modifier, SCR must log an error
-            message with the Log Service, if present, and the field must not
-            be modified.</para>
+            <code>List</code>, SCR will set the field value to a new mutable
+            empty collection or list object, respectively. If the field is
+            declared with the <code>final</code> modifier, SCR must log an
+            error message with the Log Service, if present, and the field must
+            not be modified.</para>
           </listitem>
 
           <listitem>
