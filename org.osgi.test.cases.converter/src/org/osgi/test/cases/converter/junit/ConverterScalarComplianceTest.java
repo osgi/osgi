@@ -269,6 +269,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		Pattern patternConverted = converter.convert(pattern).to(Pattern.class);
 		assertTrue(patternConverted.matcher(phoneNumber).matches());
 		
+		/* Commented out as this is Java 8 only
 		Instant instant = Instant.EPOCH;
 		String epochStr = "1970-01-01T00:00:00Z";
 		
@@ -307,6 +308,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		ZonedDateTime zonedDateTimeConverted =  converter.convert(
 				zonedDateTimeStr).to(ZonedDateTime.class);
 		assertEquals(0,zonedDateTime.compareTo(zonedDateTimeConverted));
+		*/
 	}
 	
 	/**
