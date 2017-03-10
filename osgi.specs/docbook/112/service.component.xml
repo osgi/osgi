@@ -4662,18 +4662,28 @@ public class MyComponent {
       <section xml:id="service.component-component.property.mapping">
         <title>Component Property Mapping</title>
 
-        <para><remark>BJH Mapping must handle single-element annotation. Also
-        '-'. </remark>Each method of a configuration property type is mapped
-        to a component property. The property name is derived from the method
-        name. Certain common property name characters, such as full stop
-        (<code>'.' \u002E</code>) are not valid in Java identifiers. So the
-        name of a method must be converted to its corresponding property name
-        as follows:<itemizedlist>
+        <para>Each method of a configuration property type is mapped to a
+        component property. The property name is derived from the method name.
+        Certain common property name characters, such as full stop (<code>'.'
+        \u002E</code>) and hyphen-minus (<code>'-' \u002D</code>) are not
+        valid in Java identifiers. So the name of a method must be converted
+        to its corresponding property name as follows:<itemizedlist>
             <listitem>
               <para>A single dollar sign (<code>'$' \u0024</code>) is removed
-              unless it is followed by another dollar sign in which case the
-              two consecutive dollar signs (<code>"$$"</code>) are converted
-              to a single dollar sign.</para>
+              unless it is followed by:<itemizedlist>
+                  <listitem>
+                    <para>Another dollar sign in which case the two
+                    consecutive dollar signs (<code>"$$"</code>) are converted
+                    to a single dollar sign.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>A low line (<code>'_' \u005F</code>) and a dollar
+                    sign in which case the three consecutive characters
+                    (<code>"$_$"</code>) are converted to a single
+                    hyphen-minus (<code>'-' \u002D</code>).</para>
+                  </listitem>
+                </itemizedlist></para>
             </listitem>
 
             <listitem>
@@ -4761,6 +4771,86 @@ public class MyComponent {
                 <entry><code>five_$_prop</code></entry>
 
                 <entry><code>five..prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>six$_$prop</code></entry>
+
+                <entry><code>six-prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>seven$$_$prop</code></entry>
+
+                <entry><code>seven$.prop</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>However, if the component property type is a
+        <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
+        linkend="service.component-jls.ref"/>, then the property name for the
+        <code>value</code> method is derived from the name of the component
+        property type rather than the name of the method. In this case, the
+        simple name of the component property type, that is, the name of the
+        class without any package name or outer class name, if the component
+        property type is an inner class, must be converted to the
+        <code>value</code> method's property name as follows:<itemizedlist>
+            <listitem>
+              <para>When a lower case character is followed by an upper case
+              character, a full stop (<code>'.' \u002E</code>) is inserted
+              between them.</para>
+            </listitem>
+
+            <listitem>
+              <para>Each uppercase character is converted to lower
+              case.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref linkend="service.component-single.element.name.mapping"/>
+        contains some mapping examples for the <code>value</code>
+        method.</para>
+
+        <table xml:id="service.component-single.element.name.mapping">
+          <title>Single-Element Annotaton Mapping Examples for
+          <code>value</code> Method</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Component Property Type Name</entry>
+
+                <entry>Component Property Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>ServiceRanking</code></entry>
+
+                <entry><code>service.ranking</code></entry>
+              </row>
+
+              <row>
+                <entry><code>Some_Name</code></entry>
+
+                <entry><code>some_name</code></entry>
+              </row>
+
+              <row>
+                <entry><code>OSGiProperty</code></entry>
+
+                <entry><code>osgi.property</code></entry>
               </row>
             </tbody>
           </tgroup>
@@ -5639,6 +5729,10 @@ public class MyComponent implements AcmeService {}</programlisting>
       <bibliomixed xml:id="service.component-jvms.ref"><title>The Java Virtual
       Machine Specification, Java SE 8
       Edition</title>https://docs.oracle.com/javase/specs/jvms/se8/html/index.html</bibliomixed>
+
+      <bibliomixed xml:id="service.component-jls.ref"><title>The Java Language
+      Specification, Java SE 8
+      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
     </bibliolist>
   </section>
 
@@ -5699,6 +5793,14 @@ public class MyComponent implements AcmeService {}</programlisting>
         property type method returning an array type, the component property
         type method must return an empty array instead of null. See <xref
         linkend="service.component-component.property.value.coercion"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="service.component-component.property.mapping"/>
+        is updated to add support for mapping to hyphen-minus in component
+        property names and to add special handling for the mapping of the
+        value method in component property types which are single-element
+        annotations.</para>
       </listitem>
     </itemizedlist>
   </section>
