@@ -3,7 +3,10 @@
 -dependson          : osgi.companion, ${build.impls}
 -resourceonly       : true
 
--outputmask = ${@bsn}-${versionmask;===;${@version}}.jar
+-releaserepo: Release
+-maven-release: javadoc;path=NONE,sources;path=NONE
+Bundle-Name: ${-groupid}:${bsn}
+-pom: version=${versionmask;===s;${@version}}
 
 # Build the osgi spec files
 -sub       = !layout.bnd, *.bnd
