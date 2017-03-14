@@ -33,7 +33,7 @@
  * {@code  Import-Package: org.osgi.service.cdi; version="[1.0,1.1)"}
  */
 
-@Version("1.0.0")
+@Version(CdiConstants.CDI_SPECIFICATION_VERSION)
 package org.osgi.service.cdi;
 
 import org.osgi.annotation.versioning.Version;

@@ -21,22 +21,33 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Inject;
+import javax.inject.Qualifier;
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used with {@link Inject} in order to have Configuration Admin
  * configurations injected into CDI beans.
  * <p>
- * The values are PIDs of required configurations. The special value
- * <code>$</code> is used to refer to the host bean class name.
+ * The values are PIDs of required configurations. The special value {@code $}
+ * is used to refer to the host bean class name.
  */
+@Qualifier
 @Target(value = {ElementType.FIELD, ElementType.PARAMETER})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
+@Requirement(
+		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
+		name = CdiConstants.CDI_CAPABILITY_NAME,
+		version = CdiConstants.CDI_SPECIFICATION_VERSION)
 public @interface Configuration {
 
 	/**
 	 * @return the PIDs of the required configurations
 	 */
+	@Nonbinding
 	String[] value() default "$";
 }

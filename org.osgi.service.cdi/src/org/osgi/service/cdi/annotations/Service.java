@@ -21,13 +21,20 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
  * The Service annotation exposes a bean as an OSGi service.
  */
-@Target(value = ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
 @Documented
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(value = ElementType.TYPE)
+@Requirement(
+		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
+		name = CdiConstants.CDI_CAPABILITY_NAME,
+		version = CdiConstants.CDI_SPECIFICATION_VERSION)
 public @interface Service {
 
 	/**
@@ -44,11 +51,19 @@ public @interface Service {
 	Class<?>[] type() default {};
 
 	/**
-	 * Properties for the service.
-	 *
+	 * Properties for this Service.
 	 * <p>
-	 * Each property is specified as an instance of {@link ServiceProperty}.
+	 * Each property string is specified as {@code "name=value"}. The type of
+	 * the property value can be specified in the name as
+	 * {@code name:type=value}. The type must be one of the property types
+	 * supported by the {@code type} attribute of the {@code property} element
+	 * of a Service Description.
+	 * <p>
+	 * To specify a property with multiple values, use multiple name, value
+	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
+	 *
+	 * @see "The property element of a Service."
 	 */
-	ServiceProperty[] properties() default {};
+	String[] property() default {};
 
 }

@@ -37,6 +37,6 @@ public @interface MinCardinality {
 	 *
 	 * @return minimum cardinality
 	 */
-	int value() default 1;
+	int value() default 0;
 
 }

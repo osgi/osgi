@@ -21,24 +21,32 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Annotation used to annotate a CDI injection point and inform the CDI extender
+ * Annotation used to annotate a CDI injection point informing the CDI container
  * that the injection should apply a service obtained from the OSGi registry.
  */
 @Qualifier
 @Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
+@Requirement(
+		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
+		name = CdiConstants.CDI_CAPABILITY_NAME,
+		version = CdiConstants.CDI_SPECIFICATION_VERSION)
 public @interface Reference {
 
 	/**
 	 * The reference scope for this reference.
 	 *
 	 * <p>
-	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} reference
-	 * scope is used.
+	 * If not specified, the {@link ReferenceScope#BUNDLE} reference scope is
+	 * used.
 	 */
 	ReferenceScope scope() default ReferenceScope.BUNDLE;
 
@@ -48,6 +56,7 @@ public @interface Reference {
 	 * <p>
 	 * If not specified, no target property is applied.
 	 */
+	@Nonbinding
 	String target() default "";
 
 	/**
