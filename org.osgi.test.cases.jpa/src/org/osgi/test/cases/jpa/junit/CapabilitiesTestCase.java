@@ -82,7 +82,7 @@ public class CapabilitiesTestCase extends DefaultTestBundleControl {
 
 					if (uses != null) {
 						Set<String> packages = new HashSet<>(
-								Arrays.asList(uses.split("\\s,\\s")));
+								Arrays.asList(uses.split("\\s*,\\s*")));
 						if (packages.contains("javax.persistence")
 								&& packages.contains("org.osgi.service.jpa")) {
 							found = true;

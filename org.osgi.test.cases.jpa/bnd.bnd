@@ -7,7 +7,7 @@ Private-Package						=  \
 	${p}.*
 	
 Import-Package						= \
-	${-signaturetest};          version="[1.0,2.0)", \
+	${-signaturetest}, \
 	javax.persistence;			version="[1.0,2.2)" , \
 	javax.persistence.spi;		version="[1.0,2.2)" , \
 	*
