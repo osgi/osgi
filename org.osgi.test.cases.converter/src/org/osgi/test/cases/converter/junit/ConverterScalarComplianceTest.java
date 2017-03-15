@@ -3,12 +3,6 @@ package org.osgi.test.cases.converter.junit;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetTime;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +12,7 @@ import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
@@ -158,7 +153,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		Converter converter = new StandardConverter();
 		
 		boolean booleanConverted = converter.convert(null).to(boolean.class);
-		assertTrue(booleanConverted);
+		assertFalse(booleanConverted);
 		
 		char charConverted = converter.convert(null).to(char.class);
 		assertEquals((char) 0,charConverted);
@@ -335,14 +330,12 @@ public class ConverterScalarComplianceTest extends TestCase {
 	}
 
 	/**
-	 * Section 148.4.2.5 - Date and Calendar
-	 * 
-	 * [...] Converting a Date to a String is done by converting
-	 * to a  Instant and then calling instant toString(). This will
-	 * produce a ISO-8601 UTC date/time string in the following format:
-	 * 2011-12-03T10:15/30Z. Converting  a String to a date is done by 
-	 * calling Date.from(Instant.parse(v)) which can convert this 
-	 * ISO-8601 format back into a Date
+	 * Section 148.4.2.5 - Date and Calendar [...] Converting a Date to a String
+	 * is done by converting to a Instant and then calling instant toString().
+	 * This will produce a ISO-8601 UTC date/time string in the following
+	 * format: 2011-12-03T10:15:30Z. Converting a String to a date is done by
+	 * calling Date.from(Instant.parse(v)) which can convert this ISO-8601
+	 * format back into a Date
 	 */
 	public void testScalarConversionDateAndString()
 	{
@@ -353,7 +346,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		
 		Date date = calendar.getTime();
 		
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm/ss'Z'");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		df.setTimeZone(tz);
 		
 		String dateStr = df.format(date);
@@ -667,8 +660,8 @@ public class ConverterScalarComplianceTest extends TestCase {
 				converter.convert(tobeConverted).to(
 						new TypeReference<Map.Entry<String,String>>(){});
 		
-			fail("UnsupportedOperationException expected");
-		} catch(UnsupportedOperationException e)
+			fail("ConversionException expected");
+		} catch (ConversionException e)
 		{}
 	}
 }
