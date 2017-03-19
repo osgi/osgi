@@ -1,13 +1,15 @@
 package org.osgi.test.cases.converter.junit;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
+import org.osgi.util.converter.ConvertFunction;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
 import org.osgi.util.function.Function;
@@ -34,12 +36,15 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(Date.class,String.class,
+		cb.rule(new Rule<Date,String>(
 			new Function<Date,String>(){
 				@Override
 				public String apply(Date d) {
 				    return sdf.format(d);
-				}}, 
+					}
+				}) {});
+
+		cb.rule(new Rule<String,Date>(
 			new Function<String,Date>(){
 				@Override
 				public Date apply(String s) {
@@ -49,8 +54,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 							e.printStackTrace();
 						}
 						return null;
-				}}
-		); 
+					}
+				}) {});
 		
 		Converter c = cb.build();
 		
@@ -79,12 +84,14 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(Date.class,String.class,
+		cb.rule(new Rule<Date,String>(
 			new Function<Date,String>(){
 				@Override
 				public String apply(Date d) {
 				    return sdf.format(d);
-				}}, 
+					}
+				}) {});
+		cb.rule(new Rule<String,Date>(
 			new Function<String,Date>(){
 				@Override
 				public Date apply(String s) {
@@ -94,8 +101,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 							e.printStackTrace();
 						}
 						return null;
-				}}
-		); 
+					}
+				}) {});
 		Converter c = cb.build();
 
 		String dateConverted = "131124072100+0100";
@@ -124,33 +131,34 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	{
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 		
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class,Long.class,
+		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(
 			new Function<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(){
 				@Override
 				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
 					return ((long)v.getFirstInt() << 32)
 							| (v.getSecondInt() & 0xFFFFFFFFL);
-				}}, 
+				}}) {});
+		cb.rule(new Rule<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(
 			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
 				@Override
 				public ConverterComplianceTest.MyInterfaceProvidingTwoInts apply(Long v) {
 					return null;
-				}}
-		); 
+				}}) {});
 		
 		//delegate to the MyInterfaceProvidingTwoInts interface
-		cb.rule(ConverterComplianceTest.MyAbstractImplementation.class,Long.class,
+		cb.rule(new Rule<ConverterComplianceTest.MyAbstractImplementation,Long>(
 			new Function<ConverterComplianceTest.MyAbstractImplementation,Long>(){
 				@Override
 				public Long apply(ConverterComplianceTest.MyAbstractImplementation v) {
 					return null;
-				}}, 
+				}}) {});
+		cb.rule(new Rule<Long,ConverterComplianceTest.MyAbstractImplementation>(
 			new Function<Long,ConverterComplianceTest.MyAbstractImplementation>(){
 				@Override
 				public ConverterComplianceTest.MyAbstractImplementation apply(Long v) {
 					return null;
-				}}
-		); 
+					}
+				}) {});
 		
 		//how can I chain rules to specify the fact that a 
 		//conversion from MyAbstractImplementation type to a 
@@ -198,41 +206,29 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	{
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(Object.class,Long.class,
-			new Function<Object,Long>(){
+		cb.rule(Long.class,
+			new ConvertFunction<Long>(){
 				@Override
-				public Long apply(Object v) {
+				public Long convert(Object v, Type t) {
 					return (long)v.hashCode();
-				}}, 
-			new Function<Long,Object>(){
-				@Override
-				public Object apply(Long v) {
-					return null;
-				}});
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingLong.class,Long.class,
+					}
+				});
+		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(
 			new Function<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(){
 				@Override
 				public Long apply(ConverterComplianceTest.MyInterfaceProvidingLong v) {
 					return v.getLong();
-				}}, 
-			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingLong>(){
-				@Override
-				public ConverterComplianceTest.MyInterfaceProvidingLong apply(Long v) {
-					return null;
-				}});
+					}
+				}) {});
 
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingTwoInts.class,Long.class,
+		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(
 			new Function<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(){
 				@Override
 				public Long apply(ConverterComplianceTest.MyInterfaceProvidingTwoInts v) {
 					return ((long)v.getFirstInt() << 32)
 							| (v.getSecondInt() & 0xFFFFFFFFL);
-				}}, 
-			new Function<Long,ConverterComplianceTest.MyInterfaceProvidingTwoInts>(){
-				@Override
-				public ConverterComplianceTest.MyInterfaceProvidingTwoInts apply(Long v) {
-					return null;
-				}});
+					}
+				}) {});
 		
 		ConverterComplianceTest.MyImplementation myImplementation = 
 		    new ConverterComplianceTest.MyImplementation();

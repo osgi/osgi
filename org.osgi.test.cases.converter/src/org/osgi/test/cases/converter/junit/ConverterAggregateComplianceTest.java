@@ -6,13 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import org.osgi.util.function.Function;
 
 import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
+import org.osgi.util.function.Function;
 
 import junit.framework.TestCase;
 
@@ -196,23 +197,22 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	{		
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
-		cb.rule(ConverterComplianceTest.MyInterfaceProvidingLong.class, 
-		Long.class, 
+		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingLong, Long>( 
 		new Function<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(){
 			@Override
 			public Long apply(MyInterfaceProvidingLong t) {
 				
 				return t.getLong();
 			}
-		},
-		new Function<Long,ConverterComplianceTest.MyInterfaceProvidingLong>(){
-
-			@Override
-			public MyInterfaceProvidingLong apply(Long t) {
-				return null;
-			}
-			
-		});	
+				}) {});
+//		new Function<Long,ConverterComplianceTest.MyInterfaceProvidingLong>(){
+//
+//			@Override
+//			public MyInterfaceProvidingLong apply(Long t) {
+//				return null;
+//			}
+//			
+//		});	
 		
 		ConverterComplianceTest.MyImplementation myImplementation = 
 		    new ConverterComplianceTest.MyImplementation();
