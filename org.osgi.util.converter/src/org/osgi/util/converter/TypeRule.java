@@ -15,13 +15,13 @@
  */
 package org.osgi.util.converter;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import org.osgi.util.function.Function;
 
-/** A rule implementation that works by capturing the type arguments via
- * subclassing. The rule supports specifying both <em>from</em> and
+/**
+ * Rule implementation that works by passing in type arguments rather than subclassing.
+ * The rule supports specifying both <em>from</em> and
  * <em>to</em> types. Filtering on the <em>from</em> by the {@code Rule}
  * implementation. Filtering on the <em>to</em> is done by the converter
  * customization mechanism.
@@ -29,43 +29,35 @@ import org.osgi.util.function.Function;
  * @author $Id$
  *
  * @param <F> The type to convert from.
- * @param <T> The type to convert to.
- */
-public abstract class Rule<F,T> implements TargetRule<T>{
+ * @param <T> The type to convert to. */
+public class TypeRule<F,T> implements TargetRule<T> {
     private final ConvertFunction<T> function;
+    private final Type toType;
 
     /**
-     * Create an instance with a conversion function.
+     * Create an instance based on source, target types and a conversion function.
+     *
+     * @param from The type to convert from.
+     * @param to The type to convert to.
      * @param func The conversion function to use.
      */
-    public Rule(Function<F,T> func) {
-        function = getGenericFunction(func);
+    public TypeRule(Type from, Type to, Function<F,T> func) {
+        function = getFunction(from, func);
+        toType = to;
     }
 
-    private ConvertFunction<T> getGenericFunction(Function<F, T> func) {
+    private static <F,T> ConvertFunction<T> getFunction(Type from, Function<F, T> func) {
         return new ConvertFunction<T>() {
             @Override
             @SuppressWarnings("unchecked")
             public T convert(Object obj, Type targetType) throws Exception {
-                Rule<?,?> r = Rule.this;
-                Type type = ((ParameterizedType) r.getClass().getGenericSuperclass())
-                        .getActualTypeArguments()[0];
-
-                if (type instanceof ParameterizedType) {
-                    // TODO is this ok?
-                    type = ((ParameterizedType) type).getRawType();
+                if (from instanceof Class) {
+                    Class<?> cls = (Class<?>) from;
+                    if (cls.isInstance(obj)) {
+                        return func.apply((F) obj);
+                    }
                 }
-
-                Class<?> cls = null;
-                if (type instanceof Class) {
-                    cls = ((Class<?>) type);
-                } else {
-                    return null;
-                }
-
-                if (cls.isInstance(obj)) {
-                    return func.apply((F) obj);
-                }
+                // TODO support parameterized types?
                 return null;
             }
         };
@@ -78,10 +70,6 @@ public abstract class Rule<F,T> implements TargetRule<T>{
 
     @Override
     public Type getTargetType() {
-        Type type = ((ParameterizedType) getClass().getGenericSuperclass())
-                .getActualTypeArguments()[1];
-        if (type instanceof ParameterizedType)
-            return ((ParameterizedType) type).getRawType();
-        return type;
+        return toType;
     }
 }

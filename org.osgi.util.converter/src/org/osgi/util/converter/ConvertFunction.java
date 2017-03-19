@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@ import java.lang.reflect.Type;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * An functional interface with a single convert method that is passed the
- * original object and the target type.
+ * An functional interface with a convert method that is passed the original
+ * object and the target type to perform a custom conversion.
+ * <P>
+ * This interface can also be used to register a custom error handler.
  *
- * @param <F> Type parameter for the source object.
  * @param <T> Type parameter for the converted object.
  * @author $Id$
  */
 @ConsumerType
 @FunctionalInterface
-public interface ConvertFunction<F, T> {
+public interface ConvertFunction<T> {
 	/**
 	 * Convert the object into the target type.
 	 *
@@ -39,11 +40,11 @@ public interface ConvertFunction<F, T> {
 	 * @param targetType The target type.
 	 * @return The conversion result or {@code null} to indicate that the
 	 *         convert function cannot handle this conversion. In this case the
-	 *         next matching rule or adapter will be given a opportunity to
-	 *         convert.
+	 *         next matching rule or parent converter will be given a
+	 *         opportunity to convert.
 	 * @throws Exception
 	 */
-	T convert(F obj, Type targetType)
+	T convert(Object obj, Type targetType)
 			throws Exception;
 
 	/**
@@ -60,7 +61,7 @@ public interface ConvertFunction<F, T> {
 	 * @throws RuntimeException Another Runtime Exception may also be thrown by
 	 *             this handler.
 	 */
-	default T handleError(F obj, Type targetType) {
+	default T handleError(Object obj, Type targetType) {
 		return null;
 	}
 }

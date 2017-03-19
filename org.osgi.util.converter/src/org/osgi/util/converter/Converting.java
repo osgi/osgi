@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public interface Converting {
 	 * The default value to use when the object cannot be converted or in case
 	 * of conversion from a {@code null} value.
 	 *
-	 * @param defVal The default value.
+	 * @param defVal The default value, must not be {@code null}.
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
@@ -54,7 +54,7 @@ public interface Converting {
 	 * Treat the source object as the specified class. This can be used to
 	 * disambiguate a type if it implements multiple interfaces or extends
 	 * multiple classes.
-	 * 
+	 *
 	 * @param cls The class to treat the object as.
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
@@ -64,7 +64,7 @@ public interface Converting {
 	/**
 	 * Treat the source object as a JavaBean. By default objects will not be
 	 * treated as JavaBeans, this has to be specified using this method.
-	 * 
+	 *
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
@@ -73,7 +73,7 @@ public interface Converting {
 	/**
 	 * Treat the source object as a DTO even if the source object has methods or
 	 * is otherwise not recognised as a DTO.
-	 * 
+	 *
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
@@ -83,7 +83,7 @@ public interface Converting {
 	 * Treat the target object as the specified class. This can be used to
 	 * disambiguate a type if it implements multiple interfaces or extends
 	 * multiple classes.
-	 * 
+	 *
 	 * @param cls The class to treat the object as.
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
@@ -93,7 +93,7 @@ public interface Converting {
 	/**
 	 * Treat the target object as a JavaBean. By default objects will not be
 	 * treated as JavaBeans, this has to be specified using this method.
-	 * 
+	 *
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */
@@ -102,7 +102,7 @@ public interface Converting {
 	/**
 	 * Treat the target object as a DTO even if it has methods or is otherwise
 	 * not recognized as a DTO.
-	 * 
+	 *
 	 * @return The current {@code Converting} object so that additional calls
 	 *         can be chained.
 	 */

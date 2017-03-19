@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@ package org.osgi.util.converter;
 import java.lang.reflect.Type;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.util.function.Function;
 
 /**
  * A builder to create a new converter with modified behaviour based on an
  * existing converter. The modified behaviour is specified by providing rules
- * and/or conversion functions.
+ * and/or conversion functions. If multiple rules match they will be visited
+ * in sequence of registration. If a rule's function returns {@code null} the
+ * next ruld found will be visited. If none of the rules can handle the
+ * conversion, the original converter will be used to perform the conversion.
  *
  * @author $Id$
  */
@@ -38,47 +40,30 @@ public interface ConverterBuilder {
 	 */
 	Converter build();
 
-	/**
-	 * Register a special rule for this converter.
-	 *
-	 * @param rule The rule
-	 * @return This converter builder for further building.
-	 */
-	<F, T> ConverterBuilder rule(Rule<F,T> rule);
+    /**
+     * Register a conversion rule for this converter. Note that only the target
+     * type is specified, so the rule will be visited for every conversion to the
+     * target tupe.
+     *
+     * @param type The type that this rule will produce.
+     * @param function The function that will handle the conversion.
+     * @return This converter builder for further building.
+     */
+    <T> ConverterBuilder rule(Type type, ConvertFunction<T> function);
 
-	/**
-	 * Register a special rule for this converter.
-	 *
-	 * @param fromCls The class from which to convert.
-	 * @param toCls The class to which to convert.
-	 * @param toFun A function that handles the conversion.
-	 * @param fromFun A function that handles the reverse conversion.
-	 * @return This converter builder for further building.
-	 */
-	<F, T> ConverterBuilder rule(Class<F> fromCls, Class<T> toCls,
-			Function<F,T> toFun, Function<T,F> fromFun);
+    /**
+     * Register a conversion rule for this converter.
+     *
+     * @param rule A rule implementation.
+     * @return This converter builder for further building.
+     */
+    <T> ConverterBuilder rule(TargetRule<T> rule);
 
-	/**
-	 * Register a special rule for this converter.
-	 *
-	 * @param fromRef A type reference representing the class to convert from.
-	 * @param toRef A type reference representing the class to convert to.
-	 * @param toFun A function that handles the conversion.
-	 * @param fromFun A function that handles the reverse conversion.
-	 * @return This converter builder for further building.
-	 */
-	<F, T> ConverterBuilder rule(TypeReference<F> fromRef,
-			TypeReference<T> toRef, Function<F,T> toFun, Function<T,F> fromFun);
-
-	/**
-	 * Register a special rule for this converter.
-	 *
-	 * @param fromType A reflection type from which to convert.
-	 * @param toType A reflection type to which to convert.
-	 * @param toFun A function that handles the conversion.
-	 * @param fromFun A function that handles the reverse conversion.
-	 * @return This converter builder for further building.
-	 */
-	<F, T> ConverterBuilder rule(Type fromType, Type toType,
-			Function<F,T> toFun, Function<T,F> fromFun);
+    /**
+     * Register a catch-all rule, will be called of no other rule matches.
+     *
+     * @param function The function that will handle the conversion.
+     * @return This converter builder for further building.
+     */
+    <T> ConverterBuilder rule(ConvertFunction<T> func);
 }
