@@ -28,13 +28,13 @@
 <text transform="matrix(1 0 0 1 7.3198 20.6399)" font-family="'ProductusBook'" font-size="7.98">... other files</text>
 <text transform="matrix(1 0 0 1 95.4805 8.3196)" font-family="'ProductusOSGiBookc'" font-size="7.98">Manifest-Version: 1.0</text>
 <text transform="matrix(1 0 0 1 95.4805 27.76)" font-family="'ProductusOSGiBookc'" font-size="7.98">Name: x/A.class</text>
-<text transform="matrix(1 0 0 1 95.4805 37.3362)" font-family="'ProductusOSGiBookc'" font-size="7.98">SHA-1-Digest:</text>
-<text transform="matrix(1 0 0 1 138.0718 37.3362)" font-family="'ProductusOSGiMonoc'" font-size="7.98">RJpDp+igoJ1k...</text>
+<text transform="matrix(1 0 0 1 95.4805 37.3362)" font-family="'ProductusOSGiBookc'" font-size="7.98">SHA-256-Digest:</text>
+<text transform="matrix(1 0 0 1 146.0718 37.3362)" font-family="'ProductusOSGiMonoc'" font-size="7.98">RJpDp+igoJ...</text>
 <text transform="matrix(1 0 0 1 99.4805 58.1399)" font-family="'ProductusOSGiBookc'" font-size="7.98"> </text>
 <text transform="matrix(1 0 0 1 102.6724 58.1399)" font-family="'ProductusOSGiBookc'" font-size="7.98"> </text>
 <text transform="matrix(1 0 0 1 95.4805 57.8596)" font-family="'ProductusOSGiBookc'" font-size="7.98">Name: x/B.class</text>
-<text transform="matrix(1 0 0 1 95.4805 67.4358)" font-family="'ProductusOSGiBookc'" font-size="7.98">SHA-1-Digest:</text>
-<text transform="matrix(1 0 0 1 138.0718 67.4358)" font-family="'ProductusOSGiMonoc'" font-size="7.98">3EuIPcx414w2...</text>
+<text transform="matrix(1 0 0 1 95.4805 67.4358)" font-family="'ProductusOSGiBookc'" font-size="7.98">SHA-256-Digest:</text>
+<text transform="matrix(1 0 0 1 146.0718 67.4358)" font-family="'ProductusOSGiMonoc'" font-size="7.98">3EuIPcx414...</text>
 <text transform="matrix(1 0 0 1 7.3203 48.4202)" font-family="'ProductusBook'" font-size="7.98">x/A.class</text>
 <text transform="matrix(1 0 0 1 7.3203 73.6204)" font-family="'ProductusBook'" font-size="7.98">x/B.class</text>
 <polyline points="35.64,46.8 35.46,46.86 35.64,47.281 35.82,47.219 "/>

@@ -257,20 +257,18 @@
       actual resources. These digests must be placed in their name section of
       the manifest. The name of the digest header is constructed with its
       algorithm followed by <code>-Digest</code>. An example is the
-      <code>SHA-1-Digest</code>. It is recommended that OSGi Framework
+      <code>SHA-256-Digest</code>. It is recommended that OSGi Framework
       implementations support the following digest algorithms.</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>MD5</emphasis> - Message Digest 5, an improved
-          version of MD4. It generates a 128-bit hash. It is described at page
-          436 in <xref linkend="i1483029"/>.</para>
+          <para><emphasis>SHA-1</emphasis> - Delivers a 160 bit hash. It is
+          defined in <xref linkend="i1483030"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SHA-1</emphasis> - An improved version of SHA,
-          delivers a 160 bit hash. It is defined in <xref
-          linkend="i1483030"/>.</para>
+          <para><emphasis>SHA-256</emphasis> - Delivers a 256 bit hash. It is
+          defined in <xref linkend="i1483030"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -283,10 +281,10 @@
 Bundle-Name: DisplayManifest
 <phrase role="symbol">↵</phrase>
 Name: x/A.class
-SHA-1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
+SHA-256-Digest: 7CCToQk6yvRusxNl0uSwrv37UY/fdz6aHou29mbswsM=
 <phrase role="symbol">↵</phrase>
 Name: x/B.class
-SHA-1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
+SHA-256-Digest: C+0CG/cy13WD2sq8dRZm+dNWAHIjm4RQmUVeLLv7DVU=
 <phrase role="symbol">↵</phrase></programlisting>
 
       <para>Graphically this looks like <xref linkend="i1506821"/>.</para>
@@ -326,12 +324,11 @@ SHA-1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 
       <para>The only relevant part of the signature resource is the digest of
       the Manifest resource. The name of the header must be the name algorithm
-      (e.g. <code>SHA-1</code>) followed by <code>-Digest-Manifest</code>. For
-      example:</para>
+      (e.g. <code>SHA-256</code>) followed by <code>-Digest-Manifest</code>.
+      For example:</para>
 
       <programlisting><code>Signature-Version: 1.0</code>
-SHA-1-Digest-Manifest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
-MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
+SHA-256-Digest-Manifest: HmK7445BA7n5UYYI9xZKfSdMAPci44Jn7ZcmoyoiWoM=</programlisting>
 
       <para>The signature resource can contain name sections as well. However,
       these name sections should be ignored.</para>
@@ -400,8 +397,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
 
         <listitem>
-          <para>The manifest entry must contain a SHA-1 and/or MD5 digest for
-          the complete manifest.</para>
+          <para>The manifest entry must contain a SHA-256 and/or SHA-1 digest
+          for the complete manifest.</para>
         </listitem>
 
         <listitem>
@@ -1014,17 +1011,14 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       Architecture</title>Version 1.2, Sun Microsystems, March
       2002</bibliomixed>
 
-      <bibliomixed xml:id="i1509711"><title>The Java 2 Package Versioning
-      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
+      <bibliomixed xml:id="i1509711"><title>Java Package Versioning
+      Specification</title>http://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
 
       <bibliomixed xml:id="i1488938"><title>Manifest
-      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
+      Format</title>http://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
 
-      <bibliomixed xml:id="i1483030"><title>Secure Hash Algorithm
-      1</title>http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</bibliomixed>
-
-      <bibliomixed xml:id="i1483029"><title>RFC 1321 The MD5 Message-Digest
-      Algorithm</title>http://www.ietf.org/rfc/rfc1321.txt</bibliomixed>
+      <bibliomixed xml:id="i1483030"><title>Secure Hash
+      Standard</title>http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf</bibliomixed>
 
       <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
       Internet Electronic
@@ -1046,5 +1040,19 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
       Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Updated references to current URLs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Removed MD5 and added SHA-256 digest algorithms.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
