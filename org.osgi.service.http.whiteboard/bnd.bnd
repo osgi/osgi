@@ -8,4 +8,5 @@ Export-Package:  \
 -buildpath = \
     osgi.core; version=6.0, \
     osgi.annotation; version=6.0.1, \
+    org.osgi.service.component; version=project, \
     org.apache.felix.http.servlet-api; version=1.1.2
