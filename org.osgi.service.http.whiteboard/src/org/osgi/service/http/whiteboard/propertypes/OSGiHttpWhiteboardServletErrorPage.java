@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.context.select}
- * service property.
+ * Component Property Type for the
+ * {@code osgi.http.whiteboard.servlet.errorPage} service property.
  * <p>
- * This annotation can be used on a http whiteboard component to declare the
+ * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,20 +39,19 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardContextSelect {
+public @interface OSGiHttpWhiteboardServletErrorPage {
 
 	/**
 	 * Prefix for the service properties. This value is prepended to each
 	 * property name.
 	 */
-	String PREFIX_ = "osgi.http.whiteboard.context.";
+	String PREFIX_ = "osgi.http.whiteboard.servlet.";
 
 	/**
-	 * Service property identifying the select property of a http whiteboard
-	 * component.
+	 * Service property identifying the error pages of a servlet.
 	 * 
-	 * @return The filter expression.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+	 * @return The servlet error pages.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
 	 */
-	String value();
+	String[] errorPage();
 }

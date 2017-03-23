@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.context.select}
- * service property.
+ * Component Property Type for the
+ * {@code osgi.http.whiteboard.filter.asyncSupported} service property.
  * <p>
- * This annotation can be used on a http whiteboard component to declare the
+ * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,20 +39,19 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardContextSelect {
+public @interface OSGiHttpWhiteboardFilterAsyncSupported {
 
 	/**
 	 * Prefix for the service properties. This value is prepended to each
 	 * property name.
 	 */
-	String PREFIX_ = "osgi.http.whiteboard.context.";
+	String PREFIX_ = "osgi.http.whiteboard.filter.";
 
 	/**
-	 * Service property identifying the select property of a http whiteboard
-	 * component.
+	 * Service property identifying the asynchronous support of a filter.
 	 * 
-	 * @return The filter expression.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+	 * @return Whether the filter supports asynchronous processing.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED
 	 */
-	String value();
+	boolean asyncSupported() default true;
 }

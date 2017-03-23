@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.context.select}
- * service property.
+ * Component Property Type for the
+ * {@code osgi.http.whiteboard.filter.dispatcher} service property.
  * <p>
- * This annotation can be used on a http whiteboard component to declare the
+ * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,20 +39,17 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardContextSelect {
+public @interface OSGiHttpWhiteboardFilterDispatcher {
+
+	public enum Dispatcher {
+		REQUEST, INCLUDE, FORWARD, ASYNC, ERROR
+	}
 
 	/**
-	 * Prefix for the service properties. This value is prepended to each
-	 * property name.
-	 */
-	String PREFIX_ = "osgi.http.whiteboard.context.";
-
-	/**
-	 * Service property identifying the select property of a http whiteboard
-	 * component.
+	 * Service property identifying dispatcher values for the filter.
 	 * 
-	 * @return The filter expression.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+	 * @return The dispatcher values for the filter.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
 	 */
-	String value();
+	Dispatcher[] value() default Dispatcher.REQUEST;
 }

@@ -24,12 +24,13 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.context.select}
- * service property.
+ * Component Property Type for the {@code osgi.http.whiteboard.resource.pattern}
+ * and {@code osgi.http.whiteboard.resource.prefix} service property.
  * <p>
- * This annotation can be used on a http whiteboard component to declare the
- * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
+ * This annotation can be used on any service to declare the value of the
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN}
+ * and
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,20 +40,27 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardContextSelect {
+public @interface OSGiHttpWhiteboardResource {
 
 	/**
 	 * Prefix for the service properties. This value is prepended to each
 	 * property name.
 	 */
-	String PREFIX_ = "osgi.http.whiteboard.context.";
+	String PREFIX_ = "osgi.http.whiteboard.resource.";
 
 	/**
-	 * Service property identifying the select property of a http whiteboard
-	 * component.
+	 * Service property identifying resource patterns.
 	 * 
-	 * @return The filter expression.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+	 * @return The resource patterns.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
 	 */
-	String value();
+	String[] pattern();
+
+	/**
+	 * Service property identifying resource prefix.
+	 * 
+	 * @return The resource patterns.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
+	 */
+	String prefix();
 }
