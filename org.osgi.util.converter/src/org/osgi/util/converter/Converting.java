@@ -51,6 +51,15 @@ public interface Converting {
 	Converting defaultValue(Object defVal);
 
 	/**
+	 * When converting between map-like types use case-insensitive mapping of
+	 * keys.
+	 * 
+	 * @return The current {@code Converting} object so that additional calls
+	 *         can be chained.
+	 */
+	Converting keysIgnoreCase();
+
+	/**
 	 * Treat the source object as the specified class. This can be used to
 	 * disambiguate a type if it implements multiple interfaces or extends
 	 * multiple classes.
