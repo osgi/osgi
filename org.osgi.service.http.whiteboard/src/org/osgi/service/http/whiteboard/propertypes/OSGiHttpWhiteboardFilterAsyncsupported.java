@@ -25,11 +25,11 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
  * Component Property Type for the
- * {@code osgi.http.whiteboard.servlet.asyncSupported} service property.
+ * {@code osgi.http.whiteboard.filter.asyncSupported} service property.
  * <p>
- * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
+ * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,19 +39,13 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardServletAsyncSupported {
+public @interface OSGiHttpWhiteboardFilterAsyncsupported {
 
 	/**
-	 * Prefix for the service properties. This value is prepended to each
-	 * property name.
-	 */
-	String PREFIX_ = "osgi.http.whiteboard.servlet.";
-
-	/**
-	 * Service property identifying the asynchronous support of a servlet.
+	 * Service property identifying the asynchronous support of a filter.
 	 * 
-	 * @return Whether the servlet supports asynchronous processing.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED
+	 * @return Whether the filter supports asynchronous processing.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED
 	 */
-	boolean asyncSupported() default true;
+	boolean value() default true;
 }

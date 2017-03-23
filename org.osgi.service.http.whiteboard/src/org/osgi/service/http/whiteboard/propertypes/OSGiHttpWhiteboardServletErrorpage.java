@@ -39,13 +39,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardServletErrorPage {
-
-	/**
-	 * Prefix for the service properties. This value is prepended to each
-	 * property name.
-	 */
-	String PREFIX_ = "osgi.http.whiteboard.servlet.";
+public @interface OSGiHttpWhiteboardServletErrorpage {
 
 	/**
 	 * Service property identifying the error pages of a servlet.
@@ -53,5 +47,5 @@ public @interface OSGiHttpWhiteboardServletErrorPage {
 	 * @return The servlet error pages.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
 	 */
-	String[] errorPage();
+	String[] value();
 }
