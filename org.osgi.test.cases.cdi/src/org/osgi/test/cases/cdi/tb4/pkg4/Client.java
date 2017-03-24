@@ -29,9 +29,8 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Service;
-import org.osgi.service.cdi.annotations.ServiceProperty;
 
-@Service(properties = { @ServiceProperty(key = "tb", value = "tb4") })
+@Service(property = { "tb=tb4" })
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;

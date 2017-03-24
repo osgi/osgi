@@ -6,10 +6,9 @@ import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Reference;
 import org.osgi.service.cdi.annotations.Service;
-import org.osgi.service.cdi.annotations.ServiceProperty;
 import org.osgi.test.cases.tb.serviceapi.Provider;
 
-@Service(properties = { @ServiceProperty(key = "name", value = "intermediate") })
+@Service(property = { "name=intermediate" })
 public class IntermediateDependency implements Callable<String> {
 
 	@Inject
