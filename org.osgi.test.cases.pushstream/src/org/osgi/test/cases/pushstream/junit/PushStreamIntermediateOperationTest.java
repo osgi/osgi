@@ -24,8 +24,6 @@ import org.osgi.util.pushstream.PushStreamProvider;
 import org.osgi.util.pushstream.PushbackPolicyOption;
 import org.osgi.util.pushstream.QueuePolicyOption;
 
-import junit.framework.TestCase;
-
 
 /**
  * Section 706.3 The Push Stream
@@ -188,7 +186,7 @@ public class PushStreamIntermediateOperationTest
 			return (char) ('a' + e);
 		}).toArray();
 
-		TestCase.assertEquals("[a, b, c, d, e]", Arrays.toString(p.getValue()));
+		assertEquals("[a, b, c, d, e]", Arrays.toString(p.getValue()));
 	}
 
 	/**
@@ -256,7 +254,7 @@ public class PushStreamIntermediateOperationTest
 		}).toArray();
 		// expect ('a' + 0), ('a' + 0 ,'a' + 1) ,('a' + 0 ,'a' + 1 , 'a' + 2 ),
 		// ('a' + 0 ,'a' + 1 , 'a' + 2, 'a' + 3)
-		TestCase.assertEquals("[a, a, b, a, b, c, a, b, c, d]",
+		assertEquals("[a, a, b, a, b, c, a, b, c, d]",
 				Arrays.toString(p.getValue()));
 	}
 
@@ -321,7 +319,7 @@ public class PushStreamIntermediateOperationTest
 			return e % 2 == 0;
 		}).toArray();
 
-		TestCase.assertEquals("[0, 2, 4]",
+		assertEquals("[0, 2, 4]",
 				Arrays.toString(p.getValue()));
 	}
 
@@ -383,7 +381,7 @@ public class PushStreamIntermediateOperationTest
 			return e % 2;
 		}).distinct().toArray();
 
-		TestCase.assertEquals("[0, 1]", Arrays.toString(p.getValue()));
+		assertEquals("[0, 1]", Arrays.toString(p.getValue()));
 	}
 
 	/**
@@ -407,7 +405,7 @@ public class PushStreamIntermediateOperationTest
 		Promise<Object[]> p = ps
 				.sorted((Comparator< ? super Integer>) comparator).toArray();
 
-		TestCase.assertEquals("[4, 3, 2, 1, 0]", Arrays.toString(p.getValue()));
+		assertEquals("[4, 3, 2, 1, 0]", Arrays.toString(p.getValue()));
 
 	}
 
@@ -441,8 +439,8 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
+		assertTrue(p.isDone());
+		assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
 
 	}
 
@@ -466,7 +464,7 @@ public class PushStreamIntermediateOperationTest
 		// a close event when the limit is reached
 		// gen.getExecutionThread().join();
 
-		TestCase.assertEquals("[0, 1]", Arrays.toString(p.getValue()));
+		assertEquals("[0, 1]", Arrays.toString(p.getValue()));
 		// is the close event sent immediatly ?
 		ExtGeneratorStatus status = gen.status();
 		assertNotNull(status);
@@ -564,9 +562,9 @@ public class PushStreamIntermediateOperationTest
 		PushStream<Integer>[] p = ps.split(e -> {
 			return e % 2 == 0;
 		});
-		TestCase.assertEquals(1, p.length);
+		assertEquals(1, p.length);
 		Promise<Object[]> even = p[0].toArray();
-		TestCase.assertEquals("[0, 2, 4]", Arrays.toString(even.getValue()));
+		assertEquals("[0, 2, 4]", Arrays.toString(even.getValue()));
 	}
 
 	/**
@@ -589,15 +587,15 @@ public class PushStreamIntermediateOperationTest
 			return e % 2 == 1;
 		});
 		
-		TestCase.assertEquals(2, p.length);
+		assertEquals(2, p.length);
 		
 		Promise<Object[]> even = p[0].toArray();
 		Promise<Object[]> odd = p[1].toArray();
 
-		TestCase.assertEquals("[0, 2, 4]",
+		assertEquals("[0, 2, 4]",
 				Arrays.toString(even.getValue()));
 
-		TestCase.assertEquals("[1, 3]",
+		assertEquals("[1, 3]",
 				Arrays.toString(odd.getValue()));
 
 	}
@@ -623,13 +621,13 @@ public class PushStreamIntermediateOperationTest
 			return e % 3 == 0;
 		});
 
-		TestCase.assertEquals(2, p.length);
+		assertEquals(2, p.length);
 
 		Promise<Object[]> odd = p[0].toArray();
 		Promise<Object[]> modulo3 = p[1].toArray();
 
-		TestCase.assertEquals("[1, 3]", Arrays.toString(odd.getValue()));
-		TestCase.assertEquals("[0, 3]", Arrays.toString(modulo3.getValue()));
+		assertEquals("[1, 3]", Arrays.toString(odd.getValue()));
+		assertEquals("[0, 3]", Arrays.toString(modulo3.getValue()));
 
 	}
 
@@ -652,11 +650,11 @@ public class PushStreamIntermediateOperationTest
 			return e % 2 == 2;
 		});
 
-		TestCase.assertEquals(1, p.length);
+		assertEquals(1, p.length);
 		Promise<Object[]> empty = p[0].toArray();
 
 		// which of this two behaviors is expected ?
-		TestCase.assertTrue(empty.getValue().length == 0);
+		assertTrue(empty.getValue().length == 0);
 	}
 
 	/**
@@ -671,7 +669,7 @@ public class PushStreamIntermediateOperationTest
 				.createStream(new ExtGenerator(5));
 
 		Promise<Object[]> p = ps.skip(3).toArray();
-		TestCase.assertEquals("[3, 4]", Arrays.toString(p.getValue()));
+		assertEquals("[3, 4]", Arrays.toString(p.getValue()));
 	}
 
 	/**
@@ -686,7 +684,7 @@ public class PushStreamIntermediateOperationTest
 				.createStream(new ExtGenerator(5));
 
 		Promise<Object[]> p = ps.skip(5).toArray();
-		TestCase.assertEquals("[]", Arrays.toString(p.getValue()));
+		assertEquals("[]", Arrays.toString(p.getValue()));
 	}
 
 	/**
@@ -701,7 +699,7 @@ public class PushStreamIntermediateOperationTest
 				.createStream(new ExtGenerator(5));
 
 		Promise<Object[]> p = ps.skip(0).toArray();
-		TestCase.assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
+		assertEquals("[0, 1, 2, 3, 4]", Arrays.toString(p.getValue()));
 	}
 
 	/**
@@ -769,15 +767,15 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertTrue(p.isDone());
+		assertEquals(45, (int) p.getValue().get());
 		// multi-threading
-		TestCase.assertTrue(executor.getLargestPoolSize() > 1);
+		assertTrue(executor.getLargestPoolSize() > 1);
 		// no blocking threads in fork
-		TestCase.assertTrue(executor.getLargestPoolSize() <= 5);
-		TestCase.assertTrue(gen.fixedBackPressure());
+		assertTrue(executor.getLargestPoolSize() <= 5);
+		assertTrue(gen.fixedBackPressure());
 		// thread overlapping in reduce
-		TestCase.assertTrue(threadCount.get() > 0);
+		assertTrue(threadCount.get() > 0);
 	}
 
 	/**
@@ -849,18 +847,18 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertTrue(p.isDone());
+		assertEquals(45, (int) p.getValue().get());
 		// if threads have been blocked the back pressure must have
 		// been changed during processing
-		TestCase.assertFalse(gen.fixedBackPressure());
+		assertFalse(gen.fixedBackPressure());
 		// n+1 seems to be OK and n not
-		// TestCase.assertEquals(6, executor.getLargestPoolSize());
-		TestCase.assertEquals(5, executor.getLargestPoolSize());
+		// assertEquals(6, executor.getLargestPoolSize());
+		assertEquals(5, executor.getLargestPoolSize());
 		ExtGeneratorStatus status = gen.status();
-		TestCase.assertTrue(status.bp > 0);
+		assertTrue(status.bp > 0);
 		// thread overlapping in reduce
-		TestCase.assertTrue(threadCount.get() > 0);
+		assertTrue(threadCount.get() > 0);
 	}
 
 	/**
@@ -902,14 +900,14 @@ public class PushStreamIntermediateOperationTest
 
 		// The two sets of events should be in order, even though they were
 		// interleaved
-		TestCase.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
+		assertEquals(Arrays.asList(0, 1, 2, 3, 4),
 				one.stream().collect(Collectors.toList()));
-		TestCase.assertEquals(Arrays.asList(0, 1, 2, 3, 4),
+		assertEquals(Arrays.asList(0, 1, 2, 3, 4),
 				two.stream().collect(Collectors.toList()));
 
 		// The two sets of events should be interleaved as they have a 100 ms
 		// delay after each event, giving time for the other stream to run
-		TestCase.assertFalse("The two streams were processed sequentially",
+		assertFalse("The two streams were processed sequentially",
 				Arrays.asList(0, 1, 2, 3, 4, 0, 1, 2, 3, 4)
 						.equals(Arrays.asList(p.getValue())));
 	}
@@ -941,8 +939,8 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertEquals(
+		assertTrue(p.isDone());
+		assertEquals(
 				new HashSet(Arrays.asList(0, 0, 1, 1, 2, 2, 3, 3, 4, 4)),
 				new HashSet(Arrays.asList(p.getValue())));
 	}
@@ -1014,9 +1012,9 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
+		assertTrue(p.isDone());
 		// no thread overlapping in reduce
-		TestCase.assertEquals(0, threadCount.get());
+		assertEquals(0, threadCount.get());
 	}
 
 	/**
@@ -1090,11 +1088,11 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
+		assertTrue(p.isDone());
 		// because we must receive a -1 back pressure value
-		TestCase.assertTrue(gen.fixedBackPressure());
-		TestCase.assertEquals(150, status.bp);
-		TestCase.assertTrue(45 > p.getValue().get());
+		assertTrue(gen.fixedBackPressure());
+		assertEquals(150, status.bp);
+		assertTrue(45 > p.getValue().get());
 	}
 
 	/**
@@ -1167,12 +1165,12 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
+		assertTrue(p.isDone());
 		// because we must receive a -1 back pressure value
-		TestCase.assertFalse(gen.fixedBackPressure());
-		TestCase.assertEquals(-1, status.bp);
-		TestCase.assertEquals(150, gen.maxBackPressure());
-		TestCase.assertTrue(p.getFailure() != null);
+		assertFalse(gen.fixedBackPressure());
+		assertEquals(-1, status.bp);
+		assertEquals(150, gen.maxBackPressure());
+		assertTrue(p.getFailure() != null);
 	}
 
 	/**
@@ -1250,10 +1248,10 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertTrue(gen.fixedBackPressure());
-		TestCase.assertEquals(150, status.bp);
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertTrue(p.isDone());
+		assertTrue(gen.fixedBackPressure());
+		assertEquals(150, status.bp);
+		assertEquals(45, (int) p.getValue().get());
 
 	}
 
@@ -1330,10 +1328,10 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertFalse(gen.fixedBackPressure());
-		TestCase.assertEquals(250, gen.maxBackPressure());
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertTrue(p.isDone());
+		assertFalse(gen.fixedBackPressure());
+		assertEquals(250, gen.maxBackPressure());
+		assertEquals(45, (int) p.getValue().get());
 
 	}
 
@@ -1400,12 +1398,12 @@ public class PushStreamIntermediateOperationTest
 				.create()
 				.reduce(bo);
 
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertEquals(45, (int) p.getValue().get());
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertFalse(gen.fixedBackPressure());
-		TestCase.assertEquals(250, gen.maxBackPressure());
-		TestCase.assertEquals(0, gen.minBackPressure());
+		assertTrue(p.isDone());
+		assertFalse(gen.fixedBackPressure());
+		assertEquals(250, gen.maxBackPressure());
+		assertEquals(0, gen.minBackPressure());
 	}
 
 	/**
@@ -1482,10 +1480,10 @@ public class PushStreamIntermediateOperationTest
 		while (!p.isDone() && (timeout -= 100) > 0)
 			Thread.sleep(100);
 
-		TestCase.assertTrue(p.isDone());
-		TestCase.assertFalse(gen.fixedBackPressure());
-		TestCase.assertEquals(0, gen.minBackPressure());
-		TestCase.assertEquals(45, (int) p.getValue().get());
+		assertTrue(p.isDone());
+		assertFalse(gen.fixedBackPressure());
+		assertEquals(0, gen.minBackPressure());
+		assertEquals(45, (int) p.getValue().get());
 	}
 
 	/**
