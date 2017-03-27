@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,15 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.context.name} and
- * {@code osgi.http.whiteboard.context.path} service property.
+ * Component Property Type for the {@code osgi.http.whiteboard.context.select}
+ * service property.
  * <p>
- * This annotation can be used on a
- * {@link org.osgi.service.http.context.ServletContextHelper} to declare the
+ * This annotation can be used on a http whiteboard component to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME}
- * and
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
  * service property.
  * 
  * @see "Component Property Types"
@@ -42,27 +39,19 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardContext {
-
+public @interface HttpWhiteboardContextSelect {
 	/**
-	 * Prefix for the service properties. This value is prepended to each
-	 * property name.
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
 	 */
 	String PREFIX_ = "osgi.http.whiteboard.context.";
 
 	/**
-	 * Service property identifying a servlet context helper name.
+	 * Service property identifying the select property of a http whiteboard
+	 * component.
 	 * 
-	 * @return The context name.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
+	 * @return The filter expression.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
 	 */
-	String name();
-
-	/**
-	 * Service property identifying a servlet context helper path.
-	 * 
-	 * @return The context path.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
-	 */
-	String path();
+	String value();
 }

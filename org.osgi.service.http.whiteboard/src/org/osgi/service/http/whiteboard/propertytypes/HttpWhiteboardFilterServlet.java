@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.filter.name}
+ * Component Property Type for the {@code osgi.http.whiteboard.filter.servlet}
  * service property.
  * <p>
  * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_NAME}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_SERVLET}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,13 +39,18 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardFilterName {
+public @interface HttpWhiteboardFilterServlet {
+	/**
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
+	 */
+	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying a filter name.
+	 * Service property identifying the servlets for the filter.
 	 * 
-	 * @return The filter name.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_NAME
+	 * @return The servlet names.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_SERVLET
 	 */
-	String value();
+	String[] value();
 }

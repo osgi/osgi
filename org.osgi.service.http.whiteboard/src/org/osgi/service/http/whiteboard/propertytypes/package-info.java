@@ -31,7 +31,7 @@
  */
 
 @Version("1.0")
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import org.osgi.annotation.versioning.Version;
 

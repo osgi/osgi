@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -39,10 +39,39 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardFilterDispatcher {
+public @interface HttpWhiteboardFilterDispatcher {
+	/**
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
+	 */
+	String PREFIX_ = "osgi.";
 
+	/**
+	 * Values of the
+	 * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER}
+	 * service property.
+	 */
 	public enum Dispatcher {
-		REQUEST, INCLUDE, FORWARD, ASYNC, ERROR
+		/**
+		 * The servlet filter is applied to client requests.
+		 */
+		REQUEST,
+		/**
+		 * The servlet filter is applied to include calls to the dispatcher.
+		 */
+		INCLUDE,
+		/**
+		 * The servlet filter is applied to forward calls to the dispatcher.
+		 */
+		FORWARD,
+		/**
+		 * The servlet filter is applied in the asynchronous context.
+		 */
+		ASYNC,
+		/**
+		 * The servlet filter is applied when an error page is called.
+		 */
+		ERROR
 	}
 
 	/**

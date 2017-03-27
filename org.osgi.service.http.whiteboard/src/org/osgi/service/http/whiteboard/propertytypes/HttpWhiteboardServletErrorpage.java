@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.target} service
- * property.
+ * Component Property Type for the
+ * {@code osgi.http.whiteboard.servlet.errorPage} service property.
  * <p>
- * This annotation can be used on a http whiteboard service to declare the value
- * of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_TARGET}
+ * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
+ * value of the
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,13 +39,18 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardTarget {
+public @interface HttpWhiteboardServletErrorpage {
+	/**
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
+	 */
+	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying the whiteboard target.
+	 * Service property identifying the error pages of a servlet.
 	 * 
-	 * @return The whiteboard target filter expression.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_TARGET
+	 * @return The servlet error pages.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
 	 */
-	String value();
+	String[] value();
 }

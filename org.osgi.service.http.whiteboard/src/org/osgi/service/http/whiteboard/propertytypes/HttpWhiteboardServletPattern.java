@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 import org.osgi.service.component.annotations.ComponentPropertyType;
 
 /**
- * Component Property Type for the {@code osgi.http.whiteboard.filter.pattern}
+ * Component Property Type for the {@code osgi.http.whiteboard.servlet.pattern}
  * service property.
  * <p>
- * This annotation can be used on a {@link javax.servlet.Filter} to declare the
+ * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_PATTERN}
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_PATTERN}
  * service property.
  * 
  * @see "Component Property Types"
@@ -39,13 +39,18 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardFilterPattern {
+public @interface HttpWhiteboardServletPattern {
+	/**
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
+	 */
+	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying filter patterns.
+	 * Service property identifying servlet patterns.
 	 * 
-	 * @return The filter patterns.
-	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_PATTERN
+	 * @return The servlet patterns.
+	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_PATTERN
 	 */
 	String[] value();
 }

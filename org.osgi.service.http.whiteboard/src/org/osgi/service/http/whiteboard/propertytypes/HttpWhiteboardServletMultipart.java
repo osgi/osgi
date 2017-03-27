@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.http.whiteboard.propertypes;
+package org.osgi.service.http.whiteboard.propertytypes;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -49,11 +49,10 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface OSGiHttpWhiteboardServletMultipart {
-
+public @interface HttpWhiteboardServletMultipart {
 	/**
-	 * Prefix for the service properties. This value is prepended to each
-	 * property name.
+	 * Prefix for the property name. This value is prepended to each property
+	 * name.
 	 */
 	String PREFIX_ = "osgi.http.whiteboard.servlet.multipart.";
 
