@@ -44,7 +44,7 @@ public @interface HttpWhiteboardContextSelect {
 	 * Prefix for the property name. This value is prepended to each property
 	 * name.
 	 */
-	String PREFIX_ = "osgi.http.whiteboard.context.";
+	String PREFIX_ = "osgi.";
 
 	/**
 	 * Service property identifying the select property of a http whiteboard

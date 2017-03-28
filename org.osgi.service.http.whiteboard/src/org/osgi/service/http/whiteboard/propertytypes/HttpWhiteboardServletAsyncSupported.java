@@ -39,12 +39,12 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface HttpWhiteboardServletAsyncsupported {
+public @interface HttpWhiteboardServletAsyncSupported {
 	/**
 	 * Prefix for the property name. This value is prepended to each property
 	 * name.
 	 */
-	String PREFIX_ = "osgi.";
+	String PREFIX_ = "osgi.http.whiteboard.servlet.";
 
 	/**
 	 * Service property identifying the asynchronous support of a servlet.
@@ -52,5 +52,5 @@ public @interface HttpWhiteboardServletAsyncsupported {
 	 * @return Whether the servlet supports asynchronous processing.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED
 	 */
-	boolean value() default true;
+	boolean asyncSupported() default true;
 }
