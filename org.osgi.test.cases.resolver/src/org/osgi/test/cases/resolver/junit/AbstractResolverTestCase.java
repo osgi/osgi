@@ -527,7 +527,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		}
 
 		public Collection<Resource> getMandatoryResources() {
-			if (makeWait.compareAndSet(false, true)) {
+			if (makeWait.compareAndSet(true, false)) {
 				waiter.lock();
 				waiter.unlock();
 			}
