@@ -630,13 +630,13 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <para>The XML namespace for meta type documents must be:</para>
 
-      <programlisting>http://www.osgi.org/xmlns/metatype/v1.3.0</programlisting>
+      <programlisting>http://www.osgi.org/xmlns/metatype/v1.4.0</programlisting>
 
       <para>The namespace abbreviation should be <code>metatype</code>. That
       is, the following header should be:</para>
 
       <programlisting>&lt;metatype:MetaData 
-    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0"&gt;</programlisting>
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.4.0"&gt;</programlisting>
 
       <para>The file can be found in the osgi.jar file that can be downloaded
       from the www.osgi.org web site.</para>
@@ -1306,7 +1306,7 @@ Password <phrase role="symbol">↔</phrase> <xref
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;MetaData 
-    xmlns="http://www.osgi.org/xmlns/metatype/v1.3.0" 
+    xmlns="http://www.osgi.org/xmlns/metatype/v1.4.0" 
     localization="person"&gt;
   &lt;OCD name="%person" id="2.5.6.6"
         description="%person record"&gt;
@@ -1487,7 +1487,7 @@ female=Female</programlisting>
 }</programlisting>
     </section>
 
-    <section>
+    <section xml:id="service.metatype-ad.annotation">
       <title>AttributeDefinition Annotation</title>
 
       <para>The <xref
@@ -1510,9 +1510,20 @@ female=Female</programlisting>
       <itemizedlist>
         <listitem>
           <para>A single dollar sign (<code>'$' \u0024</code>) is removed
-          unless it is followed by another dollar sign in which case the two
-          consecutive dollar signs (<code>"$$"</code>) are converted to a
-          single dollar sign.</para>
+          unless it is followed by:<itemizedlist>
+              <listitem>
+                <para>A low line (<code>'_' \u005F</code>) and a dollar sign
+                in which case the three consecutive characters
+                (<code>"$_$"</code>) are converted to a single hyphen-minus
+                (<code>'-' \u002D</code>).</para>
+              </listitem>
+
+              <listitem>
+                <para>Another dollar sign in which case the two consecutive
+                dollar signs (<code>"$$"</code>) are converted to a single
+                dollar sign.</para>
+              </listitem>
+            </itemizedlist></para>
         </listitem>
 
         <listitem>
@@ -1524,6 +1535,13 @@ female=Female</programlisting>
 
         <listitem>
           <para>All other characters are unchanged.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the component property type contains a <code>PREFIX_</code>
+          field whose value is a compile-time constant String, then the
+          property name is prefixed with the value of the <code>PREFIX_</code>
+          field.</para>
         </listitem>
       </itemizedlist>
 
@@ -1632,7 +1650,7 @@ public class MyComponent {
 
         <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.metatype";
-    version:Version="1.3";
+    version:Version="1.4";
     uses:="org.osgi.service.metatype"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref
@@ -1650,7 +1668,7 @@ public class MyComponent {
 
         <programlisting>Provide-Capability: osgi.extender;
     osgi.extender="osgi.metatype";
-    version:Version="1.3";
+    version:Version="1.4";
     uses:="org.osgi.service.metatype"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref
@@ -1698,5 +1716,26 @@ public class MyComponent {
       Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,
       MacMillan Technical publishing.</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="service.metatype-ad.annotation"/> is updated to
+        add support for mapping to hyphen-minus in component property names,
+        to add special handling for the mapping of the value method in
+        component property types which are single-element annotations, and to
+        add support for PREFIX_.</para>
+      </listitem>
+
+      <listitem>
+        <para>The special value "$" can be used in the pid and factoryPid
+        elements of the ObjectClassDefinition annotation. Tools must replace
+        "$" with the fully qualified name of the type annotated by the
+        ObjectClassDefinition annotation.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

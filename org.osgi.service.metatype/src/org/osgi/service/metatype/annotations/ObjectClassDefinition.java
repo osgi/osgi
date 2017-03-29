@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,16 @@ import java.lang.annotation.Target;
 
 /**
  * Generate a Meta Type Resource using the annotated type.
- * 
  * <p>
  * This annotation can be used without defining any element values since
  * defaults can be generated from the annotated type. Each method of the
  * annotated type has an implied {@link AttributeDefinition} annotation if not
  * explicitly annotated.
- * 
  * <p>
  * This annotation may only be used on annotation types and interface types. Use
  * on concrete or abstract class types is unsupported. If applied to an
  * interface then all methods inherited from super types are included as
  * attributes.
- * 
  * <p>
  * This annotation is not processed at runtime. It must be processed by tools
  * and used to generate a Meta Type Resource document for the bundle.
@@ -107,15 +104,23 @@ public @interface ObjectClassDefinition {
 
 	/**
 	 * The PIDs associated with this ObjectClassDefinition.
-	 * 
 	 * <p>
 	 * For each specified PID, a {@code Designate} element with a pid attribute
 	 * is generated that {@link #id() references} this ObjectClassDefinition.
-	 * 
 	 * <p>
 	 * The {@link Designate} annotation can also be used to associate a
 	 * Declarative Services component with an ObjectClassDefinition and generate
 	 * a {@code Designate} element.
+	 * <p>
+	 * A special string ({@code "$"}) can be used to specify the fully qualified
+	 * name of the annotated type as a PID. For example:
+	 * 
+	 * <pre>
+	 * &#64;ObjectClassDefinition(pid="$")
+	 * </pre>
+	 * 
+	 * Tools creating a Meta Type Resource from this annotation must replace the
+	 * special string with the fully qualified name of the annotated type.
 	 * 
 	 * @see "The pid attribute of the Designate element of a Meta Type Resource."
 	 * @see Designate
@@ -124,17 +129,24 @@ public @interface ObjectClassDefinition {
 
 	/**
 	 * The factory PIDs associated with this ObjectClassDefinition.
-	 * 
 	 * <p>
 	 * For each specified factory PID, a {@code Designate} element with a
 	 * factoryPid attribute is generated that {@link #id() references} this
 	 * ObjectClassDefinition.
-	 * 
 	 * <p>
 	 * The {@link Designate} annotation can also be used to associate a
 	 * Declarative Services component with an ObjectClassDefinition and generate
 	 * a {@code Designate} element.
+	 * <p>
+	 * A special string ({@code "$"}) can be used to specify the fully qualified
+	 * name of the annotated type as a factory PID. For example:
 	 * 
+	 * <pre>
+	 * &#64;ObjectClassDefinition(factoryPid="$")
+	 * </pre>
+	 * 
+	 * Tools creating a Meta Type Resource from this annotation must replace the
+	 * special string with the fully qualified name of the annotated type.
 	 * 
 	 * @see "The factoryPid attribute of the Designate element of a Meta Type Resource."
 	 * @see Designate

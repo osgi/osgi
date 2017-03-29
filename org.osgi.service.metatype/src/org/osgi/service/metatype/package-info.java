@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,27 @@
  */
 
 /**
- * Metatype Package Version 1.3.
- * 
+ * Metatype Package Version 1.4.
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. This package has two types of
  * users: the consumers that use the API in this package and the providers that
  * implement the API in this package.
- * 
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.metatype; version="[1.3,2.0)"}
+ * {@code  Import-Package: org.osgi.service.metatype; version="[1.4,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.metatype; version="[1.3,1.4)"}
+ * {@code  Import-Package: org.osgi.service.metatype; version="[1.4,1.5)"}
  * 
  * @author $Id$
  */
 
-@Version("1.3")
+@Version(METATYPE_SPECIFICATION_VERSION)
 package org.osgi.service.metatype;
 
-import org.osgi.annotation.versioning.Version;
+import static org.osgi.service.metatype.MetaTypeService.METATYPE_SPECIFICATION_VERSION;
 
+import org.osgi.annotation.versioning.Version;
