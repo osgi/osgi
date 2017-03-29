@@ -4672,16 +4672,16 @@ public class MyComponent {
               <para>A single dollar sign (<code>'$' \u0024</code>) is removed
               unless it is followed by:<itemizedlist>
                   <listitem>
-                    <para>Another dollar sign in which case the two
-                    consecutive dollar signs (<code>"$$"</code>) are converted
-                    to a single dollar sign.</para>
-                  </listitem>
-
-                  <listitem>
                     <para>A low line (<code>'_' \u005F</code>) and a dollar
                     sign in which case the three consecutive characters
                     (<code>"$_$"</code>) are converted to a single
                     hyphen-minus (<code>'-' \u002D</code>).</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Another dollar sign in which case the two
+                    consecutive dollar signs (<code>"$$"</code>) are converted
+                    to a single dollar sign.</para>
                   </listitem>
                 </itemizedlist></para>
             </listitem>
@@ -4695,6 +4695,13 @@ public class MyComponent {
 
             <listitem>
               <para>All other characters are unchanged.</para>
+            </listitem>
+
+            <listitem>
+              <para> If the component property type contains a
+              <code>PREFIX_</code> field whose value is a compile-time
+              constant String, then the property name is prefixed with the
+              value of the <code>PREFIX_</code> field.</para>
             </listitem>
           </itemizedlist></para>
 
@@ -4811,6 +4818,13 @@ public class MyComponent {
             <listitem>
               <para>All other characters are unchanged.</para>
             </listitem>
+
+            <listitem>
+              <para>If the component property type contains a
+              <code>PREFIX_</code> field whose value is a compile-time
+              constant String, then the property name is prefixed with the
+              value of the <code>PREFIX_</code> field.</para>
+            </listitem>
           </itemizedlist></para>
 
         <para><xref linkend="service.component-single.element.name.mapping"/>
@@ -4830,7 +4844,8 @@ public class MyComponent {
               <row>
                 <entry>Component Property Type Name</entry>
 
-                <entry>Component Property Name</entry>
+                <entry><code>value</code> Method Component Property
+                Name</entry>
               </row>
             </thead>
 
@@ -5798,9 +5813,9 @@ public class MyComponent implements AcmeService {}</programlisting>
       <listitem>
         <para><xref linkend="service.component-component.property.mapping"/>
         is updated to add support for mapping to hyphen-minus in component
-        property names and to add special handling for the mapping of the
-        value method in component property types which are single-element
-        annotations.</para>
+        property names, to add special handling for the mapping of the value
+        method in component property types which are single-element
+        annotations, and to add support for PREFIX_.</para>
       </listitem>
     </itemizedlist>
   </section>
