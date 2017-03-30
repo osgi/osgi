@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -33,6 +35,7 @@ import org.osgi.framework.hooks.resolver.ResolverHookFactory;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.service.cm.Configuration;
 import org.osgi.service.log.FormatterLogger;
 import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.Logger;
@@ -42,6 +45,9 @@ import org.osgi.service.log.admin.LoggerContext;
 public class LoggerFactoryTestCase extends AbstractLogTestCase {
 
 	static final String TEST_LOGGER_NAME = "test.logger.name";
+	// TODO remove these when there is a spec'ed constants
+	static final String	PID_PREFIX_LOG_ADMIN	= "org.osgi.service.log.admin";
+	static final String	NULL_VALUE				= "NULL";
 
 	public void testServiceReferenceIsLoggerFactory()
 			throws InvalidSyntaxException {
@@ -379,6 +385,67 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		}
 		doLoggerLogging(level, b, logger, readers);
 
+	}
+
+	private static final Map<String,LogLevel> testConfigLogLevels = new HashMap<>();
+	static {
+		testConfigLogLevels.put("default", LogLevel.ERROR);
+		testConfigLogLevels.put("default.audit", LogLevel.AUDIT);
+		testConfigLogLevels.put("default.audit.null1.null2", null);
+		testConfigLogLevels.put("default.audit.null1", null);
+		testConfigLogLevels.put("default.audit.warnOverride", LogLevel.WARN);
+		testConfigLogLevels.put("default.audit.infoOverride", LogLevel.INFO);
+		testConfigLogLevels.put("default.audit.debugOverride", LogLevel.DEBUG);
+		testConfigLogLevels.put("default.audit.traceOverride", LogLevel.TRACE);
+	}
+
+	public void testRootLoggerConfig() throws IOException {
+		doTestConfigLoggerContext(null, testConfigLogLevels);
+	}
+
+	public void testBsnLoggerConfig() throws IOException {
+		doTestConfigLoggerContext(bsnContext.getName(), testConfigLogLevels);
+	}
+
+	public void testBsnVersionLoggerConfig() throws IOException {
+		doTestConfigLoggerContext(bsnVersionContext.getName(),
+				testConfigLogLevels);
+	}
+
+	public void testBsnVersionLocationLoggerConfig() throws IOException {
+		doTestConfigLoggerContext(bsnVersionLocationContext.getName(),
+				testConfigLogLevels);
+	}
+
+	private void doTestConfigLoggerContext(String loggerContextName,
+			Map<String,LogLevel> logLevels) throws IOException {
+		String loggerContextPID = loggerContextName == null
+				? PID_PREFIX_LOG_ADMIN
+				: PID_PREFIX_LOG_ADMIN + '|' + loggerContextName;
+		Configuration contextConfig = configAdmin
+				.getConfiguration(loggerContextPID, null);
+		Dictionary<String,String> logLevelConfigs = getLogLevelConfigs(
+				logLevels);
+		testConfigurations.add(contextConfig);
+		contextConfig.update(logLevelConfigs);
+		sleep(loggerContextConfigTimeout);
+		LoggerContext loggerContext = loggerAdmin
+				.getLoggerContext(loggerContextName);
+		assertEquals(
+				"Unexpected loglevels for context named: " + loggerContextName,
+				logLevels, loggerContext.getLogLevels());
+	}
+
+	private Dictionary<String,String> getLogLevelConfigs(
+			Map<String,LogLevel> logLevels) {
+		Hashtable<String,String> result = new Hashtable<>();
+		for (Map.Entry<String,LogLevel> entry : logLevels.entrySet()) {
+			LogLevel logLevel = entry.getValue();
+			String logLevelValue = logLevel == null ? NULL_VALUE
+					: logLevel.toString();
+			result.put(entry.getKey(), logLevelValue);
+		}
+		return result;
 	}
 
 	public void testRootContextAncestorsEffectiveLogLevel() {

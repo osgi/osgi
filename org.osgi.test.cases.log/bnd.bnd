@@ -6,10 +6,11 @@ Private-Package						=  \
 	${p}.junit
 Import-Package: ${-signaturetest}, *
 
--buildpath							= \
-	org.osgi.test.support; 	version=project, \
-	org.osgi.service.log;					version=project	, \
-	osgi.core;								version=4.3.1		, \
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.log;version=project,\
+	osgi.core;version=4.3.1,\
+	org.osgi.service.cm;version=project,\
 	${junit}
 
 Test-Cases							= ${testcases}

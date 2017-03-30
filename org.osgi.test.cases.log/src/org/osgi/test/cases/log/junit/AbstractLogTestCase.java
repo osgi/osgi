@@ -19,15 +19,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.LogReaderService;
@@ -73,6 +77,9 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 	LogReaderService					logReaderService;
 	ServiceReference<LoggerAdmin>		loggerAdminReference;
 	LoggerAdmin							loggerAdmin;
+	ServiceReference<ConfigurationAdmin>	configAdminReference;
+	ConfigurationAdmin						configAdmin;
+	Set<Configuration>						testConfigurations	= new HashSet<>();
 
 	LoggerContext						rootContext;
 	LoggerContext						bsnContext;
@@ -94,7 +101,11 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 
 	Bundle								tb1					= null;
 
+	long									loggerContextConfigTimeout;
+
 	protected void setUp() throws Exception {
+		loggerContextConfigTimeout = getLongProperty(
+				"org.osgi.test.cases.log.config_waiting_time", 500);
 		auditRegistration = registerLogLevel(LogLevel.AUDIT);
 		errorRegistration = registerLogLevel(LogLevel.ERROR);
 		warnRegistration = registerLogLevel(LogLevel.WARN);
@@ -117,6 +128,10 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 		loggerAdminReference = getContext()
 				.getServiceReference(LoggerAdmin.class);
 		loggerAdmin = getContext().getService(loggerAdminReference);
+
+		configAdminReference = getContext()
+				.getServiceReference(ConfigurationAdmin.class);
+		configAdmin = getContext().getService(configAdminReference);
 
 		Bundle b = getContext().getBundle();
 		// save off original log levels
@@ -161,9 +176,18 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 		bsnVersionContext.setLogLevels(bsnVersionLogLevels);
 		bsnVersionLocationContext.setLogLevels(bsnVersionLocationLogLevels);
 
+		for (Configuration testConfig : testConfigurations) {
+			try {
+				testConfig.delete();
+			} catch (Exception e) {
+				// Just trying to clean up
+			}
+		}
+
 		getContext().ungetService(logServiceReference);
 		getContext().ungetService(logReaderServiceReference);
 		getContext().ungetService(loggerAdminReference);
+		getContext().ungetService(configAdminReference);
 
 		if (tb1 != null) {
 			try {
