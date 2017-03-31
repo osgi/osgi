@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The MIT License
+
+  Copyright (c) 2013 codehaus.org.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codehaus.mojo.signature</groupId>
+    <artifactId>signatures-parent</artifactId>
+    <version>1.2</version>
+    <relativePath>../signatures-parent</relativePath>
+  </parent>
+
+  <artifactId>java17</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+
+  <name>Generic Java 1.7 Runtime Signatures</name>
+
+  <description>
+    Java 1.7 Runtime Signatures excluding vendor specific implementation classes.
+  </description>
+
+  <scm>
+    <connection>scm:svn:https://svn.codehaus.org/mojo/tags/java17-1.0</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/java17-1.0</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/mojo/tags/java17-1.0</url>
+  </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+        <configuration>
+          <includeJavaHome>true</includeJavaHome>
+          <javaHome>${env.JAVA_HOME}</javaHome>
+          <includeModuleClasses>false</includeModuleClasses>
+          <excludeDependencies>
+            <excludeDependency>*:*:*:*:*</excludeDependency>
+          </excludeDependencies>
+          <skipIfNoJavaHome>false</skipIfNoJavaHome>
+        </configuration>
+        <executions>
+          <execution>
+            <id>java17-compact1</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <classifier>compact1</classifier>
+              <includeClasses>
+                <includeClass>java.io.*</includeClass>
+                <includeClass>java.lang.*</includeClass>
+                <includeClass>java.lang.annotation.*</includeClass>
+                <includeClass>java.lang.invoke.*</includeClass>
+                <includeClass>java.lang.ref.*</includeClass>
+                <includeClass>java.lang.reflect.*</includeClass>
+                <includeClass>java.math.*</includeClass>
+                <includeClass>java.net.*</includeClass>
+                <includeClass>java.nio.*</includeClass>
+                <includeClass>java.nio.channels.*</includeClass>
+                <includeClass>java.nio.channels.spi.*</includeClass>
+                <includeClass>java.nio.charset.*</includeClass>
+                <includeClass>java.nio.charset.spi.*</includeClass>
+                <includeClass>java.nio.file.*</includeClass>
+                <includeClass>java.nio.file.attribute.*</includeClass>
+                <includeClass>java.nio.file.spi.*</includeClass>
+                <includeClass>java.security.*</includeClass>
+                <includeClass>java.security.cert.*</includeClass>
+                <includeClass>java.security.interfaces.*</includeClass>
+                <includeClass>java.security.spec.*</includeClass>
+                <includeClass>java.text.*</includeClass>
+                <includeClass>java.text.spi.*</includeClass>
+                <includeClass>java.time.*</includeClass>
+                <includeClass>java.time.chrono.*</includeClass>
+                <includeClass>java.time.format.*</includeClass>
+                <includeClass>java.time.temporal.*</includeClass>
+                <includeClass>java.time.zone.*</includeClass>
+                <includeClass>java.util.*</includeClass>
+                <includeClass>java.util.concurrent.*</includeClass>
+                <includeClass>java.util.concurrent.atomic.*</includeClass>
+                <includeClass>java.util.concurrent.locks.*</includeClass>
+                <includeClass>java.util.function.*</includeClass>
+                <includeClass>java.util.jar.*</includeClass>
+                <includeClass>java.util.logging.*</includeClass>
+                <includeClass>java.util.regex.*</includeClass>
+                <includeClass>java.util.spi.*</includeClass>
+                <includeClass>java.util.stream.*</includeClass>
+                <includeClass>java.util.zip.*</includeClass>
+                <includeClass>javax.crypto.*</includeClass>
+                <includeClass>javax.crypto.interfaces.*</includeClass>
+                <includeClass>javax.crypto.spec.*</includeClass>
+                <includeClass>javax.net.*</includeClass>
+                <includeClass>javax.net.ssl.*</includeClass>
+                <includeClass>javax.script.*</includeClass>
+                <includeClass>javax.security.auth.*</includeClass>
+                <includeClass>javax.security.auth.callback.*</includeClass>
+                <includeClass>javax.security.auth.login.*</includeClass>
+                <includeClass>javax.security.auth.spi.*</includeClass>
+                <includeClass>javax.security.auth.x500.*</includeClass>
+                <includeClass>javax.security.cert.*</includeClass>
+              </includeClasses>
+              <excludeClasses>
+                <excludeClass>java.lang.instrument.*</excludeClass>
+                <excludeClass>java.lang.management.*</excludeClass>
+                <excludeClass>java.security.acl.*</excludeClass>
+                <excludeClass>java.util.prefs.*</excludeClass>
+                <excludeClass>javax.security.auth.kerberos.*</excludeClass>
+                <excludeClass>javax.security.sasl.*</excludeClass>
+              </excludeClasses>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>java17-compact2</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <classifier>compact2</classifier>
+              <includeClasses>
+                <includeClass>java.io.*</includeClass>
+                <includeClass>java.lang.*</includeClass>
+                <includeClass>java.lang.annotation.*</includeClass>
+                <includeClass>java.lang.invoke.*</includeClass>
+                <includeClass>java.lang.ref.*</includeClass>
+                <includeClass>java.lang.reflect.*</includeClass>
+                <includeClass>java.math.*</includeClass>
+                <includeClass>java.net.*</includeClass>
+                <includeClass>java.nio.*</includeClass>
+                <includeClass>java.nio.channels.*</includeClass>
+                <includeClass>java.nio.channels.spi.*</includeClass>
+                <includeClass>java.nio.charset.*</includeClass>
+                <includeClass>java.nio.charset.spi.*</includeClass>
+                <includeClass>java.nio.file.*</includeClass>
+                <includeClass>java.nio.file.attribute.*</includeClass>
+                <includeClass>java.nio.file.spi.*</includeClass>
+                <includeClass>java.security.*</includeClass>
+                <includeClass>java.security.cert.*</includeClass>
+                <includeClass>java.security.interfaces.*</includeClass>
+                <includeClass>java.security.spec.*</includeClass>
+                <includeClass>java.text.*</includeClass>
+                <includeClass>java.text.spi.*</includeClass>
+                <includeClass>java.time.*</includeClass>
+                <includeClass>java.time.chrono.*</includeClass>
+                <includeClass>java.time.format.*</includeClass>
+                <includeClass>java.time.temporal.*</includeClass>
+                <includeClass>java.time.zone.*</includeClass>
+                <includeClass>java.util.*</includeClass>
+                <includeClass>java.util.concurrent.*</includeClass>
+                <includeClass>java.util.concurrent.atomic.*</includeClass>
+                <includeClass>java.util.concurrent.locks.*</includeClass>
+                <includeClass>java.util.function.*</includeClass>
+                <includeClass>java.util.jar.*</includeClass>
+                <includeClass>java.util.logging.*</includeClass>
+                <includeClass>java.util.regex.*</includeClass>
+                <includeClass>java.util.spi.*</includeClass>
+                <includeClass>java.util.stream.*</includeClass>
+                <includeClass>java.util.zip.*</includeClass>
+                <includeClass>javax.crypto.*</includeClass>
+                <includeClass>javax.crypto.interfaces.*</includeClass>
+                <includeClass>javax.crypto.spec.*</includeClass>
+                <includeClass>javax.net.*</includeClass>
+                <includeClass>javax.net.ssl.*</includeClass>
+                <includeClass>javax.script.*</includeClass>
+                <includeClass>javax.security.auth.*</includeClass>
+                <includeClass>javax.security.auth.callback.*</includeClass>
+                <includeClass>javax.security.auth.login.*</includeClass>
+                <includeClass>javax.security.auth.spi.*</includeClass>
+                <includeClass>javax.security.auth.x500.*</includeClass>
+                <includeClass>javax.security.cert.*</includeClass>
+                <!-- compact 2 additions -->
+                <includeClass>java.rmi.*</includeClass>
+                <includeClass>java.rmi.activation.*</includeClass>
+                <includeClass>java.rmi.dgc.*</includeClass>
+                <includeClass>java.rmi.registry.*</includeClass>
+                <includeClass>java.rmi.server.*</includeClass>
+                <includeClass>java.sql.*</includeClass>
+                <includeClass>javax.rmi.ssl.*</includeClass>
+                <includeClass>javax.sql.*</includeClass>
+                <includeClass>javax.transaction.*</includeClass>
+                <includeClass>javax.transaction.xa.*</includeClass>
+                <includeClass>javax.xml.*</includeClass>
+                <includeClass>javax.xml.datatype.*</includeClass>
+                <includeClass>javax.xml.namespace.*</includeClass>
+                <includeClass>javax.xml.parsers.*</includeClass>
+                <includeClass>javax.xml.stream.*</includeClass>
+                <includeClass>javax.xml.stream.events.*</includeClass>
+                <includeClass>javax.xml.stream.util.*</includeClass>
+                <includeClass>javax.xml.transform.*</includeClass>
+                <includeClass>javax.xml.transform.dom.*</includeClass>
+                <includeClass>javax.xml.transform.sax.*</includeClass>
+                <includeClass>javax.xml.transform.stax.*</includeClass>
+                <includeClass>javax.xml.transform.stream.*</includeClass>
+                <includeClass>javax.xml.validation.*</includeClass>
+                <includeClass>javax.xml.xpath.*</includeClass>
+                <includeClass>org.w3c.dom.*</includeClass>
+                <includeClass>org.w3c.dom.bootstrap.*</includeClass>
+                <includeClass>org.w3c.dom.events.*</includeClass>
+                <includeClass>org.w3c.dom.ls.*</includeClass>
+                <includeClass>org.xml.sax.*</includeClass>
+                <includeClass>org.xml.sax.ext.*</includeClass>
+                <includeClass>org.xml.sax.helpers.*</includeClass>
+              </includeClasses>
+              <excludeClasses>
+                <excludeClass>java.lang.instrument.*</excludeClass>
+                <excludeClass>java.lang.management.*</excludeClass>
+                <excludeClass>java.security.acl.*</excludeClass>
+                <excludeClass>java.util.prefs.*</excludeClass>
+                <excludeClass>javax.security.auth.kerberos.*</excludeClass>
+                <excludeClass>javax.security.sasl.*</excludeClass>
+                <excludeClass>javax.sql.rowset.*</excludeClass>
+                <excludeClass>javax.sql.rowset.serial.*</excludeClass>
+                <excludeClass>javax.sql.rowset.spi.*</excludeClass>
+                <excludeClass>javax.xml.crypto.*</excludeClass>
+                <excludeClass>javax.xml.crypto.dom.*</excludeClass>
+                <excludeClass>javax.xml.crypto.dsig.*</excludeClass>
+                <excludeClass>javax.xml.crypto.dsig.dom.*</excludeClass>
+                <excludeClass>javax.xml.crypto.dsig.keyinfo.*</excludeClass>
+                <excludeClass>javax.xml.crypto.dsig.spec.*</excludeClass>
+              </excludeClasses>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>java17-compact3</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <classifier>compact3</classifier>
+              <includeClasses>
+                <includeClass>java.io.*</includeClass>
+                <includeClass>java.lang.*</includeClass>
+                <includeClass>java.lang.annotation.*</includeClass>
+                <includeClass>java.lang.invoke.*</includeClass>
+                <includeClass>java.lang.ref.*</includeClass>
+                <includeClass>java.lang.reflect.*</includeClass>
+                <includeClass>java.math.*</includeClass>
+                <includeClass>java.net.*</includeClass>
+                <includeClass>java.nio.*</includeClass>
+                <includeClass>java.nio.channels.*</includeClass>
+                <includeClass>java.nio.channels.spi.*</includeClass>
+                <includeClass>java.nio.charset.*</includeClass>
+                <includeClass>java.nio.charset.spi.*</includeClass>
+                <includeClass>java.nio.file.*</includeClass>
+                <includeClass>java.nio.file.attribute.*</includeClass>
+                <includeClass>java.nio.file.spi.*</includeClass>
+                <includeClass>java.security.*</includeClass>
+                <includeClass>java.security.cert.*</includeClass>
+                <includeClass>java.security.interfaces.*</includeClass>
+                <includeClass>java.security.spec.*</includeClass>
+                <includeClass>java.text.*</includeClass>
+                <includeClass>java.text.spi.*</includeClass>
+                <includeClass>java.time.*</includeClass>
+                <includeClass>java.time.chrono.*</includeClass>
+                <includeClass>java.time.format.*</includeClass>
+                <includeClass>java.time.temporal.*</includeClass>
+                <includeClass>java.time.zone.*</includeClass>
+                <includeClass>java.util.*</includeClass>
+                <includeClass>java.util.concurrent.*</includeClass>
+                <includeClass>java.util.concurrent.atomic.*</includeClass>
+                <includeClass>java.util.concurrent.locks.*</includeClass>
+                <includeClass>java.util.function.*</includeClass>
+                <includeClass>java.util.jar.*</includeClass>
+                <includeClass>java.util.logging.*</includeClass>
+                <includeClass>java.util.regex.*</includeClass>
+                <includeClass>java.util.spi.*</includeClass>
+                <includeClass>java.util.stream.*</includeClass>
+                <includeClass>java.util.zip.*</includeClass>
+                <includeClass>javax.crypto.*</includeClass>
+                <includeClass>javax.crypto.interfaces.*</includeClass>
+                <includeClass>javax.crypto.spec.*</includeClass>
+                <includeClass>javax.net.*</includeClass>
+                <includeClass>javax.net.ssl.*</includeClass>
+                <includeClass>javax.script.*</includeClass>
+                <includeClass>javax.security.auth.*</includeClass>
+                <includeClass>javax.security.auth.callback.*</includeClass>
+                <includeClass>javax.security.auth.login.*</includeClass>
+                <includeClass>javax.security.auth.spi.*</includeClass>
+                <includeClass>javax.security.auth.x500.*</includeClass>
+                <includeClass>javax.security.cert.*</includeClass>
+                <!-- compact 2 additions -->
+                <includeClass>java.rmi.*</includeClass>
+                <includeClass>java.rmi.activation.*</includeClass>
+                <includeClass>java.rmi.dgc.*</includeClass>
+                <includeClass>java.rmi.registry.*</includeClass>
+                <includeClass>java.rmi.server.*</includeClass>
+                <includeClass>java.sql.*</includeClass>
+                <includeClass>javax.rmi.ssl.*</includeClass>
+                <includeClass>javax.sql.*</includeClass>
+                <includeClass>javax.transaction.*</includeClass>
+                <includeClass>javax.transaction.xa.*</includeClass>
+                <includeClass>javax.xml.*</includeClass>
+                <includeClass>javax.xml.datatype.*</includeClass>
+                <includeClass>javax.xml.namespace.*</includeClass>
+                <includeClass>javax.xml.parsers.*</includeClass>
+                <includeClass>javax.xml.stream.*</includeClass>
+                <includeClass>javax.xml.stream.events.*</includeClass>
+                <includeClass>javax.xml.stream.util.*</includeClass>
+                <includeClass>javax.xml.transform.*</includeClass>
+                <includeClass>javax.xml.transform.dom.*</includeClass>
+                <includeClass>javax.xml.transform.sax.*</includeClass>
+                <includeClass>javax.xml.transform.stax.*</includeClass>
+                <includeClass>javax.xml.transform.stream.*</includeClass>
+                <includeClass>javax.xml.validation.*</includeClass>
+                <includeClass>javax.xml.xpath.*</includeClass>
+                <includeClass>org.w3c.dom.*</includeClass>
+                <includeClass>org.w3c.dom.bootstrap.*</includeClass>
+                <includeClass>org.w3c.dom.events.*</includeClass>
+                <includeClass>org.w3c.dom.ls.*</includeClass>
+                <includeClass>org.xml.sax.*</includeClass>
+                <includeClass>org.xml.sax.ext.*</includeClass>
+                <includeClass>org.xml.sax.helpers.*</includeClass>
+                <!-- compact 3 additions -->
+                <includeClass>java.lang.instrument.*</includeClass>
+                <includeClass>java.lang.management.*</includeClass>
+                <includeClass>java.security.acl.*</includeClass>
+                <includeClass>java.util.prefs.*</includeClass>
+                <includeClass>javax.annotation.processing.*</includeClass>
+                <includeClass>javax.lang.model.*</includeClass>
+                <includeClass>javax.lang.model.element.*</includeClass>
+                <includeClass>javax.lang.model.type.*</includeClass>
+                <includeClass>javax.lang.model.util.*</includeClass>
+                <includeClass>javax.management.*</includeClass>
+                <includeClass>javax.management.loading.*</includeClass>
+                <includeClass>javax.management.modelmbean.*</includeClass>
+                <includeClass>javax.management.monitor.*</includeClass>
+                <includeClass>javax.management.openmbean.*</includeClass>
+                <includeClass>javax.management.relation.*</includeClass>
+                <includeClass>javax.management.remote.*</includeClass>
+                <includeClass>javax.management.remote.rmi.*</includeClass>
+                <includeClass>javax.management.timer.*</includeClass>
+                <includeClass>javax.naming.*</includeClass>
+                <includeClass>javax.naming.directory.*</includeClass>
+                <includeClass>javax.naming.event.*</includeClass>
+                <includeClass>javax.naming.ldap.*</includeClass>
+                <includeClass>javax.naming.spi.*</includeClass>
+                <includeClass>javax.security.auth.kerberos.*</includeClass>
+                <includeClass>javax.security.sasl.*</includeClass>
+                <includeClass>javax.sql.rowset.*</includeClass>
+                <includeClass>javax.sql.rowset.serial.*</includeClass>
+                <includeClass>javax.sql.rowset.spi.*</includeClass>
+                <includeClass>javax.tools.*</includeClass>
+                <includeClass>javax.xml.crypto.*</includeClass>
+                <includeClass>javax.xml.crypto.dom.*</includeClass>
+                <includeClass>javax.xml.crypto.dsig.*</includeClass>
+                <includeClass>javax.xml.crypto.dsig.dom.*</includeClass>
+                <includeClass>javax.xml.crypto.dsig.keyinfo.*</includeClass>
+                <includeClass>javax.xml.crypto.dsig.spec.*</includeClass>
+                <includeClass>org.ietf.jgss.*</includeClass>
+              </includeClasses>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
