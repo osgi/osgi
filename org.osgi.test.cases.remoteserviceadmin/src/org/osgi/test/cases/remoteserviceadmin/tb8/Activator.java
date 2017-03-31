@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.remoteserviceadmin.tb8;
 
+import static junit.framework.TestCase.*;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -45,8 +47,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
-
-import junit.framework.Assert;
 
 /**
  * 
@@ -128,9 +128,9 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 		tracker.close();
 
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) bctx.getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 
 		//
 		// register a RemoteServiceAdminListener to receive the export
@@ -140,7 +140,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		ServiceRegistration sr = bctx.registerService(
 				RemoteServiceAdminListener.class.getName(),
 				remoteServiceAdminListener, null);
-		Assert.assertNotNull(sr);
+		assertNotNull(sr);
 
 		// load the external properties file with the config types for the
 		// server side service
@@ -151,26 +151,26 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		// export the service
 		exportRegistrations = rsa.exportService(registration.getReference(),
 				endpointProperties);
-		Assert.assertNotNull(exportRegistrations);
-		Assert.assertFalse(exportRegistrations.isEmpty());
+		assertNotNull(exportRegistrations);
+		assertFalse(exportRegistrations.isEmpty());
 
 		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it
 				.hasNext();) {
 			ExportRegistration er = it.next();
-			Assert.assertNull(er.getException());
+			assertNull(er.getException());
 			ExportReference ref = er.getExportReference();
-			Assert.assertNotNull(ref);
+			assertNotNull(ref);
 
 			// 122.4.1 Exporting
-			Assert.assertEquals(registration.getReference(),
+			assertEquals(registration.getReference(),
 					ref.getExportedService());
 
-			Assert.assertEquals(DefaultTestBundleControl.arrayToString(
+			assertEquals(DefaultTestBundleControl.arrayToString(
 					(Object[]) registration.getReference().getProperty(
 							"objectClass"), true), DefaultTestBundleControl
 					.arrayToString((Object[]) ref.getExportedService()
 							.getProperty("objectClass"), true));
-			Assert.assertEquals(
+			assertEquals(
 					registration.getReference().getProperty("service.id"), ref
 							.getExportedService().getProperty("service.id"));
 
@@ -182,16 +182,16 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			{ // check if the required EXPORT_REGISTRATION event was raised
 				Event event = m_eventHandler
 						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION");
-				Assert.assertNotNull(event);
+				assertNotNull(event);
 				RemoteServiceAdminEvent rsaevent = TestEventHandler
 						.verifyBasicRsaEventProperties(rsaRef, event);
-				Assert.assertNotNull(rsaevent);
-				Assert.assertNotNull(event.getProperty("timestamp"));
+				assertNotNull(rsaevent);
+				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
 				String topic = event.getTopic();
-				Assert.assertNull("cause in event", event.getProperty("cause"));
-				Assert.assertEquals(
+				assertNull("cause in event", event.getProperty("cause"));
+				assertEquals(
 						RemoteServiceAdminEvent.EXPORT_REGISTRATION,
 						rsaevent.getType());
 			}
@@ -229,7 +229,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			endpointProperties.putAll(properties_reg);
 			
 			EndpointDescription edNew = er.update(endpointProperties);
-			Assert.assertNotNull(edNew);
+			assertNotNull(edNew);
 
 			try {
 				// make the updated description available for the parent test
@@ -238,14 +238,14 @@ public class Activator implements BundleActivator, ModifiableService, B {
 						registrationCounter++);
 			} catch (IOException e) {
 				e.printStackTrace();
-				Assert.fail("was unable to publish the updated endpoint description for the parent framework");
+				fail("was unable to publish the updated endpoint description for the parent framework");
 			}
 
 			// verify that all relevant props are there including the updated
 			// one
 
 			verifyBasicEndpointDescriptionProperties(edNew);
-			Assert.assertEquals(
+			assertEquals(
 					"The updated endpoint description must contain the new service property",
 					"SomeValue",
 					edNew.getProperties()
@@ -254,16 +254,16 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			{ // check if the required EXPORT_UPDATE event was raised
 				Event event = m_eventHandler
 						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_UPDATE");
-				Assert.assertNotNull(event);
+				assertNotNull(event);
 				RemoteServiceAdminEvent rsaevent = TestEventHandler
 						.verifyBasicRsaEventProperties(rsaRef, event);
-				Assert.assertNotNull(rsaevent);
-				Assert.assertNotNull(event.getProperty("timestamp"));
+				assertNotNull(rsaevent);
+				assertNotNull(event.getProperty("timestamp"));
 
 				// check event type
 				String topic = event.getTopic();
-				Assert.assertNull("cause in event", event.getProperty("cause"));
-				Assert.assertEquals(RemoteServiceAdminEvent.EXPORT_UPDATE,
+				assertNull("cause in event", event.getProperty("cause"));
+				assertEquals(RemoteServiceAdminEvent.EXPORT_UPDATE,
 						rsaevent.getType());
 			}
 		}
@@ -275,18 +275,18 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	}
 
 	private void verifyBasicEndpointDescriptionProperties(EndpointDescription ed) {
-		Assert.assertNotNull(ed);
-		Assert.assertNotNull(ed.getProperties().get("objectClass"));
-		Assert.assertTrue(ed.getInterfaces().contains(
+		assertNotNull(ed);
+		assertNotNull(ed.getProperties().get("objectClass"));
+		assertTrue(ed.getInterfaces().contains(
 				ModifiableService.class.getName()));
-		Assert.assertFalse(ed.getInterfaces().contains(A.class.getName()));
-		Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
+		assertFalse(ed.getInterfaces().contains(A.class.getName()));
+		assertFalse(ed.getInterfaces().contains(B.class.getName()));
 
-		Assert.assertNotNull(ed.getId());
-		Assert.assertNotNull(ed.getConfigurationTypes());
-		Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-		Assert.assertEquals(bctx.getProperty("org.osgi.framework.uuid"),
+		assertNotNull(ed.getId());
+		assertNotNull(ed.getConfigurationTypes());
+		assertFalse(ed.getConfigurationTypes().isEmpty());
+		assertEquals(bctx.getProperty("org.osgi.framework.uuid"),
 				ed.getFrameworkUUID());
-		Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
+		assertNotNull(ed.getProperties().get("endpoint.service.id"));
 	}
 }

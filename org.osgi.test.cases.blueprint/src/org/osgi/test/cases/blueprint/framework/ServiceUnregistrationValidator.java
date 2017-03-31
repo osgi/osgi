@@ -16,7 +16,7 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.assertTrue;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -25,7 +25,8 @@ import org.osgi.framework.ServiceReference;
 /**
  * Validate that a particular set of services is no longer registered.
  */
-public class ServiceUnregistrationValidator extends Assert implements TestValidator, BundleAware {
+public class ServiceUnregistrationValidator
+		implements TestValidator, BundleAware {
     // the bundle the service should be part of
     protected Bundle bundle;
     // the name of the interface to validate

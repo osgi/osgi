@@ -40,12 +40,12 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
+import static junit.framework.TestCase.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-
-import junit.framework.Assert;
 
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.test.support.OSGiTestCase;
@@ -74,16 +74,16 @@ public class DeploymentmoConstants {
 	static {
 		String prop = OSGiTestCaseProperties
 				.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
-		Assert
-				.assertNotNull(
+		assertNotNull(
 						"Must set property: org.osgi.impl.service.deploymentadmin.deliveredarea",
 						prop);
 		DELIVERED_AREA = new File(prop);
-		Assert.assertFalse("deliveredarea is not a directory: "
+		assertFalse("deliveredarea is not a directory: "
 				+ DELIVERED_AREA.getPath(), DELIVERED_AREA.exists()
 				&& !DELIVERED_AREA.isDirectory());
 		if (!DELIVERED_AREA.isDirectory())
-			Assert.assertTrue("Could not create root directory: "
+			assertTrue(
+					"Could not create root directory: "
 					+ DELIVERED_AREA.getPath(), DELIVERED_AREA.mkdirs());
 	}
 

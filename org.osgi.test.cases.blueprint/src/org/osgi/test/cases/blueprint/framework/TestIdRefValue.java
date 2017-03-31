@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import org.osgi.service.blueprint.reflect.IdRefMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
 

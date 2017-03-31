@@ -1,13 +1,12 @@
 package org.osgi.test.cases.dmt.tc4.ext.util;
 
-import org.osgi.service.dmt.spi.MountPlugin;
-import org.osgi.service.dmt.spi.MountPoint;
+import static junit.framework.TestCase.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.osgi.service.dmt.spi.MountPlugin;
+import org.osgi.service.dmt.spi.MountPoint;
 public class TestDataMountPlugin extends TestDataPlugin implements MountPlugin {
 
     private final List eventList;
@@ -32,7 +31,7 @@ public class TestDataMountPlugin extends TestDataPlugin implements MountPlugin {
 
     public int getMountPointEventSize() throws InterruptedException {
         synchronized (eventList) {
-            return (int) eventList.size();
+            return eventList.size();
         }
     }
 
@@ -41,7 +40,7 @@ public class TestDataMountPlugin extends TestDataPlugin implements MountPlugin {
             if (eventList.size() <= index) {
                 eventList.wait(1000);
             }
-            Assert.assertTrue("No expected mount point", index < eventList.size());
+			assertTrue("No expected mount point", index < eventList.size());
             return (MountPointEvent) eventList.get(index);
         }
     }

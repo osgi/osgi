@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 

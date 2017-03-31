@@ -16,28 +16,23 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.RefMetadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
 import org.osgi.service.blueprint.reflect.RegistrationListener;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
-import org.osgi.service.blueprint.reflect.MapEntry;
-import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.Target;
-
-import org.osgi.test.cases.blueprint.services.TestUtil;
-
-import junit.framework.Assert;
 
 /**
  * Validate the metadata for a single service exported in a BlueprintContainer.
  */
-public class ExportedService extends Assert implements TestComponentMetadata {
+public class ExportedService implements TestComponentMetadata {
     // the optional assigned service id
     protected String serviceId;
     // the activation mode

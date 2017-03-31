@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb5;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.*;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -61,14 +61,14 @@ public class Activator implements BundleActivator {
 		tracker.open();
 
 		A service = (A) Tracker.waitForService(tracker, timeout);
-		Assert.assertNotNull("no service A found", service);
+		assertNotNull("no service A found", service);
 
 		// call the service
 
 		// Marc: TB4 registers the implementation of A from tb2
 		// t2 reimplements getA to return "this is A" not "A"
 
-		Assert.assertEquals("this is A", service.getA());
+		assertEquals("this is A", service.getA());
 
 		tracker.close();
 	}

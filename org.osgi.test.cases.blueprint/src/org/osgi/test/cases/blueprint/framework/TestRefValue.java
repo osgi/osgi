@@ -16,9 +16,10 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.RefMetadata;
-import org.osgi.service.blueprint.reflect.Metadata;
+import static junit.framework.TestCase.assertEquals;
 
+import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.RefMetadata;
 public class TestRefValue extends TestValue {
     // The target component reference
     protected String componentId;

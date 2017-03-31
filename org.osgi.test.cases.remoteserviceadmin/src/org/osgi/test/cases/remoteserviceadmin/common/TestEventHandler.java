@@ -1,8 +1,8 @@
 package org.osgi.test.cases.remoteserviceadmin.common;
 
-import java.util.LinkedList;
+import static junit.framework.TestCase.assertEquals;
 
-import junit.framework.Assert;
+import java.util.LinkedList;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
@@ -73,16 +73,16 @@ public class TestEventHandler implements EventHandler {
 
 	public static RemoteServiceAdminEvent verifyBasicRsaEventProperties(
 			ServiceReference rsaRef, Event event) {
-		Assert.assertEquals("122.7: bundle has to refer to RSA bundle",
+		assertEquals("122.7: bundle has to refer to RSA bundle",
 				rsaRef.getBundle(), event.getProperty("bundle"));
-		Assert.assertEquals(
+		assertEquals(
 				"122.7: bundle.symbolicname has to refer to RSA bundle SymbolicName",
 				rsaRef.getBundle().getSymbolicName(),
 				event.getProperty("bundle.symbolicname"));
-		Assert.assertEquals("122.7: bundle.id has to refer to RSA bundle id",
+		assertEquals("122.7: bundle.id has to refer to RSA bundle id",
 				rsaRef.getBundle().getBundleId(),
 				event.getProperty("bundle.id"));
-		Assert.assertEquals(
+		assertEquals(
 				"122.7: bundle.version has to refer to RSA bundle version",
 				rsaRef.getBundle().getVersion(),
 				event.getProperty("bundle.version"));

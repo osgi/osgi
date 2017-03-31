@@ -1,5 +1,7 @@
 package org.osgi.test.cases.remoteserviceadmin.common;
 
+import static junit.framework.TestCase.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
@@ -184,7 +184,7 @@ public class Utils {
 			BundleContext context) {
 		String serverconfig = context
 				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
-		Assert.assertNotNull(
+		assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
 				serverconfig);
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -193,7 +193,7 @@ public class Utils {
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
 			String value = context.getProperty(propertyName);
-			Assert.assertNotNull("system property not found: " + propertyName,
+			assertNotNull("system property not found: " + propertyName,
 					value);
 			properties.put(propertyName, value);
 		}

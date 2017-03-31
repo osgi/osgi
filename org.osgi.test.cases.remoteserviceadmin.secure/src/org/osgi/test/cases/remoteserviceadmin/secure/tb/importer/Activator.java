@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.secure.tb.importer;
 
+import static junit.framework.TestCase.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -78,9 +78,9 @@ public class Activator implements BundleActivator {
 		// lookup RemoteServiceAdmin service 
 		rsaRef = context
 				.getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 		
 		//
 		// register a RemoteServiceAdminListener to receive the export
@@ -88,70 +88,70 @@ public class Activator implements BundleActivator {
 		//
 		TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
 		ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
-		Assert.assertNotNull(sr);
+		assertNotNull(sr);
 
 		try {
 			// reconstruct the endpoint description
 			EndpointDescription endpoint = reconstructEndpoint();
 			// gather all the service and exporting intents
 			List<String> endpointIntents = endpoint.getIntents();
-			Assert.assertNotNull(endpointIntents);
-			Assert.assertFalse(endpointIntents.isEmpty());
+			assertNotNull(endpointIntents);
+			assertFalse(endpointIntents.isEmpty());
 
 			//
 			// 122.4.2: Importing
 			// positive test: import the service
 			//
 			importReg = rsa.importService(endpoint);
-			Assert.assertNotNull(importReg);
-			Assert.assertNull(importReg.getException());
+			assertNotNull(importReg);
+			assertNull(importReg.getException());
 
 			ImportReference importRef = importReg.getImportReference();
-			Assert.assertNotNull(importRef);
+			assertNotNull(importRef);
 			ServiceReference sref = importRef.getImportedService();
-			Assert.assertNotNull(sref);
-			Assert.assertEquals("has been overridden", sref.getProperty("mykey"));
-			Assert.assertNotNull("122.4.2: the service.imported property has to be set", sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
-			Assert.assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED_CONFIGS));
+			assertNotNull(sref);
+			assertEquals("has been overridden", sref.getProperty("mykey"));
+			assertNotNull("122.4.2: the service.imported property has to be set", sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
+			assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED_CONFIGS));
 			List<String> intents = getPropertyAsList(sref.getProperty(RemoteConstants.SERVICE_INTENTS));
-			Assert.assertNotNull("122.4.2: service reference has to have service.intents property set", intents);
-			Assert.assertTrue("122.4.2: imported service.intents has to include all service.intents of exported service", intents.containsAll(endpointIntents));
+			assertNotNull("122.4.2: service reference has to have service.intents property set", intents);
+			assertTrue("122.4.2: imported service.intents has to include all service.intents of exported service", intents.containsAll(endpointIntents));
 
 			// validate EndpointDescription
 			EndpointDescription description = importRef.getImportedEndpoint();
-			Assert.assertNotNull(description);
-			Assert.assertEquals("has been overridden", description.getProperties().get("mykey"));
+			assertNotNull(description);
+			assertEquals("has been overridden", description.getProperties().get("mykey"));
 			try {
 				new EndpointDescription(sref, description.getProperties()); // this throws an exception if
 			} catch (IllegalArgumentException ie) {
-				Assert.fail("invalid endpoint description returned from imported service");
+				fail("invalid endpoint description returned from imported service");
 			}
-			Assert.assertNotNull(description.getProperties().get(RemoteConstants.SERVICE_IMPORTED));
-			Assert.assertTrue(description.getInterfaces().size() == 1);
-			Assert.assertTrue(description.getInterfaces().contains(A.class.getName()));
+			assertNotNull(description.getProperties().get(RemoteConstants.SERVICE_IMPORTED));
+			assertTrue(description.getInterfaces().size() == 1);
+			assertTrue(description.getInterfaces().contains(A.class.getName()));
 
 			// check for event notifications
 			//
 			// 122.8 verify that import notification was sent to RemoteServiceAdminListeners
 			//
 			RemoteServiceAdminEvent rsaevent = remoteServiceAdminListener.getNextEvent();
-			Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
-			Assert.assertNotNull("no RemoteServiceAdminEvent received", rsaevent);
-			Assert.assertNotNull("122.10.11: source must not be null", rsaevent.getSource());
+			assertEquals(0, remoteServiceAdminListener.getEventCount());
+			assertNotNull("no RemoteServiceAdminEvent received", rsaevent);
+			assertNotNull("122.10.11: source must not be null", rsaevent.getSource());
 
 			ImportReference importReference = null;
 			EndpointDescription importedED = null;
 
 			//
 			// check received event type whether import was successful or not
-			Assert.assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION, rsaevent.getType());
-			Assert.assertNull(rsaevent.getException());
+			assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION, rsaevent.getType());
+			assertNull(rsaevent.getException());
 			importReference = rsaevent.getImportReference();
-			Assert.assertNotNull("ImportReference expected in event", importReference);
+			assertNotNull("ImportReference expected in event", importReference);
 			importedED = importReference.getImportedEndpoint();
-			Assert.assertNotNull(importedED);
+			assertNotNull(importedED);
 			// compare endpoints
-			Assert.assertTrue(endpoint.isSameService(importedED));
+			assertTrue(endpoint.isSameService(importedED));
 
 			// invoke service
 			A serviceA = null;
@@ -161,11 +161,11 @@ public class Activator implements BundleActivator {
 			//
 			// no version
 			ServiceReference ref = context.getServiceReference(A.class.getName());
-			Assert.assertNotNull(ref);
+			assertNotNull(ref);
 			serviceA = (A) context.getService(ref);
 			try {
-				Assert.assertNotNull(serviceA);
-				Assert.assertEquals("this is A", serviceA.getA());
+				assertNotNull(serviceA);
+				assertEquals("this is A", serviceA.getA());
 			} finally {
 				context.ungetService(ref);
 			}
@@ -186,7 +186,7 @@ public class Activator implements BundleActivator {
 		ServiceRegistration sr = context.registerService(
 				RemoteServiceAdminListener.class.getName(),
 				remoteServiceAdminListener, null);
-		Assert.assertNotNull(sr);
+		assertNotNull(sr);
 		try {
 			importReg.close();
 			importReg.close(); // calling this multiple times must not cause a
@@ -197,20 +197,20 @@ public class Activator implements BundleActivator {
 			//
 			RemoteServiceAdminEvent rsaevent = remoteServiceAdminListener
 					.getNextEvent();
-			Assert.assertNotNull("no RemoteServiceAdminEvent received",
+			assertNotNull("no RemoteServiceAdminEvent received",
 					rsaevent);
-			Assert.assertNotNull("122.10.11: source must not be null",
+			assertNotNull("122.10.11: source must not be null",
 					rsaevent.getSource());
-			Assert.assertNull(rsaevent.getException());
-			Assert.assertEquals("122.10.11: event type is wrong",
+			assertNull(rsaevent.getException());
+			assertEquals("122.10.11: event type is wrong",
 					RemoteServiceAdminEvent.IMPORT_UNREGISTRATION,
 					rsaevent.getType());
 
 			ImportReference importReference = rsaevent.getImportReference();
-			Assert.assertNotNull("ImportReference expected in event",
+			assertNotNull("ImportReference expected in event",
 					importReference);
 
-			Assert.assertNull(importReference.getImportedEndpoint());
+			assertNull(importReference.getImportedEndpoint());
 
 		} finally {
 			sr.unregister();
@@ -245,7 +245,7 @@ public class Activator implements BundleActivator {
 			props = (Map<String, Object>)ois.readObject();
 		} catch (ClassNotFoundException e) {e.printStackTrace();}
 		
-		Assert.assertTrue(props!=null);
+		assertTrue(props!=null);
 		
 		return new EndpointDescription(props);
 	}

@@ -16,17 +16,16 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import junit.framework.Assert;
-
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 /**
  * Validate that a target service is registered at the requested
  * test phase boundary.
  */
-public class ServiceRequestInitiator extends Assert implements TestCleanup, TestEventListener, TestInitializer, BundleAware {
+public class ServiceRequestInitiator implements TestCleanup, TestEventListener,
+		TestInitializer, BundleAware {
     // the bundle we're validating for
     protected Bundle bundle;
     // our test bundle context

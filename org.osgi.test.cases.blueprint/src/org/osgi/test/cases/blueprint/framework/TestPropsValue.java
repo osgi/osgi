@@ -16,12 +16,14 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osgi.service.blueprint.reflect.PropsMetadata;
-import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.MapEntry;
+import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.PropsMetadata;
 
 public class TestPropsValue extends TestValue {
     // The expected set of properties items.

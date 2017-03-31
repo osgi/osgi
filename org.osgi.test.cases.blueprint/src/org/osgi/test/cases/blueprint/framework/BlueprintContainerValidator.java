@@ -15,6 +15,8 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.*;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -22,12 +24,10 @@ import org.osgi.framework.Version;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
-import junit.framework.Assert;
-
 /**
  * Validate that a module context exists.
  */
-public class BlueprintContainerValidator extends Assert implements TestValidator, BundleAware {
+public class BlueprintContainerValidator implements TestValidator, BundleAware {
     // the bundle we're validating for
     protected Bundle bundle;
 

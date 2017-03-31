@@ -28,8 +28,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -121,9 +119,9 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		// service
 		//
 		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 
 		try {
 			// reconstruct the endpoint description in version 1.0.0
@@ -442,9 +440,9 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		// service
 		//
 		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 
 		try {
 			// reconstruct the endpoint description in version 1.0.0

@@ -16,11 +16,10 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
-import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
-import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
 public class ServiceComponentValidator extends MetadataValidator {
     // the target componentId.

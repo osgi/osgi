@@ -15,9 +15,9 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.secure.tb.reader;
 
-import java.util.Collection;
+import static junit.framework.TestCase.*;
 
-import junit.framework.Assert;
+import java.util.Collection;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -78,25 +78,25 @@ public class Activator implements BundleActivator {
 		// //////////////DEBUG REMOVE END
 
 		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 		try {
 			Collection<ExportReference> coll = rsa.getExportedServices();
 			System.out.println("********** " + coll);
-			Assert.assertNotNull(coll);
+			assertNotNull(coll);
 			if (isExportingFramework) {
-				Assert.assertTrue(coll.size() > 0);
+				assertTrue(coll.size() > 0);
 			} else {
-				Assert.assertTrue(coll.size() == 0);
+				assertTrue(coll.size() == 0);
 			}
 			
 			Collection<ImportReference> icoll = rsa.getImportedEndpoints();
-			Assert.assertNotNull(icoll);
+			assertNotNull(icoll);
 			if (!isExportingFramework) {
-				Assert.assertTrue(icoll.size() > 0);
+				assertTrue(icoll.size() > 0);
 			} else {
-				Assert.assertTrue(icoll.size() == 0);
+				assertTrue(icoll.size() == 0);
 			}
 		} finally {
 			// Make sure the service instance of the RSA can be closed by the RSA Service Factory

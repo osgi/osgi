@@ -15,10 +15,6 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import junit.framework.Assert;
-
-import org.osgi.service.blueprint.reflect.BeanMetadata;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.RefMetadata;
 import org.osgi.service.blueprint.reflect.RegistrationListener;
 import org.osgi.service.blueprint.reflect.Target;
@@ -26,7 +22,7 @@ import org.osgi.service.blueprint.reflect.Target;
 /**
  * Validate the metadata for a registration listener.
  */
-public class TestRegistrationListener extends Assert {
+public class TestRegistrationListener {
     // the listener component name (can be null if we expect an anonymous component)
     protected String componentId;
     // the registration method name.

@@ -16,11 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import org.osgi.service.blueprint.reflect.BeanProperty;
 
-import junit.framework.Assert;
-
-public class TestProperty extends Assert {
+public class TestProperty {
     // the target property name
     protected String propertyName;
     // expected property metadata type

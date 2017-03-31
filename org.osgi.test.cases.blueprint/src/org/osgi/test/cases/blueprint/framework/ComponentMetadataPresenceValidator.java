@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertTrue;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 

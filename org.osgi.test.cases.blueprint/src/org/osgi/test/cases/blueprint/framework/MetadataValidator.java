@@ -19,13 +19,12 @@ package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import junit.framework.Assert;
 
 /**
  * Base class for all validators that use a BlueprintMetadata instance
  * to perform the validation operations.
  */
-public class MetadataValidator extends Assert implements TestValidator, MetadataAware {
+public class MetadataValidator implements TestValidator, MetadataAware {
     // our method context wrapper
     protected BlueprintMetadata blueprintMetadata;
     // our associated bundle (retrieved from the injected metadata)

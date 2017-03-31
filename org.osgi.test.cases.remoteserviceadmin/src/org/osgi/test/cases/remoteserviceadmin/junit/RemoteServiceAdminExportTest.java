@@ -50,8 +50,6 @@ import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
 
-import junit.framework.Assert;
-
 /**
  * RSA 122.4.1 Exporting test cases
  *
@@ -1162,7 +1160,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	private Map<String, Object> loadCTProperties() {
 		String serverconfig = getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
-		Assert.assertNotNull(
+		assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
 				serverconfig);
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -1171,7 +1169,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
 			String value = getProperty(propertyName);
-			Assert.assertNotNull("system property not found: " + propertyName, value);
+			assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}
 

@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import java.util.Iterator;
 import java.util.Set;
 

@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import java.util.HashSet;
 import java.util.Set;
 

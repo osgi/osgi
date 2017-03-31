@@ -16,11 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import org.osgi.service.blueprint.reflect.BeanArgument;
 
-import junit.framework.Assert;
-
-public class TestArgument extends Assert {
+public class TestArgument {
     // expected parameter metadata type
     protected TestValue parameterTestValue;
     // explicitly named parameter type (optional, if not specified)

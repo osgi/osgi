@@ -16,13 +16,13 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import java.util.Iterator;
+import static junit.framework.TestCase.fail;
+
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.container.ComponentDefinitionException;
 import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 
 /**

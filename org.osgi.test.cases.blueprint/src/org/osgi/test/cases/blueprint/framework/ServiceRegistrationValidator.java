@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import java.util.Dictionary;
 
 import org.osgi.framework.Bundle;
@@ -23,14 +25,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.blueprint.services.TestUtil;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
 /**
  * Validate that a target service is registered at the requested
  * test phase boundary.
  */
-public class ServiceRegistrationValidator extends Assert implements TestValidator, BundleAware {
+public class ServiceRegistrationValidator
+		implements TestValidator, BundleAware {
     // the bundle the service should be part of
     protected Bundle bundle;
     // the name of the interface to validate

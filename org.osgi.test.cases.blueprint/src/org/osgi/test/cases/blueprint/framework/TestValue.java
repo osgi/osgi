@@ -16,11 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import org.osgi.service.blueprint.reflect.Metadata;
 
-import junit.framework.Assert;
-
-public class TestValue extends Assert {
+public class TestValue {
     // expected value metadata type
     protected Class valueType;
 

@@ -16,11 +16,11 @@
 
 package org.osgi.test.cases.remoteserviceadmin.tb7;
 
+import static junit.framework.TestCase.assertTrue;
+
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -204,7 +204,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		String timeout = context.getProperty("rsa.ct.timeout");
 
 		try {
-			Assert.assertTrue("no interested EndpointEventListener found",
+			assertTrue("no interested EndpointEventListener found",
 					semaphore.waitForSignal(Long
 							.parseLong(timeout != null ? timeout : "30000")));
 		} catch (InterruptedException e) {

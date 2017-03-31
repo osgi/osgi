@@ -15,11 +15,11 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb1;
 
+import static junit.framework.TestCase.*;
+
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -107,8 +107,8 @@ public class Activator implements BundleActivator, A, B {
 		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "A"); // mandatory
 		endpoint = new EndpointDescription(registration.getReference(), properties);
 		
-		Assert.assertNotNull(endpoint);
-		Assert.assertEquals("Endpoint properties are supposed to trump service properties", "has been overridden", endpoint.getProperties().get("mykey"));
+		assertNotNull(endpoint);
+		assertEquals("Endpoint properties are supposed to trump service properties", "has been overridden", endpoint.getProperties().get("mykey"));
 
 		// 
 		// find the EndpointListeners and call them with the endpoint description
@@ -144,7 +144,7 @@ public class Activator implements BundleActivator, A, B {
 		
 		String timeout = context.getProperty("rsa.ct.timeout");
 		
-		Assert.assertTrue("no interested EndpointListener found", semaphore
+		assertTrue("no interested EndpointListener found", semaphore
 				.waitForSignal(Long.parseLong(timeout != null ? timeout
 						: "30000")));
 	}
@@ -157,7 +157,7 @@ public class Activator implements BundleActivator, A, B {
 		// find the EndpointListeners and call them with the endpoint description
 		//
 		ServiceReference[] listeners = tracker.getServiceReferences();
-		Assert.assertNotNull("no EndpointListeners found", listeners);
+		assertNotNull("no EndpointListeners found", listeners);
 		
 		boolean foundListener = false;
 		for (ServiceReference sr : listeners) {
@@ -171,7 +171,7 @@ public class Activator implements BundleActivator, A, B {
 				listener.endpointRemoved(endpoint, matchedFilter);
 			}
 		}
-		Assert.assertTrue("no interested EndpointListener found", foundListener);
+		assertTrue("no interested EndpointListener found", foundListener);
 	}
 	
 

@@ -16,8 +16,10 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
+import static junit.framework.TestCase.*;
+
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**

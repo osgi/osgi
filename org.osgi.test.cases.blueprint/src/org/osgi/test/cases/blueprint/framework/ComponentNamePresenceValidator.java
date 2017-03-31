@@ -16,10 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 /**
  * Generic validator to just verify that a component appears in the set of

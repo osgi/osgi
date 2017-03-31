@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.util.validate;
 
+import static junit.framework.TestCase.*;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -25,10 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.jar.Attributes.Name;
-
-import junit.framework.Assert;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -41,7 +41,7 @@ import org.osgi.test.cases.webcontainer.util.Util;
  *          BundleManifestValidator is used to validate the manifest is 
  *          constructed per RFC 66 spec
  */
-public class BundleManifestValidator extends Assert implements Validator{
+public class BundleManifestValidator implements Validator {
 
     boolean debug = false;
     Bundle b;
@@ -167,7 +167,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         if (this.debug) {
             log(Constants.BUNDLE_MANIFESTVERSION + " is " + (String)this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         }       
-        assertNotNull((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
+        assertNotNull(this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION));
         assertTrue((Integer.parseInt((String) this.dictionary.get(Constants.BUNDLE_MANIFESTVERSION))) >= 2);
         
         // dVersion - deployer specified Bundle-Version value
@@ -297,7 +297,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         if (this.debug) {
             log(WEB_CONTEXT_PATH + " is " + (String)this.dictionary.get(WEB_CONTEXT_PATH));
         }
-        assertNotNull((String)this.dictionary.get(WEB_CONTEXT_PATH));
+        assertNotNull(this.dictionary.get(WEB_CONTEXT_PATH));
         
         // dWebContextPath - deployer specified Web-ContextPath value
         Object dWebContextPath = this.deployOptions == null ? null : this.deployOptions.get(WEB_CONTEXT_PATH);
@@ -322,7 +322,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         // original manifest attribute
         Attributes attributes = this.manifest.getMainAttributes();
 
-        Set keyset = (Set)attributes.keySet();
+        Set keyset = attributes.keySet();
         Iterator it = keyset.iterator();
         while(it.hasNext()) {
             Name key = (Name)it.next();

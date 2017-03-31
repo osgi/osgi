@@ -15,6 +15,8 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.*;
+
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -31,7 +33,6 @@ import org.osgi.service.blueprint.reflect.BeanArgument;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.BeanProperty;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.RefMetadata;
 import org.osgi.service.blueprint.reflect.ReferenceMetadata;
 import org.osgi.service.blueprint.reflect.ServiceMetadata;
@@ -40,7 +41,6 @@ import org.osgi.service.blueprint.reflect.Target;
 import org.osgi.test.cases.blueprint.services.ComponentTestInfo;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
 /**
@@ -48,7 +48,7 @@ import junit.framework.AssertionFailedError;
  * bundle.  This is used by the different validators, initializers,
  * and terminators to perform metadata-related operations.
  */
-public class BlueprintMetadata extends Assert implements TestValidator, TestCleanup {
+public class BlueprintMetadata implements TestValidator, TestCleanup {
     // the bundle context we're running in
     protected BundleContext testContext;
     // the bundle we're validating for
@@ -684,7 +684,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
 
         assertEquals("Mismatch on the number of exported services", expected.length, exportedServices.size());
         for (int i = 0; i < expected.length; i++) {
-            ExportedService e = (ExportedService)expected[i];
+            ExportedService e = expected[i];
             ServiceMetadata service = locateServiceExport(exportedServices, e);
             assertNotNull("Exported service not found in metadata: " + e, service);
             // validate the metadata specifics
@@ -725,7 +725,7 @@ public class BlueprintMetadata extends Assert implements TestValidator, TestClea
 
         assertEquals("Mismatch on the number of referenced services", expected.length, referencedServices.size());
         for (int i = 0; i < expected.length; i++) {
-            ReferencedService e = (ReferencedService)expected[i];
+            ReferencedService e = expected[i];
             ServiceReferenceMetadata service = locateServiceReference(referencedServices, e);
             assertNotNull("Referenced service not found in metadata", service);
             // validate the metadata specifics

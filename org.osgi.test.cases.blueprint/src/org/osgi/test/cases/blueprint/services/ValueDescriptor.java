@@ -17,15 +17,12 @@
 package org.osgi.test.cases.blueprint.services;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-
-import junit.framework.Assert;
 
 /**
  * Representation of a value stored inside of a component.  These are
  * further subdivided into Argument and Property values.
  */
-public class ValueDescriptor extends Assert {
+public class ValueDescriptor {
      // the internal name of the property.
      protected String name;
      // the actual object value

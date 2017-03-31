@@ -37,17 +37,15 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc;
 
+import static junit.framework.TestCase.*;
+
 import java.io.File;
 import java.security.AllPermission;
-
-import junit.framework.Assert;
 
 import org.osgi.service.condpermadmin.BundleSignerCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.support.OSGiTestCaseProperties;
-
-
 
 /**
  * @author Andre Assad
@@ -176,16 +174,16 @@ public class DeploymentConstants {
 	static {
 		String prop = OSGiTestCaseProperties
 				.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
-		Assert
-				.assertNotNull(
+		assertNotNull(
 						"Must set property: org.osgi.impl.service.deploymentadmin.deliveredarea",
 						prop);
 		DELIVERED_AREA = new File(prop);
-		Assert.assertFalse("deliveredarea is not a directory: "
+		assertFalse("deliveredarea is not a directory: "
 				+ DELIVERED_AREA.getPath(), DELIVERED_AREA.exists()
 				&& !DELIVERED_AREA.isDirectory());
 		if (!DELIVERED_AREA.isDirectory())
-			Assert.assertTrue("Could not create root directory: "
+			assertTrue(
+					"Could not create root directory: "
 					+ DELIVERED_AREA.getPath(), DELIVERED_AREA.mkdirs());
 	}
 

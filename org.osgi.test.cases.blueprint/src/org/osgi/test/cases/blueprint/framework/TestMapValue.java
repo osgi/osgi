@@ -16,14 +16,15 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 
-import org.osgi.service.blueprint.reflect.MapMetadata;
-import org.osgi.service.blueprint.reflect.MapEntry;
-import org.osgi.service.blueprint.reflect.Metadata;
 import org.osgi.service.blueprint.reflect.CollectionMetadata;
+import org.osgi.service.blueprint.reflect.MapEntry;
+import org.osgi.service.blueprint.reflect.MapMetadata;
+import org.osgi.service.blueprint.reflect.Metadata;
 
 public class TestMapValue extends TestValue {
     // The expected set of items in the List.

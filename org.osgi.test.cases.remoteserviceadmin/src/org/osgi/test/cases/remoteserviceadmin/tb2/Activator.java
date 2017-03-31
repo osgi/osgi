@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb2;
 
+import static junit.framework.TestCase.*;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -41,8 +43,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
-
-import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -79,7 +79,7 @@ public class Activator implements BundleActivator, A, B {
 
 		// read my version from the bundle header
 		version = context.getBundle().getHeaders().get("RSA-Version");
-		Assert.assertNotNull(version);
+		assertNotNull(version);
 
 		Set<String> set = new HashSet<String>();
 		set.add("one");
@@ -130,7 +130,7 @@ public class Activator implements BundleActivator, A, B {
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service
 		rsa = rsaTracker.waitForService(timeout);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 
 		try {
 			//
@@ -140,7 +140,7 @@ public class Activator implements BundleActivator, A, B {
 			remoteServiceAdminListener = new TestRemoteServiceAdminListener(
 					timeout);
 			ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
-			Assert.assertNotNull(sr);
+			assertNotNull(sr);
 
 
 			//
@@ -156,35 +156,35 @@ public class Activator implements BundleActivator, A, B {
 
 			// export the service
 			exportRegistrations = rsa.exportService(registration.getReference(), properties);
-			Assert.assertNotNull(exportRegistrations);
-			Assert.assertFalse(exportRegistrations.isEmpty());
+			assertNotNull(exportRegistrations);
+			assertFalse(exportRegistrations.isEmpty());
 
 			for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 				ExportRegistration er = it.next();
 
-				Assert.assertNull(er.getException());
+				assertNull(er.getException());
 				ExportReference ref = er.getExportReference();
-				Assert.assertNotNull(ref);
+				assertNotNull(ref);
 
 				// 122.4.1 Exporting
-				Assert.assertEquals(registration.getReference(), ref.getExportedService());
+				assertEquals(registration.getReference(), ref.getExportedService());
 
-				Assert.assertEquals(DefaultTestBundleControl.arrayToString((Object[]) registration.getReference().getProperty("objectClass"), true),
+				assertEquals(DefaultTestBundleControl.arrayToString((Object[]) registration.getReference().getProperty("objectClass"), true),
 						DefaultTestBundleControl.arrayToString((Object[]) ref.getExportedService().getProperty("objectClass"), true));
-				Assert.assertEquals(registration.getReference().getProperty("service.id"), ref.getExportedService().getProperty("service.id"));
+				assertEquals(registration.getReference().getProperty("service.id"), ref.getExportedService().getProperty("service.id"));
 
 				EndpointDescription ed = ref.getExportedEndpoint();
-				Assert.assertNotNull(ed);
-				Assert.assertNotNull(ed.getProperties().get("objectClass"));
-				Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
-				Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
+				assertNotNull(ed);
+				assertNotNull(ed.getProperties().get("objectClass"));
+				assertTrue(ed.getInterfaces().contains(A.class.getName()));
+				assertFalse(ed.getInterfaces().contains(B.class.getName()));
 
-				Assert.assertNotNull(ed.getId());
-				Assert.assertNotNull(ed.getConfigurationTypes());
-				Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-				Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"),
+				assertNotNull(ed.getId());
+				assertNotNull(ed.getConfigurationTypes());
+				assertFalse(ed.getConfigurationTypes().isEmpty());
+				assertEquals(context.getProperty("org.osgi.framework.uuid"),
 						ed.getFrameworkUUID());
-				Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
+				assertNotNull(ed.getProperties().get("endpoint.service.id"));
 
 				Utils.exportEndpointDescription(ed, version,
 						registrationCounter++);
@@ -195,24 +195,24 @@ public class Activator implements BundleActivator, A, B {
 			// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
 			//
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
-			Assert.assertNotNull("no RemoteServiceAdminEvent received", event);
-			Assert.assertNotNull("122.10.11: source must not be null", event.getSource());
-			Assert.assertNull(event.getException());
-			Assert.assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
+			assertNotNull("no RemoteServiceAdminEvent received", event);
+			assertNotNull("122.10.11: source must not be null", event.getSource());
+			assertNull(event.getException());
+			assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
 
 			ExportReference exportReference = event.getExportReference();
-			Assert.assertNotNull("ExportReference expected in event", exportReference);
-			Assert.assertEquals(registration.getReference(), exportReference.getExportedService());
+			assertNotNull("ExportReference expected in event", exportReference);
+			assertEquals(registration.getReference(), exportReference.getExportedService());
 
 			EndpointDescription ed = exportReference.getExportedEndpoint();
-			Assert.assertNotNull(ed);
-			Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
-			Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
+			assertNotNull(ed);
+			assertTrue(ed.getInterfaces().contains(A.class.getName()));
+			assertFalse(ed.getInterfaces().contains(B.class.getName()));
 
-			Assert.assertNotNull(ed.getId());
-			Assert.assertNotNull(ed.getConfigurationTypes());
-			Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
+			assertNotNull(ed.getId());
+			assertNotNull(ed.getConfigurationTypes());
+			assertFalse(ed.getConfigurationTypes().isEmpty());
+			assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
 					.getFrameworkUUID());
 
 		} finally {
@@ -229,15 +229,15 @@ public class Activator implements BundleActivator, A, B {
 	 */
 	private void teststop() throws Exception {
 		try{
-		Assert.assertNotNull(exportRegistrations);
-		Assert.assertFalse(exportRegistrations.isEmpty());
+		assertNotNull(exportRegistrations);
+		assertFalse(exportRegistrations.isEmpty());
 
 
 		// close ExportRegistrations
 		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 			ExportRegistration er = it.next();
 
-			Assert.assertNull(er.getException());
+			assertNull(er.getException());
 			er.close();
 		}
 
@@ -245,15 +245,15 @@ public class Activator implements BundleActivator, A, B {
 		// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
 		//
 		RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
-		Assert.assertNotNull("no RemoteServiceAdminEvent received", event);
-		Assert.assertNotNull("122.10.11: source must not be null", event.getSource());
-		Assert.assertNull(event.getException());
-		Assert.assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, event.getType());
+		assertNotNull("no RemoteServiceAdminEvent received", event);
+		assertNotNull("122.10.11: source must not be null", event.getSource());
+		assertNull(event.getException());
+		assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, event.getType());
 
 		ExportReference exportReference = event.getExportReference();
-		Assert.assertNotNull("ExportReference expected in event", exportReference);
+		assertNotNull("ExportReference expected in event", exportReference);
 
-		Assert.assertNull(exportReference.getExportedEndpoint());
+		assertNull(exportReference.getExportedEndpoint());
 
 		} finally {
 			// the release of the rsa service will also trigger the unexport of the services of this bundle

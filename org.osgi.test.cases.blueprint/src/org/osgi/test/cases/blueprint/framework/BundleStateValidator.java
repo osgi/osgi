@@ -15,7 +15,7 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import junit.framework.Assert;
+import static junit.framework.TestCase.assertEquals;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -23,7 +23,7 @@ import org.osgi.framework.BundleContext;
 /**
  * Validate that a bundle is in an expected state during the validation phase.
  */
-public class BundleStateValidator extends Assert implements TestValidator, BundleAware {
+public class BundleStateValidator implements TestValidator, BundleAware {
     // the bundle the service should be part of
     protected Bundle bundle;
     // the target bundle state

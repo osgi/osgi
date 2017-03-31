@@ -1,10 +1,10 @@
 package org.osgi.test.cases.wireadmin.junit;
 
+import static junit.framework.TestCase.*;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -64,7 +64,7 @@ public class Helper {
 		p.put(WireConstants.WIREADMIN_CONSUMER_FLAVORS, flavors);
 		ServiceRegistration regConsumer = context.registerService(
 				Consumer.class.getName(), consumer, p);
-		Assert.assertNull("consumer already registered", consumers.put(
+		assertNull("consumer already registered", consumers.put(
 				consumerPID, regConsumer));
 	}
 
@@ -83,14 +83,14 @@ public class Helper {
 		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, flavors);
 		ServiceRegistration regProducer = context.registerService(
 				Producer.class.getName(), producer, p);
-		Assert.assertNull("producer already registered", producers.put(
+		assertNull("producer already registered", producers.put(
 				producerPID, regProducer));
 	}
 
 	public void modifyProducer(String producerPID, Map properties) {
 		ServiceRegistration regProducer = (ServiceRegistration) producers
 				.get(producerPID);
-		Assert.assertNotNull("modifying non-existant producer", regProducer);
+		assertNotNull("modifying non-existant producer", regProducer);
 		ServiceReference ref = regProducer.getReference();
 		Hashtable p = new Hashtable();
 		p.put(WireConstants.WIREADMIN_PRODUCER_FLAVORS, ref

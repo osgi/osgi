@@ -15,7 +15,7 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Dictionary;
+import static junit.framework.TestCase.assertEquals;
 
 import org.osgi.framework.BundleContext;
 

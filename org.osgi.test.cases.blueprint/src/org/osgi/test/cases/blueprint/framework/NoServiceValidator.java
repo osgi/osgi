@@ -15,17 +15,17 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.fail;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
-import junit.framework.Assert;
 
 /**
  * Verify that there is no service associated with a bundle in the
  * service registry at the end of a test phase.
  */
-public class NoServiceValidator extends Assert implements TestValidator, BundleAware {
+public class NoServiceValidator implements TestValidator, BundleAware {
     // the bundle the service should be part of
     protected Bundle bundle;
     // the name of the interface to validate

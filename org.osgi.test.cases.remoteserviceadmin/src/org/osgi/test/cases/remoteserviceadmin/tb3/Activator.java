@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb3;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.*;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -90,10 +90,10 @@ public class Activator implements BundleActivator, ServiceListener {
 		tracker.open();
 
 		A service = (A) Tracker.waitForService(tracker, timeout);
-		Assert.assertNotNull("no service A found", service);
+		assertNotNull("no service A found", service);
 
 		// call the service
-		Assert.assertEquals("A", service.getA());
+		assertEquals("A", service.getA());
 
 		tracker.close();
 

@@ -18,8 +18,6 @@ package org.osgi.test.cases.remoteserviceadmin.secure;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -97,10 +95,10 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		// //////////////DEBUG REMOVE
 		ServiceReference rsaRef = getContext()
 				.getServiceReference(RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext()
 				.getService(rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 		System.out.println("##############  " + rsa.getImportedEndpoints());
 		// //////////////DEBUG REMOVE END
 

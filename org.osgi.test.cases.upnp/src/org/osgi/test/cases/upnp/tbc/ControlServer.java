@@ -1,5 +1,7 @@
 package org.osgi.test.cases.upnp.tbc;
 
+import static junit.framework.TestCase.*;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -11,8 +13,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import junit.framework.Assert;
-
 import org.osgi.test.cases.upnp.tbc.parser.XMLParser;
 import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
 
@@ -20,7 +20,7 @@ import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
  * 
  * 
  */
-public class ControlServer extends Assert implements Runnable {
+public class ControlServer implements Runnable {
 	private final Socket		socket;
 	private final InetAddress	address;
 	private volatile String		ans;

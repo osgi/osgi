@@ -15,10 +15,12 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.*;
+
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
-import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 import org.osgi.service.blueprint.reflect.ReferenceMetadata;
 
+import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 /**
  * A single referenced service in the BlueprintContainer metadata.
  */

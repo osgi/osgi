@@ -16,20 +16,19 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
-import org.osgi.service.blueprint.reflect.Metadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.Target;
 
 /**
  * A wrapper for component definition metadata.
  */
-public class BeanComponent extends Assert implements TestComponentMetadata {
+public class BeanComponent implements TestComponentMetadata {
     // a property name to match on (only used if not-null)
     protected String name;
     // the component class name (can double as a static factory class name)

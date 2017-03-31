@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -83,10 +81,10 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 		//
 		ServiceReference rsaRef = getContext().getServiceReference(
 				RemoteServiceAdmin.class.getName());
-		Assert.assertNotNull(rsaRef);
+		assertNotNull(rsaRef);
 		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(
 				rsaRef);
-		Assert.assertNotNull(rsa);
+		assertNotNull(rsa);
 
 		try {
 			// give the child framework and tb8 some time to start and export

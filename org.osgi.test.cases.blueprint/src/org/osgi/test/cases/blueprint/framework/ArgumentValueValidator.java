@@ -15,6 +15,8 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.assertEquals;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.blueprint.services.StringValueDescriptor;
 import org.osgi.test.cases.blueprint.services.ValueDescriptor;

@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
@@ -32,19 +30,19 @@ public class CapabilityTest extends DefaultTestBundleControl {
 					// this bundle is the discovery provider
 
 					Version version = (Version) attributes.get("version");
-					Assert.assertEquals(0,
+					assertEquals(0,
 							version.compareTo(new Version(1, 1, 0)));
 
 					String uses = bc.getDirectives().get("uses");
-					Assert.assertNotNull(uses);
-					Assert.assertTrue("org.osgi.service.remoteserviceadmin"
+					assertNotNull(uses);
+					assertTrue("org.osgi.service.remoteserviceadmin"
 							.equals(uses));
 
 					foundDiscovery = true;
 				}
 			}
 		}
-		Assert.assertTrue(foundDiscovery);
+		assertTrue(foundDiscovery);
 	}
 
 	/**
@@ -61,16 +59,16 @@ public class CapabilityTest extends DefaultTestBundleControl {
 				// this bundle is a discovery provider, check capability spec
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
-				Assert.assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
 				List<String> configs = (List<String>) attributes
 						.get("protocols");
-				Assert.assertNotNull(configs);
-				Assert.assertTrue(configs.size() > 0);
+				assertNotNull(configs);
+				assertTrue(configs.size() > 0);
 				foundDiscovery = true;
 			}
 		}
 
-		Assert.assertTrue(foundDiscovery);
+		assertTrue(foundDiscovery);
 	}
 
 	/**
@@ -84,14 +82,14 @@ public class CapabilityTest extends DefaultTestBundleControl {
 			for (BundleCapability bc : capabilities) {
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
-				Assert.assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
 				List<String> configs = (List<String>) attributes.get("configs");
-				Assert.assertNotNull(configs);
-				Assert.assertTrue(configs.size() > 0);
+				assertNotNull(configs);
+				assertTrue(configs.size() > 0);
 				foundDistributionProvider = true;
 			}
 		}
-		Assert.assertTrue(foundDistributionProvider);
+		assertTrue(foundDistributionProvider);
 	}
 
 	/**
@@ -106,15 +104,15 @@ public class CapabilityTest extends DefaultTestBundleControl {
 			for (BundleCapability bc : capabilities) {
 				Map<String, Object> attributes = bc.getAttributes();
 				Version version = (Version) attributes.get("version");
-				Assert.assertEquals(0, version.compareTo(new Version(1, 1, 0)));
+				assertEquals(0, version.compareTo(new Version(1, 1, 0)));
 				List<String> configs = (List<String>) attributes.get("policy");
-				Assert.assertNotNull(configs);
-				Assert.assertTrue(configs.size() > 0);
+				assertNotNull(configs);
+				assertTrue(configs.size() > 0);
 				foundTopologyManager = true;
 			}
 		}
 
-		Assert.assertTrue(foundTopologyManager);
+		assertTrue(foundTopologyManager);
 	}
 
 	/**

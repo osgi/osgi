@@ -16,10 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.fail;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.NoSuchComponentException;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 /**
  * Generic validator to just verify that a metadata element is absent from

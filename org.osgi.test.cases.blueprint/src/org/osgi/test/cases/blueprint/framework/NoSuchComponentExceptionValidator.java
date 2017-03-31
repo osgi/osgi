@@ -16,10 +16,11 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
+import static junit.framework.TestCase.*;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.NoSuchComponentException;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 /**
  * Validator to test the conditions under which a NoSuchComponentException

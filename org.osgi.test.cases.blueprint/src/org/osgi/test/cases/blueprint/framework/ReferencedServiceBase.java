@@ -15,23 +15,21 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.*;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
-import junit.framework.Assert;
-
-import org.osgi.service.blueprint.reflect.ReferenceListener;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import org.osgi.service.blueprint.reflect.ReferenceListener;
 import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
 
 /**
  * A single referenced service in the BlueprintContainer metadata.
  */
-public class ReferencedServiceBase extends Assert implements TestComponentMetadata {
+public class ReferencedServiceBase implements TestComponentMetadata {
     // optional name of the component
     protected String name;
     // the set of exported interfaces

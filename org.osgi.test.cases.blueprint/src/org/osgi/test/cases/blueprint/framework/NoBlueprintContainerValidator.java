@@ -15,12 +15,12 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import static junit.framework.TestCase.assertNull;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
-
-import junit.framework.Assert;
 
 /**
  * Validate that there is no module context defined as a service
@@ -28,7 +28,8 @@ import junit.framework.Assert;
  * as well as verifying that there is no module context published
  * when context creation errors occur.
  */
-public class NoBlueprintContainerValidator extends Assert implements TestValidator, BundleAware {
+public class NoBlueprintContainerValidator
+		implements TestValidator, BundleAware {
     // the bundle we're validating for
     protected Bundle bundle;
 

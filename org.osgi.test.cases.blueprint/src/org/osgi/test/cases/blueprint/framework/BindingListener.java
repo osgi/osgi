@@ -16,15 +16,14 @@
 
 package org.osgi.test.cases.blueprint.framework;
 
-import junit.framework.Assert;
+import static junit.framework.TestCase.assertEquals;
 
 import org.osgi.service.blueprint.reflect.ReferenceListener;
-import org.osgi.service.blueprint.reflect.Metadata;
 
 /**
  * A base type for validating BindingListener metadata.
  */
-public class BindingListener extends Assert {
+public class BindingListener {
     // the listener component name.  This is either a ReferenceValue or a ComponentValue
     protected TestValue listener;
     // The listener Bind method name.
