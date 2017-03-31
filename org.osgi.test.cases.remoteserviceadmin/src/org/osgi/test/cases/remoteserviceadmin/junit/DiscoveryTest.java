@@ -41,7 +41,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointEvent;
 import org.osgi.service.remoteserviceadmin.EndpointEventListener;
-import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.ExportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
@@ -135,10 +134,16 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + "))";
 		String secondFilter = "(mykey=has been overridden)";
 		Hashtable<String, Object> endpointListenerProperties = new Hashtable<String, Object>();
-		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, new String[]{endpointListenerFilter,secondFilter});
+		endpointListenerProperties.put(
+				org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE,
+				new String[] {
+						endpointListenerFilter, secondFilter
+				});
 
 		ServiceRegistration endpointListenerRegistration = getContext().registerService(
-				EndpointListener.class.getName(), endpointListenerImpl, endpointListenerProperties);
+						org.osgi.service.remoteserviceadmin.EndpointListener.class
+								.getName(),
+						endpointListenerImpl, endpointListenerProperties);
 		assertNotNull(endpointListenerRegistration);
 
 		EndpointListenerImpl emptyEndpointListener = null;
@@ -675,11 +680,14 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	private EndpointListenerImpl scope_and_filter_122_6_1(String scope)
 			throws Exception {
 		Hashtable<String, String> elp = new Hashtable<String, String>();
-		elp.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, scope);
+		elp.put(org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE,
+				scope);
 
 		EndpointListenerImpl el = new EndpointListenerImpl();
 		ServiceRegistration elr = getContext().registerService(
-				EndpointListener.class.getName(), el, elp);
+				org.osgi.service.remoteserviceadmin.EndpointListener.class
+						.getName(),
+				el, elp);
 		assertNotNull(elr);
 		assertNotNull(elr.getReference());
 		el.setServiceRegistration(elr);
@@ -710,7 +718,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * @deprecated
 	 */
-	class EndpointListenerImpl implements EndpointListener {
+	class EndpointListenerImpl
+			implements org.osgi.service.remoteserviceadmin.EndpointListener {
 		private Semaphore semAdded = new Semaphore(0);
 		private Semaphore semRemoved = new Semaphore(0);
 		private String addedMatchedFilter;
@@ -799,7 +808,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		}
 	}
 
-	class SelectiveEndpointListenerImpl extends EndpointListenerImpl {
+	class SelectiveEndpointListenerImpl
+			extends EndpointListenerImpl {
 		private final int serviceId;
 
 		public SelectiveEndpointListenerImpl(int serviceId) {

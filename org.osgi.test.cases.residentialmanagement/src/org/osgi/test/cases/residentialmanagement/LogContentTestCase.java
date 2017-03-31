@@ -40,6 +40,7 @@ import org.osgi.test.support.sleep.Sleep;
  *
  * @author Steffen Druesedow (Deutsche Telekom Laboratories)
  */
+@SuppressWarnings("deprecation")
 public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 	private LogReaderService logReader;

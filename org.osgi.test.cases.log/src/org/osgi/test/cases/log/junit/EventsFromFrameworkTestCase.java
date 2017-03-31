@@ -79,6 +79,7 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 		super.tearDown();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void testFrameworkEventsLogged()
 			throws BundleException, IOException {
 		// Only reliable events to test are STARTLEVEL_CHANGED and
@@ -165,12 +166,14 @@ public class EventsFromFrameworkTestCase extends AbstractLogTestCase {
 				null);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void assertBundleEventLog(String eventType) {
 		LogEntry entry = eventLogListener.getEntry(10000);
 		assertEventLog(entry, EVENTS_BUNDLE, "BundleEvent " + eventType, tb1,
 				LogService.LOG_INFO, LogLevel.INFO, null);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void assertEventLog(LogEntry logEntry, String loggerName,
 			String message, Bundle bundle, int level, LogLevel logLevel,
 			ServiceReference< ? > reference) {

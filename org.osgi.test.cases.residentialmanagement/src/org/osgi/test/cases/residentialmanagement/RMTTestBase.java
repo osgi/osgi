@@ -25,6 +25,7 @@ import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
+@SuppressWarnings("deprecation")
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		RMTConstants {
 

@@ -28,7 +28,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
-import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
@@ -41,6 +40,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @deprecated
  */
+@SuppressWarnings("deprecation")
 public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;
 	BundleContext       context;
@@ -48,7 +48,7 @@ public class Activator implements BundleActivator, A, B {
 
 	Semaphore semaphore = new Semaphore();
 
-	ServiceTracker<EndpointListener, EndpointListener> tracker;
+	ServiceTracker<org.osgi.service.remoteserviceadmin.EndpointListener,org.osgi.service.remoteserviceadmin.EndpointListener>	tracker;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -114,20 +114,25 @@ public class Activator implements BundleActivator, A, B {
 		// find the EndpointListeners and call them with the endpoint description
 		//
 		String filter = "(&(" + Constants.OBJECTCLASS + "="
-				+ EndpointListener.class.getName() + ")("
-				+ EndpointListener.ENDPOINT_LISTENER_SCOPE + "=*))"; // see
+				+ org.osgi.service.remoteserviceadmin.EndpointListener.class
+						.getName()
+				+ ")("
+				+ org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE
+				+ "=*))"; // see
 																		// 122.6.1
 
-		tracker = new ServiceTracker<EndpointListener, EndpointListener>(
+		tracker = new ServiceTracker<org.osgi.service.remoteserviceadmin.EndpointListener,org.osgi.service.remoteserviceadmin.EndpointListener>(
 				context, FrameworkUtil.createFilter(filter), null) {
 
 			@Override
-			public EndpointListener addingService(
-					ServiceReference<EndpointListener> reference) {
-				EndpointListener listener = super.addingService(reference);
+			public org.osgi.service.remoteserviceadmin.EndpointListener addingService(
+					ServiceReference<org.osgi.service.remoteserviceadmin.EndpointListener> reference) {
+				org.osgi.service.remoteserviceadmin.EndpointListener listener = super.addingService(
+						reference);
 
 				Object scope = reference
-						.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
+						.getProperty(
+								org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE);
 
 				String matchedFilter = Utils.isInterested(scope, endpoint);
 
@@ -161,8 +166,10 @@ public class Activator implements BundleActivator, A, B {
 		
 		boolean foundListener = false;
 		for (ServiceReference sr : listeners) {
-			EndpointListener listener = (EndpointListener) context.getService(sr);
-			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
+			org.osgi.service.remoteserviceadmin.EndpointListener listener = (org.osgi.service.remoteserviceadmin.EndpointListener) context
+					.getService(sr);
+			Object scope = sr.getProperty(
+					org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE);
 			
 			String matchedFilter = Utils.isInterested(scope, endpoint);
 			

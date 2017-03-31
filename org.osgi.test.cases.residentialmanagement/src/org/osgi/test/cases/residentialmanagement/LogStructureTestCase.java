@@ -40,6 +40,7 @@ import org.osgi.service.log.LogService;
  * 
  * @author Steffen Druesedow (Deutsche Telekom Laboratories)
  */
+@SuppressWarnings("deprecation")
 public class LogStructureTestCase extends RMTTestBase {
 
 	private LogService log;

@@ -28,6 +28,7 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -44,6 +45,7 @@ import org.osgi.test.support.sleep.Sleep;
  *
  * @author Steffen Druesedow (Deutsche Telekom Laboratories)
  */
+@SuppressWarnings("deprecation")
 public class FilterOperationsTestCase extends RMTTestBase {
 
 	/**
