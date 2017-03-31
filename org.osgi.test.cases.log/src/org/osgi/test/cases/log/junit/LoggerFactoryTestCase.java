@@ -21,8 +21,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -35,11 +38,16 @@ import org.osgi.framework.hooks.resolver.ResolverHookFactory;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.namespace.service.ServiceNamespace;
+import org.osgi.resource.Namespace;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.log.FormatterLogger;
 import org.osgi.service.log.LogLevel;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
+import org.osgi.service.log.admin.LoggerAdmin;
 import org.osgi.service.log.admin.LoggerContext;
 
 public class LoggerFactoryTestCase extends AbstractLogTestCase {
@@ -56,6 +64,67 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		assertTrue(
 				"LogService registration is not also a LogFactory registration.",
 				loggerFactoryFilter.match(logServiceReference));
+	}
+
+	public void testLogServiceImplProvidesOsgiServiceCapability() {
+		doTestForCapability(logServiceReference, LogService.class,
+				LoggerFactory.class);
+	}
+
+	public void testLogReaderServiceImplProvidesOsgiServiceCapability() {
+		doTestForCapability(logReaderServiceReference, LogReaderService.class);
+	}
+
+	public void testLoggerAdminImplProvidesOsgiServiceCapability() {
+		doTestForCapability(loggerAdminReference, LoggerAdmin.class);
+	}
+
+	static private void doTestForCapability(ServiceReference< ? > reference,
+			Class< ? >... serviceClasses) {
+		Set<String> packageSet = new HashSet<>();
+		for (Class< ? > clazz : serviceClasses) {
+			packageSet.add(clazz.getPackage().getName());
+		}
+		BundleRevision serviceRevision = reference.getBundle()
+				.adapt(BundleRevision.class);
+		List<BundleCapability> serviceCaps = serviceRevision
+				.getDeclaredCapabilities(ServiceNamespace.SERVICE_NAMESPACE);
+		assertFalse("No service capabilities found.", serviceCaps.isEmpty());
+		// search for one that provides the service classes
+		for (BundleCapability serviceCap : serviceCaps) {
+			@SuppressWarnings("unchecked")
+			List<String> objectClasses = (List<String>) serviceCap
+					.getAttributes()
+					.get(ServiceNamespace.CAPABILITY_OBJECTCLASS_ATTRIBUTE);
+			if (containsAllServiceClasses(objectClasses, serviceClasses)) {
+				String usesDirective = serviceCap.getDirectives()
+						.get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				assertNotNull("No uses directive for: " + serviceCap,
+						usesDirective);
+				Set<String> usesSet = new HashSet<>();
+				for (String uses : usesDirective.split(",")) {
+					usesSet.add(uses.trim());
+				}
+				if (!usesSet.containsAll(packageSet)) {
+					fail("Capability does not contain the expected uses: "
+							+ packageSet + " -> " + usesSet);
+				}
+				return; // done with the test
+			}
+		}
+		fail("ServiceCapability not found for service Classes: "
+				+ Arrays.toString(serviceClasses) + " in service capabilities: "
+				+ serviceCaps);
+	}
+
+	private static boolean containsAllServiceClasses(List<String> objectClasses,
+			Class< ? >... serviceClasses) {
+		for (Class< ? > clazz : serviceClasses) {
+			if (!objectClasses.contains(clazz.getName())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**

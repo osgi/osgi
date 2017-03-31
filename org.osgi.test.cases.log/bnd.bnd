@@ -11,6 +11,8 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.service.log;version=project,\
 	osgi.core;version=4.3.1,\
 	org.osgi.service.cm;version=project,\
+	org.osgi.namespace.service;version=project,\
+	org.osgi.resource;version=project,\
 	${junit}
 
 Test-Cases							= ${testcases}
