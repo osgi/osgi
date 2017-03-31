@@ -46,7 +46,8 @@ public class TypeRule<F,T> implements TargetRule<T> {
         toType = to;
     }
 
-    private static <F,T> ConvertFunction<T> getFunction(Type from, Function<F, T> func) {
+	private static <F, T> ConvertFunction<T> getFunction(final Type from,
+			final Function<F,T> func) {
         return new ConvertFunction<T>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -60,6 +61,11 @@ public class TypeRule<F,T> implements TargetRule<T> {
                 // TODO support parameterized types?
                 return null;
             }
+
+			@Override
+			public T handleError(Object obj, Type targetType) {
+				return null;
+			}
         };
     }
 

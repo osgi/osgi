@@ -42,7 +42,7 @@ public abstract class Rule<F,T> implements TargetRule<T>{
         function = getGenericFunction(func);
     }
 
-    private ConvertFunction<T> getGenericFunction(Function<F, T> func) {
+	private ConvertFunction<T> getGenericFunction(final Function<F,T> func) {
         return new ConvertFunction<T>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -68,6 +68,11 @@ public abstract class Rule<F,T> implements TargetRule<T>{
                 }
                 return null;
             }
+
+			@Override
+			public T handleError(Object obj, Type targetType) {
+				return null;
+			}
         };
     }
 

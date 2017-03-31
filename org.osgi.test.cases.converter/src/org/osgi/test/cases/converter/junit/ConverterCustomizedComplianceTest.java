@@ -212,6 +212,11 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 				public Long convert(Object v, Type t) {
 					return (long)v.hashCode();
 					}
+
+					@Override
+					public Long handleError(Object obj, Type targetType) {
+						return null;
+				}
 				});
 		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(
 			new Function<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(){

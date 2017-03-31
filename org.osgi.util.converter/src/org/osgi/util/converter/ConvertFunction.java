@@ -29,7 +29,6 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @author $Id$
  */
 @ConsumerType
-@FunctionalInterface
 public interface ConvertFunction<T> {
 	/**
 	 * Convert the object into the target type.
@@ -61,7 +60,5 @@ public interface ConvertFunction<T> {
 	 * @throws RuntimeException Another Runtime Exception may also be thrown by
 	 *             this handler.
 	 */
-	default T handleError(Object obj, Type targetType) {
-		return null;
-	}
+	T handleError(Object obj, Type targetType);
 }
