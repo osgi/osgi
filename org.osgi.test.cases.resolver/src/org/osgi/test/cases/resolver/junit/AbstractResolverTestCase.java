@@ -417,9 +417,9 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				final Collection<Resource> passiveResources,
 				final Map<Resource,Wiring> wirings) {
 			this.mandatoryResources = mandatoryResources == null
-					? new ArrayList<>() : mandatoryResources;
+					? new ArrayList<Resource>() : mandatoryResources;
 			this.optionalResources = optionalResources == null
-					? new ArrayList<>() : optionalResources;
+					? new ArrayList<Resource>() : optionalResources;
 
 			this.allResources = new ArrayList<Resource>();
 			this.allResources.addAll(this.mandatoryResources);
@@ -427,7 +427,8 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			if (passiveResources != null) {
 				this.allResources.addAll(passiveResources);
 			}
-			this.wirings = wirings == null ? new HashMap<>() : wirings;
+			this.wirings = wirings == null ? new HashMap<Resource,Wiring>()
+					: wirings;
 		}
 
 		protected TestResolveContext() {

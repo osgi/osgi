@@ -3181,7 +3181,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl", true, false,
 				new String[] {
 						"org.osgi.test.cases.component.service.ServiceProvider"
-				}, Collections.emptyMap(),
+				}, Collections.<String, Object> emptyMap(),
 				new ReferenceDTO[] {}, "activate", "deactivate", null, "optional",
 				new String[] {"org.osgi.test.cases.component.tb1.impl.ServiceProviderImpl"});
 		assertEquals("DTO wrong", expected1, description1);

@@ -981,7 +981,7 @@ public class ServiceScopesTests extends OSGiTestCase {
 	static class TestPrototypeServiceFactoryOneObject
 			implements PrototypeServiceFactory<TestService> {
 		Map<Bundle,TestService> services = Collections
-				.synchronizedMap(new HashMap<>());
+				.synchronizedMap(new HashMap<Bundle,TestService>());
 
 		@Override
 		public TestService getService(Bundle bundle,

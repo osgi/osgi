@@ -109,9 +109,20 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final Promise<Integer> p = d.getPromise();
-		Promise<Number> p2 = p.then(resolved -> resolved(
-				(Number) new Long(resolved.getValue().longValue())));
-		p2.onResolve(() -> latch.countDown());
+		Promise<Number> p2 = p.then(new Success<Integer,Number>() {
+			@Override
+			public Promise<Number> call(Promise<Integer> resolved)
+					throws Exception {
+				return resolved(
+						(Number) new Long(resolved.getValue().longValue()));
+			}
+		});
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
@@ -151,7 +162,12 @@ public class PromiseTest extends TestCase {
 				latch2.countDown();
 			}
 		});
-		p2.onResolve(() -> latch3.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch3.countDown();
+			}
+		});
 		assertFalse("callback ran before resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
@@ -195,7 +211,12 @@ public class PromiseTest extends TestCase {
 			public void fail(Promise<?> resolved) throws Exception {
 			}
 		});
-		p2.onResolve(() -> latch2.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
@@ -1169,7 +1190,12 @@ public class PromiseTest extends TestCase {
 
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		p3.onResolve(() -> latch.countDown());
+		p3.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertTrue("callback did not run after resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("not resolved", p3.isDone());
@@ -1191,7 +1217,12 @@ public class PromiseTest extends TestCase {
 
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		p3.onResolve(() -> latch.countDown());
+		p3.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertTrue("callback did not run after resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("not resolved", p3.isDone());
@@ -1211,7 +1242,12 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p2 = d2.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		p3.onResolve(() -> latch.countDown());
+		p3.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertTrue("callback did not run after resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("not resolved", p2.isDone());
@@ -1229,7 +1265,12 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p2 = d2.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Void> p3 = d2.resolveWith(p1);
-		p3.onResolve(() -> latch.countDown());
+		p3.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertTrue("callback did not run after resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("not resolved", p2.isDone());
@@ -1266,7 +1307,12 @@ public class PromiseTest extends TestCase {
 				return t.length() > 0;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p4 = p1.filter(new Predicate<String>() {
 			@Override
@@ -1274,7 +1320,12 @@ public class PromiseTest extends TestCase {
 				return t.length() == 0;
 			}
 		});
-		p4.onResolve(() -> latch2.countDown());
+		p4.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		Promise<String> p3 = resolved(value3);
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		Promise<String> p5 = p3.filter(new Predicate<String>() {
@@ -1283,7 +1334,12 @@ public class PromiseTest extends TestCase {
 				return t.length() > 0;
 			}
 		});
-		p5.onResolve(() -> latch3.countDown());
+		p5.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch3.countDown();
+			}
+		});
 
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -1337,7 +1393,12 @@ public class PromiseTest extends TestCase {
 				return t.length() > 0;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -1367,7 +1428,12 @@ public class PromiseTest extends TestCase {
 				return t.length() > 0;
 			}
 		});
-		p2.onResolve(() -> latch2.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 
 		assertTrue(p1.isDone());
 		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -1409,7 +1475,12 @@ public class PromiseTest extends TestCase {
 				return t.toString();
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1436,7 +1507,12 @@ public class PromiseTest extends TestCase {
 				return t.toString();
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1477,7 +1553,12 @@ public class PromiseTest extends TestCase {
 				return resolved(t.toString());
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1504,7 +1585,12 @@ public class PromiseTest extends TestCase {
 				return resolved(t.toString());
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1543,7 +1629,12 @@ public class PromiseTest extends TestCase {
 				return value2;
 			}
 		});
-		p2.onResolve(() -> latch2.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1565,7 +1656,12 @@ public class PromiseTest extends TestCase {
 				return value2;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1585,7 +1681,12 @@ public class PromiseTest extends TestCase {
 				return null;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1611,7 +1712,12 @@ public class PromiseTest extends TestCase {
 				throw failure2;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1649,7 +1755,12 @@ public class PromiseTest extends TestCase {
 				return resolved(value2);
 			}
 		});
-		p2.onResolve(() -> latch2.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1671,7 +1782,12 @@ public class PromiseTest extends TestCase {
 				return resolved(value2);
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1691,7 +1807,12 @@ public class PromiseTest extends TestCase {
 				return null;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1717,7 +1838,12 @@ public class PromiseTest extends TestCase {
 				throw failure2;
 			}
 		});
-		p2.onResolve(() -> latch1.countDown());
+		p2.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p2.isDone());
@@ -1749,7 +1875,12 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p1 = resolved(value1);
 		final Promise<Long> p2 = resolved(value2);
 		final Promise<Number> p3 = p1.fallbackTo(p2);
-		p3.onResolve(() -> latch1.countDown());
+		p3.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p3.isDone());
@@ -1767,7 +1898,12 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p2 = failed(failure2);
 		final Promise<Long> p3 = resolved(value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
-		p4.onResolve(() -> latch1.countDown());
+		p4.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p4.isDone());
@@ -1785,7 +1921,12 @@ public class PromiseTest extends TestCase {
 		final Promise<Number> p2 = failed(failure2);
 		final Promise<Long> p3 = failed(failure3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
-		p4.onResolve(() -> latch1.countDown());
+		p4.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(p1.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p4.isDone());
@@ -1816,16 +1957,35 @@ public class PromiseTest extends TestCase {
 		final AtomicBoolean fail1 = new AtomicBoolean(false);
 		final AtomicBoolean fail2 = new AtomicBoolean(false);
 		assertFalse(p.isDone());
-		p.onResolve(() -> d.resolveWith(resolved("onResolve")).then(r -> {
-			fail1.set(true);
-			return null;
-		}, f -> fail1.set(!(f.getFailure() instanceof IllegalStateException))));
-		p.onResolve(() -> {
-			try {
-				d.resolve("onResolve");
-				fail2.set(true);
-			} catch (IllegalStateException e) {
-				// expected
+		p.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				d.resolveWith(resolved("onResolve"))
+						.then(new Success<Void,Object>() {
+							@Override
+							public Promise<Object> call(Promise<Void> r)
+									throws Exception {
+								fail1.set(true);
+								return null;
+							}
+						}, new Failure() {
+							@Override
+							public void fail(Promise< ? > f) throws Exception {
+								fail1.set(!(f
+										.getFailure() instanceof IllegalStateException));
+							}
+						});
+			}
+		});
+		p.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					d.resolve("onResolve");
+					fail2.set(true);
+				} catch (IllegalStateException e) {
+					// expected
+				}
 			}
 		});
 		assertNull(d.resolveWith(resolved("first")).getFailure());
@@ -1842,7 +2002,7 @@ public class PromiseTest extends TestCase {
 			// expected
 		}
 		assertTrue("no error on resolveWith after resolve",
-				d.resolveWith(failed(new Exception("second")))
+				d.resolveWith(Promises.<String> failed(new Exception("second")))
 						.getFailure() instanceof IllegalStateException);
 		try {
 			d.fail(new Exception("second"));
@@ -1858,26 +2018,46 @@ public class PromiseTest extends TestCase {
 		final AtomicBoolean fail1 = new AtomicBoolean(false);
 		final AtomicBoolean fail2 = new AtomicBoolean(false);
 		assertFalse(p.isDone());
-		p.onResolve(() -> d.resolveWith(failed(new Exception("onResolve")))
-				.then(r -> {
-					fail1.set(true);
-					return null;
-				}, f -> fail1.set(
-						!(f.getFailure() instanceof IllegalStateException))));
-		p.onResolve(() -> {
-			try {
-				d.fail(new Exception("onResolve"));
-				fail2.set(true);
-			} catch (IllegalStateException e) {
-				// expected
+		p.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				d.resolveWith(
+						Promises.<String> failed(new Exception("onResolve")))
+						.then(new Success<Void,Object>() {
+							@Override
+							public Promise<Object> call(Promise<Void> r)
+									throws Exception {
+								fail1.set(true);
+								return null;
+							}
+						}, new Failure() {
+							@Override
+							public void fail(Promise< ? > f) throws Exception {
+								fail1.set(!(f
+										.getFailure() instanceof IllegalStateException));
+							}
+						});
 			}
 		});
-		assertNull(d.resolveWith(failed(new Exception("first"))).getFailure());
+		p.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					d.fail(new Exception("onResolve"));
+					fail2.set(true);
+				} catch (IllegalStateException e) {
+					// expected
+				}
+			}
+		});
+		assertNull(
+				d.resolveWith(Promises.<String> failed(new Exception("first")))
+						.getFailure());
 		assertTrue(p.isDone());
 		assertFalse("failed to error on callback fail", fail1.get());
 		assertFalse("failed to error on callback fail", fail2.get());
 		assertTrue("no error on resolveWith after resolve",
-				d.resolveWith(failed(new Exception("second")))
+				d.resolveWith(Promises.<String> failed(new Exception("second")))
 						.getFailure() instanceof IllegalStateException);
 		try {
 			d.fail(new Exception("second"));
@@ -1902,7 +2082,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertNotNull(t.getFailure());
 		assertTrue(t.getFailure() instanceof TimeoutException);
@@ -1916,7 +2101,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		d.resolve("no timeout");
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -1933,7 +2123,12 @@ public class PromiseTest extends TestCase {
 		d.resolve("no timeout");
 		assertTrue(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNull(t.getFailure());
@@ -1947,7 +2142,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		d.fail(new Exception("no timeout"));
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -1964,7 +2164,12 @@ public class PromiseTest extends TestCase {
 		d.fail(new Exception("no timeout"));
 		assertTrue(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNotNull(t.getFailure());
@@ -1980,7 +2185,12 @@ public class PromiseTest extends TestCase {
 		d.resolve("no timeout");
 		assertTrue(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNull(t.getFailure());
@@ -1992,7 +2202,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(-1));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertNotNull(t.getFailure());
 		assertTrue(t.getFailure() instanceof TimeoutException);
@@ -2005,12 +2220,22 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
-		p.onResolve(() -> latch1.countDown());
+		p.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		d.resolve("no timeout");
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p.isDone());
 		Promise<String> t = p.timeout(0);
-		t.onResolve(() -> latch2.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		assertTrue(latch2.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNull(t.getFailure());
@@ -2033,7 +2258,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		d.resolve("no delay");
 		assertFalse(t.isDone());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
@@ -2051,7 +2281,12 @@ public class PromiseTest extends TestCase {
 		d.resolve("no delay");
 		assertTrue(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertFalse(t.isDone());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -2066,7 +2301,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		d.fail(new Exception("no delay"));
 		assertFalse(t.isDone());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
@@ -2084,7 +2324,12 @@ public class PromiseTest extends TestCase {
 		d.fail(new Exception("no delay"));
 		assertTrue(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertFalse(t.isDone());
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
@@ -2100,7 +2345,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertFalse(t.isDone());
 	}
@@ -2112,7 +2362,12 @@ public class PromiseTest extends TestCase {
 		d.resolve("no delay");
 		assertTrue(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNull(t.getFailure());
@@ -2124,7 +2379,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(-1));
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertFalse(t.isDone());
 		assertFalse(p.isDone());
@@ -2137,7 +2397,12 @@ public class PromiseTest extends TestCase {
 		d.resolve("no delay");
 		assertTrue(p.isDone());
 		Promise<String> t = p.delay(0);
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertTrue(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertTrue(t.isDone());
 		assertNull(t.getFailure());
@@ -2149,7 +2414,12 @@ public class PromiseTest extends TestCase {
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(0);
-		t.onResolve(() -> latch1.countDown());
+		t.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch1.countDown();
+			}
+		});
 		assertFalse(latch1.await(WAIT_TIME * 2, TimeUnit.SECONDS));
 		assertFalse(t.isDone());
 		assertFalse(p.isDone());
@@ -2163,8 +2433,17 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<String> p2 = p1.then(() -> latch.countDown())
-				.onResolve(() -> latch2.countDown());
+		Promise<String> p2 = p1.then(new Callback() {
+			@Override
+			public void run() throws Exception {
+				latch.countDown();
+			}
+		}).onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -2188,8 +2467,17 @@ public class PromiseTest extends TestCase {
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<String> p2 = p1.then(() -> latch.countDown())
-				.onResolve(() -> latch2.countDown());
+		Promise<String> p2 = p1.then(new Callback() {
+			@Override
+			public void run() throws Exception {
+				latch.countDown();
+			}
+		}).onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -2214,10 +2502,18 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Exception e = new Exception("failure");
-		Promise<String> p2 = p1.then(() -> {
-			latch.countDown();
-			throw e;
-		}).onResolve(() -> latch2.countDown());
+		Promise<String> p2 = p1.then(new Callback() {
+			@Override
+			public void run() throws Exception {
+				latch.countDown();
+				throw e;
+			}
+		}).onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 		
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -2242,10 +2538,18 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Exception e = new Exception("failure");
-		Promise<String> p2 = p1.then(() -> {
-			latch.countDown();
-			throw e;
-		}).onResolve(() -> latch2.countDown());
+		Promise<String> p2 = p1.then(new Callback() {
+			@Override
+			public void run() throws Exception {
+				latch.countDown();
+				throw e;
+			}
+		}).onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch2.countDown();
+			}
+		});
 
 		assertFalse("callback ran before resolved",
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));

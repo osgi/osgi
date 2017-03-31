@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.osgi.resource.Resource;
 import org.osgi.service.resolver.ResolutionException;
 
 /**
@@ -65,8 +66,11 @@ public class ResolveOnCancelTestCase extends AbstractResolverTestCase {
 		Thread bg;
 		try {
 
-			bg = new Thread(() -> {
-				resolveError.set(shouldNotResolve(context));
+			bg = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					resolveError.set(shouldNotResolve(context));
+				}
 			});
 			bg.start();
 			context.cancel();
@@ -87,7 +91,7 @@ public class ResolveOnCancelTestCase extends AbstractResolverTestCase {
 		providerResource.addCapability("foo", "foo=true");
 
 		return new TestResolveContext(
-				Collections.singleton(rootResource), null,
-				Collections.singleton(providerResource));
+				Collections.<Resource> singleton(rootResource), null,
+				Collections.<Resource> singleton(providerResource));
 	}
 }

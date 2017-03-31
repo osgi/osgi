@@ -53,9 +53,9 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		TestResource rootResource = new TestResource();
 		TestResource rootRelatedResource = new TestResource();
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 2, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -72,9 +72,9 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		rootRelatedResource.addRequirement("unresolvable",
 				"(unresolvable=true)");
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 1, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -95,10 +95,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 				"resolvable=true");
 
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null,
-				Collections.singleton(providerResource));
+				Collections.<Resource> singleton(rootResource), null,
+				Collections.<Resource> singleton(providerResource));
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 3, result.size());
@@ -119,9 +119,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		Map<Resource,Wiring> wirings = new HashMap<>();
 		wirings.put(rootRelatedResource, rootRelatedResource.new TestWiring());
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null, wirings);
+				Collections.<Resource> singleton(rootResource), null, null,
+				wirings);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 1, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -142,9 +143,9 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 				"(" + HostNamespace.HOST_NAMESPACE + "=host)");
 
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootResourceFrag));
+				Collections.<Resource> singleton(rootResourceFrag));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 2, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -172,9 +173,9 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 				"(" + HostNamespace.HOST_NAMESPACE + "=host)");
 		rootResourceFrag.addRequirement("unresolvable", "(unresolvable=true)");
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootResourceFrag));
+				Collections.<Resource> singleton(rootResourceFrag));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 1, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -202,10 +203,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 				"resolvable=true");
 
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null,
-				Collections.singleton(providerResource));
+				Collections.<Resource> singleton(rootResource), null,
+				Collections.<Resource> singleton(providerResource));
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootResourceFrag));
+				Collections.<Resource> singleton(rootResourceFrag));
 
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 3, result.size());
@@ -253,9 +254,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		wirings.put(rootResource10, root10Wiring);
 
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource11), null, null, wirings);
+				Collections.<Resource> singleton(rootResource11), null, null,
+				wirings);
 		context.relatedResources.put(rootResource11,
-				Collections.singleton(rootResourceFrag));
+				Collections.<Resource> singleton(rootResourceFrag));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 2, result.size());
 		context.checkEmptyWires(result, rootResource11);
@@ -275,11 +277,11 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		TestResource rootRelatedResource1 = new TestResource();
 		TestResource rootRelatedResource2 = new TestResource();
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource1));
+				Collections.<Resource> singleton(rootRelatedResource1));
 		context.relatedResources.put(rootRelatedResource1,
-				Collections.singleton(rootRelatedResource2));
+				Collections.<Resource> singleton(rootRelatedResource2));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 3, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -299,11 +301,11 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		rootRelatedResource2.addRequirement("unresolvable",
 				"(unresolvable=true)");
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource), null, null);
+				Collections.<Resource> singleton(rootResource), null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource1));
+				Collections.<Resource> singleton(rootRelatedResource1));
 		context.relatedResources.put(rootRelatedResource1,
-				Collections.singleton(rootRelatedResource2));
+				Collections.<Resource> singleton(rootRelatedResource2));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 2, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -318,9 +320,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		TestResource rootResource = new TestResource();
 		TestResource rootRelatedResource = new TestResource();
 		TestResolveContext context = new TestResolveContext(
-				Arrays.asList(rootResource, rootRelatedResource), null, null);
+				Arrays.<Resource> asList(rootResource, rootRelatedResource),
+				null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 2, result.size());
 		context.checkEmptyWires(result, rootResource);
@@ -337,9 +340,10 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		rootRelatedResource.addRequirement("unresolvable",
 				"(unresolvable=true)");
 		TestResolveContext context = new TestResolveContext(
-				Arrays.asList(rootResource, rootRelatedResource), null, null);
+				Arrays.<Resource> asList(rootResource, rootRelatedResource),
+				null, null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		shouldNotResolve(context);
 	}
 
@@ -353,10 +357,11 @@ public class ResolveRelatedTestCase extends AbstractResolverTestCase {
 		rootRelatedResource.addRequirement("unresolvable",
 				"(unresolvable=true)");
 		TestResolveContext context = new TestResolveContext(
-				Collections.singleton(rootResource),
-				Collections.singleton(rootRelatedResource), null, null);
+				Collections.<Resource> singleton(rootResource),
+				Collections.<Resource> singleton(rootRelatedResource), null,
+				null);
 		context.relatedResources.put(rootResource,
-				Collections.singleton(rootRelatedResource));
+				Collections.<Resource> singleton(rootRelatedResource));
 		Map<Resource,List<Wire>> result = shouldResolve(context);
 		assertEquals("Wrong number of resolved resoruces.", 1, result.size());
 		context.checkEmptyWires(result, rootResource);

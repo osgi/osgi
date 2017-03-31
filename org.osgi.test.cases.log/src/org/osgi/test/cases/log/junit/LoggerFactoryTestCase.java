@@ -318,7 +318,7 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 	private void doTestRootContextRootNameEffectiveLogLevel(LogLevel level, Bundle b,
 			Logger logger, Collection<LogReader> readers) {
 		if (level == null) {
-			rootContext.setLogLevels(Collections.emptyMap());
+			rootContext.setLogLevels(Collections.<String, LogLevel> emptyMap());
 			// no log level should default to WARN
 			level = LogLevel.WARN;
 		} else {
@@ -414,7 +414,8 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 			LoggerContext managedContext,
 			Collection<LoggerContext> auditContexts) {
 		if (level == null) {
-			managedContext.setLogLevels(Collections.emptyMap());
+			managedContext
+					.setLogLevels(Collections.<String, LogLevel> emptyMap());
 			// no log level should default to AUDIT since that is what the root
 			// context is set to
 			level = LogLevel.AUDIT;

@@ -92,7 +92,8 @@ public class Promises {
 			return resolved(result);
 		}
 		/* make a copy and capture the ordering */
-		List<Promise<? extends T>> list = new ArrayList<>(promises);
+		List<Promise< ? extends T>> list = new ArrayList<Promise< ? extends T>>(
+				promises);
 		PromiseImpl<List<T>> chained = new PromiseImpl<>();
 		All<T> all = new All<>(chained, list);
 		for (Promise<? extends T> promise : list) {

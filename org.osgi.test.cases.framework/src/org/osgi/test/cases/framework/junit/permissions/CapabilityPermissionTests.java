@@ -59,12 +59,15 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 				"require");
 		invalidCapabilityPermission("a.b.c", null, null, "require");
 		invalidCapabilityPermission("(capability.namespace=a.b.c)",
-				Collections.emptyMap(), null, "require");
-		invalidCapabilityPermission("a.b.c", Collections.emptyMap(), null,
+				Collections.<String, Object> emptyMap(), null, "require");
+		invalidCapabilityPermission("a.b.c",
+				Collections.<String, Object> emptyMap(), null,
 				"require");
-		invalidCapabilityPermission("a.b.c", Collections.emptyMap(),
+		invalidCapabilityPermission("a.b.c",
+				Collections.<String, Object> emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location", null), "provide");
-		invalidCapabilityPermission("a.b.c", Collections.emptyMap(),
+		invalidCapabilityPermission("a.b.c",
+				Collections.<String, Object> emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location", null),
 				"require, provide");
 	}
@@ -529,11 +532,11 @@ public class CapabilityPermissionTests extends PermissionTestCase {
 		CapabilityPermission p59 = new CapabilityPermission("*", "require");
 
 		CapabilityPermission p5a = new CapabilityPermission(
-				"com.foo.capability2", Collections.emptyMap(),
+				"com.foo.capability2", Collections.<String, Object> emptyMap(),
 				newMockBundle(2, "test.bsn", "test.location",
 						"cn=Bugs Bunny, o=ACME, c=US"), "require");
 		CapabilityPermission p5b = new CapabilityPermission(
-				"com.bar.capability2", Collections.emptyMap(),
+				"com.bar.capability2", Collections.<String, Object> emptyMap(),
 				newMockBundle(3, "not.bsn", "not.location",
 						"cn=Bugs Bunny, o=NOT, c=US"), "require");
 

@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -396,7 +397,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 	@Override
 	public synchronized Enumeration<Permission> elements() {
 		return Collections.enumeration(
-				new ArrayList<>(this.permissions.values()));
+				new ArrayList<Permission>(this.permissions.values()));
 	}
 
 	private static final ObjectStreamField[]	serialPersistentFields	= {

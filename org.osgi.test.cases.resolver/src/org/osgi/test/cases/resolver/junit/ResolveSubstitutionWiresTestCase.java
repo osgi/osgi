@@ -59,7 +59,7 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 		@Override
 		public List<Capability> findProviders(Requirement requirement) {
 			List<Capability> result = candidates.get(requirement);
-			return result == null ? new ArrayList<>() : result;
+			return result == null ? new ArrayList<Capability>() : result;
 		}
 	}
 
@@ -98,7 +98,8 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 		TestResource core = createResource("core");
 		Capability core_pkg1 = core
 				.addCapability(PackageNamespace.PACKAGE_NAMESPACE, Collections
-				.singletonMap(PackageNamespace.PACKAGE_NAMESPACE, "pkg1"));
+						.<String, Object> singletonMap(
+								PackageNamespace.PACKAGE_NAMESPACE, "pkg1"));
 		Requirement core_reqPkg1 = core.addRequirement(
 				PackageNamespace.PACKAGE_NAMESPACE,
 				"(" + PackageNamespace.PACKAGE_NAMESPACE + "=pkg1)");
@@ -108,7 +109,8 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 		// requires core -> splitting pkg1
 		TestResource misc = createResource("misc");
 		misc.addCapability(PackageNamespace.PACKAGE_NAMESPACE, Collections
-				.singletonMap(PackageNamespace.PACKAGE_NAMESPACE, "pkg1"));
+				.<String, Object> singletonMap(
+						PackageNamespace.PACKAGE_NAMESPACE, "pkg1"));
 		Requirement misc_reqCore = misc.addRequirement(
 				BundleNamespace.BUNDLE_NAMESPACE,
 				"(" + BundleNamespace.BUNDLE_NAMESPACE + "=core)");
@@ -142,7 +144,7 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 		TestResource substitutesCore = createResource("substitutesCore");
 		Capability substitutesCore_pkg1 = substitutesCore
 				.addCapability(PackageNamespace.PACKAGE_NAMESPACE,
-						Collections.singletonMap(
+						Collections.<String, Object> singletonMap(
 								PackageNamespace.PACKAGE_NAMESPACE, "pkg1"));
 
 		Map<Requirement,List<Capability>> candMap = new HashMap<Requirement,List<Capability>>();
@@ -205,11 +207,13 @@ public class ResolveSubstitutionWiresTestCase extends AbstractResolverTestCase {
 
 		if (type == null || IdentityNamespace.TYPE_BUNDLE.equals(type)) {
 			resource.addCapability(resource.new TestCapability(
-					BundleNamespace.BUNDLE_NAMESPACE, Collections.singletonMap(
+					BundleNamespace.BUNDLE_NAMESPACE,
+					Collections.<String, Object> singletonMap(
 							BundleNamespace.BUNDLE_NAMESPACE, name)));
 			resource.addCapability(resource.new TestCapability(
 					HostNamespace.HOST_NAMESPACE, Collections
-							.singletonMap(HostNamespace.HOST_NAMESPACE, name)));
+							.<String, Object> singletonMap(
+									HostNamespace.HOST_NAMESPACE, name)));
 		}
 
 		return resource;

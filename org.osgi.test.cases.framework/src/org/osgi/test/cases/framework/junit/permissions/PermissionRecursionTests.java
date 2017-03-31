@@ -115,9 +115,9 @@ public class PermissionRecursionTests extends PermissionTestCase {
 		Bundle b2 = newMockBundle(2, "test.bsn", "test2.location", pc);
 
 		assertImplies(pc, new CapabilityPermission("com.foo",
-				Collections.emptyMap(), b1, "require"));
+				Collections.<String, Object> emptyMap(), b1, "require"));
 		assertNotImplies(pc, new CapabilityPermission("com.bar",
-				Collections.emptyMap(), b2, "require"));
+				Collections.<String, Object> emptyMap(), b2, "require"));
 		assertNotImplies(pc, new CapabilityPermission("*", "require"));
 	}
 

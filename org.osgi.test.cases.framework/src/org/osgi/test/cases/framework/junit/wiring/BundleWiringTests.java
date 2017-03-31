@@ -543,9 +543,9 @@ public class BundleWiringTests extends WiringTest {
 	private void checkBundleWiring(Bundle[] bundles, BundleWiring[] wirings) {
 		assertEquals("Lists are not the same size", bundles.length, wirings.length);
 		assertProvidedResourceWiresEqualsProvidedWires(wirings,
-				Collections.emptyList());
+				Collections.<String> emptyList());
 		assertRequiredResourceWiresEqualsRequiredWires(wirings,
-				Collections.emptyList());
+				Collections.<String> emptyList());
 		for (int i = 0; i < wirings.length; i++) {
 			BundleWiring wiring = wirings[i];
 			Bundle bundle = bundles[i];

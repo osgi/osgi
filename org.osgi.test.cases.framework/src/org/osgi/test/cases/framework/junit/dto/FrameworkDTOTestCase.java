@@ -607,7 +607,7 @@ public class FrameworkDTOTestCase extends OSGiTestCase {
 		int initialWiringCount = getAllWirings().size();
 
 		Map<BundleRevision,Integer> revisionIds = getRevisionIDs(
-				new HashMap<>());
+				new HashMap<BundleRevision,Integer>());
 		FrameworkWiringDTO dto = systemBundle.adapt(FrameworkWiringDTO.class);
 		assertEquals("Wrong number of wirings", initialWiringCount,
 				dto.wirings.size());

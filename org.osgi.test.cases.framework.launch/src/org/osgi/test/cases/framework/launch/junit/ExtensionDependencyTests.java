@@ -430,7 +430,8 @@ public class ExtensionDependencyTests extends LaunchTest {
 				stopEvent.getType());
 	}
 
-	private static Future<FrameworkEvent> waitForStop(Framework framework) {
+	private static Future<FrameworkEvent> waitForStop(
+			final Framework framework) {
 		FutureTask<FrameworkEvent> stoppedFuture = new FutureTask<>(
 				new Callable<FrameworkEvent>() {
 					@Override

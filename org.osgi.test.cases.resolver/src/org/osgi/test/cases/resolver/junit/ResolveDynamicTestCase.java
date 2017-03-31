@@ -62,7 +62,10 @@ public class ResolveDynamicTestCase extends AbstractResolverTestCase {
 		wirings.put(dynamicResolve, dynamicResolve.new TestWiring());
 		wirings.put(fooProvider, fooProvider.new TestWiring());
 		final TestResolveContext context = new TestResolveContext(
-				null, null, Collections.singletonList(fooProvider), wirings);
+				null, null,
+				Collections.<Resource> singletonList(
+						fooProvider),
+				wirings);
 		Map<Resource,List<Wire>> result = shouldDynamicResolve(context, wirings,
 				dynamicReq);
 		assertEquals("Should only be one resource in result.", 1,
@@ -87,7 +90,7 @@ public class ResolveDynamicTestCase extends AbstractResolverTestCase {
 		Map<Resource,Wiring> wirings = new HashMap<>();
 		wirings.put(dynamicResolve, dynamicResolve.new TestWiring());
 		final TestResolveContext context = new TestResolveContext(null, null,
-				Collections.singletonList(fooProvider), wirings);
+				Collections.<Resource> singletonList(fooProvider), wirings);
 		Map<Resource,List<Wire>> result = shouldDynamicResolve(context, wirings,
 				dynamicReq);
 		assertEquals("Wrong number of resources in result.", 2,
@@ -129,7 +132,7 @@ public class ResolveDynamicTestCase extends AbstractResolverTestCase {
 		Map<Resource,Wiring> wirings = new HashMap<>();
 		wirings.put(dynamicResolve, dynamicResolve.new TestWiring());
 		final TestResolveContext context = new TestResolveContext(null, null,
-				Collections.singletonList(fooProvider), wirings);
+				Collections.<Resource> singletonList(fooProvider), wirings);
 		shouldNotDynamicResolve(context, wirings, dynamicReq);
 	}
 
@@ -176,7 +179,8 @@ public class ResolveDynamicTestCase extends AbstractResolverTestCase {
 		wirings.put(foo2Provider, foo2Provider.new TestWiring());
 
 		final TestResolveContext context = new TestResolveContext(null, null,
-				Arrays.asList(dynamicResolve, foo2Provider, foo1Provider),
+				Arrays.<Resource> asList(dynamicResolve, foo2Provider,
+						foo1Provider),
 				wirings);
 		shouldNotDynamicResolve(context, wirings, dynamicReq);
 
