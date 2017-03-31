@@ -105,7 +105,7 @@ public abstract class AbstractLogTestCase extends OSGiTestCase {
 
 	protected void setUp() throws Exception {
 		loggerContextConfigTimeout = getLongProperty(
-				"org.osgi.test.cases.log.config_waiting_time", 500);
+				"org.osgi.test.cases.log.config_waiting_time", 200);
 		auditRegistration = registerLogLevel(LogLevel.AUDIT);
 		errorRegistration = registerLogLevel(LogLevel.ERROR);
 		warnRegistration = registerLogLevel(LogLevel.WARN);

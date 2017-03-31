@@ -387,46 +387,50 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 
 	}
 
-	private static final Map<String,LogLevel> testConfigLogLevels = new HashMap<>();
+	private static final Map<String,LogLevel> testConfigLogLevels;
 	static {
-		testConfigLogLevels.put("default", LogLevel.ERROR);
-		testConfigLogLevels.put("default.audit", LogLevel.AUDIT);
-		testConfigLogLevels.put("default.audit.null1.null2", null);
-		testConfigLogLevels.put("default.audit.null1", null);
-		testConfigLogLevels.put("default.audit.warnOverride", LogLevel.WARN);
-		testConfigLogLevels.put("default.audit.infoOverride", LogLevel.INFO);
-		testConfigLogLevels.put("default.audit.debugOverride", LogLevel.DEBUG);
-		testConfigLogLevels.put("default.audit.traceOverride", LogLevel.TRACE);
+		Map<String,LogLevel> temp = new HashMap<>();
+		temp.put("default", LogLevel.ERROR);
+		temp.put("default.audit", LogLevel.AUDIT);
+		temp.put("default.audit.null1.null2", null);
+		temp.put("default.audit.null1", null);
+		temp.put("default.audit.warnOverride", LogLevel.WARN);
+		temp.put("default.audit.infoOverride", LogLevel.INFO);
+		temp.put("default.audit.debugOverride", LogLevel.DEBUG);
+		temp.put("default.audit.traceOverride", LogLevel.TRACE);
+		testConfigLogLevels = Collections.unmodifiableMap(temp);
 	}
 
 	public void testRootLoggerConfig() throws IOException {
-		doTestConfigLoggerContext(null, testConfigLogLevels);
+		doTestConfigLoggerContext(null);
 	}
 
 	public void testBsnLoggerConfig() throws IOException {
-		doTestConfigLoggerContext(bsnContext.getName(), testConfigLogLevels);
+		doTestConfigLoggerContext(bsnContext.getName());
 	}
 
 	public void testBsnVersionLoggerConfig() throws IOException {
-		doTestConfigLoggerContext(bsnVersionContext.getName(),
-				testConfigLogLevels);
+		doTestConfigLoggerContext(bsnVersionContext.getName());
 	}
 
 	public void testBsnVersionLocationLoggerConfig() throws IOException {
-		doTestConfigLoggerContext(bsnVersionLocationContext.getName(),
-				testConfigLogLevels);
+		doTestConfigLoggerContext(bsnVersionLocationContext.getName());
 	}
 
-	private void doTestConfigLoggerContext(String loggerContextName,
-			Map<String,LogLevel> logLevels) throws IOException {
+	private void doTestConfigLoggerContext(String loggerContextName)
+			throws IOException {
 		String loggerContextPID = loggerContextName == null
 				? PID_PREFIX_LOG_ADMIN
 				: PID_PREFIX_LOG_ADMIN + '|' + loggerContextName;
+
+		Map<String,LogLevel> logLevels = new HashMap<>(testConfigLogLevels);
+		// First create and configure with config admin
 		Configuration contextConfig = configAdmin
 				.getConfiguration(loggerContextPID, null);
+		testConfigurations.add(contextConfig);
+
 		Dictionary<String,String> logLevelConfigs = getLogLevelConfigs(
 				logLevels);
-		testConfigurations.add(contextConfig);
 		contextConfig.update(logLevelConfigs);
 		sleep(loggerContextConfigTimeout);
 		LoggerContext loggerContext = loggerAdmin
@@ -434,6 +438,30 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		assertEquals(
 				"Unexpected loglevels for context named: " + loggerContextName,
 				logLevels, loggerContext.getLogLevels());
+
+		// delete some arbitrary key in the config and update it
+		logLevels.remove(logLevels.keySet().iterator().next());
+		logLevelConfigs = getLogLevelConfigs(logLevels);
+		contextConfig.update(logLevelConfigs);
+		sleep(loggerContextConfigTimeout);
+		assertEquals(
+				"Unexpected loglevels for context named: " + loggerContextName,
+				logLevels, loggerContext.getLogLevels());
+
+		// Now change with LoggerAdmin API
+		Map<String,LogLevel> changeWithAPI = loggerContext.getLogLevels();
+		changeWithAPI.put("added.with.api", LogLevel.TRACE);
+		loggerContext.setLogLevels(changeWithAPI);
+		assertEquals(
+				"Unexpected loglevels for context named: " + loggerContextName,
+				changeWithAPI, loggerContext.getLogLevels());
+
+		// Now delete with config admin which should make the log levels empty
+		contextConfig.delete();
+		sleep(loggerContextConfigTimeout);
+		assertEquals(
+				"Unexpected loglevels for context named: " + loggerContextName,
+				Collections.emptyMap(), loggerContext.getLogLevels());
 	}
 
 	private Dictionary<String,String> getLogLevelConfigs(
@@ -445,6 +473,8 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 					: logLevel.toString();
 			result.put(entry.getKey(), logLevelValue);
 		}
+		// purposefully place an value that does not map to a LogLevel enum
+		result.put("something.invalid", "Not a LogLevel");
 		return result;
 	}
 
