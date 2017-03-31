@@ -29,6 +29,10 @@ ext.bndWorkspace = new Workspace(rootDir, bnd_cnf).setOffline(gradle.startParame
 ext.cnf = rootProject.project(bnd_cnf)
 
 /* Configure the subprojects */
+def signatures7 = ['':'org.codehaus.mojo.signature:java17:1.0@signature',
+                   'compact1':':java17:1.0:compact1@signature',
+                   'compact2':':java17:1.0:compact2@signature',
+                   'compact3':':java17:1.0:compact3@signature']
 subprojects {
   def bndProject = bndWorkspace.getProject(name)
   if (bndProject != null) {
@@ -36,9 +40,25 @@ subprojects {
     plugins.apply 'ru.vyarus.animalsniffer'
     repositories {
       mavenCentral()
+      flatDir {
+        dirs "${bnd('licensed')}/animalsniffer"
+      }
     }
-    dependencies {
-      signature "org.codehaus.mojo.signature:${bnd('animalsniffer.signature', 'java17:1.0')}@signature"
+    if (sourceCompatibility.isJava7()) { 
+      def javacProfile = bnd('javac.profile', '')
+      tasks.withType(JavaCompile) {
+        options.compilerArgs += ['-Xlint:-options']
+        if (!javacProfile.empty) {
+          options.compilerArgs -= ['-profile', javacProfile]
+        }
+      }
+      dependencies {
+        signature signatures7[javacProfile]
+      }
+    } else { 
+      dependencies {
+        signature 'org.codehaus.mojo.signature:java18:1.0@signature'
+      }
     }
     animalsniffer {
       sourceSets = [sourceSets.main]
