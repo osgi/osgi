@@ -693,112 +693,7 @@ boolean val2 = cfg.my_other_value(); // val2=true
       sourceAs(MyInterfaceB.class).to(Map.class);</programlisting>
         </para>
       </section>
-      <section xml:id="util.converter-key.mapping">
-        <title>Key Mapping</title>
-
-        <para>The key name is derived from the method name.
-        Certain common property name characters, such as full stop (<code>'.'
-        \u002E</code>) are not valid in Java identifiers. So the name of a
-        method must be converted to its corresponding property name as
-        follows:<itemizedlist>
-            <listitem>
-              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
-              unless it is followed by another dollar sign in which case the
-              two consecutive dollar signs (<code>"$$"</code>) are converted
-              to a single dollar sign.</para>
-            </listitem>
-
-            <listitem>
-              <para>A single low line (<code>'_' \u005F</code>) is converted
-              into a full stop (<code>'.' \u002E</code>) unless is it followed
-              by another low line in which case the two consecutive low lines
-              (<code>"__"</code>) are converted to a single low line.</para>
-            </listitem>
-
-            <listitem>
-              <para>All other characters are unchanged.</para>
-            </listitem>
-          </itemizedlist></para>
-
-        <para><xref
-        linkend="util.converter-key.name.mapping"/> contains
-        some name mapping examples.</para>
-
-        <table xml:id="util.converter-key.name.mapping">
-          <title>Name Mapping Examples</title>
-
-          <tgroup cols="2">
-            <colspec colnum="1" colwidth="1*"/>
-
-            <colspec colnum="2" colwidth="1*"/>
-
-            <thead>
-              <row>
-                <entry>Method Name</entry>
-
-                <entry>Property Name</entry>
-              </row>
-            </thead>
-
-            <tbody>
-              <row>
-                <entry><code>myProperty143</code></entry>
-
-                <entry><code>myProperty143</code></entry>
-              </row>
-
-              <row>
-                <entry><code>$new</code></entry>
-
-                <entry><code>new</code></entry>
-              </row>
-
-              <row>
-                <entry><code>my$$prop</code></entry>
-
-                <entry><code>my$prop</code></entry>
-              </row>
-
-              <row>
-                <entry><code>dot_prop</code></entry>
-
-                <entry><code>dot.prop</code></entry>
-              </row>
-
-              <row>
-                <entry><code>_secret</code></entry>
-
-                <entry><code>.secret</code></entry>
-              </row>
-
-              <row>
-                <entry><code>another__prop</code></entry>
-
-                <entry><code>another_prop</code></entry>
-              </row>
-
-              <row>
-                <entry><code>three___prop</code></entry>
-
-                <entry><code>three_.prop</code></entry>
-              </row>
-
-              <row>
-                <entry><code>four_$__prop</code></entry>
-
-                <entry><code>four._prop</code></entry>
-              </row>
-
-              <row>
-                <entry><code>five_$_prop</code></entry>
-
-                <entry><code>five..prop</code></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
-      </section>
-        
+              
       </section>
       
       <section>
@@ -915,6 +810,217 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </para>
       </section> 
 
+      <section xml:id="util.converter-key.mapping">
+        <title>Key Mapping</title>
+
+        <para>When converting to or from a Java type, the key is derived from the method name.
+        Certain common property name characters, such as full stop (<code>'.'
+        \u002E</code>) and hyphen-minus (<code>'-' \u002D</code>) are not
+        valid in Java identifiers. So the name of a method must be converted
+        to its corresponding key name as follows:<itemizedlist>
+            <listitem>
+              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
+              unless it is followed by:<itemizedlist>
+                  <listitem>
+                    <para>A low line (<code>'_' \u005F</code>) and a dollar
+                    sign in which case the three consecutive characters
+                    (<code>"$_$"</code>) are converted to a single
+                    hyphen-minus (<code>'-' \u002D</code>).</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Another dollar sign in which case the two
+                    consecutive dollar signs (<code>"$$"</code>) are converted
+                    to a single dollar sign.</para>
+                  </listitem>
+                </itemizedlist></para>
+            </listitem>
+
+            <listitem>
+              <para>A single low line (<code>'_' \u005F</code>) is converted
+              into a full stop (<code>'.' \u002E</code>) unless is it followed
+              by another low line in which case the two consecutive low lines
+              (<code>"__"</code>) are converted to a single low line.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+
+            <listitem>
+              <para>If type contains a
+              <code>PREFIX_</code> field whose value is a compile-time
+              constant String, then the key name is prefixed with the
+              value of the <code>PREFIX_</code> field.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref
+        linkend="util.converter-key.name.mapping"/> contains
+        some name mapping examples.</para>
+
+        <table xml:id="util.converter-key.name.mapping">
+          <title>Component Property Name Mapping Examples</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Component Property Type Method Name</entry>
+
+                <entry>Component Property Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>myProperty143</code></entry>
+
+                <entry><code>myProperty143</code></entry>
+              </row>
+
+              <row>
+                <entry><code>$new</code></entry>
+
+                <entry><code>new</code></entry>
+              </row>
+
+              <row>
+                <entry><code>my$$prop</code></entry>
+
+                <entry><code>my$prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>dot_prop</code></entry>
+
+                <entry><code>dot.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>_secret</code></entry>
+
+                <entry><code>.secret</code></entry>
+              </row>
+
+              <row>
+                <entry><code>another__prop</code></entry>
+
+                <entry><code>another_prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>three___prop</code></entry>
+
+                <entry><code>three_.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>four_$__prop</code></entry>
+
+                <entry><code>four._prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>five_$_prop</code></entry>
+
+                <entry><code>five..prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>six$_$prop</code></entry>
+
+                <entry><code>six-prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>seven$$_$prop</code></entry>
+
+                <entry><code>seven$.prop</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>However, if the type is a
+        <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
+        linkend="service.component-jls.ref"/>, then the key name for the
+        <code>value</code> method is derived from the name of the component
+        property type rather than the name of the method. In this case, the
+        simple name of the component property type, that is, the name of the
+        class without any package name or outer class name, if the component
+        property type is an inner class, must be converted to the
+        <code>value</code> method's property name as follows:<itemizedlist>
+            <listitem>
+              <para>When a lower case character is followed by an upper case
+              character, a full stop (<code>'.' \u002E</code>) is inserted
+              between them.</para>
+            </listitem>
+
+            <listitem>
+              <para>Each uppercase character is converted to lower
+              case.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+
+            <listitem>
+              <para>If the type contains a
+              <code>PREFIX_</code> field whose value is a compile-time
+              constant String, then the key name is prefixed with the
+              value of the <code>PREFIX_</code> field.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref linkend="util.converter-single.element.name.mapping"/>
+        contains some mapping examples for the <code>value</code>
+        method.</para>
+
+        <table xml:id="util.converter-single.element.name.mapping">
+          <title>Single-Element Annotaton Mapping Examples for
+          <code>value</code> Method</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Type Name</entry>
+
+                <entry><code>value</code> Method Component Property
+                Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>ServiceRanking</code></entry>
+
+                <entry><code>service.ranking</code></entry>
+              </row>
+
+              <row>
+                <entry><code>Some_Name</code></entry>
+
+                <entry><code>some_name</code></entry>
+              </row>
+
+              <row>
+                <entry><code>OSGiProperty</code></entry>
+
+                <entry><code>osgi.property</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
 
     </section>
     
