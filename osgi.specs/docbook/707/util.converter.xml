@@ -422,10 +422,10 @@ String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</progr
           <xref linkend="org.osgi.util.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
           <programlisting>// Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
-cb.rule(int[].class, String.class,
-  v -> Arrays.stream(v).mapToObj(Integer::toString).
-              collect(Collectors.joining(",")),
-  v -> Arrays.stream(v.split(",")).mapToInt(Integer::parseInt).toArray());
+cb.rule(new Rule&lt;int[], String&gt;(v -&gt; Arrays.stream(v).
+    mapToObj(Integer::toString).collect(Collectors.joining(","))) {});
+cb.rule(new Rule&lt;String, int[]&gt;(v -&gt; Arrays.stream(v.split(",")).
+    mapToInt(Integer::parseInt).toArray()) {});
 Converter c = cb.build();
 
 String s2 = c.convert(new int[] {1,2}).to(String.class)); // s2="1,2"
@@ -947,7 +947,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
 
         <para>However, if the type is a
         <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
-        linkend="service.component-jls.ref"/>, then the key name for the
+        linkend="util.converter-jls.ref"/>, then the key name for the
         <code>value</code> method is derived from the name of the component
         property type rather than the name of the method. In this case, the
         simple name of the component property type, that is, the name of the
@@ -1138,7 +1138,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     <code>yyMMddHHmmssZ</code> instead a custom converter can be applied:
     <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 ConverterBuilder cb = new StandardConverter().newConverterBuilder();
-cb.rule(Date.class, String.class, v -&gt; sdf.format(v), v -&gt; sdf.parse(v));
+cb.rule(new TypeRule&lt;&gt;(Date.class, String.class, sdf::format));
 Converter c = cb.build();
     
 String s = c.convert(new Date()).to(String.class);
@@ -1162,23 +1162,21 @@ String en = m.get("enabled");   // en = "true"
 String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
 	Rules will only be invoked when an actual object needs to be converted, <code>null</code> values are never 
 	handed to converter rules. A converter rule can return <code>null</code> however to indicate that it cannot handle
-	the conversion, in which case the parent converter object is asked to convert the value.
+	the conversion, in which case next applicable rule is handed the conversion. If none of the registered rules for the 
+    current converter can handle the conversion, the parent converter object is asked to convert the value.
 	Since custom converters can be the basis for further custom converters, a chain of custom converters can be 
-	created where the outermost converter is given the opportunity to convert an object first, but it can delegate
-	back to the next converter in the hierarchy by returning <code>null</code> if it wishes to do so.
+	created where a custom converter rule can either decide to handle the conversion, or it can delegate
+	back to the next converter in the chain by returning <code>null</code> if it wishes to do so.
 	</para>
-	<section>
-	  <title>Abstract converter rules</title>
-	  <para>
-	  When specifying the types for the converter rules, types higher in the hierarchy can be used. When the converter looks for 
-	  a customized converter rule, it first looks for a converter rule for the most specific types. If it cannot 
-	  find a matching rule, it will look for matching converters for the supertypes of the provided objects. It will 
-	  continue to go up the type hierarchy until it reaches <code>java.lang.Object</code>. Therefore converter 
-	  rules that convert from or to Object can be used as catchall or default rules that are invoked if no specific rule
-	  is available.
-	  <remark>Need to specify what the order or lookup is if class x extends s implements a,b,c</remark>
-	  </para>
-	</section>
+  
+    <section>
+    <title>Catchall rules</title>
+    <para>It is also possible to register converter rules which are invoked for every conversion with the 
+    <xref linkend="org.osgi.util.converter.ConverterBuilder.rule-ConvertFunction-" xrefstyle="hyperlink"/>
+    method. When multiple rules are registered, they are evaluated in the order of registration, where rules targeting
+    specific types are evaluated before catchall rules.
+    </para>
+    </section>
   </section>
 
   <section>
@@ -1194,6 +1192,10 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     <bibliolist>
       <bibliomixed><title><xref linkend="intro.core.release"
       xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
+
+      <bibliomixed xml:id="util.converter-jls.ref"><title>The Java Language
+      Specification, Java SE 8
+      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
