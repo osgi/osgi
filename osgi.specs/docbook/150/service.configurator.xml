@@ -515,30 +515,55 @@
   <section>
     <title>Lifecycle</title>
     
-    <para>The configurator requires access to the Configuration Admin service. Therefore the configurator implementation
+    <para>The configurator uses the Configuration Admin service. Therefore the configurator implementation
     should require the Configuration Admin service through a service requirement. The configurator should not start
     processing configuration resources until it has runtime access to the Configuration Admin service.
     </para>
         
     <para>
-    When the configurator starts it processes all installed bundles and applies configurations provided by those bundles.
+    When the configurator starts, it processes all started bundles and applies configurations provided by those bundles.
+    From then on, the configurator processes bundles as they enter the <code>STARTING</code> state.
     The configurator should process as many bundles as possible in a single pass to minimize volatility for PIDs
-    where multiple configurations with different rankings are provided.
+    where multiple configurations with different rankings are provided. The configurator uses the Configuration Admin Service
+    that is visible to both the configurator itself as well as the bundle that is being processed. If there are multiple 
+    candidates, the service with the highest ranking is used. If there is no Configuration Admin Service visible to both
+    the bundle that is processed and the configurator, configuration resources in the bundle are not processed.
     </para>
-    
-    <remark>Carsten: As we had the recent discussion with config admin and DS, I'm wondering if we should specify that the configurator uses the bundle context of the processed bundle to get the configuration admin. I somehow feel that this would make sense, but would make the implementation harder as there might be multiple configuration admins.
-    </remark>
+        
     
     <para>
-    The configurator must also check whether configurations that it installed previously are still valid. If the bundles that provided
+    When the configurator becomes active, it must also check whether configurations that it installed previously are still valid. If the bundles that provided
     these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
     the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
     to avoid volatility in the system if the actual configuration values did not change.
     </para>
     
     <para>
+    Configurations remain in the system until the bundle that provided the configurations is uninstalled.
+    When this happens, the configurator must uninstall the configurations from the Configuration Admin Service 
+    to which it originally installed it, keeping in mind that the system might have been restarted in-between. One way 
+    of keeping track of the original Configuration Admin Service is via the bundle location of the bundle providing the service.
+    If this Configuration Admin Service is not available at this time, the configurator must remember the configurations that
+    are to be removed, and remove them when the Configuration Admin Service re-appears at a later time.
+    </para>
+    
+    <para>
+    Similarly, when a bundle containing configuration resources is updated, the configurations must be updated in the Configuration 
+    Admin Service to which they were originally provided. If this service is not available the configurator must attempt to apply 
+    the updated configuration when this Configuration Admin Service re-appears.</para>
+    
+    <para>
+    When a bundle that provides the Configuration Admin Service is uninstalled, the configurator considers all configurations
+    previously provided to that Configuration Admin Service
+    as not not yet applied. If another Configuration Admin Service is or becomes visible to both the
+    configurator and the bundle containing configuration resources, the configurator will provide the configurations to this
+    Configuration Admin Service as new. 
+    </para>
+    
+    <para>
     When the configurator is stopped or uninstalled the configurations applied will remain in the system.
     </para>
+    
   </section> 
 
   <section>
