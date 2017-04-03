@@ -68,11 +68,6 @@ public abstract class Rule<F,T> implements TargetRule<T>{
                 }
                 return null;
             }
-
-			@Override
-			public T handleError(Object obj, Type targetType) {
-				return null;
-			}
         };
     }
 

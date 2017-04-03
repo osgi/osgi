@@ -61,11 +61,6 @@ public class TypeRule<F,T> implements TargetRule<T> {
                 // TODO support parameterized types?
                 return null;
             }
-
-			@Override
-			public T handleError(Object obj, Type targetType) {
-				return null;
-			}
         };
     }
 

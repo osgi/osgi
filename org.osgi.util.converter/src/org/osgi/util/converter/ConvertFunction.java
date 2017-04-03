@@ -46,19 +46,21 @@ public interface ConvertFunction<T> {
 	T convert(Object obj, Type targetType)
 			throws Exception;
 
-	/**
-	 * Override the default error handling mechanism. Whenever a converter
-	 * throws a Conversion Exception, this can be overridden with either another
-	 * runtime exception or an actual value.
-	 *
-	 * @param obj The object to be converted. This object will never be
-	 *            {@code null} as the convert function will not be invoked for
-	 *            null values.
-	 * @param targetType The target type.
-	 * @return A value to use in case of an error. This method can return
-	 *         {@code null} to indicate that it cannot handle the error.
-	 * @throws RuntimeException Another Runtime Exception may also be thrown by
-	 *             this handler.
-	 */
-	T handleError(Object obj, Type targetType);
+	// /**
+	// * Override the default error handling mechanism. Whenever a converter
+	// * throws a Conversion Exception, this can be overridden with either
+	// another
+	// * runtime exception or an actual value.
+	// *
+	// * @param obj The object to be converted. This object will never be
+	// * {@code null} as the convert function will not be invoked for
+	// * null values.
+	// * @param targetType The target type.
+	// * @return A value to use in case of an error. This method can return
+	// * {@code null} to indicate that it cannot handle the error.
+	// * @throws RuntimeException Another Runtime Exception may also be thrown
+	// by
+	// * this handler.
+	// */
+	// T handleError(Object obj, Type targetType);
 }
