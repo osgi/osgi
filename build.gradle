@@ -63,6 +63,9 @@ subprojects {
     animalsniffer {
       sourceSets = [sourceSets.main]
     }
+    jar {
+      dependsOn animalsnifferMain
+    }
     test {
       testLogging {
         exceptionFormat 'full'
@@ -70,9 +73,6 @@ subprojects {
       if (System.properties['maven.repo.local']) {
         systemProperty 'maven.repo.local', IO.getFile(rootProject.rootDir, System.properties['maven.repo.local'])
       }
-    }
-    assemble {
-      dependsOn animalsnifferMain
     }
   }
 }

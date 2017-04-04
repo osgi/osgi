@@ -10,7 +10,7 @@ configure(rootProject) {
   buildDir = buildProject.buildDir
 
   task build {
-    dependsOn ":${buildProject.name}:assemble"
+    dependsOn ":${buildProject.name}:jar"
     dependsOn ":${buildProject.name}:releaseNeeded"
     description 'Assembles and releases the ${buildProject.name} project.'
     group 'build'
