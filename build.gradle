@@ -45,11 +45,11 @@ subprojects {
       }
     }
     if (sourceCompatibility.isJava7()) { 
-      def javacProfile = bnd('javac.profile', '')
+      String javacProfile = bnd('javac.profile', '')
       tasks.withType(JavaCompile) {
-        options.compilerArgs += ['-Xlint:-options']
+        options.compilerArgs.add('-Xlint:-options')
         if (!javacProfile.empty) {
-          options.compilerArgs -= ['-profile', javacProfile]
+          options.compilerArgs.removeAll(['-profile', javacProfile])
         }
       }
       dependencies {
