@@ -17,6 +17,8 @@ package org.osgi.test.cases.transaction.control;
 
 import static org.junit.Assume.assumeTrue;
 
+import java.util.concurrent.Callable;
+
 public class XATxControlTestCase extends TxControlTestCase {
 	
 	/**
@@ -28,9 +30,12 @@ public class XATxControlTestCase extends TxControlTestCase {
 	public void testTxControlSupportsXA() throws Exception {
 		assumeTrue(xaEnabled);
 
-		txControl.required(() -> {
-			assertTrue(txControl.getCurrentContext().supportsXA());
-			return null;
+		txControl.required(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				assertTrue(txControl.getCurrentContext().supportsXA());
+				return null;
+			}
 		});
 
 	}

@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.transaction.control;
 
+import java.util.concurrent.Callable;
+
 public class CommonTxControlTestCase extends TxControlTestCase {
 	
 	/**
@@ -28,16 +30,22 @@ public class CommonTxControlTestCase extends TxControlTestCase {
 		assertFalse(txControl.activeScope());
 		assertFalse(txControl.activeTransaction());
 
-		txControl.supports(() -> {
-			assertTrue(txControl.activeScope());
-			assertFalse(txControl.activeTransaction());
-			return null;
+		txControl.supports(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				assertTrue(txControl.activeScope());
+				assertFalse(txControl.activeTransaction());
+				return null;
+			}
 		});
 
-		txControl.required(() -> {
-			assertTrue(txControl.activeScope());
-			assertTrue(txControl.activeTransaction());
-			return null;
+		txControl.required(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				assertTrue(txControl.activeScope());
+				assertTrue(txControl.activeTransaction());
+				return null;
+			}
 		});
 
 	}

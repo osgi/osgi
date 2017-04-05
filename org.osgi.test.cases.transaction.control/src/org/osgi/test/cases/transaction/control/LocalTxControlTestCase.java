@@ -17,6 +17,8 @@ package org.osgi.test.cases.transaction.control;
 
 import static org.junit.Assume.assumeTrue;
 
+import java.util.concurrent.Callable;
+
 public class LocalTxControlTestCase extends TxControlTestCase {
 	
 	/**
@@ -28,9 +30,12 @@ public class LocalTxControlTestCase extends TxControlTestCase {
 	public void testTxControlSupportsLocal() throws Exception {
 		assumeTrue(localEnabled);
 
-		txControl.required(() -> {
-			assertTrue(txControl.getCurrentContext().supportsLocal());
-			return null;
+		txControl.required(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				assertTrue(txControl.getCurrentContext().supportsLocal());
+				return null;
+			}
 		});
 
 	}
