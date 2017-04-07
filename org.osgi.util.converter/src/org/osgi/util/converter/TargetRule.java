@@ -29,7 +29,7 @@ public interface TargetRule<T> {
      * The function to perform the conversion.
      * @return The function.
      */
-    ConvertFunction<T> getFunction();
+    ConverterFunction<T> getFunction();
 
     /**
      * The target type of this rule. The conversion function is invoked for each conversion to the target type.

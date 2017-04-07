@@ -32,7 +32,7 @@ import org.osgi.util.function.Function;
  * @param <T> The type to convert to.
  */
 public abstract class Rule<F,T> implements TargetRule<T>{
-    private final ConvertFunction<T> function;
+    private final ConverterFunction<T> function;
 
     /**
      * Create an instance with a conversion function.
@@ -42,11 +42,11 @@ public abstract class Rule<F,T> implements TargetRule<T>{
         function = getGenericFunction(func);
     }
 
-	private ConvertFunction<T> getGenericFunction(final Function<F,T> func) {
-        return new ConvertFunction<T>() {
+	private ConverterFunction<T> getGenericFunction(final Function<F,T> func) {
+        return new ConverterFunction<T>() {
             @Override
             @SuppressWarnings("unchecked")
-            public T convert(Object obj, Type targetType) throws Exception {
+            public T apply(Object obj, Type targetType) throws Exception {
                 Rule<?,?> r = Rule.this;
                 Type type = ((ParameterizedType) r.getClass().getGenericSuperclass())
                         .getActualTypeArguments()[0];
@@ -72,7 +72,7 @@ public abstract class Rule<F,T> implements TargetRule<T>{
     }
 
     @Override
-    public ConvertFunction<T> getFunction() {
+    public ConverterFunction<T> getFunction() {
         return function;
     }
 

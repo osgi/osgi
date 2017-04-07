@@ -40,6 +40,17 @@ public interface ConverterBuilder {
 	 */
 	Converter build();
 
+	/**
+	 * Register a custom error handler. The custom error handler will be called
+	 * when the conversion would otherwise throw an exception. The error handler
+	 * can either throw a different exception or return a value to be used for
+	 * the failed conversion.
+	 *
+	 * @param func The function to be used to handle errors.
+     * @return This converter builder for further building.
+	 */
+    <T> ConverterBuilder errorHandler(ConverterFunction<T> func);
+
     /**
      * Register a conversion rule for this converter. Note that only the target
      * type is specified, so the rule will be visited for every conversion to the
@@ -49,7 +60,7 @@ public interface ConverterBuilder {
      * @param function The function that will handle the conversion.
      * @return This converter builder for further building.
      */
-    <T> ConverterBuilder rule(Type type, ConvertFunction<T> function);
+    <T> ConverterBuilder rule(Type type, ConverterFunction<T> function);
 
     /**
      * Register a conversion rule for this converter.
@@ -65,5 +76,5 @@ public interface ConverterBuilder {
      * @param function The function that will handle the conversion.
      * @return This converter builder for further building.
      */
-    <T> ConverterBuilder rule(ConvertFunction<T> func);
+    <T> ConverterBuilder rule(ConverterFunction<T> func);
 }

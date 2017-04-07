@@ -29,7 +29,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @author $Id$
  */
 @ConsumerType
-public interface ConvertFunction<T> {
+public interface ConverterFunction<T> {
 	/**
 	 * Convert the object into the target type.
 	 *
@@ -43,7 +43,7 @@ public interface ConvertFunction<T> {
 	 *         opportunity to convert.
 	 * @throws Exception
 	 */
-	T convert(Object obj, Type targetType)
+	T apply(Object obj, Type targetType)
 			throws Exception;
 
 	// /**
