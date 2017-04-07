@@ -953,7 +953,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         in an annotation. This example assumes a Declarative
         Services component that is configured with the following configuration 
         property:
-        <programlisting>"com.acme.config.type"="MULTI"</programlisting>. 
+        <programlisting>"com.acme.config.type"="MULTI"</programlisting> 
         When Declarative Services invokes the <code>@Activate</code>
         method the configuration provided is already converted into the
         <code>MyAnnotation</code> 
