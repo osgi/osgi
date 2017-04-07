@@ -35,7 +35,6 @@ osgi.cmpn.specs = \
      org.osgi.service.repository, \
      org.osgi.service.resolver, \
      org.osgi.service.rest, \
-     org.osgi.service.serializer, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
      org.osgi.service.transaction.control, \
