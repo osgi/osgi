@@ -71,6 +71,10 @@
       <listitem>
         <para><emphasis>Target Type</emphasis> - the desired type of the conversion target.</para>
       </listitem>
+      
+      <listitem>
+        <para><emphasis>Rule</emphasis> - a rule is used to customize the behavior of the converter.</para>
+      </listitem>
     </itemizedlist>
     <remark>Add entity diagram</remark>
   </section> 
@@ -558,13 +562,14 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       are supported.</para>
       
       <para>When converting between map-like types, a <code>Map</code> can be used as intermediary.
-      When converting to other structures, the map is converted into an iteration order preserving collection of
+      When converting to other, non <emphasis>map-like</emphasis>, structures 
+      the map is converted into an iteration order preserving collection of
       <code>Map.Entry</code> values which in turn is converted into the target type.
       </para>
       
       <section>
         <title>Converting to a Map</title>
-        <para>When converting to a <code>java.util.Map</code>
+        <para>When converting a map-like structure to a <code>java.util.Map</code>
           the converter will return a live view 
           over the backing object that changes when the backing object changes. The live view can be 
           prevented by providing the 
@@ -617,7 +622,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         Map type information for the target type can be made available by using the
         <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
         or <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
-        methods. If no type information is available, key-value pairs are inserted into the map as-is.    
+        methods. If no type information is available, key-value pairs are provided in the map as-is.    
         </para>      
       </section>
       
@@ -709,7 +714,9 @@ boolean val2 = cfg.my_other_value(); // val2=true
         is thrown.
         </para>
         
-        <para>Below a few examples of conversions to an annotation:
+        <para>Similar to interfaces, conversions to and from annotations also follow the
+        <xref linkend="util.converter-key.mapping"/> for annotation element names.
+        Below a few examples of conversions to an annotation:
         <programlisting>@interface MyAnnotation {
   String[] args() default {"arg1", "arg2"};
 }
@@ -737,14 +744,14 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       
       <section>
         <title>Java Beans</title>
-        <para>Java Beans are concrete (non-abstract) classes that follow a naming convention. They provide 
+        <para>Java Beans are concrete (non-abstract) classes that follow the Java Bean naming convention. They provide 
         public getters and setters to
         access their properties and have a public no-arg constructor. When converting from a Java Bean introspection
         is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
         value. The method name must start with <code>get</code> followed by a capitalized property name, 
         for example <code>getSize()</code> provides access to the property <code>size</code>. 
         For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
-        is also permitted.</para> 
+        is also permitted. Properties names follow the <xref linkend="util.converter-key.mapping"/>.</para> 
         <para>
         For the converter to consider an object as a Java Bean the 
           <xref linkend="org.osgi.util.converter.Converting.sourceAsBean--" xrefstyle="hyperlink"/> or
@@ -752,15 +759,14 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         modifier needs to be invoked, for example:
           <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
         <para>When converting to a Java Bean, the bean is constructed eagerly. All available properties
-            are set in the bean using the bean's write accessors, that is public setters methods with a single argument. 
+            are set in the bean using the bean's write accessors, that is, public setters methods with a single argument. 
             All methods of the bean class itself and its 
             super classes are considered. 
             When a property cannot be converted this will cause a 
             <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
             If a property is missing in the source, the property will not be set in the bean.
             </para>
-        <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported as there is no way to 
-        find out the size of the array via these accessors.
+        <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported.
         </para>
         <para><emphasis>Note: </emphasis>the <code>getClass()</code> method of the <code>java.lang.Object</code>
         class is not considered an accessor.
@@ -805,9 +811,6 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           of <code>Map.Entry</code> objects. This collection is then converted to the target type using the rules specified
           in <xref linkend="util.converter-special.cases.map.entry"/>.
         </para>
-        <para>
-          No other conversions to map-like structures are supported.
-        </para>
       </section> 
 
       <section xml:id="util.converter-key.mapping">
@@ -848,10 +851,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             </listitem>
 
             <listitem>
-              <para>If type contains a
+              <para>If type contains a static final
               <code>PREFIX_</code> field whose value is a compile-time
               constant String, then the key name is prefixed with the
-              value of the <code>PREFIX_</code> field.</para>
+              value of the <code>PREFIX_</code> field. <code>PREFIX_</code>
+              fields in super-classes or super-interfaces are ignored.</para>
             </listitem>
           </itemizedlist></para>
 
@@ -944,6 +948,36 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             </tbody>
           </tgroup>
         </table>
+        
+        <para>Below is an example of using the <code>PREFIX_</code> constant 
+        in an annotation. This example assumes a Declarative
+        Services component that is configured with the following configuration 
+        property:
+        <programlisting>"com.acme.config.type"="MULTI"</programlisting>. 
+        When Declarative Services invokes the <code>@Activate</code>
+        method the configuration provided is already converted into the
+        <code>MyAnnotation</code> 
+        annotation. This example shows also how the annotation can be converted
+        back into a Map.
+        <programlisting>  public @interface MyAnnotation {
+    static final String PREFIX_ = "com.acme.config.";
+
+    enum Type { SINGLE, MULTI };
+
+    long timeout() default 1000L;
+    Type type() default Type.SINGLE;
+  }
+  
+  @Activate
+  private void activate(MyAnnotation ann) {
+    long configuredTimeout = ann.timeout(); // value will be 1000
+    MyAnnotation.Type configuredType = ann.type(); // value will be MULTI
+    
+    Map m = converter.convert(ann).to(Map.class);
+    // m will contain:
+    // { "com.acme.config.timeout" = 1000L,
+    //   "com.acme.config.type" = MULTI }
+  }</programlisting></para>
 
         <para>However, if the type is a
         <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
@@ -970,10 +1004,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             </listitem>
 
             <listitem>
-              <para>If the type contains a
+              <para>If the type contains a static final
               <code>PREFIX_</code> field whose value is a compile-time
               constant String, then the key name is prefixed with the
-              value of the <code>PREFIX_</code> field.</para>
+              value of the <code>PREFIX_</code> field. <code>PREFIX_</code>
+              fields in super-classes or super-interfaces are ignored.</para>
             </listitem>
           </itemizedlist></para>
 
@@ -1067,9 +1102,10 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </table>
 
         The priority rules defined in the above table can be overridden by using 
-        <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/>
+        <xref linkend="org.osgi.util.converter.Converting.sourceAs-Class-" xrefstyle="hyperlink"/>,
+        <xref linkend="org.osgi.util.converter.Converting.sourceAsBean--" xrefstyle="hyperlink"/> 
         or         
-        <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/> 
+        <xref linkend="org.osgi.util.converter.Converting.sourceAsDTO--" xrefstyle="hyperlink"/> 
         to indicate as what class the source or target object should be treated. 
         Consider the following example:
         <programlisting>  Class MyClass implements MyInterface {
@@ -1095,7 +1131,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> method.
         In some cases the converter needs to be instructed how to treat this target object.
         For example the desired target type might extend a DTO class adding some methods and behavior to 
-        the DTO. As this target class now has methods, the converter will not recognize as a DTO.
+        the DTO. As this target class now has methods, the converter will not recognize it as a DTO.
         The <xref linkend="org.osgi.util.converter.Converting.targetAs-Class-" xrefstyle="hyperlink"/>,
         <xref linkend="org.osgi.util.converter.Converting.targetAsBean--" xrefstyle="hyperlink"/>
         and <xref linkend="org.osgi.util.converter.Converting.targetAsDTO--" xrefstyle="hyperlink"/>
@@ -1105,7 +1141,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         
         <para>For example:
         <programlisting>  MyExtendedDTO med = converter.convert(someMap).
-      targetDTO().to(MyExtendedDTO.class)</programlisting>
+      targetAsDTO().to(MyExtendedDTO.class)</programlisting>
         In this example the converter will return a <code>MyExtendedDTO</code> instance
         but it will treat is as a <code>MyDTO</code> type.      
       </para>
@@ -1173,7 +1209,9 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     <title>Catchall rules</title>
     <para>It is also possible to register converter rules which are invoked for every conversion with the 
     <xref linkend="org.osgi.util.converter.ConverterBuilder.rule-ConvertFunction-" xrefstyle="hyperlink"/>
-    method. When multiple rules are registered, they are evaluated in the order of registration, where rules targeting
+    method. When multiple rules are registered, they are evaluated in the order of registration,
+    until a rule indicates that it can handle a conversion by returning a non-<code>null</code> value. 
+    Rules targeting
     specific types are evaluated before catchall rules.
     </para>
     </section>
