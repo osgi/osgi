@@ -254,7 +254,7 @@
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
-
+          
           <row>
             <entry><code>context.init.*</code></entry>
 
@@ -1177,6 +1177,60 @@ public class CDNServletContextHelper extends ServletContextHelper {
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
+          <row>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.enabled</code></para></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+            
+            <entry><para>Enables support for multipart configuration on the servlet. Allowed values are <code>true</code> and
+            false independent of case. Defaults to <code>false</code>. See @@@Link.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.fileSizeThreshold</code></para></entry>
+
+            <entry><para><code>Integer</code></para><para><emphasis>optional</emphasis></para></entry>
+            
+            <entry><para>The file size threshold after which the file is stored as a temporary file on disk while
+            uploading. Defaults to <emphasis>0</emphasis>. Files will be stored in the directory 
+            as specified in <code>...location</code> on the file system. See @@@Link.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.location</code></para></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+            
+            <entry><para>The location where files are stored on disk. Defaults to the value of 
+            <code>javax.servlet.context.tempdir</code> <remark>where is that specified?</remark>.
+            If an absolute path is specified then this path is used as-is. If a relative path
+            is specified, it will be used as relative to the <code>javax.servlet.context.tempdir</code>
+            value. <code>java.io.File.isAbsolute()</code> must be used to evaluate whether a path
+            is absolute or relative. See @@@Link.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.maxFileSize</code></para></entry>
+
+            <entry><para><code>Long</code></para><para><emphasis>optional</emphasis></para></entry>
+            
+            <entry><para>The maximum size for an uploaded file. Defaults to <emphasis>unlimited</emphasis>. Files larger 
+            than this size will cause an exception.
+            <remark>yes? which one?</remark> See @@@Link.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.maxRequestSize</code></para></entry>
+
+            <entry><para><code>Long</code></para><para><emphasis>optional</emphasis></para></entry>
+            
+            <entry><para>The maximum size of a <code>multipart/form-data</code> request, in bytes. 
+            Defaults to <emphasis>unlimited</emphasis>. Requests larger than
+            this value will cause an exception. 
+                      <remark>There are a bunch of non-string values here is that ok?</remark>
+            See @@@Link.</para></entry>
+          </row>    
+          
           <row>
             <entry><code>servlet.init.*</code></entry>
 
@@ -2243,7 +2297,9 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       is the responsibility of the Http Whiteboard service implementations to
       use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
+      <remark>New permissions for file upload?</remark>
     </section>
+    
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.context.xml"/>
