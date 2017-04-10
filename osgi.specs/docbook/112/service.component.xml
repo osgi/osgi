@@ -4698,7 +4698,7 @@ public class MyComponent {
             </listitem>
 
             <listitem>
-              <para> If the component property type contains a
+              <para>If the component property type declares a
               <code>PREFIX_</code> field whose value is a compile-time
               constant String, then the property name is prefixed with the
               value of the <code>PREFIX_</code> field.</para>
@@ -4811,7 +4811,7 @@ public class MyComponent {
             </listitem>
 
             <listitem>
-              <para>Each uppercase character is converted to lower
+              <para>Each upper case character is converted to lower
               case.</para>
             </listitem>
 
@@ -4820,7 +4820,7 @@ public class MyComponent {
             </listitem>
 
             <listitem>
-              <para>If the component property type contains a
+              <para>If the component property type declares a
               <code>PREFIX_</code> field whose value is a compile-time
               constant String, then the property name is prefixed with the
               value of the <code>PREFIX_</code> field.</para>

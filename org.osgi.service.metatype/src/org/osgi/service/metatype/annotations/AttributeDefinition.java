@@ -29,8 +29,7 @@ import java.lang.annotation.Target;
  * specify non-default AttributeDefinition information.
  * <p>
  * The {@code id} of this AttributeDefinition is generated from the name of the
- * annotated method. The annotated method name is processed from left to right
- * changing each character as follows:
+ * annotated method as follows:
  * <ul>
  * <li>A single dollar sign ({@code '$'} &#92;u0024) is removed unless it is
  * followed by:
@@ -47,9 +46,24 @@ import java.lang.annotation.Target;
  * case the two consecutive low lines ({@code "__"}) are changed to a single low
  * line.</li>
  * <li>All other characters are unchanged.</li>
- * <li>If the type annotated by {@link ObjectClassDefinition} contains a static
- * final {@code PREFIX_} field whose value is a compile-time constant String,
- * then the id is prefixed with the value of the {@code PREFIX_} field.</li>
+ * <li>If the type declaring the method also declares a {@code PREFIX_} field
+ * whose value is a compile-time constant String, then the id is prefixed with
+ * the value of the {@code PREFIX_} field.</li>
+ * </ul>
+ * However, if the type is a <em>single-element annotation</em>, then the id for
+ * the {@code value} method is derived from the name of the annotation type
+ * rather than the name of the method. In this case, the simple name of the
+ * annotation type, that is, the name of the class without any package name or
+ * outer class name, if the annotation type is an inner class, must be converted
+ * to the {@code value} method's id as follows:
+ * <ul>
+ * <li>When a lower case character is followed by an upper case character, a
+ * full stop ({@code '.'} &#92;u002E) is inserted between them.</li>
+ * <li>Each upper case character is converted to lower case.</li>
+ * <li>All other characters are unchanged.</li>
+ * <li>If the annotation type declares a {@code PREFIX_} field whose value is a
+ * compile-time constant String, then the id is prefixed with the value of the
+ * {@code PREFIX_} field.</li>
  * </ul>
  * This id is the value of the id attribute of the generate AD element and is
  * used as the name of the corresponding configuration property.

@@ -1538,12 +1538,42 @@ female=Female</programlisting>
         </listitem>
 
         <listitem>
-          <para>If the component property type contains a <code>PREFIX_</code>
-          field whose value is a compile-time constant String, then the
-          property name is prefixed with the value of the <code>PREFIX_</code>
-          field.</para>
+          <para>If the type declaring the method also declares a
+          <code>PREFIX_</code> field whose value is a compile-time constant
+          String, then the id is prefixed with the value of the
+          <code>PREFIX_</code> field.</para>
         </listitem>
       </itemizedlist>
+
+      <para>However, if the type is a <emphasis>single-element
+      annotation</emphasis>, see 9.7.3 in <xref
+      linkend="service.metatype-jls.ref"/>, then the id for the
+      <code>value</code> method is derived from the name of the annotation
+      type rather than the name of the method. In this case, the simple name
+      of the annotation type, that is, the name of the class without any
+      package name or outer class name, if the annotation type is an inner
+      class, must be converted to the <code>value</code> method's id as
+      follows:<itemizedlist>
+          <listitem>
+            <para>When a lower case character is followed by an upper case
+            character, a full stop (<code>'.' \u002E</code>) is inserted
+            between them.</para>
+          </listitem>
+
+          <listitem>
+            <para>Each upper case character is converted to lower case.</para>
+          </listitem>
+
+          <listitem>
+            <para>All other characters are unchanged.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the annotation type declares a <code>PREFIX_</code> field
+            whose value is a compile-time constant String, then the id is
+            prefixed with the value of the <code>PREFIX_</code> field.</para>
+          </listitem>
+        </itemizedlist></para>
 
       <para>The generated id becomes the value of the <code>id</code>
       attribute of the <code>AD</code> element in the generated Meta Type
@@ -1715,6 +1745,10 @@ public class MyComponent {
       <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
       Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,
       MacMillan Technical publishing.</bibliomixed>
+
+      <bibliomixed xml:id="service.metatype-jls.ref"><title>The Java Language
+      Specification, Java SE 8
+      Edition</title>https://docs.oracle.com/javase/specs/jls/se8/html/index.html</bibliomixed>
     </bibliolist>
   </section>
 
