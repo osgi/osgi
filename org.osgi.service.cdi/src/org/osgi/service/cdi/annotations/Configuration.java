@@ -52,8 +52,9 @@ public @interface Configuration {
 	String[] value() default "$";
 
 	/**
-	 * @return if configurations for the specified pids are required or not.
+	 * @return if configurations for the specified pids are required or not,
+	 *         default is {@code true}.
 	 */
-	boolean required() default false;
+	boolean required() default true;
 
 }

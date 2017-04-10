@@ -57,6 +57,7 @@
 		</sequence>
 		<attribute name="beanClass" type="token" use="required" />
 		<attribute name="pid" type="token" use="required" />
+		<attribute name="required" type="boolean" default="true" use="optional" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
