@@ -524,7 +524,8 @@
     The configurator uses the Configuration Admin Service
     that is visible to both the configurator itself as well as the bundle that is being processed. If there are multiple 
     candidates, the service with the highest ranking is used. If there is no Configuration Admin Service visible to both
-    the bundle that is processed and the configurator, configuration resources in the bundle are not processed.
+    the bundle that is processed and the configurator, 
+    the processing is delayed until such a service becomes available.
     </para>
         
     <para>
@@ -535,21 +536,24 @@
     </para>
         
     <para>
+    When a bundle containing configuration resources is updated, the configurations must be updated in the Configuration 
+    Admin Service to which they were originally provided,
+    keeping in mind that the system might have been restarted in-between. One way 
+    of keeping track of the original Configuration Admin Service is via the bundle location of the bundle providing the service.
+    If this service is not available the configurator must attempt to apply 
+    the updated configuration when this Configuration Admin Service re-appears.</para>
+        
+    <para>
     Configurations remain in the system until the bundle that provided the configurations is uninstalled.
     When this happens, the configurator must uninstall the configurations from the Configuration Admin Service 
-    to which it originally installed it, keeping in mind that the system might have been restarted in-between. One way 
-    of keeping track of the original Configuration Admin Service is via the bundle location of the bundle providing the service.
+    to which it originally installed it as is the case with updates.
     If this Configuration Admin Service is not available at this time, the configurator must remember the configurations that
     are to be removed, and remove them when the Configuration Admin Service re-appears at a later time.
     </para>
     
     <para>
-    Similarly, when a bundle containing configuration resources is updated, the configurations must be updated in the Configuration 
-    Admin Service to which they were originally provided. If this service is not available the configurator must attempt to apply 
-    the updated configuration when this Configuration Admin Service re-appears.</para>
-        
-    <para>
-    When the configurator becomes active, it must also check whether configurations that it installed previously are still valid. If the bundles that provided
+    When the configurator becomes active, it must check whether configurations that it installed previously are still valid. 
+    If the bundles that provided
     these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
     the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
     to avoid volatility in the system if the actual configuration values did not change.
