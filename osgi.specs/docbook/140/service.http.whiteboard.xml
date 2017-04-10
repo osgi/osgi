@@ -1470,7 +1470,7 @@ public class AsyncServlet extends HttpServlet {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table>
+    <table xml:id="service.http.whiteboard.filter.properties.table">
       <title>Service properties for <code>Filter</code> Whiteboard
       services.</title>
 
@@ -1647,6 +1647,45 @@ public class MyFilter implements Filter {
 
     public void destroy() {}
 }</programlisting>
+
+  <section>
+    <title>Servlet Pre-Processors</title>
+    
+    <para>
+    Servlet Filters are always run after 
+    <xref
+    linkend="org.osgi.service.http.context.ServletContextHelper.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+    xrefstyle="hyperlink"/>
+    is called. However in some cases
+    it is necessary to process servlet requests before security is handled. For example
+    when all requests must be logged, even ones that are rejected by security.
+    In other scenarios, requests may need to be prepared for the <code>handleSecurity()</code> call.
+    </para>
+    
+    <para>A whiteboard <xref
+    linkend="org.osgi.service.http.whiteboard.Preprocessor"
+    xrefstyle="hyperlink"/> service can be registered to handle such cases. The <code>Preprocessor</code>
+    service supports the same service registration properties as servlet filters, defined in 
+    <xref
+    linkend="service.http.whiteboard.filter.properties.table"
+    xrefstyle="template:Table %n on page %p"/> and is invoked before request dispatching is performed.
+    If multiple pre-processors match a request they are invoked in the order as described 
+    for servlet filters.
+    </para>
+    
+    <para>The <code>Preprocessor</code> has the same API as the servlet <code>Filter</code> and is
+    handled in the same way, the <code>init()</code> and <code>destroy()</code> are called at the
+    appropriate life-cycle events.
+    However, as pre-processors are called before dispatching, the targeted servlet context is not yet know. 
+    Therefore the <code>FilterConfig.getServletContext()</code> returns the servlet context of the backing
+    implementation, the same context as returned by the request.
+    </para>
+    
+    <para>When called in the <code>doFilter()</code> method, the pre-processor can use the 
+    <code>FilterChain</code> to invoke the next pre-processor, or if the end of the chain is 
+    reached, start processing the request. The pre-processor can also terminate the processing and
+    generate a response directly.</para>
+  </section>
   </section>
 
   <section>
