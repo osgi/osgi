@@ -6,7 +6,6 @@ import java.util.concurrent.Callable;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.osgi.service.cdi.annotations.MinCardinality;
 import org.osgi.service.cdi.annotations.Reference;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.tb.serviceapi.Provider;
@@ -14,7 +13,6 @@ import org.osgi.test.cases.tb.serviceapi.Provider;
 @Service(type = Callable.class)
 public class Client implements Callable<String> {
 	@Inject
-	@MinCardinality(0)
 	@Reference
 	Instance<Provider> provider;
 

@@ -50,4 +50,10 @@ public @interface Configuration {
 	 */
 	@Nonbinding
 	String[] value() default "$";
+
+	/**
+	 * @return if configurations for the specified pids are required or not.
+	 */
+	boolean required() default false;
+
 }
