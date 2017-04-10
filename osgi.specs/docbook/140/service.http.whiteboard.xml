@@ -1109,9 +1109,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <tgroup cols="3">
         <colspec colnum="1" colwidth="2.2*"/>
 
-        <colspec colnum="2" colwidth="0.6*"/>
+        <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.5*"/>
+        <colspec colnum="3" colwidth="3.6*"/>
 
         <thead>
           <row>
@@ -1140,7 +1140,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;errorPage</code></para></entry>
 
-            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>Register the servlet as an error page for the error
             code and/or exception specified; the value may be a fully
@@ -1156,7 +1156,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;name</code></para></entry>
 
-            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>String</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>The name of the servlet. This name is used as the
             value of the
@@ -1170,7 +1170,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><para><code>String+</code></para><para><emphasis>required</emphasis></para></entry>
+            <entry><para><code>String+</code></para><para><emphasis>optional†</emphasis></para></entry>
 
             <entry><para>Registration pattern(s) for the servlet. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN"
@@ -1247,6 +1247,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
       </tgroup>
     </table>
 
+    <para><emphasis>†</emphasis> Note that at least one of the following
+    properties <emphasis>must</emphasis> be specified on <code>Servlet</code>
+    Whiteboard services: <programlisting>    osgi.http.whiteboard.servlet.pattern
+    osgi.http.whiteboard.servlet.name
+    osgi.http.whiteboard.servlet.errorPage</programlisting></para>
+    
     <para><code>Servlet</code> objects are initialized by a Http Whiteboard
     implementation before they start serving requests. The initialization is
     done by calling the <code>Servlet</code> object's
@@ -2090,6 +2096,46 @@ public class MyServletRequestListener implements ServletRequestListener {
     returned via this service, the Servlet DTO will report negative service
     IDs for these servlets to distinguish them from Servlet Whiteboard
     services.</para>
+  </section>
+
+  <section>
+    <title>Integration with Http Service contexts</title>
+    
+    <para>Some systems are implemented using a mixture of Http Whiteboard services and 
+    Http Service servlets and contexts as specified in the <xref linkend="service.http"/>.
+    When a servlet is registered with the Http Service it is either registered with a provided
+    <code>HttpContext</code> or it uses the default Http Context. These context objects cannot 
+    be identified by name or other property. However it can be desirable to register a Http Whiteboard
+    filter, listener or error page that also acts on servlets registered with the Http Service.  
+    </para>
+    
+    <para>A Http Whiteboard service which should be registered with a Http Context from the 
+    Http Service can achieve this by targeting a <code>ServletContextHelper</code> with the
+    registration property <code>osgi.http.whiteboard.context.httpservice</code>. The value
+    for this property is not further specified. Note that this mechanism only works if the 
+    Http Service is provided by the same implementation that also provides the Http Whiteboard implementation.</para>
+    
+    <para>The following example registers a servlet filter for all servlets both managed by the Http Service
+    as well as by the Http Whiteboard. The Http Service contexts are selected  
+    with the <code>osgi.http.whiteboard.context.httpservice</code> while the Http Whiteboard
+    contexts are selected with the <code>osgi.http.whiteboard.context.name</code> property. 
+    <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE,
+   property={
+     "osgi.http.whiteboard.filter.pattern=/",
+     "osgi.http.whiteboard.context.select=" +
+            "(|(osgi.http.whiteboard.context.httpservice=*)" + 
+            "  (osgi.http.whiteboard.context.name=*))"})
+public class MyFilter implements Filter
+    </programlisting>
+    It is not possible to select an individual Http Context from the Http Service. 
+    <remark>yes?</remark> Also, the Http Service implementation
+    is not required to register the Http Context objects in the service registry. The matching can be done internally
+    by the implementation.
+    </para>
+    
+    <para>Association with Http Context from the Http Service can only be done for servlet filters,
+    error pages and listeners. Servlets and resources cannot be associated with Http Contexts managed by
+    the Http Service. If this is attempted this will be reflected in the failure DTOs.</para>
   </section>
 
   <section>
