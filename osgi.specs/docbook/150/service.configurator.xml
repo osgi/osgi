@@ -519,25 +519,21 @@
     should require the Configuration Admin service through a service requirement. The configurator should not start
     processing configuration resources until it has runtime access to the Configuration Admin service.
     </para>
-        
+    
     <para>
-    When the configurator starts, it processes all started bundles and applies configurations provided by those bundles.
-    From then on, the configurator processes bundles as they enter the <code>STARTING</code> state.
-    The configurator should process as many bundles as possible in a single pass to minimize volatility for PIDs
-    where multiple configurations with different rankings are provided. The configurator uses the Configuration Admin Service
+    The configurator uses the Configuration Admin Service
     that is visible to both the configurator itself as well as the bundle that is being processed. If there are multiple 
     candidates, the service with the highest ranking is used. If there is no Configuration Admin Service visible to both
     the bundle that is processed and the configurator, configuration resources in the bundle are not processed.
     </para>
         
-    
     <para>
-    When the configurator becomes active, it must also check whether configurations that it installed previously are still valid. If the bundles that provided
-    these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
-    the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
-    to avoid volatility in the system if the actual configuration values did not change.
+    When the configurator starts, it processes all started bundles and applies configurations provided by those bundles.
+    From then on, the configurator processes bundles as they enter the <code>STARTING</code> state.
+    The configurator should process as many bundles as possible in a single pass to minimize volatility for PIDs
+    where multiple configurations with different rankings are provided. 
     </para>
-    
+        
     <para>
     Configurations remain in the system until the bundle that provided the configurations is uninstalled.
     When this happens, the configurator must uninstall the configurations from the Configuration Admin Service 
@@ -551,6 +547,17 @@
     Similarly, when a bundle containing configuration resources is updated, the configurations must be updated in the Configuration 
     Admin Service to which they were originally provided. If this service is not available the configurator must attempt to apply 
     the updated configuration when this Configuration Admin Service re-appears.</para>
+        
+    <para>
+    When the configurator becomes active, it must also check whether configurations that it installed previously are still valid. If the bundles that provided
+    these configurations have been uninstalled, the associated configurations must be removed. If a bundle is updated 
+    the associated configurations are also updated. The configurator calls <code>updateIfDifferent()</code> on the configuration
+    to avoid volatility in the system if the actual configuration values did not change.
+    </para>
+    
+    <para>When updating or removing configurations, the configurator must
+    take the <xref linkend="service.configurator-policy"/> into account. This means that for certain policy values
+    an externally modified configuration is not replaced or removed.</para>
     
     <para>
     When a bundle that provides the Configuration Admin Service is uninstalled, the configurator considers all configurations
