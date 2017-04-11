@@ -566,7 +566,7 @@
     <para>
     When a bundle that provides the Configuration Admin Service is uninstalled, the configurator considers all configurations
     previously provided to that Configuration Admin Service
-    as not not yet applied. If another Configuration Admin Service is or becomes visible to both the
+    as not yet applied. If another Configuration Admin Service is or becomes visible to both the
     configurator and the bundle containing configuration resources, the configurator will provide the configurations to this
     Configuration Admin Service as new. 
     </para>
