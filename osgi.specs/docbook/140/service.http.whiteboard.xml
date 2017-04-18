@@ -1665,11 +1665,49 @@ public class MyFilter implements Filter {
     <para>A whiteboard <xref
     linkend="org.osgi.service.http.whiteboard.Preprocessor"
     xrefstyle="hyperlink"/> service can be registered to handle such cases. The <code>Preprocessor</code>
-    service supports the same service registration properties as servlet filters, defined in 
-    <xref
-    linkend="service.http.whiteboard.filter.properties.table"
-    xrefstyle="template:Table %n on page %p"/> and is invoked before request dispatching is performed.
-    If multiple pre-processors match a request they are invoked in the order as described 
+    service only supports the following service registration properties:</para>
+    
+    <table>
+      <title>Service properties for <code>Preprocessor</code> Whiteboard
+      services.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.4*"/>
+
+        <colspec colnum="2" colwidth="0.7*"/>
+
+        <colspec colnum="3" colwidth="3.4*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>filter.init.*</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>Properties starting with this prefix are passed as
+            init parameters to the <code>Filter.init()</code>method. The
+            <code>filter.init.</code> prefix is removed from the parameter
+            name. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    
+    <para>
+    A <code>Preprocessor</code> is invoked before request dispatching is performed.
+    If multiple pre-processors are registered they are invoked in the order as described 
     for servlet filters.
     </para>
     
@@ -2137,14 +2175,14 @@ public class MyServletRequestListener implements ServletRequestListener {
     services.</para>
   </section>
 
-  <section>
+  <section xml:id="service.http.whiteboard.httpservice.integration">
     <title>Integration with Http Service contexts</title>
     
     <para>Some systems are implemented using a mixture of Http Whiteboard services and 
     Http Service servlets and contexts as specified in the <xref linkend="service.http"/>.
     When a servlet is registered with the Http Service it is either registered with a provided
-    <code>HttpContext</code> or it uses the default Http Context. These context objects cannot 
-    be identified by name or other property. However it can be desirable to register a Http Whiteboard
+    <code>HttpContext</code> or it uses the default Http Context. 
+    It can be desirable to register a Http Whiteboard
     filter, listener or error page that also acts on servlets registered with the Http Service.  
     </para>
     
@@ -2154,20 +2192,18 @@ public class MyServletRequestListener implements ServletRequestListener {
     for this property is not further specified. Note that this mechanism only works if the 
     Http Service is provided by the same implementation that also provides the Http Whiteboard implementation.</para>
     
-    <para>The following example registers a servlet filter for all servlets both managed by the Http Service
-    as well as by the Http Whiteboard. The Http Service contexts are selected  
-    with the <code>osgi.http.whiteboard.context.httpservice</code> while the Http Whiteboard
-    contexts are selected with the <code>osgi.http.whiteboard.context.name</code> property. 
+    <para>The following example registers a servlet filter for all servlets managed by the Http Service. 
     <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE,
    property={
      "osgi.http.whiteboard.filter.pattern=/",
      "osgi.http.whiteboard.context.select=" +
-            "(|(osgi.http.whiteboard.context.httpservice=*)" + 
-            "  (osgi.http.whiteboard.context.name=*))"})
-public class MyFilter implements Filter
-    </programlisting>
-    It is not possible to select an individual Http Context from the Http Service. 
-    <remark>yes?</remark> Also, the Http Service implementation
+            "(osgi.http.whiteboard.context.httpservice=*)"})
+public class MyFilter implements Filter</programlisting>
+
+    This specification does not provide a way to select in individual Http Context from the Http Service,
+    however a Http Whiteboard implementation may provide an implementation-specific mechanism to do this.
+     
+    Also, the Http Service implementation
     is not required to register the Http Context objects in the service registry. The matching can be done internally
     by the implementation.
     </para>
