@@ -1690,6 +1690,27 @@ public class MyFilter implements Filter {
 
         <tbody>
           <row>
+            <entry><code>osgi.http.whiteboard.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>The value of this service property is an LDAP-style
+            filter expression to select the Http Whiteboard implementation(s)
+            to handle this Whiteboard service. The LDAP filter is used to
+            match <xref
+            linkend="org.osgi.service.http.runtime.HttpServiceRuntime"
+            xrefstyle="hyperlink"/> services. Each Http Whiteboard
+            <emphasis>implementation</emphasis> exposes exactly one
+            <code>HttpServiceRuntime</code> service. This property is used to
+            associate the Whiteboard service with the Http Whiteboard
+            implementation that registered the <code>HttpServiceRuntime</code>
+            service. If this property is not specified, all Http Whiteboard
+            implementations can handle the service. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
             <entry><code>filter.init.*</code></entry>
 
             <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
