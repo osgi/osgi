@@ -13,7 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.jar.Manifest;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -36,10 +38,14 @@ import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
-	public static final String	DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
+	public static final String														DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
+
+	private ServiceTracker<HttpServiceRuntime,ServiceReference<HttpServiceRuntime>>	runtimeTracker;
 
 	protected RequestInfoDTO calculateRequestInfoDTO(String string) {
 		HttpServiceRuntime httpServiceRuntime = getHttpServiceRuntime();
@@ -80,10 +86,43 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		return null;
 	}
 
+	protected ErrorPageDTO getErrorPageDTOByException(String context,
+			String exception) {
+		ServletContextDTO servletContextDTO = getServletContextDTOByName(
+				context);
+
+		if (servletContextDTO == null) {
+			return null;
+		}
+
+		for (ErrorPageDTO errorPageDTO : servletContextDTO.errorPageDTOs) {
+			for (String ex : errorPageDTO.exceptions) {
+				if (exception.equals(ex)) {
+					return errorPageDTO;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	protected FailedErrorPageDTO getFailedErrorPageDTOByName(String name) {
 		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
 			if (name.equals(failedErrorPageDTO.name)) {
 				return failedErrorPageDTO;
+			}
+		}
+
+		return null;
+	}
+
+	protected FailedErrorPageDTO getFailedErrorPageDTOByException(
+			String exception) {
+		for (FailedErrorPageDTO failedErrorPageDTO : getFailedErrorPageDTOs()) {
+			for (String ex : failedErrorPageDTO.exceptions) {
+				if (exception.equals(ex)) {
+					return failedErrorPageDTO;
+				}
 			}
 		}
 
@@ -429,9 +468,45 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
 			bundles.add(bundle);
 		}
+		this.runtimeTracker = new ServiceTracker<>(getContext(),
+				HttpServiceRuntime.class,
+				new ServiceTrackerCustomizer<HttpServiceRuntime,ServiceReference<HttpServiceRuntime>>() {
+
+					@Override
+					public ServiceReference<HttpServiceRuntime> addingService(
+							ServiceReference<HttpServiceRuntime> reference) {
+						final Object obj = reference
+								.getProperty("service.changecount");
+						if (obj != null) {
+							httpRuntimeChangeCount
+									.set(Long.valueOf(obj.toString()));
+						}
+						return reference;
+					}
+
+					@Override
+					public void modifiedService(
+							ServiceReference<HttpServiceRuntime> reference,
+							ServiceReference<HttpServiceRuntime> service) {
+						addingService(reference);
+					}
+
+					@Override
+					public void removedService(
+							ServiceReference<HttpServiceRuntime> reference,
+							ServiceReference<HttpServiceRuntime> service) {
+						httpRuntimeChangeCount.set(-1);
+					}
+
+				});
+		this.runtimeTracker.open();
 	}
 
 	protected void tearDown() throws Exception {
+		if (this.runtimeTracker != null) {
+			this.runtimeTracker.close();
+			this.runtimeTracker = null;
+		}
 		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
 			serviceRegistration.unregister();
 		}
@@ -448,4 +523,21 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	protected List<Bundle> bundles = new ArrayList<Bundle>();
 	protected Set<ServiceRegistration<?>> serviceRegistrations = new HashSet<ServiceRegistration<?>>();
 
+	final AtomicLong						httpRuntimeChangeCount	= new AtomicLong(
+			-1);
+
+	protected long getHttpRuntimeChangeCount() {
+		return httpRuntimeChangeCount.longValue();
+	}
+
+	protected long waitForRegistration(final long previousCount) {
+		while (this.httpRuntimeChangeCount.longValue() == previousCount) {
+			try {
+				Thread.sleep(20L);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		return this.httpRuntimeChangeCount.longValue();
+	}
 }

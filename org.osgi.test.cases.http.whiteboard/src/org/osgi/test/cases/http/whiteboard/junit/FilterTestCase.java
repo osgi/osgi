@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.servlet.AsyncContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,13 +18,16 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.HttpService;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedFilterDTO;
 import org.osgi.service.http.runtime.dto.FilterDTO;
@@ -811,4 +815,59 @@ public class FilterTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals("cac", request("a"));
 	}
 
+	/**
+	 * Tests for 1.1 Update
+	 */
+	
+	/**
+	 * Filters for HttpService servlets.
+	 */
+	public void testHttpServiceServletAndWhiteboardFilter() throws Exception {
+		final String path = "/tesths";
+		final HttpService service = this.getHttpService();
+		service.registerServlet(path, new HttpServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void doGet(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				resp.getWriter().print("helloworld");
+				resp.flushBuffer();
+			}
+		}, null, null);
+
+		try {
+			Dictionary<String,Object> properties = new Hashtable<String,Object>();
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN,
+					path);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			long before = this.getHttpRuntimeChangeCount();
+			this.serviceRegistrations.add(this.getContext()
+					.registerService(Filter.class, new Filter() {
+
+						@Override
+						public void init(FilterConfig arg0)
+								throws ServletException {}
+
+						@Override
+						public void doFilter(ServletRequest req,
+								ServletResponse resp, FilterChain chain)
+								throws IOException, ServletException {
+							resp.getWriter().write("FILTER-");
+							chain.doFilter(req, resp);
+						}
+
+						@Override
+						public void destroy() {}
+					}, properties));
+			this.waitForRegistration(before);
+			assertEquals("FILTER-helloworld", this.request(path));
+		} finally {
+			service.unregister(path);
+		}
+	}
 }

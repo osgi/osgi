@@ -3,9 +3,12 @@ package org.osgi.test.cases.http.whiteboard.junit;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
@@ -26,12 +29,16 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionIdListener;
 import javax.servlet.http.HttpSessionListener;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.http.HttpService;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedListenerDTO;
 import org.osgi.service.http.runtime.dto.ListenerDTO;
+import org.osgi.service.http.runtime.dto.ServletContextDTO;
+import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockSCL;
 import org.osgi.test.cases.http.whiteboard.junit.mock.MockServlet;
@@ -400,4 +407,236 @@ public class ListenerTestCase extends BaseHttpWhiteboardTestCase {
 		assertTrue(invoked.get());
 	}
 
+	/**
+	 * Tests for 1.1 Update
+	 */
+
+	/**
+	 * Servlet Request listener for HttpService servlets.
+	 */
+	public void testHttpServiceServletAndRequestListener() throws Exception {
+		final String path = "/tesths";
+		final HttpService service = this.getHttpService();
+		service.registerServlet(path, new HttpServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void doGet(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				resp.getWriter().print("helloworld");
+				resp.flushBuffer();
+			}
+		}, null, null);
+
+		try {
+			Dictionary<String,Object> properties = new Hashtable<String,Object>();
+			properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER,
+					"true");
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			long before = this.getHttpRuntimeChangeCount();
+			final AtomicBoolean in = new AtomicBoolean(false);
+			final AtomicBoolean out = new AtomicBoolean(false);
+			this.serviceRegistrations.add(this.getContext().registerService(
+					ServletRequestListener.class, new ServletRequestListener() {
+
+						@Override
+						public void requestDestroyed(ServletRequestEvent arg0) {
+							in.set(true);
+						}
+
+						@Override
+						public void requestInitialized(
+								ServletRequestEvent arg0) {
+							out.set(true);
+						}
+
+					}, properties));
+			this.waitForRegistration(before);
+
+			assertEquals("helloworld", this.request(path));
+			assertTrue(in.get());
+			assertTrue(out.get());
+		} finally {
+			service.unregister(path);
+		}
+	}
+
+	/**
+	 * Servlet Context listener for HttpService context.
+	 */
+	public void testHttpServiceAndContextListener() throws Exception {
+		Dictionary<String,Object> properties = new Hashtable<String,Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER,
+				"true");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+				"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+						+ "=*)");
+		long before = this.getHttpRuntimeChangeCount();
+		final AtomicBoolean in = new AtomicBoolean(false);
+		final AtomicBoolean out = new AtomicBoolean(false);
+		final ServiceRegistration<ServletContextListener> reg = this
+				.getContext().registerService(ServletContextListener.class,
+						new ServletContextListener() {
+
+							@Override
+							public void contextDestroyed(
+									ServletContextEvent arg0) {
+								out.set(true);
+							}
+
+							@Override
+							public void contextInitialized(
+									ServletContextEvent arg0) {
+								in.set(true);
+							}
+
+						}, properties);
+		before = this.waitForRegistration(before);
+		assertTrue(in.get());
+		assertFalse(out.get());
+
+		in.set(false);
+		reg.unregister();
+		this.waitForRegistration(before);
+		assertFalse(in.get());
+		assertTrue(out.get());
+	}
+
+	/**
+	 * Registration of listeners not covered in other tests.
+	 */
+	public void testHttpServiceAndOtherListeners() throws Exception {
+		final String path = "/tesths";
+		final HttpService service = this.getHttpService();
+		service.registerServlet(path, new HttpServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void doGet(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				resp.getWriter().print("helloworld");
+				resp.flushBuffer();
+			}
+		}, null, null);
+
+		try {
+			Dictionary<String,Object> properties = new Hashtable<String,Object>();
+			properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER,
+					"true");
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			long before = this.getHttpRuntimeChangeCount();
+
+			this.serviceRegistrations.add(this.getContext().registerService(
+					ServletContextAttributeListener.class,
+					new ServletContextAttributeListener() {
+
+						@Override
+						public void attributeReplaced(
+								ServletContextAttributeEvent arg0) {}
+
+						@Override
+						public void attributeRemoved(
+								ServletContextAttributeEvent arg0) {}
+
+						@Override
+						public void attributeAdded(
+								ServletContextAttributeEvent arg0) {}
+					}, properties));
+			before = this.waitForRegistration(before);
+
+			this.serviceRegistrations.add(this.getContext().registerService(
+					ServletRequestAttributeListener.class,
+					new ServletRequestAttributeListener() {
+
+						@Override
+						public void attributeReplaced(
+								ServletRequestAttributeEvent arg0) {}
+
+						@Override
+						public void attributeRemoved(
+								ServletRequestAttributeEvent arg0) {}
+
+						@Override
+						public void attributeAdded(
+								ServletRequestAttributeEvent arg0) {}
+					}, properties));
+			before = this.waitForRegistration(before);
+
+			this.serviceRegistrations.add(this.getContext().registerService(
+					HttpSessionListener.class, new HttpSessionListener() {
+
+						@Override
+						public void sessionCreated(HttpSessionEvent arg0) {}
+
+						@Override
+						public void sessionDestroyed(HttpSessionEvent arg0) {}
+					}, properties));
+			before = this.waitForRegistration(before);
+
+			this.serviceRegistrations.add(this.getContext().registerService(
+					HttpSessionAttributeListener.class,
+					new HttpSessionAttributeListener() {
+
+						@Override
+						public void attributeAdded(
+								HttpSessionBindingEvent arg0) {}
+
+						@Override
+						public void attributeRemoved(
+								HttpSessionBindingEvent arg0) {}
+
+						@Override
+						public void attributeReplaced(
+								HttpSessionBindingEvent arg0) {}
+					}, properties));
+			before = this.waitForRegistration(before);
+
+			this.serviceRegistrations.add(this.getContext().registerService(
+					HttpSessionIdListener.class, new HttpSessionIdListener() {
+
+						@Override
+						public void sessionIdChanged(HttpSessionEvent arg0,
+								String arg1) {}
+					}, properties));
+			before = this.waitForRegistration(before);
+
+			// search DTO for http service
+			final ServletContextDTO[] dtos = this.getHttpServiceRuntime()
+					.getRuntimeDTO().servletContextDTOs;
+			ServletContextDTO found = null;
+			for (final ServletContextDTO d : dtos) {
+				for (final ServletDTO sd : d.servletDTOs) {
+					if (sd.patterns.length > 0 && path.equals(sd.patterns[0])) {
+						found = d;
+						break;
+					}
+				}
+			}
+			assertNotNull(found);
+			assertEquals(5, found.listenerDTOs.length);
+			final Set<String> types = new HashSet<>();
+			for (final ListenerDTO d : found.listenerDTOs) {
+				for (final String name : d.types) {
+					types.add(name);
+				}
+			}
+			assertEquals(5, types.size());
+			assertTrue(types
+					.contains(ServletContextAttributeListener.class.getName()));
+			assertTrue(types
+					.contains(ServletRequestAttributeListener.class.getName()));
+			assertTrue(types.contains(HttpSessionListener.class.getName()));
+			assertTrue(types
+					.contains(HttpSessionAttributeListener.class.getName()));
+			assertTrue(types.contains(HttpSessionIdListener.class.getName()));
+		} finally {
+			service.unregister(path);
+		}
+	}
 }

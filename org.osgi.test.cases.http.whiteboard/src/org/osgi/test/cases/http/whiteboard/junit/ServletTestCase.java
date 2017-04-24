@@ -15,17 +15,25 @@
  */
 package org.osgi.test.cases.http.whiteboard.junit;
 
+import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.servlet.AsyncContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -34,19 +42,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
+import org.osgi.service.http.NamespaceException;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedErrorPageDTO;
 import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
+import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
+import org.osgi.test.cases.http.whiteboard.junit.mock.MockServlet;
 
 public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 
@@ -1097,4 +1119,302 @@ public class ServletTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals(HttpServletResponse.SC_BAD_GATEWAY + "", response.get("responseCode").get(0));
 	}
 
+	/**
+	 * Tests for 1.1 Update
+	 */
+
+	/**
+	 * Servlet registrations
+	 */
+	public void testServletRegistration() throws Exception {
+		// new in 1.1: servlet needs only one of those: pattern, name, error
+		// page
+		// previously pattern was always required
+
+		BundleContext context = getContext();
+
+		long before = this.getHttpRuntimeChangeCount();
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
+				"myname");
+		serviceRegistrations.add(context.registerService(Servlet.class,
+				new HttpServlet() {}, properties));
+		before = this.waitForRegistration(before);
+
+		properties = new Hashtable<>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
+				"/mypattern");
+		serviceRegistrations.add(context.registerService(Servlet.class,
+				new HttpServlet() {}, properties));
+		before = this.waitForRegistration(before);
+
+		properties = new Hashtable<>();
+		properties.put(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
+				"404");
+		serviceRegistrations.add(context.registerService(Servlet.class,
+				new HttpServlet() {}, properties));
+		before = this.waitForRegistration(before);
+
+		// two servlets and one error page should be registered now
+		final ServletContextDTO dto = this.getServletContextDTOByName(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		assertEquals(1, dto.errorPageDTOs.length);
+		assertEquals(404L, dto.errorPageDTOs[0].errorCodes[0]);
+		assertEquals(2, dto.servletDTOs.length);
+		int indexName = dto.servletDTOs[0].patterns.length == 0 ? 0 : 1;
+		int indexPattern = indexName == 0 ? 1 : 0;
+		assertEquals("myname", dto.servletDTOs[indexName].name);
+		assertEquals(0, dto.servletDTOs[indexName].patterns.length);
+
+		assertEquals(1, dto.servletDTOs[indexPattern].patterns.length);
+		assertEquals("/mypattern", dto.servletDTOs[indexPattern].patterns[0]);
+	}
+
+	private void setupUploadServlet(final CountDownLatch receivedLatch,
+			final Map<String,Long> contents)
+			throws Exception {
+		final Dictionary<String,Object> servletProps = new Hashtable<String,Object>();
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_PATTERN, "/post");
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED,
+				Boolean.TRUE);
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE, 1024L);
+
+		final Servlet uploadServlet = new HttpServlet() {
+			@Override
+			protected void doPost(HttpServletRequest req,
+					HttpServletResponse resp)
+					throws IOException, ServletException {
+				try {
+					final Collection<Part> parts = req.getParts();
+					for (final Part p : parts) {
+						contents.put(p.getName(), p.getSize());
+					}
+					resp.setStatus(201);
+				} finally {
+					receivedLatch.countDown();
+				}
+
+			}
+		};
+
+		long before = this.getHttpRuntimeChangeCount();
+		serviceRegistrations.add(getContext().registerService(
+				Servlet.class.getName(), uploadServlet, servletProps));
+		this.waitForRegistration(before);
+	}
+
+	private void postContent(final char c, final long length,
+			final int expectedRT) throws IOException {
+		final URL url = getServerURL("/post");
+		final CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			final HttpPost httppost = new HttpPost(url.toExternalForm());
+
+			final StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < length; i++) {
+				sb.append(c);
+			}
+			final StringBody text = new StringBody(sb.toString(),
+					ContentType.TEXT_PLAIN);
+
+			final HttpEntity reqEntity = MultipartEntityBuilder.create()
+					.addPart("text", text)
+					.build();
+
+
+			httppost.setEntity(reqEntity);
+
+			final CloseableHttpResponse response = httpclient.execute(httppost);
+			try {
+				final HttpEntity resEntity = response.getEntity();
+				EntityUtils.consume(resEntity);
+				assertEquals(expectedRT,
+						response.getStatusLine().getStatusCode());
+			} finally {
+				response.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+	}
+
+	public void testUpload() throws Exception {
+		final CountDownLatch receivedLatch = new CountDownLatch(1);
+		final Map<String,Long> contents = new HashMap<>();
+		setupUploadServlet(receivedLatch, contents);
+
+		postContent('a', 500, 201);
+		assertTrue(receivedLatch.await(5, TimeUnit.SECONDS));
+		assertEquals(1, contents.size());
+		assertEquals(500L, (long) contents.get("text"));
+	}
+
+	public void testMaxFileSize() throws Exception {
+		final CountDownLatch receivedLatch = new CountDownLatch(1);
+		final Map<String,Long> contents = new HashMap<>();
+		setupUploadServlet(receivedLatch, contents);
+
+		postContent('b', 2048, 500);
+		assertTrue(receivedLatch.await(5, TimeUnit.SECONDS));
+		assertTrue(contents.isEmpty());
+	}
+
+	/**
+	 * Registration of servlet with http service (not allowed).
+	 */
+	public void testHttpServiceAndServlet() throws Exception {
+		final String path = "/tesths";
+		Dictionary<String,Object> properties = new Hashtable<String,Object>();
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
+				path);
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+				"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+						+ "=*)");
+		final long before = this.getHttpRuntimeChangeCount();
+		this.serviceRegistrations.add(this.getContext().registerService(
+				Servlet.class, new MockServlet(), properties));
+		this.waitForRegistration(before);
+
+		boolean found = false;
+		for (final FailedServletDTO fsd : this.getHttpServiceRuntime()
+				.getRuntimeDTO().failedServletDTOs) {
+			if (fsd.patterns.length > 0 && path.equals(fsd.patterns[0])) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue(found);
+	}
+
+	private void registerDummyServletInHttpService()
+			throws ServletException, NamespaceException {
+		final String path = "/tesths";
+		final HttpService service = this.getHttpService();
+		service.registerServlet(path, new HttpServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void doGet(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				resp.getWriter().print("helloworld");
+				resp.flushBuffer();
+			}
+		}, null, null);
+	}
+
+	private void unregisterDummyServletFromHttpService() {
+		this.getHttpService().unregister("/tesths");
+	}
+
+	private ServletContextDTO getServletContextDTOForDummyServlet() {
+		for (final ServletContextDTO dto : this.getHttpServiceRuntime()
+				.getRuntimeDTO().servletContextDTOs) {
+			for (final ServletDTO sd : dto.servletDTOs) {
+				if (sd.patterns.length > 0
+						&& "/tesths".equals(sd.patterns[0])) {
+					return dto;
+				}
+			}
+		}
+		fail("Servlet context for http service not found");
+		return null;
+	}
+
+	/**
+	 * Registration of named servlet with http service (allowed) and named
+	 * servlet and pattern with http service (not allowed)
+	 */
+	public void testHttpServiceAndNamedServlet() throws Exception {
+		registerDummyServletInHttpService();
+		try {
+			final String name1 = "testname1";
+			final String name2 = "testname2";
+			Dictionary<String,Object> properties = new Hashtable<String,Object>();
+			properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
+					name1);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			long before = this.getHttpRuntimeChangeCount();
+			this.serviceRegistrations.add(this.getContext().registerService(
+					Servlet.class, new MockServlet(), properties));
+			before = this.waitForRegistration(before);
+
+			properties = new Hashtable<>();
+			properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
+					name2);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
+					"/" + name2);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			this.serviceRegistrations.add(this.getContext().registerService(
+					Servlet.class, new MockServlet(), properties));
+			before = this.waitForRegistration(before);
+
+			assertNull(this.getFailedServletDTOByName(name1));
+			assertNotNull("" + this.getHttpServiceRuntime().getRuntimeDTO(),
+					this.getFailedServletDTOByName(name2));
+
+			final ServletContextDTO scDTO = getServletContextDTOForDummyServlet();
+			assertNotNull(getServletDTOByName(scDTO.name, name1));
+			assertNull(getServletDTOByName(scDTO.name, name2));
+		} finally {
+			unregisterDummyServletFromHttpService();
+		}
+	}
+
+	/**
+	 * Registration of error page with http service (allowed) and error page and
+	 * pattern with http service (not allowed)
+	 */
+	public void testHttpServiceAndErrorPage() throws Exception {
+		registerDummyServletInHttpService();
+		try {
+			final String name1 = "testname1";
+			final String name2 = "testname2";
+			Dictionary<String,Object> properties = new Hashtable<String,Object>();
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
+					name1);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			long before = this.getHttpRuntimeChangeCount();
+			this.serviceRegistrations.add(this.getContext().registerService(
+					Servlet.class, new MockServlet(), properties));
+			before = this.waitForRegistration(before);
+
+			properties = new Hashtable<>();
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
+					name2);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN,
+					"/" + name2);
+			properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+					"(" + HttpWhiteboardConstants.HTTP_SERVICE_CONTEXT_PROPERTY
+							+ "=*)");
+			this.serviceRegistrations.add(this.getContext().registerService(
+					Servlet.class, new MockServlet(), properties));
+			before = this.waitForRegistration(before);
+
+			assertNull(this.getFailedErrorPageDTOByException(name1));
+			assertNotNull("" + this.getHttpServiceRuntime().getRuntimeDTO(),
+					this.getFailedErrorPageDTOByException(name2));
+
+			final ServletContextDTO scDTO = getServletContextDTOForDummyServlet();
+			assertNotNull(getErrorPageDTOByException(scDTO.name, name1));
+			assertNull(getErrorPageDTOByException(scDTO.name, name2));
+		} finally {
+			unregisterDummyServletFromHttpService();
+		}
+	}
 }
