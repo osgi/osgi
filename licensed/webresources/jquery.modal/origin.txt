@@ -1,1 +1,0 @@
-https://github.com/kylefox/jquery-modal/tree/v0.8.0

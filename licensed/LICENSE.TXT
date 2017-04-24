@@ -180,6 +180,40 @@ URL                     http://www.easymock.org/
 License                 http://www.opensource.org/licenses/apache-license.php
 Modifications           none
 
+highlight.js -----------------------------------------------------------------
+Copyright               Copyright (c) 2006, Ivan Sagalaev
+Used                    Used in HTML Spec production
+URL                     https://highlightjs.org/
+License                 https://github.com/isagalaev/highlight.js/blob/master/LICENSE
+Modifications           none
+
+jquery -----------------------------------------------------------------
+Copyright               Copyright JS Foundation and other contributors, https://js.foundation/
+Used                    Used in HTML Spec production
+URL                     https://jquery.org/
+License                 https://js.foundation/pdf/ip-policy.pdf
+Modifications           none
+
+jquery.modal -----------------------------------------------------------------
+Copyright               Copyright (c) 2012 Kyle Fox
+Used                    Used in HTML Spec production
+URL                     http://jquerymodal.com/
+License                 http://opensource.org/licenses/mit-license.php
+Modifications           none
+
+js-cookie -----------------------------------------------------------------
+Copyright               Copyright 2014 Klaus Hartl
+Used                    Used in HTML Spec production
+URL                     https://github.com/js-cookie/js-cookie
+License                 http://opensource.org/licenses/mit-license.php
+Modifications           none
+
+senna.js -----------------------------------------------------------------
+Copyright               Copyright (c) 2014, Liferay Inc.
+Used                    Used in HTML Spec production
+URL                     http://sennajs.com/
+License                 http://opensource.org/licenses/mit-license.php
+Modifications           none
 
 
 

@@ -277,73 +277,99 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
   }
 }
 
-def copyHtmlResources(toDir, book) {
-  return tasks.create("copyHtmlResources-${book}", Copy) {
-    from file('docbook/xsl/html-resources')
-    into toDir
-    from (new File(bnd.licensed, 'webresources')) {
-      include 'highlight.js/highlight.pack.js','jquery/jquery-3.2.1.slim.min.js','jquery.modal/jquery.modal.min.js','js-cookie/js.cookie.js','senna/senna-min.js'
-      into 'js'
-      eachFile { cfd ->
-        cfd.path = "js/${cfd.name}"
-      }
-    }
-    from (new File(bnd.licensed, 'webresources')) {
-      include 'highlight.js/styles/github.css'
-      into 'css'
-      eachFile { cfd ->
-        cfd.path = "css/${cfd.name}"
-      }
-    }
-    includeEmptyDirs = false
-  }
-}
+tasks.addRule('Pattern: <name>.htmlresources: Copy the HTML resources for the book <name>.') { taskName ->
+  if (taskName.endsWith('.htmlresources')) {
+    task(taskName, type: Copy) {
+      ext.book = taskName - '.htmlresources'
+      description "Copy the HTML resources for the book ${book}."
+      group 'documentation'
 
-def rasterizeSVGs(destinationDir, book, booktask) {
-  return tasks.create("rasterizeSVGs-${book}") {
-    def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
-    def imagesFile = new File(temporaryDir, 'images.txt')
-    def svgFiles = []
-    def outputDir = new File(destinationDir, 'images');
-
-    dependsOn booktask
-    inputs.files imagesXSL, svgFiles
-    outputs.dir outputDir
-
-    doFirst {
-      ant.xslt('style': imagesXSL,
-        'in': booktask.bookxml,
-        'out': imagesFile) {
-        classpath('location': bnd.saxon)
-        factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+      from file('docbook/xsl/html-resources')
+      into new File(buildDir, "html/${book}")
+      from (new File(bnd.licensed, 'webresources')) {
+        include 'highlight.js/highlight.pack.js','jquery/jquery-3.2.1.slim.min.js','jquery.modal/jquery.modal.min.js','js-cookie/js.cookie.js','senna.js/senna-min.js'
+        into 'js'
+        eachFile { cfd ->
+          cfd.path = "js/${cfd.name}"
+        }
       }
-
-      imagesFile.eachLine { line ->
-        svgFiles << new File(file("docbook/${book}"), line)
+      from (new File(bnd.licensed, 'webresources')) {
+        include 'highlight.js/styles/github.css'
+        into 'css'
+        eachFile { cfd ->
+          cfd.path = "css/${cfd.name}"
+        }
       }
-    }
-    doLast {
-      javaexec {
-        systemProperty('scale', '2')
-        systemProperty('dpi', '300')
-        systemProperty('JAVA_FONTS', file('fonts'))
-        classpath sourceSets.main.runtimeClasspath
-        main = 'org.osgi.tools.rasterizer.RasterizerMain'
-        minHeapSize = '1024m'
-        maxHeapSize = '2048m'
-        args outputDir
-        args svgFiles
-      }.assertNormalExitValue()
+      includeEmptyDirs = false
     }
   }
 }
 
-def zipHtmlSpec(toDir, sourceDir, book, version) {
-  return tasks.create("zipHtmlSpec-${book}", Zip) {
-    from sourceDir
-    include '**/*'
-    archiveName "osgi.${book}.html-${version}.zip"
-    destinationDir(toDir)
+tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') { taskName ->
+  if (taskName.endsWith('.rasterize')) {
+    task(taskName) {
+      ext.book = taskName - '.rasterize'
+      description "Rasterize SVGs for the book ${book}."
+      group 'documentation'
+
+      def xmltask = tasks.getByPath("${book}.xml")
+      dependsOn xmltask
+
+      def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
+      def imagesFile = new File(temporaryDir, 'images.txt')
+      def destinationDir = new File(buildDir, "html/${book}/images")
+
+      inputs.files imagesXSL, fileTree('dir': "docbook", 'include': '**/*.svg')
+      outputs.dir destinationDir
+
+      def svgFiles = []
+
+      doFirst {
+        project.mkdir(destinationDir)
+
+        ant.xslt('style': imagesXSL,
+          'in': xmltask.bookxml,
+          'out': imagesFile) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+        }
+
+        imagesFile.eachLine { line ->
+          svgFiles << file("docbook/${book}/${line}")
+        }
+      }
+      doLast {
+        javaexec {
+          systemProperty('scale', '2')
+          systemProperty('dpi', '300')
+          systemProperty('JAVA_FONTS', file('fonts'))
+          classpath sourceSets.main.runtimeClasspath
+          main = 'org.osgi.tools.rasterizer.RasterizerMain'
+          minHeapSize = '1024m'
+          maxHeapSize = '2048m'
+          args destinationDir
+          args svgFiles
+        }.assertNormalExitValue()
+      }
+    }
+  }
+}
+
+tasks.addRule('Pattern: <name>.zip: Create a ZIP archive of the HTML produced for the book <name>.') { taskName ->
+  if (taskName.endsWith('.zip')) {
+    task(taskName, type: Zip) {
+      ext.book = taskName - '.zip'
+      description "Create a ZIP archive of the HTML produced for the book ${book}."
+      group 'documentation'
+
+      def htmltask = tasks.getByPath("${book}.html")
+      dependsOn htmltask
+
+      from new File(buildDir, "html/${book}")
+      include '**/*'
+      archiveName "osgi.${book}-${version}-html.zip"
+      destinationDir(buildDir)
+    }
   }
 }
 
@@ -353,26 +379,28 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
       ext.book = taskName - '.html'
       description "Generate the html files for the book ${book}."
       group 'documentation'
-      def booktask = tasks.getByPath("${book}.xml")
-      def destinationDir = new File(buildDir, "html/${book}")
 
-      dependsOn compileJava, booktask, copyHtmlResources(destinationDir, book), rasterizeSVGs(destinationDir, book, booktask)
-      finalizedBy zipHtmlSpec(buildDir, destinationDir, book, version)
+      def htmlresourcestask = tasks.getByPath("${book}.htmlresources")
+      def rasterizetask = tasks.getByPath("${book}.rasterize")
+      dependsOn htmlresourcestask, rasterizetask
 
       def stylesheet = file('docbook/xsl/custom-html.xsl')
       def commonXSL = file('docbook/xsl/custom-html-common.xsl')
-      def profiler = file('docbook/xsl/custom-html-profile.xsl')
+      def profileXSL = file('docbook/xsl/custom-html-profile.xsl')
+      def destinationDir = new File(buildDir, "html/${book}")
 
-      inputs.files booktask, stylesheet, commonXSL, profiler
+      inputs.files stylesheet, commonXSL, profileXSL
       outputs.dir destinationDir
 
       doFirst {
         project.mkdir(destinationDir)
       }
       doLast {
+        def xmltask = tasks.getByPath("${book}.xml")
         def tmpxml = new File(temporaryDir, 'book.xml')
-        ant.xslt('style': profiler,
-          'in': booktask.bookxml,
+
+        ant.xslt('style': profileXSL,
+          'in': xmltask.bookxml,
           'out': tmpxml) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
@@ -419,10 +447,5 @@ task('specifications') {
   description 'Generates all the specifications.'
   group 'documentation'
   dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf'
-}
-
-task('htmls') {
-  description 'Generates all the html for all specifications.'
-  group 'documentation'
-  dependsOn 'core.html', 'cmpn.html', 'enterprise.html', 'residential.html'
+  dependsOn 'core.zip', 'cmpn.zip', 'enterprise.zip', 'residential.zip'
 }
