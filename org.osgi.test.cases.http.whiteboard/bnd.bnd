@@ -30,7 +30,8 @@ Include-Resource					= \
 
 -runproperties = ${runproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
-	org.osgi.service.http.port=8080
+	org.osgi.service.http.port=8080, \
+	org.apache.felix.http.whiteboard.changecount.delay=0
 
 Test-Cases							= ${testcases}
 -signaturetest = \
