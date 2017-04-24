@@ -1,0 +1,1 @@
+https://github.com/liferay/senna.js/blob/v1.2.0/build/globals/senna-min.js

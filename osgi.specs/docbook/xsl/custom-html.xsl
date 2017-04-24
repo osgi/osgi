@@ -16,11 +16,13 @@
 <!--  Parameter settings                                          -->
 <!--==============================================================-->
 <xsl:param name="table.borders.with.css" select="1" />
-<xsl:param name="table.cell.border.style">solid</xsl:param>
+<xsl:param name="table.cell.border.style">none</xsl:param>
+<xsl:param name="table.frame.border.style">none</xsl:param>
 <xsl:param name="generate.css.header" select="1" />
 <xsl:param name="webhelp.include.search.tab" select="0" />
 <xsl:param name="generate.section.toc.level" select="0"/>
 <xsl:param name="chunk.section.depth" select="1" />
+<xsl:param name="chunk.quietly" select="0" />
 
 <xsl:param name="appendix.autolabel">0</xsl:param>
 <xsl:param name="chapter.autolabel">1</xsl:param>
@@ -228,6 +230,36 @@ example before
     <xsl:otherwise>
       <xsl:value-of select="$class"/>
     </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="d:chapter|d:part|d:sect1|d:sect2|d:sect3|d:sect4|d:sect5|d:section" mode="label.markup">
+  <xsl:variable name="number">
+    <xsl:apply-imports/>
+  </xsl:variable>
+
+  <xsl:if test="string($number) != ''">
+    <span class="number"><xsl:value-of select="$number"/></span>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="anchor">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="conditional" select="1"/>
+
+  <xsl:choose>
+    <xsl:when test="$generate.id.attributes != 0">
+      <!-- No named anchors output when this param is set -->
+    </xsl:when>
+    <xsl:when test="$conditional = 0 or $node/@id or $node/@xml:id">
+      <a class="anchor">
+        <xsl:attribute name="id">
+          <xsl:call-template name="object.id">
+            <xsl:with-param name="object" select="$node"/>
+          </xsl:call-template>
+        </xsl:attribute>
+      </a>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 

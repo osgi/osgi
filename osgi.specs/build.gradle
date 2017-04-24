@@ -30,7 +30,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
     docletpath compileJava.destinationDir
   }
   doLast {
-    ant.xslt('style': stylesheet, 
+    ant.xslt('style': stylesheet,
       'in': javadocxml,
       'out': "${destinationDir}/docbook/javadoc.txt") {
       classpath('location': bnd.saxon)
@@ -38,7 +38,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
       param('name': 'destdir', 'expression': "${destinationDir}/docbook")
       param('name': 'ddf.only', 'expression': '0')
     }
-    ant.xslt('style': stylesheet, 
+    ant.xslt('style': stylesheet,
       'in': javadocxml,
       'out': "${destinationDir}/docbook/ddf.txt") {
       classpath('location': bnd.saxon)
@@ -105,7 +105,7 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
         project.mkdir(destinationDir)
       }
       doLast {
-        ant.xslt('style': stylesheet, 
+        ant.xslt('style': stylesheet,
           'in': "docbook/${book}/book.xml",
           'out': bookxml,
           'force': true) {
@@ -187,7 +187,7 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
           args booktask.bookxml
           args tmpxml
         }.assertNormalExitValue()
-        ant.xslt('style': stylesheet, 
+        ant.xslt('style': stylesheet,
           'in': tmpxml,
           'out': bookxml) {
           classpath('location': bnd.saxon)
@@ -216,7 +216,7 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
         project.mkdir(destinationDir)
       }
       doLast {
-        ant.xslt('style': stylesheet, 
+        ant.xslt('style': stylesheet,
           'in': booktask.bookxml,
           'out': bookfo) {
           classpath('location': bnd.saxon)
@@ -277,47 +277,73 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
   }
 }
 
-task('htmlresources', 'type': Copy) {
-  description 'Copy resources for the HTML specs.'
-  group 'documentation'
-  from file('docbook/xsl/html-resources')
-  into new File(buildDir, 'html')
-  from (new File(bnd.licensed, 'highlight.js')) {
-    include 'highlight.pack.js'
-    into 'js'
+def copyHtmlResources(toDir, book) {
+  return tasks.create("copyHtmlResources-${book}", Copy) {
+    from file('docbook/xsl/html-resources')
+    into toDir
+    from (new File(bnd.licensed, 'webresources')) {
+      include 'highlight.js/highlight.pack.js','jquery/jquery-3.2.1.slim.min.js','jquery.modal/jquery.modal.min.js','js-cookie/js.cookie.js','senna/senna-min.js'
+      into 'js'
+      eachFile { cfd ->
+        cfd.path = "js/${cfd.name}"
+      }
+    }
+    from (new File(bnd.licensed, 'webresources')) {
+      include 'highlight.js/styles/github.css'
+      into 'css'
+      eachFile { cfd ->
+        cfd.path = "css/${cfd.name}"
+      }
+    }
+    includeEmptyDirs = false
   }
-  from (new File(bnd.licensed, 'highlight.js/styles')) {
-    include 'github.css'
-    into 'css'
-  }
-  includeEmptyDirs = false
 }
 
-task('rasterize') {
-  description 'Rasterize the SVGs for use with HTML spec files.'
-  group 'documentation'
-  dependsOn compileJava
-  ext.destinationDir = new File(buildDir, 'html/images')
-  def fontbasedir = file('fonts')
-  def svgFiles = fileTree('dir': 'docbook', 'include': '**/*.svg')
-  inputs.files svgFiles
-  inputs.dir fontbasedir
-  outputs.dir destinationDir
-  doFirst {
-    project.mkdir(destinationDir)
+def rasterizeSVGs(destinationDir, book, booktask) {
+  return tasks.create("rasterizeSVGs-${book}") {
+    def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
+    def imagesFile = new File(temporaryDir, 'images.txt')
+    def svgFiles = []
+    def outputDir = new File(destinationDir, 'images');
+
+    dependsOn booktask
+    inputs.files imagesXSL, svgFiles
+    outputs.dir outputDir
+
+    doFirst {
+      ant.xslt('style': imagesXSL,
+        'in': booktask.bookxml,
+        'out': imagesFile) {
+        classpath('location': bnd.saxon)
+        factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+      }
+
+      imagesFile.eachLine { line ->
+        svgFiles << new File(file("docbook/${book}"), line)
+      }
+    }
+    doLast {
+      javaexec {
+        systemProperty('scale', '2')
+        systemProperty('dpi', '300')
+        systemProperty('JAVA_FONTS', file('fonts'))
+        classpath sourceSets.main.runtimeClasspath
+        main = 'org.osgi.tools.rasterizer.RasterizerMain'
+        minHeapSize = '1024m'
+        maxHeapSize = '2048m'
+        args outputDir
+        args svgFiles
+      }.assertNormalExitValue()
+    }
   }
-  doLast {
-    javaexec {
-      systemProperty('scale', '2')
-      systemProperty('dpi', '300')
-      systemProperty('JAVA_FONTS', fontbasedir)
-      classpath sourceSets.main.runtimeClasspath
-      main = 'org.osgi.tools.rasterizer.RasterizerMain'
-      minHeapSize = '1024m'
-      maxHeapSize = '2048m'
-      args destinationDir
-      args svgFiles.files
-    }.assertNormalExitValue()
+}
+
+def zipHtmlSpec(toDir, sourceDir, book, version) {
+  return tasks.create("zipHtmlSpec-${book}", Zip) {
+    from sourceDir
+    include '**/*'
+    archiveName "osgi.${book}.html-${version}.zip"
+    destinationDir(toDir)
   }
 }
 
@@ -328,13 +354,18 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
       description "Generate the html files for the book ${book}."
       group 'documentation'
       def booktask = tasks.getByPath("${book}.xml")
-      dependsOn booktask, rasterize, htmlresources
-      ext.destinationDir = new File(buildDir, "html/${book}")
+      def destinationDir = new File(buildDir, "html/${book}")
+
+      dependsOn compileJava, booktask, copyHtmlResources(destinationDir, book), rasterizeSVGs(destinationDir, book, booktask)
+      finalizedBy zipHtmlSpec(buildDir, destinationDir, book, version)
+
       def stylesheet = file('docbook/xsl/custom-html.xsl')
+      def commonXSL = file('docbook/xsl/custom-html-common.xsl')
       def profiler = file('docbook/xsl/custom-html-profile.xsl')
-      def watermark = 'draft.png'
-      inputs.files stylesheet, profiler, booktask
+
+      inputs.files booktask, stylesheet, commonXSL, profiler
       outputs.dir destinationDir
+
       doFirst {
         project.mkdir(destinationDir)
       }
@@ -346,13 +377,14 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
+
         ant.xslt('style': stylesheet,
           'in': tmpxml,
           'out': new File(temporaryDir, 'book.txt')) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
           param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
-          param('name': 'draft.watermark.image', 'expression': watermark)
+          param('name': 'draft.watermark.image', 'expression': 'draft.png')
           param('name': 'webhelp.base.dir', 'expression': destinationDir)
           param('name': 'chunked.filename.prefix', 'expression': "${book}-")
           param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
@@ -387,4 +419,10 @@ task('specifications') {
   description 'Generates all the specifications.'
   group 'documentation'
   dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf'
+}
+
+task('htmls') {
+  description 'Generates all the html for all specifications.'
+  group 'documentation'
+  dependsOn 'core.html', 'cmpn.html', 'enterprise.html', 'residential.html'
 }

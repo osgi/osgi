@@ -1,11 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:d="http://docbook.org/ns/docbook"
-xmlns:exsl="http://exslt.org/common"
-        xmlns:ng="http://docbook.org/docbook-ng" 
-        xmlns:db="http://docbook.org/ns/docbook"
-        version="1.0" xmlns="http://www.w3.org/1999/xhtml"
-	exclude-result-prefixes="exsl ng db d">
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:d="http://docbook.org/ns/docbook"
+    xmlns:db="http://docbook.org/ns/docbook"
+    xmlns:exsl="http://exslt.org/common"
+    xmlns:ng="http://docbook.org/docbook-ng"
+    xmlns:redirect="http://xml.apache.org/xalan/redirect"
+    xmlns:saxon="http://icl.com/saxon"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    exclude-result-prefixes="d db exsl ng redirect saxon"
+    version="1.0">
 
     <xsl:param name="chunker.output.method">
         <xsl:choose>
@@ -19,7 +23,7 @@ xmlns:exsl="http://exslt.org/common"
     </xsl:param>
 
     <!-- Set some reasonable defaults for webhelp output -->
-    <xsl:param name="webhelp.common.dir">../</xsl:param>
+    <xsl:param name="webhelp.common.dir"></xsl:param>
     <xsl:param name="img.src.path" select="concat($webhelp.common.dir,'images/')" />
     <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
@@ -82,14 +86,17 @@ xmlns:exsl="http://exslt.org/common"
     </xsl:if>
     <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/github.css"/>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
-
     <script type="text/javascript" src="{$webhelp.common.dir}js/senna-min.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.pack.js"></script>
+    <script type="text/javascript" src="{$webhelp.common.dir}js/js.cookie.js"></script>
+    <script type="text/javascript" src="{$webhelp.common.dir}js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="{$webhelp.common.dir}js/jquery.modal.min.js"></script>
+    <script type="text/javascript" src="{$webhelp.common.dir}js/main.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.enable.js"></script>
 
     <xsl:if test="/d:book/@status = 'final'">
         <xsl:comment>Google Analytics</xsl:comment>
-        <script>
+        <script type="text/javascript">
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -242,6 +249,8 @@ basic format:
                     <xsl:with-param name="nav.context" select="$nav.context"/>
                 </xsl:call-template>
 
+                <div id="mobile-menu-icon">&#x22EE;</div>
+
                 <div id="column-two">
                     <div id="content" data-senna-surface="">
                         <xsl:call-template name="user.header.content"/>
@@ -263,7 +272,84 @@ basic format:
                     <xsl:call-template name="user.footer.navigation"/>
                 </div>
             </div>
-            <div id="modile-menu-icon">&#x22EE;</div>
+
+            <form action="" class="ninja-forms-form" id="ninja_forms_form_13" method="post" onsubmit="return false;">
+             <input type="hidden" id="_wpnonce" name="_wpnonce" value="b02bd313df"/>
+             <input type="hidden" name="_ninja_forms_display_submit" value="1"/>
+             <input type="hidden" name="_form_id" id="_form_id" value="13"/>
+             <input type="hidden" id="ninja_forms_processing_error" value="1"/>
+             <div class="hp-wrap">
+                <label>If you are a human and are seeing this field, please leave it blank.
+                   <input type="text" value="" name="_EQZzD"/>
+                   <input type="hidden" value="_EQZzD" name="_hp_name"/>
+                   </label>
+             </div>
+
+             <div id="ninja_forms_form_13_all_fields_wrap" class="ninja-forms-all-fields-wrap">
+                <h4>
+                   We would like to find out more information about the users of the OSGi Compendium. Please fill out the form below.
+                </h4>
+
+                <p>No thanks, I’d like to go straight to the <a data-senna-off="true" href="javascript:dismissForm();">documentation</a>.</p>
+
+                <p>To find out how OSGi treats data we collect from you, please read our <a data-senna-off="true" href="https://www.osgi.org/osgi-alliance-privacy-policy/">Privacy Policy</a>.</p>
+
+                <div class="ninja-forms-required-items">Fields marked with <span class="ninja-forms-req-symbol">*</span> are required</div>
+                <div id="ninja_forms_field_26_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_26_type" value="text"/>
+                   <label for="ninja_forms_field_26" id="ninja_forms_field_26_label" class="">First Name <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
+                   <input id="ninja_forms_field_26" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_26" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req " value="" rel="26"/>
+                   <div id="ninja_forms_field_26_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+                <div id="ninja_forms_field_27_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_27_type" value="text"/>
+                   <label for="ninja_forms_field_27" id="ninja_forms_field_27_label" class="">Last Name <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
+                   <input id="ninja_forms_field_27" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_27" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req " value="" rel="27"/>
+                   <div id="ninja_forms_field_27_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+                <div id="ninja_forms_field_28_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_28_type" value="text"/>
+                   <label for="ninja_forms_field_28" id="ninja_forms_field_28_label" class="">Title</label>
+                   <input id="ninja_forms_field_28" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="character(s) left" name="ninja_forms_field_28" type="text" placeholder="" class="ninja-forms-field  " value="" rel="28"/>
+                   <div id="ninja_forms_field_28_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+                <div id="ninja_forms_field_29_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_29_type" value="text"/>
+                   <label for="ninja_forms_field_29" id="ninja_forms_field_29_label" class="">Company</label>
+                   <input id="ninja_forms_field_29" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="character(s) left" name="ninja_forms_field_29" type="text" placeholder="" class="ninja-forms-field  " value="" rel="29"/>
+                   <div id="ninja_forms_field_29_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+                <div id="ninja_forms_field_30_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_30_type" value="text"/>
+                   <label for="ninja_forms_field_30" id="ninja_forms_field_30_label" class="">Email <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
+                   <input id="ninja_forms_field_30" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_30" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req email " value="" rel="30"/>
+                   <div id="ninja_forms_field_30_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+                <div class="checkbox-wrap" id="ninja_forms_field_31_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_31_type" value="checkbox"/>
+                   <input name="ninja_forms_field_31" type="hidden" value="unchecked"/>
+                   <input id="ninja_forms_field_31" name="ninja_forms_field_31" type="checkbox" class="ninja-forms-field " value="checked" rel="31"/>
+                   <label for="ninja_forms_field_31" id="ninja_forms_field_31_label">May we contact you again with OSGi related information?</label>
+                   <div id="ninja_forms_field_31_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+
+                <div class="submit-wrap" id="ninja_forms_field_32_div_wrap" data-visible="1">
+                   <input type="hidden" id="ninja_forms_field_32_type" value="submit"/>
+                   <div id="nf_submit_13">
+                      <input type="submit" name="_ninja_forms_field_32" class="ninja-forms-field " id="ninja_forms_field_32" value="Submit" rel="32" onclick=""/>
+                   </div>
+                   <div id="nf_processing_13" style="display:none;">
+                      <input type="submit" name="_ninja_forms_field_32" class="ninja-forms-field " id="ninja_forms_field_32" value="Processing" rel="32" disabled=""/>
+                   </div>
+                   <div id="ninja_forms_field_32_error" style="display:none;" class="ninja-forms-field-error"></div>
+                </div>
+             </div>
+            </form>
+
+            <script type="text/javascript">
+                fixAnchors();
+                checkContactCookie();
+            </script>
         </body>
     </html>
 
@@ -277,20 +363,21 @@ basic format:
 <!-- The Header with the company logo -->
 <xsl:template name="webhelpheader">
     <div id="header">
+        <div class="menu-top-container"></div>
         <div id="shadow-block">
-    	    <xsl:call-template name="webhelpheader.logo"/>
+            <a class="logo" data-senna-off="true" href="index.html">
+                <xsl:call-template name="webhelpheader.logo"/>
 
-            <h1>
-                <xsl:apply-templates select="/*[1]" mode="title.markup"/>
-            </h1>
+                <h1>
+                    <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+                </h1>
+            </a>
         </div>
     </div>
 </xsl:template>
 
 <xsl:template name="webhelpheader.logo">
-    <a class="logo" href="index.html">
-        <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
-    </a>
+    <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
 </xsl:template>
 
 <xsl:template name="webhelptoc">
