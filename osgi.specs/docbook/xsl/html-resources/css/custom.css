@@ -10,9 +10,10 @@ body, html {
 
 body {
 	background-image: url(../images/solid.png);
+	background-attachment: fixed;
 	color: #333;
 	font: 16px/1.5 Ubuntu, Arial, Helvetica, sans-serif;
-	margin: 0;
+	margin: 130px 0 0 0;
 }
 
 a {
@@ -56,7 +57,7 @@ h4.title > a.anchor:after,
 h5.title > a.anchor:after,
 div.figure > a.anchor:after,
 div.table > a.anchor:after {
-	content: "\1f517";
+	content: "¶";
 }
 
 h1.title:hover > a.anchor,
@@ -66,7 +67,7 @@ h4.title:hover > a.anchor,
 h5.title:hover > a.anchor,
 div.figure:hover > a.anchor,
 div.table:hover > a.anchor {
-	opacity: 1;
+	opacity: 0.7;
 }
 
 div.toc > p, .title {
@@ -117,15 +118,6 @@ div.table-contents td {
     vertical-align: top;
 }
 
-/*
-:target:before {
-	content: "";
-	display: block;
-	height: 10px;
-	margin: -10px 0 0;
-}
-*/
-
 #content, #header, #sidebar {
 	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	background-color: #FFF;
@@ -136,6 +128,8 @@ div.table-contents td {
 	height: 120px;
 	width: inherit;
 	z-index: 1;
+	position: fixed;
+	top: 0;
 }
 
 #header .menu-top-container {
@@ -168,25 +162,15 @@ div.table-contents td {
 
 #column-two {
 	bottom: 0;
-	position: fixed;
 	top: 120px;
 }
 
 #content {
-	bottom: 0;
 	margin-left: 250px;
-	overflow-y: auto;
 	padding: 0 2em 1em;
-	position: absolute;
-	top: 10px;
+	top: 140px;
 	width: 950px;
 }
-
-/*
-#content a, #sidebar .filetree > li > span a {
-	border-bottom: 1px dotted;
-}
-*/
 
 #content a:hover {
 	text-decoration: underline;
@@ -206,8 +190,8 @@ div.table-contents td {
 	bottom: 0;
 	overflow-y: scroll;
 	padding-left: 1em;
-	position: absolute;
-	top: 10px;
+	position: fixed;
+	top: 130px;
 	width: 240px;
 }
 
@@ -314,12 +298,6 @@ div.section.package div.section.class h3.title:after {
 div.section.package div.section.summary h3.title {
 	background-color: rgba(0, 67, 112, 0.66);
 }
-
-/*
-div.section.package div.section.summary h3.title:after {
-	content: "[SUMMARY]";
-}
-*/
 
 div.section.package div.section.class div.section.field h4.title {
 	background-color: rgba(0, 67, 112, 0.33);

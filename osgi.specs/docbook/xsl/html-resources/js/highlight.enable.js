@@ -5,7 +5,6 @@ var fixAnchors = function() {
 		var j = $(d);
 		var href = window.location.href.split('#')[0] + "#" + j.attr("id");
 		j.attr("href", href);
-		//console.log("Processed: {}", d);
 	});
 }
 
@@ -31,10 +30,6 @@ document.addEventListener(
 
 					window.onhashchange = null;
 				}
-
-				var contentDiv = document.getElementById('content');
-
-				contentDiv.scrollTop = 0;
 
 				var snippets = document.querySelectorAll('pre code');
 
