@@ -38,11 +38,15 @@ h4.title > a.anchor,
 h5.title > a.anchor,
 div.figure > a.anchor,
 div.table > a.anchor {
+	color: black;
 	border-bottom: none !important;
+	text-decoration: none !important;
 	float: right;
 	opacity: 0;
+	font-weight: normal;
+	font-family: monospace;
+	width: 1.4em;
 	text-align: right;
-	width: 1.5em;
 }
 
 h1.title > a.anchor:after,
@@ -52,7 +56,7 @@ h4.title > a.anchor:after,
 h5.title > a.anchor:after,
 div.figure > a.anchor:after,
 div.table > a.anchor:after {
-	content: " ¶";
+	content: "\1f517";
 }
 
 h1.title:hover > a.anchor,
@@ -64,7 +68,6 @@ div.figure:hover > a.anchor,
 div.table:hover > a.anchor {
 	opacity: 1;
 }
-
 
 div.toc > p, .title {
 	font-weight: bold;
@@ -179,9 +182,11 @@ div.table-contents td {
 	width: 950px;
 }
 
+/*
 #content a, #sidebar .filetree > li > span a {
 	border-bottom: 1px dotted;
 }
+*/
 
 #content a:hover {
 	text-decoration: underline;
