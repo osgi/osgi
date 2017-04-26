@@ -337,6 +337,8 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
         imagesFile.eachLine { line ->
           svgFiles << file("docbook/${book}/${line}")
         }
+
+        svgFiles << file("docbook/graphics/draft.svg")
       }
       doLast {
         javaexec {
@@ -416,6 +418,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
           param('name': 'webhelp.base.dir', 'expression': destinationDir)
           param('name': 'chunked.filename.prefix', 'expression': "${book}-")
           param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
+          param('name': 'release.version', 'expression': version)
         }
       }
     }

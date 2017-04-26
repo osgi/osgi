@@ -13,7 +13,7 @@ body {
 	background-attachment: fixed;
 	color: #333;
 	font: 16px/1.5 Ubuntu, Arial, Helvetica, sans-serif;
-	margin: 130px 0 0 0;
+	margin-top: 130px;
 }
 
 a {
@@ -32,42 +32,16 @@ a.navLinkNext {
 	padding-right: 1em;
 }
 
-h1.title > a.anchor,
-h2.title > a.anchor,
-h3.title > a.anchor,
-h4.title > a.anchor,
-h5.title > a.anchor,
-div.figure > a.anchor,
-div.table > a.anchor {
-	color: black;
+a.permalink {
+	color: #000;
 	border-bottom: none !important;
 	text-decoration: none !important;
 	float: right;
-	opacity: 0;
+	opacity: 0.6;
 	font-weight: normal;
 	font-family: monospace;
 	width: 1.4em;
 	text-align: right;
-}
-
-h1.title > a.anchor:after,
-h2.title > a.anchor:after,
-h3.title > a.anchor:after,
-h4.title > a.anchor:after,
-h5.title > a.anchor:after,
-div.figure > a.anchor:after,
-div.table > a.anchor:after {
-	content: "¶";
-}
-
-h1.title:hover > a.anchor,
-h2.title:hover > a.anchor,
-h3.title:hover > a.anchor,
-h4.title:hover > a.anchor,
-h5.title:hover > a.anchor,
-div.figure:hover > a.anchor,
-div.table:hover > a.anchor {
-	opacity: 0.7;
 }
 
 div.toc > p, .title {
@@ -255,7 +229,7 @@ div.section.package div.section.class h3.title,
 div.section.package div.section.class div.section.field h4.title,
 div.section.package div.section.class div.section.method h4.title,
 div.section.package div.section.summary h3.title {
-	color: black;
+	color: #000;
 	display: block;
 	font-size: 1em;
 	margin-bottom: 0.5em;
@@ -430,31 +404,19 @@ div.section.package div.section.class div.section.method h4.title:after {
 
 .modal {
 	background: #FFF;
-	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	-o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	-ms-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	box-sizing: border-box;
 	display: inline-block;
+	left: 30vw;
 	max-width: 40vw;
 	padding: 1.5em 2em;
 	position: absolute;
 	top: 10vh;
-	left: 30vw;
 	width: 90%;
-}
-
-.modal a.close-modal {
-	background: url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20%20viewBox='0%200%20512%20512'%3E%3Cpath%20%20d='M295.781%20256L500.986%2050.795c10.998-10.998%2010.998-28.814%200-39.781-10.998-10.998-28.815-10.998-39.781%200L256%20216.219%2050.795%2010.981c-10.966-10.998-28.814-10.998-39.781%200-10.998%2010.998-10.998%2028.814%200%2039.781L216.219%20256%2011.014%20461.205c-10.998%2010.998-10.998%2028.815%200%2039.781%205.467%205.531%2012.671%208.265%2019.874%208.265s14.407-2.734%2019.907-8.233L256%20295.78l205.205%20205.205c5.5%205.5%2012.703%208.233%2019.906%208.233s14.407-2.734%2019.906-8.233c10.998-10.998%2010.998-28.815%200-39.781L295.779%20255.999z'%20fill='%23004370'/%3E%3C/svg%3E") no-repeat 0 0;
-	display: block;
-	height: 1em;
-	margin: 1em;
-	position: absolute;
-	right: 0;
-	text-indent: -9999px;
-	top: 0;
-	width: 1em;
 }
 
 .ninja-forms-all-fields-wrap h4 {
@@ -500,18 +462,13 @@ div.section.package div.section.class div.section.method h4.title:after {
 .jquery-modal.blocker.current {
 	background-color: rgba(255, 255, 255, 0.7);
 	height: 100%;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	width: 100%;
 	z-index: 1;
 }
 
 @media (max-width: 991px) {
-	.jquery-modal.blocker.current {
-		position: absolute;
-		top: 0
-	}
-
 	.modal {
 		left: 25vw;
 		max-width: 50vw;

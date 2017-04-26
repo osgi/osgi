@@ -17,7 +17,13 @@ function dismissForm() {
 }
 
 function displayModal() {
-	$('#ninja_forms_form_13_all_fields_wrap').modal();
+	$('#ninja_forms_form_13_all_fields_wrap').modal(
+		{
+			clickClose: false,
+			escapeClose: false,
+			showClose: false
+		}
+	);
 }
 
 function setCookie(value) {

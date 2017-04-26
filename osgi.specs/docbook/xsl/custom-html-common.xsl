@@ -40,6 +40,7 @@
     <xsl:param name="use.id.as.filename" select="1"/>
     <xsl:param name="branding">OSGi Alliance</xsl:param>
     <xsl:param name="brandname">OSGi Alliance</xsl:param>
+    <xsl:param name="release.version"></xsl:param>
 
     <xsl:param name="section.label.includes.component.label" select="1"/>
 
@@ -57,19 +58,19 @@
     </xsl:param>
 
     <title>
-        <xsl:copy-of select="$title"/> - <xsl:if test="parent::*"> - <xsl:copy-of select="$document-title"/></xsl:if>
+        <xsl:copy-of select="$title"/><xsl:if test="parent::*"> - <xsl:copy-of select="$document-title"/></xsl:if>&#160;<xsl:value-of select="$release.version"/>
     </title>
 </xsl:template>
 
 <xsl:template name="system.head.content">
-    <!-- 
+    <!--
     The meta tag tells the IE rendering engine that it should use the latest, or edge, version of the IE rendering environment;It prevents IE from entring compatibility mode.
     -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </xsl:template>
 
-<!-- HTML <head> section customizations -->	
+<!-- HTML <head> section customizations -->
 <xsl:template name="user.head.content">
     <xsl:param name="title">
         <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
@@ -213,16 +214,16 @@
 basic format:
 <html>
 	<head> calls-appropriate-template </head>
-	<body> 
+	<body>
 		       some-generic-content
-	       <div id="content"> 
+	       <div id="content">
 	       		All your docbook document content goes here
 			....
 	       </div>
-	       some-other-generic-content-at-footer		
+	       some-other-generic-content-at-footer
 	</body>
 </html>
--->	
+-->
 <xsl:template name="chunk-element-content">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -356,7 +357,7 @@ basic format:
     <xsl:value-of select="$chunk.append"/>
 </xsl:template>
 
-<!-- This is for the USERS. Users who want to customize webhelp may over-ride this template to add content to the footer of the content DIV. 
+<!-- This is for the USERS. Users who want to customize webhelp may over-ride this template to add content to the footer of the content DIV.
  i.e. within <div id="content"> ... </div> -->
 <xsl:template name="user.webhelp.content.footer"/>
 
@@ -366,18 +367,14 @@ basic format:
         <div class="menu-top-container"></div>
         <div id="shadow-block">
             <a class="logo" data-senna-off="true" href="index.html">
-                <xsl:call-template name="webhelpheader.logo"/>
+                <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
 
                 <h1>
-                    <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+                    <xsl:apply-templates select="/*[1]" mode="title.markup"/>&#160;<xsl:value-of select="$release.version"/>
                 </h1>
             </a>
         </div>
     </div>
-</xsl:template>
-
-<xsl:template name="webhelpheader.logo">
-    <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
 </xsl:template>
 
 <xsl:template name="webhelptoc">
@@ -506,8 +503,8 @@ basic format:
 
 <xsl:template name="user.footer.content">
 </xsl:template>
- 
-    <!-- Generates index.html file at docs/. This is simply a redirection to content/$default.topic -->	
+
+    <!-- Generates index.html file at docs/. This is simply a redirection to content/$default.topic -->
 <xsl:template name="index.html">
     <xsl:variable name="default.topic">
         <xsl:choose>
@@ -555,7 +552,9 @@ basic format:
                 <head>
                     <link rel="shortcut icon" href="{$webhelp.common.dir}images/favicon.png" type="image/x-icon"/>
                     <meta http-equiv="Refresh" content="0; URL={$default.topic}"/>
-                    <title><xsl:value-of select="//d:title[1]"/>&#160;</title>
+                    <title>
+                        <xsl:value-of select="//d:title[1]"/>&#160;<xsl:value-of select="$release.version"/>
+                    </title>
                 </head>
                 <body>
                     If not automatically redirected, click <a href="{$default.topic}"><xsl:value-of select="$default.topic"/></a>
@@ -564,5 +563,5 @@ basic format:
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
-</xsl:stylesheet> 
+</xsl:stylesheet>
 
