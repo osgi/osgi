@@ -49,7 +49,7 @@ public interface ConverterBuilder {
 	 * @param func The function to be used to handle errors.
      * @return This converter builder for further building.
 	 */
-    <T> ConverterBuilder errorHandler(ConverterFunction<T> func);
+	ConverterBuilder errorHandler(ConverterFunction<Object> func);
 
     /**
      * Register a conversion rule for this converter. Note that only the target
@@ -71,10 +71,10 @@ public interface ConverterBuilder {
     <T> ConverterBuilder rule(TargetRule<T> rule);
 
     /**
-     * Register a catch-all rule, will be called of no other rule matches.
-     *
-     * @param function The function that will handle the conversion.
-     * @return This converter builder for further building.
-     */
-    <T> ConverterBuilder rule(ConverterFunction<T> func);
+	 * Register a catch-all rule, will be called of no other rule matches.
+	 *
+	 * @param funct The function that will handle the conversion.
+	 * @return This converter builder for further building.
+	 */
+	ConverterBuilder rule(ConverterFunction<Object> func);
 }
