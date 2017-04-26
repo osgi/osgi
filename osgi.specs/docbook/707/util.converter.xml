@@ -950,7 +950,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </table>
         
         <para>Below is an example of using the <code>PREFIX_</code> constant 
-        in an annotation. This example assumes a Declarative
+        in an annotation. This example has a Declarative
         Services component that is configured with the following configuration 
         property:
         <programlisting>"com.acme.config.type"="MULTI"</programlisting> 
@@ -1208,7 +1208,7 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     <section>
     <title>Catchall rules</title>
     <para>It is also possible to register converter rules which are invoked for every conversion with the 
-    <xref linkend="org.osgi.util.converter.ConverterBuilder.rule-ConvertFunction-" xrefstyle="hyperlink"/>
+    <xref linkend="org.osgi.util.converter.ConverterBuilder.rule-ConverterFunction-" xrefstyle="hyperlink"/>
     method. When multiple rules are registered, they are evaluated in the order of registration,
     until a rule indicates that it can handle a conversion by returning a non-<code>null</code> value. 
     Rules targeting
