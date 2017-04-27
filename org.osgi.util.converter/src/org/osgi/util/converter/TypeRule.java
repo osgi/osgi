@@ -30,8 +30,8 @@ import org.osgi.util.function.Function;
  *
  * @param <F> The type to convert from.
  * @param <T> The type to convert to. */
-public class TypeRule<F,T> implements TargetRule<T> {
-    private final ConverterFunction<T> function;
+public class TypeRule<F, T> implements TargetRule {
+	private final ConverterFunction	function;
     private final Type toType;
 
     /**
@@ -46,9 +46,9 @@ public class TypeRule<F,T> implements TargetRule<T> {
         toType = to;
     }
 
-	private static <F, T> ConverterFunction<T> getFunction(final Type from,
+	private static <F, T> ConverterFunction getFunction(final Type from,
 			final Function<F,T> func) {
-        return new ConverterFunction<T>() {
+		return new ConverterFunction() {
             @Override
             @SuppressWarnings("unchecked")
             public T apply(Object obj, Type targetType) throws Exception {
@@ -65,7 +65,7 @@ public class TypeRule<F,T> implements TargetRule<T> {
     }
 
     @Override
-    public ConverterFunction<T> getFunction() {
+	public ConverterFunction getFunction() {
         return function;
     }
 

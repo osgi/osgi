@@ -21,15 +21,13 @@ import java.lang.reflect.Type;
  * Interface for custom conversion rules.
  *
  * @author $Id$
- *
- * @param <T> The target type of the conversion.
  */
-public interface TargetRule<T> {
+public interface TargetRule {
     /**
      * The function to perform the conversion.
      * @return The function.
      */
-    ConverterFunction<T> getFunction();
+	ConverterFunction getFunction();
 
     /**
      * The target type of this rule. The conversion function is invoked for each conversion to the target type.

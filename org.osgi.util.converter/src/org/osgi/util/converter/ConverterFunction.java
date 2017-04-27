@@ -25,11 +25,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * <P>
  * This interface can also be used to register a custom error handler.
  *
- * @param <T> Type parameter for the converted object.
  * @author $Id$
  */
 @ConsumerType
-public interface ConverterFunction<T> {
+public interface ConverterFunction {
 	/**
 	 * Convert the object into the target type.
 	 *
@@ -41,8 +40,9 @@ public interface ConverterFunction<T> {
 	 *         convert function cannot handle this conversion. In this case the
 	 *         next matching rule or parent converter will be given a
 	 *         opportunity to convert.
-	 * @throws Exception
+	 * @throws Exception the operation can throw an exception if the conversion
+	 *             can not be performed due to incompatible types.
 	 */
-	T apply(Object obj, Type targetType)
+	Object apply(Object obj, Type targetType)
 			throws Exception;
 }

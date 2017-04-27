@@ -49,18 +49,18 @@ public interface ConverterBuilder {
 	 * @param func The function to be used to handle errors.
      * @return This converter builder for further building.
 	 */
-	ConverterBuilder errorHandler(ConverterFunction<Object> func);
+	ConverterBuilder errorHandler(ConverterFunction func);
 
     /**
-     * Register a conversion rule for this converter. Note that only the target
-     * type is specified, so the rule will be visited for every conversion to the
-     * target tupe.
-     *
-     * @param type The type that this rule will produce.
-     * @param function The function that will handle the conversion.
-     * @return This converter builder for further building.
-     */
-    <T> ConverterBuilder rule(Type type, ConverterFunction<T> function);
+	 * Register a conversion rule for this converter. Note that only the target
+	 * type is specified, so the rule will be visited for every conversion to
+	 * the target type.
+	 *
+	 * @param type The type that this rule will produce.
+	 * @param func The function that will handle the conversion.
+	 * @return This converter builder for further building.
+	 */
+	ConverterBuilder rule(Type type, ConverterFunction func);
 
     /**
      * Register a conversion rule for this converter.
@@ -68,13 +68,13 @@ public interface ConverterBuilder {
      * @param rule A rule implementation.
      * @return This converter builder for further building.
      */
-    <T> ConverterBuilder rule(TargetRule<T> rule);
+	ConverterBuilder rule(TargetRule rule);
 
     /**
 	 * Register a catch-all rule, will be called of no other rule matches.
 	 *
-	 * @param funct The function that will handle the conversion.
+	 * @param func The function that will handle the conversion.
 	 * @return This converter builder for further building.
 	 */
-	ConverterBuilder rule(ConverterFunction<Object> func);
+	ConverterBuilder rule(ConverterFunction func);
 }
