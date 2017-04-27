@@ -950,15 +950,7 @@
             <row>
               <entry><code>Solaris</code></entry>
 
-              <entry/>
-
-              <entry><para>Sun (almost an alias of SunOS)</para></entry>
-            </row>
-
-            <row>
               <entry><code>SunOS</code></entry>
-
-              <entry/>
 
               <entry><para>Sun Microsystems</para></entry>
             </row>
@@ -977,7 +969,7 @@
               <entry><code>Win95</code> <code>"Windows 95"</code>
               <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows 95 </para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -986,16 +978,16 @@
               <entry><code>Win98</code> <code>"Windows 98"</code>
               <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows 98</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
               <entry><code>WindowsNT</code></entry>
 
               <entry><code>WinNT</code> <code>"Windows NT"</code>
-              <code>Win32</code></entry>
+              <code>"Windows NT (unknown)"</code> <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows NT</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -1003,7 +995,7 @@
 
               <entry><code>WinCE</code> <code>"Windows CE"</code></entry>
 
-              <entry><para>Microsoft Windows CE</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -1012,7 +1004,7 @@
               <entry><code>Win2000</code> <code>"Windows 2000"</code>
               <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows 2000</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -1021,7 +1013,7 @@
               <entry><code>Win2003</code> <code>"Windows 2003"</code>
               <code>Win32</code> <code>"Windows Server 2003"</code></entry>
 
-              <entry><para>Microsoft Windows 2003</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -1030,7 +1022,7 @@
               <entry><code>WinXP</code> <code>"Windows XP"</code>
               <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows XP</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
@@ -1039,23 +1031,113 @@
               <entry><code>WinVista</code> <code>"Windows Vista"</code>
               <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows Vista</para></entry>
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
               <entry><code>Windows7</code></entry>
 
-              <entry><code>"Windows 7"</code> <code>Win32</code></entry>
+              <entry><code>Win7</code> <code>"Windows 7"</code>
+              <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows 7</para></entry>
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>Windows8</code></entry>
+
+              <entry><code>Win8</code> <code>"Windows 8"</code> <code>"Windows
+              8.1"</code> <code>"Windows 8.2"</code> <code>"Windows
+              8.3"</code> <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>Windows10</code></entry>
+
+              <entry><code>Win10</code> <code>"Windows 10"</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
             </row>
 
             <row>
               <entry><code>WindowsServer2008</code></entry>
 
-              <entry><code>"Windows Server 2008"</code></entry>
+              <entry><code>"Windows Server 2008"</code> <code>"Windows
+              2008"</code> <code>Windows2008</code> <code>Win2008</code>
+              <code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows Server 2008</para></entry>
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2008R2</code></entry>
+
+              <entry><code>"Windows Server 2008 R2"</code> <code>"Windows 2008
+              R2"</code> <code>Windows2008R2</code> <code>Win2008R2</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2012</code></entry>
+
+              <entry><code>"Windows Server 2012"</code> <code>"Windows
+              2012"</code> <code>Windows2012</code> <code>Win2012</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2012R2</code></entry>
+
+              <entry><code>"Windows Server 2012 R2"</code> <code>"Windows 2012
+              R2"</code> <code>Windows2012R2</code> <code>Win2012R2</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2015</code></entry>
+
+              <entry><code>"Windows Server 2015"</code> <code>"Windows
+              2015"</code> <code>Windows2015</code> <code>Win2015</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2015R2</code></entry>
+
+              <entry><code>"Windows Server 2015 R2"</code> <code>"Windows 2015
+              R2"</code> <code>Windows2015R2</code> <code>Win2015R2</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>WindowsServer2016</code></entry>
+
+              <entry><code>"Windows Server 2016"</code> <code>"Windows
+              2016"</code> <code>Windows2016</code> <code>Win2016</code>
+              <code>Win32</code></entry>
+
+              <entry><para>Microsoft</para></entry>
+            </row>
+
+            <row>
+              <entry><code>z/OS</code></entry>
+
+              <entry><code/></entry>
+
+              <entry><para>IBM</para></entry>
             </row>
           </tbody>
         </tgroup>
