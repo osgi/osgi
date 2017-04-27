@@ -851,9 +851,9 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             </listitem>
 
             <listitem>
-              <para>If type contains a static final
+              <para>If the type that declares the method also declares a static final
               <code>PREFIX_</code> field whose value is a compile-time
-              constant String, then the key name is prefixed with the
+              constant <code>String</code>, then the key name is prefixed with the
               value of the <code>PREFIX_</code> field. <code>PREFIX_</code>
               fields in super-classes or super-interfaces are ignored.</para>
             </listitem>
@@ -1004,11 +1004,11 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
             </listitem>
 
             <listitem>
-              <para>If the type contains a static final
-              <code>PREFIX_</code> field whose value is a compile-time
-              constant String, then the key name is prefixed with the
-              value of the <code>PREFIX_</code> field. <code>PREFIX_</code>
-              fields in super-classes or super-interfaces are ignored.</para>
+              <para>If the annotation type declares a <code>PREFIX_</code> 
+              field whose value is a 
+              compile-time constant <code>String</code>,
+              then the id is prefixed with the value of the 
+              <code>PREFIX_</code> field.</para>
             </listitem>
           </itemizedlist></para>
 
