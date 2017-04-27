@@ -123,32 +123,21 @@
     // Global Settings
     ":configurator:json-version" : 1,
     
-    "configurations": [
-      {
-           "service.pid": "pid.a",
+    "pid.a": {
            "key": "val",
-           "some_number": 123,
-           ":configurator:environments": ["dev","demo"]
-      },
-      {
-           "service.pid": "pid.b",
-           "a_boolean" : true
-      }
-    ]
+           "some_number": 123 },
+           
+    "pid.b": {
+           "a_boolean": true }    
 }</programlisting>
 
-      Configuration resources provide an array of configurations with the <code>configurations</code> key. 
-      Each configuration has a <code>service.pid</code> to target a specific PID in the Configuration Admin
+      Configuration resources provide a set of configurations each with a <emphasis>Service PID</emphasis> key 
+      to target a specific PID in the Configuration Admin
       Service and zero or more configuration values for this PID. Comments in the form of JSMin comments are 
       supported, that is, any text on the same line after <code>//</code> is ignored and any text between 
       <code>/* */</code> is ignored. 
     </para>
       
-    <para>Configuration objects can define one or more environments by specifying the special key
-      <code>:configurator:environments</code>. These configurations are only applied if one or more of these
-      environments are active. For more information see <xref linkend="service.configurator-environments"/>. 
-    </para>
-
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
       as <code>":configurator:json-version": 1</code>. If the configurator version is omitted, 1 is assumed.
     </para>
@@ -159,7 +148,7 @@
     </para>
 
     <para>
-      The configurator removes the <code>service.pid</code>, any comments and the special 
+      The configurator removes any comments and the special 
    	  <code>:configurator:</code> keys from the configuration before providing it to the Configuration Admin Service.
    	  The configurator uses the <code>Configuration.updateIfDifferent()</code> method on the Configuration object
    	  to avoid any volatility in the system if the configuration applied has not been changed. The configurator
@@ -185,13 +174,6 @@
               </row>
             </thead>         
             <tbody>              
-              <row>
-                <entry><para><code>:configurator:«</code></para><para><code>&#160;&#160;environments</code></para></entry>
-                <entry><para>String <emphasis>or</emphasis></para><para>Array of String</para></entry>
-                <entry>Configuration</entry>
-                <entry>Environments that this configuration applies to. See <xref linkend="service.configurator-environments"/>.</entry>
-              </row>
-              
               <row>
                 <entry><code>:configurator:policy</code></entry>
                 <entry>String <code>default</code> or <code>force</code></entry>
@@ -281,7 +263,7 @@
       <code>Collection</code> the configurator picks a suitable implementation that preserves order. 
       An example configuration resource with typed data:
       <programlisting>{
-  "configurations": [{      
+  "my.pid": {      
     "port:Integer" : 300,
     "an.int.array:int[]" : [2, 3, 4],
     "an.Integer.collection:Collection&lt;Integer&gt;" : [2,3,4],
@@ -289,7 +271,7 @@
       "a" : 1,
       "b" : "two"
     }
-  }]
+  }
 }</programlisting>
 
     </para>
@@ -309,10 +291,10 @@
       the configuration resource, marking its type as <code>binary</code>:
       
       <programlisting>{
-  "configurations": [{
-    "service.pid" : "my.config",
+  "my.config": {
+    "security.enabled": true,
     "public.key:binary" : "/OSGI-INF/files/mykey.pub"
-  }]
+  }
 }</programlisting>
 
       When the configurator applies the configuration, it extracts the binary file to a public area on the file system.
@@ -356,25 +338,16 @@
       names are ignored.
     </para>
     
-    <para>
+    <para>To specify that a configuration applies to one or more environments, the environment name(s) 
+      must be specified with the Service PID in square brackets as a comma-separated list. 
       An example configuration resource for multiple environments can look like this:
       <programlisting>{
-  "configurations": [
-    {
-      "service.pid" : "my.service.pid",
-      "foo" : 1,
-      ":configurator:environments" : "test"
-    },
-    {
-      "service.pid" : "my.service.pid",
-      "foo" : 2,
-      ":configurator:environments" : ["stage", "prod"]
-    },
-    {
-      "service.pid" : "my.service.pid",
-      "foo" : 100
-    }
-  ]      
+  "my.service.pid[test]": {
+    "foo" : 1 },
+  "my.service.pid[stage,prod]": {
+    "foo" : 2 },
+  "my.service.pid": {
+    "foo" : 100 }
 }</programlisting>
 
       If more than one configuration for a PID can be applied, the one with the highest configuration ranking 
