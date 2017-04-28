@@ -1,4 +1,4 @@
 org.osgi.service.log; version=latest
-org.osgi.util.pushstream; version=latest
 org.osgi.util.promise; version=latest
 org.osgi.util.function; version=latest
+org.eclipse.equinox.log.stream;version=1.0.0
