@@ -55,7 +55,7 @@ task('rdmtsummary') {
   dependsOn compileJava
   ext.destinationDir = new File(buildDir, 'residentialdmt')
   ext.treesummaryxml = new File(destinationDir, 'treesummary.xml')
-  inputs.files rootProject.project('dmforest').sourceSets.main.allJava
+  inputs.files project(':dmforest').sourceSets.main.allJava
   outputs.dir destinationDir
   doFirst {
     project.mkdir(destinationDir)

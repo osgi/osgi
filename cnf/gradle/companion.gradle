@@ -38,8 +38,9 @@ javadoc {
       def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
       def matcher = entry =~ /^(osgi\.([^\/]*))/
       if (matcher) {
-        dependsOn ":${matcher[0][1]}:javadoc"
-        options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
+        def linkProject = project(":${matcher[0][1]}")
+        dependsOn linkProject.javadoc
+        options.linksOffline("../${matcher[0][2]}", linkProject.javadoc.destinationDir.absolutePath)
       }
     }
   }
