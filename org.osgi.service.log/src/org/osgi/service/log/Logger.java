@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public interface Logger {
 	/**
 	 * Root Logger Name.
 	 */
-	static String ROOT_LOGGER_NAME = "ROOT";
+	String ROOT_LOGGER_NAME = "ROOT";
 
 	/**
 	 * Return the name of this Logger.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,8 +47,10 @@ import org.osgi.service.log.LoggerFactory;
  * &lt;symbolic-name&gt;
  * </pre>
  * 
- * If a non-empty Logger Context is not found, the Logger Context with the name
- * {@code <symbolic-name>} is used for the bundle.
+ * The search stops at the first {@link LoggerContext#isEmpty() non-empty}
+ * Logger Context. If no non-empty Logger Context is found using the above
+ * search order, the Logger Context with the symbolic name of the bundle must be
+ * used for the bundle.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -64,14 +66,15 @@ public interface LoggerAdmin {
 	 * <p>
 	 * The value of this service property must be of type {@code Long}.
 	 */
-	static String LOG_SERVICE_ID = "osgi.log.service.id";
+	String LOG_SERVICE_ID = "osgi.log.service.id";
 
 	/**
 	 * Get the Logger Context for the specified name.
 	 * 
 	 * @param name The name of the Logger Context. Can be {@code null} to
 	 *            specify the root Logger Context.
-	 * @return The Logger Context for the specified name.
+	 * @return The Logger Context for the specified name. The returned Logger
+	 *         Context may be {@link LoggerContext#isEmpty() empty}.
 	 */
 	LoggerContext getLoggerContext(String name);
 }

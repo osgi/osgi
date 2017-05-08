@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,23 @@ import org.osgi.service.log.LogLevel;
 @ProviderType
 public interface LoggerContext {
 	/**
+	 * Logger Context PID.
+	 * <p>
+	 * If Configuration Admin is present, Logger Context configuration
+	 * information in Configuration Admin must be used. The name of the Logger
+	 * Context is mapped to a Configuration Admin targeted PID as follows:
+	 * <ul>
+	 * <li>The root Logger Context, which has no name, is mapped to the PID
+	 * {@code org.osgi.service.log.admin}.</li>
+	 * <li>A named Logger Context is mapped to a targeted PID by prefixing the
+	 * Logger Context's name with {@code org.osgi.service.log.admin|}. For
+	 * example, the Logger Context named {@code com.foo.bar} is mapped to the
+	 * targeted PID {@code org.osgi.service.log.admin|com.foo.bar}.</li>
+	 * </ul>
+	 */
+	String LOGGER_CONTEXT_PID = "org.osgi.service.log.admin";
+
+	/**
 	 * Returns the name for this Logger Context.
 	 * 
 	 * @return The name for this Logger Context. The root Logger Context has no
@@ -48,19 +65,15 @@ public interface LoggerContext {
 	 * The effective log level for a logger name is found by the following
 	 * steps:
 	 * <ol>
-	 * <li>If the specified logger name is configured with a non-null log level
-	 * in this Logger Context, return the configured log level.</li>
+	 * <li>If the specified logger name is configured with a log level, return
+	 * the configured log level.</li>
 	 * <li>For each ancestor logger name of the specified logger name, if the
-	 * ancestor logger name is configured with a non-null log level in this
-	 * Logger Context, return the configured log level.</li>
-	 * <li>If the specified logger name is configured with a non-null log level
-	 * in the root Logger Context, return the configured log level.</li>
-	 * <li>For each ancestor logger name of the specified logger name, if the
-	 * ancestor logger name is configured with a non-null log level in the root
-	 * Logger Context, return the configured log level.</li>
-	 * <li>Return {@link LogLevel#WARN} because no non-null log level has been
-	 * found for the specified logger name or any of its ancestor logger names.
-	 * </li>
+	 * ancestor logger name is configured with a log level, return the
+	 * configured log level.</li>
+	 * <li>If this Logger Context is named, return the result of calling this
+	 * method on the root Logger Context with the specified logger name.</li>
+	 * <li>If this Logger Context is the root Logger Context, return
+	 * {@link LogLevel#WARN}.</li>
 	 * </ol>
 	 * 
 	 * @param name The logger name.
@@ -75,10 +88,10 @@ public interface LoggerContext {
 	 * @return The configured log levels for this Logger Context. The keys are
 	 *         the logger names and the values are the log levels. The returned
 	 *         map may be empty if no logger names are configured for this
-	 *         Logger Context. The log level value can be {@code null}. The
-	 *         returned map is the property of the caller who can modify the map
-	 *         and use it as input to {@link #setLogLevels(Map)}. The returned
-	 *         map must support all optional Map operations.
+	 *         Logger Context. The returned map is the property of the caller
+	 *         who can modify the map and use it as input to
+	 *         {@link #setLogLevels(Map)}. The returned map must support all
+	 *         optional Map operations.
 	 */
 	Map<String,LogLevel> getLogLevels();
 
@@ -87,12 +100,18 @@ public interface LoggerContext {
 	 * <p>
 	 * All previous log levels configured for this Logger Context are cleared
 	 * and then the log levels in the specified map are configured.
+	 * <p>
+	 * The configured log levels for this Logger Context can be set by both this
+	 * method and by configuration information in Configuration Admin, if
+	 * Configuration Admin is present. The configured log levels for this Logger
+	 * Context are based upon the last technique used to update the configured
+	 * log levels. This method must not modify or set configuration information
+	 * in Configuration Admin.
 	 * 
 	 * @param logLevels The log levels to configure for this Logger Context. The
 	 *            keys are the logger names and the values are the log levels.
-	 *            The log level value can be {@code null}. The specified map is
-	 *            the property of the caller and this method must not modify or
-	 *            retain the specified map.
+	 *            The specified map is the property of the caller and this
+	 *            method must not modify or retain the specified map.
 	 */
 	void setLogLevels(Map<String,LogLevel> logLevels);
 
