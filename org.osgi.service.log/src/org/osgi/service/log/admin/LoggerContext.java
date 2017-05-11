@@ -51,6 +51,21 @@ public interface LoggerContext {
 	String LOGGER_CONTEXT_PID = "org.osgi.service.log.admin";
 
 	/**
+	 * Framework launching property specifying the default log level of the root
+	 * Logger Context.
+	 * <p>
+	 * The value of this property must be the name of the one of the
+	 * {@link LogLevel}s.
+	 * <p>
+	 * If not specified, or the specified value is not the name of the one of
+	 * the {@link LogLevel}s, the default log level of the root Logger Context
+	 * is {@link LogLevel#WARN}.
+	 * 
+	 * @see LogLevel
+	 */
+	String	LOGGER_CONTEXT_DEFAULT_LOGLEVEL	= "org.osgi.service.log.admin.loglevel";
+
+	/**
 	 * Returns the name for this Logger Context.
 	 * 
 	 * @return The name for this Logger Context. The root Logger Context has no
@@ -72,8 +87,9 @@ public interface LoggerContext {
 	 * configured log level.</li>
 	 * <li>If this Logger Context is named, return the result of calling this
 	 * method on the root Logger Context with the specified logger name.</li>
-	 * <li>If this Logger Context is the root Logger Context, return
-	 * {@link LogLevel#WARN}.</li>
+	 * <li>If this Logger Context is the root Logger Context, return the
+	 * {@link #LOGGER_CONTEXT_DEFAULT_LOGLEVEL default log level of the root
+	 * Logger Context}.</li>
 	 * </ol>
 	 * 
 	 * @param name The logger name.
