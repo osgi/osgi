@@ -29,14 +29,14 @@ import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Annotation used with {@link Inject} in order to have Configuration Admin
- * configurations injected into CDI beans.
- * <p>
- * The values are PIDs of required configurations. The special value {@code $}
- * is used to refer to the host bean class name.
+ * Annotation used with {@link Inject} in order to have {@link Component}
+ * configuration properties injected into CDI beans. Properties are a
+ * combination of the Map defined by {@link Component#property()} overlaid by
+ * properties provided through Configuration Admin in association with the
+ * configuration PIDs defined by {@link Component#value()}.
  */
 @Qualifier
-@Target(value = {ElementType.FIELD, ElementType.PARAMETER})
+@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 @Requirement(
@@ -46,15 +46,54 @@ import org.osgi.service.cdi.CdiConstants;
 public @interface Configuration {
 
 	/**
-	 * @return the PIDs of the required configurations
+	 * The configuration policy of this Configuration.
+	 *
+	 * <p>
+	 * Controls whether component configurations must be satisfied depending on the
+	 * presence of a corresponding Configuration object in the OSGi Configuration
+	 * Admin service. Corresponding configurations are Configuration objects where
+	 * the PIDs equal {@link Configuration#value() value}, or the
+	 * {@link Component#name() name} of the component if no values are specified.
+	 *
+	 * <p>
+	 * If not specified, the configuration policy is
+	 * {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
 	 */
-	@Nonbinding
-	String[] value() default "$";
+	ConfigurationPolicy configurationPolicy() default ConfigurationPolicy.DEFAULT;
 
 	/**
-	 * @return if configurations for the specified pids are required or not,
-	 *         default is {@code true}.
+	 * The configuration PIDs for the configuration of this Component.
+	 *
+	 * <p>
+	 * Each value specifies a configuration PID for this Component.
+	 *
+	 * <p>
+	 * If no value is specified, the name of this Component is used as the
+	 * configuration PID of this Component.
+	 *
+	 * <p>
+	 * A special string (<code>{@value #NAME}</code>) can be used to specify the
+	 * name of the component as a configuration PID. The {@code NAME} constant holds
+	 * this special string. For example:
+	 *
+	 * <pre>
+	 * &#64;Configuration({"com.acme.system", Component.NAME})
+	 * </pre>
 	 */
-	boolean required() default true;
+	@Nonbinding
+	String[] value() default NAME;
+
+	/**
+	 * Special string representing the name of this Component.
+	 *
+	 * <p>
+	 * This string can be used in {@link #value()} to specify the name of the
+	 * component as a configuration PID. For example:
+	 *
+	 * <pre>
+	 * &#64;Configuration({"com.acme.system", Component.NAME})
+	 * </pre>
+	 */
+	String NAME = "$";
 
 }

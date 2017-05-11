@@ -21,49 +21,39 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.inject.Scope;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
- * The Service annotation exposes a bean as an OSGi service.
+ * Annotation used to indicate a CDI bean marked with {@link @Component} has an
+ * OSGi {@code service.scope = bundle}.
+ *
+ * <p>
+ * By default CDI beans annotated with {@link @Component} only support:
+ * <ul>
+ * <li>{@link @ApplicationScoped} or {@link @Singleton} - which translates to
+ * {@code service.scope = singleton}
+ * <li>{@link @BundleScoped} - which translates to
+ * {@code service.scope = bundle}
+ * <li>{@link @Dependent} - which translates to
+ * {@code service.scope = prototype}
+ * </ul>
+ * Any other scope will result in a definition error.
+ * <p>
+ * By default CDI beans without a scope have {@link @Dependent} scope which
+ * means developers should take care that their services have {@code prototype}
+ * scope by default.
  */
 @Documented
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.TYPE)
 @Requirement(
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
-public @interface Service {
-
-	/**
-	 * The types under which to register the bean as a service.
-	 *
-	 * <p>
-	 * If not specified, the service types for this bean are all the
-	 * <i>directly</i> implemented interfaces of the class being annotated.
-	 *
-	 * <p>
-	 * If the CDI bean does not <i>directly</i> implement any interfaces the
-	 * bean class is used.
-	 */
-	Class<?>[] type() default {};
-
-	/**
-	 * Properties for this Service.
-	 * <p>
-	 * Each property string is specified as {@code "name=value"}. The type of
-	 * the property value can be specified in the name as
-	 * {@code name:type=value}. The type must be one of the property types
-	 * supported by the {@code type} attribute of the {@code property} element
-	 * of a Service Description.
-	 * <p>
-	 * To specify a property with multiple values, use multiple name, value
-	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
-	 *
-	 * @see "The property element of a Service."
-	 */
-	String[] property() default {};
-
+@Retention(value = RetentionPolicy.RUNTIME)
+@Scope
+@Target(value = {ElementType.TYPE})
+public @interface BundleScoped {
+	// marker annotation
 }

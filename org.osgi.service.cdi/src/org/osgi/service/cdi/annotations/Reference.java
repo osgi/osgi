@@ -32,7 +32,7 @@ import org.osgi.service.cdi.CdiConstants;
  * that the injection should apply a service obtained from the OSGi registry.
  */
 @Qualifier
-@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR})
+@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 @Requirement(
@@ -40,6 +40,107 @@ import org.osgi.service.cdi.CdiConstants;
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
 public @interface Reference {
+	/**
+	 * The name of this reference.
+	 * <p>
+	 * If not specified, the name of this reference is based upon how this
+	 * annotation is used:
+	 * <ul>
+	 * <li>Annotated constructor parameter - The name of the reference is the
+	 * simple, raw class name of the field suffixed by the positional index of
+	 * the parameter.</li>
+	 * <li>Annotated field - The name of the reference is the field name.</li>
+	 * <li>Annotated method parameter - The name of the reference is the simple,
+	 * raw class name of the field.</li>
+	 * </ul>
+	 */
+	String name() default "";
+
+	/**
+	 * The type of the service for this reference.
+	 * <p>
+	 * If not specified, the type of the service for this reference is based upon
+	 * how this annotation is used:
+	 * <ul>
+	 * <li>Annotated field - The type of the service is based upon the type of the
+	 * field being annotated and the cardinality of the reference. If the
+	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or
+	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the field must be
+	 * one of {@code java.util.Collection}, {@code java.util.List}, or a subtype of
+	 * {@code java.util.Collection} so the type of the service is the generic type
+	 * of the collection. Otherwise, the type of the service is the type of the
+	 * field.</li>
+	 * <li>Annotated constructor or method parameter - The type of the service is
+	 * based upon the type of the parameter being annotated and the cardinality of
+	 * the reference. If the cardinality is either
+	 * {@link ReferenceCardinality#MULTIPLE 0..n}, or
+	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the parameter
+	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
+	 * subtype of {@code java.util.Collection} so the type of the service is the
+	 * generic type of the collection. Otherwise, the type of the service is the
+	 * type of the parameter.</li>
+	 * </ul>
+	 */
+	@Nonbinding
+	Class<?> service() default Object.class;
+
+	/**
+	 * The cardinality of this reference.
+	 * <p>
+	 * If not specified, the cardinality of this reference is based upon how
+	 * this annotation is used:
+	 * <ul>
+	 * <li>Annotated field - The cardinality is based on the type of the field.
+	 * If the type is either {@code java.util.Collection},
+	 * {@code java.util.List}, or a subtype of {@code java.util.Collection}, the
+	 * cardinality is {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the
+	 * cardinality is {@link ReferenceCardinality#MANDATORY 1..1}.</li>
+	 * <li>Annotated constructor or method parameter - The cardinality is based
+	 * on the type of the parameter. If the type is either
+	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
+	 * {@code java.util.Collection}, the cardinality is
+	 * {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the cardinality is
+	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
+	 */
+	ReferenceCardinality cardinality() default ReferenceCardinality.DEFAULT;
+
+	/**
+	 * The policy for this reference.
+	 * <p>
+	 * If not specified, the policy of this reference is based upon how this
+	 * annotation is used:
+	 * <ul>
+	 * <li>Annotated method - The policy is {@link ReferencePolicy#STATIC
+	 * STATIC}.</li>
+	 * <li>Annotated field - The policy is based on the modifiers of the field.
+	 * If the field is declared {@code volatile}, the policy is
+	 * {@link ReferencePolicy#DYNAMIC}. Otherwise the policy is
+	 * {@link ReferencePolicy#STATIC STATIC}.</li>
+	 * <li>Annotated constructor parameter - The policy is
+	 * {@link ReferencePolicy#STATIC STATIC}. Constructor parameters must always
+	 * assume {@link ReferencePolicy#STATIC STATIC} policy.</li>
+	 * </ul>
+	 *
+	 * @see "The policy attribute of the reference element of a Component Description."
+	 */
+	ReferencePolicy policy() default ReferencePolicy.DEFAULT;
+
+	/**
+	 * The target property for this reference.
+	 *
+	 * <p>
+	 * If not specified, no target property is set.
+	 */
+	String target() default "";
+
+	/**
+	 * The policy option for this reference.
+	 *
+	 * <p>
+	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
+	 * reference policy option is used.
+	 */
+	ReferencePolicyOption policyOption() default ReferencePolicyOption.DEFAULT;
 
 	/**
 	 * The reference scope for this reference.
@@ -48,28 +149,5 @@ public @interface Reference {
 	 * If not specified, the {@link ReferenceScope#BUNDLE} reference scope is
 	 * used.
 	 */
-	ReferenceScope scope() default ReferenceScope.BUNDLE;
-
-	/**
-	 * The target property for this reference.
-	 *
-	 * <p>
-	 * If not specified, no target property is applied.
-	 */
-	@Nonbinding
-	String target() default "";
-
-	/**
-	 * <p>
-	 * If not specified, the type of the service for this reference is based
-	 * upon how this annotation is used:
-	 * <ul>
-	 * <li>Annotated method - The type of the service is the type of the first
-	 * argument of the method.</li>
-	 * <li>Annotated field - The type of the service is based upon the type of
-	 * the field being annotated.</li>
-	 * </ul>
-	 */
-	Class<?> service() default Object.class;
-
+	ReferenceScope scope() default ReferenceScope.DEFAULT;
 }

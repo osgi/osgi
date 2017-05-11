@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,58 +19,60 @@ package org.osgi.service.cdi.annotations;
 import java.util.Objects;
 
 /**
- * Reference scope for the {@link Reference} annotation.
+ * Service policy for the {@link Reference} annotation.
+ *
+ * @author $Id$
  */
-public enum ReferenceScope {
+public enum ServicePolicy {
 	/**
 	 * The value indicating that no choice was made in which case the calculated
 	 * value or default behavior should take effect.
 	 * <p>
-	 * The default behavior is {@link ReferenceScope#BUNDLE}.
+	 * The default behavior is {@link ServicePolicy#NONE NONE}.
 	 */
 	DEFAULT("default"),
 
 	/**
-	 * A single service object is used for all references to the service in this
-	 * bundle.
+	 * The derived policy means that the types under which the component will be
+	 * published is derived by using the following algorithm:
+	 * <ul>
+	 * <li>The {@code @Component.service} is set - Use the types listed</li>
+	 * <li>The {@code @Component.service} is not set - Use the directly implemented
+	 * interfaces. If no interfaces, use concrete type.</li>
+	 * </ul>
 	 */
-	BUNDLE("bundle"),
+	DERIVED("derived"),
 
 	/**
-	 * Bound services must have prototype service scope. Each instance of the
-	 * bean with this reference can receive a unique instance of the service.
+	 * The none policy means that the component is not to be published as a
+	 * service. If {@code @Component.service} is set it is ignored. This is the
+	 * default policy.
 	 */
-	PROTOTYPE("prototype"),
+	NONE("none");
+
+	private final String value;
 
 	/**
-	 * Bound services must have singleton service scope. Each instance of the
-	 * bean with this reference will receive the same instance of the service.
-	 */
-	SINGLETON("singleton");
-
-	private final String	value;
-
-	/**
-	 * Get a {@link ReferenceScope ReferenceScope} instance by value rather than by
+	 * Get a {@link ServicePolicy ServicePolicy} instance by value rather than by
 	 * name.
 	 *
 	 * @param input a non-null value
-	 * @return the {@link ReferenceScope ReferenceScope} matching the value
+	 * @return the {@link ServicePolicy ServicePolicy} matching the value
 	 * @throws NullPointerException if the input is null
 	 * @throws IllegalArgumentException on invalid input
 	 */
-	public static ReferenceScope get(String input) {
+	public static ServicePolicy get(String input) {
 		Objects.requireNonNull(input, "input cannot be null");
 
-		for (ReferenceScope scope : values()) {
-			if (input.equals(scope.toString()))
-				return scope;
+		for (ServicePolicy policy : values()) {
+			if (input.equals(policy.toString()))
+				return policy;
 		}
 
 		throw new IllegalArgumentException(input);
 	}
 
-	ReferenceScope(String value) {
+	ServicePolicy(String value) {
 		this.value = value;
 	}
 
@@ -78,5 +80,4 @@ public enum ReferenceScope {
 	public String toString() {
 		return value;
 	}
-
 }

@@ -6,8 +6,9 @@ Export-Package: ${p}.*; -split-package:=first
 -contract: JavaCDI, JavaInject
 
 -buildpath: \
-	osgi.core;                         version=5.0.0, \
+	osgi.core;                         version=6.0.0, \
 	osgi.annotation;                   version=latest, \
 	org.apache.aries.javax.inject-api; version=0.0.1, \
 	org.apache.aries.javax.cdi-api;    version=0.0.1, \
-	org.osgi.namespace.extender;       version=latest
+	org.osgi.namespace.extender;       version=latest,\
+	org.osgi.service.cm;               version=latest

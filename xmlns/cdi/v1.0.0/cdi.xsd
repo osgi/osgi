@@ -29,46 +29,82 @@
 			the OSGi CDI Extender. OSGi Bean description documents
 			may be embedded in other XML documents. The OSGi CDI Extender
 			will process all XML documents listed in the osgi.beans
-			attribute of the CDI extender requirement. XML documents containing
-			OSGi Bean descriptions may contain one or more bean, configuration,
-			and/or reference elements embedded in a larger document. Use of
-			the namespace for bean descriptions is mandatory. The attributes
-			and subelements of bean, configuration, and/or reference elements
-			are always unqualified.
+			attribute of the CDI extender requirement. CDI Beans named by the
+			descriptor are described as components. XML documents containing
+			OSGi Bean descriptions may contain one or more component elements.
+			Use of the namespace for bean descriptions is mandatory. The
+			attributes and subelements of component elements are always
+			unqualified.
 		</documentation>
 	</annotation>
-	<element name="bean" type="cdi:Tbean" />
-	<complexType name="Tbean">
+	<element name="component" type="cdi:Tcomponent" />
+	<complexType name="Tcomponent">
 		<sequence>
-			<element name="service" maxOccurs="1" minOccurs="0"
-				type="cdi:Tservice" />
-			<any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-				processContents="lax" />
+			<annotation>
+				<documentation xml:lang="en">
+					Implementations of CDI Support must not require component
+					descriptions to specify the sub-elements of the component
+					element in the order as required by the schema. CDI Support
+					implementations must allow other orderings since
+					arbitrary orderings do not affect the meaning of the
+					component description. Only the relative ordering of
+					property elements have meaning.
+				</documentation>
+			</annotation>
+			<element name="configuration" maxOccurs="unbounded" minOccurs="0" type="cdi:Tconfiguration" />
+			<element name="property" maxOccurs="unbounded" minOccurs="0" type="cdi:Tproperty" />
+			<element name="provide" maxOccurs="unbounded" minOccurs="0" type="cdi:Tprovide" />
+			<element name="reference" maxOccurs="unbounded" minOccurs="0" type="cdi:Treference" />
+			<any namespace="##other" maxOccurs="unbounded" minOccurs="0" processContents="lax" />
 		</sequence>
+		<attribute name="name" type="token" use="optional">
+			<annotation>
+				<documentation xml:lang="en">
+					The default value of this attribute is the value of
+					the class attribute. If multiple component elements use the same
+					value for the class attribute, then using the default value
+					for this attribute will result in duplicate names.
+					In this case, this attribute must be specified with
+					a unique value.
+				</documentation>
+			</annotation>
+		</attribute>
 		<attribute name="class" type="token" use="required" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
-	<element name="configuration" type="cdi:Tconfiguration" />
 	<complexType name="Tconfiguration">
-		<sequence>
-			<any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-				processContents="lax" />
-		</sequence>
-		<attribute name="beanClass" type="token" use="required" />
-		<attribute name="pid" type="token" use="required" />
-		<attribute name="required" type="boolean" default="true" use="optional" />
-		<anyAttribute processContents="lax" />
-	</complexType>
-
-	<element name="reference" type="cdi:Treference" />
-	<complexType name="Treference">
 		<sequence>
 			<any namespace="##any" processContents="lax"
 				minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="beanClass" type="token" use="required" />
-		<attribute name="target" type="token" use="required" />
+		<attribute name="configuration-policy" type="cdi:Tconfiguration-policy" default="optional" use="optional" />
+		<attribute name="configuration-pid" use="optional">
+			<annotation>
+				<documentation xml:lang="en">
+					The default value is the value of
+					the name attribute of the component.
+				</documentation>
+			</annotation>
+			<simpleType>
+				<restriction>
+					<simpleType>
+						<list itemType="token" />
+					</simpleType>
+					<minLength value="1" />
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="type" type="token" use="required" />
+		<anyAttribute processContents="lax" />
+	</complexType>
+
+	<complexType name="Tmulti-value">
+		<sequence>
+		<element name="value" minOccurs="0" maxOccurs="unbounded" type="cdi:Tvalue"/>
+		<any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+			processContents="lax" />
+		</sequence>
 		<anyAttribute processContents="lax" />
 	</complexType>
 
@@ -88,12 +124,27 @@
 		<anyAttribute processContents="lax" />
 	</complexType>
 
-	<complexType name="Tmulti-value">
+	<complexType name="Tprovide">
 		<sequence>
-		<element name="value" minOccurs="0" maxOccurs="unbounded" type="cdi:Tvalue"/>
-		<any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-			processContents="lax" />
+			<any namespace="##any" processContents="lax"
+				minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
+		<attribute name="interface" type="token" use="required" />
+		<anyAttribute processContents="lax" />
+	</complexType>
+
+	<complexType name="Treference">
+		<sequence>
+			<any namespace="##any" processContents="lax" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="cardinality" type="cdi:Tcardinality" default="1..1" use="optional" />
+		<attribute name="name" type="token" use="optional" />
+		<attribute name="policy" type="cdi:Tpolicy" default="static" use="optional" />
+		<attribute name="policy-option" type="cdi:Tpolicy-option" default="reluctant" use="optional" />
+		<attribute name="scope" type="cdi:Treference_scope" default="bundle" use="optional" />
+		<attribute name="service" type="token" use="required" />
+		<attribute name="target" type="string" use="optional" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
@@ -105,26 +156,44 @@
 		<anyAttribute processContents="lax" />
 	</complexType>
 
-	<complexType name="Tprovide">
-		<sequence>
-			<any namespace="##any" processContents="lax"
-				minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-		<attribute name="interface" type="token" use="required" />
-		<anyAttribute processContents="lax" />
-	</complexType>
+	<simpleType name="Tcardinality">
+		<restriction base="string">
+			<enumeration value="0..1" />
+			<enumeration value="0..n" />
+			<enumeration value="1..1" />
+			<enumeration value="1..n" />
+		</restriction>
+	</simpleType>
 
-	<complexType name="Tservice">
-		<sequence>
-			<element name="property" type="cdi:Tproperty"
-				maxOccurs="unbounded" minOccurs="0" />
-			<element name="provide" type="cdi:Tprovide"
-				minOccurs="1" maxOccurs="unbounded" />
-			<any namespace="##other" processContents="lax"
-				minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-		<anyAttribute processContents="lax" />
-	</complexType>
+	<simpleType name="Tconfiguration-policy">
+		<restriction base="string">
+			<enumeration value="optional" />
+			<enumeration value="require" />
+			<enumeration value="ignore" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Tpolicy">
+		<restriction base="string">
+			<enumeration value="static" />
+			<enumeration value="dynamic" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Tpolicy-option">
+		<restriction base="string">
+			<enumeration value="reluctant" />
+			<enumeration value="greedy" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Treference_scope">
+		<restriction base="string">
+			<enumeration value="bundle" />
+			<enumeration value="prototype" />
+			<enumeration value="prototype_required" />
+		</restriction>
+	</simpleType>
 
 	<!-- Specifies the data type of a property or of the elements in a multi-value
 			property. Numerical and boolean values are trimmed before they are processed.
