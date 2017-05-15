@@ -11,6 +11,7 @@
 <xsl:import href="../../../licensed/docbook-xsl-ns/xhtml/chunkfast.xsl"/>
 <xsl:import href="custom-html-common.xsl"/>
 <xsl:include href="../../../licensed/docbook-xsl-ns/webhelp/xsl/titlepage.templates.xsl"/>
+<xsl:output omit-xml-declaration="yes"/>
 
 <!--==============================================================-->
 <!--  Parameter settings                                          -->
