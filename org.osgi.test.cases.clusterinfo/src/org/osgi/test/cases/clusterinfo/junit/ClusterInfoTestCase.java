@@ -19,6 +19,7 @@ package org.osgi.test.cases.clusterinfo.junit;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import org.osgi.service.clusterinfo.FrameworkManager;
 import org.osgi.service.clusterinfo.FrameworkNodeStatus;
 import org.osgi.service.clusterinfo.NodeStatus;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class ClusterInfoTestCase extends OSGiTestCase {
 	public void testFrameworkNodeStatusProperties() {
@@ -152,6 +154,35 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		Map<String,Object> metrics2 = ns.getMetrics(metricKey);
 		assertEquals(1, metrics2.size());
 		assertEquals(metrics.get(metricKey), metrics2.get(metricKey));
+
+	}
+
+	public void testCustomTags() throws Exception {
+		BundleContext ctx = getContext();
+
+		ServiceTracker<NodeStatus,NodeStatus> st = new ServiceTracker<NodeStatus,NodeStatus>(
+				ctx, ctx.createFilter("(&(objectClass="
+						+ NodeStatus.class.getName() + ")(tags=foo))"),
+				null);
+		st.open();
+
+		Collection<ServiceReference<FrameworkManager>> srefs = ctx
+				.getServiceReferences(FrameworkManager.class,
+						"(objectClass=" + NodeStatus.class.getName() + ")");
+		assertEquals(1, srefs.size());
+		FrameworkManager fm = ctx.getService(srefs.iterator().next());
+
+		assertNull("Precondition", st.getService());
+
+		URL tb3URL = getClass().getClassLoader().getResource("tb3.jar");
+		BundleDTO dto = fm.installBundle(tb3URL.toString());
+		fm.startBundle(dto.id);
+
+		Thread.sleep(5000);
+
+		assertNotNull(
+				"The service with added custom properties should be there now",
+				st.waitForService(5000));
 	}
 
 	private void assertBundleDTOEquals(BundleDTO dto, BundleDTO dto2) {
@@ -183,6 +214,24 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 				assertEquals(v1, v2);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<String> getStringPlusProperty(Object prop) {
+		if (prop == null) {
+			return Collections.emptyList();
+		}
+		if (prop instanceof String) {
+			return Collections.singletonList((String) prop);
+		}
+		if (prop instanceof Collection) {
+			return (Collection<String>) prop;
+		}
+		if (prop instanceof String[]) {
+			return Arrays.asList((String[]) prop);
+		}
+
+		return Collections.emptyList();
 	}
 }
 
