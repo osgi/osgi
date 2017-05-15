@@ -1146,15 +1146,10 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         but it will treat is as a <code>MyDTO</code> type.      
       </para>
       </section>
-    </section>
-    
-    <section>
-      <title>Conversion failures</title>
-      <para>...</para>
-    </section>
+    </section>    
   </section>
 
-  <section>
+  <section xml:id="util.converter-customizing.converters">
     <title>Customizing converters</title>
     <para>The Standard Converter applies the conversion rules described in this specification. While this is 
     useful for many applications, in some cases deviations from the specified rules may be necessary.
@@ -1215,6 +1210,37 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
     specific types are evaluated before catchall rules.
     </para>
     </section>
+  </section>
+
+  <section>
+    <title>Conversion failures</title>
+    <para>Not all conversions can be performed by the standard converter. 
+    It cannot convert text such as 'lorem ipsum' cannot
+    into a <code>long</code> value. Or the number <emphasis>pi</emphasis> 
+    into a map. When a conversion fails, the converter will throw a 
+    <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
+    </para>
+    
+    <para>If meaningful conversions exist between types not supported by the standard converter,
+    a customized converter can be used, see <xref linkend="util.converter-customizing.converters"/>. 
+    </para>
+    
+    <para>Some applications require different behaviour for error scenarios. For example they 
+    can use an empty value such as 0 or "" instead of the exception, or they might
+    require a different exception to be thrown. For these scenarios a custom error handler can
+    be registered. The error handler is only invoked in cases where otherwise a 
+    <code>ConversionException</code> would be thrown. The error handler can return a different
+    value instead or throw another exception.
+    </para>
+    <para>An error handler is registered by creating a custom converter and providing it with an error 
+    handler via the 
+    <xref linkend="org.osgi.util.converter.ConverterBuilder.errorHandler-ConverterFunction-" xrefstyle="hyperlink"/>
+    method.
+    
+    When multiple error handlers are registered for a given converter they are invoked in the order
+    in which they were registered until an error handler either throws an exception or returns a 
+    non-null value.
+    <remark>Note that the custom error handler cannot return null! Is this ok?</remark></para>
   </section>
 
   <section>
