@@ -28,6 +28,7 @@ import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.clusterinfo.FrameworkManager;
 import org.osgi.service.clusterinfo.FrameworkNodeStatus;
+import org.osgi.service.clusterinfo.NodeStatus;
 import org.osgi.test.support.OSGiTestCase;
 
 public class ClusterInfoTestCase extends OSGiTestCase {
@@ -137,6 +138,20 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		// TODO check udto
 		// TODO stopBundle
 		// TODO uninstallBundle
+	}
+
+	public void testMetrics() {
+		BundleContext ctx = getContext();
+		ServiceReference<NodeStatus> sref = ctx
+				.getServiceReference(NodeStatus.class);
+		NodeStatus ns = ctx.getService(sref);
+		Map<String,Object> metrics = ns.getMetrics();
+		assertTrue("There should be some metrics", metrics.size() > 0);
+		
+		String metricKey = metrics.keySet().iterator().next();
+		Map<String,Object> metrics2 = ns.getMetrics(metricKey);
+		assertEquals(1, metrics2.size());
+		assertEquals(metrics.get(metricKey), metrics2.get(metricKey));
 	}
 
 	private void assertBundleDTOEquals(BundleDTO dto, BundleDTO dto2) {
