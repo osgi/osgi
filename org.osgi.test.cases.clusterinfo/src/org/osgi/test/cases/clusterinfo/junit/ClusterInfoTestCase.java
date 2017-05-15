@@ -178,8 +178,6 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 		BundleDTO dto = fm.installBundle(tb3URL.toString());
 		fm.startBundle(dto.id);
 
-		Thread.sleep(5000);
-
 		assertNotNull(
 				"The service with added custom properties should be there now",
 				st.waitForService(5000));
