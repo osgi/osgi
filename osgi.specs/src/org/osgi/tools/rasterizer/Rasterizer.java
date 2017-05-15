@@ -20,14 +20,13 @@ import java.awt.Color;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import org.apache.batik.bridge.BridgeContext;
@@ -89,36 +88,35 @@ public class Rasterizer {
 	 * Convert an SVG image into a PNG image.
 	 *
 	 * @param inputPath the full path to an SVG image
-	 * @param outputPath a directory in which to output the PNG image
+	 * @param outputDir a directory in which to output the PNG image
 	 * @param scale
 	 * @param dpi
 	 * @throws Exception if there was a processing exception
 	 */
-	public void processPath(Path inputPath, Path outputPath,
+	public void processPath(Path inputPath, Path outputDir,
 			Float scale,
 			Float dpi) throws Exception {
 
-		TranscoderInput input = new TranscoderInput(
-				Files.newInputStream(inputPath, StandardOpenOption.READ));
-
-		Path outputFile = Paths.get(outputPath.toString(),
-				getFileNameNoExtension(inputPath) + ".png");
-
+		Path outputPath = outputDir
+				.resolve(getFileNameNoExtension(inputPath) + ".png");
 		System.out.printf("Rasterizing %s to %s\n", inputPath,
-				inputPath.relativize(outputFile).toString());
+				inputPath.relativize(outputPath));
+		
+		try (Reader input = Files.newBufferedReader(inputPath,
+				StandardCharsets.UTF_8);
+				OutputStream output = Files.newOutputStream(outputPath)) {
+			TranscoderInput inImage = new TranscoderInput(input);
 
-		OutputStream output = new FileOutputStream(outputFile.toFile());
+			TranscoderOutput outImage = new TranscoderOutput(output);
 
-		TranscoderOutput image = new TranscoderOutput(output);
+			Rectangle2D bounds = loadBounds(inputPath);
 
-		Rectangle2D bounds = loadBounds(inputPath);
+			Transcoder transcoder = getTranscoder(bounds, scale, dpi);
 
-		Transcoder transcoder = getTranscoder(bounds, scale, dpi);
+			transcoder.transcode(inImage, outImage);
 
-		transcoder.transcode(input, image);
-
-		output.flush();
-		output.close();
+			output.flush();
+		}
 	}
 
 	private PNGTranscoder getTranscoder(Rectangle2D bounds, Float scale,
