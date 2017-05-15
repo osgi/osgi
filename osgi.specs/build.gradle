@@ -5,19 +5,18 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 version bnd('osgi.version')
 
-ext.fop_home = new File(bnd.licensed, 'fop')
+ext.fop_home = file("${bnd.licensed}/fop")
 ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
   fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
 
 task javadoc('overwrite': true, 'type': Javadoc) {
   description 'Build the docbook flavored javadoc.'
   group 'documentation'
-  dependsOn compileJava
   destinationDir = new File(buildDir, 'javadoc')
   ext.javadocxml = new File(destinationDir, 'javadoc.xml')
   ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
-  inputs.file stylesheet
   classpath = compileJava.classpath
+  inputs.files classpath, stylesheet
   source bnd.allSrcDirs
   bnd.javadoc_specs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
@@ -52,10 +51,9 @@ task javadoc('overwrite': true, 'type': Javadoc) {
 task('rdmtsummary') {
   description 'Build the docbook flavored Residential DMT summary.'
   group 'documentation'
-  dependsOn compileJava
   ext.destinationDir = new File(buildDir, 'residentialdmt')
   ext.treesummaryxml = new File(destinationDir, 'treesummary.xml')
-  inputs.files project(':dmforest').sourceSets.main.allJava
+  inputs.files project(':dmforest').sourceSets.main.allJava, sourceSets.main.runtimeClasspath
   outputs.dir destinationDir
   doFirst {
     project.mkdir(destinationDir)
@@ -95,11 +93,10 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
       ext.book = taskName - '.xml'
       description "Generate the docbook xml file for the book ${book}."
       group 'documentation'
-      dependsOn compileJava
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file('docbook/xsl/identity.xsl')
       ext.bookxml = new File(destinationDir, taskName)
-      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml')
+      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml'), sourceSets.main.runtimeClasspath
       outputs.file bookxml
       doFirst {
         project.mkdir(destinationDir)
@@ -123,7 +120,7 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
         javaexec {
           classpath sourceSets.main.runtimeClasspath
           main = 'org.osgi.tools.xmlvalidation.XmlValidator'
-          args rootProject.file('licensed/docbook-xsd/docbook.xsd')
+          args file("${bnd.licensed}/docbook-xsd/docbook.xsd")
           args bookxml
         }.assertNormalExitValue()
       }
@@ -131,27 +128,23 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
   }
 }
 
-configure(tasks.getByPath('core.xml')) {
+configure(tasks.getByName('core.xml')) {
   [javadoc, xmlns].each {
-    dependsOn it
     inputs.files it
   }
 }
-configure(tasks.getByPath('cmpn.xml')) {
+configure(tasks.getByName('cmpn.xml')) {
   [javadoc, xmlns].each {
-    dependsOn it
     inputs.files it
   }
 }
-configure(tasks.getByPath('enterprise.xml')) {
+configure(tasks.getByName('enterprise.xml')) {
   [javadoc, xmlns].each {
-    dependsOn it
     inputs.files it
   }
 }
-configure(tasks.getByPath('residential.xml')) {
+configure(tasks.getByName('residential.xml')) {
   [javadoc, xmlns, rdmtsummary].each {
-    dependsOn it
     inputs.files it
   }
 }
@@ -162,13 +155,12 @@ tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for 
       ext.book = taskName - '-diff.xml'
       description "Generate the docbook diff xml file for the book ${book}."
       group 'documentation'
-      def booktask = tasks.getByPath("${book}.xml")
-      dependsOn booktask
+      def booktask = tasks.getByName("${book}.xml")
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
       ext.baselinexml = file("baseline/${book}.xml")
       ext.bookxml = new File(destinationDir, taskName)
-      inputs.files stylesheet, baselinexml, booktask
+      inputs.files booktask, stylesheet, baselinexml
       outputs.file bookxml
       doFirst {
         project.mkdir(destinationDir)
@@ -204,13 +196,12 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
       ext.book = taskName - '.fo'
       description "Generate the docbook fo file for the book ${book}."
       group 'documentation'
-      def booktask = tasks.getByPath("${book}.xml")
-      dependsOn booktask
+      def booktask = tasks.getByName("${book}.xml")
       ext.destinationDir = new File(buildDir, 'fo')
       ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
       ext.bookfo = new File(destinationDir, taskName)
       ext.watermark = 'docbook/graphics/draft.svg'
-      inputs.files stylesheet, booktask
+      inputs.files booktask, stylesheet
       outputs.file bookfo
       doFirst {
         project.mkdir(destinationDir)
@@ -235,14 +226,13 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       ext.book = taskName - '.pdf'
       description "Generate the docbook pdf file for the book ${book}."
       group 'documentation'
-      def fotask = tasks.getByPath("${book}.fo")
-      dependsOn fotask
+      def fotask = tasks.getByName("${book}.fo")
       ext.destinationDir = buildDir
       ext.bookpdf = new File(destinationDir, "osgi.${book}-${version}.pdf")
       def fontbasedir = file('fonts')
       def fopxconf = file('docbook/fop/fop-osgi.xconf')
       def log4jprops = file('docbook/fop/log4j.properties')
-      inputs.files fopxconf, log4jprops, fotask, fileTree('dir': 'docbook', 'include': '**/*.svg')
+      inputs.files fotask, fopxconf, log4jprops, fileTree('dir': 'docbook', 'include': '**/*.svg')
       inputs.dir fontbasedir
       outputs.file bookpdf
       doFirst {
@@ -277,34 +267,6 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
   }
 }
 
-tasks.addRule('Pattern: <name>.htmlresources: Copy the HTML resources for the book <name>.') { taskName ->
-  if (taskName.endsWith('.htmlresources')) {
-    task(taskName, type: Copy) {
-      ext.book = taskName - '.htmlresources'
-      description "Copy the HTML resources for the book ${book}."
-      group 'documentation'
-
-      from file('docbook/xsl/html-resources')
-      into new File(buildDir, "html/${book}")
-      from (new File(bnd.licensed, 'webresources')) {
-        include 'highlight.js/highlight.pack.js','jquery/jquery-3.2.1.slim.min.js','jquery.modal/jquery.modal.min.js','js-cookie/js.cookie.js','senna.js/senna-min.js'
-        into 'js'
-        eachFile { cfd ->
-          cfd.path = "js/${cfd.name}"
-        }
-      }
-      from (new File(bnd.licensed, 'webresources')) {
-        include 'highlight.js/styles/github.css'
-        into 'css'
-        eachFile { cfd ->
-          cfd.path = "css/${cfd.name}"
-        }
-      }
-      includeEmptyDirs = false
-    }
-  }
-}
-
 tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') { taskName ->
   if (taskName.endsWith('.rasterize')) {
     task(taskName) {
@@ -312,35 +274,31 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
       description "Rasterize SVGs for the book ${book}."
       group 'documentation'
 
-      def xmltask = tasks.getByPath("${book}.xml")
-      dependsOn xmltask
-
+      def booktask = tasks.getByName("${book}.xml")
       def imagesXSL = file('docbook/xsl/custom-html-images.xsl')
-      def imagesFile = new File(temporaryDir, 'images.txt')
-      def destinationDir = new File(buildDir, "html/${book}/images")
+      ext.destinationDir = new File(buildDir, "images/${book}")
 
-      inputs.files imagesXSL, fileTree('dir': "docbook", 'include': '**/*.svg')
+      inputs.files booktask, imagesXSL, fileTree('dir': 'docbook', 'include': '**/*.svg'), sourceSets.main.runtimeClasspath
       outputs.dir destinationDir
 
-      def svgFiles = []
-
       doFirst {
+        project.delete(destinationDir)
         project.mkdir(destinationDir)
-
+      }
+      doLast {
+        def imagesFile = new File(temporaryDir, 'images.txt')
         ant.xslt('style': imagesXSL,
-          'in': xmltask.bookxml,
+          'in': booktask.bookxml,
           'out': imagesFile) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
 
+        def svgFiles = fileTree('dir': 'docbook/graphics', 'include': '*draft.svg').files
         imagesFile.eachLine { line ->
           svgFiles << file("docbook/${book}/${line}")
         }
 
-        svgFiles << file("docbook/graphics/draft.svg")
-      }
-      doLast {
         javaexec {
           systemProperty('scale', '2')
           systemProperty('dpi', '300')
@@ -357,57 +315,38 @@ tasks.addRule('Pattern: <name>.rasterize: Rasterize SVGs for the book <name>.') 
   }
 }
 
-tasks.addRule('Pattern: <name>.zip: Create a ZIP archive of the HTML produced for the book <name>.') { taskName ->
-  if (taskName.endsWith('.zip')) {
-    task(taskName, type: Zip) {
-      ext.book = taskName - '.zip'
-      description "Create a ZIP archive of the HTML produced for the book ${book}."
-      group 'documentation'
-
-      def htmltask = tasks.getByPath("${book}.html")
-      dependsOn htmltask
-
-      from new File(buildDir, "html/${book}")
-      include '**/*'
-      archiveName "osgi.${book}-${version}-html.zip"
-      destinationDir(buildDir)
-    }
-  }
-}
-
-tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book <name>.') { taskName ->
+tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the book <name>.') { taskName ->
   if (taskName.endsWith('.html')) {
     task(taskName) {
       ext.book = taskName - '.html'
-      description "Generate the html files for the book ${book}."
+      description "Generate the docbook html files for the book ${book}."
       group 'documentation'
 
-      def htmlresourcestask = tasks.getByPath("${book}.htmlresources")
-      def rasterizetask = tasks.getByPath("${book}.rasterize")
-      dependsOn htmlresourcestask, rasterizetask
-
+      def booktask = tasks.getByName("${book}.xml")
+      def rasterizetask = tasks.getByName("${book}.rasterize")
       def stylesheet = file('docbook/xsl/custom-html.xsl')
       def commonXSL = file('docbook/xsl/custom-html-common.xsl')
       def profileXSL = file('docbook/xsl/custom-html-profile.xsl')
-      def destinationDir = new File(buildDir, "html/${book}")
+      def htmlResources = file('docbook/xsl/html-resources')
+      def licensedResources = file("${bnd.licensed}/webresources")
+      ext.destinationDir = new File(buildDir, "html/${book}")
 
-      inputs.files stylesheet, commonXSL, profileXSL
+      inputs.files booktask, rasterizetask, stylesheet, commonXSL, profileXSL, htmlResources, licensedResources
       outputs.dir destinationDir
 
       doFirst {
+        project.delete(destinationDir)
         project.mkdir(destinationDir)
       }
       doLast {
-        def xmltask = tasks.getByPath("${book}.xml")
         def tmpxml = new File(temporaryDir, 'book.xml')
-
         ant.xslt('style': profileXSL,
-          'in': xmltask.bookxml,
-          'out': tmpxml) {
+          'in': booktask.bookxml,
+          'out': tmpxml,
+          'force': true) {
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
-
         ant.xslt('style': stylesheet,
           'in': tmpxml,
           'out': new File(temporaryDir, 'book.txt')) {
@@ -420,7 +359,45 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html file for the book
           param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
           param('name': 'release.version', 'expression': version)
         }
+
+        copy {
+          into destinationDir
+          from htmlResources
+          from (licensedResources) {
+            include '**/*.js'
+            into 'js'
+            eachFile { fcd ->
+              fcd.path = "js/${fcd.name}"
+            }
+          }
+          from (licensedResources) {
+            include '**/*.css'
+            into 'css'
+            eachFile { fcd ->
+              fcd.path = "css/${fcd.name}"
+            }
+          }
+          from (rasterizetask) {
+            into 'images'
+          }
+          includeEmptyDirs = false
+        }
       }
+    }
+  }
+}
+
+tasks.addRule('Pattern: <name>.zip: Generate a ZIP archive of the docbook html for the book <name>.') { taskName ->
+  if (taskName.endsWith('.zip')) {
+    task(taskName, type: Zip) {
+      ext.book = taskName - '.zip'
+      description "Generate a ZIP archive of the docbook html for the book ${book}."
+      group 'documentation'
+      destinationDir = buildDir
+      baseName = "osgi.${book}"
+      classifier = 'html'
+
+      from tasks.getByName("${book}.html")
     }
   }
 }
