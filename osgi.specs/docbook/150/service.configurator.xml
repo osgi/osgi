@@ -639,6 +639,7 @@
 
     <section>
       <title>Common Capabilities and Requirements</title>
+      <remark>Should this section be moved to the previous chapter? (Capabilities)</remark>
       <para>Both configuration files and configuration bundles offer configuration for one or more PIDs. 
       This capability is modelled using the <code>osgi.configuration</code> namespace. Configuration files and bundles 
       should define Capabilities for each configuration that they define, and each capability should have 
