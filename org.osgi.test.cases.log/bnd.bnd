@@ -17,8 +17,7 @@ Import-Package: ${-signaturetest}, *
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log, \
-    org.osgi.service.log.admin, \
-    org.osgi.service.log.stream
+    org.osgi.service.log.admin
 
 -runbundles						= \
 	org.osgi.impl.service.log;  version=latest,\
