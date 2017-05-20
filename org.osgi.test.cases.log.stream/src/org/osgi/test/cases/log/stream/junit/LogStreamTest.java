@@ -43,7 +43,7 @@ public class LogStreamTest extends OSGiTestCase {
 		logStreamProviderReference = getContext()
 				.getServiceReference(LogStreamProvider.class);
 		logStreamProvider = getContext().getService(logStreamProviderReference);
-		
+
 	}
 
 	public void tearDown() throws Exception {
@@ -52,90 +52,82 @@ public class LogStreamTest extends OSGiTestCase {
 		getContext().ungetService(logStreamProviderReference);
 
 	}
-	
+
 	public void testLogWithHistory() throws Exception {
 		for (int i = 0; i < 50; i++) {
-			logService.getLogger("Test1").audit(String.valueOf(i + 1));
+			logService.getLogger(getName()).audit(String.valueOf(i + 1));
 		}
 
-		PushStream<LogEntry> stream = logStreamProvider
-				.createStream(LogStreamProvider.Options.HISTORY);
 		CountDownLatch latch = new CountDownLatch(150);
+		try (PushStream<LogEntry> stream = logStreamProvider
+				.createStream(LogStreamProvider.Options.HISTORY)) {
 
-		for (int i = 50; i < 100; i++) {
-			logService.getLogger("Test1").audit(String.valueOf(i + 1));
+			for (int i = 50; i < 100; i++) {
+				logService.getLogger(getName()).audit(String.valueOf(i + 1));
+			}
+
+			stream.filter(l -> getName().equals(l.getLoggerName()))
+					.forEach(l -> {
+						System.out.printf("%s[%s]: %s%n", l.getLoggerName(),
+								l.getSequence(), l.getMessage());
+						latch.countDown();
+					});
+
+			for (int i = 100; i < 150; i++) {
+				logService.getLogger(getName()).audit(String.valueOf(i + 1));
+			}
+
+			latch.await(100, TimeUnit.MILLISECONDS);
+			assertEquals("Did not get full history", 0, latch.getCount());
 		}
-
-		stream.forEach(l -> {
-			System.out.println(l.getMessage());
-			latch.countDown();
-		}).onResolve(
-				() -> System.out.println("Stream closed")
-				);
-
-		for (int i = 100; i < 150; i++) {
-			logService.getLogger("Test1").audit(String.valueOf(i + 1));
-		}
-
-		latch.await(100, TimeUnit.MILLISECONDS);
-		assertEquals("Did not get full history", 0, latch.getCount());
-		stream.close();
 	}
 
 	public void testStreamSize() throws Exception {
-
-		PushStream<LogEntry> ps = logStreamProvider
-				.createStream();
-		@SuppressWarnings("serial")
-		final Set<String> messageSet = new HashSet<String>() {
-
-			{
-				add("test1");
-				add("test2");
-				add("test3");
-			}
-		};
+		Set<String> messageSet = new HashSet<String>();
+		messageSet.add("test1");
+		messageSet.add("test2");
+		messageSet.add("test3");
 
 		CountDownLatch latch = new CountDownLatch(messageSet.size());
-		ps.forEach(m -> {
-			messageSet.remove(m.getMessage());
-			latch.countDown();
-		});
+		try (PushStream<LogEntry> ps = logStreamProvider.createStream()) {
+			ps.filter(l -> getName().equals(l.getLoggerName())).forEach(m -> {
+				messageSet.remove(m.getMessage());
+				latch.countDown();
+			});
 
-		logService.getLogger("Test2").audit("test1");
-		logService.getLogger("Test2").audit("test2");
-		logService.getLogger("Test2").audit("test3");
+			logService.getLogger(getName()).audit("test1");
+			logService.getLogger(getName()).audit("test2");
+			logService.getLogger(getName()).audit("test3");
 
-		latch.await(10, TimeUnit.MILLISECONDS);
-		ps.close();
+			latch.await(10, TimeUnit.MILLISECONDS);
+		}
 		assertEquals("Some number of message, >0 not in stream", 0,
 				messageSet.size());
 
 	}
 
 	public void testCloseOnUnget() throws Exception {
-
-		PushStream<LogEntry> stream = logStreamProvider.createStream();
+		Promise<Long> p = null;
 		CountDownLatch latch = new CountDownLatch(1);
+		PushStream<LogEntry> stream = logStreamProvider.createStream();
+		try {
+			p = stream.filter(l -> getName().equals(l.getLoggerName()))
+					.filter(m -> m.getMessage().startsWith("count"))
+					.count();
 
-		Promise<Long> p = stream.filter(m -> m.getMessage().equals("test1"))
-				.count();
+			logService.getLogger(getName()).audit("count1");
+			logService.getLogger(getName()).audit("count2");
+			logService.getLogger(getName()).audit("nocount1");
+			logService.getLogger(getName()).audit("count3");
+			logService.getLogger(getName()).audit("nocount2");
 
-		logService.getLogger("Test3").audit("test1");
-		logService.getLogger("Test3").audit("test1");
-		logService.getLogger("Test3").audit("test2");
-		logService.getLogger("Test3").audit("test3");
-
-		latch.await(10, TimeUnit.MILLISECONDS);
-		
-		// ungetService closes the stream
-		getContext().ungetService(logStreamProviderReference);
-
+			latch.await(10, TimeUnit.MILLISECONDS);
+		} finally {
+			// ungetService closes the stream
+			getContext().ungetService(logStreamProviderReference);
+		}
 		long count = p.getValue();
-
-		assertEquals("Incorrect count", 2, count);
-
+		assertEquals("Incorrect count", 3, count);
 	}
-
 
 }
