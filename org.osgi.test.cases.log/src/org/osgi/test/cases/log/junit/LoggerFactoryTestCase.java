@@ -55,7 +55,7 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 	static final String TEST_LOGGER_NAME = "test.logger.name";
 	// TODO remove these when there is a spec'ed constants
 	static final String	PID_PREFIX_LOG_ADMIN	= "org.osgi.service.log.admin";
-	static final String	NULL_VALUE				= "NULL";
+
 
 	public void testServiceReferenceIsLoggerFactory()
 			throws InvalidSyntaxException {
@@ -462,8 +462,6 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		Map<String,LogLevel> temp = new HashMap<>();
 		temp.put("default", LogLevel.ERROR);
 		temp.put("default.audit", LogLevel.AUDIT);
-		temp.put("default.audit.null1.null2", null);
-		temp.put("default.audit.null1", null);
 		temp.put("default.audit.warnOverride", LogLevel.WARN);
 		temp.put("default.audit.infoOverride", LogLevel.INFO);
 		temp.put("default.audit.debugOverride", LogLevel.DEBUG);
@@ -539,8 +537,7 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		Hashtable<String,String> result = new Hashtable<>();
 		for (Map.Entry<String,LogLevel> entry : logLevels.entrySet()) {
 			LogLevel logLevel = entry.getValue();
-			String logLevelValue = logLevel == null ? NULL_VALUE
-					: logLevel.toString();
+			String logLevelValue = logLevel.toString();
 			result.put(entry.getKey(), logLevelValue);
 		}
 		// purposefully place an value that does not map to a LogLevel enum
@@ -607,176 +604,6 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		}
 		doLoggerLogging(level, b, logger, readers);
 	}
-
-
-	public void testAncestorsNullLogLevel() {
-		String ancestor = "X.Y.Z";
-
-		Logger logger = logService.getLogger(ancestor);
-		Map<String,LogLevel> childMap = new HashMap<>();
-
-		// setting up map for child contexts with null log level.
-
-		childMap.put(ancestor, null); // null log level
-		while (!ancestor.isEmpty()) { // other log levels
-			int lastDot = ancestor.lastIndexOf('.');
-			if (lastDot >= 0) {
-				ancestor = ancestor.substring(0, lastDot);
-			} else {
-				ancestor = "";
-			}
-			childMap.put(ancestor, LogLevel.INFO);
-
-		}
-
-		bsnContext.setLogLevels(childMap);
-		bsnVersionContext.setLogLevels(childMap);
-		bsnVersionLocationContext.setLogLevels(childMap);
-
-		// setting up map for root context.
-		rootContext.setLogLevels(
-				Collections.singletonMap(logger.getName(), LogLevel.ERROR));
-
-		// test for isXXX method for rootContext
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				rootContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		// test the various isXXX methods, the effective level is going to
-		// be ERROR or INFO for bsn contexts
-		// depending on the ancestor used.
-
-
-		ancestor = logger.getName();
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnVersionContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnVersionLocationContext
-						.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertFalse("Info should not be enabled", logger.isInfoEnabled());
-
-		while (!ancestor.isEmpty()) { // other log levels
-
-			int lastDot = ancestor.lastIndexOf('.');
-			if (lastDot >= 0) {
-				ancestor = ancestor.substring(0, lastDot);
-			} else {
-				ancestor = "";
-			}
-			Logger logger1 = logService.getLogger(ancestor);
-			// bsnContext
-			assertEquals("Wrong effective level.", LogLevel.INFO,
-					bsnContext.getEffectiveLogLevel(ancestor));
-			assertTrue("Info should be enabled.", logger1.isInfoEnabled());
-
-			// bsnVersionContext
-			assertEquals("Wrong effective level.", LogLevel.INFO,
-					bsnVersionContext.getEffectiveLogLevel(ancestor));
-			assertTrue("Info should be enabled.", logger1.isInfoEnabled());
-
-			// bsnVersionLocationContext
-			assertEquals("Wrong effective level.", LogLevel.INFO,
-					bsnVersionLocationContext.getEffectiveLogLevel(ancestor));
-			assertTrue("Info should be enabled.", logger1.isInfoEnabled());
-		}
-
-
-	}
-
-
-	public void testLoggerNameNotPresent() {
-		String ancestor = "X.Y.Z.1";
-
-		Logger logger = logService.getLogger(ancestor);
-		Map<String,LogLevel> childMap = new HashMap<>();
-
-		// setting up map for child contexts with a null log level and other log
-		// levels
-
-		int flag = 0;
-
-		while (!ancestor.isEmpty()) { // other log levels
-			int lastDot = ancestor.lastIndexOf('.');
-			if (lastDot >= 0) {
-				ancestor = ancestor.substring(0, lastDot);
-			} else {
-				ancestor = "";
-			}
-			if (flag == 0) {
-				childMap.put(ancestor, null);
-			}
-			else {
-				childMap.put(ancestor, LogLevel.INFO);
-			}
-
-			flag = 1;
-		}
-
-		bsnContext.setLogLevels(childMap);
-		bsnVersionContext.setLogLevels(childMap);
-		bsnVersionLocationContext.setLogLevels(childMap);
-		
-		// setting up map for root context.
-		rootContext
-				.setLogLevels(Collections.singletonMap("X.Y", LogLevel.ERROR));
-
-		ancestor = logger.getName();
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnVersionContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.ERROR,
-				bsnVersionLocationContext
-						.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isErrorEnabled());
-
-		assertFalse("Info should not be enabled", logger.isInfoEnabled());
-
-		// No non null log level found in the root context
-		rootContext
-				.setLogLevels(Collections.singletonMap("X", (LogLevel) null));
-
-		/* Empty root context */
-		// rootContext.setLogLevels(Collections.<String, LogLevel> emptyMap());
-
-		/*
-		 * Does not find logger name or any of its ancestor logger names in the
-		 * root context
-		 */
-		// rootContext.setLogLevels(Collections.singletonMap("A",
-		// LogLevel.INFO));
-
-		ancestor = logger.getName();
-		assertEquals("Wrong effective level.", LogLevel.WARN,
-				bsnContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isWarnEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.WARN,
-				bsnVersionContext.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isWarnEnabled());
-
-		assertEquals("Wrong effective level.", LogLevel.WARN,
-				bsnVersionLocationContext
-						.getEffectiveLogLevel(logger.getName()));
-		assertTrue("Error should be enabled.", logger.isWarnEnabled());
-
-		assertFalse("Info should not be enabled", logger.isInfoEnabled());
-
-
-	}
-
 
 
 
