@@ -1,0 +1,6 @@
+Bundle-Version: 1.0
+Bundle-SymbolicName: $(p).tb1
+Bundle-Activator: $(p).tb1.LogTestActivator
+Bundle-Description: Test Bundle for launch log tests
+
+Private-Package	: $(p).tb1.*

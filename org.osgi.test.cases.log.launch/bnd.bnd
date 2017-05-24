@@ -1,0 +1,31 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Description					: Framework test cases.
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
+	
+	
+Test-Cases							= ${testcases}
+
+-buildpath: \
+	org.osgi.test.support;version=project,\
+	org.osgi.resource;version=project,\
+	org.osgi.framework;version=project,\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	${junit},\
+	org.osgi.service.log;version=latest
+
+
+-runbundles							= \
+	
+-runframework = none
+
+-runproperties = ${runproperties}, \
+	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \
+	${p}.bundles=
+
+Include-Resource = log.launch.tb1.jar
