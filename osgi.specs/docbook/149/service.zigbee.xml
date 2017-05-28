@@ -498,7 +498,7 @@
       <listitem>
         <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.LOGICAL_TYPE"
         xrefstyle="hyperlink"/> –
-        (<code>zigbee.node.description.node.type/Integer</code>) specifies a
+        (<code>zigbee.node.description.node.type/Short</code>) specifies a
         device logical type.</para>
       </listitem>
 
@@ -524,7 +524,7 @@
         <para><xref
         linkend="org.osgi.service.zigbee.ZigBeeNode.RECEIVER_ON_WHEN_IDLE"
         xrefstyle="hyperlink"/> –
-        (<code>zigbee.node.receiver.on.when.idle/Integer</code>) represents
+        (<code>zigbee.node.receiver.on.when.idle/Boolean</code>) represents
         the ZigBee receiver on when idle, that is, 4th bit of "MAC
         Capabilities" in Node Descriptor, which is set to 1 if the device does
         not disable its receiver to conserve power during idle periods, set to
@@ -2163,7 +2163,7 @@ public class UI {
         properties.put(ZigBeeEndpoint.ENDPOINT_ID, endpointId);
         properties.put(ZCLCluster.ID, clusterId);
         properties.put(ZCLAttribute.ID, attributeId);
-        properties.put(ZigBeeEventListener.ATTRIBUTE_DATA_TYPE, dataType);
+        properties.put(ZCLEventListener.ATTRIBUTE_DATA_TYPE, dataType);
         // events will be filtered by the basedriver call notifyEvent() method
         // only when the event comes from a node, endpoint, cluster, attribute
         // matching these properties
