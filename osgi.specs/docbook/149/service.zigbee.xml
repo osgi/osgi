@@ -291,9 +291,8 @@
     represented by the underlying ZigBee host (ZigBee chip) on the ZigBee
     network. This is a <emphasis role="italic">device export</emphasis>
     situation. For more information about this process, please report to the
-    “Exporting a ZigBee device”<remark>BJH I cannot find any such section in
-    the document. If there is such a section, then it should be
-    xrefed.</remark> section below.</para>
+    <xref linkend="service.zigbee.implmentinganendpoint" xrefstyle="hyperlink"/>.
+    </para>
 
     <remark>BJH This figure is incorrectly drawn. It improperly uses the
     service triangle from Figure 5.1 in the Core Spec. In the figure, the
@@ -355,7 +354,9 @@
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
     objects directly call these methods to notify listeners with reports in
     the export situation. The Base Driver conveys events received
-    through<remark>BJH the sentence ends abruptly.</remark></para>
+    through a <xref linkend="org.osgi.service.zigbee.ZCLEventListener" 
+    xrefstyle="hyperlink"/> to networked the ZigBee endpoints that have 
+    subscribed to relevant reports.</para>
 
     <para>Endpoints, clusters, commands and attributes are specified by ZigBee
     Alliance or vendor-specific descriptions. Those descriptions may be
@@ -1880,7 +1881,7 @@ public class UI {
   </section>
 
   <section>
-    <title>Implementing a ZigBee Endpoint</title>
+    <title xml:id="service.zigbee.implmentinganendpoint">Implementing a ZigBee Endpoint</title>
 
     <para>OSGi services can also be exported as ZigBee endpoints to the local
     networks, in a way that is transparent to typical ZigBee devices
@@ -1919,7 +1920,7 @@ public class UI {
     services must make sure these properties are set accordingly or that none
     of these properties are set. In case a ZigBee host is not initialized yet
     or the base driver is not active on the OSGi framework, an endpoint
-    implementation<remark>BJH The sentence ends abruptly.</remark></para>
+    implementation MAY not have any of the above identifiers.</para>
 
     <para>The Base Driver will export the endpoint on the ZigBee network
     associated to the ZigBee <xref
