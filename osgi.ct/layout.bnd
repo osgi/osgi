@@ -49,6 +49,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
     org.osgi.test.cases.log, \
+    org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.log.stream, \
     org.osgi.test.cases.measurement, \
     org.osgi.test.cases.metatype, \
@@ -99,16 +100,17 @@ build.enterprise.tests = \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
     org.osgi.test.cases.http.whiteboard.secure, \
-	org.osgi.test.cases.jdbc, \
+    org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jmx.cm, \
     org.osgi.test.cases.jmx.framework, \
     org.osgi.test.cases.jmx.framework.secure, \
     org.osgi.test.cases.jmx.provisioning, \
     org.osgi.test.cases.jmx.useradmin, \
-	org.osgi.test.cases.jndi, \
-	org.osgi.test.cases.jndi.secure, \
+    org.osgi.test.cases.jndi, \
+    org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
     org.osgi.test.cases.log, \
+    org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.log.stream, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.metatype.annotations, \
@@ -127,10 +129,10 @@ build.enterprise.tests = \
     org.osgi.test.cases.serviceloader.secure, \
     org.osgi.test.cases.subsystem, \
     org.osgi.test.cases.subsystem.secure, \
-	org.osgi.test.cases.transaction, \
+    org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
-   	org.osgi.test.cases.xml
+    org.osgi.test.cases.xml
 
 jar.residential.tests = \
     ${repo;org.osgi.test.filter;latest}
@@ -152,6 +154,7 @@ build.residential.tests = \
     org.osgi.test.cases.event.secure, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.log, \
+    org.osgi.test.cases.log.launch, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.metatype.annotations, \
     org.osgi.test.cases.networkadapter, \
