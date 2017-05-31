@@ -22,6 +22,9 @@ import org.osgi.dto.DTO;
  */
 public class NodeStatusDTO extends DTO {
 	
+	/**
+	 * Prefix used for the converter
+	 */
 	public static final String	PREFIX_	= "osgi.clusterinfo.";
 
 	/**
