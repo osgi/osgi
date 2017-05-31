@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="151"
+         revision="$Id$"
+         version="5" xml:id="service.jaxrs"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>JAX-RS Whiteboard Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.jaxrs.whiteboard-version"
+    linkend="org.osgi.service.jaxrs.whiteboard"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>REpresentational State Transfer (REST) is a simple pattern for producing
+    Web Services. RESTful services use URI pattern matching to match a particular
+    web resource. Different HTTP verbs, for example <code>GET</code> and <code>DELETE</code>, 
+    then map to different operations on that resource. Standard HTTP response codes
+    are used to communicate the result of an operation, potentially including a
+    response body if the operation returns a result.</para>
+    
+    <para>The <xref linkend="service.jaxrs-i21217577"/>
+    defines a set of annotation mappings which allow Plain Old Java Objects (POJOs) 
+    to be directly exposed as RESTful web resources. Furthermore the specification
+    defines a pluggable model for extending the behavior of the application and the
+    features of the JAX-RS container itself. For example an extension may define 
+    specific error responses that should be sent when particular exceptions occur, 
+    or an extension may add support for serializing responses to a different format.
+    The OSGi JAX-RS Whiteboard Specification provides a light and convenient way of 
+    using these POJOs and extensions in an OSGi environment through the use of the <xref
+    linkend="service.jaxrs-whiteboard.pattern.ref"/>.</para>
+
+    <para>The JAX-RS Whiteboard specification supports:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Registering Resources</emphasis> - Registering a JAX-RS
+        annotated POJO in the Service Registry makes it available to be bound to an
+        endpoint and to start responding to incoming requests.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Registering Extensions</emphasis> - The JAX-RS
+        specification defines a variety of pluggable extensions. JAX-RS
+        extensions can be registered in the Service Registry
+        to include them in the handling pipeline.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Requiring Extensions</emphasis> - Sometimes JAX-RS
+        resources, or even JAX-RS extensions, depend upon the presence of
+        another extension. For example a JAX-RS resource and a JAX-RS 
+        exception mapper may both depend on a JSON serializer. JAX-RS
+        Whiteboard services may define preconditions that must be satisfied
+        before they can be bound.</para>
+      </listitem>
+    </itemizedlist>
+
+    <remark>The Http Whiteboard talks about support for different HTTP versions.
+    Is that necessary here?</remark>
+
+    <para>JAX-RS Whiteboard implementations must support version 2.0 of the Java
+    Servlet API.</para>
+    
+    <remark>JAX-RS 2.1 will be out in Q3 2017 - should that be the target?</remark>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This specification defines the following entities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>JAX-RS Whiteboard service</emphasis> - An object
+          registered in the Service Registry providing the necessary Whiteboard
+          service properties defined by this specification. JAX-RS Whiteboard
+          services may be <emphasis>resource</emphasis> or <emphasis>extension</emphasis>
+          services</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JAX-RS Whiteboard implementation</emphasis> - An
+          implementation that provides one or more JAX-RS Whiteboards.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>JAX-RS Whiteboard</emphasis> - A runtime instance
+          that processes JAX-RS Whiteboard services. Each JAX-RS Whiteboard service
+          may be processed by multiple JAX-RS Whiteboards</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JAX-RS Service Runtime service</emphasis> - A service
+          providing runtime introspection into a JAX-RS Whiteboard instance.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JAX-RS Resource Service</emphasis> - A service that
+          provides one or more RESTful resource methods which map to incoming HTTP requests.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JAX-RS Extension Service</emphasis> - A service that
+          extends the functionality of a JAX-RS Whiteboard.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>JAX-RS Whiteboard Overview Diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.313in"
+                       contentwidth="5.496in" fileref="overall.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+
+
+  <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The JAX-RS Whiteboard implementation bundle must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.jaxrs</code>. This capability can be used
+      by provisioning tools and during resolution to ensure that a JAX-RS
+      Whiteboard implementation is present to process the Whiteboard services
+      defined in this specification. The capability must also declare a uses
+      constraint for the <code>javax.ws.rs.*</code> specification packages, and for
+      the and OSGi JAX-RS Whiteboard package. The version of this capability must
+      match the version of this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.jaxrs";
+       uses:="javax.ws.rs, javax.ws.rs.client, javax.ws.rs.container,
+              javax.ws.rs.core, javax.ws.rs.ext, 
+              org.osgi.service.jaxrs.whiteboard";
+       version:Version="1.0"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.contract Capability</title>
+
+      <para>The JAX-RS Whiteboard implementation must provide a capability in
+      the <link
+      linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
+      namespace with name <code>JavaJAXRS</code> if it exports the JAX-RS
+      specification packages. See <xref
+      linkend="service.http.whiteboard-portable.java.contracts.ref"/>.</para>
+
+      <para>Providing the <code>osgi.contract</code> capability enables
+      developer to build portable bundles for packages that are not versioned
+      under OSGi Semantic Versioning rules. For more details see <xref
+      linkend="service.namespaces-osgi.contract.namespace"/>.</para>
+
+      <para>If the JAX-RS API is provided by another bundle, the JAX-RS
+      Whiteboard implementation must be a consumer of the API and require the
+      contract.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the <xref
+      linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+      xrefstyle="hyperlink"/> service must provide a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare a
+      uses constraint for the <code>org.osgi.service.jaxrs.runtime</code> and
+      <code>org.osgi.service.jaxrs.runtime.dto</code> packages:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime";
+  uses:="org.osgi.service.jaxrs.runtime,org.osgi.service.jaxrs.runtime.dto"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>This section only applies when executing in an OSGi environment
+    which is enforcing Java permissions.</para>
+    
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.dto.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+
+      <bibliomixed xml:id="service.jaxrs-i21217577"><title>Java
+      API for RESTful Web Services Specification 2.0</title>
+      https://jcp.org/en/jsr/detail?id=339</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.jaxrs-portable.java.contracts.ref"><title>Portable
+      Java Contract
+      Definitions</title>https://www.osgi.org/portable-java-contract-definitions/</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.jaxrs-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
+
+    </bibliolist>
+  </section>
+</chapter>
