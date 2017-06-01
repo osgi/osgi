@@ -31,8 +31,9 @@ import org.osgi.annotation.versioning.ProviderType;
  * additional arguments. If the last argument is a {@code Throwable} or
  * {@code ServiceReference}, it is added to the generated {@link LogEntry} and
  * then if the next to last argument is a {@code ServiceReference} or
- * {@code Throwable} and not the same type as the last argument, it is added to
- * the generated {@link LogEntry}. For example:
+ * {@code Throwable} and not the same type as the last argument, it is also
+ * added to the generated {@link LogEntry}. These arguments will not be used as
+ * message arguments. For example:
  * 
  * <pre>
  * logger.info("Found service %s.", serviceReference, serviceReference);
