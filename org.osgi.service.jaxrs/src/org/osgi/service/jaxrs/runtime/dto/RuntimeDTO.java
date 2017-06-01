@@ -18,7 +18,6 @@ package org.osgi.service.jaxrs.runtime.dto;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.resource.dto.ResourceDTO;
 
 /**
  * Represents the state of a Http Service Runtime.
@@ -35,18 +34,9 @@ public class RuntimeDTO extends DTO {
 	public ServiceReferenceDTO		serviceDTO;
 
 	/**
-	 * Returns the representations of the JAX-RS resource services associated
-	 * with this Runtime. The returned array may be empty if this whiteboard is
-	 * currently not associated with any JAX-RS Resource services.
+	 * Returns the current state of the default application for this Runtime.
 	 */
-	public ResourceDTO[]			resourceDTOs;
-
-	/**
-	 * Returns the representations of the JAX-RS extension services associated
-	 * with this Runtime. The returned array may be empty if this whiteboard is
-	 * currently not associated with any JAX-RS extension services.
-	 */
-	public ExtensionDTO[]			extensionDTOs;
+	public ApplicationDTO			defaultApplication;
 
 	/**
 	 * Returns the representations of the JAX-RS Application services associated
@@ -56,23 +46,23 @@ public class RuntimeDTO extends DTO {
 	public ApplicationDTO[]			applicationDTOs;
 
 	/**
-	 * Returns the representations of the JAX-RS resource services associated
-	 * with this runtime but currently not used due to some problem. The
-	 * returned array may be empty.
+	 * Returns the representations of the JAX-RS resource services targeted to
+	 * this runtime but currently not used due to some problem. The returned
+	 * array may be empty.
 	 */
 	public FailedResourceDTO[]		failedResourceDTOs;
 
 	/**
-	 * Returns the representations of the JAX-RS extension services associated
-	 * with this runtime but currently not used due to some problem. The
-	 * returned array may be empty.
+	 * Returns the representations of the JAX-RS extension services targeted to
+	 * this runtime but currently not used due to some problem. The returned
+	 * array may be empty.
 	 */
 	public FailedExtensionDTO[]		failedExtensionDTOs;
 
 	/**
-	 * Returns the representations of the JAX-RS extension services associated
-	 * with this runtime but currently not used due to some problem. The
-	 * returned array may be empty.
+	 * Returns the representations of the JAX-RS extension services targeted to
+	 * this runtime but currently not used due to some problem. The returned
+	 * array may be empty.
 	 */
 	public FailedApplicationDTO[]	failedApplicationDTOs;
 

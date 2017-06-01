@@ -58,16 +58,13 @@ public final class JaxRSWhiteboardConstants {
 	public static final String	JAX_RS_NAME		= "osgi.jaxrs.name";
 
 	/**
-	 * Service property specifying the base URI mapping for a JAX-RS resource
-	 * service.
+	 * Service property specifying that a JAX-RS resource should be processed by
+	 * the whiteboard.
 	 * <p>
-	 * The specified uri is used to determine whether a request should be mapped
-	 * to the resource. Services without this service property are ignored.
-	 * <p>
-	 * The value of this service property must be of type {@code String}, and
-	 * will have a "/" prepended if no "/" exists.
+	 * The value of this service property must be of type {@code String} and set
+	 * to &quot;true&quot;.
 	 */
-	public static final String	JAX_RS_RESOURCE_BASE		= "osgi.jaxrs.resource.base";
+	public static final String	JAX_RS_RESOURCE				= "osgi.jaxrs.resource";
 
 	/**
 	 * Service property specifying the base URI mapping for a JAX-RS application
@@ -80,6 +77,24 @@ public final class JaxRSWhiteboardConstants {
 	 * will have a "/" prepended if no "/" exists.
 	 */
 	public static final String	JAX_RS_APPLICATION_BASE		= "osgi.jaxrs.application.base";
+
+	/**
+	 * Service property specifying the target application for a JAX-RS resource
+	 * or extension service.
+	 * <p>
+	 * The specified filter is used to determine whether a resource should be
+	 * included in a particular application. Services without this service
+	 * property are bound to the default Application.
+	 * <p>
+	 * The value of this service property must be of type {@code String}, and be
+	 * a valid OSGi filter.
+	 */
+	public static final String	JAX_RS_APPLICATION_SELECT	= "osgi.jaxrs.application.select";
+
+	/**
+	 * The name of the default JAX-RS application in every Whiteboard instance.
+	 */
+	public static final String	JAX_RS_DEFAULT_APPLICATION	= ".default";
 
 	/**
 	 * Service property specifying the name of a JAX-RS extension service.

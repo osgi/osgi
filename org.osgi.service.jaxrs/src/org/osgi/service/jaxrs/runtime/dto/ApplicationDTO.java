@@ -17,6 +17,7 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.resource.dto.ResourceDTO;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 
 /**
@@ -40,9 +41,26 @@ public abstract class ApplicationDTO extends DTO {
 	public String					base;
 
 	/**
-	 * The RequestPaths handled by this resource
+	 * The RequestPaths handled by statically defined resources in this
+	 * Application
 	 */
 	public ResourceMethodInfoDTO[]	resourceMethods;
+
+	/**
+	 * Returns the representations of the dynamic JAX-RS resource services
+	 * associated with this Application. The returned array may be empty if this
+	 * application is currently not associated with any JAX-RS Resource
+	 * services.
+	 */
+	public ResourceDTO[]			resourceDTOs;
+
+	/**
+	 * Returns the representations of the dynamic JAX-RS extension services
+	 * associated with this Application. The returned array may be empty if this
+	 * application is currently not associated with any JAX-RS extension
+	 * services.
+	 */
+	public ExtensionDTO[]			extensionDTOs;
 
 	/**
 	 * Service property identifying the JAX-RS application service

@@ -22,7 +22,7 @@
    sodipodi:docname="overall.svg"><metadata
      id="metadata81"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs79" /><sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -37,7 +37,7 @@
      id="namedview77"
      showgrid="true"
      inkscape:zoom="2.1906357"
-     inkscape:cx="205.78068"
+     inkscape:cx="207.83488"
      inkscape:cy="88.329499"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -241,11 +241,31 @@
      id="line3475" /><text
      id="text3477"
      style="font-size:11px;font-family:ProductusSemibold"
-     x="321.18631"
+     x="317.18631"
      y="40.594002">JAX-RS</text>
 <text
      y="148.59399"
-     x="321.18631"
+     x="317.18631"
      style="font-size:11px;font-family:ProductusSemibold"
      id="text3479">JAX-RS</text>
+<polygon
+     transform="translate(0,8)"
+     id="polygon3373"
+     points="312.968,90.395 294.619,101.244 294.619,79.562 "
+     style="fill:none;stroke:#000000;stroke-width:0.66659999;stroke-linejoin:round" /><text
+     y="105.7639"
+     x="315.18631"
+     id="text3375"
+     style="font-size:11px;font-family:ProductusSemibold">Application</text>
+<line
+     id="line3377"
+     y2="98.41745"
+     x2="266.00177"
+     y1="98.611542"
+     x1="294.99823"
+     style="fill:none;stroke:#000000;stroke-width:0.55891228;stroke-linejoin:round" /><text
+     id="text3379"
+     style="font-size:11px;font-family:ProductusSemibold"
+     x="317.18631"
+     y="94.593987">JAX-RS</text>
 </svg>
