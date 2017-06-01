@@ -19,7 +19,6 @@ package org.osgi.service.jaxrs.runtime.dto;
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.resource.dto.ResourceDTO;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
 
 /**
  * Represents the state of a Http Service Runtime.
@@ -34,13 +33,6 @@ public class RuntimeDTO extends DTO {
 	 * never {@code null}.
 	 */
 	public ServiceReferenceDTO		serviceDTO;
-
-	/**
-	 * The root context path. This path may be "/", or it may be a sub path if
-	 * this {@link JaxRSServiceRuntime} is running within an external Http
-	 * container.
-	 */
-	public String					contextPath;
 
 	/**
 	 * Returns the representations of the JAX-RS resource services associated

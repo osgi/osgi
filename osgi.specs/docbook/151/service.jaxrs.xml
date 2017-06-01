@@ -81,8 +81,8 @@
           <para><emphasis>JAX-RS Whiteboard service</emphasis> - An object
           registered in the Service Registry providing the necessary Whiteboard
           service properties defined by this specification. JAX-RS Whiteboard
-          services may be <emphasis>resource</emphasis> or <emphasis>extension</emphasis>
-          services</para>
+          services may be <emphasis>resource</emphasis>, <emphasis>application</emphasis> 
+          or <emphasis>extension</emphasis> services</para>
         </listitem>
 
         <listitem>
@@ -93,7 +93,9 @@
         <listitem>
           <para><emphasis>JAX-RS Whiteboard</emphasis> - A runtime instance
           that processes JAX-RS Whiteboard services. Each JAX-RS Whiteboard service
-          may be processed by multiple JAX-RS Whiteboards</para>
+          may be processed by multiple JAX-RS Whiteboards. Different JAX-RS
+          Whiteboards provided by the same JAX-RS Whiteboard implmenetation may 
+          configured differently, for example using different ports or root contexts.</para>
         </listitem>
 
         <listitem>
@@ -104,6 +106,12 @@
         <listitem>
           <para><emphasis>JAX-RS Resource Service</emphasis> - A service that
           provides one or more RESTful resource methods which map to incoming HTTP requests.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JAX-RS Application Service</emphasis> - A service that
+          provides a <code>javax.ws.rs.core.Application</code> to be hosted by a JAX-RS
+          Whiteboard.</para>
         </listitem>
 
         <listitem>
@@ -125,7 +133,266 @@
     </section>
   </section>
 
+  <section xml:id="service.jaxrs.whiteboard">
+    <title>The JAX-RS Whiteboard</title>
 
+    <para>An important principle of the JAX-RS Whiteboard specification is that
+    an OSGi framework may contain many active JAX-RS Whiteboards at any time, 
+    even if there is only a single JAX-RS Whiteboard implementation present in
+    the framework. In addition to providing a web endpoint with which to register
+    Whiteboard services, a JAX-RS Whiteboard provides scoping, both of visible
+    resources and root contexts. In this respect a JAX-RS whiteboard shares some
+    similarities with a Servlet Context in the <xref linkend="service.http.whiteboard"
+    xrefstyle="hyperlink"/>.</para>
+    
+    <para>A JAX-RS Whiteboard implementation must create a JAX-RS Whiteboard 
+    instance, however it is expected that most implementations will permit 
+    multiple JAX-RS whiteboards to be configured. These instances may differ
+    significantly, or may simply expose the same resources on a different 
+    port.</para>
+    
+    <para>For details on the association process between JAX-RS whiteboard
+    services and a JAX-RS Whiteboard see <xref
+    linkend="service.http.whiteboard.common.properties"/>.</para>
+
+    <section>
+      <title>The JAX-RS Service Runtime Service</title>
+
+      <para>The <xref linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+    xrefstyle="hyperlink"/> service represents the runtime state information
+    of a JAX-RS Whiteboard instance. This information is provided through
+    Data Transfer Objects (DTOs). The architecture of OSGi DTOs is described
+    in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+
+    <para>Each JAX-RS Whiteboard implementation registers exactly one
+    <code>JaxRSServiceRuntime</code> service per JAX-RS Whiteboard. This
+    service can be used to target JAX-RS Whiteboard services defined in 
+    this specification to a specific JAX-RS Whiteboard.</para>
+
+    <para>The <code>JaxRSServiceRuntime</code> provides service registration
+    properties to declare its underlying JAX-RS Whiteboard. These
+    service properties can include implementation-specific key-value pairs.
+    They also include the following:</para>
+
+    <table>
+      <title>Service properties for the <code>JaxRSServiceRuntime</code>
+      service</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1.5*"/>
+
+        <colspec colnum="2" colwidth="1.3*"/>
+
+        <colspec colnum="3" colwidth="3.7*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.jaxrs.endpoint</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para> Endpoint(s) where this JAX-RS Whiteboard
+            is listening. Registered Whiteboard services are
+            made available here. Values could be provided as URLs e.g.
+            <code>http://192.168.1.10:8080/</code> or relative paths, e.g.
+            <code>/myapp/</code>. Relative paths may be used if the scheme and
+            authority parts of the URLs are not known, for example if the JAX-RS
+            Whiteboard is delegating to a bridged
+            Http Service implementation. If the JAX-RS Whiteboard Service is serving the
+            root context and scheme and authority are not known, the value of
+            the property is <code>/</code>. Each entry must end with a
+            slash.</para><para>See <xref
+            linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.changecount</code></entry>
+            
+            <entry><code>Long</code></entry>
+            
+            <entry><para>Whenever the DTOs available from the JAX-RS Service Runtime
+            service change, the value of this property property will increase.</para>
+            <para>This allows interested parties to be notified of changes to the 
+            DTOs by observice Service Events of type <code>MODIFIED</code>
+            for the 
+            <xref linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime" xrefstyle="hyperlink"/>
+            service. See
+            <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in <xref
+            linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The JAX-RS Service Runtime service provides information on registered
+    Whiteboard services through the <xref
+    linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO"
+    xrefstyle="hyperlink"/>. The <xref
+    linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
+    xrefstyle="hyperlink"/> provides information on services that have been
+    successfully registered as well as information about the JAX-RS Whiteboard
+    services that were not successfully registered. JAX-RS Whiteboard services that
+    have the required properties set but cannot be processed, are reflected in
+    the failure DTOs. JAX-RS Whiteboard services of interfaces described in this
+    specification that do not have the required properties set are ignored and
+    not reflected in the failure DTOs.</para>
+
+    <para>The Runtime DTO can be obtained using the <xref
+    linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.getRuntimeDTO--"
+    xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a snapshot
+    of the state of the JAX-RS Runtime, including the JAX-RS Whiteboard resources,
+    extensions and applications that are active. The Runtime DTO also includes 
+    information about Whiteboard services which could not be activated.</para>
+
+    <para>Handlers for a given request path can be found with the <xref
+    linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.calculateRequestInfoDTO-String-"
+    xrefstyle="hyperlink"/> method. This method returns a <xref
+    linkend="org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO"
+    xrefstyle="hyperlink"/> which includes information about the JAX-RS resource
+    that would be invoked to handle a request on this path, and also information about
+    any filter extensions that would be applied to the request.</para>
+    </section>
+  
+    <section>
+      <title>Relation to the Servlet Container</title>
+
+      <para>Implementations of this specification will often be backed by
+      existing servlet containers, such as the OSGi Http Whiteboard, or a 
+      Java EE application server. There may also exist implementations which 
+      bridge into a servlet container into which the OSGi Framework has been 
+      deployed as a Web Application.</para>
+
+      <para>In bridged situations the JAX-RS Whiteboard implementation will 
+      have limited facilities for creating new JAX-RS whiteboards, and may
+      also have limited information about its environment.</para>
+
+      <para>Information about the surrounding Servlet Container, including
+      ServletContext information and HttpSession data, is available
+      to JAX-RS Whiteboard resources using standard JAX-RS injection behaviour.
+      </para>
+      
+          <programlisting>@GET
+@Path("{name}")
+public String interrogateSession(@PathParam("name") String name,
+         @Context HttpServletRequest req) {
+    HttpSession s = req.getSession();
+    return String.valueOf(s.getAttribute(name));
+}</programlisting>
+
+      <para>A JAX-RS Whiteboard implementation needs to ensure that 
+      Http Sessions are not shared amongst different JAX-RS Whiteboards. That
+      is, <code>HttpServletRequest.getSession()</code> calls must provide
+      different sessions for each whiteboard with which a JAX-RS whiteboard
+      service is associated.</para>
+    </section>
+    
+    <section>
+      <title>Isolation between JAX-RS Whiteboards</title>
+      
+      <para>Even when they are created by the same JAX-RS Whiteboard implementation,
+      each JAX-RS Whiteboard instance is separate, and isolated from other instances.
+      Importantly, JAX-RS Whiteboard services targeted to one JAX-RS Whiteboard must not
+      be visible in any other Whiteboards to which they are not targeted.
+      </para>
+      
+      <para>This isolation restriction is critical, as it ensures that different JAX-RS
+      Whiteboards can be configured with different, potentially overlapping, incompatible
+      extension features.</para>
+    </section>
+  </section>
+
+
+  <section xml:id="service.jaxrs.common.properties">
+    <title>Common Whiteboard Properties</title>
+
+    <para>JAX-RS Whiteboard resource and extension services
+    support common service registration properties to associate them with a
+    JAX-RS Whiteboard.</para>
+
+    <table xml:id="service.jaxrs.common.properties.table">
+      <title>Common properties</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.5*"/>
+
+        <colspec colnum="2" colwidth="0.7*"/>
+
+        <colspec colnum="3" colwidth="3.3*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.jaxrs.extension.select</code></entry>
+
+            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry>
+            <para>A set of LDAP-style filters used to express dependencies on
+            one or more extension services. If a filter is provided then the JAX-RS 
+            Whiteboard attempts to match that filter against the service properties of 
+            each of the extension services currently active in the Whiteboard. If any 
+            extension service matches the filter then the Whiteboard repeats the same
+            search using the next filter. If all of the filters are matched by active
+            extensions then the whiteboard service is able to be registered into the
+            JAX-RS Whiteboard. </para>
+            
+            <para>For example, to require an extension which provides JSON serialization
+            advertising property name <code>serialize.mime.type</code> with value <code>JSON</code>
+            provide the following filter:</para>
+            <programlisting>(serialize.mime.type=JSON)</programlisting>
+            
+            <para>If any filter(s) fail to match then this is reflected
+            in the failure DTOs. See <xref
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_EXTENSION_SELECT"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.jaxrs.whiteboard.target</code></entry>
+
+            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>The value of this service property is an LDAP-style
+            filter expression to select the JAX-RS Whiteboard(s)
+            to handle this Whiteboard service. The LDAP filter is used to
+            match <xref
+            linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime"
+            xrefstyle="hyperlink"/> services. Each JAX-RS Whiteboard
+            exposes exactly one <code>JaxRSServiceRuntime</code> service. This property is used to
+            associate the Whiteboard service with the JAX-RS Whiteboard
+            that registered the <code>JaxRSServiceRuntime</code>
+            service. If this property is not specified, all JAX-RS Whiteboards
+            can handle the service. See <xref
+            linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
 
   <section>
     <title>Capabilities</title>
