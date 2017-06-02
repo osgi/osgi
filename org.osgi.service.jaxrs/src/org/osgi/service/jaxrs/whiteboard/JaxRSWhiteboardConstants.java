@@ -118,7 +118,7 @@ public final class JaxRSWhiteboardConstants {
 	 * If a service with this property does not match any of the defined types
 	 * then it is registered as a failure DTO,
 	 */
-	public static final String	JAX_RS_EXTENSION_NAME		= "osgi.jaxrs.extension.name";
+	public static final String	JAX_RS_EXTENSION		= "osgi.jaxrs.extension.name";
 
 	/**
 	 * A Service property specifying one or more target filters used to select
