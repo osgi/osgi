@@ -978,6 +978,16 @@ LOG_OTHER  (when event is not recognized)</programlisting>
     linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> to be
     returned by <xref linkend="org.osgi.service.log.LogEntry.getLevel--"
     xrefstyle="hyperlink"/>.</para>
+
+    <para>The implementation of this specification must use a single service
+    registration using both the <xref
+    linkend="org.osgi.service.log.LogService" xrefstyle="hyperlink"/> and
+    <xref linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/>
+    service names since both service names represent the same log and since
+    the <xref linkend="org.osgi.service.log.LogService"
+    xrefstyle="hyperlink"/> type extends the <xref
+    linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/>
+    type.</para>
   </section>
 
   <section>
