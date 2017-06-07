@@ -266,17 +266,12 @@
     linkend="service.zigbee-figure_id_20160712_18h54_13"
     xrefstyle="template:Figure %n on page %p"/>).</para>
 
-    <remark>BJH This figure is incorrectly drawn. It improperly uses the
-    service triangle from Figure 5.1 in the Core Spec. In the figure, the
-    interface box is the service. That is what the black lower right corner
-    means. See figure 1.4 in the core spec.</remark>
-
     <figure xml:id="service.zigbee-figure_id_20160712_18h54_13">
       <title>ZigBee device import</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="7in" contentwidth="4in"
+          <imagedata align="center" contentdepth="7in" contentwidth="5.1in"
                      fileref="DeviceImport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -290,21 +285,16 @@
     emulate those objects as ZigBee endpoints associated to the ZigBee node
     represented by the underlying ZigBee host (ZigBee chip) on the ZigBee
     network. This is a <emphasis role="italic">device export</emphasis>
-    situation. For more information about this process, please report to the
-    <xref linkend="service.zigbee.implmentinganendpoint" xrefstyle="hyperlink"/>.
+    situation. For more information about this process, please report to section
+    <xref linkend="service.zigbee.implementinganendpoint"/>.
     </para>
-
-    <remark>BJH This figure is incorrectly drawn. It improperly uses the
-    service triangle from Figure 5.1 in the Core Spec. In the figure, the
-    interface box is the service. That is what the black lower right corner
-    means. See figure 1.4 in the core spec.</remark>
 
     <figure xml:id="service.zigbee-export-figure_id_20160712_18h57_18">
       <title>ZigBee device export</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="3.1in"
+          <imagedata align="center" contentwidth="4.5in"
                      fileref="DeviceExport-2.svg"/>
         </imageobject>
       </mediaobject>
@@ -370,17 +360,12 @@
     clusters, commands, attributes supported by the described type of
     endpoint.</para>
 
-    <remark>BJH This figure is incorrectly drawn. It improperly uses the
-    service triangle from Figure 5.1 in the Core Spec. In the figure, the
-    interface box is the service. That is what the black lower right corner
-    means. See figure 1.4 in the core spec.</remark>
-
     <figure xml:id="service.zigbee-description-figure_id_20160713_9h17_17">
       <title>Using a set of device descriptions</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="3.5in"
+          <imagedata align="center" contentwidth="5.1in"
                      fileref="device_description_set.svg"/>
         </imageobject>
       </mediaobject>
@@ -441,19 +426,14 @@
     xrefstyle="template:Figure %n on page %p"/>). In the case of a generic
     device abstraction layer, the model is agnostic to technologies.</para>
 
-    <remark>BJH This figure is incorrectly drawn. It improperly uses the
-    service triangle from Figure 5.1 in the Core Spec. In the figure, the
-    interface box is the service. That is what the black lower right corner
-    means. See figure 1.4 in the core spec.</remark>
-
-    <figure xml:id="service.zigbee-basedriver-figure_id_20160713_9h23_46">
+    <figure pgwide="1" xml:id="service.zigbee-basedriver-figure_id_20160713_9h23_46">
       <title>The ZigBee Base Driver and a refining driver representing devices
       in an abstract model</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.5in"
-                     contentwidth="5.000in" fileref="RefinedDriver-2.svg"/>
+          <imagedata align="center" contentdepth="4in"
+                     contentwidth="6in" fileref="RefinedDriver-2.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1179,7 +1159,7 @@ public class UI {
   </section>
 
   <section>
-    <title>Promise and ZCLCommandResponseStream objects</title>
+    <title>Promise and Response Stream objects</title>
 
     <para><link linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink">
     Promise</link> and <xref
@@ -1880,8 +1860,8 @@ public class UI {
     in the referenced standard.</para>
   </section>
 
-  <section>
-    <title xml:id="service.zigbee.implmentinganendpoint">Implementing a ZigBee Endpoint</title>
+  <section xml:id="service.zigbee.implementinganendpoint">
+    <title>Implementing a ZigBee Endpoint</title>
 
     <para>OSGi services can also be exported as ZigBee endpoints to the local
     networks, in a way that is transparent to typical ZigBee devices
