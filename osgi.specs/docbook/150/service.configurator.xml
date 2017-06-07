@@ -190,11 +190,25 @@
               </row>
 
               <row>
-                <entry><code>:configurator:json-version</code></entry>
+                <entry><para><code>:configurator:</code></para><para><code>&#160;json-version</code></para></entry>
                 <entry>Number</entry>
                 <entry>Resource</entry>
                 <entry>The version of the configuration resource format. This specification only supports version 1. If
                 this entry is ommitted then version 1 is assumed.</entry>
+              </row>
+              
+              <row>
+                <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
+                <entry><para>String</para><para><emphasis>symbolic-name</emphasis></para></entry>
+                <entry>Resource</entry>
+                <entry>The symbolic name of the configuration resource. <emphasis>Mandatory.</emphasis></entry>
+              </row>
+              
+              <row>
+                <entry><code>:configurator:version</code></entry>
+                <entry>Version</entry>
+                <entry>Resource</entry>
+                <entry>The version of this configuration resource. <emphasis>Mandatory.</emphasis></entry>
               </row>
             </tbody>
          </tgroup>
@@ -738,9 +752,9 @@ The mime type of the configuration resource should be set to
 <code>application/vnd.osgi.configuration</code>.
           </para></listitem>
           <listitem><para>
-An <code>osgi.identity</code> capability. This capability requires that each resource define a symbolic name and version. Currently this 
-metadata cannot be automatically derived from the contents of the configuration file, and would have to be based on the file name.
-<remark>huh? do we need to define more?</remark>
+An <code>osgi.identity</code> capability. This capability requires that each resource define a symbolic name and version. 
+These can be obtained from the <code>:configurator:symbolicname</code> and <code>:configurator:version</code> keys in the 
+configuration resource. As <code>type</code> attribute the string <code>osgi.configuration</code> must be used.
           </para></listitem>
         </itemizedlist>
       </para>
