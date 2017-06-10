@@ -84,6 +84,8 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Sets the panId.
 	 * 
 	 * @param panId The network Personal Area Network identifier (PAN ID)
+	 * @throws IllegalArgumentException if set with a value out of the expected
+	 *         range [0x0000, 0xffff].
 	 * @throws IllegalStateException If the host is already started.
 	 */
 	void setPanId(int panId);
