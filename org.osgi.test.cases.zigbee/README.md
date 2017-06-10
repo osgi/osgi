@@ -8,7 +8,7 @@ Before starting the CT the tester **MUST**:
  * Create a ZigBee network and configure a set of ZigBee End Devices 
    (one ZED is enough).
  * Fill the *zcl.xml* and the *zigbee-ct-template.xml* files with the relevant 
-   information about the ZigBee host and the ZigBee End Devices 
+   information about the ZigBee Host and a subset of the ZigBee End Devices 
    that are part of the previously configured ZigBee network.
 	  
 # The *zcl.xml* file
@@ -71,15 +71,16 @@ one server side command.
 
 The *zigbee-ct-template.xml* file must contain a formal representation of
 the ZigBee Host, the ZigBee Nodes, ZigBee Endpoints and Clusters of
-the real ZigBee devices used during the CT.
+the real ZigBee devices checked during while the CT operates.
 
 Its schema file (*zigbee-ct.xsd*) contains also the types definition and 
 some documentation. Some additional information are also provided in the following:
 
 * The *discoveryTimeout* attribute in *<host>* element is used as a maximum time 
-  (expressed in milliseconds) the CT waits for a ZigBeeNode or a 
-  ZigBeeEndppoint service during the discovery tests. The *discoveryTimeout* 
-  value is implementation dependent.
+  (expressed in milliseconds) the CT waits for the ZigBeeNodes the  
+  ZigBeeEndpoints services during the discovery tests. The *discoveryTimeout* 
+  value is implementation dependent and must be configured according the expected
+  discovery time of the actual implementation.
   
 * The *invokeTimeout* attribute in *<host>* element is used as a maximum time 
   (expressed in milliseconds) the CT waits for the resolution of any API method
@@ -129,6 +130,10 @@ required to perform the tests, the CT exits with a failure.
   
 If the nodes listed in the *zigbee-ct-template.xml* file have a User Descriptor, 
 it will be modified by the CT.
+
+The CT performs also some cross-check tests also on those ZigBeeNode and 
+ZigBeeEndpoint services that it was able to discover in the service registry, 
+but that are not reported in the *zigbee-ct-template.xml* file.
 
 # ZED devices suitable for the CT
 
