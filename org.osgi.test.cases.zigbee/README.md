@@ -5,8 +5,8 @@ prepare the test setup needed to run the CT against an implementation
 of the Device Service Specification for ZigBee.
 
 Before starting the CT the tester **MUST**:
- * Create a ZigBee network and configure a set of ZigBee End Devices 
-   (one ZED is enough).
+ * Create a ZigBee network and configure (join) a set of ZigBee End Devices 
+   (one ZED if it satisfy all the requirements stated below should be is enough).
  * Fill the *zcl.xml* and the *zigbee-ct-template.xml* files with the relevant 
    information about the ZigBee Host and a subset of the ZigBee End Devices 
    that are part of the previously configured ZigBee network.
@@ -134,6 +134,9 @@ it will be modified by the CT.
 The CT performs also some cross-check tests also on those ZigBeeNode and 
 ZigBeeEndpoint services that it was able to discover in the service registry, 
 but that are not reported in the *zigbee-ct-template.xml* file.
+
+During the CT operation, the ZigBeeHost service start() and stop() methods
+are called several times.
 
 # ZED devices suitable for the CT
 
