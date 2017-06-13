@@ -279,7 +279,10 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 * 
 	 * @param bc The BundleContext.
 	 */
-	public void activate(BundleContext bc) {
+	protected void activate(BundleContext bc) {
+
+		endpointsServiceRegs.clear();
+
 		for (int j = 0; j < endpoints.length; j++) {
 			ZigBeeEndpointImpl endpoint = endpoints[j];
 			Dictionary props = new Hashtable();
@@ -323,17 +326,26 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		nodeServiceReg = bc.registerService(ZigBeeNode.class.getName(), this, nodeProperties);
 	}
 
-	public void deactivate(BundleContext bc) {
+	/**
+	 * Deactivate the node, unregistering itself and then its ZigBeeEndpoints.
+	 * 
+	 * @param bc The BundleContext
+	 */
+
+	protected void deactivate(BundleContext bc) {
 		/*
 		 * The ZigBeeNode must be unregistered before its ZigBeeEndpoints being
 		 * unregistered.
 		 */
+
 		nodeServiceReg.unregister();
 
 		for (Iterator iterator = endpointsServiceRegs.iterator(); iterator.hasNext();) {
 			ServiceRegistration sReg = (ServiceRegistration) iterator.next();
 			sReg.unregister();
 		}
+
+		endpointsServiceRegs.clear();
 	}
 
 	public String getEndpointServicePid(ZigBeeEndpointImpl endpoint) {

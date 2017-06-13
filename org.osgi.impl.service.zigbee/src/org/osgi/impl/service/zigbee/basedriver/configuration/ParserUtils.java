@@ -381,7 +381,7 @@ public class ParserUtils {
 		} else if (value instanceof Short) {
 			return ((Short) value).shortValue();
 		} else {
-			throw new RuntimeException("expected a Integer parameter, got " + value.getClass().getName());
+			throw new RuntimeException("expected a Short parameter, got " + value.getClass().getName());
 		}
 	}
 }

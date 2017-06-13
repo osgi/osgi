@@ -191,7 +191,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	public void setPanId(int panId) throws IllegalStateException {
 		synchronized (this) {
 			if (state != STOPPED) {
-				throw new IllegalStateException("pan ID cannot be set if the ZigBeeHost is already started.");
+				throw new IllegalStateException("PAN ID can be modified only if the ZigBeeHost is stopped.");
+			}
+
+			if (panId < 0 || panId > 0xffff) {
+				throw new IllegalArgumentException("Invalid value for the panId argument. It must be in the range [0, 0xffff]");
 			}
 
 			this.panId = panId;
@@ -243,7 +247,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	public void permitJoin(short duration) throws Exception {
 		synchronized (this) {
-			if (duration < 0) {
+			if (duration < 0 || duration > 0xff) {
 				throw new IllegalArgumentException("duration cannot be a negative number");
 			}
 
@@ -342,12 +346,25 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	public void setBroadcastRadius(short broadcastRadius) throws IllegalArgumentException, IllegalStateException {
 		synchronized (this) {
+
+			if (state != STOPPED) {
+				throw new IllegalStateException("BroadcastRadius can be modified only if the ZigBeeHost is stopped");
+			}
+
+			if (broadcastRadius < 0 || broadcastRadius > 0xff) {
+				throw new IllegalArgumentException("Invalid value for the broadcastRadius argument. It must be in the range [0, 0xff]");
+			}
 			this.broadcastRadius = broadcastRadius;
 		}
 	}
 
 	public void setCommunicationTimeout(long timeout) {
 		synchronized (this) {
+
+			if (timeout <= 0) {
+				throw new IllegalArgumentException("timeout must be a positive number.");
+			}
+
 			this.communicationTimeout = timeout;
 		}
 	}
@@ -358,7 +375,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		}
 	}
 
-	public void setContext(BundleContext bc) {
+	protected void setContext(BundleContext bc) {
 		this.bc = bc;
 	}
 
@@ -598,6 +615,13 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return true;
 	}
 
+	/**
+	 * Create a ZigBeeEvent object with the specified registrationInfo.
+	 * 
+	 * @param registrationInfo A RegistrationInfo instance.
+	 * @param value The value to be notified.
+	 * @return The created and filled ZigBeeEvent instance.
+	 */
 	protected ZigBeeEvent createEvent(RegistratonInfo registrationInfo, Object value) {
 		Map map = registrationInfo.properties;
 
