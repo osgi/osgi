@@ -25,6 +25,7 @@ import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZCLReadStatusRecord;
+import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
@@ -784,6 +785,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isClusterSpecificCommand(), header.isClusterSpecificCommand());
 		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isManufacturerSpecific(), header.isManufacturerSpecific());
 
+		/* performs generic checks on the returned ZCLFrame */
+		genericZCLFrameChecks(context, frame);
+
 		/*
 		 * Compares the raw frame of the actual response with the zclFrame that
 		 * was found in the xml file. Skips the ZCLHeader.
@@ -795,14 +799,15 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		assertEquals(context + ": invalid size of returned ZCLFrame", expectedRawFrame.length, actualRawFrame.length);
 
-		int minHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
+		int expectedHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
 
-		if (actualRawFrame.length < minHeaderSize) {
-			fail(context + ": ZCLFrame.getBytes() on the returned frame must return an array of at least " + minHeaderSize + ", got " + actualRawFrame.length);
+		/* The raw frame cannot be shorter than the ZCL frame header! */
+		if (actualRawFrame.length < expectedHeaderSize) {
+			fail(context + ": ZCLFrame.getBytes() on the returned frame must return an array of at least " + expectedHeaderSize + ", got " + actualRawFrame.length);
 		}
 
 		/* we skip the header */
-		for (int i = minHeaderSize; i < expectedRawFrame.length; i++) {
+		for (int i = expectedHeaderSize; i < expectedRawFrame.length; i++) {
 			assertEquals(context + ": expected and actual returned ZCL raw frames differs at index " + i, expectedRawFrame[i], actualRawFrame[i]);
 		}
 	}
@@ -814,5 +819,57 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLFrame frame = new ZCLFrameRaw(header, c.getFrame());
 
 		return frame;
+	}
+
+	private void genericZCLFrameChecks(String context, ZCLFrame frame) {
+
+		ZCLHeader header = frame.getHeader();
+
+		byte[] rawFrame = frame.getBytes();
+		assertNotNull(context + ": ZCLFrame.getBytes(): must return a valid byte array", rawFrame);
+
+		int expectedHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
+
+		if (rawFrame.length < expectedHeaderSize) {
+			fail(context + ": ZCLFrame.getBytes() on the returned frame must return an array of at least " + expectedHeaderSize + ", got " + rawFrame.length);
+
+		}
+
+		/*
+		 * Check getSize()
+		 */
+		int size = frame.getSize();
+		assertEquals(context + ": ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()", rawFrame.length, size);
+
+		byte[] otherRawFrame = frame.getBytes();
+
+		assertNotNull(context + ": ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
+		assertNotSame(context + ": ZCLFrame.getBytes(): must return a different array instance each time it is called", otherRawFrame, rawFrame);
+
+		ZigBeeDataInput is = frame.getDataInput();
+		assertNotNull(context + ": ZCLFrame.getInputStream() must not return null", is);
+
+		ZigBeeDataInput isOther = frame.getDataInput();
+		assertNotNull(context + ": ZCLFrame.getDataInput(): calling this method twice must not return null", isOther);
+		assertNotSame(context + ": ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.", is, isOther);
+
+		/*
+		 * Check the other flavor of getBytes()
+		 */
+
+		byte buffer[] = new byte[size + 20];
+
+		int len = frame.getBytes(buffer);
+		assertEquals(context + ": ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()", size, len);
+
+		/*
+		 * compares only the payload of the buffer with the payload of the raw
+		 * frame
+		 */
+		for (int i = expectedHeaderSize; i < rawFrame.length; i++) {
+			assertEquals(context + ": ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i,
+					rawFrame[i],
+					buffer[i]);
+		}
 	}
 }
