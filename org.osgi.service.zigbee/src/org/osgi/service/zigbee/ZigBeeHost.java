@@ -30,6 +30,11 @@ import org.osgi.util.promise.Promise;
  * <p>
  * It must be registered as a OSGi service.
  * 
+ * <p>
+ * Even if not specified explicitly in the javadoc, any method of this interface
+ * must throw an {@link IllegalArgumentException} exception if a or one of the
+ * passed arguments has a value not admitted by the method.
+ * 
  * @noimplement
  * 
  * @author $Id$
@@ -49,12 +54,13 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * {@link ZigBeeNode#EXTENDED_PAN_ID} (that is, if no PAN_ID, and Extended
 	 * PAN_ID are given, then they will be automatically generated and then
 	 * added to the service properties).
-	 * 
+	 * <p>
 	 * If the host is a {@link ZigBeeNode#ROUTER}, or a {@link ZigBeeNode#ZED},
 	 * then the host may start without a registered {@link ZigBeeNode#PAN_ID}
 	 * property; the property will be set when the host will find and join a
 	 * ZigBee network.
 	 * 
+	 * <p>
 	 * The host status must be persistent, that is, if the host was started,
 	 * then the host must starts again when the bundle restarts. In addition,
 	 * the values of channel, pan id, extended pan id, and host PID must remain
