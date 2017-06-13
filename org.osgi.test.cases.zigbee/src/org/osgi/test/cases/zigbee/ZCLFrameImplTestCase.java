@@ -208,13 +208,19 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 		int minFrameSize = getMinFrameSize(frame.getHeader());
 		if (rawFrame.length < minFrameSize) {
-			fail("a the ZCL raw frame is too short");
+			fail("ZCLHeader.getBytes(): the returned raw frame is too short.");
 		}
+
+		/*
+		 * Check getSize()
+		 */
+		int size = frame.getSize();
+		assertEquals("ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()", rawFrame.length, size);
 
 		byte[] otherRawFrame = frame.getBytes();
 
 		assertNotNull("ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
-		assertNotSame("ZCLFrame.getBytes(): must return a different array each time it is called", otherRawFrame, rawFrame);
+		assertNotSame("ZCLFrame.getBytes(): must return a different array instance each time it is called", otherRawFrame, rawFrame);
 
 		ZigBeeDataInput is = frame.getDataInput();
 		assertNotNull("ZCLFrame.getInputStream() must not return null", is);
@@ -222,6 +228,23 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		ZigBeeDataInput isOther = frame.getDataInput();
 		assertNotNull("ZCLFrame.getDataInput(): calling this method twice must not return null", isOther);
 		assertNotSame("ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.", is, isOther);
+
+		/*
+		 * Check the other flavor of getBytes()
+		 */
+
+		byte buffer[] = new byte[size + 20];
+
+		int len = frame.getBytes(buffer);
+		assertEquals("ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()", size, len);
+
+		/*
+		 * compares only the payload of the buffer with the payload of the raw
+		 * frame
+		 */
+		for (int i = minFrameSize; i < rawFrame.length; i++) {
+			assertEquals("ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i, rawFrame[i], buffer[i]);
+		}
 	}
 
 	public void testDataInput() {
@@ -350,8 +373,8 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 		try {
 			byte[] b = dataInput.readBytes(bytes1.length);
-			assertNotNull("ZigbeeDataInput.getBytes() returned a null array", b);
-			assertEquals("readBytes returned a wrong number of bytes", bytes1.length, b.length);
+			assertNotNull("ZigbeeDataInput.readBytes() returned a null array", b);
+			assertEquals("ZigbeeDataInput.readBytes(): readBytes() returned a wrong number of bytes", bytes1.length, b.length);
 
 			boolean differs = false;
 			for (int i = 0; i < b.length; i++) {
@@ -361,7 +384,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 			}
 
 			if (differs) {
-				fail("ZigbeeDataInput.getBytes() returned a wrong byte array");
+				fail("ZigbeeDataInput.readBytes() returned a wrong byte array");
 			}
 
 		} catch (Exception e) {
@@ -672,7 +695,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		}
 
 		if (!equals) {
-			fail("marshaled data is different from what it is expected at index " + i);
+			fail("ZCLFrame.getBytes(): marshaled data is different from what it is expected, at index " + i);
 		} else {
 			assertEquals("ZCLFrame.getBytes() size", payloadTestBasic.length + offs, rawFrame.length);
 		}

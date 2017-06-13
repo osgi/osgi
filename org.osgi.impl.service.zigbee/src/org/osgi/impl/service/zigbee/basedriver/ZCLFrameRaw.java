@@ -40,6 +40,7 @@ public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 		if (rawFrame == null || header == null) {
 			throw new NullPointerException("ZCLFrameRaw constructor requires not null arguments");
 		}
+
 		this.frame = rawFrame;
 
 		/* calculate the size in bytes of the ZCL header */
@@ -51,11 +52,20 @@ public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 	}
 
 	/**
-	 * Over
+	 * Override methods
 	 */
 
 	public byte[] getBytes() {
 		return (byte[]) frame.clone();
+	}
+
+	public int getBytes(byte[] buffer) {
+		System.arraycopy(frame, 0, buffer, 0, frame.length);
+		return getSize();
+	}
+
+	public int getSize() {
+		return frame.length;
 	}
 
 	private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -73,5 +83,4 @@ public class ZCLFrameRaw extends ZCLFrameImpl implements ZCLFrame {
 
 		return s + "]";
 	}
-
 }

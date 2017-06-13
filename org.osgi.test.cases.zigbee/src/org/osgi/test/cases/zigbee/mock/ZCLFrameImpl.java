@@ -106,9 +106,28 @@ public class ZCLFrameImpl extends ZigBeeSerializer implements ZCLFrame {
 	 */
 
 	public byte[] getBytes() {
-		int size = zclHeader.isManufacturerSpecific() ? (maxHeaderSize) : minHeaderSize;
-		byte[] d = new byte[size + index];
-		System.arraycopy(data, 0, d, size, index);
+		int headerSize = this.getHeaderSize();
+		byte[] d = new byte[headerSize + index];
+		System.arraycopy(data, 0, d, headerSize, index);
 		return d;
+	}
+
+	/**
+	 * Please note that in this fake implementation we copy only the ZCL frame
+	 * payload and not the ZCL frame header.
+	 */
+
+	public int getBytes(byte[] buffer) {
+		int headerSize = this.getHeaderSize();
+		System.arraycopy(data, 0, buffer, headerSize, index);
+		return index + headerSize;
+	}
+
+	public int getSize() {
+		return index + getHeaderSize();
+	}
+
+	private int getHeaderSize() {
+		return zclHeader.isManufacturerSpecific() ? (maxHeaderSize) : minHeaderSize;
 	}
 }

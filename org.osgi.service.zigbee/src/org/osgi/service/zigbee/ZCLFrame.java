@@ -38,11 +38,29 @@ public interface ZCLFrame {
 	 * the ZCL Frame Header and the ZCL Frame payload.
 	 * 
 	 * @return a byte array containing a raw ZCL frame, suitable to be sent on
-	 *         the wire. Any modifications issued on this array must not affect
-	 *         the internal representation of the ZCLFrame interface
+	 *         the wire. Any modifications issued on the returned array must not
+	 *         affect the internal representation of the ZCLFrame interface
 	 *         implementation.
 	 */
 	public byte[] getBytes();
+
+	/**
+	 * Copy in the passed array the internal raw ZCLFrame.
+	 * 
+	 * @param buffer The buffer where to copy the raw ZCL frame.
+	 * 
+	 * @return The actual number of bytes copied.
+	 */
+	public int getBytes(byte[] buffer);
+
+	/**
+	 * Retrieve the current size of the internal raw frame (that is the size of
+	 * the byte[] that whould be returned if calling the {@link #getBytes()}
+	 * method.
+	 * 
+	 * @return The size of the raw ZCL frame.
+	 */
+	public int getSize();
 
 	/**
 	 * Returns {@link ZigBeeDataInput} for reading the ZCLFrame payload content.
