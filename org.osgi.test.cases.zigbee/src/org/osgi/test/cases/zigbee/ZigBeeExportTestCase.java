@@ -16,11 +16,9 @@
 
 package org.osgi.test.cases.zigbee;
 
-import java.math.BigInteger;
 import java.util.Dictionary;
 import java.util.Properties;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -57,18 +55,17 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	 * exported, but that do not have the {@link ZigBeeEndpoint#ZIGBEE_EXPORT}
 	 * property set.
 	 * 
-	 * @throws InterruptedException
-	 * @throws InvalidSyntaxException
+	 * @throws Exception
 	 */
 
-	public void testExport() throws InvalidSyntaxException, InterruptedException {
+	public void testExport() throws Exception {
 		log(TAG, "---- testExport");
 
-		BundleContext bc = getContext();
+		ZigBeeHost host = getZigBeeHost(DISCOVERY_TIMEOUT);
 
-		BigInteger hostIeeeAddresss = conf.getZigBeeHost().getIEEEAddress();
-
-		ZigBeeHost host = this.getZigBeeHost(conf.getZigBeeHost(), DISCOVERY_TIMEOUT);
+		if (!host.isStarted()) {
+			host.start();
+		}
 
 		ZigBeeNodeConfig nodeConfig = conf.getFirstNode();
 
@@ -76,14 +73,15 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 		 * The exported endpoint identifier cannot be a broadcast endpoint.
 		 */
 		short broadcastEndpointId = 0xff;
-		this.registerInvalidEndpointId(bc, host, nodeConfig, broadcastEndpointId);
+
+		this.registerInvalidEndpointId(getContext(), host, nodeConfig, broadcastEndpointId);
 
 		/*
 		 * The exported endpoint identifier must be in the range [0, 0xff)
 		 */
-		this.registerInvalidEndpointId(bc, host, nodeConfig, (short) 300);
+		this.registerInvalidEndpointId(getContext(), host, nodeConfig, (short) 300);
 
-		this.registerInvalidEndpointId(bc, host, nodeConfig, (short) -10);
+		this.registerInvalidEndpointId(getContext(), host, nodeConfig, (short) -10);
 	}
 
 	/**

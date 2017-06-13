@@ -28,7 +28,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.device.Constants;
 import org.osgi.service.zigbee.ZCLAttribute;
@@ -54,6 +57,7 @@ import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
 import org.osgi.test.cases.zigbee.configuration.ParserUtils;
 import org.osgi.test.cases.zigbee.mock.StreamQueue;
 import org.osgi.test.cases.zigbee.mock.ZCLEventListenerImpl;
+import org.osgi.test.support.step.TestStepProxy;
 import org.osgi.util.promise.Promise;
 
 /**
@@ -71,28 +75,17 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	private List				servicePids	= new ArrayList();
 
 	/**
-	 * Tests any registered ZigBeeNode services. For those services that are
-	 * also defined in the CT configuration file more deeper checks are issued.
+	 * Tests any registered ZigBeeNode service. For those services that are also
+	 * defined in the CT configuration file more deeper checks are issued.
 	 * 
 	 * @throws Exception
 	 */
 	public void testZigBeeServices() throws Exception {
-		log(TAG, "test ZigBeeNodes and ZigBeeHost service methods and service properties");
+		log(TAG, "testing ZigBeeNodes and ZigBeeHost service methods and service properties");
 
 		String context = "testZigBeeServices()";
 
-		ZigBeeHostConfig hostConfig = conf.getZigBeeHost();
-
-		/*
-		 * Wait till a ZigBeeHost service with the requested IEEE address is
-		 * registered by the ZigBee Device Service implementation.
-		 */
-
-		String ieeeAddressFilter = "(" + ZigBeeHost.IEEE_ADDRESS + "=" + hostConfig.getIEEEAddress() + ")";
-		ServiceReference hostServiceRef = waitForServiceReference(ZigBeeHost.class.getName(), ieeeAddressFilter, DISCOVERY_TIMEOUT);
-		assertNotNull("the ZigBeeHost service was not found registered within the configured discovery timeout", hostServiceRef);
-
-		ZigBeeHost host = (ZigBeeHost) getContext().getService(hostServiceRef);
+		ZigBeeHost host = getZigBeeHost(DISCOVERY_TIMEOUT);
 
 		/* starts the ZigBeeHost if not started, yet */
 
@@ -100,18 +93,49 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 		log(TAG, context);
 
+		/*
+		 * If already started, stops it.
+		 */
 		if (host.isStarted()) {
 			host.stop();
+
+			/*
+			 * Once the stop() method returns the ZigBeeHost.isStarted() must be
+			 * false.
+			 */
+			assertEquals(context + ": ZigBeeHost.isStarted() wrong value", false, host.isStarted());
 		}
 
-		assertEquals(context + ": ZigBeeHost.isStarted() wrong value", false, host.isStarted());
+		/*
+		 * We check if some ZigBeeNode services are (still) registered.
+		 */
+		ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
+		if (sRefs != null) {
+			assertEquals(context + ": Found ZigBeeNode services while the ZigBeeHost is not in started state.", 0, sRefs.length);
+		}
 
 		/*
-		 * Start the ZigBeeHost again.
+		 * We check if some ZigBeeEndpoint services are (still) registered
+		 * (excluding exported ones).
+		 */
+		sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ZIGBEE_NOT_EXPORT_FILTER);
+		if (sRefs != null) {
+			assertEquals(context + ": Found ZigBeeEndpoint services while the ZigBeeHost is not in started state.", 0, sRefs.length);
+		}
+
+		context = "ZigBeeHost.start()";
+
+		/*
+		 * Let's go: start the ZigBeeHost again.
 		 */
 		host.start();
 
-		ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
+		/*
+		 * Wait until all the ZigBeeNodes have been discovered.
+		 */
+		Thread.sleep(conf.getDiscoveryTimeout());
+
+		sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
 
 		/*
 		 * First of all we check the ZigBeeNode services.
@@ -133,7 +157,7 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 
 			getContext().ungetService(sRefNode);
 
-			ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + node.getIEEEAddress() + ")";
+			String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + node.getIEEEAddress() + ")";
 			ServiceReference[] sRefsEndpoints = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ieeeAddressFilter);
 
 			for (int j = 0; j < sRefsEndpoints.length; j++) {
@@ -165,14 +189,150 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		 * Check the registered ZigBeeHost service.
 		 */
 
+		ServiceReference hostServiceRef = getZigBeeHostServiceReference();
 		Map serviceProperties = getProperties(hostServiceRef);
-		testZigBeeHost(host, serviceProperties, hostConfig, sRefs);
+		testZigBeeHost(host, serviceProperties, conf.getZigBeeHost(), sRefs);
 		String hostServicePid = (String) serviceProperties.get("service.pid");
 		if (servicePids.contains(hostServicePid)) {
 			fail(context + ": duplicate service pid " + hostServicePid);
 		}
 
 		servicePids.add(hostServicePid);
+	}
+
+	/**
+	 * Gets the ZigBeeHost service that corresponds to the one that is defined
+	 * in the CT configuration file.
+	 * 
+	 * @return A ZigBeeHost service instance.
+	 */
+
+	protected ZigBeeHost getZigBeeHostService() {
+
+		ZigBeeHostConfig hostConfig = conf.getZigBeeHost();
+		/*
+		 * Wait till a ZigBeeHost service with the requested IEEE address is
+		 * registered by the ZigBee Device Service implementation.
+		 */
+
+		String ieeeAddressFilter = "(" + ZigBeeHost.IEEE_ADDRESS + "=" + hostConfig.getIEEEAddress() + ")";
+		ServiceReference hostServiceRef = waitForServiceReference(ZigBeeHost.class.getName(), ieeeAddressFilter, DISCOVERY_TIMEOUT);
+		assertNotNull("the ZigBeeHost service was not found registered within the configured discovery timeout", hostServiceRef);
+
+		ZigBeeHost host = (ZigBeeHost) getContext().getService(hostServiceRef);
+
+		return host;
+	}
+
+	/**
+	 * Check some ZigBeeHost methods by passing wrong arguments or by calling
+	 * them while the ZigBee host is in a state that do not allow to call them.
+	 * 
+	 * @throws Exception In case of error.
+	 */
+	public void testZigBeeHostMethods() throws Exception {
+
+		log(TAG, "test ZigBeeHost service methods.");
+
+		String context = "testZigBeeHostMethods()";
+
+		ZigBeeHostConfig hostConfig = conf.getZigBeeHost();
+
+		/*
+		 * Wait till a ZigBeeHost service with the requested IEEE address is
+		 * registered by the ZigBee Device Service implementation.
+		 */
+
+		String ieeeAddressFilter = "(" + ZigBeeHost.IEEE_ADDRESS + "=" + hostConfig.getIEEEAddress() + ")";
+		ServiceReference hostServiceRef = waitForServiceReference(ZigBeeHost.class.getName(), ieeeAddressFilter, conf.getDiscoveryTimeout());
+
+		assertNotNull(context + ": The ZigBeeHost service was not found registered within the configured discovery timeout", hostServiceRef);
+
+		ZigBeeHost host = (ZigBeeHost) getContext().getService(hostServiceRef);
+
+		/*
+		 * If ZigBeeHost is not started, yet starts it!
+		 */
+		if (!host.isStarted()) {
+			host.start();
+		}
+
+		context = "ZigBeeHost.setBroadcastRadius()";
+
+		try {
+			host.setBroadcastRadius((short) 0x01);
+			fail(context + ":  must throw an IllegalStateException while ZigBeeHost in not stopped state.");
+		} catch (IllegalStateException e) {
+			/* Success */
+		}
+
+		try {
+			host.setBroadcastRadius((short) -1);
+			fail(context + ":  must throw an IllegalStateException or IllegalArgumentException while ZigBeeHost in not stopped state and the passed value in not in the range [0, 0xff].");
+		} catch (IllegalStateException e) {
+			/* Success */
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		try {
+			host.setBroadcastRadius((short) 0x100);
+			fail(context + ":  must throw an IllegalStateException or IllegalArgumentException while ZigBeeHost in not stopped state and the passed value in not in the range [0, 0xff].");
+		} catch (IllegalStateException e) {
+			/* Success */
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		context = "ZigBeeHost.setPanId()";
+
+		try {
+			host.setPanId((short) 0xf000);
+			fail(context + ":  must throw an IllegalStateException while ZigBeeHost is not stopped.");
+		} catch (IllegalStateException e) {
+			/* Success */
+		}
+
+		try {
+			host.setPanId((short) -1);
+			fail(context + ":  must throw an IllegalStateException or IllegalArgumentException while ZigBeeHost not stopped and the passed value in not in the range [0, 0xff].");
+		} catch (IllegalStateException e) {
+			/* Success */
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		try {
+			host.setPanId((short) 0x1000);
+			fail(context + ":  must throw an IllegalStateException or IllegalArgumentException while ZigBeeHost not stopped and the passed value in not in the range [0, 0xff].");
+		} catch (IllegalStateException e) {
+			/* Success */
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		context = "ZigBeeHost.permitJoin()";
+
+		try {
+			host.permitJoin((short) -1);
+			fail(context + ":  must throw an IllegalArgumentException because the passed value in not in the range [0, 0xff].");
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		try {
+			host.permitJoin((short) 0x100);
+			fail(context + ":  must throw an IllegalArgumentException because the passed value in not in the range [0, 0xff].");
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
+
+		try {
+			host.setCommunicationTimeout(0);
+			fail(context + ":  must throw an IllegalArgumentException because the passed value must greater than zero.");
+		} catch (IllegalArgumentException e) {
+			/* Success */
+		}
 	}
 
 	/**
@@ -964,38 +1124,288 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 	}
 
 	/**
-	 * Tests related to the discovery of the ZigBeeEndpoint services. The test
-	 * will also check that the registered endpoint match the information
-	 * retrieved from the CT configuration file.
+	 * This test simply stop the ZigBeeHost, if already started, verify that no
+	 * more services are registered and then starts it again. It then checks
+	 * that the ZigBeeNodes are registered AFTER the corresponding
+	 * ZigBeeEndpoint services. It then stops the ZigBeeHost and verifies that
+	 * the ZigBeeNodes are unregistered BEFORE the corresponding ZigBeeEndpoint
+	 * services.
+	 * 
+	 * @throws Exception In case of generic failure.
 	 */
-	public void testEndpointDiscovery() throws Exception {
-		log(TAG, "testEndpointDiscovery");
+	public void testRegistrationUnregistrationOrder() throws Exception {
 
-		ZigBeeNodeConfig node = conf.getFirstNode();
-		ZigBeeEndpointConfig expectedEndpoint = conf.getEnpoints(node)[0];
-		ZigBeeSimpleDescriptor expectedSimpleDesc = expectedEndpoint.getSimpleDescriptor();
+		String context = "ZigBeeHost.start()";
 
-		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
+		log(TAG, "testing " + context + ": checks that the registration and unregistrtion order of the ZigBeeNode and ZigBeeEndpoint services is correct.");
 
-		assertNotNull("ZigBeeEndpoint", endpoint);
-
-		assertEquals("Endpoint identifier not matched", expectedEndpoint.getId(), endpoint.getId());
+		ZigBeeHost host = this.getZigBeeHostService();
 
 		/*
-		 * Retrieve the ZigBeeEndpoint Simple Descriptor.
+		 * If already started, stops it.
+		 */
+		if (host.isStarted()) {
+			host.stop();
+
+			/*
+			 * Once the stop() method returns the ZigBeeHost.isStarted() must be
+			 * false.
+			 */
+			assertEquals(context + ": ZigBeeHost.isStarted() wrong value", false, host.isStarted());
+		}
+
+		/*
+		 * We check if some ZigBeeNode services are (still) registered.
+		 */
+		ServiceReference[] sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
+		if (sRefs != null) {
+			assertEquals(context + ": Found ZigBeeNode services while the ZigBeeHost is not in started state.", 0, sRefs.length);
+		}
+
+		/*
+		 * We check if some ZigBeeEndpoint services are (still) registered
+		 * (excluding exported ones).
+		 */
+		sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ZIGBEE_NOT_EXPORT_FILTER);
+		if (sRefs != null) {
+			assertEquals(context + ": Found ZigBeeEndpoint services while the ZigBeeHost is not in started state.", 0, sRefs.length);
+		}
+
+		context = "ZigBeeHost.start()";
+
+		/*
+		 * After the ZigBeeHost.start() method is returned, we need to check for
+		 * registration of the following services:
+		 * 
+		 * ZigBeeNode ZigBeeEndpoint
+		 * 
+		 * We listen for the timeout configured in the xml file. We also check
+		 * if the service registration order is correct. A valid implementation,
+		 * when it discovers a ZigBee node, must register the ZigBeeEndpoint
+		 * services first, and then the ZigBeeNode they belongs to.
 		 */
 
-		String context = "ZigBeeEndpoint.getSimpleDescriptor()";
+		/**
+		 * This filter selects any ZigBeeNode service and any not exported
+		 * ZigBeeEndpoint service.
+		 */
+		String filter = "(|" + ZIGBEE_NODE_FILTER + ZIGBEE_ENDPOINT_NOT_EXPORTED + ")";
 
-		Promise p = endpoint.getSimpleDescriptor();
-		waitForPromise(p, INVOKE_TIMEOUT);
+		final List discoveredNodes = new ArrayList();
+		final String context1 = context;
 
-		if (p.getFailure() == null) {
-			ZigBeeSimpleDescriptor simpleDesc = (ZigBeeSimpleDescriptor) assertPromiseValueClass(p, ZigBeeSimpleDescriptor.class);
-			assertNotNull(context + ": null value returned", simpleDesc);
-			this.checkSimpleDescriptor(expectedEndpoint.getSimpleDescriptor(), simpleDesc);
-		} else {
-			fail(context + ": unexpected failure while retrieving the SimpleDescriptor", p.getFailure());
+		ServiceListener listener = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				int type = event.getType();
+				if (type == ServiceEvent.REGISTERED) {
+					ServiceReference sRef = event.getServiceReference();
+					Object service = getContext().getService(sRef);
+
+					BigInteger nodeIeeeAddress = (BigInteger) sRef.getProperty(ZigBeeNode.IEEE_ADDRESS);
+					if (nodeIeeeAddress == null) {
+						fail(context1 + ": missing " + ZigBeeNode.IEEE_ADDRESS + " property in ZigBeeNode or ZigBeeEndpoint services");
+					}
+
+					if (service instanceof ZigBeeNode) {
+						if (!discoveredNodes.contains(nodeIeeeAddress)) {
+							discoveredNodes.add(nodeIeeeAddress);
+						}
+					} else if (service instanceof ZigBeeEndpoint) {
+						if (discoveredNodes.contains(nodeIeeeAddress)) {
+							fail(context1 + ": ZigBeeEndpoint with IEEE_ADDRESS " + nodeIeeeAddress + " has been registered after its ZigBeeNode");
+						}
+					}
+					getContext().ungetService(sRef);
+				} else if (type == ServiceEvent.UNREGISTERING) {
+					ServiceReference sRef = event.getServiceReference();
+					Object service = getContext().getService(sRef);
+
+					BigInteger nodeIeeeAddress = (BigInteger) sRef.getProperty(ZigBeeNode.IEEE_ADDRESS);
+					if (nodeIeeeAddress == null) {
+						fail(context1 + ": missing " + ZigBeeNode.IEEE_ADDRESS + " property in ZigBeeNode or ZigBeeEndpoint services");
+					}
+
+					if (service instanceof ZigBeeNode) {
+						if (discoveredNodes.contains(nodeIeeeAddress)) {
+							discoveredNodes.remove(nodeIeeeAddress);
+						}
+					} else if (service instanceof ZigBeeEndpoint) {
+						if (discoveredNodes.contains(nodeIeeeAddress)) {
+							fail(context1 + ": ZigBeeEndpoint with IEEE_ADDRESS " + nodeIeeeAddress + " is unregistering before its ZigBeeNode");
+						}
+					}
+					getContext().ungetService(sRef);
+				}
+			}
+		};
+
+		getContext().addServiceListener(listener, filter);
+
+		/*
+		 * Let's go: start the ZigBeeHost again and track the registration
+		 * order.
+		 */
+		host.start();
+
+		Thread.sleep(conf.getDiscoveryTimeout());
+
+		host.stop();
+
+		Thread.sleep(conf.getDiscoveryTimeout());
+
+		getContext().removeServiceListener(listener);
+
+		/*
+		 * At the end we must not have no more ZigBeeNode services and not
+		 * exported ZigBeeEndpoint services.
+		 */
+		sRefs = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
+		if (sRefs != null) {
+			assertEquals(context + ": Found aZigBeeNode services while the ZigBeeHost is stopped.", 0, sRefs.length);
+		}
+
+		/*
+		 * We check if some ZigBeeEndpoint services are (still) registered
+		 * (excluding exported ones).
+		 */
+		sRefs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ZIGBEE_NOT_EXPORT_FILTER);
+		if (sRefs != null) {
+			assertEquals(context + ": Found a not exported ZigBeeEndpoint service while the ZigBeeHost is stopped.", 0, sRefs.length);
+		}
+	}
+
+	/**
+	 * This test checks if the service.pids are persistent across restarts of
+	 * the ZigBee implementation bundle.
+	 * 
+	 * <ul>
+	 * <li>Checks if ZigBeeHost service is started. If not starts it.
+	 * <li>Wait for DISCOVERY_TIMEOUT milliseconds.
+	 * <li>Takes a snapshot of the currently registered ZigBeeNode and NOT
+	 * exported ZigBeeEndpoint services. The snapshot contains their
+	 * IEEE_ADDRESS and service.pid service properties.
+	 * <li>Stops the bundle that has registered the ZigBeeHost.
+	 * <li>Starts the bundle again.
+	 * <li>Wait for DISCOVERY_TIMEOUT milliseconds.
+	 * <li>Take a second snapshot of the currently registered ZigBeeNode and NOT
+	 * exported ZigBeeEndpoint services.
+	 * <li>Compares the two snapshots.
+	 * 
+	 * @throws Exception
+	 */
+	public void testAServicePidPersistence() throws Exception {
+
+		log(TAG, "Testing that the service.pids of the registered ZigBeeNode and ZigBeeEndpoint services is persistent.");
+
+		ZigBeeHost host = this.getZigBeeHostService();
+
+		/**
+		 * Starts the ZigBeeHost
+		 */
+		if (!host.isStarted()) {
+			host.start();
+		}
+
+		Thread.sleep(conf.getDiscoveryTimeout());
+
+		/*
+		 * Take the first snapshot.
+		 */
+		Map snapshot1 = new HashMap();
+
+		snapshotServices(snapshot1);
+
+		/*
+		 * restart the bundle
+		 */
+
+		ServiceReference hostServiceRef = getZigBeeHostServiceReference();
+
+		Bundle bundle = hostServiceRef.getBundle();
+
+		bundle.stop();
+
+		bundle.start();
+
+		TestStepProxy tproxy = new TestStepProxy(getContext());
+
+		tproxy.execute(TestStepLauncher.ACTIVATE_ZIGBEE_DEVICES, "Press to continue.");
+
+		Thread.sleep(conf.getDiscoveryTimeout());
+
+		/*
+		 * Takes the second snapshot.
+		 */
+		Map snapshot2 = new HashMap();
+
+		snapshotServices(snapshot2);
+
+		String context;
+
+		/*
+		 * Compares snapshot2 with snapshot1
+		 */
+
+		Set keysSnapshot2 = snapshot2.keySet();
+		for (Iterator iterator = keysSnapshot2.iterator(); iterator.hasNext();) {
+			String servicePid = (String) iterator.next();
+
+			Map serviceProperties2 = (Map) snapshot2.get(servicePid);
+
+			context = "service.pid=" + servicePid;
+			BigInteger ieeeAddress2 = (BigInteger) getParameterChecked(context, serviceProperties2, ZigBeeNode.IEEE_ADDRESS, ParserUtils.MANDATORY, BigInteger.class);
+
+			/*
+			 * checks if in snapshot1 there was a service with this service.pid
+			 * and the same IEEE_ADDRESS.
+			 */
+
+			Map serviceProperties1 = (Map) snapshot1.get(servicePid);
+			assertNotNull(context + ": missing from the snapshot taken before bundle restart.", serviceProperties1);
+			BigInteger ieeeAddress1 = (BigInteger) getParameterChecked(context, serviceProperties1, ZigBeeNode.IEEE_ADDRESS, ParserUtils.MANDATORY, BigInteger.class);
+
+			assertEquals(context + ": got two different IEEE_ADDRESS with the same service.pid", ieeeAddress2, ieeeAddress1);
+
+			snapshot1.remove(servicePid);
+		}
+
+		/*
+		 * After this process snapshot1 map must be empty
+		 */
+		if (snapshot1.size() > 0) {
+			fail("There are some service.pids that were not present anymore after the bundle restart");
+		}
+	}
+
+	/*
+	 * Takes a snapshot of the currently registered ZigBeeNode and imported
+	 * ZigBeeEndpoint services.
+	 */
+	private void snapshotServices(Map snapshot) throws InvalidSyntaxException {
+		/*
+		 * At the end we must not have no more ZigBeeNode services and not
+		 * exported ZigBeeEndpoint services.
+		 */
+
+		ServiceReference[] sRefsZigBeeNode = getContext().getAllServiceReferences(ZigBeeNode.class.getName(), null);
+		ServiceReference[] sRefsZigBeeEndpoint = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), ZIGBEE_NOT_EXPORT_FILTER);
+
+		String context = "ZigBeeNodes properties";
+		if (sRefsZigBeeNode != null) {
+			for (int i = 0; i < sRefsZigBeeNode.length; i++) {
+				Map serviceProperties = getProperties(sRefsZigBeeNode[i]);
+				String servicePid = (String) getParameterChecked(context, serviceProperties, "service.pid", ParserUtils.MANDATORY, String.class);
+				snapshot.put(servicePid, serviceProperties);
+			}
+		}
+
+		context = "ZigBeeEndpoints properties";
+		if (sRefsZigBeeEndpoint != null) {
+			for (int i = 0; i < sRefsZigBeeEndpoint.length; i++) {
+				Map serviceProperties = getProperties(sRefsZigBeeEndpoint[i]);
+				String servicePid = (String) getParameterChecked(context, serviceProperties, "service.pid", ParserUtils.MANDATORY, String.class);
+				snapshot.put(servicePid, serviceProperties);
+			}
 		}
 	}
 
@@ -1378,23 +1788,5 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Read all the service properties and put them into an Map object.
-	 * 
-	 * @param ref The service reference
-	 * @return A Map object containing all the service properties of the service
-	 *         represented by the passed ServiceReference.
-	 */
-
-	private Map getProperties(ServiceReference ref) {
-		Map map = new HashMap();
-		String[] keys = ref.getPropertyKeys();
-		for (int i = 0; i < keys.length; i++) {
-			Object value = ref.getProperty(keys[i]);
-			map.put(keys[i], value);
-		}
-		return map;
 	}
 }
