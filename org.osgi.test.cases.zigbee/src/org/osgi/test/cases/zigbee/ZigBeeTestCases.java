@@ -18,6 +18,7 @@ package org.osgi.test.cases.zigbee;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +63,27 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	ConfigurationFileReader		conf;
 
 	protected TestStepLauncher	launcher;
+
+	/**
+	 * Useful constant for filtering ZigBeeEndpoint services
+	 */
+	protected static String		ZIGBEE_ENDPOINT_FILTER			= "(" + org.osgi.framework.Constants.OBJECTCLASS + "=" + ZigBeeEndpoint.class.getName() + ")";
+
+	/**
+	 * Useful constant for filtering ZigBeeNode services
+	 */
+	protected static String		ZIGBEE_NODE_FILTER				= "(" + org.osgi.framework.Constants.OBJECTCLASS + "=" + ZigBeeNode.class.getName() + ")";
+
+	/**
+	 * Useful constant for filtering out services marked with ZIGBEE_EXPORT
+	 * property (alias imported ones).
+	 */
+	protected static String		ZIGBEE_NOT_EXPORT_FILTER		= "(!(" + ZigBeeEndpoint.ZIGBEE_EXPORT + "=*" + "))";
+
+	/**
+	 * This filter selects any not exported ZigBeeEndpoint service.
+	 */
+	protected static String		ZIGBEE_ENDPOINT_NOT_EXPORTED	= "(&" + ZIGBEE_ENDPOINT_FILTER + ZIGBEE_NOT_EXPORT_FILTER + ")";
 
 	protected void setUp() throws Exception {
 		prepareTestStart();
@@ -120,6 +142,33 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 			st.close();
 		}
 		return service;
+	}
+
+	protected ServiceReference getZigBeeHostServiceReference() {
+
+		ZigBeeHostConfig host = conf.getZigBeeHost();
+
+		String classFilter = "(objectClass=" + ZigBeeHost.class.getName() + ")";
+		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + host.getIEEEAddress() + ")";
+
+		String filter = "(&" + classFilter + ieeeAddressFilter + ")";
+
+		try {
+			ServiceReference[] sRefs = getContext().getServiceReferences(ZigBeeHost.class.getName(), filter);
+			if (sRefs == null || (sRefs != null && sRefs.length > 1)) {
+				fail("found more than one ZigBeeHost matching the IEEE_ADDRESS " + host.getIEEEAddress());
+			}
+			return sRefs[0];
+		} catch (InvalidSyntaxException e) {
+			fail("Internal error: filter expression is wrong", e);
+		}
+		fail("Unable to find a ZigBeeHost for IEEE_ADDRESS " + host.getIEEEAddress());
+		return null;
+	}
+
+	protected ZigBeeHost getZigBeeHost(long timeout) {
+		ZigBeeHostConfig hostConfig = conf.getZigBeeHost();
+		return this.getZigBeeHost(hostConfig, timeout);
 	}
 
 	/**
@@ -238,6 +287,24 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 		fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 		return null;
+	}
+
+	/**
+	 * Read all the service properties and put them into an Map object.
+	 * 
+	 * @param ref The service reference
+	 * @return A Map object containing all the service properties of the service
+	 *         represented by the passed ServiceReference.
+	 */
+
+	protected Map getProperties(ServiceReference ref) {
+		Map map = new HashMap();
+		String[] keys = ref.getPropertyKeys();
+		for (int i = 0; i < keys.length; i++) {
+			Object value = ref.getProperty(keys[i]);
+			map.put(keys[i], value);
+		}
+		return map;
 	}
 
 	/**
