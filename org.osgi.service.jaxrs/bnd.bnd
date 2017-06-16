@@ -8,4 +8,6 @@ Export-Package: ${p}.*; -split-package:=first
 -buildpath: \
 	osgi.core;version=6.0,\
 	osgi.annotation;version=6.0.1,\
-	org.apache.geronimo.specs:geronimo-jaxrs_2.0_spec
+	org.apache.geronimo.specs:geronimo-jaxrs_2.0_spec,\
+	org.osgi.service.component.annotations;version=latest,\
+	org.osgi.util.promise;version=latest

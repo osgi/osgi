@@ -6,9 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.osgi.util.converter.ConvertFunction;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.ConverterFunction;
 import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
@@ -207,9 +207,9 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
 
 		cb.rule(Long.class,
-			new ConvertFunction<Long>(){
+				new ConverterFunction() {
 				@Override
-				public Long convert(Object v, Type t) {
+					public Object apply(Object v, Type t) {
 					return (long)v.hashCode();
 					}
 				});

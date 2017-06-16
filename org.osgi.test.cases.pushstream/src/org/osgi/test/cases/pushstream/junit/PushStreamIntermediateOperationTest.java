@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.TimeoutException;
 import org.osgi.util.pushstream.PushEvent;
+import org.osgi.util.pushstream.PushEvent.EventType;
 import org.osgi.util.pushstream.PushStream;
 import org.osgi.util.pushstream.PushStreamProvider;
 import org.osgi.util.pushstream.PushbackPolicyOption;
@@ -541,8 +542,15 @@ public class PushStreamIntermediateOperationTest
 		assertNotNull(status);
 		assertNotNull(failure[0]);
 		assertEquals(TimeoutException.class, failure[0].getClass());
-		assertFalse(gen.closeCalled);
-		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
+
+		// There is always a race between the timeout and the next event
+		// because that is the purpose of a timeout! This means the generator
+		// may get a call to close (if the timeout propagates back first)
+		// *or* we may get a -1 returned from a data event closing the generator
+		// Also, the thread safety in the generator may not be 100%, so we may
+		// see a close call after stopping. In any event, all we care is that
+		// a stop actually is propagated back.
+		assertTrue(gen.closeCalled || status.event.getType() == EventType.DATA);
 	}
 
 	/**
@@ -1653,8 +1661,14 @@ public class PushStreamIntermediateOperationTest
 		ExtGeneratorStatus status = gen.status;
 		assertNotNull(status);
 
-		assertTrue(gen.maxBackPressure > 0l);
-		assertTrue(pr.getValue().length > 2000);
+		assertEquals(0l, gen.minBackPressure);
+		// We should get a max back pressure close to, but no more than 200
+		assertTrue("Max backpressure was " + gen.maxBackPressure,
+				gen.maxBackPressure > 160l && gen.maxBackPressure <= 200);
+		Object[] values = pr.getValue();
+		// There must be at least 100 entries as we allow a maximum of 5 per
+		// window
+		assertTrue("Not enough values " + values.length, values.length >= 100);
 		assertTrue(gen.closeCalled);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}

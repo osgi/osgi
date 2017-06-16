@@ -35,7 +35,7 @@ public abstract class ResourceDTO extends DTO {
 
 	/**
 	 * The base URI of the resource defined by
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_RESOURCE_BASE}.
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_RESOURCE}.
 	 */
 	public String					base;
 

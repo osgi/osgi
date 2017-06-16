@@ -34,8 +34,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 public class ExtensionDTO extends DTO {
 
 	/**
-	 * The {@link JaxRSWhiteboardConstants#JAX_RS_EXTENSION_NAME} for this
-	 * extension
+	 * The {@link JaxRSWhiteboardConstants#JAX_RS_NAME} for this extension
 	 */
 	public String			name;
 

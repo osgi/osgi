@@ -23,20 +23,22 @@ import org.osgi.annotation.versioning.ProviderType;
  * format strings.
  * <p>
  * Messages can be formatted by the Logger once the Logger determines the log
- * level is enabled. Use <code>"{}"</code> as a place holder for an argument. If
- * you need to use the literal <code>"{}"</code> in the formatted message,
- * precede the place holder with a backslash: <code>"\\{}"</code>. If you need
- * to place a backslash before the place holder, precede the backslash with a
- * backslash: <code>"\\\\{}"</code>.
+ * level is enabled. Use a left curly bracket (<code>'{' \u007B</code>) followed
+ * by a right curly bracket (<code>'}' \u007D</code>) as a place holder for an
+ * argument: <code>"{}"</code>. If you need to use the literal <code>"{}"</code>
+ * in the formatted message, precede the place holder with a reverse solidus
+ * ({@code '\' \u005C}): <code>"\\{}"</code>. If you need to place a backslash
+ * before the place holder, precede the reverse solidus with a reverse solidus:
+ * <code>"\\\\{}"</code>.
  * <p>
  * You can also add a {@code Throwable} and/or {@code ServiceReference} to the
  * generated {@link LogEntry} by passing them to the logging methods as
- * additional arguments. If the last argument is a {@code Throwable} or
+ * additional arguments. If the last argument is a {@code Throwable} or a
  * {@code ServiceReference}, it is added to the generated {@link LogEntry} and
- * then if the next to last argument is a {@code ServiceReference} or
- * {@code Throwable} and not the same type as the last argument, it is added to
- * the generated {@link LogEntry}. These arguments will not be used for place
- * holders. For example:
+ * then, if the next to last argument is a {@code ServiceReference} or
+ * {@code Throwable} and not the same type as the last argument, it is also
+ * added to the generated {@link LogEntry}. These arguments will not be used as
+ * message arguments. For example:
  * 
  * <pre>
  * logger.info("Found service {}.", serviceReference, serviceReference);

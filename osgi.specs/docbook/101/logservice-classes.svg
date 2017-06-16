@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="331.2px" height="203.465px" viewBox="0 0 331.2 203.465" enable-background="new 0 0 331.2 203.465" xml:space="preserve">
-<rect x="257.28" fill="#E6E6E6" width="73.92" height="43.199"/>
-<rect y="122.399" fill="#E6E6E6" width="331.2" height="72"/>
-<rect fill="#E6E6E6" width="73.02" height="43.199"/>
+	 width="331.2px" height="273.799px" viewBox="0 -60 331.2 273.799" enable-background="new 0 -60 331.2 273.799"
+	 xml:space="preserve">
+<rect x="256.92" y="-60" fill="#E6E6E6" width="73.92" height="43.199"/>
+<rect y="141.233" fill="#E6E6E6" width="331.2" height="62.233"/>
+<rect y="-60" fill="#E6E6E6" width="73.02" height="43.199"/>
 <rect x="9.6" y="73.8" width="55.2" height="27"/>
 <rect x="9.6" y="73.56" width="55.44" height="0.48"/>
 <rect x="64.56" y="73.8" width="0.48" height="27.24"/>
@@ -16,8 +17,8 @@
 <rect x="62.16" y="72" width="0.48" height="27.239"/>
 <rect x="6.96" y="98.76" width="55.44" height="0.479"/>
 <rect x="6.96" y="71.76" width="0.48" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 9.6001 79.1401)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
-<text transform="matrix(1 0 0 1 9.6001 87.6597)" font-family="'ProductusSemibold'" font-size="7.98">LogService</text>
+<text transform="matrix(0.9504 0 0 1 9.6006 79.1396)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.6001 87.6602)" font-family="'ProductusSemibold'" font-size="7.98">LogService</text>
 <rect x="268.799" y="73.8" width="55.201" height="27"/>
 <rect x="268.799" y="73.56" width="55.439" height="0.48"/>
 <rect x="323.76" y="73.8" width="0.479" height="27.24"/>
@@ -28,128 +29,122 @@
 <rect x="321.36" y="72" width="0.48" height="27.239"/>
 <rect x="266.161" y="98.76" width="55.439" height="0.479"/>
 <rect x="266.161" y="71.76" width="0.479" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 268.8003 79.1401)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
-<text transform="matrix(1 0 0 1 268.8003 87.6597)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">LogReader</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Service</tspan></text>
-<rect x="96" y="73.8" width="54.3" height="27"/>
-<rect x="96" y="73.56" width="54.54" height="0.48"/>
-<rect x="150.06" y="73.8" width="0.48" height="27.24"/>
-<rect x="95.76" y="100.56" width="54.54" height="0.48"/>
-<rect x="95.76" y="73.56" width="0.48" height="27.24"/>
-<rect x="93.6" y="72" fill="#FFFFFF" width="54.36" height="27"/>
-<rect x="93.6" y="71.76" width="54.6" height="0.479"/>
-<rect x="147.72" y="72" width="0.48" height="27.239"/>
-<rect x="93.36" y="98.76" width="54.6" height="0.479"/>
-<rect x="93.36" y="71.76" width="0.48" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 96 79.1401)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
-<text transform="matrix(1 0 0 1 96 87.6597)" font-family="'ProductusSemibold'" font-size="7.98">LogEntry</text>
-<rect x="182.4" y="73.8" width="54.3" height="27"/>
-<rect x="182.4" y="73.56" width="54.54" height="0.48"/>
-<rect x="236.459" y="73.8" width="0.479" height="27.24"/>
-<rect x="182.161" y="100.56" width="54.539" height="0.48"/>
-<rect x="182.161" y="73.56" width="0.479" height="27.24"/>
-<rect x="180" y="72" fill="#FFFFFF" width="54.358" height="27"/>
-<rect x="180" y="71.76" width="54.6" height="0.479"/>
-<rect x="234.12" y="72" width="0.48" height="27.239"/>
-<rect x="179.76" y="98.76" width="54.6" height="0.479"/>
-<rect x="179.76" y="71.76" width="0.479" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 182.3999 79.1401)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
-<text transform="matrix(1 0 0 1 182.3999 87.6597)" font-family="'ProductusSemibold'" font-size="7.98">LogListener</text>
+<text transform="matrix(0.9504 0 0 1 268.8013 79.1396)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 268.8003 87.6602)" font-family="'ProductusSemibold'" font-size="7.98">LogReader</text>
+<text transform="matrix(1 0 0 1 268.8003 97.2354)" font-family="'ProductusSemibold'" font-size="7.98">Service</text>
+<rect x="185" y="73.8" width="54.299" height="27"/>
+<rect x="185" y="73.56" width="54.539" height="0.48"/>
+<rect x="239.06" y="73.8" width="0.479" height="27.24"/>
+<rect x="184.76" y="100.56" width="54.539" height="0.48"/>
+<rect x="184.76" y="73.56" width="0.48" height="27.24"/>
+<rect x="182.6" y="72" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="182.6" y="71.76" width="54.6" height="0.479"/>
+<rect x="236.72" y="72" width="0.479" height="27.239"/>
+<rect x="182.36" y="98.76" width="54.6" height="0.479"/>
+<rect x="182.36" y="71.76" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 185.0005 79.1396)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 185.0005 87.6602)" font-family="'ProductusSemibold'" font-size="7.98">LogEntry</text>
+<rect x="194.4" y="-34.66" width="54.3" height="27"/>
+<rect x="194.4" y="-34.9" width="54.54" height="0.48"/>
+<rect x="248.459" y="-34.66" width="0.479" height="27.24"/>
+<rect x="194.161" y="-7.9" width="54.539" height="0.48"/>
+<rect x="194.161" y="-34.9" width="0.479" height="27.24"/>
+<rect x="192" y="-36.46" fill="#FFFFFF" width="54.357" height="27"/>
+<rect x="192" y="-36.7" width="54.6" height="0.479"/>
+<rect x="246.12" y="-36.46" width="0.48" height="27.239"/>
+<rect x="191.76" y="-9.7" width="54.6" height="0.479"/>
+<rect x="191.76" y="-36.7" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 194.4009 -29.3203)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 194.3999 -20.7998)" font-family="'ProductusSemibold'" font-size="7.98">LogListener</text>
 <rect x="268.799" y="160.2" width="55.201" height="27"/>
 <rect x="268.799" y="159.959" width="55.439" height="0.479"/>
 <rect x="323.76" y="160.2" width="0.479" height="27.239"/>
 <rect x="268.56" y="186.959" width="55.44" height="0.479"/>
 <rect x="268.56" y="159.959" width="0.479" height="27.24"/>
-<rect x="266.4" y="158.399" fill="#FFFFFF" width="55.2" height="27"/>
-<rect x="266.4" y="158.159" width="55.44" height="0.48"/>
-<rect x="321.36" y="158.399" width="0.48" height="27.24"/>
-<rect x="266.161" y="185.159" width="55.439" height="0.48"/>
-<rect x="266.161" y="158.159" width="0.479" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 268.8003 165.5405)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log Reader</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Service impl.</tspan></text>
-<polyline points="36,112.319 32.7,112.319 32.88,111.659 36,100.739 39.12,111.659 39.3,112.319 38.64,112.319 38.16,111.959 
+<rect x="266.4" y="158.398" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="266.4" y="158.159" width="55.44" height="0.479"/>
+<rect x="321.36" y="158.398" width="0.48" height="27.24"/>
+<rect x="266.161" y="185.159" width="55.439" height="0.479"/>
+<rect x="266.161" y="158.159" width="0.479" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 268.8013 165.541)" font-family="'ProductusOSGiBookc'" font-size="7.98">Log Reader</text>
+<text transform="matrix(0.9504 0 0 1 268.8013 175.1162)" font-family="'ProductusOSGiBookc'" font-size="7.98">Service impl.</text>
+<polyline points="36,112.318 32.7,112.318 32.88,111.659 36,100.739 39.12,111.659 39.3,112.318 38.64,112.318 38.16,111.959 
 	35.52,102.719 36.48,102.42 36.48,102.719 33.84,111.959 32.88,111.659 33.36,111.299 36,111.299 "/>
 <rect x="36" y="111.299" width="2.64" height="1.021"/>
 <polyline points="36,111.84 33.36,111.84 36,102.6 38.64,111.84 "/>
 <rect x="35.76" y="112.081" width="0.48" height="46.56"/>
-<rect x="96" y="131.399" width="54.3" height="27"/>
-<rect x="96" y="131.159" width="54.54" height="0.48"/>
-<rect x="150.06" y="131.399" width="0.48" height="27.24"/>
-<rect x="95.76" y="158.159" width="54.54" height="0.48"/>
-<rect x="95.76" y="131.159" width="0.48" height="27.24"/>
-<rect x="93.6" y="129.6" fill="#FFFFFF" width="54.36" height="27"/>
-<rect x="93.6" y="129.359" width="54.6" height="0.479"/>
-<rect x="147.72" y="129.6" width="0.48" height="27.24"/>
-<rect x="93.36" y="156.359" width="54.6" height="0.479"/>
-<rect x="93.36" y="129.359" width="0.48" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 96 136.7397)" font-family="'ProductusOSGiBookc'" font-size="7.98">LogEntry impl</text>
-<polyline points="309.6,112.319 306.299,112.319 306.481,111.659 309.6,100.739 312.719,111.659 312.901,112.319 312.241,112.319 
+<rect x="191" y="154.467" width="54.299" height="27"/>
+<rect x="191" y="154.228" width="54.539" height="0.479"/>
+<rect x="245.06" y="154.467" width="0.479" height="27.24"/>
+<rect x="190.76" y="181.228" width="54.539" height="0.479"/>
+<rect x="190.76" y="154.228" width="0.48" height="27.239"/>
+<rect x="188.6" y="152.668" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="188.6" y="152.428" width="54.6" height="0.479"/>
+<rect x="242.72" y="152.668" width="0.479" height="27.24"/>
+<rect x="188.36" y="179.428" width="54.6" height="0.479"/>
+<rect x="188.36" y="152.428" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 191.0005 159.8076)" font-family="'ProductusOSGiBookc'" font-size="7.98">LogEntry impl</text>
+<polyline points="309.6,112.318 306.299,112.318 306.481,111.659 309.6,100.739 312.719,111.659 312.901,112.318 312.241,112.318 
 	311.76,111.959 309.12,102.719 310.081,102.42 310.081,102.719 307.44,111.959 306.481,111.659 306.959,111.299 309.6,111.299 "/>
 <rect x="309.6" y="111.299" width="2.641" height="1.021"/>
 <polyline points="309.6,111.84 306.959,111.84 309.6,102.6 312.241,111.84 "/>
 <rect x="309.36" y="112.081" width="0.48" height="46.56"/>
-<rect x="9.54" y="9" width="54.36" height="27"/>
-<rect x="9.54" y="8.76" width="54.6" height="0.479"/>
-<rect x="63.66" y="9" width="0.48" height="27.239"/>
-<rect x="9.3" y="35.76" width="54.6" height="0.479"/>
-<rect x="9.3" y="8.76" width="0.48" height="27.24"/>
-<rect x="7.2" y="7.199" fill="#FFFFFF" width="54.36" height="27"/>
-<rect x="7.2" y="6.96" width="54.6" height="0.479"/>
-<rect x="61.32" y="7.199" width="0.48" height="27.24"/>
-<rect x="6.96" y="33.96" width="54.6" height="0.479"/>
-<rect x="6.96" y="6.96" width="0.48" height="27.239"/>
-<text transform="matrix(0.9504 0 0 1 9.54 14.3403)" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log user bundle</text>
-<rect x="35.76" y="35.76" width="0.48" height="36.479"/>
+<rect x="9.54" y="-51" width="54.36" height="27"/>
+<rect x="9.54" y="-51.24" width="54.6" height="0.479"/>
+<rect x="63.66" y="-51" width="0.48" height="27.239"/>
+<rect x="9.3" y="-24.24" width="54.6" height="0.479"/>
+<rect x="9.3" y="-51.24" width="0.48" height="27.24"/>
+<rect x="7.2" y="-52.801" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="7.2" y="-53.04" width="54.6" height="0.479"/>
+<rect x="61.32" y="-52.801" width="0.48" height="27.24"/>
+<rect x="6.96" y="-26.04" width="54.6" height="0.479"/>
+<rect x="6.96" y="-53.04" width="0.48" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 9.5405 -45.6602)" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log user bundle</text>
+<rect x="35.76" y="-24.24" width="0.48" height="36.479"/>
 <rect x="9.54" y="160.2" width="54.36" height="27"/>
 <rect x="9.54" y="159.959" width="54.6" height="0.479"/>
 <rect x="63.66" y="160.2" width="0.48" height="27.239"/>
 <rect x="9.3" y="186.959" width="54.6" height="0.479"/>
 <rect x="9.3" y="159.959" width="0.48" height="27.24"/>
-<rect x="7.2" y="158.399" fill="#FFFFFF" width="54.36" height="27"/>
-<rect x="7.2" y="158.159" width="54.6" height="0.48"/>
-<rect x="61.32" y="158.399" width="0.48" height="27.24"/>
-<rect x="6.96" y="185.159" width="54.6" height="0.48"/>
-<rect x="6.96" y="158.159" width="0.48" height="27.24"/>
-<text transform="matrix(0.9504 0 0 1 9.54 165.5405)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log Service</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">impl</tspan></text>
-<rect x="269.7" y="9" width="54.301" height="27"/>
-<rect x="269.7" y="8.76" width="54.541" height="0.479"/>
-<rect x="323.76" y="9" width="0.479" height="27.239"/>
-<rect x="269.459" y="35.76" width="54.541" height="0.479"/>
-<rect x="269.459" y="8.76" width="0.479" height="27.24"/>
-<rect x="267.299" y="7.199" fill="#FFFFFF" width="54.359" height="27"/>
-<rect x="267.299" y="6.96" width="54.602" height="0.479"/>
-<rect x="321.42" y="7.199" width="0.479" height="27.24"/>
-<rect x="267.06" y="33.96" width="54.601" height="0.479"/>
-<rect x="267.06" y="6.96" width="0.479" height="27.239"/>
-<text transform="matrix(0.9504 0 0 1 269.6997 14.3403)" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log reader user</text>
-<polyline points="108,112.319 104.7,112.319 104.88,111.659 108,100.739 111.12,111.659 111.3,112.319 110.64,112.319 
-	110.16,111.959 107.52,102.719 108.48,102.42 108.48,102.719 105.84,111.959 104.88,111.659 105.36,111.299 108,111.299 "/>
-<rect x="108" y="111.299" width="2.64" height="1.021"/>
-<polyline points="108,111.84 105.36,111.84 108,102.6 110.64,111.84 "/>
-<rect x="107.76" y="112.081" width="0.48" height="17.76"/>
-<rect x="64.56" y="172.56" width="202.08" height="0.479"/>
-<rect x="150.96" y="143.76" width="130.08" height="0.479"/>
-<rect x="280.56" y="144" width="0.479" height="14.64"/>
-<polyline points="208.799,60.479 212.1,60.479 211.92,61.14 208.799,72.06 205.68,61.14 205.5,60.479 206.161,60.479 206.64,60.84 
-	209.28,70.08 208.32,70.38 208.32,70.08 210.959,60.84 211.92,61.14 211.44,61.5 208.799,61.5 "/>
-<rect x="206.161" y="60.479" width="2.641" height="1.021"/>
-<polyline points="208.799,60.96 211.44,60.96 208.799,70.199 206.161,60.96 "/>
-<rect x="208.56" y="57.359" width="0.479" height="3.36"/>
-<rect x="208.799" y="57.359" width="65.041" height="0.48"/>
-<rect x="273.36" y="35.76" width="0.48" height="21.84"/>
-<text transform="matrix(1 0 0 1 39.1802 50.3999)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Log a</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">message</tspan></text>
-<text transform="matrix(1 0 0 1 106.0195 180.3608)" font-family="'ProductusBook'" font-size="7.98">Store a message in the log for retrieval</text>
-<text transform="matrix(1 0 0 1 185.2192 150.6606)" font-family="'ProductusBook'" font-size="7.98">message log</text>
-<text transform="matrix(1 0 0 1 240.1792 126.481)" font-family="'ProductusBook'" font-size="7.98">send new log entry</text>
-<text transform="matrix(1 0 0 1 286.1392 49.8608)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">retrieve log</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">or register</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">listener</tspan></text>
-<rect x="208.56" y="100.56" width="0.479" height="29.28"/>
-<rect x="208.799" y="129.359" width="86.641" height="0.479"/>
-<rect x="294.959" y="129.6" width="0.479" height="29.04"/>
-<text transform="matrix(1 0 0 1 66.1201 170.8804)" font-family="'ProductusBook'" font-size="7.98">1</text>
-<text transform="matrix(1 0 0 1 261.9604 170.6401)" font-family="'ProductusBook'" font-size="7.98">1</text>
-<text transform="matrix(1 0 0 1 276.1812 156.48)" font-family="'ProductusBook'" font-size="7.98">1</text>
-<text transform="matrix(1 0 0 1 154.4409 141.4204)" font-family="'ProductusBook'" font-size="7.98">0..n (impl dependent maximum)</text>
-<text transform="matrix(1 0 0 1 291.2417 156.48)" font-family="'ProductusBook'" font-size="7.98">1</text>
-<text transform="matrix(1 0 0 1 212.7017 107.4595)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
-<text transform="matrix(1 0 0 1 93.6016 50.2603)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">LogEntry has references to</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">ServiceReference,</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">Throwable and Bundle</tspan></text>
+<rect x="7.2" y="158.398" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="7.2" y="158.159" width="54.6" height="0.479"/>
+<rect x="61.32" y="158.398" width="0.48" height="27.24"/>
+<rect x="6.96" y="185.159" width="54.6" height="0.479"/>
+<rect x="6.96" y="158.159" width="0.48" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 9.5405 165.541)" font-family="'ProductusOSGiBookc'" font-size="7.98">Log Service</text>
+<text transform="matrix(0.9504 0 0 1 9.5405 175.1162)" font-family="'ProductusOSGiBookc'" font-size="7.98">impl</text>
+<rect x="269.34" y="-51" width="54.301" height="27"/>
+<rect x="269.34" y="-51.24" width="54.541" height="0.479"/>
+<rect x="323.401" y="-51" width="0.479" height="27.239"/>
+<rect x="269.1" y="-24.24" width="54.541" height="0.479"/>
+<rect x="269.1" y="-51.24" width="0.479" height="27.24"/>
+<rect x="266.94" y="-52.801" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="266.94" y="-53.04" width="54.602" height="0.479"/>
+<rect x="321.061" y="-52.801" width="0.479" height="27.24"/>
+<rect x="266.701" y="-26.04" width="54.601" height="0.479"/>
+<rect x="266.701" y="-53.04" width="0.479" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 269.3403 -45.6602)" font-family="'ProductusOSGiBookc'" font-size="7.98">a Log reader user</text>
+<rect x="244.589" y="-7.9" width="0.48" height="137.741"/>
+<rect x="44.04" y="192.755" width="238.407" height="0.479"/>
+<polyline points="220.799,-47.981 224.1,-47.981 223.92,-47.32 220.799,-36.4 217.68,-47.32 217.5,-47.981 218.161,-47.981 
+	218.64,-47.62 221.28,-38.38 220.32,-38.08 220.32,-38.38 222.959,-47.62 223.92,-47.32 223.44,-46.96 220.799,-46.96 "/>
+<rect x="218.161" y="-47.981" width="2.641" height="1.021"/>
+<polyline points="220.799,-47.5 223.44,-47.5 220.799,-38.261 218.161,-47.5 "/>
+<rect x="220.56" y="-51.101" width="0.479" height="3.36"/>
+<rect x="220.799" y="-51.101" width="45.901" height="0.48"/>
+<text transform="matrix(1 0 0 1 85.6802 -12.7881)" font-family="'ProductusBook'" font-size="7.98">Log a</text>
+<text transform="matrix(1 0 0 1 85.6802 -3.2129)" font-family="'ProductusBook'" font-size="7.98">message</text>
+<text transform="matrix(1 0 0 1 246.1196 126.4814)" font-family="'ProductusBook'" font-size="7.98">send new log entry</text>
+<text transform="matrix(1 0 0 1 281.1138 -6.0015)" font-family="'ProductusBook'" font-size="7.98">retrieve log</text>
+<text transform="matrix(1 0 0 1 281.1138 3.5747)" font-family="'ProductusBook'" font-size="7.98">or register</text>
+<text transform="matrix(1 0 0 1 281.1138 13.1509)" font-family="'ProductusBook'" font-size="7.98">listener</text>
+<rect x="191.553" y="52.422" width="0.479" height="19.338"/>
+<rect x="244.589" y="129.359" width="50.851" height="0.479"/>
+<rect x="294.959" y="129.6" width="0.479" height="29.041"/>
+<text transform="matrix(1 0 0 1 66.1201 170.8809)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 261.9604 170.7598)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 291.2417 156.4805)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 246.6001 -1.2129)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
 <polyline points="64.8,86.399 50.4,100.8 64.8,100.8 "/>
 <polyline points="64.98,86.58 50.58,100.979 50.4,101.04 49.8,101.04 64.62,86.22 "/>
 <rect x="50.4" y="100.56" width="14.64" height="0.48"/>
@@ -158,15 +153,116 @@
 <polyline points="324.18,86.58 309.78,100.979 309.6,101.04 309,101.04 323.821,86.22 "/>
 <rect x="309.6" y="100.56" width="14.641" height="0.48"/>
 <polyline points="323.76,100.8 323.76,86.399 323.821,86.22 324.241,85.8 324.241,100.8 "/>
-<rect x="316.559" y="35.76" width="0.48" height="0.24"/>
-<rect x="316.559" y="36" width="0.48" height="36.239"/>
-<text transform="matrix(1 0 0 1 80.1001 10.3198)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Bundle using</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Log Service</tspan></text>
-<text transform="matrix(1 0 0 1 213.6001 23.4604)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Bundle using</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Log Reader</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">Service</tspan></text>
-<text transform="matrix(1 0 0 1 165.6001 201.1206)" font-family="'ProductusBook'" font-size="7.98">Log implementation bundle</text>
-<rect x="150.72" y="84.359" width="0.24" height="0.48"/>
-<rect x="150.96" y="84.359" width="3.96" height="0.48"/>
-<rect x="161.1" y="84.359" width="0.24" height="0.48"/>
-<rect x="161.34" y="84.359" width="7.86" height="0.48"/>
-<rect x="175.32" y="84.359" width="0.24" height="0.48"/>
-<rect x="175.56" y="84.359" width="3.96" height="0.48"/>
+<rect x="316.2" y="-24.24" width="0.48" height="0.24"/>
+<rect x="316.2" y="-24" width="0.48" height="96.239"/>
+<text transform="matrix(1 0 0 1 118.5996 211.4531)" font-family="'ProductusBook'" font-size="7.98">Log implementation bundle</text>
+<rect x="275.32" y="84.359" width="0.24" height="0.48"/>
+<rect x="9.36" y="14.797" width="55.199" height="27"/>
+<rect x="9.36" y="14.557" width="55.439" height="0.48"/>
+<rect x="64.32" y="14.797" width="0.479" height="27.24"/>
+<rect x="9.12" y="41.557" width="55.439" height="0.48"/>
+<rect x="9.12" y="14.557" width="0.48" height="27.24"/>
+<rect x="6.96" y="12.997" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="6.96" y="12.757" width="55.44" height="0.479"/>
+<rect x="61.92" y="12.997" width="0.479" height="27.239"/>
+<rect x="6.72" y="39.757" width="55.44" height="0.479"/>
+<rect x="6.72" y="12.757" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 9.3604 20.1367)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.3599 28.6572)" font-family="'ProductusSemibold'" font-size="7.98">LoggerFactory</text>
+<polyline points="64.559,27.396 50.16,41.797 64.559,41.797 "/>
+<polyline points="64.74,27.577 50.34,41.976 50.16,42.037 49.559,42.037 64.379,27.217 "/>
+<rect x="50.16" y="41.557" width="14.64" height="0.48"/>
+<polyline points="64.32,41.797 64.32,27.396 64.379,27.217 64.799,26.797 64.799,41.797 "/>
+<polyline points="35.76,52.828 32.46,52.828 32.64,52.168 35.76,41.249 38.88,52.168 39.06,52.828 38.4,52.828 37.92,52.468 
+	35.28,43.228 36.24,42.929 36.24,43.228 33.6,52.468 32.64,52.168 33.12,51.808 35.76,51.808 "/>
+<rect x="35.76" y="51.808" width="2.64" height="1.021"/>
+<polyline points="35.76,52.349 33.12,52.349 35.76,43.109 38.4,52.349 "/>
+<rect x="35.52" y="52.59" width="0.48" height="19.143"/>
+<rect x="101.334" y="159.179" width="54.299" height="27"/>
+<rect x="101.334" y="158.939" width="54.539" height="0.479"/>
+<rect x="155.394" y="159.179" width="0.479" height="27.24"/>
+<rect x="101.094" y="185.939" width="54.539" height="0.479"/>
+<rect x="101.094" y="158.939" width="0.48" height="27.239"/>
+<rect x="98.934" y="157.38" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="98.934" y="157.14" width="54.6" height="0.479"/>
+<rect x="153.054" y="157.38" width="0.479" height="27.24"/>
+<rect x="98.693" y="184.14" width="54.6" height="0.479"/>
+<rect x="98.693" y="157.14" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 101.334 164.5195)" font-family="'ProductusOSGiBookc'" font-size="7.98">Logger impl</text>
+<rect x="99.713" y="72.479" width="55.199" height="27"/>
+<rect x="99.713" y="72.239" width="55.439" height="0.48"/>
+<rect x="154.673" y="72.479" width="0.479" height="27.24"/>
+<rect x="99.473" y="99.24" width="55.439" height="0.479"/>
+<rect x="99.473" y="72.239" width="0.48" height="27.24"/>
+<rect x="97.313" y="70.679" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="97.313" y="70.439" width="55.44" height="0.479"/>
+<rect x="152.274" y="70.679" width="0.479" height="27.239"/>
+<rect x="97.073" y="97.439" width="55.44" height="0.479"/>
+<rect x="97.073" y="70.439" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 99.7139 77.8188)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 99.7134 86.3394)" font-family="'ProductusSemibold'" font-size="7.98">Logger</text>
+<polyline points="126.114,110.998 122.813,110.998 122.993,110.338 126.114,99.418 129.233,110.338 129.413,110.998 
+	128.753,110.998 128.274,110.639 125.633,101.398 126.593,101.099 126.593,101.398 123.954,110.639 122.993,110.338 
+	123.473,109.979 126.114,109.979 "/>
+<rect x="126.114" y="109.979" width="2.64" height="1.021"/>
+<polyline points="126.114,110.52 123.473,110.52 126.114,101.279 128.753,110.52 "/>
+<rect x="125.874" y="110.76" width="0.48" height="46.561"/>
+<rect x="140.513" y="99.24" width="14.64" height="0.479"/>
+<polyline points="154.673,99.479 154.673,85.078 154.733,84.899 155.153,84.479 155.153,99.479 "/>
+<rect x="99.473" y="13.476" width="55.199" height="27"/>
+<rect x="99.473" y="13.236" width="55.439" height="0.48"/>
+<rect x="154.433" y="13.476" width="0.479" height="27.24"/>
+<rect x="99.233" y="40.236" width="55.439" height="0.48"/>
+<rect x="99.233" y="13.236" width="0.48" height="27.24"/>
+<rect x="97.073" y="11.676" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="97.073" y="11.436" width="55.44" height="0.479"/>
+<rect x="152.034" y="11.676" width="0.479" height="27.239"/>
+<rect x="96.833" y="38.436" width="55.44" height="0.479"/>
+<rect x="96.833" y="11.436" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 99.4736 18.8159)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 99.4731 27.3364)" font-family="'ProductusSemibold'" font-size="7.98">FormatterLogger</text>
+<rect x="140.273" y="40.236" width="14.64" height="0.48"/>
+<polyline points="154.433,40.476 154.433,26.075 154.493,25.896 154.913,25.476 154.913,40.476 "/>
+<polyline points="125.874,51.507 122.573,51.507 122.753,50.848 125.874,39.928 128.993,50.848 129.172,51.507 128.513,51.507 
+	128.034,51.147 125.393,41.907 126.353,41.608 126.353,41.907 123.713,51.147 122.753,50.848 123.233,50.487 125.874,50.487 "/>
+<rect x="125.874" y="50.487" width="2.64" height="1.021"/>
+<polyline points="125.874,51.028 123.233,51.028 125.874,41.788 128.513,51.028 "/>
+<rect x="125.633" y="51.27" width="0.48" height="19.143"/>
+<rect x="167.473" y="25.662" width="55.199" height="27"/>
+<rect x="167.473" y="25.422" width="55.439" height="0.48"/>
+<rect x="222.433" y="25.662" width="0.479" height="27.24"/>
+<rect x="167.233" y="52.422" width="55.439" height="0.48"/>
+<rect x="167.233" y="25.422" width="0.48" height="27.24"/>
+<rect x="165.073" y="23.862" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="165.073" y="23.622" width="55.44" height="0.479"/>
+<rect x="220.034" y="23.862" width="0.479" height="27.239"/>
+<rect x="164.833" y="50.622" width="55.44" height="0.479"/>
+<rect x="164.833" y="23.622" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 167.4731 31.0015)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;enum&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 167.4731 39.522)" font-family="'ProductusSemibold'" font-size="7.98">LogLevel</text>
+<rect x="208.273" y="52.422" width="14.64" height="0.48"/>
+<polyline points="222.433,52.662 222.433,38.261 222.493,38.082 222.913,37.662 222.913,52.662 "/>
+<line fill="#FFFFFF" stroke="#000000" stroke-width="0.75" stroke-miterlimit="10" stroke-dasharray="6" x1="229.767" y1="-7.42" x2="230.1" y2="71.733"/>
+<polyline points="209.901,111.988 206.6,111.988 206.78,111.328 209.901,100.408 213.02,111.328 213.2,111.988 212.541,111.988 
+	212.061,111.629 209.42,102.388 210.38,102.089 210.38,102.388 207.741,111.629 206.78,111.328 207.26,110.969 209.901,110.969 "/>
+<rect x="209.901" y="110.969" width="2.64" height="1.021"/>
+<polyline points="209.901,111.51 207.26,111.51 209.901,102.269 212.541,111.51 "/>
+<rect x="209.661" y="111.75" width="0.48" height="41.156"/>
+<rect x="81.621" y="-29.028" width="0.48" height="112.846"/>
+<rect x="61.32" y="-29.141" width="20.301" height="0.48"/>
+<rect x="81.621" y="83.819" width="15.452" height="0.48"/>
+<text transform="matrix(1 0 0 1 38.6401 -6.0005)" font-family="'ProductusBook'" font-size="7.98">Get a</text>
+<text transform="matrix(1 0 0 1 38.6401 3.5747)" font-family="'ProductusBook'" font-size="7.98">Logger</text>
+<rect x="61.56" y="173.58" width="37.613" height="0.479"/>
+<text transform="matrix(1 0 0 1 86.2671 170.7598)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="153.753" y="170.761" width="34.607" height="0.479"/>
+<text transform="matrix(1 0 0 1 158.4531 168.0869)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 175.9341 168.0879)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="282.208" y="185.159" width="0.479" height="7.8"/>
+<rect x="43.8" y="185.159" width="0.479" height="7.596"/>
+<text transform="matrix(1 0 0 1 37.3198 193.2334)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 286.4536 193.2334)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<rect x="242.72" y="172.56" width="23.92" height="0.479"/>
+<text transform="matrix(1 0 0 1 246.4526 171)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 194.1606 70.4126)" font-family="'ProductusBook'" font-size="7.98">1</text>
 </svg>

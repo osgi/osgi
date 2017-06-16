@@ -1,6 +1,6 @@
 org.apache.aries.jpa.container; version=2.7.0.SNAPSHOT
-
-javax.persistence;  version=2.1.1
+org.apache.aries.jpa.javax.persistence_2.1;  version=2.7.0.SNAPSHOT
+org.apache.aries.jpa.eclipselink.adapter;    version=2.7.0.SNAPSHOT
 
 org.apache.geronimo.specs.geronimo-jta_1.1_spec;    version=1.1.1
 org.eclipse.persistence.jpa;    version=2.6.0
@@ -8,7 +8,6 @@ org.eclipse.persistence.core;    version=2.6.0
 org.eclipse.persistence.asm;    version=2.6.0
 org.eclipse.persistence.antlr;    version=2.6.0
 org.eclipse.persistence.jpa.jpql;    version=2.6.0
-org.apache.aries.jpa.eclipselink.adapter;    version=2.4.0
 
 org.osgi.impl.service.cm; version=latest
 
