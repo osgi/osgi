@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,14 @@ import org.osgi.annotation.versioning.ProviderType;
 /**
  * LogReaderService for obtaining logging information.
  * <p>
- * There are two ways to obtain {@link LogEntry} objects:
+ * Since 1.4, {@link org.osgi.service.log.stream.LogStreamProvider} is the
+ * preferred way to obtain {@link LogEntry} objects.
+ * <p>
+ * The LogReaderService provides two ways to obtain {@link LogEntry} objects:
  * <ul>
- * <li>The primary way to obtain {@link LogEntry} objects is to get a
- * {@link org.osgi.service.log.stream.LogStreamProvider} object from the service
- * registry. This replaces adding a {@link LogListener} object.</li>
+ * <li>The primary way to retrieve {@link LogEntry} objects is to register a
+ * {@link LogListener} object whose {@link LogListener#logged(LogEntry)} method
+ * will be called for each entry added to the log.</li>
  * <li>To obtain past {@link LogEntry} objects, the {@link #getLog()} method can
  * be called which will return an {@code Enumeration} of the {@link LogEntry}
  * objects in the log.</li>
@@ -85,8 +88,7 @@ public interface LogReaderService {
 	 * Each element of the enumeration is a {@link LogEntry} object, ordered
 	 * with the most recent entry first. Whether the enumeration is of all
 	 * {@link LogEntry} objects since the Log Service was started or some recent
-	 * past is implementation-specific. Also implementation-specific is which
-	 * level {@link LogEntry} objects are included in the enumeration.
+	 * past is implementation-specific.
 	 * 
 	 * @return An {@code Enumeration} of the {@link LogEntry} objects in the
 	 *         log.

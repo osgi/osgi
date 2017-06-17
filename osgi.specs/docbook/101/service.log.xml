@@ -114,7 +114,7 @@
     linkend="service.log-slf4j.ref"/>.</para>
 
     <figure pgwide="1">
-      <title>Log Class Diagram org.osgi.service.log package</title>
+      <title>Logger Class Diagram org.osgi.service.log package</title>
 
       <mediaobject>
         <imageobject>
@@ -136,59 +136,96 @@
       <listitem xml:id="i1294533">
         <para>Define the log level representing the severity of the message
         being logged. If the effective log level for the Logger does not impy
-        the requested log level, then the logging request is ignored.</para>
+        the requested log level, then the logging request is ignored. See
+        <xref linkend="service.log-effective.log.level"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Specify the Service associated with the log message.</para>
+        <para>Specify the Service associated with the message being
+        logged.</para>
       </listitem>
     </itemizedlist>
 
-    <para xml:id="i1294534">By obtaining a <code>Logger</code> object from the
-    <xref linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/>
-    service, a bundle can start logging messages to the Log Service by calling
-    one of the <code>Logger</code> methods.</para>
+    <para xml:id="i1294534">By obtaining a <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> object from
+    the <xref linkend="org.osgi.service.log.LoggerFactory"
+    xrefstyle="hyperlink"/> service, a bundle can start logging messages to
+    the Log Service by calling one of the <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/>
+    methods.</para>
 
-    <para>The <code>Logger</code> interface defines several methods for each
-    of the defined log levels. The log levels are:</para>
+    <para>The <xref linkend="org.osgi.service.log.Logger"
+    xrefstyle="hyperlink"/> interface defines several methods for each of the
+    defined <xref linkend="org.osgi.service.log.LogLevel"
+    xrefstyle="hyperlink"/>s.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.AUDIT"
-        xrefstyle="hyperlink"/> - This log level is used for information that
-        must always be logged.</para>
-      </listitem>
+    <table>
+      <title>Log Levels</title>
 
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.ERROR"
-        xrefstyle="hyperlink"/> - This log level is used for information about
-        an error situation.</para>
-      </listitem>
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1.2*"/>
 
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.WARN"
-        xrefstyle="hyperlink"/> - This log level is used for information about
-        a failure or unwanted situation that is not blocking.</para>
-      </listitem>
+        <colspec colnum="2" colwidth="5*"/>
 
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.INFO"
-        xrefstyle="hyperlink"/> - This log level is used for information about
-        normal operation.</para>
-      </listitem>
+        <thead>
+          <row>
+            <entry>Log Level</entry>
 
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.DEBUG"
-        xrefstyle="hyperlink"/> - This log level is used for detailed output
-        for debugging operations.</para>
-      </listitem>
+            <entry>Descriptions</entry>
+          </row>
+        </thead>
 
-      <listitem>
-        <para><xref linkend="org.osgi.service.log.LogLevel.TRACE"
-        xrefstyle="hyperlink"/> - This log level is used for large volume of
-        output for tracing operations.</para>
-      </listitem>
-    </itemizedlist>
+        <tbody>
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.AUDIT"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for information that must
+            always be logged.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.ERROR"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for information about an error
+            situation.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.WARN"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for information about a
+            failure or unwanted situation that is not blocking.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.INFO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for information about normal
+            operation.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.DEBUG"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for detailed output for
+            debugging operations.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.service.log.LogLevel.TRACE"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>This log level is used for large volume of output for
+            tracing operations.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
 
     <para xml:id="i1294535">Many of the <code>Logger</code> methods take a
     message format string and message parameters which are formatted together
@@ -199,7 +236,7 @@
     formatted message, precede the place holder with a reverse solidus
     (<code>'\' \u005C</code>): <code>"\\{}"</code>. If you need to place a
     backslash before the place holder, precede the reverse solidus with a
-    reverse solidus: <code>"\\\\{}"</code>. </para>
+    reverse solidus: <code>"\\\\{}"</code>.</para>
 
     <para>You can also add a Throwable and/or ServiceReference to the
     generated <xref linkend="org.osgi.service.log.LogEntry"
@@ -211,7 +248,7 @@
     ServiceReference or Throwable and not the same type as the last argument,
     it is also added to the generated <xref
     linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/>. These
-    arguments will not be used as message parameters. For example: </para>
+    arguments will not be used as message parameters. For example:</para>
 
     <programlisting>logger.info("Found service {}.", serviceReference, serviceReference);
 logger.warn("Something named {} happened.", name, serviceReference, throwable);
@@ -249,8 +286,9 @@ logger.error("Failed.", exception);</programlisting>
     <para>Logger names form a hierarchy. A logger name is said to be an
     ancestor of another logger name if the logger name followed by a full stop
     ('.' \u002E) is a prefix of the descendant logger name. The root logger
-    name ("<code>ROOT</code>") is the top ancestor of the logger name
-    hierarchy. For example:</para>
+    name (<xref linkend="org.osgi.service.log.Logger.ROOT_LOGGER_NAME"
+    xrefstyle="hyperlink"/>) is the top ancestor of the logger name hierarchy.
+    For example:</para>
 
     <programlisting>com.foo.Bar
 com.foo
@@ -286,14 +324,15 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     associated with the specified bundle.</para>
 
     <programlisting>Logger logger = loggerFactory.getLogger(componentBundle,
-  componentImplClass.getName(),
+  componentImplClassName,
   Logger.class);</programlisting>
   </section>
 
   <section>
     <title>Logger Configuration</title>
 
-    <para/>
+    <para>A Logger Admin service is defined which allows for the configuration
+    of Loggers.</para>
 
     <figure pgwide="1">
       <title>Log Admin Class Diagram org.osgi.service.log.admin
@@ -307,77 +346,241 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       </mediaobject>
     </figure>
 
-    <para/>
-  </section>
+    <para>The <xref linkend="org.osgi.service.log.admin.LoggerAdmin"
+    xrefstyle="hyperlink"/> service can be used to obtain the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    for a bundle. <xref linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>s are named similar to targeted PIDs in
+    Configuration Admin. Each bundle may have its own named <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    based upon its bundle symbolic name, bundle version, and bundle location.
+    There is also a <emphasis>root</emphasis> <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    from which all named <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>s inherit. The root <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    has no name.</para>
 
-  <section>
-    <title>Log Level and Error Severity</title>
+    <para>The <xref linkend="org.osgi.service.log.admin.LoggerAdmin"
+    xrefstyle="hyperlink"/> service is associated with the <xref
+    linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/>
+    service it administrates via the <xref
+    linkend="org.osgi.service.log.admin.LoggerAdmin.LOG_SERVICE_ID"
+    xrefstyle="hyperlink"/> service property whose value is a Long containing
+    the service.id of the <xref linkend="org.osgi.service.log.LoggerFactory"
+    xrefstyle="hyperlink"/> service.</para>
 
-    <para>The <code>log</code> methods expect a log level indicating error
-    severity, which can be used to filter log messages when they are
-    retrieved. The severity levels are defined in the <code>LogService</code>
-    interface.</para>
+    <para>A <xref linkend="org.osgi.service.log.Logger"
+    xrefstyle="hyperlink"/> implementation must locate the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    for the bundle to determine the effective log level of the <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> when a log
+    method is called. See <xref linkend="service.log-effective.log.level"/>.
+    The best matching name for the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    is the longest name, which has a non-empty <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>, according to the following syntax:</para>
 
-    <para>Callers must supply the log levels that they deem appropriate when
-    making log requests.</para>
+    <programlisting>name ::= symbolic-name ( ’|’ version ( ’|’ location )? )?</programlisting>
 
-    <para>The following table lists the log levels.</para>
+    <para>The version must be formatted canonically, that is, according to the
+    <code>toString()</code> method of the <code>Version</code> class. So the
+    <xref linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/> for a bundle is searched for using the following
+    names in the given order:</para>
 
-    <table>
-      <title>Log Levels</title>
+    <programlisting>&lt;symbolic-name&gt;|&lt;version&gt;|&lt;location&gt;
+&lt;symbolic-name&gt;|&lt;version&gt;
+&lt;symbolic-name&gt;</programlisting>
 
-      <tgroup cols="2">
-        <colspec colnum="1" colwidth="1.2*"/>
+    <para>The search stops at the first non-empty <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>. If no non-empty <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    is found using the above search order, the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    with the symbolic name of the bundle must be used.</para>
 
-        <colspec colnum="2" colwidth="5*"/>
+    <para>This allows a bundle to have no <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    configured. In this case it will use the root <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>'s configuration. It also allows a bundle to be
+    configured based upon bundle symbolic name, bundle symbolic name and
+    bundle version or even bundle symbolic name, bundle version, and bundle
+    location. The latter forms may be of interest if there are multiple
+    versions of a bundle installed.</para>
 
-        <thead>
-          <row>
-            <entry>Level</entry>
+    <para><xref linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>s can be configured using the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext.getLogLevels--"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.log.admin.LoggerContext.setLogLevels-Map-"
+    xrefstyle="hyperlink"/> methods of the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>. Logger names, including the root logger name
+    (<xref linkend="org.osgi.service.log.Logger.ROOT_LOGGER_NAME"
+    xrefstyle="hyperlink"/>), can be configured to a specific log
+    level.</para>
 
-            <entry>Descriptions</entry>
-          </row>
-        </thead>
+    <para>Any change to the configuration of a <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    must be effective immediately for all loggers that would rely upon the
+    configuration of the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext"
+    xrefstyle="hyperlink"/>. Changes to the configuration of a <xref
+    linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
+    via the <xref
+    linkend="org.osgi.service.log.admin.LoggerContext.setLogLevels-Map-"
+    xrefstyle="hyperlink"/> method are not persisted.</para>
 
-        <tbody>
-          <row>
-            <entry><para><code>LOG_DEBUG</code></para></entry>
+    <section>
+      <title>Configuration Admin Integration</title>
 
-            <entry><para>Used for problem determination and may be irrelevant
-            to anyone but the bundle developer.</para></entry>
-          </row>
+      <para>The configured log levels for a <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> can be set by both the <xref
+      linkend="org.osgi.service.log.admin.LoggerContext.setLogLevels-Map-"
+      xrefstyle="hyperlink"/> method and by configuration information in
+      Configuration Admin, if Configuration Admin is present. The configured
+      log levels for a <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> are based upon the last technique used to update
+      the configured log levels.</para>
 
-          <row>
-            <entry><para><code>LOG_ERROR</code></para></entry>
+      <para>If Configuration Admin is present, <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> configuration information in Configuration Admin
+      must be used. This allows external <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> configuration such as via <xref
+      linkend="service.configurator"/>. The name of the <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> is mapped to a Configuration Admin targeted PID
+      as follows: </para>
 
-            <entry><para>Indicates the bundle or service may not be
-            functional. Action should be taken to correct this
-            situation.</para></entry>
-          </row>
+      <itemizedlist>
+        <listitem>
+          <para>The root <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/>, which has no name, is mapped to the PID
+          <xref
+          linkend="org.osgi.service.log.admin.LoggerContext.LOGGER_CONTEXT_PID"
+          xrefstyle="hyperlink"/>.</para>
+        </listitem>
 
-          <row>
-            <entry><para><code>LOG_INFO</code></para></entry>
+        <listitem>
+          <para>A named <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/> is mapped to a targeted PID by prefixing the
+          <xref linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/>'s name with <xref
+          linkend="org.osgi.service.log.admin.LoggerContext.LOGGER_CONTEXT_PID"
+          xrefstyle="hyperlink"/> followed by vertical line (<code>'|'
+          \u007c</code>). For example, the <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/> named <code>com.foo.bar</code> is mapped to
+          the targeted PID
+          <code>org.osgi.service.log.admin|com.foo.bar</code>.</para>
+        </listitem>
+      </itemizedlist>
 
-            <entry><para>May be the result of any change in the bundle or
-            service and does not indicate a problem.</para></entry>
-          </row>
+      <para>In the Configuration for the targeted PID, the dictionary keys are
+      <xref linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/>
+      names having a key type of <code>String</code>, and the values are the
+      names of the <xref linkend="org.osgi.service.log.LogLevel"
+      xrefstyle="hyperlink"/> values having a value type of
+      <code>String</code>. If the Configuration contains any key/value pairs
+      whose value is not the name of a <xref
+      linkend="org.osgi.service.log.LogLevel" xrefstyle="hyperlink"/> value,
+      that key/value pair must be ignored when setting the configuration into
+      the <xref linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/>. </para>
 
-          <row>
-            <entry><para><code>LOG_WARNING</code></para></entry>
+      <para>Any change to the Configuration for a <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> must be set into the <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> as soon as possible. Since notification of
+      Configuration changes happen asynchronously, it may take a brief period
+      of time before Configuration changes can be made effective. </para>
 
-            <entry><para>Indicates a bundle or service is still functioning
-            but may experience problems in the future because of the warning
-            condition.</para></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+      <para>This section is not meant to require that a Log Service
+      implementation must require Configuration Admin. But if Configuration
+      Admin is present, the Configurations must be used to set the log levels
+      in the mapped <xref linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/>s.</para>
+    </section>
+
+    <section xml:id="service.log-effective.log.level">
+      <title>Effective Log Level</title>
+
+      <para>Once the <xref linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> for the logging bundle is determined, the
+      effective log level for the <xref linkend="org.osgi.service.log.Logger"
+      xrefstyle="hyperlink"/> is found using the logger name with the
+      following steps: </para>
+
+      <orderedlist>
+        <listitem>
+          <para>If the logger name is configured with a log level, return the
+          configured log level.</para>
+        </listitem>
+
+        <listitem>
+          <para>For each ancestor logger name of the logger name, if the
+          ancestor logger name is configured with a log level, return the
+          configured log level.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/> is named, return the result of calling this
+          method on the root <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/> with the original logger name.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/> is the root Logger Context, return the
+          default log level for the root <xref
+          linkend="org.osgi.service.log.admin.LoggerContext"
+          xrefstyle="hyperlink"/>.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The default log level for the root <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> can be set by the framework launch property
+      <xref
+      linkend="org.osgi.service.log.admin.LoggerContext.LOGGER_CONTEXT_DEFAULT_LOGLEVEL"
+      xrefstyle="hyperlink"/>. The value of this property must be the name of
+      the one of the <xref linkend="org.osgi.service.log.LogLevel"
+      xrefstyle="hyperlink"/> values. If not specified, or the specified value
+      is not the name of the one of the <xref
+      linkend="org.osgi.service.log.LogLevel" xrefstyle="hyperlink"/> values,
+      the default log level of the root <xref
+      linkend="org.osgi.service.log.admin.LoggerContext"
+      xrefstyle="hyperlink"/> is <xref
+      linkend="org.osgi.service.log.LogLevel.WARN"
+      xrefstyle="hyperlink"/>.</para>
+    </section>
   </section>
 
   <section>
     <title>Log Stream Provider</title>
 
-    <para/>
+    <para>The Log Stream Provider service can be used to create Push Streams
+    of Log Entries. Since the log is basically an ongoing stream of Log
+    Entries having asynchronous arrival, a Push Stream of <xref
+    linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> objects
+    can be used receive the Log Entries. See <xref linkend="util.pushstream"/>
+    for information on Push Streams and how to use them.</para>
 
     <figure pgwide="1">
       <title>Log Stream Diagram org.osgi.service.log.stream package</title>
@@ -390,68 +593,129 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       </mediaobject>
     </figure>
 
-    <para/>
+    <para>Push Streams created by the <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> are unbuffered and have a parallelism of one. If
+    buffering is desired, the caller can buffer the Push Stream.</para>
+
+    <para>The following code snippet show how one could get future Log Entries
+    and print them.</para>
+
+    <programlisting>logStreamProvider.createStream()
+  .forEach(l -&gt; System.out.println(l))
+  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
+
+    <para>An existing <xref linkend="org.osgi.service.log.LogListener"
+    xrefstyle="hyperlink"/> implementation can also be used with the Push
+    Streams.</para>
+
+    <programlisting>logStreamProvider.createStream()
+  .forEach(logListener::logged)
+  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
+
+    <para>The <xref linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> service offers a <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider.Options.HISTORY"
+    xrefstyle="hyperlink"/> option which will prime the returned Push Stream
+    with the past log history, if any. The following code will process the
+    past log entries followed by any new log entries.</para>
+
+    <programlisting>logStreamProvider.createStream(LogStreamProvider.Options.HISTORY)
+  .forEach(l -&gt; System.out.println(l))
+  .onResolve(() -&gt; System.out.println("stream closed"));</programlisting>
+
+    <para>The <xref linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> interface is in a separate package, <xref
+    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/>, so that the
+    existing <xref linkend="org.osgi.service.log" xrefstyle="hyperlink"/>
+    package does not have a dependency on the <xref
+    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package. The
+    <xref linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package
+    requires <xref linkend="org.osgi.util.promise" xrefstyle="hyperlink"/> and
+    Java 8. Having <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> in a separate package allows the <xref
+    linkend="org.osgi.service.log" xrefstyle="hyperlink"/> package to be
+    implemented in a framework and avoid dependencies on <xref
+    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.util.promise" xrefstyle="hyperlink"/> and Java 8. In
+    this situation, <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> can be implemented by a bundle which sources Log
+    Entries from the <xref linkend="org.osgi.service.log.LogReaderService"
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section xml:id="i1210758">
     <title>Log Reader Service</title>
 
-    <para>The Log Reader Service maintains a list of <code>LogEntry</code>
-    objects called the <emphasis>log</emphasis>. The Log Reader Service is a
-    service that bundle developers can use to retrieve information contained
-    in this log, and receive notifications about <code>LogEntry</code> objects
+    <para>The Log Reader Service maintains a list of <xref
+    linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> objects
+    called the <emphasis>log</emphasis>. The Log Reader Service is a service
+    that bundle developers can use to retrieve information contained in this
+    log, and receive notifications about <xref
+    linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> objects
     when they are created through the Log Service.</para>
 
     <para>The size of the log is implementation-specific, and it determines
-    how far into the past the log entries go. Additionally, some log entries
-    may not be recorded in the log in order to save space. In particular,
-    <code>LOG_DEBUG</code> log entries may not be recorded. Note that this
-    rule is implementation-dependent. Some implementations may allow a
-    configurable policy to ignore certain <code>LogEntry</code> object
-    types.</para>
+    how far into the past the log entries go.</para>
 
-    <para>The <code>LogReaderService</code> interface defines these methods
-    for retrieving log entries.</para>
+    <para>The <xref linkend="org.osgi.service.log.LogReaderService"
+    xrefstyle="hyperlink"/> interface defines the following methods:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code>getLog()</code> - This method retrieves past log entries
-        as an enumeration with the most recent entry first.</para>
+        <para><xref linkend="org.osgi.service.log.LogReaderService.getLog--"
+        xrefstyle="hyperlink"/> - This method retrieves past log entries as an
+        enumeration with the most recent entry first.</para>
       </listitem>
 
       <listitem>
-        <para><code>addLogListener(LogListener)</code> - This method is used
-        to subscribe to the Log Reader Service in order to receive log
-        messages as they occur. Unlike the previously recorded log entries,
-        all log messages must be sent to subscribers of the Log Reader Service
-        as they are recorded.</para>
+        <para><xref
+        linkend="org.osgi.service.log.LogReaderService.addLogListener-LogListener-"
+        xrefstyle="hyperlink"/> - This method is used to subscribe to the Log
+        Reader Service in order to receive log messages as they occur. Unlike
+        the previously recorded log entries, all log messages must be sent to
+        subscribers of the Log Reader Service as they are recorded.</para>
 
-        <para>A subscriber to the Log Reader Service must implement the
-        <code>LogListener</code> interface.</para>
+        <para>A subscriber to the Log Reader Service must implement the <xref
+        linkend="org.osgi.service.log.LogListener" xrefstyle="hyperlink"/>
+        interface.</para>
 
         <para>After a subscription to the Log Reader Service has been started,
-        the subscriber's <code>LogListener.logged</code> method must be called
-        with a <code>Log-Entry</code> object for the message each time a
-        message is logged.</para>
+        the subscriber's <xref
+        linkend="org.osgi.service.log.LogListener.logged-LogEntry-"
+        xrefstyle="hyperlink"/> method must be called with a <xref
+        linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> object
+        for the message each time a message is logged.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.log.LogReaderService.removeLogListener-LogListener-"
+        xrefstyle="hyperlink"/> - This method is used to unsubscribe the <xref
+        linkend="org.osgi.service.log.LogListener" xrefstyle="hyperlink"/>
+        from the Log Reader Service.</para>
       </listitem>
     </itemizedlist>
 
-    <para>The <code>LogListener</code> interface defines the following
-    method:</para>
+    <para>The <xref linkend="org.osgi.service.log.LogListener"
+    xrefstyle="hyperlink"/> interface defines the following method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code>logged(LogEntry)</code> - This method is called for each
-        <code>Log-Entry</code> object created. A Log Reader Service
-        implementation must not filter entries to the <code>LogListener</code>
-        interface as it is allowed to do for its log. A
-        <code>LogListener</code> object should see all <code>LogEntry</code>
-        objects that are created.</para>
+        <para><xref
+        linkend="org.osgi.service.log.LogListener.logged-LogEntry-"
+        xrefstyle="hyperlink"/> - This method is called for each <xref
+        linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> object
+        created.</para>
       </listitem>
     </itemizedlist>
 
-    <para>The delivery of <code>LogEntry</code> objects to the
-    <code>LogListener</code> object should be done asynchronously.</para>
+    <para>The delivery of <xref linkend="org.osgi.service.log.LogEntry"
+    xrefstyle="hyperlink"/> objects to the <xref
+    linkend="org.osgi.service.log.LogListener" xrefstyle="hyperlink"/> object
+    should be done asynchronously.</para>
   </section>
 
   <section xml:id="i1231250">
@@ -469,26 +733,26 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         <para><xref linkend="org.osgi.service.log.LogEntry.getBundle--"
         xrefstyle="hyperlink"/> - This method returns the Bundle object
         associated with the <xref linkend="org.osgi.service.log.Logger"
-        xrefstyle="hyperlink"/> used to log the event.</para>
+        xrefstyle="hyperlink"/> used to create the log entry.</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.service.log.LogEntry.getException--"
-        xrefstyle="hyperlink"/> - This method returns the exception, if any,
-        logged with the event. In some implementations, the returned exception
-        may not be the original exception. To avoid references to a bundle
-        defined exception class, thus preventing an uninstalled bundle from
-        being garbage collected, the Log Service may return an exception
-        object of an implementation defined Throwable subclass. This object
-        will attempt to return as much information as possible, such as the
-        message and stack trace, from the original exception object .</para>
+        xrefstyle="hyperlink"/> - This method returns the logged exception, if
+        any. In some implementations, the returned exception may not be the
+        original exception object. To avoid references to a bundle-defined
+        exception class, thus preventing an uninstalled bundle from being
+        garbage collected, the Log Service may return an exception object of
+        an implementation defined Throwable subclass. This object will attempt
+        to return as much information as possible, such as the message and
+        stack trace, from the original exception object .</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.service.log.LogEntry.getLoggerName--"
         xrefstyle="hyperlink"/> - This name of the <xref
         linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> used to
-        log the event.</para>
+        create the log entry.</para>
       </listitem>
 
       <listitem>
@@ -507,8 +771,8 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.log.LogEntry.getServiceReference--"
-        xrefstyle="hyperlink"/> - This method returns the
-        <code>ServiceReference</code>, if any, logged with the event..</para>
+        xrefstyle="hyperlink"/> - This method returns the logged
+        <code>ServiceReference</code>, if any.</para>
       </listitem>
 
       <listitem>
@@ -526,14 +790,14 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       <listitem>
         <para><xref linkend="org.osgi.service.log.LogEntry.getThreadInfo--"
         xrefstyle="hyperlink"/> - This method returns information about the
-        thread that created that logged the event.</para>
+        thread that created the log entry.</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.service.log.LogEntry.getLocation--"
         xrefstyle="hyperlink"/> - This method returns a
-        <code>StackTraceElement</code> about the caller that created that
-        logged the event.</para>
+        <code>StackTraceElement</code> about the caller that created the log
+        entry.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -545,9 +809,10 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     and map the information to <code>LogEntry</code> objects in a consistent
     way. Framework events must be treated exactly the same as other logged
     events and distributed to all <code>LogListener</code> objects that are
-    associated with the Log Reader Service. The following sections define the
-    mapping for the three different event types: Bundle, Service, and
-    Framework.</para>
+    associated with the Log Reader Service. Additionally, if the Event Admin
+    service is present, implementations of a Log Service must map
+    <code>LogEntry</code> objects to events in Event Admin. The following
+    sections define these mappings.</para>
 
     <section>
       <title>Bundle Events Mapping</title>
@@ -573,13 +838,26 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
           <tbody>
             <row>
-              <entry><code>getLevel()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLoggerName--"
+              xrefstyle="hyperlink"/></entry>
 
-              <entry><para><code>LOG_INFO</code></para></entry>
+              <entry><para>The logger name
+              <code>"LogServiceBundleEvent"</code>.</para></entry>
             </row>
 
             <row>
-              <entry><code>getBundle()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLogLevel--"
+              xrefstyle="hyperlink"/></entry>
+
+              <entry><para><xref linkend="org.osgi.service.log.LogLevel.INFO"
+              xrefstyle="hyperlink"/></para></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Identifies the bundle to which the event happened.
               In other words, it identifies the bundle that was installed,
@@ -589,19 +867,25 @@ logger.error("Cannot access file %s", myFile);</programlisting>
             </row>
 
             <row>
-              <entry><code>getException()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getException--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><code>getServiceReference()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getServiceReference--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><code>getMessage()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getMessage--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The message depends on the event
               type:</para><itemizedlist>
@@ -667,16 +951,32 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
           <tbody>
             <row>
-              <entry><code>getLevel()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLoggerName--"
+              xrefstyle="hyperlink"/></entry>
 
-              <entry><para><code>LOG_INFO</code>, except for the
-              <code>ServiceEvent.MODIFIED</code> event. This event can happen
-              frequently and contains relatively little information. It must
-              be logged with a level of <code>LOG_DEBUG</code>.</para></entry>
+              <entry><para>The logger name
+              <code>"LogServiceServiceEvent"</code>.</para></entry>
             </row>
 
             <row>
-              <entry><code>getBundle()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLogLevel--"
+              xrefstyle="hyperlink"/></entry>
+
+              <entry><para><xref linkend="org.osgi.service.log.LogLevel.INFO"
+              xrefstyle="hyperlink"/>, except for
+              <code>ServiceEvent.MODIFIED</code> events.
+              <code>ServiceEvent.MODIFIED</code> events can happen frequently
+              and contains relatively little information. They must be logged
+              with a level of <xref
+              linkend="org.osgi.service.log.LogLevel.DEBUG"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Identifies the bundle that registered the service
               associated with this event. It is obtained by calling
@@ -685,13 +985,17 @@ logger.error("Cannot access file %s", myFile);</programlisting>
             </row>
 
             <row>
-              <entry><code>getException()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getException--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><code>getServiceReference()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getServiceReference--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Identifies a reference to the service associated
               with the event. It is obtained by calling
@@ -700,7 +1004,9 @@ logger.error("Cannot access file %s", myFile);</programlisting>
             </row>
 
             <row>
-              <entry><code>getMessage()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getMessage--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>This message depends on the actual event type. The
               messages are mapped as follows:</para><itemizedlist>
@@ -749,16 +1055,36 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
           <tbody>
             <row>
-              <entry><code>getLevel()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLoggerName--"
+              xrefstyle="hyperlink"/></entry>
 
-              <entry><para><code>LOG_INFO</code>, except for the
-              FrameworkEvent<code>.ERROR</code> event. This event represents
-              an error and is logged with a level of
-              <code>LOG_ERROR</code>.</para></entry>
+              <entry><para>The logger name
+              <code>"LogServiceFrameworkEvent"</code>.</para></entry>
             </row>
 
             <row>
-              <entry><code>getBundle()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getLogLevel--"
+              xrefstyle="hyperlink"/></entry>
+
+              <entry><para><xref linkend="org.osgi.service.log.LogLevel.INFO"
+              xrefstyle="hyperlink"/>, except for
+              <code>FrameworkEvent.ERROR</code> events and
+              <code>FrameworkEvent.WARNING</code> events. A
+              <code>FrameworkEvent.ERROR</code> event represents an error and
+              is logged with a level of <xref
+              linkend="org.osgi.service.log.LogLevel.ERROR"
+              xrefstyle="hyperlink"/> and a
+              <code>FrameworkEvent.WARNING</code> event represents a warning
+              and is logged with a level of <xref
+              linkend="org.osgi.service.log.LogLevel.WARN"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="org.osgi.service.log.LogEntry.getBundle--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Identifies the bundle associated with the event.
               This may be the system bundle. It is obtained by calling
@@ -767,22 +1093,29 @@ logger.error("Cannot access file %s", myFile);</programlisting>
             </row>
 
             <row>
-              <entry><code>getException()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getException--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Identifies the exception associated with the error.
-              This will be null for event types other than ERROR. It is
-              obtained by calling <code>getThrowable()</code> on the
-              <code>FrameworkEvent</code> object.</para></entry>
+              This will be null for event types other than
+              <code>FrameworkEvent.ERROR</code>. It is obtained by calling
+              <code>getThrowable()</code> on the <code>FrameworkEvent</code>
+              object.</para></entry>
             </row>
 
             <row>
-              <entry><code>getServiceReference()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getServiceReference--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><code>getMessage()</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.log.LogEntry.getMessage--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>This message depends on the actual event type. The
               messages are mapped as follows:</para><itemizedlist>
@@ -823,19 +1156,78 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     <section xml:id="i1479168">
       <title>Log Events</title>
 
-      <para>Log events must be delivered by the Log Service implementation to
-      the Event Admin service (if present) asynchronously under the
-      topic:</para>
+      <para>Log entries must be mapped into events by the Log Service
+      implementation and delivered asynchronously to the Event Admin service
+      (if present). The following event topics are used based upon the log
+      level of the log entry:</para>
 
-      <programlisting>org/osgi/service/log/LogEntry/&lt;event type&gt;</programlisting>
+      <table>
+        <title>Event Topics</title>
 
-      <para>The logging level is used as event type:</para>
+        <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
 
-      <programlisting>LOG_ERROR
-LOG_WARNING
-LOG_INFO
-LOG_DEBUG
-LOG_OTHER  (when event is not recognized)</programlisting>
+          <colspec colnum="2" colwidth="1*"/>
+
+          <thead>
+            <row>
+              <entry>Event Topic</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_AUDIT</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.AUDIT"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_ERROR</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.ERROR"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_WARNING</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.WARN"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_INFO</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.INFO"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_DEBUG</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.DEBUG"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><code>org/osgi/service/log/LogEntry/LOG_OTHER</code></para></entry>
+
+              <entry><para>When the log level is <xref
+              linkend="org.osgi.service.log.LogLevel.TRACE"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
       <para>The properties of a log event are:</para>
 
@@ -856,7 +1248,17 @@ LOG_OTHER  (when event is not recognized)</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>log.level</code> - (<code>Integer</code>) The log
+          <para><code>log.level</code> - (<code>Integer</code>) The integer
+          log level.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>log.logger</code> - (<code>String</code>) The logger
+          name.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>log.loglevel</code> - (<code>LogLevel</code>) The log
           level.</para>
         </listitem>
 
@@ -974,9 +1376,9 @@ LOG_OTHER  (when event is not recognized)</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>The integer log level value is stored in the generated <xref
-    linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> to be
-    returned by <xref linkend="org.osgi.service.log.LogEntry.getLevel--"
+    <para>The specified integer log level value is stored in the generated
+    <xref linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> to
+    be returned by <xref linkend="org.osgi.service.log.LogEntry.getLevel--"
     xrefstyle="hyperlink"/>.</para>
 
     <para>The implementation of this specification must use a single service
@@ -993,12 +1395,19 @@ LOG_OTHER  (when event is not recognized)</programlisting>
   <section>
     <title>Security</title>
 
-    <para>The Log Service should only be implemented by trusted bundles. This
-    bundle requires <code>ServicePermission[LogService|LogReaderService,
-    REGISTER]</code>. Virtually all bundles should get
-    <code>ServicePermission[LogService, GET]</code>. The
-    <code>ServicePermission[LogReaderService, GET]</code> should only be
-    assigned to trusted bundles.</para>
+    <para>The Log Service should only be implemented by trusted bundles. These
+    bundles require
+    <code>ServicePermission[LoggerFactory|LogReaderService|LoggerAdmin|LogStreamProvider|LogService,
+    REGISTER] and ServicePermission[ConfigurationAdmin|EventAdmin,
+    GET]</code>.</para>
+
+    <para>Virtually all bundles should get
+    <code>ServicePermission[LoggerFactory|LogService, GET]</code> so they can
+    log. </para>
+
+    <para>Only trusted bundles who must be able to access log entries should
+    be assigned <code>ServicePermission[LogStreamProvider|LogReaderService,
+    GET]</code>.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.xml"/>
@@ -1021,7 +1430,7 @@ LOG_OTHER  (when event is not recognized)</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><remark>BJH Need to list major changes</remark>. </para>
+        <para><remark>BJH Need to list major changes</remark>.</para>
       </listitem>
     </itemizedlist>
   </section>
