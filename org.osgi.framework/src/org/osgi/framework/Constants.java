@@ -814,7 +814,6 @@ public interface Constants {
 	 * 
 	 * @see #FRAGMENT_HOST
 	 * @see #EXTENSION_FRAMEWORK
-	 * @see #EXTENSION_BOOTCLASSPATH
 	 * @since 1.3
 	 */
 	String	EXTENSION_DIRECTIVE						= "extension";
@@ -840,7 +839,6 @@ public interface Constants {
 	 * Manifest header directive value identifying the type of extension
 	 * fragment. An extension fragment type of bootclasspath indicates that the
 	 * extension fragment is to be loaded by the boot class loader.
-	 * 
 	 * <p>
 	 * The directive value is encoded in the Fragment-Host manifest header like:
 	 * 
@@ -850,6 +848,7 @@ public interface Constants {
 	 * 
 	 * @see #EXTENSION_DIRECTIVE
 	 * @since 1.3
+	 * @deprecated As of 1.9.
 	 */
 	String	EXTENSION_BOOTCLASSPATH					= "bootclasspath";
 

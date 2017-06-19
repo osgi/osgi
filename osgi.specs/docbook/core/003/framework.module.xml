@@ -5002,16 +5002,9 @@ bundle-description  ::= symbolic-name
     <title>Extension Bundles</title>
 
     <para>Extension bundles can deliver optional parts of the Framework
-    implementation or provide functionality that must reside on the boot class
-    path. These packages cannot be provided by the normal import/export
-    mechanisms.</para>
-
-    <para>Boot class path extensions are necessary because certain package
-    implementations assume that they are on the boot class path or are
-    required to be available to all clients. An example of a boot class path
-    extension is an implementation of <code>java.sql</code> such as JSR 169.
-    Boot class path extensions are not required to be implemented by a
-    compliant framework.</para>
+    implementation. The contents of extension bundles cannot
+    be provided by the normal bundles because they need to be loaded
+    by the framework implementation.</para>
 
     <para>Framework extensions are necessary to provide implementation aspects
     of the Framework. For example, a Framework vendor could supply the
@@ -5023,17 +5016,17 @@ bundle-description  ::= symbolic-name
     bundle, which is <code>system.bundle</code>.</para>
 
     <para>The following example uses the Fragment-Host manifest header to
+    specify an extension bundle for any Framework implementation.</para>
+
+    <programlisting>Fragment-Host: system.bundle</programlisting>
+
+    <para>The following example uses the Fragment-Host manifest header to
     specify an extension bundle for a specific Framework
     implementation.</para>
 
-    <programlisting>Fragment-Host: com.acme.impl.framework; extension:=framework</programlisting>
+    <programlisting>Fragment-Host: com.acme.impl.framework</programlisting>
 
-    <para>The following example uses the Fragment-Host manifest header to
-    specify a boot class path extension bundle.</para>
-
-    <programlisting>Fragment-Host: system.bundle; extension:=bootclasspath</programlisting>
-
-    <para>The following steps describe the life cycle of an extension
+    <para>The following describe the life cycle of an extension
     bundle:</para>
 
     <orderedlist>
@@ -5044,22 +5037,30 @@ bundle-description  ::= symbolic-name
 
       <listitem>
         <para>The extension bundle is allowed to enter the
-        <code>RESOLVED</code> state at the Frameworks discretion, which can
-        require a Framework re-launch.</para>
+        <code>RESOLVED</code> state at the frameworks discretion. For
+        example, a framework may choose to immediately resolve the
+        extension after it has entered the <code>INSTALLED</code> state.
+        If all requirements of an extension bundle are satisfied then
+        resolving the extension bundle must not require a framework
+        restart.</para>
       </listitem>
 
       <listitem>
         <para>If a <code>RESOLVED</code> extension bundle is refreshed then
-        the Framework must shutdown; the host VM must terminate and framework
-        must be re-launched.</para>
+        the framework must shutdown and the framework must be re-launched.
+        In this case a Framework Event is fired of type <xref
+        linkend="org.osgi.framework.FrameworkEvent.STOPPED_SYSTEM_REFRESHED"
+        xrefstyle="hyperlink"/>.</para>
       </listitem>
 
       <listitem>
         <para>When a <code>RESOLVED</code> extension bundle is updated or
         <code>UNINSTALLED</code>, it is not allowed to re-enter the
         <code>RESOLVED</code> state. If the extension bundle is refreshed then
-        the Framework must shutdown; the host VM must terminate and framework
-        must be re-launched.</para>
+        the Framework must shutdown and the framework must be re-launched.
+        In this case a Framework Event is fired of type <xref
+        linkend="org.osgi.framework.FrameworkEvent.STOPPED_SYSTEM_REFRESHED"
+        xrefstyle="hyperlink"/>.</para>
       </listitem>
     </orderedlist>
 
@@ -5068,8 +5069,8 @@ bundle-description  ::= symbolic-name
     a fragment to the system bundle. When this bundle is updated the old
     content of the bundle must remain attached to the system bundle until the
     system bundle is refreshed or the extension bundle is refreshed (using the
-    Wiring API). This must initiate a VM and Framework restart. When the
-    framework comes back up the new content of the bundle may be
+    Wiring API). This must initiate and Framework shutdown and restart. When
+    the framework comes back up the new content of the bundle may be
     resolved.</para>
 
     <para>All Bundle events should be dispatched for extension bundles as for
@@ -5083,10 +5084,6 @@ bundle-description  ::= symbolic-name
       headers.</para>
 
       <itemizedlist>
-        <listitem>
-          <para><code>Import-Package</code></para>
-        </listitem>
-
         <listitem>
           <para><code>Require-Bundle</code></para>
         </listitem>
@@ -5102,43 +5099,51 @@ bundle-description  ::= symbolic-name
         <listitem>
           <para><code>Bundle-Activator</code></para>
         </listitem>
-
-        <listitem>
-          <para><code>Require-Capability</code> (only requirements in the
-          <code>osgi.ee</code> namespace are allowed since these are not
-          hosted)</para>
-        </listitem>
       </itemizedlist>
 
-      <para>Both boot class path and framework extension bundles are permitted
-      to specify an Export-Package header. Any exported packages specified by
-      a framework extension bundle must be exported by the System Bundle when
-      the extension bundle is resolved.</para>
+      <para>Extension bundles are permitted to specify an
+      Export-Package header. Any exported packages specified by
+      an extension bundle must be hosted (exported) by the System
+      Bundle when the extension bundle is resolved.</para>
+
+      <para>Extension bundles are permitted to specify
+      Import-Package and Require-Capability headers to 
+      declare dependencies on packages and capabilities.</para>
+    </section>
+
+    <section>
+      <title>Resolving Extensions</title>
+
+      <para>Extension bundles may specify requirements on
+      packages (Import-Package) and capabilities (Require-Capability).
+      An extension bundle is allowed to become resolved when all
+      of its mandatory requirements are wired to valid packages or
+      capabilities.</para>
+
+      <para>Extension bundle requirements may only be wired
+      to packages and capabilities provided by the system bundle 
+      or another extension bundle that is also attached to the
+      system bundle. All other capabilities are considered invalid
+      for resolving an extension bundle. This ensures that the system
+      bundle wiring never hosts a requirement from an extension bundle
+      which is wired to a capability hosted by another bundle other than
+      the system bundle.
+      </para>
     </section>
 
     <section>
       <title>Class Path Treatment</title>
 
-      <para>A boot class path extension bundle's JAR file must be appended to
-      the boot class path of the host VM. A framework extension bundle's JAR
-      is appended to the class path of the Framework.</para>
-
-      <para>Extension bundles must be appended to their class path in the
-      order in which the extension bundles are installed: that is, ascending
-      bundle ID order.</para>
-
-      <para>How a framework configures itself or the boot class path to append
-      the extension bundle's JAR is implementation specific. In some execution
-      environments, it may be impossible to support extension bundles. In such
-      environments, the Framework must throw a Bundle Exception when such an
-      extension bundle is installed. The resulting Bundle Exception must have
-      a cause of type <code>UnsupportedOperationException</code>.</para>
+      <para>A extension bundle's JAR is appended to the class path
+      of the Framework. Extension bundles that are resolved together must
+      have their JAR appended in the order in which the extension
+      bundles are installed: that is, ascending bundle ID order.</para>
     </section>
 
     <section xml:id="framework.module.extensionActivator">
-      <title>Framework Extension Activator</title>
+      <title>Extension Bundle Activator</title>
 
-      <para>A framework extension may hook into the Framework initialization
+      <para>A extension may hook into the Framework initialization
       and shutdown process by specifying an Extension Bundle Activator. The
       <xref linkend="org.osgi.framework.BundleActivator"
       xrefstyle="hyperlink"/> interface defines methods that the Framework
@@ -5158,9 +5163,8 @@ bundle-description  ::= symbolic-name
       <code>Class.newInstance</code>.</para>
 
       <para>Supplying an Extension Bundle Activator is optional and only valid
-      for Extension Bundles of type <code>framework</code>. For normal Bundles
-      and Fragments, the <code>ExtensionBundle-Activator</code> must be
-      ignored.</para>
+      for Extension Bundles. For normal Bundles and Fragments, the
+      <code>ExtensionBundle-Activator</code> must be ignored.</para>
 
       <section>
         <title>Framework Initialization and Shutdown</title>
@@ -5178,12 +5182,12 @@ bundle-description  ::= symbolic-name
       <section>
         <title>Installing</title>
 
-        <para>When a framework extension is installed, a Framework may allow
+        <para>When an extension bundle is installed, a Framework must allow
         the extension to become resolved dynamically, without a Framework
-        restart. If a framework extension is allowed to install and resolve
-        dynamically after Framework initialization, then the Extension Bundle
-        Activator start method must be called as soon as the extension bundle
-        is resolved. This must happen before the Bundle Event of type
+        restart. When an extension bundle is resolved dynamically after
+        Framework initialization, then the Extension Bundle Activator start
+        method must be called as soon as the extension bundle is resolved.
+        This must happen before the Bundle Event of type
         <code>RESOLVED</code> is fired for the extension bundle.</para>
       </section>
 
@@ -5200,28 +5204,8 @@ bundle-description  ::= symbolic-name
     </section>
 
     <section>
-      <title>Optionality Boot Class Path Extension</title>
-
-      <para>This specification provides for one optional mechanism: the boot
-      class path extension. The reason to make this mechanism optional is that
-      it is not possible to implement this in a portable way. A compliant
-      framework must set the following property to <code>true</code> or
-      <code>false</code> depending on the implementation of the boot class
-      path extension:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><code>org.osgi.supports.bootclasspath.extension</code></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>If the property is not set or the value is unrecognized, then the
-      value defaults to <code>false</code>. A Framework that does not
-      implement the <code>bootclasspath</code> extension must refuse to
-      install or update a bundle that carries this option. It must then throw
-      an exception at install or update time.</para>
-
-      <para>Additionally, frameworks must implement fragments, require bundle,
+      <title>Support Properties</title>
+      <para>Frameworks must implement fragments, require bundle,
       and extensions. They must therefore set the following properties to
       <code>true</code>.</para>
 
@@ -5239,6 +5223,7 @@ bundle-description  ::= symbolic-name
         </listitem>
       </itemizedlist>
     </section>
+
   </section>
 
   <section>
@@ -5710,6 +5695,23 @@ URL(String protocol, String host, String file)</programlisting>
       <listitem>
         <para>Updated to reference the new bundle annotations in <xref
         linkend="org.osgi.annotation.bundle"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Removed specification for bootclasspath extension bundles.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added FrameworkEvent type STOPPED_SYSTEM_REFRESHED.</para>
+      </listitem>
+
+      <listitem>
+        <para>Allow extension bundles to specify package and capability
+        requirements.</para>
+      </listitem>
+
+      <listitem>
+        <para>Mandate support for dynamically resolving extension bundles.</para>
       </listitem>
     </itemizedlist>
   </section>
