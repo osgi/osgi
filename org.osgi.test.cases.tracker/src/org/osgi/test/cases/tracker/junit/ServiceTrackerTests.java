@@ -1125,8 +1125,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
     }
 
     /**
-	 * Make sure different ServiceTrackers get different service objects for a
-	 * prototype scoped service.
+	 * Make sure different ServiceTrackers in same bundle get same service
+	 * objects for a prototype scoped service.
 	 * 
 	 * @throws Exception
 	 */
@@ -1145,7 +1145,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals("wrong size", 1, serviceTracker2.size());
 			TestService1 s1 = serviceTracker1.getService();
 			TestService1 s2 = serviceTracker2.getService();
-			assertNotSame("same service", s1, s2);
+			assertSame("not same service", s1, s2);
 		} finally {
 			serviceTracker1.close();
 			serviceTracker2.close();

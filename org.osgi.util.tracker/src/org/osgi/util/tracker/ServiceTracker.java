@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -394,10 +394,9 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * This method is only called when this {@code ServiceTracker} has been
 	 * constructed with a {@code null ServiceTrackerCustomizer} argument.
 	 * <p>
-	 * This implementation returns the result of calling
-	 * {@code getServiceObjects(reference).getService()} on the
-	 * {@code BundleContext} with which this {@code ServiceTracker} was created
-	 * passing the specified {@code ServiceReference}.
+	 * This implementation returns the result of calling {@code getService}, on
+	 * the {@code BundleContext} with which this {@code ServiceTracker} was
+	 * created, passing the specified {@code ServiceReference}.
 	 * <p>
 	 * This method can be overridden in a subclass to customize the service
 	 * object to be tracked for the service being added. In that case, take care
@@ -414,7 +413,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	@Override
 	public T addingService(ServiceReference<S> reference) {
 		@SuppressWarnings("unchecked")
-		T result = (T) context.getServiceObjects(reference).getService();
+		T result = (T) context.getService(reference);
 		return result;
 	}
 
@@ -445,10 +444,9 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * This method is only called when this {@code ServiceTracker} has been
 	 * constructed with a {@code null ServiceTrackerCustomizer} argument.
 	 * <p>
-	 * This implementation calls
-	 * {@code getServiceObjects(reference).ungetService(service)}, on the
+	 * This implementation calls {@code ungetService}, on the
 	 * {@code BundleContext} with which this {@code ServiceTracker} was created,
-	 * passing the specified {@code ServiceReference} and service.
+	 * passing the specified {@code ServiceReference}.
 	 * <p>
 	 * This method can be overridden in a subclass. If the default
 	 * implementation of {@link #addingService(ServiceReference) addingService}
@@ -460,9 +458,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 */
 	@Override
 	public void removedService(ServiceReference<S> reference, T service) {
-		@SuppressWarnings("unchecked")
-		S s = (S) service;
-		context.getServiceObjects(reference).ungetService(s);
+		context.ungetService(reference);
 	}
 
 	/**
