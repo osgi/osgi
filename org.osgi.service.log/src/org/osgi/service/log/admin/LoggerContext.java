@@ -43,9 +43,10 @@ public interface LoggerContext {
 	 * <li>The root Logger Context, which has no name, is mapped to the PID
 	 * {@code org.osgi.service.log.admin}.</li>
 	 * <li>A named Logger Context is mapped to a targeted PID by prefixing the
-	 * Logger Context's name with {@code org.osgi.service.log.admin|}. For
-	 * example, the Logger Context named {@code com.foo.bar} is mapped to the
-	 * targeted PID {@code org.osgi.service.log.admin|com.foo.bar}.</li>
+	 * Logger Context's name with {@code org.osgi.service.log.admin} followed by
+	 * vertical line ({@code '|'} &#92;u007c). For example, the Logger Context
+	 * named {@code com.foo.bar} is mapped to the targeted PID
+	 * {@code org.osgi.service.log.admin|com.foo.bar}.</li>
 	 * </ul>
 	 */
 	String LOGGER_CONTEXT_PID = "org.osgi.service.log.admin";

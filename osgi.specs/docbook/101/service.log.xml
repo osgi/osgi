@@ -110,7 +110,7 @@
     xrefstyle="hyperlink"/> interface allows bundle developers to log messages
     that can be distributed to other bundles, which in turn can forward the
     logged entries to a file system, remote system, or some other destination.
-    It is inspired by the ideas using in <xref
+    It is inspired by the ideas used in <xref
     linkend="service.log-slf4j.ref"/>.</para>
 
     <figure pgwide="1">
@@ -135,7 +135,7 @@
 
       <listitem xml:id="i1294533">
         <para>Define the log level representing the severity of the message
-        being logged. If the effective log level for the Logger does not impy
+        being logged. If the effective log level for the Logger does not imply
         the requested log level, then the logging request is ignored. See
         <xref linkend="service.log-effective.log.level"/>.</para>
       </listitem>
@@ -459,7 +459,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       linkend="service.configurator"/>. The name of the <xref
       linkend="org.osgi.service.log.admin.LoggerContext"
       xrefstyle="hyperlink"/> is mapped to a Configuration Admin targeted PID
-      as follows: </para>
+      as follows:</para>
 
       <itemizedlist>
         <listitem>
@@ -497,7 +497,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       linkend="org.osgi.service.log.LogLevel" xrefstyle="hyperlink"/> value,
       that key/value pair must be ignored when setting the configuration into
       the <xref linkend="org.osgi.service.log.admin.LoggerContext"
-      xrefstyle="hyperlink"/>. </para>
+      xrefstyle="hyperlink"/>.</para>
 
       <para>Any change to the Configuration for a <xref
       linkend="org.osgi.service.log.admin.LoggerContext"
@@ -505,7 +505,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       linkend="org.osgi.service.log.admin.LoggerContext"
       xrefstyle="hyperlink"/> as soon as possible. Since notification of
       Configuration changes happen asynchronously, it may take a brief period
-      of time before Configuration changes can be made effective. </para>
+      of time before Configuration changes can be made effective.</para>
 
       <para>This section is not meant to require that a Log Service
       implementation must require Configuration Admin. But if Configuration
@@ -521,7 +521,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       xrefstyle="hyperlink"/> for the logging bundle is determined, the
       effective log level for the <xref linkend="org.osgi.service.log.Logger"
       xrefstyle="hyperlink"/> is found using the logger name with the
-      following steps: </para>
+      following steps:</para>
 
       <orderedlist>
         <listitem>
@@ -806,18 +806,21 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     <title>Mapping of Events</title>
 
     <para>Implementations of a Log Service must log Framework-generated events
-    and map the information to <code>LogEntry</code> objects in a consistent
-    way. Framework events must be treated exactly the same as other logged
-    events and distributed to all <code>LogListener</code> objects that are
-    associated with the Log Reader Service. Additionally, if the Event Admin
-    service is present, implementations of a Log Service must map
-    <code>LogEntry</code> objects to events in Event Admin. The following
-    sections define these mappings.</para>
+    and map the information to <xref linkend="org.osgi.service.log.LogEntry"
+    xrefstyle="hyperlink"/> objects in a consistent way. Framework events must
+    be treated exactly the same as other logged events and distributed to all
+    <xref linkend="org.osgi.service.log.LogListener" xrefstyle="hyperlink"/>
+    objects that are associated with the Log Reader Service. Additionally, if
+    the Event Admin service is present, implementations of a Log Service must
+    map <xref linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/>
+    objects to events in Event Admin. The following sections define these
+    mappings.</para>
 
     <section>
       <title>Bundle Events Mapping</title>
 
-      <para>A Bundle Event is mapped to a <code>LogEntry</code> object
+      <para>A Bundle Event is mapped to a <xref
+      linkend="org.osgi.service.log.LogEntry" xrefstyle="hyperlink"/> object
       according to the following table.</para>
 
       <table>
@@ -843,7 +846,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"LogServiceBundleEvent"</code>.</para></entry>
+              <code>"Events.Bundle"</code>.</para></entry>
             </row>
 
             <row>
@@ -956,7 +959,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"LogServiceServiceEvent"</code>.</para></entry>
+              <code>"Events.Service"</code>.</para></entry>
             </row>
 
             <row>
@@ -1060,7 +1063,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
               xrefstyle="hyperlink"/></entry>
 
               <entry><para>The logger name
-              <code>"LogServiceFrameworkEvent"</code>.</para></entry>
+              <code>"Events.Framework"</code>.</para></entry>
             </row>
 
             <row>
@@ -1253,8 +1256,13 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>log.logger</code> - (<code>String</code>) The logger
+          <para><code>log.loggername</code> - (<code>String</code>) The logger
           name.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>log.threadinfo</code> - (<code>String</code>) The thread
+          information for the thread creating the log entry.</para>
         </listitem>
 
         <listitem>
@@ -1337,7 +1345,8 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     now specified to log to the Logger with the logger name
     <code>"LogService"</code> which allows legacy logging to be configured as
     specified above. Furthermore, the integer log level values used with the
-    <code>log</code> methods are mapped to the new LogLevels as
+    <code>log</code> methods are mapped to the new <xref
+    linkend="org.osgi.service.log.LogLevel" xrefstyle="hyperlink"/>s as
     follows:</para>
 
     <itemizedlist>
@@ -1393,21 +1402,78 @@ logger.error("Cannot access file %s", myFile);</programlisting>
   </section>
 
   <section>
+    <title>Capabilities</title>
+
+    <para>The bundle providing the <xref
+    linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/> and
+    <xref linkend="org.osgi.service.log.LogService" xrefstyle="hyperlink"/>
+    service must provide a capability in the <code>osgi.service</code>
+    namespace representing this service. This capability must also declare a
+    uses constraint for the <xref linkend="org.osgi.service.log"
+    xrefstyle="hyperlink"/> package: </para>
+
+    <para><programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;=
+ "org.osgi.service.log.LoggerFactory,org.osgi.service.log.LogService";
+ uses:="org.osgi.service.log" </programlisting></para>
+
+    <para>The bundle providing the <xref
+    linkend="org.osgi.service.log.LogReaderService" xrefstyle="hyperlink"/>
+    service must provide a capability in the <code>osgi.service</code>
+    namespace representing this service. This capability must also declare a
+    uses constraint for the <xref linkend="org.osgi.service.log"
+    xrefstyle="hyperlink"/> package: </para>
+
+    <programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.log.LogReaderService";
+ uses:="org.osgi.service.log" </programlisting>
+
+    <para>The bundle providing the <xref
+    linkend="org.osgi.service.log.admin.LoggerAdmin" xrefstyle="hyperlink"/>
+    service must provide a capability in the <code>osgi.service</code>
+    namespace representing this service. This capability must also declare a
+    uses constraint for the <xref linkend="org.osgi.service.log.admin"
+    xrefstyle="hyperlink"/> package: </para>
+
+    <programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.log.admin.LoggerAdmin";
+ uses:="org.osgi.service.log.admin" </programlisting>
+
+    <para>The bundle providing the <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> service must provide a capability in the
+    <code>osgi.service</code> namespace representing this service. This
+    capability must also declare a uses constraint for the <xref
+    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/> package:
+    </para>
+
+    <programlisting>Provide-Capability: osgi.service;
+ objectClass:List&lt;String&gt;="org.osgi.service.log.stream.LogStreamProvider";
+ uses:="org.osgi.service.log.stream" </programlisting>
+
+    <para>These capabilities must follow the rules defined for the
+    <code>osgi.service</code> Namespace.</para>
+  </section>
+
+  <section>
     <title>Security</title>
 
-    <para>The Log Service should only be implemented by trusted bundles. These
-    bundles require
+    <para>The Log Service specification should only be implemented by trusted
+    bundles. These bundles require
     <code>ServicePermission[LoggerFactory|LogReaderService|LoggerAdmin|LogStreamProvider|LogService,
-    REGISTER] and ServicePermission[ConfigurationAdmin|EventAdmin,
-    GET]</code>.</para>
+    REGISTER]</code> and
+    <code>ServicePermission[ConfigurationAdmin|EventAdmin, GET]</code>.</para>
 
     <para>Virtually all bundles should get
     <code>ServicePermission[LoggerFactory|LogService, GET]</code> so they can
-    log. </para>
+    log.</para>
 
     <para>Only trusted bundles who must be able to access log entries should
     be assigned <code>ServicePermission[LogStreamProvider|LogReaderService,
     GET]</code>.</para>
+
+    <para>Only trusted bundles who must be able to change log configuration
+    should be assigned <code>ServicePermission[LogAdmin, GET]</code>.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.xml"/>
@@ -1428,9 +1494,44 @@ logger.error("Cannot access file %s", myFile);</programlisting>
   <section>
     <title>Changes</title>
 
+    <para>This release of the Log Service specification includes a significant
+    number of enhancements and new features.</para>
+
     <itemizedlist>
       <listitem>
-        <para><remark>BJH Need to list major changes</remark>.</para>
+        <para>The log methods of LogService are deprecated and replaced by the
+        new Logger type. Loggers are named and have dedicated methods to log
+        to the defined log levels. The new Logger Factory service is used to
+        obtain Loggers.</para>
+      </listitem>
+
+      <listitem>
+        <para>The new Log Stream Provider service creates Push Streams of Log
+        Entries which can be used to receive Log Entries as they are created.
+        This is an alternative to using the Log Reader Service.</para>
+      </listitem>
+
+      <listitem>
+        <para>Log Entry is extended to hold the name of the Logger, a sequence
+        number which orders log entries, and thread and stack trace
+        information about the logging code.</para>
+      </listitem>
+
+      <listitem>
+        <para>The LogLevel enum type specified the supported log levels which
+        includes new log levels AUDIT and TRACE.</para>
+      </listitem>
+
+      <listitem>
+        <para>The new Logger Admin service allows the effective log levels of
+        named loggers to be configured. It supports integration with
+        Configuration Admin so logger configuration can be managed in
+        Configuration Admin.</para>
+      </listitem>
+
+      <listitem>
+        <para>Service capabilities are defined for all the specified
+        services.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -23,13 +23,13 @@ import org.osgi.annotation.versioning.ProviderType;
  * format strings.
  * <p>
  * Messages can be formatted by the Logger once the Logger determines the log
- * level is enabled. Use a left curly bracket (<code>'{' \u007B</code>) followed
- * by a right curly bracket (<code>'}' \u007D</code>) as a place holder for an
- * argument: <code>"{}"</code>. If you need to use the literal <code>"{}"</code>
- * in the formatted message, precede the place holder with a reverse solidus
- * ({@code '\' \u005C}): <code>"\\{}"</code>. If you need to place a backslash
- * before the place holder, precede the reverse solidus with a reverse solidus:
- * <code>"\\\\{}"</code>.
+ * level is enabled. Use a left curly bracket (<code>'{'</code> &#92;u007B)
+ * followed by a right curly bracket (<code>'}'</code> &#92;u007D) as a place
+ * holder for an argument: <code>"{}"</code>. If you need to use the literal
+ * <code>"{}"</code> in the formatted message, precede the place holder with a
+ * reverse solidus ({@code '\'} &#92;u005C): <code>"\{}"</code>. If you need to
+ * place a backslash before the place holder, precede the reverse solidus with a
+ * reverse solidus: <code>"\\{}"</code>.
  * <p>
  * You can also add a {@code Throwable} and/or {@code ServiceReference} to the
  * generated {@link LogEntry} by passing them to the logging methods as
