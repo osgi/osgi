@@ -482,7 +482,10 @@
     Listener services and calls their <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClassListener.modified-WovenClass-"
     xrefstyle="hyperlink"/> method whenever a Woven Class undergoes a state
-    transition.</para>
+    transition. The framework must not obtain Woven Class Listener services if there 
+    are no Weaving Hook services registered. In this case, if the party needs to receive 
+    notifications of woven class state transitions then a no-op Weaving Hook service implementation 
+    can be registered to ensure Woven Class Listener services are called.</para>
 
     <para>The Woven Class Listener <code>modified</code> method is called with
     a <xref linkend="org.osgi.framework.hooks.weaving.WovenClass"
