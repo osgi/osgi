@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.osgi.util.promise;
 
-import static org.osgi.util.promise.PromiseImpl.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;

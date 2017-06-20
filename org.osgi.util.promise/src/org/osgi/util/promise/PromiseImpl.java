@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package org.osgi.util.promise;
+
+import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
@@ -953,12 +955,5 @@ final class PromiseImpl<T> implements Promise<T> {
 			}
 			return result;
 		}
-	}
-
-	static <V> V requireNonNull(V value) {
-		if (value != null) {
-			return value;
-		}
-		throw new NullPointerException();
 	}
 }
