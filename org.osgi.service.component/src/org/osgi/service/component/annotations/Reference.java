@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,10 @@ public @interface Reference {
 	 * upon how this annotation is used:
 	 * <ul>
 	 * <li>Annotated method - The type of the service is the type of the first
-	 * parameter of the method.</li>
+	 * parameter of the method unless the type of the first parameter is
+	 * {@code org.osgi.service.log.Logger} or
+	 * {@code org.osgi.service.log.FormatterLogger}, in which case, the type of
+	 * the service is {@code org.osgi.service.log.LoggerFactory}.</li>
 	 * <li>Annotated field - The type of the service is based upon the type of
 	 * the field being annotated and the cardinality of the reference. If the
 	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or
@@ -91,7 +94,10 @@ public @interface Reference {
 	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
 	 * subtype of {@code java.util.Collection} so the type of the service is the
 	 * generic type of the collection. Otherwise, the type of the service is the
-	 * type of the field.</li>
+	 * type of the field unless the type of the field is
+	 * {@code org.osgi.service.log.Logger} or
+	 * {@code org.osgi.service.log.FormatterLogger}, in which case, the type of
+	 * the service is {@code org.osgi.service.log.LoggerFactory}.</li>
 	 * <li>Annotated constructor parameter - The type of the service is based
 	 * upon the type of the parameter being annotated and the cardinality of the
 	 * reference. If the cardinality is either
@@ -100,7 +106,10 @@ public @interface Reference {
 	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
 	 * subtype of {@code java.util.Collection} so the type of the service is the
 	 * generic type of the collection. Otherwise, the type of the service is the
-	 * type of the parameter.</li>
+	 * type of the parameter unless the type of the parameter is
+	 * {@code org.osgi.service.log.Logger} or
+	 * {@code org.osgi.service.log.FormatterLogger}, in which case, the type of
+	 * the service is {@code org.osgi.service.log.LoggerFactory}.</li>
 	 * </ul>
 	 * 
 	 * @see "The interface attribute of the reference element of a Component Description."

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,9 +103,8 @@ public @interface Component {
 	boolean servicefactory() default false;
 
 	/**
-	 * Declares whether this Component is enabled when the bundle containing it
+	 * Declares whether this Component is enabled when the bundle declaring it
 	 * is started.
-	 * 
 	 * <p>
 	 * If {@code true} or not specified, this Component is enabled. If
 	 * {@code false}, this Component is disabled.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,11 +100,10 @@ public interface ComponentContext {
 	public Object[] locateServices(String name);
 
 	/**
-	 * Returns the {@code BundleContext} of the bundle which contains this
+	 * Returns the {@code BundleContext} of the bundle which declares this
 	 * component.
 	 * 
-	 * @return The {@code BundleContext} of the bundle containing this
-	 *         component.
+	 * @return The {@code BundleContext} of the bundle declares this component.
 	 */
 	public BundleContext getBundleContext();
 

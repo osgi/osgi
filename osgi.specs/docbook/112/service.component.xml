@@ -631,8 +631,8 @@
       services of a reference.</para>
     </section>
 
-    <section xml:id="service.component-event.methods">
-      <title>Event Methods</title>
+    <section xml:id="service.component-event.strategy">
+      <title>Event Strategy</title>
 
       <para>When using the event strategy, SCR must callback the component
       instance at the appropriate time. SCR must callback on the following
@@ -781,16 +781,16 @@
       then the methods may be called multiple times. The updated method can be
       called multiple times per service.</para>
 
-      <para>In the following examples, a component requires the Log Service.
-      The first example uses the lookup strategy. The reference is declared
-      without any bind, updated, and unbind methods:</para>
+      <para>In the following examples, a component requires the Logger Factory
+      service. The first example uses the lookup strategy. The reference is
+      declared without any bind, updated, and unbind methods:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
     &lt;implementation class="com.acme.impl.LogLookupImpl"/&gt;
     &lt;reference name="LOG"
-        interface="org.osgi.service.log.LogService"/&gt;
+        interface="org.osgi.service.log.LoggerFactory"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The component implementation class must now lookup the service.
@@ -798,22 +798,22 @@
 
       <programlisting>public class LogLookupImpl {
     private void activate(ComponentContext ctxt) {
-        LogService log = (LogService)
+        LoggerFactory lf = (LoggerFactory)
             ctxt.locateService("LOG");
-        log.log(LogService.LOG_INFO, "Hello Components!"));
+        lf.getLogger(LogLookupImpl.class).info("Hello Components!");
     }
 }</programlisting>
 
       <para>Alternatively, the component could use the event strategy and ask
-      to be notified with the Log Service by declaring bind, updated, and
-      unbind methods.</para>
+      to be notified with the Logger Factory service by declaring bind,
+      updated, and unbind methods.</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
     &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
-        interface="org.osgi.service.log.LogService"
+        interface="org.osgi.service.log.LoggerFactory"
         bind="setLog"
         updated="updatedLog"
         unbind="unsetLog"
@@ -823,19 +823,18 @@
       <para>The component implementation class looks like:</para>
 
       <programlisting>public class LogEventImpl {
-    LogService log;
+    LoggerFactory lf;
     Integer    level;
-    void setLog( LogService l, Map&lt;String,?&gt; ref ) {
-        log = l;
-        updatedLog(ref);
+    void setLog( LoggerFactory l, Map&lt;String,?&gt; ref ) {
+        lf = l;
+        updatedLog(l, ref);
     }
-    void updatedLog( LogService l, Map&lt;String,?&gt; ref) {
+    void updatedLog( LoggerFactory l, Map&lt;String,?&gt; ref) {
         level = (Integer) ref.get("level");
     }
-    void unsetLog( LogService l ) { log = null; }
-
+    void unsetLog( LoggerFactory l ) { lf = null; }
     private void activate() {
-        log.log(LogService.LOG_INFO, "Hello Components!"));
+        lf.getLogger(LogEventImpl.class).info("Hello Components!");
     }
 }</programlisting>
 
@@ -998,25 +997,25 @@
       the component implementation does not alter the field value so SCR may
       retain its own copy of the value set in the field.</para>
 
-      <para>In the following examples, a component requires the Log
-      Service.</para>
+      <para>In the following examples, a component requires the Logger Factory
+      service.</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.4.0"&gt;
     &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
-        interface="org.osgi.service.log.LogService"
-        field="log"
+        interface="org.osgi.service.log.LoggerFactory"
+        field="lf"
     /&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The component implementation class looks like:</para>
 
       <programlisting>public class LogEventImpl {
-    LogService log;
+    LoggerFactory lf;
     private void activate() {
-        log.log(LogService.LOG_INFO, "Hello Components!"));
+        lf.getLogger(LogEventImpl.class).info("Hello Components!");
     }
 }</programlisting>
 
@@ -1036,12 +1035,12 @@
         <listitem>
           <para><emphasis>Multiplicity</emphasis> - Does the component
           implementation assume a single service or does it explicitly handle
-          multiple services? For example, when a component uses the Log
-          Service, it only needs to bind to one Log Service to function
-          correctly. Alternatively, when the Configuration Admin uses the
-          Configuration Listener services it needs to bind to all target
-          services present in the service registry to dispatch its events
-          correctly.</para>
+          multiple services? For example, when a component uses the Logger
+          Factory service, it only needs to bind to one Logger Factory service
+          to function correctly. Alternatively, when the Configuration Admin
+          uses the Configuration Listener services it needs to bind to all
+          target services present in the service registry to dispatch its
+          events correctly.</para>
         </listitem>
 
         <listitem>
@@ -1633,6 +1632,58 @@ public class HttpResourceImpl {
       optional cardinality can be satisfied and bound to zero target services.
       Therefore the cycle is broken and the other references may be
       satisfied.</para>
+    </section>
+
+    <section xml:id="service.component-logger.support">
+      <title>Logger Support</title>
+
+      <para>SCR provides special support for components having references to
+      Loggers from the Log Service specification. If the reference uses event,
+      field or constructor strategy, the referenced service is of type
+      <code>org.osgi.service.log.LoggerFactory</code>, and the type of the
+      parameter or field to receive the service object is of type
+      <code>org.osgi.service.log.Logger</code> or
+      <code>org.osgi.service.log.FormatterLogger</code>, then SCR must obtain
+      the proper type of Logger from the bound Logger Factory service and use
+      the obtained Logger as the service object rather than the service object
+      for the bound Logger Factory service.</para>
+
+      <para>To obtain the Logger object to use as the service object, SCR must
+      call the <code>LoggerFactory.getLogger(Bundle bundle, String name, Class
+      loggerType)</code> method passing the bundle declaring the component as
+      the first argument, the fully qualified name of the component
+      implementation class as the second argument, and the type of the
+      parameter or field, <code>org.osgi.service.log.Logger</code> or
+      <code>org.osgi.service.log.FormatterLogger</code>, as the third
+      argument.</para>
+
+      <para>For example, the following code will have the <code>logger</code>
+      field set to a Logger object created by SCR from the Logger Factory
+      service.</para>
+
+      <programlisting>@Component
+public class MyComponent {
+  @Reference
+  private Logger logger;
+  @Activate
+  void activate(ComponentContext context) {
+    logger.trace(“activating component id {}”,
+      context.getProperties().get(“component.id”));
+  }
+}</programlisting>
+
+      <para>The tool processing the <code>Reference</code> component
+      annotation must also participate in the special support for components
+      having references to Loggers. When the <code>Reference</code> annotation
+      does not specify the <code>service</code> element and the parameter or
+      field for the reference is of type
+      <code>org.osgi.service.log.Logger</code> or
+      <code>org.osgi.service.log.FormatterLogger</code>, the generated
+      component description must specify the Logger Factory service as the
+      referenced service rather than <code>org.osgi.service.log.Logger</code>
+      or <code>org.osgi.service.log.FormatterLogger</code>.</para>
+
+      <programlisting>&lt;reference interface="org.osgi.service.log.LoggerFactory"/&gt;</programlisting>
     </section>
   </section>
 
@@ -2501,7 +2552,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               for the set of target services.</para><para>The
               <code>Reference</code> annotation will use the type of the first
               parameter of the annotated method or the type of the annotated
-              field to determine the <code>service</code>
+              parameter or field to determine the <code>service</code>
               value.</para></entry>
             </row>
 
@@ -5315,16 +5366,15 @@ public class MyComponent implements AcmeService {}</programlisting>
     </section>
 
     <section>
-      <title>Logging Error Messages</title>
+      <title>Logging Messages</title>
 
-      <para>When SCR must log an error message to the Log Service, it must use
-      a Log Service obtained using the component's Bundle Context so that the
-      resulting Log Entry is associated with the component's bundle.</para>
-
-      <para>If SCR is unable to obtain, or use, a Log Service using the
-      component's Bundle Context, then SCR must log the error message to a Log
-      Service obtained using SCR's bundle context to ensure the error message
-      is logged.</para>
+      <para>When SCR must log a message to the Log Service, it must use a
+      Logger named for the component implementation class and associated with
+      the bundle declaring the component. To obtain the Logger object, SCR
+      must call the <code>LoggerFactory.getLogger(Bundle bundle, String name,
+      Class loggerType)</code> method passing the bundle declaring the
+      component as the first argument and the fully qualified name of the
+      component implementation class as the second argument.</para>
     </section>
 
     <section xml:id="i1641644">
@@ -5816,6 +5866,13 @@ public class MyComponent implements AcmeService {}</programlisting>
         property names, to add special handling for the mapping of the value
         method in component property types which are single-element
         annotations, and to add support for PREFIX_.</para>
+      </listitem>
+
+      <listitem>
+        <para>Special support is added for references to Loggers from the Log
+        Service specification. SCR will convert a reference to a LoggerFactory
+        to a Logger object on behalf of the component. See <xref
+        linkend="service.component-logger.support"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
