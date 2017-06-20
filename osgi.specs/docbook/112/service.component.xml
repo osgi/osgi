@@ -502,9 +502,9 @@
       by calling the <code>newInstance</code> method on this Component Factory
       service. The <xref
       linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"
-      xrefstyle="hyperlink"/> method has a <code>Dictionary</code> object as
-      argument. This Dictionary object is merged with the component properties
-      as described in <xref
+      xrefstyle="hyperlink"/> method has a <code>Dictionary</code> object as a
+      parameter. This Dictionary object is merged with the component
+      properties as described in <xref
       linkend="service.component-component.properties"/>. If the component
       specifies a service, then the service is registered after the created
       component configuration is satisfied with the component properties. Then
@@ -664,10 +664,10 @@
       <para>Each event is associated with an <emphasis>event
       method</emphasis>. The prototype of the event methods is:</para>
 
-      <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
+      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
 
-      <para>An event method can take one or more arguments. Each argument must
-      be of one of the following types:</para>
+      <para>An event method can take one or more parameters. Each parameter
+      must be of one of the following types:</para>
 
       <itemizedlist>
         <listitem>
@@ -710,30 +710,30 @@
 
       <orderedlist>
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.ServiceReference</code>. This
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>org.osgi.framework.ServiceReference</code>. This
           method will receive a Service Reference for the bound
           service.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <xref
+          <para>The method takes a single parameter and the type of the
+          parameter is <xref
           linkend="org.osgi.service.component.ComponentServiceObjects"
           xrefstyle="hyperlink"/>. This method will receive a Component
           Service Objects for the bound service.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is the type specified by the reference's
+          <para>The method takes a single parameter and the type of the
+          parameter is the type specified by the reference's
           <code>interface</code> attribute. This method will receive the bound
           service object.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is assignable from the type specified by the reference's
+          <para>The method takes a single parameter and the type of the
+          parameter is assignable from the type specified by the reference's
           <code>interface</code> attribute. If multiple methods match this
           rule, this implies the method name is overloaded and SCR may choose
           any of the methods to call. This method will receive the bound
@@ -741,15 +741,15 @@
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>java.util.Map</code>. This method will receive an
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.util.Map</code>. This method will receive an
           unmodifiable Map containing the service properties of the bound
           service.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two or more arguments and the types of the
-          arguments must be one of: the type specified by the reference's
+          <para>The method takes two or more parameters and the types of the
+          parameters must be one of: the type specified by the reference's
           <code>interface</code> attribute, a type assignable from the type
           specified by the reference's <code>interface</code> attribute,
           <code>org.osgi.framework.ServiceReference</code>, <xref
@@ -761,9 +761,9 @@
           is <code>org.osgi.framework.ServiceReference</code>, <xref
           linkend="org.osgi.service.component.ComponentServiceObjects"
           xrefstyle="hyperlink"/>, or <code>java.util.Map</code>, the first
-          argument of that type will receive the bound service object. If
-          selected event method has more than one argument of that type, the
-          remaining arguments of that type will receive a Service Reference
+          parameter of that type will receive the bound service object. If
+          selected event method has more than one parameter of that type, the
+          remaining parameters of that type will receive a Service Reference
           for the bound service, a Service Objects for the bound service, or
           an unmodifiable Map containing the service properties of the bound
           service.</para>
@@ -2034,8 +2034,8 @@ public class HttpResourceImpl {
 
       <para>The class is retrieved with the <code>loadClass</code> method of
       the component's bundle. The class must be public and have a public
-      constructor without arguments (this is normally the default constructor)
-      so component instances may be created by SCR with the
+      constructor without parameters (this is normally the default
+      constructor) so component instances may be created by SCR with the
       <code>newInstance</code> method on <code>Class</code>.</para>
 
       <para>If the component description specifies a service, the class must
@@ -2500,7 +2500,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               A service must be registered under this name to be considered
               for the set of target services.</para><para>The
               <code>Reference</code> annotation will use the type of the first
-              argument of the annotated method or the type of the annotated
+              parameter of the annotated method or the type of the annotated
               field to determine the <code>service</code>
               value.</para></entry>
             </row>
@@ -3391,10 +3391,10 @@ public class FooImpl implements Foo {
       name of <code>activate</code> is used. The prototype of the activate
       method is:</para>
 
-      <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
+      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
 
-      <para>The activate method can take zero or more arguments. Each argument
-      must be of one of the following types:</para>
+      <para>The activate method can take zero or more parameters. Each
+      parameter must be of one of the following types:</para>
 
       <itemizedlist>
         <listitem>
@@ -3425,29 +3425,29 @@ public class FooImpl implements Foo {
 
       <orderedlist>
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is
+          <para>The method takes a single parameter and the type of the
+          parameter is
           <code>org.osgi.service.component.ComponentContext</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.BundleContext</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>org.osgi.framework.BundleContext</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is a component property type.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is a component property type.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>java.util.Map</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two or more arguments and the type of each
-          argument must be
+          <para>The method takes two or more parameters and the type of each
+          parameter must be
           <code>org.osgi.service.component.ComponentContext</code>,
           <code>org.osgi.framework.BundleContext</code>, a component property
           type or <code>java.util.Map</code>. If multiple methods match this
@@ -3456,7 +3456,7 @@ public class FooImpl implements Foo {
         </listitem>
 
         <listitem>
-          <para>The method takes zero arguments.</para>
+          <para>The method takes zero parameters.</para>
         </listitem>
       </orderedlist>
 
@@ -3687,10 +3687,10 @@ void unsetLogService( LogService log ) {
       method name of <code>deactivate</code> is used. The prototype of the
       deactivate method is:</para>
 
-      <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
+      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
 
-      <para>The deactivate method can take zero or more arguments. Each
-      argument must be assignable from one of the following types:</para>
+      <para>The deactivate method can take zero or more parameters. Each
+      parameter must be assignable from one of the following types:</para>
 
       <itemizedlist>
         <listitem>
@@ -3727,39 +3727,39 @@ void unsetLogService( LogService log ) {
 
       <orderedlist>
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is
+          <para>The method takes a single parameter and the type of the
+          parameter is
           <code>org.osgi.service.component.ComponentContext</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.BundleContext</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>org.osgi.framework.BundleContext</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is a component property type.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is a component property type.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>java.util.Map</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>int</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>int</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes a single argument and the type of the
-          argument is <code>java.lang.Integer</code>.</para>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.lang.Integer</code>.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two or more arguments and the type of each
-          argument must be
+          <para>The method takes two or more parameters and the type of each
+          parameter must be
           <code>org.osgi.service.component.ComponentContext</code>,
           <code>org.osgi.framework.BundleContext</code>, a component property
           type, <code>java.util.Map</code>, <code>int</code> or
@@ -3769,7 +3769,7 @@ void unsetLogService( LogService log ) {
         </listitem>
 
         <listitem>
-          <para>The method takes zero arguments.</para>
+          <para>The method takes zero parameters.</para>
         </listitem>
       </orderedlist>
 
@@ -4490,8 +4490,8 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
         </listitem>
 
         <listitem>
-          <para>The requested service is the type of the first argument of the
-          bind method.</para>
+          <para>The requested service is the type of the first parameter of
+          the bind method.</para>
         </listitem>
 
         <listitem>
@@ -4580,11 +4580,11 @@ public @interface Config {
           </listitem>
 
           <listitem>
-            <para>Component property types can be argument types in the
+            <para>Component property types can be parameter types in the
             component's life cycle methods, activate, deactivate, and
             modified. The life cycle method implementation can use these
-            arguments at runtime to access component property values in a type
-            safe manner.</para>
+            parameters at runtime to access component property values in a
+            type safe manner.</para>
 
             <para>To be used in this way, it is recommended the component
             property type be annotated with the <xref
@@ -4601,9 +4601,9 @@ public @interface Config {
       with the example <code>Config</code> component property type which
       specifies a property value for the component which is different than the
       default value. The example also shows the activate method taking the
-      example <code>Config</code> component property type as an argument type
+      example <code>Config</code> component property type as a parameter type
       and the method implementation accesses component property values by
-      invoking methods on the component property type argument.</para>
+      invoking methods on the component property type parameter.</para>
 
       <programlisting>@Component
 @Config(names="myapp")
@@ -4640,7 +4640,7 @@ public class MyComponent {
       <para>Component property types must be defined as annotation types. This
       is done for several reasons. First, the limitations on annotation type
       definitions make them well suited for component property types. The
-      methods must have no arguments and the return types supported are
+      methods must have no parameters and the return types supported are
       limited to a set which is well suited for component properties. Second,
       annotation types support default values which is useful for defining the
       default value of a component property. Finally, as annotations, they can
@@ -4652,7 +4652,7 @@ public class MyComponent {
       linkend="service.component-ordering.generated.properties"/>.</para>
 
       <para>At runtime, when SCR needs to call a lifecycle method on a
-      component instance which takes an argument whose type is a component
+      component instance which takes a parameter whose type is a component
       property type, SCR must construct an instance of the component property
       type whose methods are backed by the values of the component properties
       for the component instance. This object is then passed to the life cycle
@@ -4893,7 +4893,7 @@ public class MyComponent {
       <section xml:id="service.component-component.property.value.coercion">
         <title>Coercing Component Property Values</title>
 
-        <para>When a component property type is used as an argument for a life
+        <para>When a component property type is used as a parameter for a life
         cycle method, SCR must create an object that implements the component
         property type and maps the methods of the component property type to
         component properties. The name of the method is converted to the
@@ -5186,13 +5186,13 @@ public class MyComponent implements AcmeService {}</programlisting>
           generated <code>property</code> elements must be added to the
           component description by processing the component property types
           used in the signatures of the life cycle methods in the following
-          order. First, the component property types used as arguments to the
+          order. First, the component property types used as parameters to the
           activate method, followed by the component property types used as
-          arguments to the modified method and finally the component property
-          types used as arguments to the deactivate method. If a method has
-          more than one component property type argument, the component
+          parameters to the modified method and finally the component property
+          types used as parameters to the deactivate method. If a method has
+          more than one component property type parameter, the component
           property types are processed in the order of the method
-          arguments.</para>
+          parameters.</para>
 
           <para>For component property type methods without a default value or
           with a default value of an empty array, a <code>property</code>
@@ -5389,7 +5389,7 @@ public class MyComponent implements AcmeService {}</programlisting>
       Runtime service provides methods to inspect the component descriptions
       and component configurations as well as inspect and modify the enabled
       state of components. The service uses <emphasis>Data Transfer Objects
-      (DTO)</emphasis> as arguments and return values. The rules for Data
+      (DTO)</emphasis> as parameters and return values. The rules for Data
       Transfer Objects are specified in <xref linkend="intro.core.release"
       xrefstyle="template:%t"/>.</para>
 

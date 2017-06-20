@@ -83,7 +83,7 @@ public @interface Reference {
 	 * upon how this annotation is used:
 	 * <ul>
 	 * <li>Annotated method - The type of the service is the type of the first
-	 * argument of the method.</li>
+	 * parameter of the method.</li>
 	 * <li>Annotated field - The type of the service is based upon the type of
 	 * the field being annotated and the cardinality of the reference. If the
 	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or

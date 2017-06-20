@@ -950,7 +950,7 @@ version="1.1">
       <xsl:element name="formalpara" namespace="{$ns}">
         <xsl:attribute name="role">parameter</xsl:attribute>
         <xsl:element name="title" namespace="{$ns}">
-          <xsl:text>Type Arguments</xsl:text>
+          <xsl:text>Type Parameters</xsl:text>
         </xsl:element>
         <xsl:element name="para" namespace="{$ns}">
           <xsl:element name="code" namespace="{$ns}">
