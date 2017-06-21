@@ -105,6 +105,13 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Dependency Injection</emphasis> - The programming
+          model for using declarative services supports three types of
+          dependency injection, method injection, field injection, and
+          constructor injection, for service dependencies.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Reactive</emphasis> - It must be possible to react
           to changes in the external dependencies with different
           policies.</para>
@@ -600,19 +607,26 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event strategy</emphasis> - SCR calls a method on
+          <para><emphasis>Method injection</emphasis> - SCR calls a method on
           the component instance when a service becomes bound, when a service
           becomes unbound, or when its properties are updated. These methods
           are the bind, updated, and unbind methods specified by the
-          reference. The event strategy is useful if the component needs to be
+          reference. Method injection is useful if the component needs to be
           notified of changes to the bound services for a dynamic
           reference.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Field strategy</emphasis> - SCR modifies a field in
+          <para><emphasis>Field injection</emphasis> - SCR modifies a field in
           the component instance when a service becomes bound, when a service
           becomes unbound, or when its properties are updated.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Constructor injection</emphasis> - SCR constructs
+          the component when the constructor referenced services becomes
+          bound. When those services becomes unbound, the component instance
+          must be deactivated.</para>
         </listitem>
 
         <listitem>
@@ -631,12 +645,11 @@
       services of a reference.</para>
     </section>
 
-    <section xml:id="service.component-event.strategy">
-      <title>Event Strategy</title>
+    <section xml:id="service.component-method.injection">
+      <title>Method Injection</title>
 
-      <para>When using the event strategy, SCR must callback the component
-      instance at the appropriate time. SCR must callback on the following
-      events:</para>
+      <para>When using method injection, SCR must call the component instance
+      at the appropriate time. SCR must call on the following events:</para>
 
       <itemizedlist>
         <listitem>
@@ -683,8 +696,8 @@
           xrefstyle="hyperlink"/> method to obtain the actual service object.
           This approach is useful when the service properties need to be
           examined before accessing the service object. It also allows for the
-          delayed activation of bound services when using the event
-          strategy.</para>
+          delayed activation of bound services when using method
+          injection.</para>
         </listitem>
 
         <listitem>
@@ -804,9 +817,9 @@
     }
 }</programlisting>
 
-      <para>Alternatively, the component could use the event strategy and ask
-      to be notified with the Logger Factory service by declaring bind,
-      updated, and unbind methods.</para>
+      <para>Alternatively, the component could use method injection and ask to
+      be notified with the Logger Factory service by declaring bind, updated,
+      and unbind methods.</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
@@ -843,10 +856,10 @@
       public, or have default access. See <xref linkend="i1641644"/>.</para>
     </section>
 
-    <section xml:id="service.component-field.strategy">
-      <title>Field Strategy</title>
+    <section xml:id="service.component-field.injection">
+      <title>Field Injection</title>
 
-      <para>When using the field strategy, SCR must modify fields in the
+      <para>When using field injection, SCR must modify fields in the
       component instance at the appropriate time. SCR must modify the fields
       on the following events:</para>
 
@@ -889,7 +902,7 @@
           This approach is useful when the service properties need to be
           examined before accessing the service object. It also allows for the
           delayed activation of bound services when using field
-          strategy.</para>
+          injection.</para>
         </listitem>
 
         <listitem>
@@ -1022,6 +1035,14 @@
       <para>Fields can be declared private in the component class but are only
       looked up in the inheritance chain when they are protected, public, or
       have default access. See <xref linkend="i1641644"/>.</para>
+    </section>
+
+    <section xml:id="service.component-constructor.injection">
+      <title>Constructor Injection</title>
+
+      <para><remark>BJH Need to add constructor injection specification text.
+      When using constructor injection, the constructor is also the activate
+      method.</remark></para>
     </section>
 
     <section xml:id="service.component-reference.cardinality">
@@ -1277,7 +1298,7 @@ public class HttpResourceImpl {
         the component instance is created. A reference with a dynamic policy
         is called a <emphasis>dynamic reference</emphasis>. With the dynamic
         policy, SCR can change the set of bound services without deactivating
-        a component configuration. If the component uses the event strategy to
+        a component configuration. If the component uses method injection to
         access services, then the component instance will be notified of
         changes in the set of bound services by calls to the bind, updated,
         and unbind methods.</para>
@@ -1432,7 +1453,7 @@ public class HttpResourceImpl {
     <section xml:id="service.component-reference.field.option">
       <title>Reference Field Option</title>
 
-      <para>For a reference using field strategy, the reference field option
+      <para>For a reference using field injection, the reference field option
       defines how SCR must manage the field value. The reference field option
       can have the following values:</para>
 
@@ -1638,10 +1659,10 @@ public class HttpResourceImpl {
       <title>Logger Support</title>
 
       <para>SCR provides special support for components having references to
-      Loggers from the Log Service specification. If the reference uses event,
-      field or constructor strategy, the referenced service is of type
-      <code>org.osgi.service.log.LoggerFactory</code>, and the type of the
-      parameter or field to receive the service object is of type
+      Loggers from the Log Service specification. If the reference uses
+      method, field or constructor injection, the referenced service is of
+      type <code>org.osgi.service.log.LoggerFactory</code>, and the type of
+      the parameter or field to receive the service object is of type
       <code>org.osgi.service.log.Logger</code> or
       <code>org.osgi.service.log.FormatterLogger</code>, then SCR must obtain
       the proper type of Logger from the bound Logger Factory service and use
@@ -2746,7 +2767,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               <entry><para>Defines the types of elements in the collection
               referenced by the field value. This is ignored if the
               <code>field</code> attribute is not set or the cardinality is
-              unary. See <xref linkend="service.component-field.strategy"/>
+              unary. See <xref linkend="service.component-field.injection"/>
               for more information.</para><para>The <code>Reference</code>
               annotation can generally infer the value of the collection
               elements from the generic type information of the annotated
@@ -2764,7 +2785,7 @@ public class Foo implements EventHandler { ... }</programlisting>
 
       <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation for the event strategy.</para>
+      xrefstyle="hyperlink"/> annotation for method injection.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
@@ -2784,7 +2805,7 @@ public class FooImpl implements Foo {
 
       <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation for the field strategy.</para>
+      xrefstyle="hyperlink"/> annotation for field injection.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
@@ -3195,10 +3216,10 @@ public class FooImpl implements Foo {
       <para>SCR must register a service after the component configuration
       becomes satisfied. The registration of this service must look to
       observers of the service registry as if the component's bundle actually
-      registered this service. This strategy makes it possible to register
-      services without creating a class loader for the bundle and loading
-      classes, thereby allowing reduction in initialization time and a delay
-      in memory footprint.</para>
+      registered this service. This makes it possible to register services
+      without creating a class loader for the bundle and loading classes,
+      thereby allowing reduction in initialization time and a delay in memory
+      footprint.</para>
 
       <para>When SCR registers the service on behalf of a component
       configuration, it must avoid causing a class load to occur from the
@@ -3369,7 +3390,9 @@ public class FooImpl implements Foo {
       <title>Activation</title>
 
       <para>Activating a component configuration consists of the following
-      steps:</para>
+      steps:<remark> BJH Need to update for constructor injection and
+      activation fields. When using constructor injection, the constructor is
+      also the activate method.</remark></para>
 
       <orderedlist>
         <listitem>
@@ -3424,8 +3447,8 @@ public class FooImpl implements Foo {
       bound service which failed to activate will be considered
       unbound.</para>
 
-      <para>If the reference uses the field strategy, the field must be set.
-      Then, if the reference uses the event strategy, the bind method must be
+      <para>If the reference uses field injection, the field must be set.
+      Then, if the reference uses method injection, the bind method must be
       called for each bound service of that reference. If a bind method throws
       an exception, SCR must log an error message containing the exception
       with the Log Service, if present, but the activation of the component
@@ -3549,9 +3572,9 @@ public class FooImpl implements Foo {
       SCR must attempt to replace the bound service with a new bound
       service.</para>
 
-      <para>If the reference uses the field strategy, the field must be set
-      for the replacement bound service. Then, if the reference uses the event
-      strategy, SCR must first bind the new bound service and then unbind the
+      <para>If the reference uses field injection, the field must be set for
+      the replacement bound service. Then, if the reference uses method
+      injection, SCR must first bind the new bound service and then unbind the
       outgoing service. This reversed order allows the component to not have
       to handle the inevitable gap between the unbind and bind methods.
       However, this means that in the unbind method care must be taken to not
@@ -3586,9 +3609,9 @@ void unsetLogService( LogService log ) {
 
       <para>If an active component is bound to a service that modifies its
       service properties then the component can be updated. If the reference
-      uses the field strategy and the field holds the service properties, the
+      uses field injection and the field holds the service properties, the
       field must be set for the updated bound service. Then, if the reference
-      uses the event strategy and specifies an updated method, the updated
+      uses method injection and specifies an updated method, the updated
       method must be called.</para>
     </section>
 
@@ -3849,12 +3872,12 @@ void unsetLogService( LogService log ) {
       That is, target services from the last specified reference are unbound
       before services from the previous specified reference.</para>
 
-      <para>If the reference uses the event strategy, the unbind method must
-      be called for each bound service of that reference. If an unbind method
+      <para>If the reference uses method injection, the unbind method must be
+      called for each bound service of that reference. If an unbind method
       throws an exception, SCR must log an error message containing the
       exception with the Log Service, if present, and the deactivation of the
-      component configuration will continue. Then, if the reference uses the
-      field strategy, the field must be set to <code>null</code>.</para>
+      component configuration will continue. Then, if the reference uses field
+      injection, the field must be set to <code>null</code>.</para>
     </section>
 
     <section>
@@ -4141,14 +4164,17 @@ void unsetLogService( LogService log ) {
   <section xml:id="service.component-deployment">
     <title>Deployment</title>
 
-    <para>A component description contains default information to select
-    target services for each reference. However, when a component is deployed,
-    it is often necessary to influence the target service selection in a way
-    that suits the needs of the deployer. Therefore, SCR uses
-    <code>Configuration</code> objects from Configuration Admin to replace and
-    extend the component properties for a component configuration. That is,
-    through Configuration Admin, a deployer can configure component
-    properties.</para>
+    <para><remark>BJH Need to cover changes regarding CM. SCR _SHOULD_ support
+    Coordinations and delay action regarding Configurations until the
+    Coordination ends. SCR must use Configuration.getProcessedProperties to
+    support ConfigurationPlugins. </remark>A component description contains
+    default information to select target services for each reference. However,
+    when a component is deployed, it is often necessary to influence the
+    target service selection in a way that suits the needs of the deployer.
+    Therefore, SCR uses <code>Configuration</code> objects from Configuration
+    Admin to replace and extend the component properties for a component
+    configuration. That is, through Configuration Admin, a deployer can
+    configure component properties.</para>
 
     <para>A component's configuration PIDs are used as keys for obtaining
     additional component properties from Configuration Admin. When
