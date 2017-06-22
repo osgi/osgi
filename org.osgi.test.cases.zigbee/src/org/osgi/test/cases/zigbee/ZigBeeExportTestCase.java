@@ -35,15 +35,26 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	private static final String TAG = ZigBeeExportTestCase.class.getName();
 
 	/**
-	 * This test tries to verify if the base driver is correctly calling an
-	 * exported endpoint when it is detected, if this exported endpoint is not
-	 * suitable to be exported. It may happen because:
+	 * This test verifies if the driver implementation is correctly calling the
+	 * {@code ZigBeeEndpoint.notExported()} method. The exported ZigBeeEndpoint
+	 * cannot rely on a call to this method from the ZigBee implementation to
+	 * state that it has been actually exported or not, but we expect it to be
+	 * called within a short time (in the CT the amount in milliseconds is the
+	 * discovery timeout configuration property), if all the following
+	 * conditions are met:
 	 * <ul>
-	 * <li>The ZigBeeEndpoint do not have the mandatory service properties set.
+	 * <li>The ZigBeeHost service is registered.
+	 * <li>The ZigBeeHost is started.
+	 * <li>The exported ZigBeeEndpoint is not suitable to be exported.
+	 * </ul>
+	 * The latter condition may occur if:
+	 * <ul>
+	 * <li>The ZigBeeEndpoint does not have the mandatory service properties
+	 * set.
 	 * <li>The new ZigBeeEndpoint has the same
 	 * {@link ZigBeeEndpoint#ENDPOINT_ID} and the same
 	 * {@link ZigBeeNode#IEEE_ADDRESS} service properties values of another
-	 * endpoint.
+	 * ZigBeeEndpoint.
 	 * <li>The new ZigBeeEndpoint do not have the
 	 * {@link ZigBeeEndpoint#ENDPOINT_ID} and {@link ZigBeeNode#IEEE_ADDRESS}
 	 * </ul>
@@ -55,13 +66,13 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	 * exported, but that do not have the {@link ZigBeeEndpoint#ZIGBEE_EXPORT}
 	 * property set.
 	 * 
-	 * @throws Exception
+	 * @throws Exception In case of failure.
 	 */
 
 	public void testExport() throws Exception {
 		log(TAG, "---- testExport");
 
-		ZigBeeHost host = getZigBeeHost(DISCOVERY_TIMEOUT);
+		ZigBeeHost host = getZigBeeHost(conf.getDiscoveryTimeout());
 
 		if (!host.isStarted()) {
 			host.start();

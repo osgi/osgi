@@ -1732,11 +1732,6 @@ public class ZigBeeControlTestCase extends ZigBeeTestCases {
 		eventListener.stop();
 	}
 
-	private String printScope(ZigBeeEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Creates an event listener with the passed service properties.
 	 */
