@@ -44,7 +44,6 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	 * conditions are met:
 	 * <ul>
 	 * <li>The ZigBeeHost service is registered.
-	 * <li>The ZigBeeHost is started.
 	 * <li>The exported ZigBeeEndpoint is not suitable to be exported.
 	 * </ul>
 	 * The latter condition may occur if:
