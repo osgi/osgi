@@ -2149,7 +2149,8 @@ public class MyServletRequestListener implements ServletRequestListener {
             <entry><code>Long</code></entry>
             
             <entry><para>Whenever the DTOs available from the Http Service Runtime
-            service change, the value of this property property will increase.</para>
+            service change, the value of this property will increase by 
+            an amount of 1 or more.</para>
             <para>This allows interested parties to be notified of changes to the 
             DTOs by observice Service Events of type <code>MODIFIED</code>
             for the 
