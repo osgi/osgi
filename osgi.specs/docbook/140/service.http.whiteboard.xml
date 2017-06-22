@@ -1103,7 +1103,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table>
+    <table xml:id="service.http.whiteboard.servlet.properties.table">
       <title>Service properties for <code>Servlet</code> Whiteboard
       services.</title>
 
@@ -1652,7 +1652,7 @@ public class MyFilter implements Filter {
     public void destroy() {}
 }</programlisting>
 
-  <section>
+  <section xml:id="service.http.whiteboard.servlet.preprocessors">
     <title>Servlet Pre-Processors</title>
     
     <para>
@@ -2088,7 +2088,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     service properties can include implementation-specific key-value pairs.
     They also include the following:</para>
 
-    <table>
+    <table xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
       <title>Service properties for the <code>HttpServiceRuntime</code>
       service</title>
 
@@ -2519,5 +2519,36 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       Hooks</title>OSGi Core, Chapter 55 Service Hook Service
       Specification</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added Servlet support for Multipart Configuration Handling. 
+        See <xref linkend="service.http.whiteboard.servlet.properties.table"/>.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Added  
+        <xref linkend="service.http.whiteboard.servlet.preprocessors"/>.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Added <code>service.changecount</code> service property to Http Service 
+        Runtime Service. 
+        See table <xref linkend="service.http.whiteboard.httpserviceruntime.properties.table"/></para>
+      </listitem>
+      
+      <listitem>
+        <para>Added <xref linkend="service.http.whiteboard.httpservice.integration"/>.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Added component property types and annotations, see
+        <code>org.osgi.service.http.whiteboard.propertytypes</code> in the API section.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
