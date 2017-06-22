@@ -1034,6 +1034,17 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
               linkend="org.osgi.service.resolver.ResolveContext.getWirings--"
               xrefstyle="hyperlink"/></entry>
             </row>
+            
+            <row>
+              <entry>S</entry>
+
+              <entry><code>Map&lt;Wiring,List&lt;Wire&gt;&gt;</code></entry>
+
+              <entry>The substitution wires of an existing Wiring state, <xref
+              linkend="org.osgi.service.resolver.ResolveContext.getSubstitutionWires-Wiring-"
+              xrefstyle="hyperlink"/></entry>
+            </row>
+            
           </tbody>
         </tgroup>
       </informaltable>
@@ -1130,10 +1141,12 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
       xrefstyle="hyperlink"/> method.</para>
 
-      <para>The existing wiring X provides an existing set of constraints that
+      <para>The existing wiring X and its substitution wires S provides an existing set of constraints that
       the Resolver service must abide by. It can get this state with the <xref
       linkend="org.osgi.service.resolver.ResolveContext.getWirings--"
-      xrefstyle="hyperlink"/> method. The purpose of the existing state is to
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getSubstitutionWires-Wiring-"
+      xrefstyle="hyperlink"/> methods. The purpose of the existing state is to
       ensure that any wires are compatible with existing wiring. For an OSGi
       framework it is crucial that the uses constraints are maintained for the
       resolution, see <xref linkend="i3333826"/>.</para>
@@ -1150,13 +1163,20 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       xrefstyle="hyperlink"/> then it must call the Resolve Context's <xref
       linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-"
       xrefstyle="hyperlink"/> method.</para>
-
-      <para>Fragments can be attached from resolved resources or from
+      
+      
+      <para>Fragments can be attached to resolved resources or to 
       resources that declare the capabilities returned from <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
-      xrefstyle="hyperlink"/>, that is,
-      <emphasis>C</emphasis><subscript>env.</subscript></para>
-
+      xrefstyle="hyperlink"/>, that is, <emphasis>C</emphasis><subscript>env</subscript>. 
+      Additional resources are also pulled into the resolve operation by invoking the 
+      <xref linkend="org.osgi.service.resolver.ResolveContext.findRelatedResources-Resource-"
+      xrefstyle="hyperlink"/> method on the resolve context. As part of the related resources 
+      the resolve context can include fragments to be considered as part of the resolve operation. 
+      This allows the available fragments to be resolved when the host is being resolved.
+      </para>
+      
+      
       <para>This specification does not define the detailed rules and
       constraints associated with resolving; these rules are defined in their
       namespaces. An OSGi Resolver service must support at least all
