@@ -638,6 +638,25 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
    }
    return wirings;
 }</programlisting>
+
+	<para>A wiring for a resource may also have a subset of required wires which 
+	substitute capabilities provided by the resource or one of its attached fragment resources.  
+	The <xref linkend="org.osgi.service.resolver.ResolveContext.getSubstitutionWires-Wiring-"
+    xrefstyle="hyperlink"/> method is called by the resolver in order to find the wires that 
+    substitute capabilities of the wiring. For example, when a wiring provides a <code>osgi.wiring.bundle</code> 
+    capability that is used to resolve one or more <code>osgi.wiring.bundle</code> requirements. In this case the resolver 
+    needs to discover which capabilities have been substituted in order to ensure a consistent class space
+    (see <emphasis>Requiring Bundles</emphasis> of <xref linkend="intro.core.release" xrefstyle="template:%t"/>).
+    In order to get the capabilities which have been substituted, the resolver asks the resolve context to 
+    return the substitution wires for the wiring.
+	</para>
+	
+	<para>Note that the default implementation of this method searches all the <code>osgi.wiring.package</code> capabilities 
+	which are declared as provided by the resource associated with the wiring and fragment resources 
+	wired to the wiring with the <code>osgi.wiring.host</code> namespace. The provided capabilities are compared against the 
+	required package wires to determine which wires are substitution wires. Subclasses of ResolveContext 
+	should provide a more efficient implementation of this method.
+	</para>
     </section>
 
     <section>
@@ -760,18 +779,24 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       that appear as if they come from the host bundle are called
       <emphasis>hosted</emphasis>.</para>
 
-      <para>Since fragments are not required by the host bundle, there will be
-      no resource requiring the fragment bundles. The Resolver will therefore
-      never ask the Resolve Context to provide fragments. However, fragments
-      will require their hosts. A Resolver should attach any fragments
+      <para>When resolving a set of resources it must be possible to pull in any 
+      available fragments which may attach to the resource. Since fragments are not 
+      required by the host bundle, there will be no resource requiring the fragment bundles. 
+      However, fragments will require their hosts. A Resolver should attach any fragments
       available in a resolution to suitable hosts.</para>
 
-      <para>Since fragments will not be discovered from their hosts, it can be
-      necessary to run the resolver twice in certain scenarios. The first
-      resolve operation finds a resolution that is then used to find fragments
-      that could be attached to the included bundles. These fragments can then
-      be added to set of mandatory or optional resources for an additional
-      resolve operation.</para>
+      <para>In order to discover additional fragments which may be attached to the resources in 
+      a resolution the <xref linkend="org.osgi.service.resolver.ResolveContext.findRelatedResources-Resource-"
+      xrefstyle="hyperlink"/> method is called by the resolver . The resolver attempts to also resolve the related resources 
+      during the current resolve operation. Failing to resolve one of the related resources 
+      must not result in a resolution exception unless the related resource is also considered 
+      a mandatory resource.</para>
+      
+      <para>A resolve context may consider a fragment to be a related resource for the hosts it can attach to. 
+      In order for the resolver to pull the fragments into the resolve operation the resolve context is asked to 
+      return the related resources of each host bundle which is to be resolved. The resolve context may decide 
+      if the fragments of the host needs to be resolved along with the host. Note that fragments are used as an 
+      example of a related resource. The resolve context is free to use any type of resource as a related resource.</para>
 
       <para>Fragments can of course also be found by the normal finding of
       capabilities.</para>
@@ -895,6 +920,23 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       xrefstyle="hyperlink"/> can often point to a potential solution.</para>
     </section>
 
+	<section>
+	<title>Cancel</title>
+
+	<para>Some resolution operations can be long running, and therefore a resolve context 
+	may want to cancel the currently running resolve operation. The resolver must register a 
+	single runnable callback with the resolve context that is associated with the currently 
+	running resolve operation. The <xref linkend="org.osgi.service.resolver.ResolveContext.onCancel-Runnable-"
+    xrefstyle="hyperlink"/> method must be invoked by the resolver implementation before any 
+    other method on the resolve context is invoked. The resolve context invokes the callback 
+    to cancel the currently running resolve operation that appears to be running endlessly or 
+    at risk of running out of resources. The resolve context may give up on the resolve operation 
+    or attempt to try another resolve operation with a smaller set of resources which may allow 
+    the resolve operation to complete normally.
+	</para>
+	</section>
+    
+    
     <section>
       <title>Complexity</title>
 
