@@ -274,11 +274,11 @@ basic format:
                 </div>
             </div>
 
-            <form action="" class="ninja-forms-form" id="ninja_forms_form_13" method="post" onsubmit="return false;">
+            <form action="https://www.osgi.org/developer/downloads/release-6/" id="ninja_forms_form_13" method="post" onsubmit="return false;">
              <input type="hidden" id="_wpnonce" name="_wpnonce" value="b02bd313df"/>
+             <input type="hidden" name="_wp_http_referer" value="."/>
              <input type="hidden" name="_ninja_forms_display_submit" value="1"/>
              <input type="hidden" name="_form_id" id="_form_id" value="13"/>
-             <input type="hidden" id="ninja_forms_processing_error" value="1"/>
              <div class="hp-wrap">
                 <label>If you are a human and are seeing this field, please leave it blank.
                    <input type="text" value="" name="_EQZzD"/>
@@ -287,9 +287,7 @@ basic format:
              </div>
 
              <div id="ninja_forms_form_13_all_fields_wrap" class="ninja-forms-all-fields-wrap">
-                <h4>
-                   We would like to find out more information about the users of the OSGi Compendium. Please fill out the form below.
-                </h4>
+                <h4>We would like to find out more information about the users of the OSGi Compendium. Please fill out the form below.</h4>
 
                 <p>No thanks, I’d like to go straight to the <a data-senna-off="true" href="javascript:dismissForm();">documentation</a>.</p>
 
