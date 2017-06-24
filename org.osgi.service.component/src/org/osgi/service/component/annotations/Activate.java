@@ -25,15 +25,19 @@ import java.lang.annotation.Target;
  * Identify the annotated member as part of the activation of a Service
  * Component.
  * <p>
- * When the annotation is applied to a method or constructor, the method or
- * constructor is the {@code activate} method of the Component.
- * <p>
- * When the annotation is applied to a field, the field will contain an
- * activation argument of the Component. The field must be set after the
- * component instance constructor completes and before any other method, such as
- * the activate method, is called. That is, there is a <i>happens-before</i>
- * relationship between the field being set and any method being called on the
- * fully constructed component instance.
+ * When this annotation is applied to a:
+ * <ul>
+ * <li>Method - The method is the {@code activate} method of the Component.</li>
+ * <li>Constructor - The constructor is the {@code activate} method of the
+ * Component. The constructor must be public.</li>
+ * <li>Field - The field will contain an activation object of the Component. The
+ * field must be set after the constructor is called and before calling any
+ * other method on the fully constructed component instance. That is, there is a
+ * <i>happens-before</i> relationship between the field being set and calling
+ * any method on the fully constructed component instance such as the
+ * {@code activate} method when the {@code activate} method is not a
+ * constructor.</li>
+ * </ul>
  * <p>
  * This annotation is not processed at runtime by Service Component Runtime. It
  * must be processed by tools and used to add a Component Description to the

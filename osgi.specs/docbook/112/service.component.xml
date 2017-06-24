@@ -108,7 +108,7 @@
           <para><emphasis>Dependency Injection</emphasis> - The programming
           model for using declarative services supports three types of
           dependency injection, method injection, field injection, and
-          constructor injection, for service dependencies.</para>
+          activation injection, for service dependencies.</para>
         </listitem>
 
         <listitem>
@@ -298,18 +298,20 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Architects</emphasis> - The chapter, <xref
-          linkend="i1479629"/>, gives a comprehensive introduction to the
-          capabilities of the component model. It explains the model with a
-          number of examples. The section about <xref linkend="i1545305"/>
-          provides some deeper insight in the life cycle of components.</para>
+          linkend="service.component-components"/>, gives a comprehensive
+          introduction to the capabilities of the component model. It explains
+          the model with a number of examples. The section about <xref
+          linkend="service.component-component.lifecycle"/> provides some
+          deeper insight in the life cycle of components.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Service Programmers</emphasis> - Service programmers
-          should read <xref linkend="i1479629"/>. This chapter should suffice
-          for the most common cases. For the more advanced possibilities, they
-          should consult <xref linkend="i1524140"/> for the details of the XML
-          grammar for component descriptions.</para>
+          should read <xref linkend="service.component-components"/>. This
+          chapter should suffice for the most common cases. For the more
+          advanced possibilities, they should consult <xref
+          linkend="service.component-component.description"/> for the details
+          of the XML grammar for component descriptions.</para>
         </listitem>
 
         <listitem>
@@ -320,7 +322,7 @@
     </section>
   </section>
 
-  <section xml:id="i1479629">
+  <section xml:id="service.component-components">
     <title>Components</title>
 
     <para>A component is a normal Java class contained within a bundle. The
@@ -374,8 +376,9 @@
       </itemizedlist>
 
       <para>The elements in the component's description are defined in <xref
-      linkend="i1524140"/>. The XML grammar for the component declaration is
-      defined by the XML Schema, see <xref linkend="i1523991"/>.</para>
+      linkend="service.component-component.description"/>. The XML grammar for
+      the component declaration is defined by the XML Schema, see <xref
+      linkend="service.component-schema"/>.</para>
     </section>
 
     <section>
@@ -425,7 +428,7 @@
       configuration is not activated and will be discarded.</para>
     </section>
 
-    <section xml:id="i1613408">
+    <section>
       <title>Delayed Component</title>
 
       <para>A <emphasis>delayed component</emphasis> specifies a service, is
@@ -595,9 +598,9 @@
     some or all of the target services of a reference to the component
     configuration. Any target service that is bound to the component
     configuration is called a <emphasis>bound</emphasis> service. See <xref
-    linkend="i1536739"/>.</para>
+    linkend="service.component-binding.services"/>.</para>
 
-    <section xml:id="i1548427">
+    <section xml:id="service.component-accessing.services">
       <title>Accessing Services</title>
 
       <para>A component instance must be able to use the services that are
@@ -623,15 +626,18 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Constructor injection</emphasis> - SCR constructs
-          the component when the constructor referenced services becomes
-          bound. When those services becomes unbound, the component instance
-          must be deactivated.</para>
+          <para><emphasis>Activation injection</emphasis> - When SCR activates
+          a component instance, activation injection occurs. This includes
+          calling the <code>activate</code> method, if one is specified, and
+          setting any activation fields, if any are specified. Bound services
+          can be parameters to the <code>activate</code> method. Since the
+          <code>activate</code> method can be a constructor, activation
+          injection supports constructor injection.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Lookup strategy</emphasis> - The component instance
-          can use one of the <code>locateService</code> methods of <xref
+          <para><emphasis>Lookup strategy</emphasis> - A component instance
+          can use one of the <code>locateService</code> methods of its <xref
           linkend="org.osgi.service.component.ComponentContext"
           xrefstyle="hyperlink"/> to locate a bound service. These methods
           take the <code>name</code> of the reference as a parameter. If the
@@ -675,9 +681,7 @@
       </itemizedlist>
 
       <para>Each event is associated with an <emphasis>event
-      method</emphasis>. The prototype of the event methods is:</para>
-
-      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
+      method</emphasis>. </para>
 
       <para>An event method can take one or more parameters. Each parameter
       must be of one of the following types:</para>
@@ -784,10 +788,10 @@
       </orderedlist>
 
       <para>When searching for an event method to call, SCR must locate a
-      suitable method as specified in <xref linkend="i1641644"/>. If no
-      suitable method is located, SCR must log an error message with the Log
-      Service, if present, and there will be no bind, updated, or unbind
-      notification.</para>
+      suitable method as specified in <xref
+      linkend="service.component-locating.members"/>. If no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and there will be no bind, updated, or unbind notification.</para>
 
       <para>The bind and unbind methods must be called once for each bound
       service. This implies that if the reference has multiple cardinality,
@@ -853,7 +857,8 @@
 
       <para>Event methods can be declared private in the component class but
       are only looked up in the inheritance chain when they are protected,
-      public, or have default access. See <xref linkend="i1641644"/>.</para>
+      public, or have default access. See <xref
+      linkend="service.component-locating.members"/>.</para>
     </section>
 
     <section xml:id="service.component-field.injection">
@@ -998,10 +1003,10 @@
       referenced field is declared with the <code>static</code> modifier or
       has a type other than one of the above, SCR must log an error message
       with the Log Service, if present, and the field must not be modified.
-      SCR must locate field as specified in <xref linkend="i1641644"/>. If no
-      suitable field is located, SCR must log an error message with the Log
-      Service, if present, and a field will not be modified for the
-      reference.</para>
+      SCR must locate field as specified in <xref
+      linkend="service.component-locating.members"/>. If no suitable field is
+      located, SCR must log an error message with the Log Service, if present,
+      and a field will not be modified for the reference.</para>
 
       <para>Care must be taken by the component implementation regarding the
       field. SCR has no way to know if the component implementation itself may
@@ -1034,15 +1039,193 @@
 
       <para>Fields can be declared private in the component class but are only
       looked up in the inheritance chain when they are protected, public, or
-      have default access. See <xref linkend="i1641644"/>.</para>
+      have default access. See <xref
+      linkend="service.component-locating.members"/>.</para>
     </section>
 
-    <section xml:id="service.component-constructor.injection">
-      <title>Constructor Injection</title>
+    <section xml:id="service.component-activation.injection">
+      <title>Activation Injection</title>
 
-      <para><remark>BJH Need to add constructor injection specification text.
-      When using constructor injection, the constructor is also the activate
-      method.</remark></para>
+      <para>Activation injection occurs when a component instance undergoes
+      activation. See <xref linkend="service.component-activation"/>. A
+      component can have an <code>activate</code> method. The name of the
+      <code>activate</code> method can be specified by the
+      <code>activate</code> attribute. A component can also have activation
+      fields. The names of the activation fields can be specified by the
+      <code>activation-fields</code> attribute. See <xref
+      linkend="service.component-component.element"/>.</para>
+
+      <para>There are several cases for activation injection. In each of the
+      cases below, the indicated steps are performed to create the component
+      instance and initialize it.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>No <code>activate</code> method name is specified.</para>
+
+          <orderedlist>
+            <listitem>
+              <para>Call the no-parameter constructor.</para>
+            </listitem>
+
+            <listitem>
+              <para>Set the activation fields, if any.</para>
+            </listitem>
+
+            <listitem>
+              <para>Bind the bound services. See <xref
+              linkend="service.component-binding.services"/>.</para>
+            </listitem>
+
+            <listitem>
+              <para>If there is an <code>activate</code> method with the
+              default name <code>activate</code>, call the
+              <code>activate</code> method .</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+
+        <listitem>
+          <para>The specified <code>activate</code> method name is not
+          <code>-init-</code>. That is, the <code>activate</code> method is
+          not a constructor.</para>
+
+          <orderedlist>
+            <listitem>
+              <para>Call the no-parameter constructor.</para>
+            </listitem>
+
+            <listitem>
+              <para>Set the activation fields, if any.</para>
+            </listitem>
+
+            <listitem>
+              <para>Bind the bound services. See <xref
+              linkend="service.component-binding.services"/>.</para>
+            </listitem>
+
+            <listitem>
+              <para>Call the <code>activate</code> method. </para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+
+        <listitem>
+          <para>The specified <code>activate</code> method name is
+          <code>-init-</code>. That is, the <code>activate</code> method is a
+          constructor. This case is constructor injection.</para>
+
+          <orderedlist>
+            <listitem>
+              <para>Call the the <code>activate</code> method
+              constructor.</para>
+            </listitem>
+
+            <listitem>
+              <para>Set the activation fields, if any.</para>
+            </listitem>
+
+            <listitem>
+              <para>Bind the bound services. See <xref
+              linkend="service.component-binding.services"/>.</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>The activate method can take zero or more parameters. The
+      parameters must be of one of the following types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>ComponentContext</code> - The component instance will be
+          passed the Component Context for the component configuration.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>BundleContext</code> - The component instance will be
+          passed the Bundle Context of the component's bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - The component instance will be passed an
+          unmodifiable Map containing the component properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>A component property type - The component instance will be
+          passed an instance of the component property type which allows type
+          safe access to component properties defined by the component
+          property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>One of the types supported by field injection - The component
+          instance will be passed an object for the reference matching the
+          zero-based parameter number. See <xref
+          linkend="service.component-field.injection"/> for the supported
+          types.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><remark>BJH Need to write the activate method selection algorithm.
+      The following is the old algorithm.</remark></para>
+
+      <para>A suitable method is selected using the following priority:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is
+          <code>org.osgi.service.component.ComponentContext</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>org.osgi.framework.BundleContext</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is a component property type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.util.Map</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes two or more parameters and the type of each
+          parameter must be
+          <code>org.osgi.service.component.ComponentContext</code>,
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type or <code>java.util.Map</code>. If multiple methods match this
+          rule, this implies the method name is overloaded and SCR may choose
+          any of the methods to call.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes zero parameters.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>When searching for the activate method to call, SCR must locate a
+      suitable method as specified in <xref
+      linkend="service.component-locating.members"/>. If the
+      <code>activate</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the component configuration is not activated.</para>
+
+      <para>If an activate method is located, SCR must call this method to
+      complete the activation of the component configuration. If the activate
+      method throws an exception, SCR must log an error message containing the
+      exception with the Log Service, if present, and the component
+      configuration is not activated.</para>
+
+      <para><remark>BJH Need text regarding setting activation
+      fields.</remark></para>
     </section>
 
     <section xml:id="service.component-reference.cardinality">
@@ -1241,7 +1424,7 @@ public class HttpResourceImpl {
       object for each component instance.</para>
     </section>
 
-    <section xml:id="i1440474">
+    <section xml:id="service.component-reference.policy">
       <title>Reference Policy</title>
 
       <para>Once all the references of a component are satisfied, a component
@@ -1264,11 +1447,13 @@ public class HttpResourceImpl {
         a <emphasis>static reference</emphasis>. A component instance never
         sees any of the dynamics of the static reference. The bind method is
         called and/or the field is set before the component instance is
-        activated. Component configurations are deactivated before any bound
-        service for the static reference becomes unavailable. If a target
-        service is available to replace the bound service which became
-        unavailable, the component configuration must be reactivated and the
-        replacement service is bound to the new component instance.</para>
+        activated. Static references can also be used for parameters to the
+        <code>activate</code> method. Component configurations are deactivated
+        before any bound service for the static reference becomes unavailable.
+        If a target service is available to replace the bound service which
+        became unavailable, the component configuration must be reactivated
+        and the replacement service is bound to the new component
+        instance.</para>
 
         <para>If the <code>policy-option</code> is <code>reluctant</code> then
         the registration of an additional target service for a reference must
@@ -1296,12 +1481,12 @@ public class HttpResourceImpl {
         since the component implementation must properly handle changes in the
         set of bound services that can occur on any thread at any time after
         the component instance is created. A reference with a dynamic policy
-        is called a <emphasis>dynamic reference</emphasis>. With the dynamic
-        policy, SCR can change the set of bound services without deactivating
-        a component configuration. If the component uses method injection to
-        access services, then the component instance will be notified of
-        changes in the set of bound services by calls to the bind, updated,
-        and unbind methods.</para>
+        is called a <emphasis>dynamic reference</emphasis>. With a dynamic
+        reference, SCR can change the set of bound services without
+        deactivating a component configuration. If the component uses method
+        injection to access services, then the component instance will be
+        notified of changes in the set of bound services by calls to the bind,
+        updated, and unbind methods.</para>
 
         <para>If the <code>policy-option</code> is <code>reluctant</code> then
         a bound reference is not rebound even if a more suitable service
@@ -1631,7 +1816,7 @@ public class HttpResourceImpl {
       information.</para>
     </section>
 
-    <section xml:id="i1540789">
+    <section xml:id="service.component-circular.references">
       <title>Circular References</title>
 
       <para>It is possible for a set of component descriptions to create a
@@ -1660,9 +1845,9 @@ public class HttpResourceImpl {
 
       <para>SCR provides special support for components having references to
       Loggers from the Log Service specification. If the reference uses
-      method, field or constructor injection, the referenced service is of
-      type <code>org.osgi.service.log.LoggerFactory</code>, and the type of
-      the parameter or field to receive the service object is of type
+      method, field or activation injection, the referenced service is of type
+      <code>org.osgi.service.log.LoggerFactory</code>, and the type of the
+      parameter or field to receive the service object is of type
       <code>org.osgi.service.log.Logger</code> or
       <code>org.osgi.service.log.FormatterLogger</code>, then SCR must obtain
       the proper type of Logger from the bound Logger Factory service and use
@@ -1708,7 +1893,7 @@ public class MyComponent {
     </section>
   </section>
 
-  <section xml:id="i1524140">
+  <section xml:id="service.component-component.description">
     <title>Component Description</title>
 
     <para>Component descriptions are defined in XML documents contained in a
@@ -1809,8 +1994,8 @@ public class MyComponent {
       additional information about components. These additional elements are
       parsed by another sub-system.</para>
 
-      <para>See <xref linkend="i1523991"/> for component description
-      schema.</para>
+      <para>See <xref linkend="service.component-schema"/> for component
+      description schema.</para>
     </section>
 
     <section xml:id="service.component-component.element">
@@ -1903,7 +2088,7 @@ public class MyComponent {
               <code>ComponentContext</code> object. This allows some
               initialization to be performed by some other component in the
               bundle before this component can become satisfied. See <xref
-              linkend="i1545307"/>.</para></entry>
+              linkend="service.component-enabled"/>.</para></entry>
             </row>
 
             <row>
@@ -2014,9 +2199,30 @@ public class MyComponent {
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
               attribute is <code>activate</code>. See <xref
-              linkend="i1539155"/> for more information.</para><para>The
-              annotation must be applied to the activate method and can only
-              be used once.</para></entry>
+              linkend="service.component-activation.injection"/> for more
+              information.</para><para>The annotation must be applied to only
+              one method or constructor which is to be used as the activate
+              method. If applied to a constructor, the name
+              <code>-init-</code> is used. Otherwise the name of the method is
+              used.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>activation-fields</code></entry>
+
+              <entry><xref
+              linkend="org.osgi.service.component.annotations.Activate"
+              xrefstyle="hyperlink"/></entry>
+
+              <entry><para>Specifies the whitespace separated list of the
+              names of the fields to hold activation objects. The fields are
+              set once after the constructor has been called and before
+              calling any other method on the fully constructed component
+              instance such as the <code>activate</code> method when the
+              <code>activate</code> method is not a
+              constructor.</para><para>The <code>Activate</code> annotation
+              will use the name of the field it is applied to as the
+              activation field name.</para></entry>
             </row>
 
             <row>
@@ -2029,9 +2235,10 @@ public class MyComponent {
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
               this attribute is <code>deactivate</code>. See <xref
-              linkend="i1576028"/> for more information.</para><para>The
-              annotation must be applied to the deactivate method and can only
-              be used once.</para></entry>
+              linkend="service.component-deactivate.method"/> for more
+              information.</para><para>The annotation must be applied to only
+              one method which is to be used as the deactivate
+              method.</para></entry>
             </row>
 
             <row>
@@ -2049,9 +2256,11 @@ public class MyComponent {
               unsatisfied. If this attribute is not specified, then the
               component configuration will become unsatisfied if its
               configuration properties use a <code>Configuration</code> object
-              that is modified in any way. See <xref linkend="i1649781"/> for
-              more information.</para><para>The annotation must be applied to
-              the modified method and can only be used once.</para></entry>
+              that is modified in any way. See <xref
+              linkend="service.component-modified.method"/> for more
+              information.</para><para>The annotation must be applied to only
+              one method which is to be used as the modified
+              method.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2105,10 +2314,11 @@ public class MyComponent {
       </table>
 
       <para>The class is retrieved with the <code>loadClass</code> method of
-      the component's bundle. The class must be public and have a public
-      constructor without parameters (this is normally the default
-      constructor) so component instances may be created by SCR with the
-      <code>newInstance</code> method on <code>Class</code>.</para>
+      the component's bundle. The class must be public. If the
+      <code>activate</code> method of the class is a constructor, the
+      constructor must be public. Otherwise, the class must have a public
+      no-parameter constructor which will be used to construct the component
+      instance.</para>
 
       <para>If the component description specifies a service, the class must
       implement all interfaces that are provided by the service.</para>
@@ -2552,8 +2762,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               duplicate reference names. In this case, this attribute must be
               specified with a unique name for the reference to avoid an
               error.</para><para>The <code>Reference</code> annotation will
-              use the name of the annotated method or field as the default
-              reference name. If the method name begins with
+              use the name of the annotated method, field, or parameter as the
+              default reference name. If the method name begins with
               <code>bind</code>, <code>set</code> or <code>add</code>, that
               prefix is removed.</para></entry>
             </row>
@@ -2610,7 +2820,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The policy declares the assumption of the component
-              about dynamicity. See <xref linkend="i1440474"/>.</para></entry>
+              about dynamicity. See <xref
+              linkend="service.component-reference.policy"/>.</para></entry>
             </row>
 
             <row>
@@ -2625,7 +2836,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Defines the policy when a better service becomes
-              available. See <xref linkend="i1440474"/>.</para></entry>
+              available. See <xref
+              linkend="service.component-reference.policy"/>.</para></entry>
             </row>
 
             <row>
@@ -2678,9 +2890,9 @@ public class Foo implements EventHandler { ... }</programlisting>
               this method is only called before the <code>activate</code>
               method. For dynamic references, this method can also be called
               while the component configuration is active. See <xref
-              linkend="i1548427"/>.</para><para>The <code>Reference</code>
-              annotation will use the name of the method it is applied to as
-              the bind method name.</para></entry>
+              linkend="service.component-accessing.services"/>.</para><para>The
+              <code>Reference</code> annotation will use the name of the
+              method it is applied to as the bind method name.</para></entry>
             </row>
 
             <row>
@@ -2707,7 +2919,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               references, the method is only called after the
               <code>deactivate</code> method. For dynamic references, this
               method can also be called while the component configuration is
-              active. See <xref linkend="i1548427"/>.</para></entry>
+              active. See <xref
+              linkend="service.component-accessing.services"/>.</para></entry>
             </row>
 
             <row>
@@ -2722,12 +2935,15 @@ public class Foo implements EventHandler { ... }</programlisting>
               <entry><para>The name of a field in the component implementation
               class that is used to hold service(s) that are bound to the
               component configuration. For static references, this field is
-              only set before the <code>activate</code> method. For dynamic
+              set once after the constructor has been called and before
+              calling any other method on the fully constructed component
+              instance such as the <code>activate</code> method when the
+              <code>activate</code> method is not a constructor. For dynamic
               references, this field can modified while the component
               configuration is active. See <xref
-              linkend="i1548427"/>.</para><para>The <code>Reference</code>
-              annotation will use the name of the field it is applied to as
-              the field name.</para></entry>
+              linkend="service.component-accessing.services"/>.</para><para>The
+              <code>Reference</code> annotation will use the name of the field
+              it is applied to as the field name.</para></entry>
             </row>
 
             <row>
@@ -2772,6 +2988,30 @@ public class Foo implements EventHandler { ... }</programlisting>
               annotation can generally infer the value of the collection
               elements from the generic type information of the annotated
               field but it can be explicitly defined if needed.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>parameter</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.parameter--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The zero-based parameter number of a parameter in
+              the <code>activate</code> method of the component that is used
+              to receive service(s) that are bound to the component
+              configuration. If this attribute is set and the
+              <code>policy</code> attribute is set to <xref
+              linkend="org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC"
+              xrefstyle="hyperlink"/>, this attribute must be ignored and SCR
+              must log an error message with the Log Service, if present. See
+              <xref
+              linkend="service.component-accessing.services"/>.</para><para>The
+              <code>Reference</code> annotation will use the zero-based
+              parameter number of the parameter it is applied to as the
+              parameter number.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3093,10 +3333,10 @@ public class FooImpl implements Foo {
     </section>
   </section>
 
-  <section xml:id="i1545305">
+  <section xml:id="service.component-component.lifecycle">
     <title>Component Life Cycle</title>
 
-    <section xml:id="i1545307">
+    <section xml:id="service.component-enabled">
       <title>Enabled</title>
 
       <para>A component must first be <emphasis>enabled</emphasis> before it
@@ -3185,7 +3425,8 @@ public class FooImpl implements Foo {
       service, SCR must register the component configuration as a service in
       the service registry and then activate the component configuration. The
       service properties for this registration consist of the component
-      properties as defined in <xref linkend="i1629621"/>.</para>
+      properties as defined in <xref
+      linkend="service.component-service.properties"/>.</para>
 
       <para>The state diagram is shown in <xref linkend="i1445265"/>.</para>
 
@@ -3229,7 +3470,7 @@ public class FooImpl implements Foo {
       object is not needed until the <code>ServiceFactory</code> is called to
       provide the service object. The service properties for this registration
       consist of the component properties as defined in <xref
-      linkend="i1629621"/>.</para>
+      linkend="service.component-service.properties"/>.</para>
 
       <para>The activation of a component configuration must be delayed until
       its service is requested. When the service is requested, if the service
@@ -3335,7 +3576,8 @@ public class FooImpl implements Foo {
       called. If the component description specifies a service, the component
       configuration is registered as a service under the provided interfaces.
       The service properties for this registration consist of the component
-      properties as defined in <xref linkend="i1629621"/>. The service
+      properties as defined in <xref
+      linkend="service.component-service.properties"/>. The service
       registration must take place before the component configuration is
       activated. Service unregistration must take place before the component
       configuration is deactivated.</para>
@@ -3386,13 +3628,11 @@ public class FooImpl implements Foo {
       reactivated or used again.</para>
     </section>
 
-    <section>
+    <section xml:id="service.component-activation">
       <title>Activation</title>
 
       <para>Activating a component configuration consists of the following
-      steps:<remark> BJH Need to update for constructor injection and
-      activation fields. When using constructor injection, the constructor is
-      also the activate method.</remark></para>
+      steps:</para>
 
       <orderedlist>
         <listitem>
@@ -3400,17 +3640,18 @@ public class FooImpl implements Foo {
         </listitem>
 
         <listitem>
-          <para>Create the component instance and component context.</para>
+          <para>Create the component context.</para>
         </listitem>
 
         <listitem>
-          <para>Bind the target services. See <xref
-          linkend="i1536739"/>.</para>
+          <para>Compute the bound services. See <xref
+          linkend="service.component-bound.services"/>.</para>
         </listitem>
 
         <listitem>
-          <para>Call the activate method, if present. See <xref
-          linkend="i1539155"/>.</para>
+          <para>Construct the component instance and perform activation
+          injection. See <xref
+          linkend="service.component-activation.injection"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -3424,8 +3665,24 @@ public class FooImpl implements Foo {
       activation.</para>
     </section>
 
-    <section xml:id="i1536739">
-      <title>Binding Services</title>
+    <section>
+      <title>Component Context</title>
+
+      <para>The Component Context is made available to a component instance
+      via the <code>activate</code> and <code>deactivate</code> methods and
+      also through activation fields. It provides the interface to the
+      execution context of the component, much like the Bundle Context
+      provides a bundle the interface to the Framework. A Component Context
+      should therefore be regarded as a capability and not shared with other
+      components or bundles.</para>
+
+      <para>Each distinct component instance receives a unique Component
+      Context. Component Contexts are not reused and must be discarded when
+      the component configuration is deactivated.</para>
+    </section>
+
+    <section xml:id="service.component-bound.services">
+      <title>Bound Services</title>
 
       <para>When a component configuration's reference is satisfied, there is
       a set of zero or more target services for that reference. When the
@@ -3434,11 +3691,6 @@ public class FooImpl implements Foo {
       is chosen by the cardinality of the reference. See <xref
       linkend="service.component-reference.cardinality"/>.</para>
 
-      <para>When binding services, the references are processed in the order
-      in which they are specified in the component description. That is,
-      target services from the first specified reference are bound before
-      services from the next specified reference.</para>
-
       <para>Obtaining the service object for a bound service may result in
       activating a component configuration of the bound service which could
       result in an exception. If the loss of the bound service due to the
@@ -3446,6 +3698,15 @@ public class FooImpl implements Foo {
       then activation of this component configuration will fail. Otherwise the
       bound service which failed to activate will be considered
       unbound.</para>
+    </section>
+
+    <section xml:id="service.component-binding.services">
+      <title>Binding Services</title>
+
+      <para>When binding services, the references are processed in the order
+      in which they are specified in the component description. That is,
+      target services from the first specified reference are bound before
+      services from the next specified reference.</para>
 
       <para>If the reference uses field injection, the field must be set.
       Then, if the reference uses method injection, the bind method must be
@@ -3455,19 +3716,118 @@ public class FooImpl implements Foo {
       configuration does not fail.</para>
     </section>
 
-    <section xml:id="i1539155">
-      <title>Activate Method</title>
+    <section xml:id="service.component-bound.service.replacement">
+      <title>Bound Service Replacement</title>
 
-      <para>A component instance can have an activate method. The name of the
-      activate method can be specified by the <code>activate</code> attribute.
-      See <xref linkend="service.component-component.element"/>. If the
-      <code>activate</code> attribute is not specified, the default method
-      name of <code>activate</code> is used. The prototype of the activate
-      method is:</para>
+      <para>If an active component configuration has a dynamic reference with
+      unary cardinality and the bound service is modified or unregistered and
+      ceases to be a target service, or the <code>policy-option</code> is
+      <code>greedy</code> and a better target service becomes available then
+      SCR must attempt to replace the bound service with a new bound
+      service.</para>
 
-      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
+      <para>If the reference uses field injection, the field must be set for
+      the replacement bound service. Then, if the reference uses method
+      injection, SCR must first bind the new bound service and then unbind the
+      outgoing service. This reversed order allows the component to not have
+      to handle the inevitable gap between the unbind and bind methods.
+      However, this means that in the unbind method care must be taken to not
+      overwrite the newly bound service. For example, the following code
+      handles the associated concurrency issues and simplify handling the
+      reverse order.</para>
 
-      <para>The activate method can take zero or more parameters. Each
+      <programlisting>final AtomicReference&lt;LogService&gt; log = new AtomicReference&lt;LogService&gt;();
+
+void setLogService( LogService log ) {
+    this.log.set(log);
+}
+void unsetLogService( LogService log ) {
+    this.log.compareAndSet(log, null);
+}</programlisting>
+
+      <para>If the dynamic reference falls below the minimum cardinality, the
+      component configuration must be deactivated because the cardinality
+      constraints will be violated.</para>
+
+      <para>If a component configuration has a static reference and a bound
+      service is modified or unregistered and ceases to be a target service,
+      or the <code>policy-option</code> is <code>greedy</code> and a better
+      target service becomes available then SCR must deactivate the component
+      configuration. Afterwards, SCR must attempt to activate the component
+      configuration again if another target service can be used as a
+      replacement for the outgoing service.</para>
+    </section>
+
+    <section>
+      <title>Updated</title>
+
+      <para>If an active component is bound to a service that modifies its
+      service properties then the component can be updated. If the reference
+      uses field injection and the field holds the service properties, the
+      field must be set for the updated bound service. Then, if the reference
+      uses method injection and specifies an updated method, the updated
+      method must be called.</para>
+    </section>
+
+    <section xml:id="service.component-modification">
+      <title>Modification</title>
+
+      <para>Modifying a component configuration can occur if the component
+      description specifies the <code>modified</code> attribute and the
+      component properties of the component configuration use a
+      <code>Configuration</code> object from the Configuration Admin service
+      and that <code>Configuration</code> object is modified without causing
+      the component configuration to become unsatisfied. If this occurs, the
+      component instance will be notified of the change in the component
+      properties.</para>
+
+      <para>If the <code>modified</code> attribute is not specified, then the
+      component configuration will become unsatisfied if its component
+      properties use a <code>Configuration</code> object and that
+      Configuration object is modified in any way.</para>
+
+      <para>Modifying a component configuration consists of the following
+      steps:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Update the component context for the component configuration
+          with the modified configuration properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>Call the modified method. See <xref
+          linkend="service.component-modified.method"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Modify the bound services for the dynamic references if the
+          set of target services changed due to changes in the target
+          properties. See <xref
+          linkend="service.component-bound.service.replacement"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the component configuration is registered as a service,
+          modify the service properties.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>A component instance must complete activation, or a previous
+      modification, before it can be modified.</para>
+
+      <para>See <xref linkend="service.component-configuration.changes"/> for
+      more information.</para>
+    </section>
+
+    <section xml:id="service.component-modified.method">
+      <title>Modified Method</title>
+
+      <para>The name of the modified method is specified by the
+      <code>modified</code> attribute. See <xref
+      linkend="service.component-component.element"/>.</para>
+
+      <para>The modified method can take zero or more parameters. Each
       parameter must be of one of the following types:</para>
 
       <itemizedlist>
@@ -3534,151 +3894,12 @@ public class FooImpl implements Foo {
         </listitem>
       </orderedlist>
 
-      <para>When searching for the activate method to call, SCR must locate a
-      suitable method as specified in <xref linkend="i1641644"/>. If the
-      <code>activate</code> attribute is specified and no suitable method is
-      located, SCR must log an error message with the Log Service, if present,
-      and the component configuration is not activated.</para>
-
-      <para>If an activate method is located, SCR must call this method to
-      complete the activation of the component configuration. If the activate
-      method throws an exception, SCR must log an error message containing the
-      exception with the Log Service, if present, and the component
-      configuration is not activated.</para>
-    </section>
-
-    <section>
-      <title>Component Context</title>
-
-      <para>The Component Context is made available to a component instance
-      via the <code>activate</code> and <code>deactivate</code> methods. It
-      provides the interface to the execution context of the component, much
-      like the Bundle Context provides a bundle the interface to the
-      Framework. A Component Context should therefore be regarded as a
-      capability and not shared with other components or bundles.</para>
-
-      <para>Each distinct component instance receives a unique Component
-      Context. Component Contexts are not reused and must be discarded when
-      the component configuration is deactivated.</para>
-    </section>
-
-    <section xml:id="i1651072">
-      <title>Bound Service Replacement</title>
-
-      <para>If an active component configuration has a dynamic reference with
-      unary cardinality and the bound service is modified or unregistered and
-      ceases to be a target service, or the <code>policy-option</code> is
-      <code>greedy</code> and a better target service becomes available then
-      SCR must attempt to replace the bound service with a new bound
-      service.</para>
-
-      <para>If the reference uses field injection, the field must be set for
-      the replacement bound service. Then, if the reference uses method
-      injection, SCR must first bind the new bound service and then unbind the
-      outgoing service. This reversed order allows the component to not have
-      to handle the inevitable gap between the unbind and bind methods.
-      However, this means that in the unbind method care must be taken to not
-      overwrite the newly bound service. For example, the following code
-      handles the associated concurrency issues and simplify handling the
-      reverse order.</para>
-
-      <programlisting>final AtomicReference&lt;LogService&gt; log = new AtomicReference&lt;LogService&gt;();
-
-void setLogService( LogService log ) {
-    this.log.set(log);
-}
-void unsetLogService( LogService log ) {
-    this.log.compareAndSet(log, null);
-}</programlisting>
-
-      <para>If the dynamic reference falls below the minimum cardinality, the
-      component configuration must be deactivated because the cardinality
-      constraints will be violated.</para>
-
-      <para>If a component configuration has a static reference and a bound
-      service is modified or unregistered and ceases to be a target service,
-      or the <code>policy-option</code> is <code>greedy</code> and a better
-      target service becomes available then SCR must deactivate the component
-      configuration. Afterwards, SCR must attempt to activate the component
-      configuration again if another target service can be used as a
-      replacement for the outgoing service.</para>
-    </section>
-
-    <section>
-      <title>Updated</title>
-
-      <para>If an active component is bound to a service that modifies its
-      service properties then the component can be updated. If the reference
-      uses field injection and the field holds the service properties, the
-      field must be set for the updated bound service. Then, if the reference
-      uses method injection and specifies an updated method, the updated
-      method must be called.</para>
-    </section>
-
-    <section xml:id="i1652198">
-      <title>Modification</title>
-
-      <para>Modifying a component configuration can occur if the component
-      description specifies the <code>modified</code> attribute and the
-      component properties of the component configuration use a
-      <code>Configuration</code> object from the Configuration Admin service
-      and that <code>Configuration</code> object is modified without causing
-      the component configuration to become unsatisfied. If this occurs, the
-      component instance will be notified of the change in the component
-      properties.</para>
-
-      <para>If the <code>modified</code> attribute is not specified, then the
-      component configuration will become unsatisfied if its component
-      properties use a <code>Configuration</code> object and that
-      Configuration object is modified in any way.</para>
-
-      <para>Modifying a component configuration consists of the following
-      steps:</para>
-
-      <orderedlist>
-        <listitem>
-          <para>Update the component context for the component configuration
-          with the modified configuration properties.</para>
-        </listitem>
-
-        <listitem>
-          <para>Call the modified method. See <xref
-          linkend="i1649781"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para>Modify the bound services for the dynamic references if the
-          set of target services changed due to changes in the target
-          properties. See <xref linkend="i1651072"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para>If the component configuration is registered as a service,
-          modify the service properties.</para>
-        </listitem>
-      </orderedlist>
-
-      <para>A component instance must complete activation, or a previous
-      modification, before it can be modified.</para>
-
-      <para>See <xref linkend="i1649746"/> for more information.</para>
-    </section>
-
-    <section xml:id="i1649781">
-      <title>Modified Method</title>
-
-      <para>The name of the modified method is specified by the
-      <code>modified</code> attribute. See <xref
-      linkend="service.component-component.element"/>. The prototype and
-      selection priority of the modified method is identical to that of the
-      activate method. See <xref linkend="i1539155"/>.</para>
-
       <para>SCR must locate a suitable method as specified in <xref
-      linkend="i1641644"/>. If the <code>modified</code> attribute is
-      specified and no suitable method is located, SCR must log an error
-      message with the Log Service, if present, and the component
-      configuration becomes unsatisfied and is deactivated as if the
-      <code>modified</code> attribute was not specified.</para>
+      linkend="service.component-locating.members"/>. If the
+      <code>modified</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the component configuration becomes unsatisfied and is deactivated
+      as if the <code>modified</code> attribute was not specified.</para>
 
       <para>If a modified method is located, SCR must call this method to
       notify the component configuration of changes to the component
@@ -3687,7 +3908,7 @@ void unsetLogService( LogService log ) {
       and continue processing the modification.</para>
     </section>
 
-    <section xml:id="i1649517">
+    <section xml:id="service.component-deactivation">
       <title>Deactivation</title>
 
       <para>Deactivating a component configuration consists of the following
@@ -3696,12 +3917,12 @@ void unsetLogService( LogService log ) {
       <orderedlist>
         <listitem>
           <para>Call the deactivate method, if present. See <xref
-          linkend="i1576028"/>.</para>
+          linkend="service.component-deactivate.method"/>.</para>
         </listitem>
 
         <listitem>
           <para>Unbind any bound services. See <xref
-          linkend="i1543088"/>.</para>
+          linkend="service.component-unbinding"/>.</para>
         </listitem>
 
         <listitem>
@@ -3751,17 +3972,14 @@ void unsetLogService( LogService log ) {
       associated with the activation.</para>
     </section>
 
-    <section xml:id="i1576028">
+    <section xml:id="service.component-deactivate.method">
       <title>Deactivate Method</title>
 
       <para>A component instance can have a deactivate method. The name of the
       deactivate method can be specified by the <code>deactivate</code>
       attribute. See <xref linkend="service.component-component.element"/>. If
       the <code>deactivate</code> attribute is not specified, the default
-      method name of <code>deactivate</code> is used. The prototype of the
-      deactivate method is:</para>
-
-      <programlisting>void &lt;method-name&gt;(&lt;parameters&gt;);</programlisting>
+      method name of <code>deactivate</code> is used.</para>
 
       <para>The deactivate method can take zero or more parameters. Each
       parameter must be assignable from one of the following types:</para>
@@ -3793,7 +4011,8 @@ void unsetLogService( LogService log ) {
         <listitem>
           <para><code>int</code> or <code>Integer</code> - The component
           instance will be passed the reason the component configuration is
-          being deactivated. See <xref linkend="i1649517"/>.</para>
+          being deactivated. See <xref
+          linkend="service.component-deactivation"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -3848,7 +4067,8 @@ void unsetLogService( LogService log ) {
       </orderedlist>
 
       <para>When searching for the deactivate method to call, SCR must locate
-      a suitable method as specified in <xref linkend="i1641644"/>. If the
+      a suitable method as specified in <xref
+      linkend="service.component-locating.members"/>. If the
       <code>deactivate</code> attribute is specified and no suitable method is
       located, SCR must log an error message with the Log Service, if present,
       and the deactivation of the component configuration will
@@ -3861,7 +4081,7 @@ void unsetLogService( LogService log ) {
       deactivation of the component configuration will continue.</para>
     </section>
 
-    <section xml:id="i1543088">
+    <section xml:id="service.component-unbinding">
       <title>Unbinding</title>
 
       <para>When a component configuration is deactivated, the bound services
@@ -4064,7 +4284,7 @@ void unsetLogService( LogService log ) {
       </listitem>
     </itemizedlist>
 
-    <section xml:id="i1629621">
+    <section xml:id="service.component-service.properties">
       <title>Service Properties</title>
 
       <para>When SCR registers a service on behalf of a component
@@ -4254,7 +4474,7 @@ void unsetLogService( LogService log ) {
     <programlisting>[PID=com.acme.client, factoryPID=null]
 HTTP.target = (component.name=com.acme.httpserver)</programlisting>
 
-    <section xml:id="i1649746">
+    <section xml:id="service.component-configuration.changes">
       <title>Configuration Changes</title>
 
       <para>SCR must track changes in the <code>Configuration</code> objects
@@ -4413,8 +4633,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           <listitem>
             <para>If the component configuration has been activated, the
             modified method is called to provide the updated component
-            properties. See <xref linkend="i1652198"/> for more
-            information.</para>
+            properties. See <xref linkend="service.component-modification"/>
+            for more information.</para>
           </listitem>
 
           <listitem>
@@ -5346,14 +5566,14 @@ public class MyComponent implements AcmeService {}</programlisting>
     </section>
   </section>
 
-  <section xml:id="i1578406">
+  <section xml:id="service.component-service.component.runtime">
     <title>Service Component Runtime</title>
 
     <para>Service Component Runtime (SCR) is the actor that manages the
     components and their life cycle and allows introspection of the
     components.</para>
 
-    <section xml:id="i1616910">
+    <section xml:id="service.component-relationship.framework">
       <title>Relationship to OSGi Framework</title>
 
       <para>SCR must have access to the Bundle Context of any bundle that
@@ -5403,7 +5623,7 @@ public class MyComponent implements AcmeService {}</programlisting>
       component implementation class as the second argument.</para>
     </section>
 
-    <section xml:id="i1641644">
+    <section xml:id="service.component-locating.members">
       <title>Locating Component Methods and Fields</title>
 
       <para>SCR will need to locate activate, deactivate, modified, bind,
@@ -5732,7 +5952,7 @@ public class MyComponent implements AcmeService {}</programlisting>
       this service.</para>
     </section>
 
-    <section xml:id="i1617328">
+    <section>
       <title>Required Admin Permission</title>
 
       <para>SCR requires <code>AdminPermission[*,CONTEXT]</code> because it
@@ -5766,7 +5986,7 @@ public class MyComponent implements AcmeService {}</programlisting>
     </section>
   </section>
 
-  <section xml:id="i1523991">
+  <section xml:id="service.component-schema">
     <title>Component Description Schema</title>
 
     <para>This XML Schema defines the component description grammar.</para>
@@ -5899,6 +6119,21 @@ public class MyComponent implements AcmeService {}</programlisting>
         Service specification. SCR will convert a reference to a LoggerFactory
         to a Logger object on behalf of the component. See <xref
         linkend="service.component-logger.support"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Support is added for static references as parameters to the
+        activate method. So parameters of the activate method can be annotated
+        with @Reference. See <xref
+        linkend="service.component-activation.injection"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Support is added for using a constructor as the activate method
+        of a component. Combined with the support for static references as
+        parameters to the activate method, static references can be stored in
+        final fields in the constructor. See <xref
+        linkend="service.component-activation.injection"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
