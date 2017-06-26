@@ -77,13 +77,15 @@ public interface Resolver {
 	Map<Resource, List<Wire>> resolve(ResolveContext context) throws ResolutionException;
 
 	/**
-	 * Resolves a given dynamic requirement dynamically for the given host
-	 * wiring using the given resolve context and return any new resources and
-	 * wires to the caller.
+	 * Resolves a given requirement dynamically for the given host wiring using
+	 * the given resolve context and return any new resources and wires to the
+	 * caller.
 	 * <p>
 	 * The requirement must be a {@link Wiring#getResourceRequirements(String)
 	 * requirement} of the wiring and must use the
-	 * {@link PackageNamespace#PACKAGE_NAMESPACE package} namespace.
+	 * {@link PackageNamespace#PACKAGE_NAMESPACE package} namespace with a
+	 * {@link Namespace#REQUIREMENT_RESOLUTION_DIRECTIVE resolution} of type
+	 * {@link PackageNamespace#RESOLUTION_DYNAMIC dynamic}.
 	 * <p>
 	 * The resolve context is not asked for
 	 * {@link ResolveContext#getMandatoryResources() mandatory} resources or for

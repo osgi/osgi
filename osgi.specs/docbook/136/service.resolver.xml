@@ -1153,7 +1153,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
       <para>The Resolver service can wire new requirements to existing
       capabilities but it can never create wires for an existing requirement
-      from the existing wiring.</para>
+      from the existing wiring unless the resolve process is for a
+      dynamic resolve, see <xref linkend="i3347566"/>.</para>
 
       <para>If the Resolver service attaches a hosted resource like a
       fragment, and thereby needs to add new <xref
@@ -1243,6 +1244,110 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       </itemizedlist>
     </section>
 
+    <section  xml:id="i3347566">
+      <title>Dynamic Resolving</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.resolver.Resolver.resolveDynamic-ResolveContext-Wiring-Requirement-"
+      xrefstyle="hyperlink"/> method is used to resolve a dynamic
+      requirement for an existing host wiring. For example, this method can
+      be used to resolve dynamic package imports as specified by the
+      <code>DynamicImport-Package</code> manifest header. This method may
+      resolve additional resources in order to resolve the dynamic
+      requirement. Dynamic resolving must return a resolution
+      <code>D</code> that is a delta on the existing Wiring state
+      <code>X</code> or throw a
+      <xref linkend="org.osgi.service.resolver.ResolutionException"
+      xrefstyle="hyperlink"/>
+      if the dynamic requirement cannot be resolved.</para>
+      
+      <para>The delta must contain the host resource of the host
+      wiring as a key. The list of wires for the host resource entry will
+      contain a single wire that resolves the dynamic requirement to
+      a valid capability. The delta wiring may also contain additional
+      resources that are necessary to resolve the dynamic requirement.</para>
+
+      <para>To find a dynamic resolution <code>D</code>, the Resolver must
+      use the Resolve Context in the same way as normal resolving except
+      the Resolve Context is not asked for mandatory or optional resources
+      as provided by <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getMandatoryResources--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--"
+      xrefstyle="hyperlink"/>. The Resolve Context is asked to find providers
+      for the dynamic requirement as provided by <xref
+      linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
+      xrefstyle="hyperlink"/>.</para>
+
+      <para>The Resolver assumes the following about the host wiring and
+      the dynamic requirement:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The requirement uses the <code>osgi.wiring.package</code>
+          namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para>The requirement has a <code>resolution</code> directive of
+          <code>dynamic</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The requirement is hosted by the host wiring.</para>
+        </listitem>
+
+        <listitem>
+          <para>A requirement that has a <code>cardinality</code> directive of
+          <code>single</code> is not used by an existing required wire of the
+          host wiring.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Resolver is not required to validate these assumptions. If these
+      assumptions are not true then the result of the dynamic resolution is not
+      specified.</para>
+
+      <para>The Resolver uses the dynamic requirement to call <xref
+      linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
+      xrefstyle="hyperlink"/> in order to find valid matching capabilities. In
+      order for a matching capability to be considered as valid it must satisfy
+      the following rules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The capability must use the <code>osgi.wiring.package</code>
+          namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para>The wiring must not provide an <code>osgi.wiring.package</code>
+          capability that has the same package name as the matching capability.
+          In other words, the resolved bundle must not already export the
+          package name.</para>
+        </listitem>
+
+        <listitem>
+          <para>The wiring must not have a required wire that wires to an
+          <code>osgi.wiring.package</code> capability that has the same
+          package name as the matching capability. In other words, the resolved
+          bundle must not already import the package name.</para>
+        </listitem>
+
+      </itemizedlist>
+
+      <para>The Resolver assumes the matching capabilities are valid. If
+      invalid capabilities are returned by the Resolve Context then the
+      result of the dynamic resolution is not specified.</para>
+
+      <para>At this point the dynamic resolution continues on as a normal
+      resolution where the host wiring resource is considered a mandatory resource
+      and the dynamic requirement is considered a mandatory requirement. The
+      resources providing the matching capabilities to the dynamic requirement are
+      then resolved as in a normal resolution operation.</para>
+ 
+    </section>
+ 
     <section>
       <title>Resolution Exception</title>
 
