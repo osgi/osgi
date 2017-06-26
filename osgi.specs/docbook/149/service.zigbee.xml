@@ -473,7 +473,8 @@
       <listitem>
         <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
         xrefstyle="hyperlink"/> –
-        (<code>zigbee.node.ieee.address/BigInteger</code>)</para>
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies 
+        the IEEE Address of a ZigBee node.</para>
       </listitem>
 
       <listitem>
@@ -743,6 +744,13 @@ public class UI {
     xrefstyle="hyperlink"/> interface with the following properties:</para>
 
     <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
+        xrefstyle="hyperlink"/> –
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies 
+        the IEEE Address of the parent node.</para>
+      </listitem>
+      
       <listitem>
         <para><xref
         linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ENDPOINT_ID"
@@ -1867,7 +1875,7 @@ public class UI {
     networks, in a way that is transparent to typical ZigBee devices
     endpoints. This allows developers to bridge legacy devices to ZigBee
     networks. A <xref linkend="org.osgi.service.zigbee.ZigBeeEndpoint"
-    xrefstyle="hyperlink"/> should be registered with the following properties
+    xrefstyle="hyperlink"/> MUST be registered with the following properties
     to export an OSGi service as a ZigBee endpoint:</para>
 
     <itemizedlist>
@@ -1902,8 +1910,9 @@ public class UI {
     or the base driver is not active on the OSGi framework, an endpoint
     implementation MAY not have any of the above identifiers.</para>
 
-    <para>The Base Driver will export the endpoint on the ZigBee network
-    associated to the ZigBee <xref
+    <para>If the Base Driver is active and at a ZigBee host is started, then 
+    the Base Driver makes an attempt to export the endpoint on the ZigBee 
+    network associated to the ZigBee <xref
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
     xrefstyle="hyperlink"/>, <xref
     linkend="org.osgi.service.zigbee.ZigBeeNode.PAN_ID"
@@ -1923,11 +1932,12 @@ public class UI {
     xrefstyle="hyperlink"/> returns a different array of ZigBeeEndpoint
     objects).</para>
 
-    <para>If an error occurs when exporting a ZigBee endpoint , then the base
-    driver calls the <xref
+    <para>If - and only if - an error is detected on the properties of the 
+    ZigBee endpoint to be exported, then the Base Driver calls the <xref
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
     xrefstyle="hyperlink"/> method with a relevant ZigBeeException object as
-    the input argument.</para>
+    the input argument. The method SHOULD be called even if a ZigBee Host is not 
+    started. </para>
 
     <para>The endpoint has to be registered with an ID that is unique. If the
     chosen ID already exists as a property of a local endpoint with the same
