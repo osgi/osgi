@@ -581,7 +581,39 @@
     
   <section>
     <title>Security</title>
-    <para>...</para>
+    <para>When Java permissions are enabled, the configurator must perform the following
+    security procedures.</para>
+
+    <section>
+      <title>Configuration Permission</title>
+
+      <para>The configurator manages configurations on behalf of the bundle containing
+      the configuration resources. Therefore the configurator needs to have the 
+      <code>ConfigurationPermission[*,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
+      xrefstyle="hyperlink"/> <code>]</code>.</para>
+
+      <para>Every bundle has the implicit right to receive and configure
+      configurations with a location that exactly matches the Bundle's
+      location or that is <code>null</code>. Therefore the extended bundle does not
+      need to special permissions.</para>
+
+      <para>The configurator needs <code>ServicePermission[&lt;interface&gt;, GET]</code>
+      for the <code>ConfigurationAdmin</code> and the <code>Coordinator</code> service.</para>
+
+    </section>
+
+    <section>
+      <title>File Permission</title>
+
+      <para>If binaries are used, the coordinator needs to have read/write permission
+      to the configured directory to store the binaries.</para>
+      
+      <para>A bundle using a binary referenced from a configuration needs to have read
+      permission to correct sub directory of the configured binary directory. The sub
+      directory is named after the PID of the configuration.</para>
+    </section>
+
   </section> 
 
   <section>
