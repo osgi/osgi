@@ -597,10 +597,28 @@
       configurations with a location that exactly matches the Bundle's
       location or that is <code>null</code>. Therefore the extended bundle does not
       need to special permissions.</para>
+    </section>
+
+    <section>
+      <title>Service Permission</title>
 
       <para>The configurator needs <code>ServicePermission[&lt;interface&gt;, GET]</code>
-      for the <code>ConfigurationAdmin</code> and the <code>Coordinator</code> service.</para>
+      for the <code>Coordinator</code> service.</para>
 
+      <para>The extended bundle needs <code>ServicePermission[&lt;interface&gt;, GET]</code>
+      for the <code>ConfigurationAdmin</code> service.</para>
+
+    </section>
+
+    <section>
+      <title>Using hasPermission</title>
+
+      <para>The configurator does get the <code>ConfigurationAdmin</code> service on behalf
+      of the extended bundle. This means that normal stack-based permission checks will 
+      check the configurator and not the extended bundle. Since the configurator is getting
+      the service on behalf of the extended bundle, the configurator must call the
+      <code>Bundle.hasPermission</code> method to validate that the extended
+      bundle has the necessary permission to get the <code>ConfigurationAdmin</code>.</para>
     </section>
 
     <section>
