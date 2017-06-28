@@ -65,13 +65,15 @@
     <itemizedlist>
       <listitem>
         <para><emphasis>Configuration Admin Service</emphasis> - Standard service to configure
-              OSGi-based systems.<remark>todo XREF</remark></para>
+              OSGi-based systems. See <xref linkend="service.cm"/>.</para>
       </listitem>
+      
       <listitem>
-          <para><emphasis>Configuration Resource</emphasis> - A JSON resource in a bundle containing
-              configuration. This resource is processed, or <emphasis>extended</emphasis>, by an 
-              implementation of this specification.</para>
+        <para><emphasis>Configuration Resource</emphasis> - A JSON resource in a bundle containing
+            configuration. This resource is processed, or <emphasis>extended</emphasis>, by an 
+            implementation of this specification.</para>
       </listitem>
+      
       <listitem>
         <para><emphasis>Configurator</emphasis> - The configurator implements the behavior specified
         in this specification. It processes configuration resources found in bundles and passes the
@@ -81,12 +83,12 @@
       <listitem>
         <para><emphasis>Coordinator Service</emphasis> - The coordinator groups related operations 
         to optimize handling of these operations. Using the coordinator with configuration updates
-        can minimize the volatility in the system. <remark>todo XREF</remark></para>
+        can minimize the volatility in the system. See <xref linkend="service.coordinator"/>.</para>
       </listitem>
     
       <listitem>
         <para><emphasis>Persistent Identity (PID)</emphasis> - Configuration data is associated with 
-        a PID to identify the destination of this data. See <remark>todo XREF</remark></para>
+        a PID to identify the destination of this data. See <xref linkend="i1233800"/>.</para>
       </listitem>
     
     </itemizedlist>
@@ -315,7 +317,8 @@
     
     <para>
       As an alternative of specifying datatypes for the configurator, consumers of configuration can convert
-      the configuration values to the desired type by using the OSGi Converter <remark>xref</remark>. A convenient way to convert a
+      the configuration values to the desired type by using the OSGi Converter 
+      see <xref linkend="util.converter"/>. A convenient way to convert a
       configuration map to the desired datatypes is by using the Converter to convert it to an annotation instance or by using
       a Declarative Services configuration property type.  
     </para>
