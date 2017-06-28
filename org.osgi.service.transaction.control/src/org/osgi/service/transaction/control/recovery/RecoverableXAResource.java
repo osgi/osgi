@@ -19,6 +19,7 @@ import javax.transaction.xa.XAResource;
 
 import org.osgi.service.transaction.control.ResourceProvider;
 import org.osgi.service.transaction.control.TransactionContext;
+import org.osgi.service.transaction.control.TransactionControl;
 
 /**
  * A {@link RecoverableXAResource} service may be provided by a
@@ -46,7 +47,16 @@ import org.osgi.service.transaction.control.TransactionContext;
 public interface RecoverableXAResource {
 
 	/**
-	 * Get the id of this resource. This should be unique, and persist between restarts
+	 * This service property key is used by {@link TransactionControl} services
+	 * and {@link ResourceProvider} factories to indicate that they can support
+	 * transaction recovery.
+	 */
+	public static final String OSGI_RECOVERY_ENABLED = "osgi.recovery.enabled";
+
+	/**
+	 * Get the id of this resource. This should be unique, and persist between
+	 * restarts
+	 * 
 	 * @return an identifier, never <code>null</code>
 	 */
 	String getId();

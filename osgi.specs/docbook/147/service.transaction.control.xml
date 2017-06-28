@@ -180,7 +180,7 @@
       in an appropriate way.</para>
     </section>
 
-    <section>
+    <section xml:id="service.transaction.control-simple-usage">
       <title>Running Scoped Work</title>
 
       <para>The general pattern for a client is to obtain the Transaction
@@ -190,7 +190,7 @@
       instances can then be used in the scoped work. This is demonstrated 
       in the following example:</para>
 
-      <programlisting xml:id="service.transaction.control-simple-usage">
+      <programlisting>
       
 @Reference
 TransactionControl control;
@@ -243,8 +243,8 @@ public List&lt;String&gt; listMessages(String message) {
       created using a Resource Provider, and the returned object can then be 
       used in any scope to access the associated Resource.</para>
       
-      <para>In the <xref linkend="service.transaction.control-simple-usage" /> 
-      the Resource Provider is an instance of <code>JDBCConnectionProvider</code>, 
+      <para>The example in <xref linkend="service.transaction.control-simple-usage" /> 
+      uses a <code>JDBCConnectionProvider</code>, 
       which is a specialization of the generic <code>ResourceProvider</code> 
       interface that returns JDBC <code>Connection</code> objects. Other 
       specializations of the Resource Provider exist in this specification, 
@@ -355,7 +355,7 @@ try {
         to roll back. This can be indicated to the Transaction Control Service when 
         the Scope is being declared.</para>
 
-        <programlisting xml:id="service.transaction.control-no-rollback">
+        <programlisting>
         
 control.build()
     .noRollbackFor(URISyntaxException.class)
@@ -365,7 +365,7 @@ control.build()
         
         </programlisting>        
         
-        <para>In the <xref linkend="service.transaction.control-no-rollback"/>
+        <para>In this example
         the Transaction does not roll back for any <code>URISyntaxException</code>.
         Sometimes this is too coarse grained, and the Transaction should only
         avoid rolling back for one specific exception instance. In this case
@@ -1786,7 +1786,7 @@ txControl.required(() ->
       </listitem>
     </itemizedlist>
     
-    <para>In both of these cases it is cruicial that the Transaction Manager can uniquely identify
+    <para>In both of these cases it is crucial that the Transaction Manager can uniquely identify
     the resource that is being recovered. The Transaction Manager must be able to tell that a 
     returning resource is suitable for recovering an in-doubt transaction branch.</para>
      
@@ -1832,6 +1832,26 @@ txControl.required(() ->
       branch then it must release the XAResource it obtained from the RecoverableXAResource using 
       the <code>releaseXAResource</code> method.</para>
     </section>
+    
+    <section>
+      <title>Identifying implementations which support recovery</title>
+      
+      <para>Transaction Control implementations which support recovery must register the
+      Transaction Control service with the <code>osgi.recovery.enabled</code> service 
+      property with a value of <code>true</code> if recovery is enabled. Recovery may 
+      only be enabled if the implementation is configured for recovery, for example by 
+      configuring a transaction log.</para>
+      
+      <para>Resource Provider factory services which support creating recoverable 
+      scoped resources must also register the <code>osgi.recovery.enabled</code> 
+      service property with a value of <code>true</code>. The recovery identifier
+      of a scoped resource created by the factory is specified using the 
+      <code>osgi.recovery.identifier</code> property. It is an error to attempt
+      to create a recoverable scoped resource from a factory which does not support
+      recovery, and a <code>TransactionException</code> will be thrown to the caller
+      if they attempt to set a recovery identifier when using a factory that does
+      not support recovery.</para>
+    </section>
   </section>
 
   <section xml:id="service.transaction.control-capabilities">
@@ -1844,11 +1864,15 @@ txControl.required(() ->
         linkend="org.osgi.service.transaction.control.TransactionControl" xrefstyle="hyperlink"/>
         service. This capability must also declare a uses constraint for the
         <code>org.osgi.service.transaction.control</code> package, and attributes
-        indicating whether the service supports local and/or XA transactions. For example:</para>
+        indicating whether the service supports local transactions, XA transactions, 
+        and recovery. For example, an XA capable, recoverable Transaction Control
+        implementation which also supports recovery would offer the following
+        capability.</para>
 
         <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
     "org.osgi.service.transaction.control.TransactionControl";
-    uses:="org.osgi.service.transaction.control";osgi.local.enabled="true"</programlisting>
+    uses:="org.osgi.service.transaction.control";osgi.local.enabled="true";
+    osgi.xa.enabled="true";osgi.recovery.enabled="true"</programlisting>
 
    <para>Resource Provider Implementations must provide capabilities in the <link
         linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
@@ -1858,19 +1882,19 @@ txControl.required(() ->
         uses constraints for the<code>org.osgi.service.transaction.control</code> package and any
         other packages that they provide. In the case where a more specific type is registered
         (for example JDBCConnectionProvider) then that type should be used instead. The service
-        properties that indicate whether the resource provider supports local and/or XA 
-        transactions should be advertised as attributes.
+        properties that indicate whether the resource provider supports local transactions, 
+        XA transactions, and recovery must be advertised as attributes.
         
         For example:</para>
 
         <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
     "org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider";
     uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
-    control.jdbc";osgi.local.enabled="true", 
+    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";osgi.recovery.enabled="true", 
     osgi.service;objectClass:List&lt;String&gt;=
     "org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory";
     uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
-    control.jdbc";osgi.local.enabled="true"</programlisting>
+    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";osgi.recovery.enabled="true"</programlisting>
 
         <para>These capabilities must follow the rules defined for the <xref
         linkend="service.namespaces-osgi.service.namespace"/>.</para>

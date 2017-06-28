@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import org.osgi.service.jdbc.DataSourceFactory;
+import org.osgi.service.transaction.control.TransactionException;
 
 /**
  * A factory for creating JDBCConnectionProvider instances
@@ -88,8 +89,22 @@ public interface JDBCConnectionProviderFactory {
 	public static final String	USE_DRIVER					= "osgi.use.driver";
 
 	/**
+	 * The property used to set the recovery identifier that should be used by
+	 * this resource
+	 */
+	public static String		OSGI_RECOVERY_IDENTIFIER	= "osgi.recovery.identifier";
+
+	/**
 	 * Create a private {@link JDBCConnectionProvider} using a
-	 * DataSourceFactory.
+	 * DataSourceFactory. This call may fail with a {@link TransactionException}
+	 * if the supplied configuration is invalid. Examples of invalid
+	 * configuration include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param dsf
 	 * @param jdbcProperties The properties to pass to the
@@ -105,7 +120,15 @@ public interface JDBCConnectionProviderFactory {
 
 	/**
 	 * Create a private {@link JDBCConnectionProvider} using an existing
-	 * {@link DataSource}.
+	 * {@link DataSource}. This call may fail with a
+	 * {@link TransactionException} if the supplied configuration is invalid.
+	 * Examples of invalid configuration include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param ds
 	 * @param resourceProviderProperties Configuration properties to pass to the
@@ -117,7 +140,15 @@ public interface JDBCConnectionProviderFactory {
 
 	/**
 	 * Create a private {@link JDBCConnectionProvider} using an existing
-	 * {@link Driver}.
+	 * {@link Driver}. This call may fail with a {@link TransactionException} if
+	 * the supplied configuration is invalid. Examples of invalid configuration
+	 * include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param driver
 	 * @param jdbcProperties The properties to pass to the {@link Driver} in
@@ -132,7 +163,15 @@ public interface JDBCConnectionProviderFactory {
 
 	/**
 	 * Create a private {@link JDBCConnectionProvider} using an existing
-	 * {@link XADataSource}.
+	 * {@link XADataSource}. This call may fail with a
+	 * {@link TransactionException} if the supplied configuration is invalid.
+	 * Examples of invalid configuration include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param ds
 	 * @param resourceProviderProperties Configuration properties to pass to the

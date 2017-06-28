@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
+import org.osgi.service.transaction.control.TransactionException;
 
 /**
  * A factory for creating JPAEntityManagerProvider instances
@@ -53,13 +54,27 @@ public interface JPAEntityManagerProviderFactory {
 	/**
 	 * The property used to indicate that database connections will be
 	 * automatically enlisted in ongoing transactions without intervention from
-	 * the JPA provider
+	 * the JPA resource provider
 	 */
 	public static final String	PRE_ENLISTED_DB_CONNECTION	= "osgi.jdbc.enlisted";
 
 	/**
+	 * The property used to set the recovery identifier that should be used by
+	 * this resource
+	 */
+	public static String		OSGI_RECOVERY_IDENTIFIER	= "osgi.recovery.identifier";
+
+	/**
 	 * Create a private {@link JPAEntityManagerProvider} using an
-	 * {@link EntityManagerFactoryBuilder}
+	 * {@link EntityManagerFactoryBuilder}. This call may fail with a
+	 * {@link TransactionException} if the supplied configuration is invalid.
+	 * Examples of invalid configuration include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param emfb
 	 * @param jpaProperties The properties to pass to the
@@ -77,7 +92,15 @@ public interface JPAEntityManagerProviderFactory {
 
 	/**
 	 * Create a private {@link JPAEntityManagerProvider} using an existing
-	 * {@link EntityManagerFactory}.
+	 * {@link EntityManagerFactory}. This call may fail with a
+	 * {@link TransactionException} if the supplied configuration is invalid.
+	 * Examples of invalid configuration include:
+	 * <ul>
+	 * <li>The properties request XA enlistment, but the provider implementation
+	 * only supports local enlistment</li>
+	 * <li>The properties attempt to set a recovery alias, but the provider does
+	 * not support recovery.</li>
+	 * </ul>
 	 * 
 	 * @param emf
 	 * @param resourceProviderProperties Configuration properties to pass to the

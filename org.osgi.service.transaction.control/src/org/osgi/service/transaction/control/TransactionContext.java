@@ -137,7 +137,11 @@ public interface TransactionContext {
 	 *            <p>
 	 *            If an id is passed then a {@link RecoverableXAResource} with
 	 *            the same id must be registered in the service registry for
-	 *            recovery to occur
+	 *            recovery to occur.
+	 *            <p>
+	 *            If the underlying {@link TransactionControl} service does not
+	 *            support recovery then it must treat the resource as if it is
+	 *            not recoverable.
 	 * @throws IllegalStateException if no transaction is active, or the current
 	 *             transaction is not XA capable
 	 */
