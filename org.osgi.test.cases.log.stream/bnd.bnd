@@ -18,6 +18,7 @@ Import-Package: \
 	org.osgi.resource;version=project,\
 	org.osgi.util.pushstream;version=project,\
 	org.osgi.util.promise;version=project,\
+	org.osgi.util.function;version=project,\
 	${junit}
 
 Test-Cases							= ${testcases}
