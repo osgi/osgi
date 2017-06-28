@@ -156,67 +156,86 @@
    	  by multiple bundles.
     </para>
         
-    <para>The configurator defines the following special keys:
+    <para>The configurator defines special keys on the global resource level and on pid level. 
     </para>
-      <table pgwide="1">
-          <title>Configurator keys</title>
-          <tgroup cols="4">
-            <colspec colnum="1" colwidth="1*"/>
-            <colspec colnum="2" colwidth="0.75*"/>
-            <colspec colnum="3" colwidth="0.75*"/>
-            <colspec colnum="4" colwidth="2*"/>
-            <thead>
-              <row>
-                <entry>Key</entry>
-                <entry>Value type</entry>
-                <entry>Scope</entry>
-                <entry>Description</entry>
-              </row>
-            </thead>         
-            <tbody>              
-              <row>
-                <entry><code>:configurator:policy</code></entry>
-                <entry>String <code>default</code> or <code>force</code></entry>
-                <entry>Configuration</entry>
-                <entry>Specifies the overwrite policy on configurations set by non-configurator sources.
-                See <xref linkend="service.configurator-policy"/>.</entry>
-              </row>
-              
-              <row>
-                <entry><code>:configurator:ranking</code></entry>
-                <entry>Number</entry>
-                <entry>Configuration</entry>
-                <entry>The ranking of this configuration. See <xref linkend="service.configurator-ranking"/>.</entry>
-              </row>
+    <table pgwide="1">
+        <title>Resource-level configurator keys</title>
+        <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+          <colspec colnum="2" colwidth="0.75*"/>
+          <colspec colnum="3" colwidth="0.75*"/>
+          <colspec colnum="4" colwidth="2*"/>
+          <thead>
+            <row>
+              <entry>Key</entry>
+              <entry>Value type</entry>
+              <entry>Syntax</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>         
+          <tbody>              
+            <row>
+              <entry><para><code>:configurator:</code></para><para><code>&#160;resource-version</code></para></entry>
+              <entry>Number</entry>
+              <entry><emphasis>integer</emphasis> &gt; 0</entry>
+              <entry>The version of the configuration resource format. This specification only supports version 1. If
+              this entry is ommitted then version 1 is assumed.</entry>
+            </row>
+            
+            <row>
+              <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
+              <entry>String</entry>
+              <entry><emphasis>symbolic-name</emphasis></entry>
+              <entry>The symbolic name of the configuration resource. If not specified the symbolic name of
+              the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
+              resources that do not reside in a bundle.</entry>
+            </row>
+            
+            <row>
+              <entry><code>:configurator:version</code></entry>
+              <entry>String</entry>
+              <entry><emphasis>version</emphasis></entry>
+              <entry>The version of this configuration resource. If not specified the symbolic name of
+              the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
+              resources that do not reside in a bundle.</entry>
+            </row>
+          </tbody>
+       </tgroup>
+    </table>
 
-              <row>
-                <entry><para><code>:configurator:</code></para><para><code>&#160;resource-version</code></para></entry>
-                <entry>Number</entry>
-                <entry>Resource</entry>
-                <entry>The version of the configuration resource format. This specification only supports version 1. If
-                this entry is ommitted then version 1 is assumed.</entry>
-              </row>
-              
-              <row>
-                <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
-                <entry><para>String</para><para><emphasis>symbolic-name</emphasis></para></entry>
-                <entry>Resource</entry>
-                <entry>The symbolic name of the configuration resource. If not specified the symbolic name of
-                the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
-                resources that do not reside in a bundle.</entry>
-              </row>
-              
-              <row>
-                <entry><code>:configurator:version</code></entry>
-                <entry>Version</entry>
-                <entry>Resource</entry>
-                <entry>The version of this configuration resource. If not specified the symbolic name of
-                the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
-                resources that do not reside in a bundle.</entry>
-              </row>
-            </tbody>
-         </tgroup>
-      </table>
+    <table pgwide="1">
+        <title>PID-level configurator keys</title>
+        <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+          <colspec colnum="2" colwidth="0.75*"/>
+          <colspec colnum="3" colwidth="0.75*"/>
+          <colspec colnum="4" colwidth="2*"/>
+          <thead>
+            <row>
+              <entry>Key</entry>
+              <entry>Value type</entry>
+              <entry>Syntax</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>         
+          <tbody>              
+            <row>
+              <entry><code>:configurator:policy</code></entry>
+              <entry>String</entry>
+              <entry><code>default</code> or <code>force</code></entry>
+              <entry>Specifies the overwrite policy on configurations set by non-configurator sources.
+              See <xref linkend="service.configurator-policy"/>.</entry>
+            </row>
+            
+            <row>
+              <entry><code>:configurator:ranking</code></entry>
+              <entry>Number</entry>
+              <entry><emphasis>integer</emphasis></entry>
+              <entry>The ranking of this configuration. See <xref linkend="service.configurator-ranking"/>.</entry>
+            </row>
+          </tbody>
+       </tgroup>
+    </table>
   </section> 
   
   <section>
@@ -341,42 +360,6 @@
       the configurator should use a different filename for the extracted binary file to avoid any open file lock issues.
       </para>      
     </section>
-  </section>
-
-  <section xml:id="service.configurator-environments">
-    <title>Environments</title>
-    <para>A single configuration resource or set of configuration resources
-      can contain configurations for more than one runtime context for a given 
-      PID. These contexts are named <emphasis>environments</emphasis>. Example environments could be 
-      <emphasis>test</emphasis> and <emphasis>production</emphasis>. At runtime the active environments are
-      obtained using the <code>bundleContext.getProperty("configurator.environments")</code> method. 
-      This property must be specified
-      as a comma-separated string which defines the set of active environments. 
-      White space before and after the individual environment 
-      names are ignored.
-    </para>
-    
-    <para>To specify that a configuration applies to one or more environments, the environment name(s) 
-      must be specified with the Service PID in square brackets as a comma-separated list. 
-      An example configuration resource for multiple environments can look like this:
-      <programlisting>{
-  "my.service.pid[test]": {
-    "foo" : 1 },
-  "my.service.pid[stage,prod]": {
-    "foo" : 2 },
-  "my.service.pid": {
-    "foo" : 100 }
-}</programlisting>
-
-      If more than one configuration for a PID can be applied, the one with the highest configuration ranking 
-      is applied, see <xref linkend="service.configurator-ranking"/>. 
-      All others are ignored for this PID. If two configurations have the same ranking, the first 
-      one found is used. In the example above all configurations have the same ranking. If the environment 
-      <code>test</code> is active, the first configuration is used, if <code>prod</code> is active, the second 
-      configuration is used.
-      If neither <code>test</code> nor <code>prod</code> are active, the third configuration is used. If both 
-      <code>test</code> and <code>prod</code> are active, the first configuration is used.
-    </para>
   </section>
     
   <section xml:id="service.configurator-ranking">
