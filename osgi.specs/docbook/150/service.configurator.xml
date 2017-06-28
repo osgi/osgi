@@ -203,8 +203,7 @@
                 <entry>Resource</entry>
                 <entry>The symbolic name of the configuration resource. If not specified the symbolic name of
                 the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
-                resources that do not reside in a bundle. The value of this property will be set in the configuration
-                object with the <code>service.configurator.resource.symbolicName</code> key.</entry>
+                resources that do not reside in a bundle.</entry>
               </row>
               
               <row>
@@ -213,8 +212,7 @@
                 <entry>Resource</entry>
                 <entry>The version of this configuration resource. If not specified the symbolic name of
                 the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
-                resources that do not reside in a bundle. The value of this property will be set in the configuration
-                object with the <code>service.configurator.resource.version</code> key.</entry>
+                resources that do not reside in a bundle.</entry>
               </row>
             </tbody>
          </tgroup>
