@@ -32,7 +32,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -193,7 +192,7 @@ public final class PushStreamProvider {
 				((ExecutorService) toUse).shutdown();
 			}
 			releaseScheduler();
-		}).map(Function.identity());
+		}).map(x -> x);
 		return stream;
 	}
 
@@ -226,7 +225,7 @@ public final class PushStreamProvider {
 				((ExecutorService) toUse).shutdown();
 			}
 			releaseScheduler();
-		}).map(Function.identity());
+		}).map(x -> x);
 
 		return stream;
 	}
@@ -574,7 +573,7 @@ public final class PushStreamProvider {
 				((ExecutorService) toUse).shutdown();
 			}
 			releaseScheduler();
-		}).map(Function.identity());
+		}).map(x -> x);
 
 		return stream;
 	}

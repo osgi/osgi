@@ -1890,11 +1890,13 @@ txControl.required(() ->
         <programlisting>Provide-Capability: osgi.service;objectClass:List&lt;String&gt;=
     "org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider";
     uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
-    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";osgi.recovery.enabled="true", 
+    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";
+    osgi.recovery.enabled="true", 
     osgi.service;objectClass:List&lt;String&gt;=
     "org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory";
     uses:="org.osgi.service.transaction.control,org.osgi.service.transaction.
-    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";osgi.recovery.enabled="true"</programlisting>
+    control.jdbc";osgi.local.enabled="true";osgi.xa.enabled="true";
+    osgi.recovery.enabled="true"</programlisting>
 
         <para>These capabilities must follow the rules defined for the <xref
         linkend="service.namespaces-osgi.service.namespace"/>.</para>

@@ -61,7 +61,7 @@
         <listitem>
           <para><emphasis>Common concepts</emphasis> - The API is inspired by
           the Streams API in Java 8 and uses the same basic concepts.
-          See ## TODO.</para>
+          See <xref linkend="util.pushstream-ref.java8stream"/>.</para>
         </listitem>
 
         <listitem>
@@ -127,7 +127,7 @@
   </section>
 
   <section>
-    <title>Asynchronous Eventing Streams</title>
+    <title>Asynchronous Event Streams</title>
     
     <para>The Push Stream API is built upon the principals of Asynchronous
     Event streams, and therefore requires three basic primitives:</para>
@@ -141,26 +141,28 @@
     <section>
       <title>The Push Event</title>
       
-      <para>The Push Event is an object representing an event. Every
+      <para>The <xref linkend="org.osgi.util.pushstream.PushEvent" xrefstyle="hyperlink"/> 
+      is an object representing an event. Every
       Push Event has an event type, which has one of three values:</para>
       
       <itemizedlist>
         <listitem>
-          <para><code>DATA</code> - A data event encapsulates a
-          typed object</para></listitem>
+          <para><xref linkend="org.osgi.util.pushstream.PushEvent.EventType.DATA" xrefstyle="hyperlink"/>
+          - A data event encapsulates a typed object</para></listitem>
         <listitem>
-          <para><code>ERROR</code> - An error event encapsulates
+          <para><xref linkend="org.osgi.util.pushstream.PushEvent.EventType.ERROR" xrefstyle="hyperlink"/>
+          - An error event encapsulates
           an exception and indicates a failure in the event stream.</para>
         </listitem>
         <listitem>
-          <para><code>CLOSE</code> - A close event represents
-          the end of the stream of events.</para>
+          <para><xref linkend="org.osgi.util.pushstream.PushEvent.EventType.CLOSE" xrefstyle="hyperlink"/>
+           - A close event represents the end of the stream of events.</para>
         </listitem>
       </itemizedlist>
       
       <para>An event stream consists of zero or more data events
       followed by a <emphasis>terminal event</emphasis>. A terminal
-      event is either an error or a failure, and it indicates that
+      event is either an error or a close, and it indicates that
       there will be no more events in this stream. Depending on the
       reason for the terminal event it may be possible to re-attach
       to the event source and consume more events.</para>
@@ -196,9 +198,8 @@
       <para>The <code>accept</code> method of the Push Event Consumer 
       returns a <code>long</code> representing 
       <emphasis>back pressure</emphasis>. Back pressure is described in
-      detail in <xref linkend="util.pushstream.back-pressure" 
-      xrefstyle="hyperlink"/>. If the returned long is negative then
-      the event stream should be closed by the event source. 
+      detail in <xref linkend="util.pushstream.back-pressure"/>. If the returned 
+      long is negative then the event stream should be closed by the event source. 
       </para>
     </section>
     
@@ -206,30 +207,36 @@
     <section>
       <title>Closing the Event Stream</title>
       
-      <para>There are three ways in which a stream can be closed:</para>
+      <para>There are three ways in which a stream of events can complete normally.</para>
       
-      <para>The Push Event Source may close the stream at any time by
-      sending a terminal event to the consumer. Upon receiving a terminal
-      event the consumer should clean up any resources and not expect
-      to receive further messages. Note that in a multi-threaded system
-      the consumer may receive events out of order, and in this case data 
-      events may be received after a terminal event. Event processors 
-      should be careful to ignore data events that occur after terminal
-      events, and to ensure that any downstream consumers receive any
-      pending data events before forwarding the terminal event.</para>
-        
-      <para>The <code>open</code> method of the Push Event Source returns 
-      an <code>AutoCloseable</code> which can be used to close the event 
-      stream. If the <code>close</code> method is called on this object then 
-      the stream is terminated by sending a close event. If additional calls 
-      are made to the close method then they return without action. If the 
-      close method is called after a terminal event has been sent for any
-      other reason then it should return without action.</para>
-       
-      <para>The <code>accept</code> method of the Push Event Consumer
-      returns a long indicating back pressure. If the long is negative
-      then the event source should immediately close the stream by sending
-      a close event.</para>
+      <itemizedlist>
+        <listitem>
+          <para>The Push Event Source may close the stream at any time by
+          sending a terminal event to the consumer. Upon receiving a terminal
+          event the consumer should clean up any resources and not expect
+          to receive further messages. Note that in a multi-threaded system
+          the consumer may receive events out of order, and in this case data 
+          events may be received after a terminal event. Event processors 
+          should be careful to ignore data events that occur after terminal
+          events, and to ensure that any downstream consumers receive any
+          pending data events before forwarding the terminal event.</para>
+        </listitem>
+        <listitem>
+          <para>The <code>open</code> method of the Push Event Source returns 
+          an <code>AutoCloseable</code> which can be used to close the event 
+          stream. If the <code>close</code> method is called on this object then 
+          the stream is terminated by sending a close event. If additional calls 
+          are made to the close method then they return without action. If the 
+          close method is called after a terminal event has been sent for any
+          other reason then it must return without action.</para>
+        </listitem>
+        <listitem>
+          <para>The <code>accept</code> method of the Push Event Consumer
+          returns a long indicating back pressure. If the long is negative
+          then the event source must close the stream by sending
+          a close event.</para>
+        </listitem>
+      </itemizedlist>
     </section>
   </section>
 
@@ -242,7 +249,8 @@
       location. Furthermore it is difficult to reuse business logic across
       different event streams.</para>
     
-      <para>The Push Stream provides a powerful, flexible pipeline for event
+      <para>The <xref linkend="org.osgi.util.pushstream.PushStream" 
+      xrefstyle="hyperlink"/> provides a powerful, flexible pipeline for event
       processing. The Push Stream API shares many concepts with the Java 8 
       Streams API, in particular Push Streams are lazy, they may not consume
       the entire event stream, and they can be composed from functional steps.
@@ -251,11 +259,12 @@
     <section>
       <title>Simple Pipelines</title>
 
-      <para>A Push Stream can be created from a Push Event Source. A
+      <para>A Push Stream can be created from a Push Event Source by using
+      a <xref linkend="org.osgi.util.pushstream.PushStreamProvider" xrefstyle="hyperlink"/>. A
       Push Stream represents a stage in an event processing pipeline. 
       The overall pipeline is constructed from zero or more 
-      <code>intermediate operations</code>, and completed with a single 
-      terminal operation.</para> 
+      <emphasis>intermediate operations</emphasis>, and completed with a single 
+      <emphasis>terminal operation</emphasis>.</para> 
       
       <para>Each intermediate operation returns a new Push Stream object
       chained to the previous pipeline step. Once a Push Stream object has 
@@ -300,7 +309,7 @@
           in the error event is set to the Exception thrown by the mapping
           function. The current pipeline step is also closed, and the close
           operation is propagated back upstream to the event source by
-          returning negative backpressure.</para>
+          returning negative back pressure.</para>
         </section>
         
         <section>
@@ -319,7 +328,7 @@
     PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
     
     PushStream&lt;Character&gt; streamOfCharacters = 
-            streamOfStrings.map(s -> {
+            streamOfStrings.flatMap(s -> {
                     SimplePushEventSource&lt;Character&gt; spes = 
                             getSimplePushEventSource();
                     
@@ -339,7 +348,7 @@
           in the error event is set to the Exception thrown by the mapping
           function. The current pipeline step is also closed, and the close
           operation is propagated back upstream to the event source by
-          returning negative backpressure.</para>
+          returning negative back pressure.</para>
         </section>
         
         <section>
@@ -356,7 +365,7 @@
     PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
     
     PushStream&lt;String&gt; filteredStrings = 
-            streamOfStrings.map(s -> s.length() == 42);
+            streamOfStrings.filter(s -> s.length() == 42);
           </programlisting>
           
           <para>If the filtering function throws an Exception then an Error Event
@@ -364,7 +373,7 @@
           in the error event is set to the Exception thrown by the filter
           function. The current pipeline step is also closed, and the close
           operation is propagated back upstream to the event source by
-          returning negative backpressure.</para>
+          returning negative back pressure.</para>
         </section>
       </section>
       
@@ -375,8 +384,97 @@
          or <emphasis>stateful</emphasis>. Stateless operations are ones
          where the pipeline stage does not need to remember the previous
          data from the stream. Mapping, Flat Mapping and Filtering are
-         all stateless operations.</para>
+         all stateless operations. The following table lists the 
+         stateless operations on the Push Stream.</para>
          
+                 <table>
+          <title>Stateless Intermediate Operations on the Push Stream</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1.6*"/>
+        
+        <colspec colnum="2" colwidth="4.8*"/>
+
+        <thead>
+          <row>
+            <entry>Intermediate Operation</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.filter-Predicate-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a selection function to be called with each
+            data event in the stream. If the function returns <code>true</code>
+            then the event will propagated, if <code>false</code> then the event
+            will dropped from the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.flatMap-Function-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a transformation function to be called with each
+            data event in the stream. Each incoming data element is converted into
+            a stream of elements. The transformed data is then propagated to the
+            next stage of the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.fork-int-int-Executor-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Pushes event processing onto one or more threads in
+            the supplied <code>Executor</code> returning a fixed back pressure</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.map-Function-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a transformation function to be called with each
+            data event in the stream. The transformed data is propagated to the
+            next stage of the stream.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.merge-PushStream-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry>
+              <para>Merges <code>this</code> stream and another stream into a
+              single stream. The returned stream will not close until both
+              parent streams are closed.</para>
+            </entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.split-Predicate...-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a set of filter functions to select elements that
+            should be forwarded downstream. The returned streams correspond to
+            the supplied filter functions.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.sequential--" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Forces data events to be delivered sequentially to the
+            next stage of the stream. Events may be delivered on multiple threads,
+            but will not arrive concurrently at the next stage of the pipeline.</para></entry>
+          </row>
+
+        </tbody>
+      </tgroup>
+    </table>
+    
          <para>Stateful operations differ from stateless operations in that
          they must remember items from the stream. Sometimes stateful operations
          must remember large numbers of events, or even the entire stream.
@@ -389,23 +487,22 @@
          a close event. At this point the events can be sorted and delivered 
          in order. It is usually a good idea to use the <code>limit</code>
          operation to restrict the length of the stream before performing
-         a stateful operation.</para>
+         a stateful operation which must remember many elements.</para>
+         
+         <para>The following table lists all of the stateful operations of
+         the PushStream.</para>
          
                  <table>
-          <title>Intermediate Operations on the Push Stream</title>
+          <title>Stateful Intermediate Operations on the Push Stream</title>
 
-      <tgroup cols="3">
+      <tgroup cols="2">
         <colspec colnum="1" colwidth="1.6*"/>
         
-        <colspec colnum="2" colwidth="0.8*"/>
-
-        <colspec colnum="3" colwidth="4.0*"/>
+        <colspec colnum="2" colwidth="4.8*"/>
 
         <thead>
           <row>
             <entry>Intermediate Operation</entry>
-
-            <entry>Stateful</entry>
 
             <entry>Description</entry>
           </row>
@@ -413,22 +510,47 @@
 
         <tbody>
           <row>
-            <entry><code>filter()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.buffer--" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>false</code></entry>
-
-            <entry><para>Register a selection function to be called with each
-            data event in the stream. If the function returns <code>true</code>
-            then the event will propagated, if <code>false</code> then the event
-            will dropped from the stream.</para></entry>
+            <entry><para>Introduces a buffer before the next stage of the stream.
+            The buffer can be used to provide a circuit breaker, or to allow a
+            switch of consumer thread(s).</para></entry>
           </row>
 
           <row>
-            <entry><code>distinct()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.buildBuffer--" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>true</code></entry>
+            <entry><para>Introduces a configurable buffer before the next stage of the stream.
+            The buffer can be used to provide a circuit breaker, or to allow a
+            switch of consumer thread(s).</para></entry>
+          </row>
 
-            <entry><para>A variation of <code>filter</code> which drops data
+          <row>
+            <entry>
+            <xref linkend="org.osgi.util.pushstream.PushStream.coalesce-Function-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.coalesce-int-Function-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.coalesce-IntSupplier-Function-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry>
+              <para>Register a coalescing function which aggregates one or more data
+              events into a single data event which will be passed to the next
+              stage of the stream.</para>
+              <para>The number of events to be accumulated is either provided as a fixed number, 
+              or as the result of a function</para>
+            </entry>
+          </row>
+        
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.distinct--" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>A variation of <xref linkend="org.osgi.util.pushstream.PushStream.filter-Predicate-" 
+      xrefstyle="hyperlink"/> which drops data
             from the stream that has already been seen. Specifically if a
             data element <code>equals</code> an element which has previously
             been seen then it will be dropped. This stateful operation must
@@ -436,40 +558,8 @@
           </row>
 
           <row>
-            <entry><code>map()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Register a transformation function to be called with each
-            data event in the stream. The transformed data is propagated to the
-            next stage of the stream.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>sorted()</code></entry>
-
-            <entry><code>true</code></entry>
-
-            <entry><para>Remembers all items in the stream until the stream
-            ends. At this point the data in the stream will be propagated to the
-            next stage of the stream, in the order defined by the Comparator</para></entry>
-          </row>
-
-          <row>
-            <entry><code>flatMap()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Register a transformation function to be called with each
-            data event in the stream. Each incoming data element is converted into
-            a stream of elements. The transformed data is then propagated to the
-            next stage of the stream.</para></entry>
-          </row>
-          
-          <row>
-            <entry><code>limit(long)</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.limit-long-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Limits the length of the stream to the defined number of 
             elements. Once that number of elements are received then a close
@@ -477,107 +567,60 @@
           </row>
 
           <row>
-            <entry><code>limit(Duration)</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.limit-Duration-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Limits the time that the stream will remain open
-            to the supplied Duration. Once that time has elapsed then a close
+            to the supplied <code>Duration</code>. Once that time has elapsed then a close
             event is propagated to the next stage of the stream.</para></entry>
           </row>
           
           <row>
-            <entry><code>split()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Register a set of filter functions to select elements that
-            should be forwarded downstream. The returned streams correspond to
-            the supplied filter functions.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>skip()</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.skip-long-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Drops the supplied number of data events from the stream
             and then forwards any further data events.</para></entry>
           </row>
 
           <row>
-            <entry><code>sequential()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.sorted--" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.sorted-Comparator-" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>false</code></entry>
-
-            <entry><para>Forces data events to be delivered sequentially to the
-            next stage of the stream.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>buffer()</code></entry>
-
-            <entry><code>true</code></entry>
-
-            <entry><para>Introduces a buffer before the next stage of the stream.
-            The buffer can be used to provide a circuit breaker, or to allow a
-            switch of consumer thread(s).</para></entry>
+            <entry><para>Remembers all items in the stream until the stream
+            ends. At this point the data in the stream will be propagated to the
+            next stage of the stream, either in the Natural Ordering of the elements,
+            or in the order defined by the supplied Comparator.</para></entry>
           </row>
           
           <row>
-            <entry><code>fork()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Pushes event processing onto one or more threads in
-            the supplied <code>Executor</code> returning a fixed backpressure</para></entry>
-          </row>
-
-          <row>
-            <entry><code>coalesce()</code></entry>
-
-            <entry><code>true</code></entry>
-
-            <entry>
-              <para>Register a coalescing function which aggregates one or more data
-              events into a single data event which will be passed to the next
-              stage of the stream.</para>
-            </entry>
-          </row>
-
-          <row>
-            <entry><code>merge()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry>
-              <para>Merges <code>this</code> stream and another stream into a
-              single stream. The returned stream will not close until both
-              parent streams are closed.</para>
-            </entry>
-          </row>
-          
-          <row>
-            <entry><code>window()</code></entry>
-
-            <entry><code>true</code></entry>
-
-            <entry>
-              <para>Collects events over the specified time-limit, passing them
-              to the registered handler function. If no events occur during the
-              time limit then no events are propagated</para>
-            </entry>
-          </row>
-          <row>
-            <entry><code>timeout()</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.timeout-Duration-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry>
               <para>Tracks the time since the last event was received. If no
               event is received within the supplied Duration then an error event
               is propagated to the next stage of the stream. The exception in the
               event will be an <code>org.osgi.util.promise.TimeoutException</code>.</para>
+            </entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.window-Duration-Function-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.window-Duration-Executor-Function-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.window-Supplier-IntSupplier-BiFunction-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.window-Supplier-IntSupplier-Executor-BiFunction-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry>
+              <para>Collects events over the specified time-limit, passing them
+              to the registered handler function. If no events occur during the
+              time limit then a Collection containing no events is passed to the handler function.</para>
             </entry>
           </row>
         </tbody>
@@ -592,7 +635,8 @@
         a terminal operation causes the PushStream to connect to its underlying
         event source and begin processing.</para>
         
-        <para>The simplest terminal operation is the <code>count</code> 
+        <para>The simplest terminal operation is the <xref linkend="org.osgi.util.pushstream.PushStream.count--" 
+      xrefstyle="hyperlink"/> 
         operation. This method returns a promise that will resolve when the stream
         finishes. If the stream finishes with a close event then the promise will
         resolve with a Long representing the number of events that reached the end 
@@ -601,85 +645,77 @@
         
         <para>Some terminal operations, like <code>count</code> require the full
         stream to be processed, others are are able to finish before the end of
-        the stream. These are known as <code>short circuiting</code> operations.
-        An example of a short-circuiting operation is <code>findFirst</code>. This
+        the stream. These are known as <emphasis>short circuiting</emphasis> operations.
+        An example of a short-circuiting operation is <xref linkend="org.osgi.util.pushstream.PushStream.findFirst--" 
+      xrefstyle="hyperlink"/>. This
         operation resolves the promise with the first event that is received by
         the end of the pipeline. Once a short-circuiting operation has completed
         it propagates negative back-pressure through the pipeline to close the
         source of events.</para>
         
         <table>
-          <title>Terminal Operations on the Push Stream</title>
+          <title>Non Short Circuiting Terminal Operations on the Push Stream</title>
 
-      <tgroup cols="3">
+      <tgroup cols="2">
         <colspec colnum="1" colwidth="1.6*"/>
         
-        <colspec colnum="2" colwidth="0.8*"/>
-
-        <colspec colnum="3" colwidth="4.0*"/>
+        <colspec colnum="2" colwidth="4.8*"/>
 
         <thead>
           <row>
             <entry>Terminal Operation</entry>
-
-            <entry>Short-circuiting</entry>
 
             <entry>Description</entry>
           </row>
         </thead>
 
         <tbody>
-          <row>
-            <entry><code>forEach()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Register a function to be called back with the data
-            from each event in the stream</para></entry>
-          </row>
 
           <row>
-            <entry><code>forEachEvent()</code></entry>
-
-            <entry><code>true</code></entry>
-
-            <entry><para>Register a <code>PushEventConsumer</code> to be called 
-            back with each event in the stream. If negative back-pressure is
-            returned then the stream will be closed.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>toArray()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Collects together all of the event data in a
-            single array which is used to resolve the returned promise.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>reduce()</code></entry>
-
-            <entry><code>false</code></entry>
-
-            <entry><para>Uses a Binary Operator function to combine event data
-            into a single object. The promise is resolved with the final result
-            when the stream finishes.</para></entry>
-          </row>
-
-          <row>
-            <entry><code>collect()</code></entry>
-
-            <entry><code>false</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.collect-Collector-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Uses the Java Collector API to collect the data from
             events into a single Collection, Map, or other type.</para></entry>
           </row>
           
           <row>
-            <entry><code>min()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.count--" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>false</code></entry>
+            <entry><para>Counts the number of events that reach the end of
+            the stream pipeline.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.forEach-Consumer-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a function to be called back with the data
+            from each event in the stream</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.forEachEvent-PushEventConsumer-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a <code>PushEventConsumer</code> to be called 
+            back with each event in the stream. If negative back-pressure is
+            returned then the stream will be closed.</para></entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.max-Comparator-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Uses a Comparator to find the largest data element in
+            the stream of data. The promise is resolved with the final result
+            when the stream finishes.</para></entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.min-Comparator-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Uses a Comparator to find the smallest data element in
             the stream of data. The promise is resolved with the final result
@@ -687,50 +723,62 @@
           </row>
           
           <row>
-            <entry><code>max()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.reduce-BinaryOperator-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.reduce-T-BinaryOperator-" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.reduce-U-BiFunction-BinaryOperator-" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>false</code></entry>
-
-            <entry><para>Uses a Comparator to find the largest data element in
-            the stream of data. The promise is resolved with the final result
+            <entry><para>Uses a Binary Operator function to combine event data
+            into a single object. The promise is resolved with the final result
             when the stream finishes.</para></entry>
           </row>
 
           <row>
-            <entry><code>count()</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.toArray--" 
+      xrefstyle="hyperlink"/>
+            <xref linkend="org.osgi.util.pushstream.PushStream.toArray-IntFunction-" 
+      xrefstyle="hyperlink"/></entry>
 
-            <entry><code>false</code></entry>
-
-            <entry><para>Counts the number of events that reach the end of
-            the stream pipeline.</para></entry>
+            <entry><para>Collects together all of the event data in a
+            single array which is used to resolve the returned promise.</para></entry>
           </row>
 
+        </tbody>
+      </tgroup>
+    </table>
+
+        <table>
+          <title>Short Circuiting Terminal Operations on the Push Stream</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1.6*"/>
+        
+        <colspec colnum="2" colwidth="4.8*"/>
+
+        <thead>
           <row>
-            <entry><code>anyMatch()</code></entry>
+            <entry>Terminal Operation</entry>
 
-            <entry><code>true</code></entry>
-
-            <entry><para>Resolves with <code>true</code> if any data event reaches
-            the end of the stream pipeline and matches the supplied predicate.
-            If the stream ends without any data matching the predicate then
-            the promise resolves with <code>false</code></para></entry>
+            <entry>Description</entry>
           </row>
+        </thead>
 
+        <tbody>
           <row>
-            <entry><code>allMatch()</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.allMatch-Predicate-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Resolves with <code>false</code> if any event reaches
             the end of the stream pipeline that does not match the predicate.
             If the stream ends without any data matching the predicate then
             the promise resolves with <code>true</code></para></entry>
           </row>
-          
-          <row>
-            <entry><code>anyMatch()</code></entry>
 
-            <entry><code>true</code></entry>
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.anyMatch-Predicate-" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Resolves with <code>true</code> if any data event reaches
             the end of the stream pipeline and matches the supplied predicate.
@@ -739,15 +787,35 @@
           </row>
 
           <row>
-            <entry><code>findFirst()</code></entry>
-
-            <entry><code>true</code></entry>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.findAny--" 
+      xrefstyle="hyperlink"/></entry>
 
             <entry><para>Resolves with an Optional representing the data
             from the first event that reaches the end of the pipeline. 
             If the stream ends without any data reaching the end of the
             pipleine then the promise resolves with an empty Optional.</para>
             </entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.findFirst--" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Resolves with an Optional representing the data
+            from the first event that reaches the end of the pipeline. 
+            If the stream ends without any data reaching the end of the
+            pipleine then the promise resolves with an empty Optional.</para>
+            </entry>
+          </row>
+          
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.noneMatch-Predicate-" 
+      xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Resolves with <code>false</code> if any data event reaches
+            the end of the stream pipeline and matches the supplied predicate.
+            If the stream ends without any data matching the predicate then
+            the promise resolves with <code>true</code></para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -777,7 +845,7 @@
         the requested back pressure. A return of zero indicates that event
         delivery may continue immediately. A positive return value indicates
         that the source should delay sending any further events for the
-        requested number of milliseconds. A return value of -1 indicates that
+        requested number of milliseconds. A negative return value indicates that
         no further events should be sent and that the stream can be closed.</para>
       </section>
     
@@ -787,7 +855,7 @@
         <para>In asynchronous systems events may be produced and consumed at
         different rates. If the consumer is faster than the producer then there
         is no issue, however if the producer is faster than the consumer then
-        events must be held somewhere. Backpressure provides some assistance
+        events must be held somewhere. Back pressure provides some assistance
         here, however some sources do not have control over when events are
         produced. In these cases the data must be buffered until it can be 
         processed.</para>
@@ -817,22 +885,50 @@
         no Executor is provided then the PushStream will create its own internal Executor 
         with the same number of threads as the defined parallelism. An internally created 
         Executor will be shut down when the PushStream is closed.</para>
+      </section>
+      <section>
+        <title>Buffering policies</title>
         
-        <para>The PushStreamBuilder can be used to customize the buffer at the start of 
+        <para>Buffering policies govern the behavior of a buffer as it becomes full.
+        </para>
+        <para>
+        The <xref linkend="org.osgi.util.pushstream.QueuePolicy" xrefstyle="hyperlink"/> of
+        the buffer determines what happens when the queue becomes full. Different policies
+        may discard incoming data, evict data from the buffer, block, or throw an exception.
+        </para>
+        <para>
+        The <xref linkend="org.osgi.util.pushstream.QueuePolicyOption" xrefstyle="hyperlink"/>
+        provides basic implementations of the queue policies, but custom polices can be
+        implemented to provide more complex behaviors.</para>
+        
+        <para>
+        The <xref linkend="org.osgi.util.pushstream.PushbackPolicy" xrefstyle="hyperlink"/> of
+        the buffer determines how much back pressure is requested by the buffer. Different policies
+        may return a constant value, slowly increase the back pressure as the buffer fills, 
+        or return an exponentially increasing value when the buffer is full. </para>
+        <para>
+        The <xref linkend="org.osgi.util.pushstream.PushbackPolicyOption" xrefstyle="hyperlink"/>
+        provides basic implementations of the push back policies, but custom polices can be
+        implemented to provide more complex behaviors.</para>
+      </section>
+      
+      <section>
+        <title>Building a Push Stream</title>
+        <para>The <xref linkend="org.osgi.util.pushstream.PushStreamBuilder" xrefstyle="hyperlink"/> 
+        can be obtained from a Push Stream Provider and used to customize the buffer at the start of 
         the PushStream, or it can be used to create an unbuffered PushStream. An unbuffered 
         PushStream uses the incoming event delivery thread to process the events, and 
         therefore users must be careful not to block the thread, or perform long-running 
-        tasks. The default configuration when buffering is as follows:</para>
+        tasks. The default configuration building a Push Stream is as follows:</para>
         
         <itemizedlist>
           <listitem><para>A parallelism of one</para></listitem>
-          <listitem><para>A <code>FAIL</code> QueuePolicy</para></listitem>
-          <listitem><para>A <code>LINEAR</code> PushbackPolicy with a maximum pushback of one second</para></listitem>
+          <listitem><para>A <xref linkend="org.osgi.util.pushstream.QueuePolicyOption.FAIL" xrefstyle="hyperlink"/> queue policy</para></listitem>
+          <listitem><para>A <xref linkend="org.osgi.util.pushstream.PushbackPolicyOption.LINEAR" xrefstyle="hyperlink"/> push back policy with a maximum push back of one second</para></listitem>
           <listitem><para>A Buffer with a capacity of 32 elements</para></listitem>
         </itemizedlist>
-        
-
       </section>
+              
         <section>
           <title>Circuit Breakers</title>
           <para>Buffering is a powerful tool in event processing pipelines, however it
@@ -1066,14 +1162,14 @@
         SimplePushEventSource handles the details of implementing PushEventSource, providing 
         a simplified API for the event producing code to use.</para>
         
-        <para>Events can be sent via the Simple Push Event Source <code>publish(T t)</code> 
+        <para>Events can be sent via the Simple Push Event Source <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.publish-T-" xrefstyle="hyperlink"/> 
         method at any time until it is closed. These events may be silently ignored if no 
         consumer is connected, but if one or more consumers are connected then the event 
-        will be asynchronously delivered to them, When the event has been delivered to all 
-        of the connected consumers then the returned promise will resolve.</para>
+        will be asynchronously delivered to them.</para>
         
         <para>Close or error events can be sent equally easily using the 
-        <code>endOfStream()</code> and <code>error(Exception e)</code> methods. These will 
+        <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.endOfStream--" xrefstyle="hyperlink"/>  
+        and <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.error-Exception-" xrefstyle="hyperlink"/>  methods. These will 
         send disconnection events to all of the currently connected consumers and remove 
         them from the Simple Push Event Source. Note that sending these events does not 
         close the Simple Push Event Source. Subsequent connection attempts will succeed, 
@@ -1093,6 +1189,36 @@
           If the Simple Push Event Source is closed before the Promise resolves then the 
           Promise is failed with an IllegalStateException. The connect Promise can be used 
           to trigger the initialisation of an event thread, allowing lazier startup.</para>
+          
+          <programlisting>
+PushStreamProvider psp = new PushStreamProvider();
+
+SimplePushEventSource&lt;Long&gt; ses = psp.createSimpleEventSource(Long.class))
+
+Success&lt;Void,Void&gt; onConnect = p -> {
+    new Thread(() -> {
+        long counter = 0;
+        // Keep going as long as someone is listening
+        while (ses.isConnected()) {
+          ses.publish(++counter);
+          Thread.sleep(100);
+          System.out.println("Published: " + counter);
+        }
+        // Restart delivery when a new listener connects
+        ses.connectPromise().then(onConnect);
+      }).start();
+    return null;
+  };
+
+// Begin delivery when someone is listening
+ses.connectPromise().then(onConnect);
+
+// Create a listener which prints out even numbers
+psp.createStream(ses).
+  filter(l -> l % 2L == 0).
+  limit(5000L).
+  forEach(f -> System.out.println("Consumed event: " + f));          
+          </programlisting>
         </section>
       </section>
 
@@ -1109,8 +1235,10 @@
 
   <section>
     <title>References</title>
-      <para>TODO</para>
-
+          <bibliolist>
+      <bibliomixed xml:id="util.pushstream-ref.java8stream"><title>Java 8 Stream API</title>
+      https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#package.description</bibliomixed>
+    </bibliolist>
   </section>
 
 </chapter>

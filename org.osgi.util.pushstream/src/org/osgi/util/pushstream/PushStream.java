@@ -25,14 +25,14 @@ import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.TimeoutException;
 
@@ -54,6 +54,16 @@ import org.osgi.util.promise.TimeoutException;
  */
 @ProviderType
 public interface PushStream<T> extends AutoCloseable {
+
+	/**
+	 * Close this PushStream by sending an event of type
+	 * {@link PushEvent.EventType#CLOSE} downstream. Closing a PushStream is a
+	 * safe operation that will not throw an Exception.
+	 * <p>
+	 * Calling <code>close()</code> on a closed PushStream has no effect.
+	 */
+	@Override
+	void close();
 
 	/**
 	 * Must be run after the channel is closed. This handler will run after the
@@ -222,12 +232,8 @@ public interface PushStream<T> extends AutoCloseable {
 	 * {@link QueuePolicyOption#FAIL} is used then a full buffer will trigger
 	 * the stream to close, preventing an event storm from reaching the client.
 	 * 
-	 * @param parallelism
-	 * @param executor
-	 * @param queue
-	 * @param queuePolicy
-	 * @param pushbackPolicy
-	 * @return Builder style (can be a new or the same object)
+	 * @return A builder which can be used to configure the buffer for this
+	 *         pipeline stage.
 	 */
 	<U extends BlockingQueue<PushEvent< ? extends T>>> PushStreamBuilder<T,U> buildBuffer();
 

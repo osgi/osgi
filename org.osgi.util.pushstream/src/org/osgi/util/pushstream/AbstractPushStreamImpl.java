@@ -37,14 +37,14 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.TimeoutException;
@@ -52,6 +52,8 @@ import org.osgi.util.pushstream.PushEvent.EventType;
 
 abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	
+	private final Function<T,T> IDENTITY = x -> x;
+
 	static enum State {
 		BUILDING, STARTED, CLOSED
 	}
@@ -541,7 +543,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
-		}).map(Function.identity());
+		}).map(IDENTITY);
 	}
 
 	@Override
@@ -607,7 +609,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
-		}).map(Function.identity());
+		}).map(IDENTITY);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -803,7 +805,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	private <R> long aggregateAndForward(Function<Collection<T>,R> f,
 			AbstractPushStreamImpl<R> eventStream,
-			PushEvent< ? extends T> event, Queue<T> queue) {
+			PushEvent< ? extends T> event, Queue<T> queue) throws Exception {
 		if (!queue.offer(event.getData())) {
 			((ArrayQueue<T>) queue).forcePush(event.getData());
 		}
@@ -820,7 +822,13 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	@Override
 	public <R> PushStream<R> window(Duration time, Executor executor,
 			Function<Collection<T>,R> f) {
-		return window(() -> time, () -> 0, executor, (t, c) -> f.apply(c));
+		return window(() -> time, () -> 0, executor, (t, c) -> {
+			try {
+				return f.apply(c);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
