@@ -349,9 +349,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     <para>The <xref linkend="org.osgi.service.log.admin.LoggerAdmin"
     xrefstyle="hyperlink"/> service can be used to obtain the <xref
     linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
-    for a bundle. <xref linkend="org.osgi.service.log.admin.LoggerContext"
-    xrefstyle="hyperlink"/>s are named similar to targeted PIDs in
-    Configuration Admin. Each bundle may have its own named <xref
+    for a bundle. Each bundle may have its own named <xref
     linkend="org.osgi.service.log.admin.LoggerContext" xrefstyle="hyperlink"/>
     based upon its bundle symbolic name, bundle version, and bundle location.
     There is also a <emphasis>root</emphasis> <xref
@@ -520,8 +518,9 @@ logger.error("Cannot access file %s", myFile);</programlisting>
       <para>Once the <xref linkend="org.osgi.service.log.admin.LoggerContext"
       xrefstyle="hyperlink"/> for the logging bundle is determined, the
       effective log level for the <xref linkend="org.osgi.service.log.Logger"
-      xrefstyle="hyperlink"/> is found using the logger name with the
-      following steps:</para>
+      xrefstyle="hyperlink"/> is found using the <xref
+      linkend="org.osgi.service.log.admin.LoggerContext.getEffectiveLogLevel-String-"
+      xrefstyle="hyperlink"/> method:</para>
 
       <orderedlist>
         <listitem>
@@ -538,10 +537,12 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         <listitem>
           <para>If the <xref
           linkend="org.osgi.service.log.admin.LoggerContext"
-          xrefstyle="hyperlink"/> is named, return the result of calling this
-          method on the root <xref
+          xrefstyle="hyperlink"/> is named, return the result of calling the
+          <xref
+          linkend="org.osgi.service.log.admin.LoggerContext.getEffectiveLogLevel-String-"
+          xrefstyle="hyperlink"/> method on the root <xref
           linkend="org.osgi.service.log.admin.LoggerContext"
-          xrefstyle="hyperlink"/> with the original logger name.</para>
+          xrefstyle="hyperlink"/> with the logger name.</para>
         </listitem>
 
         <listitem>
@@ -595,8 +596,27 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
     <para>Push Streams created by the <xref
     linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> are unbuffered and have a parallelism of one. If
-    buffering is desired, the caller can buffer the Push Stream.</para>
+    xrefstyle="hyperlink"/> must:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Be buffered with a buffer large enough to contain the history,
+        if included.</para>
+      </listitem>
+
+      <listitem>
+        <para>Have the <code>QueuePolicyOption.DISCARD_OLDEST</code> queue
+        policy option.</para>
+      </listitem>
+
+      <listitem>
+        <para>Use a shared executor.</para>
+      </listitem>
+
+      <listitem>
+        <para>Have a parallelism of one.</para>
+      </listitem>
+    </itemizedlist>
 
     <para>The following code snippet show how one could get future Log Entries
     and print them.</para>
@@ -617,8 +637,9 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     xrefstyle="hyperlink"/> service offers a <xref
     linkend="org.osgi.service.log.stream.LogStreamProvider.Options.HISTORY"
     xrefstyle="hyperlink"/> option which will prime the returned Push Stream
-    with the past log history, if any. The following code will process the
-    past log entries followed by any new log entries.</para>
+    with the available log history, if any. The following code will process
+    the available historical log entries followed by any new log
+    entries.</para>
 
     <programlisting>logStreamProvider.createStream(LogStreamProvider.Options.HISTORY)
   .forEach(l -&gt; System.out.println(l))
@@ -627,10 +648,10 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     <para>The <xref linkend="org.osgi.service.log.stream.LogStreamProvider"
     xrefstyle="hyperlink"/> interface is in a separate package, <xref
     linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/>, so that the
-    existing <xref linkend="org.osgi.service.log" xrefstyle="hyperlink"/>
-    package does not have a dependency on the <xref
-    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package. The
-    <xref linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package
+    <xref linkend="org.osgi.service.log" xrefstyle="hyperlink"/> package does
+    not have a dependency on the <xref linkend="org.osgi.util.pushstream"
+    xrefstyle="hyperlink"/> package. The <xref
+    linkend="org.osgi.util.pushstream" xrefstyle="hyperlink"/> package
     requires <xref linkend="org.osgi.util.promise" xrefstyle="hyperlink"/> and
     Java 8. Having <xref
     linkend="org.osgi.service.log.stream.LogStreamProvider"
@@ -643,7 +664,12 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     linkend="org.osgi.service.log.stream.LogStreamProvider"
     xrefstyle="hyperlink"/> can be implemented by a bundle which sources Log
     Entries from the <xref linkend="org.osgi.service.log.LogReaderService"
-    xrefstyle="hyperlink"/>.</para>
+    xrefstyle="hyperlink"/>. Since <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> requires Java 8, the <xref
+    linkend="org.osgi.service.log.stream.LogStreamProvider"
+    xrefstyle="hyperlink"/> service is optional when implementions of this
+    specification run on Java versions prior to Java 8.</para>
   </section>
 
   <section xml:id="i1210758">
@@ -677,10 +703,6 @@ logger.error("Cannot access file %s", myFile);</programlisting>
         Reader Service in order to receive log messages as they occur. Unlike
         the previously recorded log entries, all log messages must be sent to
         subscribers of the Log Reader Service as they are recorded.</para>
-
-        <para>A subscriber to the Log Reader Service must implement the <xref
-        linkend="org.osgi.service.log.LogListener" xrefstyle="hyperlink"/>
-        interface.</para>
 
         <para>After a subscription to the Log Reader Service has been started,
         the subscriber's <xref
@@ -764,7 +786,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
 
       <listitem>
         <para><xref linkend="org.osgi.service.log.LogEntry.getMessage--"
-        xrefstyle="hyperlink"/> - This method returns the parameterized
+        xrefstyle="hyperlink"/> - This method returns the formatted
         message.</para>
       </listitem>
 
@@ -1410,7 +1432,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     service must provide a capability in the <code>osgi.service</code>
     namespace representing this service. This capability must also declare a
     uses constraint for the <xref linkend="org.osgi.service.log"
-    xrefstyle="hyperlink"/> package: </para>
+    xrefstyle="hyperlink"/> package:</para>
 
     <para><programlisting>Provide-Capability: osgi.service;
  objectClass:List&lt;String&gt;=
@@ -1422,7 +1444,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     service must provide a capability in the <code>osgi.service</code>
     namespace representing this service. This capability must also declare a
     uses constraint for the <xref linkend="org.osgi.service.log"
-    xrefstyle="hyperlink"/> package: </para>
+    xrefstyle="hyperlink"/> package:</para>
 
     <programlisting>Provide-Capability: osgi.service;
  objectClass:List&lt;String&gt;="org.osgi.service.log.LogReaderService";
@@ -1433,7 +1455,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     service must provide a capability in the <code>osgi.service</code>
     namespace representing this service. This capability must also declare a
     uses constraint for the <xref linkend="org.osgi.service.log.admin"
-    xrefstyle="hyperlink"/> package: </para>
+    xrefstyle="hyperlink"/> package:</para>
 
     <programlisting>Provide-Capability: osgi.service;
  objectClass:List&lt;String&gt;="org.osgi.service.log.admin.LoggerAdmin";
@@ -1444,8 +1466,8 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     xrefstyle="hyperlink"/> service must provide a capability in the
     <code>osgi.service</code> namespace representing this service. This
     capability must also declare a uses constraint for the <xref
-    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/> package:
-    </para>
+    linkend="org.osgi.service.log.stream" xrefstyle="hyperlink"/>
+    package:</para>
 
     <programlisting>Provide-Capability: osgi.service;
  objectClass:List&lt;String&gt;="org.osgi.service.log.stream.LogStreamProvider";

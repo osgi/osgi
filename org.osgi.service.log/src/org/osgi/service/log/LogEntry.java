@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,11 +68,11 @@ public interface LogEntry {
 	int getLevel();
 
 	/**
-	 * Returns the human readable message associated with this {@code LogEntry}
+	 * Returns the formatted message associated with this {@code LogEntry}
 	 * object.
 	 * 
-	 * @return {@code String} containing the message associated with this
-	 *         {@code LogEntry} object.
+	 * @return {@code String} containing the formatted message associated with
+	 *         this {@code LogEntry} object.
 	 */
 	String getMessage();
 
