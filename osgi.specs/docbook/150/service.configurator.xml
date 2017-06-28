@@ -101,8 +101,8 @@
       installed bundles, if the bundle has opted-in to be processed.
       In order to get processed, a bundle must require the configurator implementation:
       
-      <programlisting>Require-Capability: osgi.implementation;
-  filter := (&amp;(osgi.implementation="osgi.configurator"))
+      <programlisting>Require-Capability: osgi.extender;
+  filter := (&amp;(osgi.extender="osgi.configurator"))
               (version&gt;=1.0)(!(version&gt;=2.0)))
       </programlisting>
       
@@ -728,18 +728,18 @@
     </section>
 
     <section>
-      <title>osgi.implementation Capability</title>
+      <title>osgi.extender Capability</title>
 
       <para>The Configurator implementation bundle must provide the <link
-      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
       capability with name <code>osgi.configurator</code> with the version of this specification:
-      <programlisting>Provide-Capability: osgi.implementation;
-       osgi.implementation="osgi.configurator";
+      <programlisting>Provide-Capability: osgi.extender;
+       osgi.extender="osgi.configurator";
        version:Version="1.0"</programlisting>
       </para>
       
       <para>
-      Bundles providing configuration resources must require the <code>osgi.implementation</code>
+      Bundles providing configuration resources must require the <code>osgi.extender</code>
       capability to opt in to being processed by the configurator. The default location for 
       configuration resources is in <code>OSGI-INF/configurator</code>. A bundle can specify 
       alternate locations for configuration resources through the <code>configurations</code> attribute.
@@ -754,14 +754,13 @@
       Resources in a single directory are processed in alphabetical order. For example:
       </para>
 
-      <programlisting>Require-Capability: osgi.implementation;
-       filter:=(&amp;(osgi.implementation="osgi.configurator")
+      <programlisting>Require-Capability: osgi.extender;
+       filter:=(&amp;(osgi.extender="osgi.configurator")
                  (version&gt;=1.0)(!(version&gt;=2.0)));
        configurations=resources/configs</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
-      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
-      <remark>Why are we not using osgi.extender here?</remark>
+      linkend="service.namespaces-osgi.extender.namespace"/>.</para>
     </section>
   </section>
   
