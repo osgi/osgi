@@ -121,7 +121,7 @@
       
     <programlisting>{
     // Global Settings
-    ":configurator:json-version" : 1,
+    ":configurator:resource-version" : 1,
     
     "pid.a": {
            "key": "val",
@@ -139,7 +139,7 @@
     </para>
       
     <para>This Configurator specification supports configuration resources in version 1. This is specified 
-      as <code>":configurator:json-version": 1</code>. If the configurator version is omitted, 1 is assumed.
+      as <code>":configurator:resource-version": 1</code>. If the configurator resource version is omitted, 1 is assumed.
     </para>
     
     <para>
@@ -190,7 +190,7 @@
               </row>
 
               <row>
-                <entry><para><code>:configurator:</code></para><para><code>&#160;json-version</code></para></entry>
+                <entry><para><code>:configurator:</code></para><para><code>&#160;resource-version</code></para></entry>
                 <entry>Number</entry>
                 <entry>Resource</entry>
                 <entry>The version of the configuration resource format. This specification only supports version 1. If
@@ -201,14 +201,20 @@
                 <entry><para><code>:configurator:</code></para><para><code>&#160;symbolicname</code></para></entry>
                 <entry><para>String</para><para><emphasis>symbolic-name</emphasis></para></entry>
                 <entry>Resource</entry>
-                <entry>The symbolic name of the configuration resource. <emphasis>Mandatory.</emphasis></entry>
+                <entry>The symbolic name of the configuration resource. If not specified the symbolic name of
+                the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
+                resources that do not reside in a bundle. The value of this property will be set in the configuration
+                object with the <code>service.configurator.resource.symbolicName</code> key.</entry>
               </row>
               
               <row>
                 <entry><code>:configurator:version</code></entry>
                 <entry>Version</entry>
                 <entry>Resource</entry>
-                <entry>The version of this configuration resource. <emphasis>Mandatory.</emphasis></entry>
+                <entry>The version of this configuration resource. If not specified the symbolic name of
+                the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
+                resources that do not reside in a bundle. The value of this property will be set in the configuration
+                object with the <code>service.configurator.resource.version</code> key.</entry>
               </row>
             </tbody>
          </tgroup>
