@@ -539,6 +539,18 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.clusterinfo"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.clusterinfo"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.clusterinfo-version"
+              linkend="service.clusterinfo"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.configurator"
               xrefstyle="template:%n %t"/></entry>
 

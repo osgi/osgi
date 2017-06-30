@@ -105,6 +105,8 @@
   <xi:include href="../140/service.http.whiteboard.xml"/>
 
   <xi:include href="../147/service.transaction.control.xml"/>
+  
+  <xi:include href="../148/service.clusterinfo.xml"/>
 
   <xi:include href="../150/service.configurator.xml"/>
 

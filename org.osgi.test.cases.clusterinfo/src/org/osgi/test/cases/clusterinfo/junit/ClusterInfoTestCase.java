@@ -44,11 +44,8 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 			props.put(key, sref.getProperty(key));
 		}
 
-		assertNotNull(props.get("id"));
-		assertNotNull(props.get("cluster"));
-		assertTrue(props.get("endpoint") != null
-				|| props.get("private.endpoint") != null);
-		assertNotNull(props.get("version"));
+		assertNotNull(props.get("osgi.clusterinfo.id"));
+		assertNotNull(props.get("osgi.clusterinfo.cluster"));
 
 		assertEquals(ctx.getProperty("org.osgi.framework.version"),
 				props.get("org.osgi.framework.version"));
@@ -162,7 +159,8 @@ public class ClusterInfoTestCase extends OSGiTestCase {
 
 		ServiceTracker<NodeStatus,NodeStatus> st = new ServiceTracker<NodeStatus,NodeStatus>(
 				ctx, ctx.createFilter("(&(objectClass="
-						+ NodeStatus.class.getName() + ")(tags=foo))"),
+						+ NodeStatus.class.getName()
+						+ ")(osgi.clusterinfo.tags=foo))"),
 				null);
 		st.open();
 

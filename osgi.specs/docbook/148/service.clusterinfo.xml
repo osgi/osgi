@@ -84,11 +84,10 @@
     machine, a container or an OSGi framework.</para>
     
     <para>The NodeStatus service provides metadata about the node via service properties.
-    Each NodeStatus must provide an id, cluster, vendor and version property. Optionally
-    additional service properties can be provided such as the physical location of the node,
-    the endpoints at which this node can be accessed, etc. These service properties can be 
-    converted to a NodeStatusDTO using the object convertor to have type-safe access to these
-    properties.</para>
+    Each NodeStatus must provide an id, cluster. Optionally additional service properties 
+    can be provided such as the physical location of the node, the endpoints at which this 
+    node can be accessed, etc. These service properties can be converted to a NodeStatusDTO 
+    using the object convertor to have type-safe access to these properties.</para>
 
     <table>
       <title>Service properties of the NodeStatus Service</title>
@@ -130,16 +129,16 @@
           </row>
 
           <row>
-            <entry><code>osgi.clusterinfo.parentId</code></entry>
+            <entry><code>osgi.clusterinfo.parent</code></entry>
 
             <entry><code>String</code></entry>
 
-            <entry><para>An optional parentID indicating this node is part of or embedded in
-            another node. For example multiple virtual machines could run on the same physical node.</para></entry>
+            <entry><para>In the case this node is part of or embedded in another node, this field contains
+             the id of the parent node. For example multiple virtual machines could run on the same physical node.</para></entry>
           </row>
           
           <row>
-            <entry><code>osgi.clusterinfo.endpoints</code></entry>
+            <entry><code>osgi.clusterinfo.endpoint</code></entry>
 
             <entry><code>String+</code></entry>
 
@@ -148,7 +147,7 @@
           </row>
           
           <row>
-            <entry><code>osgi.clusterinfo.privateEndpoints</code></entry>
+            <entry><code>osgi.clusterinfo.endpoint.private</code></entry>
 
             <entry><code>String+</code></entry>
 
