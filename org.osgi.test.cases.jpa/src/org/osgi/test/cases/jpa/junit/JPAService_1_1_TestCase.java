@@ -90,6 +90,9 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 		} catch (java.lang.IllegalArgumentException ex) {
 			fail("Unknown properties should be ignored and not result in an IllegalArgumentException.");
 		} finally {
+			if (emf != null) {
+				emf.close();
+			}
 			if (emfBuilder != null) {
 				ungetService(emfBuilder);
 			}
@@ -152,6 +155,71 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 			}
 			uninstallBundle(persistenceBundle);
 		}
+	}
+	
+	/**
+	 * See JPA Service Spec 127.3.4.1
+	 * 
+	 * @throws Exception
+	 */
+	public void testClosingEntityManagerFactoryService() throws Exception {
+
+		// Install the bundles necessary for this test
+				Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+				EntityManagerFactoryBuilder emfBuilder = null;
+				waitForService(EntityManagerFactoryBuilder.class, true);
+				try {
+					emfBuilder = getService(EntityManagerFactoryBuilder.class,
+							"(osgi.unit.name=emfBuilderTestUnit)");
+					assertNotNull(
+							"Unable to retrieve the specified EntityManagerFactoryBuilder",
+							emfBuilder);
+
+					assertNull("There should not be an EntityManagerFactory",
+							getContext()
+									.getServiceReference(EntityManagerFactory.class));
+
+					Map<String,Object> props = new HashMap<>();
+					props.put("javax.persistence.jdbc.driver", "org.h2.Driver");
+
+					EntityManagerFactory emfFromBuilder = emfBuilder.createEntityManagerFactory(props);
+
+					waitForService(EntityManagerFactory.class, true);
+					EntityManagerFactory emfService = getService(
+							EntityManagerFactory.class);
+
+					// Test the service is not closeable
+					emfService.close();
+					
+					assertTrue(emfService.isOpen());
+					assertTrue(emfFromBuilder.isOpen());
+					
+					ServiceReference< ? > serviceRef = getServiceReference(emfService);
+
+					ServiceReference< ? >[] serviceReferences = getContext().getServiceReferences(
+							EntityManagerFactory.class.getName(), 
+							"(service.id=" + serviceRef.getProperty("service.id")  + ")");
+
+			assertNotNull(serviceReferences);
+			assertEquals(1, serviceReferences.length);
+					assertEquals(serviceRef, serviceReferences[0]);
+					
+			// Now close the builder
+			emfFromBuilder.close();
+
+			assertFalse(emfService.isOpen());
+			assertFalse(emfFromBuilder.isOpen());
+
+			assertFalse(serviceAvailable(EntityManagerFactory.class));
+
+		} catch (Exception ex) {
+			fail("An exception occurredException.", ex);
+				} finally {
+					if (emfBuilder != null) {
+						ungetService(emfBuilder);
+					}
+					uninstallBundle(persistenceBundle);
+				}
 	}
 
 	public <T> void waitForService(Class<T> cls, boolean expected) {
