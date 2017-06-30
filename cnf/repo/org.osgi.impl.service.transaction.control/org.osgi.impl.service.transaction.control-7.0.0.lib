@@ -1,4 +1,4 @@
-tx-control-service-xa;    version=0.0.2
+tx-control-service-xa;    version=1.0.0
 org.osgi.impl.service.cm; version=latest
 
 slf4j.api;  version=1.7.7

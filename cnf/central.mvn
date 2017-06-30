@@ -24,9 +24,6 @@ org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.4.0
 org.apache.aries.proxy:org.apache.aries.proxy:1.0.1
 org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.8
 org.apache.aries.subsystem:org.apache.aries.subsystem:2.0.2
-org.apache.aries.tx-control:tx-control-service-xa:0.0.2
-org.apache.aries.tx-control:tx-control-provider-jdbc-xa:0.0.2
-org.apache.aries.tx-control:tx-control-provider-jpa-xa:0.0.2
 
 org.apache.felix:org.apache.felix.configadmin:1.8.12
 org.apache.felix:org.apache.felix.dependencymanager:3.1.0

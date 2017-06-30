@@ -10,3 +10,7 @@ org.apache.aries.jpa:org.apache.aries.jpa.container:2.7.0-SNAPSHOT
 org.apache.aries.jpa.javax.persistence:javax.persistence_2.1:2.7.0-SNAPSHOT
 org.apache.aries.jpa:org.apache.aries.jpa.eclipselink.adapter:2.7.0-SNAPSHOT
 org.apache.felix:org.apache.felix.converter:0.1.0-SNAPSHOT
+
+org.apache.aries.tx-control:tx-control-service-xa:1.0.0-SNAPSHOT
+org.apache.aries.tx-control:tx-control-provider-jdbc-xa:1.0.0-SNAPSHOT
+org.apache.aries.tx-control:tx-control-provider-jpa-xa:1.0.0-SNAPSHOT
