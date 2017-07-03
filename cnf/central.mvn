@@ -42,6 +42,7 @@ org.apache.geronimo.specs:geronimo-jaxb_2.1_spec:1.0
 org.apache.geronimo.specs:geronimo-jaxrpc_1.1_spec:2.0.0
 org.apache.geronimo.specs:geronimo-jaxws_2.1_spec:1.0
 org.apache.geronimo.specs:geronimo-jpa_1.0_spec:1.1.2
+org.apache.geronimo.specs:geronimo-json_1.0_spec:1.0-alpha-1
 org.apache.geronimo.specs:geronimo-jsp_2.2_spec:1.2
 org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1
 org.apache.geronimo.specs:geronimo-saaj_1.3_spec:1.0.1
@@ -69,6 +70,7 @@ log4j:log4j:1.2.15
 com.h2database:h2:1.4.193
 
 org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_4
+org.apache.ws.xmlschema:xmlschema-core:2.2.1
 
 org.easymock:easymock:2.5.1
 
@@ -80,3 +82,4 @@ org.springframework:spring-core:3.1.0.RELEASE
 org.slf4j:slf4j-api:1.7.7
 org.slf4j:slf4j-nop:1.7.7
 org.slf4j:slf4j-simple:1.7.7
+org.slf4j:log4j-over-slf4j:1.7.7

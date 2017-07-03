@@ -1,0 +1,15 @@
+org.apache.aries.jax.rs.jaxrs.api;version=0.0.1
+org.apache.aries.jax.rs.whiteboard;version=0.0.1
+
+org.apache.geronimo.specs.geronimo-annotation_1.2_spec;version=1.0.0
+org.apache.geronimo.specs.geronimo-json_1.0_spec;version=1.0.0
+
+org.osgi.service.jaxrs;version=latest
+org.osgi.impl.service.http.whiteboard;version=latest
+
+log4j.over.slf4j;version=1.7.7
+slf4j.api;version=1.7.7
+slf4j.simple;version=1.7.7
+
+org.apache.ws.xmlschema.core;version=2.2.1
+org.objectweb.asm.all;version=5.0.4
