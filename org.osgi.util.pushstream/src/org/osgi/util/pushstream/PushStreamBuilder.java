@@ -3,6 +3,8 @@ package org.osgi.util.pushstream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A Builder for a PushStream. This Builder extends the support of a standard
  * BufferBuilder by allowing the PushStream to be unbuffered.
@@ -11,6 +13,7 @@ import java.util.concurrent.Executor;
  * @param <T> The type of objects in the {@link PushEvent}
  * @param <U> The type of the Queue used in the user specified buffer
  */
+@ProviderType
 public interface PushStreamBuilder<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 		extends BufferBuilder<PushStream<T>,T,U> {
 

@@ -18,6 +18,8 @@ package org.osgi.util.pushstream;
 
 import static org.osgi.util.pushstream.PushEvent.EventType.*;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A PushEvent is an immutable object that is transferred through a
  * communication channel to push information to a downstream consumer. The event
@@ -35,6 +37,7 @@ import static org.osgi.util.pushstream.PushEvent.EventType.*;
  * @param <T> The payload type of the event.
  * @Immutable
  */
+@ProviderType
 public abstract class PushEvent<T> {
 
 	/**

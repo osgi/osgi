@@ -3,6 +3,8 @@ package org.osgi.util.pushstream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Create a buffered section of a Push-based stream
  *
@@ -10,6 +12,7 @@ import java.util.concurrent.Executor;
  * @param <T> The type of objects in the {@link PushEvent}
  * @param <U> The type of the Queue used in the user specified buffer
  */
+@ProviderType
 public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends T>>> {
 
 	/**
