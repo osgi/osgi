@@ -61,8 +61,8 @@ public final class JaxRSWhiteboardConstants {
 	 * Service property specifying that a JAX-RS resource should be processed by
 	 * the whiteboard.
 	 * <p>
-	 * The value of this service property must be of type {@code String} and set
-	 * to &quot;true&quot;.
+	 * The value of this service property must be of type {@code String} or
+	 * {@link Boolean} and set to &quot;true&quot; or <code>true</code>.
 	 */
 	public static final String	JAX_RS_RESOURCE				= "osgi.jaxrs.resource";
 
@@ -97,7 +97,11 @@ public final class JaxRSWhiteboardConstants {
 	public static final String	JAX_RS_DEFAULT_APPLICATION	= ".default";
 
 	/**
-	 * Service property specifying the name of a JAX-RS extension service.
+	 * Service property specifying that a JAX-RS resource should be processed by
+	 * the whiteboard.
+	 * <p>
+	 * The value of this service property must be of type {@code String} or
+	 * {@link Boolean} and set to &quot;true&quot; or <code>true</code>.
 	 * <p>
 	 * A service providing this property must be registered as one or more of
 	 * the following types:
