@@ -22,7 +22,7 @@
     <para>REpresentational State Transfer (REST) is a simple pattern for producing
     Web Services. RESTful services use URI pattern matching to match a particular
     web resource. Different HTTP verbs, for example <code>GET</code> and <code>DELETE</code>, 
-    then map to different operations on that resource. Standard HTTP response codes
+    map to different operations on that resource. Standard HTTP response codes
     are used to communicate the result of an operation, potentially including a
     response body if the operation returns a result.</para>
     
@@ -70,14 +70,9 @@
       </listitem>
     </itemizedlist>
 
-    <remark>The Http Whiteboard talks about support for different HTTP versions.
-    Is that necessary here?</remark>
-
-    <para>JAX-RS Whiteboard implementations must support version 2.0 of the Java
-    Servlet API.</para>
+    <para>JAX-RS Whiteboard implementations must support version 2.0 of the JAX-RS
+    API.</para>
     
-    <remark>JAX-RS 2.1 will be out in Q3 2017 - should that be the target?</remark>
-
     <section>
       <title>Entities</title>
 
@@ -101,7 +96,7 @@
           <para><emphasis>JAX-RS Whiteboard</emphasis> - A runtime instance
           that processes JAX-RS Whiteboard services. Each JAX-RS Whiteboard service
           may be processed by multiple JAX-RS Whiteboards. Different JAX-RS
-          Whiteboards provided by the same JAX-RS Whiteboard implmenetation may 
+          Whiteboards provided by the same JAX-RS Whiteboard implementation may 
           configured differently, for example using different ports or root contexts.</para>
         </listitem>
 
@@ -128,12 +123,12 @@
 
         <listitem>
           <para><emphasis>Static Resources</emphasis> - JAX-RS resources that
-          are included programmatically in a JAX-RS whiteboard application, rather
+          are included programmatically in a JAX-RS Whiteboard application, rather
           than being added at runtime by the whiteboard.</para>
         </listitem>
       </itemizedlist>
 
-      <figure pgwide="1">
+      <figure xml:id="service.jaxrs.whiteboard-overview" pgwide="1">
         <title>JAX-RS Whiteboard Overview Diagram</title>
 
         <mediaobject>
@@ -143,6 +138,13 @@
           </imageobject>
         </mediaobject>
       </figure>
+      
+      <para>The <xref linkend="service.jaxrs.whiteboard-overview"/> shows an OSGi
+      framework running a JAX-RS Whiteboard Implementation bundle. This bundle
+      has been configured to provide two JAX-RS whiteboards, each of which has a
+      corresponding JAX-RS Service Runtime Service. The various JAX-RS Whiteboard
+      services available in the framework are discovered and processed by both 
+      whiteboards.</para>
     </section>
   </section>
 
@@ -160,7 +162,7 @@
     All JAX-RS Whiteboards have a <code>default</code> application which is used to
     register resources that do not target an existing application. In this respect a 
     JAX-RS whiteboard application shares some similarities with a Servlet Context in 
-    the <xref linkend="service.http.whiteboard" xrefstyle="hyperlink"/>. Resources
+    the <xref linkend="service.http.whiteboard"/>. Resources
     registered with a JAX-RS Whiteboard are <code>always</code> registered as part of
     an application. The generated name of the default application is <code>.default</code>,
     and it is mapped to the root context of the JAX-RS Whiteboard.</para>
@@ -185,9 +187,11 @@
     in <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
     <para>Each JAX-RS Whiteboard implementation registers exactly one
-    <code>JaxRSServiceRuntime</code> service per JAX-RS Whiteboard. This
-    service can be used to target JAX-RS Whiteboard services defined in 
-    this specification to a specific JAX-RS Whiteboard.</para>
+    <code>JaxRSServiceRuntime</code> service per JAX-RS Whiteboard. The
+    service properties of the JAX-RS Service Runtime Service
+    can be used to target JAX-RS Whiteboard services at specific JAX
+    RS whiteboards, as described by the <code>osgi.jaxrs.whiteboard.target</code>
+    property in <xref linkend="service.jaxrs.common.properties"/>.</para>
 
     <para>The <code>JaxRSServiceRuntime</code> provides service registration
     properties to declare its underlying JAX-RS Whiteboard. These
@@ -244,7 +248,7 @@
             <entry><para>Whenever the DTOs available from the JAX-RS Service Runtime
             service change, the value of this property property will increase.</para>
             <para>This allows interested parties to be notified of changes to the 
-            DTOs by observice Service Events of type <code>MODIFIED</code>
+            DTOs by observing Service Events of type <code>MODIFIED</code>
             for the 
             <xref linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime" xrefstyle="hyperlink"/>
             service. See
@@ -373,10 +377,10 @@ public String interrogateSession(@PathParam("name") String name,
 
             <entry>
             <para>A user defined name that can be used to identify a JAX-RS whiteboard service. Names 
-            must follow OSGi symbolic name rules, and also must not start with the prefixes <code>.</code> or 
-            <code>osgi.</code>.</para>
+            must follow OSGi symbolic name rules, and also must not start with the prefixes <code>'.'</code> or 
+            <code>'osgi.'</code>.</para>
             <para>If no name is defined for a JAX-RS whiteboard service then one is generated for it.
-            This generated name will start with a <code>.</code>. The prefix <ns:code>osgi.</ns:code>
+            This generated name will start with a <code>'.'</code>. The prefix <ns:code>osgi.</ns:code>
             is currently unused, but reserved for future versions of this specification.
             </para>
             <para>If a JAX-RS service is registered with an illegal name then it is not bound and
@@ -401,7 +405,7 @@ public String interrogateSession(@PathParam("name") String name,
             </para>
             <para>For example, to select an Application with name <code>myApp</code> provide the 
             following filter:</para><programlisting>(osgi.jaxrs.name=myApp)</programlisting><para>To
-            select all Servlet Context Helpers provide the following
+            select all Applications in the whiteboard provide the following
             value:</para><programlisting>(osgi.jaxrs.name=*)</programlisting><para>If
             no matching application exists this is reflected in the failure DTOs.
             See <xref
@@ -419,17 +423,19 @@ public String interrogateSession(@PathParam("name") String name,
             <para>A set of LDAP-style filters used to express dependencies on
             one or more extension services. If a filter is provided then the JAX-RS 
             Whiteboard attempts to match that filter against the service properties of 
-            the Whiteboard runtime, then the service properties of the whiteboard application, 
-            then each of the extension services currently active in the 
-            application. If any service matches the filter then the Whiteboard repeats 
-            the same search using the next filter. If all of the filters are matched 
-            then the whiteboard service is able to be registered into the
-            JAX-RS Whiteboard application. </para>
+            the Whiteboard runtime, the service properties of the whiteboard application, 
+            and each of the extension services currently active in the 
+            application. This search may occur in any order. If all of the supplied
+            filters are matched then the whiteboard service is registered 
+            into the JAX-RS Whiteboard application. </para>
             
             <para>For example, to require an extension which provides JSON serialization
-            advertising property name <code>serialize.mime.type</code> with value <code>JSON</code>
+            advertising property name <code>serialize.to</code> with value <code>JSON</code>
             provide the following filter:</para>
-            <programlisting>(serialize.mime.type=JSON)</programlisting>
+            <programlisting>(serialize.to=JSON)</programlisting>
+            
+            <para>A more detailed version of this example is available in 
+            <xref linkend="service.jaxrs.extension.example"/></para>
             
             <para>If any filter(s) fail to match then this is reflected
             in the failure DTOs. See <xref
@@ -451,8 +457,8 @@ public String interrogateSession(@PathParam("name") String name,
             exposes exactly one <code>JaxRSServiceRuntime</code> service. This property is used to
             associate the Whiteboard service with the JAX-RS Whiteboard
             that registered the <code>JaxRSServiceRuntime</code>
-            service. If this property is not specified, all JAX-RS Whiteboards
-            can handle the service. See <xref
+            service. If this property is not specified then the service
+            will target all JAX-RS Whiteboards. See <xref
             linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -474,7 +480,7 @@ public String interrogateSession(@PathParam("name") String name,
 
     <para>As JAX-RS resources have no common interface type they are instead
     registered with the <code>osgi.jaxrs.resource</code> service property with
-    a value of <code>true</code>. This property serves as a marker to the JAX-RS 
+    a value of <code>"true"</code>. This property serves as a marker to the JAX-RS 
     whiteboard runtime, indicating that this OSGi service should be hosted as a 
     JAX-RS Whiteboard resource.</para>
 
@@ -512,33 +518,46 @@ public class Foo {
       <para>This JAX-RS resource defines two resource methods. The <code>Path</code>
       annotation applied to the class sets the base URI for all methods in the
       resource. The <code>getFoos()</code> method is therefore bound to the URI
-      <code>foos</code>. The <code>Path</code> annotation on the <code>getFoo()</code>
+      <code>foo</code>. The <code>Path</code> annotation on the <code>getFoo()</code>
       method makes this method a sub-resource which captures the next token in the URI.
-      This method is therefore bound to URIs of the form <code>foos/buzz</code>.</para>
+      This method is therefore bound to URIs of the form <code>foo/buzz</code>.</para>
       
       <para>When used as an OSGi JAX-RS Whiteboard service a JAX-RS resource follows
       the same mapping rules, but the base context(s) it uses are determined by the 
       Application(s) to which it is mapped. For example, when mapped to the default
       application of a whiteboard with endpoint <code>http://127.0.0.1/</code> the
-      <code>getFoos()</code> method would be available at <code>http://127.0.0.1/foos</code>.</para>
+      <code>getFoos()</code> method would be available at <code>http://127.0.0.1/foo</code>.</para>
 
-      <para>Resource services bound to a JAX-RS whiteboard application share a single URI 
-      namespace with other resources in the application (including any existing static resources). 
-      When JAX-RS services are bound it is possible that one or more
-      methods on these services will require the same mapping. If any clashes
-      occur then service ranking rules are used to select the service that will
-      bind to the JAX-RS Whiteboard; also a resource service will always override a
-      static resource. In summary, resources that have any
-      of their methods shadowed by a Whiteboard services associated 
-      with the <emphasis>same</emphasis> Whiteboard are not bound, and are 
-      represented in the failure DTOs.</para>
+      <section xml:id="service.jaxrs.resource.services.clashes">
+        <title>Clashing resource mappings</title>
+        <para>Resource services bound to a JAX-RS whiteboard application share a single URI 
+        namespace with other resources in the application (including any existing static resources). 
+        When JAX-RS services are bound it is possible that one or more
+        methods on these services will map to the same URI. This situation is
+        permitted as long as the two mappings do not clash.</para>
+      
+        <para>A clash occurs when two resource methods map to the same URI and
+        also declare that they produce and consume the same content type. For example
+        a resource annotated with <code>@Produces("text/plain")</code> does
+        not clash with a method annotated with <code>@Produces("application/xml")</code>.
+        </para>
+      
+        <para>
+        If any clashes
+        occur then service ranking rules are used to select the service that will
+        bind to the JAX-RS Whiteboard; also a resource service will always override a
+        static resource. In summary, resources that have any
+        of their methods shadowed by a Whiteboard services associated 
+        with the <emphasis>same</emphasis> Whiteboard are not bound, and are 
+        represented in the failure DTOs.</para>
 
-      <para>The above rules can cause JAX-RS resources that are already bound to
-      become unbound if a higher ranked service arrives. This ensures a predictable 
-      end result regardless of the order in which services are registered. The rules
-      also ensure that all methods defined by a resource become unavailable if 
-      <emphasis>any</emphasis> of them are shadowed. This prevents undesirable
-      situations where some, but not all, of a resource's methods can be called.</para>
+        <para>The above rules can cause JAX-RS resources that are already bound to
+        become unbound if a higher ranked service arrives. This ensures a predictable 
+        end result regardless of the order in which services are registered. The rules
+        also ensure that all methods defined by a resource become unavailable if 
+        <emphasis>any</emphasis> of them are shadowed. This prevents undesirable
+        situations where some, but not all, of a resource's methods can be called.</para>
+      </section>
 
     </section>
 
@@ -585,12 +604,13 @@ public class Foo {
         are annotated with a JAX-RS annotation, for example <code>@Context</code>,
         and may be injected as method parameters, or as fields in the object.</para>
         
-        <para>If the injected objects are passed as method parameters then the
-        resource object may be a singleton. If, however, the injected objects are
-        injected into fields then the resource <emphasis>must</emphasis> be
-        request scoped. It is an error to register a singleton whiteboard resource
-        that has injected fields, and this must result in the removal of the service
-        from the application and a failure DTO being created for it.</para>
+        <para>If the JAX-RS injected objects are passed as method parameters then the
+        resource object may be a singleton. If, however, the objects are
+        injected into fields by the JAX-RS container then the resource should be
+        declared as a <code>prototype</code> scope. JAX-RS Whiteboard implementations
+        may support field injection for singleton resources, however this behaviour
+        is non portable, and may lead to errors at runtime when using other 
+        implementations.</para>
       </section>
       
       <section>
@@ -617,7 +637,7 @@ public class Foo {
       <para>The following table describes the properties that can be used by
       JAX-RS resources registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.http.whiteboard.common.properties.table"
+      linkend="service.jaxrs.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
   
       <table>
@@ -645,9 +665,9 @@ public class Foo {
             <row>
               <entry><para><code>osgi.jaxrs.resource</code></para></entry>
   
-              <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
+              <entry><para><code>String</code> / <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
   
-              <entry><para>Declares that this service should be processed by the JAX-RS
+              <entry><para>Declares that this service must be processed by the JAX-RS
               whiteboard when set to <code>true</code>. See <xref
               linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_RESOURCE"
               xrefstyle="hyperlink"/>.</para></entry>
@@ -663,7 +683,7 @@ public class Foo {
       <para>The following example code uses Declarative Services annotations to
       register a JAX-RS Whiteboard service.</para>
   
-      <programlisting>@Component(service = Object.class,
+      <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource     
  public class MyResource {
@@ -774,14 +794,14 @@ public class MyApplication extends Application {}</programlisting>
     in a failure DTO being created.</para>
 
     <section>
-      <title><code>NameBinding</code> and JAX-RS Extensions</title>
+      <title>Name Binding and JAX-RS Extensions</title>
 
       <para>By default JAX-RS extensions are applied to every request, however
       sometimes they are only needed for a subset of resource methods. In this
       case a <code>NameBinding</code> annotation can be used to apply the extension
       to a subset of resource methods. The following example declares a binding
       annotation called <code>FizzBuzz</code> and uses it to bind an extension
-      which replaces ooccurrences of "fizz" with "fizzbuzz".</para>  
+      which replaces occurrences of "fizz" with "fizzbuzz".</para>  
       
       <programlisting>@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -804,7 +824,7 @@ public class FizzBuzzReplacer implements WriterInterceptor {
     }
 }
 
-@Component(service=Object.class)
+@Component(service=FizzResource.class)
 @JaxrsResource
 @Path("fizzbuzz")
 public class FizzResource {
@@ -983,15 +1003,17 @@ public class ConfiguredExtension implements WriterInterceptor {
       
       <para>JAX-RS extensions often require configuration, and need to
       be configured differently for different applications. This configuration
-      is typically injected into fields of the extension. It is therefore
+      is typically provided by a JAX-RS <code>ContextResolver</code> and
+      injected into fields of the extension by the JAX-RS container. It is therefore
       highly recommended that JAX-RS Whiteboard extensions are always
       registered as prototype scope, so that separate instances can be created
       for each whiteboard application.</para>
-      
-      <para>If an extension is registered as a singleton service then it must
-      not rely on any fields being injected. If a singleton service does expect
-      fields to be injected then the JAX-RS whiteboard must detect this, prevent
-      the use of the extension, and register a failure DTO.
+        
+      <para>If an extension is registered as a singleton service then it should
+      not rely on any fields being injected by the JAX-RS Whiteboard implementation.
+      JAX-RS Whiteboard implementations may support field injection for singleton 
+      extensions, however this behaviour is non portable, and may lead to errors at 
+      runtime when using other implementations.
       </para>
     
     </section>
@@ -1003,7 +1025,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       <para>The following table describes the properties that can be used by
       JAX-RS extensions registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.http.whiteboard.common.properties.table"
+      linkend="service.jaxrs.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported.</para>
   
       <table>
@@ -1031,9 +1053,9 @@ public class ConfiguredExtension implements WriterInterceptor {
             <row>
               <entry><para><code>osgi.jaxrs.extension</code></para></entry>
   
-              <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
+              <entry><para><code>String</code> / <code>Boolean</code></para><para><emphasis>required</emphasis></para></entry>
   
-              <entry><para>Declares that this service should be processed by the JAX-RS
+              <entry><para>Declares that this service must be processed by the JAX-RS
               whiteboard when set to <code>true</code>. See <xref
               linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_EXTENSION"
               xrefstyle="hyperlink"/>.</para></entry>
@@ -1043,7 +1065,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       </table>
     </section>
 
-    <section>
+    <section xml:id="service.jaxrs.extension.example">
       <title>A JAX-RS Whiteboard Extension Example</title>
     
       <para>The following example code uses Declarative Services annotations to
@@ -1051,7 +1073,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       and requires the extension from a JAX-RS whiteboard resource.</para>
   
       <programlisting>
- @Component(property="mime.type=application/json")
+ @Component(property="serialize.to=JSON")
  @JaxrsExtension
  public class JsonProvider implements MessageBodyReader,
       MessageBodyWriter {
@@ -1061,12 +1083,12 @@ public class ConfiguredExtension implements WriterInterceptor {
  @Component(service = Object.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource
- @JaxrsExtensionSelect("(mime.type=application/json)")
+ @JaxrsExtensionSelect("(serialize.to=JSON)")
  public class MyResource {
   
      @GET
      @Path("hello")
-     @Produces("application/json")
+     @Produces(MediaType.APPLICATION_JSON)
      public List&lt;String&gt; getList(){
           return Arrays.asList("Hello", "World!");
      }
@@ -1129,7 +1151,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       
       <para>In the scenario described there is clearly a conflict between the resource
       in the default application and the resource in the whiteboard application. To resolve
-      this the JAX-RS whiteboard must unregister the application with the longer base URI.
+      this the JAX-RS whiteboard must unregister the application with the shorter base URI.
       The whole whiteboard application (not just the clashing resource) must be unregistered
       to avoid inconsistent behaviour when an application is only partially visible. It is 
       therfore critical for the JAX-RS Whiteboard to track the mappings of all resources
@@ -1153,7 +1175,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       <para>The following table describes the properties that can be used by
       JAX-RS applications registered as Whiteboard services. Additionally, the
       common properties listed in <xref
-      linkend="service.http.whiteboard.common.properties.table"
+      linkend="service.jaxrs.common.properties.table"
       xrefstyle="template:Table %n on page %p"/> are supported, except for the
       <code>osgi.jaxrs.application.select</code> property.</para>
   
@@ -1184,7 +1206,7 @@ public class ConfiguredExtension implements WriterInterceptor {
   
               <entry><para><code>String</code></para><para><emphasis>required</emphasis></para></entry>
   
-              <entry><para>Declares that this service should be processed by the JAX-RS
+              <entry><para>Declares that this service must be processed by the JAX-RS
               whiteboard, and defines the URI, relative to the root context of the whiteboard,
               at which the Application should be registered. See <xref
               linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE"
@@ -1204,7 +1226,7 @@ public class ConfiguredExtension implements WriterInterceptor {
   
       <programlisting>
 @Component(service=Application.class)
-@JaxrsApplicationBase
+@JaxrsApplicationBase("example")
 @JaxrsName("myApp")
 public class MyApplication extends Application {
     public Set&lt;Class&lt;?&gt;&gt; getClasses() {
@@ -1212,7 +1234,7 @@ public class MyApplication extends Application {
     }      
 }
  
- @Component(service = Object.class,
+ @Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource
  @JaxrsApplicationSelect("(osgi.jaxrs.name=myApp)")
@@ -1225,17 +1247,22 @@ public class MyApplication extends Application {
           return Arrays.asList("Hello", "World!");
      }
  }</programlisting>
+    
+    <para>The <code>MyResource</code> service will be available at
+    <code>http://www.acme.com/example/hello</code></para>
+ 
     </section>
   </section>
 
   <section>
     <title>Advertising JAX-RS Endpoints</title>
     
-    <para>All JAX-RS whiteboard services may be registered with an 
+    <para>All JAX-RS Whiteboard services may be registered with an 
     optional <code>osgi.jaxrs.name</code> property. For Whiteboard resources and applications 
     (but not extensions), if the registered service has set this property then the 
-    JAX-RS container must register a <code>JaxRSEndpoint</code> service identifying the URI(s) that 
-    can be used to access the service.</para>
+    JAX-RS container must register a 
+    <xref linkend="org.osgi.service.jaxrs.runtime.JaxRSEndpoint" xrefstyle="hyperlink"/>
+    service identifying the URI(s) that can be used to access the service.</para>
     
     <para>The endpoint service must declare the following properties:</para>
     
@@ -1246,9 +1273,9 @@ public class MyApplication extends Application {
         <tgroup cols="3">
           <colspec colnum="1" colwidth="2.2*"/>
   
-          <colspec colnum="2" colwidth="0.7*"/>
+          <colspec colnum="2" colwidth="0.9*"/>
   
-          <colspec colnum="3" colwidth="3.6*"/>
+          <colspec colnum="3" colwidth="3.4*"/>
   
           <thead>
             <row>
@@ -1323,11 +1350,11 @@ public class MyApplication extends Application {
     register a resource. All of these cases must result in a failure DTO being created with the 
     appropriate error code.</para>
     
-    <orderedlist>
+    <itemizedlist>
       <listitem>
         <para><emphasis>Failure to obtain a service instance</emphasis> - 
         In the case where a published service is unable to obtained by the JAX-RS whiteboard
-        then the object is blacklisted by the container. A failure DTO is made available from 
+        then the service is blacklisted by the container. A failure DTO is made available from 
         the JAXRSServiceRuntime representing the blacklisted service object.
         </para>
       </listitem>
@@ -1344,11 +1371,14 @@ public class MyApplication extends Application {
       <listitem>
         <para><emphasis>Overlapping resource mappings</emphasis> - 
         When multiple bundles collaborate it is possible that two JAX-RS resources will 
-        register for the same path. In this case the lower ranked service object is shadowed, and 
-        a failure DTO is available from the JAXRSServiceRuntime representing the shadowed object.
-        Note that determining when two JAX-RS endpoints overlap requires an analysis of the resource 
-        path and all of sub-resource paths. If any of these paths clash then the entire of the 
-        lower-ranked JAX-RS resource must be unregistered and marked as a failure. It is an 
+        register for the same path. Note that determining when two JAX-RS resources clash 
+        requires an analysis of the resource path, all sub-resource paths, and the content
+        types produced and consumed by the method. See <xref linkend="service.jaxrs.resource.services.clashes"/>
+        for further details.</para>
+        
+        <para>When a clash occurs for <emphasis>any</emphasis> resource method the lower ranked 
+        service object is shadowed, and a failure DTO is made available from the JAXRSServiceRuntime 
+        representing the shadowed object. It is an 
         implementation error for some sub-resource paths to be available while others are shadowed.
         </para>
       </listitem>
@@ -1359,7 +1389,7 @@ public class MyApplication extends Application {
         longer base URI is shadowed, and a failure DTO is available from the JAXRSServiceRuntime 
         representing the shadowed Application.
         Note that determining when two JAX-RS applications overlap requires an analysis of the resource 
-        paths and all of sub-resource paths. If any of these paths clash then the entirity of the 
+        paths and all of sub-resource paths. If any of these paths clash then the entirety of the 
         shadowed application must be unregistered and marked as a failure. It is an 
         implementation error for some application resource paths to be available while others are shadowed.
         </para>
@@ -1371,7 +1401,7 @@ public class MyApplication extends Application {
         implementation searches for whiteboard services. The JAX-RS whiteboard must therefore confirm 
         that the registered service shares the correct view of the JAX-RS packages. If the class space 
         is not consistent then the JAX-RS whiteboard container must not register the services, but 
-        instead should create a failure DTO indiecating that the JAX-RS object is unable to be 
+        instead should create a failure DTO indicating that the JAX-RS object is unable to be 
         registered due to an incompatible class-space.
         </para>
       </listitem>
@@ -1383,7 +1413,7 @@ public class MyApplication extends Application {
         failure DTO must be created for the relevant resource or extension service.
         </para>
       </listitem>
-    </orderedlist>
+    </itemizedlist>
   </section>
   
   <section>
@@ -1391,7 +1421,7 @@ public class MyApplication extends Application {
     
     <para>The JAX-RS specification includes a client API for making REST requests. 
     The normal mechanism for obtaining a <code>Client</code> is to use a 
-    <code>ClientBuilder</code>ClientBuilder, which is instantiated using a static factory method.
+    <code>ClientBuilder</code>, which is instantiated using a static factory method.
     Static factory methods require the reflective loading of classes and suffer from significant 
     lifecycle issues, as there is no way to force indirectly wired objects to be discarded if 
     the implementation bundle is stopped or uninstalled.</para>
@@ -1402,33 +1432,6 @@ public class MyApplication extends Application {
     Client instances, and ensures that separate bundles will never accidentally provide conflicting 
     configuration to the same ClientBuilder instance.
     </para>
-    
-    <section>
-      <title>Asynchronous Client Requests</title>
-      
-      <para>The JAX-RS client API supports the concept of asynchronous calls which return a 
-      <code>java.util.concurrent.Future</code>. Future is a type with very limited capabilities, 
-      and it is impossible to use in a truly asynchronous way. As a result the JAX-RS client API 
-      provides a mechanism to register a callback on asynchronous calls, called the InvocationCallback. 
-      As OSGi promises provide a much better asynchronous programming model than Java Futures the 
-      JAX-RS whiteboard offer a simple mechanism to obtain a promise from the JAX-RS client using
-      the <code>PromiseHandler</code>:</para>
-    <programlisting>
-Client client = clientBuilder.build();
-PromiseHandler&lt;String&gt; handler = new PromiseHandler&lt;String&gt;{};
-
-client.target(REST_SERVICE_URL)
-    .path("/foo”)
-    .path(“/{name}")
-    .resolveTemplate("name", buzz)
-    .request()
-    .async()
-    .get(handler);
-
-Promise&lt;String&gt; result = handler.getPromise();
-    </programlisting>
-    
-    </section>
     
     <section>
       <title> Client Filters, Interceptors, Readers and Writers</title>
@@ -1529,7 +1532,7 @@ Promise&lt;String&gt; result = handler.getPromise();
 
     <para>This section only applies when executing in an OSGi environment
     which is enforcing Java permissions.</para>
-    
+    <remark>Not yet complete</remark>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
