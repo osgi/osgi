@@ -1532,7 +1532,39 @@ public class MyApplication extends Application {
 
     <para>This section only applies when executing in an OSGi environment
     which is enforcing Java permissions.</para>
-    <remark>Not yet complete</remark>
+    
+    <section>
+      <title>Service Permissions</title>
+
+      <para>Bundles that need to register JAX-RS Whiteboard services must be
+      granted <code>ServicePermission[interfaceName, REGISTER]</code> where
+      interface name is the relevant JAX-RS Whiteboard service interface name.</para>
+
+      <para>The Http Whiteboard implementation must be granted
+      <code>ServicePermission[*, GET]</code> to retrieve the JAX-RS
+      Whiteboard services from the service registry.</para>
+    </section>
+
+    <section>
+      <title>Runtime Introspection</title>
+
+      <para>Bundles that need to introspect the state of the JAX-RS runtime will
+      need
+      <code>ServicePermission[org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime,
+      GET]</code> to obtain the JAX-RS Service Runtime service and access the DTO
+      types.</para>
+    </section>
+
+    <section>
+      <title>Calling JAX-RS Whiteboard Services</title>
+
+      <para>This specification does not require that the JAX-RS Whiteboard
+      implementation is granted All Permission or wraps calls to the JAX-RS
+      Whiteboard services in a <code>doPrivileged</code> block. Therefore, it
+      is the responsibility of the JAX-RS Whiteboard services to
+      use a <code>doPrivileged</code> block when performing privileged
+      operations.</para>
+    </section>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.xml"/>
