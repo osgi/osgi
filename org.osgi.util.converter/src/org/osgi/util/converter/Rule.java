@@ -52,7 +52,6 @@ public abstract class Rule<F, T> implements TargetRule {
                         .getActualTypeArguments()[0];
 
                 if (type instanceof ParameterizedType) {
-                    // TODO is this ok?
                     type = ((ParameterizedType) type).getRawType();
                 }
 
@@ -80,8 +79,6 @@ public abstract class Rule<F, T> implements TargetRule {
     public Type getTargetType() {
         Type type = ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[1];
-        if (type instanceof ParameterizedType)
-            return ((ParameterizedType) type).getRawType();
         return type;
     }
 }
