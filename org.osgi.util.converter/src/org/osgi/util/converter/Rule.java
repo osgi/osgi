@@ -60,13 +60,13 @@ public abstract class Rule<F, T> implements TargetRule {
                 if (type instanceof Class) {
                     cls = ((Class<?>) type);
                 } else {
-                    return null;
+                    return ConverterFunction.CANNOT_HANDLE;
                 }
 
                 if (cls.isInstance(obj)) {
                     return func.apply((F) obj);
                 }
-                return null;
+                return ConverterFunction.CANNOT_HANDLE;
             }
         };
     }

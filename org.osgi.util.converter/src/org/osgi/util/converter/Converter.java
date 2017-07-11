@@ -36,6 +36,12 @@ public interface Converter {
 	Converting convert(Object obj);
 
 	/**
+	 * Start defining a function that can perform given conversions.
+	 * @return A {@link Functioning} object to complete the definition.
+	 */
+	Functioning function();
+
+	/**
 	 * Obtain a builder to create a modified converter based on this converter.
 	 * For more details see the {@link ConverterBuilder} interface.
 	 *

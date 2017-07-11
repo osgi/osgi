@@ -22,101 +22,13 @@ import org.osgi.annotation.versioning.ProviderType;
 /**
  * This interface is used to specify the target that an object should be
  * converted to. A {@link Converting} instance can be obtained via the
- * {@link Converter} service by starting a conversion for a specific object.
+ * {@link Converter}.
  *
  * @author $Id$
  * @NotThreadSafe
  */
 @ProviderType
-public interface Converting {
-	/**
-	 * Always return a fully populated copy of the object, however if the object
-	 * is an immutable built-in scalar such as String or Long, then a copy is
-	 * not needed. By default a wrapped object is returned by the converter if
-	 * possible.
-	 *
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting copy();
-
-	/**
-	 * The default value to use when the object cannot be converted or in case
-	 * of conversion from a {@code null} value.
-	 *
-	 * @param defVal The default value, must not be {@code null}.
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting defaultValue(Object defVal);
-
-	/**
-	 * When converting between map-like types use case-insensitive mapping of
-	 * keys.
-	 * 
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting keysIgnoreCase();
-
-	/**
-	 * Treat the source object as the specified class. This can be used to
-	 * disambiguate a type if it implements multiple interfaces or extends
-	 * multiple classes.
-	 *
-	 * @param cls The class to treat the object as.
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting sourceAs(Class< ? > cls);
-
-	/**
-	 * Treat the source object as a JavaBean. By default objects will not be
-	 * treated as JavaBeans, this has to be specified using this method.
-	 *
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting sourceAsBean();
-
-	/**
-	 * Treat the source object as a DTO even if the source object has methods or
-	 * is otherwise not recognised as a DTO.
-	 *
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting sourceAsDTO();
-
-	/**
-	 * Treat the target object as the specified class. This can be used to
-	 * disambiguate a type if it implements multiple interfaces or extends
-	 * multiple classes.
-	 *
-	 * @param cls The class to treat the object as.
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting targetAs(Class< ? > cls);
-
-	/**
-	 * Treat the target object as a JavaBean. By default objects will not be
-	 * treated as JavaBeans, this has to be specified using this method.
-	 *
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting targetAsBean();
-
-	/**
-	 * Treat the target object as a DTO even if it has methods or is otherwise
-	 * not recognized as a DTO.
-	 *
-	 * @return The current {@code Converting} object so that additional calls
-	 *         can be chained.
-	 */
-	Converting targetAsDTO();
-
+public interface Converting extends Specifying<Converting> {
 	/**
 	 * Specify the target object type for the conversion as a class object.
 	 *

@@ -29,6 +29,12 @@ import org.osgi.annotation.versioning.ConsumerType;
  */
 @ConsumerType
 public interface ConverterFunction {
+    /**
+     * Special object to indicate that a custom converter rule or error
+     * handler cannot handle the conversion.
+     */
+    static final Object CANNOT_HANDLE = new Object();
+
 	/**
 	 * Convert the object into the target type.
 	 *
@@ -36,7 +42,7 @@ public interface ConverterFunction {
 	 *            {@code null} as the convert function will not be invoked for
 	 *            null values.
 	 * @param targetType The target type.
-	 * @return The conversion result or {@code null} to indicate that the
+	 * @return The conversion result or {@link #CANNOT_HANDLE} to indicate that the
 	 *         convert function cannot handle this conversion. In this case the
 	 *         next matching rule or parent converter will be given a
 	 *         opportunity to convert.

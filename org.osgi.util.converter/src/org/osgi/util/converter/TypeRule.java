@@ -51,15 +51,19 @@ public class TypeRule<F, T> implements TargetRule {
 		return new ConverterFunction() {
             @Override
             @SuppressWarnings("unchecked")
-            public T apply(Object obj, Type targetType) throws Exception {
+            public Object apply(Object obj, Type targetType) throws Exception {
                 if (from instanceof Class) {
                     Class<?> cls = (Class<?>) from;
                     if (cls.isInstance(obj)) {
-                        return func.apply((F) obj);
+                        T res = func.apply((F) obj);
+                        if (res != null)
+                            return res;
+                        else
+                            return ConverterFunction.CANNOT_HANDLE;
                     }
                 }
                 // TODO support parameterized types?
-                return null;
+                return ConverterFunction.CANNOT_HANDLE;
             }
         };
     }
