@@ -62,7 +62,6 @@ public class TypeRule<F, T> implements TargetRule {
                             return ConverterFunction.CANNOT_HANDLE;
                     }
                 }
-                // TODO support parameterized types?
                 return ConverterFunction.CANNOT_HANDLE;
             }
         };
