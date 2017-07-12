@@ -10,8 +10,8 @@ import java.util.Set;
 import org.osgi.test.cases.converter.junit.ConverterComplianceTest.MyInterfaceProvidingLong;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.Rule;
-import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
 import org.osgi.util.function.Function;
 
@@ -38,7 +38,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 		toBeConverted.add(113l);
 		toBeConverted.add(24l);
 		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		
 		Collection<Number> collectionConverted = converter.convert(
 			toBeConverted).to(new TypeReference<Collection<Number>>(){});
@@ -64,7 +64,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	 */
 	public void testGenericConversion()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		List<String> list = converter.convert(Arrays.<Integer>asList(1,2,3)).to(
 				new TypeReference<List<String>>(){});
 		
@@ -80,7 +80,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	 */
 	public void testAggregateConversionToScalar()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		List<Long> longList = Arrays.asList(5l,8l,10l);
 
 		Long converted = converter.convert(longList).to(Long.class);
@@ -96,7 +96,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	 */
 	public void testAggregateConversionToScalarEmpty()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		List<Long> longList = new ArrayList<Long>();
 		
 		Long converted = converter.convert(longList).to(Long.class);
@@ -135,7 +135,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	{
 		int[] backingObject = new int[]{1,2,3};
 		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		List<Long> converted = converter.convert(backingObject).to(
 				new TypeReference<List<Long>>(){});
 		
@@ -174,7 +174,7 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	 */
 	public void testAggregateConversionFromNull()
 	{		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		Set<Long> converted = converter.convert(null).to(
 				new TypeReference<Set<Long>>(){});
 		assertTrue(converted.isEmpty());
@@ -195,7 +195,8 @@ public class ConverterAggregateComplianceTest extends TestCase {
 	 */
 	public void testAggregateConversionFromNotSpecial()
 	{		
-		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+		ConverterBuilder cb = Converters.standardConverter()
+				.newConverterBuilder();
 
 		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingLong, Long>( 
 		new Function<ConverterComplianceTest.MyInterfaceProvidingLong,Long>(){

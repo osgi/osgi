@@ -9,8 +9,8 @@ import java.util.Map;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.ConverterFunction;
+import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.Rule;
-import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
 import org.osgi.util.function.Function;
 
@@ -34,7 +34,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	public void testCustomizedConversion()
 	{
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
-		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+		ConverterBuilder cb = Converters.standardConverter()
+				.newConverterBuilder();
 
 		cb.rule(new Rule<Date,String>(
 			new Function<Date,String>(){
@@ -82,7 +83,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 		mb.setEnabled(true);
 
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
-		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+		ConverterBuilder cb = Converters.standardConverter()
+				.newConverterBuilder();
 
 		cb.rule(new Rule<Date,String>(
 			new Function<Date,String>(){
@@ -129,7 +131,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	//how does a converter express its wishes ?
 	public void testCustomizedRuleChainConversion()
 	{
-		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+		ConverterBuilder cb = Converters.standardConverter()
+				.newConverterBuilder();
 		
 		cb.rule(new Rule<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(
 			new Function<ConverterComplianceTest.MyInterfaceProvidingTwoInts,Long>(){
@@ -204,7 +207,8 @@ public class ConverterCustomizedComplianceTest extends TestCase {
 	//How is the most specific type defined ?
 	public void testCustomizedAbstractRuleConversion()
 	{
-		ConverterBuilder cb = new StandardConverter().newConverterBuilder();
+		ConverterBuilder cb = Converters.standardConverter()
+				.newConverterBuilder();
 
 		cb.rule(Long.class,
 				new ConverterFunction() {

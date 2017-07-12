@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
-import org.osgi.util.converter.StandardConverter;
+import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 
 import junit.framework.TestCase;
@@ -36,7 +36,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	public void testScalarAssignableTypeConversion()
 	{
 		BigDecimal toConvert = BigDecimal.valueOf(System.currentTimeMillis());
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		
 		Number converted = converter.convert(toConvert).to(
 				Number.class);
@@ -60,7 +60,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionFromBoolean()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Boolean fstToBoConverted = new Boolean(true);
 		
@@ -90,7 +90,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionFromCharacter()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Character fstToBoConverted = Character.valueOf('A');
 		
@@ -120,7 +120,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionFromNumber()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Number fstToBoConverted = new Double(65);
 		
@@ -150,7 +150,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionFromNull()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		
 		boolean booleanConverted = converter.convert(null).to(boolean.class);
 		assertFalse(booleanConverted);
@@ -174,7 +174,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		boolean fstToBeConverted = true;
 		Long sndToBeConverted = 125l;
 		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		String stringConverted = converter.convert(fstToBeConverted).to(String.class);
 		assertEquals("true", stringConverted);
 		
@@ -194,7 +194,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	public void testScalarConversionFromString()
 	{
 		String fstToBeConverted = "myObject";		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		
 		ConverterComplianceTest.MyObject myObjectConverted = 
 			converter.convert(fstToBeConverted).to(
@@ -236,7 +236,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		//thrown while parsing a string which does not represent a numeric 
 		//value for example) if not what is the expected result of the 
 		//conversion depending on type ?
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		
 		String booleanToBeConverted = "true";
 		
@@ -321,7 +321,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		Date date = calendar.getTime();
 		long millisEpoch = date.getTime();
 
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		Date dateConverted = converter.convert(millisEpoch).to(Date.class);
 		assertEquals(0,date.compareTo(dateConverted));
 		
@@ -351,7 +351,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		
 		String dateStr = df.format(date);
 
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		Date dateConverted = converter.convert(dateStr).to(Date.class);
 		assertEquals(0,date.compareTo(dateConverted));
 		
@@ -377,7 +377,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 		Date date = calendar.getTime();
 		long millisEpoch = date.getTime();
 		
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		long longConverted = converter.convert(calendar).to(long.class);
 		assertEquals(millisEpoch, longConverted);
 		
@@ -403,7 +403,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionEnum()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		// number
 		Number fstToBeConverted = 4l;
 		
@@ -453,7 +453,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionMapEntryKeyOrValueSameType()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Long fstKey = 145l;		
 		Character characterValue = Character.valueOf('z');
@@ -511,7 +511,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 
 	public void testScalarConversionMapEntryKeyOrValueAssignableType()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Number fstKey = 145l;		
 		Comparable<?> characterValue = Character.valueOf('z');
@@ -574,7 +574,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionMapEntryKeyOrValueStringType()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Number fstKey = 0l;		
 		String stringValue = "true";
@@ -625,7 +625,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionMapEntryKeyToString()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 
 		Number fstKey = 1l;		
 		Number numberValue = 0l;
@@ -652,7 +652,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	 */
 	public void testScalarConversionMapEntryUnsuported()
 	{
-		Converter converter = new StandardConverter();
+		Converter converter = Converters.standardConverter();
 		String tobeConverted = "map entry to be converted";
 		
 		try{
