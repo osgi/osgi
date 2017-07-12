@@ -614,7 +614,7 @@
     <section>
       <title>File Permission</title>
 
-      <para>If binaries are used, the coordinator needs to have read/write permission
+      <para>If binaries are used, the configurator needs to have read/write permission
       to the configured directory to store the binaries.</para>
       
       <para>A bundle using a binary referenced from a configuration needs to have read
