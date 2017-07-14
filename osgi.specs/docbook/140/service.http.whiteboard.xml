@@ -401,9 +401,25 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para>This method is invoked to handle implementation-defined security
       on the request. It is invoked before the request is sent to the
       filter-servlet pipeline.</para>
+      
+      <para>When the request returns from the filter-servlet pipeline the 
+        <xref
+        linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+        xrefstyle="hyperlink"/>
+        method is called. This method can be used by the security handling 
+        mechanism to clean up any context associated with the current request.
+      </para>
+      
+      <para>
+        In the case a request is forwarded or includes the result of an other resource such as a servlet
+        <code>handleSecurity()</code> and <code>finishSecurity()</code> are called again
+        on this new context. These calls are nested within the originating request. 
+        Servlet Context Helpers that implement these methods must be prepared to 
+        deal with such nested invocations. 
+      </para>
 
-      <para><emphasis>Default Behavior</emphasis> - Always returns
-      <code>true</code>.</para>
+      <para><emphasis>Default Behavior</emphasis> - <code>handleSecurity()</code> always returns
+      <code>true</code>. <code>finishSecurity()</code> does nothing by default.</para>
     </section>
 
     <section>
