@@ -408,10 +408,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
         xrefstyle="hyperlink"/>
         method is called. This method can be used by the security handling 
         mechanism to clean up any context associated with the current request.
+        <code>finishSecurity()</code> is only called if <code>handleSecurity()</code>
+        returned <code>true</code> for the specified request.
       </para>
       
       <para>
-        In the case a request is forwarded or includes the result of an other resource such as a servlet
+        In the case a request is dispatched either using the include or forward method 
         <code>handleSecurity()</code> and <code>finishSecurity()</code> are called again
         on this new context. These calls are nested within the originating request. 
         Servlet Context Helpers that implement these methods must be prepared to 

@@ -192,7 +192,7 @@ public abstract class ServletContextHelper {
 	 * <p>
 	 * If there is the need to clean up resources at the end of the request, the
 	 * method {@link #finishSecurity(HttpServletRequest, HttpServletResponse)}
-	 * can be used.
+	 * can be implemented. That method is only called if this method returns {@code true}.
 	 *
 	 * @param request The HTTP request.
 	 * @param response The HTTP response.
@@ -216,6 +216,10 @@ public abstract class ServletContextHelper {
 	 * Implementations of this service can implement this method to clean up
 	 * resources which have been setup in
 	 * {@link #handleSecurity(HttpServletRequest, HttpServletResponse)}.
+	 * <p>
+	 * This method is only called if 
+	 * {@link #handleSecurity((HttpServletRequest, HttpServletResponse)} returned 
+	 * {@code true} for the specified request.
 	 * <p>
 	 * The default implementation of this method does nothing.
 	 * 
