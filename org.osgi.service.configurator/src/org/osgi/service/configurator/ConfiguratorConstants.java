@@ -111,9 +111,4 @@ public final class ConfiguratorConstants {
 	 * @see #PROPERTY_POLICY
 	 */
 	public static final String	POLICY_FORCE			= "force";
-
-	/**
-	 * Key in the JSON that denotes the section containing all configurations.
-	 */
-	public static final String	KEY_CONFIGURATIONS		= "configurations";
 }
