@@ -109,6 +109,9 @@ public class AuthenticationTestCase extends BaseHttpWhiteboardTestCase {
 						request.setAttribute(REC_PAR, "true");
 						request.getRequestDispatcher("/servlet")
 									.include(request, response);
+					} else if (request.getParameter("throw") != null) {
+						callStack.add("throw");
+						throw new ServletException("throw");
 					}
 				}
 				response.setStatus(200);
@@ -186,6 +189,17 @@ public class AuthenticationTestCase extends BaseHttpWhiteboardTestCase {
 		assertEquals(6, callStack.size());
 		assertEquals(Arrays.asList("handle1", "servlet/context1", "handle1",
 				"servlet/context1", "finish1", "finish1"), callStack);
+		callStack.clear();
+	}
+
+	public void test_exceptionFromServlet() throws Exception {
+		final List<String> callStack = new ArrayList<>();
+		setup(callStack);
+
+		request("/context1/servlet?throw=true&auth=true");
+		assertEquals(4, callStack.size());
+		assertEquals(Arrays.asList("handle1", "servlet/context1", "throw",
+				"finish1"), callStack);
 		callStack.clear();
 	}
 }
