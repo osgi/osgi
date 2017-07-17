@@ -104,7 +104,7 @@
       In order to get processed, a bundle must require the configurator implementation:
       
       <programlisting>Require-Capability: osgi.extender;
-  filter := (&amp;(osgi.extender="osgi.configurator"))
+  filter := (&amp;(osgi.extender="osgi.configurator")
               (version&gt;=1.0)(!(version&gt;=2.0)))
       </programlisting>
       
