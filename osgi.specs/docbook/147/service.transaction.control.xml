@@ -486,35 +486,39 @@ control.required(() -> {
 
         <tbody>
           <row>
-            <entry morerows='2' valign='middle'><code>required()</code></entry>
+            <entry><code>required()</code></entry>
             <entry>Unscoped</entry>
             <entry><para>Begins a new Transaction scope and executes the 
             work inside it</para></entry>
           </row>
           <row>
+            <entry><code>required()</code></entry>
             <entry>No Transaction scope</entry>
             <entry><para>Suspends the No Transaction Scope and begins a new 
             Transaction scope, executing the work inside it. After the work
             completes the original scope is restored.</para></entry>
           </row>
           <row>
+            <entry><code>required()</code></entry>
             <entry>Transaction scope</entry>
             <entry><para>Runs the work within the existing scope</para></entry>
           </row>
 
           <row>
-            <entry morerows='2' valign='middle'><code>requiresNew()</code></entry>
+            <entry><code>requiresNew()</code></entry>
             <entry>Unscoped</entry>
             <entry><para>Begins a new Transaction scope and executes the 
             work inside it</para></entry>
           </row>
           <row>
+            <entry><code>requiresNew()</code></entry>
             <entry>No Transaction scope</entry>
             <entry><para>Suspends the No Transaction Scope and begins a new 
             Transaction scope, executing the work inside it. After the work
             completes the original scope is restored.</para></entry>
           </row>
           <row>
+            <entry><code>requiresNew()</code></entry>
             <entry>Transaction scope</entry>
             <entry><para>Suspends the Transaction Scope and begins a new 
             Transaction scope, executing the work inside it. After the work
@@ -522,33 +526,39 @@ control.required(() -> {
           </row>
  
           <row>
-            <entry morerows='2' valign='middle'><code>supports()</code></entry>
+            <entry><code>supports()</code></entry>
             <entry>Unscoped</entry>
             <entry><para>Begins a new No Transaction scope and executes the 
             work inside it</para></entry>
           </row>
           <row>
+            <entry><code>supports()</code></entry>
             <entry>No Transaction scope</entry>
             <entry><para>Runs the work within the existing scope</para></entry>
           </row>
           <row>
+            <entry><code>supports()</code></entry>
             <entry>Transaction scope</entry>
             <entry><para>Runs the work within the existing scope</para></entry>
           </row>
 
           <row>
-            <entry morerows='2' valign='middle'><code>notSupported()</code></entry>
+            <entry><code>notSupported()</code></entry>
             <entry>Unscoped</entry>
             <entry><para>Begins a new No Transaction scope and executes the 
             work inside it</para></entry>
           </row>
           <row>
+            <entry><code>notSupported()</code></entry>
             <entry>No Transaction scope</entry>
             <entry><para>Runs the work within the existing scope</para></entry>
           </row>
           <row>
+            <entry><code>notSupported()</code></entry>
             <entry>Transaction scope</entry>
-            <entry><para>Runs the work within the existing scope</para></entry>
+            <entry><para>Suspends the Transaction Scope and begins a new 
+            No Transaction scope, executing the work inside it. After the work
+            completes the original transaction scope is restored.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -601,14 +611,17 @@ control.required(() -> {
           <para>If a client exception is thrown then it must be caught by the
           Transaction Control Service and handled appropriately by finishing the
           scope as required. Once the scope has completed the client exception
-          must be wrapped in a <code>ScopedWorkException</code> and rethrown by 
+          must be wrapped in a <xref
+          linkend="org.osgi.service.transaction.control.ScopedWorkException" 
+          xrefstyle="hyperlink"/> and rethrown by 
           the Transaction Control service.</para> 
           
           <para>If a number of scopes are nested then a ScopedWorkException may be
-          received as a client Exception. A ScopedWorkException should not be re-wrapped
-          by the Transaction Control Service but instead a new ScopedWorkException should 
+          received as a client Exception. A ScopedWorkException must not be re-wrapped
+          by the Transaction Control Service using the normal Exception chaining mechanism,
+          but instead a new ScopedWorkException must 
           be created initialised with the original cause. The caught ScopedWorkException 
-          must then be added to the new ScopedWorkException as a supressed Exception. 
+          must then be added to the new ScopedWorkException as a suppressed Exception. 
           This prevents clients from having to deeply introspect the exception cause chain 
           to locate the original error.</para>
         </section>
@@ -620,7 +633,9 @@ control.required(() -> {
             the Exceptions thrown by a piece of work represent an important part of the 
             API, and they need to be thrown on without being wrapped in a ScopedWorkException.
             The ScopedWorkException provides a simple mechanism to do this. The client simply 
-            calls one of the <code>asOneOf()</code> methods which will throw the cause of the
+            calls one of the <xref
+            linkend="org.osgi.service.transaction.control.ScopedWorkException.asOneOf-Class-Class-" 
+            xrefstyle="hyperlink"/> methods which will throw the cause of the
             Exception as one of the supplied checked Exception types, or directly as an 
             unchecked Exception if the cause is unchecked. 
           </para>
@@ -644,9 +659,9 @@ try {
           
           <para>If the cause of a ScopedWorkException is a checked exception, but that
           exception is not assignable to any of the types passed to the 
-          <code>asOneOf()</code> method then this is a programming error and an 
-          <code>IllegalArgument</code> exception will be thrown with its cause
-          set as the ScopedWorkException</para>
+          <code>asOneOf()</code> method then the cause of the ScopedWorkException will 
+          still be thrown, however there will be no compiler assistance for the user
+          when writing their <code>throws</code> clause.</para>
         </section>
 
         <section>
@@ -655,7 +670,9 @@ try {
           <para>Many operations performed by the Transaction Control Service,
             particularly when finishing a scope, may result in an Exception.
             Internal failures, for example a failure when attempting to commit
-            a resource, must be wrapped in a TransactionException and thrown
+            a resource, must be wrapped in a <xref
+            linkend="org.osgi.service.transaction.control.TransactionException" 
+            xrefstyle="hyperlink"/> and thrown
             to the client.</para>
             <para>A TransactionException must never override a ScopedWorkException.
             In the case where a ScopedWorkException should be thrown and a
@@ -678,10 +695,14 @@ try {
         logic determines that the transaction should not complete) then the work may trigger 
         a rollback in one of two ways.</para>
       
-        <para>Calling <code>setRollbackOnly()</code> on the Transaction Control object will 
+        <para>Calling <xref
+        linkend="org.osgi.service.transaction.control.TransactionControl.setRollbackOnly--" 
+        xrefstyle="hyperlink"/> on the Transaction Control object will 
         mark the transaction for rollback so that it will never commit, even if the method 
         completes normally. This is a one-way operation, and the rollback state can be 
-        queried using <code>getRollbackOnly().</code></para>
+        queried using <xref
+        linkend="org.osgi.service.transaction.control.TransactionControl.getRollbackOnly--" 
+        xrefstyle="hyperlink"/></para>
       
         <programlisting>
 txControl.required(() -> {
@@ -722,12 +743,16 @@ txControl.required(() -> {
         <para>There are two ways to prevent a transaction from rolling back when a particular 
         exception occurs</para>
 
-        <para>The Transaction Control service provides a <code>TransactionBuilder</code>.
+        <para>The Transaction Control service provides a <xref
+          linkend="org.osgi.service.transaction.control.TransactionBuilder" 
+          xrefstyle="hyperlink"/>.
         The builder can can be used to define sets of Exception types that should, or should 
         not, trigger rollback. The most specific match will be used to determine whether the 
         transaction should roll back or not.</para>
         
-        <para>The Transaction Control service provides an ignoreException() method. This can 
+        <para>The Transaction Control service provides an <xref
+          linkend="org.osgi.service.transaction.control.TransactionControl.ignoreException-Throwable-" 
+          xrefstyle="hyperlink"/> method. This can 
         be used from within an Active Transaction to declare a specific Exception object that 
         should not trigger rollback.</para>
         
@@ -792,7 +817,9 @@ txControl.build()
         <section>
           <title>Determining whether a Transaction is read only</title>
           <para>The TransactionContext provides access to whether the transaction is read only 
-          using the <code>isReadOnly()</code> method. This method will return true if the 
+          using the <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.isReadOnly--" 
+          xrefstyle="hyperlink"/> method. This method will return true if the 
           transaction was started using the read only flag, and the TransactionControl 
           service supports read-only optimization.</para>
           
@@ -847,25 +874,39 @@ txControl.build()
     
     <itemizedlist>
       <listitem>
-        <para><code>activeTransaction()</code> - returns true if there is a Transaction
+        <para><xref
+          linkend="org.osgi.service.transaction.control.TransactionControl.activeTransaction--" 
+          xrefstyle="hyperlink"/> - returns true if there is a Transaction
         scope associated with the currently executing work.</para>
       </listitem>
       <listitem>
-        <para><code>activeScope()</code> - returns true if there is a Transaction
+        <para><xref
+          linkend="org.osgi.service.transaction.control.TransactionControl.activeScope--" 
+          xrefstyle="hyperlink"/> - returns true if there is a Transaction
         Scope or a No Transaction Scope associated with the currently executing work.</para>
       </listitem>
       <listitem>
-        <para><code>getCurrentContext()</code> - returns the current 
-        <code>TransactionContext</code>, or <code>null</code> if the currently executing code 
+        <para><xref
+          linkend="org.osgi.service.transaction.control.TransactionControl.getCurrentContext--" 
+          xrefstyle="hyperlink"/> - returns the current 
+        <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext" 
+          xrefstyle="hyperlink"/>, or <code>null</code> if the currently executing code 
         is unscoped. If the current work has a No Transaction scope then the returned 
-        Transaction Context will report its status as <code>NO_TRANSACTION</code></para>
+        Transaction Context will report its status as <xref
+          linkend="org.osgi.service.transaction.control.TransactionStatus.NO_TRANSACTION" 
+          xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
   
     <para>If a Transaction scope is active then it may either be backed by a 
     Local Transaction, or by an XA Transaction, which affects the types of resource that
     can be used with the Transaction Context. The transaction support can be queried
-    using the <code>supportsLocal()</code> and <code>supportsXA()</code> methods on the
+    using the <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.supportsLocal--" 
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.supportsXA--" 
+          xrefstyle="hyperlink"/> methods on the
     transaction context object. Some implementations may support both XA and Local
     resources in the same transaction, but these are still considered to be XA 
     Transactions.</para>
@@ -875,8 +916,12 @@ txControl.build()
       
       <para>In addition to registering Resources with the Transaction Context clients or resources
       may register callback functions. Callback functions can run either before or after the transaction
-      finishes, depending as to whether they are registered using <code>preCompletion</code> or 
-      <code>postCompletion</code> to register their callbacks.</para>
+      finishes, depending as to whether they are registered using <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.preCompletion-Runnable-" 
+          xrefstyle="hyperlink"/> or 
+      <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.postCompletion-Consumer-" 
+          xrefstyle="hyperlink"/> to register their callbacks.</para>
       
       <para>Lifecycle callbacks may be registered at any point during the execution of scoped 
       work. Once the scoped work has finished it is no longer possible to register a
@@ -938,8 +983,12 @@ txControl.build()
       attached to the TransactionContext, and will be released after the Context finishes.
       Scoped resources are guaranteed to be accessible in lifecycle callbacks.</para>
     
-      <para>Variables may be added to the scope using <code>putScopedValue()</code> and retrieved 
-      using <code>getScopedValue()</code>. These methods are valid both for Active Transactions 
+      <para>Variables may be added to the scope using <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.putScopedValue-Object-Object-" 
+          xrefstyle="hyperlink"/> and retrieved 
+      using <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.getScopedValue-Object-" 
+          xrefstyle="hyperlink"/>. These methods are valid both for Active Transactions 
       and the No Transaction scope.</para>
     </section>
     
@@ -955,14 +1004,16 @@ txControl.build()
       use the same key, and/or a Transaction Control implementation may reuse keys if it 
       unregisters and then re-registers its service with a different service id.</para>
 
-      <para>TransactionContexts for the NovTransaction scope have a null key.</para>
+      <para>TransactionContexts for the No Transaction scope have a null key.</para>
     </section>
     
     <section>
       <title>The Transaction Status</title>
       
       <para>The current state of a Transaction Context is represented by a Java enum, and
-      can be queried by calling <code>getTransactionStatus</code>. The status of a 
+      can be queried by calling <xref
+          linkend="org.osgi.service.transaction.control.TransactionContext.getTransactionStatus--" 
+          xrefstyle="hyperlink"/>. The status of a 
       Transaction Context will change over time until it reaches a terminal state. 
       Once a terminal state has been reached the status of the Transaction Context will
       not change again. </para>
@@ -994,7 +1045,9 @@ txControl.build()
 
           <tbody>
             <row>
-              <entry><code>NO_TRANSACTION</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.NO_TRANSACTION" 
+              xrefstyle="hyperlink"/></entry>
               <entry>yes</entry>
               <entry>
                 <para>This Transaction Context is for a No Transaction Scope</para>
@@ -1002,7 +1055,9 @@ txControl.build()
             </row>
           
             <row>
-              <entry><code>ACTIVE</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.ACTIVE" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>This Transaction Scope is executing and not marked for rollback</para>
@@ -1010,7 +1065,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>MARKED_ROLLBACK</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.MARKED_ROLLBACK" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>This Transaction Scope is executing and has been marked for rollback</para>
@@ -1018,7 +1075,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>PREPARING</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.PREPARING" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>A two phase commit is occurring and the transaction is being prepared.
@@ -1027,7 +1086,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>PREPARED</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.PREPARED" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>A two phase commit is occurring and the transaction has been prepared.
@@ -1036,7 +1097,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>COMMITTING</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.COMMITTING" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>The transaction is being committed. This state is visible during the 
@@ -1045,7 +1108,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>COMMITTED</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.COMMITTED" 
+              xrefstyle="hyperlink"/></entry>
               <entry>yes</entry>
               <entry>
                 <para>The transaction was successfully committed.</para>
@@ -1053,7 +1118,9 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>ROLLING_BACK</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.ROLLING_BACK" 
+              xrefstyle="hyperlink"/></entry>
               <entry>no</entry>
               <entry>
                 <para>The transaction is being rolled back. This state is visible during the 
@@ -1062,10 +1129,12 @@ txControl.build()
             </row>
 
             <row>
-              <entry><code>ROLLED_BACK</code></entry>
+              <entry><xref
+              linkend="org.osgi.service.transaction.control.TransactionStatus.ROLLED_BACK" 
+              xrefstyle="hyperlink"/></entry>
               <entry>yes</entry>
               <entry>
-                <para>The transaction was successfully committed.</para>
+                <para>The transaction was successfully rolled back.</para>
               </entry>
             </row>
           
