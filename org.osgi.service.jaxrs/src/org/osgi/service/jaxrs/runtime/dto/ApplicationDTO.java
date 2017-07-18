@@ -17,7 +17,6 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.resource.dto.ResourceDTO;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 
 /**

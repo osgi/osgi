@@ -39,5 +39,5 @@ public class RequestInfoDTO extends DTO {
 	/**
 	 * The resource processing this request.
 	 */
-	public ResourceDTO		servletDTO;
+	public ResourceDTO		resourceDTO;
 }
