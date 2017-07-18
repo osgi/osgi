@@ -14,20 +14,20 @@ public class ResourceMethodInfoDTO extends DTO {
 	 * The HTTP verb being handled, for example GET, DELETE, PUT, POST, HEAD,
 	 * OPTIONS
 	 */
-	String	method;
+	public String	method;
 
 	/**
 	 * The mime-type(s) consumed by this resource method, null if not defined
 	 */
-	String[]	consumingMimeType;
+	public String[]	consumingMimeType;
 
 	/**
 	 * The mime-type(s) produced by this resource method, null if not defined
 	 */
-	String[]	producingMimeType;
+	public String[]	producingMimeType;
 
 	/**
 	 * The URI of this sub-resource, null if this is not a sub-resource method
 	 */
-	String	uri;
+	public String	uri;
 }
