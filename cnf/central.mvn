@@ -9,9 +9,9 @@ org.osgi:osgi.cmpn:6.0.0
 org.osgi:osgi.promise:6.0.0
 
 # Bnd artifacts
-biz.aQute.bnd:biz.aQute.bnd:3.3.0
-biz.aQute.bnd:biz.aQute.junit:3.3.0
-biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0
+biz.aQute.bnd:biz.aQute.bnd:3.4.0
+biz.aQute.bnd:biz.aQute.junit:3.4.0
+biz.aQute.bnd:biz.aQute.bnd.gradle:3.4.0
 
 # 3rd party artifacts
 org.apache.aries:org.apache.aries.util:1.1.1
