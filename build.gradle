@@ -56,6 +56,9 @@ subprojects {
     }
     jar {
       dependsOn animalsnifferMain
+      doFirst {
+        project.mkdir(compileJava.destinationDir)
+      }
     }
     test {
       testLogging {
