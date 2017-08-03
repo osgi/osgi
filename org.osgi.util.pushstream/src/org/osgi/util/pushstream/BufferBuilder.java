@@ -77,6 +77,6 @@ public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends
 	/**
 	 * @return the object being built
 	 */
-	R create();
+	R build();
 
 }

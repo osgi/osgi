@@ -457,7 +457,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(5);
 		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
 				.unbuffered()
-				.create();
+				.build();
 
 		Promise<Object[]> p = ps.limit(2l).toArray();
 
@@ -489,7 +489,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(10000);
 		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
 				.unbuffered()
-				.create();
+				.build();
 
 		Promise<Object[]> p = ps.limit(Duration.ofMillis(5)).toArray();
 		gen.getExecutionThread().join();
@@ -522,7 +522,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(100);
 		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
 				.unbuffered()
-				.create();
+				.build();
 
 		final Throwable[] failure = new Throwable[1];
 
@@ -887,11 +887,11 @@ public class PushStreamIntermediateOperationTest
 		PushStream<Integer> ps_first = new PushStreamProvider()
 				.buildStream(gen_first)
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 100)
-				.create();
+				.build();
 		PushStream<Integer> ps_second = new PushStreamProvider()
 				.buildStream(gen_second)
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 100)
-				.create();
+				.build();
 
 		Promise<Object[]> p = ps_first.merge(ps_second).toArray();
 		
@@ -1046,7 +1046,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1086,7 +1086,7 @@ public class PushStreamIntermediateOperationTest
 				.withBuffer(new ArrayBlockingQueue<>(3))
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 150)
 				.withQueuePolicy(QueuePolicyOption.DISCARD_OLDEST)
-				.create()
+				.build()
 				.reduce(bo);
 
 		gen.getExecutionThread().join();
@@ -1123,7 +1123,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1163,7 +1163,7 @@ public class PushStreamIntermediateOperationTest
 				.withBuffer(new ArrayBlockingQueue<>(3))
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 150)
 				.withQueuePolicy(QueuePolicyOption.FAIL)
-				.create()
+				.build()
 				.reduce(bo);
 
 		gen.getExecutionThread().join();
@@ -1206,7 +1206,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1246,7 +1246,7 @@ public class PushStreamIntermediateOperationTest
 				.withBuffer(new ArrayBlockingQueue<>(5))
 				.withPushbackPolicy(PushbackPolicyOption.FIXED, 150)
 				.withQueuePolicy(QueuePolicyOption.BLOCK)
-				.create()
+				.build()
 				.reduce(bo);
 
 		gen.getExecutionThread().join();
@@ -1285,7 +1285,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1325,7 +1325,7 @@ public class PushStreamIntermediateOperationTest
 				.withBuffer(new ArrayBlockingQueue<>(3))
 				.withPushbackPolicy(PushbackPolicyOption.LINEAR, 250)
 				.withQueuePolicy(QueuePolicyOption.BLOCK)
-				.create()
+				.build()
 				.reduce(bo);
 
 		gen.getExecutionThread().join();
@@ -1363,7 +1363,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1403,7 +1403,7 @@ public class PushStreamIntermediateOperationTest
 				.withBuffer(new ArrayBlockingQueue<>(3))
 				.withPushbackPolicy(PushbackPolicyOption.ON_FULL_FIXED, 250)
 				.withQueuePolicy(QueuePolicyOption.BLOCK)
-				.create()
+				.build()
 				.reduce(bo);
 
 		assertEquals(45, (int) p.getValue().get());
@@ -1436,7 +1436,7 @@ public class PushStreamIntermediateOperationTest
 		// cf PushStreamTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 
 		// thread overlapping detection
 		AtomicInteger threadCount = new AtomicInteger(0);
@@ -1477,7 +1477,7 @@ public class PushStreamIntermediateOperationTest
 				.withPushbackPolicy(PushbackPolicyOption.ON_FULL_EXPONENTIAL,
 						200)
 				.withQueuePolicy(QueuePolicyOption.BLOCK)
-				.create()
+				.build()
 				.reduce(bo);
 
 		gen.getExecutionThread().join();
@@ -1517,7 +1517,7 @@ public class PushStreamIntermediateOperationTest
 
 		AtomicInteger current = new AtomicInteger();
 
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 		Promise<Object[]> pr = ps.<Integer> coalesce((c) -> {
 			current.set(current.get() + c);
 			if (current.get() > 10) {
@@ -1571,7 +1571,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(10);
 		PushStreamProvider psp = new PushStreamProvider();
 
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 		Promise<Object[]> pr = ps.filter((i) -> {
 			return i > 10;
 		}).window(Duration.ofMillis(1000), (c) -> {
@@ -1609,7 +1609,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(10000);
 		PushStreamProvider psp = new PushStreamProvider();
 
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 		Promise<Object[]> pr = ps.window(Duration.ofMillis(10), (c) -> {
 			return c.size();
 		}).toArray();
@@ -1647,7 +1647,7 @@ public class PushStreamIntermediateOperationTest
 		ExtGenerator gen = new ExtGenerator(500);
 		PushStreamProvider psp = new PushStreamProvider();
 
-		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().create();
+		PushStream<Integer> ps = psp.buildStream(gen).unbuffered().build();
 		Promise<Object[]> pr = ps.window(() -> {
 			return Duration.ofMillis(200);
 		}, () -> {

@@ -91,7 +91,7 @@ public class PushStreamTest extends TestCase {
 		return impl.buildStream(source)
 				.withPushbackPolicy(LINEAR, 20)
 				.withQueuePolicy(FAIL)
-				.create();
+				.build();
 	}
 	
 	public void testSimple() throws Exception {

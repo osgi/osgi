@@ -77,7 +77,7 @@ class PushStreamBuilderImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 	}
 
 	@Override
-	public PushStream<T> create() {
+	public PushStream<T> build() {
 		if (unbuffered) {
 			return psp.createUnbufferedStream(eventSource, previousExecutor);
 		} else {

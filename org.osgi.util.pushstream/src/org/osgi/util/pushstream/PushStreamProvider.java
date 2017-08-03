@@ -248,7 +248,7 @@ public final class PushStreamProvider {
 	 */
 	public <T> PushEventSource<T> createEventSourceFromStream(
 			PushStream<T> stream) {
-		return buildEventSourceFromStream(stream).create();
+		return buildEventSourceFromStream(stream).build();
 	}
 
 	/**
@@ -268,7 +268,7 @@ public final class PushStreamProvider {
 			PushStream<T> stream) {
 		return new AbstractBufferBuilder<PushEventSource<T>,T,U>() {
 			@Override
-			public PushEventSource<T> create() {
+			public PushEventSource<T> build() {
 				SimplePushEventSource<T> spes = createSimplePushEventSource(
 						concurrency, worker, buffer, bufferingPolicy, () -> {
 							try {
@@ -320,7 +320,7 @@ public final class PushStreamProvider {
 			Class<T> type) {
 		return new AbstractBufferBuilder<SimplePushEventSource<T>,T,U>() {
 			@Override
-			public SimplePushEventSource<T> create() {
+			public SimplePushEventSource<T> build() {
 				return createSimplePushEventSource(concurrency, worker, buffer,
 						bufferingPolicy, () -> { /* Nothing else to do */ });
 			}
@@ -402,7 +402,7 @@ public final class PushStreamProvider {
 	 */
 	public <T> PushEventConsumer<T> createBufferedConsumer(
 			PushEventConsumer<T> delegate) {
-		return buildBufferedConsumer(delegate).create();
+		return buildBufferedConsumer(delegate).build();
 	}
 	
 	/**
@@ -434,7 +434,7 @@ public final class PushStreamProvider {
 			PushEventConsumer<T> delegate) {
 		return new AbstractBufferBuilder<PushEventConsumer<T>,T,U>() {
 			@Override
-			public PushEventConsumer<T> create() {
+			public PushEventConsumer<T> build() {
 				PushEventPipe<T> pipe = new PushEventPipe<>();
 				
 				createStream(pipe, concurrency, worker, buffer, bufferingPolicy, backPressure)
