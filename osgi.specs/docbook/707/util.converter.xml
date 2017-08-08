@@ -76,7 +76,17 @@
         <para><emphasis>Rule</emphasis> - a rule is used to customize the behavior of the converter.</para>
       </listitem>
     </itemizedlist>
-    <remark>Add entity diagram</remark>
+
+    <figure>
+      <title>Converter Entity overview</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="3.100in"
+                     contentwidth="5.000in" fileref="converter-overview.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
   </section> 
 
   <section>
