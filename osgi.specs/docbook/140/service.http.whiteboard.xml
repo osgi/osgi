@@ -2213,7 +2213,6 @@ public class MyServletRequestListener implements ServletRequestListener {
       </mediaobject>
     </figure>
 
-    <remark>Add PreprocessorDTO</remark>
     <para>Handlers for a given request path can be found with the <xref
     linkend="org.osgi.service.http.runtime.HttpServiceRuntime.calculateRequestInfoDTO-String-"
     xrefstyle="hyperlink"/> method. This method returns a <xref
@@ -2231,7 +2230,6 @@ public class MyServletRequestListener implements ServletRequestListener {
       </mediaobject>
     </figure>
 
-    <remark>Does this need to support PreprocessorDTO as well?</remark>
     <para>Where servlets registered via the <xref linkend="service.http"/> are
     returned via this service, the Servlet DTO will report negative service
     IDs for these servlets to distinguish them from Servlet Whiteboard

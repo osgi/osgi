@@ -2,7 +2,7 @@
 <!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="391.115px" height="177.892px" viewBox="0 -0.001 391.115 177.892"
+	 width="420.115px" height="177.892px" viewBox="0 -0.001 391.115 177.892"
 	 style="enable-background:new 0 -0.001 391.115 177.892;" xml:space="preserve">
 <polygon points="194.874,111.277 150.709,111.277 150.709,74.612 239.039,74.612 239.039,111.277 "/>
 <polygon style="fill:none;stroke:#000000;stroke-width:0.6666;stroke-linejoin:round;" points="194.874,111.277 150.709,111.277 
@@ -41,7 +41,7 @@
 <rect x="315.186" y="36.664" style="fill:none;" width="31.69" height="11.667"/>
 <text transform="matrix(1 0 0 1 315.1863 44.594)" style="font-family:'ProductusSemibold'; font-size:11;">Servlet</text>
 <rect x="315.186" y="83.833" style="fill:none;" width="22.357" height="11.667"/>
-<text transform="matrix(1 0 0 1 315.1863 91.7639)" style="font-family:'ProductusSemibold'; font-size:11;">Filter</text>
+<text transform="matrix(1 0 0 1 315.1863 91.7639)" style="font-family:'ProductusSemibold'; font-size:11;">Filter / Pre-processor</text>
 <rect x="315.186" y="132.9" style="fill:none;" width="75.929" height="11.667"/>
 <text transform="matrix(1 0 0 1 315.1863 140.8313)" style="font-family:'ProductusSemibold'; font-size:11;">Resources Service</text>
 <rect x="158.338" y="78.075" style="fill:none;" width="68.359" height="23.758"/>
