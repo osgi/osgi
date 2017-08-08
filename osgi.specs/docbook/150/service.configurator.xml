@@ -92,7 +92,16 @@
       </listitem>
     
     </itemizedlist>
-    <remark>Add entity diagram</remark>
+    <figure>
+      <title>Configurator Entity overview</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="3.100in"
+                     contentwidth="5.000in" fileref="configurator-overview.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
   </section> 
 
   <section xml:id="service.configurator-resources">

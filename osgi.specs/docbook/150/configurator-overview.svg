@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 184.7 104.5" style="enable-background:new 0 0 184.7 104.5;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#E6E6E6;}
+	.st1{fill:#FFFFFF;}
+	.st2{font-family:'ProductusBook';}
+	.st3{font-size:7.98px;}
+	.st4{enable-background:new    ;}
+</style>
+<rect x="-1.7" y="0" class="st0" width="186.4" height="43.2"/>
+<rect x="37.9" y="28.1" width="0.5" height="4.3"/>
+<rect x="37.9" y="38.4" width="0.5" height="8.1"/>
+<rect x="37.9" y="52.6" width="0.5" height="8.1"/>
+<rect x="37.9" y="66.8" width="0.5" height="8.1"/>
+<rect x="123" y="8.1" width="54.3" height="27"/>
+<rect x="123" y="7.9" width="54.5" height="0.5"/>
+<rect x="177.1" y="8.1" width="0.5" height="27.2"/>
+<rect x="122.8" y="34.9" width="54.5" height="0.5"/>
+<rect x="122.8" y="7.9" width="0.5" height="27.2"/>
+<rect x="120.6" y="6.3" class="st1" width="54.4" height="27"/>
+<rect x="120.6" y="6.1" width="54.6" height="0.5"/>
+<rect x="174.7" y="6.3" width="0.5" height="27.2"/>
+<rect x="120.4" y="33.1" width="54.6" height="0.5"/>
+<rect x="120.4" y="6.1" width="0.5" height="27.2"/>
+<text transform="matrix(0.9504 0 0 1 123.0236 13.4383)" class="st2 st3">Configuration</text>
+<text transform="matrix(0.9504 0 0 1 123.0236 23.0144)" class="st2 st3">PID</text>
+<polyline class="st1" points="4.4,35.4 4.4,7.1 47.3,7.1 47.3,27.3 "/>
+<rect x="4.2" y="6.8" width="0.5" height="28.6"/>
+<rect x="4.4" y="6.8" width="43.1" height="0.5"/>
+<polyline points="47.5,7.1 47.5,27.5 47.3,27.5 4.5,35.6 4.2,35.7 4.2,35.4 4.4,35.2 47.3,27.1 47.3,27.5 47,27.3 47,7.1 "/>
+<text transform="matrix(1 0 0 1 6.443 15.4199)" class="st2 st3">Configuration</text>
+<text transform="matrix(1 0 0 1 6.443 24.9951)" class="st2 st3">Resource</text>
+<rect x="6.4" y="77.5" width="54.3" height="27"/>
+<rect x="6.4" y="77.2" width="54.5" height="0.5"/>
+<rect x="60.5" y="77.5" width="0.5" height="27.2"/>
+<rect x="6.2" y="104.2" width="54.5" height="0.5"/>
+<rect x="6.2" y="77.2" width="0.5" height="27.2"/>
+<rect x="4" y="75.7" class="st1" width="54.4" height="27"/>
+<rect x="4" y="75.4" width="54.6" height="0.5"/>
+<rect x="58.1" y="75.7" width="0.5" height="27.2"/>
+<rect x="3.8" y="102.4" width="54.6" height="0.5"/>
+<rect x="3.8" y="75.4" width="0.5" height="27.2"/>
+<text transform="matrix(0.9504 0 0 1 6.3941 82.7976)" class="st2 st3">Configurator</text>
+<text transform="matrix(0.9504 0 0 1 6.3941 92.3728)" class="st2 st3">Implementation</text>
+<rect x="60.9" y="91.3" width="81.4" height="0.4"/>
+<text transform="matrix(1 0 0 1 66.3521 89.018)" class="st4"><tspan x="0" y="0" class="st2 st3">creates</tspan><tspan x="0" y="9.6" class="st2 st3">updates</tspan></text>
+<text transform="matrix(-6.123234e-17 1 -1 -6.123234e-17 40.8627 45.4395)" class="st2 st3">reads</text>
+<text transform="matrix(1 0 0 1 4.1693 95.5164)" class="st2 st3"> </text>
+<text transform="matrix(1 0 0 1 61.6628 18.2494)" class="st2 st3">declares</text>
+<rect x="47.5" y="19.9" width="73.1" height="0.3"/>
+<text transform="matrix(1 0 0 1 110.0029 26.3992)" class="st2 st3">1..n </text>
+<rect x="121.5" y="77.2" width="54.3" height="27"/>
+<rect x="121.5" y="77" width="54.5" height="0.5"/>
+<rect x="175.6" y="77.2" width="0.5" height="27.2"/>
+<rect x="121.3" y="104" width="54.5" height="0.5"/>
+<rect x="121.3" y="77" width="0.5" height="27.2"/>
+<rect x="119.1" y="75.4" class="st1" width="54.4" height="27"/>
+<rect x="119.1" y="75.2" width="54.6" height="0.5"/>
+<rect x="173.3" y="75.4" width="0.5" height="27.2"/>
+<rect x="118.9" y="102.2" width="54.6" height="0.5"/>
+<rect x="118.9" y="75.2" width="0.5" height="27.2"/>
+<text transform="matrix(0.9504 0 0 1 121.5333 82.5587)" class="st2 st3">Configuration</text>
+<text transform="matrix(0.9504 0 0 1 121.5333 92.1349)" class="st2 st3">Admin Service</text>
+<polyline points="175.8,89.6 161.7,103.8 175.8,103.8 "/>
+<polyline points="176,89.8 161.9,104 161.7,104 161.1,104 161.5,103.6 175.7,89.4 "/>
+<rect x="161.7" y="103.6" width="14.4" height="0.5"/>
+<polyline points="175.6,103.8 175.6,89.6 175.7,89.4 176.1,89 176.1,103.8 "/>
+<text transform="matrix(1 0 0 1 39.2034 72.939)" class="st2 st3">0..n </text>
+<g>
+	<polyline class="st1" points="94.5,98.7 108.6,91.6 94.5,84.5 	"/>
+	<polyline points="94.3,98.6 108.5,91.4 108.7,91.4 108.5,91.8 94.3,84.8 94.2,84.5 94.2,84.2 109.1,91.6 108.7,91.8 94.6,99 	"/>
+	<polyline points="94.7,84.5 94.7,98.7 94.6,99 94.2,99.2 94.2,84.5 	"/>
+	<rect x="108.4" y="91.4" width="0.2" height="0.5"/>
+</g>
+</svg>
