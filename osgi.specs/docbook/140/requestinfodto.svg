@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="216px" height="116.283px" viewBox="0 0 216 116.283" style="enable-background:new 0 0 216 116.283;" xml:space="preserve"
-	>
-<polygon points="39.272,72.255 2.455,72.255 2.455,46.176 76.091,46.176 76.091,72.255 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="39.272,72.255 2.455,72.255 
-	2.455,46.176 76.091,46.176 76.091,72.255 "/>
-<polygon style="fill:#FFFFFF;" points="37.125,70.106 0.307,70.106 0.307,44.028 73.943,44.028 73.943,70.106 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="37.125,70.106 0.307,70.106 
-	0.307,44.028 73.943,44.028 73.943,70.106 "/>
-<line style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" x1="73.943" y1="57.067" x2="139.909" y2="57.067"/>
-<polyline style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="37.125,70.106 37.125,100.789 
-	139.909,100.789 "/>
-<polygon points="178.875,73.789 142.057,73.789 142.057,47.71 215.693,47.71 215.693,73.789 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="178.875,73.789 142.057,73.789 
-	142.057,47.71 215.693,47.71 215.693,73.789 "/>
-<polygon style="fill:#FFFFFF;" points="176.729,71.642 139.909,71.642 139.909,45.562 213.545,45.562 213.545,71.642 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="176.729,71.642 139.909,71.642 
-	139.909,45.562 213.545,45.562 213.545,71.642 "/>
-<polygon points="178.875,115.978 142.057,115.978 142.057,89.897 215.693,89.897 215.693,115.978 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="178.875,115.978 142.057,115.978 
-	142.057,89.897 215.693,89.897 215.693,115.978 "/>
-<polygon style="fill:#FFFFFF;" points="176.729,113.829 139.909,113.829 139.909,87.75 213.545,87.75 213.545,113.829 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="176.729,113.829 139.909,113.829 
-	139.909,87.749 213.545,87.749 213.545,113.829 "/>
-<polygon points="178.875,28.533 142.057,28.533 142.057,2.454 215.693,2.454 215.693,28.533 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="178.875,28.533 142.057,28.533 
-	142.057,2.454 215.693,2.454 215.693,28.533 "/>
-<polygon style="fill:#FFFFFF;" points="176.729,26.386 139.909,26.386 139.909,0.307 213.545,0.307 213.545,26.386 "/>
-<polygon style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="176.729,26.386 139.909,26.386 
-	139.909,0.307 213.545,0.307 213.545,26.386 "/>
-<polyline style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="37.125,44.028 37.125,13.346 
-	139.909,13.346 "/>
-<text transform="matrix(1 0 0 1 2.4551 59.2158)" style="font-family:'ProductusBook'; font-size:10;">Request Info DTO</text>
-<text transform="matrix(1 0 0 1 144.2324 15.4937)" style="font-family:'ProductusBook'; font-size:10;">Filter DTO</text>
-<text transform="matrix(1 0 0 1 144.2324 59.2158)" style="font-family:'ProductusBook'; font-size:10;">Servlet DTO</text>
-<text transform="matrix(1 0 0 1 144.2324 102.9385)" style="font-family:'ProductusBook'; font-size:10;">Resource DTO</text>
-<text transform="matrix(1 0 0 1 127.9824 19.9937)" style="font-family:'ProductusBook'; font-size:8;">0..n</text>
+	 viewBox="0 0 216 156" style="enable-background:new 0 0 216 156;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;}
+	.st1{fill:#FFFFFF;}
+	.st2{font-family:'ProductusBook';}
+	.st3{font-size:10px;}
+	.st4{font-size:8px;}
+</style>
+<polygon points="39.3,72.3 2.5,72.3 2.5,46.2 76.1,46.2 76.1,72.3 "/>
+<polygon class="st0" points="39.3,72.3 2.5,72.3 2.5,46.2 76.1,46.2 76.1,72.3 "/>
+<polygon class="st1" points="37.1,70.1 0.3,70.1 0.3,44 73.9,44 73.9,70.1 "/>
+<polygon class="st0" points="37.1,70.1 0.3,70.1 0.3,44 73.9,44 73.9,70.1 "/>
+<line class="st0" x1="73.9" y1="57.1" x2="139.9" y2="57.1"/>
+<polyline class="st0" points="37.1,70.1 37.1,100.8 139.9,100.8 "/>
+<polygon points="178.9,73.8 142.1,73.8 142.1,47.7 215.7,47.7 215.7,73.8 "/>
+<polygon class="st0" points="178.9,73.8 142.1,73.8 142.1,47.7 215.7,47.7 215.7,73.8 "/>
+<polygon class="st1" points="176.7,71.6 139.9,71.6 139.9,45.6 213.5,45.6 213.5,71.6 "/>
+<polygon class="st0" points="176.7,71.6 139.9,71.6 139.9,45.6 213.5,45.6 213.5,71.6 "/>
+<polygon points="178.9,116 142.1,116 142.1,89.9 215.7,89.9 215.7,116 "/>
+<polygon class="st0" points="178.9,116 142.1,116 142.1,89.9 215.7,89.9 215.7,116 "/>
+<polygon class="st1" points="176.7,113.8 139.9,113.8 139.9,87.8 213.5,87.8 213.5,113.8 "/>
+<polygon class="st0" points="176.7,113.8 139.9,113.8 139.9,87.7 213.5,87.7 213.5,113.8 "/>
+<polygon points="178.9,28.5 142.1,28.5 142.1,2.5 215.7,2.5 215.7,28.5 "/>
+<polygon class="st0" points="178.9,28.5 142.1,28.5 142.1,2.5 215.7,2.5 215.7,28.5 "/>
+<polygon class="st1" points="176.7,26.4 139.9,26.4 139.9,0.3 213.5,0.3 213.5,26.4 "/>
+<polygon class="st0" points="176.7,26.4 139.9,26.4 139.9,0.3 213.5,0.3 213.5,26.4 "/>
+<polyline class="st0" points="37.1,44 37.1,13.3 139.9,13.3 "/>
+<text transform="matrix(1 0 0 1 2.4551 59.2158)" class="st2 st3">Request Info DTO</text>
+<text transform="matrix(1 0 0 1 143.2324 15.4937)" class="st2 st3">Pre-Processor DTO</text>
+<text transform="matrix(1 0 0 1 143.2324 61.2158)" class="st2 st3">Filter DTO</text>
+<text transform="matrix(1 0 0 1 144.2324 102.9385)" class="st2 st3">Servlet DTO</text>
+<text transform="matrix(1 0 0 1 127.9824 19.9937)" class="st2 st4">0..n</text>
+<polyline class="st0" points="37.1,94.6 37.1,140.8 139.9,140.8 "/>
+<polygon points="178.9,156 142.1,156 142.1,129.9 215.7,129.9 215.7,156 "/>
+<polygon class="st0" points="178.9,156 142.1,156 142.1,129.9 215.7,129.9 215.7,156 "/>
+<polygon class="st1" points="176.7,153.8 139.9,153.8 139.9,127.8 213.5,127.8 213.5,153.8 "/>
+<polygon class="st0" points="176.7,153.8 139.9,153.8 139.9,127.7 213.5,127.7 213.5,153.8 "/>
+<text transform="matrix(1 0 0 1 144.2324 142.9385)" class="st2 st3">Resource DTO</text>
+<text transform="matrix(1 0 0 1 127.9826 63.5866)" class="st2 st4">0..n</text>
 </svg>
