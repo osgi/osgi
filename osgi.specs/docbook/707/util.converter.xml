@@ -77,13 +77,13 @@
       </listitem>
     </itemizedlist>
 
-    <figure>
+    <figure pgwide="1">
       <title>Converter Entity overview</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="3.100in"
-                     contentwidth="5.000in" fileref="converter-overview.svg"/>
+          <imagedata align="center" contentdepth="4.100in"
+                     contentwidth="7.500in" fileref="converter-overview.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
