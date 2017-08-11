@@ -50,6 +50,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
 	${repo;org.osgi.impl.service.log;latest}, \
+	${repo;org.osgi.impl.service.log.stream;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
@@ -91,6 +92,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
     ${repo;org.osgi.impl.service.log;latest}, \
+    ${repo;org.osgi.impl.service.log.stream;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \

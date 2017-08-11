@@ -25,7 +25,7 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log.stream
 
 -runbundles						= \
-	org.osgi.impl.service.log;  version=latest,\
+	org.osgi.impl.service.log.stream;  version=latest,\
 	org.osgi.impl.service.cm;  version=latest
 
 -runproperties					= ${runproperties}, \
