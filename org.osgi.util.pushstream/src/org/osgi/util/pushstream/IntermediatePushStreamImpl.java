@@ -31,5 +31,13 @@ class IntermediatePushStreamImpl<T> extends AbstractPushStreamImpl<T>
 		// The base implementation has nothing to do, but
 		// this method is used in windowing
 	}
+
+	@Override
+	protected void upstreamClose(PushEvent< ? > close) {
+		if (closed.get() != CLOSED) {
+			close(close.nodata(), false);
+		}
+		previous.upstreamClose(close);
+	}
 	
 }

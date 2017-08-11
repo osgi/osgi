@@ -24,22 +24,27 @@ class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T
 	}
 
 	@Override
-	protected boolean close(PushEvent<T> event) {
-		if(super.close(event)) {
-			ofNullable(upstream.getAndSet(() -> {
-				// This block doesn't need to do anything, but the presence
-				// of the Closable is needed to prevent duplicate begins
-			})).ifPresent(c -> {
-					try {
-						c.close();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				});
+	protected boolean close(PushEvent<T> event, boolean sendDownStreamEvent) {
+		if (super.close(event, sendDownStreamEvent)) {
+			upstreamClose(event);
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	protected void upstreamClose(PushEvent< ? > close) {
+		ofNullable(upstream.getAndSet(() -> {
+			// This block doesn't need to do anything, but the presence
+			// of the Closable is needed to prevent duplicate begins
+		})).ifPresent(c -> {
+				try {
+					c.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 	}
 
 	@Override

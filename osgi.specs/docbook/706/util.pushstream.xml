@@ -308,8 +308,9 @@
           is propagated down the stream to the next pipeline step. The failure
           in the error event is set to the Exception thrown by the mapping
           function. The current pipeline step is also closed, and the close
-          operation is propagated back upstream to the event source by
-          returning negative back pressure.</para>
+          operation is propagated back upstream to the event source by closing
+          previous pipeline stages. Any subsequently received events must not
+          be propagated and must return negative back pressure.</para>
         </section>
         
         <section>
@@ -347,8 +348,9 @@
           is propagated down the stream to the next pipeline step. The failure
           in the error event is set to the Exception thrown by the mapping
           function. The current pipeline step is also closed, and the close
-          operation is propagated back upstream to the event source by
-          returning negative back pressure.</para>
+          operation is propagated back upstream to the event source by closing
+          previous pipeline stages. Any subsequently received events must not
+          be propagated and must return negative back pressure.</para>
         </section>
         
         <section>
@@ -372,8 +374,9 @@
           is propagated down the stream to the next pipeline step. The failure
           in the error event is set to the Exception thrown by the filter
           function. The current pipeline step is also closed, and the close
-          operation is propagated back upstream to the event source by
-          returning negative back pressure.</para>
+          operation is propagated back upstream to the event source by closing
+          previous pipeline stages. Any subsequently received events must not
+          be propagated and must return negative back pressure.</para>
         </section>
       </section>
       
@@ -651,7 +654,10 @@
         operation resolves the promise with the first event that is received by
         the end of the pipeline. Once a short-circuiting operation has completed
         it propagates negative back-pressure through the pipeline to close the
-        source of events.</para>
+        source of events. Any subsequently received events must not affect the
+        result and must return negative back pressure. If an asynchronous pipeline 
+        step is encountered, such as a buffer, the close operation is propagated 
+        back upstream to the event source by closing previous pipeline stages. </para>
         
         <table>
           <title>Non Short Circuiting Terminal Operations on the Push Stream</title>
@@ -1078,6 +1084,36 @@
       in their processing. If the timeout expires then it propagates an error event
       to the next stage of the pipeline. The Exception in the error event is an
       <code>org.osgi.util.promise.TimeoutException</code>.
+      </para>
+    </section>
+    
+    <section>
+      <title>Closing Streams</title>
+        
+      <para>A <xref linkend="org.osgi.util.pushstream.PushStream" 
+      xrefstyle="hyperlink"/> represents a stage in the processing pipeline
+      and is <code>AutoCloseable</code>. When the <xref 
+      linkend="org.osgi.util.pushstream.PushStream.close--" xrefstyle="hyperlink"/> 
+      method is invoked it will not, in general, coincide with the processing
+      of an event. The closing of a stream in this way must therefore do the
+      following things:</para>
+      
+      <itemizedlist>
+          <listitem><para>Send a close event downstream to close the stream</para></listitem>
+          <listitem><para>Discard events subsequently received by this pipeline stage, and 
+          return negative backpressure for any that do arrive at this pipeline stage.</para></listitem>
+          <listitem><para>Propagate the close operation upstream until the <code>AutoCloseable</code>
+          returned by the <xref linkend="org.osgi.util.pushstream.PushEventSource.open-PushEventConsumer-" 
+           xrefstyle="hyperlink"/> method is closed.</para></listitem>
+        </itemizedlist>
+        
+      <para>The result of this set of operations must be that all stages of the pipeline,
+      including the connection to the <xref linkend="org.osgi.util.pushstream.PushEventSource" 
+      xrefstyle="hyperlink"/>, are eagerly closed. This may be as a result of receiving 
+      a close event, negative back pressure, or the close call being propagated back up the pipeline,
+      but it must not wait for the next event. For example, if an event is produced every ten minutes
+      and the stream is closed one minute after an event is created then it must not take a further
+      nine minutes to close the connection to the Push Event Source.
       </para>
     </section>
   </section>

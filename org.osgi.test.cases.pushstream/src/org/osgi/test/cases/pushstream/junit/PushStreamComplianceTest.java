@@ -122,6 +122,10 @@ public abstract class PushStreamComplianceTest extends TestCase {
 			return this.thread;
 		}
 
+		public boolean closeCalled() {
+			return closeCalled;
+		}
+
 		@Override
 		public Closeable open(PushEventConsumer< ? super Integer> l) {
 			thread = new Thread("generator") {

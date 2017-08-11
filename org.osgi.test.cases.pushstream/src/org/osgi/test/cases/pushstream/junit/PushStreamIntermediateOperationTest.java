@@ -466,7 +466,9 @@ public class PushStreamIntermediateOperationTest
 		// gen.getExecutionThread().join();
 
 		assertEquals("[0, 1]", Arrays.toString(p.getValue()));
-		// is the close event sent immediatly ?
+		gen.thread.join();
+
+		assertTrue(gen.closeCalled);
 		ExtGeneratorStatus status = gen.status();
 		assertNotNull(status);
 		assertNull(status.failure);

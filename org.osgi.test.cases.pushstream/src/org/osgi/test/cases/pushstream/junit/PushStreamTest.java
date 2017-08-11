@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.util.promise.Promise;
@@ -317,6 +318,245 @@ public class PushStreamTest extends TestCase {
 		assertTrue(latch.await(500, MILLISECONDS));
 		assertTrue(counts.isDone());
 		assertEquals(Integer.valueOf(0), counts.getValue().get());
+
+	}
+
+	public void testClosePropagatesInBothDirections() throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+					pec.accept(PushEvent.data(1));
+					pec.accept(PushEvent.data(2));
+
+					s.release();
+
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		PushStream<String> midway = impl.buildStream(pes)
+				.unbuffered()
+				.build()
+				.map(Object::toString);
+
+		Promise<String> aggregate = midway.reduce("", String::concat);
+
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+		assertFalse(aggregate.isDone());
+
+		midway.close();
+
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+
+		assertTrue(aggregate.isDone());
+		assertEquals("12", aggregate.getValue());
+
+	}
+
+	public void testClosePropagatesInBothDirectionsThroughABuffer()
+			throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+					pec.accept(PushEvent.data(1));
+					pec.accept(PushEvent.data(2));
+
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		PushStream<String> midway = impl.buildStream(pes)
+				.unbuffered()
+				.build()
+				.map(Object::toString)
+				.buffer();
+
+		Promise<String> aggregate = midway.limit(2).reduce("", String::concat);
+
+		assertEquals("12", aggregate.getValue());
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+	}
+
+	public void testClosePropagatesBackwardsFromTimeout() throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		Promise<String> aggregate = impl.buildStream(pes)
+				.unbuffered()
+				.build()
+				.timeout(Duration.ofSeconds(1))
+				.map(Object::toString)
+				.reduce("", String::concat);
+
+		assertNotNull(aggregate.getFailure());
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+	}
+
+	public void testClosePropagatesBackwardsFromFork() throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+
+					pec.accept(PushEvent.data(1));
+					pec.accept(PushEvent.data(2));
+
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		Promise<String> aggregate = impl.buildStream(pes)
+				.unbuffered()
+				.build()
+				.fork(1, 100, Executors.newSingleThreadExecutor())
+				.limit(2)
+				.map(Object::toString)
+				.reduce("", String::concat);
+
+		assertEquals("12", aggregate.getValue());
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+
+	}
+
+	public void testClosePropagatesBackwardsFromWindow() throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+
+					pec.accept(PushEvent.data(1));
+					pec.accept(PushEvent.data(2));
+
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		Promise<Optional<String>> aggregate = impl.buildStream(pes)
+				.unbuffered()
+				.build()
+				.window(Duration.ofSeconds(1), c -> c.stream()
+						.map(Object::toString)
+						.reduce("", String::concat))
+				.findFirst();
+
+		assertEquals("12", aggregate.getValue().get());
+		assertTrue(s.tryAcquire(500, MILLISECONDS));
+
+	}
+
+	public void testClosePropagatesBackwardsToBothMergedStreams()
+			throws Exception {
+		Semaphore s = new Semaphore(0);
+
+		PushEventSource<Integer> pes = pec -> {
+
+			Thread t = new Thread(() -> {
+				try {
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						s.release();
+						return;
+					}
+					pec.accept(PushEvent.close());
+				} catch (Exception e) {
+
+				}
+			});
+			t.start();
+
+			return () -> t.interrupt();
+		};
+
+		PushStream<Integer> a = impl.buildStream(pes).unbuffered().build();
+		PushStream<Integer> b = impl.buildStream(pes).unbuffered().build();
+		
+		PushStream<Integer> merged = a.merge(b);
+		
+		Promise<Long> totalEvents = merged
+			.count();
+		
+		merged.close();
+
+		assertEquals(0, totalEvents.getValue().intValue());
+		assertTrue(s.tryAcquire(2, 500, MILLISECONDS));
 
 	}
 }
