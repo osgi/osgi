@@ -269,6 +269,23 @@
     callback is registered on an already resolved Promise, it will be called
     right away.</para>
 
+    <para>The <xref linkend="org.osgi.util.promise.Deferred"
+    xrefstyle="hyperlink"/> class provides <xref
+    linkend="org.osgi.util.promise.Deferred.Deferred-Executor-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.util.promise.Deferred.Deferred-Executor-ScheduledExecutorService-"
+    xrefstyle="hyperlink"/> constructors which can be used to specify a
+    callback executor and/or a scheduled executor to be used by the Promise
+    associated with the new Deferred object. All Promise objects created by
+    the associated Promise will also use the specified executors. Callbacks
+    will be called using the callback executor. The scheduled executor is used
+    by the <xref linkend="org.osgi.util.promise.Promise.timeout-long-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.util.promise.Promise.delay-long-"
+    xrefstyle="hyperlink"/> operations. If the callback executor or the
+    scheduled executor is not specified or is specified as <code>null</code>,
+    then the Promise implementation will use an implementation default.</para>
+
     <section>
       <title>Runnable</title>
 
@@ -586,11 +603,15 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <para>The Promises class also provides the <xref
     linkend="org.osgi.util.promise.Promises.all-Promise...-"
-    xrefstyle="hyperlink"/> and <xref
+    xrefstyle="hyperlink"/>, <xref
     linkend="org.osgi.util.promise.Promises.all-Collection-"
-    xrefstyle="hyperlink"/> methods which return a new Promise that is a latch
-    on the specified Promises. The returned Promise must resolve only when all
-    of the specified Promises have resolved.</para>
+    xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.util.promise.Promises.all-Deferred-Promise...-"
+    xrefstyle="hyperlink"/>, and <xref
+    linkend="org.osgi.util.promise.Promises.all-Deferred-Collection-"
+    xrefstyle="hyperlink"/> methods which return a Promise that is a latch on
+    the specified Promises. The returned Promise must resolve only when all of
+    the specified Promises have resolved.</para>
   </section>
 
   <section>
@@ -645,6 +666,12 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
         <listitem>
           <para>New timeout and delay methods are added to Promise.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Deferred class has new constructors which allows the
+          caller to specify the executors to be used by the associated Promise
+          and any Promises created by the associated Promise.</para>
         </listitem>
       </itemizedlist></para>
   </section>

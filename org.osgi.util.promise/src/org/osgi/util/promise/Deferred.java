@@ -18,6 +18,9 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
+
 /**
  * A Deferred Promise resolution.
  * 
@@ -42,14 +45,49 @@ public class Deferred<T> {
 	private final PromiseImpl<T>	promise;
 
 	/**
-	 * Create a new Deferred with an associated Promise.
+	 * Create a new Deferred.
+	 * <p>
+	 * The default callback executor and default scheduled executor will be
+	 * used.
 	 */
 	public Deferred() {
-		promise = new PromiseImpl<>();
+		this(null, null);
+	}
+
+	/**
+	 * Create a new Deferred with the specified callback executor.
+	 * <p>
+	 * The default scheduled executor will be used.
+	 * 
+	 * @param callbackExecutor The executor to use for callbacks. {@code null}
+	 *            can be specified for the default callback executor.
+	 * @since 1.1
+	 */
+	public Deferred(Executor callbackExecutor) {
+		this(callbackExecutor, null);
+	}
+
+	/**
+	 * Create a new Deferred with the specified callback and scheduled
+	 * executors.
+	 * 
+	 * @param callbackExecutor The executor to use for callbacks. {@code null}
+	 *            can be specified for the default callback executor.
+	 * @param scheduledExecutor The scheduled executor for use for scheduled
+	 *            operations. {@code null} can be specified for the default
+	 *            scheduled executor.
+	 * @since 1.1
+	 */
+	public Deferred(Executor callbackExecutor,
+			ScheduledExecutorService scheduledExecutor) {
+		promise = new PromiseImpl<>(callbackExecutor, scheduledExecutor);
 	}
 
 	/**
 	 * Returns the Promise associated with this Deferred.
+	 * <p>
+	 * All Promise objects created by the associated Promise will use the
+	 * executors of the associated Promise.
 	 * 
 	 * @return The Promise associated with this Deferred.
 	 */
