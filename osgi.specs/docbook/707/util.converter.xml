@@ -93,18 +93,20 @@
     <title>Standard Converter</title>
     
     <para>The Standard Converter is a converter that follows precisely what is described in this 
-    specification. It converts objects to the desired target type if a suitable conversion is 
+    specification. It converts source objects to the desired target type if a suitable conversion is 
     available. 
-    An instance can be obtained by creating a <code>new StandardConverter()</code>.</para> 
+    An instance can be obtained by calling the static
+    <xref linkend="org.osgi.util.converter.Converters.standardConverter--" xrefstyle="hyperlink"/>
+    method on the <code>Converters</code> class.</para> 
     
     <para>Some example conversions:
-    <programlisting>Converter c = new StandardConverter();
+    <programlisting>Converter c = Converters.standardConverter();
     
 // Scalar conversions    
 MyEnum e = c.convert(MyOtherEnum.BLUE).to(MyEnum.class);
 BigDecimal bd = c.convert(12345).to(BigDecimal.class);
 
-// Aggregate conversions
+// Collection/array conversions
 List&lt;String&gt; ls = Arrays.asList("978", "142", "-99");
 long[] la = c.convert(ls).to(long[].class);
 
@@ -125,14 +127,14 @@ int t = mi.timeout(); // t=700</programlisting>
     <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
     requested target type.</para>
     
-    <para>In the case of Aggregates (Arrays and Collections) and Map-like structures a new object is always returned, 
+    <para>In the case of arrays, Collections and Map-like structures a new object is always returned, 
     even if the target type is compatible with the source type. This copy can be owned and optionally further
     modified by the caller.</para>
     
     <section>
       <title>Generics</title>
       <para>When converting to a target type with generic type parameters it is necessary to capture 
-      the generic type parameters to instruct the converter to produce the correct parameterized type.
+      thes to instruct the converter to produce the correct parameterized type.
       This can be achieved with the <code>TypeReference</code> based APIs, for example:
       <programlisting>Converter c = new StandardConverter();
 List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt;&gt;());
@@ -145,15 +147,12 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       <section>
         <title>Direct conversion between scalars</title>
         
-        <para>Direct conversion between certain scalar types is supported. Except conversions from
-        <code>Map.Entry</code>, see <xref linkend="util.converter-special.cases.map.entry"/>,
-        all other 
-        scalar types conversion is done by converting to <code>String</code> and then converting 
-        into the target type.
+        <para>
+        Direct conversion between the following scalars is supported:
         </para>
   
         <table pgwide="1" rowheader="firstcol">
-          <title>Direct conversions between scalar types</title>
+          <title>Scalar types that support direct conversions</title>
           
           <tgroup cols="5">
             <colspec colnum="1" colwidth="0.5*"/>
@@ -203,19 +202,41 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
 
         <para>Direct conversions between Enums and ints and between Dates and longs are also supported, see
         the sections below.</para>
+        
+        <para>Conversions between from <code>Map.Entry</code> to scalars follow special rules, 
+        see <xref linkend="util.converter-special.cases.map.entry"/>.
+        </para>
+        
+        <para>All other conversions between scalars are done by converting the source object to a String first and then
+        converting the String value to the target type.
+        </para>
       </section>
   
       <section>
         <title>Conversion to String</title>
         
-        <para>Conversion to <code>String</code> is done by calling <code>toString()</code> on the object to
+        <para>Conversion of scalars to <code>String</code> is done by calling <code>toString()</code> on the object to
         be converted. In the case of a primitive type, the object is boxed first.</para>
         
         <para>A <code>null</code> object results in a <code>null</code> String value.</para>
         
-        <para><emphasis>Exception: </emphasis><code>java.util.Calendar</code> and 
-        <code>java.util.Date</code> are converted to <code>String</code> as described in 
-        <xref linkend="util.converter-date.calendar"/>.
+        <para><emphasis>Exceptions: </emphasis>
+          <itemizedlist>
+            <listitem>
+              <para>
+               <code>java.util.Calendar</code> and 
+               <code>java.util.Date</code> are converted to <code>String</code> as described in 
+               <xref linkend="util.converter-date.calendar"/>.
+              </para>
+            </listitem>
+            
+            <listitem>
+              <para>
+                <code>Map.Entry</code> is converter to String according to the rules in 
+                <xref linkend="util.converter-special.cases.map.entry"/>.
+              </para>
+            </listitem>
+          </itemizedlist>
         </para>
       </section>
       
@@ -237,11 +258,9 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
           Some scalars have special rules for converting from String
           values. See below.
         </para>
-      </section>
-      <section xml:id="util.converter-special.cases.string">
-        <title>Special cases converting from String</title>
-        <table>
-          <title>Special cases converting scalars from String</title>
+
+        <table xml:id="util.converter-special.cases.string">
+          <title>Special cases converting to scalars from String</title>
           <tgroup cols="2">
             <thead>
               <row>
@@ -317,7 +336,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
 
               <row>
                 <entry><code>java.util.Date</code></entry>
-                <entry><code>Date.from(Instant.parse(v))</code></entry>
+                <entry>See <xref linkend="util.converter-date.calendar"/>.</entry>
               </row>
               
               <row>
@@ -348,12 +367,14 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
         Converting a <code>long</code> into a <code>java.util.Date</code>
         is done by calling <code>new Date(long)</code>.</para> 
         
-        <para>Converting a Date to a String is done by converting it to an 
-        <code>Instant</code> and then calling <code>Instant.toString()</code>.
-        This will produce a ISO-8601 UTC date/time string in the following 
-        format: <code>2011-12-03T10:15:30Z</code>. Converting a String to
-        a date is done by calling <code>Date.from(Instant.parse(v))</code>
-        which can convert this ISO-8601 format back into a Date.
+        <para>Converting a Date to a String will produce a ISO-8601 UTC 
+        date/time string in the following 
+        format: <code>2011-12-03T10:15:30Z</code>. In Java 8 this can be done
+        by calling <code>Date.toInstant().toString()</code>.
+        Converting a String to
+        a Date is done by parsing this ISO-8601 format back into a Date. In Java 8
+        this function is performed by  
+        calling <code>Date.from(Instant.parse(v))</code>.
         </para>
           
         <para>Conversions from Calendar objects are done by converting the Calendar
@@ -403,8 +424,7 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
           <listitem><para>If one of the key or value is the same as the target type, then this is used.
           If both are the same, the key is used.</para></listitem>
           <listitem><para>If one of the key or value type is assignable to the target type, then this is used.
-          If both are assignable the most specific is used. If key and value type are both equally assignable
-          the key is used.</para></listitem>
+          If both are assignable the key is used.</para></listitem>
           <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type. If both are of type <code>String</code> the key is used.</para></listitem>
           <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
           value is then converted to the target type.</para></listitem>
