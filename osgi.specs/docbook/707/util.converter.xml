@@ -436,23 +436,49 @@ List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt
       </section>
     
     <section>
-      <title>Aggregates</title>
+      <title>Arrays and Collections</title>
   
-      <para>Aggregates represent Collections and Arrays, including Lists, Sets, Queues and 
+      <para>This section describes conversions from, to and between Arrays and Collections.
+      This includes Lists, Sets, Queues and 
       Double-ended Queues (<emphasis>Deques</emphasis>).</para>
+      
+      <section>
+        <title>Converting from a scalar</title>
+        
+        <para>
+        Scalars are converted into a Collection or Array by creating an instance of the target type
+        suitable for holding a single element. The scalar source object will be converted to target element type 
+        if necessary and then set as the element.
+        </para>
+        
+        <para>
+        A <code>null</code> value will result in an empty Collection or Array.
+        </para>
+        
+        <para><emphasis>Exceptions: </emphasis>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Converting a <code>String</code> to a <code>char[]</code> or <code>Character[]</code>
+                will result in an array with characters representing the characters in the String.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </section>
       
       <section>
         <title>Converting to a scalar</title>
         <para>
         If a Collection or array needs to be converted to a scalar,
         the first element is taken and converted into the target type. Example:
-        <programlisting>Converter converter = new StandardConverter();
+        <programlisting>Converter converter = Converters.standardConverter();
 String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</programlisting></para>
         
         <para>If the collection or array has no elements, the <code>null</code> value is
         used to convert into the target type.</para>
         
-        <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using an 
+        <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using a 
           <xref linkend="org.osgi.util.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
           <programlisting>// Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
@@ -465,15 +491,28 @@ Converter c = cb.build();
 String s2 = c.convert(new int[] {1,2}).to(String.class)); // s2="1,2"
 int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting> 
         </para>
+        
+        <para><emphasis>Exceptions: </emphasis>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Converting a <code>char[]</code> or <code>Character[]</code> into a <code>String</code>
+                results in a String where each character represents the elements of the character
+                array.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>        
       </section>
       
       <section>
         <title>Converting to an Array or Collection</title>
-        <para>When converting to a <code>java.util.Collection</code>, <code>java.util.List</code> 
+        <para>When converting an Array or Collection  
+          to a <code>java.util.Collection</code>, <code>java.util.List</code> 
           or <code>java.util.Set</code> the converter will return a live view 
           over the backing object that changes when the backing object changes. The live view can be 
           prevented by providing the 
-          <xref linkend="org.osgi.util.converter.Converting.copy--" xrefstyle="hyperlink"/>
+          <xref linkend="org.osgi.util.converter.Specifying.copy--" xrefstyle="hyperlink"/>
           modifier. When converting to other collection types or arrays a copy is always produced.
         </para>
 
@@ -501,7 +540,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
                 <entry>Other Collection interface</entry>
                 <entry>A mutable implementation is created. For example, if the target type is 
                 <code>java.util.Queue</code> then the converter can create a
-                <code>java.util.LinkedList</code>. When converting to a <code>java.util.Set</code>
+                <code>java.util.LinkedList</code>. When converting to a subinterface of <code>java.util.Set</code>
                 the converter must choose a set implementation that preserves iteration order.</entry>
               </row>
               <row>
@@ -529,7 +568,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         methods. If no type information is available, source elements are inserted into the target 
         aggregate as-is without further treatment.</para>
         
-        <para>Example: 
+        <para>For example, 
         to convert an array of <code>String</code>s into a list of <code>Integer</code>s:
         
         <programlisting>List&lt;Integer&gt; result =
@@ -542,7 +581,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         <programlisting>Set&lt;Double&gt; result =
   converter.convert(new int[] {2,3,2,1}).
     to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
-// result is 2,3,1</programlisting>
+// result is 2.0, 3.0, 1.0</programlisting>
         
         Values are inserted in the target Collection/array as follows:
         
@@ -550,14 +589,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             <listitem>
               <para>If the source object is <code>null</code>, an empty collection/array is produced.</para>
             </listitem>
-            
-            <listitem>
-              <para>If the source is not a Collection, Array or Map-like structure (as described
-              in <xref linkend="util.converter-special.cases.maps"/>) a target with
-              a single element is produced. The value is first converted into the desired
-              target type, if the target type is known.</para>
-            </listitem>
-            
+                        
             <listitem>
               <para>If the source is a Collection or Array, then each of its elements is converted 
               into desired target type, if known, before inserting. Elements are inserted into the target
@@ -567,7 +599,8 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             <listitem>
               <para>If the source is a Map-like structure (as described
               in <xref linkend="util.converter-special.cases.maps"/>) then <code>Map.Entry</code> elements 
-              are obtained from it via <code>Map.entrySet()</code>. 
+              are obtained from it by converting the source to a <code>Map</code> (if needed) and then 
+              calling<code>Map.entrySet()</code>. 
               Each <code>Map.Entry</code> element is then converted into the target type 
               as described in <xref linkend="util.converter-special.cases.map.entry"/> 
               before inserting in the
@@ -579,7 +612,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       
       <section>
         <title>Converting to maps</title>
-        <para>Conversion to a map-like structure from an aggregate is not supported by the Standard Converter.</para>
+        <para>Conversion to a map-like structure from an Array or Collection is not supported by the Standard Converter.</para>
       </section>
     </section>
     
