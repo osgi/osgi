@@ -1190,7 +1190,36 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
       </section>
     </section>
     </section>
+  </section>
+
+  <section>
+    <title>Repeated or Deferred Conversions</title>
     
+    <para>In certain situations the same conversion needs to be performed multiple times, on different source
+    objects. Or maybe the conversion needs to be performed asynchronously as part of a async stream processing 
+    pipeline. For such cases the Converter can produce a Function, which will perform the conversion once 
+    applied. The function can be invoked multiple times with different source objects. The 
+    <code>Converter</code> can produce this function through the 
+    <xref linkend="org.osgi.util.converter.Converter.function--" xrefstyle="hyperlink"/> method, which provides 
+    an API similar to the <xref linkend="org.osgi.util.converter.Converter.convert-Object-" xrefstyle="hyperlink"/>
+    method, with the difference that instead of returning the conversion, once <code>to()</code> is called,
+    a <code>Function</code> that can perform the conversion on 
+    <xref linkend="org.osgi.util.function.Function.apply-Object-" xrefstyle="hyperlink"/> is returned.
+    </para>
+    
+    <para>The following example sets up a Function that can perform conversions to <code>Integer</code>
+    objects. A default value of <code>999</code> is specified for the conversion:
+    <programlisting>  Converter c = Converters.standardConverter();
+
+  // Obtain a function for the conversion 
+  Function&lt;Object, Integer&gt; cf = c.function().defaultValue(999).to(Integer.class);
+
+  // Use the converter multiple times:
+  Integer i1 = cf.apply("123"); // i1 = 123
+  Integer i2 = cf.apply("");    // i2 = 999</programlisting>
+    The <code>Function</code> returned by the converter is thread safe and can be used concurrently or 
+    asynchronously in other threads.
+    </para>
   </section>
 
   <section xml:id="util.converter-customizing.converters">
@@ -1294,7 +1323,10 @@ String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programl
 
   <section>
     <title>Security</title>
-    <para>...</para>
+    <para>
+    An implementation of this specification will require the use of Java Reflection APIs. Therefore
+    it should have the appropriate permissions to perform these operations when running under the Java 
+    Security model.</para>
   </section> 
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.util.converter.xml"/>
