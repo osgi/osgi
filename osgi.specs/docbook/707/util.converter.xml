@@ -1204,7 +1204,7 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     an API similar to the <xref linkend="org.osgi.util.converter.Converter.convert-Object-" xrefstyle="hyperlink"/>
     method, with the difference that instead of returning the conversion, once <code>to()</code> is called,
     a <code>Function</code> that can perform the conversion on 
-    <xref linkend="org.osgi.util.function.Function.apply-Object-" xrefstyle="hyperlink"/> is returned.
+    <xref linkend="org.osgi.util.function.Function.apply-T-" xrefstyle="hyperlink"/> is returned.
     </para>
     
     <para>The following example sets up a Function that can perform conversions to <code>Integer</code>
