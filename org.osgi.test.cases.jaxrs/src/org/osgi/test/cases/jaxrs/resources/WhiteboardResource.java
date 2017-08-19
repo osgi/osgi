@@ -32,7 +32,7 @@ public class WhiteboardResource {
 	@PUT
 	@Path("{name}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response addValue(@PathParam("value") String value) {
+	public Response addValue(@PathParam("name") String value) {
 		if (values.add(value)) {
 			return Response.ok().build();
 		} else {
@@ -60,7 +60,7 @@ public class WhiteboardResource {
 	@GET
 	@Path("{name}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response containsValue(@PathParam("value") String value) {
+	public Response containsValue(@PathParam("name") String value) {
 		return Response
 				.status(values.contains(value) ? Status.OK : Status.NOT_FOUND)
 				.entity(value)
@@ -70,7 +70,7 @@ public class WhiteboardResource {
 	@DELETE
 	@Path("{name}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteValue(@PathParam("value") String value) {
+	public Response deleteValue(@PathParam("name") String value) {
 		if (values.remove(value)) {
 			return Response.ok().build();
 		} else {
