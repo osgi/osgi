@@ -18,62 +18,28 @@
 package org.osgi.test.cases.jaxrs.junit;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants.JAX_RS_SERVICE_ENDPOINT;
 import static org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource.CUSTOM_HEADER;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.PrototypeServiceFactory;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
-import org.osgi.test.cases.jaxrs.util.ServiceUpdateHelper;
-import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Promise;
 
 /**
  * This test covers the lifecycle behaviours described in section 151.4.2
  */
-public class ResourceLifecyleTestCase extends OSGiTestCase {
+public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	
-	private CloseableHttpClient						client;
-
-	private ServiceUpdateHelper						helper;
-
-	private ServiceReference<JaxRSServiceRuntime>	runtime;
-
-	public void setUp() {
-		client = HttpClients.createDefault();
-
-		helper = new ServiceUpdateHelper(getContext());
-		helper.open();
-
-		runtime = helper.awaitRuntime(5000);
-	}
-
-	public void tearDown() throws IOException {
-		helper.close();
-		client.close();
-	}
 
 	/**
 	 * Section 151.4.2 Register a simple JAX-RS singleton resource and show that
@@ -281,57 +247,5 @@ public class ResourceLifecyleTestCase extends OSGiTestCase {
 		}
 	}
 
-	private String getBaseURI() {
-		Object value = runtime.getProperty(JAX_RS_SERVICE_ENDPOINT);
-
-		if (value instanceof String) {
-			return (String) value;
-		} else if (value instanceof String[]) {
-			return ((String[]) value)[0];
-		} else if (value instanceof Collection) {
-			return String.valueOf(((Collection< ? >) value).iterator().next());
-		}
-
-		throw new IllegalArgumentException(
-				"The JAXRS Service Runtime did not declare an endpoint property");
-	}
-
-	private String assertResponse(CloseableHttpResponse response,
-			int responseCode, String mediaType) throws IOException {
-
-		assertEquals(responseCode, response.getStatusLine().getStatusCode());
-
-		HttpEntity entity = response.getEntity();
-
-		if (mediaType != null) {
-			assertEquals(mediaType, entity.getContentType().getValue());
-		}
-
-		if (entity != null) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			entity.writeTo(baos);
-			return baos.toString("UTF-8");
-		}
-		return null;
-	}
-
-	private <T> PrototypeServiceFactory<T> getPrototypeServiceFactory(
-			Supplier<T> supplier,
-			BiConsumer<ServiceRegistration<T>,T> destroyer) {
-		return new PrototypeServiceFactory<T>() {
-
-			@Override
-			public T getService(Bundle bundle,
-					ServiceRegistration<T> registration) {
-				return supplier.get();
-			}
-
-			@Override
-			public void ungetService(Bundle bundle,
-					ServiceRegistration<T> registration, T service) {
-				destroyer.accept(registration, service);
-			}
-
-		};
-	}
+	// TODO clash resolution tests
 }
