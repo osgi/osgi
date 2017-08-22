@@ -999,7 +999,7 @@ public class ConfiguredExtension implements WriterInterceptor {
     </section>
 
     <section>
-      <title>JAX-RS Whiteboard Resource Lifecycle</title>
+      <title>JAX-RS Whiteboard Extension Lifecycle</title>
       
       <para>JAX-RS extensions often require configuration, and need to
       be configured differently for different applications. This configuration
