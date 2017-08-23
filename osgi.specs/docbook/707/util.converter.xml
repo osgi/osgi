@@ -136,7 +136,7 @@ int t = mi.timeout(); // t=700</programlisting>
       <para>When converting to a target type with generic type parameters it is necessary to capture 
       thes to instruct the converter to produce the correct parameterized type.
       This can be achieved with the <code>TypeReference</code> based APIs, for example:
-      <programlisting>Converter c = new StandardConverter();
+      <programlisting>Converter c = Converters.standardConverter();
 List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt;&gt;());
 // list will contain the Long value 123L</programlisting></para>
     </section>
