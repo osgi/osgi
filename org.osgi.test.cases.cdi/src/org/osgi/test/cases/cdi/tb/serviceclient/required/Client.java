@@ -4,11 +4,12 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.osgi.service.cdi.annotations.Component;
 import org.osgi.service.cdi.annotations.Reference;
-import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.ServicePolicy;
 import org.osgi.test.cases.tb.serviceapi.Provider;
 
-@Service(type = Callable.class)
+@Component(servicePolicy = ServicePolicy.DERIVED)
 public class Client implements Callable<String> {
 	@Inject
 	@Reference

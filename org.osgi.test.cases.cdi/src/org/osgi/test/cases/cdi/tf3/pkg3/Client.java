@@ -28,9 +28,9 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.osgi.service.cdi.annotations.Service;
+import org.osgi.service.cdi.annotations.Component;
 
-@Service
+@Component
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;
