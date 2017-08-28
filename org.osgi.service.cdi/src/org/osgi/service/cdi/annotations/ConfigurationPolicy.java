@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.annotations;
 
 import java.util.Objects;
+import javax.enterprise.context.Dependent;
 
 /**
  * Configuration Policy for the {@link Component} annotation.
@@ -53,8 +54,26 @@ public enum ConfigurationPolicy {
 	REQUIRE("require"),
 
 	/**
-	 * Always allow the component configuration to be satisfied and do not use
-	 * the corresponding Configuration object even if it is present.
+	 * The pids defined in {@link Configuration#value()} are treated as "factory
+	 * pids" and component instances are created and managed by a managed service
+	 * factory. The component is therefore referred to as a component factory bean.
+	 * <p>
+	 * A component factory bean having no configuration factory instances should not
+	 * prevent the instantiation of other component beans. As such it behaves like
+	 * {@link ConfigurationPolicy#OPTIONAL OPTIONAL} in addition to the multiplicity
+	 * provided by the managed service factory.
+	 * <p>
+	 * A component factory bean must use the {@link Dependent} scope. Use of any
+	 * other scope will be treated as a definition error.
+	 * <p>
+	 * Attempting to inject a component factory bean into a regular component bean
+	 * in a non-dynamic way will result in a definition error.
+	 */
+	FACTORY("factory"),
+
+	/**
+	 * Always allow the component configuration to be satisfied and do not use the
+	 * corresponding Configuration object even if it is present.
 	 */
 	IGNORE("ignore");
 

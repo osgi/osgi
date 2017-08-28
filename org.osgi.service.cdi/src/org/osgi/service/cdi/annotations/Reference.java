@@ -21,7 +21,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
@@ -81,7 +80,6 @@ public @interface Reference {
 	 * type of the parameter.</li>
 	 * </ul>
 	 */
-	@Nonbinding
 	Class<?> service() default Object.class;
 
 	/**

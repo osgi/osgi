@@ -20,6 +20,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.context.Dependent;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
@@ -49,27 +50,33 @@ public @interface Component {
 	 * The types under which to register this Component as a service.
 	 *
 	 * <p>
-	 * The result of this value depends on the value of the service policy.
+	 * The result of this value depends on the value of
+	 * {@link Component#serviceScope() serviceScope}.
 	 * <ol>
-	 * <li>If service policy is {@link ServicePolicy#DERIVED} and service is NOT
-	 * specified: the component is published using all directly implemented
-	 * interfaces. If there are no directly implemented interfaces, the class of
-	 * the Component is used.
-	 * <li>If service policy is {@link ServicePolicy#DERIVED} and service is
-	 * specified: the component is published using the specified types.
-	 * <li>If service policy is {@link ServicePolicy#NONE}: the value is ignored
-	 * and the component is not published as a service.
+	 * <li>If {@code serviceScope} is any value besides {@link ServiceScope#NONE
+	 * NONE} and service <em>is NOT</em> specified: the component is published using
+	 * all directly implemented interfaces. If there are no directly implemented
+	 * interfaces, the class of the Component is used.
+	 * <li>If {@code serviceScope} is any value besides {@link ServiceScope#NONE
+	 * NONE} and service <em>IS</em> specified: the component is published using the
+	 * specified types.
+	 * <li>If {@code serviceScope} is {@link ServiceScope#NONE}: the value is
+	 * ignored and the component is not published as a service.
 	 * <ol>
 	 */
 	Class<?>[] service() default {};
 
 	/**
-	 * The service policy used for the Component.
+	 * The service scope used for the Component.
 	 *
 	 * <p>
 	 * If not specified the Component will not be published as a service.
+	 * <p>
+	 * In order to be published as an OSGi service the component bean must use the
+	 * CDI scope {@link Dependent}. The use of any other CDI scope will result in a
+	 * definition error.
 	 */
-	ServicePolicy servicePolicy() default ServicePolicy.DEFAULT;
+	ServiceScope serviceScope() default ServiceScope.DEFAULT;
 
 	/**
 	 * Properties for this Component.

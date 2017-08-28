@@ -57,6 +57,7 @@
 			<element name="reference" maxOccurs="unbounded" minOccurs="0" type="cdi:Treference" />
 			<any namespace="##other" maxOccurs="unbounded" minOccurs="0" processContents="lax" />
 		</sequence>
+		<attribute name="class" type="token" use="required" />
 		<attribute name="name" type="token" use="optional">
 			<annotation>
 				<documentation xml:lang="en">
@@ -69,7 +70,7 @@
 				</documentation>
 			</annotation>
 		</attribute>
-		<attribute name="class" type="token" use="required" />
+		<attribute name="service-scope" default="none" type="cdi:Tservice_scope" use="optional" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
@@ -78,12 +79,11 @@
 			<any namespace="##any" processContents="lax"
 				minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="configuration-policy" type="cdi:Tconfiguration-policy" default="optional" use="optional" />
+		<attribute name="configuration-policy" default="optional" type="cdi:Tconfiguration-policy" use="optional" />
 		<attribute name="configuration-pid" use="optional">
 			<annotation>
 				<documentation xml:lang="en">
-					The default value is the value of
-					the name attribute of the component.
+					The default value is the name attribute of the component.
 				</documentation>
 			</annotation>
 			<simpleType>
@@ -115,19 +115,17 @@
 				<element name="list" type="cdi:Tmulti-value"/>
 				<element name="set" type="cdi:Tmulti-value"/>
 			</choice>
-			<any namespace="##other" minOccurs="0" maxOccurs="unbounded"
-				processContents="lax" />
+			<any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
 		</sequence>
 		<attribute name="name" type="string" use="required" />
 		<attribute name="value" type="string" use="optional" />
-		<attribute name="value-type" type="cdi:Tvalue-types" default="String" use="optional" />
+		<attribute name="value-type" default="String" type="cdi:Tvalue-types" use="optional" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
 	<complexType name="Tprovide">
 		<sequence>
-			<any namespace="##any" processContents="lax"
-				minOccurs="0" maxOccurs="unbounded" />
+			<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="interface" type="token" use="required" />
 		<anyAttribute processContents="lax" />
@@ -135,14 +133,13 @@
 
 	<complexType name="Treference">
 		<sequence>
-			<any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" />
+			<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="cardinality" type="cdi:Tcardinality" default="1..1" use="optional" />
+		<attribute name="cardinality" default="1..1" type="cdi:Tcardinality" use="optional" />
 		<attribute name="name" type="token" use="optional" />
-		<attribute name="policy" type="cdi:Tpolicy" default="static" use="optional" />
-		<attribute name="policy-option" type="cdi:Tpolicy-option" default="reluctant" use="optional" />
-		<attribute name="scope" type="cdi:Treference_scope" default="bundle" use="optional" />
+		<attribute name="policy" default="static" type="cdi:Tpolicy" use="optional" />
+		<attribute name="policy-option" default="reluctant" type="cdi:Tpolicy-option" use="optional" />
+		<attribute name="scope" default="bundle" type="cdi:Treference_scope" use="optional" />
 		<attribute name="service" type="token" use="required" />
 		<attribute name="target" type="string" use="optional" />
 		<anyAttribute processContents="lax" />
@@ -167,23 +164,24 @@
 
 	<simpleType name="Tconfiguration-policy">
 		<restriction base="string">
+			<enumeration value="factory" />
+			<enumeration value="ignore" />
 			<enumeration value="optional" />
 			<enumeration value="require" />
-			<enumeration value="ignore" />
 		</restriction>
 	</simpleType>
 
 	<simpleType name="Tpolicy">
 		<restriction base="string">
-			<enumeration value="static" />
 			<enumeration value="dynamic" />
+			<enumeration value="static" />
 		</restriction>
 	</simpleType>
 
 	<simpleType name="Tpolicy-option">
 		<restriction base="string">
-			<enumeration value="reluctant" />
 			<enumeration value="greedy" />
+			<enumeration value="reluctant" />
 		</restriction>
 	</simpleType>
 
@@ -195,6 +193,15 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="Tservice_scope">
+		<restriction base="string">
+			<enumeration value="bundle" />
+			<enumeration value="none" />
+			<enumeration value="prototype" />
+			<enumeration value="singleton" />
+		</restriction>
+	</simpleType>
+
 	<!-- Specifies the data type of a property or of the elements in a multi-value
 			property. Numerical and boolean values are trimmed before they are processed.
 			Simple types are automatically boxed if needed. Only the array data type
@@ -202,23 +209,23 @@
 			type of property it will automatically be boxed. -->
 	<simpleType name="Tvalue-types">
 		<restriction base="string">
-			<enumeration value="String" />
-			<enumeration value="long" />
-			<enumeration value="Long" />
+			<enumeration value="boolean" />
+			<enumeration value="Boolean" />
+			<enumeration value="byte" />
+			<enumeration value="Byte" />
+			<enumeration value="char" />
+			<enumeration value="Character" />
 			<enumeration value="double" />
 			<enumeration value="Double" />
 			<enumeration value="float" />
 			<enumeration value="Float" />
 			<enumeration value="int" />
 			<enumeration value="Integer" />
-			<enumeration value="byte" />
-			<enumeration value="Byte" />
-			<enumeration value="char" />
-			<enumeration value="Character" />
-			<enumeration value="boolean" />
-			<enumeration value="Boolean" />
+			<enumeration value="long" />
+			<enumeration value="Long" />
 			<enumeration value="short" />
 			<enumeration value="Short" />
+			<enumeration value="String" />
 		</restriction>
 	</simpleType>
 
