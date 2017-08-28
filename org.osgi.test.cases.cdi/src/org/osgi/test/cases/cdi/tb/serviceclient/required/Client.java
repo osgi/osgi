@@ -6,10 +6,10 @@ import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Component;
 import org.osgi.service.cdi.annotations.Reference;
-import org.osgi.service.cdi.annotations.ServicePolicy;
+import org.osgi.service.cdi.annotations.ServiceScope;
 import org.osgi.test.cases.tb.serviceapi.Provider;
 
-@Component(servicePolicy = ServicePolicy.DERIVED)
+@Component(serviceScope = ServiceScope.BUNDLE)
 public class Client implements Callable<String> {
 	@Inject
 	@Reference

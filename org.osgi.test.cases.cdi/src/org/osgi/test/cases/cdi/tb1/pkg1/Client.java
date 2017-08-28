@@ -29,9 +29,9 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Component;
-import org.osgi.service.cdi.annotations.ServicePolicy;
+import org.osgi.service.cdi.annotations.ServiceScope;
 
-@Component(servicePolicy = ServicePolicy.DERIVED, property = { "tb=tb1" })
+@Component(serviceScope = ServiceScope.BUNDLE, property = { "tb=tb1" })
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;
