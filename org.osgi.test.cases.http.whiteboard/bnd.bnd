@@ -14,10 +14,10 @@ Include-Resource					= \
 -buildpath: \
 	org.osgi.test.support;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
-	org.apache.commons.logging;version=1.2,\
-	org.apache.httpcomponents.httpcore-osgi;version=4.4.6,\
-	org.apache.httpcomponents.httpclient-osgi;version=4.5.3,\
 	org.apache.felix.http.servlet-api;version=1.1.2,\
+	org.apache.commons.logging;version=1.2,\
+	org.apache.httpcomponents.httpcore;version=4.4.6,\
+	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=6.0.0,\
 	${junit}
@@ -25,8 +25,8 @@ Include-Resource					= \
 -runbundles						= \
     org.osgi.impl.service.http.whiteboard;version=latest,\
 	org.apache.commons.logging;version=1.2,\
-	org.apache.httpcomponents.httpcore-osgi;version=4.4.6,\
-	org.apache.httpcomponents.httpclient-osgi;version=4.5.3
+	org.apache.httpcomponents.httpcore;version=4.4.6,\
+	org.apache.httpcomponents.httpclient;version=4.5.3
 
 -runproperties = ${runproperties}, \
 	org.apache.felix.http.host=127.0.0.1, \
