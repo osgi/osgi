@@ -33,7 +33,7 @@ import org.osgi.service.cdi.CdiConstants;
  * configuration properties injected into CDI beans. Properties are a
  * combination of the Map defined by {@link Component#property()} overlaid by
  * properties provided through Configuration Admin in association with the
- * configuration PIDs defined by {@link Component#value()}.
+ * configuration PIDs defined by {@link Configuration#value()}.
  */
 @Qualifier
 @Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})

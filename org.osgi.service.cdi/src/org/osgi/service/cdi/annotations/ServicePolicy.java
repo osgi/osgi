@@ -33,20 +33,22 @@ public enum ServicePolicy {
 	DEFAULT("default"),
 
 	/**
-	 * The derived policy means that the types under which the component will be
-	 * published is derived by using the following algorithm:
+	 * The derived policy means that the component should be published as a service.
+	 * The types under which the component will be published is derived by using the
+	 * following algorithm:
 	 * <ul>
-	 * <li>The {@code @Component.service} is set - Use the types listed</li>
-	 * <li>The {@code @Component.service} is not set - Use the directly implemented
-	 * interfaces. If no interfaces, use concrete type.</li>
+	 * <li>If {@code @Component.service} is set - Use the types listed</li>
+	 * <li>If {@code @Component.service} is not set - Use the directly implemented
+	 * interfaces. If no directly implemented interfaces are found, use concrete
+	 * type.</li>
 	 * </ul>
 	 */
 	DERIVED("derived"),
 
 	/**
-	 * The none policy means that the component is not to be published as a
-	 * service. If {@code @Component.service} is set it is ignored. This is the
-	 * default policy.
+	 * The {@link ServicePolicy#NONE NONE} policy means that the component is not to
+	 * be published as a service. If {@code @Component.service} is set, it is
+	 * ignored. This is the default policy.
 	 */
 	NONE("none");
 

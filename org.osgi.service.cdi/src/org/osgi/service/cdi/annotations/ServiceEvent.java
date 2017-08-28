@@ -30,16 +30,6 @@ package org.osgi.service.cdi.annotations;
  * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
  * value ({@link java.util.Map.Entry Map.Entry})</li>
  * </ul>
- * <p>
- * e.g. <code><pre>
- * void trackFoos(@Observes @Reference ServiceEvent&lt;Foo&gt; event) {
- *   event.adding(
- *   	foo -> // perform add
- *   ).removed(
- *   	foo -> // perform remove
- *   );
- * }
- * </pre></code>
  *
  * @param <T> the service argument type.
  */

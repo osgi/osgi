@@ -21,30 +21,33 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Scope;
+import javax.inject.Singleton;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Annotation used to indicate a CDI bean marked with {@link @Component} has an
- * OSGi {@code service.scope = bundle}.
+ * Annotation used to indicate a CDI bean marked with {@link Component
+ * Component} has an OSGi {@code service.scope = bundle}.
  *
  * <p>
- * By default CDI beans annotated with {@link @Component} only support:
+ * By default CDI beans annotated with {@link Component Component} only support:
  * <ul>
- * <li>{@link @ApplicationScoped} or {@link @Singleton} - which translates to
- * {@code service.scope = singleton}
- * <li>{@link @BundleScoped} - which translates to
+ * <li>{@link ApplicationScoped ApplicationScoped} or {@link Singleton
+ * Singleton} - which translates to {@code service.scope = singleton}
+ * <li>{@link BundleScoped BundleScoped} - which translates to
  * {@code service.scope = bundle}
- * <li>{@link @Dependent} - which translates to
+ * <li>{@link Dependent Dependent} - which translates to
  * {@code service.scope = prototype}
  * </ul>
  * Any other scope will result in a definition error.
  * <p>
- * By default CDI beans without a scope have {@link @Dependent} scope which
- * means developers should take care that their services have {@code prototype}
- * scope by default.
+ * By default CDI beans without a scope have {@link Dependent Dependent} scope
+ * which means developers should take care that their services have
+ * {@code prototype} scope by default.
  */
 @Documented
 @Requirement(
