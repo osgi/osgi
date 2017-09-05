@@ -39,7 +39,9 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
+import java.util.function.ToLongBiFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -1205,6 +1207,49 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 				close(PushEvent.error(e));
 			}
 		});
+	}
+
+	@Override
+	public PushStream<T> adjustBackPressure(LongUnaryOperator adjustment) {
+		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
+				psp, defaultExecutor, scheduler, this);
+		updateNext(event -> {
+			try {
+				long bp = eventStream.handleEvent(event);
+				if (event.isTerminal()) {
+					return ABORT;
+				} else {
+					return bp < 0 ? bp : adjustment.applyAsLong(bp);
+				}
+			} catch (Exception e) {
+				close(PushEvent.error(e));
+				return ABORT;
+			}
+		});
+		return eventStream;
+	}
+
+	@Override
+	public PushStream<T> adjustBackPressure(
+			ToLongBiFunction<T,Long> adjustment) {
+		AbstractPushStreamImpl<T> eventStream = new IntermediatePushStreamImpl<>(
+				psp, defaultExecutor, scheduler, this);
+		updateNext(event -> {
+			try {
+				long bp = eventStream.handleEvent(event);
+				if (event.isTerminal()) {
+					return ABORT;
+				} else {
+					return bp < 0 ? bp
+							: adjustment.applyAsLong(event.getData(),
+									Long.valueOf(bp));
+				}
+			} catch (Exception e) {
+				close(PushEvent.error(e));
+				return ABORT;
+			}
+		});
+		return eventStream;
 	}
 
 	@Override

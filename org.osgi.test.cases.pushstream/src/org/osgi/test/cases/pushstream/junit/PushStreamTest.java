@@ -232,9 +232,11 @@ public class PushStreamTest extends TestCase {
 
 	private void doTestWindow2(PushStream<Integer> es)
 			throws InvocationTargetException, InterruptedException {
-		List<Integer> list = es.window(() -> Duration.ofMillis(200), () -> 5,
-				(t, c) -> c.size())
-				.collect(toList()).getValue();
+		List<Integer> list = es.adjustBackPressure(l -> 1)
+				.window(() -> Duration.ofMillis(200), () -> 5,
+						(t, c) -> c.size())
+				.collect(toList())
+				.getValue();
 		
 		assertTrue("List is too small: " + list, list.size() > 9);
 		assertFalse("List is too big: " + list, list.size() > 14);

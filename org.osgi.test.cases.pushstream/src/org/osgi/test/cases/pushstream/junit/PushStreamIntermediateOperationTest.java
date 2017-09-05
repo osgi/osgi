@@ -1674,4 +1674,44 @@ public class PushStreamIntermediateOperationTest
 		assertTrue(gen.closeCalled);
 		assertEquals(PushEvent.EventType.CLOSE, status.event.getType());
 	}
+
+	/**
+	 * 706.3.2.1 : Back Pressure
+	 * <p/>
+	 * Apply back pressure mid-way through the stream
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
+	 */
+	public void testIntermediateOperationAdjustBackPressure()
+			throws InterruptedException, InvocationTargetException {
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
+				.unbuffered()
+				.build();
+		Promise<Long> p = ps.adjustBackPressure(l -> 10).count();
+
+		assertEquals(5L, p.getValue().longValue());
+		assertEquals(10, gen.maxBackPressure());
+	}
+
+	/**
+	 * 706.3.2.1 : Back Pressure
+	 * <p/>
+	 * Apply back pressure mid-way through the stream
+	 * 
+	 * @throws InterruptedException
+	 * @throws InvocationTargetException
+	 */
+	public void testIntermediateOperationAdjustBackPressure2()
+			throws InterruptedException, InvocationTargetException {
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
+				.unbuffered()
+				.build();
+		Promise<Long> p = ps.adjustBackPressure((d, l) -> 10 + d).count();
+
+		assertEquals(5L, p.getValue().longValue());
+		assertEquals(14, gen.maxBackPressure());
+	}
 }
