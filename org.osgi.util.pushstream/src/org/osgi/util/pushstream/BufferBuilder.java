@@ -2,6 +2,7 @@ package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -73,6 +74,15 @@ public interface BufferBuilder<R, T, U extends BlockingQueue<PushEvent<? extends
 	 * @return this builder
 	 */
 	BufferBuilder<R, T, U> withExecutor(Executor executor);
+
+	/**
+	 * Set the {@link ScheduledExecutorService} that should be used to trigger
+	 * timed events after this buffer
+	 * 
+	 * @param scheduler
+	 * @return this builder
+	 */
+	BufferBuilder<R,T,U> withScheduler(ScheduledExecutorService scheduler);
 	
 	/**
 	 * @return the object being built

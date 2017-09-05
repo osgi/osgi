@@ -44,7 +44,7 @@ public final class PushStreamProvider {
 
 	private int							schedulerReferences;
 
-	private ScheduledExecutorService	scheduler;
+	private ScheduledExecutorService	sharedScheduler;
 
 	private ScheduledExecutorService acquireScheduler() {
 		try {
@@ -53,9 +53,10 @@ public final class PushStreamProvider {
 				schedulerReferences += 1;
 
 				if (schedulerReferences == 1) {
-					scheduler = Executors.newSingleThreadScheduledExecutor();
+					sharedScheduler = Executors
+							.newSingleThreadScheduledExecutor();
 				}
-				return scheduler;
+				return sharedScheduler;
 			} finally {
 				lock.unlock();
 			}
@@ -72,8 +73,8 @@ public final class PushStreamProvider {
 				schedulerReferences -= 1;
 
 				if (schedulerReferences == 0) {
-					scheduler.shutdown();
-					scheduler = null;
+					sharedScheduler.shutdown();
+					sharedScheduler = null;
 				}
 			} finally {
 				lock.unlock();
@@ -112,7 +113,8 @@ public final class PushStreamProvider {
 	 * @return A {@link PushStream} with a default initial buffer
 	 */
 	public <T> PushStream<T> createStream(PushEventSource<T> eventSource) {
-		return createStream(eventSource, 1, null, new ArrayBlockingQueue<>(32),
+		return createStream(eventSource, 1, null, null,
+				new ArrayBlockingQueue<>(32),
 				FAIL.getPolicy(), LINEAR.getPolicy(1000));
 	}
 	
@@ -130,7 +132,7 @@ public final class PushStreamProvider {
 	 */
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> PushStreamBuilder<T,U> buildStream(
 			PushEventSource<T> eventSource) {
-		return new PushStreamBuilderImpl<T,U>(this, null, eventSource);
+		return new PushStreamBuilderImpl<T,U>(this, null, null, eventSource);
 	}
 	
 	@SuppressWarnings({
@@ -138,7 +140,8 @@ public final class PushStreamProvider {
 	})
 	<T, U extends BlockingQueue<PushEvent< ? extends T>>> PushStream<T> createStream(
 			PushEventSource<T> eventSource, int parallelism, Executor executor,
-			U queue, QueuePolicy<T,U> queuePolicy,
+			ScheduledExecutorService scheduler, U queue,
+			QueuePolicy<T,U> queuePolicy,
 			PushbackPolicy<T,U> pushbackPolicy) {
 
 		if (eventSource == null) {
@@ -154,13 +157,23 @@ public final class PushStreamProvider {
 		}
 
 		boolean closeExecutorOnClose;
-		Executor toUse;
+		Executor workerToUse;
 		if (executor == null) {
-			toUse = Executors.newFixedThreadPool(parallelism);
+			workerToUse = Executors.newFixedThreadPool(parallelism);
 			closeExecutorOnClose = true;
 		} else {
-			toUse = executor;
+			workerToUse = executor;
 			closeExecutorOnClose = false;
+		}
+
+		boolean releaseSchedulerOnClose;
+		ScheduledExecutorService timerToUse;
+		if (scheduler == null) {
+			timerToUse = acquireScheduler();
+			releaseSchedulerOnClose = true;
+		} else {
+			timerToUse = scheduler;
+			releaseSchedulerOnClose = false;
 		}
 
 		if (queue == null) {
@@ -175,9 +188,8 @@ public final class PushStreamProvider {
 			pushbackPolicy = LINEAR.getPolicy(1000);
 		}
 
-		@SuppressWarnings("resource")
 		PushStream<T> stream = new BufferedPushStreamImpl<>(this,
-				acquireScheduler(), queue, parallelism, toUse, queuePolicy,
+				timerToUse, queue, parallelism, workerToUse, queuePolicy,
 				pushbackPolicy, aec -> {
 					try {
 						return eventSource.open(aec);
@@ -187,31 +199,51 @@ public final class PushStreamProvider {
 					}
 				});
 
-		stream = stream.onClose(() -> {
-			if (closeExecutorOnClose) {
-				((ExecutorService) toUse).shutdown();
-			}
-			releaseScheduler();
-		}).map(x -> x);
+		return cleanupThreads(closeExecutorOnClose, workerToUse,
+				releaseSchedulerOnClose, stream);
+	}
+
+	private <T> PushStream<T> cleanupThreads(boolean closeExecutorOnClose,
+			Executor workerToUse, boolean releaseSchedulerOnClose,
+			PushStream<T> stream) {
+		if (closeExecutorOnClose || releaseSchedulerOnClose) {
+			stream = stream.onClose(() -> {
+				if (closeExecutorOnClose) {
+					((ExecutorService) workerToUse).shutdown();
+				}
+				if (releaseSchedulerOnClose) {
+					releaseScheduler();
+				}
+			}).map(x -> x);
+		}
 		return stream;
 	}
 
 	<T> PushStream<T> createUnbufferedStream(PushEventSource<T> eventSource,
-			Executor executor) {
+			Executor executor, ScheduledExecutorService scheduler) {
 
 		boolean closeExecutorOnClose;
-		Executor toUse;
+		Executor workerToUse;
 		if (executor == null) {
-			toUse = Executors.newFixedThreadPool(2);
+			workerToUse = Executors.newFixedThreadPool(2);
 			closeExecutorOnClose = true;
 		} else {
-			toUse = executor;
+			workerToUse = executor;
 			closeExecutorOnClose = false;
 		}
 
-		@SuppressWarnings("resource")
-		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, toUse,
-				acquireScheduler(), aec -> {
+		boolean releaseSchedulerOnClose;
+		ScheduledExecutorService timerToUse;
+		if (scheduler == null) {
+			timerToUse = acquireScheduler();
+			releaseSchedulerOnClose = true;
+		} else {
+			timerToUse = scheduler;
+			releaseSchedulerOnClose = false;
+		}
+
+		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, workerToUse,
+				timerToUse, aec -> {
 					try {
 						return eventSource.open(aec);
 					} catch (Exception e) {
@@ -220,14 +252,8 @@ public final class PushStreamProvider {
 					}
 				});
 
-		stream = stream.onClose(() -> {
-			if (closeExecutorOnClose) {
-				((ExecutorService) toUse).shutdown();
-			}
-			releaseScheduler();
-		}).map(x -> x);
-
-		return stream;
+		return cleanupThreads(closeExecutorOnClose, workerToUse,
+				releaseSchedulerOnClose, stream);
 	}
 
 	/**
@@ -345,7 +371,7 @@ public final class PushStreamProvider {
 		boolean closeExecutorOnClose;
 		Executor toUse;
 		if (executor == null) {
-			toUse = Executors.newFixedThreadPool(2);
+			toUse = Executors.newFixedThreadPool(parallelism);
 			closeExecutorOnClose = true;
 		} else {
 			toUse = executor;
@@ -437,7 +463,8 @@ public final class PushStreamProvider {
 			public PushEventConsumer<T> build() {
 				PushEventPipe<T> pipe = new PushEventPipe<>();
 				
-				createStream(pipe, concurrency, worker, buffer, bufferingPolicy, backPressure)
+				createStream(pipe, concurrency, worker, timer, buffer,
+						bufferingPolicy, backPressure)
 					.forEachEvent(delegate);
 				
 				return pipe;
@@ -501,7 +528,7 @@ public final class PushStreamProvider {
 			return () -> closed.set(true);
 		};
 
-		return this.<T> createUnbufferedStream(pes, null);
+		return this.<T> createUnbufferedStream(pes, null, null);
 	}
 
 	/**
@@ -511,24 +538,36 @@ public final class PushStreamProvider {
 	 * 
 	 * @param executor The worker to use to push items from the Stream into the
 	 *            PushStream
+	 * @param scheduler The scheduler to use to trigger timed events in the
+	 *            PushStream
 	 * @param items The items to push into the PushStream
 	 * @return A PushStream containing the items from the Java Stream
 	 */
-	public <T> PushStream<T> streamOf(Executor executor, Stream<T> items) {
+	public <T> PushStream<T> streamOf(Executor executor,
+			ScheduledExecutorService scheduler, Stream<T> items) {
 
 		boolean closeExecutorOnClose;
-		Executor toUse;
+		Executor workerToUse;
 		if (executor == null) {
-			toUse = Executors.newFixedThreadPool(2);
+			workerToUse = Executors.newFixedThreadPool(2);
 			closeExecutorOnClose = true;
 		} else {
-			toUse = executor;
+			workerToUse = executor;
 			closeExecutorOnClose = false;
 		}
 
-		@SuppressWarnings("resource")
+		boolean releaseSchedulerOnClose;
+		ScheduledExecutorService timerToUse;
+		if (scheduler == null) {
+			timerToUse = acquireScheduler();
+			releaseSchedulerOnClose = true;
+		} else {
+			timerToUse = scheduler;
+			releaseSchedulerOnClose = false;
+		}
+
 		PushStream<T> stream = new UnbufferedPushStreamImpl<T,BlockingQueue<PushEvent< ? extends T>>>(
-				this, toUse, acquireScheduler(), aec -> {
+				this, workerToUse, timerToUse, aec -> {
 					return () -> { /* No action to take */ };
 				}) {
 
@@ -537,7 +576,7 @@ public final class PushStreamProvider {
 				if (super.begin()) {
 					Iterator<T> it = items.iterator();
 
-					toUse.execute(() -> pushData(it));
+					defaultExecutor.execute(() -> pushData(it));
 
 					return true;
 				}
@@ -555,7 +594,8 @@ public final class PushStreamProvider {
 								return;
 							} else {
 								scheduler.schedule(
-										() -> toUse.execute(() -> pushData(it)),
+										() -> defaultExecutor
+												.execute(() -> pushData(it)),
 										returnValue, MILLISECONDS);
 								return;
 							}
@@ -568,13 +608,7 @@ public final class PushStreamProvider {
 			}
 		};
 
-		stream = stream.onClose(() -> {
-			if (closeExecutorOnClose) {
-				((ExecutorService) toUse).shutdown();
-			}
-			releaseScheduler();
-		}).map(x -> x);
-
-		return stream;
+		return cleanupThreads(closeExecutorOnClose, workerToUse,
+				releaseSchedulerOnClose, stream);
 	}
 }

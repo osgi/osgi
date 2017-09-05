@@ -886,8 +886,12 @@
       
         <para>Buffering is provided by the Push Stream using default configuration values,
         either when creating the Push Stream from the Push Stream Provider, or using the
-        <code>buffer</code> method. These values can be overridden by using a 
-        <code>PushStreamBuilder</code> to explicitly provide the buffering parameters. If 
+        <code>buffer</code> method. These defaults are described in <xref 
+        linkend="util.pushstream.building-a-stream"/>.</para>
+        
+        <para>The default configuration values can be overridden by using a 
+        <xref linkend="org.osgi.util.pushstream.BufferBuilder" xrefstyle="hyperlink"/> 
+        to explicitly provide the buffering parameters. If 
         no Executor is provided then the PushStream will create its own internal Executor 
         with the same number of threads as the defined parallelism. An internally created 
         Executor will be shut down when the PushStream is closed.</para>
@@ -918,8 +922,8 @@
         implemented to provide more complex behaviors.</para>
       </section>
       
-      <section>
-        <title>Building a Push Stream</title>
+      <section xml:id="util.pushstream.building-a-stream">
+        <title>Building a Buffer or Push Stream</title>
         <para>The <xref linkend="org.osgi.util.pushstream.PushStreamBuilder" xrefstyle="hyperlink"/> 
         can be obtained from a Push Stream Provider and used to customize the buffer at the start of 
         the PushStream, or it can be used to create an unbuffered PushStream. An unbuffered 
@@ -933,6 +937,18 @@
           <listitem><para>A <xref linkend="org.osgi.util.pushstream.PushbackPolicyOption.LINEAR" xrefstyle="hyperlink"/> push back policy with a maximum push back of one second</para></listitem>
           <listitem><para>A Buffer with a capacity of 32 elements</para></listitem>
         </itemizedlist>
+        
+        <para>A Push Stream also requires a timer and an executor. For a new Push Stream the 
+        Push Stream Provider must create a new fixed pool of worker threads with the same size 
+        as the parallelism. The Push Stream Provider may create a new 
+        <code>ScheduledExecutorService</code> for each new Push Stream, or reuse a common Scheduler.
+        When adding a buffer to an existing Push Stream the existing executor and timer used
+        by the Push Stream are reused by default. The builder of the Buffer/Push Stream may provide 
+        their own executor and timer using the
+        <xref linkend="org.osgi.util.pushstream.PushStreamBuilder.withExecutor-Executor-" xrefstyle="hyperlink"/>
+        and
+        <xref linkend="org.osgi.util.pushstream.PushStreamBuilder.withScheduler-ScheduledExecutorService-" xrefstyle="hyperlink"/>
+        methods</para>
       </section>
               
         <section>
@@ -1145,9 +1161,16 @@
           <listitem><para>A Buffer with a capacity of 32 elements</para></listitem>
         </itemizedlist>
         
-        <para>If no Executor is provided when creating a buffer then the buffer will 
-        have its own internal Executor with the same number of threads as the defined 
-        parallelism. An internally created Executor will be shut down after the buffer has
+        <para>A Buffer requires a timer and an executor. If no Executor is provided when 
+        creating a buffer then the buffer will have its own internal Executor with the same 
+        number of threads as the defined parallelism. The Push Stream Provider may create a new 
+        <code>ScheduledExecutorService</code> for each buffer, or reuse a common Scheduler.
+        The builder of the Buffer may provide their own executor and timer using the
+        <xref linkend="org.osgi.util.pushstream.PushStreamBuilder.withExecutor-Executor-" xrefstyle="hyperlink"/>
+        and
+        <xref linkend="org.osgi.util.pushstream.PushStreamBuilder.withScheduler-ScheduledExecutorService-" xrefstyle="hyperlink"/>
+        methods</para>
+        <para> Any internally created Executor will be shut down after the buffer has
         processed a terminal event.</para>
         
       </section>
@@ -1156,7 +1179,8 @@
         <title>Mapping between Java 8 Streams and Push Streams</title>
         <para>There are a number of scenarios where an application developer may wish to 
         convert between a Java 8 Stream and a PushStream. In particular, the 
-        <code>flatMap</code> operation of a Push Stream takes a single event and converts 
+        <xref linkend="org.osgi.util.pushstream.PushStream.flatMap-Function-" xrefstyle="hyperlink"/> 
+        operation of a Push Stream takes a single event and converts 
         it into many events in a Push Stream. Common operations, such as splitting the 
         event into child events will result in a Java Collection, or a Java 8 Stream. 
         These need to be converted into a Push Stream before they can be returned from 
@@ -1166,7 +1190,8 @@
         methods. These convert a Java 8 Stream into a Push Stream, changing the pull-based 
         model of Java 8 Streams into the asynchronous model of the Push Stream.</para>
         
-        <para>The first <code>streamOf</code> method takes a Java 8 Stream. The 
+        <para>The first <xref linkend="org.osgi.util.pushstream.PushStreamProvider.streamOf-Stream-" xrefstyle="hyperlink"/> 
+        method takes a Java 8 Stream. The 
         PushStream created by this method is not fully asynchronous, it uses the 
         connecting thread to consume the Java 8 Stream. As a result the streams created 
         using this method will block terminal operations. This method should therefore 
@@ -1176,11 +1201,16 @@
         performance.</para>
         
         <para>For larger Streams of data, or when truly asynchronous operation is 
-        required, there is a second <code>streamOf</code> method which also takes an 
-        <code>Executor</code>. This Executor is used to asynchronously consume elements 
+        required, there is a second <xref linkend="org.osgi.util.pushstream.PushStreamProvider.streamOf-Executor-ScheduledExecutorService-Stream-" xrefstyle="hyperlink"/> 
+        method which allows for asynchronous consumption of the stream. The Executor is used to consume elements 
         from the Java 8 Stream using a single task. This mode of operation is suitable 
         for use with infinite data streams, or for streams which require a truly 
-        asynchronous mode of operation, and does not require the stream to be parallel.</para>
+        asynchronous mode of operation, and does not require the stream to be parallel.
+        If <code>null</code> is passed for the <code>Executor</code> then the PushStreamProvider will create a
+        fixed thread pool of size 2. This allows for work to continue in the Push Stream even if the
+        passed-in Stream blocks the consuming thread. If <code>null</code> is passed for the 
+        <code>ScheduledExecutor</code> then the Push Stream Provider may create a new scheduler
+        or use a shared default.</para>
       </section>
       
     </section>

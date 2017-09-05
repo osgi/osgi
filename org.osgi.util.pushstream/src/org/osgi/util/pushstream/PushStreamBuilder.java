@@ -2,6 +2,7 @@ package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -20,7 +21,18 @@ public interface PushStreamBuilder<T, U extends BlockingQueue<PushEvent< ? exten
 	/**
 	 * Tells this {@link PushStreamBuilder} to create an unbuffered stream which
 	 * delivers events directly to its consumer using the incoming delivery
-	 * thread.
+	 * thread. Setting the {@link PushStreamBuilder} to be unbuffered means that
+	 * any buffer, queue policy or push back policy will be ignored. Note that
+	 * calling one of:
+	 * <ul>
+	 * <li>{@link #withBuffer(BlockingQueue)}</li>
+	 * <li>{@link #withQueuePolicy(QueuePolicy)}</li>
+	 * <li>{@link #withQueuePolicy(QueuePolicyOption)}</li>
+	 * <li>{@link #withPushbackPolicy(PushbackPolicy)}</li>
+	 * <li>{@link #withPushbackPolicy(PushbackPolicyOption, long)}</li>
+	 * <li>{@link #withParallelism(int)}</li>
+	 * </ul>
+	 * after this method will reset this builder to require a buffer.
 	 * 
 	 * @return the builder
 	 */
@@ -52,4 +64,7 @@ public interface PushStreamBuilder<T, U extends BlockingQueue<PushEvent< ? exten
 
 	@Override
 	PushStreamBuilder<T,U> withExecutor(Executor executor);
+
+	@Override
+	PushStreamBuilder<T,U> withScheduler(ScheduledExecutorService scheduler);
 }

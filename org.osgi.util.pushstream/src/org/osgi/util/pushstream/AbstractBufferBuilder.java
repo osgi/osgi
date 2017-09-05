@@ -2,15 +2,17 @@ package org.osgi.util.pushstream;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
 
 abstract class AbstractBufferBuilder<R, T, U extends BlockingQueue<PushEvent< ? extends T>>>
 		implements BufferBuilder<R,T,U> {
 
-	protected Executor				worker;
-	protected int					concurrency;
-	protected PushbackPolicy<T,U>	backPressure;
-	protected QueuePolicy<T,U>		bufferingPolicy;
-	protected U						buffer;
+	protected Executor					worker;
+	protected ScheduledExecutorService	timer;
+	protected int						concurrency;
+	protected PushbackPolicy<T,U>		backPressure;
+	protected QueuePolicy<T,U>			bufferingPolicy;
+	protected U							buffer;
 
 	@Override
 	public BufferBuilder<R,T,U> withBuffer(U queue) {
@@ -55,6 +57,13 @@ abstract class AbstractBufferBuilder<R, T, U extends BlockingQueue<PushEvent< ? 
 	@Override
 	public BufferBuilder<R,T,U> withExecutor(Executor executor) {
 		this.worker = executor;
+		return this;
+	}
+
+	@Override
+	public BufferBuilder<R,T,U> withScheduler(
+			ScheduledExecutorService scheduler) {
+		this.timer = scheduler;
 		return this;
 	}
 }

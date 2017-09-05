@@ -1209,7 +1209,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Void> forEach(Consumer< ? super T> action) {
-		Deferred<Void> d = new Deferred<>();
+		Deferred<Void> d = new Deferred<>(defaultExecutor, scheduler);
 		updateNext((event) -> {
 				try {
 					switch(event.getType()) {
@@ -1248,7 +1248,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<T> reduce(T identity, BinaryOperator<T> accumulator) {
-		Deferred<T> d = new Deferred<>();
+		Deferred<T> d = new Deferred<>(defaultExecutor, scheduler);
 		AtomicReference<T> iden = new AtomicReference<T>(identity);
 
 		updateNext(event -> {
@@ -1277,7 +1277,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Optional<T>> reduce(BinaryOperator<T> accumulator) {
-		Deferred<Optional<T>> d = new Deferred<>();
+		Deferred<Optional<T>> d = new Deferred<>(defaultExecutor, scheduler);
 		AtomicReference<T> iden = new AtomicReference<T>(null);
 
 		updateNext(event -> {
@@ -1307,7 +1307,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public <U> Promise<U> reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
-		Deferred<U> d = new Deferred<>();
+		Deferred<U> d = new Deferred<>(defaultExecutor, scheduler);
 		AtomicReference<U> iden = new AtomicReference<>(identity);
 
 		updateNext(event -> {
@@ -1338,7 +1338,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	public <R, A> Promise<R> collect(Collector<? super T, A, R> collector) {
 		A result = collector.supplier().get();
 		BiConsumer<A, ? super T> accumulator = collector.accumulator();
-		Deferred<R> d = new Deferred<>();
+		Deferred<R> d = new Deferred<>(defaultExecutor, scheduler);
 		PushEventConsumer<T> consumer;
 
 		if (collector.characteristics()
@@ -1405,7 +1405,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Long> count() {
-		Deferred<Long> d = new Deferred<>();
+		Deferred<Long> d = new Deferred<>(defaultExecutor, scheduler);
 		LongAdder counter = new LongAdder();
 		updateNext((event) -> {
 				try {
@@ -1451,7 +1451,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Optional<T>> findFirst() {
-		Deferred<Optional<T>> d = new Deferred<>();
+		Deferred<Optional<T>> d = new Deferred<>(defaultExecutor, scheduler);
 		updateNext((event) -> {
 				try {
 					Optional<T> o = null;
@@ -1485,7 +1485,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public Promise<Long> forEachEvent(PushEventConsumer< ? super T> action) {
-		Deferred<Long> d = new Deferred<>();
+		Deferred<Long> d = new Deferred<>(defaultExecutor, scheduler);
 		LongAdder la = new LongAdder();
 		updateNext((event) -> {
 			try {

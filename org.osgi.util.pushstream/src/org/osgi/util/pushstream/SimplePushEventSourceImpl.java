@@ -110,18 +110,18 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 	@SuppressWarnings("boxing")
 	private Promise<Long> doSendWithBackPressure(
 			PushEventConsumer< ? super T> pec, PushEvent<T> event) {
-		Deferred<Long> d = new Deferred<>();
+		Deferred<Long> d = new Deferred<>(worker, scheduler);
 		try {
 			worker.execute(
 					() -> d.resolve(System.nanoTime() + safePush(pec, event)));
 		} catch (RejectedExecutionException ree) {
 			// TODO log?
+
 			if (!event.isTerminal()) {
 				close(PushEvent.error(ree));
-				return Promises.resolved(System.nanoTime());
+				d.resolve(System.nanoTime());
 			} else {
-				return Promises
-						.resolved(System.nanoTime() + safePush(pec, event));
+				d.resolve(System.nanoTime() + safePush(pec, event));
 			}
 		}
 		return d.getPromise();
@@ -263,12 +263,15 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 								semaphore.release();
 							}
 						} else {
-							return Promises.resolved(
-									System.nanoTime() + safePush(pec, event));
+							Deferred<Long> d = new Deferred<>(worker,
+									scheduler);
+							d.resolve(System.nanoTime() + safePush(pec, event));
+							return d.getPromise();
 						}
 					}).collect(toList());
 
-					long toWait = Promises.all(calls)
+					long toWait = Promises
+							.all(new Deferred<>(worker, scheduler), calls)
 							.map(l -> l.stream()
 									.max(Long::compareTo)
 										.orElseGet(() -> System.nanoTime()))
@@ -320,18 +323,22 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 
 			if (connected.isEmpty()) {
 				if (connectPromise == null) {
-					connectPromise = new Deferred<>();
+					connectPromise = new Deferred<>(worker, scheduler);
 				}
 				return connectPromise.getPromise();
 			} else {
-				return Promises.resolved(null);
+				Deferred<Void> d = new Deferred<>(worker, scheduler);
+				d.resolve(null);
+				return d.getPromise();
 			}
 		}
 	}
 
 	private Promise<Void> closedConnectPromise() {
-		return Promises.failed(new IllegalStateException(
+		Deferred<Void> d = new Deferred<>(worker, scheduler);
+		d.fail(new IllegalStateException(
 				"This SimplePushEventSource is closed"));
+		return d.getPromise();
 	}
 
 }
