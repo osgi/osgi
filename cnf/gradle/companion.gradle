@@ -2,6 +2,17 @@
  * OSGi companion code Gradle script
  */
 
+jar {
+  ext.javadocIncludes = new File(docsDir, 'javadoc.includes')
+  outputs.file javadocIncludes
+  doLast {
+    project.mkdir(javadocIncludes.parent)
+    javadocIncludes.text = bnd.project.getExports().collect { packageRef, attrs ->
+       "${packageRef.getBinary()}/*.java"
+    }.join(',')
+  }
+}
+
 javadoc {
   inputs.files jar
   source bnd.allSrcDirs
@@ -48,14 +59,9 @@ javadoc {
   if (JavaVersion.current().isJava8Compatible()) {
     options.addStringOption('Xdoclint:none', '-quiet') 
   }
-  onlyIf {
-    jar.didWork
-  }
   doFirst {
     project.delete(destinationDir)
-    include bnd.project.getExports().collect { packageRef, attrs ->
-       "${packageRef.getBinary()}/*.java"
-    }
+    include jar.javadocIncludes.text.tokenize(',')
     logger.info 'Title         : {}', options.windowTitle
     logger.info 'Packages      : {}', includes
     logger.info 'Destdir       : {}', destinationDir
