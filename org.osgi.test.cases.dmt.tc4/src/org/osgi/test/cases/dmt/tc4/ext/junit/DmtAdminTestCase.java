@@ -361,7 +361,7 @@ public abstract class DmtAdminTestCase extends OSGiTestCase {
 	protected void addDmtEventListener(String principal, int type, String uri, DmtEventListener listener) {
 		Dictionary serviceProps = new Hashtable();
 		serviceProps.put(DmtEventListener.FILTER_PRINCIPAL, new String[] {principal});
-		serviceProps.put(DmtEventListener.FILTER_EVENT, new Integer(type));
+		serviceProps.put(DmtEventListener.FILTER_EVENT, Integer.valueOf(type));
 		serviceProps.put(DmtEventListener.FILTER_SUBTREE, new String[] {uri});
 		ServiceRegistration registration = getContext().registerService(DmtEventListener.class.getName(), listener, serviceProps);
 		listenerRegistrationMap.put(listener, registration);
@@ -369,7 +369,7 @@ public abstract class DmtAdminTestCase extends OSGiTestCase {
 
 	protected void addDmtEventListener(int type, String uri, DmtEventListener listener) {
 		Dictionary serviceProps = new Hashtable();
-		serviceProps.put(DmtEventListener.FILTER_EVENT, new Integer(type));
+		serviceProps.put(DmtEventListener.FILTER_EVENT, Integer.valueOf(type));
 		serviceProps.put(DmtEventListener.FILTER_SUBTREE, new String[] {uri});
 		ServiceRegistration registration = getContext().registerService(DmtEventListener.class.getName(), listener, serviceProps);
 		listenerRegistrationMap.put(listener, registration);

@@ -588,7 +588,7 @@ public final class SubsystemPermission extends BasicPermission {
 			AccessController.doPrivileged(new PrivilegedAction<Void>() {
 				@Override
 				public Void run() {
-					map.put("id", new Long(subsystem.getSubsystemId()));
+					map.put("id", Long.valueOf(subsystem.getSubsystemId()));
 					map.put("location", subsystem.getLocation());
 					map.put("name", subsystem.getSymbolicName());
 					return null;

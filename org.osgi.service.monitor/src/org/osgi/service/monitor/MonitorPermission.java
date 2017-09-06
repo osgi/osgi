@@ -243,7 +243,7 @@ public class MonitorPermission extends Permission {
 	 */
 	@Override
 	public int hashCode() {
-		return new Integer(mask).hashCode() ^ new Integer(minJobInterval).hashCode() ^ monId.hashCode() ^ new Boolean(prefixMonId).hashCode() ^ varId.hashCode() ^ new Boolean(prefixVarId).hashCode();
+		return Integer.valueOf(mask).hashCode() ^ Integer.valueOf(minJobInterval).hashCode() ^ monId.hashCode() ^ Boolean.valueOf(prefixMonId).hashCode() ^ varId.hashCode() ^ Boolean.valueOf(prefixVarId).hashCode();
 	}
 
 	/**

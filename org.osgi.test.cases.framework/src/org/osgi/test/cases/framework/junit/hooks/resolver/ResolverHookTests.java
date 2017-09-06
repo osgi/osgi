@@ -106,7 +106,7 @@ public class ResolverHookTests extends OSGiTestCase {
 	ServiceRegistration<ResolverHookFactory> registerHook(
 			ResolverHookFactory hook, int ranking) {
 		Dictionary<String, Object> props = new Hashtable<String, Object>();
-		props.put(Constants.SERVICE_RANKING, new Integer(ranking));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(ranking));
 		ServiceRegistration<ResolverHookFactory> reg = getContext().registerService(ResolverHookFactory.class, hook, props);
 		registrations.add(reg);
 		return reg;
@@ -132,11 +132,11 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testBeginEnd01() {
 		LinkedList<Long> beginOrder = new LinkedList<Long>();
 		LinkedList<Long> endOrder = new LinkedList<Long>();
-		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, beginOrder, endOrder);
-		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
-		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, beginOrder, endOrder, null, true, null, null);
-		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder);
+		TestResolverHook hook1 = new TestResolverHook(Long.valueOf(1), null, beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(Long.valueOf(2), null, beginOrder, endOrder);
+		TestResolverHook hook3 = new TestResolverHook(Long.valueOf(3), null, beginOrder, endOrder);
+		TestResolverHook hook4 = new TestResolverHook(Long.valueOf(4), null, beginOrder, endOrder, null, true, null, null);
+		TestResolverHook hook5 = new TestResolverHook(Long.valueOf(5), null, beginOrder, endOrder);
 		registerHook(hook1, 0);
 		registerHook(hook2, Integer.MAX_VALUE);
 		registerHook(hook3, Integer.MAX_VALUE);
@@ -187,9 +187,9 @@ public class ResolverHookTests extends OSGiTestCase {
 		RuntimeException error1 = new RuntimeException("Test hook error 1");
 		LinkedList<Long> beginOrder = new LinkedList<Long>();
 		LinkedList<Long> endOrder = new LinkedList<Long>();
-		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), error1, beginOrder, endOrder);
-		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
+		TestResolverHook hook1 = new TestResolverHook(Long.valueOf(1), null, beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(Long.valueOf(2), error1, beginOrder, endOrder);
+		TestResolverHook hook3 = new TestResolverHook(Long.valueOf(3), null, beginOrder, endOrder);
 		registerHook(hook1, 30);
 		registerHook(hook2, 20);
 		registerHook(hook3, 10);
@@ -240,7 +240,7 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		// insert a hook that throws an error on begin()
 		RuntimeException error2 = new RuntimeException("Test factory error 2");
-		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, beginOrder, endOrder, null, false, error2, null);
+		TestResolverHook hook4 = new TestResolverHook(Long.valueOf(4), null, beginOrder, endOrder, null, false, error2, null);
 		ServiceRegistration<ResolverHookFactory> hook4Reg = registerHook(hook4, 25);
 
 		try {
@@ -280,7 +280,7 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		// insert a hook that throws an error on end()
 		RuntimeException error3 = new RuntimeException("Test end error");
-		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, null, error3);
+		TestResolverHook hook5 = new TestResolverHook(Long.valueOf(5), null, beginOrder, endOrder, null, false, null, error3);
 		@SuppressWarnings("unused")
 		ServiceRegistration<ResolverHookFactory> hook5Reg = registerHook(hook5, 50);
 
@@ -321,9 +321,9 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		LinkedList<Long> beginOrder = new LinkedList<Long>();
 		LinkedList<Long> endOrder = new LinkedList<Long>();
-		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, beginOrder, endOrder);
-		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
+		TestResolverHook hook1 = new TestResolverHook(Long.valueOf(1), null, beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(Long.valueOf(2), null, beginOrder, endOrder);
+		TestResolverHook hook3 = new TestResolverHook(Long.valueOf(3), null, beginOrder, endOrder);
 		
 		final ServiceRegistration<ResolverHookFactory> hook1Reg = registerHook(hook1, 30);
 		registerHook(hook2, 20);
@@ -415,7 +415,7 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		LinkedList<Long> beginOrder = new LinkedList<Long>();
 		LinkedList<Long> endOrder = new LinkedList<Long>();
-		TestResolverHook testHook = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
+		TestResolverHook testHook = new TestResolverHook(Long.valueOf(1), null, beginOrder, endOrder);
 		registerHook(testHook, 0);
 		preventReg.unregister();
 
@@ -1223,10 +1223,10 @@ public class ResolverHookTests extends OSGiTestCase {
 		bundles.add(install("resolver.tb6.v200.jar"));
 		LinkedList<Long> callOrderBegin = new LinkedList<Long>();
 		LinkedList<Long> callOrderEnd = new LinkedList<Long>();
-		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, callOrderBegin, callOrderEnd);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, callOrderBegin, callOrderEnd);
-		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, callOrderBegin, callOrderEnd);
-		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook1 = new TestResolverHook(Long.valueOf(1), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook2 = new TestResolverHook(Long.valueOf(2), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook3 = new TestResolverHook(Long.valueOf(3), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook4 = new TestResolverHook(Long.valueOf(4), null, callOrderBegin, callOrderEnd);
 		registerHook(hook1, -1);
 		ServiceRegistration<ResolverHookFactory> hook2Reg = registerHook(hook2, -2);
 		ServiceRegistration<ResolverHookFactory> hook4Reg = registerHook(hook4, -2);

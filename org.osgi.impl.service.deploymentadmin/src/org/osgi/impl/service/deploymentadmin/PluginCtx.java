@@ -124,10 +124,10 @@ public class PluginCtx {
 			Boolean b = (Boolean) AccessController.doPrivileged(new PrivilegedAction() {
 				public Object run() {
 					Bundle b = bundleContext.getBundle(be.getBundleId());
-					return new Boolean(b.getState() == Bundle.ACTIVE);
+					return Boolean.valueOf(b.getState() == Bundle.ACTIVE);
 				}});
 			if (!b.booleanValue())
-				ret.add(new Long(be.getBundleId()));
+				ret.add(Long.valueOf(be.getBundleId()));
 		}
 		
 		return (Long[]) ret.toArray(new Long[] {});

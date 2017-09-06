@@ -85,7 +85,7 @@ public class DmtEvent implements TestInterface {
 
     private void addEventListener(int type, String uri, DmtEventListener listener) {
     	Hashtable properties = new Hashtable();
-    	properties.put(DmtEventListener.FILTER_EVENT, new Integer(type));
+    	properties.put(DmtEventListener.FILTER_EVENT, Integer.valueOf(type));
     	properties.put(DmtEventListener.FILTER_SUBTREE, uri);
     	listenerRegistration = tbc.getContext().registerService(DmtEventListener.class.getName(),
     					listener, properties);

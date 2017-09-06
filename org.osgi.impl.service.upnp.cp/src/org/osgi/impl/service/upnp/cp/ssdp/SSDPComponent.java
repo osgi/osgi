@@ -138,9 +138,9 @@ public class SSDPComponent implements SSDPConstants {
 			ssdpdevices.put(uuid, location);
 			controller.addDevice(uuid, location);
 		}
-		Long exp = new Long(cache);
+		Long exp = Long.valueOf(cache);
 		long time1 = System.currentTimeMillis() + (exp.longValue() * 1000);
-		Long exp1 = new Long(time1);
+		Long exp1 = Long.valueOf(time1);
 		devExpTimes.put(uuid, exp1);
 	}
 

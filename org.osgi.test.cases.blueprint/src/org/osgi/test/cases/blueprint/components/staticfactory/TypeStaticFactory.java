@@ -25,61 +25,61 @@ public class TypeStaticFactory {
     static public Integer createInteger(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Integer(v);
+        return Integer.valueOf(v);
     }
 
     static public Long createLong(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Long(v);
+        return Long.valueOf(v);
     }
 
     static public Double createDouble(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Double(v);
+        return Double.valueOf(v);
     }
 
     static public Float createFloat(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Float(v);
+        return Float.valueOf(v);
     }
 
     static public Short createShort(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Short(v);
+        return Short.valueOf(v);
     }
 
     static public int createPrimInt(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Integer(v).intValue();
+		return Integer.parseInt(v);
     }
 
     static public long createPrimLong(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Long(v).longValue();
+		return Long.parseLong(v);
     }
 
     static public double createPrimDouble(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Double(v).doubleValue();
+		return Double.parseDouble(v);
     }
 
     static public float createPrimFloat(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Float(v).floatValue();
+		return Float.parseFloat(v);
     }
 
     static public short createPrimShort(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(AssertionService.FACTORY_CALLED);
-        return new Short(v).shortValue();
+		return Short.parseShort(v);
     }
 }
 

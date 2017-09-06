@@ -17,25 +17,25 @@
 package org.osgi.test.cases.blueprint.tests;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Collection;
 import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.LinkedHashSet;
-import java.util.TreeSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.Stack;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import org.osgi.test.cases.blueprint.framework.ArgumentMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.MapValueEntry;
@@ -43,12 +43,12 @@ import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
 import org.osgi.test.cases.blueprint.framework.PropertyMetadataValidator;
 import org.osgi.test.cases.blueprint.framework.PropertyValueValidator;
 import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
 import org.osgi.test.cases.blueprint.framework.TestListValue;
 import org.osgi.test.cases.blueprint.framework.TestMapValue;
 import org.osgi.test.cases.blueprint.framework.TestNullValue;
-import org.osgi.test.cases.blueprint.framework.TestArgument;
-import org.osgi.test.cases.blueprint.framework.TestPropsValue;
 import org.osgi.test.cases.blueprint.framework.TestProperty;
+import org.osgi.test.cases.blueprint.framework.TestPropsValue;
 import org.osgi.test.cases.blueprint.framework.TestSetValue;
 import org.osgi.test.cases.blueprint.framework.TestStringValue;
 import org.osgi.test.cases.blueprint.framework.TestValue;
@@ -110,13 +110,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -143,8 +143,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -155,8 +155,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
@@ -248,13 +248,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -281,8 +281,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -293,8 +293,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
@@ -385,13 +385,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -418,8 +418,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, List.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -430,8 +430,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, List.class);
 
@@ -538,13 +538,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -570,8 +570,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "list", expected, List.class);
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
@@ -583,8 +583,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
@@ -758,13 +758,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -790,8 +790,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "list", expected, List.class);
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
@@ -803,8 +803,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
@@ -895,13 +895,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new ArrayList();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -928,8 +928,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed list of Doubles
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "list", expected, List.class);
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
@@ -941,8 +941,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a type list of Doubles with an element override
         expected = new ArrayList();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "list", expected, List.class);
 
@@ -1033,13 +1033,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1066,8 +1066,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -1078,8 +1078,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
@@ -1170,13 +1170,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1203,8 +1203,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -1215,8 +1215,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
@@ -1308,13 +1308,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1341,8 +1341,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Set.class);
 
         startEvents.addValidator(new ArgumentMetadataValidator("compTypedItems", new TestArgument(
@@ -1353,8 +1353,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addConstructorValidator(startEvents, "compTypeOverride", expected, Set.class);
 
@@ -1449,13 +1449,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1482,8 +1482,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "set", expected, Set.class);
 
         // Section 121.8.3 states that if the value type of a <value> used in a collection
@@ -1498,8 +1498,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
@@ -1595,13 +1595,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1628,8 +1628,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "set", expected, Set.class);
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
@@ -1641,8 +1641,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
@@ -1732,13 +1732,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashSet();
         expected.add("abc");
         expected.add(Boolean.FALSE);
-        expected.add(new Byte((byte)3));
-        expected.add(new Character('4'));
-        expected.add(new Integer(5));
-        expected.add(new Short((short)6));
-        expected.add(new Long(7));
-        expected.add(new Double(8.0));
-        expected.add(new Float(9.0));
+        expected.add(Byte.valueOf((byte)3));
+        expected.add(Character.valueOf('4'));
+        expected.add(Integer.valueOf(5));
+        expected.add(Short.valueOf((short)6));
+        expected.add(Long.valueOf(7));
+        expected.add(Double.valueOf(8.0));
+		expected.add(Float.valueOf(9.0f));
         expected.add(new URL("http://www.osgi.org"));
         expected.add(String.class);
         expected.add(new Locale("en", "US"));
@@ -1765,8 +1765,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "set", expected, Set.class);
 
         startEvents.addValidator(new PropertyMetadataValidator("compTypedItems", new TestProperty(
@@ -1778,8 +1778,8 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
 
         // a typed set of elements, with an element override
         expected = new HashSet();
-        expected.add(new Double(0.0));
-        expected.add(new Double(1.0));
+        expected.add(Double.valueOf(0.0));
+        expected.add(Double.valueOf(1.0));
         expected.add(Boolean.TRUE);
         addPropertyValidator(startEvents, "compTypeOverride", "set", expected, Set.class);
 
@@ -1892,7 +1892,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too (the entry values will inherit the value type
@@ -1909,7 +1909,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
@@ -1925,13 +1925,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2056,7 +2056,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2072,7 +2072,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2088,13 +2088,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2219,7 +2219,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addConstructorValidator(startEvents, "compTypedItems", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2235,7 +2235,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addConstructorValidator(startEvents, "compTypedKeys", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2251,13 +2251,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2384,7 +2384,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2400,7 +2400,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addPropertyValidator(startEvents, "compTypedKeys", "map", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2416,13 +2416,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2550,7 +2550,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2566,7 +2566,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addPropertyValidator(startEvents, "compTypedKeys", "map", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2582,13 +2582,13 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));
@@ -2715,7 +2715,7 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put("true", Boolean.TRUE);
         expected.put("false", Boolean.FALSE);
-        expected.put("double", new Double(1.0));
+        expected.put("double", Double.valueOf(1.0));
         addPropertyValidator(startEvents, "compTypedItems", "map", expected, Map.class);
 
         // validate the metadata for this one too
@@ -2731,19 +2731,19 @@ public class TestCollectionInjection extends DefaultTestBundleControl {
         expected = new HashMap();
         expected.put(Boolean.TRUE, "true");
         expected.put(Boolean.FALSE, "false");
-        expected.put(new Double(1.0), "double");
+        expected.put(Double.valueOf(1.0), "double");
         addPropertyValidator(startEvents, "compTypedKeys", "map", expected, Map.class);
         // Map containing a mixed bag of types
         expected = new HashMap();
         expected.put("String", "abc");
         expected.put("Boolean", Boolean.FALSE);
-        expected.put("Byte", new Byte((byte)3));
-        expected.put("Character", new Character('4'));
-        expected.put("Integer", new Integer(5));
-        expected.put("Short", new Short((short)6));
-        expected.put("Long", new Long(7));
-        expected.put("Double", new Double(8.0));
-        expected.put("Float", new Float(9.0));
+        expected.put("Byte", Byte.valueOf((byte)3));
+        expected.put("Character", Character.valueOf('4'));
+        expected.put("Integer", Integer.valueOf(5));
+        expected.put("Short", Short.valueOf((short)6));
+        expected.put("Long", Long.valueOf(7));
+        expected.put("Double", Double.valueOf(8.0));
+		expected.put("Float", Float.valueOf(9.0f));
         expected.put("URL", new URL("http://www.osgi.org"));
         expected.put("Class", String.class);
         expected.put("Locale", new Locale("en", "US"));

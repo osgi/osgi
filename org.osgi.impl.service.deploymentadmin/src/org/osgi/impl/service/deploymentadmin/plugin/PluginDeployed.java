@@ -110,12 +110,12 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
         Set bset = new HashSet();
         Bundle[] bs = pluginCtx.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++)
-            bset.add(new Long(bs[i].getBundleId()));
+            bset.add(Long.valueOf(bs[i].getBundleId()));
         for (int i = 0; i < dps.length; i++) {
             for (Iterator iter = ((DeploymentPackageImpl) dps[i]).
                     getBundleEntries().iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
-                bset.remove(new Long(be.getBundleId()));
+                bset.remove(Long.valueOf(be.getBundleId()));
             }
         }
         for (Iterator iter = bset.iterator(); iter.hasNext();) {
@@ -347,7 +347,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                     }
                     return new DmtData(id);
                 }
-                String id = (String) bundleIdMappings.get(new Long(str));
+                String id = (String) bundleIdMappings.get(Long.valueOf(str));
                 if (null == id) {
                     Bundle b = pluginCtx.getBundleContext().getBundle(Long.parseLong(str));
                     id = createIdForBundle(b);
@@ -736,7 +736,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
     }
     
     public String associateID(Bundle b, String dwnlId) {
-       bundleIdMappings.put(new Long(b.getBundleId()), dwnlId);
+       bundleIdMappings.put(Long.valueOf(b.getBundleId()), dwnlId);
        return Uri.mangle(bundleToNodeId(b.getBundleId()));
     }
 

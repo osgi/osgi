@@ -25,8 +25,8 @@ public class TB3Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		Hashtable<String, Object> ts3Props = new Hashtable<String, Object>();
 		ts3Props.put("name", "TestService3");
-		ts3Props.put("version", new Float(1.0));
-		ts3Props.put("compatible", new Float(1.0));
+		ts3Props.put("version", Float.valueOf(1.0f));
+		ts3Props.put("compatible", Float.valueOf(1.0f));
 		ts3Props.put("description", "TestService 3");
 
 		bc.registerService(TestService3.class.getName(), new TestService3() {

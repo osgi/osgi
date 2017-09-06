@@ -33,7 +33,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.ACCESS,
-				new Integer(
+				Integer.valueOf(
 						PropertyMetadata.ACCESS_READABLE |
 								PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(

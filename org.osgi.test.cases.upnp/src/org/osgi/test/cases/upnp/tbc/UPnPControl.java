@@ -224,8 +224,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 			fail("Unexpected Exception", exc);
 		}
 		hash.clear();
-		Double duble = new Double(UPnPConstants.V_IN_NUMBER);
-		Float fl = new Float(UPnPConstants.V_IN_FLOAT);
+		Double duble = Double.valueOf(UPnPConstants.V_IN_NUMBER);
+		Float fl = Float.valueOf(UPnPConstants.V_IN_FLOAT);
 		hash.put(UPnPConstants.N_IN_INT, UPnPConstants.V_IN_INT);
 		hash.put(UPnPConstants.N_IN_UI4, UPnPConstants.V_IN_UI4);
 		hash.put(UPnPConstants.N_IN_FLOAT, fl);
@@ -246,14 +246,14 @@ public class UPnPControl extends DefaultTestBundleControl {
 			log("Exception is thrown OK");
 		}
 		hash = new Hashtable(9, 1f);
-		hash.put(UPnPConstants.N_IN_INT, new Integer(UPnPConstants.V_IN_INT));
-		hash.put(UPnPConstants.N_IN_UI4, new Long(UPnPConstants.V_IN_UI4));
+		hash.put(UPnPConstants.N_IN_INT, Integer.valueOf(UPnPConstants.V_IN_INT));
+		hash.put(UPnPConstants.N_IN_UI4, Long.valueOf(UPnPConstants.V_IN_UI4));
 		hash.put(UPnPConstants.N_IN_FLOAT, fl);
 		hash.put(UPnPConstants.N_IN_NUMBER, duble);
-		hash.put(UPnPConstants.N_IN_CHAR, new Character(UPnPConstants.V_IN_CHAR
+		hash.put(UPnPConstants.N_IN_CHAR, Character.valueOf(UPnPConstants.V_IN_CHAR
 				.charAt(0)));
 		hash.put(UPnPConstants.N_IN_STRING, UPnPConstants.V_IN_STRING);
-		hash.put(UPnPConstants.N_IN_BOOLEAN, new Boolean(
+		hash.put(UPnPConstants.N_IN_BOOLEAN, Boolean.valueOf(
 				UPnPConstants.V_IN_BOOLEAN));
 		hash.put(UPnPConstants.N_IN_HEX, UPnPConstants.V_IN_HEX.getBytes());
 		log("Invoking an action Post In Success");
@@ -271,14 +271,14 @@ public class UPnPControl extends DefaultTestBundleControl {
 					+ " Invoke Failed: Threre was an exception", exc);
 		}
 		hash = new Hashtable(9, 1f);
-		hash.put(UPnPConstants.N_IN_INT, new Integer(UPnPConstants.V_IN_INT));
-		hash.put(UPnPConstants.N_IN_UI4, new Long(UPnPConstants.V_IN_UI4));
+		hash.put(UPnPConstants.N_IN_INT, Integer.valueOf(UPnPConstants.V_IN_INT));
+		hash.put(UPnPConstants.N_IN_UI4, Long.valueOf(UPnPConstants.V_IN_UI4));
 		hash.put(UPnPConstants.N_IN_FLOAT, fl);
 		hash.put(UPnPConstants.N_IN_NUMBER, duble);
-		hash.put(UPnPConstants.N_IN_CHAR, new Character(UPnPConstants.V_IN_CHAR
+		hash.put(UPnPConstants.N_IN_CHAR, Character.valueOf(UPnPConstants.V_IN_CHAR
 				.charAt(0)));
 		hash.put(UPnPConstants.N_IN_STRING, UPnPConstants.V_IN_STRING);
-		hash.put(UPnPConstants.N_IN_BOOLEAN, new Boolean(
+		hash.put(UPnPConstants.N_IN_BOOLEAN, Boolean.valueOf(
 				UPnPConstants.V_IN_BOOLEAN));
 		hash.put(UPnPConstants.N_IN_HEX, UPnPConstants.V_IN_HEX.getBytes());
 		act = cs.getAction(UPnPConstants.ACT_MPIS);
@@ -621,30 +621,30 @@ public class UPnPControl extends DefaultTestBundleControl {
 				+ " value is not ok: " + st, UPnPConstants.V_OUT_HEX, st);
 		Integer inint = (Integer) dict.get(UPnPConstants.N_OUT_INT);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_INT
-				+ " value is not ok: " + inint, new Integer(
+				+ " value is not ok: " + inint, Integer.valueOf(
 				UPnPConstants.V_OUT_INT), inint);
 		Long lo = (Long) dict.get(UPnPConstants.N_OUT_UI4);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_UI4
-				+ " value is not ok: " + lo, new Long(UPnPConstants.V_OUT_UI4),
+				+ " value is not ok: " + lo, Long.valueOf(UPnPConstants.V_OUT_UI4),
 				lo);
 		Float fl = (Float) dict.get(UPnPConstants.N_OUT_FLOAT);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_FLOAT
-				+ " value is not ok: " + fl, new Float(
+				+ " value is not ok: " + fl, Float.valueOf(
 				UPnPConstants.V_OUT_FLOAT), fl);
 		Double dl = (Double) dict.get(UPnPConstants.N_OUT_NUMBER);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_NUMBER
-				+ " value is not ok: " + dl, new Double(
+				+ " value is not ok: " + dl, Double.valueOf(
 				UPnPConstants.V_OUT_NUMBER), dl);
 		Character ch = (Character) dict.get(UPnPConstants.N_OUT_CHAR);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_CHAR
-				+ " value is not ok: " + ch, new Character(
+				+ " value is not ok: " + ch, Character.valueOf(
 				UPnPConstants.V_OUT_CHAR.charAt(0)), ch);
 		String str = (String) dict.get(UPnPConstants.N_OUT_STRING);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_STRING
 				+ " value is not ok: " + str, UPnPConstants.V_OUT_STRING, str);
 		Boolean bool = (Boolean) dict.get(UPnPConstants.N_OUT_BOOLEAN);
 		assertEquals("SERVER: " + UPnPConstants.N_OUT_BOOLEAN
-				+ " value is not ok: " + bool, new Boolean(
+				+ " value is not ok: " + bool, Boolean.valueOf(
 				UPnPConstants.V_OUT_BOOLEAN), bool);
 	}
 
@@ -665,7 +665,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 			case 7 : {
 				Boolean bool = (Boolean) dict.get(UPnPConstants.N_BOOLEAN);
 				assertEquals("SERVER: " + UPnPConstants.N_BOOLEAN + " " + si
-						+ " value is not ok: " + bool, new Boolean(
+						+ " value is not ok: " + bool, Boolean.valueOf(
 						UPnPConstants.V_BOOLEAN), bool);
 			}
 			case 6 : {
@@ -677,31 +677,31 @@ public class UPnPControl extends DefaultTestBundleControl {
 			case 5 : {
 				Character ch = (Character) dict.get(UPnPConstants.N_CHAR);
 				assertEquals("SERVER: " + UPnPConstants.N_CHAR + " " + si
-						+ " value is not ok: " + ch, new Character(
+						+ " value is not ok: " + ch, Character.valueOf(
 						UPnPConstants.V_CHAR.charAt(0)), ch);
 			}
 			case 4 : {
 				Float fl = (Float) dict.get(UPnPConstants.N_FLOAT);
 				assertEquals("SERVER: " + UPnPConstants.N_FLOAT + " " + si
-						+ " value is not ok: " + fl, new Float(
+						+ " value is not ok: " + fl, Float.valueOf(
 						UPnPConstants.V_FLOAT), fl);
 			}
 			case 3 : {
 				Double dl = (Double) dict.get(UPnPConstants.N_NUMBER);
 				assertEquals("SERVER: " + UPnPConstants.N_NUMBER + " " + si
-						+ " value is not ok: " + dl, new Double(
+						+ " value is not ok: " + dl, Double.valueOf(
 						UPnPConstants.V_NUMBER), dl);
 			}
 			case 2 : {
 				Long lo = (Long) dict.get(UPnPConstants.N_UI4);
 				assertEquals("SERVER: " + UPnPConstants.N_UI4 + " " + si
-						+ " value is not ok: " + lo, new Long(
+						+ " value is not ok: " + lo, Long.valueOf(
 						UPnPConstants.V_UI4), lo);
 			}
 			case 1 : {
 				Integer in = (Integer) dict.get(UPnPConstants.N_INT);
 				assertEquals("SERVER: " + UPnPConstants.N_INT + " " + si
-						+ " value is not ok: " + in, new Integer(
+						+ " value is not ok: " + in, Integer.valueOf(
 						UPnPConstants.V_INT), in);
 			}
 		}

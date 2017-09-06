@@ -734,7 +734,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					case DmtData.FORMAT_INTEGER:
 						int in = session.getNodeValue(propertyNodePath)
 								.getInt();
-						prop.put(propertyNodes[i], new Integer(in));
+						prop.put(propertyNodes[i], Integer.valueOf(in));
 						break;
 					case DmtData.FORMAT_STRING:
 						nodeValue = session.getNodeValue(propertyNodePath)
@@ -744,7 +744,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					case DmtData.FORMAT_BOOLEAN:
 						boolean bool = session.getNodeValue(propertyNodePath)
 								.getBoolean();
-						prop.put(propertyNodes[i], new Boolean(bool));
+						prop.put(propertyNodes[i], Boolean.valueOf(bool));
 						break;
 					case DmtData.FORMAT_DATE_TIME:
 						Date date = session.getNodeValue(propertyNodePath)
@@ -754,7 +754,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					case DmtData.FORMAT_LONG:
 						long lo = session.getNodeValue(propertyNodePath)
 								.getLong();
-						prop.put(propertyNodes[i], new Long(lo));
+						prop.put(propertyNodes[i], Long.valueOf(lo));
 						break;
 					case DmtData.FORMAT_RAW_BINARY:
 						byte[] b = session.getNodeValue(propertyNodePath)

@@ -397,7 +397,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 	private boolean removeNode(final File file) {
 		boolean ret = ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				return new Boolean(file.delete());
+				return Boolean.valueOf(file.delete());
 			}})).booleanValue();
         if (!ret)
         	pluginCtx.getLogger().log(Logger.LOG_WARNING, "Cannot remove the subtree under " +

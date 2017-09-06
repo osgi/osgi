@@ -51,85 +51,88 @@ public class InstallServices implements BundleActivator {
 		_sa1Props = new Hashtable<>();
 		_sa1Props.put("id", "a1");
 		_sa1Props.put("name", "ServiceA");
-		_sa1Props.put("version", new Float(1.0));
-		_sa1Props.put("compatible", new Float(1.0));
+		_sa1Props.put("version", Float.valueOf(1.0f));
+		_sa1Props.put("compatible", Float.valueOf(1.0f));
 		_sa1Props.put("description", "Service A");
-		_sa1Props.put("Integer", new Integer(1));
-		_sa1Props.put("Long", new Long(1));
-		_sa1Props.put("Byte", new Byte("1"));
-		_sa1Props.put("Short", new Short("1"));
+		_sa1Props.put("Integer", Integer.valueOf(1));
+		_sa1Props.put("Long", Long.valueOf(1));
+		_sa1Props.put("Byte", Byte.valueOf("1"));
+		_sa1Props.put("Short", Short.valueOf("1"));
 		_sra1 = bc
 				.registerService(TestService.class, _sa1, _sa1Props);
 		_sb1 = new ServiceB();
 		_sb1Props = new Hashtable<>();
 		_sb1Props.put("id", "b1");
 		_sb1Props.put("name", "ServiceB");
-		_sb1Props.put("version", new Float(1.0));
-		_sb1Props.put("compatible", new Float(1.0));
+		_sb1Props.put("version", Float.valueOf(1.0f));
+		_sb1Props.put("compatible", Float.valueOf(1.0f));
 		_sb1Props.put("description", "Service B");
-		_sb1Props.put("Integer", new Integer(1));
-		_sb1Props.put("Long", new Long(1));
-		_sb1Props.put("Byte", new Byte("1"));
-		_sb1Props.put("Short", new Short("1"));
+		_sb1Props.put("Integer", Integer.valueOf(1));
+		_sb1Props.put("Long", Long.valueOf(1));
+		_sb1Props.put("Byte", Byte.valueOf("1"));
+		_sb1Props.put("Short", Short.valueOf("1"));
 		_srb1 = bc
 				.registerService(TestService.class, _sb1, _sb1Props);
 		_sb2 = new ServiceB();
 		_sb2Props = new Hashtable<>();
 		_sb2Props.put("id", "b2");
 		_sb2Props.put("name", "ServiceB");
-		_sb2Props.put("version", new Float(2.0));
+		_sb2Props.put("version", Float.valueOf(2.0f));
 		_sb2Props.put("compatible",
-				new Float[] {new Float(1.0), new Float(2.0)});
+				new Float[] {
+						Float.valueOf(1.0f), Float.valueOf(2.0f)
+				});
 		_sb2Props.put("description", "Service B version 2");
-		_sb2Props.put("Integer", new Integer(2));
-		_sb2Props.put("Long", new Long(2));
-		_sb2Props.put("Byte", new Byte("2"));
-		_sb2Props.put("Short", new Short("2"));
+		_sb2Props.put("Integer", Integer.valueOf(2));
+		_sb2Props.put("Long", Long.valueOf(2));
+		_sb2Props.put("Byte", Byte.valueOf("2"));
+		_sb2Props.put("Short", Short.valueOf("2"));
 		_srb2 = bc
 				.registerService(TestService.class, _sb2, _sb2Props);
 		_sc1 = new ServiceC();
 		_sc1Props = new Hashtable<>();
 		_sc1Props.put("id", "c1");
 		_sc1Props.put("name", "ServiceC");
-		_sc1Props.put("version", new Float(1.0));
-		_sc1Props.put("compatible", new Float(1.0));
+		_sc1Props.put("version", Float.valueOf(1.0f));
+		_sc1Props.put("compatible", Float.valueOf(1.0f));
 		_sc1Props.put("description", "Service C");
-		_sc1Props.put("Integer", new Integer(1));
-		_sc1Props.put("Long", new Long(1));
-		_sc1Props.put("Byte", new Byte("1"));
-		_sc1Props.put("Short", new Short("1"));
+		_sc1Props.put("Integer", Integer.valueOf(1));
+		_sc1Props.put("Long", Long.valueOf(1));
+		_sc1Props.put("Byte", Byte.valueOf("1"));
+		_sc1Props.put("Short", Short.valueOf("1"));
 		_src1 = bc
 				.registerService(TestService.class, _sc1, _sc1Props);
 		_sc2 = new ServiceC();
 		_sc2Props = new Hashtable<>();
 		_sc2Props.put("id", "c2");
 		_sc2Props.put("name", "ServiceC");
-		_sc2Props.put("version", new Float(2.0));
-		_sc2Props.put("compatible", new Float[] {new Float(1.0),
-				new Float(1.5), new Float(2.0)});
+		_sc2Props.put("version", Float.valueOf(2.0f));
+		_sc2Props.put("compatible", new Float[] {
+				Float.valueOf(1.0f), Float.valueOf(1.5f), Float.valueOf(2.0f)
+		});
 		_sc2Props.put("description", "Service C version 2");
-		_sc2Props.put("Integer", new Integer(2));
-		_sc2Props.put("Long", new Long(2));
-		_sc2Props.put("Byte", new Byte("2"));
-		_sc2Props.put("Short", new Short("2"));
+		_sc2Props.put("Integer", Integer.valueOf(2));
+		_sc2Props.put("Long", Long.valueOf(2));
+		_sc2Props.put("Byte", Byte.valueOf("2"));
+		_sc2Props.put("Short", Short.valueOf("2"));
 		_src2 = bc
 				.registerService(TestService.class, _sc2, _sc2Props);
 		_sc3 = new ServiceC();
 		_sc3Props = new Hashtable<>();
 		_sc3Props.put("id", "c25");
 		_sc3Props.put("name", "ServiceC");
-		_sc3Props.put("version", new Float(2.5));
+		_sc3Props.put("version", Float.valueOf(2.5f));
 		Vector<Float> v = new Vector<>();
-		v.addElement(new Float(2.0));
-		v.addElement(new Float(2.1));
-		v.addElement(new Float(2.2));
-		v.addElement(new Float(2.3));
+		v.addElement(Float.valueOf(2.0f));
+		v.addElement(Float.valueOf(2.1f));
+		v.addElement(Float.valueOf(2.2f));
+		v.addElement(Float.valueOf(2.3f));
 		_sc3Props.put("compatible", v);
 		_sc3Props.put("description", "Service C version 2.5 \",*'()");
-		_sc3Props.put("Integer", new Integer(3));
-		_sc3Props.put("Long", new Long(3));
-		_sc3Props.put("Byte", new Byte("3"));
-		_sc3Props.put("Short", new Short("3"));
+		_sc3Props.put("Integer", Integer.valueOf(3));
+		_sc3Props.put("Long", Long.valueOf(3));
+		_sc3Props.put("Byte", Byte.valueOf("3"));
+		_sc3Props.put("Short", Short.valueOf("3"));
 		_src3 = bc
 				.registerService(TestService.class, _sc3, _sc3Props);
 		
@@ -139,13 +142,13 @@ public class InstallServices implements BundleActivator {
 		_sd1Props = new Hashtable<>();
 		_sd1Props.put("id", "d25");
 		_sd1Props.put("name", "ServiceD");
-		_sd1Props.put("version", new Float(2.5));
-		_sd1Props.put("compatible", new Float(1.0));
+		_sd1Props.put("version", Float.valueOf(2.5f));
+		_sd1Props.put("compatible", Float.valueOf(1.0f));
 		_sd1Props.put("description", "Service D");
-		_sd1Props.put("Integer", new Integer(4));
-		_sd1Props.put("Long", new Long(4));
-		_sd1Props.put("Byte", new Byte("4"));
-		_sd1Props.put("Short", new Short("4"));
+		_sd1Props.put("Integer", Integer.valueOf(4));
+		_sd1Props.put("Long", Long.valueOf(4));
+		_sd1Props.put("Byte", Byte.valueOf("4"));
+		_sd1Props.put("Short", Short.valueOf("4"));
 		_sd1Props.put("ObjectA", new ObjectA("4"));
 		_sd1Props.put("ObjectB", new ObjectB("4"));
 		_sd1Props.put("ObjectC", new ObjectC());

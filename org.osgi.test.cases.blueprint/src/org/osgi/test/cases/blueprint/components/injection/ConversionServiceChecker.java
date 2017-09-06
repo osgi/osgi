@@ -16,24 +16,21 @@
 
 package org.osgi.test.cases.blueprint.components.injection;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Dictionary;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.Locale;
-import java.util.BitSet;
 import java.util.regex.Pattern;
 
 import org.osgi.service.blueprint.container.Converter;
 import org.osgi.service.blueprint.container.ReifiedType;
-
-import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.BaseTestComponent;
 
 /**
  * Test component for validating conversion results for
@@ -58,7 +55,7 @@ public class ConversionServiceChecker extends BaseTestComponent {
         Object source = new AsianRegionCode("CN+86");
         AssertionService.assertSame(this, "Conversion service assignability test", source, convert(source, new ReifiedType(RegionCode.class)));
         // some simple tests for wrapper/primitive requests
-        source = new Integer(1);
+        source = Integer.valueOf(1);
         // there might be some boxing/unboxing going on, so don't assume this is the same object.
         AssertionService.assertEquals(this, "Conversion service primitive type request", source, convert(source, new ReifiedType(Integer.TYPE)));
         AssertionService.assertEquals(this, "Conversion service wrapper type request", source, convert(source, new ReifiedType(Integer.class)));
@@ -75,7 +72,7 @@ public class ConversionServiceChecker extends BaseTestComponent {
         Object converted = convert(source, new ReifiedType(target.getClass()));
         AssertionService.assertArrayEquals(this, "Failed array conversion", (int[])target, (int[])converted);
         // an unboxing conversion
-        source = new Integer[] { new Integer(1), new Integer(2) };
+        source = new Integer[] { Integer.valueOf(1), Integer.valueOf(2) };
         converted = convert(source, new ReifiedType(target.getClass()));
         AssertionService.assertArrayEquals(this, "Failed array conversion", (int[])target, (int[])converted);
         // and do the boxing in the other direction
@@ -101,12 +98,12 @@ public class ConversionServiceChecker extends BaseTestComponent {
         AssertionService.assertArrayEquals(this, "Failed collection to array conversion", (int[])target, (int[])converted);
         // an unboxing conversion
         listSource = new ArrayList();
-        listSource.add(new Integer(1));
-        listSource.add(new Integer(2));
+        listSource.add(Integer.valueOf(1));
+        listSource.add(Integer.valueOf(2));
         converted = convert(source, new ReifiedType(target.getClass()));
         AssertionService.assertArrayEquals(this, "Failed collection to array conversion", (int[])target, (int[])converted);
         // and do the boxing in the other direction
-        target = new Integer[] { new Integer(1), new Integer(2) };
+        target = new Integer[] { Integer.valueOf(1), Integer.valueOf(2) };
 
         converted = convert(listSource, new ReifiedType(target.getClass()));
         AssertionService.assertArrayEquals(this, "Failed collection to array conversion", (Object[])target, (Object[])converted);
@@ -158,8 +155,8 @@ public class ConversionServiceChecker extends BaseTestComponent {
 
         // array of primitives to a list...these will be wrappered
         targetList = new ArrayList();
-        targetList.add(new Integer(1));
-        targetList.add(new Integer(2));
+        targetList.add(Integer.valueOf(1));
+        targetList.add(Integer.valueOf(2));
 
         source = new int[] { 1, 2 };
 
@@ -223,7 +220,7 @@ public class ConversionServiceChecker extends BaseTestComponent {
         sourceMap.put("1", "java.lang.String");
 
         targetMap = new HashMap();
-        targetMap.put(new Integer(1), String.class);
+        targetMap.put(Integer.valueOf(1), String.class);
 
         converted = convert(sourceMap, new CheckerReifiedType(HashMap.class, new Class[] { Integer.class, Class.class }));
         AssertionService.assertTrue(this, "Incorrect map conversion class", converted instanceof HashMap);
@@ -231,32 +228,38 @@ public class ConversionServiceChecker extends BaseTestComponent {
 
         // Conversion step 6:  Conversion from wrapper to a primitive type;
 
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Integer(1), convert(new Integer(1), new ReifiedType(Integer.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Long(1), convert(new Long(1), new ReifiedType(Long.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Short((short)1), convert(new Short((short)1), new ReifiedType(Short.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Byte((byte)1), convert(new Byte((byte)1), new ReifiedType(Byte.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Character('A'), convert(new Character('A'), new ReifiedType(Character.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Integer.valueOf(1), convert(Integer.valueOf(1), new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Long.valueOf(1), convert(Long.valueOf(1), new ReifiedType(Long.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Short.valueOf((short)1), convert(Short.valueOf((short)1), new ReifiedType(Short.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Byte.valueOf((byte)1), convert(Byte.valueOf((byte)1), new ReifiedType(Byte.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Character.valueOf('A'), convert(Character.valueOf('A'), new ReifiedType(Character.TYPE)));
         AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Boolean.TRUE, convert(Boolean.TRUE, new ReifiedType(Boolean.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Double(1.0), convert(new Double(1.0), new ReifiedType(Double.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", new Float(1.0), convert(new Float(1.0), new ReifiedType(Float.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect wrapper/primitive conversion", Double.valueOf(1.0), convert(Double.valueOf(1.0), new ReifiedType(Double.TYPE)));
+		AssertionService.assertEquals(this,
+				"Incorrect wrapper/primitive conversion", Float.valueOf(1.0f),
+				convert(Float.valueOf(1.0f), new ReifiedType(Float.TYPE)));
 
         // Conversion step 7:  Conversion between Number types we'll just do everything to Integer. Note that Boolean and Character are NOT Numbers
 
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Long(1), new ReifiedType(Integer.class)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Short((short)1), new ReifiedType(Integer.class)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Byte((byte)1), new ReifiedType(Integer.class)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Long.valueOf(1), new ReifiedType(Integer.class)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Short.valueOf((short)1), new ReifiedType(Integer.class)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Byte.valueOf((byte)1), new ReifiedType(Integer.class)));
         // Note:  the precision loss is allowed here
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Double(1.1), new ReifiedType(Integer.class)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Float(1.1), new ReifiedType(Integer.class)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Double.valueOf(1.1), new ReifiedType(Integer.class)));
+		AssertionService.assertEquals(this, "Incorrect Number conversion",
+				Integer.valueOf(1),
+				convert(Float.valueOf(1.1f), new ReifiedType(Integer.class)));
 
         // this is a combination of 6 and 7.  The primitive should be treated as the wrapper
         // equivalent, so this should convert
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Long(1), new ReifiedType(Integer.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Short((short)1), new ReifiedType(Integer.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Byte((byte)1), new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Long.valueOf(1), new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Short.valueOf((short)1), new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Byte.valueOf((byte)1), new ReifiedType(Integer.TYPE)));
         // Note:  the precision loss is allowed here
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Double(1.1), new ReifiedType(Integer.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect Number conversion", new Integer(1), convert(new Float(1.1), new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect Number conversion", Integer.valueOf(1), convert(Double.valueOf(1.1), new ReifiedType(Integer.TYPE)));
+		AssertionService.assertEquals(this, "Incorrect Number conversion",
+				Integer.valueOf(1),
+				convert(Float.valueOf(1.1f), new ReifiedType(Integer.TYPE)));
 
         // Conversion step 8:  If the source is a String, there are additional defined conversions. This will not be exhaustive, but we'll
         // do one variation for each type.
@@ -270,23 +273,27 @@ public class ConversionServiceChecker extends BaseTestComponent {
 
         // the rest of the primitives are tested here.  The String/wrapper conversions are handled
         // by step 8.
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Integer(1), convert("1", new ReifiedType(Integer.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Short((short)1), convert("1", new ReifiedType(Short.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Long(1), convert("1", new ReifiedType(Long.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Byte((byte)1), convert("1", new ReifiedType(Byte.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Character('A'), convert("A", new ReifiedType(Character.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Double(1.0), convert("1.0", new ReifiedType(Double.TYPE)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Float(1.0), convert("1.0", new ReifiedType(Float.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Integer.valueOf(1), convert("1", new ReifiedType(Integer.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Short.valueOf((short)1), convert("1", new ReifiedType(Short.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Long.valueOf(1), convert("1", new ReifiedType(Long.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Byte.valueOf((byte)1), convert("1", new ReifiedType(Byte.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Character.valueOf('A'), convert("A", new ReifiedType(Character.TYPE)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Double.valueOf(1.0), convert("1.0", new ReifiedType(Double.TYPE)));
+		AssertionService.assertEquals(this, "Incorrect String conversion",
+				Float.valueOf(1.0f),
+				convert("1.0", new ReifiedType(Float.TYPE)));
 
         // Conversion step 8:  If the target class has a constructor that takes a single String argument,
         // use that to create the class.  This includes the wrapper classes
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Integer(1), convert("1", new ReifiedType(Integer.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Short((short)1), convert("1", new ReifiedType(Short.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Long(1), convert("1", new ReifiedType(Long.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Byte((byte)1), convert("1", new ReifiedType(Byte.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Character('A'), convert("A", new ReifiedType(Character.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Double(1.0), convert("1.0", new ReifiedType(Double.class)));
-        AssertionService.assertEquals(this, "Incorrect String conversion", new Float(1.0), convert("1.0", new ReifiedType(Float.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Integer.valueOf(1), convert("1", new ReifiedType(Integer.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Short.valueOf((short)1), convert("1", new ReifiedType(Short.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Long.valueOf(1), convert("1", new ReifiedType(Long.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Byte.valueOf((byte)1), convert("1", new ReifiedType(Byte.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Character.valueOf('A'), convert("A", new ReifiedType(Character.class)));
+        AssertionService.assertEquals(this, "Incorrect String conversion", Double.valueOf(1.0), convert("1.0", new ReifiedType(Double.class)));
+		AssertionService.assertEquals(this, "Incorrect String conversion",
+				Float.valueOf(1.0f),
+				convert("1.0", new ReifiedType(Float.class)));
 
         // this is a custom class that fits the pattern of having an appropriate constructor (and no type converter is installed)
         AssertionService.assertEquals(this, "Incorrect String conversion", new EuropeanRegionCode("UK+32"), convert("UK+32", new ReifiedType(EuropeanRegionCode.class)));

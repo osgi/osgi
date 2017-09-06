@@ -38,6 +38,6 @@ public class Point {
     }
 
     public int hashCode() {
-        return new Integer(x).hashCode() + new Integer(y).hashCode();
+        return Integer.valueOf(x).hashCode() + Integer.valueOf(y).hashCode();
     }
 }

@@ -180,10 +180,10 @@ public class UPnPExportedDevice implements UPnPDevice {
     resp.put(UPnPConstants.N_OUT_STRING, UPnPConstants.V_OUT_STRING);
     resp.put(UPnPConstants.N_OUT_STR, UPnPConstants.V_OUT_STR);
     resp.put(UPnPConstants.N_OUT_BOOLEAN, Boolean.TRUE);
-    resp.put(UPnPConstants.N_OUT_NUMBER , new Double(42.0d));
-    resp.put(UPnPConstants.N_OUT_INT, new Integer(42));
-    resp.put(UPnPConstants.N_OUT_CHAR, new Character('\42'));
-    resp.put(UPnPConstants.N_OUT_FLOAT, new Float(42.0f));
+    resp.put(UPnPConstants.N_OUT_NUMBER , Double.valueOf(42.0d));
+    resp.put(UPnPConstants.N_OUT_INT, Integer.valueOf(42));
+    resp.put(UPnPConstants.N_OUT_CHAR, Character.valueOf('\42'));
+    resp.put(UPnPConstants.N_OUT_FLOAT, Float.valueOf(42.0f));
 
 		UPnPAction testALL = new TestAction("testALL", null, new String[] {
 				UPnPConstants.N_IN_STRING, UPnPConstants.N_IN_BOOLEAN,

@@ -31,7 +31,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 		setInteriorNode(mountingPlugin, "./A1");
 
 		Hashtable serviceProps = new Hashtable();
-		serviceProps.put(DataPlugin.DATA_ROOT_URIS, new Integer(0));
+		serviceProps.put(DataPlugin.DATA_ROOT_URIS, Integer.valueOf(0));
 
 		ServiceRegistration registration = null;
 		try {

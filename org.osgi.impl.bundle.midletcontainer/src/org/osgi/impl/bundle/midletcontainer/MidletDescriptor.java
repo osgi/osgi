@@ -90,7 +90,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		if( initlock ) {
 			initlock = false;
 			Hashtable properties = new Hashtable();
-			properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
+			properties.put(ApplicationDescriptor.APPLICATION_LOCKED, Boolean.valueOf(locked));
 			return properties;
 		}
 		checkBundle();
@@ -125,9 +125,9 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 				.getProperty(ApplicationDescriptor.APPLICATION_VENDOR));
 		String visible = props.getProperty(ApplicationDescriptor.APPLICATION_VISIBLE);
 		if (visible != null && visible.equalsIgnoreCase("false"))
-			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, new Boolean( false ) );
+			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, Boolean.valueOf( false ) );
 		else
-			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, new Boolean( true ) );
+			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, Boolean.valueOf( true ) );
 		boolean launchable = false;
 		try {
 			launchable = isLaunchable();
@@ -135,8 +135,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		catch (Exception e) {
 			Activator.log( LogService.LOG_ERROR ,"Exception occurred at searching the Midlet container reference!",e);
 		}
-		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
-		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean(launchable));
+		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, Boolean.valueOf(locked));
+		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, Boolean.valueOf(launchable));
 		properties.put(ApplicationDescriptor.APPLICATION_CONTAINER, "MIDlet");
 		properties.put(Constants.SERVICE_PID, new String(pid));
 		
@@ -168,8 +168,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		checkBundle();
 		locked = true;
 		if( serviceReg != null ) {
-			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, new Boolean( true ));
-			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( false ));
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, Boolean.valueOf( true ));
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, Boolean.valueOf( false ));
 			registeredLaunchable = false;
 			serviceReg.setProperties( serviceProps ); // if lock changes, change the service registration properties also
 		}
@@ -179,9 +179,9 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		checkBundle();
 		locked = false;
 		if( serviceReg != null ) {
-			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, new Boolean( false ));
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, Boolean.valueOf( false ));
 			registeredLaunchable = isLaunchable();
-			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( registeredLaunchable ));
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, Boolean.valueOf( registeredLaunchable ));
 			serviceReg.setProperties( serviceProps ); // if lock changes, change the service registration properties also
 		}
 	}
@@ -251,7 +251,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	public void serviceChanged(ServiceEvent event) {
 		boolean launchable = isLaunchable();
 		if( serviceReg != null && launchable != registeredLaunchable ) {
-			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( launchable ) );
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, Boolean.valueOf( launchable ) );
 			registeredLaunchable = launchable;
 			serviceReg.setProperties( serviceProps );
 		}

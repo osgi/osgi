@@ -48,7 +48,7 @@ public class EnOceanChannelDescription1 implements EnOceanEnumChannelDescription
 	public Object deserialize(byte[] bytes) throws IllegalArgumentException {
 		if ((bytes == null) || bytes.length != 1)
 			throw new IllegalArgumentException();
-		return new Integer((bytes[0] & 0x07));
+		return Integer.valueOf((bytes[0] & 0x07));
 	}
 
 	public EnOceanChannelEnumValue[] getPossibleValues() {

@@ -528,7 +528,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		assertEquals("Wrong subsystem symbolic name: " + tag, symbolicName, subsystem.getSymbolicName());
 		assertEquals("Wrong subsystem version: " + tag, version, subsystem.getVersion());
 		assertEquals("Wrong subsystem type: " + tag, type, subsystem.getType());
-		assertEquals("Wrong subsystem id: " + tag, id, new Long(subsystem.getSubsystemId()));
+		assertEquals("Wrong subsystem id: " + tag, id, Long.valueOf(subsystem.getSubsystemId()));
 		assertEquals("Wrong subsystem location: " + tag, location, subsystem.getLocation());
 		assertEquals("Wrong subsystem state: " + tag, state, subsystem.getState());
 	}

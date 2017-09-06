@@ -248,16 +248,16 @@ public class Node implements Comparable {
 				v.add(n.getValue().getString());
 				break;
 			case DmtData.FORMAT_BOOLEAN:
-				v.add(new Boolean(n.getValue().getBoolean()));
+				v.add(Boolean.valueOf(n.getValue().getBoolean()));
 				break;
 			case DmtData.FORMAT_INTEGER:
-				v.add(new Integer( n.getValue().getInt() ));
+				v.add(Integer.valueOf( n.getValue().getInt() ));
 				break;
 			case DmtData.FORMAT_LONG:
-				v.add(new Long( n.getValue().getLong() ));
+				v.add(Long.valueOf( n.getValue().getLong() ));
 				break;
 			case DmtData.FORMAT_FLOAT:
-				v.add(new Float( n.getValue().getFloat() ));
+				v.add(Float.valueOf( n.getValue().getFloat() ));
 				break;
 			case DmtData.FORMAT_DATE_TIME:
 				v.add(n.getValue().getDateTime());
@@ -309,16 +309,16 @@ public class Node implements Comparable {
 				m.put(n.getName(), n.getValue().getString());
 				break;
 			case DmtData.FORMAT_BOOLEAN:
-				m.put(n.getName(), new Boolean(n.getValue().getBoolean()));
+				m.put(n.getName(), Boolean.valueOf(n.getValue().getBoolean()));
 				break;
 			case DmtData.FORMAT_INTEGER:
-				m.put(n.getName(), new Integer( n.getValue().getInt() ));
+				m.put(n.getName(), Integer.valueOf( n.getValue().getInt() ));
 				break;
 			case DmtData.FORMAT_LONG:
-				m.put(n.getName(), new Long( n.getValue().getLong() ));
+				m.put(n.getName(), Long.valueOf( n.getValue().getLong() ));
 				break;
 			case DmtData.FORMAT_FLOAT:
-				m.put(n.getName(), new Float( n.getValue().getFloat() ));
+				m.put(n.getName(), Float.valueOf( n.getValue().getFloat() ));
 				break;
 			case DmtData.FORMAT_DATE_TIME:
 				m.put(n.getName(), n.getValue().getDateTime());

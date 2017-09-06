@@ -140,7 +140,7 @@ public final class Acl {
 					checkServerId(serverIds[j], "Invalid ACL string: " + "server ID contains illegal character");
 					Integer n = tempPrincipalPermissions.get(serverIds[j]);
 					int oldPermission = (n != null) ? n.intValue() : 0;
-					tempPrincipalPermissions.put(serverIds[j], new Integer(oldPermission | command));
+					tempPrincipalPermissions.put(serverIds[j], Integer.valueOf(oldPermission | command));
 				}
 			}
 		}
@@ -178,7 +178,7 @@ public final class Acl {
 				checkPrincipal(principals[i]);
 			checkPermissions(permissions[i]);
 
-			Integer permInt = new Integer(permissions[i]);
+			Integer permInt = Integer.valueOf(permissions[i]);
 			Object old = tempPrincipalPermissions.put(principals[i], permInt);
 			if (old != null)
 				throw new IllegalArgumentException("Principal '" + principals[i] + "' appears multiple times in the principal array.");
@@ -464,7 +464,7 @@ public final class Acl {
 		if (perm == 0)
 			principalPermissions.remove(principal);
 		else
-			principalPermissions.put(principal, new Integer(perm));
+			principalPermissions.put(principal, Integer.valueOf(perm));
 	}
 
 	private static String writeCommands(int command) {

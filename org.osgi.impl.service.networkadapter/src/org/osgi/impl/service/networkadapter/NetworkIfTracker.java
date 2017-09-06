@@ -183,7 +183,7 @@ class NetworkIfTracker {
         prop.put(NetworkAddress.IPADDRESS, address);
         prop.put(NetworkAddress.IPADDRESS_VERSION, addressVersion);
         prop.put(NetworkAddress.IPADDRESS_SCOPE, addressScope);
-        prop.put(NetworkAddress.SUBNETMASK_LENGTH, new Integer(length));
+        prop.put(NetworkAddress.SUBNETMASK_LENGTH, Integer.valueOf(length));
 
         ServiceRegistration reg = NetworkIfManager.getInstance().getNetworkAddressReg(networkAddressId);
         reg.setProperties(prop);
@@ -245,7 +245,7 @@ class NetworkIfTracker {
         prop.put(NetworkAddress.IPADDRESS_VERSION, addressVersion);
         prop.put(NetworkAddress.IPADDRESS_SCOPE, addressScope);
         prop.put(NetworkAddress.IPADDRESS, address);
-        prop.put(NetworkAddress.SUBNETMASK_LENGTH, new Integer(length));
+        prop.put(NetworkAddress.SUBNETMASK_LENGTH, Integer.valueOf(length));
         prop.put(NetworkAddress.NETWORKADAPTER_PID, networkAdapterPID);
         NetworkIfManager.getInstance().putNetworkAddressProp(networkAddressId, prop);
 

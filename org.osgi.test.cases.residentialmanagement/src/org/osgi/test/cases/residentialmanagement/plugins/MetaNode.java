@@ -108,7 +108,7 @@ public class MetaNode implements org.osgi.service.dmt.MetaNode {
 
     public Object getExtensionProperty(String key) {
 //        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
-//            return new Boolean(true);
+//            return Boolean.valueOf(true);
 //        
 //        throw new IllegalArgumentException("Only the '" + 
 //                INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 

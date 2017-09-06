@@ -20,16 +20,37 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.Converter;
-import org.osgi.service.blueprint.container.ReifiedType;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.test.cases.blueprint.components.comp1.AltSimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.comp1.SimpleTestComponent;
 import org.osgi.test.cases.blueprint.components.factory.SimpleInstanceFactory;
-import org.osgi.test.cases.blueprint.components.factory.TypeInstanceFactory;
 import org.osgi.test.cases.blueprint.components.staticfactory.SimpleStaticFactory;
-import org.osgi.test.cases.blueprint.components.staticfactory.TypeStaticFactory;
-import org.osgi.test.cases.blueprint.framework.*;
+import org.osgi.test.cases.blueprint.framework.AnonymousComponentValidator;
+import org.osgi.test.cases.blueprint.framework.BeanComponent;
+import org.osgi.test.cases.blueprint.framework.BlueprintContainerEvent;
+import org.osgi.test.cases.blueprint.framework.ComponentAssertion;
+import org.osgi.test.cases.blueprint.framework.ComponentMetadataPresenceValidator;
+import org.osgi.test.cases.blueprint.framework.ComponentMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ComponentNamePresenceValidator;
+import org.osgi.test.cases.blueprint.framework.ComponentTypeValidator;
+import org.osgi.test.cases.blueprint.framework.ComponentValueValidator;
+import org.osgi.test.cases.blueprint.framework.EventSet;
+import org.osgi.test.cases.blueprint.framework.GetBeanMetadataValidator;
+import org.osgi.test.cases.blueprint.framework.ManagedBundle;
+import org.osgi.test.cases.blueprint.framework.MetadataEventSet;
+import org.osgi.test.cases.blueprint.framework.NoSuchComponentExceptionValidator;
+import org.osgi.test.cases.blueprint.framework.NonBlueprintTestController;
+import org.osgi.test.cases.blueprint.framework.ReplayAssertion;
+import org.osgi.test.cases.blueprint.framework.ReplayListener;
+import org.osgi.test.cases.blueprint.framework.ReplayListenerRegister;
+import org.osgi.test.cases.blueprint.framework.ReplayListenerUnregister;
+import org.osgi.test.cases.blueprint.framework.StandardTestController;
+import org.osgi.test.cases.blueprint.framework.StringArgument;
+import org.osgi.test.cases.blueprint.framework.TestArgument;
+import org.osgi.test.cases.blueprint.framework.TestRefValue;
+import org.osgi.test.cases.blueprint.framework.TestService;
+import org.osgi.test.cases.blueprint.framework.ThreePhaseTestController;
 import org.osgi.test.cases.blueprint.services.AssertionService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -331,11 +352,12 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // has been validated elsewhere, since there's nothing special about it here, we'll
         // just validate the created values.
 
-        startEvents.addValidator(new ComponentValueValidator("staticInt", new Integer(1)));
-        startEvents.addValidator(new ComponentValueValidator("staticLong", new Long(2)));
-        startEvents.addValidator(new ComponentValueValidator("staticShort", new Short((short)3)));
-        startEvents.addValidator(new ComponentValueValidator("staticDouble", new Double(4.0)));
-        startEvents.addValidator(new ComponentValueValidator("staticFloat", new Float(5.0)));
+        startEvents.addValidator(new ComponentValueValidator("staticInt", Integer.valueOf(1)));
+        startEvents.addValidator(new ComponentValueValidator("staticLong", Long.valueOf(2)));
+        startEvents.addValidator(new ComponentValueValidator("staticShort", Short.valueOf((short)3)));
+        startEvents.addValidator(new ComponentValueValidator("staticDouble", Double.valueOf(4.0)));
+		startEvents.addValidator(new ComponentValueValidator("staticFloat",
+				Float.valueOf(5.0f)));
 
         controller.run();
     }
@@ -427,11 +449,12 @@ public class TestBlueprintBundle extends DefaultTestBundleControl {
         // has been validated elsewhere, since there's nothing special about it here, we'll
         // just validate the created values.
 
-        startEvents.addValidator(new ComponentValueValidator("instanceInt", new Integer(1)));
-        startEvents.addValidator(new ComponentValueValidator("instanceLong", new Long(2)));
-        startEvents.addValidator(new ComponentValueValidator("instanceShort", new Short((short)3)));
-        startEvents.addValidator(new ComponentValueValidator("instanceDouble", new Double(4.0)));
-        startEvents.addValidator(new ComponentValueValidator("instanceFloat", new Float(5.0)));
+        startEvents.addValidator(new ComponentValueValidator("instanceInt", Integer.valueOf(1)));
+        startEvents.addValidator(new ComponentValueValidator("instanceLong", Long.valueOf(2)));
+        startEvents.addValidator(new ComponentValueValidator("instanceShort", Short.valueOf((short)3)));
+        startEvents.addValidator(new ComponentValueValidator("instanceDouble", Double.valueOf(4.0)));
+		startEvents.addValidator(new ComponentValueValidator("instanceFloat",
+				Float.valueOf(5.0f)));
 
         controller.run();
     }

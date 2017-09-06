@@ -279,11 +279,11 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 		final TestObject service3 = new TestObject();
 
 		final Dictionary<String,Object> props1 = new Hashtable<>();
-		props1.put(Constants.SERVICE_RANKING, new Integer(5));
+		props1.put(Constants.SERVICE_RANKING, Integer.valueOf(5));
 		final Dictionary<String,Object> props2 = new Hashtable<>();
-		props2.put(Constants.SERVICE_RANKING, new Integer(10));
+		props2.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		final Dictionary<String,Object> props3 = new Hashtable<>();
-		props3.put(Constants.SERVICE_RANKING, new Integer(15));
+		props3.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 
 		final Bundle tb = installBundle("tbf1.jar", false);
 		try {

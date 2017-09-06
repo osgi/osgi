@@ -3577,44 +3577,46 @@ public class CMControl extends DefaultTestBundleControl {
 		/* Put all legal types in the properties and update */
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("StringKey", getName());
-		props.put("IntegerKey", new Integer(12));
-		props.put("LongKey", new Long(-29));
-		props.put("FloatKey", new Float(921.14));
-		props.put("DoubleKey", new Double(1827.234));
-		props.put("ByteKey", new Byte((byte) 127));
-		props.put("ShortKey", new Short((short) 1));
+		props.put("IntegerKey", Integer.valueOf(12));
+		props.put("LongKey", Long.valueOf(-29));
+		props.put("FloatKey", Float.valueOf(921.14f));
+		props.put("DoubleKey", Double.valueOf(1827.234));
+		props.put("ByteKey", Byte.valueOf((byte) 127));
+		props.put("ShortKey", Short.valueOf((short) 1));
 		// props.put("BigIntegerKey", new BigInteger("123"));
 		// props.put("BigDecimalkey", new BigDecimal(9872.7643));
-		props.put("CharacterKey", new Character('N'));
-		props.put("BooleanKey", new Boolean(true));
+		props.put("CharacterKey", Character.valueOf('N'));
+		props.put("BooleanKey", Boolean.valueOf(true));
 
 		Collection<Object> v = new ArrayList<>();
 		v.add(getName());
 		// ### is now invalid ....
-		// v.addElement(new Integer(12));
-		// v.addElement(new Long(-29));
-		// v.addElement(new Float(921.14));
-		// v.addElement(new Double(1827.234));
-		// v.addElement(new Byte((byte) 127));
-		// v.addElement(new Short((short) 1));
+		// v.addElement(Integer.valueOf(12));
+		// v.addElement(Long.valueOf(-29));
+		// v.addElement(Float.valueOf(921.14));
+		// v.addElement(Double.valueOf(1827.234));
+		// v.addElement(Byte.valueOf((byte) 127));
+		// v.addElement(Short.valueOf((short) 1));
 		// v.addElement(new BigInteger("123"));
 		// v.addElement(new BigDecimal(9872.7643));
-		// v.addElement(new Character('N'));
-		// v.addElement(new Boolean(true));
+		// v.addElement(Character.valueOf('N'));
+		// v.addElement(Boolean.valueOf(true));
 		// v.addElement(new String[] {"firststring", "secondstring"});
 		// ### end invalid
 		props.put("collectionkey", v);
 		props.put("StringArray", new String[] { "string1", "string2" });
-		props.put("IntegerArray", new Integer[] { new Integer(1),
-				new Integer(2) });
-		props.put("LongArray", new Long[] { new Long(1), new Long(2) });
-		props.put("FloatArray", new Float[] { new Float(1.1), new Float(2.2) });
-		props.put("DoubleArray", new Double[] { new Double(1.1),
-				new Double(2.2) });
-		props.put("ByteArray", new Byte[] { new Byte((byte) -1),
-				new Byte((byte) -2) });
-		props.put("ShortArray", new Short[] { new Short((short) 1),
-				new Short((short) 2) });
+		props.put("IntegerArray", new Integer[] { Integer.valueOf(1),
+				Integer.valueOf(2) });
+		props.put("LongArray", new Long[] { Long.valueOf(1), Long.valueOf(2) });
+		props.put("FloatArray", new Float[] {
+				Float.valueOf(1.1f), Float.valueOf(2.2f)
+		});
+		props.put("DoubleArray", new Double[] { Double.valueOf(1.1),
+				Double.valueOf(2.2) });
+		props.put("ByteArray", new Byte[] { Byte.valueOf((byte) -1),
+				Byte.valueOf((byte) -2) });
+		props.put("ShortArray", new Short[] { Short.valueOf((short) 1),
+				Short.valueOf((short) 2) });
 		// props.put("BigIntegerArray", new BigInteger[] {
 		// new BigInteger("1"), new BigInteger("2")
 		// }
@@ -3625,10 +3627,10 @@ public class CMControl extends DefaultTestBundleControl {
 		// }
 		//
 		// );
-		props.put("CharacterArray", new Character[] { new Character('N'),
-				new Character('O') });
-		props.put("BooleanArray", new Boolean[] { new Boolean(true),
-				new Boolean(false) });
+		props.put("CharacterArray", new Character[] { Character.valueOf('N'),
+				Character.valueOf('O') });
+		props.put("BooleanArray", new Boolean[] { Boolean.valueOf(true),
+				Boolean.valueOf(false) });
 
 		// ### invalid
 		// Vector v1 = new Vector();

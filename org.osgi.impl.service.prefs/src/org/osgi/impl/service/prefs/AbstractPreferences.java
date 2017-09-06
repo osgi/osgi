@@ -9,7 +9,9 @@
 package org.osgi.impl.service.prefs;
 
 import java.util.StringTokenizer;
-import org.osgi.service.prefs.*;
+
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * This class provides a skeletal implementation of the <tt>Preferences</tt>
@@ -401,8 +403,7 @@ public abstract class AbstractPreferences implements Preferences {
 		try {
 			String value = get(key, null);
 			if (value != null)
-				// result = Float.parseFloat(value);
-				result = Float.valueOf(value).floatValue();
+				result = Float.parseFloat(value);
 		}
 		catch (NumberFormatException e) {
 			// Ignoring exception causes specified default to be returned

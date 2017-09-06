@@ -31,7 +31,7 @@ public class CommonDriver implements Driver, BundleActivator {
 		log("starting driver bundle");
 		Hashtable h = new Hashtable();
 		h.put("DRIVER_ID", "common_driver");
-		h.put(org.osgi.framework.Constants.SERVICE_RANKING, new Integer(42));
+		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(42));
 		log("registering service");
 		driverRegistration = bc.registerService(
 				"org.osgi.service.device.Driver", this, h);

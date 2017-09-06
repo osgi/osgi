@@ -606,7 +606,7 @@ class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 			if (filter != null) {
 				//create a dictionary for matching with the filter
 				Hashtable dict = new Hashtable();
-				dict.put(SEVERITY, new Integer(le.getLevel()));
+				dict.put(SEVERITY, Integer.valueOf(le.getLevel()));
 				if (le.getBundle() != null)
 					dict.put(SYSTEM, le.getBundle().toString());
 				if (le.getServiceReference() != null)

@@ -40,7 +40,7 @@ public class RegistrationListener extends BaseTestComponent {
         Hashtable props = new Hashtable();
         props.putAll(serviceProperties);
         props.put("service.interface.name", serviceInterface.getName());
-        props.put("service.null.object", new Boolean(reference == null));
+        props.put("service.null.object", Boolean.valueOf(reference == null));
         AssertionService.sendEvent(this, AssertionService.SERVICE_REGISTERED, props);
     }
 
@@ -50,7 +50,7 @@ public class RegistrationListener extends BaseTestComponent {
             props.putAll(serviceProperties);
         }
         props.put("service.interface.name", serviceInterface.getName());
-        props.put("service.null.object", new Boolean(reference == null));
+        props.put("service.null.object", Boolean.valueOf(reference == null));
         AssertionService.sendEvent(this, AssertionService.SERVICE_UNREGISTERED, props);
     }
 }

@@ -391,17 +391,17 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MIN_VALUE));
 		ServiceRegistration<Runnable> reg1 = getContext()
 				.registerService(Runnable.class, runIt, props);
 
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<Runnable> reg2 = getContext()
 				.registerService(Runnable.class, runIt, props);
 
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<Runnable> reg3 = getContext()
 				.registerService(Runnable.class, runIt, props);
 
@@ -799,17 +799,17 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MIN_VALUE));
 		ServiceRegistration<Runnable> reg1 = getContext()
 				.registerService(Runnable.class, runIt, props);
 		assertServiceProperties(reg1.getReference());
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<Runnable> reg2 = getContext()
 				.registerService(Runnable.class, runIt, props);
 		assertServiceProperties(reg2.getReference());
 
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<Runnable> reg3 = getContext()
 				.registerService(Runnable.class, runIt, props);
 		assertServiceProperties(reg3.getReference());
@@ -866,11 +866,11 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		};
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put(getName(), Boolean.TRUE);
-		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 		ServiceRegistration<Runnable> reg1 = getContext()
 				.registerService(Runnable.class, runIt, props);
 		assertServiceProperties(reg1.getReference());
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		ServiceRegistration<Runnable> reg2 = getContext()
 				.registerService(Runnable.class, runIt, props);
 		assertServiceProperties(reg2.getReference());
@@ -878,7 +878,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertEquals("wrong service reference", reg1.getReference(),
 					getContext().getServiceReference("java.lang.Runnable"));
 
-			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			props.put(Constants.SERVICE_RANKING, Integer.valueOf(20));
 			reg2.setProperties(props);
 			assertEquals("wrong service reference", reg2.getReference(),
 					getContext().getServiceReference("java.lang.Runnable"));

@@ -37,7 +37,7 @@ package org.osgi.service.wireadmin;
  * For example:
  * 
  * <pre>
- * Integer mask = new Integer(WIRE_TRACE | WIRE_CONNECTED | WIRE_DISCONNECTED);
+ * Integer mask = Integer.valueOf(WIRE_TRACE | WIRE_CONNECTED | WIRE_DISCONNECTED);
  * Hashtable ht = new Hashtable();
  * ht.put(WIREADMIN_EVENTS, mask);
  * context.registerService(WireAdminListener.class.getName(), this, ht);

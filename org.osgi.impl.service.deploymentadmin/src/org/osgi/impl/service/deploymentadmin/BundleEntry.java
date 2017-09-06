@@ -58,8 +58,8 @@ public class BundleEntry implements Serializable {
         this.resName = resName;
 		this.symbName = symbName;
 		this.version = version;
-		this.bundleId = new Long(bundleId);
-		this.missing = new Boolean(missing);
+		this.bundleId = Long.valueOf(bundleId);
+		this.missing = Boolean.valueOf(missing);
 		this.attrs = new CaseInsensitiveMap(jarAttrs, dp);
 	}
 
@@ -87,14 +87,14 @@ public class BundleEntry implements Serializable {
                 Object[] triple = new Object[3];
                 triple[0] = (String) b.getHeaders().get(DAConstants.BUNDLE_SYMBOLIC_NAME);
                 triple[1] = (String) b.getHeaders().get(DAConstants.BUNDLE_VERSION);
-                triple[2] = new Long(b.getBundleId());
+                triple[2] = Long.valueOf(b.getBundleId());
                 return triple;
             }
         });
         this.symbName = (String) triple[0];
         this.version = (String) triple[1];
         this.bundleId = (Long) triple[2];
-        missing = new Boolean(false);
+        missing = Boolean.valueOf(false);
     }
     
     /**
@@ -196,7 +196,7 @@ public class BundleEntry implements Serializable {
     }
     
     public void setBundleId(long bundleId) {
-        this.bundleId = new Long(bundleId);
+        this.bundleId = Long.valueOf(bundleId);
     }
     
     public void setPid(String pid) {

@@ -139,7 +139,7 @@ public class ManagedService {
             props = new Properties();
         }
         // add the service name
-        props.put(Constants.SERVICE_RANKING, new Integer(r));
+        props.put(Constants.SERVICE_RANKING, Integer.valueOf(r));
     }
 
     public void setStart(boolean s) {

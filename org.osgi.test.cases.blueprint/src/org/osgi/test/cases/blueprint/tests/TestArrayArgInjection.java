@@ -88,8 +88,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         this.addConstructorValidator(startEvents, "compWrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
@@ -124,8 +124,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         this.addConstructorValidator(startEvents, "compWrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
@@ -136,8 +136,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -148,8 +148,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         this.addConstructorValidator(startEvents, "compWrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
@@ -160,8 +160,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
@@ -173,8 +173,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
@@ -185,8 +185,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+		expected[0] = Float.valueOf(3);
+		expected[1] = Float.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected.getClass());
 
         // Date array
@@ -275,8 +275,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         this.addConstructorValidator(startEvents, "compWrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
@@ -301,8 +301,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         this.addConstructorValidator(startEvents, "compWrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
@@ -314,8 +314,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -327,8 +327,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         this.addConstructorValidator(startEvents, "compWrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
@@ -340,8 +340,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
@@ -353,8 +353,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
@@ -366,8 +366,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+        expected[0] = Float.valueOf(3);
+        expected[1] = Float.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected.getClass());
 
         // Date array
@@ -464,8 +464,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         this.addConstructorValidator(startEvents, "compWrappedIntArray", expected, expected
                 .getClass());
 
@@ -492,8 +492,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         this.addConstructorValidator(startEvents, "compWrappedByteArray", expected, expected
                 .getClass());
 
@@ -506,8 +506,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         this.addConstructorValidator(startEvents, "compWrappedCharArray", expected, expected
                 .getClass());
 
@@ -520,8 +520,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         this.addConstructorValidator(startEvents, "compWrappedShortArray", expected, expected
                 .getClass());
 
@@ -534,8 +534,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedLongArray", expected, expected
                 .getClass());
 
@@ -548,8 +548,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedDoubleArray", expected, expected
                 .getClass());
 
@@ -562,8 +562,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+        expected[0] = Float.valueOf(3);
+        expected[1] = Float.valueOf(4);
         this.addConstructorValidator(startEvents, "compWrappedFloatArray", expected, expected
                 .getClass());
 
@@ -658,8 +658,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         addPropertyValidator(startEvents, "compWrappedIntArray", "wrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
@@ -685,8 +685,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         addPropertyValidator(startEvents, "compWrappedByteArray", "wrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
@@ -698,8 +698,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         addPropertyValidator(startEvents, "compWrappedCharArray", "wrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -711,8 +711,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         addPropertyValidator(startEvents, "compWrappedShortArray", "wrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
@@ -724,8 +724,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedLongArray", "wrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
@@ -737,8 +737,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedDoubleArray", "wrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
@@ -750,8 +750,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+        expected[0] = Float.valueOf(3);
+        expected[1] = Float.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedFloatArray", "wrappedFloatArray", expected, expected.getClass());
 
         // Date array
@@ -848,8 +848,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         addPropertyValidator(startEvents, "compWrappedIntArray", "wrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
@@ -875,8 +875,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         addPropertyValidator(startEvents, "compWrappedByteArray", "wrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
@@ -888,8 +888,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         addPropertyValidator(startEvents, "compWrappedCharArray", "wrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -901,8 +901,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         addPropertyValidator(startEvents, "compWrappedShortArray", "wrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
@@ -914,8 +914,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedLongArray", "wrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
@@ -927,8 +927,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedDoubleArray", "wrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
@@ -940,8 +940,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+        expected[0] = Float.valueOf(3);
+        expected[1] = Float.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedFloatArray", "wrappedFloatArray", expected, expected.getClass());
 
         // Date array
@@ -1038,8 +1038,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped int array
         expected = new Integer[2];
-        expected[0] = new Integer(1);
-        expected[1] = new Integer(2);
+        expected[0] = Integer.valueOf(1);
+        expected[1] = Integer.valueOf(2);
         addPropertyValidator(startEvents, "compWrappedIntArray", "wrappedIntArray", expected, expected.getClass());
 
         // Primitive boolean array
@@ -1065,8 +1065,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped byte array
         expected = new Byte[2];
-        expected[0] = new Byte((byte) 1);
-        expected[1] = new Byte((byte) 2);
+        expected[0] = Byte.valueOf((byte) 1);
+        expected[1] = Byte.valueOf((byte) 2);
         addPropertyValidator(startEvents, "compWrappedByteArray", "wrappedByteArray", expected, expected.getClass());
 
         // Primitive char array
@@ -1078,8 +1078,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped char array
         expected = new Character[2];
-        expected[0] = new Character('a');
-        expected[1] = new Character('b');
+        expected[0] = Character.valueOf('a');
+        expected[1] = Character.valueOf('b');
         addPropertyValidator(startEvents, "compWrappedCharArray", "wrappedCharArray", expected, expected.getClass());
 
         // Primitive short array
@@ -1091,8 +1091,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped short array
         expected = new Short[2];
-        expected[0] = new Short((short) 3);
-        expected[1] = new Short((short) 4);
+        expected[0] = Short.valueOf((short) 3);
+        expected[1] = Short.valueOf((short) 4);
         addPropertyValidator(startEvents, "compWrappedShortArray", "wrappedShortArray", expected, expected.getClass());
 
         // Primitive long array
@@ -1104,8 +1104,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped long array
         expected = new Long[2];
-        expected[0] = new Long(3);
-        expected[1] = new Long(4);
+        expected[0] = Long.valueOf(3);
+        expected[1] = Long.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedLongArray", "wrappedLongArray", expected, expected.getClass());
 
         // Primitive double array
@@ -1117,8 +1117,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped double array
         expected = new Double[2];
-        expected[0] = new Double(3);
-        expected[1] = new Double(4);
+        expected[0] = Double.valueOf(3);
+        expected[1] = Double.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedDoubleArray", "wrappedDoubleArray", expected, expected.getClass());
 
         // Primitive float array
@@ -1130,8 +1130,8 @@ public class TestArrayArgInjection extends DefaultTestBundleControl {
 
         // Wrapped float array
         expected = new Float[2];
-        expected[0] = new Float(3);
-        expected[1] = new Float(4);
+        expected[0] = Float.valueOf(3);
+        expected[1] = Float.valueOf(4);
         addPropertyValidator(startEvents, "compWrappedFloatArray", "wrappedFloatArray", expected, expected.getClass());
 
         // Date array

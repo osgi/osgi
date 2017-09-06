@@ -97,23 +97,26 @@ public class ComplexServicePropertyValidator
     protected void validateProperties(ServiceReference ref) {
         assertEquals("Property osgi.service.blueprint.compname", "ServiceOne", ref.getProperty("osgi.service.blueprint.compname"));
         assertNull("Property service.ranking", ref.getProperty("service.ranking"));
-        assertEquals("Property test.case.property.int", new Integer(1), ref.getProperty("test.case.property.int"));
-        assertEquals("Property test.case.property.short", new Short((short)2), ref.getProperty("test.case.property.short"));
-        assertEquals("Property test.case.property.byte", new Byte((byte)3), ref.getProperty("test.case.property.byte"));
-        assertEquals("Property test.case.property.char", new Character('4'), ref.getProperty("test.case.property.char"));
-        assertEquals("Property test.case.property.long", new Long(5), ref.getProperty("test.case.property.long"));
+        assertEquals("Property test.case.property.int", Integer.valueOf(1), ref.getProperty("test.case.property.int"));
+        assertEquals("Property test.case.property.short", Short.valueOf((short)2), ref.getProperty("test.case.property.short"));
+        assertEquals("Property test.case.property.byte", Byte.valueOf((byte)3), ref.getProperty("test.case.property.byte"));
+        assertEquals("Property test.case.property.char", Character.valueOf('4'), ref.getProperty("test.case.property.char"));
+        assertEquals("Property test.case.property.long", Long.valueOf(5), ref.getProperty("test.case.property.long"));
         assertEquals("Property test.case.property.boolean", Boolean.TRUE, ref.getProperty("test.case.property.boolean"));
-        assertEquals("Property test.case.property.float", new Float(6.0), ref.getProperty("test.case.property.float"));
-        assertEquals("Property test.case.property.double", new Double(7.0), ref.getProperty("test.case.property.double"));
+		assertEquals("Property test.case.property.float", Float.valueOf(6.0f),
+				ref.getProperty("test.case.property.float"));
+        assertEquals("Property test.case.property.double", Double.valueOf(7.0), ref.getProperty("test.case.property.double"));
 
-        assertEquals("Property test.case.property.java.lang.Integer", new Integer(11), ref.getProperty("test.case.property.java.lang.Integer"));
-        assertEquals("Property test.case.property.java.lang.Short", new Short((short)12), ref.getProperty("test.case.property.java.lang.Short"));
-        assertEquals("Property test.case.property.java.lang.Byte", new Byte((byte)13), ref.getProperty("test.case.property.java.lang.Byte"));
-        assertEquals("Property test.case.property.java.lang.Char", new Character('a'), ref.getProperty("test.case.property.java.lang.Character"));
-        assertEquals("Property test.case.property.java.lang.Long", new Long(15), ref.getProperty("test.case.property.java.lang.Long"));
+        assertEquals("Property test.case.property.java.lang.Integer", Integer.valueOf(11), ref.getProperty("test.case.property.java.lang.Integer"));
+        assertEquals("Property test.case.property.java.lang.Short", Short.valueOf((short)12), ref.getProperty("test.case.property.java.lang.Short"));
+        assertEquals("Property test.case.property.java.lang.Byte", Byte.valueOf((byte)13), ref.getProperty("test.case.property.java.lang.Byte"));
+        assertEquals("Property test.case.property.java.lang.Char", Character.valueOf('a'), ref.getProperty("test.case.property.java.lang.Character"));
+        assertEquals("Property test.case.property.java.lang.Long", Long.valueOf(15), ref.getProperty("test.case.property.java.lang.Long"));
         assertEquals("Property test.case.property.java.lang.Boolean", Boolean.FALSE, ref.getProperty("test.case.property.java.lang.Boolean"));
-        assertEquals("Property test.case.property.java.lang.Float", new Float(16.0), ref.getProperty("test.case.property.java.lang.Float"));
-        assertEquals("Property test.case.property.java.lang.Double", new Double(17.0), ref.getProperty("test.case.property.java.lang.Double"));
+		assertEquals("Property test.case.property.java.lang.Float",
+				Float.valueOf(16.0f),
+				ref.getProperty("test.case.property.java.lang.Float"));
+        assertEquals("Property test.case.property.java.lang.Double", Double.valueOf(17.0), ref.getProperty("test.case.property.java.lang.Double"));
 
         assertEquals("Property test.case.property.int.array", 1, ((int[])ref.getProperty("test.case.property.int.array"))[0]);
         assertEquals("Property test.case.property.short.array", 2, ((short[])ref.getProperty("test.case.property.short.array"))[0]);
@@ -125,34 +128,44 @@ public class ComplexServicePropertyValidator
         assertEquals("Property test.case.property.double.array", 7.0, ((double[])ref.getProperty("test.case.property.double.array"))[0], 0.0);
 
         assertEquals("Property test.case.property.java.lang.String.array", "abc", ((Object[])ref.getProperty("test.case.property.java.lang.String.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Integer.array", new Integer(11), ((Object[])ref.getProperty("test.case.property.java.lang.Integer.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Short.array", new Short((short)12), ((Object[])ref.getProperty("test.case.property.java.lang.Short.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Byte.array", new Byte((byte)13), ((Object[])ref.getProperty("test.case.property.java.lang.Byte.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Char.array", new Character('a'), ((Object[])ref.getProperty("test.case.property.java.lang.Character.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Long.array", new Long(15), ((Object[])ref.getProperty("test.case.property.java.lang.Long.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Integer.array", Integer.valueOf(11), ((Object[])ref.getProperty("test.case.property.java.lang.Integer.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Short.array", Short.valueOf((short)12), ((Object[])ref.getProperty("test.case.property.java.lang.Short.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Byte.array", Byte.valueOf((byte)13), ((Object[])ref.getProperty("test.case.property.java.lang.Byte.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Char.array", Character.valueOf('a'), ((Object[])ref.getProperty("test.case.property.java.lang.Character.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Long.array", Long.valueOf(15), ((Object[])ref.getProperty("test.case.property.java.lang.Long.array"))[0]);
         assertEquals("Property test.case.property.java.lang.Boolean.array", Boolean.FALSE, ((Object[])ref.getProperty("test.case.property.java.lang.Boolean.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Float.array", new Float(16.0), ((Object[])ref.getProperty("test.case.property.java.lang.Float.array"))[0]);
-        assertEquals("Property test.case.property.java.lang.Double.array", new Double(17.0), ((Object[])ref.getProperty("test.case.property.java.lang.Double.array"))[0]);
+		assertEquals("Property test.case.property.java.lang.Float.array",
+				Float.valueOf(16.0f), ((Object[]) ref.getProperty(
+						"test.case.property.java.lang.Float.array"))[0]);
+        assertEquals("Property test.case.property.java.lang.Double.array", Double.valueOf(17.0), ((Object[])ref.getProperty("test.case.property.java.lang.Double.array"))[0]);
 
         assertEquals("Property test.case.property.java.lang.String.Set", "abc", ((Set)ref.getProperty("test.case.property.java.lang.String.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Integer.Set", new Integer(11), ((Set)ref.getProperty("test.case.property.java.lang.Integer.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Short.Set", new Short((short)12), ((Set)ref.getProperty("test.case.property.java.lang.Short.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Byte.Set", new Byte((byte)13), ((Set)ref.getProperty("test.case.property.java.lang.Byte.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Char.Set", new Character('a'), ((Set)ref.getProperty("test.case.property.java.lang.Character.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Long.Set", new Long(15), ((Set)ref.getProperty("test.case.property.java.lang.Long.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Integer.Set", Integer.valueOf(11), ((Set)ref.getProperty("test.case.property.java.lang.Integer.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Short.Set", Short.valueOf((short)12), ((Set)ref.getProperty("test.case.property.java.lang.Short.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Byte.Set", Byte.valueOf((byte)13), ((Set)ref.getProperty("test.case.property.java.lang.Byte.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Char.Set", Character.valueOf('a'), ((Set)ref.getProperty("test.case.property.java.lang.Character.Set")).toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Long.Set", Long.valueOf(15), ((Set)ref.getProperty("test.case.property.java.lang.Long.Set")).toArray()[0]);
         assertEquals("Property test.case.property.java.lang.Boolean.Set", Boolean.FALSE, ((Set)ref.getProperty("test.case.property.java.lang.Boolean.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Float.Set", new Float(16.0), ((Set)ref.getProperty("test.case.property.java.lang.Float.Set")).toArray()[0]);
-        assertEquals("Property test.case.property.java.lang.Double.Set", new Double(17.0), ((Set)ref.getProperty("test.case.property.java.lang.Double.Set")).toArray()[0]);
+		assertEquals("Property test.case.property.java.lang.Float.Set",
+				Float.valueOf(16.0f),
+				((Set) ref
+						.getProperty("test.case.property.java.lang.Float.Set"))
+								.toArray()[0]);
+        assertEquals("Property test.case.property.java.lang.Double.Set", Double.valueOf(17.0), ((Set)ref.getProperty("test.case.property.java.lang.Double.Set")).toArray()[0]);
 
         assertEquals("Property test.case.property.java.lang.String.List", "abc", ((List)ref.getProperty("test.case.property.java.lang.String.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Integer.List", new Integer(11), ((List)ref.getProperty("test.case.property.java.lang.Integer.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Short.List", new Short((short)12), ((List)ref.getProperty("test.case.property.java.lang.Short.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Byte.List", new Byte((byte)13), ((List)ref.getProperty("test.case.property.java.lang.Byte.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Char.List", new Character('a'), ((List)ref.getProperty("test.case.property.java.lang.Character.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Long.List", new Long(15), ((List)ref.getProperty("test.case.property.java.lang.Long.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.Integer.List", Integer.valueOf(11), ((List)ref.getProperty("test.case.property.java.lang.Integer.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.Short.List", Short.valueOf((short)12), ((List)ref.getProperty("test.case.property.java.lang.Short.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.Byte.List", Byte.valueOf((byte)13), ((List)ref.getProperty("test.case.property.java.lang.Byte.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.Char.List", Character.valueOf('a'), ((List)ref.getProperty("test.case.property.java.lang.Character.List")).get(0));
+        assertEquals("Property test.case.property.java.lang.Long.List", Long.valueOf(15), ((List)ref.getProperty("test.case.property.java.lang.Long.List")).get(0));
         assertEquals("Property test.case.property.java.lang.Boolean.List", Boolean.FALSE, ((List)ref.getProperty("test.case.property.java.lang.Boolean.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Float.List", new Float(16.0), ((List)ref.getProperty("test.case.property.java.lang.Float.List")).get(0));
-        assertEquals("Property test.case.property.java.lang.Double.List", new Double(17.0), ((List)ref.getProperty("test.case.property.java.lang.Double.List")).get(0));
+		assertEquals("Property test.case.property.java.lang.Float.List",
+				Float.valueOf(16.0f),
+				((List) ref
+						.getProperty("test.case.property.java.lang.Float.List"))
+								.get(0));
+        assertEquals("Property test.case.property.java.lang.Double.List", Double.valueOf(17.0), ((List)ref.getProperty("test.case.property.java.lang.Double.List")).get(0));
     }
 }
 

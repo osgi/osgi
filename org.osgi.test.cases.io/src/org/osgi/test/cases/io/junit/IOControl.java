@@ -156,7 +156,7 @@ public class IOControl extends OSGiTestCase {
 		ServiceRegistration<ConnectionFactory> reg1 = bc
 				.registerService(ConnectionFactory.class, cf1, props);
 		TestConnectionFactory cf2 = new TestConnectionFactory();
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<ConnectionFactory> reg2 = bc
 				.registerService(ConnectionFactory.class, cf2, props);
 		ServiceTracker<ConnectorService,ConnectorService> st = new ServiceTracker<>(

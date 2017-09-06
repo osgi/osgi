@@ -86,13 +86,13 @@ public class Utils {
 		String[] mimeTypes = node.getMimeTypes();
 		switch (dmtValue.getFormat()) {
 			case DmtData.FORMAT_INTEGER : {
-				return encode(new Integer(dmtValue.getInt()), getTR069Type(dmtValue, mimeTypes));
+				return encode(Integer.valueOf(dmtValue.getInt()), getTR069Type(dmtValue, mimeTypes));
 			}
 			case DmtData.FORMAT_LONG : {
-				return encode(new Long(dmtValue.getLong()), getTR069Type(dmtValue, mimeTypes));
+				return encode(Long.valueOf(dmtValue.getLong()), getTR069Type(dmtValue, mimeTypes));
 			}
 			case DmtData.FORMAT_FLOAT : {
-				return encode(new Float(dmtValue.getFloat()), getTR069Type(dmtValue, mimeTypes));
+				return encode(Float.valueOf(dmtValue.getFloat()), getTR069Type(dmtValue, mimeTypes));
 			}
 			case DmtData.FORMAT_STRING : {
 				return encode(dmtValue.getString(), getTR069Type(dmtValue, mimeTypes));
@@ -340,7 +340,7 @@ public class Utils {
 					checkUnsignedNumber(stringValue);
 					if (tr069Type == TR069Connector.TR069_UNSIGNED_INT) {
 						/* check unsignedInt */
-						long l = (new Long(stringValue)).longValue();
+						long l = (Long.valueOf(stringValue)).longValue();
 						long l1 = 0xfffffffeL;
 						if (l < 0L || l > l1) {
 							throw new IllegalArgumentException("The unsigned int " + stringValue + " is out of range.");

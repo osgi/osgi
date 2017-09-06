@@ -149,7 +149,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		out.writeObject(args);
 		out.writeObject(topic);
 		out.writeObject(eventFilter);
-		out.writeObject( new Boolean( recurring ) );
+		out.writeObject( Boolean.valueOf( recurring ) );
 		out.writeObject(id);
 	}
 

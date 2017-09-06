@@ -31,19 +31,19 @@ public class TR069ConnectorImpl implements TR069Connector {
 
 	private static final Map<Integer, String>	DMT_FORMAT_NAMES	= new HashMap<Integer, String>();
 	static {
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_BASE64), "base64");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_BINARY), "binary");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_BOOLEAN), "boolean");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_DATE), "date");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_FLOAT), "float");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_INTEGER), "integer");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_NODE), "NODE");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_NULL), "null");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_STRING), "string");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_TIME), "time");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_XML), "xml");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_LONG), "long");
-		DMT_FORMAT_NAMES.put(new Integer(DmtData.FORMAT_DATE_TIME), "dateTime");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_BASE64), "base64");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_BINARY), "binary");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_BOOLEAN), "boolean");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_DATE), "date");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_FLOAT), "float");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_INTEGER), "integer");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_NODE), "NODE");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_NULL), "null");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_STRING), "string");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_TIME), "time");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_XML), "xml");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_LONG), "long");
+		DMT_FORMAT_NAMES.put(Integer.valueOf(DmtData.FORMAT_DATE_TIME), "dateTime");
 	}
 
 	private DmtSession							session;

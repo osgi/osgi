@@ -69,7 +69,7 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 							Object result = m.invoke(MyServiceAsyncDelegate.this, args);
 							// We 2x the results so we can detect that our async was really called.
 							if (result instanceof Integer) {
-								result = new Integer(2 * ((Integer) result).intValue());
+								result = Integer.valueOf(2 * ((Integer) result).intValue());
 							}
 							deferred.resolve(result);
 						} catch (IllegalAccessException e) {

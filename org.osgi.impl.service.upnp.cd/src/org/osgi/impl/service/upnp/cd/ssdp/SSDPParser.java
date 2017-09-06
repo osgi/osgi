@@ -305,16 +305,16 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	void waitRandomTime(String maxWait) {
 		long resTime = 0;
 		try {
-			Integer in = new Integer(maxWait);
+			Integer in = Integer.valueOf(maxWait);
 			double rand = Math.random();
 			rand = rand * 1000;
 			String rands = Double.toString(rand);
 			rands = rands.substring(0, rands.indexOf("."));
-			Long lval = new Long(rands);
+			Long lval = Long.valueOf(rands);
 			resTime = (long) (lval.longValue() * in.intValue());
 		}
 		catch (Exception e) {
-			Long wt = new Long(maxWait);
+			Long wt = Long.valueOf(maxWait);
 			resTime = wt.longValue();
 		}
 		try {

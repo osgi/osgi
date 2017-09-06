@@ -69,7 +69,7 @@ public class RemoteAlertSenderActivator implements BundleActivator {
 		
 		Hashtable ht = new Hashtable();
 		ht.put("principals", new String[] { DmtConstants.PRINCIPAL, DmtConstants.PRINCIPAL_2 });
-		ht.put(Constants.SERVICE_RANKING, new Integer(RemoteAlertSenderActivator.RANKING));	
+		ht.put(Constants.SERVICE_RANKING, Integer.valueOf(RemoteAlertSenderActivator.RANKING));	
 		String[] ifs = new String[] { RemoteAlertSender.class.getName() };
 		servReg = bc.registerService(ifs, testRemoteAlertSenderImpl, ht);
 		System.out.println("RemoteAlertSender activated.");

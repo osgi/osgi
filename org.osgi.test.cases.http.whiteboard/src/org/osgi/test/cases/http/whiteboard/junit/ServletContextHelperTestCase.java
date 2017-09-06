@@ -318,7 +318,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
-		properties.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
@@ -339,13 +339,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, contextPath);
-		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, DEFAULT);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/otherContext");
-		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		AtomicReference<ServletContext> sc1 = new AtomicReference<ServletContext>();
@@ -530,7 +530,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foobar");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
-		properties.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
@@ -565,13 +565,13 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
-		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foobar");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo");
-		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		properties = new Hashtable<String, Object>();
@@ -648,7 +648,7 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "foo");
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/foo/bar");
-		properties.put(Constants.SERVICE_RANKING, new Integer(1000));
+		properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1000));
 		serviceRegistrations.add(context.registerService(ServletContextHelper.class, new ServletContextHelper() {}, properties));
 
 		FailedServletContextDTO failedServletContextDTO = getFailedServletContextDTOByName("foo");

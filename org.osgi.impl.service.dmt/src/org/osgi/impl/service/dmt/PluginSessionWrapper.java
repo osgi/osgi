@@ -366,7 +366,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         Boolean ret = (Boolean) AccessController.doPrivileged(
                 new PrivilegedAction() {
                     public Object run() {
-                        return new Boolean(readableDataSession.isNodeUri(path));
+                        return Boolean.valueOf(readableDataSession.isNodeUri(path));
                     }
                 }, securityContext);
         return ret.booleanValue();
@@ -382,7 +382,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
             Boolean isLeaf = (Boolean) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Boolean(
+                            return Boolean.valueOf(
                                     readableDataSession.isLeafNode(path));
                         }
                     }, securityContext);
@@ -460,7 +460,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
             Integer ret = (Integer) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Integer(readableDataSession.getNodeVersion(path));
+                            return Integer.valueOf(readableDataSession.getNodeVersion(path));
                         }
                     }, securityContext);
             return ret.intValue();
@@ -499,7 +499,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
             Integer ret = (Integer) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Integer(
+                            return Integer.valueOf(
                                     readableDataSession.getNodeSize(path));
                         }
                     }, securityContext);

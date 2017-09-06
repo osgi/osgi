@@ -223,7 +223,7 @@ public abstract class ApplicationDescriptor {
 		 * replace the container's lock with the application model's lock,
 		 * that's the correct
 		 */
-		props.put(APPLICATION_LOCKED, new Boolean(isLocked));
+		props.put(APPLICATION_LOCKED, Boolean.valueOf(isLocked));
 		return props;
 	}
 
@@ -625,7 +625,7 @@ public abstract class ApplicationDescriptor {
 		ScheduledApplication schedule(String scheduleId, Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException, ApplicationException {
 			try {
 				try {
-					return (ScheduledApplication) schedule.invoke(target, new Object[] {scheduleId, args, topic, filter, new Boolean(recurs)});
+					return (ScheduledApplication) schedule.invoke(target, new Object[] {scheduleId, args, topic, filter, Boolean.valueOf(recurs)});
 				} catch (InvocationTargetException e) {
 					throw e.getTargetException();
 				}

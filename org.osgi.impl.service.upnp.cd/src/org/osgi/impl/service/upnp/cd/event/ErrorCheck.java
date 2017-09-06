@@ -57,7 +57,7 @@ public class ErrorCheck {
 			infinite = true;
 		}
 		else {
-			newtime = new Integer(Integer.parseInt(timeconvert) * 1000)
+			newtime = Integer.valueOf(Integer.parseInt(timeconvert) * 1000)
 					.longValue();
 			if (newtime < 1800000) {
 				timeOut = "Second-1800";

@@ -136,7 +136,7 @@ public class DmtPrincipalPermission extends Permission {
 	 */
 	@Override
 	public int hashCode() {
-		return new Boolean(isPrefix).hashCode() ^ principal.hashCode();
+		return Boolean.valueOf(isPrefix).hashCode() ^ principal.hashCode();
 	}
 
 	/**

@@ -79,7 +79,7 @@ public class BindUnbind implements BaseService {
 		}
 		Object prop = properties.get("config.base.data");
 		long data = (prop instanceof Long) ? ((Long) prop).longValue() : 0;
-		properties.put("config.base.data", new Long(data | value));
+		properties.put("config.base.data", Long.valueOf(data | value));
 	}
 
   public ComponentContext getComponentContext() {

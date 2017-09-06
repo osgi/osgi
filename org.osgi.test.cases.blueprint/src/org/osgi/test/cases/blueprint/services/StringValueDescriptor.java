@@ -44,34 +44,34 @@ public class StringValueDescriptor extends ValueDescriptor {
       * @param v      The primitive value.
       */
      public StringValueDescriptor(String name, boolean v) {
-         this(name, new Boolean(v), Boolean.TYPE);
+         this(name, Boolean.valueOf(v), Boolean.TYPE);
      }
 
      public StringValueDescriptor(String name, byte v) {
-         this(name, new Byte(v), Byte.TYPE);
+         this(name, Byte.valueOf(v), Byte.TYPE);
      }
 
      public StringValueDescriptor(String name, char v) {
-         this(name, new Character(v), Character.TYPE);
+         this(name, Character.valueOf(v), Character.TYPE);
      }
 
      public StringValueDescriptor(String name, short v) {
-         this(name, new Short(v), Short.TYPE);
+         this(name, Short.valueOf(v), Short.TYPE);
      }
 
      public StringValueDescriptor(String name, int v) {
-         this(name, new Integer(v), Integer.TYPE);
+         this(name, Integer.valueOf(v), Integer.TYPE);
      }
 
      public StringValueDescriptor(String name, long v) {
-         this(name, new Long(v), Long.TYPE);
+         this(name, Long.valueOf(v), Long.TYPE);
      }
 
      public StringValueDescriptor(String name, double v) {
-         this(name, new Double(v), Double.TYPE);
+         this(name, Double.valueOf(v), Double.TYPE);
      }
 
      public StringValueDescriptor(String name, float v) {
-         this(name, new Float(v), Float.TYPE);
+         this(name, Float.valueOf(v), Float.TYPE);
      }
 }

@@ -76,7 +76,7 @@ public class PersistenceManager {
 	}
 
 	private void addMapping(DmtSession session, String aliasedUri, long instanceNumber) {
-		mappingTable.put(aliasedUri, new Long(instanceNumber));
+		mappingTable.put(aliasedUri, Long.valueOf(instanceNumber));
 		String instanceNumberString = String.valueOf(instanceNumber);
 		String[] path = Uri.toPath(aliasedUri);
 		String alias = path[path.length - 1];
@@ -393,7 +393,7 @@ public class PersistenceManager {
 			String instanceIDUri = aliasedUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
 			if (session.isNodeUri(instanceIDUri)) {
 				try {
-					mapping = new Long(session.getNodeValue(instanceIDUri).getLong());
+					mapping = Long.valueOf(session.getNodeValue(instanceIDUri).getLong());
 				} catch (DmtException e) {
 					return -1;
 				}

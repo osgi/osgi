@@ -96,7 +96,7 @@ public class Activator implements BundleActivator, A, B {
 		//
 		// create an EndpointDescription
 		//
-		Long endpointID = new Long(12345);
+		Long endpointID = Long.valueOf(12345);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
 //		properties.put(Constants.OBJECTCLASS, new String [] {A.class.getName()}); // needed? no, already in servicereference

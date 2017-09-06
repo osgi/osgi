@@ -224,7 +224,7 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 							catch (NumberFormatException e) {
 							}
 
-							return new Long(limit);
+							return Long.valueOf(limit);
 						}
 					})).longValue();
 		}
@@ -251,7 +251,7 @@ public class DmtAdminCore extends ServiceTracker implements MappingListener {
 							catch (NumberFormatException e) {
 							}
 
-							return new Long(limit);
+							return Long.valueOf(limit);
 						}
 					})).longValue();
 		}

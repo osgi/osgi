@@ -87,7 +87,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 
 
 	public Object lookup(String name) throws NamingException {
-		Long serviceId = new Long(name);
+		Long serviceId = Long.valueOf(name);
 		if(serviceId == null) {
 			throw new NameNotFoundException("Service with the name = " + name + " does not exist in this context");
 		} else {

@@ -351,7 +351,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			    if (input < getDomainStart() && input > getDomainStop()) {
 				throw new IllegalArgumentException("Supplied value out of input domain");
 			    }
-			    Float output = new Float(scale(input));
+			    Float output = Float.valueOf(scale(input));
 			    return output;
 			}
 

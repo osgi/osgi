@@ -68,11 +68,11 @@ public class PermissionRecursionTests extends PermissionTestCase {
 		Bundle b1 = newMockBundle(1, "test.bsn", "test.location", pc);
 		Bundle b2 = newMockBundle(2, "test.bsn", "test2.location", pc);
 		Map<String,Object> m1 = new HashMap<>();
-		m1.put("service.id", new Long(2));
+		m1.put("service.id", Long.valueOf(2));
 		m1.put("objectClass", new String[] {"com.foo.Service2"});
 		ServiceReference< ? > r1 = newMockServiceReference(b1, m1);
 		Map<String,Object> m2 = new HashMap<>();
-		m2.put("service.id", new Long(3));
+		m2.put("service.id", Long.valueOf(3));
 		m2.put("objectClass", new String[] {"com.bar.Service2"});
 		ServiceReference< ? > r2 = newMockServiceReference(b2, m2);
 

@@ -141,7 +141,7 @@ public class AuthorizationImpl implements Authorization {
 	}
 
 	protected boolean cacheHaveRole(Role role, boolean have) {
-		cache.put(role, new Boolean(have));
+		cache.put(role, Boolean.valueOf(have));
 		working.removeElement(role);
 		return have;
 	}

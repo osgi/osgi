@@ -42,7 +42,7 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.ACCESS,
-				new Integer(PropertyMetadata.ACCESS_READABLE |
+				Integer.valueOf(PropertyMetadata.ACCESS_READABLE |
 						PropertyMetadata.ACCESS_EVENTABLE));
 		metadata.put(
 				PropertyMetadata.UNITS,

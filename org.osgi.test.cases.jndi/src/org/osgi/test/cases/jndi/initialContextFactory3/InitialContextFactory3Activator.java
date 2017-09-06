@@ -40,7 +40,7 @@ public class InitialContextFactory3Activator implements BundleActivator {
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
 		props.put("osgi.jndi.serviceName", "CTInitialContextFactory"); 
-		props.put(Constants.SERVICE_RANKING, new Integer(2));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 		
 		Hashtable env = new Hashtable();
 		

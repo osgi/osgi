@@ -60,7 +60,7 @@ public interface NetworkAddress {
 	/**
 	 * The value integer of service property, when information is not available.
 	 */
-	public Integer	EMPTY_INTEGER							= new Integer(-1);
+	public Integer	EMPTY_INTEGER							= Integer.valueOf(-1);
 
 	/**
 	 * The key string of "networkAdapter.type" service property. Network

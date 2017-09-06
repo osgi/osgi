@@ -34,7 +34,7 @@ public class MockServlet extends HttpServlet {
 	}
 
 	public MockServlet error(int code, String errorMessage) {
-		this.code = new Integer(code);
+		this.code = Integer.valueOf(code);
 		this.errorMessage = errorMessage;
 
 		return this;

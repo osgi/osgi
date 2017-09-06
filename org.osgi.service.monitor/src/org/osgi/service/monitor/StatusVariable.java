@@ -321,9 +321,9 @@ public final class StatusVariable {
 			case TYPE_INTEGER :
 				return hash ^ intData;
 			case TYPE_FLOAT :
-				return hash ^ hashCode(new Float(floatData));
+				return hash ^ hashCode(Float.valueOf(floatData));
 			case TYPE_BOOLEAN :
-				return hash ^ hashCode(new Boolean(booleanData));
+				return hash ^ hashCode(Boolean.valueOf(booleanData));
 			case TYPE_STRING :
 				return hash ^ hashCode(stringData);
 		}

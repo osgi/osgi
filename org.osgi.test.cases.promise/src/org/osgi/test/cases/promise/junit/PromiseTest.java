@@ -125,7 +125,7 @@ public class PromiseTest extends TestCase {
 			public Promise<Number> call(Promise<Integer> resolved)
 					throws Exception {
 				return resolved(
-						(Number) new Long(resolved.getValue().longValue()));
+						(Number) Long.valueOf(resolved.getValue().longValue()));
 			}
 		});
 		p2.onResolve(new Runnable() {
@@ -138,7 +138,7 @@ public class PromiseTest extends TestCase {
 				latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
-		Integer value = new Integer(15);
+		Integer value = Integer.valueOf(15);
 		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
@@ -158,7 +158,7 @@ public class PromiseTest extends TestCase {
 		Promise<Number> p2 = p.then(new Success<Number, Number>() {
 			@Override
 			public Promise<Number> call(Promise<Number> resolved) throws Exception {
-				final Promise<Number> returned = resolved((Number) new Long(resolved.getValue().longValue()));
+				final Promise<Number> returned = resolved((Number) Long.valueOf(resolved.getValue().longValue()));
 				returned.onResolve(new Runnable() {
 					@Override
 					public void run() {
@@ -183,7 +183,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
-		Integer value = new Integer(15);
+		Integer value = Integer.valueOf(15);
 		d.resolve(value);
 		assertTrue("callback did not run after resolved",
 				latch3.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -231,7 +231,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
-		Integer value = new Integer(15);
+		Integer value = Integer.valueOf(15);
 		d1.resolve(value);
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
@@ -816,7 +816,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value1 = new Integer(12);
+		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
@@ -824,7 +824,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Long value2 = new Long(24);
+		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
@@ -870,7 +870,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value1 = new Integer(12);
+		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
@@ -878,7 +878,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value2 = new Integer(24);
+		Integer value2 = Integer.valueOf(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
@@ -926,7 +926,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value1 = new Integer(12);
+		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved",
 				latch1.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -935,7 +935,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Long value2 = new Long(24);
+		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved",
 				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -989,7 +989,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value1 = new Integer(12);
+		Integer value1 = Integer.valueOf(12);
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved",
 				latch1.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -998,7 +998,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Integer value2 = new Integer(24);
+		Integer value2 = Integer.valueOf(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved",
 				latch2.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -1065,7 +1065,7 @@ public class PromiseTest extends TestCase {
 		}
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		Long value2 = new Long(24);
+		Long value2 = Long.valueOf(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
@@ -1594,13 +1594,13 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testMap() throws Exception {
-		Integer value1 = new Integer(42);
+		Integer value1 = Integer.valueOf(42);
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.map(new Function<Number, Long>() {
 			@Override
 			public Long apply(Number t) {
-				return new Long(t.longValue());
+				return Long.valueOf(t.longValue());
 			}
 		}).map(new Function<Number, String>() {
 			@Override
@@ -1623,7 +1623,7 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testMapException() throws Exception {
-		Integer value1 = new Integer(42);
+		Integer value1 = Integer.valueOf(42);
 		final Exception failure = new Exception("fail");
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -1672,13 +1672,13 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testFlatMap() throws Exception {
-		Integer value1 = new Integer(42);
+		Integer value1 = Integer.valueOf(42);
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<? extends Long>>() {
 			@Override
 			public Promise<Long> apply(Number t) {
-				return resolved(new Long(t.longValue()));
+				return resolved(Long.valueOf(t.longValue()));
 			}
 		}).flatMap(new Function<Number, Promise<? extends String>>() {
 			@Override
@@ -1701,7 +1701,7 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testFlatMapException() throws Exception {
-		Integer value1 = new Integer(42);
+		Integer value1 = Integer.valueOf(42);
 		final Exception failure = new Exception("fail");
 		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -1750,8 +1750,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverNoFailure() throws Exception {
-		final Number value1 = new Integer(42);
-		final Long value2 = new Long(43);
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
 		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
@@ -1779,7 +1779,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverFailure() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Long value2 = new Long(43);
+		final Long value2 = Long.valueOf(43);
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
@@ -1876,8 +1876,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverWithNoFailure() throws Exception {
-		final Number value1 = new Integer(42);
-		final Long value2 = new Long(43);
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
 		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
@@ -1905,7 +1905,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverWithFailure() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Long value2 = new Long(43);
+		final Long value2 = Long.valueOf(43);
 		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<? extends Number>>() {
@@ -2002,8 +2002,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testFallbackToNoFailure() throws Exception {
-		final Number value1 = new Integer(42);
-		final Long value2 = new Long(43);
+		final Number value1 = Integer.valueOf(42);
+		final Long value2 = Long.valueOf(43);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p1 = resolved(value1);
 		final Promise<Long> p2 = resolved(value2);
@@ -2025,7 +2025,7 @@ public class PromiseTest extends TestCase {
 	public void testFallbackToFailure() throws Exception {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
-		final Long value3 = new Long(43);
+		final Long value3 = Long.valueOf(43);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p1 = failed(failure1);
 		final Promise<Number> p2 = failed(failure2);

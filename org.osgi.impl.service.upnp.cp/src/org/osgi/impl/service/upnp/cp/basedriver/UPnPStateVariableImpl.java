@@ -36,23 +36,23 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 		if ((type.equals("ui1")) || (type.equals("ui2")) || (type.equals("i1"))
 				|| (type.equals("i2")) || (type.equals("i4"))
 				|| (type.equals("int"))) {
-			Integer in = new Integer("1");
+			Integer in = Integer.valueOf("1");
 			return in.getClass();
 		}
 		else
 			if (type.equals("ui2")) {
-				Long ll = new Long("1");
+				Long ll = Long.valueOf("1");
 				return ll.getClass();
 			}
 			else
 				if ((type.equals("r4")) || (type.equals("float"))) {
-					Float ff = new Float("1");
+					Float ff = Float.valueOf("1");
 					return ff.getClass();
 				}
 				else
 					if ((type.equals("r8")) || (type.equals("number"))
 							|| (type.equals("fixed.14.4"))) {
-						Double dd = new Double("1");
+						Double dd = Double.valueOf("1");
 						return dd.getClass();
 					}
 					else
@@ -63,12 +63,12 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 						}
 						else
 							if (type.equals("char")) {
-								Character cc = new Character('a');
+								Character cc = Character.valueOf('a');
 								return cc.getClass();
 							}
 							else
 								if (type.equals("boolean")) {
-									Boolean bb = new Boolean(true);
+									Boolean bb = Boolean.valueOf(true);
 									return bb.getClass();
 								}
 		return null;

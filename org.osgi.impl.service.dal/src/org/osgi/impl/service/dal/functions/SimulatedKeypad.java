@@ -32,7 +32,7 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.ACCESS,
-				new Integer(PropertyMetadata.ACCESS_EVENTABLE));
+				Integer.valueOf(PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // step

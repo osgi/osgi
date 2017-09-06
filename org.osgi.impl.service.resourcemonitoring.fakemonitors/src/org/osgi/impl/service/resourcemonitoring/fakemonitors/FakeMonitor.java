@@ -83,7 +83,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	/**
 	 * currentUsage
 	 */
-	private Long								currentUsage	= new Long(0);
+	private Long								currentUsage	= Long.valueOf(0);
 
 	/**
 	 * Create a new FakeMonitor
@@ -179,7 +179,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 			e.printStackTrace();
 		}
 		thread = null;
-		currentUsage = new Long(0);
+		currentUsage = Long.valueOf(0);
 		eventNotifier.reportEnableDisable();
 	}
 
@@ -241,7 +241,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	 * @param pNewUsage
 	 */
 	private void setUsage(long pNewUsage) {
-		currentUsage = new Long(pNewUsage);
+		currentUsage = Long.valueOf(pNewUsage);
 		eventNotifier.notify(currentUsage);
 	}
 

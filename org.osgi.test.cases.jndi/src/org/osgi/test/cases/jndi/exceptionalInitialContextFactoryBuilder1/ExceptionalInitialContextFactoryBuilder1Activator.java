@@ -44,8 +44,8 @@ public class ExceptionalInitialContextFactoryBuilder1Activator implements
 		String[] interfaces ={InitialContextFactoryBuilder.class.getName()};
 		
 
-		props1.put(Constants.SERVICE_RANKING, new Integer(3));
-		props2.put(Constants.SERVICE_RANKING, new Integer(2));
+		props1.put(Constants.SERVICE_RANKING, Integer.valueOf(3));
+		props2.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 		
 		CTExceptionalInitialContextFactoryBuilder ctfb1 = new CTExceptionalInitialContextFactoryBuilder();
 		CTInitialContextFactoryBuilder ctfb2 = new CTInitialContextFactoryBuilder();

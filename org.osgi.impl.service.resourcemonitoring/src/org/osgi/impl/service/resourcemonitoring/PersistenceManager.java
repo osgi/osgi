@@ -69,7 +69,7 @@ public class PersistenceManager implements BundleListener {
 			// check if an entry exists into the unresolvedBundles map
 			// for this new bundle
 			long bundleId = event.getBundle().getBundleId();
-			Long bundleIdLong = new Long(bundleId);
+			Long bundleIdLong = Long.valueOf(bundleId);
 			String resourceContextName = (String) unresolvedBundles
 					.get(bundleIdLong);
 			if (resourceContextName != null) {

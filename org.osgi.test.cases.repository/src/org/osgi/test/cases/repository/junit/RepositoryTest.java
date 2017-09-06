@@ -258,7 +258,7 @@ public class RepositoryTest extends RepositoryTestBase {
         String url = (String) contentCap.getAttributes().get("url");
         byte[] contentBytes = readFully(new URL(url).openStream());
         assertTrue(contentBytes.length > 0);
-        assertEquals(new Long(contentBytes.length), contentCap.getAttributes().get("size"));
+        assertEquals(Long.valueOf(contentBytes.length), contentCap.getAttributes().get("size"));
         assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
     }
 
@@ -310,7 +310,7 @@ public class RepositoryTest extends RepositoryTestBase {
         assertEquals("(&(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version>=0.9)(!(version>=1)))",
                 wiringReq.getDirectives().get("filter"));
         assertEquals(1, wiringReq.getAttributes().size());
-        assertEquals(new Long(42), wiringReq.getAttributes().get("custom"));
+        assertEquals(Long.valueOf(42), wiringReq.getAttributes().get("custom"));
 
         List<Requirement> metaReqs = resource.getRequirements("osgi.identity");
         assertEquals(2, metaReqs.size());
@@ -348,7 +348,7 @@ public class RepositoryTest extends RepositoryTestBase {
         byte[] contentBytes = readFully(repositoryContent.getContent());
         assertTrue(contentBytes.length > 0);
         assertTrue(Arrays.equals(expectedBytes, contentBytes));
-        assertEquals(new Long(contentBytes.length), contentCap.getAttributes().get("size"));
+        assertEquals(Long.valueOf(contentBytes.length), contentCap.getAttributes().get("size"));
         assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
     }
 
@@ -367,8 +367,8 @@ public class RepositoryTest extends RepositoryTestBase {
         assertEquals(",", cap.getAttributes().get("testString2"));
         assertEquals("a,b", cap.getAttributes().get("testString3"));
         assertEquals(Version.parseVersion("1.2.3.qualifier"), cap.getAttributes().get("testVersion"));
-        assertEquals(new Long(Long.MAX_VALUE), cap.getAttributes().get("testLong"));
-        assertEquals(new Double(Math.PI), cap.getAttributes().get("testDouble"));
+        assertEquals(Long.valueOf(Long.MAX_VALUE), cap.getAttributes().get("testLong"));
+        assertEquals(Double.valueOf(Math.PI), cap.getAttributes().get("testDouble"));
         assertEquals(Arrays.asList("a", "b and c", "d"), cap.getAttributes().get("testStringList"));
         assertEquals(Arrays.asList(",", "\\,\\"), cap.getAttributes().get("testStringList2"));
         assertEquals(Arrays.asList(","), cap.getAttributes().get("testStringList3"));
@@ -456,7 +456,7 @@ public class RepositoryTest extends RepositoryTestBase {
 
             byte[] actualBytes = readFully(new URL((String) attrs.get("url")).openStream());
             assertTrue(Arrays.equals(expectedBytes, actualBytes));
-            assertEquals(new Long(expectedBytes.length), attrs.get("size"));
+            assertEquals(Long.valueOf(expectedBytes.length), attrs.get("size"));
             assertEquals(getSHA256(expectedBytes), attrs.get("osgi.content"));
         }
         assertTrue(foundZip);

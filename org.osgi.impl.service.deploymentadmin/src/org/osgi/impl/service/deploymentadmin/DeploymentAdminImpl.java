@@ -633,7 +633,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         		ht.put(DAConstants.EVENTPROP_DP_NEXT_VERSION, version);
         	}
         }
-        ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
+        ht.put(DAConstants.EVENTPROP_SUCCESSFUL, Boolean.valueOf(succ));
         
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)

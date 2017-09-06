@@ -155,7 +155,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	       * Tests that serializing a wrong value in
 	       * EnOceanChannelDescription in an exception
 	       */
-	    channelDescription.serialize(new Float(-2000.0f));
+	    channelDescription.serialize(Float.valueOf(-2000.0f));
 	    fail("The expected exception hasn't been caught.");
 	} catch (IllegalArgumentException e) {
 	    tlog("testInterfaceExceptions(), --> OK.");

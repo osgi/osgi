@@ -163,9 +163,11 @@ public class Rasterizer {
 
 		if (scale != null) {
 			transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT,
-					new Float(bounds.getHeight() * scale.floatValue()));
+					Float.valueOf(
+							(float) (bounds.getHeight() * scale.floatValue())));
 			transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH,
-					new Float(bounds.getWidth() * scale.floatValue()));
+					Float.valueOf(
+							(float) (bounds.getWidth() * scale.floatValue())));
 		}
 
 		transcoder.addTranscodingHint(PNGTranscoder.KEY_BACKGROUND_COLOR,
@@ -174,7 +176,7 @@ public class Rasterizer {
 		if (dpi != null) {
 			transcoder.addTranscodingHint(
 					PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER,
-					new Float(25.4f / dpi.floatValue()));
+					Float.valueOf(25.4f / dpi.floatValue()));
 		}
 
 		transcoder.addTranscodingHint(PNGTranscoder.KEY_USER_STYLESHEET_URI,

@@ -677,35 +677,35 @@ public class DivTests extends DefaultTestBundleControl {
 	}
 
 	public void testBundleEventConstants() {
-		assertConstant(new Integer(0x00000001), "INSTALLED", BundleEvent.class);
-		assertConstant(new Integer(0x00000002), "STARTED", BundleEvent.class);
-		assertConstant(new Integer(0x00000004), "STOPPED", BundleEvent.class);
-		assertConstant(new Integer(0x00000008), "UPDATED", BundleEvent.class);
-		assertConstant(new Integer(0x00000010), "UNINSTALLED",
+		assertConstant(Integer.valueOf(0x00000001), "INSTALLED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000002), "STARTED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000004), "STOPPED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000008), "UPDATED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000010), "UNINSTALLED",
 				BundleEvent.class);
-		assertConstant(new Integer(0x00000020), "RESOLVED", BundleEvent.class);
-		assertConstant(new Integer(0x00000040), "UNRESOLVED", BundleEvent.class);
-		assertConstant(new Integer(0x00000080), "STARTING", BundleEvent.class);
-		assertConstant(new Integer(0x00000100), "STOPPING", BundleEvent.class);
-		assertConstant(new Integer(0x00000200), "LAZY_ACTIVATION",
+		assertConstant(Integer.valueOf(0x00000020), "RESOLVED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000040), "UNRESOLVED", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000080), "STARTING", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000100), "STOPPING", BundleEvent.class);
+		assertConstant(Integer.valueOf(0x00000200), "LAZY_ACTIVATION",
 				BundleEvent.class);
 	}
 
 	public void testFrameworkEventConstants() {
-		assertConstant(new Integer(0x00000001), "STARTED", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000002), "ERROR", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000004), "PACKAGES_REFRESHED",
+		assertConstant(Integer.valueOf(0x00000001), "STARTED", FrameworkEvent.class);
+		assertConstant(Integer.valueOf(0x00000002), "ERROR", FrameworkEvent.class);
+		assertConstant(Integer.valueOf(0x00000004), "PACKAGES_REFRESHED",
 				FrameworkEvent.class);
-		assertConstant(new Integer(0x00000008), "STARTLEVEL_CHANGED",
+		assertConstant(Integer.valueOf(0x00000008), "STARTLEVEL_CHANGED",
 				FrameworkEvent.class);
-		assertConstant(new Integer(0x00000010), "WARNING", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000020), "INFO", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000040), "STOPPED", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000080), "STOPPED_UPDATE",
+		assertConstant(Integer.valueOf(0x00000010), "WARNING", FrameworkEvent.class);
+		assertConstant(Integer.valueOf(0x00000020), "INFO", FrameworkEvent.class);
+		assertConstant(Integer.valueOf(0x00000040), "STOPPED", FrameworkEvent.class);
+		assertConstant(Integer.valueOf(0x00000080), "STOPPED_UPDATE",
 				FrameworkEvent.class);
-		assertConstant(new Integer(0x00000100),
+		assertConstant(Integer.valueOf(0x00000100),
 				"STOPPED_BOOTCLASSPATH_MODIFIED", FrameworkEvent.class);
-		assertConstant(new Integer(0x00000200), "WAIT_TIMEDOUT",
+		assertConstant(Integer.valueOf(0x00000200), "WAIT_TIMEDOUT",
 				FrameworkEvent.class);
 	}
 

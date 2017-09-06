@@ -42,17 +42,17 @@ public class ServiceConsumerEventImpl extends DefaultBindImpl implements
 
 	public ServiceConsumerEventImpl() {
 		properties = new Hashtable<>();
-		properties.put("count", new Integer(count));
+		properties.put("count", Integer.valueOf(count));
 	}
 
 	public synchronized void bindObject(Object o) {
 		count++;
-		properties.put("count", new Integer(count));
+		properties.put("count", Integer.valueOf(count));
 	}
 
 	public synchronized void unbindObject(Object o) {
 		count--;
-		properties.put("count", new Integer(count));
+		properties.put("count", Integer.valueOf(count));
 	}
 
 	public TestObject getTestObject() {

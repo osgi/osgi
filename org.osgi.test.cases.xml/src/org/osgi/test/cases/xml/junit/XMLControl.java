@@ -299,12 +299,12 @@ public class XMLControl extends DefaultTestBundleControl {
 				.getProperty(XMLParserActivator.PARSER_VALIDATING);
 		assertNotNull("parser.validating property is not set", v);
 		assertEquals("parser.validating property has the wrong value",
-				new Boolean(validating), v);
+				Boolean.valueOf(validating), v);
 		Boolean ns = (Boolean) reference
 				.getProperty(XMLParserActivator.PARSER_NAMESPACEAWARE);
 		assertNotNull("parser.namespaceAware property is not set", ns);
 		assertEquals("parser.namespaceAware property has the wrong value",
-				new Boolean(namespaceAware), ns);
+				Boolean.valueOf(namespaceAware), ns);
 	}
 
 	private String summarize(ServiceReference< ? > reference) {

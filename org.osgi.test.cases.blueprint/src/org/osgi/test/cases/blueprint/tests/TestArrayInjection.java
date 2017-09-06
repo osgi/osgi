@@ -84,44 +84,44 @@ public class TestArrayInjection extends DefaultTestBundleControl {
         // byte conversion
         addPropertyValidator(startEvents, "compListPrimByte", new ByteArrayValueDescriptor("primByte", new byte[] {0, Byte.MAX_VALUE, Byte.MIN_VALUE}));
         addPropertyValidator(startEvents, "compSetPrimByte", new ByteArrayValueDescriptor("primByte", new byte[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedByte", new ObjectArrayValueDescriptor("byte", new Byte[] {new Byte((byte)0), new Byte(Byte.MAX_VALUE), new Byte(Byte.MIN_VALUE)}));
-        addPropertyValidator(startEvents, "compSetWrapperedByte", new ObjectArrayValueDescriptor("byte", new Byte[] {new Byte((byte)123)}));
+        addPropertyValidator(startEvents, "compListWrapperedByte", new ObjectArrayValueDescriptor("byte", new Byte[] {Byte.valueOf((byte)0), Byte.valueOf(Byte.MAX_VALUE), Byte.valueOf(Byte.MIN_VALUE)}));
+        addPropertyValidator(startEvents, "compSetWrapperedByte", new ObjectArrayValueDescriptor("byte", new Byte[] {Byte.valueOf((byte)123)}));
 
         // double conversion
         addPropertyValidator(startEvents, "compListPrimDouble", new DoubleArrayValueDescriptor("primDouble", new double[] {0, Double.MAX_VALUE, Double.MIN_VALUE, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY}));
         addPropertyValidator(startEvents, "compSetPrimDouble", new DoubleArrayValueDescriptor("primDouble", new double[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedDouble", new ObjectArrayValueDescriptor("double", new Double[] {new Double(0), new Double(Double.MAX_VALUE), new Double(Double.MIN_VALUE), new Double(Double.POSITIVE_INFINITY), new Double(Double.NEGATIVE_INFINITY)}));
-        addPropertyValidator(startEvents, "compSetWrapperedDouble", new ObjectArrayValueDescriptor("double", new Double[] {new Double(123)}));
+        addPropertyValidator(startEvents, "compListWrapperedDouble", new ObjectArrayValueDescriptor("double", new Double[] {Double.valueOf(0), Double.valueOf(Double.MAX_VALUE), Double.valueOf(Double.MIN_VALUE), Double.valueOf(Double.POSITIVE_INFINITY), Double.valueOf(Double.NEGATIVE_INFINITY)}));
+        addPropertyValidator(startEvents, "compSetWrapperedDouble", new ObjectArrayValueDescriptor("double", new Double[] {Double.valueOf(123)}));
 
         // float conversion
         addPropertyValidator(startEvents, "compListPrimFloat", new FloatArrayValueDescriptor("primFloat", new float[] {0, Float.MAX_VALUE, Float.MIN_VALUE, Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY}));
         addPropertyValidator(startEvents, "compSetPrimFloat", new FloatArrayValueDescriptor("primFloat", new float[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedFloat", new ObjectArrayValueDescriptor("float", new Float[] {new Float(0), new Float(Float.MAX_VALUE), new Float(Float.MIN_VALUE), new Float(Float.POSITIVE_INFINITY), new Float(Float.NEGATIVE_INFINITY)}));
-        addPropertyValidator(startEvents, "compSetWrapperedFloat", new ObjectArrayValueDescriptor("float", new Float[] {new Float(123)}));
+        addPropertyValidator(startEvents, "compListWrapperedFloat", new ObjectArrayValueDescriptor("float", new Float[] {Float.valueOf(0), Float.valueOf(Float.MAX_VALUE), Float.valueOf(Float.MIN_VALUE), Float.valueOf(Float.POSITIVE_INFINITY), Float.valueOf(Float.NEGATIVE_INFINITY)}));
+        addPropertyValidator(startEvents, "compSetWrapperedFloat", new ObjectArrayValueDescriptor("float", new Float[] {Float.valueOf(123)}));
 
         // int conversion
         addPropertyValidator(startEvents, "compListPrimInteger", new IntArrayValueDescriptor("primInt", new int[] {0, Integer.MAX_VALUE, Integer.MIN_VALUE}));
         addPropertyValidator(startEvents, "compSetPrimInteger", new IntArrayValueDescriptor("primInt", new int[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {new Integer((int)0), new Integer(Integer.MAX_VALUE), new Integer(Integer.MIN_VALUE)}));
-        addPropertyValidator(startEvents, "compSetWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {new Integer((int)123)}));
+        addPropertyValidator(startEvents, "compListWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {Integer.valueOf((int)0), Integer.valueOf(Integer.MAX_VALUE), Integer.valueOf(Integer.MIN_VALUE)}));
+        addPropertyValidator(startEvents, "compSetWrapperedInteger", new ObjectArrayValueDescriptor("int", new Integer[] {Integer.valueOf((int)123)}));
 
         // char conversion
         addPropertyValidator(startEvents, "compListPrimCharacter", new CharArrayValueDescriptor("primChar", new char[] {'\u0000', Character.MAX_VALUE}));
         addPropertyValidator(startEvents, "compSetPrimCharacter", new CharArrayValueDescriptor("primChar", new char[] {'A'}));
-        addPropertyValidator(startEvents, "compListWrapperedCharacter", new ObjectArrayValueDescriptor("char", new Character[] {new Character('\u0000'), new Character(Character.MAX_VALUE)}));
-        addPropertyValidator(startEvents, "compSetWrapperedCharacter", new ObjectArrayValueDescriptor("char", new Character[] {new Character('1')}));
+        addPropertyValidator(startEvents, "compListWrapperedCharacter", new ObjectArrayValueDescriptor("char", new Character[] {Character.valueOf('\u0000'), Character.valueOf(Character.MAX_VALUE)}));
+        addPropertyValidator(startEvents, "compSetWrapperedCharacter", new ObjectArrayValueDescriptor("char", new Character[] {Character.valueOf('1')}));
 
         // short conversion
         addPropertyValidator(startEvents, "compListPrimShort", new ShortArrayValueDescriptor("primShort", new short[] {0, Short.MAX_VALUE, Short.MIN_VALUE}));
         addPropertyValidator(startEvents, "compSetPrimShort", new ShortArrayValueDescriptor("primShort", new short[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedShort", new ObjectArrayValueDescriptor("short", new Short[] {new Short((short)0), new Short(Short.MAX_VALUE), new Short(Short.MIN_VALUE)}));
-        addPropertyValidator(startEvents, "compSetWrapperedShort", new ObjectArrayValueDescriptor("short", new Short[] {new Short((short)123)}));
+        addPropertyValidator(startEvents, "compListWrapperedShort", new ObjectArrayValueDescriptor("short", new Short[] {Short.valueOf((short)0), Short.valueOf(Short.MAX_VALUE), Short.valueOf(Short.MIN_VALUE)}));
+        addPropertyValidator(startEvents, "compSetWrapperedShort", new ObjectArrayValueDescriptor("short", new Short[] {Short.valueOf((short)123)}));
 
         // long conversion
         addPropertyValidator(startEvents, "compListPrimLong", new LongArrayValueDescriptor("primLong", new long[] {0, Long.MAX_VALUE, Long.MIN_VALUE}));
         addPropertyValidator(startEvents, "compSetPrimLong", new LongArrayValueDescriptor("primLong", new long[] {123}));
-        addPropertyValidator(startEvents, "compListWrapperedLong", new ObjectArrayValueDescriptor("long", new Long[] {new Long((long)0), new Long(Long.MAX_VALUE), new Long(Long.MIN_VALUE)}));
-        addPropertyValidator(startEvents, "compSetWrapperedLong", new ObjectArrayValueDescriptor("long", new Long[] {new Long((long)123)}));
+        addPropertyValidator(startEvents, "compListWrapperedLong", new ObjectArrayValueDescriptor("long", new Long[] {Long.valueOf((long)0), Long.valueOf(Long.MAX_VALUE), Long.valueOf(Long.MIN_VALUE)}));
+        addPropertyValidator(startEvents, "compSetWrapperedLong", new ObjectArrayValueDescriptor("long", new Long[] {Long.valueOf((long)123)}));
 
         controller.run();
     }

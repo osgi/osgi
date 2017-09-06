@@ -311,13 +311,13 @@ public class Scheduler implements Runnable, EventHandler {
 			Calendar calendar = Calendar.getInstance();
 
 			Map props = new Hashtable();
-			props.put( ScheduledApplication.YEAR,			new Integer( calendar.get( Calendar.YEAR ) ) );
-			props.put( ScheduledApplication.MONTH,			new Integer( calendar.get( Calendar.MONTH ) ) );
-			props.put( ScheduledApplication.DAY_OF_MONTH,	new Integer( calendar.get( Calendar.DAY_OF_MONTH ) ) );
-			props.put( ScheduledApplication.DAY_OF_WEEK,	new Integer( calendar.get( Calendar.DAY_OF_WEEK ) ) );
-			props.put( "day_of_week",						new Integer( calendar.get( Calendar.DAY_OF_WEEK ) ) );
-			props.put( ScheduledApplication.HOUR_OF_DAY,	new Integer( calendar.get( Calendar.HOUR_OF_DAY ) ) );
-			props.put( ScheduledApplication.MINUTE,			new Integer( calendar.get( Calendar.MINUTE ) ) );
+			props.put( ScheduledApplication.YEAR,			Integer.valueOf( calendar.get( Calendar.YEAR ) ) );
+			props.put( ScheduledApplication.MONTH,			Integer.valueOf( calendar.get( Calendar.MONTH ) ) );
+			props.put( ScheduledApplication.DAY_OF_MONTH,	Integer.valueOf( calendar.get( Calendar.DAY_OF_MONTH ) ) );
+			props.put( ScheduledApplication.DAY_OF_WEEK,	Integer.valueOf( calendar.get( Calendar.DAY_OF_WEEK ) ) );
+			props.put( "day_of_week",						Integer.valueOf( calendar.get( Calendar.DAY_OF_WEEK ) ) );
+			props.put( ScheduledApplication.HOUR_OF_DAY,	Integer.valueOf( calendar.get( Calendar.HOUR_OF_DAY ) ) );
+			props.put( ScheduledApplication.MINUTE,			Integer.valueOf( calendar.get( Calendar.MINUTE ) ) );
 			
 			if( stopped ) /* avoid exception */
 				break;

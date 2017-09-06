@@ -289,7 +289,7 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
         props.put("bundle.version", Version.parseVersion(bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
-        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
+        props.put(EventConstants.BUNDLE_ID, Long.valueOf(bundle.getBundleId()));
 
         // get the extender as well
         Bundle extender = e.getExtenderBundle();

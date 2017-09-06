@@ -244,7 +244,7 @@ public class DmtPermission extends Permission {
 	 */
 	@Override
 	public int hashCode() {
-		return new Integer(mask).hashCode() ^ new Boolean(prefixPath).hashCode() ^ path.hashCode();
+		return Integer.valueOf(mask).hashCode() ^ Boolean.valueOf(prefixPath).hashCode() ^ path.hashCode();
 	}
 
 	/**

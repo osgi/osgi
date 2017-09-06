@@ -77,8 +77,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		returnedWires = new Hashtable();
 		clearSync();
 		permBundles = new ArrayList();
-		wa = (WireAdmin) getService(WireAdmin.class);
-		pa = (PermissionAdmin) getService(PermissionAdmin.class);
+		wa = getService(WireAdmin.class);
+		pa = getService(PermissionAdmin.class);
 		helper = new Helper(getContext(), this);
 		Helper.deleteAllWires(wa);
 	}
@@ -170,9 +170,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplA", "");
 
 		Hashtable properties = new Hashtable();
-		properties.put("property1", new Integer(1));
-		properties.put("property2", new Float(1.0));
-		properties.put("property3", new Boolean(false));
+		properties.put("property1", Integer.valueOf(1));
+		properties.put("property2", Float.valueOf(1.0f));
+		properties.put("property3", Boolean.valueOf(false));
 
 		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
 		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
@@ -194,9 +194,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				.getLastValue());
 
 		Hashtable newProperties = new Hashtable();
-		newProperties.put("property1", new Integer(2));
-		newProperties.put("property2", new Float(2.0));
-		newProperties.put("property3", new Boolean(false));
+		newProperties.put("property1", Integer.valueOf(2));
+		newProperties.put("property2", Float.valueOf(2.0f));
+		newProperties.put("property3", Boolean.valueOf(false));
 		log("Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA");
 		helper.updateWire(wa, wire, newProperties);
 		waitForSync(2, 100);
@@ -300,7 +300,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			log("Test createWire with null PIDs: Operation passed: OK. Exception thrown.");
 		}
 		Hashtable properties1 = new Hashtable();
-		properties1.put(new Integer(1), "test");
+		properties1.put(Integer.valueOf(1), "test");
 		try {
 			wire = helper.createWire(wa, "abc.bac", "bac.abc", properties1);
 			fail("Test createWire with incorrect properties' key: NOT OK. ");
@@ -309,8 +309,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			log("Test createWire with incorrect properties' key: Operation passed: OK. Exception thrown.");
 		}
 		Hashtable properties2 = new Hashtable();
-		properties2.put("Test", new Integer(1));
-		properties2.put("test", new Integer(2));
+		properties2.put("Test", Integer.valueOf(1));
+		properties2.put("test", Integer.valueOf(2));
 		try {
 			wire = helper.createWire(wa, "abc.bac", "bac.abc", properties2);
 			fail("Test createWire with case insensensitive keys: NOT OK.");
@@ -375,7 +375,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplA", "consumer.ConsumerImplA");
 
 		Hashtable properties = new Hashtable();
-		properties.put(new Integer(1), "TEST");
+		properties.put(Integer.valueOf(1), "TEST");
 		try {
 			helper.updateWire(wa, wire, properties);
 			fail("Test updateWire with incorrect properties' keys: NOT OK.");
@@ -441,8 +441,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplC", "");
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new String("TEST"));
-		properties.put("property2", new Float(5.0));
-		properties.put("property3", new Boolean(false));
+		properties.put("property2", Float.valueOf(5.0f));
+		properties.put("property3", Boolean.valueOf(false));
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
 		Wire wire = helper.createWire(wa, "producer.ProducerImplC",
 				"consumer.ConsumerImplC", properties);
@@ -504,8 +504,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplC", "");
 		Hashtable properties = new Hashtable();
 		properties.put("property1", new String("TEST"));
-		properties.put("property2", new Float(5.0));
-		properties.put("property3", new Boolean(false));
+		properties.put("property2", Float.valueOf(5.0f));
+		properties.put("property3", Boolean.valueOf(false));
 		log("Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC");
 		Wire wire = helper.createWire(wa, "producer.ProducerImplC",
 				"consumer.ConsumerImplC", properties);
@@ -520,7 +520,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("", "consumer.ConsumerImplC");
 		properties = new Hashtable();
 		properties.put("property1", new String("NEW TEST FOR PRODUCER"));
-		properties.put("property2", new Float(2.0));
+		properties.put("property2", Float.valueOf(2.0f));
 		helper.updateWire(wa, wire, properties);
 
 		waitForNoSync(30);
@@ -540,7 +540,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		compareConnected("producer.ProducerImplC", "");
 		properties = new Hashtable();
 		properties.put("property1", new String("NEW TEST FOR CONSUMER"));
-		properties.put("property2", new Float(1.0));
+		properties.put("property2", Float.valueOf(1.0f));
 		helper.updateWire(wa, wire, properties);
 
 		waitForNoSync(30);
@@ -608,7 +608,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			// ignored
 		}
 
-		wa = (WireAdmin) getService(WireAdmin.class);
+		wa = getService(WireAdmin.class);
 		compareConnected("producer1", "consumer1");
 		compareConnected("producer2", "consumer2");
 		Wire[] wires = wa
@@ -686,9 +686,9 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// producer/consumer notifications
 
 		Hashtable properties = new Hashtable();
-		properties.put("property1", new Integer(1));
-		properties.put("property2", new Float(1.0));
-		properties.put("property3", new Boolean(false));
+		properties.put("property1", Integer.valueOf(1));
+		properties.put("property2", Float.valueOf(1.0f));
+		properties.put("property3", Boolean.valueOf(false));
 		Wire wire = helper.createWire(wa, "producer.ProducerImplA",
 				"consumer.ConsumerImplA", properties);
 		wire = helper.createWire(wa, "producer.ProducerImplC",
@@ -775,7 +775,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		assertNull("received value (null) ", value);
 		// update unconnected wire
 		log("updating unconnected wire");
-		localWire.update(new Integer(4242));
+		localWire.update(Integer.valueOf(4242));
 		// register producer
 		log("register test producer");
 		WireAPITestProducerImpl producer = new WireAPITestProducerImpl();
@@ -794,12 +794,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// poll
 		log("polling connected wire");
 		value = localWire.poll();
-		assertEquals("did not receive value Integer(42) ", new Integer(42),
+		assertEquals("did not receive value Integer(42) ", Integer.valueOf(42),
 				value);
 		// update
 		log("updating connected wire");
-		localWire.update(new Integer(4242));
-		assertEquals("did not receive value Integer(4242) ", new Integer(4242),
+		localWire.update(Integer.valueOf(4242));
+		assertEquals("did not receive value Integer(4242) ", Integer.valueOf(4242),
 				consumer.getValue());
 		// poll wire with producer throwing exception in its polled method
 		log("polling connected wire with producer throwing exception");
@@ -859,7 +859,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Integer[] {new Integer(5)}), values);
+				.asList(new Integer[] {Integer.valueOf(5)}), values);
 		log(delimiter);
 		// previous value test
 		// last received value was 5 so the consumer should receive 0 and
@@ -877,7 +877,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Integer[] {new Integer(0)}), values);
+				.asList(new Integer[] {Integer.valueOf(0)}), values);
 		log(delimiter);
 	}
 
@@ -930,7 +930,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Integer[] {
-				new Integer(4), new Integer(8)}), values);
+				Integer.valueOf(4), Integer.valueOf(8)}), values);
 		log(delimiter);
 	}
 
@@ -985,8 +985,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Integer[] {new Integer(0), new Integer(2),
-						new Integer(4), new Integer(8)}), values);
+				.asList(new Integer[] {Integer.valueOf(0), Integer.valueOf(2),
+						Integer.valueOf(4), Integer.valueOf(8)}), values);
 		log(delimiter);
 	}
 
@@ -1045,8 +1045,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received",
-				Arrays.asList(new Integer[] {new Integer(2), new Integer(4),
-						new Integer(6), new Integer(8)}), values);
+				Arrays.asList(new Integer[] {Integer.valueOf(2), Integer.valueOf(4),
+						Integer.valueOf(6), Integer.valueOf(8)}), values);
 		log(delimiter);
 	}
 
@@ -1098,8 +1098,8 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Integer[] {new Integer(0), new Integer(3),
-						new Integer(6), new Integer(9)}), values);
+				.asList(new Integer[] {Integer.valueOf(0), Integer.valueOf(3),
+						Integer.valueOf(6), Integer.valueOf(9)}), values);
 		log(delimiter);
 	}
 
@@ -1108,7 +1108,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	 */
 	public void testEvents() throws Exception {
 		// a full mask
-		Integer mask = new Integer(0xFFFFFFFF);
+		Integer mask = Integer.valueOf(0xFFFFFFFF);
 		// register the listeners
 		TestWireAdminListener listener = new TestWireAdminListener(this, false); // should
 		// receive
@@ -1124,7 +1124,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				WireAdminListener.class.getName(), listener, walProps);
 		// dummy listener
 		Hashtable dummyProps = new Hashtable();
-		dummyProps.put(WireConstants.WIREADMIN_EVENTS, new Integer(0));
+		dummyProps.put(WireConstants.WIREADMIN_EVENTS, Integer.valueOf(0));
 		ServiceRegistration dummyReg = getContext().registerService(
 				WireAdminListener.class.getName(), dummy, dummyProps);
 		// real test
@@ -1136,7 +1136,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		List result = listener.resetValuesReceived();
 		assertEquals("incorrect values received",
-				Arrays.asList(new Object[] {new Integer(
+				Arrays.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_CREATED)}), result);
 
 		log("update a wire: WIRE_UPDATED event is expected");
@@ -1144,7 +1144,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received",
-				Arrays.asList(new Object[] {new Integer(
+				Arrays.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_UPDATED)}), result);
 
 		log("connect a wire: WIRE_CONNECTED event is expected");
@@ -1153,7 +1153,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received",
-				Arrays.asList(new Object[] {new Integer(
+				Arrays.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_CONNECTED)}), result);
 
 		log("poll the wire: WIRE_TRACE event is expected");
@@ -1161,7 +1161,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Object[] {new Integer(WireAdminEvent.WIRE_TRACE)}),
+				.asList(new Object[] {Integer.valueOf(WireAdminEvent.WIRE_TRACE)}),
 				result);
 
 		log("disconnect wire: WIRE_DISCONNECTED event is expected");
@@ -1170,12 +1170,12 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
-				.asList(new Object[] {new Integer(
+				.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_DISCONNECTED)}), result);
 
 		// receive only PRODUCERS_EXCEPTION, CONSUMERS_EXCEPTION and
 		// WIRE_DELETED events from now
-		mask = new Integer(WireAdminEvent.CONSUMER_EXCEPTION
+		mask = Integer.valueOf(WireAdminEvent.CONSUMER_EXCEPTION
 				| WireAdminEvent.PRODUCER_EXCEPTION
 				| WireAdminEvent.WIRE_DELETED);
 		walProps.put(WireConstants.WIREADMIN_EVENTS, mask);
@@ -1187,7 +1187,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Object[] {
-				new Integer(WireAdminEvent.CONSUMER_EXCEPTION), "testing"}),
+				Integer.valueOf(WireAdminEvent.CONSUMER_EXCEPTION), "testing"}),
 				result);
 
 		log("cause exception from updated: CONSUMER_EXCEPTION is expected");
@@ -1195,7 +1195,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Object[] {
-				new Integer(WireAdminEvent.CONSUMER_EXCEPTION), "testing"}),
+				Integer.valueOf(WireAdminEvent.CONSUMER_EXCEPTION), "testing"}),
 				result);
 
 		helper.unregisterEventConsumer();
@@ -1207,7 +1207,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Object[] {
-				new Integer(WireAdminEvent.PRODUCER_EXCEPTION), "testing"}),
+				Integer.valueOf(WireAdminEvent.PRODUCER_EXCEPTION), "testing"}),
 				result);
 
 		log("cause exception from polled: PRODUCER_EXCEPTION is expected");
@@ -1215,7 +1215,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Object[] {
-				new Integer(WireAdminEvent.PRODUCER_EXCEPTION), "testing"}),
+				Integer.valueOf(WireAdminEvent.PRODUCER_EXCEPTION), "testing"}),
 				result);
 
 		helper.unregisterEventConsumer();
@@ -1226,7 +1226,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		listener.waitForCall(5000 * OSGiTestCaseProperties.getScaling());
 		result = listener.resetValuesReceived();
 		assertEquals("incorrect values received",
-				Arrays.asList(new Object[] {new Integer(
+				Arrays.asList(new Object[] {Integer.valueOf(
 						WireAdminEvent.WIRE_DELETED)}), result);
 
 		log("cause exception form producersConnected of a 'free' Consumer. CONSUMER_EXCEPTION is expected");
@@ -1306,7 +1306,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			assertTrue(
 					"Test Wire Scope with null producer scope, after setting WirePermission: NOT OK.",
 					compareScopes(wire.getScope(), null));
-			BasicEnvelope envelope = new BasicEnvelope(new Integer(42),
+			BasicEnvelope envelope = new BasicEnvelope(Integer.valueOf(42),
 					"window1", "A");
 			wire.update(envelope);
 
@@ -1328,7 +1328,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			assertTrue(
 					"Test Wire Scope without WirePermission: NOT OK.",
 					compareScopes(wire.getScope(), new String[] {"A", "B", "C"}));
-			BasicEnvelope envelope = new BasicEnvelope(new Integer(42),
+			BasicEnvelope envelope = new BasicEnvelope(Integer.valueOf(42),
 					"window2", "YY");
 			wire.update(envelope);
 			assertNull("Test Wire update without permission: NOT OK.", wire
@@ -1341,7 +1341,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			assertTrue(
 					"Test Wire Scope, after setting WirePermission: NOT OK.",
 					compareScopes(wire.getScope(), new String[] {"B"}));
-			envelope = new BasicEnvelope(new Integer(42), "window2", "B");
+			envelope = new BasicEnvelope(Integer.valueOf(42), "window2", "B");
 			wire.update(envelope);
 			assertEquals("Test Wire update with envelope object: NOT OK.",
 					envelope, wire.getLastValue());
@@ -1395,7 +1395,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 			assertTrue(
 					"Test Wire Scope with *(scope) and *(WirePermission): NOT OK.",
 					compareScopes(wire.getScope(), new String[] {"*"}));
-			BasicEnvelope envelope = new BasicEnvelope(new Integer(5),
+			BasicEnvelope envelope = new BasicEnvelope(Integer.valueOf(5),
 					"numberDoors", "AA");
 			wire.update(envelope);
 			assertEquals("Test Wire update with envelope object: NOT OK.",
@@ -1417,7 +1417,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 					"consumer.ConsumerImplB", null);
 			assertTrue("Test Wire Scope: NOT OK.", compareScopes(wire
 					.getScope(), new String[] {}));
-			BasicEnvelope envelope = new BasicEnvelope(new Integer(44),
+			BasicEnvelope envelope = new BasicEnvelope(Integer.valueOf(44),
 					"numberWindows", "A");
 			wire.update(envelope);
 			assertNull(

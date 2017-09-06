@@ -25,10 +25,10 @@ public class CustomBooleanConverter implements Converter {
         if (source instanceof String && toType.getRawClass() == Boolean.class) {
             String strValue = (String)source;
             if (strValue.equals("T")) {
-                return new Boolean(true);
+                return Boolean.valueOf(true);
             }
             else if (strValue.equals("F")) {
-                return new Boolean(false);
+                return Boolean.valueOf(false);
             }
             //this make the module context only support converting T/F to Boolean?
         }

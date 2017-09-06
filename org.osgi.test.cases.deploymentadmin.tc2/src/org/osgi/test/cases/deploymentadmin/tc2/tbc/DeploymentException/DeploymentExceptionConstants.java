@@ -52,39 +52,39 @@ public class DeploymentExceptionConstants extends DeploymentTestControl {
 	 * @spec 114.14.5
 	 */
 	public void testConstants001() {
-		assertConstant(new Integer(452), "CODE_BAD_HEADER",
+		assertConstant(Integer.valueOf(452), "CODE_BAD_HEADER",
 				DeploymentException.class);
-		assertConstant(new Integer(457), "CODE_BUNDLE_NAME_ERROR",
+		assertConstant(Integer.valueOf(457), "CODE_BUNDLE_NAME_ERROR",
 				DeploymentException.class);
-		assertConstant(new Integer(460), "CODE_BUNDLE_SHARING_VIOLATION",
+		assertConstant(Integer.valueOf(460), "CODE_BUNDLE_SHARING_VIOLATION",
 				DeploymentException.class);
-		assertConstant(new Integer(401), "CODE_CANCELLED",
+		assertConstant(Integer.valueOf(401), "CODE_CANCELLED",
 				DeploymentException.class);
-		assertConstant(new Integer(462), "CODE_COMMIT_ERROR",
+		assertConstant(Integer.valueOf(462), "CODE_COMMIT_ERROR",
 				DeploymentException.class);
-		assertConstant(new Integer(458), "CODE_FOREIGN_CUSTOMIZER",
+		assertConstant(Integer.valueOf(458), "CODE_FOREIGN_CUSTOMIZER",
 				DeploymentException.class);
-		assertConstant(new Integer(454), "CODE_MISSING_BUNDLE",
+		assertConstant(Integer.valueOf(454), "CODE_MISSING_BUNDLE",
 				DeploymentException.class);
-		assertConstant(new Integer(453), "CODE_MISSING_FIXPACK_TARGET",
+		assertConstant(Integer.valueOf(453), "CODE_MISSING_FIXPACK_TARGET",
 				DeploymentException.class);
-		assertConstant(new Integer(451), "CODE_MISSING_HEADER",
+		assertConstant(Integer.valueOf(451), "CODE_MISSING_HEADER",
 				DeploymentException.class);
-		assertConstant(new Integer(455), "CODE_MISSING_RESOURCE",
+		assertConstant(Integer.valueOf(455), "CODE_MISSING_RESOURCE",
 				DeploymentException.class);
-		assertConstant(new Integer(404), "CODE_NOT_A_JAR",
+		assertConstant(Integer.valueOf(404), "CODE_NOT_A_JAR",
 				DeploymentException.class);
-		assertConstant(new Integer(450), "CODE_ORDER_ERROR",
+		assertConstant(Integer.valueOf(450), "CODE_ORDER_ERROR",
 				DeploymentException.class);
-		assertConstant(new Integer(463), "CODE_OTHER_ERROR",
+		assertConstant(Integer.valueOf(463), "CODE_OTHER_ERROR",
 				DeploymentException.class);
-		assertConstant(new Integer(464), "CODE_PROCESSOR_NOT_FOUND",
+		assertConstant(Integer.valueOf(464), "CODE_PROCESSOR_NOT_FOUND",
 				DeploymentException.class);
-		assertConstant(new Integer(461), "CODE_RESOURCE_SHARING_VIOLATION",
+		assertConstant(Integer.valueOf(461), "CODE_RESOURCE_SHARING_VIOLATION",
 				DeploymentException.class);
-		assertConstant(new Integer(456), "CODE_SIGNING_ERROR",
+		assertConstant(Integer.valueOf(456), "CODE_SIGNING_ERROR",
 				DeploymentException.class);
-		assertConstant(new Integer(465), "CODE_TIMEOUT",
+		assertConstant(Integer.valueOf(465), "CODE_TIMEOUT",
 				DeploymentException.class);
 	}
 

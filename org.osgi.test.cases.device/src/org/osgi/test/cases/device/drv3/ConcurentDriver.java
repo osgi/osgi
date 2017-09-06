@@ -34,7 +34,7 @@ public class ConcurentDriver implements Driver, BundleActivator {
 		/* register the driver service */
 		Hashtable h = new Hashtable();
 		h.put("DRIVER_ID", "concurent_dirver");
-		h.put(org.osgi.framework.Constants.SERVICE_RANKING, new Integer(4242));
+		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(4242));
 		log("registering service");
 		driverRegistration = bc.registerService(
 				"org.osgi.service.device.Driver", this, h);

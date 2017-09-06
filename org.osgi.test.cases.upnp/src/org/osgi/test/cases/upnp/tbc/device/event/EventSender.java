@@ -35,9 +35,9 @@ public class EventSender implements Runnable {
 		Hashtable hash = new Hashtable();
 		hash.put(UPnPConstants.N_INT, UPnPConstants.V_INT);
 		hash.put(UPnPConstants.N_UI4, UPnPConstants.V_UI4);
-		Double duble = new Double(UPnPConstants.V_NUMBER);
+		Double duble = Double.valueOf(UPnPConstants.V_NUMBER);
 		hash.put(UPnPConstants.N_NUMBER, duble);
-		Float fl = new Float(UPnPConstants.V_FLOAT);
+		Float fl = Float.valueOf(UPnPConstants.V_FLOAT);
 		hash.put(UPnPConstants.N_FLOAT, fl);
 		hash.put(UPnPConstants.N_CHAR, UPnPConstants.V_CHAR);
 		hash.put(UPnPConstants.N_STRING, UPnPConstants.V_STRING);
@@ -81,7 +81,7 @@ public class EventSender implements Runnable {
 			DefaultTestBundleControl.log("Sending event 3 with name "
 					+ UPnPConstants.N_NUMBER + " and value "
 					+ UPnPConstants.V_NUMBER);
-			duble = new Double(UPnPConstants.V_NUMBER);
+			duble = Double.valueOf(UPnPConstants.V_NUMBER);
 			hash.put(UPnPConstants.N_NUMBER, duble);
 			try {
 				genEvent(hash);
@@ -93,7 +93,7 @@ public class EventSender implements Runnable {
 			DefaultTestBundleControl.log("Sending event 4 with name "
 					+ UPnPConstants.N_FLOAT + " and value "
 					+ UPnPConstants.V_FLOAT);
-			fl = new Float(UPnPConstants.V_FLOAT);
+			fl = Float.valueOf(UPnPConstants.V_FLOAT);
 			hash.put(UPnPConstants.N_FLOAT, fl);
 			try {
 				genEvent(hash);

@@ -158,14 +158,14 @@ public interface Device {
 	 * the device service can be unregistered from the service registry. It can
 	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
-	public static final Integer	STATUS_REMOVED							= new Integer(1);
+	public static final Integer	STATUS_REMOVED							= Integer.valueOf(1);
 
 	/**
 	 * Device status indicates that the device is currently not available for
 	 * operations. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_OFFLINE							= new Integer(2);
+	public static final Integer	STATUS_OFFLINE							= Integer.valueOf(2);
 
 	/**
 	 * Device status indicates that the device is currently available for
@@ -173,14 +173,14 @@ public interface Device {
 	 * through. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_ONLINE							= new Integer(3);
+	public static final Integer	STATUS_ONLINE							= Integer.valueOf(3);
 
 	/**
 	 * Device status indicates that the device is currently busy with an
 	 * operation. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_PROCESSING						= new Integer(4);
+	public static final Integer	STATUS_PROCESSING						= Integer.valueOf(4);
 
 	/**
 	 * Device status indicates that the device is currently not initialized.
@@ -188,7 +188,7 @@ public interface Device {
 	 * connected. The device can be initialized later when it's awakened. It can
 	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
-	public static final Integer	STATUS_NOT_INITIALIZED					= new Integer(5);
+	public static final Integer	STATUS_NOT_INITIALIZED					= Integer.valueOf(5);
 
 	/**
 	 * Device status indicates that the device is currently not configured. The
@@ -196,14 +196,14 @@ public interface Device {
 	 * the network. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_NOT_CONFIGURED					= new Integer(6);
+	public static final Integer	STATUS_NOT_CONFIGURED					= Integer.valueOf(6);
 
 	/**
 	 * Device status detail indicates that the device is currently connecting to
 	 * the network. It can be used as a value of {@link #SERVICE_STATUS_DETAIL}
 	 * service property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_CONNECTING				= new Integer(1);
+	public static final Integer	STATUS_DETAIL_CONNECTING				= Integer.valueOf(1);
 
 	/**
 	 * Device status detail indicates that the device is currently in process of
@@ -211,21 +211,21 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_INITIALIZING				= new Integer(2);
+	public static final Integer	STATUS_DETAIL_INITIALIZING				= Integer.valueOf(2);
 
 	/**
 	 * Device status detail indicates that the device is leaving the network. It
 	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
 	 * property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_REMOVING					= new Integer(3);
+	public static final Integer	STATUS_DETAIL_REMOVING					= Integer.valueOf(3);
 
 	/**
 	 * Device status detail indicates that the device firmware is updating. It
 	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
 	 * property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_FIRMWARE_UPDATING			= new Integer(4);
+	public static final Integer	STATUS_DETAIL_FIRMWARE_UPDATING			= Integer.valueOf(4);
 
 	/**
 	 * Device status detail indicates that the device configuration is not
@@ -233,14 +233,14 @@ public interface Device {
 	 * service property. The device status must be
 	 * {@link #STATUS_NOT_CONFIGURED}.
 	 */
-	public static final Integer	STATUS_DETAIL_CONFIGURATION_UNAPPLIED	= new Integer(-1);
+	public static final Integer	STATUS_DETAIL_CONFIGURATION_UNAPPLIED	= Integer.valueOf(-1);
 
 	/**
 	 * Device status detail indicates that the device is broken. It can be used
 	 * as a value of {@link #SERVICE_STATUS_DETAIL} service property. The device
 	 * status must be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_BROKEN					= new Integer(-2);
+	public static final Integer	STATUS_DETAIL_BROKEN					= Integer.valueOf(-2);
 
 	/**
 	 * Device status detail indicates that the device communication is
@@ -248,7 +248,7 @@ public interface Device {
 	 * service property. The device status must be {@link #STATUS_ONLINE} or
 	 * {@link #STATUS_NOT_INITIALIZED}.
 	 */
-	public static final Integer	STATUS_DETAIL_COMMUNICATION_ERROR		= new Integer(-3);
+	public static final Integer	STATUS_DETAIL_COMMUNICATION_ERROR		= Integer.valueOf(-3);
 
 	/**
 	 * Device status detail indicates that the device doesn't provide enough
@@ -256,7 +256,7 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_NOT_INITIALIZED}.
 	 */
-	public static final Integer	STATUS_DETAIL_DATA_INSUFFICIENT			= new Integer(-4);
+	public static final Integer	STATUS_DETAIL_DATA_INSUFFICIENT			= Integer.valueOf(-4);
 
 	/**
 	 * Device status detail indicates that the device is not accessible and
@@ -264,21 +264,21 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_INACCESSIBLE				= new Integer(-5);
+	public static final Integer	STATUS_DETAIL_INACCESSIBLE				= Integer.valueOf(-5);
 
 	/**
 	 * Device status detail indicates that the device cannot be configured. It
 	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
 	 * property. The device status must be {@link #STATUS_NOT_CONFIGURED}.
 	 */
-	public static final Integer	STATUS_DETAIL_CONFIGURATION_ERROR		= new Integer(-6);
+	public static final Integer	STATUS_DETAIL_CONFIGURATION_ERROR		= Integer.valueOf(-6);
 
 	/**
 	 * Device status detail indicates that the device is in duty cycle. It can
 	 * be used as a value of {@link #SERVICE_STATUS_DETAIL} service property.
 	 * The device status must be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_DUTY_CYCLE				= new Integer(-7);
+	public static final Integer	STATUS_DETAIL_DUTY_CYCLE				= Integer.valueOf(-7);
 
 	/**
 	 * Returns the current value of the specified property. The method will

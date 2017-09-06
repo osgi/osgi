@@ -507,7 +507,7 @@ public class Activator extends Thread implements BundleActivator,
     }
 
     private void updateLife(Bundle b, long t) {
-        tempDrivers.put(b, new Long(System.currentTimeMillis() + t));
+        tempDrivers.put(b, Long.valueOf(System.currentTimeMillis() + t));
     }
 
     private boolean isUsed(ServiceReference sr) {
@@ -704,7 +704,7 @@ public class Activator extends Thread implements BundleActivator,
         }
         int k1 = pid != null ? pid.hashCode() : dev.hashCode();
         int k2 = drvid.hashCode();
-        Integer key = new Integer(k1 + k2);
+        Integer key = Integer.valueOf(k1 + k2);
         MatchValue mv0 = (MatchValue) cache.get(key);
         MatchValue mv = mv0;
         while (mv != null) {

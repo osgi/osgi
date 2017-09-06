@@ -547,7 +547,7 @@ public class Schedule implements TestInterface {
 			);
 
 			HashMap map = new HashMap();
-			map.put(new Integer(2), "Rejected");
+			map.put(Integer.valueOf(2), "Rejected");
 			sa = tbc.getAppDescriptor().schedule(null, map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -621,7 +621,7 @@ public class Schedule implements TestInterface {
 			);
 
 			HashMap map = new HashMap();
-			map.put(new Boolean(true), "Rejected");
+			map.put(Boolean.valueOf(true), "Rejected");
 			sa = tbc.getAppDescriptor().schedule(null, map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -658,7 +658,7 @@ public class Schedule implements TestInterface {
 			);
 
 			HashMap map = new HashMap();
-			map.put(new Float(2.3f), "Rejected");
+			map.put(Float.valueOf(2.3f), "Rejected");
 			sa = tbc.getAppDescriptor().schedule(null, map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -695,7 +695,7 @@ public class Schedule implements TestInterface {
 			);
 
 			HashMap map = new HashMap();
-			map.put(new Byte("a"), "Rejected");
+			map.put(Byte.valueOf("a"), "Rejected");
 			sa = tbc.getAppDescriptor().schedule(null, map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -732,7 +732,7 @@ public class Schedule implements TestInterface {
 			);
 
 			HashMap map = new HashMap();
-			map.put(new Double(0.2), "Rejected");
+			map.put(Double.valueOf(0.2), "Rejected");
 			sa = tbc.getAppDescriptor().schedule(null, map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
 			tbc.failException("", IllegalArgumentException.class);

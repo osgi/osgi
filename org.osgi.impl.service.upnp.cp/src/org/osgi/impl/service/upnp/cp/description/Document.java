@@ -824,20 +824,20 @@ public class Document {
 									 * if(allowedrange.equals("maximum")){
 									 * String maxval = el4.getValue().trim();
 									 * Number nor ; if(maxval.indexOf('.')!=-1){
-									 * nor = new Long(maxval); } else {
+									 * nor = Long.valueOf(maxval); } else {
 									 * if(maxval != null){ nor = new
 									 * Double(maxval); }else{ nor = null; } }
 									 * sv[j].setMaximum(nor); } else
 									 * if(allowedrange.equals("minimum")){
 									 * String minval = el4.getValue().trim();
 									 * Number nor ; if(minval.indexOf('.')!=-1){
-									 * nor = new Long(minval); } else { nor =
-									 * new Double(minval); }
+									 * nor = Long.valueOf(minval); } else { nor =
+									 * Double.valueOf(minval); }
 									 * sv[j].setMinimum(nor); } else
 									 * if(allowedrange.equals("step")){ String
 									 * stepval = el4.getValue().trim(); Number
 									 * nor ; if(stepval.indexOf('.')!=-1){ nor =
-									 * new Long(stepval); } else { nor = new
+									 * Long.valueOf(stepval); } else { nor = new
 									 * Double(stepval); } sv[j].setStep(nor); } }
 									 */
 								}

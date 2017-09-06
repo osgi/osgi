@@ -227,7 +227,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		 */
 		public ServiceRegistration<WeavingHook> register(BundleContext ctx, int rank) {
 			Hashtable<String, Object> table = new Hashtable<String, Object>();
-			table.put(Constants.SERVICE_RANKING, new Integer(rank));
+			table.put(Constants.SERVICE_RANKING, Integer.valueOf(rank));
 			return ctx.registerService(WeavingHook.class, this, table);
 		}
 	}
@@ -429,7 +429,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 
 			// We expect the order to change if we update our ranking
 			Hashtable<String, Object> table = new Hashtable<String, Object>();
-			table.put(Constants.SERVICE_RANKING, new Integer(2));
+			table.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 			reg2.setProperties(table);
 
 			hook2.setExpected("DEFAULT");
@@ -1243,7 +1243,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	public void testWovenClassListenerCalledWhenWeavingHookException() throws Exception {
 		final AtomicInteger integer = new AtomicInteger(0);
 		Dictionary<String, Object> props = new Hashtable<String, Object>(1);
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MIN_VALUE));
 		ServiceRegistration<WeavingHook> reg = getContext().registerService(
 				WeavingHook.class, 
 				new WeavingHook() {

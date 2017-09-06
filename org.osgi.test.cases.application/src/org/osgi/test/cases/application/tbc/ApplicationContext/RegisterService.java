@@ -230,7 +230,7 @@ public class RegisterService implements ApplicationServiceListener, TestService 
                 .getApplicationContext(tbc.getAppInstance());
                         
             Hashtable hash = new Hashtable();
-            hash.put(Constants.SERVICE_ID, new Long(2355));
+            hash.put(Constants.SERVICE_ID, Long.valueOf(2355));
             hash.put(Constants.OBJECTCLASS, new String[] { "test2" });
             hash.put("test", "test");
             
@@ -581,7 +581,7 @@ public class RegisterService implements ApplicationServiceListener, TestService 
                 .getApplicationContext(tbc.getAppInstance());
                         
             Hashtable hash = new Hashtable();
-            hash.put(Constants.SERVICE_ID, new Long(2355));
+            hash.put(Constants.SERVICE_ID, Long.valueOf(2355));
             hash.put(Constants.OBJECTCLASS, new String[] { "test1", "test2" });
             hash.put("test", "test");                 
             

@@ -71,7 +71,7 @@ public class TestServiceDynamics extends DefaultTestBundleControl {
         MetadataEventSet importStartEvents = controller.getStartEvents(0);
 
         Hashtable props = new Hashtable();
-        props.put("test.service.counter", new Integer(0));
+        props.put("test.service.counter", Integer.valueOf(0));
 
         // we need to add one of these at the head of the queue to catch the initial registration.
         // If we don't then the initial registration will trigger the the registration event below and

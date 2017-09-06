@@ -374,7 +374,7 @@ public class Launch implements TestInterface {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
-			map.put(new Integer(2) , "Reject");		
+			map.put(Integer.valueOf(2) , "Reject");		
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 
@@ -450,7 +450,7 @@ public class Launch implements TestInterface {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
-			map.put(new Boolean(true) , "Reject");		
+			map.put(Boolean.valueOf(true) , "Reject");		
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 
@@ -488,7 +488,7 @@ public class Launch implements TestInterface {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
-			map.put(new Float(0.2f) , "Reject");		
+			map.put(Float.valueOf(0.2f) , "Reject");		
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 
@@ -526,7 +526,7 @@ public class Launch implements TestInterface {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
-			map.put(new Byte("a") , "Reject");		
+			map.put(Byte.valueOf("a") , "Reject");		
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 
@@ -564,7 +564,7 @@ public class Launch implements TestInterface {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
-			map.put(new Double(12.1) , "Reject");		
+			map.put(Double.valueOf(12.1) , "Reject");		
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 

@@ -32,61 +32,61 @@ public class TypeInstanceFactory extends BaseTestComponent {
     public Integer createInteger(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Integer(v);
+        return Integer.valueOf(v);
     }
 
     public Long createLong(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Long(v);
+        return Long.valueOf(v);
     }
 
     public Double createDouble(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Double(v);
+        return Double.valueOf(v);
     }
 
     public Float createFloat(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Float(v);
+        return Float.valueOf(v);
     }
 
     public Short createShort(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Short(v);
+        return Short.valueOf(v);
     }
 
     public int createPrimInt(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Integer(v).intValue();
+		return Integer.parseInt(v);
     }
 
     public long createPrimLong(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Long(v).longValue();
+		return Long.parseLong(v);
     }
 
     public double createPrimDouble(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Double(v).doubleValue();
+		return Double.parseDouble(v);
     }
 
     public float createPrimFloat(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Float(v).floatValue();
+		return Float.parseFloat(v);
     }
 
     public short createPrimShort(String v) {
         // broadcast a factory method event
         AssertionService.sendEvent(this, AssertionService.FACTORY_CALLED);
-        return new Short(v).shortValue();
+		return Short.parseShort(v);
     }
 }
 

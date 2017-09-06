@@ -871,7 +871,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		waitBundleStart();
 
 		Hashtable<String,Object> props = new Hashtable<>(10);
-		props.put("config.base.data", new Integer(1));
+		props.put("config.base.data", Integer.valueOf(1));
 
 		// component notsetNS100 - property not set by Configuration Admin; XML
 		// NS
@@ -1001,7 +1001,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		waitBundleStart();
 
 		Hashtable<String,Object> props = new Hashtable<>(10);
-		props.put("config.base.data", new Integer(1));
+		props.put("config.base.data", Integer.valueOf(1));
 
 		// component notsetNS100 - property not set by Configuration Admin; XML
 		// NS
@@ -1841,7 +1841,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Bundle tb13 = installBundle("tb13.jar", false);
 
 		Hashtable<String,Object> props = new Hashtable<>(10);
-		props.put("config.dummy.data", new Integer(1));
+		props.put("config.dummy.data", Integer.valueOf(1));
 		cm.getConfiguration(MOD_NOTSET_NS100, null).update(props);
 		cm.getConfiguration(MOD_NOARGS_NS100, null).update(props);
 		cm.getConfiguration(MOD_CC_NS100, null).update(props);
@@ -1854,7 +1854,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb13.start();
 		waitBundleStart();
 
-		props.put("config.dummy.data", new Integer(2));
+		props.put("config.dummy.data", Integer.valueOf(2));
 		Hashtable<String,Object> unsatisfyingProps = new Hashtable<>(10);
 		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
 				+ ".tb13.unexisting.provider)");
@@ -1909,7 +1909,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Bundle tb13a = installBundle("tb13a.jar", false);
 
 		Hashtable<String,Object> props = new Hashtable<>(10);
-		props.put("config.dummy.data", new Integer(1));
+		props.put("config.dummy.data", Integer.valueOf(1));
 		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
 		cm.getConfiguration(MOD_NOARGS_NS110, null).update(props);
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
@@ -1922,7 +1922,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb13a.start();
 		waitBundleStart();
 
-		props.put("config.dummy.data", new Integer(2));
+		props.put("config.dummy.data", Integer.valueOf(2));
 		Hashtable<String,Object> unsatisfyingProps = new Hashtable<>(10);
 		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
 				+ ".tb13.unexisting.provider)");
@@ -2082,7 +2082,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Bundle tb13a = installBundle("tb13a.jar", false);
 
 		Hashtable<String,Object> props = new Hashtable<>(10);
-		props.put("config.dummy.data", new Integer(1));
+		props.put("config.dummy.data", Integer.valueOf(1));
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
 		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
@@ -2095,7 +2095,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// Verifying correctness of updated component properties
 		BaseService bs = getBaseService(MOD_CC_NS110);
-		props.put("config.dummy.data", new Integer(2));
+		props.put("config.dummy.data", Integer.valueOf(2));
 		log("\n" + MOD_CC_NS110 + " config update");
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		Sleep.sleep(SLEEP * 3);
@@ -2105,7 +2105,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Modified method of " + MOD_CC_NS110 + " should be called",
 				checkDataBits(ModifyRegistrator2.MOD_CC, getBaseConfigData(bs)));
 		assertTrue("Component properties should be updated properly for "
-				+ MOD_CC_NS110, (new Integer(2)).equals(val));
+				+ MOD_CC_NS110, (Integer.valueOf(2)).equals(val));
 
 		// Specified modified method doesn't exist, deactivate() should be
 		// called
@@ -2423,7 +2423,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					bsSR1N.getProperties().get(KEY));
 
 			serviceProps.put(KEY, "higher");
-			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			serviceProps.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 			regHigher = getContext().registerService(
 					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
@@ -2511,7 +2511,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					bsSG1N.getProperties().get(KEY));
 
 			serviceProps.put(KEY, "higher");
-			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			serviceProps.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 			regHigher = getContext().registerService(
 					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
@@ -2599,7 +2599,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					bsDR1N.getProperties().get(KEY));
 
 			serviceProps.put(KEY, "higher");
-			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			serviceProps.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 			regHigher = getContext().registerService(
 					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);
@@ -2687,7 +2687,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					bsDG1N.getProperties().get(KEY));
 
 			serviceProps.put(KEY, "higher");
-			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			serviceProps.put(Constants.SERVICE_RANKING, Integer.valueOf(100));
 			regHigher = getContext().registerService(
 					TestObject.class, service, serviceProps);
 			Sleep.sleep(SLEEP * 3);

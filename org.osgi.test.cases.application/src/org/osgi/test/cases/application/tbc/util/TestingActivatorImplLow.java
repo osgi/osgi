@@ -54,7 +54,7 @@ public class TestingActivatorImplLow implements TestingActivator {
 
 	public void start(BundleContext context) throws Exception {
 		ht = new Hashtable();
-		ht.put(Constants.SERVICE_RANKING, new Integer(5) );		
+		ht.put(Constants.SERVICE_RANKING, Integer.valueOf(5) );		
 		servReg = context.registerService(TestingActivator.class.getName(), this, ht);
 		System.out.println("Activator activated.");
 	}

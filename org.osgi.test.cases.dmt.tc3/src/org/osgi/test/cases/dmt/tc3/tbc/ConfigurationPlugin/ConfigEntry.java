@@ -60,12 +60,12 @@ class ConfigEntry {
                 cardinality = Cardinality.VECTOR;
                 Iterator iter = vector.iterator();
                 for(int i = 0; iter.hasNext(); i++)
-                    values.put(new Integer(i), new Value(iter.next(), type));
+                    values.put(Integer.valueOf(i), new Value(iter.next(), type));
             } else { // obj is an array
                 type = Type.getTypeByClass(obj.getClass().getComponentType());
                 cardinality = Cardinality.ARRAY;
                 for(int i = 0; i < Array.getLength(obj); i++)
-                    values.put(new Integer(i), 
+                    values.put(Integer.valueOf(i), 
                             new Value(Array.get(obj, i), type));
             }
         }
@@ -111,7 +111,7 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node does not " +
                     "exist: entry is scalar or node not created yet.");
 
-        return (Value) values.get(new Integer(index));
+        return (Value) values.get(Integer.valueOf(index));
     }
     
     /**
@@ -157,7 +157,7 @@ class ConfigEntry {
             obj = new Vector(size);
         
         for (int i = 0; i < size; i++) {
-            Value v = (Value) values.get(new Integer(i));
+            Value v = (Value) values.get(Integer.valueOf(i));
             if(v == null) // the indices are not continuous from 0 to size
                 throw new ConfigPluginException(DmtException.METADATA_MISMATCH,
                         "An array or vector value " +
@@ -320,7 +320,7 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node " +
                     "has not been created yet.");
         
-        if(values.containsKey(new Integer(index)))
+        if(values.containsKey(Integer.valueOf(index)))
             throw new ConfigPluginException(DmtException.NODE_ALREADY_EXISTS,
                     "An element with the given index already exists.");
         
@@ -331,7 +331,7 @@ class ConfigEntry {
         
         // non-null values guarantees non-scalar cardinality
         // type conformance (if type is set) checked by Value constructor
-        values.put(new Integer(index), new Value(data, type));
+        values.put(Integer.valueOf(index), new Value(data, type));
     }
 
     
@@ -374,7 +374,7 @@ class ConfigEntry {
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
                     "The given node has not been created yet.");
         
-        if(!values.containsKey(new Integer(index)))
+        if(!values.containsKey(Integer.valueOf(index)))
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
                     "There is no element with the given index.");
         
@@ -385,7 +385,7 @@ class ConfigEntry {
         
         // non-null values guarantees non-scalar cardinality
         // type conformance (if type is set) checked by Value constructor
-        values.put(new Integer(index), new Value(data, type));
+        values.put(Integer.valueOf(index), new Value(data, type));
     }
     
     /**
@@ -406,15 +406,15 @@ class ConfigEntry {
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
                     "The given node has not been created yet.");
         
-        if(!values.containsKey(new Integer(oldIndex)))
+        if(!values.containsKey(Integer.valueOf(oldIndex)))
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
                     "There is no element with the given index.");
         
-        if(values.containsKey(new Integer(newIndex)))
+        if(values.containsKey(Integer.valueOf(newIndex)))
             throw new ConfigPluginException(DmtException.NODE_ALREADY_EXISTS,
                     "An element with the new index already exists.");
         
-        values.put(new Integer(newIndex), values.remove(new Integer(oldIndex)));
+        values.put(Integer.valueOf(newIndex), values.remove(Integer.valueOf(oldIndex)));
     }
     
     /**
@@ -433,7 +433,7 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node " +
                     "has not been created yet.");
         
-        if(values.remove(new Integer(index)) == null)
+        if(values.remove(Integer.valueOf(index)) == null)
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND, 
                     "No element exists in the array/vector with the given " +
                     "index.");
@@ -607,15 +607,15 @@ class Value {
             this.type = null;
             break;
         case DmtData.FORMAT_INTEGER:
-            value = new Integer(data.getInt());
+            value = Integer.valueOf(data.getInt());
             this.type = Type.getTypeByClass(Integer.class);
             break;
         case DmtData.FORMAT_BOOLEAN:
-            value = new Boolean(data.getBoolean());
+            value = Boolean.valueOf(data.getBoolean());
             this.type = Type.getTypeByClass(Boolean.class);
             break;
         case DmtData.FORMAT_FLOAT:
-            value = new Float(data.getFloat());
+            value = Float.valueOf(data.getFloat());
             this.type = Type.getTypeByClass(Float.class);
             break;
         case DmtData.FORMAT_BINARY:
@@ -688,17 +688,17 @@ class Value {
         
         try {
             if(Long.class.equals(cl)) {
-                value = new Long(valueString);
+                value = Long.valueOf(valueString);
                 return;
             } 
             
             if(Double.class.equals(cl)) {
-                value = new Double(valueString);
+                value = Double.valueOf(valueString);
                 return;
             }
             
             if(Byte.class.equals(cl)) {
-                value = new Byte(valueString);
+                value = Byte.valueOf(valueString);
                 return;
             }
         } catch(NumberFormatException e) {
@@ -710,7 +710,7 @@ class Value {
         
         if(Character.class.equals(cl)) {
             if(valueString.length() != 0) {
-                value = new Character(valueString.charAt(0));
+                value = Character.valueOf(valueString.charAt(0));
                 return;
             }
             

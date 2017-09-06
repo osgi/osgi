@@ -413,9 +413,9 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		assertEquals( "Update count must be 4 higher", count+4, getCount() );
 
 		d = new Hashtable();
-		Object [] invalidTypes = { new Integer(0), new Byte((byte)0), new Character((char)0), new Object[1],
+		Object [] invalidTypes = { Integer.valueOf(0), Byte.valueOf((byte)0), Character.valueOf((char)0), new Object[1],
 			new int[0], new byte[][] { {0},{0} }, new char[0], new short[0],
-			new Short((short)0) };
+			Short.valueOf((short)0) };
 
 		for ( int i=0; i<invalidTypes.length; i++ ) {
 			Object	 type = invalidTypes[i];
@@ -965,7 +965,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		};
 		Dictionary properties = new Hashtable();
 		properties.put(URLConstants.URL_HANDLER_PROTOCOL,new String[]{"director","spid-test"});
-		properties.put(Constants.SERVICE_RANKING,new Integer(100));
+		properties.put(Constants.SERVICE_RANKING,Integer.valueOf(100));
 		return getContext().registerService(
 			URLStreamHandlerService.class.getName(),
 			magic,

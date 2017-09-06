@@ -455,7 +455,7 @@ public class BaseTestController implements EventHandler, BlueprintListener, Serv
         props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
         props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
-        props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
+        props.put(EventConstants.BUNDLE_ID, Long.valueOf(bundle.getBundleId()));
         props.put(Constants.OBJECTCLASS, ref.getProperty(Constants.OBJECTCLASS));
 
         for (int i = 0; i < ref.getPropertyKeys().length; i++) {

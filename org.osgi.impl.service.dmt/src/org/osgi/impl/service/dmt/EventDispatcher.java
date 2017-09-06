@@ -93,7 +93,7 @@ public class EventDispatcher {
 	synchronized void add(int type, Node node, Node newNode, Acl acl,
 			boolean isAtomic) {
 		if (isAtomic) { // add event to event store, for delivery at commit
-			Integer typeInteger = new Integer(type);
+			Integer typeInteger = Integer.valueOf(type);
 			DmtEventCore event = events.size() > 0 ? (DmtEventCore) events
 					.getLast() : null;
 			// create new DmtEventCore, if it is the first event at all or
@@ -134,9 +134,9 @@ public class EventDispatcher {
 		dmtEvent.addProperty("session.rooturi", sessionRoot);
 		if ( principal != null )
 			dmtEvent.addProperty("session.principal", principal);
-		dmtEvent.addProperty("session.locktype", new Integer(locktype));
+		dmtEvent.addProperty("session.locktype", Integer.valueOf(locktype));
 		if (timeout)
-			dmtEvent.addProperty("session.timeout", new Boolean(true));
+			dmtEvent.addProperty("session.timeout", Boolean.valueOf(true));
 		if (fatalException != null ) {
 			dmtEvent.addProperty("exception", fatalException);
 			dmtEvent.addProperty("exception.message", fatalException.getMessage());
@@ -148,9 +148,9 @@ public class EventDispatcher {
 	private void dispatchEvent(DmtEventCore dmtEvent) {
 		// ensure that mandatory properties are there see spec v2.0 117.11
 		// mandatory life-cycle events are assumed already present in the event
-		dmtEvent.addProperty("session.id", new Integer(dmtEvent.getSessionId()));
+		dmtEvent.addProperty("session.id", Integer.valueOf(dmtEvent.getSessionId()));
 		dmtEvent.addProperty(EventConstants.EVENT_TOPIC, dmtEvent.getTopic());
-		dmtEvent.addProperty("timestamp", new Long(System.currentTimeMillis()));
+		dmtEvent.addProperty("timestamp", Long.valueOf(System.currentTimeMillis()));
 		
 		// add bundle properties (see also Bug 2106)
 		dmtEvent.addProperty(EventConstants.BUNDLE, initiatingBundle );

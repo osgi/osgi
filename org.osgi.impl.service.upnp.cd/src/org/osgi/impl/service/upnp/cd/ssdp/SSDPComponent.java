@@ -36,7 +36,7 @@ public class SSDPComponent implements SSDPConstants {
 	public SSDPComponent(String cache, BundleContext bc, String genaIP,
 			EventAccessForExporter evRegistry) throws Exception {
 		cacheControl = cache;
-		Long chVal = new Long(cache);
+		Long chVal = Long.valueOf(cache);
 		cacheValue = chVal.longValue();
 		genaURL = genaIP;
 		eventregistry = evRegistry;

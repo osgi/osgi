@@ -125,9 +125,9 @@ public class UserAdminControl extends DefaultTestBundleControl {
 	}
 
 	public void testRoleGetType() throws Exception {
-		assertConstant(new Integer(Role.USER), "USER", Role.class);
-		assertConstant(new Integer(Role.GROUP), "GROUP", Role.class);
-		assertConstant(new Integer(Role.ROLE), "ROLE", Role.class);
+		assertConstant(Integer.valueOf(Role.USER), "USER", Role.class);
+		assertConstant(Integer.valueOf(Role.GROUP), "GROUP", Role.class);
+		assertConstant(Integer.valueOf(Role.ROLE), "ROLE", Role.class);
 		Role role = useradmin.createRole("r1", Role.USER);
 		assertEquals(role.getType(), Role.USER);
 		role = useradmin.createRole("r2", Role.GROUP);
@@ -148,7 +148,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 		p.put("testKey", "testValue");
 		p.put("key", new byte[] {0, 0, 0});
 		try {
-			p.put(new Integer(1), "123");
+			p.put(Integer.valueOf(1), "123");
 			fail("expected IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
@@ -175,7 +175,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 		p.put("testKey", "testValue");
 		p.put("key", new byte[] {0, 0, 0});
 		try {
-			p.put(new Integer(1), "123");
+			p.put(Integer.valueOf(1), "123");
 			fail("expected IllegalArgumentException");
 		}
 		catch (IllegalArgumentException e) {
@@ -189,7 +189,7 @@ public class UserAdminControl extends DefaultTestBundleControl {
 		user.getCredentials().put("pwd2", new byte[] {0, 0, 0});
 		assertTrue("missing credential", user.hasCredential("password", "1234"));
 		assertFalse("credential found that was not present", user
-				.hasCredential("xxx", new Integer(1)));
+				.hasCredential("xxx", Integer.valueOf(1)));
 		assertTrue("missing credential", user.hasCredential("pwd2", new byte[] {
 				0, 0, 0}));
 	}

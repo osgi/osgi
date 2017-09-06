@@ -37,7 +37,7 @@ public class CounterFactory extends BaseTestComponent {
     }
 
     public Integer makeInstance() {
-        return new Integer(counter++);
+        return Integer.valueOf(counter++);
     }
 }
 

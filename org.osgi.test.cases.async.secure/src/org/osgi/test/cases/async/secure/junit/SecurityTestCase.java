@@ -155,7 +155,7 @@ public class SecurityTestCase extends OSGiTestCase {
 		Callable<Promise<Integer>> callable = asPromiseInteger(getCallable());
 		Promise<Integer> promise = callable.call();
 		Integer result = AsyncTestUtils.awaitResolve(promise);
-		assertEquals("Wrong result.", new Integer(2), result);
+		assertEquals("Wrong result.", Integer.valueOf(2), result);
 		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myService.lastMethodCalled());
 	}
 
@@ -172,7 +172,7 @@ public class SecurityTestCase extends OSGiTestCase {
 		Callable<Void> callable = asVoid(getCallable());
 		callable.call();
 		Integer result = myService.awaitSuccess();
-		assertEquals("Wrong result.", new Integer(2), result);
+		assertEquals("Wrong result.", Integer.valueOf(2), result);
 		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myService.lastMethodCalled());
 	}
 

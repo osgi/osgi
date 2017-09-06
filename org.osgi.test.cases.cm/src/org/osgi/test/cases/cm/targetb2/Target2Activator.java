@@ -46,7 +46,7 @@ public class Target2Activator implements BundleActivator {
 			log("Going to register ManagedService " + i + " . pid:\n\t" + pid1);
 			props.put(org.osgi.framework.Constants.SERVICE_PID, pid1);
 			if (count > 1)
-				props.put("DuplicatedID", new Integer(i));
+				props.put("DuplicatedID", Integer.valueOf(i));
 			try {
 				context.registerService(clazz,
 						service, props);

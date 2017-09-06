@@ -758,7 +758,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(50);
 
@@ -838,7 +838,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1001,7 +1001,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1072,7 +1072,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1149,7 +1149,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1232,7 +1232,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1311,7 +1311,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1389,7 +1389,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 
@@ -1462,7 +1462,7 @@ public class PushStreamIntermediateOperationTest
 			@Override
 			public Integer apply(Integer t, Integer u) {
 				COUNTER.get();
-				Integer result = new Integer(t.intValue() + u.intValue());
+				Integer result = Integer.valueOf(t.intValue() + u.intValue());
 				try {
 					Thread.sleep(250);
 

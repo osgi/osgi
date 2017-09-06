@@ -51,8 +51,8 @@ public class MessageExample2 extends MessageType_1 {
 		EnOceanChannel channel04 = new Channel04();
 
 		EnOceanChannelDescription description = new EnOceanChannelDescription1();
-		channel01.setRawValue(description.serialize(new Integer(action1)));
-		channel02.setRawValue(description.serialize(new Integer(action2)));
+		channel01.setRawValue(description.serialize(Integer.valueOf(action1)));
+		channel02.setRawValue(description.serialize(Integer.valueOf(action2)));
 		if (eb) {
 			channel03.setRawValue(new byte[] {(byte) 0x01});
 		} else {

@@ -30,9 +30,9 @@ public class TestCondition implements Condition {
     String[] args = info.getArgs();
     if (args.length < 4 || args.length > 5)
       throw new IllegalArgumentException("Illegal number of args: " + args.length);
-    postponed = (new Boolean(args[0])).booleanValue();
-		satisfied = (new Boolean(args[1])).booleanValue();
-		mutable = (new Boolean(args[2])).booleanValue();
+		postponed = Boolean.parseBoolean(args[0]);
+		satisfied = Boolean.parseBoolean(args[1]);
+		mutable = Boolean.parseBoolean(args[2]);
     name = args[3];
     setInfoString(args);
     if (args.length == 5)

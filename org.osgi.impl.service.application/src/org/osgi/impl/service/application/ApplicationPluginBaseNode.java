@@ -316,7 +316,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 
 	public Object getExtensionProperty(String key) {
 		if (key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
-			return new Boolean(false); // :)
+			return Boolean.valueOf(false); // :)
 		throw new IllegalArgumentException("Only the '" + 
 				INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
 				"' extension property is supported by this plugin");

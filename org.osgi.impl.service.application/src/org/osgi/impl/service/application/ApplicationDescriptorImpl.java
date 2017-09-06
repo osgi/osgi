@@ -60,14 +60,14 @@ public class ApplicationDescriptorImpl {
 				}
 				boolean current = locks.containsKey( pid ); 
 				if ( query || newState == current )
-					return new Boolean( current );
+					return Boolean.valueOf( current );
 
 				if ( current )
 					locks.remove( pid );
 				else
 					locks.put( pid, "locked");
 				locks.store(new FileOutputStream(f), "Saved " + new Date());
-				return new Boolean( newState );
+				return Boolean.valueOf( newState );
 			  }
 		  })).booleanValue();
 		} catch( PrivilegedActionException pe ) {

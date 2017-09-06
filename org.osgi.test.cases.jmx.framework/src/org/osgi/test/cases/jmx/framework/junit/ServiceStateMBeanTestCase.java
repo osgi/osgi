@@ -226,7 +226,7 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
     private void assertTestService(CompositeData item) {
-        assertEquals(new Long(getServiceId(expectedInterface)),item.get("Identifier"));
+        assertEquals(Long.valueOf(getServiceId(expectedInterface)),item.get("Identifier"));
 
         long bundleId = ((Long) item.get("BundleIdentifier")).longValue();
         assertTrue("wrong bundle id is returned", bundleId == testBundle2.getBundleId());

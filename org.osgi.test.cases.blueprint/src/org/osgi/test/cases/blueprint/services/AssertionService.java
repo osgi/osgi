@@ -349,7 +349,7 @@ public class AssertionService
      *            long actual value
      */
     static public void assertEquals(Object component, String message, long expected, long actual) {
-        assertEquals(component, message, new Long(expected), new Long(actual));
+        assertEquals(component, message, Long.valueOf(expected), Long.valueOf(actual));
     }
 
 

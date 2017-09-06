@@ -161,7 +161,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testUpperWarningThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 0
-		upperWarning = new Long(0);
+		upperWarning = Long.valueOf(0);
 
 		// set the other thresholds to null.
 		upperError = null;
@@ -191,7 +191,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testUpperErrorThreshold() throws InterruptedException {
 		// set upper ERROR threshold to A
-		upperError = new Long(1);
+		upperError = Long.valueOf(1);
 
 		// set the other thresholds to null.
 		upperWarning = null;
@@ -221,7 +221,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testLowerWarningThreshold() throws InterruptedException {
 		// set lower WARNING threshold to 100
-		lowerWarning = new Long(100);
+		lowerWarning = Long.valueOf(100);
 
 		// set the other thresholds to null.
 		lowerError = null;
@@ -251,7 +251,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testLowerErrorThreshold() throws InterruptedException {
 		// set lower ERROR threshold to 99
-		lowerError = new Long(99);
+		lowerError = Long.valueOf(99);
 
 		// set the other thresholds to null.
 		lowerWarning = null;

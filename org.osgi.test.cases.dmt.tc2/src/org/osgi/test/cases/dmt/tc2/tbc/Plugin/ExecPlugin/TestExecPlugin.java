@@ -73,7 +73,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
     
 	private static boolean allUriIsExistent = false;
 	
-	private DmtData dataComplex = new DmtData(new Integer("1"));
+	private DmtData dataComplex = new DmtData(Integer.valueOf("1"));
 	
 	private DmtData dataString = new DmtData("");
 	

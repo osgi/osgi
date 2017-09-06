@@ -218,7 +218,7 @@ public class GetServiceProperties {
 			        	
         	Hashtable hash = new Hashtable();
         	hash.put("Test", "Test2");
-        	hash.put(Constants.SERVICE_RANKING, new Integer(9) );
+        	hash.put(Constants.SERVICE_RANKING, Integer.valueOf(9) );
         	
         	tbc.getTestingActivator2().setProperties(hash);
         	       	

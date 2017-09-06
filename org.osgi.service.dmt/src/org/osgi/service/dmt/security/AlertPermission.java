@@ -135,7 +135,7 @@ public class AlertPermission extends Permission {
 	 */
 	@Override
 	public int hashCode() {
-		return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
+		return Boolean.valueOf(isPrefix).hashCode() ^ serverId.hashCode();
 	}
 
 	/**

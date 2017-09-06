@@ -92,7 +92,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register find hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MIN_VALUE));
 		ServiceRegistration<FindHook> regHook1 = testContext.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -156,7 +156,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register find hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook2 = testContext.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -217,7 +217,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register find hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook3 = testContext.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -281,7 +281,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// register find hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook4 = testContext.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -1648,13 +1648,13 @@ EventListenerHook.class,
 
 		// register event hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
-		props.put(Constants.SERVICE_RANKING, new Integer(20));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(20));
 		ServiceRegistration<EventListenerHook> regHook3 = testContext
 				.registerService(EventListenerHook.class, hook3, props);
 
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook1 = testContext.registerService(
 				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 
@@ -2113,7 +2113,7 @@ EventListenerHook.class,
 	
 		// register find hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MIN_VALUE));
 		ServiceRegistration<FindHook> regHook1 = testContext1.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -2177,7 +2177,7 @@ EventListenerHook.class,
 	
 		// register find hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook2 = testContext1.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -2238,7 +2238,7 @@ EventListenerHook.class,
 	
 		// register find hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook3 = testContext1.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -2302,7 +2302,7 @@ EventListenerHook.class,
 	
 		// register find hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
-		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(Integer.MAX_VALUE));
 		ServiceRegistration<FindHook> regHook4 = testContext1.registerService(
 				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
@@ -2790,13 +2790,13 @@ EventListenerHook.class,
 
 		// register event hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
-		props.put(Constants.SERVICE_RANKING, new Integer(20));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(20));
 		ServiceRegistration<EventListenerHook> regHook3 = testContext
 				.registerService(EventListenerHook.class, hook3, props);
 
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook1 = testContext.registerService(
 				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 

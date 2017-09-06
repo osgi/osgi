@@ -109,42 +109,42 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         //boolean
         ci = new PrimitiveConstructorInjection(true);
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveBoolean", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Boolean(false));
+        ci = new WrapperConstructorInjection(Boolean.valueOf(false));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedBoolean", ci, WrapperConstructorInjection.class);
         //byte
         ci = new PrimitiveConstructorInjection((byte)-128);
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveByte", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Byte("127"));
+        ci = new WrapperConstructorInjection(Byte.valueOf("127"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedByte", ci, WrapperConstructorInjection.class);
         //double
-        ci = new PrimitiveConstructorInjection(new Double("4.9e-324").doubleValue());
+        ci = new PrimitiveConstructorInjection(Double.valueOf("4.9e-324").doubleValue());
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveDouble", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Double("1.7976931348623157E308"));
+        ci = new WrapperConstructorInjection(Double.valueOf("1.7976931348623157E308"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedDouble", ci, WrapperConstructorInjection.class);
         //float
-        ci = new PrimitiveConstructorInjection(new Float("1.4E-45").floatValue());
+        ci = new PrimitiveConstructorInjection(Float.valueOf("1.4E-45").floatValue());
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveFloat", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Float("3.4028235E38"));
+        ci = new WrapperConstructorInjection(Float.valueOf("3.4028235E38"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedFloat", ci, WrapperConstructorInjection.class);
         //int
         ci = new PrimitiveConstructorInjection(-2147483648);
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveInteger", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Integer("2147483647"));
+        ci = new WrapperConstructorInjection(Integer.valueOf("2147483647"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedInteger", ci, WrapperConstructorInjection.class);
         //char
         ci = new PrimitiveConstructorInjection('a');
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveCharacter", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Character('A'));
+        ci = new WrapperConstructorInjection(Character.valueOf('A'));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedCharacter", ci, WrapperConstructorInjection.class);
         //short
         ci = new PrimitiveConstructorInjection((short)-32768);
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveShort", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Short("32767"));
+        ci = new WrapperConstructorInjection(Short.valueOf("32767"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedShort", ci, WrapperConstructorInjection.class);
         //long
-        ci = new PrimitiveConstructorInjection(new Long("-9223372036854775808").longValue());
+        ci = new PrimitiveConstructorInjection(Long.valueOf("-9223372036854775808").longValue());
         this.addConstructorValueValidator(startEvents, "compInnerPrimitiveLong", ci, PrimitiveConstructorInjection.class);
-        ci = new WrapperConstructorInjection(new Long("9223372036854775807"));
+        ci = new WrapperConstructorInjection(Long.valueOf("9223372036854775807"));
         this.addConstructorValueValidator(startEvents, "compInnerWrapperedLong", ci, WrapperConstructorInjection.class);
     }
 
@@ -364,56 +364,56 @@ public class TestInnerComponentInjection extends DefaultTestBundleControl {
         pi.setPrimBoolean(true);
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveBoolean", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setBoolean(new Boolean(false));
+        pi.setBoolean(Boolean.valueOf(false));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedBoolean", "innerComponent", pi, innerComponentExpectedType);
         //byte
         pi = new PropertyInjection();
         pi.setPrimByte((byte)-128);
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveByte", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setByte(new Byte("127"));
+        pi.setByte(Byte.valueOf("127"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedByte", "innerComponent", pi, innerComponentExpectedType);
         //double
         pi = new PropertyInjection();
-        pi.setPrimDouble(new Double("4.9e-324").doubleValue());
+        pi.setPrimDouble(Double.valueOf("4.9e-324").doubleValue());
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveDouble", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setDouble(new Double("1.7976931348623157E308"));
+        pi.setDouble(Double.valueOf("1.7976931348623157E308"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedDouble", "innerComponent", pi, innerComponentExpectedType);
         //float
         pi = new PropertyInjection();
-        pi.setPrimFloat(new Float("1.4E-45").floatValue());
+        pi.setPrimFloat(Float.valueOf("1.4E-45").floatValue());
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveFloat", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setFloat(new Float("3.4028235E38"));
+        pi.setFloat(Float.valueOf("3.4028235E38"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedFloat", "innerComponent", pi, innerComponentExpectedType);
         //int
         pi = new PropertyInjection();
         pi.setPrimInteger(-2147483648);
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveInteger", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setInteger(new Integer("2147483647"));
+        pi.setInteger(Integer.valueOf("2147483647"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedInteger", "innerComponent", pi, innerComponentExpectedType);
         //char
         pi = new PropertyInjection();
         pi.setPrimCharacter('a');
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveCharacter", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setCharacter(new Character('A'));
+        pi.setCharacter(Character.valueOf('A'));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedCharacter", "innerComponent", pi, innerComponentExpectedType);
         //short
         pi = new PropertyInjection();
         pi.setPrimShort((short)-32768);
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveShort", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setShort(new Short("32767"));
+        pi.setShort(Short.valueOf("32767"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedShort", "innerComponent", pi, innerComponentExpectedType);
         //long
         pi = new PropertyInjection();
-        pi.setPrimLong(new Long("-9223372036854775808").longValue());
+        pi.setPrimLong(Long.valueOf("-9223372036854775808").longValue());
         this.addPropertyValueValidator(startEvents, "compInnerPrimitiveLong", "innerComponent", pi, innerComponentExpectedType);
         pi = new PropertyInjection();
-        pi.setLong(new Long("9223372036854775807"));
+        pi.setLong(Long.valueOf("9223372036854775807"));
         this.addPropertyValueValidator(startEvents, "compInnerWrapperedLong", "innerComponent", pi, innerComponentExpectedType);
     }
 

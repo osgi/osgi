@@ -49,9 +49,9 @@ import org.osgi.service.cm.ManagedServiceFactory;
 public interface TestingManagedServiceFactory extends ManagedServiceFactory {
 	
 	public static final String ATTRIBUTE_A = "ATTRIBUTE_A";
-	public static final Integer ATTRIBUTE_A_VALUE = new Integer(1);
+	public static final Integer ATTRIBUTE_A_VALUE = Integer.valueOf(1);
 	public static final String ATTRIBUTE_B = "ATTRIBUTE_B";
-	public static final Float ATTRIBUTE_B_VALUE = new Float(9.98F);
+	public static final Float ATTRIBUTE_B_VALUE = Float.valueOf(9.98F);
 	public static final String ATTRIBUTE_C = "ATTRIBUTE_C";
 	public static final String ATTRIBUTE_C_VALUE = "FACTORY";
 	

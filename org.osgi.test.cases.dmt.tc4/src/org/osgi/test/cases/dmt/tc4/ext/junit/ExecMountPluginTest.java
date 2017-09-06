@@ -74,7 +74,7 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
 
         TestExecPlugin execPlugin = new TestExecPlugin();
         Hashtable serviceProps = new Hashtable();
-        serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, new Integer(0));
+        serviceProps.put(ExecPlugin.EXEC_ROOT_URIS, Integer.valueOf(0));
 
         ServiceRegistration registration = null;
         try {

@@ -32,7 +32,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		Map metadata = new HashMap();
 		metadata.put("test-string", "test");
 		metadata.put("test-boolean", Boolean.TRUE);
-		metadata.put("test-int", new Integer(Integer.MAX_VALUE));
+		metadata.put("test-int", Integer.valueOf(Integer.MAX_VALUE));
 		checkEqualsAndHashCode(metadata);
 
 		// test with array
@@ -75,10 +75,10 @@ public class FunctionDataTest extends AbstractDeviceTest {
 	 */
 	public void testComparison() {
 		Map metadata = new HashMap();
-		metadata.put("test-value", new Integer(1));
+		metadata.put("test-value", Integer.valueOf(1));
 
 		Map otherMetadata = new HashMap();
-		otherMetadata.put("test-value", new Integer(2));
+		otherMetadata.put("test-value", Integer.valueOf(2));
 		checkComparison(metadata, otherMetadata);
 
 		metadata.clear();
@@ -90,10 +90,10 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		metadata.clear();
 		otherMetadata.clear();
 		Map metadataValue = new HashMap();
-		metadataValue.put("test-value", new Integer(1));
+		metadataValue.put("test-value", Integer.valueOf(1));
 		metadata.put("test-value", metadataValue);
 		Map otherMetadataValue = new HashMap();
-		otherMetadataValue.put("test-value", new Integer(2));
+		otherMetadataValue.put("test-value", Integer.valueOf(2));
 		otherMetadata.put("test-value", otherMetadataValue);
 	}
 
@@ -116,7 +116,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 
 		// check with map constructor
 		Map fields = new HashMap();
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(currentTime));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(currentTime));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new TestFunctionData(fields);
 		assertEquals("The function data timestamp is not correct.",
@@ -135,7 +135,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(System.currentTimeMillis()));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(System.currentTimeMillis()));
 		fields.put(FunctionData.FIELD_METADATA, "test");
 		checkInvalidFieldType(fields);
 	}

@@ -96,7 +96,7 @@ public class TestPostPonedCondition implements Condition {
 		for (int i = 0; i < conditions.length; i++) {
 			Boolean isSatisfied = (Boolean) context.get(conditions[i]);
 			if (isSatisfied == null) {
-				isSatisfied = new Boolean(conditions[i].isSatisfied());
+				isSatisfied = Boolean.valueOf(conditions[i].isSatisfied());
 				context.put(conditions[i], isSatisfied);
 			}
 			if (!isSatisfied.booleanValue())

@@ -134,7 +134,7 @@ public class DmtSessionImpl implements DmtSession {
 		} else
 			securityContext = null;
 
-		sessionId = (new Long(System.currentTimeMillis())).hashCode()
+		sessionId = (Long.valueOf(System.currentTimeMillis())).hashCode()
 				^ hashCode();
 
 		eventStore = new EventDispatcher(context, sessionId, initiatingBundle);

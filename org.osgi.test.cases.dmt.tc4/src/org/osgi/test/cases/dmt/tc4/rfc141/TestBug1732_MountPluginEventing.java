@@ -125,7 +125,7 @@ public class TestBug1732_MountPluginEventing extends
 			assertNull(event.getProperty(DmtConstants.EVENT_PROPERTY_NEW_NODES));
 
 		// sessionID must be -1 for internal events
-		assertEquals("the session.id property must be -1 for internal events", new Integer(-1), event.getProperty(DmtConstants.EVENT_PROPERTY_SESSION_ID));
+		assertEquals("the session.id property must be -1 for internal events", Integer.valueOf(-1), event.getProperty(DmtConstants.EVENT_PROPERTY_SESSION_ID));
 	}
 
 

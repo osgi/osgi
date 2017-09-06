@@ -46,7 +46,7 @@ public class BaseTestComponent implements ComponentTestInfo{
         props.put(BEAN_ID, componentId);
         props.put(INIT_CALLED, Boolean.FALSE);
         props.put(DESTROY_CALLED, Boolean.FALSE);
-        props.put(BEAN_INSTANCE, new Integer(creationId++));
+        props.put(BEAN_INSTANCE, Integer.valueOf(creationId++));
         // the arguments and properties are maintained in the snapshot tree
         props.put(BEAN_ARGUMENTS, arguments);
         props.put(BEAN_PROPERTIES, properties);

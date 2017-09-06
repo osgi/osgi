@@ -432,9 +432,9 @@ public class FrameworkDTOTestCase extends OSGiTestCase {
         properties.put("dtotest", getName());
         Version versionProp = new Version("1.2.3.Q");
         properties.put("testVersion", versionProp);
-        properties.put("testNumber", new Double(3.14));
+        properties.put("testNumber", Double.valueOf(3.14));
         properties.put("testBoolean", Boolean.TRUE);
-        properties.put("testCharacter", new Character('#'));
+        properties.put("testCharacter", Character.valueOf('#'));
         TestDTO dtoProp = new TestDTO();
         dtoProp.field = "prop";
         properties.put("testDTO", dtoProp);
@@ -485,10 +485,10 @@ public class FrameworkDTOTestCase extends OSGiTestCase {
         Bundle[] bundlesArray = systemBundle.getBundleContext().getBundles();
         Map<Long, Bundle> bundlesMap = new HashMap<Long, Bundle>(bundlesArray.length);
         for (Bundle b : bundlesArray) {
-            bundlesMap.put(new Long(b.getBundleId()), b);
+            bundlesMap.put(Long.valueOf(b.getBundleId()), b);
         }
         for (BundleDTO b : dto.bundles) {
-            Bundle bundle = bundlesMap.remove(new Long(b.id));
+            Bundle bundle = bundlesMap.remove(Long.valueOf(b.id));
             assertNotNull("FrameworkDTO bundles has wrong bundle", bundle);
             assertBundleDTO(bundle, b);
         }
@@ -536,10 +536,10 @@ public class FrameworkDTOTestCase extends OSGiTestCase {
         assertEquals("ServiceReferenceDTO usingBundles wrong size", using.length, dto.usingBundles.length);
         Map<Long, Bundle> bundlesMap = new HashMap<Long, Bundle>(using.length);
         for (Bundle b : using) {
-            bundlesMap.put(new Long(b.getBundleId()), b);
+            bundlesMap.put(Long.valueOf(b.getBundleId()), b);
         }
         for (long id : dto.usingBundles) {
-            Bundle bundle = bundlesMap.remove(new Long(id));
+            Bundle bundle = bundlesMap.remove(Long.valueOf(id));
             assertNotNull("ServiceReferenceDTO usingBundles has wrong bundle", bundle);
         }
     }

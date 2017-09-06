@@ -47,7 +47,7 @@ class IntegerConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Integer(value);
+		return Integer.valueOf(value);
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
@@ -63,7 +63,7 @@ class LongConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Long(value);
+		return Long.valueOf(value);
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
@@ -79,7 +79,7 @@ class FloatConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Float(value);
+		return Float.valueOf(value);
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
@@ -95,7 +95,7 @@ class DoubleConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Double(value);
+		return Double.valueOf(value);
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
@@ -151,7 +151,7 @@ class CharacterConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Character(value.charAt(0));
+		return Character.valueOf(value.charAt(0));
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
@@ -238,7 +238,7 @@ class BooleanConverter extends TypeConverter {
 	}
 
 	public Object convertToJavaTypeBySubchild(String value) throws Exception {
-		return new Boolean(value);
+		return Boolean.valueOf(value);
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {

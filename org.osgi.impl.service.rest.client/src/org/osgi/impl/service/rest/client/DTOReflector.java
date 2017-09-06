@@ -108,9 +108,9 @@ public final class DTOReflector {
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
 				if (data.has("bundle")) {
-					field.set(dto, new Long(getBundleIdFromPath(data.getString("bundle"))));
+					field.set(dto, Long.valueOf(getBundleIdFromPath(data.getString("bundle"))));
 				} else {
-					field.set(dto, new Long(getBundleIdFromPath(path)));
+					field.set(dto, Long.valueOf(getBundleIdFromPath(path)));
 				}
 			} else if ("usingBundles".equals(field.getName())) {
 				field.set(
@@ -132,9 +132,9 @@ public final class DTOReflector {
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
 				if (elem.getElementsByTagName("bundle") != null) {
-					field.set(dto, new Long(getBundleIdFromPath(elem.getElementsByTagName("bundle").item(0).getTextContent())));
+					field.set(dto, Long.valueOf(getBundleIdFromPath(elem.getElementsByTagName("bundle").item(0).getTextContent())));
 				} else {
-					field.set(dto, new Long(getBundleIdFromPath(path)));
+					field.set(dto, Long.valueOf(getBundleIdFromPath(path)));
 				}
 			} else if ("usingBundles".equals(field.getName())) {
 				final Node node = elem.getElementsByTagName("usingBundles").item(0);
@@ -204,7 +204,7 @@ public final class DTOReflector {
 		} else if ("Byte".equals(type)) {
 			return Byte.valueOf(value);
 		} else if ("Character".equals(type)) {
-			return new Character(value.trim().charAt(0));
+			return Character.valueOf(value.trim().charAt(0));
 		} else if ("Boolean".equals(type)) {
 			return Boolean.valueOf(value);
 		} else if ("Short".equals(type)) {
@@ -273,7 +273,7 @@ public final class DTOReflector {
 		final String[] keys = JSONObject.getNames(obj);
 
 		for (int i = 0; i < keys.length; i++) {
-			final Object o = keys[i].equals("service.id") || keys[i].equals("service.bundleid") ? new Long(obj.getLong(keys[i])) : obj.get(keys[i]);
+			final Object o = keys[i].equals("service.id") || keys[i].equals("service.bundleid") ? Long.valueOf(obj.getLong(keys[i])) : obj.get(keys[i]);
 			if (o instanceof JSONArray) {
 				result.put((K) keys[i], (V) getStringArrayFromJSONArray((JSONArray) o));
 			} else {

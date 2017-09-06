@@ -47,21 +47,21 @@ public class UrlHandlerControl extends OSGiTestCase {
 		urlServiceProperty1 = new Hashtable<>();
 		urlServiceProperty1.put(URLConstants.URL_HANDLER_PROTOCOL,
 				new String[] {protocol1, protocol2});
-		urlServiceProperty1.put(Constants.SERVICE_RANKING, new Integer(10));
+		urlServiceProperty1.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		urlServiceProperty2 = new Hashtable<>();
 		urlServiceProperty2.put(URLConstants.URL_HANDLER_PROTOCOL,
 				new String[] {protocol1});
-		urlServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(5));
+		urlServiceProperty2.put(Constants.SERVICE_RANKING, Integer.valueOf(5));
 		urlHandler1 = new CustomUrlHandler1();
 		urlHandler2 = new CustomUrlHandler2();
 		contentServiceProperty1 = new Hashtable<>();
 		contentServiceProperty1.put(URLConstants.URL_CONTENT_MIMETYPE,
 				new String[] {"osgi/test"});
-		contentServiceProperty1.put(Constants.SERVICE_RANKING, new Integer(10));
+		contentServiceProperty1.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		contentServiceProperty2 = new Hashtable<>();
 		contentServiceProperty2.put(URLConstants.URL_CONTENT_MIMETYPE,
 				new String[] {"osgi/test"});
-		contentServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(5));
+		contentServiceProperty2.put(Constants.SERVICE_RANKING, Integer.valueOf(5));
 		contentHandler1 = new CustomContentHandler1();
 		contentHandler2 = new CustomContentHandler2();
 		// register services
@@ -158,7 +158,7 @@ public class UrlHandlerControl extends OSGiTestCase {
 	 */
 	public void testUrlHandlerAfterChangingRank() throws Exception {
 		// increase url handler ranking for handler2
-		urlServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(15));
+		urlServiceProperty2.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 		urlHandlerSerReg2.setProperties(urlServiceProperty2);
 		// test protocol1
 		URL url = new URL(protocol1 + "://test");
@@ -181,7 +181,7 @@ public class UrlHandlerControl extends OSGiTestCase {
 	 */
 	public void testContentHandlerAfterChangingRank() throws Exception {
 		// increase content handler ranking for handler2
-		contentServiceProperty2.put(Constants.SERVICE_RANKING, new Integer(15));
+		contentServiceProperty2.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 		contentHandlerSerReg2.setProperties(contentServiceProperty2);
 		URL url = new URL(protocol1 + "://test");
 		Object ob = url.getContent();

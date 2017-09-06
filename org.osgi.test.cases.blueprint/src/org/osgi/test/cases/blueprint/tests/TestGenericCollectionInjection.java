@@ -72,8 +72,8 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
         // array of ints converted into a Generic list of Point items
         {
             List<Integer> expected = new ArrayList<Integer>();
-            expected.add(new Integer(123));
-            expected.add(new Integer(456));
+            expected.add(Integer.valueOf(123));
+            expected.add(Integer.valueOf(456));
             startEvents.validateComponentArgument("GenericListConstructor", "arg1", expected, List.class);
         }
 
@@ -86,36 +86,36 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
 
         {
             List<Integer> expected = new ArrayList<Integer>();
-            expected.add(new Integer(123));
-            expected.add(new Integer(456));
+            expected.add(Integer.valueOf(123));
+            expected.add(Integer.valueOf(456));
             startEvents.validateComponentProperty("GenericListExtendsProperty", "extendsInteger", expected, List.class);
         }
 
         {
             List<Integer> expected = new ArrayList<Integer>();
-            expected.add(new Integer(123));
-            expected.add(new Integer(456));
+            expected.add(Integer.valueOf(123));
+            expected.add(Integer.valueOf(456));
             startEvents.validateComponentProperty("GenericListSuperProperty", "superInteger", expected, List.class);
         }
 
         {
             List<Double> expected = new ArrayList<Double>();
-            expected.add(new Double(123));
-            expected.add(new Double(456));
+            expected.add(Double.valueOf(123));
+            expected.add(Double.valueOf(456));
             startEvents.validateComponentProperty("GenericListAProperty", "a", expected, List.class);
         }
 
         {
             Set<Double> expected = new HashSet<Double>();
-            expected.add(new Double(3.1415926));
-            expected.add(new Double(1.0));
+            expected.add(Double.valueOf(3.1415926));
+            expected.add(Double.valueOf(1.0));
             startEvents.validateComponentArgument("GenericSetConstructor", "arg1", expected, Set.class);
         }
 
         {
             Set<Integer> expected = new HashSet<Integer>();
-            expected.add(new Integer(123));
-            expected.add(new Integer(456));
+            expected.add(Integer.valueOf(123));
+            expected.add(Integer.valueOf(456));
             startEvents.validateComponentProperty("GenericSetProperty", "integer", expected, Set.class);
         }
 
@@ -128,17 +128,17 @@ public class TestGenericCollectionInjection extends DefaultTestBundleControl {
 
         {
             Map<Long, Boolean> expected = new HashMap<Long, Boolean>();
-            expected.put(new Long(1), Boolean.TRUE);
-            expected.put(new Long(2), Boolean.FALSE);
-            expected.put(new Long(3), Boolean.TRUE);
-            expected.put(new Long(4), Boolean.FALSE);
+            expected.put(Long.valueOf(1), Boolean.TRUE);
+            expected.put(Long.valueOf(2), Boolean.FALSE);
+            expected.put(Long.valueOf(3), Boolean.TRUE);
+            expected.put(Long.valueOf(4), Boolean.FALSE);
             startEvents.validateComponentArgument("GenericMapConstructor", "arg1", expected, Map.class);
         }
 
         {
             Map<Double, String> expected = new HashMap<Double, String>();
-            expected.put(new Double(1.0), "true");
-            expected.put(new Double(2.0), "false");
+            expected.put(Double.valueOf(1.0), "true");
+            expected.put(Double.valueOf(2.0), "false");
             startEvents.validateComponentProperty("GenericMapProperty", "map1", expected, Map.class);
         }
 

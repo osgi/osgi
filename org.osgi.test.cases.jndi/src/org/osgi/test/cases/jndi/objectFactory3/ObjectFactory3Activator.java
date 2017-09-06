@@ -40,7 +40,7 @@ public class ObjectFactory3Activator implements BundleActivator {
 		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};		
 		
 		props.put("osgi.jndi.serviceName", "CTObjectFactory");
-		props.put(Constants.SERVICE_RANKING, new Integer(2));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(2));
 		
 		Hashtable env = new Hashtable();
 		env.put("test2", "test2");

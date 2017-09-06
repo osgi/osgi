@@ -42,7 +42,7 @@ public class Component1 implements BaseService, ComponentContextExposer {
 
   protected void deactivate(ComponentContext ctxt) {
     deactPos = deactCount++;
-    properties.put("config.base.data", new Integer(deactPos));
+    properties.put("config.base.data", Integer.valueOf(deactPos));
   }
 
 	public Dictionary<String,Object> getProperties() {

@@ -67,13 +67,13 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         startEvents.validateComponentProperty("assignableRegionCode", "regionCode", new EuropeanRegionCode("UK+24"), RegionCode.class);
-        startEvents.validateComponentProperty("wrapperToPrim", "primInteger", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("primToWrapper", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("wrapperToPrim", "primInteger", Integer.valueOf(1), Integer.TYPE);
+        startEvents.validateComponentProperty("primToWrapper", "integer", Integer.valueOf(1), Integer.class);
         startEvents.validateComponentProperty("convertedRegionCode", "regionCode", new AsianRegionCode("CN+90"), RegionCode.class);
         startEvents.validateComponentProperty("convertedAsianRegionCode", "asianRegionCode", new AsianRegionCode("CN+94"), AsianRegionCode.class);
         startEvents.validateComponentProperty("stringArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
         startEvents.validateComponentProperty("integerArrayToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
-        startEvents.validateComponentProperty("intArrayToIntegerArray", "wrappedIntArray", new Integer[] {new Integer(1), new Integer(2)}, Integer[].class);
+        startEvents.validateComponentProperty("intArrayToIntegerArray", "wrappedIntArray", new Integer[] {Integer.valueOf(1), Integer.valueOf(2)}, Integer[].class);
         startEvents.validateComponentProperty("stringArrayToRegionCodeArray", "regionCodeArray", new RegionCode[] {new AsianRegionCode("CN+76") }, RegionCode[].class);
         startEvents.validateComponentProperty("stringListToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
         startEvents.validateComponentProperty("integerListToIntArray", "primIntArray", new int[] {1, 2}, int[].class);
@@ -87,8 +87,8 @@ public class TestTypeConversion extends DefaultTestBundleControl {
         startEvents.validateComponentProperty("stringArrayToCollectionSubTypeImpl", "collectionSubTypeImpl", target, CollectionSubTypeImpl.class);
 
         target = new ArrayList();
-        target.add(new Integer(1));
-        target.add(new Integer(2));
+        target.add(Integer.valueOf(1));
+        target.add(Integer.valueOf(2));
         startEvents.validateComponentProperty("intArrayToList", "list", target, List.class);
 
         Map mapTarget = new HashMap();
@@ -106,28 +106,28 @@ public class TestTypeConversion extends DefaultTestBundleControl {
 
         // wrapper to corresponding primitive
 
-        startEvents.validateComponentProperty("wrapperToInt", "primInteger", new Integer(1), Integer.TYPE);
-        startEvents.validateComponentProperty("wrapperToLong", "primLong", new Long(1), Long.TYPE);
-        startEvents.validateComponentProperty("wrapperToShort", "primShort", new Short((short)1), Short.TYPE);
-        startEvents.validateComponentProperty("wrapperToByte", "primByte", new Byte((byte)1), Byte.TYPE);
-        startEvents.validateComponentProperty("wrapperToChar", "primCharacter", new Character('A'), Character.TYPE);
+        startEvents.validateComponentProperty("wrapperToInt", "primInteger", Integer.valueOf(1), Integer.TYPE);
+        startEvents.validateComponentProperty("wrapperToLong", "primLong", Long.valueOf(1), Long.TYPE);
+        startEvents.validateComponentProperty("wrapperToShort", "primShort", Short.valueOf((short)1), Short.TYPE);
+        startEvents.validateComponentProperty("wrapperToByte", "primByte", Byte.valueOf((byte)1), Byte.TYPE);
+        startEvents.validateComponentProperty("wrapperToChar", "primCharacter", Character.valueOf('A'), Character.TYPE);
         startEvents.validateComponentProperty("wrapperToBoolean", "primBoolean", Boolean.TRUE, Boolean.TYPE);
-        startEvents.validateComponentProperty("wrapperToDouble", "primDouble", new Double(1), Double.TYPE);
-        startEvents.validateComponentProperty("wrapperToFloat", "primFloat", new Float(1), Float.TYPE);
+        startEvents.validateComponentProperty("wrapperToDouble", "primDouble", Double.valueOf(1), Double.TYPE);
+        startEvents.validateComponentProperty("wrapperToFloat", "primFloat", Float.valueOf(1), Float.TYPE);
 
         // Number-type conversions
-        startEvents.validateComponentProperty("longToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("shortToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("byteToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("doubleToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("floatToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("longToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("shortToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("byteToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("doubleToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("floatToInteger", "integer", Integer.valueOf(1), Integer.class);
 
         // primitive number-type conversions
-        startEvents.validateComponentProperty("primLongToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("primShortToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("primByteToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("primDoubleToInteger", "integer", new Integer(1), Integer.class);
-        startEvents.validateComponentProperty("primFloatToInteger", "integer", new Integer(1), Integer.class);
+        startEvents.validateComponentProperty("primLongToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("primShortToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("primByteToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("primDoubleToInteger", "integer", Integer.valueOf(1), Integer.class);
+        startEvents.validateComponentProperty("primFloatToInteger", "integer", Integer.valueOf(1), Integer.class);
 
         controller.run();
     }

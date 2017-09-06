@@ -659,8 +659,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				// i.e. reg a new TestService1
 				Hashtable<String, Object> ts1Props = new Hashtable<String, Object>();
 				ts1Props.put("name", "TestService1");
-				ts1Props.put("version", new Float(1.0));
-				ts1Props.put("compatible", new Float(1.0));
+				ts1Props.put("version", Float.valueOf(1.0f));
+				ts1Props.put("compatible", Float.valueOf(1.0f));
 				ts1Props.put("description", "TestService 1 in tbc");
 
 				ServiceRegistration<TestService1> tsr1 = (ServiceRegistration<TestService1>) context
@@ -989,11 +989,11 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 		ServiceRegistration<Runnable> reg1 = (ServiceRegistration<Runnable>) getContext()
 				.registerService(
 				Runnable.class.getName(), runIt, props);
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		ServiceRegistration<Runnable> reg2 = (ServiceRegistration<Runnable>) getContext()
 				.registerService(
 				Runnable.class.getName(), runIt, props);
@@ -1013,7 +1013,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals("wrong service reference", reg1.getReference(),
 					testTracker.getServiceReference());
 
-			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			props.put(Constants.SERVICE_RANKING, Integer.valueOf(20));
 			reg2.setProperties(props);
 			assertEquals("wrong service reference", reg2.getReference(),
 					testTracker.getServiceReference());
@@ -1032,10 +1032,10 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Service runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(15));
 		ServiceRegistration<Service> reg1 = getContext().registerService(
 				Service.class, runIt, props);
-		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		props.put(Constants.SERVICE_RANKING, Integer.valueOf(10));
 		ServiceRegistration<Service> reg2 = getContext().registerService(
 				Service.class, runIt, props);
 		ServiceTracker<Service, Service> testTracker = null;
@@ -1055,7 +1055,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					sortedMap.lastKey());
 			assertEquals("wrong size", testTracker.size(), sortedMap.size());
 
-			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			props.put(Constants.SERVICE_RANKING, Integer.valueOf(20));
 			reg2.setProperties(props);
 
 			sortedMap = testTracker.getTracked();

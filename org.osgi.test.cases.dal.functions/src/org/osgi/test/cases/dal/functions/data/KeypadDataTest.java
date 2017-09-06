@@ -73,12 +73,12 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		data = new KeypadData(fields);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
@@ -146,12 +146,12 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		data = new KeypadData(fields);
 		assertEquals(
 				"The keypad data comparison is wrong!",
@@ -217,12 +217,12 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		data = new KeypadData(fields);
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
@@ -280,12 +280,12 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, Integer.valueOf(KeypadData.SUB_TYPE_PRESSED_NORMAL));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		data = new KeypadData(fields);
 		checkKeypadDataFields(
 				Long.MIN_VALUE,
@@ -303,35 +303,35 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	public void testInvalidFields() {
 		Map fields = new HashMap();
 		fields.put(KeypadData.FIELD_TYPE, "invalid-event-type");
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(KeypadData.FIELD_SUB_TYPE, "invalid-event-sub-type");
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_KEY_CODE, "invalid-key-code");
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
-		fields.put(KeypadData.FIELD_KEY_NAME, new Integer(Integer.MAX_VALUE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
+		fields.put(KeypadData.FIELD_KEY_NAME, Integer.valueOf(Integer.MAX_VALUE));
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(FunctionData.FIELD_METADATA, Boolean.TRUE);
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_TYPE, Integer.valueOf(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_KEY_CODE, Integer.valueOf(KEY_CODE));
 		fields.put(FunctionData.FIELD_TIMESTAMP, Boolean.TRUE);
 		checkInvalidFieldType(fields);
 

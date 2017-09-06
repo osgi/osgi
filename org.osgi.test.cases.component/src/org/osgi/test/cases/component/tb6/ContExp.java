@@ -52,7 +52,7 @@ public class ContExp implements ComponentContextExposer {
 		}
 		Object prop = properties.get("config.base.data");
 		int data = (prop instanceof Integer) ? ((Integer) prop).intValue() : 0;
-		properties.put("config.base.data", new Integer(data | value));
+		properties.put("config.base.data", Integer.valueOf(data | value));
 	}
 
   public ComponentContext getComponentContext() {

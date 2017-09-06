@@ -48,7 +48,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.ACCESS,
-				new Integer(
+				Integer.valueOf(
 						PropertyMetadata.ACCESS_READABLE |
 								PropertyMetadata.ACCESS_WRITABLE |
 								PropertyMetadata.ACCESS_EVENTABLE));

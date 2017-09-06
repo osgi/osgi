@@ -131,8 +131,8 @@ public class TestConstructorDisambiguation extends DefaultTestBundleControl {
         MetadataEventSet startEvents = controller.getStartEvents();
 
         addConstructorValueValidator(startEvents, "string", "XYZ", String.class);
-        addConstructorValueValidator(startEvents, "int", new Integer(1), Integer.TYPE);
-        addConstructorValueValidator(startEvents, "integer", new Integer(1), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "int", Integer.valueOf(1), Integer.TYPE);
+        addConstructorValueValidator(startEvents, "integer", Integer.valueOf(1), Integer.TYPE);
         addConstructorValueValidator(startEvents, "regionCode", new RegionCode("RC+40"), RegionCode.class);
         addConstructorValueValidator(startEvents, "europeanRegionCode", new EuropeanRegionCode("UK+32"), RegionCode.class);
         addConstructorValueValidator(startEvents, "asianRegionCode", new AsianRegionCode("CN+86"), AsianRegionCode.class);

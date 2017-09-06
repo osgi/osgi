@@ -1288,7 +1288,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 	private static void assertEventBundle(DmtEvent dmtEvent) {
 		Bundle bundle = context.getBundle();
 		assertEquals(bundle, dmtEvent.getProperty(EventConstants.BUNDLE));
-		assertEquals(new Long(bundle.getBundleId()),
+		assertEquals(Long.valueOf(bundle.getBundleId()),
 				dmtEvent.getProperty(EventConstants.BUNDLE_ID));
 		assertEquals(bundle.getSymbolicName(),
 				dmtEvent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
@@ -1359,7 +1359,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 	private static void assertEventBundle(Event event) {
 		Bundle bundle = context.getBundle();
 		assertEquals(bundle, event.getProperty(EventConstants.BUNDLE));
-		assertEquals(new Long(bundle.getBundleId()),
+		assertEquals(Long.valueOf(bundle.getBundleId()),
 				event.getProperty(EventConstants.BUNDLE_ID));
 		assertEquals(bundle.getSymbolicName(),
 				event.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));

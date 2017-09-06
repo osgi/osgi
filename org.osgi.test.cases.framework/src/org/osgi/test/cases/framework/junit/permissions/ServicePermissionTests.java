@@ -55,7 +55,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 
 		invalidServicePermission((ServiceReference< ? >) null, "get");
 		Map<String,Object> properties = new HashMap<>();
-		properties.put("service.id", new Long(1));
+		properties.put("service.id", Long.valueOf(1));
 		properties.put("objectClass", new String[] {"test.Service"});
 		invalidServicePermission(newMockServiceReference(null, properties),
 				"register");
@@ -416,7 +416,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		Bundle b46 = newMockBundle(2, "test.bsn", "test.location",
 				"cn=Bugs Bunny, o=ACME, c=US");
 		Map<String,Object> m46 = new HashMap<>();
-		m46.put("service.id", new Long(2));
+		m46.put("service.id", Long.valueOf(2));
 		m46.put("objectClass", new String[] {"com.foo.Service2"});
 		ServiceReference< ? > r46 = newMockServiceReference(b46, m46);
 		ServicePermission p46 = new ServicePermission(r46, "get");
@@ -424,7 +424,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		Bundle b47 = newMockBundle(3, "not.bsn", "not.location",
 				"cn=Bugs Bunny, o=NOT, c=US");
 		Map<String,Object> m47 = new HashMap<>();
-		m47.put("service.id", new Long(3));
+		m47.put("service.id", Long.valueOf(3));
 		m47.put("objectClass", new String[] {"com.bar.Service2"});
 		ServiceReference< ? > r47 = newMockServiceReference(b47, m47);
 		ServicePermission p47 = new ServicePermission(r47, "get");
@@ -515,7 +515,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		Bundle b5a = newMockBundle(2, "test.bsn", "test.location",
 		"cn=Bugs Bunny, o=ACME, c=US");
 		Map<String,Object> m5a = new HashMap<>();
-		m5a.put("service.id", new Long(2));
+		m5a.put("service.id", Long.valueOf(2));
 		m5a.put("objectClass", new String[] {"com.foo.Service2"});
 		ServiceReference< ? > r5a = newMockServiceReference(b5a, m5a);
 		ServicePermission p5a = new ServicePermission(r5a, "get");
@@ -523,7 +523,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		Bundle b5b = newMockBundle(3, "not.bsn", "not.location",
 				"cn=Bugs Bunny, o=NOT, c=US");
 		Map<String,Object> m5b = new HashMap<>();
-		m5b.put("service.id", new Long(3));
+		m5b.put("service.id", Long.valueOf(3));
 		m5b.put("objectClass", new String[] {"com.bar.Service1",
 				"com.bar.Service2"});
 		ServiceReference< ? > r5b = newMockServiceReference(b5b, m5b);
@@ -669,7 +669,7 @@ public class ServicePermissionTests extends PermissionTestCase {
 		Bundle b62 = newMockBundle(2, "test.bsn", "test.location",
 				"cn=Bugs Bunny, o=ACME, c=US");
 		Map<String,Object> m62 = new HashMap<>();
-		m62.put("service.id", new Long(2));
+		m62.put("service.id", Long.valueOf(2));
 		m62.put("objectClass", new String[] {"com.foo.Service2"});
 		m62.put("name", "expected");
 		m62.put("@at", "atat");

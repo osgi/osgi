@@ -411,7 +411,7 @@ public class DeviceServlet extends HttpServlet {
 					res.sendError(500, UPnPConstants.ERR_UAR);
 					return;
 				}
-				arr[1] = new Long(System.currentTimeMillis() + (time * 1000));
+				arr[1] = Long.valueOf(System.currentTimeMillis() + (time * 1000));
 				rdev.put(sid, arr);
 			}
 			else {
@@ -448,7 +448,7 @@ public class DeviceServlet extends HttpServlet {
 					}
 				Object[] obj = new Object[2];
 				obj[0] = url;
-				obj[1] = new Long(System.currentTimeMillis() + (time * 1000));
+				obj[1] = Long.valueOf(System.currentTimeMillis() + (time * 1000));
 				Hashtable rdev = (Hashtable) evs.get(dsi);
 				rdev.put(sid, obj);
 				eventing = true;

@@ -298,28 +298,28 @@ public class Autoconf implements ResourceProcessor {
 				java.lang.Object realValue;
 				switch(type) {
 					case AttributeDefinition.BOOLEAN:
-						realValue = new Boolean(strValue);
+						realValue = Boolean.valueOf(strValue);
 						break;
 					case AttributeDefinition.BYTE:
-						realValue = new Byte(strValue);
+						realValue = Byte.valueOf(strValue);
 						break;
 					case AttributeDefinition.CHARACTER:
-						realValue = new Character(strValue.charAt(0));
+						realValue = Character.valueOf(strValue.charAt(0));
 						break;
 					case AttributeDefinition.DOUBLE:
-						realValue = new Double(strValue);
+						realValue = Double.valueOf(strValue);
 						break;
 					case AttributeDefinition.FLOAT:
-						realValue = new Float(strValue);
+						realValue = Float.valueOf(strValue);
 						break;
 					case AttributeDefinition.INTEGER:
-						realValue = new Integer(strValue);
+						realValue = Integer.valueOf(strValue);
 						break;
 					case AttributeDefinition.LONG:
-						realValue = new Long(strValue);
+						realValue = Long.valueOf(strValue);
 						break;
 					case AttributeDefinition.SHORT:
-						realValue = new Short(strValue);
+						realValue = Short.valueOf(strValue);
 						break;
 					case AttributeDefinition.STRING:
 						realValue = strValue;

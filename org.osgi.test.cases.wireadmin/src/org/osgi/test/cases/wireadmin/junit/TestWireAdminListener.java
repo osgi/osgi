@@ -46,7 +46,7 @@ public class TestWireAdminListener implements WireAdminListener {
 			if (dummy) {
 				WireAdminControl.log("Dummy received an event! Error");
 				synchronized (this) {
-					valuesReceived.add(new Integer(type));
+					valuesReceived.add(Integer.valueOf(type));
 				}
 				return;
 			}
@@ -58,7 +58,7 @@ public class TestWireAdminListener implements WireAdminListener {
 				if ("42".equals(prop)) {
 					WireAdminControl.log("wire is OK");
 					synchronized (this) {
-						valuesReceived.add(new Integer(type));
+						valuesReceived.add(Integer.valueOf(type));
 					}
 				}
 				else {

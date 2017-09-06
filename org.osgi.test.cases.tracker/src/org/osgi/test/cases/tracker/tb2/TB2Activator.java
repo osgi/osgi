@@ -26,8 +26,8 @@ public class TB2Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		Hashtable<String, Object> ts2Props = new Hashtable<String, Object>();
 		ts2Props.put("name", "TestService2");
-		ts2Props.put("version", new Float(1.0));
-		ts2Props.put("compatible", new Float(1.0));
+		ts2Props.put("version", Float.valueOf(1.0f));
+		ts2Props.put("compatible", Float.valueOf(1.0f));
 		ts2Props.put("description", "TestService 2");
 
 		bc.registerService(TestService2.class.getName(), new TestService2() {

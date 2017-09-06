@@ -254,13 +254,13 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 					nvp.value = value.getString();
 				  break;
 				case DmtData.FORMAT_INTEGER:
-					nvp.value = new Integer( value.getInt() );
+					nvp.value = Integer.valueOf( value.getInt() );
 				  break;
 				case DmtData.FORMAT_FLOAT:
-					nvp.value = new Float( value.getFloat() );
+					nvp.value = Float.valueOf( value.getFloat() );
 				  break;
 				case DmtData.FORMAT_BOOLEAN:
-					nvp.value = new Boolean( value.getBoolean() );
+					nvp.value = Boolean.valueOf( value.getBoolean() );
 				  break;
 				case DmtData.FORMAT_NULL:
 					nvp.value = null;
@@ -960,7 +960,7 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 			
 			switch( getFormat() ) {
 			case DmtData.FORMAT_BOOLEAN:
-				return new Boolean( false );
+				return Boolean.valueOf( false );
 			case DmtData.FORMAT_STRING:
 				return new String();
 			}			

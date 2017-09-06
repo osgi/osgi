@@ -37,7 +37,7 @@ public class StandAloneDriver implements BundleActivator, Driver {
 		/* register the driver service */
 		Hashtable h = new Hashtable();
 		h.put("DRIVER_ID", "sadriver");
-		h.put(org.osgi.framework.Constants.SERVICE_RANKING, new Integer(4242));
+		h.put(org.osgi.framework.Constants.SERVICE_RANKING, Integer.valueOf(4242));
 		driverRegistration = bc.registerService(
 				"org.osgi.service.device.Driver", this, h);
 	}

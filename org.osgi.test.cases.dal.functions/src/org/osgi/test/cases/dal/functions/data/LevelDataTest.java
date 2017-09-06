@@ -52,7 +52,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
@@ -91,7 +91,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
@@ -129,7 +129,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
@@ -158,7 +158,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);

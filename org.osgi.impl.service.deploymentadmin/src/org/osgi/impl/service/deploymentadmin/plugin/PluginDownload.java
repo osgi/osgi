@@ -75,10 +75,10 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
         private String  dwnlId;
         private String  uri;
         private String  envType;
-        private Integer status = new Integer(STATUS_IDLE);
+        private Integer status = Integer.valueOf(STATUS_IDLE);
         
         public void setStatus(int status) {
-            this.status = new Integer(status);
+            this.status = Integer.valueOf(status);
         }
         
         public int getStatus() {

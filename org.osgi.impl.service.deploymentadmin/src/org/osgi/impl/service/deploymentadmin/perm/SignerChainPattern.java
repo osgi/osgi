@@ -246,9 +246,9 @@ class SignerChainPattern {
                         Principal princ = (Principal) m.invoke(cert);
     		            SignerChainPattern.SignerPattern sp = 
     		                	new SignerChainPattern.SignerPattern(princ.toString());
-    	            	return new Boolean(sp.match(signer));
+    	            	return Boolean.valueOf(sp.match(signer));
     		        }
-    		        return new Boolean(false);
+    		        return Boolean.valueOf(false);
                 }
             })).booleanValue(); 
         } catch (PrivilegedActionException  e) {

@@ -354,7 +354,7 @@ public class PermissionSignatureUtility {
 				"call StartLevel.setBundleStartLevel(Bundle, int) " + message,
 				"callStartLevel_setBundleStartLevel", new Class[] {
 						Bundle.class, Integer.class}, new Object[] {bundle,
-						new Integer(startlevel)});
+						Integer.valueOf(startlevel)});
 	}
 
 	public boolean not_allowed_StartLevel_setBundleStartLevel(String message,
@@ -363,14 +363,14 @@ public class PermissionSignatureUtility {
 				"call StartLevel.setBundleStartLevel(Bundle, int) " + message,
 				"callStartLevel_setBundleStartLevel", new Class[] {
 						Bundle.class, Integer.class}, new Object[] {bundle,
-						new Integer(startlevel)}, SecurityException.class);
+						Integer.valueOf(startlevel)}, SecurityException.class);
 	}
 
 	public Object allowed_StartLevel_setStartLevel(String message,
 			int startlevel) throws Exception {
 		return control.allowed_call("call StartLevel.setStartLevel(int) "
 				+ message, "callStartLevel_setStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)});
 	}
 
@@ -379,7 +379,7 @@ public class PermissionSignatureUtility {
 		return control
 				.not_allowed_call("call StartLevel.setBundleStartLevel(int) "
 						+ message, "callStartLevel_setStartLevel",
-						new Class[] {Integer.class}, new Object[] {new Integer(
+						new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 								startlevel)}, SecurityException.class);
 	}
 
@@ -388,7 +388,7 @@ public class PermissionSignatureUtility {
 		return control.allowed_call(
 				"call StartLevel.setInitialBundleStartLevel(int) " + message,
 				"callStartLevel_setInitialBundleStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)});
 	}
 
@@ -397,7 +397,7 @@ public class PermissionSignatureUtility {
 		return control.not_allowed_call(
 				"call StartLevel.setInitialBundleStartLevel(int) " + message,
 				"callStartLevel_setInitialBundleStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)}, SecurityException.class);
 	}
 
@@ -407,7 +407,7 @@ public class PermissionSignatureUtility {
 				"call BundleStartLevel.setStartLevel(Bundle, int) " + message,
 				"callBundleStartLevel_setStartLevel", new Class[] {
 						Bundle.class, Integer.class}, new Object[] {bundle,
-						new Integer(startlevel)});
+						Integer.valueOf(startlevel)});
 	}
 
 	public boolean not_allowed_BundleStartLevel_setStartLevel(String message,
@@ -416,7 +416,7 @@ public class PermissionSignatureUtility {
 				"call BundleStartLevel.setStartLevel(Bundle, int) " + message,
 				"callBundleStartLevel_setStartLevel", new Class[] {
 						Bundle.class, Integer.class}, new Object[] {bundle,
-						new Integer(startlevel)}, SecurityException.class);
+						Integer.valueOf(startlevel)}, SecurityException.class);
 	}
 
 	public Object allowed_FrameworkStartLevel_setStartLevel(String message,
@@ -424,7 +424,7 @@ public class PermissionSignatureUtility {
 		return control.allowed_call(
 				"call FrameworkStartLevel.setStartLevel(int) " + message,
 				"callFrameworkStartLevel_setStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)});
 	}
 
@@ -433,7 +433,7 @@ public class PermissionSignatureUtility {
 		return control.not_allowed_call(
 				"call FrameworkStartLevel.setStartLevel(int) " + message,
 				"callFrameworkStartLevel_setStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)}, SecurityException.class);
 	}
 
@@ -443,7 +443,7 @@ public class PermissionSignatureUtility {
 				"call FrameworkStartLevel.setInitialBundleStartLevel(int) "
 						+ message,
 				"callFrameworkStartLevel_setInitialBundleStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)});
 	}
 
@@ -453,7 +453,7 @@ public class PermissionSignatureUtility {
 				"call FrameworkStartLevel.setInitialBundleStartLevel(int) "
 						+ message,
 				"callFrameworkStartLevel_setInitialBundleStartLevel",
-				new Class[] {Integer.class}, new Object[] {new Integer(
+				new Class[] {Integer.class}, new Object[] {Integer.valueOf(
 						startlevel)}, SecurityException.class);
 	}
 

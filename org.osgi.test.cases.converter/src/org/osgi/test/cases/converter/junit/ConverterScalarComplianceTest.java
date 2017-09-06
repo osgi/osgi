@@ -62,7 +62,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	{
 		Converter converter = Converters.standardConverter();
 
-		Boolean fstToBoConverted = new Boolean(true);
+		Boolean fstToBoConverted = Boolean.valueOf(true);
 		
 		boolean booleanConverted = converter.convert(fstToBoConverted).to(boolean.class);
 		assertTrue(booleanConverted);
@@ -122,7 +122,7 @@ public class ConverterScalarComplianceTest extends TestCase {
 	{
 		Converter converter = Converters.standardConverter();
 
-		Number fstToBoConverted = new Double(65);
+		Number fstToBoConverted = Double.valueOf(65);
 		
 		boolean booleanConverted = converter.convert(fstToBoConverted).to(boolean.class);
 		assertTrue(booleanConverted);

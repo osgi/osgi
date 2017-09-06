@@ -16,7 +16,7 @@ public class WireAPITestProducerImpl implements Producer {
 			}
 			WireAdminControl
 					.log("Producer.polled called for correct wire. Returning '42'");
-			return new Integer("42");
+			return Integer.valueOf("42");
 		}
 		WireAdminControl.log("Producer.polled called for incorrect wire "
 				+ wire + ". Crashing now!");

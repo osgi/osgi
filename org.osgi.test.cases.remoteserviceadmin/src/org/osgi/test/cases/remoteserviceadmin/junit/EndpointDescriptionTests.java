@@ -107,7 +107,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		Long someServiceId = new Long(12l);
+		Long someServiceId = Long.valueOf(12l);
 		props.put(ENDPOINT_SERVICE_ID, someServiceId);
 		ed = newEndpointDescription(props);
 		assertEquals("wrong id", someServiceId.longValue(), ed.getServiceId());
@@ -333,7 +333,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		Long someServiceId = new Long(12l);
+		Long someServiceId = Long.valueOf(12l);
 		props.remove(ENDPOINT_SERVICE_ID);
 		serviceProps.put(SERVICE_ID, someServiceId);
 		ed = newEndpointDescription(ref, props);
@@ -720,7 +720,7 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, "id2");
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		Long someID = new Long(12l);
+		Long someID = Long.valueOf(12l);
 		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
@@ -757,7 +757,7 @@ public class EndpointDescriptionTests extends TestCase {
 		serviceProps.put(ENDPOINT_ID, "id2");
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
-		Long someID = new Long(12l);
+		Long someID = Long.valueOf(12l);
 		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);

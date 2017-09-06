@@ -406,7 +406,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         MetadataEventSet exportStartEvents = controller.getStartEvents(0);
         // the service ranking is stored in the service properties, so validate it is what we expect to see
         Hashtable serviceProps = new Hashtable();
-        serviceProps.put("service.ranking", new Integer(3));
+        serviceProps.put("service.ranking", Integer.valueOf(3));
         // We should see both of these registered
         exportStartEvents.addValidator(new ServiceRegistrationValidator(TestServiceOne.class, "ServiceOne", null, serviceProps));
         // also validate the metadata for the exported service
@@ -2340,7 +2340,7 @@ public class TestServiceImportExport extends DefaultTestBundleControl {
         // This is the evaluated service properties that the service is registered under.
         // These are evaluated eagerly also
         Hashtable props = new Hashtable();
-        props.put("service.property.integer", new Integer(999));
+        props.put("service.property.integer", Integer.valueOf(999));
 
         // we should see a service event here indicating this was registered
         TestEvent registered = new ServiceTestEvent("REGISTERED", TestServiceOne.class, props);

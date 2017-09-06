@@ -47,7 +47,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals("The boolean data comparison is wrong!",
@@ -85,7 +85,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals(
@@ -122,7 +122,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals("The boolean data hash code is wrong!",
@@ -150,7 +150,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		// check with fields map
 		Map fields = new HashMap();
 		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(FunctionData.FIELD_TIMESTAMP, Long.valueOf(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		checkBooleanDataFields(Long.MIN_VALUE, metadata, false, data);

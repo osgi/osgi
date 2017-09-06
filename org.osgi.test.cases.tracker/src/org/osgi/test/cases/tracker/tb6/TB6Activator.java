@@ -36,8 +36,8 @@ public class TB6Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		Hashtable<String, Object> ts1Props = new Hashtable<String, Object>();
 		ts1Props.put("name", "TestService1");
-		ts1Props.put("version", new Float(1.0));
-		ts1Props.put("compatible", new Float(1.0));
+		ts1Props.put("version", Float.valueOf(1.0f));
+		ts1Props.put("compatible", Float.valueOf(1.0f));
 		ts1Props.put("description", "TestService 1");
 
 		bc.registerService(TestService1.class,

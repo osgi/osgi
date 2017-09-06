@@ -55,21 +55,21 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 	Hashtable<String,Object> getProperties() {
 		Hashtable<String,Object> props = new Hashtable<>();
 		props.put("room", "bedroom");
-		props.put("channel", new Object[] {new Integer(34), "101"});
+		props.put("channel", new Object[] {Integer.valueOf(34), "101"});
 		props.put("status", "(on\\)*");
 		List<Object> list = new ArrayList<>(10);
-		list.add(new Long(150));
+		list.add(Long.valueOf(150));
 		list.add("100");
 		props.put("max record time", list);
 		props.put("canrecord", "true(x)");
-		props.put("shortvalue", new Short((short) 1000));
-		props.put("intvalue", new Integer(100000));
-		props.put("longvalue", new Long(10000000000L));
-		props.put("bytevalue", new Byte((byte) 10));
-		props.put("floatvalue", new Float(1.01));
-		props.put("doublevalue", new Double(2.01));
-		props.put("charvalue", new Character('A'));
-		props.put("booleanvalue", new Boolean(true));
+		props.put("shortvalue", Short.valueOf((short) 1000));
+		props.put("intvalue", Integer.valueOf(100000));
+		props.put("longvalue", Long.valueOf(10000000000L));
+		props.put("bytevalue", Byte.valueOf((byte) 10));
+		props.put("floatvalue", Float.valueOf(1.01f));
+		props.put("doublevalue", Double.valueOf(2.01));
+		props.put("charvalue", Character.valueOf('A'));
+		props.put("booleanvalue", Boolean.valueOf(true));
 		props.put("weirdvalue", new Hashtable<String,Object>());
 		props.put("primintarrayvalue", new int[] {1, 2, 3});
 		props.put("primlongarrayvalue", new long[] {1, 2, 3});
@@ -92,7 +92,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		props.put("|", "c");
 		props.put("&", "c");
 		props.put("empty", "");
-		props.put("space", new Character(' '));
+		props.put("space", Character.valueOf(' '));
 		return props;
 	}
 

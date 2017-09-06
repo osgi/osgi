@@ -62,7 +62,7 @@ public class TestExceptions implements TestInterface {
 	private DmtTestControl tbc;
 	
 	//Default values, so the values are instaciated once.
-	private Boolean defaultBoolean = new Boolean(false);
+	private Boolean defaultBoolean = Boolean.valueOf(false);
 	private DmtData defaultDmtData = new DmtData(1);
 	private String defaultString = "test"; 
 	private Acl defaultAcl = new Acl("Add=*&Replace=*");

@@ -293,18 +293,18 @@ public class XAResourceImpl implements XAResource, Serializable {
     }
 
     public XAResourceImpl() {
-        _key = new Integer(_nextKey++);
+        _key = Integer.valueOf(_nextKey++);
         _resources.put(_key, new XAResourceData(_key.intValue()));
     }
 
     public XAResourceImpl(int i) {
-        if (_resources.containsKey(new Integer(i))) {
-            _key = new Integer(i);
+        if (_resources.containsKey(Integer.valueOf(i))) {
+            _key = Integer.valueOf(i);
         } else if (i < _nextKey) {
             throw new RuntimeException(i + " < " + _nextKey);
         } else {
             _nextKey = i + 1;
-            _key = new Integer(i);
+            _key = Integer.valueOf(i);
 
             _resources.put(_key, new XAResourceData(_key.intValue()));
         }
@@ -793,7 +793,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
             while (true) {
                 final XAResourceData xares = (XAResourceData) ois.readObject();
-                _resources.put(new Integer(xares.key), xares);
+                _resources.put(Integer.valueOf(xares.key), xares);
                 _nextKey = xares.key + 1;
                 resourceCount++;
             }

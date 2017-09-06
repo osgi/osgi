@@ -49,9 +49,9 @@ import org.osgi.service.cm.ManagedService;
 public interface TestingManagedService extends ManagedService {
 	
 	public static final String ATTRIBUTE_A = "ATTRIBUTE_A";
-	public static final Integer ATTRIBUTE_A_VALUE = new Integer(0);
+	public static final Integer ATTRIBUTE_A_VALUE = Integer.valueOf(0);
 	public static final String ATTRIBUTE_B = "ATTRIBUTE_B";
-	public static final Float ATTRIBUTE_B_VALUE = new Float(3.1415f);
+	public static final Float ATTRIBUTE_B_VALUE = Float.valueOf(3.1415f);
 	public static final String ATTRIBUTE_C = "ATTRIBUTE_C";
 	public static final String ATTRIBUTE_C_VALUE = "test";
 
