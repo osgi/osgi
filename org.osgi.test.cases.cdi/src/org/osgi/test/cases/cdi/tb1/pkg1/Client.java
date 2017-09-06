@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import org.osgi.service.cdi.annotations.Component;
 import org.osgi.service.cdi.annotations.ServiceScope;
 
-@Component(serviceScope = ServiceScope.BUNDLE, property = { "tb=tb1" })
+@Component(scope = ServiceScope.BUNDLE, property = { "tb=tb1" })
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;

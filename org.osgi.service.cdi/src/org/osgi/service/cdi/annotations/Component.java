@@ -51,16 +51,16 @@ public @interface Component {
 	 *
 	 * <p>
 	 * The result of this value depends on the value of
-	 * {@link Component#serviceScope() serviceScope}.
+	 * {@link Component#scope() scope}.
 	 * <ol>
-	 * <li>If {@code serviceScope} is any value besides {@link ServiceScope#NONE
+	 * <li>If {@code scope} is any value besides {@link ServiceScope#NONE
 	 * NONE} and service <em>is NOT</em> specified: the component is published using
 	 * all directly implemented interfaces. If there are no directly implemented
 	 * interfaces, the class of the Component is used.
-	 * <li>If {@code serviceScope} is any value besides {@link ServiceScope#NONE
+	 * <li>If {@code scope} is any value besides {@link ServiceScope#NONE
 	 * NONE} and service <em>IS</em> specified: the component is published using the
 	 * specified types.
-	 * <li>If {@code serviceScope} is {@link ServiceScope#NONE}: the value is
+	 * <li>If {@code scope} is {@link ServiceScope#NONE}: the value is
 	 * ignored and the component is not published as a service.
 	 * <ol>
 	 */
@@ -76,7 +76,7 @@ public @interface Component {
 	 * CDI scope {@link Dependent}. The use of any other CDI scope will result in a
 	 * definition error.
 	 */
-	ServiceScope serviceScope() default ServiceScope.DEFAULT;
+	ServiceScope scope() default ServiceScope.DEFAULT;
 
 	/**
 	 * Properties for this Component.
