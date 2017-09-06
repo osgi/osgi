@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2017). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
