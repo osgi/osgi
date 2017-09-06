@@ -204,18 +204,15 @@ public @interface Component {
 
 	/**
 	 * The configuration PIDs for the configuration of this Component.
-	 * 
 	 * <p>
 	 * Each value specifies a configuration PID for this Component.
-	 * 
 	 * <p>
 	 * If no value is specified, the name of this Component is used as the
 	 * configuration PID of this Component.
-	 * 
 	 * <p>
-	 * A special string (<code>{@value #NAME}</code>) can be used to specify the
-	 * name of the component as a configuration PID. The {@code NAME} constant
-	 * holds this special string. For example:
+	 * A special string (<code>"$"</code>) can be used to specify the name of
+	 * the component as a configuration PID. The {@link #NAME} constant holds
+	 * this special string. For example:
 	 * 
 	 * <pre>
 	 * &#64;Component(configurationPid={"com.acme.system", Component.NAME})

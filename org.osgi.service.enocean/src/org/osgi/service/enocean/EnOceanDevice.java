@@ -161,12 +161,12 @@ public interface EnOceanDevice {
     public int[] getLearnedDevices();
 
     /**
-     * Retrieves the currently available RPCs to this device; those are stored
-     * using their manfufacturerId:commandId identifiers.
-     * 
-     * @return A list of the available RPCs, in a Map< Integer, Integer[] >
-     *         form.
-     */
+	 * Retrieves the currently available RPCs to this device; those are stored
+	 * using their manfufacturerId:commandId identifiers.
+	 * 
+	 * @return A list of the available RPCs, in a
+	 *         {@code Map<Integer, Integer[]>} form.
+	 */
     public Map<Integer, Integer[]> getRPCs();
 
     /**

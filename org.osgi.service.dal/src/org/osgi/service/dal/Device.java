@@ -93,11 +93,11 @@ public interface Device {
 	 * the reason for the current device status. It's an optional property. The
 	 * value type is {@code java.lang.Integer}. There are two value categories:
 	 * <ul>
-	 * <li>positive values i.e. > 0 - those values contain details related to
-	 * the current status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
+	 * <li>positive values - those values contain details related to the current
+	 * status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
 	 * {@link #STATUS_DETAIL_INITIALIZING}.</li>
-	 * <li>negative values i.e. < 0 - those values contain errors related to the
-	 * current status. Examples: {@link #STATUS_DETAIL_CONFIGURATION_UNAPPLIED},
+	 * <li>negative values - those values contain errors related to the current
+	 * status. Examples: {@link #STATUS_DETAIL_CONFIGURATION_UNAPPLIED},
 	 * {@link #STATUS_DETAIL_BROKEN} and
 	 * {@link #STATUS_DETAIL_COMMUNICATION_ERROR}.</li>
 	 * </ul>

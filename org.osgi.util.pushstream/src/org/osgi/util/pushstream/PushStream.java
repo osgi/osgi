@@ -189,8 +189,8 @@ public interface PushStream<T> extends AutoCloseable {
 	 * @param delay Nr of ms/thread that is queued back pressure
 	 * @param e an executor to use for the background threads.
 	 * @return Builder style (can be a new or the same object)
-	 * @throws IllegalArgumentException if the number of threads is < 1 or the
-	 *             delay is < 0
+	 * @throws IllegalArgumentException if the number of threads is &lt; 1 or
+	 *             the delay is &lt; 0
 	 * @throws NullPointerException if the Executor is null
 	 */
 	PushStream<T> fork(int n, int delay, Executor e)
