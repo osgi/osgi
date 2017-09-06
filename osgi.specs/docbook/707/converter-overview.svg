@@ -1,97 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 526.4 109.1" style="enable-background:new 0 0 526.4 109.1;" xml:space="preserve">
-<style type="text/css">
-	.st0{font-family:'ProductusBook';}
-	.st1{font-size:7.98px;}
-	.st2{stroke:#000000;stroke-miterlimit:10;}
-	.st3{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
-	.st4{font-family:'ProductusSemibold';}
-	.st5{fill:#202020;}
-	.st6{fill:none;stroke:#000000;stroke-width:0.75;stroke-miterlimit:10;}
-	.st7{fill:none;}
-</style>
-<text transform="matrix(1 0 0 1 79.2402 14.7002)" class="st0 st1">obtain standard</text>
-<text transform="matrix(1 0 0 1 79.2402 24.3001)" class="st0 st1">converter</text>
-<text transform="matrix(1 0 0 1 344.8279 24.3001)" class="st0 st1">1..n </text>
+	 width="613px" height="127.841px" viewBox="-0.5 332.08 613 127.841" enable-background="new -0.5 332.08 613 127.841"
+	 xml:space="preserve">
+<text transform="matrix(1 0 0 1 92.126 349.6699)" font-family="'ProductusBook'" font-size="9.2777">obtain standard</text>
+<text transform="matrix(1 0 0 1 92.126 360.8311)" font-family="'ProductusBook'" font-size="9.2777">converter</text>
+<text transform="matrix(1 0 0 1 400.9014 360.8311)" font-family="'ProductusBook'" font-size="9.2777">1..n </text>
 <g>
-	<rect x="275.5" y="1.9" class="st2" width="65.9" height="29.4"/>
-	<rect x="273.3" class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 276.4663 8.7656)" class="st0 st1">&lt;&lt;interface&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 276.4663 17.5858)" class="st4 st1">Converter</text>
-	<text transform="matrix(1 0 0 1 276.4663 27.1619)" class="st4 st1">Builder</text>
+	<rect x="320.3" y="334.789" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<rect x="317.742" y="332.58" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 321.4238 342.7705)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;interface&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 321.4238 353.0244)" font-family="'ProductusSemibold'" font-size="9.2777">Converter</text>
+	<text transform="matrix(1 0 0 1 321.4238 364.1582)" font-family="'ProductusSemibold'" font-size="9.2777">Builder</text>
 </g>
 <g>
-	<rect x="138.8" y="1.9" class="st2" width="65.9" height="29.4"/>
-	<rect x="136.7" class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 139.8323 8.785)" class="st0 st1">&lt;&lt;interface&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 139.8323 17.6053)" class="st4 st1">Converter</text>
+	<rect x="161.371" y="334.789" stroke="#000000" stroke-miterlimit="10" width="76.617" height="34.181"/>
+	<rect x="158.929" y="332.58" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 162.5713 342.793)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;interface&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 162.5713 353.0479)" font-family="'ProductusSemibold'" font-size="9.2777">Converter</text>
 </g>
 <g>
-	<rect x="412.1" y="1.9" class="st2" width="65.9" height="29.4"/>
-	<rect x="410" class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 413.1498 8.7461)" class="st0 st1">&lt;&lt;interface&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 413.1498 17.5664)" class="st4 st1">TargetRule</text>
+	<rect x="479.113" y="334.789" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<rect x="476.672" y="332.58" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 480.334 342.748)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;interface&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 480.334 353.002)" font-family="'ProductusSemibold'" font-size="9.2777">TargetRule</text>
 </g>
-<text transform="matrix(1 0 0 1 211.753 14.7004)" class="st0 st1">obtain converter</text>
-<text transform="matrix(1 0 0 1 211.753 24.3004)" class="st0 st1">builder</text>
+<text transform="matrix(1 0 0 1 246.1875 349.6699)" font-family="'ProductusBook'" font-size="9.2777">obtain converter</text>
+<text transform="matrix(1 0 0 1 246.1875 360.8311)" font-family="'ProductusBook'" font-size="9.2777">builder</text>
 <g>
-	<rect x="2.1" y="1.9" class="st2" width="65.9" height="29.4"/>
-	<rect class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 3.1493 8.785)" class="st0 st1">&lt;&lt;class&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 3.1493 17.6053)" class="st4 st1">Converters</text>
+	<rect x="2.441" y="334.789" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<rect y="332.58" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 3.6611 342.793)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;class&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 3.6611 353.0479)" font-family="'ProductusSemibold'" font-size="9.2777">Converters</text>
 </g>
 <g>
 	<g>
 		<g>
-			<polygon class="st5" points="68,17.2 133.8,17.2 131.3,19.8 133,19.8 136.2,16.6 133,13.4 131.3,13.4 133.8,16 68,16 			"/>
+			<polygon fill="#202020" points="79.058,352.576 155.558,352.576 152.651,355.599 154.627,355.599 158.348,351.879 
+				154.627,348.158 152.651,348.158 155.558,351.181 79.058,351.181 			"/>
 		</g>
 	</g>
 </g>
 <g>
 	<g>
 		<g>
-			<polygon class="st5" points="204.7,17.2 270.9,17.2 268.3,19.8 270.1,19.8 273.3,16.6 270.1,13.4 268.3,13.4 270.9,16 204.7,16 
-							"/>
+			<polygon fill="#202020" points="237.987,352.576 314.952,352.576 311.93,355.599 314.022,355.599 317.742,351.879 
+				314.022,348.158 311.93,348.158 314.952,351.181 237.987,351.181 			"/>
 		</g>
 	</g>
 </g>
-<line class="st6" x1="341.4" y1="16.6" x2="410" y2="16.6"/>
-<polyline class="st3" points="306.3,31.3 306.3,61.4 169.6,61.4 169.6,31.3 "/>
+<line fill="none" stroke="#000000" stroke-width="0.75" stroke-miterlimit="10" x1="396.916" y1="351.879" x2="476.672" y2="351.879"/>
+<polyline fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" points="356.108,368.969 356.108,403.964 197.179,403.964 
+	197.179,368.969 "/>
 <g>
 	<g>
 		<g>
-			<polygon class="st5" points="170.3,61.4 170.3,33.7 172.8,36.3 172.8,34.5 169.6,31.3 166.5,34.5 166.5,36.3 169,33.7 169,61.4 
-							"/>
+			<polygon fill="#202020" points="197.993,403.964 197.993,371.759 200.9,374.782 200.9,372.689 197.179,368.969 193.575,372.689 
+				193.575,374.782 196.482,371.759 196.482,403.964 			"/>
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 219.3743 59.0653)" class="st0 st1">create custom</text>
-<text transform="matrix(1 0 0 1 219.3743 68.6653)" class="st0 st1">converter</text>
+<text transform="matrix(1 0 0 1 255.0479 401.25)" font-family="'ProductusBook'" font-size="9.2777">create custom</text>
+<text transform="matrix(1 0 0 1 255.0479 412.4111)" font-family="'ProductusBook'" font-size="9.2777">converter</text>
 <g>
-	<rect x="365.9" y="79.7" class="st2" width="65.9" height="29.4"/>
-	<rect x="363.8" y="77.8" class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 366.9704 86.5789)" class="st0 st1">&lt;&lt;abstract class&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 366.9704 95.3992)" class="st4 st1">Rule</text>
+	<rect x="425.4" y="425.24" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<rect x="422.959" y="423.031" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 426.6445 433.2373)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;abstract class&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 426.6445 443.4922)" font-family="'ProductusSemibold'" font-size="9.2777">Rule</text>
 </g>
 <g>
-	<rect x="460.5" y="79.7" class="st2" width="65.9" height="29.4"/>
-	<rect x="458.4" y="77.8" class="st3" width="65.9" height="29.4"/>
-	<text transform="matrix(1 0 0 1 461.5261 86.5789)" class="st0 st1">&lt;&lt;class&gt;&gt;</text>
-	<text transform="matrix(1 0 0 1 461.5261 95.3992)" class="st4 st1">TypeRule</text>
+	<rect x="535.384" y="425.24" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<rect x="532.942" y="423.031" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="76.616" height="34.181"/>
+	<text transform="matrix(1 0 0 1 536.5762 433.2373)" font-family="'ProductusBook'" font-size="9.2777">&lt;&lt;class&gt;&gt;</text>
+	<text transform="matrix(1 0 0 1 536.5762 443.4922)" font-family="'ProductusSemibold'" font-size="9.2777">TypeRule</text>
 </g>
 <g>
 	<g>
 		<g>
-			<rect x="439.4" y="43.4" class="st7" width="11.5" height="21.5"/>
+			<rect x="510.853" y="383.037" fill="none" width="13.37" height="24.996"/>
 			<g>
-				<polygon class="st5" points="450.8,64.8 445.1,43.4 439.4,64.8 				"/>
+				<polygon fill="#202020" points="524.106,407.917 517.479,383.037 510.853,407.917 				"/>
 			</g>
 		</g>
 	</g>
 </g>
-<line class="st6" x1="445.1" y1="31.3" x2="445.1" y2="43.8"/>
-<polyline class="st6" points="396.8,77.8 396.8,64.4 491.3,64.4 491.3,77.8 "/>
+<line fill="none" stroke="#000000" stroke-width="0.75" stroke-miterlimit="10" x1="517.479" y1="368.969" x2="517.479" y2="383.502"/>
+<polyline fill="none" stroke="#000000" stroke-width="0.75" stroke-miterlimit="10" points="461.325,423.031 461.325,407.452 
+	571.192,407.452 571.192,423.031 "/>
 </svg>
