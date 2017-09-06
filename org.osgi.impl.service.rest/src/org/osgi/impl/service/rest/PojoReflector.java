@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,6 +36,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
+
 import org.json.JSONObject;
 import org.osgi.impl.service.rest.pojos.BundleExceptionPojo;
 import org.w3c.dom.Document;
@@ -129,7 +131,7 @@ public class PojoReflector<B> {
 
 	public B beanFromJSONObject(final JSONObject obj) throws Exception {
 		final String[] names = JSONObject.getNames(obj);
-		final B instance = clazz.newInstance();
+		final B instance = clazz.getConstructor().newInstance();
 		for (int i = 0; i < names.length; i++) {
 			final String key = names[i];
 			final Method setter = setterMethodTable.get(key);
@@ -148,7 +150,7 @@ public class PojoReflector<B> {
 	}
 
 	public B beanFromXml(final Document doc) throws Exception {
-		final B instance = clazz.newInstance();
+		final B instance = clazz.getConstructor().newInstance();
 		final Node rootNode = doc.getFirstChild();
 		final NodeList elems = rootNode.getChildNodes();
 		for (int i = 0; i < elems.getLength(); i++) {

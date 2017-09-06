@@ -103,7 +103,10 @@ public class TestControl extends DefaultTestBundleControl {
 		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION);
 		getContext().addBundleListener(resultsListener);
 		try {
-			tblazy1.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy1.LazySimple").newInstance();
+			tblazy1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy1.LazySimple")
+					.getConstructor()
+					.newInstance();
 	
 			// The bundle must have been activated now
 			Object[] expectedEvents = new Object[1];
@@ -143,14 +146,20 @@ public class TestControl extends DefaultTestBundleControl {
 		getContext().addBundleListener(resultsListener);
 		try {
 			// First load a class that depends on a class included in an excludes package
-			tblazy1.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyExclude1").newInstance();
+			tblazy1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyExclude1")
+					.getConstructor()
+					.newInstance();
 			// this should result in no STARTED event
 			Object[] expectedEvents = new Object[0];
 			Object[] actualEvents = resultsListener.getResults(0);
 			compareEvents(expectedEvents, actualEvents);
 
 			// Now load a class that was not included in an excludes package
-			tblazy1.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyExclude2").newInstance();
+			tblazy1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyExclude2")
+					.getConstructor()
+					.newInstance();
 			// this should result in a STARTED event for tblazy3 bundle
 			expectedEvents = new Object[1];
 			expectedEvents[0] = new BundleEvent(BundleEvent.STARTED, tblazy3);
@@ -187,14 +196,20 @@ public class TestControl extends DefaultTestBundleControl {
 		getContext().addBundleListener(resultsListener);
 		try {
 			// first load a class that depends on a class that was not included in an includes package
-			tblazy1.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyInclude1").newInstance();
+			tblazy1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyInclude1")
+					.getConstructor()
+					.newInstance();
 			// this should result in no STARTED event
 			Object[] expectedEvents = new Object[0];
 			Object[] actualEvents = resultsListener.getResults(0);
 			compareEvents(expectedEvents, actualEvents);
 
 			// now load a class that depends on a class that is included in an includes package
-			tblazy1.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyInclude2").newInstance();
+			tblazy1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy1.LazyInclude2")
+					.getConstructor()
+					.newInstance();
 			// this should result in a STARTED event
 			expectedEvents = new Object[1];
 			expectedEvents[0] = new BundleEvent(BundleEvent.STARTED, tblazy4);
@@ -699,7 +714,10 @@ public class TestControl extends DefaultTestBundleControl {
 		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED);
 		getContext().addBundleListener(resultsListener);
 		try {
-			tbchain1.loadClass("org.osgi.test.cases.framework.activationpolicy.tbchain1.SingleChainTest").newInstance();
+			tbchain1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tbchain1.SingleChainTest")
+					.getConstructor()
+					.newInstance();
 	
 			Object[] expectedEvents = new Object[3];
 			expectedEvents[0] = new BundleEvent(BundleEvent.STARTED, tbchain3);
@@ -742,7 +760,10 @@ public class TestControl extends DefaultTestBundleControl {
 		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED);
 		getContext().addBundleListener(resultsListener);
 		try {
-			tbchain1.loadClass("org.osgi.test.cases.framework.activationpolicy.tbchain1.TestMultiChain").newInstance();
+			tbchain1.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tbchain1.TestMultiChain")
+					.getConstructor()
+					.newInstance();
 
 			Object[] expectedEvents = new Object[5];
 			expectedEvents[0] = new BundleEvent(BundleEvent.STARTED, tbchain5);
@@ -778,7 +799,10 @@ public class TestControl extends DefaultTestBundleControl {
 		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED);
 		getContext().addBundleListener(resultsListener);
 		try {
-			tblazy5.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy5.CircularityErrorTest").newInstance();
+			tblazy5.loadClass(
+					"org.osgi.test.cases.framework.activationpolicy.tblazy5.CircularityErrorTest")
+					.getConstructor()
+					.newInstance();
 			// The order of activation is reversed here because tblazy6's activator loads a class in tblazy5 that triggers it to be activated before
 			// tblazy6 is started, therefore the STARTED event should be fired for tblazy5 first.
 			// It is questionable whether this is required by the specification.  It may be better just to make sure both bundles are in the ACTIVE state 

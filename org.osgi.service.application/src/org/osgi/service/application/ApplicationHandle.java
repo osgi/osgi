@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedExceptionAction;
+
 import org.osgi.framework.Constants;
 
 /**
@@ -283,7 +284,8 @@ public abstract class ApplicationHandle {
 		Delegate() throws Exception {
 			target = AccessController.doPrivileged(new PrivilegedExceptionAction() {
 				public Object run() throws Exception {
-					return implementation.newInstance();
+							return implementation.getConstructor()
+									.newInstance();
 				}
 			});
 		}

@@ -34,7 +34,7 @@ public class ContextSharerImpl implements ContextSharer, BundleActivator {
 	}
 
 	public Object createObject(String clazz) throws Exception {
-		return Class.forName(clazz).newInstance();
+		return Class.forName(clazz).getConstructor().newInstance();
 	}
 
 	public void invoke(Object o, Method m) throws Throwable {

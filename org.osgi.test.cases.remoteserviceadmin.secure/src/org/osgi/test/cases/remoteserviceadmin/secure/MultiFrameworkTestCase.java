@@ -262,7 +262,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	private FrameworkFactory getFrameworkFactory() {
 		try {
 			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.newInstance();
+			return (FrameworkFactory) clazz.getConstructor().newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}

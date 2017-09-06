@@ -44,7 +44,10 @@ public class TestDynamicImport {
 			//If the class name is the SymbolicNameVersion class then we want the object's
 			//toString, otherwise the Class's toString is fine, and allows us to load interfaces
 			if("org.osgi.test.cases.framework.weaving.tb2.SymbolicNameVersion".equals(name))
-				return Class.forName(name).newInstance().toString();
+				return Class.forName(name)
+						.getConstructor()
+						.newInstance()
+						.toString();
 			else
 				return Class.forName(name).toString();
 		} catch (Throwable t) {

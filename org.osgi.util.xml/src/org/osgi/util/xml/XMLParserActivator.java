@@ -26,9 +26,11 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -421,7 +423,10 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory<Objec
 	 */
 	private Object getFactory(String parserFactoryClassName) throws FactoryConfigurationError {
 		try {
-			return bundleContext.getBundle().loadClass(parserFactoryClassName).newInstance();
+			return bundleContext.getBundle()
+					.loadClass(parserFactoryClassName)
+					.getConstructor()
+					.newInstance();
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {

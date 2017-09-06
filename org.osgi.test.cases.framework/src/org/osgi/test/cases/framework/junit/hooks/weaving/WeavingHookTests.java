@@ -308,7 +308,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		try {
 			reg = new ConfigurableWeavingHook().register(getContext(), 0);
 			Class<?> clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", "WOVEN", clazz.newInstance().toString());
+			assertEquals("Weaving was unsuccessful", "WOVEN",
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg != null)
 				reg.unregister();
@@ -328,7 +329,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		try {
 			reg = hook.register(getContext(), 0);
 			Class<?>clazz = weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
-			clazz.newInstance().toString();
+			clazz.getConstructor().newInstance().toString();
 			fail("Should fail to load the Bundle class");
 		} catch (RuntimeException cnfe) {
 			assertTrue("Wrong exception: " + cnfe.getCause().getClass(),
@@ -354,7 +355,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			reg = hook.register(getContext(), 0);
 			Class<?>clazz = weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
 			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.Bundle",
-					clazz.newInstance().toString());
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg != null)
 				reg.unregister();
@@ -385,7 +386,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			reg2 = hook2.register(getContext(), 0);
 			reg3 = hook3.register(getContext(), 0);
 			Class<?>clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", "Chain Complete", clazz.newInstance().toString());
+			assertEquals("Weaving was unsuccessful", "Chain Complete",
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -422,7 +424,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			reg2 = hook2.register(getContext(), 0);
 			reg3 = hook3.register(getContext(), 1);
 			Class<?>clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", "Chain Complete", clazz.newInstance().toString());
+			assertEquals("Weaving was unsuccessful", "Chain Complete",
+					clazz.getConstructor().newInstance().toString());
 
 			// We expect the order to change if we update our ranking
 			Hashtable<String, Object> table = new Hashtable<String, Object>();
@@ -439,7 +442,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 
 			clazz = weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
 			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.hooks.weaving.WovenClass",
-					clazz.newInstance().toString());
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -550,7 +553,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			assertFalse("Hook 2 should not be called", hook2.isCalled());
 			assertTrue("Hook 3 should be called", hook3.isCalled());
 			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.wiring.BundleWiring",
-					clazz.newInstance().toString());
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -636,7 +639,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			assertTrue("Hook 2 should not be called", hook2.isCalled());
 			assertTrue("Hook 3 should be called", hook3.isCalled());
 			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.wiring.BundleWiring",
-					clazz.newInstance().toString());
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -707,7 +710,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			assertTrue("Hook 2 should not be called", hook2.isCalled());
 			assertTrue("Hook 3 should be called", hook3.isCalled());
 			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.wiring.BundleRevision",
-					clazz.newInstance().toString());
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -734,7 +737,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		try {
 			reg = hook.register(getContext(), 0);
 			Class<?>clazz = weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", result, clazz.newInstance().toString());
+			assertEquals("Weaving was unsuccessful", result,
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg != null)
 				reg.unregister();
@@ -807,7 +811,9 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		try {
 			reg = hook.register(getContext(), 0);
 			Class<?>clazz = weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", TEST_IMPORT_SYM_NAME + "_1.1.0", clazz.newInstance().toString());
+			assertEquals("Weaving was unsuccessful",
+					TEST_IMPORT_SYM_NAME + "_1.1.0",
+					clazz.getConstructor().newInstance().toString());
 		} finally {
 			if (reg != null)
 				reg.unregister();

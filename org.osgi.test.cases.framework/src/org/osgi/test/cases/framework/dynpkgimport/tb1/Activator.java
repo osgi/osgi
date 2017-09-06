@@ -51,6 +51,7 @@ public class Activator implements BundleActivator, TestService {
 		@SuppressWarnings("unused")
 		Object o = Class
 				.forName("org.osgi.test.cases.framework.dynpkgimport.tlx.TestLib")
+				.getConstructor()
 				.newInstance();
 	}
 }

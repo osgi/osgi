@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,7 +104,7 @@ public final class DTOReflector {
 
 	private static <T extends DTO> T getDTOfromJson(final Class<T> clazz, final JSONObject data, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
-		final T dto = clazz.newInstance();
+		final T dto = clazz.getConstructor().newInstance();
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
 				if (data.has("bundle")) {
@@ -126,7 +127,7 @@ public final class DTOReflector {
 
 	private static <T extends DTO> T getDTOfromXml(final Class<T> clazz, final Element elem, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
-		final T dto = clazz.newInstance();
+		final T dto = clazz.getConstructor().newInstance();
 
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {

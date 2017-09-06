@@ -98,7 +98,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
         assertNotNull("Framework MBean is not registered", objectName);
 
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+		FrameworkMBean mbean = MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, objectName, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -128,7 +128,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
         assertNotNull("Framework MBean is not registered", objectName);
 
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+		FrameworkMBean mbean = MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, objectName, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -168,7 +168,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
         assertNotNull("Framework MBean is not registered", objectName);
 
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+		FrameworkMBean mbean = MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, objectName, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -208,7 +208,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		ObjectName objectName = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
         assertNotNull("Framework MBean is not registered", objectName);
 
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+		FrameworkMBean mbean = MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, objectName, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -242,7 +242,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
         ObjectName objectName2 = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
 		assertNotNull("Framework MBean is not registered", objectName2);
 
-		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
+		mbean = MBeanServerInvocationHandler.newProxyInstance(
 				mBeanServer, objectName2, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -276,7 +276,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
         ObjectName objectName3 = waitForRegistering(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME));
 		assertNotNull("Framework MBean is not registered", objectName3);
 
-		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
+		mbean = MBeanServerInvocationHandler.newProxyInstance(
 				mBeanServer, objectName3, FrameworkMBean.class, false);
 
 		context.ungetService(reference);
@@ -343,7 +343,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private FrameworkFactory getFrameworkFactory() {
 		try {
 			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.newInstance();
+			return (FrameworkFactory) clazz.getConstructor().newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}

@@ -138,7 +138,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 				@SuppressWarnings("unchecked")
 				Class<FrameworkFactory> clazz = (Class<FrameworkFactory>) frameworkClassLoader
 						.loadClass(frameworkFactoryClassName);
-				frameworkFactory = clazz.newInstance();
+				frameworkFactory = clazz.getConstructor().newInstance();
 			} catch (Exception e) {
 				fail("Failed to get the framework constructor", e);
 			}

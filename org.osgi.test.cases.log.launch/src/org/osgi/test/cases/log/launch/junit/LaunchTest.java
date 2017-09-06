@@ -233,7 +233,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	private FrameworkFactory getFrameworkFactory() {
 		try {
 			Class<FrameworkFactory> clazz = loadFrameworkFactoryClass(frameworkFactoryClassName);
-			return clazz.newInstance();
+			return clazz.getConstructor().newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}

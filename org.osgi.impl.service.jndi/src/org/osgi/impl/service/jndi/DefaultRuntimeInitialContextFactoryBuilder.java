@@ -51,7 +51,8 @@ class DefaultRuntimeInitialContextFactoryBuilder implements
 			try {
 				Class clazz = 
 					getClass().getClassLoader().loadClass(initialContextFactoryName);
-				return (InitialContextFactory) clazz.newInstance();
+				return (InitialContextFactory) clazz.getConstructor()
+						.newInstance();
 			}
 			catch (Exception e) {
 				logger.log(Level.FINEST,

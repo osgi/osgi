@@ -22,6 +22,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedExceptionAction;
 import java.util.Map;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 
@@ -551,7 +552,8 @@ public abstract class ApplicationDescriptor {
 		Delegate() throws Exception {
 			target = AccessController.doPrivileged(new PrivilegedExceptionAction() {
 				public Object run() throws Exception {
-					return implementation.newInstance();
+							return implementation.getConstructor()
+									.newInstance();
 				}
 			});
 		}

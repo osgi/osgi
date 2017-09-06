@@ -163,7 +163,7 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			Class<?> classObj = tb7f
 					.loadClass("org.osgi.test.cases.framework.secure.fragments.tb7f.TestClass");
-			Object obj = classObj.newInstance();
+			Object obj = classObj.getConstructor().newInstance();
 			URL resourceURL = tb7g.getResource("/resources/resource.txt");
 			classObj.getMethod("run", new Class[] {Bundle.class, URL.class})
 					.invoke(obj, new Object[] {tb7g, resourceURL});
