@@ -1,11 +1,6 @@
--include = ${build}/eclipse/jdt.bnd
+-include = ${build}/eclipse/jdt.bnd, layout.bnd
 
 -nobundles = true
 
 -dependson = \
-    osgi.annotation, \
-    osgi.promise, \
-    osgi.core, \
-    osgi.cmpn, \
-    osgi.enterprise, \
-    osgi.residential
+    ${osgi.companion.jars}
