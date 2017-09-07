@@ -25,7 +25,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
     ${osgi.annotation.specs} 
 
 -buildpath = \
-    ${replace;${osgi.annotation.specs};.+;$0\\;version=project}
+    ${replace;${osgi.annotation.specs};$;\\;version=project}
 
 -include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Annotation

@@ -16,7 +16,7 @@ companion.code = true
 
 Import-Package					: *; resolution:=optional
 
-Export-Package 					: ${replace;${osgi.cmpn.packages};.+;$0\\;-split-package:=first}
+Export-Package 					: ${replace;${osgi.cmpn.packages};$;\\;-split-package:=first}
 -fixupmessages.export: Unused Export-Package instructions
 
 -includeresource 				: ${osgi.cmpn.resources}
@@ -28,7 +28,7 @@ Require-Capability: osgi.unresolvable; filter:="(&(must.not.resolve=*)(!(must.no
 	${osgi.cmpn.specs} 
 
 -buildpath 					= \
-	${replace;${osgi.cmpn.specs};.+;$0\\;version=project}, \
+	${replace;${osgi.cmpn.specs};$;\\;version=project}, \
     osgi.annotation;version=latest, \
     osgi.core;version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \

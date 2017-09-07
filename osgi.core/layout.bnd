@@ -9,6 +9,6 @@ osgi.core.specs = \
  org.osgi.service.url, \
  org.osgi.util.tracker
 
-osgi.core.packages = ${replace;${osgi.core.specs};^.*$;$0.*}
+osgi.core.packages = ${replace;${osgi.core.specs};$;.*}
 
 osgi.core.resources = {${project.workspace}/osgi.companion/legal/jar}

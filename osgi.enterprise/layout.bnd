@@ -38,7 +38,7 @@ osgi.enterprise.specs = \
      org.osgi.util.pushstream, \
      org.osgi.util.xml
 
-osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};^.*$;$0.*}
+osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};$;.*}
 
 osgi.enterprise.resources = {${project.workspace}/osgi.companion/legal/jar}, \
                         xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
