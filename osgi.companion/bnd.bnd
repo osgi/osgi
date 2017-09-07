@@ -3,4 +3,5 @@
 -nobundles = true
 
 -dependson = \
-    ${osgi.companion.jars}
+    ${osgi.companion.jars},\
+    org.osgi.service.cdi
