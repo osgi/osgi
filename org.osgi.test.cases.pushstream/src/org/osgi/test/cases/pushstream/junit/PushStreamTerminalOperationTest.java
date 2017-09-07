@@ -49,6 +49,35 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 	/**
 	 * 706.3.1.3 : Terminal Operations
 	 * <p/>
+	 * forEach register a function to be called back with the data from each
+	 * event in the stream
+	 * 
+	 * @throws Exception
+	 */
+	public void testTerminalOperationForEachException() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		RuntimeException re = new RuntimeException("bang");
+
+		Promise<Void> p = ps.forEach(i -> {
+			throw re;
+		});
+
+		gen.getExecutionThread().join();
+
+		int timeout = 5100;
+		while (!p.isDone() && (timeout -= 100) > 0)
+			Thread.sleep(100);
+
+		assertTrue(p.isDone());
+		assertSame(re, p.getFailure());
+	}
+
+	/**
+	 * 706.3.1.3 : Terminal Operations
+	 * <p/>
 	 * forEachEvent registers a PushEventConsumer to be called with each event
 	 * in the stream. If negative back pressure is returned then the stream will
 	 * be closed
@@ -79,6 +108,57 @@ public class PushStreamTerminalOperationTest extends PushStreamComplianceTest {
 		assertTrue(gen.fixedBackPressure());
 		// what becomes the returned back pressure ?
 		// assertEquals(5, status.bp);
+	}
+
+	/**
+	 * 706.3.1.3 : Terminal Operations
+	 * <p/>
+	 * forEachEvent registers a PushEventConsumer to be called with each event
+	 * in the stream. If negative back pressure is returned then the stream will
+	 * be closed
+	 */
+	public void testTerminalOperationForEachEventException() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		RuntimeException re = new RuntimeException("bang");
+
+		Promise<Long> p = ps.forEachEvent(i -> {
+			throw re;
+		});
+
+		gen.getExecutionThread().join();
+
+		int timeout = 5100;
+		while (!p.isDone() && (timeout -= 100) > 0)
+			Thread.sleep(100);
+
+		assertTrue(p.isDone());
+		assertSame(re, p.getFailure());
+	}
+
+	public void testTerminalOperationForEachEventException2() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().createStream(gen);
+
+		RuntimeException re = new RuntimeException("bang");
+
+		Promise<Long> p = ps.forEachEvent(i -> {
+			if (i.isTerminal())
+				throw re;
+			return 0;
+		});
+
+		gen.getExecutionThread().join();
+
+		int timeout = 5100;
+		while (!p.isDone() && (timeout -= 100) > 0)
+			Thread.sleep(100);
+
+		assertTrue(p.isDone());
+		assertSame(re, p.getFailure());
 	}
 
 	/**

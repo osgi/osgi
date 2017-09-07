@@ -1268,10 +1268,10 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 							d.fail(event.getFailure());
 							break;
 					}
-					close(event.nodata());
+				close(event.nodata());
 					return ABORT;
 				} catch (Exception e) {
-					d.fail(e);
+				close(PushEvent.error(e));
 					return ABORT;
 				}
 			});
@@ -1542,15 +1542,17 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 					case CLOSE:
 						try {
 							action.accept(event);
-						} finally {
 							d.resolve(Long.valueOf(la.sum()));
+						} catch (Exception e) {
+							d.fail(e);
 						}
 						break;
 					case ERROR:
 						try {
 							action.accept(event);
-						} finally {
 							d.fail(event.getFailure());
+						} catch (Exception e) {
+							d.fail(e);
 						}
 						break;
 				}
