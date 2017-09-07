@@ -34,7 +34,8 @@ public interface SimplePushEventSource<T>
 	 * any more events published by it. Calling this method sends a close event
 	 * to all connected consumers. After calling this method any
 	 * {@link PushEventConsumer} that tries to {@link #open(PushEventConsumer)}
-	 * this source will immediately receive a close event.
+	 * this source will immediately receive a close event, and will not see any
+	 * remaining buffered events.
 	 */
 	@Override
 	void close();
@@ -53,7 +54,11 @@ public interface SimplePushEventSource<T>
 
 	/**
 	 * Close this source for now, but potentially reopen it later. Calling this
-	 * method asynchronously sends a close event to all connected consumers.
+	 * method asynchronously sends a close event to all connected consumers and
+	 * then disconnects them. Any events previously queued by the
+	 * {@link #publish(Object)} method will be delivered before this close
+	 * event.
+	 * <p>
 	 * After calling this method any {@link PushEventConsumer} that wishes may
 	 * {@link #open(PushEventConsumer)} this source, and will receive subsequent
 	 * events.
@@ -62,7 +67,11 @@ public interface SimplePushEventSource<T>
 
 	/**
 	 * Close this source for now, but potentially reopen it later. Calling this
-	 * method asynchronously sends an error event to all connected consumers.
+	 * method asynchronously sends an error event to all connected consumers and
+	 * then disconnects them. Any events previously queued by the
+	 * {@link #publish(Object)} method will be delivered before this error
+	 * event.
+	 * <p>
 	 * After calling this method any {@link PushEventConsumer} that wishes may
 	 * {@link #open(PushEventConsumer)} this source, and will receive subsequent
 	 * events.

@@ -93,7 +93,7 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 						return;
 					}
 				}
-
+				// Only release this now the queue is empty
 				semaphore.release();
 			} catch (Exception e) {
 				close(PushEvent.error(e));
