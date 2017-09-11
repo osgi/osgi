@@ -345,9 +345,10 @@ public String interrogateSession(@PathParam("name") String name,
   <section xml:id="service.jaxrs.common.properties">
     <title>Common Whiteboard Properties</title>
 
-    <para>JAX-RS Whiteboard resource and extension services
+    <para>JAX-RS Whiteboard services
     support common service registration properties to associate them with a
-    JAX-RS Whiteboard.</para>
+    JAX-RS Whiteboard. These properties apply to whiteboard resources,
+    extensions and applications except where explicitly stated otherwise.</para>
 
     <table xml:id="service.jaxrs.common.properties.table">
       <title>Common properties</title>
