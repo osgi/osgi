@@ -657,7 +657,7 @@
         of the pipeline. If the stream finishes with an error then the promise will
         fail with that error.</para> 
         
-        <para>Terminal operations such as <xref linkend="org.osgi.util.pushstream.PushStream.forEach-PushEventConsumer-" 
+        <para>Terminal operations such as <xref linkend="org.osgi.util.pushstream.PushStream.forEachEvent-PushEventConsumer-" 
         xrefstyle="hyperlink"/> are passed a handler function which will be
         called for each piece of data that reaches the end of the stream. If the
         handler function throws an Exception then the Promise returned by the
