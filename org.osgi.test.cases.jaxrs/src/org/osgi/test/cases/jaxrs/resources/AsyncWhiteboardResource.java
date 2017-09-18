@@ -39,6 +39,6 @@ public class AsyncWhiteboardResource {
 			} finally {
 				postResume.run();
 			}
-		});
+		}).start();
 	}
 }

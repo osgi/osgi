@@ -28,6 +28,7 @@ import javax.ws.rs.ext.WriterInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer;
@@ -39,7 +40,7 @@ import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
 import org.osgi.util.promise.Promise;
 
 /**
- * This test covers the lifecycle behaviours described in section 151.4.2
+ * This test covers the behaviours described in section 151.5
  */
 public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 	
@@ -160,7 +161,114 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 		}
 	}
 
-	// TODO extension ordering tests
+	/**
+	 * Section 151.5 Register a simple JAX-RS extension resource and show that
+	 * it gets applied to the request
+	 * 
+	 * @throws Exception
+	 */
+	public void testExtensionOrdering() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
+				.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			// Do a get
+
+			HttpUriRequest getRequest = RequestBuilder
+					.get(baseURI + "whiteboard/resource").build();
+
+			CloseableHttpResponse httpResponse = client.execute(getRequest);
+
+			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			properties = new Hashtable<>();
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					Boolean.TRUE);
+			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
+					.registerService(WriterInterceptor.class,
+							new StringReplacer("fizz", "fizzbuzz"), properties);
+			try {
+				awaitSelection.getValue();
+
+				httpResponse = client.execute(getRequest);
+
+				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
+				awaitSelection = helper.awaitModification(runtime, 5000);
+
+				properties = new Hashtable<>();
+				properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+						Boolean.TRUE);
+				ServiceRegistration<WriterInterceptor> extensionReg2 = getContext()
+						.registerService(WriterInterceptor.class,
+								new StringReplacer("buzz", "fizzbuzz"),
+								properties);
+				try {
+					awaitSelection.getValue();
+
+					httpResponse = client.execute(getRequest);
+
+					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+					assertEquals(
+							"The second writer interceptor was not applied after the first.",
+							"[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]",
+							response);
+
+					// Promote the second filter to be first
+					awaitSelection = helper.awaitModification(runtime, 5000);
+
+					properties.put(Constants.SERVICE_RANKING, Long.valueOf(10));
+					extensionReg2.setProperties(properties);
+
+					awaitSelection.getValue();
+
+					httpResponse = client.execute(getRequest);
+
+					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+					assertEquals("The filter ranking was not observed",
+							"[fizzbuzzbuzz, fizzbuzz, fizzbuzzfizzbuzzbuzz]",
+							response);
+
+					// Reset the second filter ranking to default
+					awaitSelection = helper.awaitModification(runtime, 5000);
+
+					properties.remove(Constants.SERVICE_RANKING);
+					extensionReg2.setProperties(properties);
+
+					awaitSelection.getValue();
+
+					httpResponse = client.execute(getRequest);
+
+					response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+					assertEquals(
+							"[fizzbuzz, fizzfizzbuzz, fizzfizzbuzzfizzbuzz]",
+							response);
+				} finally {
+					extensionReg2.unregister();
+				}
+			} finally {
+				extensionReg.unregister();
+			}
+		} finally {
+			resourceReg.unregister();
+		}
+	}
 
 	/**
 	 * Section 151.3 Register a JAX-RS resource which requires an extension
@@ -298,6 +406,98 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 				} finally {
 					contextResolverReg.unregister();
 				}
+			} finally {
+				extensionReg.unregister();
+			}
+		} finally {
+			resourceReg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.3 Use whiteboard targeting for extensions
+	 * 
+	 * @throws Exception
+	 */
+	public void testSimpleWhiteboardTarget() throws Exception {
+
+		Long serviceId = (Long) runtime.getProperty(Constants.SERVICE_ID);
+
+		String selectFilter = "(service.id=" + serviceId + ")";
+		String rejectFilter = "(!" + selectFilter + ")";
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<WhiteboardResource> resourceReg = getContext()
+				.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			// Do a get
+
+			HttpUriRequest getRequest = RequestBuilder
+					.get(baseURI + "whiteboard/resource").build();
+
+			CloseableHttpResponse httpResponse = client.execute(getRequest);
+
+			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			properties = new Hashtable<>();
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					Boolean.TRUE);
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+					selectFilter);
+			ServiceRegistration<WriterInterceptor> extensionReg = getContext()
+					.registerService(WriterInterceptor.class,
+							new StringReplacer("fizz", "fizzbuzz"), properties);
+			try {
+				awaitSelection.getValue();
+
+				httpResponse = client.execute(getRequest);
+
+				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
+				// Change the target
+				awaitSelection = helper.awaitModification(runtime, 5000);
+
+				properties.put(
+						JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+						rejectFilter);
+				extensionReg.setProperties(properties);
+
+				awaitSelection.getValue();
+
+				httpResponse = client.execute(getRequest);
+
+				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+				// Reset the target
+				awaitSelection = helper.awaitModification(runtime, 5000);
+
+				properties.put(
+						JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+						selectFilter);
+				extensionReg.setProperties(properties);
+
+				awaitSelection.getValue();
+
+				httpResponse = client.execute(getRequest);
+
+				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
 			} finally {
 				extensionReg.unregister();
 			}

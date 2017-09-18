@@ -27,7 +27,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
@@ -36,7 +38,7 @@ import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
 import org.osgi.util.promise.Promise;
 
 /**
- * This test covers the lifecycle behaviours described in section 151.4.2
+ * This test covers the lifecycle behaviours described in section 151.4
  */
 public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 	
@@ -241,6 +243,75 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			assertEquals("quack", response);
 
 			assertFalse(wasReleasedPreCompletion.get());
+
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.3 Use whiteboard targeting for resources
+	 * 
+	 * @throws Exception
+	 */
+	public void testSimpleWhiteboardTarget() throws Exception {
+
+		Long serviceId = (Long) runtime.getProperty(Constants.SERVICE_ID);
+
+		String selectFilter = "(service.id=" + serviceId + ")";
+		String rejectFilter = "(!" + selectFilter + ")";
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+				selectFilter);
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<WhiteboardResource> reg = getContext()
+				.registerService(WhiteboardResource.class,
+						new WhiteboardResource(), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			HttpUriRequest getRequest = RequestBuilder
+					.get(baseURI + "whiteboard/resource").build();
+
+			CloseableHttpResponse httpResponse = client.execute(getRequest);
+
+			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+			// Change the target
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+					rejectFilter);
+			reg.setProperties(properties);
+
+			awaitSelection.getValue();
+
+			httpResponse = client.execute(getRequest);
+
+			assertResponse(httpResponse, 404, null);
+
+			// Reset the target
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_TARGET,
+					selectFilter);
+			reg.setProperties(properties);
+
+			awaitSelection.getValue();
+
+			httpResponse = client.execute(getRequest);
+
+			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals("[buzz, fizz, fizzbuzz]", response);
 
 		} finally {
 			reg.unregister();
