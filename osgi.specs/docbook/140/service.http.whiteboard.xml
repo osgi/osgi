@@ -1397,7 +1397,6 @@ public class MyServlet extends HttpServlet {
 
       <para>For example:</para>
 
-      <remark>Why 'errorPage' attribute and not value?</remark>
       <programlisting>@Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 @HttpWhiteboardServletErrorPage(errorPage = {"java.io.IOException", "500"})
 public class MyErrorServlet extends HttpServlet {
@@ -1429,7 +1428,7 @@ public class MyErrorServlet extends HttpServlet {
       <programlisting>
 @Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE)
 @HttpWhiteboardServletPattern("/as")
-@HttpWhiteboardServletAsyncSupported(asyncSupported=true)
+@HttpWhiteboardServletAsyncSupported
 public class AsyncServlet extends HttpServlet {
     ExecutorService executor = Executors.newCachedThreadPool(
         r -&gt; new Thread(r, "Pooled Thread"));
@@ -2242,7 +2241,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     Http Service is provided by the same implementation that also provides the Http Whiteboard implementation.</para>
     
     <para>The following example registers a servlet filter for all servlets managed by the Http Service.
-    <remark>Is the syntax of the context select annotation correct?</remark> 
+
     <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE)
 @HttpWhiteboardFilterPattern("/*")
 @HttpWhiteboardContextSelect("(osgi.http.whiteboard.context.httpservice=*)")
@@ -2466,7 +2465,6 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       is the responsibility of the Http Whiteboard service implementations to
       use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
-      <remark>New permissions for file upload?</remark>
     </section>
     
   </section>
