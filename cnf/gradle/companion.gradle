@@ -20,8 +20,8 @@ javadoc {
   configure(options) {
     docTitle = "OSGi&trade; ${javadocTitle} Release ${bnd.osgi_release}"
     windowTitle = "OSGi ${javadocTitle} Release ${bnd.osgi_release}"
-    bottom = "<font size=-1>${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a></font>"
-    header = "<b>OSGi&trade; ${javadocTitle}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
+    bottom = "${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a>"
+    header = "<b>OSGi&trade; ${javadocTitle}</b><br/>Release ${bnd.osgi_release}"
     memberLevel = JavadocMemberLevel.PROTECTED
     charSet = 'UTF-8'
     encoding = 'UTF-8'
