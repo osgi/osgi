@@ -19,7 +19,7 @@
   <section>
     <title>Introduction</title>
     
-    <para>OSGi specifies a standardized model to provide bundles with configurations. This is specified in 
+    <para>OSGi defines a model to provide bundles with configurations. This is specified in 
       the Configuration Admin specification where a configuration is identified by a 
       persistent identity (PID). A PID is a unique token, recommended to be conforming to the symbolic 
       name syntax. A configuration consists of a set of properties, where a property consists of a 
@@ -28,33 +28,10 @@
     </para>
 
     <para>
-      Sometimes it is necessary to store binary large objects (BLOB) in configuration. For example, a keystore 
-      with certificates. Since configuration admin is not suitable for this, these BLOBs are often stored on
-      the files system. Then application developers must manage the life cycle of these files manually.
-    </para>
-      
-    <para>
-      The original Configuration Admin specification specified that the configurations were sent to a Managed Service for 
-      the singletons and Managed Service Factory services for the factory instances. However, over time 
-      component models became popular and a component can rely on configuration. For example, Declarative 
-      Services is tightly integrated with Configuration Admin. For these heavy users of configurations 
-      a Configuration Listener whiteboard service was added. Configuration update, delete, and bundle 
-      location change events are forwarded to this whiteboard service on a background thread.
-    </para>
-
-    <para>
       This specification defines a mechanism to feed configurations into the Configuration Admin service
       through configuration resources. A single configuration resource can feed multiple PIDs with configuration
       and multiple configuration resources can be provided in one ore more bundles.
     </para>
-
-    <para>
-      Configuration resources can define configurations for more than one environment, allowing a single set 
-      of resources to be used in multiple contexts, such as development, test and production, each of which may 
-      have different configuration values.
-    </para>
-    
-    <remark>Revisit, maybe a little less history?</remark>
   </section> 
   
   <section>
@@ -435,9 +412,7 @@
           </tbody>
         </tgroup>
       </table>
-      
-      <remark>TODO add example</remark>
-      
+            
       The configurator must keep track of configuration change count values to identify configurations 
       that were changed by other entities or administrators.
     </para>
