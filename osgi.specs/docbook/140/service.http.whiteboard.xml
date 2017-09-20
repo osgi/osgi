@@ -2483,7 +2483,7 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       use a <code>doPrivileged</code> block when performing the write operation.</para>
       <para>If security is enabled and any of the above required permissions is not
       granted, the multipart handling servlet is regarded invalid and will not be registered.
-      This state is reflected in the error DTOs</para>
+      This state is reflected in the error DTOs.</para>
     </section>
   </section>
 
