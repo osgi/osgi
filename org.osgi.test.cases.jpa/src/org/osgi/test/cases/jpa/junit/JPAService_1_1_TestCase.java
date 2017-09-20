@@ -222,6 +222,68 @@ public class JPAService_1_1_TestCase extends DefaultTestBundleControl {
 				}
 	}
 
+	/**
+	 * See JPA Service Spec 127.3.4
+	 * 
+	 * @throws Exception
+	 */
+	public void testReportsCorrectPersistenceProviderDetails()
+			throws Exception {
+
+		// Install the bundles necessary for this test
+		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+		EntityManagerFactoryBuilder emfBuilder = null;
+		EntityManagerFactory emf = null;
+		waitForService(EntityManagerFactoryBuilder.class, true);
+		try {
+			emfBuilder = getService(EntityManagerFactoryBuilder.class,
+					"(osgi.unit.name=emfBuilderTestUnit)");
+			assertNotNull(
+					"Unable to retrieve the specified EntityManagerFactoryBuilder",
+					emfBuilder);
+
+			String provider = String
+					.valueOf(getServiceReference(emfBuilder).getProperty(
+							EntityManagerFactoryBuilder.JPA_UNIT_PROVIDER));
+
+			assertEquals(provider, emfBuilder.getPersistenceProviderName());
+
+			Bundle providerBundle = emfBuilder.getPersistenceProviderBundle();
+
+			boolean found = false;
+			for (ServiceReference< ? > ref : providerBundle
+					.getRegisteredServices()) {
+				if (provider.equals(
+						ref.getProperty("javax.persistence.provider"))) {
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				try {
+					providerBundle.loadClass(provider);
+					found = true;
+				} catch (ClassNotFoundException cnfe) {}
+			}
+
+			assertTrue(
+					"The provider bundle returned by the EntityManagerFactoryBuilder did not advertise a PersistenceProvider service, nor was it able to load the provider class",
+					found);
+
+		} catch (java.lang.IllegalArgumentException ex) {
+			fail("Unknown properties should be ignored and not result in an IllegalArgumentException.");
+		} finally {
+			if (emf != null) {
+				emf.close();
+			}
+			if (emfBuilder != null) {
+				ungetService(emfBuilder);
+			}
+			uninstallBundle(persistenceBundle);
+		}
+	}
+
 	public <T> void waitForService(Class<T> cls, boolean expected) {
 		ServiceTracker<T,T> tracker = new ServiceTracker<>(getContext(),
 				cls.getName(), null);
