@@ -2467,6 +2467,24 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       operations.</para>
     </section>
     
+    <section>
+      <title>Multipart Upload</title>
+
+      <para>If multipart upload is enabled for a servlet, the uploaded data is usually
+      temporarily written to a file. Therefore if security is enabled file permissions
+      must be granted accordingly.</para>
+      <para>If a servlet is using the default path to store uploaded data, the Http
+      Whiteboard implementation needs <code>FilePermission[path, "read,write"]</code>
+      for that path. As the servlet is reading the data, the bundle containing the servlet
+      needs <code>FilePermission[path, "read"]</code> for that path.</para>
+      <para>If a servlet is providing the path to store uploaded data, the bundle containing 
+      the servlet needs <code>FilePermission[path, "read,write"]</code> for that path.
+      Therefore, it is the responsibility of the Http Whiteboard service implementations to
+      use a <code>doPrivileged</code> block when performing the write operation.</para>
+      <para>If security is enabled and any of the above required permissions is not
+      granted, the multipart handling servlet is regarded invalid and will not be registered.
+      This state is reflected in the error DTOs</para>
+    </section>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.context.xml"/>
