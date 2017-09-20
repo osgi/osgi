@@ -43,15 +43,15 @@ public final class JaxRSWhiteboardConstants {
 	}
 
 	/**
-	 * Service property specifying the name of a JAX-RS resource.
+	 * Service property specifying the name of a JAX-RS whiteboard service.
 	 * <p>
 	 * This name is provided as a property on the registered Endpoint service so
 	 * that the URI for a particular JAX-RS service can be identified. If this
 	 * service property is not specified, then no Endpoint information will be
 	 * registered for this resource.
 	 * <p>
-	 * Resource names should be unique among all resource service associated
-	 * with a single Whiteboard implementation.
+	 * Resource names should be unique among all services associated with a
+	 * single Whiteboard implementation.
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
 	 */

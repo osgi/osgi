@@ -17,7 +17,6 @@
 package org.osgi.service.jaxrs.runtime;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO;
 import org.osgi.service.jaxrs.runtime.dto.RuntimeDTO;
 
 /**
@@ -42,14 +41,4 @@ public interface JaxRSServiceRuntime {
 	 * @return The runtime DTO.
 	 */
 	public RuntimeDTO getRuntimeDTO();
-
-	/**
-	 * Return a request info DTO containing the services involved with
-	 * processing a request for the specified path.
-	 * 
-	 * @param path The request path, relative to the root of the JAX-RS
-	 *        Whiteboard implementation.
-	 * @return The request info DTO for the specified path.
-	 */
-	public RequestInfoDTO calculateRequestInfoDTO(String path);
 }

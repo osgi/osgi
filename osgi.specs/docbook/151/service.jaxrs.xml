@@ -263,11 +263,8 @@
     <para>The JAX-RS Service Runtime service provides information about registered
     Whiteboard services through the <xref
     linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO"
     xrefstyle="hyperlink"/>.</para>
-    <para>The <xref linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
-    xrefstyle="hyperlink"/> provides information about services that have been
+    <para>The Runtime DTO provides information about services that have been
     successfully registered as well as information about the JAX-RS Whiteboard
     services that were not successfully registered. JAX-RS Whiteboard services that
     have the required properties set but cannot be processed, are reflected in
@@ -282,14 +279,6 @@
     extensions and applications that are active in each resgistered application. 
     The Runtime DTO also includes information about Whiteboard services which 
     could not be activated.</para>
-
-    <para>Handlers for a given request path can be found with the <xref
-    linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.calculateRequestInfoDTO-String-"
-    xrefstyle="hyperlink"/> method. This method returns a <xref
-    linkend="org.osgi.service.jaxrs.runtime.dto.RequestInfoDTO"
-    xrefstyle="hyperlink"/> which includes information about the JAX-RS resource
-    that would be invoked to handle a request on this path, and also information about
-    any filter extensions that would be applied to the request.</para>
     </section>
   
     <section>
@@ -385,15 +374,17 @@ public String interrogateSession(@PathParam("name") String name,
             is currently unused, but reserved for future versions of this specification.
             </para>
             <para>If a JAX-RS service is registered with an illegal name then it is not bound and
-            this is reflected in the failure DTOs.
-            See <xref
+            this is reflected in the failure DTOs. If two JAX-RS services are registered with the
+            same name (even if they are advertised as different types) then only the higher
+            ranked service is bound and the lower ranked service(s) are reflected in the failure
+            DTOs. See <xref
             linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_NAME"
             xrefstyle="hyperlink"/>.</para>
             </entry>
           </row>
           
           <row>
-            <entry><code>osgi.jaxrs.application.select</code></entry>
+            <entry><code>osgi.jaxrs.application.select</code><emphasis role="strong"><superscript>&#8224;</superscript></emphasis></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
@@ -412,7 +403,7 @@ public String interrogateSession(@PathParam("name") String name,
             See <xref
             linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT"
             xrefstyle="hyperlink"/>.</para>
-            <para>Note that this property is not valid for JAX-RS Application services.</para></entry>
+            <para>&#8224; Note that this property is not valid for JAX-RS Application services.</para></entry>
           </row>
           
           <row>
@@ -535,29 +526,14 @@ public class Foo {
         namespace with other resources in the application (including any existing static resources). 
         When JAX-RS services are bound it is possible that one or more
         methods on these services will map to the same URI. This situation is
-        permitted as long as the two mappings do not clash.</para>
+        permitted by the JAX-RS specification which defines a detailed selection
+        algorithm.</para>
       
-        <para>A clash occurs when two resource methods map to the same URI and
-        also declare that they produce and consume the same content type. For example
-        a resource annotated with <code>@Produces("text/plain")</code> does
-        not clash with a method annotated with <code>@Produces("application/xml")</code>.
+        <para>When clashes occur in the JAX-RS whiteboard then resources supplied using
+        the service whiteboard must be preferred to static resources contained in the application.
+        Otherwise resource method selection follows the normal rules defined in the JAX-RS 
+        specification.
         </para>
-      
-        <para>
-        If any clashes
-        occur then service ranking rules are used to select the service that will
-        bind to the JAX-RS Whiteboard; also a resource service will always override a
-        static resource. In summary, resources that have any
-        of their methods shadowed by a Whiteboard services associated 
-        with the <emphasis>same</emphasis> Whiteboard are not bound, and are 
-        represented in the failure DTOs.</para>
-
-        <para>The above rules can cause JAX-RS resources that are already bound to
-        become unbound if a higher ranked service arrives. This ensures a predictable 
-        end result regardless of the order in which services are registered. The rules
-        also ensure that all methods defined by a resource become unavailable if 
-        <emphasis>any</emphasis> of them are shadowed. This prevents undesirable
-        situations where some, but not all, of a resource's methods can be called.</para>
       </section>
 
     </section>
@@ -1144,21 +1120,16 @@ public class ConfiguredExtension implements WriterInterceptor {
       All other application services with that URI will have a failure DTO created
       for them.</para>
       
-      <para>A more complex shadowing scenario can occur between applications with different
-      base URIs. For example, in the following scenario the default application has a base URI 
-      of "/", and a second whiteboard application is registered with the base URI "/fizz". The 
-      default application is hosting a whiteboard resource mapped to "fizz/buzz", and the
-      whiteboard application hosts a resource mapped to "buzz".</para>
+      <para>The default application is implicitly created by the whiteboard and has
+      the name <code>.default</code>. The default application has a lower ranking 
+      than all registered services. Therefore an application registered with a base 
+      of <code>/</code> will shadow a default application bound at <code>/</code>.</para> 
       
-      <para>In the scenario described there is clearly a conflict between the resource
-      in the default application and the resource in the whiteboard application. To resolve
-      this the JAX-RS whiteboard must unregister the application with the shorter base URI.
-      The whole whiteboard application (not just the clashing resource) must be unregistered
-      to avoid inconsistent behaviour when an application is only partially visible. It is 
-      therfore critical for the JAX-RS Whiteboard to track the mappings of all resources
-      within every application so that clashes can be eagerly detected.</para>
+      <para>A whiteboard application service may set an <code>osgi.jaxrs.name</code> of 
+      <code>.default</code> to replace the default application. This technique may be used
+      to rebind the default application to a base uri other than <code>/</code>.</para>
     </section>
-    
+
     <section>
       <title>Application Extension Dependencies</title>
       

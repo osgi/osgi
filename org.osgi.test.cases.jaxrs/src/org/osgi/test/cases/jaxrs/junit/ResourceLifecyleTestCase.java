@@ -317,6 +317,4 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 			reg.unregister();
 		}
 	}
-
-	// TODO clash resolution tests
 }
