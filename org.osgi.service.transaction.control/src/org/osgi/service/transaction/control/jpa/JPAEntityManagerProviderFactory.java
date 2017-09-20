@@ -75,6 +75,10 @@ public interface JPAEntityManagerProviderFactory {
 	 * <li>The properties attempt to set a recovery alias, but the provider does
 	 * not support recovery.</li>
 	 * </ul>
+	 * <p>
+	 * If XA transactions are used then this factory will provide configuration
+	 * to ensure that the JPA Provider can participate correctly in ongoing
+	 * transactions.
 	 * 
 	 * @param emfb
 	 * @param jpaProperties The properties to pass to the
@@ -101,6 +105,11 @@ public interface JPAEntityManagerProviderFactory {
 	 * <li>The properties attempt to set a recovery alias, but the provider does
 	 * not support recovery.</li>
 	 * </ul>
+	 * <p>
+	 * When using this method the client is responsible for all configuration of
+	 * the {@link EntityManagerFactory}. This includes setting any relevant
+	 * integration plugins for ensuring that the JPA provider can participate in
+	 * the ongoing transaction context.
 	 * 
 	 * @param emf
 	 * @param resourceProviderProperties Configuration properties to pass to the

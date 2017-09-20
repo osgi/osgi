@@ -1670,7 +1670,13 @@ txControl.required(() ->
           passed to the EntityManageFactoryBuilder using the javax.persistence.jtaDataSource
           property. This allows the same physical database connection to be used by JPA and
           by JDBC within the same scope.</para>
-        
+          
+          <para>When configured to use JTA transactions most JPA implementations require 
+          integration with the transaction lifecycle. The JPA resource provider is required
+          introspect the Entity Manager Factory Builder and to provide sufficient configuration
+          to integrate the JPA provider with the supplied Transaction Control service. If the
+          JPA resource provider is unable to supply the necessary configuration for the 
+          JPA implementation being used then it must log a warning.</para>
         </section>
 
         <section> 
@@ -1679,6 +1685,15 @@ txControl.required(() ->
           <para>In this case the client provides the configured EntityManagerFactory that 
           should be used, along with the properties that should be used to create the 
           EntityManager.</para>
+        
+          <para>When using an EntityManagerFactory to create the JPA resource provider there
+          is no possibility for the resource provider implementation to customise the
+          configuration of the EntityManagerFactory. This means that the client is responsible
+          for fully configuring the EntityManagerFactory in this case. For Local Transactions
+          this is reasonably simple, however for XA transactions this configuration process
+          may be very involved. For example JPA providers typically require custom plugins 
+          to integrate with external Transaction lifecycle management. It is recommended
+          that clients use the Entity Manager Factory Builder when XA transactions are needed.</para>
         
         </section>
         
