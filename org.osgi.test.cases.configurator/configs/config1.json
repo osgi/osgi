@@ -1,0 +1,6 @@
+{
+  "org.osgi.test.pid1": 
+  {
+    "foo": "bar"
+  }
+}

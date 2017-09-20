@@ -1,7 +1,13 @@
-Bundle-Version: 4.1.0.${project.build}
-Bundle-Activator: $(p).tb1.Activator
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Name: tb1
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
 
-Private-Package	: $(p).tb1
-Customer-Header: A custom header
+Import-Package: *
+Private-Package                     = \
+    ${p}.tb.*
 
-
+Include-Resource: {OSGI-INF/config1.json=configs/config1.json}
+ 
