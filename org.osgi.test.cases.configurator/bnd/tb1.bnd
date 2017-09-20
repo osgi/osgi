@@ -1,0 +1,7 @@
+Bundle-Version: 4.1.0.${project.build}
+Bundle-Activator: $(p).tb1.Activator
+
+Private-Package	: $(p).tb1
+Customer-Header: A custom header
+
+
