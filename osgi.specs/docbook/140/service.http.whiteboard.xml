@@ -1482,7 +1482,7 @@ public class AsyncServlet extends HttpServlet {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table xml:id="service.http.whiteboard.filter.properties.table">
+    <table pgwide="1" xml:id="service.http.whiteboard.filter.properties.table">
       <title>Service properties for <code>Filter</code> Whiteboard
       services.</title>
 
@@ -1491,7 +1491,7 @@ public class AsyncServlet extends HttpServlet {
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.4*"/>
+        <colspec colnum="3" colwidth="6*"/>
 
         <thead>
           <row>
