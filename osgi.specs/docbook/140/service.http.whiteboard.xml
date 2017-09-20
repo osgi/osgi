@@ -1117,7 +1117,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table xml:id="service.http.whiteboard.servlet.properties.table">
+    <table pgwide="1" xml:id="service.http.whiteboard.servlet.properties.table">
       <title>Service properties for <code>Servlet</code> Whiteboard
       services.</title>
 
@@ -1126,7 +1126,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.6*"/>
+        <colspec colnum="3" colwidth="4*"/>
 
         <thead>
           <row>
@@ -1482,7 +1482,7 @@ public class AsyncServlet extends HttpServlet {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table pgwide="1" xml:id="service.http.whiteboard.filter.properties.table">
+    <table xml:id="service.http.whiteboard.filter.properties.table">
       <title>Service properties for <code>Filter</code> Whiteboard
       services.</title>
 
@@ -1491,7 +1491,7 @@ public class AsyncServlet extends HttpServlet {
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="6*"/>
+        <colspec colnum="3" colwidth="3.4*"/>
 
         <thead>
           <row>
@@ -1679,7 +1679,7 @@ public class MyFilter implements Filter {
     xrefstyle="hyperlink"/> service can be registered to handle such cases. The <code>Preprocessor</code>
     service only supports the following service registration properties:</para>
     
-    <table>
+    <table pgwide="1">
       <title>Service properties for <code>Preprocessor</code> Whiteboard
       services.</title>
 
@@ -1688,7 +1688,7 @@ public class MyFilter implements Filter {
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.4*"/>
+        <colspec colnum="3" colwidth="5*"/>
 
         <thead>
           <row>
