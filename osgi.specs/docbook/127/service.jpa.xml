@@ -520,7 +520,9 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
           <para><emphasis>Entity Manager Factory Builder service</emphasis> -
           The Entity Manager Factory Builder service provides the capability
           of creating an <code>EntityManagerFactory</code> object with
-          additional configuration properties.</para>
+          additional configuration properties. The Entity Manager Factory
+          Builder service also provides information about the JPA Provider
+          that will be used to create the <code>EntityManagerFactory</code> object.</para>
         </listitem>
       </itemizedlist>
 
@@ -634,7 +636,11 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       <emphasis>Entity Manager Factory Builder</emphasis> service. This can
       for example be used to provide the database selection properties when
       the Persistence Unit is incomplete or if the database selection needs to
-      be overridden.</para>
+      be overridden. The Entity Manager Factory Builder service also provides
+      information about the JPA Provider that will be used to create the
+      Entity Manager Factory. This information can be used by the Client 
+      Bundle when determining what (if any) JPA Provider implementation specific 
+      configuration that the Client Bundle will provide.</para>
 
       <para>The Entity Manager Factory Builder service's life cycle must not
       depend on the availability of any Data Source Factory, even if a JDBC
@@ -643,7 +649,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       properties as the corresponding Entity Factory service, see <xref
       linkend="i3087143"/>.</para>
 
-      <para>The following method is defined on the
+      <para>The following methods are defined on the
       <code>EntityManagerFactoryBuilder</code> interface:</para>
 
       <itemizedlist>
@@ -656,6 +662,25 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
           properties to be applied during Entity Manager Factory creation. The
           method must return a proper Entity Manager Factory or throw an
           Exception.</para>
+        </listitem>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.getPersistenceProviderName--"
+          xrefstyle="hyperlink"/> - Returns the name of the <code>PersistenceProvider</code>
+          implementation class used in Entity Manager Factory creation. This name will
+          be the same as the value of the <xref
+          linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_UNIT_PROVIDER"
+          xrefstyle="hyperlink"/> service property.</para>
+        </listitem>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.getPersistenceProviderBundle--"
+          xrefstyle="hyperlink"/> - Returns the bundle JPA Provider implementation bundle
+          which provides the <code>PersistenceProvider</code>. If the Persistence Provider
+          was provided as an OSGi service then this method must return the bundle 
+          which registered the service. Otherwise  this method must return the bundle which 
+          loaded the <code>PersistenceProvider</code> implementation class.
+          </para>
         </listitem>
       </itemizedlist>
 

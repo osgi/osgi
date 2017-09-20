@@ -19,6 +19,10 @@ package org.osgi.service.jpa;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.spi.PersistenceProvider;
+
+import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.framework.Bundle;
 
 /**
  * This service interface offers JPA clients the ability to create instances of
@@ -32,6 +36,7 @@ import javax.persistence.EntityManagerFactory;
  * the creation of the EntityManagerFactory then the basic EntityManagerFactory
  * service should be used.
  */
+@ProviderType
 public interface EntityManagerFactoryBuilder {
 
 	/**
@@ -70,4 +75,31 @@ public interface EntityManagerFactoryBuilder {
 	 *         this service. Must not be null.
 	 */
 	EntityManagerFactory createEntityManagerFactory(Map<String, Object> props);
+
+	/**
+	 * This method returns the name of the {@link PersistenceProvider}
+	 * implementation that is used by this {@link EntityManagerFactoryBuilder}.
+	 * The returned value will be the same as the value of the
+	 * {@link #JPA_UNIT_PROVIDER} service property.
+	 * 
+	 * @since 1.1
+	 * @return the name of the {@link PersistenceProvider} implementation
+	 */
+	String getPersistenceProviderName();
+
+	/**
+	 * This method returns the {@link Bundle} which provides the
+	 * {@link PersistenceProvider} implementation that is used by this
+	 * {@link EntityManagerFactoryBuilder}.
+	 * <p>
+	 * If the {@link PersistenceProvider} is provided as an OSGi service then
+	 * this method must return the bundle which registered the service.
+	 * Otherwise this method must return the bundle which loaded the
+	 * {@link PersistenceProvider} implementation class.
+	 * 
+	 * @since 1.1
+	 * @return The Bundle which provides the {@link PersistenceProvider}
+	 *         implementation used by this {@link EntityManagerFactoryBuilder}.
+	 */
+	Bundle getPersistenceProviderBundle();
 }
