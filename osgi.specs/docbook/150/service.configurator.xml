@@ -90,8 +90,8 @@
       In order to get processed, a bundle must require the configurator implementation:
       
       <programlisting>Require-Capability: osgi.extender;
-  filter := (&amp;(osgi.extender="osgi.configurator")
-              (version&gt;=1.0)(!(version&gt;=2.0)))
+  filter := "(&amp;(osgi.extender=osgi.configurator)
+              (version&gt;=1.0)(!(version&gt;=2.0)))"
       </programlisting>
       
       The configurator must ensure to only process bundles that it is wired to it by the resolver.
@@ -729,9 +729,9 @@
       </para>
 
       <programlisting>Require-Capability: osgi.extender;
-       filter:=(&amp;(osgi.extender="osgi.configurator")
-                 (version&gt;=1.0)(!(version&gt;=2.0)));
-       configurations=resources/configs</programlisting>
+       filter:="(&amp;(osgi.extender=osgi.configurator)
+                 (version&gt;=1.0)(!(version&gt;=2.0)))";
+       configurations="resources/configs"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.extender.namespace"/>.</para>
