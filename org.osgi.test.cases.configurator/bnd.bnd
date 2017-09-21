@@ -11,7 +11,7 @@ Export-Package                      = \
 # Import-Package: ${-signaturetest}, *
 Import-Package: *
 
-Include-Resource                  = \
+Include-Resource                    = \
    tb1.jar
    
 Test-Cases                          = ${testcases}
@@ -25,6 +25,8 @@ Test-Cases                          = ${testcases}
     ${junit}
 
 -runbundles                         = \
+    org.osgi.impl.service.cm; version=latest , \
+    org.osgi.impl.service.configurator; version=latest , \
     org.osgi.impl.service.log; version=latest
     
 
