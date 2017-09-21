@@ -12,8 +12,9 @@
   <title>Remote Services</title>
 
   <info>
-    <releaseinfo xml:id="service.remoteservices-version">Version
-    1.1</releaseinfo>
+    <releaseinfo xml:id="service.remoteservices-version">
+    <xref endterm="org.osgi.service.remoteservices-version"
+    linkend="org.osgi.service.remoteservices"/></releaseinfo>
   </info>
 
   <para>The OSGi framework provides a <emphasis>local</emphasis> service
@@ -1336,6 +1337,8 @@ com.acme.rmi.path = service-id/24</programlisting>
 }</programlisting>
     </section>
   </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteservices.xml"/>
 
   <section>
     <title>References</title>
