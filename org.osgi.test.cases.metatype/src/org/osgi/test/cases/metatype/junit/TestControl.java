@@ -106,7 +106,7 @@ public class TestControl extends DefaultTestBundleControl {
 		assertSame("MetaTypeInformation.getBundle()", bundle, mti.getBundle());
 
 		// Test the method getPids()
-		assertEquals("MetaTypeInformation.getPids()", 2, mti.getPids().length);
+		assertEquals("MetaTypeInformation.getPids()", 3, mti.getPids().length);
 		assertNotNull(
 				"MetaTypeInformation.getPids()[0] is not null (as expected)",
 				mti.getPids()[0]);

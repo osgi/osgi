@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<md:MetaData xmlns:md="http://www.osgi.org/xmlns/metatype/v1.3.0">
+
+	<Designate pid="com.acme.foo.txt">
+		<Object ocdref="ocd3"/>
+	</Designate>
+	
+	<OCD id="ocd3" name="%Person" description="%Description">
+		<AD  id="surName" name="%Surname" type="String" max="24" min="2" default="" required="true"/>
+	</OCD>
+
+</md:MetaData>
