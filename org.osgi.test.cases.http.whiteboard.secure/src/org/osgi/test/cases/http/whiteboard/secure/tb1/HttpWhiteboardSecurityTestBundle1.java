@@ -1,10 +1,20 @@
 package org.osgi.test.cases.http.whiteboard.secure.tb1;
 
+import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.*;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -14,6 +24,8 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 
+	private static final String							JAVA_SERVLET_TEMP_DIR_PROP	= "javax.servlet.content.tempdir";
+
 	private ServiceRegistration<ServletContextHelper>	registration;
 
 	public void start(BundleContext context) throws Exception {
@@ -21,6 +33,12 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/");
 		registration = context.registerService(ServletContextHelper.class, new FileServletContextHelper(), properties);
+
+		registerSetupServlet(context);
+
+		setupUploadServlet(context, "/postdefault", null);
+		setupUploadServlet(context, "/postfailedwrite", "/some/wired/path");
+		setupUploadServlet(context, "/postlocation", "/upload/test/location");
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -42,4 +60,47 @@ public class HttpWhiteboardSecurityTestBundle1 implements BundleActivator {
 
 	}
 
+	private void registerSetupServlet(final BundleContext context)
+			throws Exception {
+		final Dictionary<String,Object> servletProps = new Hashtable<String,Object>();
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_PATTERN, "/setup");
+
+		final Servlet initServlet = new HttpServlet() {
+
+			@Override
+			public void init(ServletConfig config) throws ServletException {
+				super.init(config);
+				config.getServletContext().setAttribute(
+						JAVA_SERVLET_TEMP_DIR_PROP, "/upload/test/default");
+			}
+		};
+
+		context.registerService(Servlet.class.getName(), initServlet,
+				servletProps);
+	}
+
+	private void setupUploadServlet(final BundleContext context,
+			final String path, final String location) throws Exception {
+		final Dictionary<String,Object> servletProps = new Hashtable<String,Object>();
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_PATTERN, path);
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED,
+				Boolean.TRUE);
+		if (location != null) {
+			servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION,
+					location);
+		}
+		servletProps.put(HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE, 1024L);
+
+		final Servlet uploadServlet = new HttpServlet() {
+			@Override
+			protected void doPost(HttpServletRequest req,
+					HttpServletResponse resp)
+					throws IOException, ServletException {
+				// nothing to do
+			}
+		};
+
+		context.registerService(Servlet.class.getName(), uploadServlet,
+				servletProps);
+	}
 }

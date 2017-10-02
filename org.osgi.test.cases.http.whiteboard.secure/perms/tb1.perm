@@ -9,3 +9,6 @@
 ${permissions;packages}
 (org.osgi.framework.ServicePermission "org.osgi.service.http.runtime.HttpServiceRuntime" "get")
 (org.osgi.framework.ServicePermission "org.osgi.service.http.context.ServletContextHelper" "register")
+(org.osgi.framework.ServicePermission "javax.servlet.Servlet" "register")
+(java.io.FilePermission "/upload/test/default" "read")
+(java.io.FilePermission "/upload/test/location" "read,write")

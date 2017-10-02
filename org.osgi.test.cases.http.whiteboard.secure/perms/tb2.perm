@@ -7,3 +7,4 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
+(org.osgi.framework.ServicePermission "javax.servlet.Servlet" "register")

@@ -7,12 +7,17 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
+import org.osgi.service.http.runtime.dto.DTOConstants;
+import org.osgi.service.http.runtime.dto.FailedServletDTO;
+import org.osgi.service.http.runtime.dto.ServletContextDTO;
+import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 public class SecureTestCase extends BaseHttpWhiteboardTestCase {
@@ -153,4 +158,76 @@ public class SecureTestCase extends BaseHttpWhiteboardTestCase {
 		}
 	}
 
+	private ServletDTO searchServletDTO(final String path) {
+		final ServletContextDTO contextDTO = this.getServletContextDTOByName(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+		if (contextDTO != null) {
+			for (final ServletDTO servletDTO : contextDTO.servletDTOs) {
+				if (servletDTO.patterns.length == 1
+						&& path.equals(servletDTO.patterns[0])) {
+					return servletDTO;
+				}
+			}
+			for (final ServletDTO servletDTO : getHttpServiceRuntime()
+					.getRuntimeDTO().failedServletDTOs) {
+				if (servletDTO.patterns.length == 1
+						&& path.equals(servletDTO.patterns[0])) {
+					return servletDTO;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Test the permissions for uploads
+	 */
+	public void testUploadPermissions() throws Exception {
+		long before = this.getHttpRuntimeChangeCount();
+
+		Bundle bundle = install("tb1.jar");
+
+		try {
+			bundle.start();
+
+			before = this.waitForRegistration(before);
+
+			ServletDTO servletDTO = searchServletDTO("/postdefault");
+			assertNotNull(servletDTO);
+			assertFalse(servletDTO instanceof FailedServletDTO);
+
+			servletDTO = searchServletDTO("/postfailedwrite");
+			assertNotNull(servletDTO);
+			assertTrue(servletDTO instanceof FailedServletDTO);
+			assertEquals(
+					DTOConstants.FAILURE_REASON_SERVLET_WRITE_TO_LOCATION_DENIED,
+					((FailedServletDTO) servletDTO).failureReason);
+
+			servletDTO = searchServletDTO("/postlocation");
+			assertNotNull(servletDTO);
+			assertFalse(servletDTO instanceof FailedServletDTO);
+		} finally {
+			bundle.uninstall();
+		}
+
+		before = this.getHttpRuntimeChangeCount();
+
+		bundle = install("tb2.jar");
+
+		try {
+			bundle.start();
+
+			before = this.waitForRegistration(before);
+
+			ServletDTO servletDTO = searchServletDTO("/post");
+			assertNotNull(servletDTO);
+			assertTrue(servletDTO instanceof FailedServletDTO);
+			assertEquals(
+					DTOConstants.FAILURE_REASON_SERVLET_READ_FROM_DEFAULT_DENIED,
+					((FailedServletDTO) servletDTO).failureReason);
+
+		} finally {
+			bundle.uninstall();
+		}
+	}
 }

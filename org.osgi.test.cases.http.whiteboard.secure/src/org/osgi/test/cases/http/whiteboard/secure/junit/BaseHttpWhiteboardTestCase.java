@@ -13,12 +13,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.jar.Manifest;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
@@ -36,8 +39,12 @@ import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
+
+	private ServiceTracker<HttpServiceRuntime,ServiceReference<HttpServiceRuntime>>	runtimeTracker;
 
 	public static final String	DEFAULT	= HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME;
 
@@ -421,6 +428,17 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 		}
 	}
 
+	protected ConditionalPermissionAdmin getPermissionAdmin() {
+		BundleContext context = getContext();
+
+		ServiceReference<ConditionalPermissionAdmin> serviceReference = context
+				.getServiceReference(ConditionalPermissionAdmin.class);
+
+		assertNotNull(serviceReference);
+
+		return context.getService(serviceReference);
+	}
+
 	protected void setUp() throws Exception {
 		for (String bundlePath : getBundlePaths()) {
 			Bundle bundle = install(bundlePath);
@@ -429,9 +447,45 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 
 			bundles.add(bundle);
 		}
+		this.runtimeTracker = new ServiceTracker<>(getContext(),
+				HttpServiceRuntime.class,
+				new ServiceTrackerCustomizer<HttpServiceRuntime,ServiceReference<HttpServiceRuntime>>() {
+
+					@Override
+					public ServiceReference<HttpServiceRuntime> addingService(
+							ServiceReference<HttpServiceRuntime> reference) {
+						final Object obj = reference
+								.getProperty("service.changecount");
+						if (obj != null) {
+							httpRuntimeChangeCount
+									.set(Long.valueOf(obj.toString()));
+						}
+						return reference;
+					}
+
+					@Override
+					public void modifiedService(
+							ServiceReference<HttpServiceRuntime> reference,
+							ServiceReference<HttpServiceRuntime> service) {
+						addingService(reference);
+					}
+
+					@Override
+					public void removedService(
+							ServiceReference<HttpServiceRuntime> reference,
+							ServiceReference<HttpServiceRuntime> service) {
+						httpRuntimeChangeCount.set(-1);
+					}
+
+				});
+		this.runtimeTracker.open();
 	}
 
 	protected void tearDown() throws Exception {
+		if (this.runtimeTracker != null) {
+			this.runtimeTracker.close();
+			this.runtimeTracker = null;
+		}
 		for (ServiceRegistration<?> serviceRegistration : serviceRegistrations) {
 			serviceRegistration.unregister();
 		}
@@ -448,4 +502,21 @@ public abstract class BaseHttpWhiteboardTestCase extends OSGiTestCase {
 	protected List<Bundle> bundles = new ArrayList<Bundle>();
 	protected Set<ServiceRegistration<?>> serviceRegistrations = new HashSet<ServiceRegistration<?>>();
 
+	final AtomicLong						httpRuntimeChangeCount	= new AtomicLong(
+			-1);
+
+	protected long getHttpRuntimeChangeCount() {
+		return httpRuntimeChangeCount.longValue();
+	}
+
+	protected long waitForRegistration(final long previousCount) {
+		while (this.httpRuntimeChangeCount.longValue() == previousCount) {
+			try {
+				Thread.sleep(20L);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		return this.httpRuntimeChangeCount.longValue();
+	}
 }
