@@ -188,4 +188,30 @@ public class Deferred<T> {
 	public String toString() {
 		return promise.toString();
 	}
+
+	/**
+	 * Returns an Executor implementation to execute callbacks immediately on
+	 * the caller's thread.
+	 * 
+	 * @return An Executor implementation to execute callbacks immediately on
+	 *         the caller's thread.
+	 * @since 1.1
+	 */
+	public static Executor inlineExecutor() {
+		return new InlineExecutor();
+	}
+
+	/**
+	 * An Executor implementation which executes the Runnable immediately on the
+	 * caller's thread.
+	 * 
+	 * @since 1.1
+	 */
+	private static class InlineExecutor implements Executor {
+		InlineExecutor() {}
+		@Override
+		public void execute(Runnable callback) {
+			callback.run();
+		}
+	}
 }

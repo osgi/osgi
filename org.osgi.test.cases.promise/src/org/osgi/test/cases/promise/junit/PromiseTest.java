@@ -28,7 +28,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -150,7 +149,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseSuccess3() throws Exception {
-		final Deferred<Integer> d = new Deferred<Integer>(new InlineExecutor());
+		final Deferred<Integer> d = new Deferred<Integer>(
+				Deferred.inlineExecutor());
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
@@ -250,7 +250,8 @@ public class PromiseTest extends TestCase {
 
 	public void testPromiseFail1() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>(new InlineExecutor());
+		final Deferred<String> d = new Deferred<String>(
+				Deferred.inlineExecutor());
 		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -677,7 +678,8 @@ public class PromiseTest extends TestCase {
 
 	public void testCallbackException1() throws Exception {
 		final int size = 20;
-		final Deferred<String> d = new Deferred<String>(new InlineExecutor());
+		final Deferred<String> d = new Deferred<String>(
+				Deferred.inlineExecutor());
 		final Promise<String> p = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(size);
 		final AtomicInteger count = new AtomicInteger(0);
@@ -956,7 +958,7 @@ public class PromiseTest extends TestCase {
 	public void testAllSuccess4() throws Exception {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Deferred<Integer> d1 = new Deferred<Integer>(
-				new InlineExecutor());
+				Deferred.inlineExecutor());
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -965,7 +967,7 @@ public class PromiseTest extends TestCase {
 		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Deferred<Integer> d2 = new Deferred<Integer>(
-				new InlineExecutor());
+				Deferred.inlineExecutor());
 		final Promise<Integer> p2 = d2.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -978,7 +980,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<List<Number>> latched = Promises
 				.<Number, Integer> all(
-						new Deferred<List<Number>>(new InlineExecutor()),
+						new Deferred<List<Number>>(Deferred.inlineExecutor()),
 						promises)
 				.onResolve(new Runnable() {
 					@Override
@@ -2711,13 +2713,6 @@ public class PromiseTest extends TestCase {
 			fail("failed to error on null function");
 		} catch (NullPointerException e) {
 			// expected
-		}
-	}
-
-	static class InlineExecutor implements Executor {
-		@Override
-		public void execute(Runnable callback) {
-			callback.run();
 		}
 	}
 }
