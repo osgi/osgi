@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,24 @@ package org.osgi.util.function;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * A callback that performs an operation and may throw an exception.
+ * A function that accepts a single argument and produces no result.
  * <p>
  * This is a functional interface and can be used as the assignment target for a
  * lambda expression or method reference.
  * 
+ * @param <T> The type of the function input.
  * @ThreadSafe
  * @since 1.1
  * @author $Id$
  */
 @ConsumerType
 @FunctionalInterface
-public interface Callback {
+public interface Consumer<T> {
 	/**
-	 * Execute the callback.
+	 * Applies this function to the specified argument.
 	 * 
+	 * @param t The input to this function.
 	 * @throws Exception An exception thrown by the method.
 	 */
-	void run() throws Exception;
+	void accept(T t) throws Exception;
 }

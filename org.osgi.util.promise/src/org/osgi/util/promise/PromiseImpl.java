@@ -40,7 +40,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.osgi.util.function.Callback;
+import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 
@@ -226,23 +226,13 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public String toString() {
-		if (!isDone()) {
+		if (!isDone()) { // ensure latch open before reading state
 			return super.toString() + "[unresolved]";
 		}
-		final boolean interrupted = Thread.interrupted();
-		try {
-			Throwable t = getFailure();
-			if (t != null) {
-				return super.toString() + "[failed: " + t + "]";
-			}
-			return super.toString() + "[resolved: " + getValue() + "]";
-		} catch (InterruptedException | InvocationTargetException e) {
-			return super.toString() + "[" + e + "]";
-		} finally {
-			if (interrupted) { // restore interrupt status
-				Thread.currentThread().interrupt();
-			}
+		if (fail == null) {
+			return super.toString() + "[resolved: " + value + "]";
 		}
+		return super.toString() + "[failed: " + fail + "]";
 	}
 
 	/**
@@ -302,6 +292,78 @@ final class PromiseImpl<T> implements Promise<T> {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @since 1.1
+	 */
+	@Override
+	public Promise<T> onSuccess(Consumer< ? super T> success) {
+		return onResolve(new OnSuccess(success));
+	}
+
+	/**
+	 * A callback used for the {@link #onSuccess(Consumer)} method.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private final class OnSuccess implements Runnable {
+		private final Consumer< ? super T> success;
+
+		OnSuccess(Consumer< ? super T> success) {
+			this.success = requireNonNull(success);
+		}
+
+		@Override
+		public void run() {
+			Result<T> result = collect();
+			if (result.fail == null) {
+				try {
+					success.accept(result.value);
+				} catch (Throwable e) {
+					uncaughtException(e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @since 1.1
+	 */
+	@Override
+	public Promise<T> onFailure(Consumer< ? super Throwable> failure) {
+		return onResolve(new OnFailure(failure));
+	}
+
+	/**
+	 * A callback used for the {@link #onFailure(Consumer)} method.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private final class OnFailure implements Runnable {
+		private final Consumer< ? super Throwable> failure;
+
+		OnFailure(Consumer< ? super Throwable> failure) {
+			this.failure = requireNonNull(failure);
+		}
+
+		@Override
+		public void run() {
+			Result<T> result = collect();
+			if (result.fail != null) {
+				try {
+					failure.accept(result.fail);
+				} catch (Throwable e) {
+					uncaughtException(e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
@@ -313,23 +375,10 @@ final class PromiseImpl<T> implements Promise<T> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @since 1.1
 	 */
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success) {
 		return then(success, null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Promise<T> then(Callback callback) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
-		onResolve(chained.new Chain(this, callback));
-		return chained;
 	}
 
 	/**
@@ -339,12 +388,12 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class Then<P> implements Runnable {
-		private final Promise<P>				promise;
+		private final PromiseImpl<P>			promise;
 		private final Success<P, ? extends T>	success;
 		private final Failure					failure;
 
 		@SuppressWarnings("unchecked")
-		Then(Promise<P> promise, Success< ? super P, ? extends T> success,
+		Then(PromiseImpl<P> promise, Success< ? super P, ? extends T> success,
 				Failure failure) {
 			this.promise = promise;
 			this.success = (Success<P, ? extends T>) success;
@@ -353,13 +402,13 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Throwable f = Result.collect(promise).fail;
-			if (f != null) {
+			Result<P> result = promise.collect();
+			if (result.fail != null) {
 				if (failure != null) {
 					try {
 						failure.fail(promise);
 					} catch (Throwable e) {
-						f = e; // propagate new exception
+						result.fail = e; // propagate new exception
 					}
 				}
 			} else if (success != null) {
@@ -367,7 +416,7 @@ final class PromiseImpl<T> implements Promise<T> {
 				try {
 					returned = success.call(promise);
 				} catch (Throwable e) {
-					f = e; // propagate new exception
+					result.fail = e; // propagate new exception
 				}
 				if (returned != null) {
 					// resolve chained when returned promise is resolved
@@ -375,8 +424,21 @@ final class PromiseImpl<T> implements Promise<T> {
 					return;
 				}
 			}
-			tryResolve(null, f);
+			tryResolve(null, result.fail);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @since 1.1
+	 */
+	@Override
+	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
+		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
+				scheduledExecutor);
+		onResolve(chained.new Chain(this, consumer));
+		return chained;
 	}
 
 	/**
@@ -388,39 +450,41 @@ final class PromiseImpl<T> implements Promise<T> {
 	private final class Chain implements Runnable {
 		private final Promise< ? extends T>	promise;
 		private final Throwable				failure;
-		private final Callback				callback;
+		private final Consumer< ? super T>	consumer;
 
 		Chain(Promise< ? extends T> promise) {
 			this.promise = promise;
 			this.failure = null;
-			this.callback = null;
+			this.consumer = null;
 		}
 
 		Chain(Promise< ? extends T> promise, Throwable failure) {
 			this.promise = promise;
 			this.failure = requireNonNull(failure);
-			this.callback = null;
+			this.consumer = null;
 		}
 
-		Chain(Promise< ? extends T> promise, Callback callback) {
+		Chain(Promise< ? extends T> promise, Consumer< ? super T> consumer) {
 			this.promise = promise;
 			this.failure = null;
-			this.callback = requireNonNull(callback);
+			this.consumer = requireNonNull(consumer);
 		}
 
 		@Override
 		public void run() {
-			if (callback != null) {
-				try {
-					callback.run();
-				} catch (Throwable e) {
-					tryResolve(null, e);
-					return;
+			Result<T> result = collect(promise);
+			if (result.fail == null) {
+				if (consumer != null) {
+					try {
+						consumer.accept(result.value);
+					} catch (Throwable e) {
+						result.fail = e;
+					}
 				}
-			}
-			Result<T> result = Result.collect(promise);
-			if ((result.fail != null) && (failure != null)) {
-				result.fail = failure;
+			} else {
+				if (failure != null) {
+					result.fail = failure;
+				}
 			}
 			tryResolve(result.value, result.fail);
 		}
@@ -428,7 +492,6 @@ final class PromiseImpl<T> implements Promise<T> {
 
 	/**
 	 * Resolve this Promise with the specified Promise.
-	 * 
 	 * <p>
 	 * If the specified Promise is successfully resolved, this Promise is
 	 * resolved with the value of the specified Promise. If the specified
@@ -436,7 +499,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * failure of the specified Promise.
 	 * 
 	 * @param with A Promise whose value or failure must be used to resolve this
-	 *        Promise. Must not be {@code null}.
+	 *            Promise. Must not be {@code null}.
 	 * @return A Promise that is resolved only when this Promise is resolved by
 	 *         the specified Promise. The returned Promise must be successfully
 	 *         resolved with the value {@code null}, if this Promise was
@@ -470,7 +533,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		@Override
 		public void run() {
 			Throwable f = null;
-			Result<T> result = Result.collect(promise);
+			Result<T> result = collect(promise);
 			try {
 				resolve(result.value, result.fail);
 			} catch (Throwable e) {
@@ -497,17 +560,17 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class Filter implements Runnable {
-		private final Promise< ? extends T>	promise;
+		private final PromiseImpl<T>		promise;
 		private final Predicate<? super T>	predicate;
 
-		Filter(Promise< ? extends T> promise, Predicate< ? super T> predicate) {
+		Filter(PromiseImpl<T> promise, Predicate< ? super T> predicate) {
 			this.promise = promise;
 			this.predicate = requireNonNull(predicate);
 		}
 
 		@Override
 		public void run() {
-			Result<T> result = Result.collect(promise);
+			Result<T> result = promise.collect();
 			if (result.fail == null) {
 				try {
 					if (!predicate.test(result.value)) {
@@ -538,10 +601,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class Map<P> implements Runnable {
-		private final Promise< ? extends P>				promise;
+		private final PromiseImpl<P>					promise;
 		private final Function<? super P, ? extends T>	mapper;
 
-		Map(Promise< ? extends P> promise,
+		Map(PromiseImpl<P> promise,
 				Function< ? super P, ? extends T> mapper) {
 			this.promise = promise;
 			this.mapper = requireNonNull(mapper);
@@ -549,7 +612,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<P> result = Result.collect(promise);
+			Result<P> result = promise.collect();
 			T v = null;
 			if (result.fail == null) {
 				try {
@@ -579,10 +642,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class FlatMap<P> implements Runnable {
-		private final Promise< ? extends P>							promise;
+		private final PromiseImpl<P>								promise;
 		private final Function< ? super P,Promise< ? extends T>>	mapper;
 
-		FlatMap(Promise< ? extends P> promise,
+		FlatMap(PromiseImpl<P> promise,
 				Function< ? super P,Promise< ? extends T>> mapper) {
 			this.promise = promise;
 			this.mapper = requireNonNull(mapper);
@@ -590,7 +653,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<P> result = Result.collect(promise);
+			Result<P> result = promise.collect();
 			if (result.fail == null) {
 				Promise< ? extends T> flatmap = null;
 				try {
@@ -624,10 +687,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class Recover implements Runnable {
-		private final Promise<T>							promise;
+		private final PromiseImpl<T>						promise;
 		private final Function<Promise< ? >, ? extends T>	recovery;
 
-		Recover(Promise<T> promise,
+		Recover(PromiseImpl<T> promise,
 				Function<Promise< ? >, ? extends T> recovery) {
 			this.promise = promise;
 			this.recovery = requireNonNull(recovery);
@@ -635,7 +698,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = Result.collect(promise);
+			Result<T> result = promise.collect();
 			if (result.fail != null) {
 				try {
 					T v = recovery.apply(promise);
@@ -668,10 +731,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class RecoverWith implements Runnable {
-		private final Promise<T>									promise;
+		private final PromiseImpl<T>								promise;
 		private final Function<Promise<?>, Promise<? extends T>>	recovery;
 
-		RecoverWith(Promise<T> promise,
+		RecoverWith(PromiseImpl<T> promise,
 				Function<Promise< ? >,Promise< ? extends T>> recovery) {
 			this.promise = promise;
 			this.recovery = requireNonNull(recovery);
@@ -679,7 +742,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		@Override
 		public void run() {
-			Result<T> result = Result.collect(promise);
+			Result<T> result = promise.collect();
 			if (result.fail != null) {
 				Promise< ? extends T> recovered = null;
 				try {
@@ -713,22 +776,22 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private final class FallbackTo implements Runnable {
-		private final Promise<T>			promise;
+		private final PromiseImpl<T>		promise;
 		private final Promise<? extends T>	fallback;
 
-		FallbackTo(Promise<T> promise, Promise< ? extends T> fallback) {
+		FallbackTo(PromiseImpl<T> promise, Promise< ? extends T> fallback) {
 			this.promise = promise;
 			this.fallback = requireNonNull(fallback);
 		}
 
 		@Override
 		public void run() {
-			Result<T> result = Result.collect(promise);
+			Result<T> result = promise.collect();
 			if (result.fail != null) {
 				fallback.onResolve(new Chain(fallback, result.fail));
 				return;
 			}
-			tryResolve(result.value, result.fail);
+			tryResolve(result.value, null);
 		}
 	}
 
@@ -843,6 +906,72 @@ final class PromiseImpl<T> implements Promise<T> {
 		@Override
 		public void run() {
 			schedule(operation, delay, unit);
+		}
+	}
+
+	/**
+	 * A holder of the result of a Promise.
+	 * 
+	 * @NotThreadSafe
+	 * @since 1.1
+	 */
+	static final class Result<P> {
+		Throwable	fail;
+		P			value;
+	
+		Result(P value) {
+			this.value = value;
+			this.fail = null;
+		}
+	
+		Result(Throwable fail) {
+			this.value = null;
+			this.fail = fail;
+		}
+	}
+
+	/**
+	 * Return a holder of the result of this PromiseImpl.
+	 * 
+	 * @since 1.1
+	 */
+	Result<T> collect() {
+		if (!isDone()) { // ensure latch open before reading state
+			return new Result<T>(new AssertionError("promise not resolved"));
+		}
+		if (fail == null) {
+			return new Result<T>(value);
+		}
+		return new Result<T>(fail);
+	}
+
+	/**
+	 * Return a holder of the result of the specified Promise.
+	 * 
+	 * @since 1.1
+	 */
+	static <R> Result<R> collect(Promise< ? extends R> promise) {
+		if (promise instanceof PromiseImpl) {
+			@SuppressWarnings("unchecked")
+			PromiseImpl<R> impl = (PromiseImpl<R>) promise;
+			return impl.collect();
+		}
+		if (!promise.isDone()) {
+			return new Result<R>(new AssertionError("promise not resolved"));
+		}
+		final boolean interrupted = Thread.interrupted();
+		try {
+			Throwable fail = promise.getFailure();
+			if (fail == null) {
+				return new Result<R>(promise.getValue());
+			}
+			return new Result<R>(fail);
+		} catch (Throwable e) {
+			return new Result<R>(e); // propagate new exception
+		} finally {
+			if (interrupted) { // restore interrupt status
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -993,37 +1122,6 @@ final class PromiseImpl<T> implements Promise<T> {
 					uncaughtException(t);
 				}
 			}
-		}
-	}
-
-	/**
-	 * A holder of the result of a promise.
-	 * 
-	 * @NotThreadSafe
-	 * @since 1.1
-	 */
-	static final class Result<P> {
-		Throwable	fail;
-		P			value;
-
-		Result() {}
-
-		static <R> Result<R> collect(Promise< ? extends R> promise) {
-			Result<R> result = new Result<>();
-			final boolean interrupted = Thread.interrupted();
-			try {
-				result.fail = promise.getFailure();
-				if (result.fail == null) {
-					result.value = promise.getValue();
-				}
-			} catch (Throwable e) {
-				result.fail = e; // propagate new exception
-			} finally {
-				if (interrupted) { // restore interrupt status
-					Thread.currentThread().interrupt();
-				}
-			}
-			return result;
 		}
 	}
 }

@@ -229,7 +229,7 @@ public class Promises {
 			List<Promise<?>> failed = new ArrayList<>(promises.size());
 			Throwable cause = null;
 			for (Promise<? extends T> promise : promises) {
-				Result<T> result = Result.collect(promise);
+				Result<T> result = PromiseImpl.collect(promise);
 				if (result.fail != null) {
 					failed.add(promise);
 					if (cause == null) {

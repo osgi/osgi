@@ -19,7 +19,7 @@ package org.osgi.util.promise;
 import java.lang.reflect.InvocationTargetException;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.util.function.Callback;
+import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
 import org.osgi.util.function.Predicate;
 
@@ -115,41 +115,85 @@ public interface Promise<T> {
 
 	/**
 	 * Register a callback to be called when this Promise is resolved.
-	 * 
 	 * <p>
 	 * The specified callback is called when this Promise is resolved either
 	 * successfully or with a failure.
-	 * 
 	 * <p>
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
-	 * 
 	 * <p>
 	 * Resolving this Promise <i>happens-before</i> any registered callback is
 	 * called. That is, in a registered callback, {@link #isDone()} must return
 	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
 	 * block.
-	 * 
 	 * <p>
 	 * A callback may be called on a different thread than the thread which
 	 * registered the callback. So the callback must be thread safe but can rely
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
-	 * @param callback A callback to be called when this Promise is resolved.
-	 *        Must not be {@code null}.
+	 * @param callback The callback to be called when this Promise is resolved.
+	 *            Must not be {@code null}.
 	 * @return This Promise.
 	 */
 	Promise<T> onResolve(Runnable callback);
 
 	/**
-	 * Chain a new Promise to this Promise with Success and Failure callbacks.
+	 * Register a callback to be called with the result of this Promise when
+	 * this Promise is resolved successfully. The callback will not be called if
+	 * this Promise is resolved with a failure.
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * <p>
+	 * Resolving this Promise <i>happens-before</i> any registered callback is
+	 * called. That is, in a registered callback, {@link #isDone()} must return
+	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
+	 * block.
+	 * <p>
+	 * A callback may be called on a different thread than the thread which
+	 * registered the callback. So the callback must be thread safe but can rely
+	 * upon that the registration of the callback <i>happens-before</i> the
+	 * registered callback is called.
 	 * 
+	 * @param success The Consumer callback that receives the the value of this
+	 *            Promise. Must not be {@code null}.
+	 * @return This Promise.
+	 * @since 1.1
+	 */
+	Promise<T> onSuccess(Consumer< ? super T> success);
+
+	/**
+	 * Register a callback to be called with the failure for this Promise when
+	 * this Promise is resolved with a failure. The callback will not be called
+	 * if this Promise is resolved successfully.
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * <p>
+	 * Resolving this Promise <i>happens-before</i> any registered callback is
+	 * called. That is, in a registered callback, {@link #isDone()} must return
+	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
+	 * block.
+	 * <p>
+	 * A callback may be called on a different thread than the thread which
+	 * registered the callback. So the callback must be thread safe but can rely
+	 * upon that the registration of the callback <i>happens-before</i> the
+	 * registered callback is called.
+	 * 
+	 * @param failure The Consumer callback that receives the the failure of
+	 *            this Promise. Must not be {@code null}.
+	 * @return This Promise.
+	 * @since 1.1
+	 */
+	Promise<T> onFailure(Consumer< ? super Throwable> failure);
+
+	/**
+	 * Chain a new Promise to this Promise with Success and Failure callbacks.
 	 * <p>
 	 * The specified {@link Success} callback is called when this Promise is
 	 * successfully resolved and the specified {@link Failure} callback is
 	 * called when this Promise is resolved with a failure.
-	 * 
 	 * <p>
 	 * This method returns a new Promise which is chained to this Promise. The
 	 * returned Promise must be resolved when this Promise is resolved after the
@@ -157,24 +201,20 @@ public interface Promise<T> {
 	 * executed callback must be used to resolve the returned Promise. Multiple
 	 * calls to this method can be used to create a chain of promises which are
 	 * resolved in sequence.
-	 * 
 	 * <p>
 	 * If this Promise is successfully resolved, the Success callback is
 	 * executed and the result Promise, if any, or thrown exception is used to
 	 * resolve the returned Promise from this method. If this Promise is
 	 * resolved with a failure, the Failure callback is executed and the
 	 * returned Promise from this method is failed.
-	 * 
 	 * <p>
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
-	 * 
 	 * <p>
 	 * Resolving this Promise <i>happens-before</i> any registered callback is
 	 * called. That is, in a registered callback, {@link #isDone()} must return
 	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
 	 * block.
-	 * 
 	 * <p>
 	 * A callback may be called on a different thread than the thread which
 	 * registered the callback. So the callback must be thread safe but can rely
@@ -182,14 +222,14 @@ public interface Promise<T> {
 	 * registered callback is called.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param success A Success callback to be called when this Promise is
-	 *        successfully resolved. May be {@code null} if no Success callback
-	 *        is required. In this case, the returned Promise must be resolved
-	 *        with the value {@code null} when this Promise is successfully
-	 *        resolved.
-	 * @param failure A Failure callback to be called when this Promise is
-	 *        resolved with a failure. May be {@code null} if no Failure
-	 *        callback is required.
+	 * @param success The Success callback to be called when this Promise is
+	 *            successfully resolved. May be {@code null} if no Success
+	 *            callback is required. In this case, the returned Promise must
+	 *            be resolved with the value {@code null} when this Promise is
+	 *            successfully resolved.
+	 * @param failure The Failure callback to be called when this Promise is
+	 *            resolved with a failure. May be {@code null} if no Failure
+	 *            callback is required.
 	 * @return A new Promise which is chained to this Promise. The returned
 	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success or Failure callback, if any, is executed.
@@ -198,18 +238,17 @@ public interface Promise<T> {
 
 	/**
 	 * Chain a new Promise to this Promise with a Success callback.
-	 * 
 	 * <p>
 	 * This method performs the same function as calling
 	 * {@link #then(Success, Failure)} with the specified Success callback and
 	 * {@code null} for the Failure callback.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param success A Success callback to be called when this Promise is
-	 *        successfully resolved. May be {@code null} if no Success callback
-	 *        is required. In this case, the returned Promise must be resolved
-	 *        with the value {@code null} when this Promise is successfully
-	 *        resolved.
+	 * @param success The Success callback to be called when this Promise is
+	 *            successfully resolved. May be {@code null} if no Success
+	 *            callback is required. In this case, the returned Promise must
+	 *            be resolved with the value {@code null} when this Promise is
+	 *            successfully resolved.
 	 * @return A new Promise which is chained to this Promise. The returned
 	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success, if any, is executed.
@@ -218,16 +257,17 @@ public interface Promise<T> {
 	<R> Promise<R> then(Success<? super T, ? extends R> success);
 
 	/**
-	 * Chain a new Promise to this Promise with a callback.
+	 * Chain a new Promise to this Promise with a Consumer callback that
+	 * receives the value of this Promise when it is successfully resolved.
 	 * <p>
-	 * The specified {@link Callback} is called when this Promise is resolved
-	 * either successfully or with a failure.
+	 * The specified {@link Consumer} is called when this Promise is resolved
+	 * successfully.
 	 * <p>
 	 * This method returns a new Promise which is chained to this Promise. The
 	 * returned Promise must be resolved when this Promise is resolved after the
 	 * specified callback is executed. If the callback throws an exception, the
 	 * returned Promise is failed with that exception. Otherwise the returned
-	 * Promise is resolved with this Promise.
+	 * Promise is resolved with the success value from this Promise.
 	 * <p>
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
@@ -242,18 +282,17 @@ public interface Promise<T> {
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
-	 * @param callback A callback to be called when this Promise is resolved.
-	 *            Must not be {@code null}.
+	 * @param consumer The Consumer callback that receives the the value of this
+	 *            Promise. Must not be {@code null}.
 	 * @return A new Promise which is chained to this Promise. The returned
 	 *         Promise must be resolved when this Promise is resolved after the
-	 *         specified callback is executed.
+	 *         specified Consumer is executed.
 	 * @since 1.1
 	 */
-	Promise<T> then(Callback callback);
+	Promise<T> thenAccept(Consumer< ? super T> consumer);
 
 	/**
 	 * Filter the value of this Promise.
-	 * 
 	 * <p>
 	 * If this Promise is successfully resolved, the returned Promise must
 	 * either be resolved with the value of this Promise, if the specified
@@ -261,17 +300,15 @@ public interface Promise<T> {
 	 * {@code NoSuchElementException}, if the specified Predicate does not
 	 * accept that value. If the specified Predicate throws an exception, the
 	 * returned Promise must be failed with the exception.
-	 * 
 	 * <p>
 	 * If this Promise is resolved with a failure, the returned Promise must be
 	 * failed with that failure.
-	 * 
 	 * <p>
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
 	 * 
 	 * @param predicate The Predicate to evaluate the value of this Promise.
-	 *        Must not be {@code null}.
+	 *            Must not be {@code null}.
 	 * @return A Promise that filters the value of this Promise.
 	 */
 	Promise<T> filter(Predicate<? super T> predicate);

@@ -182,8 +182,7 @@
     implementations. This API contains the <xref
     linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
     which provides a standard Promise implementation. A Deferred object can be
-    created with the <xref linkend="org.osgi.util.promise.Deferred.Deferred--"
-    xrefstyle="hyperlink"/> constructor and the Promise associated with the
+    created with one of the constructors and the Promise associated with the
     new Deferred object can be obtained using <xref
     linkend="org.osgi.util.promise.Deferred.getPromise--"
     xrefstyle="hyperlink"/>. This Promise can then be supplied to other
@@ -219,8 +218,8 @@
 
     <programlisting>private void doTask(Deferred&lt;String&gt; deferred) {
   try {
-    Promise&lt;String&gt; answer = getPromiseWithTheAnswer();
-    deferred.resolveWith(answer); // resolve with another Promise
+    Promise&lt;String&gt; promise = getPromiseWithTheAnswer();
+    deferred.resolveWith(promise); // resolve with another Promise
   } catch (Exception e) {
     deferred.fail(e); // unsuccessfully resolve with exception
   }
@@ -244,7 +243,7 @@
 
     <para>To be notified when a Promise has been resolved, callbacks are used.
     The Promise API provides two forms of callbacks: the basic
-    <code>Runnable</code> and <xref linkend="org.osgi.util.function.Callback"
+    <code>Runnable</code> and <xref linkend="org.osgi.util.function.Consumer"
     xrefstyle="hyperlink"/> callbacks and the more specialized <xref
     linkend="org.osgi.util.promise.Success" xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Failure" xrefstyle="hyperlink"/>
@@ -269,8 +268,11 @@
     callback is registered on an already resolved Promise, it will be called
     right away.</para>
 
-    <para>The <xref linkend="org.osgi.util.promise.Deferred"
-    xrefstyle="hyperlink"/> class provides <xref
+    <para>In addition to the <xref
+    linkend="org.osgi.util.promise.Deferred.Deferred--"
+    xrefstyle="hyperlink"/> constructor, the <xref
+    linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
+    also provides the <xref
     linkend="org.osgi.util.promise.Deferred.Deferred-Executor-"
     xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Deferred.Deferred-Executor-ScheduledExecutorService-"
@@ -304,11 +306,7 @@
       must take care to ensure it has access.</para>
 
       <programlisting>final Promise&lt;String&gt; answer = getTimeConsumingAnswer();
-answer.onResolve(new Runnable() {
-  public void run() {
-    doSomethingWithAnswer(answer);
-  }
-});</programlisting>
+answer.onResolve(() -&gt; doSomethingWithAnswer(answer));</programlisting>
 
       <para>The <xref
       linkend="org.osgi.util.promise.Promise.onResolve-Runnable-"
@@ -316,31 +314,52 @@ answer.onResolve(new Runnable() {
       is called.</para>
     </section>
 
-    <section xml:id="util.promise-callbacks.callback">
-      <title>Callback</title>
+    <section xml:id="util.promise-callbacks.consumer">
+      <title>Consumer</title>
 
-      <para>The <xref linkend="org.osgi.util.promise.Promise.then-Callback-"
+      <para>The <xref
+      linkend="org.osgi.util.promise.Promise.thenAccept-Consumer-"
       xrefstyle="hyperlink"/> method is used to register a <xref
-      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/> with
-      the Promise which must be called when the Promise is resolved either
-      successfully with a value or unsuccessfully with a failure. The resolved
-      Promise is not passed to the <xref
-      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/>, so if
-      the <xref linkend="org.osgi.util.function.Callback"
-      xrefstyle="hyperlink"/> implementation needs access to the resolved
-      Promise, it must take care to ensure it has access.</para>
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/> with
+      the Promise which must be called when the Promise is resolved
+      successfully with a value. The value of the resolved Promise is passed
+      to the <xref linkend="org.osgi.util.function.Consumer"
+      xrefstyle="hyperlink"/>.</para>
 
-      <programlisting>final Promise&lt;String&gt; answer = getTimeConsumingAnswer().then(new Callback() {
-  public void run() throws Exception {
-    doSomethingWithAnswer(answer);
-  }
-});</programlisting>
+      <programlisting>final Promise&lt;String&gt; answer = getTimeConsumingAnswer().thenAccept(s -&gt;
+    doSomethingWithAnswer(s)
+);</programlisting>
 
-      <para>The <xref linkend="org.osgi.util.promise.Promise.then-Callback-"
+      <para>The <xref
+      linkend="org.osgi.util.promise.Promise.thenAccept-Consumer-"
       xrefstyle="hyperlink"/> method returns a new Promise which will be
       resolved with either the exception thrown from the <xref
-      linkend="org.osgi.util.function.Callback" xrefstyle="hyperlink"/>, if
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>, if
       one is thrown, or with the Promise.</para>
+
+      <para>The <xref
+      linkend="org.osgi.util.promise.Promise.onSuccess-Consumer-"
+      xrefstyle="hyperlink"/> method is used to register a <xref
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/> with
+      the Promise which must be called when the Promise is resolved
+      successfully with a value. The value of the resolved Promise is passed
+      to the <xref linkend="org.osgi.util.function.Consumer"
+      xrefstyle="hyperlink"/>. The <xref
+      linkend="org.osgi.util.promise.Promise.onSuccess-Consumer-"
+      xrefstyle="hyperlink"/> method returns the Promise object upon which it
+      is called.</para>
+
+      <para>The <xref
+      linkend="org.osgi.util.promise.Promise.onFailure-Consumer-"
+      xrefstyle="hyperlink"/> method is used to register a <xref
+      linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/> with
+      the Promise which must be called when the Promise is resolved
+      unsuccessfully with a failure. The failure of the resolved Promise is
+      passed to the <xref linkend="org.osgi.util.function.Consumer"
+      xrefstyle="hyperlink"/>. The <xref
+      linkend="org.osgi.util.promise.Promise.onFailure-Consumer-"
+      xrefstyle="hyperlink"/> method returns the Promise object upon which it
+      is called.</para>
     </section>
 
     <section>
@@ -372,24 +391,37 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     <title>Chaining Promises</title>
 
     <para>The <xref linkend="org.osgi.util.promise.Promise.then-Success-"
-    xrefstyle="hyperlink"/> and <xref
+    xrefstyle="hyperlink"/>, <xref
     linkend="org.osgi.util.promise.Promise.then-Success-Failure-"
+    xrefstyle="hyperlink"/>, and <xref
+    linkend="org.osgi.util.promise.Promise.thenAccept-Consumer-"
     xrefstyle="hyperlink"/> methods also provide a means to chain Promises
-    together. The <code>then</code> methods return a new Promise which is
-    chained to the original Promise upon which the <code>then</code> method
-    was called. The returned Promise must be resolved when the original
-    Promise is resolved after the specified Success or Failure callback is
-    executed. The result of the executed callback must be used to resolve the
-    returned Promise. A sequence of calls to the <code>then</code> methods can
-    be used to create a chain of promises which are resolved in
-    sequence.</para>
+    together. These methods return a new Promise which is chained to the
+    original Promise upon which the method was called. The returned Promise
+    must be resolved when the original Promise is resolved after the specified
+    Success, Failure, or Consumer callback is executed. The result of the
+    executed callback must be used to resolve the returned Promise. A sequence
+    of calls to the <code>then</code> methods can be used to create a chain of
+    promises which are resolved in sequence.</para>
 
-    <para>If the original Promise is successfully resolved, the Success
-    callback is executed and the Promise returned by the Success callback, if
-    any, or thrown exception is used to resolve the Promise returned from the
-    <code>then</code> method. If the original Promise is resolved with a
-    failure, the Failure callback is executed and the Promise returned from
-    the <code>then</code> method is resolved with a failure.</para>
+    <para>For the <xref linkend="org.osgi.util.promise.Promise.then-Success-"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.util.promise.Promise.then-Success-Failure-"
+    xrefstyle="hyperlink"/> methods, if the original Promise is successfully
+    resolved, the Success callback is executed and the Promise returned by the
+    Success callback, if any, or thrown exception is used to resolve the
+    Promise returned from the method. If the original Promise is resolved with
+    a failure, the Failure callback is executed and the Promise returned from
+    the method is resolved with a failure.</para>
+
+    <para>For the <xref
+    linkend="org.osgi.util.promise.Promise.thenAccept-Consumer-"
+    xrefstyle="hyperlink"/> method, if the original Promise is successfully
+    resolved, the Consumer callback is executed and the value of the original
+    Promise or thrown exception is used to resolve the Promise returned from
+    the method. If the original Promise is resolved with a failure, the
+    Consumer callback is not executed and the Promise returned from the method
+    is resolved with the failure of the original Promise.</para>
 
     <para>In the following example, a Promise which will supply the name of
     the file to download is chained to a Promise which will return a mirror
@@ -409,7 +441,9 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <para>The chain of Promises will also propagate any exceptions that occur
     to resolve the last Promise in the chain which means we do not need to do
-    any exception handling in the intermediate tasks.</para>
+    any exception handling in the intermediate tasks. Promises can also be
+    chained by using the monadic programming methods in <xref
+    linkend="util.promise-monad.programming"/>.</para>
   </section>
 
   <section xml:id="util.promise-monad.programming">
@@ -530,7 +564,27 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         returned by the fallbackTo method is unsuccessfully resolved with the
         failure of the Promise.</para>
       </listitem>
+    </itemizedlist>
 
+    <para>These functions can be used to build pipelines of chained Promises
+    that are processed in sequence. For example, in the following chain, the
+    value of the original promise, once resolved, is filtered for acceptable
+    values. If the filter says the value is not acceptable, the recover method
+    will be used to replace it with a default value.</para>
+
+    <programlisting>return promise.filter(v -&gt; isValueOk(v)).recover(p -&gt; getDefaultValue())</programlisting>
+
+    <para>With these chains, one can write powerful programs without the need
+    to resort to complex if/else and try/catch logic.</para>
+  </section>
+
+  <section xml:id="util.promise-timing.methods">
+    <title>Timing</title>
+
+    <para>The Promise API provides methods to affect the timing of resolving
+    Promises.</para>
+
+    <itemizedlist>
       <listitem>
         <para><xref linkend="org.osgi.util.promise.Promise.timeout-long-"
         xrefstyle="hyperlink"/> - Time out the resolution of the
@@ -554,17 +608,6 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         the Promise after the specified delay.</para>
       </listitem>
     </itemizedlist>
-
-    <para>These functions can be used to build pipelines of chained Promises
-    that are processed in sequence. For example, in the following chain, the
-    value of the original promise, once resolved, is filtered for acceptable
-    values. If the filter says the value is not acceptable, the recover method
-    will be used to replace it with a default value.</para>
-
-    <programlisting>return promise.filter(v -&gt; isValueOk(v)).recover(p -&gt; getDefaultValue())</programlisting>
-
-    <para>With these chains, one can write powerful programs without the need
-    to resort to complex if/else and try/catch logic.</para>
   </section>
 
   <section>
@@ -572,20 +615,22 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
 
     <para>In Java 8, the concept of Functional Interfaces is introduced. See
     <xref linkend="util.promise-ref.functional.interfaces"/>. Functional
-    interfaces are interfaces with a single abstract method. Instances of
+    interfaces are types with a single abstract method. Instances of
     functional interfaces can be created with lambda expressions, method
     references, or constructor references. Many methods on <xref
     linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/> take
     functional interface arguments and so are suitable for use with lambda
     expressions and method references in Java 8.</para>
 
-    <para>Two of these functional interfaces are <xref
-    linkend="org.osgi.util.function.Function" xrefstyle="hyperlink"/> and
-    <xref linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>.
+    <para>Three of these functional interfaces are <xref
+    linkend="org.osgi.util.function.Function" xrefstyle="hyperlink"/>, <xref
+    linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, and
+    <xref linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>.
     These are equivalent to functional interfaces which are part of the
     <code>java.util.function</code> package introduced in Java 8. Since OSGi
     intends the Promise API to be usable on versions of Java prior to Java 8,
-    we define our own interfaces.</para>
+    we define our own interfaces. Our interfaces also allow thrown exceptions
+    which can be propagated in a chain of Promises.</para>
   </section>
 
   <section>
@@ -663,20 +708,24 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         </listitem>
 
         <listitem>
-          <para>The Callback functional interface is added to the
-          org.osgi.util.function package. A new method is added to Promise
-          which accepts a Callback. See <xref
-          linkend="util.promise-callbacks.callback"/>.</para>
+          <para>The Consumer functional interface is added to the
+          org.osgi.util.function package. New methods are added to Promise
+          which accept a Consumer. See <xref
+          linkend="util.promise-callbacks.consumer"/>.</para>
         </listitem>
 
         <listitem>
-          <para>New timeout and delay methods are added to Promise.</para>
+          <para>New timeout and delay methods are added to Promise. See <xref
+          linkend="util.promise-timing.methods"/>.</para>
         </listitem>
 
         <listitem>
           <para>The Deferred class has new constructors which allows the
           caller to specify the executors to be used by the associated Promise
-          and any Promises created by the associated Promise.</para>
+          and any Promises created by the associated Promise. The Deferred
+          class provides an inlineExecutor which can be used to provide
+          behavior similar to how callbacks were executed in the default
+          implementation of Promise 1.0 specification.</para>
         </listitem>
       </itemizedlist></para>
   </section>
