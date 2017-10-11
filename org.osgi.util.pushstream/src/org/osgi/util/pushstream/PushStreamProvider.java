@@ -302,9 +302,65 @@ public final class PushStreamProvider {
 	 */
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventSource<T>,T,U> buildEventSourceFromStream(
 			PushStream<T> stream) {
+		BufferBuilder<PushStream<T>,T,U> builder = stream.buildBuffer();
 		
-		return new AbstractBufferBuilder<PushEventSource<T>,T,U>() {
-			@SuppressWarnings("unchecked")
+		return new BufferBuilder<PushEventSource<T>,T,U>() {
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withBuffer(U queue) {
+				builder.withBuffer(queue);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withQueuePolicy(
+					QueuePolicy<T,U> queuePolicy) {
+				builder.withQueuePolicy(queuePolicy);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withQueuePolicy(
+					QueuePolicyOption queuePolicyOption) {
+				builder.withQueuePolicy(queuePolicyOption);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withPushbackPolicy(
+					PushbackPolicy<T,U> pushbackPolicy) {
+				builder.withPushbackPolicy(pushbackPolicy);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withPushbackPolicy(
+					PushbackPolicyOption pushbackPolicyOption, long time) {
+				builder.withPushbackPolicy(pushbackPolicyOption, time);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withParallelism(
+					int parallelism) {
+				builder.withParallelism(parallelism);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withExecutor(
+					Executor executor) {
+				builder.withExecutor(executor);
+				return this;
+			}
+
+			@Override
+			public BufferBuilder<PushEventSource<T>,T,U> withScheduler(
+					ScheduledExecutorService scheduler) {
+				builder.withScheduler(scheduler);
+				return this;
+			}
+
 			@Override
 			public PushEventSource<T> build() {
 				
@@ -330,16 +386,7 @@ public final class PushStreamProvider {
 					
 					if(!connect.getAndSet(true)) {
 						// connect
-						stream.buildBuffer()
-								.withBuffer(buffer)
-								.withPushbackPolicy(
-										(PushbackPolicy<T,BlockingQueue<PushEvent< ? extends T>>>) backPressure)
-								.withExecutor(worker)
-								.withParallelism(concurrency)
-								.withQueuePolicy(
-										(QueuePolicy<T,BlockingQueue<PushEvent< ? extends T>>>) bufferingPolicy)
-								.withScheduler(timer)
-								.build()
+						builder.build()
 								.forEachEvent(new MultiplexingConsumer<T>(
 										terminalEvent, consumers));
 					}
