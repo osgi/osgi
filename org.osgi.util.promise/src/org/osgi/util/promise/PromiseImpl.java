@@ -511,35 +511,35 @@ final class PromiseImpl<T> implements Promise<T> {
 	Promise<Void> resolveWith(Promise<? extends T> with) {
 		PromiseImpl<Void> chained = new PromiseImpl<>(callbackExecutor,
 				scheduledExecutor);
-		with.onResolve(new ResolveWith(with, chained));
+		with.onResolve(chained.new ResolveWith<>(this, with));
 		return chained;
 	}
 
 	/**
-	 * A callback used to resolve this Promise with another Promise for the
+	 * A callback used to resolve a Promise with another Promise for the
 	 * {@link PromiseImpl#resolveWith(Promise)} method.
 	 * 
 	 * @Immutable
 	 */
-	private final class ResolveWith implements Runnable {
-		private final Promise< ? extends T>	promise;
-		private final PromiseImpl<Void>	chained;
+	private final class ResolveWith<P> implements Runnable {
+		private final PromiseImpl<P>		promise;
+		private final Promise< ? extends P>	with;
 
-		ResolveWith(Promise< ? extends T> promise, PromiseImpl<Void> chained) {
+		ResolveWith(PromiseImpl<P> promise, Promise< ? extends P> with) {
 			this.promise = promise;
-			this.chained = chained;
+			this.with = with;
 		}
 
 		@Override
 		public void run() {
 			Throwable f = null;
-			Result<T> result = collect(promise);
+			Result<P> result = collect(with);
 			try {
-				resolve(result.value, result.fail);
+				promise.resolve(result.value, result.fail);
 			} catch (Throwable e) {
 				f = e; // propagate new exception
 			}
-			chained.tryResolve(null, f);
+			tryResolve(null, f);
 		}
 	}
 
