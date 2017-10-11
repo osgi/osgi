@@ -289,8 +289,9 @@
     then the Promise implementation will use an implementation default. The
     <xref linkend="org.osgi.util.promise.Deferred.inlineExecutor--"
     xrefstyle="hyperlink"/> method can be used to get an executor which runs
-    callbacks immediately on the caller's thread. This behavior is similar to
-    how callbacks were executed in the default implementation of Promise 1.0
+    callbacks immediately on the thread calling the
+    <code>Executor.execute</code> method. This behavior is similar to how
+    callbacks were executed in the default implementation of Promise 1.0
     specification.</para>
 
     <section>

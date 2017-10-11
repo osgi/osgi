@@ -190,11 +190,11 @@ public class Deferred<T> {
 	}
 
 	/**
-	 * Returns an Executor implementation to execute callbacks immediately on
-	 * the caller's thread.
+	 * Returns an Executor implementation that executes callbacks immediately on
+	 * the thread calling the {@code Executor.execute} method.
 	 * 
-	 * @return An Executor implementation to execute callbacks immediately on
-	 *         the caller's thread.
+	 * @return An Executor implementation that executes callbacks immediately on
+	 *         the thread calling the {@code Executor.execute} method.
 	 * @since 1.1
 	 */
 	public static Executor inlineExecutor() {
@@ -203,7 +203,7 @@ public class Deferred<T> {
 
 	/**
 	 * An Executor implementation which executes the Runnable immediately on the
-	 * caller's thread.
+	 * thread calling the {@code Executor.execute} method.
 	 * 
 	 * @since 1.1
 	 */
