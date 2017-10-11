@@ -25,11 +25,13 @@ import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
@@ -282,9 +284,17 @@ public final class PushStreamProvider {
 	 * call to {@link PushEventSource#open(PushEventConsumer)} will begin event
 	 * processing.
 	 * 
+	 * <p>
 	 * The {@link PushEventSource} will remain active until the backing stream
 	 * is closed, and permits multiple consumers to
-	 * {@link PushEventSource#open(PushEventConsumer)} it.
+	 * {@link PushEventSource#open(PushEventConsumer)} it. Note that this means
+	 * the caller of this method is responsible for closing the supplied
+	 * stream if it is not finite in length.
+	 * 
+	 * <p>Late joining
+	 * consumers will not receive historical events, but will immediately
+	 * receive the terminal event which closed the stream if the stream is
+	 * already closed.
 	 * 
 	 * @param stream
 	 * 
@@ -292,26 +302,127 @@ public final class PushStreamProvider {
 	 */
 	public <T, U extends BlockingQueue<PushEvent< ? extends T>>> BufferBuilder<PushEventSource<T>,T,U> buildEventSourceFromStream(
 			PushStream<T> stream) {
+		
 		return new AbstractBufferBuilder<PushEventSource<T>,T,U>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public PushEventSource<T> build() {
-				SimplePushEventSource<T> spes = createSimplePushEventSource(
-						concurrency, worker, buffer, bufferingPolicy, () -> {
+				
+				AtomicBoolean connect = new AtomicBoolean();
+				AtomicReference<PushEvent<T>> terminalEvent = new AtomicReference<>();
+				
+				CopyOnWriteArrayList<PushEventConsumer< ? super T>> consumers = new CopyOnWriteArrayList<>();
+				
+				return consumer -> {
+					
+					consumers.add(consumer);
+					
+					PushEvent<T> terminal = terminalEvent.get();
+					if (terminal != null) {
+						if (consumers.remove(consumer)) {
+							// The stream is already done and we missed it
+							consumer.accept(terminal);
+						}
+						return () -> {
+								//Nothing to do, we have already sent the terminal event
+							};
+					}
+					
+					if(!connect.getAndSet(true)) {
+						// connect
+						stream.buildBuffer()
+								.withBuffer(buffer)
+								.withPushbackPolicy(
+										(PushbackPolicy<T,BlockingQueue<PushEvent< ? extends T>>>) backPressure)
+								.withExecutor(worker)
+								.withParallelism(concurrency)
+								.withQueuePolicy(
+										(QueuePolicy<T,BlockingQueue<PushEvent< ? extends T>>>) bufferingPolicy)
+								.withScheduler(timer)
+								.build()
+								.forEachEvent(new MultiplexingConsumer<T>(
+										terminalEvent, consumers));
+					}
+
+					return () -> {
+						if (consumers.remove(consumer)) {
 							try {
-								stream.close();
-							} catch (Exception e) {
+								consumer.accept(PushEvent.close());
+							} catch (Exception ex) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								ex.printStackTrace();
 							}
-						});
-				spes.connectPromise()
-						.then(p -> stream.forEach(t -> spes.publish(t))
-								.onResolve(() -> spes.close()));
-				return spes;
+						}
+					};
+				};
 			}
 		};
 	}
 	
+	private static class MultiplexingConsumer<T> implements PushEventConsumer<T> {
+
+		private final AtomicReference<PushEvent<T>> terminalEventStore;
+		
+		private final CopyOnWriteArrayList<PushEventConsumer<? super T>> consumers;
+		
+		public MultiplexingConsumer(
+				AtomicReference<PushEvent<T>> terminalEventStore,
+				CopyOnWriteArrayList<PushEventConsumer< ? super T>> consumers) {
+			super();
+			this.terminalEventStore = terminalEventStore;
+			this.consumers = consumers;
+		}
+
+		@Override
+		public long accept(PushEvent< ? extends T> event) throws Exception {
+			boolean isTerminal = event.isTerminal();
+			if(isTerminal) {
+				if(!terminalEventStore.compareAndSet(null, event.nodata())) {
+					// We got a duplicate terminal, silently ignore it
+					return -1;
+				}
+				for (PushEventConsumer< ? super T> pushEventConsumer : consumers) {
+					if(consumers.remove(pushEventConsumer)) {
+						try {
+							pushEventConsumer.accept(event);
+						} catch (Exception ex) {
+							// TODO Auto-generated catch block
+							ex.printStackTrace();
+						}
+					}
+				}
+				return -1;
+			} else {
+				long maxBP = 0;
+				for (PushEventConsumer< ? super T> pushEventConsumer : consumers) {
+					try {
+						long tmpBP = pushEventConsumer.accept(event);
+						
+						if(tmpBP < 0 && consumers.remove(pushEventConsumer)) {
+							try {
+								pushEventConsumer.accept(PushEvent.close());
+							} catch (Exception ex) {
+								// TODO Auto-generated catch block
+								ex.printStackTrace();
+							}
+						} else if (tmpBP > maxBP) {
+							maxBP = tmpBP;
+						}
+					} catch (Exception ex) {
+						if(consumers.remove(pushEventConsumer)) {
+							try {
+								pushEventConsumer.accept(PushEvent.error(ex));
+							} catch (Exception ex2) {
+								// TODO Auto-generated catch block
+								ex2.printStackTrace();
+							}
+						}
+					}
+				}
+				return maxBP;
+			}
+		}
+	}
 
 	/**
 	 * Create a {@link SimplePushEventSource} with the supplied type and default
