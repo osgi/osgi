@@ -429,6 +429,47 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * A callback used to resolve the chained Promise when the Promise is
+	 * resolved.
+	 * 
+	 * @Immutable
+	 */
+	private final class Chain implements Runnable {
+		private final Promise< ? extends T> promise;
+	
+		Chain(Promise< ? extends T> promise) {
+			this.promise = promise;
+		}
+	
+		@Override
+		public void run() {
+			Result<T> result = collect(promise);
+			tryResolve(result.value, result.fail);
+		}
+	}
+
+	/**
+	 * A callback used to resolve the chained Promise when the PromiseImpl is
+	 * resolved.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private final class ChainImpl implements Runnable {
+		private final PromiseImpl<T> promise;
+	
+		ChainImpl(PromiseImpl<T> promise) {
+			this.promise = promise;
+		}
+	
+		@Override
+		public void run() {
+			Result<T> result = promise.collect();
+			tryResolve(result.value, result.fail);
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @since 1.1
@@ -437,53 +478,34 @@ final class PromiseImpl<T> implements Promise<T> {
 	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
 		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
 				scheduledExecutor);
-		onResolve(chained.new Chain(this, consumer));
+		onResolve(chained.new ThenAccept(this, consumer));
 		return chained;
 	}
 
 	/**
-	 * A callback used to resolve the chained Promise when the Promise promise
-	 * is resolved.
+	 * A callback used to resolve the chained Promise and call a Consumer when
+	 * the PromiseImpl is resolved.
 	 * 
 	 * @Immutable
+	 * @since 1.1
 	 */
-	private final class Chain implements Runnable {
-		private final Promise< ? extends T>	promise;
-		private final Throwable				failure;
-		private final Consumer< ? super T>	consumer;
-
-		Chain(Promise< ? extends T> promise) {
+	private final class ThenAccept implements Runnable {
+		private final PromiseImpl<T>		promise;
+		private final Consumer< ? super T> consumer;
+	
+		ThenAccept(PromiseImpl<T> promise, Consumer< ? super T> consumer) {
 			this.promise = promise;
-			this.failure = null;
-			this.consumer = null;
-		}
-
-		Chain(Promise< ? extends T> promise, Throwable failure) {
-			this.promise = promise;
-			this.failure = requireNonNull(failure);
-			this.consumer = null;
-		}
-
-		Chain(Promise< ? extends T> promise, Consumer< ? super T> consumer) {
-			this.promise = promise;
-			this.failure = null;
 			this.consumer = requireNonNull(consumer);
 		}
-
+	
 		@Override
 		public void run() {
-			Result<T> result = collect(promise);
+			Result<T> result = promise.collect();
 			if (result.fail == null) {
-				if (consumer != null) {
-					try {
-						consumer.accept(result.value);
-					} catch (Throwable e) {
-						result.fail = e;
-					}
-				}
-			} else {
-				if (failure != null) {
-					result.fail = failure;
+				try {
+					consumer.accept(result.value);
+				} catch (Throwable e) {
+					result.fail = e;
 				}
 			}
 			tryResolve(result.value, result.fail);
@@ -788,10 +810,36 @@ final class PromiseImpl<T> implements Promise<T> {
 		public void run() {
 			Result<T> result = promise.collect();
 			if (result.fail != null) {
-				fallback.onResolve(new Chain(fallback, result.fail));
+				fallback.onResolve(new FallbackChain(fallback, result.fail));
 				return;
 			}
 			tryResolve(result.value, null);
+		}
+	}
+
+	/**
+	 * A callback used to resolve the chained Promise when the fallback Promise
+	 * is resolved.
+	 * 
+	 * @Immutable
+	 * @since 1.1
+	 */
+	private final class FallbackChain implements Runnable {
+		private final Promise< ? extends T>	fallback;
+		private final Throwable failure;
+	
+		FallbackChain(Promise< ? extends T> fallback, Throwable failure) {
+			this.fallback = fallback;
+			this.failure = failure;
+		}
+
+		@Override
+		public void run() {
+			Result<T> result = collect(fallback);
+			if (result.fail != null) {
+				result.fail = failure;
+			}
+			tryResolve(result.value, result.fail);
 		}
 	}
 
@@ -831,10 +879,10 @@ final class PromiseImpl<T> implements Promise<T> {
 			PromiseImpl<T> timedout = new PromiseImpl<>(null,
 					new TimeoutException(), callbackExecutor,
 					scheduledExecutor);
-			onResolve(new Timeout(chained.new Chain(timedout), millis,
+			onResolve(new Timeout(chained.new ChainImpl(timedout), millis,
 					TimeUnit.MILLISECONDS));
 		}
-		onResolve(chained.new Chain(this));
+		onResolve(chained.new ChainImpl(this));
 		return chained;
 	}
 
@@ -869,7 +917,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	public Promise<T> delay(long millis) {
 		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
 				scheduledExecutor);
-		onResolve(new Delay(chained.new Chain(this), millis,
+		onResolve(new Delay(chained.new ChainImpl(this), millis,
 				TimeUnit.MILLISECONDS));
 		return chained;
 	}
