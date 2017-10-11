@@ -828,7 +828,11 @@ final class PromiseImpl<T> implements Promise<T> {
 		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
 				scheduledExecutor);
 		if (!isDone()) {
-			onResolve(chained.new Timeout(millis, TimeUnit.MILLISECONDS));
+			PromiseImpl<T> timedout = new PromiseImpl<>(null,
+					new TimeoutException(), callbackExecutor,
+					scheduledExecutor);
+			onResolve(new Timeout(chained.new Chain(timedout), millis,
+					TimeUnit.MILLISECONDS));
 		}
 		onResolve(chained.new Chain(this));
 		return chained;
@@ -844,8 +848,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	private final class Timeout implements Runnable {
 		private final ScheduledFuture< ? > future;
 
-		Timeout(long timeout, TimeUnit unit) {
-			future = schedule(new TimeoutAction(), timeout, unit);
+		Timeout(Runnable operation, long delay, TimeUnit unit) {
+			future = schedule(operation, delay, unit);
 		}
 
 		@Override
@@ -853,21 +857,6 @@ final class PromiseImpl<T> implements Promise<T> {
 			if (future != null) {
 				future.cancel(false);
 			}
-		}
-	}
-
-	/**
-	 * Callback used to fail the Promise if the timeout expires.
-	 * 
-	 * @Immutable
-	 * @since 1.1
-	 */
-	private final class TimeoutAction implements Runnable {
-		TimeoutAction() {}
-
-		@Override
-		public void run() {
-			tryResolve(null, new TimeoutException());
 		}
 	}
 
