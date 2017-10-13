@@ -29,16 +29,15 @@
 			the OSGi CDI Extender. OSGi Bean description documents
 			may be embedded in other XML documents. The OSGi CDI Extender
 			will process all XML documents listed in the osgi.beans
-			attribute of the CDI extender requirement. CDI Beans named by the
-			descriptor are described as components. XML documents containing
-			OSGi Bean descriptions may contain one or more component elements.
+			attribute of the CDI extender requirement. XML documents containing
+			OSGi Bean descriptions may contain one or more bean elements.
 			Use of the namespace for bean descriptions is mandatory. The
 			attributes and subelements of component elements are always
 			unqualified.
 		</documentation>
 	</annotation>
-	<element name="component" type="cdi:Tcomponent" />
-	<complexType name="Tcomponent">
+	<element name="bean" type="cdi:Tbean" />
+	<complexType name="Tbean">
 		<sequence>
 			<annotation>
 				<documentation xml:lang="en">
@@ -70,7 +69,8 @@
 				</documentation>
 			</annotation>
 		</attribute>
-		<attribute name="service-scope" default="none" type="cdi:Tservice_scope" use="optional" />
+		<attribute name="service-scope" default="bundle" type="cdi:Tservice_scope" use="optional" />
+		<attribute name="vetoed" default="false" type="boolean" use="optional" />
 		<anyAttribute processContents="lax" />
 	</complexType>
 
@@ -79,22 +79,6 @@
 			<any namespace="##any" processContents="lax"
 				minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="configuration-policy" default="optional" type="cdi:Tconfiguration-policy" use="optional" />
-		<attribute name="configuration-pid" use="optional">
-			<annotation>
-				<documentation xml:lang="en">
-					The default value is the name attribute of the component.
-				</documentation>
-			</annotation>
-			<simpleType>
-				<restriction>
-					<simpleType>
-						<list itemType="token" />
-					</simpleType>
-					<minLength value="1" />
-				</restriction>
-			</simpleType>
-		</attribute>
 		<attribute name="type" type="token" use="required" />
 		<anyAttribute processContents="lax" />
 	</complexType>
@@ -136,9 +120,9 @@
 			<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="cardinality" default="1..1" type="cdi:Tcardinality" use="optional" />
-		<attribute name="name" type="token" use="optional" />
-		<attribute name="policy" default="static" type="cdi:Tpolicy" use="optional" />
-		<attribute name="policy-option" default="reluctant" type="cdi:Tpolicy-option" use="optional" />
+		<attribute name="cdi-scope" default="AppliationScoped" type="token" use="optional" />
+		<attribute name="name" type="token" use="required" />
+		<attribute name="policy-option" default="reluctant" type="cdi:Treference-policy-option" use="optional" />
 		<attribute name="scope" default="bundle" type="cdi:Treference_scope" use="optional" />
 		<attribute name="service" type="token" use="required" />
 		<attribute name="target" type="string" use="optional" />
@@ -162,23 +146,7 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="Tconfiguration-policy">
-		<restriction base="string">
-			<enumeration value="factory" />
-			<enumeration value="ignore" />
-			<enumeration value="optional" />
-			<enumeration value="require" />
-		</restriction>
-	</simpleType>
-
-	<simpleType name="Tpolicy">
-		<restriction base="string">
-			<enumeration value="dynamic" />
-			<enumeration value="static" />
-		</restriction>
-	</simpleType>
-
-	<simpleType name="Tpolicy-option">
+	<simpleType name="Treference-policy-option">
 		<restriction base="string">
 			<enumeration value="greedy" />
 			<enumeration value="reluctant" />
@@ -196,7 +164,6 @@
 	<simpleType name="Tservice_scope">
 		<restriction base="string">
 			<enumeration value="bundle" />
-			<enumeration value="none" />
 			<enumeration value="prototype" />
 			<enumeration value="singleton" />
 		</restriction>

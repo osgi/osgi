@@ -20,6 +20,8 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Defines CDI constants.
+ *
+ * @author $Id$
  */
 @ProviderType
 public class CdiConstants {
@@ -44,7 +46,7 @@ public class CdiConstants {
 	 * The property of the CdiContainer service holding it's state.
 	 * <p>
 	 * The property will be updated every time the CdiContainer's state changes.
-	 * The possible values are defined by {@link CdiEvent.Type}.
+	 * The possible values are defined by {@link CdiContainerState}.
 	 */
 	public static final String	CDI_CONTAINER_STATE		= "osgi.cdi.container.state";
 

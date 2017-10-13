@@ -28,17 +28,9 @@ public enum ServiceScope {
 	 * The value indicating that no choice was made in which case the calculated
 	 * value or default behavior should take effect.
 	 * <p>
-	 * The default behavior is {@link ServiceScope#NONE NONE}.
+	 * The default behavior is {@link ServiceScope#SINGLETON}.
 	 */
-	DEFAULT("default"),
-
-	/**
-	 * Indicates the component must be registered as an OSGi service with
-	 * {@code osgi.scope=singleton}. It must be registered as a bundle scope service
-	 * but only a single instance of the component must be used for all bundles
-	 * using the service.
-	 */
-	SINGLETON("singleton"),
+	NOT_SPECIFIED("not_specified"),
 
 	/**
 	 * Indicates the component should be registered as an OSGi service with
@@ -57,10 +49,12 @@ public enum ServiceScope {
 	PROTOTYPE("prototype"),
 
 	/**
-	 * The component is not to be published as a service. If
-	 * {@link Component#service} is set, it is ignored. This is the default policy.
+	 * Indicates the component must be registered as an OSGi service with
+	 * {@code osgi.scope=singleton}. It must be registered as a bundle scope service
+	 * but only a single instance of the component must be used for all bundles
+	 * using the service.
 	 */
-	NONE("none");
+	SINGLETON("singleton");
 
 	private final String value;
 
@@ -92,4 +86,5 @@ public enum ServiceScope {
 	public String toString() {
 		return value;
 	}
+
 }

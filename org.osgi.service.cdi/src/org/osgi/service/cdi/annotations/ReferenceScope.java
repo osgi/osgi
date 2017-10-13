@@ -20,6 +20,8 @@ import java.util.Objects;
 
 /**
  * Reference scope for the {@link Reference} annotation.
+ *
+ * @author $Id$
  */
 public enum ReferenceScope {
 	/**
@@ -28,7 +30,7 @@ public enum ReferenceScope {
 	 * <p>
 	 * The default behavior is {@link ReferenceScope#BUNDLE}.
 	 */
-	DEFAULT("default"),
+	NOT_SPECIFIED("not_specified"),
 
 	/**
 	 * A single service object is used for all references to the service in this
@@ -37,16 +39,18 @@ public enum ReferenceScope {
 	BUNDLE("bundle"),
 
 	/**
-	 * Bound services must have prototype service scope. Each instance of the
-	 * bean with this reference can receive a unique instance of the service.
+	 * If the bound service has prototype service scope, then each instance of the
+	 * component with this reference can receive a unique instance of the service.
+	 * If the bound service does not have prototype service scope, then this
+	 * reference scope behaves the same as {@link #BUNDLE}.
 	 */
 	PROTOTYPE("prototype"),
 
 	/**
-	 * Bound services must have singleton service scope. Each instance of the
-	 * bean with this reference will receive the same instance of the service.
+	 * Bound services must have prototype service scope. Each instance of the
+	 * component with this reference can receive a unique instance of the service.
 	 */
-	SINGLETON("singleton");
+	PROTOTYPE_REQUIRED("prototype_required");
 
 	private final String	value;
 

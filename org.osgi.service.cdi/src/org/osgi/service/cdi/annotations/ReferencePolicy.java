@@ -30,7 +30,7 @@ public enum ReferencePolicy {
 	 * <p>
 	 * The default behavior is {@link ReferencePolicy#STATIC STATIC}.
 	 */
-	DEFAULT("default"),
+	NOT_SPECIFIED("not_specified"),
 
 	/**
 	 * The static policy is the most simple policy and is the default policy. A

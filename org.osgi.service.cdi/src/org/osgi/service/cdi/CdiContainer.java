@@ -17,18 +17,21 @@
 package org.osgi.service.cdi;
 
 import javax.enterprise.inject.spi.BeanManager;
+import org.osgi.util.promise.Promise;
 
 /**
  * A CdiContainer object is registered by the CDI extender in the OSGi registry
  * for each managed CDI bundle.
+ *
+ * @author $Id$
  */
 public interface CdiContainer {
 
 	/**
-	 * When the {@link CdiContainer} is READY the {@link BeanManager} will be
-	 * available.
+	 * When the {@link CdiContainer} is {@link CdiContainerState#CREATED} the
+	 * {@link BeanManager} will become available.
 	 *
 	 * @return BeanManager
 	 */
-	public BeanManager getBeanManager();
+	public Promise<BeanManager> getBeanManager();
 }

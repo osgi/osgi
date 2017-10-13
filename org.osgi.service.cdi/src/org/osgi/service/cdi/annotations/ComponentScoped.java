@@ -16,48 +16,43 @@
 
 package org.osgi.service.cdi.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Inject;
-import javax.inject.Qualifier;
+import javax.inject.Scope;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Annotation used with {@link Inject} in order to have configuration properties
- * injected into CDI beans. Properties are a combination of those defined by
- * {@link Properties#value()} overlaid by properties provided through
- * Configuration Admin in association with the configuration PIDs defined by
- * {@link SingletonConfigurations#value()} or in the case of non-components which were
- * specified in the requirement (which defaults to a PID named after the
- * generated CDI container id).
+ * This scope is used to define a bean as a CDI component. To trigger this it
+ * must be used in conjunction with the {@link javax.inject.Named} annotation
+ * which must specify a value.
  *
  * @author $Id$
  */
-@Qualifier
-@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
+@Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
-@Documented
+@Scope
+@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
 @Requirement(
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
-public @interface Configuration {
+public @interface ComponentScoped {
 
 	/**
-	 * Support inline instantiation of the {@link Configuration} annotation.
+	 * Support inline instantiation of the {@link ComponentScoped} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Configuration> implements Configuration {
+	public static final class Literal extends AnnotationLiteral<ComponentScoped> implements ComponentScoped {
 
 		/**
 		 * Default instance.
 		 */
-		public static final Configuration	INSTANCE			= new Literal();
+		public static final ComponentScoped	INSTANCE			= new Literal();
 
 		private static final long			serialVersionUID	= 1L;
 

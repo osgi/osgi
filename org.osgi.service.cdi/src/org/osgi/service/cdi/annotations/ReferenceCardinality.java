@@ -34,7 +34,7 @@ public enum ReferenceCardinality {
 	 * <p>
 	 * The default behavior is {@link ReferenceCardinality#MANDATORY MANDATORY}.
 	 */
-	DEFAULT("default"),
+	NOT_SPECIFIED("not_specified"),
 
 	/**
 	 * The reference is optional and unary. That is, the reference has a
@@ -91,4 +91,5 @@ public enum ReferenceCardinality {
 	public String toString() {
 		return value;
 	}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,45 +22,56 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Inject;
-import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Annotation used with {@link Inject} in order to have configuration properties
- * injected into CDI beans. Properties are a combination of those defined by
- * {@link Properties#value()} overlaid by properties provided through
- * Configuration Admin in association with the configuration PIDs defined by
- * {@link SingletonConfigurations#value()} or in the case of non-components which were
- * specified in the requirement (which defaults to a PID named after the
- * generated CDI container id).
+ * Annotation used in conjunction with {@link ComponentScoped} in order to
+ * associate configurations with the component bean.
  *
  * @author $Id$
  */
-@Qualifier
-@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
+@Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 @Requirement(
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
-public @interface Configuration {
+public @interface SingletonConfigurations {
 
 	/**
-	 * Support inline instantiation of the {@link Configuration} annotation.
+	 * Support inline instantiation of the {@link SingletonConfigurations} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Configuration> implements Configuration {
+	public static final class Literal extends AnnotationLiteral<SingletonConfigurations> implements SingletonConfigurations {
+
+		private static final long serialVersionUID = 1L;
 
 		/**
-		 * Default instance.
+		 * @param pids array of {@link SingletonConfiguration}
+		 * @return an instance of {@link SingletonConfigurations}
 		 */
-		public static final Configuration	INSTANCE			= new Literal();
+		public static SingletonConfigurations of(SingletonConfiguration[] pids) {
+			return new Literal(pids);
+		}
 
-		private static final long			serialVersionUID	= 1L;
+		private Literal(SingletonConfiguration[] pids) {
+			_pids = pids;
+		}
+
+		@Override
+		public SingletonConfiguration[] value() {
+			return _pids;
+		}
+
+		private final SingletonConfiguration[] _pids;
 
 	}
+
+	/**
+	 * The set of ordered configurations available to the component.
+	 */
+	SingletonConfiguration[] value();
 
 }

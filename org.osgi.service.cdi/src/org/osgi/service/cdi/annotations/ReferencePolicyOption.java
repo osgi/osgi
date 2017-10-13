@@ -30,7 +30,7 @@ public enum ReferencePolicyOption {
 	 * <p>
 	 * The default behavior is {@link ReferencePolicyOption#RELUCTANT RELUCTANT}.
 	 */
-	DEFAULT("default"),
+	NOT_SPECIFIED("not_specified"),
 
 	/**
 	 * The reluctant policy option is the default policy option for both

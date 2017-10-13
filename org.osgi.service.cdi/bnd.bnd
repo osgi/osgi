@@ -11,4 +11,4 @@ Export-Package: ${p}.*; -split-package:=first
 	org.apache.aries.javax.inject-api; version=latest, \
 	org.apache.aries.javax.cdi-api;    version=latest, \
 	org.osgi.namespace.extender;       version=latest,\
-	org.osgi.service.cm;               version=latest
+	org.osgi.util.promise;             version=1.0.0

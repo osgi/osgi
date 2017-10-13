@@ -20,7 +20,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Stereotype;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Named;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.namespace.extender.ExtenderNamespace;
 import org.osgi.service.cdi.CdiConstants;
@@ -30,66 +32,44 @@ import org.osgi.service.cdi.CdiConstants;
  *
  * @author $Id$
  */
+@ComponentScoped
+@Named
 @Retention(value = RetentionPolicy.RUNTIME)
+@Stereotype
 @Target(value = ElementType.TYPE)
 @Requirement(
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
 public @interface Component {
-	/**
-	 * The name of this Component.
-	 *
-	 * <p>
-	 * If not specified, the name of this Component is the fully qualified type
-	 * name of the class being annotated.
-	 */
-	String name() default "";
 
 	/**
-	 * The types under which to register this Component as a service.
-	 *
-	 * <p>
-	 * The result of this value depends on the value of
-	 * {@link Component#scope() scope}.
-	 * <ol>
-	 * <li>If {@code scope} is any value besides {@link ServiceScope#NONE
-	 * NONE} and service <em>is NOT</em> specified: the component is published using
-	 * all directly implemented interfaces. If there are no directly implemented
-	 * interfaces, the class of the Component is used.
-	 * <li>If {@code scope} is any value besides {@link ServiceScope#NONE
-	 * NONE} and service <em>IS</em> specified: the component is published using the
-	 * specified types.
-	 * <li>If {@code scope} is {@link ServiceScope#NONE}: the value is
-	 * ignored and the component is not published as a service.
-	 * <ol>
+	 * Support inline instantiation of the {@link Component} annotation.
 	 */
-	Class<?>[] service() default {};
+	public static final class Literal extends AnnotationLiteral<Component> implements Component {
+
+		/**
+		 * Default instance.
+		 */
+		public static final Component	INSTANCE			= new Literal();
+
+		private static final long		serialVersionUID	= 1L;
+
+	}
 
 	/**
-	 * The service scope used for the Component.
+	 * Special string representing the name of this Component.
 	 *
 	 * <p>
-	 * If not specified the Component will not be published as a service.
-	 * <p>
-	 * In order to be published as an OSGi service the component bean must use the
-	 * CDI scope {@link Dependent}. The use of any other CDI scope will result in a
-	 * definition error.
+	 * This string can be used in {@link SingletonConfiguration#pid()} OR
+	 * {@link FactoryConfiguration#pid()} to specify the name of the component or in
+	 * the case of the non-components the CDI container id as a configuration PID.
+	 * For example:
+	 *
+	 * <pre>
+	 * &#64;SingletonConfiguration(pid = Component.NAME)
+	 * </pre>
 	 */
-	ServiceScope scope() default ServiceScope.DEFAULT;
-
-	/**
-	 * Properties for this Component.
-	 * <p>
-	 * Each property string is specified as {@code "name=value"}. The type of
-	 * the property value can be specified in the name as
-	 * {@code name:type=value}. The type must be one of the property types
-	 * supported by the {@code type} attribute of the {@code property} element
-	 * of a Component description.
-	 * <p>
-	 * To specify a property with multiple values, use multiple name, value
-	 * pairs. For example, {@code {"foo=bar", "foo=baz"}}.
-	 */
-	String[] property() default {};
+	String NAME = "$";
 
 }

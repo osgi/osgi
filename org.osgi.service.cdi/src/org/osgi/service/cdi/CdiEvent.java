@@ -21,67 +21,17 @@ import org.osgi.framework.Bundle;
 /**
  * CdiEvents are sent by the CDI extender and received by registered CdiListener
  * services.
+ *
+ * @author $Id$
  */
-public class CdiEvent {
-
-	/**
-	 * An enum defining the states of a CDI container.
-	 *
-	 */
-	public static enum Type {
-
-		/**
-		 * The CDI container has started being created.
-		 */
-		CREATING,
-
-		/**
-		 * The CDI container is created and should be fully usable.
-		 */
-		CREATED,
-
-		/**
-		 * The CDI container has started being destroyed.
-		 */
-		DESTROYING,
-
-		/**
-		 * The CDI container is completely destroyed.
-		 */
-		DESTROYED,
-
-		/**
-		 * The CDI container is waiting for dependent configurations.
-		 */
-		WAITING_FOR_CONFIGURATIONS,
-
-		/**
-		 * The CDI container is waiting for dependent extensions.
-		 */
-		WAITING_FOR_EXTENSIONS,
-
-		/**
-		 * The CDI container is waiting for dependent services.
-		 */
-		WAITING_FOR_SERVICES,
-
-		/**
-		 * The CDI container is satisfied and resuming construction.
-		 */
-		SATISFIED,
-
-		/**
-		 * The CDI container has suffered a failure and will be destroyed.
-		 */
-		FAILURE
-	}
+public final class CdiEvent {
 
 	/**
 	 * @param type
 	 * @param bundle
 	 * @param extenderBundle
 	 */
-	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle) {
+	public CdiEvent(CdiContainerState type, Bundle bundle, Bundle extenderBundle) {
 		this(type, bundle, extenderBundle, null, null);
 	}
 
@@ -91,7 +41,7 @@ public class CdiEvent {
 	 * @param extenderBundle
 	 * @param dependencies
 	 */
-	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle, String dependencies) {
+	public CdiEvent(CdiContainerState type, Bundle bundle, Bundle extenderBundle, String dependencies) {
 		this(type, bundle, extenderBundle, dependencies, null);
 	}
 
@@ -102,56 +52,34 @@ public class CdiEvent {
 	 * @param dependencies
 	 * @param cause
 	 */
-	public CdiEvent(Type type, Bundle bundle, Bundle extenderBundle, String dependencies, Throwable cause) {
+	public CdiEvent(CdiContainerState type, Bundle bundle, Bundle extenderBundle, String dependencies, Throwable cause) {
 		this.type = type;
-		this.bundle = bundle;
-		this.extenderBundle = extenderBundle;
+		this.bundleId = bundle.getBundleId();
+		this.extenderBundleId = extenderBundle.getBundleId();
 		this.dependencies = dependencies;
-		this.cause = cause;
+		this.cause = cause.getMessage();
 		this.timestamp = System.currentTimeMillis();
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{type:'");
-		sb.append(this.type);
-		sb.append("',timestamp:");
-		sb.append(this.timestamp);
-		sb.append(",bundle:'");
-		sb.append(this.bundle);
-		sb.append("',extenderBundle:'");
-		sb.append(this.extenderBundle);
-		if (this.dependencies != null) {
-			sb.append("',payload:'");
-			sb.append(this.dependencies);
-		}
-		if (this.cause != null) {
-			sb.append("',cause:'");
-			sb.append(this.cause.getMessage());
-		}
-		sb.append("'}");
-
-		string = sb.toString();
 	}
 
 	/**
 	 * @return the bundle who's CDI container triggered this event
 	 */
-	public Bundle getBundle() {
-		return bundle;
+	public long getBundleId() {
+		return bundleId;
 	}
 
 	/**
 	 * @return the cause of the event if there was one
 	 */
-	public Throwable getCause() {
+	public String getCause() {
 		return cause;
 	}
 
 	/**
 	 * @return the bundle of the CDI extender
 	 */
-	public Bundle getExtenderBundle() {
-		return extenderBundle;
+	public long getExtenderBundleId() {
+		return extenderBundleId;
 	}
 
 	/**
@@ -171,21 +99,44 @@ public class CdiEvent {
 	/**
 	 * @return the state of this event
 	 */
-	public Type getType() {
+	public CdiContainerState getType() {
 		return type;
 	}
 
 	@Override
 	public String toString() {
+		if (string == null) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("{type:'");
+			sb.append(this.type);
+			sb.append("', timestamp:");
+			sb.append(this.timestamp);
+			sb.append(", bundle:");
+			sb.append(this.bundleId);
+			sb.append(", extenderBundle:");
+			sb.append(this.extenderBundleId);
+			if (this.dependencies != null) {
+				sb.append(", payload:'");
+				sb.append(this.dependencies);
+			}
+			if (this.cause != null) {
+				sb.append("', cause:'");
+				sb.append(this.cause);
+			}
+			sb.append("'}");
+
+			string = sb.toString();
+		}
 		return string;
 	}
 
-	private final Bundle bundle;
-	private final Throwable cause;
-	private final Bundle extenderBundle;
+	private final long				bundleId;
+	private final String			cause;
+	private final long				extenderBundleId;
 	private final String dependencies;
 	private final long timestamp;
-	private final Type type;
-	private final String string;
+	private final CdiContainerState type;
+	private volatile String			string;
 
 }
