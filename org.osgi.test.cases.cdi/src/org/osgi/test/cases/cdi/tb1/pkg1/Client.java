@@ -26,12 +26,15 @@ package org.osgi.test.cases.cdi.tb1.pkg1;
 
 import java.util.concurrent.Callable;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.osgi.service.cdi.annotations.Component;
-import org.osgi.service.cdi.annotations.ServiceScope;
+import org.osgi.service.cdi.annotations.Properties;
+import org.osgi.service.cdi.annotations.Service;
 
-@Component(scope = ServiceScope.BUNDLE, property = { "tb=tb1" })
+@ApplicationScoped
+@Service
+@Properties("tb=tb1")
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;

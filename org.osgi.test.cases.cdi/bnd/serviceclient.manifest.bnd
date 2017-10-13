@@ -1,6 +1,8 @@
 Bundle-SymbolicName: ${p}.serviceclient.manifest
 Bundle-Version: 1.0.0.test
 Private-Package: org.osgi.test.cases.cdi.serviceclient.manifest
-Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+Require-Capability:\
+	osgi.extender;\
+		filter:="(osgi.extender=osgi.cdi)"
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/serviceclient.manifest-beans.xml}

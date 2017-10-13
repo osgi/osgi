@@ -24,10 +24,12 @@
  */
 package org.osgi.test.cases.cdi.tb6.pkg6;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.osgi.test.cases.cdi.tb6.intf.ClientInterface;
 
+@ApplicationScoped
 public class Client2 implements ClientInterface {
     @Inject Interface provider;
 

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cdi:beans xmlns:cdi="http://www.osgi.org/xmlns/cdi/v1.0.0">
-	<bean class="org.osgi.test.cases.cdi.tb6.pkg6.Client">
-		<service>
-			<provide interface="org.osgi.test.cases.cdi.tb6.intf.ClientInterface" />
-		</service>
-	</bean>
-	<bean class="org.osgi.test.cases.cdi.tb6.pkg6.Client2">
-		<service>
-			<provide interface="org.osgi.test.cases.cdi.tb6.intf.ClientInterface" />
-		</service>
-	</bean>
-	<bean class="org.osgi.test.cases.cdi.tb6.pkg6.Provider" />
-</cdi:beans>
+<beans xmlns:cdi="http://www.osgi.org/xmlns/cdi/v1.0.0">
+	<cdi:bean class="org.osgi.test.cases.cdi.tb6.pkg6.Client">
+		<provide interface="org.osgi.test.cases.cdi.tb6.intf.ClientInterface" />
+	</cdi:bean>
+	<cdi:bean class="org.osgi.test.cases.cdi.tb6.pkg6.Client2">
+		<provide interface="org.osgi.test.cases.cdi.tb6.intf.ClientInterface" />
+	</cdi:bean>
+	<cdi:bean class="org.osgi.test.cases.cdi.tb6.pkg6.Provider" />
+</beans>

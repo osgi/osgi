@@ -25,18 +25,19 @@
 package org.osgi.test.cases.cdi.serviceclient.manifest;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.tb.serviceapi.Provider;
 
+@ApplicationScoped
 public class Client implements TestInterface {
     @Inject
     BundleContext bundleContext;
 
-    // Should inject the Provider from the Service Registry as the
-    // {@code at-service:="optional"}
-    // is present on the osgi.extender capability.
+	// Should inject the Provider from the Service Registry because of the OSGi bean
+	// descriptor.
 	@Inject
 	Provider provider;
 
@@ -44,7 +45,7 @@ public class Client implements TestInterface {
     public void init() {
         bundleContext.registerService(TestInterface.class, this, null);
     }
-	
+
     public String invokeIt() {
         return provider.call() + "_via_manifest";
     }
