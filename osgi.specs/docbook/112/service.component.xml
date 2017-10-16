@@ -1161,9 +1161,9 @@
         </listitem>
 
         <listitem>
-          <para>One of the types supported by field injection - The component
-          instance will be passed an object for the reference matching the
-          zero-based parameter number. See <xref
+          <para>One of the types supported by field injection for static
+          references - The component instance will be passed an object for the
+          reference matching the zero-based parameter number. See <xref
           linkend="service.component-field.injection"/> for the supported
           types.</para>
         </listitem>
