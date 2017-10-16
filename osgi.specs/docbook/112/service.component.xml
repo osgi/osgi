@@ -2314,11 +2314,10 @@ public class MyComponent {
       </table>
 
       <para>The class is retrieved with the <code>loadClass</code> method of
-      the component's bundle. The class must be public. If the
-      <code>activate</code> method of the class is a constructor, the
-      constructor must be public. Otherwise, the class must have a public
-      no-parameter constructor which will be used to construct the component
-      instance.</para>
+      the component's bundle. If the <code>activate</code> method of the class
+      is a constructor, the constructor must be public. Otherwise, the class
+      must have a public no-parameter constructor which will be used to
+      construct the component instance.</para>
 
       <para>If the component description specifies a service, the class must
       implement all interfaces that are provided by the service.</para>
