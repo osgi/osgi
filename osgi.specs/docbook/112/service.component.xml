@@ -681,7 +681,7 @@
       </itemizedlist>
 
       <para>Each event is associated with an <emphasis>event
-      method</emphasis>. </para>
+      method</emphasis>.</para>
 
       <para>An event method can take one or more parameters. Each parameter
       must be of one of the following types:</para>
@@ -1105,7 +1105,7 @@
             </listitem>
 
             <listitem>
-              <para>Call the <code>activate</code> method. </para>
+              <para>Call the <code>activate</code> method.</para>
             </listitem>
           </orderedlist>
         </listitem>
@@ -1844,10 +1844,10 @@ public class HttpResourceImpl {
       <title>Logger Support</title>
 
       <para>SCR provides special support for components having references to
-      Loggers from the Log Service specification. If the reference uses
-      method, field or activation injection, the referenced service is of type
-      <code>org.osgi.service.log.LoggerFactory</code>, and the type of the
-      parameter or field to receive the service object is of type
+      the Logger Factory from the Log Service specification. If the reference
+      uses method, field or activation injection, the referenced service is of
+      type <code>org.osgi.service.log.LoggerFactory</code>, and the type of
+      the parameter or field to receive the service object is of type
       <code>org.osgi.service.log.Logger</code> or
       <code>org.osgi.service.log.FormatterLogger</code>, then SCR must obtain
       the proper type of Logger from the bound Logger Factory service and use
@@ -1864,12 +1864,12 @@ public class HttpResourceImpl {
       argument.</para>
 
       <para>For example, the following code will have the <code>logger</code>
-      field set to a Logger object created by SCR from the Logger Factory
-      service.</para>
+      field set to a Logger object created by SCR from the bound Logger
+      Factory service.</para>
 
       <programlisting>@Component
 public class MyComponent {
-  @Reference
+  @Reference(service=LoggerFactory.class)
   private Logger logger;
   @Activate
   void activate(ComponentContext context) {
@@ -1877,19 +1877,6 @@ public class MyComponent {
       context.getProperties().get(“component.id”));
   }
 }</programlisting>
-
-      <para>The tool processing the <code>Reference</code> component
-      annotation must also participate in the special support for components
-      having references to Loggers. When the <code>Reference</code> annotation
-      does not specify the <code>service</code> element and the parameter or
-      field for the reference is of type
-      <code>org.osgi.service.log.Logger</code> or
-      <code>org.osgi.service.log.FormatterLogger</code>, the generated
-      component description must specify the Logger Factory service as the
-      referenced service rather than <code>org.osgi.service.log.Logger</code>
-      or <code>org.osgi.service.log.FormatterLogger</code>.</para>
-
-      <programlisting>&lt;reference interface="org.osgi.service.log.LoggerFactory"/&gt;</programlisting>
     </section>
   </section>
 
