@@ -20,25 +20,11 @@ import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.RunnableScheduledFuture;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
@@ -56,15 +42,9 @@ import org.osgi.util.function.Predicate;
  */
 final class PromiseImpl<T> implements Promise<T> {
 	/**
-	 * The executor to use for callbacks. If {@code null}, the default callback
-	 * executor is used.
+	 * The executors to use for callbacks and scheduled operations.
 	 */
-	private final Executor							callbackExecutor;
-	/**
-	 * The executor to use for scheduled operations. If {@code null}, the
-	 * default scheduled executor is used.
-	 */
-	private final ScheduledExecutorService			scheduledExecutor;
+	private final PromiseExecutors					executors;
 	/**
 	 * A ConcurrentLinkedQueue to hold the callbacks for this Promise, so no
 	 * additional synchronization is required to write to or read from the
@@ -104,16 +84,11 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * Initialize this Promise.
 	 * 
-	 * @param callbackExecutor The executor to use for callbacks. {@code null}
-	 *            can be specified for the default callback executor.
-	 * @param scheduledExecutor The scheduled executor for use for scheduled
-	 *            operations. {@code null} can be specified for the default
-	 *            scheduled executor.
+	 * @param executors The executors to use for callbacks and scheduled
+	 *            operations.
 	 */
-	PromiseImpl(Executor callbackExecutor,
-			ScheduledExecutorService scheduledExecutor) {
-		this.callbackExecutor = callbackExecutor;
-		this.scheduledExecutor = scheduledExecutor;
+	PromiseImpl(PromiseExecutors executors) {
+		this.executors = executors;
 		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(1);
 	}
@@ -123,21 +98,16 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @param v The value of this resolved Promise.
 	 * @param f The failure of this resolved Promise.
-	 * @param callbackExecutor The executor to use for callbacks. {@code null}
-	 *            can be specified for the default callback executor.
-	 * @param scheduledExecutor The scheduled executor for use for scheduled
-	 *            operations. {@code null} can be specified for the default
-	 *            scheduled executor.
+	 * @param executors The executors to use for callbacks and scheduled
+	 *            operations.
 	 */
-	PromiseImpl(T v, Throwable f, Executor callbackExecutor,
-			ScheduledExecutorService scheduledExecutor) {
+	PromiseImpl(T v, Throwable f, PromiseExecutors executors) {
 		if (f == null) {
 			value = v;
 		} else {
 			fail = f;
 		}
-		this.callbackExecutor = callbackExecutor;
-		this.scheduledExecutor = scheduledExecutor;
+		this.executors = executors;
 		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(0);
 	}
@@ -252,20 +222,15 @@ final class PromiseImpl<T> implements Promise<T> {
 		if (resolved.getCount() != 0) {
 			return; // return if not resolved
 		}
-
 		/*
 		 * Note: multiple threads can be in this method removing callbacks from
 		 * the queue and executing them, so the order in which callbacks are
 		 * executed cannot be specified.
 		 */
-		Executor executor = callbackExecutor;
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
-			if (executor == null) {
-				executor = DefaultExecutors.callbackExecutor();
-			}
 			try {
 				try {
-					executor.execute(callback);
+					executors.executor().execute(callback);
 				} catch (RejectedExecutionException e) {
 					callback.run();
 				}
@@ -367,8 +332,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
-		PromiseImpl<R> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<R> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new Then<>(this, success, failure));
 		return chained;
 	}
@@ -476,8 +440,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new ThenAccept(this, consumer));
 		return chained;
 	}
@@ -531,8 +494,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 *         resolved.
 	 */
 	Promise<Void> resolveWith(Promise<? extends T> with) {
-		PromiseImpl<Void> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<Void> chained = new PromiseImpl<>(executors);
 		with.onResolve(chained.new ResolveWith<>(this, with));
 		return chained;
 	}
@@ -549,7 +511,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		ResolveWith(PromiseImpl<P> promise, Promise< ? extends P> with) {
 			this.promise = promise;
-			this.with = with;
+			this.with = requireNonNull(with);
 		}
 
 		@Override
@@ -570,8 +532,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new Filter(this, predicate));
 		return chained;
 	}
@@ -611,8 +572,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<R> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new Map<>(this, mapper));
 		return chained;
 	}
@@ -652,8 +612,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<R> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new FlatMap<>(this, mapper));
 		return chained;
 	}
@@ -697,8 +656,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new Recover(this, recovery));
 		return chained;
 	}
@@ -741,8 +699,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new RecoverWith(this, recovery));
 		return chained;
 	}
@@ -786,8 +743,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(chained.new FallbackTo(this, fallback));
 		return chained;
 	}
@@ -850,13 +806,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	ScheduledFuture< ? > schedule(Runnable operation, long delay,
 			TimeUnit unit) {
-		ScheduledExecutorService executor = scheduledExecutor;
-		if (executor == null) {
-			executor = DefaultExecutors.scheduledExecutor();
-		}
 		try {
 			try {
-				return executor.schedule(operation, delay, unit);
+				return executors.scheduledExecutor().schedule(operation, delay,
+						unit);
 			} catch (RejectedExecutionException e) {
 				operation.run();
 			}
@@ -873,12 +826,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> timeout(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		if (!isDone()) {
 			PromiseImpl<T> timedout = new PromiseImpl<>(null,
-					new TimeoutException(), callbackExecutor,
-					scheduledExecutor);
+					new TimeoutException(), executors);
 			onResolve(new Timeout(chained.new ChainImpl(timedout), millis,
 					TimeUnit.MILLISECONDS));
 		}
@@ -915,8 +866,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> delay(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<>(callbackExecutor,
-				scheduledExecutor);
+		PromiseImpl<T> chained = new PromiseImpl<>(executors);
 		onResolve(new Delay(chained.new ChainImpl(this), millis,
 				TimeUnit.MILLISECONDS));
 		return chained;
@@ -1008,156 +958,6 @@ final class PromiseImpl<T> implements Promise<T> {
 		} finally {
 			if (interrupted) { // restore interrupt status
 				Thread.currentThread().interrupt();
-			}
-		}
-	}
-
-	/**
-	 * Default executors for callbacks.
-	 * 
-	 * @Immutable
-	 * @since 1.1
-	 */
-	private static final class DefaultExecutors
-			implements ThreadFactory, RejectedExecutionHandler, Runnable {
-		private static final DefaultExecutors	callbacks;
-		private static final ScheduledExecutor	scheduledExecutor;
-		private static final ThreadPoolExecutor	callbackExecutor;
-		static {
-			callbacks = new DefaultExecutors();
-			scheduledExecutor = new ScheduledExecutor(2, callbacks);
-			callbackExecutor = new ThreadPoolExecutor(0, 64, 60L,
-					TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-					callbacks, callbacks);
-		}
-
-		static Executor callbackExecutor() {
-			return callbackExecutor;
-		}
-
-		static ScheduledExecutorService scheduledExecutor() {
-			return scheduledExecutor;
-		}
-
-		private final AtomicBoolean	shutdownHookInstalled;
-		private final ThreadFactory	delegateThreadFactory;
-
-		private DefaultExecutors() {
-			shutdownHookInstalled = new AtomicBoolean();
-			delegateThreadFactory = Executors.defaultThreadFactory();
-		}
-
-		/**
-		 * Executor threads should not prevent VM from exiting
-		 */
-		@Override
-		public Thread newThread(Runnable r) {
-			if (shutdownHookInstalled.compareAndSet(false, true)) {
-				Thread shutdownThread = delegateThreadFactory.newThread(this);
-				shutdownThread.setName("ExecutorShutdownHook,"
-						+ shutdownThread.getName());
-				try {
-					Runtime.getRuntime().addShutdownHook(shutdownThread);
-				} catch (IllegalStateException e) {
-					// VM is already shutting down...
-					callbackExecutor.shutdown();
-					scheduledExecutor.shutdown();
-				}
-			}
-			Thread t = delegateThreadFactory.newThread(r);
-			t.setName("PromiseImpl," + t.getName());
-			t.setDaemon(true);
-			return t;
-		}
-
-		/**
-		 * Call the callback using the caller's thread because the thread pool
-		 * rejected the execution.
-		 */
-		@Override
-		public void rejectedExecution(Runnable callback,
-				ThreadPoolExecutor executor) {
-			try {
-				callback.run();
-			} catch (Throwable t) {
-				uncaughtException(t);
-			}
-		}
-
-		/**
-		 * Shutdown hook
-		 */
-		@Override
-		public void run() {
-			// limit new thread creation
-			callbackExecutor.setMaximumPoolSize(
-					Math.max(1, callbackExecutor.getPoolSize()));
-			// Run all delayed callbacks now
-			scheduledExecutor.shutdown();
-			BlockingQueue<Runnable> queue = scheduledExecutor.getQueue();
-			if (!queue.isEmpty()) {
-				for (Object r : queue.toArray()) {
-					if (r instanceof RunnableScheduledFuture< ? >) {
-						RunnableScheduledFuture< ? > future = (RunnableScheduledFuture< ? >) r;
-						if ((future.getDelay(TimeUnit.NANOSECONDS) > 0L)
-								&& queue.remove(future)) {
-							future.run();
-							scheduledExecutor.afterExecute(future, null);
-						}
-					}
-				}
-				scheduledExecutor.shutdown();
-			}
-			try {
-				scheduledExecutor.awaitTermination(20, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-			// Shutdown callback executor
-			callbackExecutor.shutdown();
-			try {
-				callbackExecutor.awaitTermination(20, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
-
-		/**
-		 * ScheduledThreadPoolExecutor for scheduled execution.
-		 * 
-		 * @ThreadSafe
-		 */
-		private static final class ScheduledExecutor
-				extends ScheduledThreadPoolExecutor {
-			ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-				super(corePoolSize, threadFactory);
-			}
-
-			/**
-			 * Handle uncaught exceptions
-			 */
-			@Override
-			protected void afterExecute(Runnable r, Throwable t) {
-				super.afterExecute(r, t);
-				if ((t == null) && (r instanceof Future< ? >)) {
-					boolean interrupted = Thread.interrupted();
-					try {
-						((Future< ? >) r).get();
-					} catch (CancellationException e) {
-						// ignore
-					} catch (InterruptedException e) {
-						interrupted = true;
-					} catch (ExecutionException e) {
-						t = e.getCause();
-					} finally {
-						if (interrupted) { // restore interrupt status
-							Thread.currentThread().interrupt();
-						}
-					}
-				}
-				if (t != null) {
-					uncaughtException(t);
-				}
 			}
 		}
 	}

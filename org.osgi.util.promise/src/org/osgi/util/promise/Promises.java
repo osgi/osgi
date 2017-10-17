@@ -16,7 +16,7 @@
 
 package org.osgi.util.promise;
 
-import static java.util.Objects.requireNonNull;
+import static org.osgi.util.promise.PromiseExecutors.defaultExecutors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,10 +42,13 @@ public class Promises {
 	 * 
 	 * @param <T> The value type associated with the returned Promise.
 	 * @param value The value of the resolved Promise.
-	 * @return A new Promise that has been resolved with the specified value.
+	 * @return A new Promise which uses the default callback executor and
+	 *         default scheduled executor that has been resolved with the
+	 *         specified value.
+	 * @see PromiseExecutors#resolved(Object)
 	 */
 	public static <T> Promise<T> resolved(T value) {
-		return new PromiseImpl<>(value, null, null, null);
+		return defaultExecutors.resolved(value);
 	}
 
 	/**
@@ -54,10 +57,13 @@ public class Promises {
 	 * @param <T> The value type associated with the returned Promise.
 	 * @param failure The failure of the resolved Promise. Must not be
 	 *            {@code null}.
-	 * @return A new Promise that has been resolved with the specified failure.
+	 * @return A new Promise which uses the default callback executor and
+	 *         default scheduled executor that has been resolved with the
+	 *         specified failure.
+	 * @see PromiseExecutors#failed(Throwable)
 	 */
 	public static <T> Promise<T> failed(Throwable failure) {
-		return new PromiseImpl<>(null, requireNonNull(failure), null, null);
+		return defaultExecutors.failed(failure);
 	}
 
 	/**
@@ -74,19 +80,21 @@ public class Promises {
 	 * @param promises The Promises which must be resolved before the returned
 	 *            Promise must be resolved. Must not be {@code null} and all of
 	 *            the elements in the collection must not be {@code null}.
-	 * @return A Promise that is resolved only when all the specified Promises
-	 *         are resolved. The returned Promise must be successfully resolved
-	 *         with a List of the values in the order of the specified Promises
-	 *         if all the specified Promises are successfully resolved. The List
-	 *         in the returned Promise is the property of the caller and is
-	 *         modifiable. The returned Promise must be resolved with a failure
-	 *         of {@link FailedPromisesException} if any of the specified
-	 *         Promises are resolved with a failure. The failure
+	 * @return A Promise which uses the default callback executor and default
+	 *         scheduled executor that is resolved only when all the specified
+	 *         Promises are resolved. The returned Promise must be successfully
+	 *         resolved with a List of the values in the order of the specified
+	 *         Promises if all the specified Promises are successfully resolved.
+	 *         The List in the returned Promise is the property of the caller
+	 *         and is modifiable. The returned Promise must be resolved with a
+	 *         failure of {@link FailedPromisesException} if any of the
+	 *         specified Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
+	 * @see #all(Deferred, Collection)
 	 */
 	public static <T, S extends T> Promise<List<T>> all(Collection<Promise<S>> promises) {
-		return all(new Deferred<List<T>>(), promises);
+		return all(defaultExecutors.<List<T>> deferred(), promises);
 	}
 
 	/**
@@ -118,6 +126,7 @@ public class Promises {
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 * @since 1.1
+	 * @see PromiseExecutors#deferred()
 	 */
 	public static <T, S extends T> Promise<List<T>> all(
 			Deferred<List<T>> deferred, Collection<Promise<S>> promises) {
@@ -147,7 +156,8 @@ public class Promises {
 	 * @param promises The Promises which must be resolved before the returned
 	 *            Promise must be resolved. Must not be {@code null} and all of
 	 *            the arguments must not be {@code null}.
-	 * @return A Promise that is resolved only when all the specified Promises
+	 * @return A Promise which uses the default callback executor and scheduled
+	 *         executor that is resolved only when all the specified Promises
 	 *         are resolved. The returned Promise must be successfully resolved
 	 *         with a List of the values in the order of the specified Promises
 	 *         if all the specified Promises are successfully resolved. The List
@@ -157,6 +167,7 @@ public class Promises {
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
+	 * @see #all(Deferred, Promise...)
 	 */
 	@SafeVarargs
 	public static <T> Promise<List<T>> all(Promise<? extends T>... promises) {
@@ -191,6 +202,7 @@ public class Promises {
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 * @since 1.1
+	 * @see PromiseExecutors#deferred()
 	 */
 	@SafeVarargs
 	public static <T> Promise<List<T>> all(Deferred<List<T>> deferred,

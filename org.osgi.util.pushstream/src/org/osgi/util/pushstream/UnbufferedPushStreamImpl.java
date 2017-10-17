@@ -20,8 +20,6 @@ import static java.util.Optional.ofNullable;
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -33,9 +31,9 @@ class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T
 	protected final AtomicReference<AutoCloseable>					upstream	= new AtomicReference<AutoCloseable>();
 	
 	UnbufferedPushStreamImpl(PushStreamProvider psp,
-			Executor executor, ScheduledExecutorService scheduler,
+			PushStreamExecutors executors,
 			Function<PushEventConsumer<T>,AutoCloseable> connector) {
-		super(psp, executor, scheduler);
+		super(psp, executors);
 		this.connector = connector;
 	}
 

@@ -21,8 +21,6 @@ import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.CLOSED;
 import static org.osgi.util.pushstream.PushEventConsumer.ABORT;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -33,8 +31,6 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 	private final U eventQueue;
 	
 	private final Semaphore semaphore;
-	
-	private final Executor worker;
 	
 	private final QueuePolicy<T, U> queuePolicy;
 
@@ -50,15 +46,14 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 	private final int					parallelism;
 
 	BufferedPushStreamImpl(PushStreamProvider psp,
-			ScheduledExecutorService scheduler, U eventQueue,
-			int parallelism, Executor worker, QueuePolicy<T,U> queuePolicy,
+			PushStreamExecutors executors, U eventQueue, int parallelism,
+			QueuePolicy<T,U> queuePolicy,
 			PushbackPolicy<T,U> pushbackPolicy,
 			Function<PushEventConsumer<T>,AutoCloseable> connector) {
-		super(psp, worker, scheduler, connector);
+		super(psp, executors, connector);
 		this.eventQueue = eventQueue;
 		this.parallelism = parallelism;
 		this.semaphore = new Semaphore(parallelism);
-		this.worker = worker;
 		this.queuePolicy = queuePolicy;
 		this.pushbackPolicy = pushbackPolicy;
 	}
@@ -90,7 +85,7 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 	}
 
 	private void startWorker() {
-		worker.execute(() -> {
+		executors.execute(() -> {
 			try {
 				PushEvent< ? extends T> event;
 				while ((event = eventQueue.poll()) != null) {
@@ -104,7 +99,7 @@ class BufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>
 						close();
 						return;
 					} else if(backpressure > 0) {
-						scheduler.schedule(this::startWorker, backpressure,
+						executors.schedule(this::startWorker, backpressure,
 								MILLISECONDS);
 						return;
 					}

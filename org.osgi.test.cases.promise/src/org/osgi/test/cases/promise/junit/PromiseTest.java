@@ -43,6 +43,7 @@ import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.FailedPromisesException;
 import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.PromiseExecutors;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.Success;
 import org.osgi.util.promise.TimeoutException;
@@ -117,7 +118,9 @@ public class PromiseTest extends TestCase {
 
 	public void testPromiseSuccess2() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<Integer> d = new Deferred<Integer>(callbackExecutor);
+		final PromiseExecutors executors = new PromiseExecutors(
+				callbackExecutor);
+		final Deferred<Integer> d = executors.deferred();
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.then(new Success<Integer,Number>() {
 			@Override
@@ -149,8 +152,9 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseSuccess3() throws Exception {
-		final Deferred<Integer> d = new Deferred<Integer>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<Integer> d = executors.deferred();
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
@@ -250,8 +254,9 @@ public class PromiseTest extends TestCase {
 
 	public void testPromiseFail1() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<String> d = executors.deferred();
 		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -277,7 +282,9 @@ public class PromiseTest extends TestCase {
 
 	public void testPromiseFail2() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>(callbackExecutor);
+		final PromiseExecutors executors = new PromiseExecutors(
+				callbackExecutor);
+		final Deferred<String> d = executors.deferred();
 		final AtomicReference<Throwable> result = new AtomicReference<>();
 		final Throwable failure = new RuntimeException();
 		final Promise<String> p = d.getPromise();
@@ -683,8 +690,9 @@ public class PromiseTest extends TestCase {
 
 	public void testCallbackException1() throws Exception {
 		final int size = 20;
-		final Deferred<String> d = new Deferred<String>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<String> d = executors.deferred();
 		final Promise<String> p = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(size);
 		final AtomicInteger count = new AtomicInteger(0);
@@ -903,7 +911,9 @@ public class PromiseTest extends TestCase {
 
 	public void testAllSuccess3() throws Exception {
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		final Deferred<Integer> d1 = new Deferred<Integer>(callbackExecutor);
+		final PromiseExecutors executors = new PromiseExecutors(
+				callbackExecutor);
+		final Deferred<Integer> d1 = executors.deferred();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -911,7 +921,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Deferred<Long> d2 = new Deferred<Long>(callbackExecutor);
+		final Deferred<Long> d2 = executors.deferred();
 		final Promise<Long> p2 = d2.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -921,8 +931,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<List<Number>> latched = Promises
 				.<Number> all(
-						new Deferred<List<Number>>(
-								callbackExecutor),
+						executors.<List<Number>> deferred(),
 						p1, p2)
 				.onResolve(new Runnable() {
 					@Override
@@ -962,8 +971,9 @@ public class PromiseTest extends TestCase {
 
 	public void testAllSuccess4() throws Exception {
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		final Deferred<Integer> d1 = new Deferred<Integer>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<Integer> d1 = executors.deferred();
 		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -971,8 +981,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Deferred<Integer> d2 = new Deferred<Integer>(
-				Deferred.inlineExecutor());
+		final Deferred<Integer> d2 = executors.deferred();
 		final Promise<Integer> p2 = d2.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
@@ -985,7 +994,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<List<Number>> latched = Promises
 				.<Number, Integer> all(
-						new Deferred<List<Number>>(Deferred.inlineExecutor()),
+						executors.<List<Number>> deferred(),
 						promises)
 				.onResolve(new Runnable() {
 					@Override
@@ -2237,8 +2246,9 @@ public class PromiseTest extends TestCase {
 
 	public void testTimeoutWithSuccess1() throws Exception {
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		Deferred<String> d = new Deferred<String>(
+		final PromiseExecutors executors = new PromiseExecutors(
 				callbackExecutor, scheduledExecutor);
+		final Deferred<String> d = executors.deferred();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.timeout(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -2395,8 +2405,9 @@ public class PromiseTest extends TestCase {
 
 	public void testDelayWithSuccess1() throws Exception {
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		Deferred<String> d = new Deferred<String>(
+		final PromiseExecutors executors = new PromiseExecutors(
 				callbackExecutor, scheduledExecutor);
+		final Deferred<String> d = executors.deferred();
 		Promise<String> p = d.getPromise();
 		assertFalse(p.isDone());
 		Promise<String> t = p.delay(TimeUnit.SECONDS.toMillis(WAIT_TIME));
@@ -2748,8 +2759,9 @@ public class PromiseTest extends TestCase {
 
 	public void testOnSuccessFailure() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<String> d = executors.deferred();
 		final Promise<String> p = d.getPromise()
 				.onSuccess(new Consumer<String>() {
 					@Override
@@ -2776,8 +2788,9 @@ public class PromiseTest extends TestCase {
 
 	public void testOnFailureFailure() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Deferred<String> d = new Deferred<String>(
-				Deferred.inlineExecutor());
+		final PromiseExecutors executors = new PromiseExecutors(
+				PromiseExecutors.inlineExecutor());
+		final Deferred<String> d = executors.deferred();
 		final AtomicReference<Throwable> result = new AtomicReference<>();
 		final Throwable failure = new RuntimeException();
 		final Promise<String> p = d.getPromise()

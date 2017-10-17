@@ -18,9 +18,6 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
-
 /**
  * A Deferred Promise resolution.
  * 
@@ -42,45 +39,33 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author $Id$
  */
 public class Deferred<T> {
+	/**
+	 * The Promise associated with this Deferred.
+	 */
 	private final PromiseImpl<T>	promise;
 
 	/**
 	 * Create a new Deferred.
 	 * <p>
-	 * The default callback executor and default scheduled executor will be
-	 * used.
+	 * The {@link #getPromise() associated promise} will use the default
+	 * callback executor and default scheduled executor.
+	 * 
+	 * @see PromiseExecutors#deferred()
 	 */
 	public Deferred() {
-		this(null, null);
-	}
-
-	/**
-	 * Create a new Deferred with the specified callback executor.
-	 * <p>
-	 * The default scheduled executor will be used.
-	 * 
-	 * @param callbackExecutor The executor to use for callbacks. {@code null}
-	 *            can be specified for the default callback executor.
-	 * @since 1.1
-	 */
-	public Deferred(Executor callbackExecutor) {
-		this(callbackExecutor, null);
+		this(PromiseExecutors.defaultExecutors);
 	}
 
 	/**
 	 * Create a new Deferred with the specified callback and scheduled
 	 * executors.
 	 * 
-	 * @param callbackExecutor The executor to use for callbacks. {@code null}
-	 *            can be specified for the default callback executor.
-	 * @param scheduledExecutor The scheduled executor for use for scheduled
-	 *            operations. {@code null} can be specified for the default
-	 *            scheduled executor.
+	 * @param executors The executors to use for callbacks and scheduled
+	 *            operations.
 	 * @since 1.1
 	 */
-	public Deferred(Executor callbackExecutor,
-			ScheduledExecutorService scheduledExecutor) {
-		promise = new PromiseImpl<>(callbackExecutor, scheduledExecutor);
+	Deferred(PromiseExecutors executors) {
+		promise = new PromiseImpl<>(executors);
 	}
 
 	/**
@@ -187,31 +172,5 @@ public class Deferred<T> {
 	@Override
 	public String toString() {
 		return promise.toString();
-	}
-
-	/**
-	 * Returns an Executor implementation that executes callbacks immediately on
-	 * the thread calling the {@code Executor.execute} method.
-	 * 
-	 * @return An Executor implementation that executes callbacks immediately on
-	 *         the thread calling the {@code Executor.execute} method.
-	 * @since 1.1
-	 */
-	public static Executor inlineExecutor() {
-		return new InlineExecutor();
-	}
-
-	/**
-	 * An Executor implementation which executes the Runnable immediately on the
-	 * thread calling the {@code Executor.execute} method.
-	 * 
-	 * @since 1.1
-	 */
-	private static class InlineExecutor implements Executor {
-		InlineExecutor() {}
-		@Override
-		public void execute(Runnable callback) {
-			callback.run();
-		}
 	}
 }

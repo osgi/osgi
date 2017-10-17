@@ -138,7 +138,8 @@
   <section>
     <title>Promise</title>
 
-    <para>A Promise object holds the eventual result of a potentially
+    <para>A <xref linkend="org.osgi.util.promise.Promise"
+    xrefstyle="hyperlink"/> object holds the eventual result of a potentially
     asynchronous task. A Promise is either unresolved or resolved. An
     <emphasis>unresolved</emphasis> Promise does not have the result of the
     associated task available while a <emphasis>resolved</emphasis> Promise
@@ -181,10 +182,40 @@
     xrefstyle="hyperlink"/> is an interface which can allow for many Promise
     implementations. This API contains the <xref
     linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
-    which provides a standard Promise implementation. A Deferred object can be
-    created with one of the constructors and the Promise associated with the
-    new Deferred object can be obtained using <xref
-    linkend="org.osgi.util.promise.Deferred.getPromise--"
+    which provides access to the standard Promise implementation. A Deferred
+    object can be created by calling the<xref
+    linkend="org.osgi.util.promise.PromiseExecutors.deferred--"
+    xrefstyle="hyperlink"/> method on a <xref
+    linkend="org.osgi.util.promise.PromiseExecutors" xrefstyle="hyperlink"/>
+    object or by using the <xref
+    linkend="org.osgi.util.promise.Deferred.Deferred--"
+    xrefstyle="hyperlink"/> constructor. </para>
+
+    <para>A <xref linkend="org.osgi.util.promise.PromiseExecutors"
+    xrefstyle="hyperlink"/> object is created with a specifed callback
+    executor and a specifed scheduled executor to use for created Promise
+    objects and the Promise objects associated with created Deferred objects.
+    If the callback executor or the scheduled executor is not specified or is
+    specified as <code>null</code>, then implementation default executors will
+    be used. The <xref linkend="org.osgi.util.promise.Deferred.Deferred--"
+    xrefstyle="hyperlink"/> constructor will create a Deferred whose
+    associated Promise uses the implementation default executors. All Promise
+    objects created by a Promise must use the same executors as the creating
+    Promise. Callbacks must be called using the callback executor. The
+    scheduled executor must be used by the <xref
+    linkend="org.osgi.util.promise.Promise.timeout-long-"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.util.promise.Promise.delay-long-"
+    xrefstyle="hyperlink"/> operations. The <xref
+    linkend="org.osgi.util.promise.PromiseExecutors.inlineExecutor--"
+    xrefstyle="hyperlink"/> method can be used to obtain an executor which
+    runs callbacks immediately on the thread calling the
+    <code>Executor.execute</code> method. This behavior is similar to how
+    callbacks were executed in the default Promise implementation of Promise
+    1.0 specification.</para>
+
+    <para>The Promise associated with a Deferred object can be obtained using
+    <xref linkend="org.osgi.util.promise.Deferred.getPromise--"
     xrefstyle="hyperlink"/>. This Promise can then be supplied to other
     parties who can use it to be notified of and obtain the eventual
     result.</para>
@@ -267,32 +298,6 @@
     is resolved, it will be called later when the Promise is resolved. If a
     callback is registered on an already resolved Promise, it will be called
     right away.</para>
-
-    <para>In addition to the <xref
-    linkend="org.osgi.util.promise.Deferred.Deferred--"
-    xrefstyle="hyperlink"/> constructor, the <xref
-    linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
-    also provides the <xref
-    linkend="org.osgi.util.promise.Deferred.Deferred-Executor-"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.util.promise.Deferred.Deferred-Executor-ScheduledExecutorService-"
-    xrefstyle="hyperlink"/> constructors which can be used to specify a
-    callback executor and/or a scheduled executor to be used by the Promise
-    associated with the new Deferred object. All Promise objects created by
-    the associated Promise will also use the specified executors. Callbacks
-    will be called using the callback executor. The scheduled executor is used
-    by the <xref linkend="org.osgi.util.promise.Promise.timeout-long-"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.util.promise.Promise.delay-long-"
-    xrefstyle="hyperlink"/> operations. If the callback executor or the
-    scheduled executor is not specified or is specified as <code>null</code>,
-    then the Promise implementation will use an implementation default. The
-    <xref linkend="org.osgi.util.promise.Deferred.inlineExecutor--"
-    xrefstyle="hyperlink"/> method can be used to get an executor which runs
-    callbacks immediately on the thread calling the
-    <code>Executor.execute</code> method. This behavior is similar to how
-    callbacks were executed in the default implementation of Promise 1.0
-    specification.</para>
 
     <section>
       <title>Runnable</title>
@@ -630,35 +635,34 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     These are equivalent to functional interfaces which are part of the
     <code>java.util.function</code> package introduced in Java 8. Since OSGi
     intends the Promise API to be usable on versions of Java prior to Java 8,
-    we define our own interfaces. Our interfaces also allow thrown exceptions
-    which can be propagated in a chain of Promises.</para>
+    we define our own interfaces. Our interfaces also allow throwing checked
+    exceptions which can be propagated in a chain of Promises.</para>
   </section>
 
   <section>
-    <title>Promises Class</title>
+    <title>Utiltity Methods</title>
 
-    <para>The <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class provides several useful static methods when
-    working with Promises.</para>
+    <para>The API also provides several useful utility methods when working
+    with Promises.</para>
 
     <para>Often, you may need to create an already resolved Promise to return
     or chain with another Promise. The <xref
-    linkend="org.osgi.util.promise.Promises.resolved-T-"
+    linkend="org.osgi.util.promise.PromiseExecutors.resolved-T-"
     xrefstyle="hyperlink"/> method can be used to create a new Promise already
     successfully resolved with the specified value. The <xref
-    linkend="org.osgi.util.promise.Promises.failed-Throwable-"
+    linkend="org.osgi.util.promise.PromiseExecutors.failed-Throwable-"
     xrefstyle="hyperlink"/> method can be used to create a new Promise already
-    unsuccessfully resolved with the specified exception.</para>
+    unsuccessfully resolved with the specified exception. These methods also
+    exists as static methods on the <xref
+    linkend="org.osgi.util.promise.Promises" xrefstyle="hyperlink"/> class
+    returning Promises which use the implementation default executors.</para>
 
     <programlisting>  return getTimeConsumingAnswer().fallbackTo(Promises.resolved("Fallback Value"));</programlisting>
 
-    <para>The Promises class also provides the <xref
-    linkend="org.osgi.util.promise.Promises.all-Promise...-"
-    xrefstyle="hyperlink"/>, <xref
-    linkend="org.osgi.util.promise.Promises.all-Collection-"
-    xrefstyle="hyperlink"/>, <xref
+    <para>The <xref linkend="org.osgi.util.promise.Promises"
+    xrefstyle="hyperlink"/> class also provides the <xref
     linkend="org.osgi.util.promise.Promises.all-Deferred-Promise...-"
-    xrefstyle="hyperlink"/>, and <xref
+    xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Promises.all-Deferred-Collection-"
     xrefstyle="hyperlink"/> methods which return a Promise that is a latch on
     the specified Promises. The returned Promise must resolve only when all of
@@ -721,12 +725,12 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         </listitem>
 
         <listitem>
-          <para>The Deferred class has new constructors which allows the
-          caller to specify the executors to be used by the associated Promise
-          and any Promises created by the associated Promise. The Deferred
+          <para>The new PromiseExecutors class has methods which allows the
+          caller to specify the executors to be used by Deferred and Promise
+          objects created by a PromiseExecutors object. The PromiseExecutors
           class provides an inlineExecutor which can be used to provide
           behavior similar to how callbacks were executed in the default
-          implementation of Promise 1.0 specification.</para>
+          Promise implementation of the Promise 1.0 specification.</para>
         </listitem>
       </itemizedlist></para>
   </section>

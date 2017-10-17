@@ -191,7 +191,8 @@ public final class PushStreamProvider {
 		}
 
 		PushStream<T> stream = new BufferedPushStreamImpl<>(this,
-				timerToUse, queue, parallelism, workerToUse, queuePolicy,
+				new PushStreamExecutors(workerToUse, timerToUse), queue,
+				parallelism, queuePolicy,
 				pushbackPolicy, aec -> {
 					try {
 						return eventSource.open(aec);
@@ -243,9 +244,9 @@ public final class PushStreamProvider {
 			timerToUse = scheduler;
 			releaseSchedulerOnClose = false;
 		}
-
-		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this, workerToUse,
-				timerToUse, aec -> {
+		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this,
+				new PushStreamExecutors(workerToUse, timerToUse),
+				aec -> {
 					try {
 						return eventSource.open(aec);
 					} catch (Exception e) {
@@ -545,7 +546,8 @@ public final class PushStreamProvider {
 		}
 
 		SimplePushEventSourceImpl<T,U> spes = new SimplePushEventSourceImpl<T,U>(
-				toUse, acquireScheduler(), queuePolicy, queue, parallelism,
+				new PushStreamExecutors(toUse, acquireScheduler()), queuePolicy,
+				queue, parallelism,
 				() -> {
 					try {
 						onClose.run();
@@ -725,7 +727,7 @@ public final class PushStreamProvider {
 		}
 
 		PushStream<T> stream = new UnbufferedPushStreamImpl<T,BlockingQueue<PushEvent< ? extends T>>>(
-				this, workerToUse, timerToUse, aec -> {
+				this, new PushStreamExecutors(workerToUse, timerToUse), aec -> {
 					return () -> { /* No action to take */ };
 				}) {
 
@@ -734,7 +736,7 @@ public final class PushStreamProvider {
 				if (super.begin()) {
 					Iterator<T> it = items.iterator();
 
-					defaultExecutor.execute(() -> pushData(it));
+					executors.execute(() -> pushData(it));
 
 					return true;
 				}
@@ -751,8 +753,8 @@ public final class PushStreamProvider {
 								close();
 								return;
 							} else {
-								scheduler.schedule(
-										() -> defaultExecutor
+								executors.schedule(
+										() -> executors
 												.execute(() -> pushData(it)),
 										returnValue, MILLISECONDS);
 								return;

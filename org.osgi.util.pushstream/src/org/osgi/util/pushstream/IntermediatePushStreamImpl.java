@@ -18,18 +18,15 @@ package org.osgi.util.pushstream;
 
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
-
 class IntermediatePushStreamImpl<T> extends AbstractPushStreamImpl<T>
 		implements PushStream<T> {
 	
 	private final AbstractPushStreamImpl< ? > previous;
 	
 	IntermediatePushStreamImpl(PushStreamProvider psp,
-			Executor executor, ScheduledExecutorService scheduler,
+			PushStreamExecutors executors,
 			AbstractPushStreamImpl< ? > previous) {
-		super(psp, executor, scheduler);
+		super(psp, executors);
 		this.previous = previous;
 	}
 
