@@ -168,4 +168,16 @@ public final class JaxRSWhiteboardConstants {
 	 * a valid {@link Filter filter string}.
 	 */
 	public static final String	JAX_RS_WHITEBOARD_TARGET	= "osgi.jaxrs.whiteboard.target";
+
+	/**
+	 * The name of the implementation capability for the JAX-RS Whiteboard
+	 * specification
+	 */
+	public static final String	JAX_RS_WHITEBOARD_IMPLEMENTATION		= "osgi.jaxrs";
+
+	/**
+	 * The version of the implementation capability for the JAX-RS Whiteboard
+	 * specification
+	 */
+	public static final String	JAX_RS_WHITEBOARD_SPECIFICATION_VERSION	= "1.0.0";
 }
