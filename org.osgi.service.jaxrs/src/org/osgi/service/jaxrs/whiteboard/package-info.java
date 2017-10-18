@@ -33,8 +33,9 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
 package org.osgi.service.jaxrs.whiteboard;
 
-import org.osgi.annotation.versioning.Version;
+import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
+import org.osgi.annotation.versioning.Version;
