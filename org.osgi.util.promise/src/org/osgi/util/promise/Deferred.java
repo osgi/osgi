@@ -18,6 +18,8 @@ package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A Deferred Promise resolution.
  * 
@@ -38,6 +40,7 @@ import static java.util.Objects.requireNonNull;
  * @Immutable
  * @author $Id$
  */
+@ProviderType
 public class Deferred<T> {
 	/**
 	 * The Promise associated with this Deferred.

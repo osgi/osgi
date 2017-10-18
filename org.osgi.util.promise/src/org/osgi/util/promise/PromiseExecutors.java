@@ -34,6 +34,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * The executors for Promise callbacks and scheduled operations.
  * <p>
@@ -46,6 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author $Id$
  * @since 1.1
  */
+@ConsumerType
 public class PromiseExecutors {
 	/**
 	 * The default executors.
