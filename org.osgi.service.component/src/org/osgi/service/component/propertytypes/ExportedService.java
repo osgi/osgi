@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * service.
  * <p>
  * This annotation can be used on a {@link Component} to declare the values of
- * the remote service service properties for an exported service.
+ * the remote service properties for an exported service.
  * 
  * @see "Component Property Types"
  * @see "Remote Services Specification"

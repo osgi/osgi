@@ -107,8 +107,8 @@
         <listitem>
           <para><emphasis>Dependency Injection</emphasis> - The programming
           model for using declarative services supports three types of
-          dependency injection, method injection, field injection, and
-          activation injection, for service dependencies.</para>
+          dependency injection: method injection, field injection, and
+          constructor injection.</para>
         </listitem>
 
         <listitem>
@@ -626,13 +626,11 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Activation injection</emphasis> - When SCR activates
-          a component instance, activation injection occurs. This includes
-          calling the <code>activate</code> method, if one is specified, and
-          setting any activation fields, if any are specified. Bound services
-          can be parameters to the <code>activate</code> method. Since the
-          <code>activate</code> method can be a constructor, activation
-          injection supports constructor injection.</para>
+          <para><emphasis>Constructor injection</emphasis> - When SCR
+          activates a component instance, the component instance must be
+          constructed and constructor injection occurs. Bound services and
+          activation objects can be parameters to the constructor. <remark>BJH
+          Need to finish constructor injection design.</remark></para>
         </listitem>
 
         <listitem>
@@ -1003,10 +1001,10 @@
       referenced field is declared with the <code>static</code> modifier or
       has a type other than one of the above, SCR must log an error message
       with the Log Service, if present, and the field must not be modified.
-      SCR must locate field as specified in <xref
+      SCR must locate a suitable field as specified in <xref
       linkend="service.component-locating.members"/>. If no suitable field is
       located, SCR must log an error message with the Log Service, if present,
-      and a field will not be modified for the reference.</para>
+      and no field will not be modified for the reference.</para>
 
       <para>Care must be taken by the component implementation regarding the
       field. SCR has no way to know if the component implementation itself may
@@ -1041,191 +1039,6 @@
       looked up in the inheritance chain when they are protected, public, or
       have default access. See <xref
       linkend="service.component-locating.members"/>.</para>
-    </section>
-
-    <section xml:id="service.component-activation.injection">
-      <title>Activation Injection</title>
-
-      <para>Activation injection occurs when a component instance undergoes
-      activation. See <xref linkend="service.component-activation"/>. A
-      component can have an <code>activate</code> method. The name of the
-      <code>activate</code> method can be specified by the
-      <code>activate</code> attribute. A component can also have activation
-      fields. The names of the activation fields can be specified by the
-      <code>activation-fields</code> attribute. See <xref
-      linkend="service.component-component.element"/>.</para>
-
-      <para>There are several cases for activation injection. In each of the
-      cases below, the indicated steps are performed to create the component
-      instance and initialize it.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>No <code>activate</code> method name is specified.</para>
-
-          <orderedlist>
-            <listitem>
-              <para>Call the no-parameter constructor.</para>
-            </listitem>
-
-            <listitem>
-              <para>Set the activation fields, if any.</para>
-            </listitem>
-
-            <listitem>
-              <para>Bind the bound services. See <xref
-              linkend="service.component-binding.services"/>.</para>
-            </listitem>
-
-            <listitem>
-              <para>If there is an <code>activate</code> method with the
-              default name <code>activate</code>, call the
-              <code>activate</code> method .</para>
-            </listitem>
-          </orderedlist>
-        </listitem>
-
-        <listitem>
-          <para>The specified <code>activate</code> method name is not
-          <code>-init-</code>. That is, the <code>activate</code> method is
-          not a constructor.</para>
-
-          <orderedlist>
-            <listitem>
-              <para>Call the no-parameter constructor.</para>
-            </listitem>
-
-            <listitem>
-              <para>Set the activation fields, if any.</para>
-            </listitem>
-
-            <listitem>
-              <para>Bind the bound services. See <xref
-              linkend="service.component-binding.services"/>.</para>
-            </listitem>
-
-            <listitem>
-              <para>Call the <code>activate</code> method.</para>
-            </listitem>
-          </orderedlist>
-        </listitem>
-
-        <listitem>
-          <para>The specified <code>activate</code> method name is
-          <code>-init-</code>. That is, the <code>activate</code> method is a
-          constructor. This case is constructor injection.</para>
-
-          <orderedlist>
-            <listitem>
-              <para>Call the the <code>activate</code> method
-              constructor.</para>
-            </listitem>
-
-            <listitem>
-              <para>Set the activation fields, if any.</para>
-            </listitem>
-
-            <listitem>
-              <para>Bind the bound services. See <xref
-              linkend="service.component-binding.services"/>.</para>
-            </listitem>
-          </orderedlist>
-        </listitem>
-      </itemizedlist>
-
-      <para>The activate method can take zero or more parameters. The
-      parameters must be of one of the following types:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><code>ComponentContext</code> - The component instance will be
-          passed the Component Context for the component configuration.</para>
-        </listitem>
-
-        <listitem>
-          <para><code>BundleContext</code> - The component instance will be
-          passed the Bundle Context of the component's bundle.</para>
-        </listitem>
-
-        <listitem>
-          <para><code>Map</code> - The component instance will be passed an
-          unmodifiable Map containing the component properties.</para>
-        </listitem>
-
-        <listitem>
-          <para>A component property type - The component instance will be
-          passed an instance of the component property type which allows type
-          safe access to component properties defined by the component
-          property type. See <xref
-          linkend="service.component-component.property.types"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para>One of the types supported by field injection for static
-          references - The component instance will be passed an object for the
-          reference matching the zero-based parameter number. See <xref
-          linkend="service.component-field.injection"/> for the supported
-          types.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para><remark>BJH Need to write the activate method selection algorithm.
-      The following is the old algorithm.</remark></para>
-
-      <para>A suitable method is selected using the following priority:</para>
-
-      <orderedlist>
-        <listitem>
-          <para>The method takes a single parameter and the type of the
-          parameter is
-          <code>org.osgi.service.component.ComponentContext</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para>The method takes a single parameter and the type of the
-          parameter is <code>org.osgi.framework.BundleContext</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para>The method takes a single parameter and the type of the
-          parameter is a component property type.</para>
-        </listitem>
-
-        <listitem>
-          <para>The method takes a single parameter and the type of the
-          parameter is <code>java.util.Map</code>.</para>
-        </listitem>
-
-        <listitem>
-          <para>The method takes two or more parameters and the type of each
-          parameter must be
-          <code>org.osgi.service.component.ComponentContext</code>,
-          <code>org.osgi.framework.BundleContext</code>, a component property
-          type or <code>java.util.Map</code>. If multiple methods match this
-          rule, this implies the method name is overloaded and SCR may choose
-          any of the methods to call.</para>
-        </listitem>
-
-        <listitem>
-          <para>The method takes zero parameters.</para>
-        </listitem>
-      </orderedlist>
-
-      <para>When searching for the activate method to call, SCR must locate a
-      suitable method as specified in <xref
-      linkend="service.component-locating.members"/>. If the
-      <code>activate</code> attribute is specified and no suitable method is
-      located, SCR must log an error message with the Log Service, if present,
-      and the component configuration is not activated.</para>
-
-      <para>If an activate method is located, SCR must call this method to
-      complete the activation of the component configuration. If the activate
-      method throws an exception, SCR must log an error message containing the
-      exception with the Log Service, if present, and the component
-      configuration is not activated.</para>
-
-      <para><remark>BJH Need text regarding setting activation
-      fields.</remark></para>
     </section>
 
     <section xml:id="service.component-reference.cardinality">
@@ -1447,13 +1260,12 @@ public class HttpResourceImpl {
         a <emphasis>static reference</emphasis>. A component instance never
         sees any of the dynamics of the static reference. The bind method is
         called and/or the field is set before the component instance is
-        activated. Static references can also be used for parameters to the
-        <code>activate</code> method. Component configurations are deactivated
-        before any bound service for the static reference becomes unavailable.
-        If a target service is available to replace the bound service which
-        became unavailable, the component configuration must be reactivated
-        and the replacement service is bound to the new component
-        instance.</para>
+        activated. Static references can also be used for parameters for
+        constructor injection. Component configurations are deactivated before
+        any bound service for the static reference becomes unavailable. If a
+        target service is available to replace the bound service which became
+        unavailable, the component configuration must be reactivated and the
+        replacement service is bound to the new component instance.</para>
 
         <para>If the <code>policy-option</code> is <code>reluctant</code> then
         the registration of an additional target service for a reference must
@@ -2187,11 +1999,9 @@ public class MyComponent {
               component configuration is activated. The default value of this
               attribute is <code>activate</code>. See <xref
               linkend="service.component-activation.injection"/> for more
-              information.</para><para>The annotation must be applied to only
-              one method or constructor which is to be used as the activate
-              method. If applied to a constructor, the name
-              <code>-init-</code> is used. Otherwise the name of the method is
-              used.</para></entry>
+              information.</para><para>The <code>Activate</code> annotation
+              must be applied to only one method which is to be used as the
+              activate method.</para></entry>
             </row>
 
             <row>
@@ -2205,11 +2015,10 @@ public class MyComponent {
               names of the fields to hold activation objects. The fields are
               set once after the constructor has been called and before
               calling any other method on the fully constructed component
-              instance such as the <code>activate</code> method when the
-              <code>activate</code> method is not a
-              constructor.</para><para>The <code>Activate</code> annotation
-              will use the name of the field it is applied to as the
-              activation field name.</para></entry>
+              instance such as the <code>activate</code>
+              method.</para><para>The <code>Activate</code> annotation will
+              use the name of the field it is applied to as the activation
+              field name.</para></entry>
             </row>
 
             <row>
@@ -2223,9 +2032,9 @@ public class MyComponent {
               component configuration is deactivated. The default value of
               this attribute is <code>deactivate</code>. See <xref
               linkend="service.component-deactivate.method"/> for more
-              information.</para><para>The annotation must be applied to only
-              one method which is to be used as the deactivate
-              method.</para></entry>
+              information.</para><para>The <code>Deactivate</code> annotation
+              must be applied to only one method which is to be used as the
+              deactivate method.</para></entry>
             </row>
 
             <row>
@@ -2245,9 +2054,9 @@ public class MyComponent {
               configuration properties use a <code>Configuration</code> object
               that is modified in any way. See <xref
               linkend="service.component-modified.method"/> for more
-              information.</para><para>The annotation must be applied to only
-              one method which is to be used as the modified
-              method.</para></entry>
+              information.</para><para>The <code>Modified</code> annotation
+              must be applied to only one method which is to be used as the
+              modified method.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2301,10 +2110,8 @@ public class MyComponent {
       </table>
 
       <para>The class is retrieved with the <code>loadClass</code> method of
-      the component's bundle. If the <code>activate</code> method of the class
-      is a constructor, the constructor must be public. Otherwise, the class
-      must have a public no-parameter constructor which will be used to
-      construct the component instance.</para>
+      the component's bundle. The class must have a public constructor which
+      will be used to construct the component instance.</para>
 
       <para>If the component description specifies a service, the class must
       implement all interfaces that are provided by the service.</para>
@@ -2923,8 +2730,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               component configuration. For static references, this field is
               set once after the constructor has been called and before
               calling any other method on the fully constructed component
-              instance such as the <code>activate</code> method when the
-              <code>activate</code> method is not a constructor. For dynamic
+              instance such as the <code>activate</code> method. For dynamic
               references, this field can modified while the component
               configuration is active. See <xref
               linkend="service.component-accessing.services"/>.</para><para>The
@@ -2986,10 +2792,10 @@ public class Foo implements EventHandler { ... }</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The zero-based parameter number of a parameter in
-              the <code>activate</code> method of the component that is used
-              to receive service(s) that are bound to the component
-              configuration. If this attribute is set and the
-              <code>policy</code> attribute is set to <xref
+              the constructor of the component that is used to receive
+              service(s) that are bound to the component configuration. If
+              this attribute is set and the <code>policy</code> attribute is
+              set to <xref
               linkend="org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC"
               xrefstyle="hyperlink"/>, this attribute must be ignored and SCR
               must log an error message with the Log Service, if present. See
@@ -3635,8 +3441,11 @@ public class FooImpl implements Foo {
         </listitem>
 
         <listitem>
-          <para>Construct the component instance and perform activation
-          injection. See <xref
+          <para>Construct the component instance.</para>
+        </listitem>
+
+        <listitem>
+          <para>Perform activation injection. See <xref
           linkend="service.component-activation.injection"/>.</para>
         </listitem>
       </orderedlist>
@@ -3654,13 +3463,12 @@ public class FooImpl implements Foo {
     <section>
       <title>Component Context</title>
 
-      <para>The Component Context is made available to a component instance
-      via the <code>activate</code> and <code>deactivate</code> methods and
-      also through activation fields. It provides the interface to the
-      execution context of the component, much like the Bundle Context
-      provides a bundle the interface to the Framework. A Component Context
-      should therefore be regarded as a capability and not shared with other
-      components or bundles.</para>
+      <para>The Component Context can be made available to a component
+      instance via constructor injection and activation injection. It provides
+      the interface to the execution context of the component, much like the
+      Bundle Context provides a bundle the interface to the Framework. A
+      Component Context should therefore be regarded as a capability and not
+      shared with other components or bundles.</para>
 
       <para>Each distinct component instance receives a unique Component
       Context. Component Contexts are not reused and must be discarded when
@@ -3684,6 +3492,129 @@ public class FooImpl implements Foo {
       then activation of this component configuration will fail. Otherwise the
       bound service which failed to activate will be considered
       unbound.</para>
+    </section>
+
+    <section xml:id="service.component-activation.injection">
+      <title>Activation Injection</title>
+
+      <para>A component can have an <code>activate</code> method. The name of
+      the <code>activate</code> method can be specified by the
+      <code>activate</code> attribute. If the <code>activate</code> attribute
+      is not specified, the default method name of <code>activate</code> is
+      used. A component can also have activation fields. The names of the
+      activation fields are specified by the <code>activation-fields</code>
+      attribute. See <xref
+      linkend="service.component-component.element"/>.</para>
+
+      <para>After the component is constructed, the following steps are taken
+      to perform activation injection.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Set the activation fields, if any.</para>
+        </listitem>
+
+        <listitem>
+          <para>Bind the bound services. See <xref
+          linkend="service.component-binding.services"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Call the <code>activate</code> method , if any. Calling the
+          <code>activate</code> method signals the complete of activating the
+          component instance.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The activation fields and the activate method parameters must be
+      of one of the following <emphasis>activation object</emphasis>
+      types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>ComponentContext</code> - The Component Context for the
+          component configuration.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>BundleContext</code> - The Bundle Context of the
+          component's bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - An unmodifiable Map containing the
+          component properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>A component property type - An instance of the component
+          property type which allows type safe access to component properties
+          defined by the component property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The activate method can take zero or more parameters. A suitable
+      activate method is selected using the following priority:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is
+          <code>org.osgi.service.component.ComponentContext</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>org.osgi.framework.BundleContext</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is a component property type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single parameter and the type of the
+          parameter is <code>java.util.Map</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes two or more parameters and the type of each
+          parameter must be
+          <code>org.osgi.service.component.ComponentContext</code>,
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type or <code>java.util.Map</code>. If multiple methods match this
+          rule, this implies the method name is overloaded and SCR may choose
+          any of the methods to call.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes zero parameters.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>When searching for the activate method to call, SCR must locate a
+      suitable method as specified in <xref
+      linkend="service.component-locating.members"/>. If the
+      <code>activate</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the component configuration is not activated.</para>
+
+      <para>If an activate method is located, SCR must call this method to
+      complete the activation of the component configuration. If the activate
+      method throws an exception, SCR must log an error message containing the
+      exception with the Log Service, if present, and the component
+      configuration is not activated.</para>
+
+      <para>Only instance fields of the activation object types above are
+      supported. If an activation field is declared with the
+      <code>static</code> modifier or has a type other than one of the above,
+      SCR must log an error message with the Log Service, if present, and the
+      field must not be modified. SCR must locate a suitable field as
+      specified in <xref linkend="service.component-locating.members"/>. If no
+      suitable field is located for an activation field name, SCR must log an
+      error message with the Log Service, if present.</para>
     </section>
 
     <section xml:id="service.component-binding.services">
@@ -3818,25 +3749,24 @@ void unsetLogService( LogService log ) {
 
       <itemizedlist>
         <listitem>
-          <para><code>ComponentContext</code> - The component instance will be
-          passed the Component Context for the component configuration.</para>
+          <para><code>ComponentContext</code> - The Component Context for the
+          component configuration.</para>
         </listitem>
 
         <listitem>
-          <para><code>BundleContext</code> - The component instance will be
-          passed the Bundle Context of the component's bundle.</para>
+          <para><code>BundleContext</code> - The Bundle Context of the
+          component's bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>Map</code> - The component instance will be passed an
-          unmodifiable Map containing the component properties.</para>
+          <para><code>Map</code> - An unmodifiable Map containing the
+          component properties.</para>
         </listitem>
 
         <listitem>
-          <para>A component property type - The component instance will be
-          passed an instance of the component property type which allows type
-          safe access to component properties defined by the component
-          property type. See <xref
+          <para>A component property type - An instance of the component
+          property type which allows type safe access to component properties
+          defined by the component property type. See <xref
           linkend="service.component-component.property.types"/>.</para>
         </listitem>
       </itemizedlist>
@@ -3925,31 +3855,45 @@ void unsetLogService( LogService log ) {
 
       <itemizedlist>
         <listitem>
-          <para>0 - Unspecified.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_UNSPECIFIED"
+          xrefstyle="hyperlink"/> - Unspecified.</para>
         </listitem>
 
         <listitem>
-          <para>1 - The component was disabled.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_DISABLED"
+          xrefstyle="hyperlink"/> - The component was disabled.</para>
         </listitem>
 
         <listitem>
-          <para>2 - A reference became unsatisfied.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_REFERENCE"
+          xrefstyle="hyperlink"/> - A reference became unsatisfied.</para>
         </listitem>
 
         <listitem>
-          <para>3 - A configuration was changed.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_MODIFIED"
+          xrefstyle="hyperlink"/> - A configuration was changed.</para>
         </listitem>
 
         <listitem>
-          <para>4 - A configuration was deleted.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_DELETED"
+          xrefstyle="hyperlink"/> - A configuration was deleted.</para>
         </listitem>
 
         <listitem>
-          <para>5 - The component was disposed.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_DISPOSED"
+          xrefstyle="hyperlink"/> - The component was disposed.</para>
         </listitem>
 
         <listitem>
-          <para>6 - The bundle was stopped.</para>
+          <para><xref
+          linkend="org.osgi.service.component.ComponentConstants.DEACTIVATION_REASON_BUNDLE_STOPPED"
+          xrefstyle="hyperlink"/> - The bundle was stopped.</para>
         </listitem>
       </itemizedlist>
 
@@ -3965,39 +3909,38 @@ void unsetLogService( LogService log ) {
       deactivate method can be specified by the <code>deactivate</code>
       attribute. See <xref linkend="service.component-component.element"/>. If
       the <code>deactivate</code> attribute is not specified, the default
-      method name of <code>deactivate</code> is used.</para>
+      method name of <code>deactivate</code> is used. Activation fields must
+      not be modified during deactivation.</para>
 
       <para>The deactivate method can take zero or more parameters. Each
       parameter must be assignable from one of the following types:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>ComponentContext</code> - The component instance will be
-          passed the Component Context for the component.</para>
+          <para><code>ComponentContext</code> - The Component Context for the
+          component configuration.</para>
         </listitem>
 
         <listitem>
-          <para><code>BundleContext</code> - The component instance will be
-          passed the Bundle Context of the component's bundle.</para>
+          <para><code>BundleContext</code> - The Bundle Context of the
+          component's bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>Map</code> - The component instance will be passed an
-          unmodifiable Map containing the component properties.</para>
+          <para><code>Map</code> - An unmodifiable Map containing the
+          component properties.</para>
         </listitem>
 
         <listitem>
-          <para>A component property type - The component instance will be
-          passed an instance of the component property type which allows type
-          safe access to component properties defined by the component
-          property type. See <xref
+          <para>A component property type - An instance of the component
+          property type which allows type safe access to component properties
+          defined by the component property type. See <xref
           linkend="service.component-component.property.types"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>int</code> or <code>Integer</code> - The component
-          instance will be passed the reason the component configuration is
-          being deactivated. See <xref
+          <para><code>int</code> or <code>Integer</code> - The reason the
+          component configuration is being deactivated. See <xref
           linkend="service.component-deactivation"/>.</para>
         </listitem>
       </itemizedlist>
@@ -4863,11 +4806,11 @@ public @interface Config {
           </listitem>
 
           <listitem>
-            <para>Component property types can be parameter types in the
-            component's life cycle methods, activate, deactivate, and
-            modified. The life cycle method implementation can use these
-            parameters at runtime to access component property values in a
-            type safe manner.</para>
+            <para>Component property types can be used as activation objects
+            via parameter types in the component's life cycle methods,
+            activate, deactivate, and modified or via activation fields. The
+            component implementation can use these objects at runtime to
+            access component property values in a type safe manner.</para>
 
             <para>To be used in this way, it is recommended the component
             property type be annotated with the <xref
@@ -5115,7 +5058,7 @@ public class MyComponent {
         method.</para>
 
         <table xml:id="service.component-single.element.name.mapping">
-          <title>Single-Element Annotaton Mapping Examples for
+          <title>Single-Element Annotation Mapping Examples for
           <code>value</code> Method</title>
 
           <tgroup cols="2">
@@ -6108,18 +6051,8 @@ public class MyComponent implements AcmeService {}</programlisting>
       </listitem>
 
       <listitem>
-        <para>Support is added for static references as parameters to the
-        activate method. So parameters of the activate method can be annotated
-        with @Reference. See <xref
-        linkend="service.component-activation.injection"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Support is added for using a constructor as the activate method
-        of a component. Combined with the support for static references as
-        parameters to the activate method, static references can be stored in
-        final fields in the constructor. See <xref
-        linkend="service.component-activation.injection"/>.</para>
+        <para>Support is added for injecting activation objects into fields.
+        See <xref linkend="service.component-activation.injection"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

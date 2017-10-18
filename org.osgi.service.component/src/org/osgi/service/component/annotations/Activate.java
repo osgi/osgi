@@ -28,15 +28,12 @@ import java.lang.annotation.Target;
  * When this annotation is applied to a:
  * <ul>
  * <li>Method - The method is the {@code activate} method of the Component.</li>
- * <li>Constructor - The constructor is the {@code activate} method of the
- * Component. The constructor must be public.</li>
  * <li>Field - The field will contain an activation object of the Component. The
  * field must be set after the constructor is called and before calling any
  * other method on the fully constructed component instance. That is, there is a
  * <i>happens-before</i> relationship between the field being set and calling
  * any method on the fully constructed component instance such as the
- * {@code activate} method when the {@code activate} method is not a
- * constructor.</li>
+ * {@code activate} method.</li>
  * </ul>
  * <p>
  * This annotation is not processed at runtime by Service Component Runtime. It
@@ -49,7 +46,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target({
-		ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD
+		ElementType.METHOD, ElementType.FIELD
 })
 public @interface Activate {
 	// marker annotation
