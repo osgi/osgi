@@ -16,13 +16,11 @@
 
 package org.osgi.service.cdi.annotations;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
@@ -57,7 +55,6 @@ public @interface Reference {
 
 		/**
 		 * @param cardinality
-		 * @param fromScope
 		 * @param policy
 		 * @param policyOption
 		 * @param scope
@@ -67,26 +64,23 @@ public @interface Reference {
 		 */
 		public static final Literal of(
 				ReferenceCardinality cardinality,
-				Class<? extends Annotation> fromScope,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
 
-			return new Literal(cardinality, fromScope, policy, policyOption, scope, service, target);
+			return new Literal(cardinality, policy, policyOption, scope, service, target);
 		}
 
 		private Literal(
 				ReferenceCardinality cardinality,
-				Class<? extends Annotation> fromScope,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
 			_cardinality = cardinality;
-			_fromScope = fromScope;
 			_policy = policy;
 			_policyOption = policyOption;
 			_scope = scope;
@@ -97,11 +91,6 @@ public @interface Reference {
 		@Override
 		public ReferenceCardinality cardinality() {
 			return _cardinality;
-		}
-
-		@Override
-		public Class<? extends Annotation> fromScope() {
-			return _fromScope;
 		}
 
 		@Override
@@ -130,7 +119,6 @@ public @interface Reference {
 		}
 
 		private final ReferenceCardinality	_cardinality;
-		private final Class<? extends Annotation>	_fromScope;
 		private final ReferencePolicy		_policy;
 		private final ReferencePolicyOption	_policyOption;
 		private final ReferenceScope		_scope;
@@ -158,17 +146,6 @@ public @interface Reference {
 	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
 	 */
 	ReferenceCardinality cardinality() default ReferenceCardinality.NOT_SPECIFIED;
-
-	/**
-	 * The CDI scope in which the synthetic reference bean will be created.
-	 * <p>
-	 * This property is only applicable in non-component beans. The default
-	 * behaviour is for all synthetic reference beans to be
-	 * {@link ApplicationScoped}.
-	 * 
-	 * @return the CDI scope in which to create the synthetic reference bean
-	 */
-	Class<? extends Annotation> fromScope() default ApplicationScoped.class;
 
 	/**
 	 * The policy for this reference.

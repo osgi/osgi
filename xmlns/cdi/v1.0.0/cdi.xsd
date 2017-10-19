@@ -120,7 +120,6 @@
 			<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="cardinality" default="1..1" type="cdi:Tcardinality" use="optional" />
-		<attribute name="cdi-scope" default="AppliationScoped" type="token" use="optional" />
 		<attribute name="name" type="token" use="required" />
 		<attribute name="policy-option" default="reluctant" type="cdi:Treference-policy-option" use="optional" />
 		<attribute name="scope" default="bundle" type="cdi:Treference_scope" use="optional" />
