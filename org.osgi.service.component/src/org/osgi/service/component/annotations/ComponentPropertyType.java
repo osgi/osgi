@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
  * Identify the annotated annotation as a Component Property Type.
  * <p>
  * Component Property Types can be applied as annotations to the implementation
- * class of the Component. They can also be used as parameter types for the
- * component's life cycle methods {@link Activate}, {@link Deactivate}, and
- * {@link Modified}.
+ * class of the Component. They can also be used as activation objects which
+ * means they can be used as parameter types for the component's constructor and
+ * life cycle methods {@link Activate}, {@link Deactivate}, and {@link Modified}
+ * as well as activation fields.
  * <p>
  * Component Property Types do not have to be annotated with this annotation to
- * be used as parameter types for life cycle methods but they must be annotated
- * with this annotation to be used as annotations on the implementation class of
- * the Component.
+ * be used as parameter types but they must be annotated with this annotation to
+ * be used as annotations on the implementation class of the Component.
  * <p>
  * This annotation is not processed at runtime by Service Component Runtime. It
  * must be processed by tools and used to add a Component Description to the

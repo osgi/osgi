@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
  * When this annotation is applied to a:
  * <ul>
  * <li>Method - The method is the {@code activate} method of the Component.</li>
+ * <li>Constructor - The constructor will be used to construct the Component and
+ * can be called with activation objects and bound services as parameters.</li>
  * <li>Field - The field will contain an activation object of the Component. The
  * field must be set after the constructor is called and before calling any
  * other method on the fully constructed component instance. That is, there is a
@@ -40,13 +42,13 @@ import java.lang.annotation.Target;
  * must be processed by tools and used to add a Component Description to the
  * bundle.
  * 
- * @see "The activate and activation-fields attributes of the component element of a Component Description."
+ * @see "The init, activate, and activation-fields attributes of the component element of a Component Description."
  * @author $Id$
  * @since 1.1
  */
 @Retention(RetentionPolicy.CLASS)
 @Target({
-		ElementType.METHOD, ElementType.FIELD
+		ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR
 })
 public @interface Activate {
 	// marker annotation

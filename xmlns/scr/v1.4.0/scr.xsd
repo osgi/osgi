@@ -120,6 +120,8 @@
                 </restriction>
             </simpleType>
         </attribute>
+        <attribute name="init" type="unsignedByte" default="0"
+            use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Timplementation">

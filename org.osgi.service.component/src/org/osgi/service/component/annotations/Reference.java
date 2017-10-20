@@ -22,7 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Identify the annotated member as a reference of a Service Component.
+ * Identify the annotated member or parameter as a reference of a Service
+ * Component.
  * <p>
  * When the annotation is applied to a method, the method is the bind method of
  * the reference.
@@ -30,9 +31,8 @@ import java.lang.annotation.Target;
  * When the annotation is applied to a field, the field will contain the bound
  * service(s) of the reference.
  * <p>
- * When the annotation is applied to a parameter of an {@code activate} method
- * that is annotated with {@link Activate}, the parameter will contain the bound
- * service(s) of the reference.
+ * When the annotation is applied to a parameter of a constructor, the parameter
+ * will contain the bound service(s) of the reference.
  * <p>
  * This annotation is not processed at runtime by Service Component Runtime. It
  * must be processed by tools and used to add a Component Description to the
@@ -63,8 +63,8 @@ public @interface Reference {
 	 * the reference. Otherwise, the name of the reference is the method
 	 * name.</li>
 	 * <li>Annotated field - The name of the reference is the field name.</li>
-	 * <li>Annotated {@code activate} method parameter - The name of the
-	 * reference is the parameter name.</li>
+	 * <li>Annotated constructor parameter - The name of the reference is the
+	 * parameter name.</li>
 	 * </ul>
 	 * 
 	 * @see "The name attribute of the reference element of a Component Description."
@@ -92,9 +92,9 @@ public @interface Reference {
 	 * subtype of {@code java.util.Collection} so the type of the service is the
 	 * generic type of the collection. Otherwise, the type of the service is the
 	 * type of the field.</li>
-	 * <li>Annotated {@code activate} method parameter - The type of the service
-	 * is based upon the type of the parameter being annotated and the
-	 * cardinality of the reference. If the cardinality is either
+	 * <li>Annotated constructor parameter - The type of the service is based
+	 * upon the type of the parameter being annotated and the cardinality of the
+	 * reference. If the cardinality is either
 	 * {@link ReferenceCardinality#MULTIPLE 0..n}, or
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the parameter
 	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
@@ -122,8 +122,8 @@ public @interface Reference {
 	 * cardinality is {@link ReferenceCardinality#MANDATORY 1..1}.</li>
 	 * <li>{@link Component#reference()} element - The cardinality is
 	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
-	 * <li>Annotated {@code activate} method parameter - The cardinality is
-	 * based on the type of the parameter. If the type is either
+	 * <li>Annotated constructor parameter - The cardinality is based on the
+	 * type of the parameter. If the type is either
 	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
 	 * {@code java.util.Collection}, the cardinality is
 	 * {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the cardinality is
@@ -148,9 +148,9 @@ public @interface Reference {
 	 * If the field is declared {@code volatile}, the policy is
 	 * {@link ReferencePolicy#DYNAMIC}. Otherwise the policy is
 	 * {@link ReferencePolicy#STATIC STATIC}.</li>
-	 * <li>Annotated {@code activate} method parameter - The policy is
-	 * {@link ReferencePolicy#STATIC STATIC}. {@link ReferencePolicy#STATIC
-	 * STATIC} policy must be used for {@code activate} method parameters.</li>
+	 * <li>Annotated constructor parameter - The policy is
+	 * {@link ReferencePolicy#STATIC STATIC}. STATIC policy must be used for
+	 * constructor parameters.</li>
 	 * <li>{@link Component#reference()} element - The policy is
 	 * {@link ReferencePolicy#STATIC STATIC}.</li>
 	 * </ul>
@@ -207,8 +207,7 @@ public @interface Reference {
 	 * <li>Annotated method - The name of the annotated method is the name of
 	 * the bind method.</li>
 	 * <li>Annotated field - There is no bind method name.</li>
-	 * <li>Annotated {@code activate} method parameter - There is no bind method
-	 * name.</li>
+	 * <li>Annotated constructor parameter - There is no bind method name.</li>
 	 * <li>{@link Component#reference()} element - There is no bind method name.
 	 * </li>
 	 * </ul>
@@ -238,8 +237,8 @@ public @interface Reference {
 	 * method when the component type contains a method with the candidate name,
 	 * the value {@code "-"} must be used.</li>
 	 * <li>Annotated field - There is no updated method name.</li>
-	 * <li>Annotated {@code activate} method parameter - There is no updated
-	 * method name.</li>
+	 * <li>Annotated constructor parameter - There is no updated method
+	 * name.</li>
 	 * <li>{@link Component#reference()} element - There is no updated method
 	 * name.</li>
 	 * </ul>
@@ -269,8 +268,8 @@ public @interface Reference {
 	 * method. To declare no unbind method when the component type contains a
 	 * method with the candidate name, the value {@code "-"} must be used.</li>
 	 * <li>Annotated field - There is no unbind method name.</li>
-	 * <li>Annotated {@code activate} method parameter - There is no unbind
-	 * method name.</li>
+	 * <li>Annotated constructor parameter - There is no unbind method
+	 * name.</li>
 	 * <li>{@link Component#reference()} element - There is no unbind method
 	 * name.</li>
 	 * </ul>
@@ -296,8 +295,7 @@ public @interface Reference {
 	 * <li>Annotated method - There is no field name.</li>
 	 * <li>Annotated field - The name of the annotated field is the name of the
 	 * field.</li>
-	 * <li>Annotated {@code activate} method parameter - There is no field
-	 * name.</li>
+	 * <li>Annotated constructor parameter - There is no field name.</li>
 	 * <li>{@link Component#reference()} element - There is no field name.</li>
 	 * </ul>
 	 * <p>
@@ -323,8 +321,7 @@ public @interface Reference {
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, and the field is declared
 	 * {@code final}, the field option is {@link FieldOption#UPDATE}. Otherwise,
 	 * the field option is {@link FieldOption#REPLACE}.</li>
-	 * <li>Annotated {@code activate} method parameter - There is no field
-	 * option.</li>
+	 * <li>Annotated constructor parameter - There is no field option.</li>
 	 * <li>{@link Component#reference()} element - There is no field
 	 * option.</li>
 	 * </ul>
@@ -334,37 +331,37 @@ public @interface Reference {
 	 */
 	FieldOption fieldOption() default FieldOption.REPLACE;
 
-	/* Activation injection elements */
+	/* Constructor injection elements */
 
 	/**
-	 * The zero-based parameter number of the {@code activate} method parameter
-	 * for this reference. The {@code activate} method can be a constructor.
+	 * The zero-based parameter number of the constructor parameter for this
+	 * reference.
 	 * <p>
-	 * If specified and this reference annotates an {@code activate} method
-	 * parameter, the specified value must match the zero-based parameter number
-	 * of the annotated {@code activate} method parameter.
+	 * If specified and this reference annotates an constructor parameter, the
+	 * specified value must match the zero-based parameter number of the
+	 * annotated constructor parameter.
 	 * <p>
 	 * If not specified, the parameter number is based upon how this annotation
 	 * is used:
 	 * <ul>
 	 * <li>Annotated method - There is no parameter number.</li>
 	 * <li>Annotated field - There is no parameter number.</li>
-	 * <li>Annotated {@code activate} method parameter - The zero-based
-	 * parameter number of the parameter.</li>
+	 * <li>Annotated constructor parameter - The zero-based parameter number of
+	 * the parameter.</li>
 	 * <li>{@link Component#reference()} element - There is no parameter
 	 * number.</li>
 	 * </ul>
 	 * <p>
-	 * If there is a parameter number, the component must contain an
-	 * {@code activate} method annotated with {@link Activate} that has a
-	 * parameter having the zero-based parameter number.
+	 * If there is a parameter number, the component must declare a constructor
+	 * that has a parameter having the zero-based parameter number.
 	 * 
 	 * @see "The parameter attribute of the reference element of a Component Description."
+	 * @see "The init attribute of the component element of a Component Description."
 	 * @since 1.4
 	 */
 	int parameter() default 0;
 
-	/* Field and Activation injection elements */
+	/* Field and Constructor injection elements */
 
 	/**
 	 * The collection type for this reference.
@@ -379,8 +376,8 @@ public @interface Reference {
 	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection type is
 	 * inferred from the generic type of the list or collection. Otherwise,
 	 * there is no collection type</li>
-	 * <li>Annotated {@code activate} method parameter - The collection type is
-	 * based upon the cardinality of the reference and the generic type of the
+	 * <li>Annotated constructor method parameter - The collection type is based
+	 * upon the cardinality of the reference and the generic type of the
 	 * parameter. If the cardinality is {@link ReferenceCardinality#MULTIPLE
 	 * 0..n} or {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the collection
 	 * type is inferred from the generic type of the list or collection.

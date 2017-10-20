@@ -144,7 +144,7 @@ public @interface Component {
 	 * of a Component Description.
 	 * <p>
 	 * To specify a property with multiple values, use multiple name, value
-	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
+	 * pairs. For example, <code>{"foo=bar", "foo=baz"}</code>.
 	 * 
 	 * @see "The property element of a Component Description."
 	 */
@@ -270,7 +270,9 @@ public @interface Component {
 	 * <p>
 	 * To access references using method injection, bind methods are annotated
 	 * with {@link Reference}. To access references using field injection,
-	 * fields are annotated with {@link Reference}.
+	 * fields are annotated with {@link Reference}. To access references using
+	 * constructor injection, constructor parameters are annotated with
+	 * {@link Reference}.
 	 * 
 	 * @see "The reference element of a Component Description."
 	 * @since 1.3
@@ -287,7 +289,7 @@ public @interface Component {
 	 * {@code factory-property} element of a Component Description.
 	 * <p>
 	 * To specify a factory property with multiple values, use multiple name,
-	 * value pairs. For example, {@code "foo=bar", "foo=baz"}.
+	 * value pairs. For example, <code>{"foo=bar", "foo=baz"}</code>.
 	 * <p>
 	 * If specified, the {@link #factory()} element must also be specified to
 	 * indicate the component is a Factory Component.
