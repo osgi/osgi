@@ -1107,6 +1107,11 @@
       message containing the exception with the Log Service, if present, and
       the component configuration is not activated.</para>
 
+      <para>If the constructor parameter is associated with a reference having
+      cardinality of <code>0..1</code> and there is no bound service for the
+      reference, then the value <code>null</code> will be supplied as the
+      constructor parameter.</para>
+
       <para>In the following examples, a component requires the Logger Factory
       service.</para>
 
