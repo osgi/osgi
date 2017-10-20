@@ -16,9 +16,12 @@
 
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * The interface used by clients to control the active transaction context
  */
+@ProviderType
 public interface TransactionControl extends TransactionStarter {
 
 	/**

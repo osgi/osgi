@@ -17,6 +17,8 @@ package org.osgi.service.transaction.control;
 
 import java.io.Serializable;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * An Exception that is thrown when a piece of scoped work exits with an
  * {@link Exception}.
@@ -25,6 +27,7 @@ import java.io.Serializable;
  * is raised then the current {@link TransactionContext} will be available from
  * the {@link #ongoingContext()} method.
  */
+@ProviderType
 public class ScopedWorkException extends RuntimeException {
 
 	/**

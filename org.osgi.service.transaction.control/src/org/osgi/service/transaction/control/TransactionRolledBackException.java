@@ -15,10 +15,13 @@
  */
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * An Exception indicating that the active transaction was unexpectedly rolled
  * back
  */
+@ProviderType
 public class TransactionRolledBackException extends TransactionException {
 
 	/**

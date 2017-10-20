@@ -15,10 +15,13 @@
  */
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * An Exception indicating that there was a problem with starting, finishing,
  * suspending or resuming a transaction
  */
+@ProviderType
 public class TransactionException extends RuntimeException {
 
 	/**

@@ -15,10 +15,13 @@
  */
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Resources that can integrate with local transactions should do so using this
  * interface
  */
+@ConsumerType
 public interface LocalResource {
 
 	/**

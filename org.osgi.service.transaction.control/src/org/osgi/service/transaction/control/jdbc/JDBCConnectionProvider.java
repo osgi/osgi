@@ -17,6 +17,7 @@ package org.osgi.service.transaction.control.jdbc;
 
 import java.sql.Connection;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.service.transaction.control.ResourceProvider;
 
 /**
@@ -26,6 +27,7 @@ import org.osgi.service.transaction.control.ResourceProvider;
  * Instances of this interface may be available in the Service Registry, or can
  * be created using a {@link JDBCConnectionProviderFactory}.
  */
+@ConsumerType
 public interface JDBCConnectionProvider extends ResourceProvider<Connection> {
 	/**
 	 * This interface specialises the ResourceProvider for creating JDBC

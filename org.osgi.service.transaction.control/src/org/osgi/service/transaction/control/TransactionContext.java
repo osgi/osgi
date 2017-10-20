@@ -19,12 +19,14 @@ import java.util.function.Consumer;
 
 import javax.transaction.xa.XAResource;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.transaction.control.recovery.RecoverableXAResource;
 
 /**
  * A transaction context defines the current transaction, and allows resources
  * to register information and/or synchronisations
  */
+@ProviderType
 public interface TransactionContext {
 
 	/**

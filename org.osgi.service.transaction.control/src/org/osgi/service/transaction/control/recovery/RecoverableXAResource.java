@@ -17,6 +17,7 @@ package org.osgi.service.transaction.control.recovery;
 
 import javax.transaction.xa.XAResource;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.service.transaction.control.ResourceProvider;
 import org.osgi.service.transaction.control.TransactionContext;
 import org.osgi.service.transaction.control.TransactionControl;
@@ -44,6 +45,7 @@ import org.osgi.service.transaction.control.TransactionControl;
  * the recoverable resource is used.
  * 
  */
+@ConsumerType
 public interface RecoverableXAResource {
 
 	/**

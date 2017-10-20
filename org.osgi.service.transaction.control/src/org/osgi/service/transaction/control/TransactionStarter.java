@@ -17,10 +17,13 @@ package org.osgi.service.transaction.control;
 
 import java.util.concurrent.Callable;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Implementations of this interface are able to run a piece of work within a
  * transaction
  */
+@ProviderType
 public interface TransactionStarter {
 	/**
 	 * A transaction is required to run the supplied piece of work. If no

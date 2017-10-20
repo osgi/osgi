@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.osgi.service.transaction.control.TransactionException;
 
@@ -29,6 +30,7 @@ import org.osgi.service.transaction.control.TransactionException;
  * This factory can be used if the {@link JPAEntityManagerProvider} should not
  * be a public service, for example to protect a username/password.
  */
+@ProviderType
 public interface JPAEntityManagerProviderFactory {
 
 	/**

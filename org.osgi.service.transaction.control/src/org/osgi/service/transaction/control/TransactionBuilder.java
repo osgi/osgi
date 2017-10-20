@@ -20,9 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A builder for a piece of transactional work
  */
+@ProviderType
 public abstract class TransactionBuilder implements TransactionStarter {
 
 	/**
