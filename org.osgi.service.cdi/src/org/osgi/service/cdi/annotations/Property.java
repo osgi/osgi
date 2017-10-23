@@ -18,6 +18,7 @@ package org.osgi.service.cdi.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -44,33 +45,34 @@ import org.osgi.service.cdi.CdiConstants;
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
-public @interface Properties {
+@Repeatable(Properties.class)
+public @interface Property {
 
 	/**
-	 * Support inline instantiation of the {@link Properties} annotation.
+	 * Support inline instantiation of the {@link Property} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Properties> implements Properties {
+	public static final class Literal extends AnnotationLiteral<Property> implements Property {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
 		 * @param properties
-		 * @return an instance of {@link Properties}
+		 * @return an instance of {@link Property}
 		 */
-		public static Properties of(Property[] properties) {
+		public static Literal of(String properties) {
 			return new Literal(properties);
 		}
 
-		private Literal(Property[] properties) {
-			_properties = properties;
+		private Literal(String property) {
+			_property = property;
 		}
 
 		@Override
-		public Property[] value() {
-			return _properties;
+		public String value() {
+			return _property;
 		}
 
-		private final Property[] _properties;
+		private final String _property;
 
 	}
 
@@ -83,8 +85,8 @@ public @interface Properties {
 	 * attribute of the {@code property} element of a Component description.
 	 * <p>
 	 * To specify a property with multiple values, use multiple name, value pairs.
-	 * For example, {@code {"foo=bar", "foo=baz"}}.
+	 * For example, {@code @Property("foo=bar") @Property("foo=baz")}.
 	 */
-	Property[] value();
+	String value();
 
 }

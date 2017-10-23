@@ -29,13 +29,13 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Component;
-import org.osgi.service.cdi.annotations.Properties;
+import org.osgi.service.cdi.annotations.Property;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.ServiceScope;
 
 @Component
 @Service(scope = ServiceScope.PROTOTYPE)
-@Properties("tb=tb5")
+@Property("tb=tb5")
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;
