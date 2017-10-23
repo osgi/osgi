@@ -17,6 +17,7 @@
 package org.osgi.util.promise;
 
 import static java.util.Objects.requireNonNull;
+import static org.osgi.util.promise.PromiseImpl.uncaughtException;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
@@ -267,7 +268,7 @@ public class PromiseExecutors {
 			try {
 				callback.run();
 			} catch (Throwable t) {
-				PromiseImpl.uncaughtException(t);
+				uncaughtException(t);
 			}
 		}
 
@@ -343,7 +344,7 @@ public class PromiseExecutors {
 					}
 				}
 				if (t != null) {
-					PromiseImpl.uncaughtException(t);
+					uncaughtException(t);
 				}
 			}
 		}
