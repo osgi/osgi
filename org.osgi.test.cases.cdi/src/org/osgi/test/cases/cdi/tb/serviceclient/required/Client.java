@@ -8,10 +8,12 @@ import org.osgi.service.cdi.annotations.Component;
 import org.osgi.service.cdi.annotations.Reference;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.service.cdi.annotations.ServiceScope;
+import org.osgi.service.cdi.annotations.ServiceScopes;
 import org.osgi.test.cases.tb.serviceapi.Provider;
 
 @Component
-@Service(scope = ServiceScope.BUNDLE)
+@Service
+@ServiceScope(ServiceScopes.BUNDLE)
 public class Client implements Callable<String> {
 	@Inject
 	@Reference

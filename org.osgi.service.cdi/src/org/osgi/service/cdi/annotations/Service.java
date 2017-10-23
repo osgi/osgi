@@ -37,7 +37,7 @@ import org.osgi.service.cdi.CdiConstants;
  * <li>Applied to non-component bean - In this scenario only beans which are
  * {@link ApplicationScoped} or {@link Singleton} are allowed. Use of other
  * scopes will result in a definition error. Also in this scenario the default
- * {@link Service#scope()} behaviour will be {@link ServiceScope#SINGLETON
+ * {@link ServiceScope} behaviour will be {@link ServiceScopes#SINGLETON
  * SINGLETON}. Use of other service scopes will result in a definition
  * error.</li>
  * </ul>
@@ -61,43 +61,25 @@ public @interface Service {
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param scope the scope of the service
 		 * @param service an array of types under which to publish the service
 		 * @return an instance of {@link Service}
 		 */
-		public static Literal of(ServiceScope scope, Class<?>[] service) {
-			return new Literal(scope, service);
+		public static Literal of(Class<?>[] service) {
+			return new Literal(service);
 		}
 
-		private Literal(ServiceScope scope, Class<?>[] service) {
-			_scope = scope;
+		private Literal(Class<?>[] service) {
 			_service = service;
 		}
 
 		@Override
-		public ServiceScope scope() {
-			return _scope;
-		}
-
-		@Override
-		public Class<?>[] service() {
+		public Class<?>[] value() {
 			return _service;
 		}
 
-		private final ServiceScope	_scope;
 		private final Class<?>[]	_service;
 
 	}
-
-	/**
-	 * The service scope used for the service.
-	 *
-	 * <p>
-	 * If not specified the bean will be published as a
-	 * {@link ServiceScope#SINGLETON SINGLETON} service.
-	 * <p>
-	 */
-	ServiceScope scope() default ServiceScope.NOT_SPECIFIED;
 
 	/**
 	 * The types under which to register this Component as a service.
@@ -110,6 +92,6 @@ public @interface Service {
 	 * specified values.
 	 * <ul>
 	 */
-	Class<?>[] service() default {};
+	Class<?>[] value() default {};
 
 }

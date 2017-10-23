@@ -16,75 +16,67 @@
 
 package org.osgi.service.cdi.annotations;
 
-import java.util.Objects;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.enterprise.util.AnnotationLiteral;
+import org.osgi.annotation.bundle.Requirement;
+import org.osgi.namespace.extender.ExtenderNamespace;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Service scope for the {@link Reference} annotation.
+ * Annotation used to specify that a CDI bean to describe the scope of the
+ * service. Used in conjunction with {@link Service}.
  *
  * @author $Id$
  */
-public enum ServiceScope {
-	/**
-	 * The value indicating that no choice was made in which case the calculated
-	 * value or default behavior should take effect.
-	 * <p>
-	 * The default behavior is {@link ServiceScope#SINGLETON}.
-	 */
-	NOT_SPECIFIED("not_specified"),
+@Target(value = ElementType.TYPE)
+@Retention(value = RetentionPolicy.RUNTIME)
+@Documented
+@Requirement(
+		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
+		name = CdiConstants.CDI_CAPABILITY_NAME,
+		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+public @interface ServiceScope {
 
 	/**
-	 * Indicates the component should be registered as an OSGi service with
-	 * {@code osgi.scope=bundle}. It must be registered as a bundle scope service
-	 * and an instance of the component must be created for each bundle using the
-	 * service.
+	 * Support inline instantiation of the {@link Component} annotation.
 	 */
-	BUNDLE("bundle"),
+	public static final class Literal extends AnnotationLiteral<ServiceScope> implements ServiceScope {
 
-	/**
-	 * Indicates the component should be registered as an OSGi service with
-	 * {@code osgi.scope=prototype}. It must be registered as a prototype scope
-	 * service and an instance of the component must be created for each distinct
-	 * request for the service.
-	 */
-	PROTOTYPE("prototype"),
+		private static final long serialVersionUID = 1L;
 
-	/**
-	 * Indicates the component must be registered as an OSGi service with
-	 * {@code osgi.scope=singleton}. It must be registered as a bundle scope service
-	 * but only a single instance of the component must be used for all bundles
-	 * using the service.
-	 */
-	SINGLETON("singleton");
-
-	private final String value;
-
-	/**
-	 * Get a {@link ServiceScope ServiceScope} instance by value rather than by
-	 * name.
-	 *
-	 * @param input a non-null value
-	 * @return the {@link ServiceScope ServiceScope} matching the value
-	 * @throws NullPointerException if the input is null
-	 * @throws IllegalArgumentException on invalid input
-	 */
-	public static ServiceScope get(String input) {
-		Objects.requireNonNull(input, "input cannot be null");
-
-		for (ServiceScope policy : values()) {
-			if (input.equals(policy.toString()))
-				return policy;
+		/**
+		 * @param scope the scope of the service
+		 * @return an instance of {@link Service}
+		 */
+		public static Literal of(ServiceScopes scope) {
+			return new Literal(scope);
 		}
 
-		throw new IllegalArgumentException(input);
+		private Literal(ServiceScopes scope) {
+			_scope = scope;
+		}
+
+		@Override
+		public ServiceScopes value() {
+			return _scope;
+		}
+
+		private final ServiceScopes _scope;
+
 	}
 
-	ServiceScope(String value) {
-		this.value = value;
-	}
-
-	@Override
-	public String toString() {
-		return value;
-	}
+	/**
+	 * The service scope used for the service.
+	 *
+	 * <p>
+	 * If not specified the bean will be published as a
+	 * {@link ServiceScopes#SINGLETON SINGLETON} service.
+	 * <p>
+	 */
+	ServiceScopes value() default ServiceScopes.NOT_SPECIFIED;
 
 }
