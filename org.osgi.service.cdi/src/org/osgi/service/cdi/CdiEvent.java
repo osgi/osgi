@@ -16,6 +16,7 @@
 
 package org.osgi.service.cdi;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 
 /**
@@ -24,6 +25,7 @@ import org.osgi.framework.Bundle;
  *
  * @author $Id$
  */
+@ProviderType
 public final class CdiEvent {
 
 	/**

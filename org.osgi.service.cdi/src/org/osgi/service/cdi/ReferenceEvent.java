@@ -18,6 +18,7 @@ package org.osgi.service.cdi;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * This interface is used in CDI Observer methods to watch OSGi service events.
@@ -28,7 +29,8 @@ import java.util.function.Function;
  * <ul>
  * <li>service type</li>
  * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
- * <li>{@link org.osgi.framework.ServiceObjects ServiceObjects}</li>
+ * <li>{@link org.osgi.service.cdi.ComponentServiceObjects
+ * ComponentServiceObjects}</li>
  * <li>properties ({@link java.util.Map Map})</li>
  * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
  * value ({@link java.util.Map.Entry Map.Entry})</li>
@@ -38,6 +40,7 @@ import java.util.function.Function;
  *
  * @author $Id$
  */
+@ProviderType
 public interface ReferenceEvent<S> {
 
 	/**

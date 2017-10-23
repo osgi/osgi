@@ -25,7 +25,8 @@ package org.osgi.service.cdi;
  * <ul>
  * <li>service type</li>
  * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
- * <li>{@link org.osgi.framework.ServiceObjects ServiceObjects}</li>
+ * <li>{@link org.osgi.service.cdi.ComponentServiceObjects
+ * ComponentServiceObjects}</li>
  * <li>properties ({@link java.util.Map Map})</li>
  * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
  * value ({@link java.util.Map.Entry Map.Entry})</li>
@@ -40,7 +41,7 @@ public interface ReferenceEventCustomizer<S, T> {
 
 	/**
 	 * Called when a service matching the reference is added.
-	 * 
+	 *
 	 * @param s the service instance
 	 * @return the tracked instance
 	 */
@@ -48,7 +49,7 @@ public interface ReferenceEventCustomizer<S, T> {
 
 	/**
 	 * Called when a service matching the reference is modified.
-	 * 
+	 *
 	 * @param s the service instance
 	 * @param t the tracked instance
 	 */
@@ -56,7 +57,7 @@ public interface ReferenceEventCustomizer<S, T> {
 
 	/**
 	 * Called when a service matching the reference is removed.
-	 * 
+	 *
 	 * @param s the service instance
 	 * @param t the tracked instance
 	 */
