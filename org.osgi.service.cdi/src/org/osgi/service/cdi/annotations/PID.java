@@ -18,47 +18,58 @@ package org.osgi.service.cdi.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Annotation used in collaboration with {@link ComponentScoped} to specify a
- * factory configuration.
+ * Annotation used in collaboration with {@link ComponentScoped} to specify
+ * singleton configurations and their policy.
  *
  * @author $Id$
  */
 @Documented
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface FactoryConfiguration {
+@Repeatable(PIDs.class)
+public @interface PID {
 
 	/**
-	 * Support inline instantiation of the {@link FactoryConfiguration} annotation.
+	 * Support inline instantiation of the {@link PID}
+	 * annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<FactoryConfiguration> implements FactoryConfiguration {
+	public static final class Literal extends AnnotationLiteral<PID> implements PID {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param pid the factory configuration pid
-		 * @return an instance of {@link FactoryConfiguration}
+		 * @param pid the configuration pid
+		 * @param required true if the configuration is required
+		 * @return an instance of {@link PID}
 		 */
-		public static final Literal of(String pid) {
-			return new Literal(pid);
+		public static final Literal of(String pid, boolean required) {
+			return new Literal(pid, required);
 		}
 
-		private Literal(String pid) {
+		private Literal(String pid, boolean required) {
 			_pid = pid;
+			_required = required;
 		}
 
 		@Override
-		public String pid() {
+		public String value() {
 			return _pid;
 		}
 
+		@Override
+		public boolean required() {
+			return _required;
+		}
+
 		private final String _pid;
+		private final boolean	_required;
 
 	}
 
@@ -75,9 +86,23 @@ public @interface FactoryConfiguration {
 	 * this special string. For example:
 	 *
 	 * <pre>
-	 * &#64;FactoryConfiguration(pid = Component.NAME)
+	 * &#64;SingletonConfiguration(pid = Component.NAME)
 	 * </pre>
 	 */
-	String pid() default Component.NAME;
+	String value() default Component.NAME;
+
+	/**
+	 * The configuration policy associated with this PID.
+	 *
+	 * <p>
+	 * Controls how the configuration must be satisfied depending on the presence
+	 * and type of a corresponding Configuration object in the OSGi Configuration
+	 * Admin service. Corresponding configuration is a Configuration object where
+	 * the PID is equal to {@link PID#value() value}.
+	 *
+	 * <p>
+	 * If not specified, the configuration is not required.
+	 */
+	boolean required() default false;
 
 }

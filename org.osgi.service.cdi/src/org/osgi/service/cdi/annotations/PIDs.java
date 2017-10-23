@@ -39,39 +39,39 @@ import org.osgi.service.cdi.CdiConstants;
 		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
 		name = CdiConstants.CDI_CAPABILITY_NAME,
 		version = CdiConstants.CDI_SPECIFICATION_VERSION)
-public @interface SingletonConfigurations {
+public @interface PIDs {
 
 	/**
-	 * Support inline instantiation of the {@link SingletonConfigurations} annotation.
+	 * Support inline instantiation of the {@link PIDs} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<SingletonConfigurations> implements SingletonConfigurations {
+	public static final class Literal extends AnnotationLiteral<PIDs> implements PIDs {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param pids array of {@link SingletonConfiguration}
-		 * @return an instance of {@link SingletonConfigurations}
+		 * @param pids array of {@link PID}
+		 * @return an instance of {@link PIDs}
 		 */
-		public static SingletonConfigurations of(SingletonConfiguration[] pids) {
+		public static PIDs of(PID[] pids) {
 			return new Literal(pids);
 		}
 
-		private Literal(SingletonConfiguration[] pids) {
+		private Literal(PID[] pids) {
 			_pids = pids;
 		}
 
 		@Override
-		public SingletonConfiguration[] value() {
+		public PID[] value() {
 			return _pids;
 		}
 
-		private final SingletonConfiguration[] _pids;
+		private final PID[] _pids;
 
 	}
 
 	/**
 	 * The set of ordered configurations available to the component.
 	 */
-	SingletonConfiguration[] value();
+	PID[] value();
 
 }

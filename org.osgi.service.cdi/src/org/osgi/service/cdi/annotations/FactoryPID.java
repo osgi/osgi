@@ -18,58 +18,47 @@ package org.osgi.service.cdi.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Annotation used in collaboration with {@link ComponentScoped} to specify
- * singleton configurations and their policy.
+ * Annotation used in collaboration with {@link ComponentScoped} to specify a
+ * factory configuration.
  *
  * @author $Id$
  */
 @Documented
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-@Repeatable(SingletonConfigurations.class)
-public @interface SingletonConfiguration {
+public @interface FactoryPID {
 
 	/**
-	 * Support inline instantiation of the {@link SingletonConfiguration}
-	 * annotation.
+	 * Support inline instantiation of the {@link FactoryPID} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<SingletonConfiguration> implements SingletonConfiguration {
+	public static final class Literal extends AnnotationLiteral<FactoryPID> implements FactoryPID {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param pid the configuration pid
-		 * @param required true if the configuration is required
-		 * @return an instance of {@link SingletonConfiguration}
+		 * @param pid the factory configuration pid
+		 * @return an instance of {@link FactoryPID}
 		 */
-		public static final Literal of(String pid, boolean required) {
-			return new Literal(pid, required);
+		public static final Literal of(String pid) {
+			return new Literal(pid);
 		}
 
-		private Literal(String pid, boolean required) {
+		private Literal(String pid) {
 			_pid = pid;
-			_required = required;
 		}
 
 		@Override
-		public String pid() {
+		public String value() {
 			return _pid;
 		}
 
-		@Override
-		public boolean required() {
-			return _required;
-		}
-
 		private final String _pid;
-		private final boolean	_required;
 
 	}
 
@@ -86,23 +75,9 @@ public @interface SingletonConfiguration {
 	 * this special string. For example:
 	 *
 	 * <pre>
-	 * &#64;SingletonConfiguration(pid = Component.NAME)
+	 * &#64;FactoryConfiguration(pid = Component.NAME)
 	 * </pre>
 	 */
-	String pid() default Component.NAME;
-
-	/**
-	 * The configuration policy associated with this PID.
-	 *
-	 * <p>
-	 * Controls how the configuration must be satisfied depending on the presence
-	 * and type of a corresponding Configuration object in the OSGi Configuration
-	 * Admin service. Corresponding configuration is a Configuration object where
-	 * the PID is equal to {@link SingletonConfiguration#pid() value}.
-	 *
-	 * <p>
-	 * If not specified, the configuration is not required.
-	 */
-	boolean required() default false;
+	String value() default Component.NAME;
 
 }

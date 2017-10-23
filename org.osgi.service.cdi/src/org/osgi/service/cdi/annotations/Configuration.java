@@ -33,7 +33,7 @@ import org.osgi.service.cdi.CdiConstants;
  * injected into CDI beans. Properties are a combination of those defined by
  * {@link Properties#value()} overlaid by properties provided through
  * Configuration Admin in association with the configuration PIDs defined by
- * {@link SingletonConfigurations#value()} or in the case of non-components which were
+ * {@link PIDs#value()} or in the case of non-components which were
  * specified in the requirement (which defaults to a PID named after the
  * generated CDI container id).
  *

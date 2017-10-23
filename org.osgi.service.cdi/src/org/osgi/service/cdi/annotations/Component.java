@@ -61,8 +61,8 @@ public @interface Component {
 	 * Special string representing the name of this Component.
 	 *
 	 * <p>
-	 * This string can be used in {@link SingletonConfiguration#pid()} OR
-	 * {@link FactoryConfiguration#pid()} to specify the name of the component or in
+	 * This string can be used in {@link PID#value()} OR
+	 * {@link FactoryPID#value()} to specify the name of the component or in
 	 * the case of the non-components the CDI container id as a configuration PID.
 	 * For example:
 	 *
