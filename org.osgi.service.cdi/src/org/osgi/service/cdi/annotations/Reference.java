@@ -54,7 +54,6 @@ public @interface Reference {
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param cardinality
 		 * @param policy
 		 * @param policyOption
 		 * @param scope
@@ -63,34 +62,26 @@ public @interface Reference {
 		 * @return instance of {@link Reference}
 		 */
 		public static final Literal of(
-				ReferenceCardinality cardinality,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
 
-			return new Literal(cardinality, policy, policyOption, scope, service, target);
+			return new Literal(policy, policyOption, scope, service, target);
 		}
 
 		private Literal(
-				ReferenceCardinality cardinality,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
-			_cardinality = cardinality;
 			_policy = policy;
 			_policyOption = policyOption;
 			_scope = scope;
 			_service = service;
 			_target = target;
-		}
-
-		@Override
-		public ReferenceCardinality cardinality() {
-			return _cardinality;
 		}
 
 		@Override
@@ -118,7 +109,6 @@ public @interface Reference {
 			return _target;
 		}
 
-		private final ReferenceCardinality	_cardinality;
 		private final ReferencePolicy		_policy;
 		private final ReferencePolicyOption	_policyOption;
 		private final ReferenceScope		_scope;
@@ -126,26 +116,6 @@ public @interface Reference {
 		private final String				_target;
 
 	}
-
-	/**
-	 * The cardinality of this reference.
-	 * <p>
-	 * If not specified, the cardinality of this reference is based upon how
-	 * this annotation is used:
-	 * <ul>
-	 * <li>Annotated field - The cardinality is based on the type of the field.
-	 * If the type is either {@code java.util.Collection},
-	 * {@code java.util.List}, or a subtype of {@code java.util.Collection}, the
-	 * cardinality is {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the
-	 * cardinality is {@link ReferenceCardinality#MANDATORY 1..1}.</li>
-	 * <li>Annotated constructor or method parameter - The cardinality is based
-	 * on the type of the parameter. If the type is either
-	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
-	 * {@code java.util.Collection}, the cardinality is
-	 * {@link ReferenceCardinality#MULTIPLE 0..n}. Otherwise the cardinality is
-	 * {@link ReferenceCardinality#MANDATORY 1..1}.</li>
-	 */
-	ReferenceCardinality cardinality() default ReferenceCardinality.NOT_SPECIFIED;
 
 	/**
 	 * The policy for this reference.
@@ -193,22 +163,18 @@ public @interface Reference {
 	 * how this annotation is used:
 	 * <ul>
 	 * <li>Annotated field - The type of the service is based upon the type of the
-	 * field being annotated and the cardinality of the reference. If the
-	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or
-	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the field must be
-	 * one of {@code java.util.Collection}, {@code java.util.List}, or a subtype of
+	 * field being annotated, or the type of the field must be one of
+	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
 	 * {@code java.util.Collection} so the type of the service is the generic type
 	 * of the collection. Otherwise, the type of the service is the type of the
 	 * field.</li>
 	 * <li>Annotated constructor or method parameter - The type of the service is
 	 * based upon the type of the parameter being annotated and the cardinality of
-	 * the reference. If the cardinality is either
-	 * {@link ReferenceCardinality#MULTIPLE 0..n}, or
-	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the parameter
-	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
-	 * subtype of {@code java.util.Collection} so the type of the service is the
-	 * generic type of the collection. Otherwise, the type of the service is the
-	 * type of the parameter.</li>
+	 * the reference. If the type of the parameter is one of
+	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
+	 * {@code java.util.Collection}, the type of the service is the generic type of
+	 * the collection. Otherwise, the type of the service is the type of the
+	 * parameter.</li>
 	 * </ul>
 	 */
 	Class<?> service() default Object.class;
