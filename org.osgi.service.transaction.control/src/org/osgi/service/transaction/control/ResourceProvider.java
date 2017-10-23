@@ -15,12 +15,15 @@
  */
 package org.osgi.service.transaction.control;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A resource provider is used to provide a transactional resource to the
  * application
  * 
  * @param <T>
  */
+@ConsumerType
 public interface ResourceProvider<T> {
 
 	/**
