@@ -19,7 +19,10 @@ DynamicImport-Package: javax.servlet.*
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;version=6.0.0,\
 	osgi.promise;version=latest,\
-	${junit}
+	${junit},\
+	org.osgi.namespace.implementation;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.namespace.contract;version=latest
 
 -runbundles                     = \
     org.osgi.impl.service.cm;                   version=latest,\

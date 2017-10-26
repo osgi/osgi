@@ -44,6 +44,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.http.whiteboard, \
     org.osgi.test.cases.http.whiteboard.secure, \
     org.osgi.test.cases.io, \
+    org.osgi.test.cases.jaxrs, \
     org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jndi, \
     org.osgi.test.cases.jndi.secure, \
@@ -100,6 +101,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.http.whiteboard, \
     org.osgi.test.cases.http.whiteboard.secure, \
+    org.osgi.test.cases.jaxrs, \
     org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jmx.cm, \
     org.osgi.test.cases.jmx.framework, \

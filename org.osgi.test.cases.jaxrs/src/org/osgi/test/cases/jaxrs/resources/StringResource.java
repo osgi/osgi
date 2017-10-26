@@ -20,4 +20,11 @@ public class StringResource {
 		return message;
 	}
 
+	@GET
+	@Path("length")
+	@Produces(MediaType.TEXT_PLAIN)
+	public int getLength() {
+		return message.length();
+	}
+
 }
