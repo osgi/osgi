@@ -28,16 +28,10 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 public abstract class ResourceDTO extends DTO {
 	/**
 	 * The name of the resource if it set one using
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, {@code null}
-	 * otherwise.
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, otherwise this value will
+	 * contain the generated name for this resource
 	 */
 	public String					name;
-
-	/**
-	 * The base URI of the resource defined by
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_RESOURCE}.
-	 */
-	public String					base;
 
 	/**
 	 * The RequestPaths handled by this resource

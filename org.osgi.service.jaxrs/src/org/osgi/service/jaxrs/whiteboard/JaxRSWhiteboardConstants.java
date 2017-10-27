@@ -31,6 +31,7 @@ import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.WriterInterceptor;
 
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntimeConstants;
+import org.osgi.service.jaxrs.runtime.dto.DTOConstants;
 
 /**
  * Defines standard constants for the JAX-RS Whiteboard services.
@@ -50,8 +51,10 @@ public final class JaxRSWhiteboardConstants {
 	 * service property is not specified, then no Endpoint information will be
 	 * registered for this resource.
 	 * <p>
-	 * Resource names should be unique among all services associated with a
-	 * single Whiteboard implementation.
+	 * Resource names must be unique among all services associated with a single
+	 * Whiteboard implementation. If a clashing name is registered then the
+	 * lower ranked service will be failed with a cause of
+	 * {@link DTOConstants#FAILURE_REASON_DUPLICATE_NAME}
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
 	 */
@@ -75,6 +78,10 @@ public final class JaxRSWhiteboardConstants {
 	 * <p>
 	 * The value of this service property must be of type {@code String}, and
 	 * will have a "/" prepended if no "/" exists.
+	 * <p>
+	 * If two applications are registered with the same base uri then the lower
+	 * ranked service is failed with a cause of
+	 * {@link DTOConstants#FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE}
 	 */
 	public static final String	JAX_RS_APPLICATION_BASE		= "osgi.jaxrs.application.base";
 
@@ -85,6 +92,11 @@ public final class JaxRSWhiteboardConstants {
 	 * The specified filter is used to determine whether a resource should be
 	 * included in a particular application. Services without this service
 	 * property are bound to the default Application.
+	 * <p>
+	 * If a filter property is registered and no application running in the
+	 * whiteboard matches the filter then the service will be failed with a
+	 * cause of
+	 * {@link DTOConstants#FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE}
 	 * <p>
 	 * The value of this service property must be of type {@code String}, and be
 	 * a valid OSGi filter.
@@ -120,7 +132,8 @@ public final class JaxRSWhiteboardConstants {
 	 * </ul>
 	 * <p>
 	 * If a service with this property does not match any of the defined types
-	 * then it is registered as a failure DTO,
+	 * then it is registered as a failure DTO with the error code
+	 * {@link DTOConstants#FAILURE_REASON_NOT_AN_EXTENSION_TYPE},
 	 */
 	public static final String	JAX_RS_EXTENSION			= "osgi.jaxrs.extension";
 
@@ -144,6 +157,10 @@ public final class JaxRSWhiteboardConstants {
 	 * <p>
 	 * If this service property is not specified, then no extensions are
 	 * required.
+	 * <p>
+	 * If one or more filter properties are registered and no suitable
+	 * extension(s) are available then the service will be failed with a cause
+	 * of {@link DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE}
 	 * <p>
 	 * The value of this service property must be of type {@code String} and be
 	 * a valid {@link Filter filter string}.

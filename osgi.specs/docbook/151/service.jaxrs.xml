@@ -259,26 +259,56 @@
         </tbody>
       </tgroup>
     </table>
-
-    <para>The JAX-RS Service Runtime service provides information about registered
-    Whiteboard services through the <xref
-    linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
-    xrefstyle="hyperlink"/>.</para>
-    <para>The Runtime DTO provides information about services that have been
-    successfully registered as well as information about the JAX-RS Whiteboard
-    services that were not successfully registered. JAX-RS Whiteboard services that
-    have the required properties set but cannot be processed, are reflected in
-    the failure DTOs. JAX-RS Whiteboard services of interfaces described in this
-    specification that do not have the required properties set are ignored and
-    not reflected in the failure DTOs.</para>
-
-    <para>The Runtime DTO can be obtained using the <xref
-    linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.getRuntimeDTO--"
-    xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a snapshot
-    of the state of the JAX-RS Runtime, including the JAX-RS Whiteboard resources,
-    extensions and applications that are active in each resgistered application. 
-    The Runtime DTO also includes information about Whiteboard services which 
-    could not be activated.</para>
+    </section>
+    <section>
+      <title>Inspecting the Runtime DTOs</title>
+      <para>The JAX-RS Service Runtime service provides information about registered
+      Whiteboard services through the <xref
+      linkend="org.osgi.service.jaxrs.runtime.dto.RuntimeDTO"
+      xrefstyle="hyperlink"/>.</para>
+      <para>The Runtime DTO provides information about services that have been
+      successfully registered as well as information about the JAX-RS Whiteboard
+      services that were not successfully registered. JAX-RS Whiteboard services that
+      have the required properties set but cannot be processed, are reflected in
+      the failure DTOs. JAX-RS Whiteboard services of interfaces described in this
+      specification that do not have the required properties set are ignored and
+      not reflected in the failure DTOs.</para>
+  
+      <para>The Runtime DTO can be obtained using the <xref
+      linkend="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime.getRuntimeDTO--"
+      xrefstyle="hyperlink"/> method. The Runtime DTO returned provides a snapshot
+      of the state of the JAX-RS Runtime, including the JAX-RS Whiteboard resources,
+      extensions and applications that are active in each registered application. 
+      The Runtime DTO also includes information about Whiteboard services which 
+      could not be activated.</para>
+      
+      <section>
+        <title>DTO properties</title>
+        
+        <para>When whiteboard services are registered with the whiteboard they must
+        be introspected and this information reflected in the DTO(s) for that service.
+        This introspection will include looking for annotations such as <code>@GET</code>
+        and <code>@Path</code> both at a class and method level. The values associated
+        with these annotations must then be appropriately combined, for example when
+        <code>@Path</code> is declared on a type and method level, and recorded in the DTO.
+        </para>
+      </section>
+      <section>
+        <title>Failure DTOs</title>
+        
+        <para>There are a variety of reasons that whiteboard services may not be
+        able to be used by the whiteboard. For example, if the whiteboard service
+        cannot be retrieved from the service registry, or if the whiteboard service
+        provides an invalid service property value, such as a malformed filter. 
+        </para>
+        <para>In these cases the failed services are represented in the Runtime DTO
+        under one of the failed DTO properties. Depending upon the failure reason
+        one or more of the properties of the failed DTO may be unavailable. For
+        example if the service cannot be retrieved from the service registry then
+        it cannot be introspected for annotations. A failure DTO will always contain
+        the service id for the failed service and the failure reason. The whiteboard
+        implementation must then fill in other dto properties on a best effort basis.</para>
+      </section>
     </section>
   
     <section>

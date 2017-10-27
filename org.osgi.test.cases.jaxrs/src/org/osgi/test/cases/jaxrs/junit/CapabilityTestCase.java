@@ -21,6 +21,7 @@ import static org.osgi.namespace.contract.ContractNamespace.*;
 import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
 import static org.osgi.namespace.service.ServiceNamespace.*;
 import static org.osgi.resource.Namespace.CAPABILITY_USES_DIRECTIVE;
+import static org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,9 +39,14 @@ import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
 
 public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	
+	private static final List<String> JAX_RS_PACKAGES = Arrays.asList(
+			"javax.ws.rs", "javax.ws.rs.core",
+			"javax.ws.rs.ext", "javax.ws.rs.client",
+			"javax.ws.rs.container");
+
 	/**
 	 * A basic test that ensures the provider of the JaxRSServiceRuntime service
-	 * advertises the JaxRSServiceRuntime service capability
+	 * advertises the JaxRSServiceRuntime service capability (151.10.3)
 	 * 
 	 * @throws Exception
 	 */
@@ -84,7 +90,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 
 	/**
 	 * A basic test that ensures that the implementation advertises the JAX-RS
-	 * implementation capability
+	 * implementation capability (151.10.1)
 	 * 
 	 * @throws Exception
 	 */
@@ -92,6 +98,8 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 			throws Exception {
 
 		boolean hasCapability = false;
+		boolean uses = false;
+		boolean version = false;
 
 		bundles: for (Bundle bundle : getContext().getBundles()) {
 			List<BundleCapability> capabilities = bundle
@@ -102,6 +110,25 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				hasCapability = "osgi.jaxrs".equals(
 						cap.getAttributes().get(IMPLEMENTATION_NAMESPACE));
 				if (hasCapability) {
+					Version required = Version
+							.valueOf(JAX_RS_WHITEBOARD_SPECIFICATION_VERSION);
+					Version toCheck = (Version) cap.getAttributes()
+							.get(CAPABILITY_VERSION_ATTRIBUTE);
+
+					version = required.equals(toCheck);
+
+					String usesDirective = cap.getDirectives()
+							.get(CAPABILITY_USES_DIRECTIVE);
+					if (usesDirective != null) {
+						Collection<String> requiredPackages = JAX_RS_PACKAGES;
+
+						Set<String> packages = new HashSet<String>(
+								Arrays.asList(usesDirective.trim()
+										.split("\\s*,\\s*")));
+
+						uses = packages.containsAll(requiredPackages);
+					}
+
 					break bundles;
 				}
 			}
@@ -110,11 +137,19 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 		assertTrue(
 				"No osgi.implementation capability for the JAX-RS whiteboard implementation",
 				hasCapability);
+
+		assertTrue(
+				"No osgi.implementation capability for the JAX-RS Whiteboard at version "
+						+ JAX_RS_WHITEBOARD_SPECIFICATION_VERSION,
+				version);
+		assertTrue(
+				"The osgi.implementation capability for the JAX-RS API does not have the correct uses constraint",
+				uses);
 	}
 
 	/**
 	 * A basic test that ensures that the implementation advertises the JAX-RS
-	 * contract capability
+	 * contract capability (151.10.2)
 	 * 
 	 * @throws Exception
 	 */
@@ -153,10 +188,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 					String usesDirective = cap.getDirectives()
 							.get(CAPABILITY_USES_DIRECTIVE);
 					if (usesDirective != null) {
-						Collection<String> requiredPackages = Arrays.asList(
-								"javax.ws.rs", "javax.ws.rs.core",
-								"javax.ws.rs.ext", "javax.ws.rs.client",
-								"javax.ws.rs.container");
+						Collection<String> requiredPackages = JAX_RS_PACKAGES;
 
 						Set<String> packages = new HashSet<String>(Arrays
 								.asList(usesDirective.trim().split("\\s*,\\s*")));

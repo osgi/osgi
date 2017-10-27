@@ -56,6 +56,12 @@ public class ExtensionDTO extends DTO {
 	public String[]			consumes;
 
 	/**
+	 * The full names of the {@link NameBinding} annotations applied to this
+	 * extension, if any
+	 */
+	public String[]			nameBindings;
+
+	/**
 	 * The resourceDTOs that are mapped to this extension using a
 	 * {@link NameBinding} annotation
 	 */

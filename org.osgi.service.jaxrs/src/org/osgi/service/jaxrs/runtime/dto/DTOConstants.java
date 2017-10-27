@@ -72,4 +72,11 @@ public final class DTOConstants {
 	 */
 	public static final int	FAILURE_REASON_DUPLICATE_NAME					= 6;
 
+	/**
+	 * The service is registered in the service registry with the
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_APPLICATION_SELECT} property and
+	 * the filters is not matched by any running application.
+	 */
+	public static final int	FAILURE_REASON_REQUIRED_APPLICATION_UNAVAILABLE	= 7;
+
 }

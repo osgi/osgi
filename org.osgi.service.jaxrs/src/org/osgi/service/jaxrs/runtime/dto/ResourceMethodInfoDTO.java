@@ -1,5 +1,7 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
+import javax.ws.rs.NameBinding;
+
 import org.osgi.dto.DTO;
 
 /**
@@ -27,7 +29,13 @@ public class ResourceMethodInfoDTO extends DTO {
 	public String[]	producingMimeType;
 
 	/**
-	 * The URI of this sub-resource, null if this is not a sub-resource method
+	 * The {@link NameBinding} annotations that apply to this resource method,
+	 * if any
 	 */
-	public String	uri;
+	public String[]	nameBindings;
+
+	/**
+	 * The path of this resource method
+	 */
+	public String	path;
 }
