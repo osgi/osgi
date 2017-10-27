@@ -54,6 +54,7 @@ public @interface Reference {
 		private static final long serialVersionUID = 1L;
 
 		/**
+		 * @param name
 		 * @param policy
 		 * @param policyOption
 		 * @param scope
@@ -62,26 +63,34 @@ public @interface Reference {
 		 * @return instance of {@link Reference}
 		 */
 		public static final Literal of(
+				String name,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
 
-			return new Literal(policy, policyOption, scope, service, target);
+			return new Literal(name, policy, policyOption, scope, service, target);
 		}
 
 		private Literal(
+				String name,
 				ReferencePolicy policy,
 				ReferencePolicyOption policyOption,
 				ReferenceScope scope,
 				Class<?> service,
 				String target) {
+			_name = name();
 			_policy = policy;
 			_policyOption = policyOption;
 			_scope = scope;
 			_service = service;
 			_target = target;
+		}
+
+		@Override
+		public String name() {
+			return _name;
 		}
 
 		@Override
@@ -109,6 +118,7 @@ public @interface Reference {
 			return _target;
 		}
 
+		private final String				_name;
 		private final ReferencePolicy		_policy;
 		private final ReferencePolicyOption	_policyOption;
 		private final ReferenceScope		_scope;
@@ -116,6 +126,19 @@ public @interface Reference {
 		private final String				_target;
 
 	}
+
+	/**
+	 * The name of this reference.
+	 * <p>
+	 * If not specified, the name of this reference is based upon how this
+	 * annotation is used:
+	 * <ul>
+	 * <li>Annotated field - The name of the reference is the field name.</li>
+	 * <li>Annotated constructor or method parameter - The name of the reference is
+	 * the parameter name.</li>
+	 * </ul>
+	 */
+	public String name() default "";
 
 	/**
 	 * The policy for this reference.
