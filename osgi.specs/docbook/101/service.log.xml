@@ -144,6 +144,10 @@
         <para>Specify the Service associated with the message being
         logged.</para>
       </listitem>
+
+      <listitem>
+        <para>Query if a log level is effective.</para>
+      </listitem>
     </itemizedlist>
 
     <para xml:id="i1294534">By obtaining a <xref
@@ -269,6 +273,23 @@ logger.error("Failed.", exception);</programlisting>
     <para xml:id="i1294536">Notice that in addition to the error message, the
     exception itself is also logged. Providing this information can
     significantly simplify problem determination by the Operator.</para>
+
+    <para>Sometimes message parameters can be expensive to compute, so
+    avoiding computation is important if the log level is not effective. This
+    can be done using either an <code>if</code> block or a <xref
+    linkend="org.osgi.service.log.LoggerConsumer" xrefstyle="hyperlink"/>. The
+    latter is convenient as a lambda expression. For example, both of the
+    following examples avoid computation if the log level is not
+    effective.</para>
+
+    <programlisting>if (logger.isInfoEnabled()) {
+    logger.info("Max {}", Collections.max(processing));
+}</programlisting>
+
+    <programlisting>logger.info(l -&gt; l.info("Max {}", Collections.max(processing)));</programlisting>
+
+    <para>The latter example only calls the lambda expression if the log level
+    is effective.</para>
   </section>
 
   <section>

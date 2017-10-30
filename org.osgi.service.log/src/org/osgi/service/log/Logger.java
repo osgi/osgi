@@ -106,6 +106,15 @@ public interface Logger {
 	void trace(String format, Object... arguments);
 
 	/**
+	 * Call the specified function if logging enabled for the
+	 * {@link LogLevel#TRACE} level.
+	 * 
+	 * @param consumer The function to call passing this Logger.
+	 * @throws E An exception thrown by the function.
+	 */
+	<E extends Exception> void trace(LoggerConsumer<E> consumer) throws E;
+
+	/**
 	 * Is logging enabled for the {@link LogLevel#DEBUG} level?
 	 * 
 	 * @return {@code true} if logging is enabled for the {@link LogLevel#DEBUG
@@ -144,6 +153,15 @@ public interface Logger {
 	 * @param arguments The arguments to format into the message.
 	 */
 	void debug(String format, Object... arguments);
+
+	/**
+	 * Call the specified function if logging enabled for the
+	 * {@link LogLevel#DEBUG} level.
+	 * 
+	 * @param consumer The function to call passing this Logger.
+	 * @throws E An exception thrown by the function.
+	 */
+	<E extends Exception> void debug(LoggerConsumer<E> consumer) throws E;
 
 	/**
 	 * Is logging enabled for the {@link LogLevel#INFO} level?
@@ -186,6 +204,15 @@ public interface Logger {
 	void info(String format, Object... arguments);
 
 	/**
+	 * Call the specified function if logging enabled for the
+	 * {@link LogLevel#INFO} level.
+	 * 
+	 * @param consumer The function to call passing this Logger.
+	 * @throws E An exception thrown by the function.
+	 */
+	<E extends Exception> void info(LoggerConsumer<E> consumer) throws E;
+
+	/**
 	 * Is logging enabled for the {@link LogLevel#WARN} level?
 	 * 
 	 * @return {@code true} if logging is enabled for the {@link LogLevel#WARN
@@ -226,6 +253,15 @@ public interface Logger {
 	void warn(String format, Object... arguments);
 
 	/**
+	 * Call the specified function if logging enabled for the
+	 * {@link LogLevel#WARN} level.
+	 * 
+	 * @param consumer The function to call passing this Logger.
+	 * @throws E An exception thrown by the function.
+	 */
+	<E extends Exception> void warn(LoggerConsumer<E> consumer) throws E;
+
+	/**
 	 * Is logging enabled for the {@link LogLevel#ERROR} level?
 	 * 
 	 * @return {@code true} if logging is enabled for the {@link LogLevel#ERROR
@@ -264,6 +300,15 @@ public interface Logger {
 	 * @param arguments The arguments to format into the message.
 	 */
 	void error(String format, Object... arguments);
+
+	/**
+	 * Call the specified function if logging enabled for the
+	 * {@link LogLevel#ERROR} level.
+	 * 
+	 * @param consumer The function to call passing this Logger.
+	 * @throws E An exception thrown by the function.
+	 */
+	<E extends Exception> void error(LoggerConsumer<E> consumer) throws E;
 
 	/**
 	 * Log a message at the {@link LogLevel#AUDIT} level.
