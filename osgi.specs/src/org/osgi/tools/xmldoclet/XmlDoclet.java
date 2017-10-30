@@ -511,10 +511,9 @@ public class XmlDoclet extends Doclet {
 		for (int i = 0; i < parameters.length; i++) {
 			print(parameters[i], x.isVarArgs() && i == parameters.length - 1);
 		}
-		ClassDoc exceptions[] = x.thrownExceptions();
-		for (int i = 0; i < exceptions.length; i++) {
-			pw.println("<exception name='" + exceptions[i].name() + "' fqn='"
-					+ exceptions[i].qualifiedName() + "'/>");
+		for (Type exception : x.thrownExceptionTypes()) {
+			pw.println("<exception name='" + exception.simpleTypeName()
+					+ "' fqn='" + exception.qualifiedTypeName() + "'/>");
 		}
 	}
 
