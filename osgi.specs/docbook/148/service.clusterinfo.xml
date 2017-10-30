@@ -48,7 +48,7 @@
 		
 		<listitem>
 	      <para><emphasis>Node</emphasis> - A node is a discoverable entity in the cluster,
-	      for example a physical machine, virtual machine, container or OSGi framework.</para>
+	      for example a physical machine, virtual machine (VM), container or OSGi framework.</para>
 		</listitem>
 	  </itemizedlist>
 	</section>
@@ -63,7 +63,7 @@
 		</listitem>
 
 		<listitem>
-		  <para><emphasis>FrameworkNodeStatus</emphasis> - The FrameworkNodeStatus
+		  <para><emphasis>FrameworkNodeStatus</emphasis> - The FrameworkNodeStatus service
 		  represents an OSGi framework running on a node in the cluster.</para>
 	    </listitem>
 	    
@@ -71,10 +71,57 @@
 	      <para><emphasis>FrameworkManager</emphasis> - The FrameworkManager service 
 	      provides an interface to manage an OSGi framework in the cluster.</para>
 		</listitem>
-	  </itemizedlist>
+	    </itemizedlist>
+
+	    <figure>
+	      <title>Clusterinfo Entity overview</title>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata align="center" contentdepth="3.750in"
+		               contentwidth="4.000in"
+		               fileref="clusterinfo-classes.svg"/>
+		</imageobject>
+              </mediaobject>
+	    </figure>
 	</section>
   </section>
     
+
+  <section>
+    <title>OSGi frameworks in a cluster</title>
+    
+    <para>We distinguish two types of nodes in a cluster. On the one hand we have OSGi frameworks 
+    that are running in the cluster. These publish their presence using a FrameworkNodeStatus service.
+    On the other hand there can be other nodes in the system, such as the virtual machines or containers
+    the OSGi frameworks are running in, or an external server such as a database. These can be represented
+    as well using a NodeStatus service.</para>
+    
+    <para>When an OSGi framework is part of a cluster, this means it gets access to remote services of any
+    other OSGi framework in the cluster. Ensuring the discovery, visibility and access of remote services 
+    within the cluster is the responsibility of the <xref linkend="service.remoteserviceadmin"/>.</para>
+
+    <para>An example cluster deployment is shown in Figure 148.2. Here, a cluster consisting
+    of three virtual machines or containers has deployed a total of four OSGi frameworks.
+    Each OSGi framework has a Cluster Information implementation running that exposes a FrameworkNodeStatus
+    service. Besides these, there can also be an entity managing the virtual machines/containers (e.g. the 
+    cloud provider), that exposes three NodeStatus services, one for each VM/container. In this case, each
+    FrameworkNodeStatus will have a parent id pointing to the id of the NodeStatus of the VM/container 
+    it is deployed in.</para>
+
+    <figure>
+      <title>Example cluster deployment</title>
+
+      <mediaobject>
+      <imageobject>
+        <imagedata align="center" contentdepth="3.750in"
+		               contentwidth="4.000in"
+		               fileref="clusterinfo.svg"/>
+        </imageobject>
+       </mediaobject>
+    </figure>
+  </section>
+
 
   <section>
     <title>NodeStatus Service</title>
@@ -86,11 +133,11 @@
     <para>The NodeStatus service provides metadata about the node via service properties.
     Each NodeStatus must provide an id, cluster. Optionally additional service properties 
     can be provided such as the physical location of the node, the endpoints at which this 
-    node can be accessed, etc. These service properties can be converted to a NodeStatusDTO 
-    using the object convertor to have type-safe access to these properties.</para>
+    node can be accessed, etc. These service properties can be converted to a <code>NodeStatusDTO</code> 
+    to have type-safe access to these properties using the <xref linkend="util.converter"/>.</para>
 
     <table>
-      <title>Service properties of the NodeStatus Service</title>
+      <title>Service properties of the NodeStatus service</title>
 
       <tgroup cols="3">
         <colspec colnum="1" colwidth="2.2*"/>
@@ -223,13 +270,12 @@
     </table>
     
     <para>The NodeStatus service can also provides access to dynamic properties from the node.
-    The <code>getMetrics</code> 
-    method allows to query key-value pairs, that are specific for that node. For
-    example, for an OSGi framework this could be CPU and memory usage, for a database node 
-    this could be the number of database reads/writes, and for a VM these could be metrics made 
-    accessible by the Cloud provider. In this case the service implementator can provide you with 
-    DTOs to have a type-safe way to access these metrics by converting the returned map 
-    to one of these DTOs. For example, an implementator could expose JMX metrics together with a type-safe DTO:</para>
+    The <code>getMetrics</code>  method allows to query key-value pairs, that are specific for 
+    that node. For example, for an OSGi framework this could be CPU and memory usage, for a database 
+    node this could be the number of database reads/writes, and for a VM these could be metrics made 
+    accessible by the Cloud provider. In this case the service implementor can provide you with 
+    DTOs to have a type-safe way to access these metrics by converting the returned map to one of 
+    these DTOs. For example, an implementation could expose JMX metrics together with a type-safe DTO:</para>
     
      <programlisting>
 public class JMXMetricsDTO extends DTO {
@@ -266,18 +312,19 @@ public class JMXMetricsDTO extends DTO {
 
 }
      </programlisting>
+
   </section> 
 
   <section>
     <title>FrameworkNodeStatus Service</title>
     
-    <para>In case the cluster node is an OSGi framework, the FrameworkNodeStatus Service 
-    is used to represent the node. FrameworkNodeStatus extends NodeStatus, where the node id is the OSGi framework UUID.
-    Next to the NodeStatus service properties, this service has some additional service
-    properties describing the OSGi and Java runtime:</para>
+    <para>In case the cluster node is an OSGi framework, the FrameworkNodeStatus service 
+    is used to represent the node. <code>FrameworkNodeStatus</code> extends <code>NodeStatus</code>,
+    and the node id is the OSGi framework UUID. Next to the NodeStatus service properties, 
+    this service has some additional service properties describing the OSGi and Java runtime:</para>
     
     <table>
-      <title>Additional service properties of the FrameworkNodeStatus Service</title>
+      <title>Additional service properties of the FrameworkNodeStatus service</title>
 
       <tgroup cols="3">
         <colspec colnum="1" colwidth="2.2*"/>
@@ -356,12 +403,17 @@ public class JMXMetricsDTO extends DTO {
       </tgroup>
     </table>
     
-    <para>The FrameworkNodeStatus Service also extends the FrameworkManager interface,
+     
+    <para>Similar to the NodeStatus service, the service properties of the FrameworkNodeStatus service
+    can be converted to a <code>FrameworkNodeStatusDTO</code> to have 
+    type-safe access to these properties using the <xref linkend="util.converter"/>.</para>
+    
+    <para>The FrameworkNodeStatus service also extends the FrameworkManager interface,
     which provides a management interface for the OSGi framework. This allows a remote
     management agent to interact with the OSGi framework. The FrameworkNodeStatus service
     can be exported remotely with Remote Services, however alternative mechanisms 
     to distribute this service are also permitted. For example, the FrameworkManager interface
-    can also be made available through the REST spec.</para>
+    can also be made available through the <xref linkend="service.rest"/>.</para>
   </section> 
 
   <section>
@@ -374,13 +426,42 @@ public class JMXMetricsDTO extends DTO {
     
 	<para>Other bundles can specify additional tags by registering any service with the service property
 	<code>org.osgi.service.clusterinfo.tags</code> providing a custom <code>String[]</code> of tags. 
-	The clusterinfo implementation will add those to the tags property of the FrameworkNodeStatus 
-	that represents the OSGi framework.</para>
+	The Cluster Information implementation will add those to the tags property of the 
+	FrameworkNodeStatus service that represents the OSGi framework.</para>
   </section>
 
   <section>
     <title>Security</title>
-    <para>...</para>
+
+    <section>
+      <title>Cluster Tag Permission</title>
+
+      <para>The <code>ClusterTagPermission</code> class allows fine-grained control
+      over which bundles may add tags to the FrameworkNodeStatus service.</para>
+    </section>
+
+    <section>
+      <title>Required Permissions</title>
+
+      <para>The Cluster Information Specification should only be implemented by trusted
+      bundles. These bundles require
+      <code>ServicePermission[NodeStatus|FrameworkNodeStatus|FrameworkManager,
+      REGISTER]</code>.</para>
+
+      <para>All bundles accessing the Cluster Information services should get
+      <code>ServicePermission[NodeStatus|FrameworkNodeStatus|FrameworkManager, GET]</code>.</para>
+
+      <para>Only trusted bundles who must be able to add NodeStatus tags
+      should be assigned <code>ServicePermission[ClusterTag, ADD]</code>.</para>
+      </section>
+
+
+    <section>
+      <title>Remote service visibility in a cluster</title>
+
+      <para>By default, all remote OSGi services are visible within a cluster. This is
+      handled by the <xref linkend="service.remoteserviceadmin"/>.</para>
+    </section>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.clusterinfo.xml"/>
