@@ -1603,6 +1603,14 @@ Require-Capability: osgi.contract;
       </listitem>
 
       <listitem>
+        <para>Added methods to the <xref
+        linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
+        xrefstyle="hyperlink"/> so that users can query which JPA Provider
+        bundle is being used to create the <code>EntityManagerFactory</code>. 
+        See <xref linkend="i3095031" xrefstyle="hyperlink"/></para>
+      </listitem>
+
+      <listitem>
         <para>Required that configuration overrides passed to the <xref
         linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
         xrefstyle="hyperlink"/> result in service property updates to any
