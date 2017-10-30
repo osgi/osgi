@@ -25,8 +25,8 @@ import org.osgi.framework.ServiceReference;
  * Allows multiple service objects for a service to be obtained.
  *
  * <p>
- * A component instance can receive a {@code ComponentServiceObjects} object via
- * a reference that is typed {@code ComponentServiceObjects}.
+ * A component instance can receive a {@code ReferenceServiceObjects} object via
+ * a reference that is typed {@code ReferenceServiceObjects}.
  *
  * <p>
  * For services with {@link Constants#SCOPE_PROTOTYPE prototype} scope, multiple
@@ -36,7 +36,7 @@ import org.osgi.framework.ServiceReference;
  *
  * <p>
  * Any unreleased service objects obtained from this
- * {@code ComponentServiceObjects} object are automatically released by Service
+ * {@code ReferenceServiceObjects} object are automatically released by Service
  * Component Runtime when the service becomes unbound.
  *
  * @param <S> Type of Service
@@ -45,7 +45,7 @@ import org.osgi.framework.ServiceReference;
  * @author $Id$
  */
 @ProviderType
-public interface ComponentServiceObjects<S> {
+public interface ReferenceServiceObjects<S> {
 	/**
 	 * Returns a service object for the {@link #getServiceReference() associated}
 	 * service.
@@ -58,7 +58,7 @@ public interface ComponentServiceObjects<S> {
 	 *         {@code ServiceFactory} does not implement the classes under which it
 	 *         was registered or the {@code ServiceFactory} threw an exception.
 	 * @throws IllegalStateException If the component instance that received this
-	 *         {@code ComponentServiceObjects} object has been deactivated.
+	 *         {@code ReferenceServiceObjects} object has been deactivated.
 	 * @see #ungetService(Object)
 	 */
 	public S getService();
@@ -71,21 +71,21 @@ public interface ComponentServiceObjects<S> {
 	 * should be destroyed after calling this method.
 	 *
 	 * @param service A service object previously provided by this
-	 *        {@code ComponentServiceObjects} object.
+	 *        {@code ReferenceServiceObjects} object.
 	 * @throws IllegalStateException If the component instance that received this
-	 *         {@code ComponentServiceObjects} object has been deactivated.
+	 *         {@code ReferenceServiceObjects} object has been deactivated.
 	 * @throws IllegalArgumentException If the specified service object was not
-	 *         provided by this {@code ComponentServiceObjects} object.
+	 *         provided by this {@code ReferenceServiceObjects} object.
 	 * @see #getService()
 	 */
 	public void ungetService(S service);
 
 	/**
 	 * Returns the {@link ServiceReference} for the service associated with this
-	 * {@code ComponentServiceObjects} object.
+	 * {@code ReferenceServiceObjects} object.
 	 *
 	 * @return The {@link ServiceReference} for the service associated with this
-	 *         {@code ComponentServiceObjects} object.
+	 *         {@code ReferenceServiceObjects} object.
 	 */
 	public ServiceReference<S> getServiceReference();
 }

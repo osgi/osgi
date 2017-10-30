@@ -16,16 +16,16 @@
 
 package org.osgi.service.cdi.annotations;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
+import static org.osgi.service.cdi.CdiConstants.*;
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used to annotate a CDI injection point informing the CDI container
@@ -36,14 +36,11 @@ import org.osgi.service.cdi.CdiConstants;
  *
  * @author $Id$
  */
-@Qualifier
-@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE})
-@Retention(value = RetentionPolicy.RUNTIME)
 @Documented
-@Requirement(
-		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
-		name = CdiConstants.CDI_CAPABILITY_NAME,
-		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+@Qualifier
+@Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
+@Retention(RUNTIME)
+@Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface Reference {
 
 	/**
@@ -55,35 +52,23 @@ public @interface Reference {
 
 		/**
 		 * @param name
-		 * @param policy
-		 * @param policyOption
-		 * @param scope
 		 * @param service
 		 * @param target
 		 * @return instance of {@link Reference}
 		 */
 		public static final Literal of(
 				String name,
-				ReferencePolicy policy,
-				ReferencePolicyOption policyOption,
-				ReferenceScope scope,
 				Class<?> service,
 				String target) {
 
-			return new Literal(name, policy, policyOption, scope, service, target);
+			return new Literal(name, service, target);
 		}
 
 		private Literal(
 				String name,
-				ReferencePolicy policy,
-				ReferencePolicyOption policyOption,
-				ReferenceScope scope,
 				Class<?> service,
 				String target) {
-			_name = name();
-			_policy = policy;
-			_policyOption = policyOption;
-			_scope = scope;
+			_name = name;
 			_service = service;
 			_target = target;
 		}
@@ -91,21 +76,6 @@ public @interface Reference {
 		@Override
 		public String name() {
 			return _name;
-		}
-
-		@Override
-		public ReferencePolicy policy() {
-			return _policy;
-		}
-
-		@Override
-		public ReferencePolicyOption policyOption() {
-			return _policyOption;
-		}
-
-		@Override
-		public ReferenceScope scope() {
-			return _scope;
 		}
 
 		@Override
@@ -119,9 +89,6 @@ public @interface Reference {
 		}
 
 		private final String				_name;
-		private final ReferencePolicy		_policy;
-		private final ReferencePolicyOption	_policyOption;
-		private final ReferenceScope		_scope;
 		private final Class<?>				_service;
 		private final String				_target;
 
@@ -141,63 +108,23 @@ public @interface Reference {
 	public String name() default "";
 
 	/**
-	 * The policy for this reference.
-	 * <p>
-	 * If not specified, the policy of this reference is based upon how this
-	 * annotation is used:
-	 * <ul>
-	 * <li>Annotated method - The policy is {@link ReferencePolicy#STATIC
-	 * STATIC}.</li>
-	 * <li>Annotated field - The policy is based on the modifiers of the field.
-	 * If the field is declared {@code volatile}, the policy is
-	 * {@link ReferencePolicy#DYNAMIC}. Otherwise the policy is
-	 * {@link ReferencePolicy#STATIC STATIC}.</li>
-	 * <li>Annotated constructor parameter - The policy is
-	 * {@link ReferencePolicy#STATIC STATIC}. Constructor parameters must always
-	 * assume {@link ReferencePolicy#STATIC STATIC} policy.</li>
-	 * </ul>
-	 *
-	 * @see "The policy attribute of the reference element of a Component Description."
-	 */
-	ReferencePolicy policy() default ReferencePolicy.NOT_SPECIFIED;
-
-	/**
-	 * The policy option for this reference.
-	 *
-	 * <p>
-	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
-	 * reference policy option is used.
-	 */
-	ReferencePolicyOption policyOption() default ReferencePolicyOption.NOT_SPECIFIED;
-
-	/**
-	 * The reference scope for this reference.
-	 *
-	 * <p>
-	 * If not specified, the {@link ReferenceScope#BUNDLE} reference scope is
-	 * used.
-	 */
-	ReferenceScope scope() default ReferenceScope.NOT_SPECIFIED;
-
-	/**
 	 * The type of the service for this reference.
 	 * <p>
 	 * If not specified, the type of the service for this reference is based upon
 	 * how this annotation is used:
 	 * <ul>
-	 * <li>Annotated field - The type of the service is based upon the type of the
-	 * field being annotated, or the type of the field must be one of
+	 * <li>Annotated field - TODO The type of the service is based upon the type of
+	 * the field being annotated. The type of the field must be one of
 	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
 	 * {@code java.util.Collection} so the type of the service is the generic type
 	 * of the collection. Otherwise, the type of the service is the type of the
 	 * field.</li>
-	 * <li>Annotated constructor or method parameter - The type of the service is
-	 * based upon the type of the parameter being annotated and the cardinality of
-	 * the reference. If the type of the parameter is one of
-	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
-	 * {@code java.util.Collection}, the type of the service is the generic type of
-	 * the collection. Otherwise, the type of the service is the type of the
-	 * parameter.</li>
+	 * <li>Annotated constructor or method parameter - TODO The type of the service
+	 * is based upon the type of the parameter being annotated. The type of the
+	 * parameter must be one of {@code java.util.Collection},
+	 * {@code java.util.List}, or a subtype of {@code java.util.Collection} so the
+	 * type of the service is the generic type of the collection. Otherwise, the
+	 * type of the service is the type of the parameter.</li>
 	 * </ul>
 	 */
 	Class<?> service() default Object.class;

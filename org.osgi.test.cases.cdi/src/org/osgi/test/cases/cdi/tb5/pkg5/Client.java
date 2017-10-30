@@ -30,15 +30,12 @@ import javax.inject.Inject;
 
 import org.osgi.service.cdi.annotations.Component;
 import org.osgi.service.cdi.annotations.Property;
+import org.osgi.service.cdi.annotations.Prototype;
 import org.osgi.service.cdi.annotations.Service;
-import org.osgi.service.cdi.annotations.ServiceScope;
-import org.osgi.service.cdi.annotations.ServiceScopes;
 
 @Component
-@Service
-@ServiceScope(ServiceScopes.PROTOTYPE)
 @Property("tb=tb5")
-public class Client implements Callable<String>{
+public class Client implements @Service @Prototype Callable<String> {
 	@Inject
 	Interface provider;
 

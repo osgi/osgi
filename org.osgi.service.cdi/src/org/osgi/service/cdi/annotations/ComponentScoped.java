@@ -16,16 +16,17 @@
 
 package org.osgi.service.cdi.annotations;
 
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
+import static org.osgi.service.cdi.CdiConstants.*;
+import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Scope;
 import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.cdi.CdiConstants;
 
 /**
  * This scope is used to define a bean as a CDI component. To trigger this it
@@ -34,14 +35,12 @@ import org.osgi.service.cdi.CdiConstants;
  *
  * @author $Id$
  */
+@Documented
 @Inherited
-@Retention(value = RetentionPolicy.RUNTIME)
+@Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
+@Retention(RUNTIME)
 @Scope
-@Target(value = {ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
-@Requirement(
-		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
-		name = CdiConstants.CDI_CAPABILITY_NAME,
-		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+@Target({FIELD, METHOD, TYPE})
 public @interface ComponentScoped {
 
 	/**

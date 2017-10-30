@@ -16,15 +16,12 @@
 
 package org.osgi.service.cdi.annotations;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
-import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used to associate properties with the CDI bean.
@@ -37,13 +34,9 @@ import org.osgi.service.cdi.CdiConstants;
  *
  * @author $Id$
  */
-@Target(value = ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
 @Documented
-@Requirement(
-		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
-		name = CdiConstants.CDI_CAPABILITY_NAME,
-		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+@Retention(RUNTIME)
+@Target({TYPE})
 public @interface Properties {
 
 	/**

@@ -16,16 +16,17 @@
 
 package org.osgi.service.cdi.annotations;
 
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
+import static org.osgi.service.cdi.CdiConstants.*;
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
 import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Identify the annotated CDI bean class as a Service Component.
@@ -33,14 +34,12 @@ import org.osgi.service.cdi.CdiConstants;
  * @author $Id$
  */
 @ComponentScoped
+@Documented
 @Named
-@Retention(value = RetentionPolicy.RUNTIME)
+@Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
+@Retention(RUNTIME)
 @Stereotype
-@Target(value = ElementType.TYPE)
-@Requirement(
-		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
-		name = CdiConstants.CDI_CAPABILITY_NAME,
-		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+@Target(TYPE)
 public @interface Component {
 
 	/**

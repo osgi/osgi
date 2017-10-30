@@ -25,8 +25,8 @@ package org.osgi.service.cdi;
  * <ul>
  * <li>service type</li>
  * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
- * <li>{@link org.osgi.service.cdi.ComponentServiceObjects
- * ComponentServiceObjects}</li>
+ * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
+ * ReferenceServiceObjects}</li>
  * <li>properties ({@link java.util.Map Map})</li>
  * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
  * value ({@link java.util.Map.Entry Map.Entry})</li>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,47 +24,28 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Annotation used in conjunction with {@link ComponentScoped} in order to
- * associate configurations with the component bean.
+ * Annotation used to indicate that the behaviour of the reference should be
+ * greedy. Used in conjunction with {@link Reference}.
  *
  * @author $Id$
  */
 @Documented
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface PIDs {
+public @interface Greedy {
 
 	/**
-	 * Support inline instantiation of the {@link PIDs} annotation.
+	 * Support inline instantiation of the {@link Component} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<PIDs> implements PIDs {
-
-		private static final long serialVersionUID = 1L;
+	public static final class Literal extends AnnotationLiteral<Greedy> implements Greedy {
 
 		/**
-		 * @param pids array of {@link PID}
-		 * @return an instance of {@link PIDs}
+		 * Default instance
 		 */
-		public static PIDs of(PID[] pids) {
-			return new Literal(pids);
-		}
+		public static final Greedy	INSTANCE			= new Literal();
 
-		private Literal(PID[] pids) {
-			_pids = pids;
-		}
-
-		@Override
-		public PID[] value() {
-			return _pids;
-		}
-
-		private final PID[] _pids;
+		private static final long			serialVersionUID	= 1L;
 
 	}
-
-	/**
-	 * The set of ordered configurations available to the component.
-	 */
-	PID[] value();
 
 }

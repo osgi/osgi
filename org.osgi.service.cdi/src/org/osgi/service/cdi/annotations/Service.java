@@ -16,82 +16,52 @@
 
 package org.osgi.service.cdi.annotations;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
+import static org.osgi.service.cdi.CdiConstants.*;
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Singleton;
 import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.extender.ExtenderNamespace;
-import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used to specify that a CDI bean should be published as a service.
  * <p>
- * There are two use cases for this annotation:
+ * The behaviour of this annotation depends on it's useage:
  * <ul>
- * <li>Applied to component bean - No special cases apply in this scenario.</li>
+ * <li>Applied to component bean - publish the service using all directly
+ * implemented interfaces. If no directly implemented interfaces are found use
+ * the class.</li>
+ * <li>Applied to an interface use on a component bean - publish the service
+ * using the interface.</li>
  * <li>Applied to non-component bean - In this scenario only beans which are
- * {@link ApplicationScoped} or {@link Singleton} are allowed. Use of other
- * scopes will result in a definition error. Also in this scenario the default
- * {@link ServiceScope} behaviour will be {@link ServiceScopes#SINGLETON
- * SINGLETON}. Use of other service scopes will result in a definition
- * error.</li>
+ * {@link ApplicationScoped} are allowed. Use of other CDI scopes will result in
+ * a definition error.</li>
  * </ul>
  *
  * @author $Id$
  */
-@Target(value = ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
 @Documented
-@Requirement(
-		namespace = ExtenderNamespace.EXTENDER_NAMESPACE,
-		name = CdiConstants.CDI_CAPABILITY_NAME,
-		version = CdiConstants.CDI_SPECIFICATION_VERSION)
+@Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
+@Retention(RUNTIME)
+@Target({TYPE, TYPE_USE})
 public @interface Service {
 
 	/**
-	 * Support inline instantiation of the {@link Component} annotation.
+	 * Support inline instantiation of the {@link Service} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<Service> implements Service {
 
-		private static final long serialVersionUID = 1L;
-
 		/**
-		 * @param service an array of types under which to publish the service
-		 * @return an instance of {@link Service}
+		 * Default instance
 		 */
-		public static Literal of(Class<?>[] service) {
-			return new Literal(service);
-		}
+		public static final Service	INSTANCE			= new Literal();
 
-		private Literal(Class<?>[] service) {
-			_service = service;
-		}
-
-		@Override
-		public Class<?>[] value() {
-			return _service;
-		}
-
-		private final Class<?>[]	_service;
+		private static final long	serialVersionUID	= 1L;
 
 	}
-
-	/**
-	 * The types under which to register this Component as a service.
-	 *
-	 * <ul>
-	 * <li>If no value, or an empty array is specified: the bean is published using
-	 * all directly implemented interfaces. If there are no directly implemented
-	 * interfaces, the bean class is used.
-	 * <li>If any other value is specified: the component is published using the
-	 * specified values.
-	 * <ul>
-	 */
-	Class<?>[] value() default {};
 
 }

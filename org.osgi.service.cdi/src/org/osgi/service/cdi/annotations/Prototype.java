@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,47 +24,32 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Annotation used in conjunction with {@link ComponentScoped} in order to
- * associate configurations with the component bean.
+ * When used with {@link Service} indicates that the CDI bean should be
+ * published with {@code service.scope = prototype}. When used with
+ * {@link Reference} indicates that the service must be
+ * {@code service.scope=prototype}.
+ * <p>
+ * Used in conjunction with {@link Service} and {@link Reference}.
  *
  * @author $Id$
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface PIDs {
+@Target({FIELD, METHOD, PARAMETER, TYPE, TYPE_USE})
+public @interface Prototype {
 
 	/**
-	 * Support inline instantiation of the {@link PIDs} annotation.
+	 * Support inline instantiation of the {@link Component} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<PIDs> implements PIDs {
-
-		private static final long serialVersionUID = 1L;
+	public static final class Literal extends AnnotationLiteral<Prototype> implements Prototype {
 
 		/**
-		 * @param pids array of {@link PID}
-		 * @return an instance of {@link PIDs}
+		 * Default instance
 		 */
-		public static PIDs of(PID[] pids) {
-			return new Literal(pids);
-		}
+		public static final Prototype	INSTANCE			= new Literal();
 
-		private Literal(PID[] pids) {
-			_pids = pids;
-		}
-
-		@Override
-		public PID[] value() {
-			return _pids;
-		}
-
-		private final PID[] _pids;
+		private static final long			serialVersionUID	= 1L;
 
 	}
-
-	/**
-	 * The set of ordered configurations available to the component.
-	 */
-	PID[] value();
 
 }
