@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.clusterinfo;
+package org.osgi.service.clusterinfo.dto;
 
 /**
  * Data Transfer Object for a FrameworkNodeStatus Service.
