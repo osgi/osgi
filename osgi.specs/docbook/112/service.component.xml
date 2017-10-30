@@ -5699,7 +5699,11 @@ public class MyComponent implements AcmeService {}</programlisting>
       must call the <code>LoggerFactory.getLogger(Bundle bundle, String name,
       Class loggerType)</code> method passing the bundle declaring the
       component as the first argument and the fully qualified name of the
-      component implementation class as the second argument.</para>
+      component implementation class as the second argument. If SCR cannot
+      know the component implementation class name, because the error is not
+      associated with a component or the error occured before the component
+      description is processed, then SCR must use the bundle's Root Logger,
+      that is, the Logger named <code>ROOT</code>.</para>
     </section>
 
     <section xml:id="service.component-locating.members">
