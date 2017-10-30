@@ -16,7 +16,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
   ext.javadocxml = new File(destinationDir, 'javadoc.xml')
   ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
   classpath = compileJava.classpath
-  inputs.files classpath, stylesheet
+  inputs.files compileJava, classpath, stylesheet
   source bnd.allSrcDirs
   bnd.javadoc_specs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
