@@ -51,31 +51,22 @@ public @interface Reference {
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param name
 		 * @param service
 		 * @param target
 		 * @return instance of {@link Reference}
 		 */
 		public static final Literal of(
-				String name,
 				Class<?> service,
 				String target) {
 
-			return new Literal(name, service, target);
+			return new Literal(service, target);
 		}
 
 		private Literal(
-				String name,
 				Class<?> service,
 				String target) {
-			_name = name;
 			_service = service;
 			_target = target;
-		}
-
-		@Override
-		public String name() {
-			return _name;
 		}
 
 		@Override
@@ -88,24 +79,10 @@ public @interface Reference {
 			return _target;
 		}
 
-		private final String				_name;
 		private final Class<?>				_service;
 		private final String				_target;
 
 	}
-
-	/**
-	 * The name of this reference.
-	 * <p>
-	 * If not specified, the name of this reference is based upon how this
-	 * annotation is used:
-	 * <ul>
-	 * <li>Annotated field - The name of the reference is the field name.</li>
-	 * <li>Annotated constructor or method parameter - The name of the reference is
-	 * the parameter name.</li>
-	 * </ul>
-	 */
-	public String name() default "";
 
 	/**
 	 * The type of the service for this reference.

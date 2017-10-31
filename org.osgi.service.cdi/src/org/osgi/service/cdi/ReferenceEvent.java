@@ -49,8 +49,8 @@ public interface ReferenceEvent<S> {
 	 *
 	 * @param <T> the tracked type
 	 * @param adding function called on adding service
-	 * @param modified consumer called on modified service
-	 * @param removed consumer called on removed service
+	 * @param modified biconsumer called on modified service
+	 * @param removed biconsumer called on removed service
 	 */
 	<T> void dispatch(Function<S, T> adding, BiConsumer<S, T> modified, BiConsumer<S, T> removed);
 
