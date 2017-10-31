@@ -16,51 +16,66 @@
 
 package org.osgi.service.cdi;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * This interface is used in CDI Observer methods to watch OSGi service events.
- * <p>
- * The type parameter is the service argument type and can be one of the
- * following:
- * </p>
- * <ul>
- * <li>service type</li>
- * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
- * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
- * ReferenceServiceObjects}</li>
- * <li>properties ({@link java.util.Map Map})</li>
- * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
- * value ({@link java.util.Map.Entry Map.Entry})</li>
- * </ul>
- *
- * @param <S> the service argument type.
  *
  * @author $Id$
  */
 @ProviderType
-public interface ReferenceEvent<S> {
+public interface ReferenceEvent {
 
 	/**
-	 * Dispatch the handling of the event to operations that will handle the
-	 * lifecycles.
+	 * Declare a function to call during "adding" events.
+	 * <p>
+	 * The type parameter S is the service argument type and can be one of the
+	 * following:
+	 * </p>
+	 * <ul>
+	 * <li>service type</li>
+	 * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
+	 * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
+	 * ReferenceServiceObjects}</li>
+	 * <li>properties ({@link java.util.Map Map})</li>
+	 * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
+	 * value ({@link java.util.Map.Entry Map.Entry})</li>
+	 * </ul>
+	 * <p>
+	 * The type parameter R is an arbitrary type provided by the user that
+	 * implements {@link AutoCloseable} to handle the remove event.
 	 *
-	 * @param <T> the tracked type
-	 * @param adding function called on adding service
-	 * @param modified biconsumer called on modified service
-	 * @param removed biconsumer called on removed service
+	 * @param adding a function called when the event type is "adding"
+	 * @return event
+	 *
+	 * @param <S> the service argument type.
+	 * @param <R> the result of the adding function
 	 */
-	<T> void dispatch(Function<S, T> adding, BiConsumer<S, T> modified, BiConsumer<S, T> removed);
+	<S, R extends AutoCloseable> ReferenceEvent adding(Function<S, R> adding);
 
 	/**
-	 * Dispatch the handling of the event to a customizer that will handle the
-	 * lifecycles.
+	 * Declare a consumer to call during "modified" events.
+	 * <p>
+	 * The type parameter S is the service argument type and can be one of the
+	 * following:
+	 * </p>
+	 * <ul>
+	 * <li>service type</li>
+	 * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
+	 * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
+	 * ReferenceServiceObjects}</li>
+	 * <li>properties ({@link java.util.Map Map})</li>
+	 * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
+	 * value ({@link java.util.Map.Entry Map.Entry})</li>
+	 * </ul>
 	 *
-	 * @param <T> the tracked type
-	 * @param customizer handles the lifecycles
+	 * @param modified a consumer called when the event type is "modified"
+	 * @return event
+	 *
+	 * @param <S> the service argument type.
 	 */
-	<T> void dispatch(ReferenceEventCustomizer<S, T> customizer);
+	<S> ReferenceEvent modified(Consumer<S> modified);
 
 }
