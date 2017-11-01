@@ -21,14 +21,15 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 
 /**
- * This interface is used in CDI Observer methods to watch OSGi service events.
+ * This interface is used in CDI Observer methods to watch OSGi service adding
+ * events.
  *
  * @param <S> the service argument type.
  *
  * @author $Id$
  */
 @ProviderType
-public interface ReferenceEvent<S> {
+public interface AddingEvent<S> {
 
 	/**
 	 * Obtain the service instance associated with this event.
