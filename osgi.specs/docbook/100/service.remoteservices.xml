@@ -743,6 +743,20 @@ tracker.open();</programlisting>
     </section>
     
     <section>
+      <title>Confidential Remote Services: osgi.confidential</title>
+
+      <para>If the remote service must only be exported using a mechanism that supports
+      confidential message delivery the <code>osgi.confidential</code> intent can be specified.
+      This means that the Remote Services implementation can only export the service if
+      a confidential message layer, such as a TLS-based protocol, is supported.</para>
+
+      <para>
+      If the Remote Services implementation does not support a confidential mechanism,
+      or is not configured as such, it should not expose the service remotely.
+      </para>
+    </section>
+
+    <section>
       <title>Private Remote Services: osgi.private</title>
       
       <para>In many deployment scenarios, including cloud, embedded or IoT deployments, hosts may be 
@@ -1361,7 +1375,7 @@ com.acme.rmi.path = service-id/24</programlisting>
 
     <itemizedlist>
       <listitem>
-          <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code>, <code>osgi.confidential</code> and <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
+        <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code> and <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
