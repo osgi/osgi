@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi;
+package org.osgi.service.cdi.dto;
 
-import javax.enterprise.inject.spi.BeanManager;
-import org.osgi.util.promise.Promise;
+import java.util.Map;
 
 /**
- * A CdiContainer object is registered by the CDI extender in the OSGi registry
- * for each managed CDI bundle.
+ * Description of a CDI configuration instance.
  *
+ * @NotThreadSafe
  * @author $Id$
  */
-public interface CdiContainer {
+public class ConfigurationDTO extends BaseConfigurationDTO {
 
 	/**
-	 * When the {@link CdiContainer} is {@link CdiContainerState#CREATED} the
-	 * {@link BeanManager} will become available.
-	 *
-	 * @return BeanManager
+	 * The properties as found in the configuration dictionary.
+	 * <p>
+	 * A null value indicates no configuration object is available.
 	 */
-	public Promise<BeanManager> getBeanManager();
+	public Map<String, Object> properties;
+
 }

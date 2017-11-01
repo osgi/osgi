@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi;
+package org.osgi.service.cdi.runtime;
 
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;

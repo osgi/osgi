@@ -16,66 +16,60 @@
 
 package org.osgi.service.cdi;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.Map;
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.framework.ServiceReference;
 
 /**
  * This interface is used in CDI Observer methods to watch OSGi service events.
  *
+ * @param <S> the service argument type.
+ *
  * @author $Id$
  */
 @ProviderType
-public interface ReferenceEvent {
+public interface ReferenceEvent<S> {
 
 	/**
-	 * Declare a function to call during "adding" events.
-	 * <p>
-	 * The type parameter S is the service argument type and can be one of the
-	 * following:
-	 * </p>
-	 * <ul>
-	 * <li>service type</li>
-	 * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
-	 * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
-	 * ReferenceServiceObjects}</li>
-	 * <li>properties ({@link java.util.Map Map})</li>
-	 * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
-	 * value ({@link java.util.Map.Entry Map.Entry})</li>
-	 * </ul>
-	 * <p>
-	 * The type parameter R is an arbitrary type provided by the user that
-	 * implements {@link AutoCloseable} to handle the remove event.
+	 * Obtain the service instance associated with this event.
 	 *
-	 * @param adding a function called when the event type is "adding"
-	 * @return event
-	 *
-	 * @param <S> the service argument type.
-	 * @param <R> the result of the adding function
+	 * @return the service instance
 	 */
-	<S, R extends AutoCloseable> ReferenceEvent adding(Function<S, R> adding);
+	S getService();
 
 	/**
-	 * Declare a consumer to call during "modified" events.
-	 * <p>
-	 * The type parameter S is the service argument type and can be one of the
-	 * following:
-	 * </p>
-	 * <ul>
-	 * <li>service type</li>
-	 * <li>{@link org.osgi.framework.ServiceReference ServiceReference}</li>
-	 * <li>{@link org.osgi.service.cdi.ReferenceServiceObjects
-	 * ReferenceServiceObjects}</li>
-	 * <li>properties ({@link java.util.Map Map})</li>
-	 * <li>tuple of properties ({@link java.util.Map Map}) as key, service type as
-	 * value ({@link java.util.Map.Entry Map.Entry})</li>
-	 * </ul>
+	 * Obtain the service reference associated with this event.
 	 *
-	 * @param modified a consumer called when the event type is "modified"
-	 * @return event
-	 *
-	 * @param <S> the service argument type.
+	 * @return the service reference
 	 */
-	<S> ReferenceEvent modified(Consumer<S> modified);
+	ServiceReference<S> getServiceReference();
+
+	/**
+	 * Obtain the service objects associated with this event.
+	 *
+	 * @return the service objects
+	 */
+	ReferenceServiceObjects<S> getServiceObjects();
+
+	/**
+	 * Obtain the service properties associated with this event.
+	 *
+	 * @return the service properties
+	 */
+	Map<String, ?> getServiceProperties();
+
+	/**
+	 * Subscribe an action to the "updated" service event.
+	 *
+	 * @param action to subscribe to the "updated" service event
+	 */
+	void onUpdate(Runnable action);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param action to subscribe to the "removed" service event
+	 */
+	void onRemove(Runnable action);
 
 }

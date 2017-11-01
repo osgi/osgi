@@ -35,7 +35,7 @@ import javax.enterprise.util.AnnotationLiteral;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, TYPE, TYPE_USE})
+@Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface Bundle {
 
 	/**

@@ -45,8 +45,9 @@ public class CdiConstants {
 	/**
 	 * The property of the CdiContainer service holding it's state.
 	 * <p>
-	 * The property will be updated every time the CdiContainer's state changes.
-	 * The possible values are defined by {@link CdiContainerState}.
+	 * The property will be updated every time the CdiContainer's state changes. The
+	 * possible values are defined by
+	 * {@link org.osgi.service.cdi.runtime.CdiContainerState}.
 	 */
 	public static final String	CDI_CONTAINER_STATE		= "osgi.cdi.container.state";
 

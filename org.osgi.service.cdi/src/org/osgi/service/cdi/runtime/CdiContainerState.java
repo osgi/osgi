@@ -1,10 +1,13 @@
-package org.osgi.service.cdi;
+package org.osgi.service.cdi.runtime;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * An enum defining the states of a CDI container.
  *
  * @author $Id$
  */
+@ProviderType
 public enum CdiContainerState {
 
 	/**

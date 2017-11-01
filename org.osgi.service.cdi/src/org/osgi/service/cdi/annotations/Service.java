@@ -24,22 +24,36 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.util.AnnotationLiteral;
 import org.osgi.annotation.bundle.Requirement;
+import org.osgi.framework.PrototypeServiceFactory;
+import org.osgi.framework.ServiceFactory;
 
 /**
  * Annotation used to specify that a CDI bean should be published as a service.
  * <p>
- * The behaviour of this annotation depends on it's useage:
+ * The behaviour of this annotation depends on it's usage:
  * <ul>
- * <li>Applied to component bean - publish the service using all directly
- * implemented interfaces. If no directly implemented interfaces are found use
- * the class.</li>
- * <li>Applied to an interface use on a component bean - publish the service
- * using the interface.</li>
- * <li>Applied to non-component bean - In this scenario only beans which are
- * {@link ApplicationScoped} are allowed. Use of other CDI scopes will result in
- * a definition error.</li>
+ * <li>on the bean type - publish the service using all implemented interfaces.
+ * If there are no implemented interfaces use the bean class.</li>
+ * <li>on the bean's type_use(s) - publish the service using the collected
+ * interface(s).</li>
+ * </ul>
+ * Use of {@code @Service} on both type and type_use will result in a definition
+ * error.
+ * <p>
+ * Where this annotation is used affects how service scopes are supported:
+ * <li>{@link Component} or {@link Dependent} bean - The provided service can be
+ * of any scope. The bean can either implement {@link ServiceFactory} or
+ * {@link PrototypeServiceFactory} or use {@link Bundle} or {@link Prototype} to
+ * set it's service scope. If none of those options are used the service is a
+ * singleton scope service.</li>
+ * <li>{@link ApplicationScoped} bean - The provided service is a singleton
+ * scope service unless it implements {@link ServiceFactory} or
+ * {@link PrototypeServiceFactory}. It cannot use {@link Bundle} or
+ * {@link Prototype} to set it's service scope. Use of those annotations will
+ * result in a definition error.</li>
  * </ul>
  *
  * @author $Id$
