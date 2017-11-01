@@ -12,9 +12,8 @@
   <title>Remote Services</title>
 
   <info>
-    <releaseinfo xml:id="service.remoteservices-version">
-    <xref endterm="org.osgi.service.remoteservices-version"
-    linkend="org.osgi.service.remoteservices"/></releaseinfo>
+    <releaseinfo xml:id="service.remoteservices-version">Version
+    1.1</releaseinfo>
   </info>
 
   <para>The OSGi framework provides a <emphasis>local</emphasis> service

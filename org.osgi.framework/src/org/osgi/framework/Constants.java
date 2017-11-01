@@ -1846,4 +1846,38 @@ public interface Constants {
 	 * @since 1.9
 	 */
 	String	SERVICE_CHANGECOUNT						= "service.changecount";
+
+	/**
+	 * Intent supported by Remote Services implementations that support Basic
+	 * Remote Services as defined for the {@code osgi.basic} intent.
+	 * 
+	 * @since 1.9
+	 */
+	String	INTENT_BASIC							= "osgi.basic";
+
+	/**
+	 * Intent supported by Remote Service implementations that support
+	 * Asynchronous Remote Services as defined for the {@code osgi.async}
+	 * intent.
+	 * 
+	 * @since 1.9
+	 */
+	String	INTENT_ASYNC							= "osgi.async";
+
+	/**
+	 * Intent supported by Remote Service implementation that provide
+	 * confidential communications as defined for the {@code osgi.confidential}
+	 * intent.
+	 * 
+	 * @since 1.9
+	 */
+	String	INTENT_CONFIDENTIAL						= "osgi.confidential";
+
+	/**
+	 * Intent supported by Remote Service implementations that provide private
+	 * communications as defined for the {@code osgi.private} intent.
+	 * 
+	 * @since 1.9
+	 */
+	String	INTENT_PRIVATE							= "osgi.private";
 }
