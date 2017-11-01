@@ -1337,8 +1337,6 @@ com.acme.rmi.path = service-id/24</programlisting>
     </section>
   </section>
 
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteservices.xml"/>
-
   <section>
     <title>References</title>
 
@@ -1363,7 +1361,7 @@ com.acme.rmi.path = service-id/24</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code> and <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
+          <para>Added intents: <code>osgi.basic</code>, <code>osgi.async</code>, <code>osgi.confidential</code> and <code>osgi.private</code>. See <xref linkend="i1693415"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
