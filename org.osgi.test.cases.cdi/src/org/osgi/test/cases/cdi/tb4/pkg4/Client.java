@@ -24,17 +24,25 @@
  */
 package org.osgi.test.cases.cdi.tb4.pkg4;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Qualifier;
 
 import org.osgi.service.cdi.annotations.Component;
-import org.osgi.service.cdi.annotations.Property;
 import org.osgi.service.cdi.annotations.Service;
+
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@interface Tb {
+	String value();
+}
 
 @Component
 @Service // == (scope = ServiceScope.SINGLETONE)
-@Property("tb=tb4")
+@Tb("tb4")
 public class Client implements Callable<String>{
 	@Inject
 	Interface provider;
