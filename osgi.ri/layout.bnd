@@ -48,6 +48,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
+	${repo;org.osgi.impl.service.jaxrs;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
 	${repo;org.osgi.impl.service.log;latest}, \
 	${repo;org.osgi.impl.service.log.stream;latest}, \
@@ -90,6 +91,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
 	${repo;org.osgi.impl.service.http.whiteboard;latest}, \
+	${repo;org.osgi.impl.service.jaxrs;latest}, \
 	${repo;org.osgi.impl.service.jpa;latest}, \
     ${repo;org.osgi.impl.service.log;latest}, \
     ${repo;org.osgi.impl.service.log.stream;latest}, \

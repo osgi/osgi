@@ -14,10 +14,14 @@ build.core.tests = \
     org.osgi.test.cases.tracker
 
 jar.cmpn.tests = \
+    ${repo;org.apache.commons.logging;1.2.0}, \
+    ${repo;org.apache.httpcomponents.httpclient;4.5.3}, \
+    ${repo;org.apache.httpcomponents.httpcore;4.4.6}, \
     ${repo;org.osgi.service.jdbc;latest}, \
     ${repo;org.h2;1.4.193}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
-    ${repo;org.osgi.test.filter;latest}
+    ${repo;org.osgi.test.filter;latest}, \
+    ${repo;osgi.promise;latest}
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
@@ -81,10 +85,14 @@ build.cmpn.tests = \
     org.osgi.test.cases.xml
 
 jar.enterprise.tests = \
+    ${repo;org.apache.commons.logging;1.2.0}, \
+    ${repo;org.apache.httpcomponents.httpclient;4.5.3}, \
+    ${repo;org.apache.httpcomponents.httpcore;4.4.6}, \
     ${repo;org.osgi.service.jdbc;latest}, \
     ${repo;org.h2;1.4.193}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
-    ${repo;org.osgi.test.filter;latest}
+    ${repo;org.osgi.test.filter;latest}, \
+    ${repo;osgi.promise;latest}
 
 build.enterprise.tests = \
     org.osgi.test.cases.async, \
