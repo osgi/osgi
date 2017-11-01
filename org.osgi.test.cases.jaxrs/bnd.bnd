@@ -1,10 +1,18 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package                 = org.osgi.test.support.*
+Conditional-Package: org.osgi.test.support.*,\
+ org.apache.http.*,\
+ org.apache.commons.codec.*,\
+ org.apache.commons.logging.*
 Private-Package                     =  \
     ${p}.*
-Import-Package: ${-signaturetest}, !javax.servlet.*, *
+Import-Package: ${-signaturetest},\
+ org.apache.avalon.framework.logger;resolution:=optional,\
+ org.apache.log;resolution:=optional,\
+ org.apache.log4j;resolution:=optional,\
+ !javax.servlet.*,\
+ *
 
 DynamicImport-Package: javax.servlet.*
 
@@ -15,10 +23,12 @@ DynamicImport-Package: javax.servlet.*
 	org.osgi.service.jaxrs;version=project,\
 	org.apache.aries.jax.rs.jaxrs.api;version=latest,\
 	org.apache.geronimo.specs.geronimo-servlet_3.0_spec;version=1.0,\
+    org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
 	org.apache.httpcomponents.httpclient;version=4.5.3,\
 	osgi.core;version=6.0.0,\
-	osgi.promise;version=latest,\
+	org.osgi.util.function;version=latest,\
+	org.osgi.util.promise;version=latest,\
 	${junit},\
 	org.osgi.namespace.implementation;version=latest,\
 	org.osgi.namespace.service;version=latest,\
@@ -26,10 +36,8 @@ DynamicImport-Package: javax.servlet.*
 
 -runbundles                     = \
     org.osgi.impl.service.cm;                   version=latest,\
-    osgi.promise;                               version=latest,\
-    org.apache.httpcomponents.httpcore;         version=4.4.6,\
-    org.apache.httpcomponents.httpclient;       version=4.5.3,\
-    org.apache.commons.logging;                 version=1.2.0,\
+    org.osgi.util.function;version=latest,\
+    org.osgi.util.promise;version=latest,\
     org.osgi.impl.service.jaxrs;                version=latest
 
 -runproperties                  = ${runproperties}
