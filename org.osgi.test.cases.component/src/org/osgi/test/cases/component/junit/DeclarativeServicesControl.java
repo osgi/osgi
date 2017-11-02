@@ -457,7 +457,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				found = true;
 				assertEquals(
 						"osgi.extender capability version wrong",
-						new Version(1, 3, 0),
+						new Version(1, 4, 0),
 						extender.getAttributes()
 								.get(
 								ExtenderNamespace.CAPABILITY_VERSION_ATTRIBUTE));

@@ -496,7 +496,9 @@ public class ComponentPropertyTypeTestCase extends OSGiTestCase {
 				assertEquals("array wrong length", 2, config.long$$Array().length);
 				assertEquals("property has wrong value", 9876543210L, config.long$$Array()[0]);
 				assertEquals("property has wrong value", 123456L, config.long$$Array()[1]);
-				assertNull("property has wrong value", config.string$$None());
+				// this changed in 1.4 (R7) - while it has to be null in 1.3 it must be an empty array in 1.4:
+				assertNotNull("array null", config.string$$None());
+				assertEquals("array wrong length", 0, config.string$$None().length);
 
 			} finally {
 				providerTracker.close();
