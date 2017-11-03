@@ -16,48 +16,40 @@
 
 package org.osgi.service.cdi.dto;
 
+import org.osgi.dto.DTO;
+import org.osgi.service.cdi.dto.model.ComponentModelDTO;
+import org.osgi.service.cdi.dto.model.DependencyModelDTO;
+
 /**
- * Description of a CDI configuration factory dependency.
+ * Description of a CDI configuration factory. This is a pure runtime structure
+ * (i.e. has no formal model) that manages the instances of a given component as
+ * described by it's {@link ComponentModelDTO model}. Handles the
+ * {@link ComponentModelDTO#configurations}
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentFactoryDTO {
+public class ComponentFactoryDTO extends DTO {
+    /**
+     * Model of the components this factory creates
+     */
+    public ComponentModelDTO model;
 
-	/**
-	 * The name of this component factory.
-	 */
-	public String						name;
+    /**
+     * The configuration dependencies.
+     * <p>
+     * Must never be null.
+     * <p>
+     * May contain many {@link DependencyModelDTO.MaximumCardinality#ONE singleton}
+     * configurations.
+     * <p>
+     * May contain at most one {@link DependencyModelDTO.MaximumCardinality#MANY
+     * factory} configurations.
+     */
+    public ConfigurationDTO[] configurations;
 
-	/**
-	 * The factory configuration dependency of this component factory.
-	 * <p>
-	 * The value cannot be null.
-	 */
-	public TemplateConfigurationDTO		factoryConfiguration;
-
-	/**
-	 * The singleton configuration dependencies of this component factory.
-	 * <p>
-	 * The value cannot be null. The array will be empty if there are no singleton
-	 * configuration dependencies.
-	 */
-	public TemplateConfigurationDTO[]	configurations;
-
-	/**
-	 * The reference dependencies of this component factory.
-	 * <p>
-	 * The value cannot be null. The array will be empty when there are no service
-	 * dependencies.
-	 */
-	public TemplateReferenceDTO[]	references;
-
-	/**
-	 * The component instances created from this component factory.
-	 * <p>
-	 * The value cannot be null. The array will contain one value for every factory
-	 * configuration instance.
-	 */
-	public ComponentDTO[]	instances;
-
+    /**
+     * All instances created by this factory
+     */
+    public ComponentDTO[] instances;
 }

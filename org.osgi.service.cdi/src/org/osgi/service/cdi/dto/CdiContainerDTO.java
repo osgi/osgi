@@ -18,6 +18,7 @@ package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.BundleDTO;
+import org.osgi.service.cdi.dto.model.CdiContainerModelDTO;
 
 /**
  * Description of a CDI container.
@@ -26,30 +27,23 @@ import org.osgi.framework.dto.BundleDTO;
  * @author $Id$
  */
 public class CdiContainerDTO extends DTO {
+    /**
+     *
+     */
+    public CdiContainerModelDTO model;
 
-	/**
-	 * The id of the CDI container.
-	 */
-	public String			id;
+    /**
+     * The bundle declaring the CDI container.
+     */
+    public BundleDTO bundle;
 
-	/**
-	 * The bundle declaring the CDI container.
-	 */
-	public BundleDTO		bundle;
+    /**
+     * The extension dependencies of this CDI container.
+     */
+    public ExtensionDTO[] extensions;
 
-	/**
-	 * The extension dependencies of this CDI container.
-	 */
-	public ExtensionDTO[]	extensions;
-
-	/**
-	 * The components defined in this CDI container.
-	 */
-	public ComponentDTO[] components;
-
-	/**
-	 * The factory components defined in this CDI container.
-	 */
-	public ComponentFactoryDTO[]	factoryComponents;
-
+    /**
+     * The factory components defined in this CDI container.
+     */
+    public ComponentFactoryDTO[] componentFactories;
 }

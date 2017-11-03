@@ -14,36 +14,29 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto;
+package org.osgi.service.cdi.dto.model;
 
 import org.osgi.dto.DTO;
 
 /**
- * Description of a CDI configuration dependency.
+ * Description of a CDI container.
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class BaseConfigurationDTO extends DTO {
+public class CdiContainerModelDTO extends DTO {
+    /**
+     * The id of the CDI container.
+     */
+    public String id;
 
-	/**
-	 * The pid of the Configuration object.
-	 * <p>
-	 * The value must not be null.
-	 */
-	public String pid;
+    /**
+     * The extension dependencies of this CDI container.
+     */
+    public ExtensionModelDTO[] extensions;
 
-	/**
-	 * If the configuration is a factory configuration.
-	 * <p>
-	 * If the value is {@code true} the value of {@link #required} must also be
-	 * {@code true}.
-	 */
-	public boolean	factory;
-
-	/**
-	 * Whether a configuration object for this pid is required.
-	 */
-	public boolean	required;
-
+    /**
+     * The components defined in this CDI container.
+     */
+    public ComponentModelDTO[] components;
 }

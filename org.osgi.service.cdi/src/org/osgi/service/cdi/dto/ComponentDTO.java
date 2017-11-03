@@ -17,91 +17,39 @@
 package org.osgi.service.cdi.dto;
 
 import java.util.Map;
+
 import org.osgi.dto.DTO;
-import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * Description of a CDI component.
+ * Description of a CDI component instance
  *
  * @NotThreadSafe
  * @author $Id$
  */
 public class ComponentDTO extends DTO {
+    /**
+     * The service dependencies of the component.
+     * <p>
+     * Value must not be null. The array will be empty if there are no service
+     * dependencies.
+     */
+    public ReferenceDTO[] references;
 
-	/**
-	 * Define the possible values for {@link #scope}.
-	 */
-	public enum Type {
-		/**
-		 * The component is the <em>Application Component</em>.
-		 */
-		APPLICATION,
-		/**
-		 * The component is an <em>OSGi Component</em>.
-		 */
-		COMPONENT
-	}
+    /**
+     * The service dependencies of the component.
+     * <p>
+     * Value must not be null. The array may be empty for the application component.
+     */
+    public ActivationDTO[] activations;
 
-	/**
-	 * The name of the component.
-	 */
-	public String	name;
-
-	/**
-	 * Indicate whether the component is the <em>Application Component</em> or an
-	 * <em>OSGi Component<em>.
-	 */
-	public Type						componentType;
-
-	/**
-	 * The bean class of the component.
-	 * <p>
-	 * In the case of the <em>Application Component</em>, the value is null.
-	 */
-	public String			beanClass;
-
-	/**
-	 * The service dependencies of the component.
-	 * <p>
-	 * Value must not be null. The array will be empty if there are no service
-	 * dependencies.
-	 */
-	public ReferenceDTO[]	references;
-
-	/**
-	 * The component properties.
-	 * <p>
-	 * These are the aggregated properties from all configuration sources. This
-	 * value must never be null.
-	 */
-	public Map<String, Object>	properties;
-
-	/**
-	 * The component's configuration dependencies.
-	 * <p>
-	 * The value must not be null. The array will be at least length 1 because every
-	 * component has at least one singleton PID. The order indicates the precedence
-	 * order in which the properties are aggregated.
-	 */
-	public ConfigurationDTO[]	configurations;
-
-	/**
-	 * The component's detached singleton configuration dependencies.
-	 * <p>
-	 * The value must not be null. The array will be empty if there are no detached
-	 * singleton configuration dependencies. These configurations are not part of
-	 * the aggregate component configuration and cannot configure references or
-	 * other aspects of the component. In that sense they are detached from the
-	 * component and are only considered dependencies for the purpose of injection.
-	 */
-	public ConfigurationDTO[]	detachedConfigurations;
-
-	/**
-	 * The services published from this component.
-	 * <p>
-	 * The value must not be null. The array will be empty if there are no services
-	 * published by this component.
-	 */
-	public ServiceReferenceDTO[]	services;
-
+    /**
+     * The values of all configurations consumed by this component.
+     * <p>
+     * Each map contains a <code>service.pid<code>.
+     * <p>
+     * At most one map also contains <code>service.factoryPid</code>
+     * <p>
+     * The merged properties are in a map where <code>service.pid=$</code>.
+     */
+    public Map<String, Object>[] configurations;
 }
