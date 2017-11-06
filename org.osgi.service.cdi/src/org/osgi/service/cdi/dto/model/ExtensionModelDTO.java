@@ -1,9 +1,10 @@
+
 package org.osgi.service.cdi.dto.model;
 
-import org.osgi.service.cdi.dto.CdiContainerDTO;
+import org.osgi.service.cdi.dto.ContainerDTO;
 
 /**
- * Models an extension dependency of the {@link CdiContainerDTO}
+ * Models an extension dependency of the {@link ContainerDTO}
  *
  * <ul>
  * <li>{@link DependencyModelDTO#maximumCardinality maximumCardinality} =
@@ -12,12 +13,15 @@ import org.osgi.service.cdi.dto.CdiContainerDTO;
  * <li>{@link DependencyModelDTO#dynamic dynamic} = false</li>
  * <li>{@link DependencyModelDTO#greedy greedy} = true</li>
  * </ul>
+ * 
+ * @NotThreadSafe
+ * @author $Id: $
  */
 public class ExtensionModelDTO extends DependencyModelDTO {
-    /**
-     * Target filter for the extension service.
-     * <p>
-     * The value must not be null.
-     */
-    public String target;
+	/**
+	 * Target filter for the extension service.
+	 * <p>
+	 * The value must not be null.
+	 */
+	public String target;
 }

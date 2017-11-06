@@ -18,38 +18,40 @@ package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.model.ComponentModelDTO;
-import org.osgi.service.cdi.dto.model.DependencyModelDTO;
+import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
 
 /**
- * Description of a CDI configuration factory. This is a pure runtime structure
- * (i.e. has no formal model) that manages the instances of a given component as
- * described by it's {@link ComponentModelDTO model}. Handles the
- * {@link ComponentModelDTO#configurations}
+ * A snapshot of the runtime state of a component factory.
+ * <p>
+ * A component factory maintains the binding of {@link ComponentDTO component
+ * instances} to the {@link #configurations configuration dependencies}
+ * described by one {@link ComponentModelDTO component model}
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: $
  */
 public class ComponentFactoryDTO extends DTO {
-    /**
-     * Model of the components this factory creates
-     */
-    public ComponentModelDTO model;
+	/**
+	 * Model of the components this factory creates
+	 */
+	public ComponentModelDTO	model;
 
-    /**
-     * The configuration dependencies.
-     * <p>
-     * Must never be null.
-     * <p>
-     * May contain many {@link DependencyModelDTO.MaximumCardinality#ONE singleton}
-     * configurations.
-     * <p>
-     * May contain at most one {@link DependencyModelDTO.MaximumCardinality#MANY
-     * factory} configurations.
-     */
-    public ConfigurationDTO[] configurations;
+	/**
+	 * The configuration dependencies.
+	 * <p>
+	 * Must never be null.
+	 * <p>
+	 * May contain many {@link MaximumCardinality#ONE singleton} configurations.
+	 * <p>
+	 * May contain at most one {@link MaximumCardinality#MANY factory}
+	 * configuration.
+	 */
+	public ConfigurationDTO[]	configurations;
 
-    /**
-     * All instances created by this factory
-     */
-    public ComponentDTO[] instances;
+	/**
+	 * All components created by this factory
+	 * <p>
+	 * Must not be null. An empty array means on components are currently created.
+	 */
+	public ComponentDTO[]		components;
 }

@@ -18,14 +18,14 @@ package org.osgi.service.cdi.runtime;
 
 import javax.enterprise.inject.spi.BeanManager;
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.cdi.dto.CdiContainerDTO;
+import org.osgi.service.cdi.dto.ContainerDTO;
 import org.osgi.util.promise.Promise;
 
 /**
  * A {@code CdiContainerRuntime} object is registered by the CDI extender in the
  * OSGi registry for each managed CDI bundle.
  *
- * @author $Id$
+ * @author $Id: e0c4b871d38ff9db0914d8c94dee4941963c4a11 $
  */
 @ProviderType
 public interface CdiContainerRuntime {
@@ -44,6 +44,6 @@ public interface CdiContainerRuntime {
 	 *
 	 * @return the CDI container dto
 	 */
-	public CdiContainerDTO getCdiContainerDTO();
+	public ContainerDTO getCdiContainerDTO();
 
 }

@@ -22,21 +22,21 @@ import org.osgi.dto.DTO;
  * Description of a CDI container.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 9278d91cfc28267939292c9fa47030684e29c0da $
  */
-public class CdiContainerModelDTO extends DTO {
-    /**
-     * The id of the CDI container.
-     */
-    public String id;
+public class ContainerModelDTO extends DTO {
+	/**
+	 * The name of the CDI container.
+	 */
+	public String				name;
 
-    /**
-     * The extension dependencies of this CDI container.
-     */
-    public ExtensionModelDTO[] extensions;
+	/**
+	 * The extension dependencies of this CDI container.
+	 */
+	public ExtensionModelDTO[]	extensions;
 
-    /**
-     * The components defined in this CDI container.
-     */
-    public ComponentModelDTO[] components;
+	/**
+	 * The components defined in this CDI container.
+	 */
+	public ComponentModelDTO[]	components;
 }

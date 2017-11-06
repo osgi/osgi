@@ -17,39 +17,42 @@
 package org.osgi.service.cdi.dto;
 
 import java.util.Map;
-
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
 
 /**
- * Description of a CDI component instance
+ * A snapshot of the runtime state of a component
  *
  * @NotThreadSafe
  * @author $Id$
  */
 public class ComponentDTO extends DTO {
-    /**
-     * The service dependencies of the component.
-     * <p>
-     * Value must not be null. The array will be empty if there are no service
-     * dependencies.
-     */
-    public ReferenceDTO[] references;
+	/**
+	 * The service dependencies of the component.
+	 * <p>
+	 * Must not be null. The array will be empty if the component has no reference
+	 * rependencies.
+	 */
+	public ReferenceDTO[]			references;
 
-    /**
-     * The service dependencies of the component.
-     * <p>
-     * Value must not be null. The array may be empty for the application component.
-     */
-    public ActivationDTO[] activations;
+	/**
+	 * The activations of the component.
+	 * <p>
+	 * Value must not be null. The array may be empty for the
+	 * {@link Type#APPLICATION APPLICATION}. The array will always contain 1 element
+	 * for a {@link Type#COMPONENT COMPONENT}.
+	 */
+	public ActivationDTO[]			activations;
 
-    /**
-     * The values of all configurations consumed by this component.
-     * <p>
-     * Each map contains a <code>service.pid<code>.
-     * <p>
-     * At most one map also contains <code>service.factoryPid</code>
-     * <p>
-     * The merged properties are in a map where <code>service.pid=$</code>.
-     */
-    public Map<String, Object>[] configurations;
+	/**
+	 * The values of all configurations consumed by this component.
+	 * <p>
+	 * Each map contains a <code>service.pid<code>.
+	 * <p>
+	 * At most one map also contains <code>service.factoryPid</code>.
+	 * <p>
+	 * Must not be null. The array may be empty if this component has become
+	 * satisfied without consuming configurations.
+	 */
+	public Map<String, Object>[]	configurations;
 }

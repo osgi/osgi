@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.cdi.annotations; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.cdi.dto; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.cdi.annotations; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.cdi.dto; version="[1.0,1.1)"}
  */
 
 @Version(CdiConstants.CDI_SPECIFICATION_VERSION)

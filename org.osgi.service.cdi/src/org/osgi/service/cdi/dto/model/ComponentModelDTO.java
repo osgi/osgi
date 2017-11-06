@@ -21,8 +21,11 @@ import org.osgi.service.cdi.dto.ComponentDTO;
 import org.osgi.service.cdi.dto.ComponentFactoryDTO;
 
 /**
- * Description of a CDI component.
- *
+ * A description of a CDI component
+ * <p>
+ * The content of this DTO is resolved form metadata at initialization time and
+ * remains the same between the CDI bundle restarts.
+ * <p>
  * At runtime it is spit between a {@link ComponentFactoryDTO} which handles the
  * resolution of the {@link #configurations} and the creation of
  * {@link ComponentDTO} instances and one or more {@link ComponentDTO}
@@ -30,64 +33,64 @@ import org.osgi.service.cdi.dto.ComponentFactoryDTO;
  * creation of {@link #activations}.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: $
  */
 public class ComponentModelDTO extends DTO {
 
-    /**
-     * Define the possible values for {@link #scope}.
-     */
-    public enum Type {
-        /**
-         * The component is the <em>Application Component</em>.
-         */
-        APPLICATION,
-        /**
-         * The component is an <em>OSGi Component</em>.
-         */
-        COMPONENT
-    }
+	/**
+	 * Define the possible values for {@link #type}.
+	 */
+	public enum Type {
+		/**
+		 * The component is the <em>Application Component</em>.
+		 */
+		APPLICATION,
+		/**
+		 * The component is an <em>OSGi Component</em>.
+		 */
+		COMPONENT
+	}
 
-    /**
-     * Indicate whether the component is the <em>Application Component</em> or an
-     * <em>OSGi Component<em>.
-     */
-    public Type type;
+	/**
+	 * Indicate whether the component is the <em>Application Component</em> or an
+	 * <em>OSGi Component<em>.
+	 */
+	public Type						type;
 
-    /**
-     * The configuration dependencies of this component.
-     * <p>
-     * Value must not be null, since there is always at least one default singleton
-     * configuration.
-     * <p>
-     * May contain at most one factory configuration.
-     * <p>
-     * May contain one or more singleton configurations.
-     */
-    public ConfigurationModelDTO[] configurations;
+	/**
+	 * The configuration dependencies of this component.
+	 * <p>
+	 * Value must not be null, since there is always at least one default singleton
+	 * configuration.
+	 * <p>
+	 * May contain at most one factory configuration.
+	 * <p>
+	 * May contain one or more singleton configurations.
+	 */
+	public ConfigurationModelDTO[]	configurations;
 
-    /**
-     * The service dependencies of the component.
-     * <p>
-     * Value must not be null. The array will be empty if there are no service
-     * dependencies.
-     */
-    public ReferenceModelDTO[] references;
+	/**
+	 * The service dependencies of the component.
+	 * <p>
+	 * Value must not be null. The array will be empty if there are no service
+	 * dependencies.
+	 */
+	public ReferenceModelDTO[]		references;
 
-    /**
-     * The activation beans of the component.
-     * <p>
-     * Value must not be null.
-     * <p>
-     * For {@link #type} = {@link Type#APPLICATION} the array may be empty.
-     * <p>
-     * For {@link #type} = {@link Type#APPLICATION} the array may contain multiple
-     * entries where {@link ActivationModelDTO#serviceClasses} is not empty and
-     * {@link ActivationModelDTO#scope} is {@link ActivationModelDTO.Scope#SINGLETON
-     * SINGLETON}.
-     * <p>
-     * For {@link #type} = {@link Type#COMPONENT} the array must contain exactly one
-     * entry.
-     */
-    public ActivationModelDTO[] activations;
+	/**
+	 * The activation beans of the component.
+	 * <p>
+	 * Value must not be null.
+	 * <p>
+	 * For {@link #type} = {@link Type#APPLICATION} the array may be empty.
+	 * <p>
+	 * For {@link #type} = {@link Type#APPLICATION} the array may contain multiple
+	 * entries where {@link ActivationModelDTO#serviceClasses} is not empty and
+	 * {@link ActivationModelDTO#scope} is {@link ActivationModelDTO.Scope#SINGLETON
+	 * SINGLETON}.
+	 * <p>
+	 * For {@link #type} = {@link Type#COMPONENT} the array must contain exactly one
+	 * entry.
+	 */
+	public ActivationModelDTO[]		activations;
 }
