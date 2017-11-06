@@ -254,7 +254,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     to the default storage format. It is therefore possible to get the content
     with the following code.</para>
 
-    <programlisting>InputStream getContent( String type, Stringname, Version version ) {
+    <programlisting>InputStream getContent( String type, String name, Version version ) {
   Resource r = getResource( type, name, version );
   if ( r == null )
     return null;
@@ -292,7 +292,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     <para>It is therefore possible to search for a specific MIME type and
     download that format. For example:</para>
 
-    <programlisting>String getURL( String type, String name, Versionversion, String mime ) 
+    <programlisting>String getURL( String type, String name, Version version, String mime ) 
     throws Exception {
     Resource r = getResource( type, name, version );
     for ( Capability cap : r.getCapabilities( "osgi.content") ) {
