@@ -2893,13 +2893,16 @@ public class Foo implements EventHandler { ... }</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Defines the types of elements in the collection
-              referenced by the field value. This is ignored if the
-              <code>field</code> attribute is not set or the cardinality is
-              unary. See <xref linkend="service.component-field.injection"/>
-              for more information.</para><para>The <code>Reference</code>
-              annotation can generally infer the value of the collection
-              elements from the generic type information of the annotated
-              field but it can be explicitly defined if needed.</para></entry>
+              referenced by the field value or constructor parameter. This is
+              ignored if the <code>field</code> attribute or
+              <code>parameter</code> attribute is not set or the cardinality
+              is unary. See <xref
+              linkend="service.component-field.injection"/> for more
+              information.</para><para>The <code>Reference</code> annotation
+              can generally infer the value of the collection elements from
+              the generic type information of the annotated field or
+              constructor parameter but it can be explicitly defined if
+              needed.</para></entry>
             </row>
 
             <row>
