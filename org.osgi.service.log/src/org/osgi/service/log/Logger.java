@@ -106,11 +106,11 @@ public interface Logger {
 	void trace(String format, Object... arguments);
 
 	/**
-	 * Call the specified function if logging enabled for the
+	 * Perform the specified operation if logging enabled for the
 	 * {@link LogLevel#TRACE} level.
 	 * 
-	 * @param consumer The function to call passing this Logger.
-	 * @throws E An exception thrown by the function.
+	 * @param consumer The operation to perform on this Logger.
+	 * @throws E An exception thrown by the operation.
 	 */
 	<E extends Exception> void trace(LoggerConsumer<E> consumer) throws E;
 
@@ -155,11 +155,11 @@ public interface Logger {
 	void debug(String format, Object... arguments);
 
 	/**
-	 * Call the specified function if logging enabled for the
+	 * Perform the specified operation if logging enabled for the
 	 * {@link LogLevel#DEBUG} level.
 	 * 
-	 * @param consumer The function to call passing this Logger.
-	 * @throws E An exception thrown by the function.
+	 * @param consumer The operation to perform on this Logger.
+	 * @throws E An exception thrown by the operation.
 	 */
 	<E extends Exception> void debug(LoggerConsumer<E> consumer) throws E;
 
@@ -204,11 +204,11 @@ public interface Logger {
 	void info(String format, Object... arguments);
 
 	/**
-	 * Call the specified function if logging enabled for the
+	 * Perform the specified operation if logging enabled for the
 	 * {@link LogLevel#INFO} level.
 	 * 
-	 * @param consumer The function to call passing this Logger.
-	 * @throws E An exception thrown by the function.
+	 * @param consumer The operation to perform on this Logger.
+	 * @throws E An exception thrown by the operation.
 	 */
 	<E extends Exception> void info(LoggerConsumer<E> consumer) throws E;
 
@@ -253,11 +253,11 @@ public interface Logger {
 	void warn(String format, Object... arguments);
 
 	/**
-	 * Call the specified function if logging enabled for the
+	 * Perform the specified operation if logging enabled for the
 	 * {@link LogLevel#WARN} level.
 	 * 
-	 * @param consumer The function to call passing this Logger.
-	 * @throws E An exception thrown by the function.
+	 * @param consumer The operation to perform on this Logger.
+	 * @throws E An exception thrown by the operation.
 	 */
 	<E extends Exception> void warn(LoggerConsumer<E> consumer) throws E;
 
@@ -302,11 +302,11 @@ public interface Logger {
 	void error(String format, Object... arguments);
 
 	/**
-	 * Call the specified function if logging enabled for the
+	 * Perform the specified operation if logging enabled for the
 	 * {@link LogLevel#ERROR} level.
 	 * 
-	 * @param consumer The function to call passing this Logger.
-	 * @throws E An exception thrown by the function.
+	 * @param consumer The operation to perform on this Logger.
+	 * @throws E An exception thrown by the operation.
 	 */
 	<E extends Exception> void error(LoggerConsumer<E> consumer) throws E;
 

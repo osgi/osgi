@@ -19,7 +19,7 @@ package org.osgi.service.log;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * A function that accepts a {@link Logger} argument and produces no result.
+ * An operation that accepts a {@link Logger} argument and produces no result.
  * <p>
  * This is a functional interface and can be used as the assignment target for a
  * lambda expression or method reference.
@@ -33,10 +33,10 @@ import org.osgi.annotation.versioning.ConsumerType;
 @FunctionalInterface
 public interface LoggerConsumer<E extends Exception> {
 	/**
-	 * Applies this function to the specified {@link Logger}.
+	 * Perform this operation on the specified {@link Logger}.
 	 * 
-	 * @param l The {@link Logger} input to this function.
-	 * @throws E An exception thrown by the method.
+	 * @param l The {@link Logger} input to this operation.
+	 * @throws E An exception thrown by the operation.
 	 */
 	void accept(Logger l) throws E;
 }
