@@ -347,6 +347,20 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     <programlisting>Logger logger = loggerFactory.getLogger(componentBundle,
   componentImplClassName,
   Logger.class);</programlisting>
+
+    <para>As long as the <xref linkend="org.osgi.service.log.LoggerFactory"
+    xrefstyle="hyperlink"/> service, from which the <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> is obtained,
+    is active, that is, the <xref linkend="org.osgi.service.log.LoggerFactory"
+    xrefstyle="hyperlink"/> service has not been unregistered, then the <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> is valid and
+    can be used to log. However, once the <xref
+    linkend="org.osgi.service.log.LoggerFactory" xrefstyle="hyperlink"/>
+    service has been unregistered, then <xref
+    linkend="org.osgi.service.log.Logger" xrefstyle="hyperlink"/> objects
+    obtained from the <xref linkend="org.osgi.service.log.LoggerFactory"
+    xrefstyle="hyperlink"/> service must enter a "no-op" state where no log
+    level is effective and no logging occurs.</para>
   </section>
 
   <section>
