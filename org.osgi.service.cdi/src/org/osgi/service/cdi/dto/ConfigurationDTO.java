@@ -32,10 +32,9 @@ public class ConfigurationDTO extends DependencyDTO {
 	 * {@link DependencyDTO#minimumCardinality minimumCardinality} <= matches.size <= {@link MaximumCardinality#toInt() model.maximumCardinality.toInt()}
 	 * </pre>
 	 * <p>
-	 * Each map contains a the standard Configuration Admin keys
-	 * <code>service.pid</code> and optionally <code>service.factoryPid<code>
-	 * depending on the {@link MaximumCardinality model.maximumCardinality}
-	 * 
+	 * Each map contains the standard Configuration Admin keys
+	 * <code>service.pid</code> and a <code>service.factoryPid<code> when
+	 * {@link MaximumCardinality#MANY model.maximumCardinality=MANY}
 	 */
 	public Map<String, Object>[]	matches;
 }

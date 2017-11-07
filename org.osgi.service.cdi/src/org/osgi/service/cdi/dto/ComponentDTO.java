@@ -19,6 +19,7 @@ package org.osgi.service.cdi.dto;
 import java.util.Map;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
+import org.osgi.service.cdi.dto.model.ConfigurationModelDTO;
 
 /**
  * A snapshot of the runtime state of a component
@@ -45,14 +46,25 @@ public class ComponentDTO extends DTO {
 	public ActivationDTO[]			activations;
 
 	/**
-	 * The values of all configurations consumed by this component.
+	 * The exact set of configuration {@link Map Maps} used by this component
+	 * instance.
 	 * <p>
-	 * Each map contains a <code>service.pid<code>.
+	 * <ul>
+	 * <li><code>0..N</code> maps can have only <code>service.pid</code> which
+	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
+	 * {@link ComponentFactoryDTO#configurations configuration dependencies} of the
+	 * parent {@link ComponentFactoryDTO}</li>
+	 * 
+	 * <li><code>0..1</code> map can have a <code>service.factoryPid</code> which
+	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
+	 * {@link ComponentFactoryDTO#configurations configuration dependencies} of the
+	 * parent {@link ComponentFactoryDTO}, in which case the
+	 * <code>service.pid</code> of the map corresponds to one of the
+	 * {@link ConfigurationDTO#matches} of that configuration dependency.</li>
+	 * </ul>
 	 * <p>
-	 * At most one map also contains <code>service.factoryPid</code>.
-	 * <p>
-	 * Must not be null. The array may be empty if this component has become
-	 * satisfied without consuming configurations.
+	 * Must not be null. The array may be empty if this component instance does not
+	 * consume configurations.
 	 */
 	public Map<String, Object>[]	configurations;
 }

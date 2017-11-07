@@ -16,8 +16,11 @@
 
 package org.osgi.service.cdi.dto;
 
+import java.util.Map;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.model.ComponentModelDTO;
+import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
+import org.osgi.service.cdi.dto.model.ConfigurationModelDTO;
 import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
 
 /**
@@ -26,6 +29,52 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * A component factory maintains the binding of {@link ComponentDTO component
  * instances} to the {@link #configurations configuration dependencies}
  * described by one {@link ComponentModelDTO component model}
+ * <p>
+ * Both the application component and the regular components have a
+ * {@link ComponentFactoryDTO}.
+ * <p>
+ * When the referenced {@link ComponentModelDTO} has type
+ * {@link Type#APPLICATION} this factory can have <code>0..N</code>
+ * {@link ConfigurationDTO} with {@link MaximumCardinality#ONE}.
+ * <p>
+ * When the referenced {@link ComponentModelDTO} has type {@link Type#COMPONENT}
+ * this factory can have <code>0..N</code> {@link ConfigurationDTO} with
+ * {@link MaximumCardinality#ONE} and <code>0..1</code> {@link ConfigurationDTO}
+ * with {@link MaximumCardinality#MANY}.
+ * <p>
+ * When all configuration dependencies managed by this factory become satisfied
+ * this factory will have:
+ * <ul>
+ * <li><code>0..N</code> {@link ConfigurationDTO} each with <code>0..1</code>
+ * {@link ConfigurationDTO#matches matching configuration} called singleton
+ * configurations</li>
+ * <li><code>0..1</code> {@link ConfigurationDTO} with <code>0..N</code>
+ * {@link ConfigurationDTO#matches matching configurations} called the factory
+ * configuration</li>
+ * </ul>
+ * <p>
+ * The binding of configurations to component instances is maintained as
+ * follows:
+ * <ol>
+ * <li>For every matching {@link Map} of the factory
+ * {@link ConfigurationDTO}</li>
+ * <li>Add the matching {@link Map Maps} of all singleton
+ * {@link ConfigurationDTO}</li>
+ * <li>Build one {@link ComponentDTO} that holds the
+ * {@link ComponentDTO#configurations resulting set}</li>
+ * </ol>
+ * <p>
+ * Therefore when all configuration dependencies are satisfied:
+ * <ul>
+ * <li>For component {@link Type#APPLICATION} there will always be
+ * <code>1</code> {@link ComponentDTO}</li>
+ * <li>For component {@link Type#COMPONENT} without a factory configuration
+ * there will always be <code>1</code> {@link ComponentDTO}</li>
+ * <li>For component {@link Type#COMPONENT} with a factory configuration there
+ * will be <code>0..N</code> {@link ComponentDTO} where <code>N</code> is equals
+ * to the size of the set ot matches of that factory configuration.</li> of c.
+ * </li>
+ * </ul>
  *
  * @NotThreadSafe
  * @author $Id: $
@@ -38,6 +87,10 @@ public class ComponentFactoryDTO extends DTO {
 
 	/**
 	 * The configuration dependencies.
+	 * <p>
+	 * Each entry in the array corresponds to the runtime state of one of the
+	 * statically defined {@link ConfigurationModelDTO configurations} of
+	 * {@link #model the component} managed by this factory.
 	 * <p>
 	 * Must never be null.
 	 * <p>
