@@ -10,7 +10,7 @@ import org.osgi.service.cdi.dto.model.ReferenceModelDTO;
  * dependency
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ReferenceDTO extends DependencyDTO {
 	/**

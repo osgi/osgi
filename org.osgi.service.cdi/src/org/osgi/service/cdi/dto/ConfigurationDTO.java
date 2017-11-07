@@ -10,7 +10,7 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * factory} configuration dependency
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ConfigurationDTO extends DependencyDTO {
 	/**

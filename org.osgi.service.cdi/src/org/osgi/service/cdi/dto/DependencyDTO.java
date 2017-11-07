@@ -9,7 +9,7 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * Base abstraction for the runtime state of a dependency
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public abstract class DependencyDTO extends DTO {
 	/**

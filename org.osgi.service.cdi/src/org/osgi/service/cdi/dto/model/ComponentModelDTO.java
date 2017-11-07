@@ -33,7 +33,7 @@ import org.osgi.service.cdi.dto.ComponentFactoryDTO;
  * creation of {@link #activations}.
  *
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ComponentModelDTO extends DTO {
 

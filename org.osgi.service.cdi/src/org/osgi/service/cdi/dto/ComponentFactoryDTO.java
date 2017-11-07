@@ -77,7 +77,7 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * </ul>
  *
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ComponentFactoryDTO extends DTO {
 	/**

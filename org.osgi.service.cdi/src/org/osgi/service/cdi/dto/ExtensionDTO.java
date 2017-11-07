@@ -9,7 +9,7 @@ import org.osgi.service.cdi.dto.model.ExtensionModelDTO;
  * {@link ContainerDTO container}
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ExtensionDTO extends DependencyDTO {
 	/**

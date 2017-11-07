@@ -15,7 +15,7 @@ import org.osgi.service.cdi.dto.ContainerDTO;
  * </ul>
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ExtensionModelDTO extends DependencyModelDTO {
 	/**

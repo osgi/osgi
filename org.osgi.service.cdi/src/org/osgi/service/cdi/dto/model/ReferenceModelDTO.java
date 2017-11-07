@@ -9,7 +9,7 @@ package org.osgi.service.cdi.dto.model;
  * <p>
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ReferenceModelDTO extends DependencyModelDTO {
 	/**

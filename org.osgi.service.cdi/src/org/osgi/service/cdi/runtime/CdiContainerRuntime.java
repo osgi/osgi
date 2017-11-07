@@ -25,7 +25,7 @@ import org.osgi.util.promise.Promise;
  * A {@code CdiContainerRuntime} object is registered by the CDI extender in the
  * OSGi registry for each managed CDI bundle.
  *
- * @author $Id: e0c4b871d38ff9db0914d8c94dee4941963c4a11 $
+ * @author $Id$
  */
 @ProviderType
 public interface CdiContainerRuntime {

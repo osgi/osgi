@@ -37,7 +37,7 @@ package org.osgi.service.cdi.dto.model;
  * </ul>
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ConfigurationModelDTO extends DependencyModelDTO {
 	/**

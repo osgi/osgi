@@ -22,7 +22,7 @@ import org.osgi.dto.DTO;
  * Description of a CDI container.
  *
  * @NotThreadSafe
- * @author $Id: 9278d91cfc28267939292c9fa47030684e29c0da $
+ * @author $Id$
  */
 public class ContainerModelDTO extends DTO {
 	/**

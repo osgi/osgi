@@ -14,7 +14,7 @@ import org.osgi.service.cdi.dto.ActivationDTO;
  * case of {@link Scope#SINGLETON}.
  * 
  * @NotThreadSafe
- * @author $Id: $
+ * @author $Id$
  */
 public class ActivationModelDTO {
 	/**
