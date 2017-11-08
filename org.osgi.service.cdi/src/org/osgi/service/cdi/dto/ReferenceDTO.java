@@ -21,9 +21,9 @@ public class ReferenceDTO extends DependencyDTO {
 
 	/**
 	 * Indicates the runtime target filter used in addition to the
-	 * {@link ReferenceModelDTO#serviceType model.serviceType} to match services.
+	 * {@link ReferenceModelDTO#targetFilter model.serviceType} to match services.
 	 */
-	public String					target;
+	public String					targetFilter;
 
 	/**
 	 * The set of services that match this reference.
