@@ -2187,7 +2187,10 @@ ConfigurationPermission[?application,<xref
       configuration property of the <code>ConfigurationPlugin</code> object.
       <xref linkend="i1624384"/> shows the usage of the
       <code>service.cmRanking</code> property for the order of calling the
-      Configuration Plugin services.</para>
+      Configuration Plugin services. In the event of more than one plugin
+      having the same value of <code>service.cmRanking</code>, then the
+      Configuration Admin service arbitrarily chooses the order in which
+      they are called.</para>
 
       <table xml:id="i1624384">
         <title><code>service.cmRanking</code> Usage For Ordering</title>
@@ -2211,7 +2214,8 @@ ConfigurationPermission[?application,<xref
 
               <entry><para>The Configuration Plugin service should not modify
               properties and must be called before any modifications are
-              made.</para></entry>
+              made. Any modification from the Configuration Plugin service
+              is ignored.</para></entry>
             </row>
 
             <row>
@@ -2228,7 +2232,8 @@ ConfigurationPermission[?application,<xref
 
               <entry><para>The Configuration Plugin service should not modify
               data and is called after all modifications are
-              made.</para></entry>
+              made. Any modification from the Configuration Plugin service
+              is ignored.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2271,7 +2276,7 @@ ConfigurationPermission[?application,<xref
     available to a management system due to the many open issues regarding
     remote management.</para>
   </section>
-
+  
   <section>
     <title>Security</title>
 
@@ -2441,5 +2446,45 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     </section>
   </section>
 
+  <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The Configuration Admin implementation bundle must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with the name <code>osgi.cm</code>. This capability can be used
+      by provisioning tools and during resolution to ensure that a Configuration Admin
+      implementation is present to manage configurations. The capability must also declare a uses
+      constraint for the <code>org.osgi.service.cm</code> package and provide
+      the version of this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.cm";
+       uses:="org.osgi.service.cm";
+       version:Version="1.6"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the Configuration Admin service must provide a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare a
+      uses constraint for the <code>org.osgi.service.cm</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.cm.ConfigurationAdmin";
+  uses:="org.osgi.service.cm"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+  
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
 </chapter>

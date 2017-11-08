@@ -99,6 +99,9 @@ import org.osgi.annotation.versioning.ConsumerType;
  * dictionary, this is the configuration that is bound to the location of the
  * registering bundle. However, when security is on, a Managed Service can have
  * Configuration Permission to also be updated for other locations.
+ * <p>
+ * If a Managed Service is registered without the {@code service.pid} property,
+ * it will be ignored.
  *
  * @author $Id$
  * @ThreadSafe
