@@ -22,49 +22,53 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Qualifier;
 
 /**
- * Annotation used in conjunction with {@link ComponentScoped} in order to
- * associate configurations with the component bean.
+ * Annotation used in collaboration with {@link Reference} to specify a filter
+ * used to target specific services. It can also be used with
+ * {@link org.osgi.service.cdi.reference.AddingEvent}.
  *
  * @author $Id$
  */
 @Documented
+@Qualifier
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface PIDs {
+public @interface Filter {
 
 	/**
-	 * Support inline instantiation of the {@link PIDs} annotation.
+	 * Support inline instantiation of the {@link Filter}
+	 * annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<PIDs> implements PIDs {
+	public static final class Literal extends AnnotationLiteral<Filter> implements Filter {
 
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param pids array of {@link PID}
-		 * @return an instance of {@link PIDs}
+		 * @param filter the service filter string
+		 * @return an instance of {@link Filter}
 		 */
-		public static PIDs of(PID[] pids) {
-			return new Literal(pids);
+		public static final Literal of(String filter) {
+			return new Literal(filter);
 		}
 
-		private Literal(PID[] pids) {
-			_pids = pids;
+		private Literal(String filter) {
+			_filter = filter;
 		}
 
 		@Override
-		public PID[] value() {
-			return _pids;
+		public String value() {
+			return _filter;
 		}
 
-		private final PID[] _pids;
+		private final String _filter;
 
 	}
 
 	/**
-	 * The set of ordered configurations available to the component.
+	 * The filter string used to target services.
 	 */
-	PID[] value();
+	String value();
 
 }

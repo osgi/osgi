@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * described by one {@link ComponentModelDTO component model}
  * <p>
  * Both the application component and the regular components have a
- * {@link ComponentFactoryDTO}.
+ * {@link ComponentLifecycleDTO}.
  * <p>
  * When the referenced {@link ComponentModelDTO} has type
  * {@link Type#APPLICATION} this factory can have <code>0..N</code>
@@ -79,7 +79,7 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentFactoryDTO extends DTO {
+public class ComponentLifecycleDTO extends DTO {
 	/**
 	 * Model of the components this factory creates
 	 */

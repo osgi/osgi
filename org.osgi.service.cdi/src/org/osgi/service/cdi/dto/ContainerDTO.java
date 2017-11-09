@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.BundleDTO;
 import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
 import org.osgi.service.cdi.dto.model.ContainerModelDTO;
+import org.osgi.service.cdi.runtime.CdiContainerState;
 
 /**
  * A snapshot of the runtime state of a CDI container
@@ -36,6 +37,11 @@ public class ContainerDTO extends DTO {
 	public ContainerModelDTO		model;
 
 	/**
+	 * The CDI container's current state.
+	 */
+	public CdiContainerState		state;
+
+	/**
 	 * The bundle declaring the CDI container.
 	 */
 	public BundleDTO				bundle;
@@ -46,10 +52,10 @@ public class ContainerDTO extends DTO {
 	public ExtensionDTO[]			extensions;
 
 	/**
-	 * The component factories defined by this CDI container.
+	 * The component lifecycles defined by this CDI container.
 	 * <p>
 	 * Must not be null. The array always contains at least one element representing
 	 * the {@link Type#APPLICATION APPLICATION}.
 	 */
-	public ComponentFactoryDTO[]	componentFactories;
+	public ComponentLifecycleDTO[]	componentLifecycles;
 }

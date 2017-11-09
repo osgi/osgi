@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@
  * Example import for providers implementing the API in this package:
  * <p>
  * {@code  Import-Package: org.osgi.service.cdi.annotations; version="[1.0,1.1)"}
+ *
+ * @author $Id$
  */
 
 @Version(CdiConstants.CDI_SPECIFICATION_VERSION)
