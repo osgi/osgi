@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -46,6 +47,7 @@ import org.osgi.service.log.LogLevel;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerConsumer;
 import org.osgi.service.log.LoggerFactory;
 import org.osgi.service.log.admin.LoggerAdmin;
 import org.osgi.service.log.admin.LoggerContext;
@@ -147,6 +149,92 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		logger = logService.getLogger(TEST_LOGGER_NAME, FormatterLogger.class);
 		assertEquals("Wrong logger name.", TEST_LOGGER_NAME, logger.getName());
 		doLoggerLogging(LogLevel.TRACE, b, logger, readers);
+	}
+
+	public <E extends Exception> void testLoggerWithConsumer() throws E {
+		AtomicBoolean consumerAccepted = new AtomicBoolean(false);
+		Bundle b = getContext().getBundle();
+		LoggerContext loggerContext = loggerAdmin.getLoggerContext(null);
+		LoggerConsumer<E> consumer = (l) -> {
+			consumerAccepted.set(true);
+		};
+
+		for (LogLevel level : LogLevel.values()) {
+			loggerContext.setLogLevels(
+				Collections.singletonMap(Logger.ROOT_LOGGER_NAME,
+							level));
+			Logger logger = logService.getLogger(TEST_LOGGER_NAME);
+			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
+					logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level);
+
+			logger = logService.getLogger(b, TEST_LOGGER_NAME, Logger.class);
+			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
+					logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level);
+
+			logger = logService.getLogger(TEST_LOGGER_NAME,
+					FormatterLogger.class);
+			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
+					logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level);
+		 }
+	}
+
+	private <E extends Exception> void doLoggerLoggingWithConsumer(
+			Logger logger, LoggerConsumer<E> consumer,
+			AtomicBoolean consumerAcepted, LogLevel effectiveLevel) throws E {
+		for (LogLevel level : LogLevel.values()) {
+			logToLoggerWithConsumer(level, logger, consumer, consumerAcepted,
+					effectiveLevel);
+		}
+	}
+
+	private <E extends Exception> void logToLoggerWithConsumer(
+			LogLevel level, Logger logger, LoggerConsumer<E> consumer,
+			AtomicBoolean consumerAccepted, LogLevel effectiveLevel)
+			throws E {
+
+		consumerAccepted.set(false);
+
+		switch (level) {
+			case TRACE :
+				logger.trace(consumer);
+				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
+				break;
+			case DEBUG :
+				logger.debug(consumer);
+				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
+				break;
+			case INFO :
+				logger.info(consumer);
+				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
+				break;
+			case WARN :
+				logger.warn(consumer);
+				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
+				break;
+			case ERROR :
+				logger.error(consumer);
+				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
+				break;
+			default :
+				break;
+		}
+	}
+
+	private void assertLogWithConsumer(LogLevel effectiveLevel, LogLevel level,
+			AtomicBoolean consumerAccepted) {
+		if (effectiveLevel.implies(level)) {
+			assertTrue("Consumer did not accept logger.",
+					consumerAccepted.get());
+		} else {
+			assertFalse("Consumer wrongly accepted logger.",
+					consumerAccepted.get());
+		}
 	}
 
 	public void testLoggerForBundle() throws BundleException, IOException {
