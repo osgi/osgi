@@ -20,13 +20,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -51,6 +51,7 @@ import org.osgi.service.log.LoggerConsumer;
 import org.osgi.service.log.LoggerFactory;
 import org.osgi.service.log.admin.LoggerAdmin;
 import org.osgi.service.log.admin.LoggerContext;
+import org.osgi.test.support.concurrent.AtomicReference;
 
 public class LoggerFactoryTestCase extends AbstractLogTestCase {
 
@@ -151,89 +152,131 @@ public class LoggerFactoryTestCase extends AbstractLogTestCase {
 		doLoggerLogging(LogLevel.TRACE, b, logger, readers);
 	}
 
-	public <E extends Exception> void testLoggerWithConsumer() throws E {
-		AtomicBoolean consumerAccepted = new AtomicBoolean(false);
+	public void testLoggerWithConsumer() throws Exception {
+		final AtomicReference<Logger> consumerAccepted = new AtomicReference<>();
 		Bundle b = getContext().getBundle();
 		LoggerContext loggerContext = loggerAdmin.getLoggerContext(null);
-		LoggerConsumer<E> consumer = (l) -> {
-			consumerAccepted.set(true);
+		LoggerConsumer<RuntimeException> consumer = new LoggerConsumer<RuntimeException>() {
+			@Override
+			public void accept(Logger l) {
+				consumerAccepted.set(l);
+			}
 		};
-
-		for (LogLevel level : LogLevel.values()) {
-			loggerContext.setLogLevels(
-				Collections.singletonMap(Logger.ROOT_LOGGER_NAME,
-							level));
-			Logger logger = logService.getLogger(TEST_LOGGER_NAME);
-			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
-					logger.getName());
+		for (LogLevel level : EnumSet
+				.complementOf(EnumSet.of(LogLevel.AUDIT))) {
+			String loggerName = getName();
+			loggerContext
+					.setLogLevels(Collections.singletonMap(loggerName, level));
+			loggerName = getName() + ".simple";
+			Logger logger = logService.getLogger(loggerName);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
 			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
-					level);
+					level, null);
 
-			logger = logService.getLogger(b, TEST_LOGGER_NAME, Logger.class);
-			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
-					logger.getName());
+			loggerName = getName() + ".bundle";
+			logger = logService.getLogger(b, loggerName, Logger.class);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
 			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
-					level);
+					level, null);
 
-			logger = logService.getLogger(TEST_LOGGER_NAME,
-					FormatterLogger.class);
-			assertEquals("Wrong logger name.", TEST_LOGGER_NAME,
-					logger.getName());
+			loggerName = getName() + ".formatter";
+			logger = logService.getLogger(loggerName, FormatterLogger.class);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
 			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
-					level);
-		 }
+					level, null);
+		}
 	}
 
-	private <E extends Exception> void doLoggerLoggingWithConsumer(
-			Logger logger, LoggerConsumer<E> consumer,
-			AtomicBoolean consumerAcepted, LogLevel effectiveLevel) throws E {
-		for (LogLevel level : LogLevel.values()) {
+	final Exception consumerException = new Exception("Consumer");
+
+	public void testLoggerWithConsumerException() throws Exception {
+		final AtomicReference<Logger> consumerAccepted = new AtomicReference<>();
+		Bundle b = getContext().getBundle();
+		LoggerContext loggerContext = loggerAdmin.getLoggerContext(null);
+		LoggerConsumer<Exception> consumer = new LoggerConsumer<Exception>() {
+			@Override
+			public void accept(Logger l) throws Exception {
+				consumerAccepted.set(l);
+				throw consumerException;
+			}
+		};
+		for (LogLevel level : EnumSet
+				.complementOf(EnumSet.of(LogLevel.AUDIT))) {
+			String loggerName = getName();
+			loggerContext
+					.setLogLevels(Collections.singletonMap(loggerName, level));
+			loggerName = getName() + ".simple";
+			Logger logger = logService.getLogger(loggerName);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level, consumerException);
+
+			loggerName = getName() + ".bundle";
+			logger = logService.getLogger(b, loggerName, Logger.class);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level, consumerException);
+
+			loggerName = getName() + ".formatter";
+			logger = logService.getLogger(loggerName, FormatterLogger.class);
+			assertEquals("Wrong logger name.", loggerName, logger.getName());
+			doLoggerLoggingWithConsumer(logger, consumer, consumerAccepted,
+					level, consumerException);
+		}
+	}
+
+	private void doLoggerLoggingWithConsumer(Logger logger,
+			LoggerConsumer< ? extends Exception> consumer,
+			AtomicReference<Logger> consumerAcepted, LogLevel effectiveLevel,
+			Exception exception) {
+		for (LogLevel level : EnumSet
+				.complementOf(EnumSet.of(LogLevel.AUDIT))) {
 			logToLoggerWithConsumer(level, logger, consumer, consumerAcepted,
-					effectiveLevel);
+					effectiveLevel, exception);
 		}
 	}
 
-	private <E extends Exception> void logToLoggerWithConsumer(
-			LogLevel level, Logger logger, LoggerConsumer<E> consumer,
-			AtomicBoolean consumerAccepted, LogLevel effectiveLevel)
-			throws E {
+	private void logToLoggerWithConsumer(LogLevel level, Logger logger,
+			LoggerConsumer< ? extends Exception> consumer,
+			AtomicReference<Logger> consumerAccepted, LogLevel effectiveLevel,
+			Exception exception) {
 
-		consumerAccepted.set(false);
+		consumerAccepted.set(null);
+		Exception t = null;
 
-		switch (level) {
-			case TRACE :
-				logger.trace(consumer);
-				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
-				break;
-			case DEBUG :
-				logger.debug(consumer);
-				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
-				break;
-			case INFO :
-				logger.info(consumer);
-				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
-				break;
-			case WARN :
-				logger.warn(consumer);
-				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
-				break;
-			case ERROR :
-				logger.error(consumer);
-				assertLogWithConsumer(effectiveLevel, level, consumerAccepted);
-				break;
-			default :
-				break;
+		try {
+			switch (level) {
+				case TRACE :
+					logger.trace(consumer);
+					break;
+				case DEBUG :
+					logger.debug(consumer);
+					break;
+				case INFO :
+					logger.info(consumer);
+					break;
+				case WARN :
+					logger.warn(consumer);
+					break;
+				case ERROR :
+					logger.error(consumer);
+					break;
+				default :
+					fail("unknown log level");
+					break;
+			}
+		} catch (Exception e) {
+			t = e;
 		}
-	}
 
-	private void assertLogWithConsumer(LogLevel effectiveLevel, LogLevel level,
-			AtomicBoolean consumerAccepted) {
 		if (effectiveLevel.implies(level)) {
-			assertTrue("Consumer did not accept logger.",
-					consumerAccepted.get());
+			assertSame("Consumer did not accept logger.",
+					consumerAccepted.get(), logger);
+			assertSame("Wrong exception from Consumer", t, exception);
 		} else {
-			assertFalse("Consumer wrongly accepted logger.",
+			assertNull("Consumer wrongly accepted logger.",
 					consumerAccepted.get());
+			assertNull("Wrong exception from Consumer", t);
 		}
 	}
 
