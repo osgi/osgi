@@ -4477,8 +4477,12 @@ void unsetLogService( LogService log ) {
 
     <para>SCR must obtain the <code>Configuration</code> objects from the
     Configuration Admin service using the Bundle Context of the bundle
-    containing the component. To ensure Configuration Plugins can participate
-    in the configuration process, SCR must use the
+    containing the component. SCR must only use <code>Configuration</code>
+    objects for which the bundle containing the component has visibility. See
+    <xref linkend="service.cm-location.binding"/>.</para>
+
+    <para>To ensure Configuration Plugins can participate in the configuration
+    process, SCR must use the
     <code>Configuration.getProcessedProperties</code> method when obtaining
     the configuration data from a <code>Configuration</code> object. To use
     the <code>getProcessedProperties</code> method, SCR must supply a Service
