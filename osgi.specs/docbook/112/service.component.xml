@@ -4401,11 +4401,10 @@ void unsetLogService( LogService log ) {
 
     <para><remark>BJH Need to cover changes regarding CM. SCR _SHOULD_ support
     Coordinations and delay action regarding Configurations until the
-    Coordination ends. SCR must use Configuration.getProcessedProperties to
-    support ConfigurationPlugins. </remark>A component description contains
-    default information to select target services for each reference. However,
-    when a component is deployed, it is often necessary to influence the
-    target service selection in a way that suits the needs of the deployer.
+    Coordination ends. </remark>A component description contains default
+    information to select target services for each reference. However, when a
+    component is deployed, it is often necessary to influence the target
+    service selection in a way that suits the needs of the deployer.
     Therefore, SCR uses <code>Configuration</code> objects from Configuration
     Admin to replace and extend the component properties for a component
     configuration. That is, through Configuration Admin, a deployer can
@@ -4478,7 +4477,20 @@ void unsetLogService( LogService log ) {
 
     <para>SCR must obtain the <code>Configuration</code> objects from the
     Configuration Admin service using the Bundle Context of the bundle
-    containing the component.</para>
+    containing the component. To ensure Configuration Plugins can participate
+    in the configuration process, SCR must use the
+    <code>Configuration.getProcessedProperties</code> method when obtaining
+    the configuration data from a <code>Configuration</code> object. To use
+    the <code>getProcessedProperties</code> method, SCR must supply a Service
+    Reference for a <code>ManagedService</code> or
+    <code>ManagedServiceFactory</code> service. The
+    <code>ManagedService</code> or <code>ManageServiceFactory</code> service
+    must be registered using the Bundle Context of the bundle containing the
+    component. If SCR registers one of these services for the purpose of using
+    the service's Service Reference for the call to
+    <code>getProcessedProperties</code>, SCR should register the service
+    without a <code>service.pid</code> service property so that the service
+    itself is not called by Configuration Admin.</para>
 
     <para>For example, there is a component named <code>com.acme.client</code>
     with a reference named <code>HTTP</code> that requires an Http Service
@@ -6213,8 +6225,14 @@ public class MyComponent implements AcmeService {}</programlisting>
       </listitem>
 
       <listitem>
-        <para>Support is added for constructor injection . See <xref
+        <para>Support is added for constructor injection. See <xref
         linkend="service.component-constructor.injection"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>SCR must ensure Configuration Plugins participate in the
+        coniguration process. See <xref
+        linkend="service.component-deployment"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
