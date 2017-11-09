@@ -20,6 +20,8 @@ import static junit.framework.TestCase.*;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -33,7 +35,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -46,7 +47,8 @@ public class Activator implements BundleActivator, A, B {
 	BundleContext       context;
 	EndpointDescription endpoint;
 
-	Semaphore semaphore = new Semaphore();
+	Semaphore																													semaphore	= new Semaphore(
+			0);
 
 	ServiceTracker<org.osgi.service.remoteserviceadmin.EndpointListener,org.osgi.service.remoteserviceadmin.EndpointListener>	tracker;
 
@@ -138,7 +140,7 @@ public class Activator implements BundleActivator, A, B {
 
 				if (matchedFilter != null) {
 					listener.endpointAdded(endpoint, matchedFilter);
-					semaphore.signal();
+					semaphore.release();
 				}
 
 				return listener;
@@ -150,8 +152,8 @@ public class Activator implements BundleActivator, A, B {
 		String timeout = context.getProperty("rsa.ct.timeout");
 		
 		assertTrue("no interested EndpointListener found", semaphore
-				.waitForSignal(Long.parseLong(timeout != null ? timeout
-						: "30000")));
+				.tryAcquire(Long.parseLong(timeout != null ? timeout
+						: "30000"), TimeUnit.MILLISECONDS));
 	}
 
 	/**

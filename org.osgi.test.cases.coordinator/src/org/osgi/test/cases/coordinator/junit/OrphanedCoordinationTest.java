@@ -25,7 +25,7 @@ import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
-import org.osgi.test.support.concurrent.AtomicReference;
+import java.util.concurrent.atomic.AtomicReference;
 import org.osgi.test.support.sleep.Sleep;
 
 /**

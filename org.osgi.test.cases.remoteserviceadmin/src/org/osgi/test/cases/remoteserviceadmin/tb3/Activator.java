@@ -17,6 +17,9 @@ package org.osgi.test.cases.remoteserviceadmin.tb3;
 
 import static junit.framework.TestCase.*;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -26,7 +29,6 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.support.OSGiTestCaseProperties;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
@@ -71,7 +73,7 @@ public class Activator implements BundleActivator, ServiceListener {
 		if (event.getType() == ServiceEvent.UNREGISTERING) {
 			System.out.println("service " + event.getServiceReference() + " is unregistered");
 
-			servicesem.signal();
+			servicesem.release();
 		}
 	}
 
@@ -102,7 +104,7 @@ public class Activator implements BundleActivator, ServiceListener {
 			public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
 				System.out.println("bundle " + bundle.getSymbolicName() + " was stopped");
 
-				sem.signal();
+				sem.release();
 			}
 
 			public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
@@ -125,9 +127,9 @@ public class Activator implements BundleActivator, ServiceListener {
 	 */
 	private void teststop() throws Exception {
 		try {
-			sem.waitForSignal(timeout * factor);
+			sem.tryAcquire(timeout * factor, TimeUnit.MILLISECONDS);
 
-			servicesem.waitForSignal(timeout * factor);
+			servicesem.tryAcquire(timeout * factor, TimeUnit.MILLISECONDS);
 		} finally {
 			bundleTracker.close();
 		}

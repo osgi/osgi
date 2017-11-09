@@ -51,7 +51,7 @@ import org.osgi.service.log.LoggerConsumer;
 import org.osgi.service.log.LoggerFactory;
 import org.osgi.service.log.admin.LoggerAdmin;
 import org.osgi.service.log.admin.LoggerContext;
-import org.osgi.test.support.concurrent.AtomicReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class LoggerFactoryTestCase extends AbstractLogTestCase {
 

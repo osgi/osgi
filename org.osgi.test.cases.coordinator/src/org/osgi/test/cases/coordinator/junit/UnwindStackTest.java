@@ -15,10 +15,11 @@
  */
 package org.osgi.test.cases.coordinator.junit;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Participant;
-import org.osgi.test.support.concurrent.AtomicInteger;
 
 /**
  * When ending, if this Coordination has been pushed on the thread local 

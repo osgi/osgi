@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -47,7 +49,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * Use RSA service to register a service in a child framework and then import
@@ -542,12 +543,12 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		 */
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
-			sem.signal();
+			sem.release();
 		}
 
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal(timeout);
+				sem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e1) {
 				return null;
 			}

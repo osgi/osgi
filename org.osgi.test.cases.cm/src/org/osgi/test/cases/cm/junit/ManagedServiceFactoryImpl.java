@@ -30,7 +30,7 @@ import java.util.Map;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
-import org.osgi.test.support.compatibility.Semaphore;
+import java.util.concurrent.Semaphore;
 
 public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 	private final String	name;
@@ -68,7 +68,7 @@ public class ManagedServiceFactoryImpl implements ManagedServiceFactory {
 				services.put(pid, theService);
 			}
 			theService.setConfigData(data);
-			semaphore.signal();
+			semaphore.release();
 		}
 		catch (Throwable e) {
 			e.printStackTrace();

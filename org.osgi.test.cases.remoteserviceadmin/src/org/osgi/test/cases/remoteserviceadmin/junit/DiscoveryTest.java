@@ -28,6 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -49,8 +52,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.impl.TestServiceImpl;
-import org.osgi.test.support.compatibility.Semaphore;
-import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 
 /**
@@ -161,7 +162,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			System.out.println("************* wait for Signal 1 ********************");
 			// verify callback in parent framework
 			assertTrue(endpointListenerImpl.getSemAdded()
-					.waitForSignal(timeout));
+					.tryAcquire(timeout, TimeUnit.MILLISECONDS));
 
 			// 122.6.2 callback has to return first matched filter
 			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getAddedMatchedFilter());
@@ -194,8 +195,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			System.out.println("************* wait for Signal 2 ********************");
 			// verify callback in parent framework
-			assertTrue(endpointListenerImpl.getSemRemoved().waitForSignal(
-					timeout));
+			assertTrue(endpointListenerImpl.getSemRemoved().tryAcquire(
+					timeout, TimeUnit.MILLISECONDS));
 
 			// 122.6.2 callback has to return first matched filter
 			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getRemMatchedFilter());
@@ -386,8 +387,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			System.out
 					.println("************* wait for Signal 1 (EndpointEvent:added) ********************");
 			// verify callback in parent framework
-			assertTrue(endpointEventListenerImpl.getSemAdded().waitForSignal(
-					timeout));
+			assertTrue(endpointEventListenerImpl.getSemAdded().tryAcquire(
+					timeout, TimeUnit.MILLISECONDS));
 			System.out
 					.println("************* recieved Signal 1 (EndpointEvent:added) ********************");
 
@@ -418,8 +419,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 					.println("************* wait for Signal 2 (EndpointEvent:modified) ********************");
 			// verify callback in parent framework
 			assertTrue(endpointEventListenerImpl.getSemModified()
-					.waitForSignal(
-					timeout));
+					.tryAcquire(
+							timeout, TimeUnit.MILLISECONDS));
 			System.out
 					.println("************* recieved Signal 2 (EndpointEvent:modified) ********************");
 
@@ -440,8 +441,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			 System.out
 					.println("************* wait for Signal 3 (EndpointEvent:removed) ********************");
 			 // verify callback in parent framework
-			assertTrue(endpointEventListenerImpl.getSemRemoved().waitForSignal(
-					timeout));
+			assertTrue(endpointEventListenerImpl.getSemRemoved().tryAcquire(
+					timeout, TimeUnit.MILLISECONDS));
 			System.out
 					.println("************* recieved Signal 3 (EndpointEvent:removed) ********************");
 
@@ -751,7 +752,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			this.addedEndpoint = endpoint;
 			this.addedMatchedFilter = matchedFilter;
-			semAdded.signal();
+			semAdded.release();
 		}
 
 		/**
@@ -762,7 +763,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			this.removedEndpoint = endpoint;
 			this.remMatchedFilter = matchedFilter;
-			semRemoved.signal();
+			semRemoved.release();
 		}
 
 		/**
@@ -855,20 +856,20 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			lastMatchedFilter = matchedFilter;
 
 			if (EndpointEvent.ADDED == event.getType()) {
-				semAdded.signal();
+				semAdded.release();
 				lastAddedEndpoint = event.getEndpoint();
 			}
 
 			if (EndpointEvent.MODIFIED == event.getType()) {
-				semModified.signal();
+				semModified.release();
 			}
 
 			if (EndpointEvent.MODIFIED_ENDMATCH == event.getType()) {
-				semModifiedEndmatch.signal();
+				semModifiedEndmatch.release();
 			}
 
 			if (EndpointEvent.REMOVED == event.getType()) {
-				semRemoved.signal();
+				semRemoved.release();
 				lastRemovedEndpoint = event.getEndpoint();
 			}
 		}

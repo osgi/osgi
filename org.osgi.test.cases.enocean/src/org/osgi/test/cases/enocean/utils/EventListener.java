@@ -18,13 +18,14 @@ package org.osgi.test.cases.enocean.utils;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.support.OSGiTestCaseProperties;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * @author $Id$
@@ -52,12 +53,12 @@ public class EventListener implements EventHandler {
 			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
 		}
 		sReg = this.bc.registerService(EventHandler.class.getName(), this, ht);
-		waiter = new Semaphore();
+		waiter = new Semaphore(0);
 	}
 
 	public void handleEvent(Event event) {
 		lastEvents.addFirst(event);
-		waiter.signal();
+		waiter.release();
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class EventListener implements EventHandler {
 		if (!lastEvents.isEmpty()) {
 			return (Event) lastEvents.removeLast();
 		}
-		if (waiter.waitForSignal(timeout)) {
+		if (waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			return lastEvents.isEmpty() ? null : (Event) lastEvents
 					.removeLast();
 		}
@@ -92,7 +93,7 @@ public class EventListener implements EventHandler {
 	public void close() {
 		lastEvents.clear();
 		sReg.unregister();
-		waiter.signal();
+		waiter.release();
 	}
 
 }

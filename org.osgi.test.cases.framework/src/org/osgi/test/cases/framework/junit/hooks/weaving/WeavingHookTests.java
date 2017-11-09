@@ -24,6 +24,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Constant;
@@ -43,7 +44,6 @@ import org.osgi.framework.hooks.weaving.WovenClassListener;
 import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 
 public class WeavingHookTests extends DefaultTestBundleControl implements WeavingHook, WovenClassListener {

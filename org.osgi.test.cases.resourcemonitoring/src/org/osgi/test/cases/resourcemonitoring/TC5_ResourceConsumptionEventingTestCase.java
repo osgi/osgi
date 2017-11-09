@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -35,7 +37,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * @author $Id$
@@ -88,7 +89,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	/**
 	 * See org.osgi.test.cases.enocean.utils.EventListener class.
 	 */
-	private final Semaphore				waiter			= new Semaphore();
+	private final Semaphore				waiter			= new Semaphore(0);
 
 	/**
 	 * last event received.
@@ -149,7 +150,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		lowerWarning = null;
 		lowerError = null;
 
-		waiter.signal();
+		waiter.release();
 	}
 
 	/**
@@ -455,7 +456,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public ResourceEvent waitForEvent(long timeout) throws InterruptedException {
-		if (waiter.waitForSignal(timeout)) {
+		if (waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			return lastEvent;
 		}
 		return null;
@@ -476,7 +477,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 				+ event.isUpperThreshold());
 		receivedEvents.add(event);
 		lastEvent = event;
-		waiter.signal();
+		waiter.release();
 	}
 
 	public Comparable getLowerWarningThreshold() {

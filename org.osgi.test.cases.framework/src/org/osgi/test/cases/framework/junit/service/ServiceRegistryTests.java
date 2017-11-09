@@ -19,6 +19,7 @@ package org.osgi.test.cases.framework.junit.service;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -31,7 +32,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.UnfilteredServiceListener;
 import org.osgi.test.support.OSGiTestCase;
-import org.osgi.test.support.concurrent.AtomicInteger;
 
 public class ServiceRegistryTests extends OSGiTestCase {
 

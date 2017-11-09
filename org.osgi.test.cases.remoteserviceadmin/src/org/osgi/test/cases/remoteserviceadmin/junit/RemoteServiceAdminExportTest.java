@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -46,7 +48,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -1213,12 +1214,12 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
-			sem.signal();
+			sem.release();
 		}
 
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal(timeout);
+				sem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e1) {
 				return null;
 			}

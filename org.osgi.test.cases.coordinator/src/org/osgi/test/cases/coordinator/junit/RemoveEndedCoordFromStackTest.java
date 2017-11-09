@@ -19,7 +19,7 @@ import junit.framework.AssertionFailedError;
 
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
-import org.osgi.test.support.concurrent.AtomicReference;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Coordinations can only be removed from the thread local stack by calling the

@@ -17,12 +17,13 @@
 package org.osgi.test.cases.enocean.utils;
 
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.support.OSGiTestCaseProperties;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -55,7 +56,7 @@ public class ServiceListener extends ServiceTracker {
 		super(bc, bc.createFilter("(&(objectclass=" + cls.getName() + "))"), null);
 		this.bc = bc;
 		this.lastActions = new LinkedList();
-		waiter = new Semaphore();
+		waiter = new Semaphore(0);
 		open();
 	}
 
@@ -64,7 +65,7 @@ public class ServiceListener extends ServiceTracker {
 		if (service != null) {
 			serviceReference = ref;
 			lastActions.addFirst(SERVICE_ADDED);
-			waiter.signal();
+			waiter.release();
 		}
 		return service;
 	}
@@ -74,7 +75,7 @@ public class ServiceListener extends ServiceTracker {
 		if (service != null) {
 			serviceReference = ref;
 			lastActions.addFirst(SERVICE_MODIFIED);
-			waiter.signal();
+			waiter.release();
 		}
 	}
 
@@ -83,7 +84,7 @@ public class ServiceListener extends ServiceTracker {
 		if (service != null) {
 			serviceReference = ref;
 			lastActions.addFirst(SERVICE_REMOVED);
-			waiter.signal();
+			waiter.release();
 		}
 	}
 
@@ -108,7 +109,7 @@ public class ServiceListener extends ServiceTracker {
 		if (!lastActions.isEmpty()) {
 			return (String) lastActions.removeLast();
 		}
-		if (waiter.waitForSignal(timeout)) {
+		if (waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			return lastActions.isEmpty() ? null : (String) lastActions
 					.removeLast();
 		}

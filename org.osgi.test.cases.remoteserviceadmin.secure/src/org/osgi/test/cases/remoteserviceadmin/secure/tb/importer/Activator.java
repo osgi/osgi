@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -41,7 +43,6 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.secure.common.A;
 import org.osgi.test.support.OSGiTestCaseProperties;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * This class imports an endpoint.
@@ -288,12 +289,12 @@ public class Activator implements BundleActivator {
 		 */
 		public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 			eventlist.add(event);
-			sem.signal();
+			sem.release();
 		}
 		
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal(timeout);
+				sem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e1) {
 				return null;
 			}

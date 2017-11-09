@@ -2,10 +2,11 @@ package org.osgi.test.cases.remoteserviceadmin.common;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * RemoteServiceAdminListener implementation, which collects and returns the
@@ -29,12 +30,12 @@ public class TestRemoteServiceAdminListener implements
 	 */
 	public void remoteAdminEvent(final RemoteServiceAdminEvent event) {
 		eventlist.add(event);
-		sem.signal();
+		sem.release();
 	}
 
 	public RemoteServiceAdminEvent getNextEvent() {
 		try {
-			sem.waitForSignal(timeout);
+			sem.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e1) {
 			return null;
 		}

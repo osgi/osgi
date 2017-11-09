@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
-
-import junit.framework.AssertionFailedError;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -35,10 +34,11 @@ import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
-import org.osgi.test.support.concurrent.AtomicInteger;
-import org.osgi.test.support.concurrent.AtomicReference;
-import org.osgi.test.support.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Basic Coordinator test case.

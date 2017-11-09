@@ -28,6 +28,7 @@ package org.osgi.test.cases.tracker.junit;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.concurrent.Semaphore;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,7 +42,6 @@ import org.osgi.test.cases.tracker.service.TestService1;
 import org.osgi.test.cases.tracker.service.TestService2;
 import org.osgi.test.cases.tracker.service.TestService3;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -385,10 +385,10 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"The number of Services being tracked by ServiceTracker 3 is: 0",
 					0, st3.size());
 
-			Semaphore s1 = new Semaphore();
+			Semaphore s1 = new Semaphore(0);
 			BundleStarter t1 = new BundleStarter(b1, s1);
 			t1.start();
-			s1.signal();
+			s1.release();
 			TestService1 tt1 = st1.waitForService(0);
 			assertNotNull("Returned an object in ServiceTracker 1?:  true", tt1);
 			assertEquals(
@@ -401,7 +401,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"The number of Services being tracked by ServiceTracker 3 is: 0",
 					0, st3.size());
 
-			Semaphore s2 = new Semaphore();
+			Semaphore s2 = new Semaphore(0);
 			BundleStarter t2 = new BundleStarter(b2, s2);
 			t2.start();
 			TestService2 tt2 = st2.waitForService(1000);
@@ -415,7 +415,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals(
 					"The number of Services being tracked by ServiceTracker 3 is: 0",
 					0, st3.size());
-			s2.signal();
+			s2.release();
 
 			Semaphore s3 = new Semaphore(1);
 			BundleStarter t3 = new BundleStarter(b3, s3);
@@ -458,7 +458,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		public void run() {
 			try {
-				semaphore.waitForSignal();
+				semaphore.acquire();
 				bundle.start();
 			}
 			catch (Exception e) {

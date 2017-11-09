@@ -16,9 +16,10 @@
 
 package org.osgi.test.cases.component.tb24;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.test.support.concurrent.AtomicInteger;
 
 public abstract class AbstractFieldReceiver {
 

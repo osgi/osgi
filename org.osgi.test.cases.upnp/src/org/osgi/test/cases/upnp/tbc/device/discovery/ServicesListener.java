@@ -1,11 +1,13 @@
 package org.osgi.test.cases.upnp.tbc.device.discovery;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -28,7 +30,7 @@ public class ServicesListener extends ServiceTracker {
 				bc
 						.createFilter("(&(objectclass=org.osgi.service.upnp.UPnPDevice)(UPnP.device.manufacturer=ProSyst))"),
 				null);
-		waiter = new Semaphore();
+		waiter = new Semaphore(0);
 		desiredCount = count;
 		size = 0;
 	}
@@ -71,7 +73,7 @@ public class ServicesListener extends ServiceTracker {
 		}
 		DefaultTestBundleControl.log(desiredCount
 				+ " UPnP Devices arrived, signaling waiter");
-		waiter.signal();
+		waiter.release();
 		return device;
 	}
 
@@ -89,6 +91,6 @@ public class ServicesListener extends ServiceTracker {
 
 	public void waitFor(long timeout) throws InterruptedException {
 		DefaultTestBundleControl.log("waiting for UPnP Devices " + timeout);
-		waiter.waitForSignal(timeout);
+		waiter.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 	}
 }

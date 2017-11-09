@@ -41,6 +41,8 @@ import java.util.PropertyPermission;
 import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -74,7 +76,6 @@ import org.osgi.test.cases.cm.shared.ModifyPid;
 import org.osgi.test.cases.cm.shared.Synchronizer;
 import org.osgi.test.cases.cm.shared.Util;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
 
 import junit.framework.AssertionFailedError;
@@ -2591,10 +2592,11 @@ public class CMControl extends DefaultTestBundleControl {
 		trace("created configuration has null properties.");
 		trace("Create and register a new the ManagedService");
 
-		Semaphore semaphore = new Semaphore();
+		Semaphore semaphore = new Semaphore(0);
 		ManagedServiceImpl ms = createManagedService(pid, semaphore);
 		trace("Wait until the ManagedService has gotten the update");
-		boolean calledBack = semaphore.waitForSignal(SIGNAL_WAITING_TIME);
+		boolean calledBack = semaphore.tryAcquire(SIGNAL_WAITING_TIME,
+				TimeUnit.MILLISECONDS);
 		assertTrue("ManagedService is called back", calledBack);
 
 		trace("Update done!");
@@ -2610,9 +2612,9 @@ public class CMControl extends DefaultTestBundleControl {
 		trace("created configuration has non-null properties.");
 		trace("Create and register a new the ManagedService");
 		trace("Wait until the ManagedService has gotten the update");
-		semaphore = new Semaphore();
+		semaphore = new Semaphore(0);
 		ms = createManagedService(pid2, semaphore);
-		semaphore.waitForSignal();
+		semaphore.acquire();
 		trace("Update done!");
 
 		/*
@@ -3557,9 +3559,9 @@ public class CMControl extends DefaultTestBundleControl {
 
 	private Dictionary<String,Object> getManagedProperties(String pid)
 			throws Exception {
-		Semaphore semaphore = new Semaphore();
+		Semaphore semaphore = new Semaphore(0);
 		ManagedServiceImpl ms = createManagedService(pid, semaphore);
-		semaphore.waitForSignal();
+		semaphore.acquire();
 		return ms.getProperties();
 	}
 
@@ -4022,7 +4024,7 @@ public class CMControl extends DefaultTestBundleControl {
 			configs.put(conf.getPid(), conf);
 		}
 		try {
-			Semaphore semaphore = new Semaphore();
+			Semaphore semaphore = new Semaphore(0);
 			// Register a factory
 			ManagedServiceFactoryImpl msf = new ManagedServiceFactoryImpl(
 					"msf", "testprop", semaphore);
@@ -4033,7 +4035,7 @@ public class CMControl extends DefaultTestBundleControl {
 					properties);
 			for (int i = 0; i < 2 * NUMBER_OF_CONFIGS; i++) {
 				trace("Wait for signal #" + i);
-				semaphore.waitForSignal();
+				semaphore.acquire();
 				trace("Signal #" + i + " arrived");
 			}
 			trace("All signals have arrived");

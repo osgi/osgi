@@ -21,6 +21,8 @@ import static junit.framework.TestCase.assertTrue;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -37,7 +39,6 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -61,7 +62,8 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	private BundleContext bctx;
 	private Map<String, Object> endpointProperties;
 
-	Semaphore semaphore = new Semaphore();
+	Semaphore													semaphore	= new Semaphore(
+			0);
 
 	ServiceTracker<EndpointEventListener, EndpointEventListener> tracker;
 
@@ -205,8 +207,9 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 		try {
 			assertTrue("no interested EndpointEventListener found",
-					semaphore.waitForSignal(Long
-							.parseLong(timeout != null ? timeout : "30000")));
+					semaphore.tryAcquire(Long
+							.parseLong(timeout != null ? timeout : "30000"),
+							TimeUnit.MILLISECONDS));
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -227,7 +230,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			System.out
 					.println("TestBundle7: ******************** Propagated EndpointChanged Event to endpointEventListener: "
 							+ listener + " <<  " + endpointEvent.getType());
-			semaphore.signal();
+			semaphore.release();
 		}
 
 		return listener;

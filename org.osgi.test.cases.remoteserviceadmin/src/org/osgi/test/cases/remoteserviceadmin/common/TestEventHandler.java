@@ -3,12 +3,13 @@ package org.osgi.test.cases.remoteserviceadmin.common;
 import static junit.framework.TestCase.assertEquals;
 
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * Simple EventHandler implementation that records all events received and
@@ -37,7 +38,7 @@ public class TestEventHandler implements EventHandler {
 
 		synchronized (eventlist) {
 			eventlist.add(event);
-			sem.signal();
+			sem.release();
 		}
 
 	}
@@ -60,7 +61,7 @@ public class TestEventHandler implements EventHandler {
 						}
 					}
 				}
-				sem.waitForSignal(m_timeout / 10);
+				sem.tryAcquire(m_timeout / 10, TimeUnit.MILLISECONDS);
 				++waited;
 				if (waited >= 10)
 					return null;

@@ -15,14 +15,15 @@
  */
 package org.osgi.test.cases.coordinator.junit;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
 import org.osgi.test.support.OSGiTestCase;
-import org.osgi.test.support.concurrent.AtomicReference;
-import org.osgi.test.support.concurrent.Semaphore;
 
 /**
  * A coordination must not block on subsequent calls to terminate while 
@@ -54,7 +55,7 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 	 * @throws InterruptedException
 	 */
 	public void testCoordinatorFail() throws InterruptedException {
-		final Semaphore lock = new Semaphore();
+		final Semaphore lock = new Semaphore(0);
 		final AtomicReference<Coordination> coordination = new AtomicReference<Coordination>();
 		final AtomicReference<Thread> thread2 = new AtomicReference<Thread>();
 		// This thread is responsible for ensuring there is no blockage.
@@ -86,7 +87,7 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 	 * @throws InterruptedException
 	 */
 	public void testCoordinationFail() throws InterruptedException {
-		final Semaphore lock = new Semaphore();
+		final Semaphore lock = new Semaphore(0);
 		final AtomicReference<Coordination> coordination = new AtomicReference<Coordination>();
 		final AtomicReference<Thread> thread2 = new AtomicReference<Thread>();
 		// This thread is responsible for ensuring there is no blockage.
@@ -117,7 +118,7 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 	 * @throws InterruptedException
 	 */
 	public void testCoordinationEnd() throws InterruptedException {
-		final Semaphore lock = new Semaphore();
+		final Semaphore lock = new Semaphore(0);
 		final AtomicReference<Coordination> coordination = new AtomicReference<Coordination>();
 		final AtomicReference<Thread> thread2 = new AtomicReference<Thread>();
 		// This thread is responsible for ensuring there is no blockage.

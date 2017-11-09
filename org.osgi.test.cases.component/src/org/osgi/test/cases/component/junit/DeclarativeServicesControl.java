@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -87,7 +88,6 @@ import org.osgi.test.cases.component.tb13a.ModifyRegistrator2;
 import org.osgi.test.cases.component.tb6.ActDeactComponent;
 import org.osgi.test.support.MockFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;

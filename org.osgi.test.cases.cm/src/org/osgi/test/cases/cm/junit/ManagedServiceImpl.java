@@ -27,7 +27,7 @@ package org.osgi.test.cases.cm.junit;
 import java.util.Dictionary;
 
 import org.osgi.service.cm.ManagedService;
-import org.osgi.test.support.compatibility.Semaphore;
+import java.util.concurrent.Semaphore;
 
 public class ManagedServiceImpl implements ManagedService {
 	private Dictionary<String,Object>	properties;
@@ -44,6 +44,6 @@ public class ManagedServiceImpl implements ManagedService {
 	@SuppressWarnings("unchecked")
 	public synchronized void updated(Dictionary<String, ? > p) {
 		properties = (Dictionary<String,Object>) p;
-		semaphore.signal();
+		semaphore.release();
 	}
 }
