@@ -1720,6 +1720,28 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED"
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
+      
+      <para>Invoking the <code>update</code> method results in Configuration Admin
+      service blindly updating the <code>Configuration</code> object and performing
+      the above outlined actions. This even happens if the updated set of properties
+      is the same as the already existing properties in the <code>Configuration</code>
+      object.</para>
+      
+      <para>To optimize configuration updates if the caller does not know whether
+      properties of a  <code>Configuration</code> object have changed, 
+      <code>Configuration.updateIfDifferent</code> can be used. The provided dictionary
+      is compared with the existing properties. If there is no change, no action is
+      invoked. If there is any change or if the properties cannot be compared,
+      <code>Configuration.updateIfDifferent</code> acts exactly as 
+      <code>Configuration.update</code>. Properties are compared as follows: scalars are 
+      compared using <code>equals()</code>, arrays are compared using 
+      <code>Arrays.equals()</code>, and collections are compared using 
+      <code>equals()</code>.</para>
+      
+      <para>If the <code>Configuration</code> object has the <code>READ_ONLY</code>
+      attribute set, calling one of the update methods results in a 
+      <code>ReadOnlyConfigurationException</code> and the configuration is not changed.
+      </para>
     </section>
 
     <section xml:id="service.cm-multi.locations">
@@ -1912,11 +1934,16 @@ ConfigurationPermission[?application,<xref
       a service. This method is called asynchronously from the
       <code>delete</code> method.</para>
 
-      <para>The update method must also asynchronously send out a
+      <para>The delete method must also asynchronously send out a
       Configuration Event <xref
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED"
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
+      
+      <para>If the <code>Configuration</code> object has the <code>READ_ONLY</code>
+      attribute set, calling the delete method results in a 
+      <code>ReadOnlyConfigurationException</code> and the configuration is not deleted.
+      </para>
     </section>
 
     <section>
@@ -1935,6 +1962,26 @@ ConfigurationPermission[?application,<xref
       the advantage that the events, from the bundle implementation's
       perspective, appear similar for internal updates, remote management
       updates, and initialization.</para>
+    </section>
+
+    <section>
+      <title>Configuration Attributes</title>
+
+      <para>The <code>Configuration</code> object allows to set attributes, similar 
+      to setting attributes on files in a file system. Currently only the 
+      <code>READ_ONLY</code> attribute is supported.</para>
+
+      <para>Attributes can be set by calling the <code>Configuration.addAttributes</code>
+      method and listing the attributes to be added. In the same way attributes
+      can be removed by calling <code>Configuration.removeAttributes</code>. Each
+      successful change in attributes is persisted.</para>
+      
+      <para>A Bundle can only change the attributes if it has 
+      <code>ConfigurationPermission[location, ATTRIBUTE]</code>. Otherwise 
+      a Security Exception is thrown.</para>
+
+      <para>The currently set attributes can be queried using 
+      <code>Configuration.getAttributes</code>.</para>
     </section>
   </section>
 
@@ -2352,6 +2399,13 @@ ConfigurationPermission[?application,<xref
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
           xrefstyle="hyperlink"/> - Can be updated with a matching
+          configuration</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.ATTRIBUTE"
+          xrefstyle="hyperlink"/> - Can manage attributes for matching
           configuration</para>
         </listitem>
       </itemizedlist>
