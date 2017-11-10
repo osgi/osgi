@@ -636,7 +636,9 @@
       <para>When a <xref linkend="org.osgi.service.cm.Configuration"
       xrefstyle="hyperlink"/> object is created with either <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-"
-      xrefstyle="hyperlink"/> or <xref
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-"
+      xrefstyle="hyperlink"/>, or <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-"
       xrefstyle="hyperlink"/>, it becomes <emphasis>bound</emphasis> to the
       location of the calling bundle. This location is obtained with the <xref
@@ -653,8 +655,12 @@
       linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-String-"
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-"
-      xrefstyle="hyperlink"/> take a location <code>String</code> as their
-      second argument. These methods require the correct permission, and they
+      xrefstyle="hyperlink"/> as well as the three argument version of
+      <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-String-"
+      xrefstyle="hyperlink"/>
+      take a location <code>String</code> as their
+      last argument. These methods require the correct permission, and they
       create <xref linkend="org.osgi.service.cm.Configuration"
       xrefstyle="hyperlink"/> objects bound to the specified location.</para>
 
@@ -1302,16 +1308,6 @@ private       ::= '.' symbolic-name</programlisting>
       Managed Service Factory. It is used to group all Managed Service Factory
       configuration dictionaries together.</para>
 
-      <para>When a <code>Configuration</code> object for a Managed Service
-      Factory is created (<code>ConfigurationAdmin.</code><xref
-      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-"
-      xrefstyle="hyperlink"/> or <xref
-      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-"
-      xrefstyle="hyperlink"/> ), a new unique PID is created for this object
-      by the Configuration Admin service. The scheme used for this PID is
-      defined by the Configuration Admin service and is unrelated to the
-      factory PID, which is chosen by the registering bundle.</para>
-
       <para>When the Configuration Admin service detects the registration of a
       Managed Service Factory, it must find all visible configuration
       dictionaries for this factory and must then sequentially call
@@ -1570,8 +1566,16 @@ private       ::= '.' symbolic-name</programlisting>
     <section xml:id="i1761778">
       <title>Creating a Managed Service Factory Configuration Object</title>
 
-      <para>The <code>ConfigurationAdmin</code> class provides two methods to
-      create a new instance of a Managed Service Factory:</para>
+      <para>The <code>ConfigurationAdmin</code> class provides two sets of methods to
+      create a new instance of a Managed Service Factory. The first set delegates the
+      creation of the unique PID to the Configuration Admin service. The second set 
+      allows to influence the generation of the PID.</para>
+
+      <para>The <code>ConfigurationAdmin</code> class provides the following two methods to
+      create a new instance of a Managed Service Factory. A new unique PID is created
+      for the Configuration object by the Configuration Admin service. The scheme used for
+      this PID is defined by the Configuration Admin service and is unrelated to the
+      factory PID, which is chosen by the registering bundle.</para>
 
       <itemizedlist>
         <listitem>
@@ -1599,6 +1603,44 @@ private       ::= '.' symbolic-name</programlisting>
         </listitem>
       </itemizedlist>
 
+      <para>The <code>ConfigurationAdmin</code> class provides the following two methods to
+      create a new instance of a Managed Service Factory. The PID for this Configuration
+      object is generated from the provided factory PID and the provided name by starting 
+      with the factory PID, appending the character ~ (tilde) and then appending the 
+      name. The <code>getFactoryConfiguration</code> method must atomically create and 
+      persistently store an object if it does not yet exist.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-"
+          xrefstyle="hyperlink"/> - This method is used by a bundle with a
+          given location to configure its own
+          <code>ManagedServiceFactory</code> objects. The first argument specifies
+          the PID of the targeted <code>ManagedServiceFactory</code> object.
+          This <emphasis>factory PID</emphasis> can be obtained from the
+          returned <code>Configuration</code> object with the
+          <code>getFactoryPid()</code> method. The second argument specifies the
+          <emphasis>name</emphasis> of the factory configuration. The generated PID can
+          be obtained from the returned <code>Configuration</code> object with the
+          <code>getPid()</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-String-"
+          xrefstyle="hyperlink"/> - This method is used by a management bundle
+          to configure another bundle's <code>ManagedServiceFactory</code>
+          object. The first argument is the PID, the second argument is the name, 
+          and the third is the location identifier of the targeted <code>ManagedServiceFactory</code>
+          object. The <emphasis>factory PID</emphasis> can be obtained from
+          the returned <code>Configuration</code> object with
+          <code>getFactoryPid</code> method. The generated PID can
+          be obtained from the returned <code>Configuration</code> object with the
+          <code>getPid()</code> method.</para>
+        </listitem>
+      </itemizedlist>
+      
       <para>Creating a new factory configuration must <emphasis>not</emphasis>
       initiate a callback to the Managed Service Factory <code>updated</code>
       method until the properties are set in the <code>Configuration</code>
@@ -1638,8 +1680,10 @@ private       ::= '.' symbolic-name</programlisting>
       <para>The process of updating a <code>Configuration</code> object is the
       same for Managed Services and Managed Service Factories. First, <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-"
-      xrefstyle="hyperlink"/> or <xref
+      xrefstyle="hyperlink"/>, <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-"
+      xrefstyle="hyperlink"/> or  <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-"
       xrefstyle="hyperlink"/> should be used to get a
       <code>Configuration</code> object. The properties can be obtained with
       <code>Configuration.getProperties</code>. When no update has occurred
