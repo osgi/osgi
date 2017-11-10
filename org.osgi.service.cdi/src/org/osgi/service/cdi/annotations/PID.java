@@ -23,6 +23,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used in collaboration with {@link ComponentScoped} to specify
@@ -82,14 +83,17 @@ public @interface PID {
 	 *
 	 * <p>
 	 * A special string (<code>"$"</code>) can be used to specify the name of the
-	 * component as a configuration PID. The {@link Component#NAME} constant holds
-	 * this special string. For example:
+	 * component as a configuration PID. The {@link CdiConstants#CDI_COMPONENT_NAME
+	 * CDI_COMPONENT_NAME} constant holds this special string.
+	 *
+	 * <p>
+	 * For example:
 	 *
 	 * <pre>
-	 * &#64;SingletonConfiguration(pid = Component.NAME)
+	 * {@code @PID(CDI_COMPONENT_NAME)}
 	 * </pre>
 	 */
-	String value() default Component.NAME;
+	String value() default CdiConstants.CDI_COMPONENT_NAME;
 
 	/**
 	 * The configuration policy associated with this PID.

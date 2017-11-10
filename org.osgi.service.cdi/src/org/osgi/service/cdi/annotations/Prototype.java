@@ -22,14 +22,14 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import org.osgi.framework.PrototypeServiceFactory;
+import org.osgi.service.cdi.reference.AddingEvent;
 
 /**
- * When used with {@link Service} indicates that the CDI bean should be
- * published with {@code service.scope = prototype}. When used with
- * {@link Reference} indicates that the service must be
- * {@code service.scope=prototype}.
- * <p>
- * Used in conjunction with {@link Service} and {@link Reference}.
+ * When used with {@link Service @Service} indicates that the bean should be
+ * published as a {@link PrototypeServiceFactory PrototypeServiceFactory}. When
+ * used with {@link Reference @Reference} or {@link AddingEvent AddingEvent}
+ * indicates that the service must be {@code service.scope=prototype}.
  *
  * @author $Id$
  */

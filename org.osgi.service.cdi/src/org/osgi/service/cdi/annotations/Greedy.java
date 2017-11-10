@@ -22,10 +22,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import org.osgi.service.cdi.reference.AddingEvent;
 
 /**
  * Annotation used to indicate that the behaviour of the reference should be
- * greedy. Used in conjunction with {@link Reference}.
+ * greedy. Used in conjunction with {@link Reference @Reference} or
+ * {@link AddingEvent AddingEvent}.
  *
  * @author $Id$
  */

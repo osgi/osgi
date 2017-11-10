@@ -27,6 +27,7 @@ import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
 import org.osgi.annotation.bundle.Requirement;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
  * Annotation used in collaboration with {@link ComponentScoped} to specify a
@@ -80,13 +81,16 @@ public @interface FactoryPID {
 	 *
 	 * <p>
 	 * A special string (<code>"$"</code>) can be used to specify the name of the
-	 * component as a configuration PID. The {@link Component#NAME} constant holds
-	 * this special string. For example:
+	 * component as a configuration PID. The {@link CdiConstants#CDI_COMPONENT_NAME
+	 * CDI_COMPONENT_NAME} constant holds this special string.
+	 *
+	 * <p>
+	 * For example:
 	 *
 	 * <pre>
-	 * &#64;FactoryConfiguration(pid = Component.NAME)
+	 * {@code @FactoryPID(CDI_COMPONENT_NAME)}
 	 * </pre>
 	 */
-	String value() default Component.NAME;
+	String value() default CdiConstants.CDI_COMPONENT_NAME;
 
 }

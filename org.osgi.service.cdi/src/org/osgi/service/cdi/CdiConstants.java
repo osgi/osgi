@@ -17,6 +17,8 @@
 package org.osgi.service.cdi;
 
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.cdi.annotations.FactoryPID;
+import org.osgi.service.cdi.annotations.PID;
 
 /**
  * Defines CDI constants.
@@ -41,6 +43,21 @@ public class CdiConstants {
 	 * </pre>
 	 */
 	public static final String	CDI_CAPABILITY_NAME					= "osgi.cdi";
+
+	/**
+	 * Special string representing the name of a Component.
+	 *
+	 * <p>
+	 * This string can be used with {@link PID#value() PID} OR
+	 * {@link FactoryPID#value() FactoryPID} to specify the name of the component.
+	 * <p>
+	 * For example:
+	 *
+	 * <pre>
+	 * &#64;PID(CDI_COMPONENT_NAME)
+	 * </pre>
+	 */
+	public static final String	CDI_COMPONENT_NAME					= "$";
 
 	/**
 	 * The property of the CdiContainer service holding it's id.

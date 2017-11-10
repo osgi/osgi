@@ -31,7 +31,7 @@ import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
 
 /**
- * Annotation used to specify that a CDI bean should be published as a service.
+ * Annotation used to specify that a bean should be published as a service.
  * <p>
  * The behaviour of this annotation depends on it's usage:
  * <ul>
@@ -44,16 +44,18 @@ import org.osgi.framework.ServiceFactory;
  * error.
  * <p>
  * Where this annotation is used affects how service scopes are supported:
- * <li>{@link Component} or {@link Dependent} bean - The provided service can be
- * of any scope. The bean can either implement {@link ServiceFactory} or
- * {@link PrototypeServiceFactory} or use {@link Bundle} or {@link Prototype} to
- * set it's service scope. If none of those options are used the service is a
- * singleton scope service.</li>
- * <li>{@link ApplicationScoped} bean - The provided service is a singleton
- * scope service unless it implements {@link ServiceFactory} or
- * {@link PrototypeServiceFactory}. It cannot use {@link Bundle} or
- * {@link Prototype} to set it's service scope. Use of those annotations will
- * result in a definition error.</li>
+ * <li>{@link Component @Component} or {@link Dependent @Dependent} bean - The
+ * provided service can be of any scope. The bean can either implement
+ * {@link ServiceFactory ServiceFactory} or {@link PrototypeServiceFactory
+ * PrototypeServiceFactory} or use {@link Bundle @Bundle} or
+ * {@link Prototype @Prototype} to set it's service scope. If none of those
+ * options are used the service is a singleton scope service.</li>
+ * <li>{@link ApplicationScoped @ApplicationScoped} bean - The provided service
+ * is a singleton scope service unless the bean implements {@link ServiceFactory
+ * ServiceFactory} or {@link PrototypeServiceFactory PrototypeServiceFactory}.
+ * It cannot use {@link Bundle @Bundle} or {@link Prototype @Prototype} to set
+ * it's service scope. Use of those annotations in this case will result in a
+ * definition error.</li>
  * </ul>
  *
  * @author $Id$

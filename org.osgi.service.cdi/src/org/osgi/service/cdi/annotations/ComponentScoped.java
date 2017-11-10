@@ -29,9 +29,9 @@ import javax.inject.Scope;
 import org.osgi.annotation.bundle.Requirement;
 
 /**
- * This scope is used to define a bean as a CDI component. To trigger this it
- * must be used in conjunction with the {@link javax.inject.Named} annotation
- * which must specify a value.
+ * This scope is used to declare a bean who's lifecycle is determined by the
+ * state of it's OSGi dependencies and the {@link Component Component(s)} that
+ * may reference it through injection.
  *
  * @author $Id$
  */

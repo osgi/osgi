@@ -28,11 +28,13 @@ import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
 
 /**
- * Annotation used to annotate a CDI injection point informing the CDI container
- * that the injection should apply a service obtained from the OSGi registry.
+ * Annotation used on injection points informing the CDI container that the
+ * injection should apply a service obtained from the OSGi registry.
  * <p>
- * This annotation must be used in conjunction with {@link javax.inject.Named}
- * which must specify a value.
+ * The {@link javax.inject.Named} annotation may be used to specify a name which
+ * is the root of properties used to configure the behavior of the reference. If
+ * not specified the name of the reference will be derived from the fully
+ * qualifier class name plus the injection member's name.
  *
  * @author $Id$
  */
@@ -63,7 +65,7 @@ public @interface Reference {
 		}
 
 		@Override
-		public Class<?> service() {
+		public Class<?> value() {
 			return _service;
 		}
 
@@ -77,9 +79,10 @@ public @interface Reference {
 	 * If not specified, the type of the service for this reference is derived from
 	 * the injection point type.
 	 * <p>
-	 * Finally, if {@code service} is specified it must be type compatible with
-	 * (assignable to) the service type derived from the injection point type.
+	 * If a value is specified it must be type compatible with (assignable to) the
+	 * service type derived from the injection point type, otherwise a definition
+	 * error will result.
 	 */
-	Class<?> service() default Object.class;
+	Class<?> value() default Object.class;
 
 }

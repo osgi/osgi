@@ -29,7 +29,11 @@ import javax.inject.Named;
 import org.osgi.annotation.bundle.Requirement;
 
 /**
- * Identify the annotated CDI bean class as a Service Component.
+ * Identify the annotated CDI bean class as a Component who's lifecycle is
+ * determined by the state of it's OSGi dependencies.
+ * <p>
+ * Components MUST always be {@link ComponentScoped ComponentScoped}. Applying
+ * any other scope will result in a definition error.
  *
  * @author $Id$
  */
@@ -55,20 +59,5 @@ public @interface Component {
 		private static final long		serialVersionUID	= 1L;
 
 	}
-
-	/**
-	 * Special string representing the name of this Component.
-	 *
-	 * <p>
-	 * This string can be used in {@link PID#value()} OR
-	 * {@link FactoryPID#value()} to specify the name of the component or in
-	 * the case of the non-components the CDI container id as a configuration PID.
-	 * For example:
-	 *
-	 * <pre>
-	 * &#64;SingletonConfiguration(pid = Component.NAME)
-	 * </pre>
-	 */
-	String NAME = "$";
 
 }
