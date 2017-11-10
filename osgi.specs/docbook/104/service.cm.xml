@@ -2486,5 +2486,23 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     </section>
   </section>
   
+  <section>
+    <title>Coordinator Support</title>
+    
+    <para>The <link linkend="service.coordinator">Coordinator Service Specification</link> defines
+    a mechanism for multiple parties to collaborate on a common task without a priori knowledge of
+    who will collaborate in that task. The Configuration Admin service can participate in such
+    scenarios to coordinate provisioning or configuration tasks.</para>
+    
+    <para>If configurations are created, updated or deleted and an implicit coordination exists, 
+    the Configuration Admin service must delay notifications until the coordination terminates. 
+    However the configuration changes are persisted immediately. Updating a Managed Service or
+    Managed Service Factory and informing asynchronous listeners is delayed until the 
+    coordination terminates, regardless whether the coordination fails or terminates regularly. 
+    Registered synchronous listeners will be informed immediately when the change happens
+    regardless of a coordination. 
+    </para>
+  </section>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
 </chapter>
