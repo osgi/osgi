@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,21 +52,14 @@ public @interface Reference {
 
 		/**
 		 * @param service
-		 * @param target
 		 * @return instance of {@link Reference}
 		 */
-		public static final Literal of(
-				Class<?> service,
-				String target) {
-
-			return new Literal(service, target);
+		public static final Literal of(Class<?> service) {
+			return new Literal(service);
 		}
 
-		private Literal(
-				Class<?> service,
-				String target) {
+		private Literal(Class<?> service) {
 			_service = service;
-			_target = target;
 		}
 
 		@Override
@@ -74,44 +67,19 @@ public @interface Reference {
 			return _service;
 		}
 
-		@Override
-		public String target() {
-			return _target;
-		}
-
 		private final Class<?>				_service;
-		private final String				_target;
 
 	}
 
 	/**
-	 * The type of the service for this reference.
+	 * Specify the type of the service for this reference.
 	 * <p>
-	 * If not specified, the type of the service for this reference is based upon
-	 * how this annotation is used:
-	 * <ul>
-	 * <li>Annotated field - TODO The type of the service is based upon the type of
-	 * the field being annotated. The type of the field must be one of
-	 * {@code java.util.Collection}, {@code java.util.List}, or a subtype of
-	 * {@code java.util.Collection} so the type of the service is the generic type
-	 * of the collection. Otherwise, the type of the service is the type of the
-	 * field.</li>
-	 * <li>Annotated constructor or method parameter - TODO The type of the service
-	 * is based upon the type of the parameter being annotated. The type of the
-	 * parameter must be one of {@code java.util.Collection},
-	 * {@code java.util.List}, or a subtype of {@code java.util.Collection} so the
-	 * type of the service is the generic type of the collection. Otherwise, the
-	 * type of the service is the type of the parameter.</li>
-	 * </ul>
+	 * If not specified, the type of the service for this reference is derived from
+	 * the injection point type.
+	 * <p>
+	 * Finally, if {@code service} is specified it must be type compatible with
+	 * (assignable to) the service type derived from the injection point type.
 	 */
 	Class<?> service() default Object.class;
-
-	/**
-	 * The target property for this reference.
-	 *
-	 * <p>
-	 * If not specified, no target property is set.
-	 */
-	String target() default "";
 
 }

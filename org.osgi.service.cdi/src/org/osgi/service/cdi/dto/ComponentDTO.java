@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +52,13 @@ public class ComponentDTO extends DTO {
 	 * <ul>
 	 * <li><code>0..N</code> maps can have only <code>service.pid</code> which
 	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
-	 * {@link ComponentFactoryDTO#configurations configuration dependencies} of the
-	 * parent {@link ComponentFactoryDTO}</li>
-	 * 
+	 * {@link ComponentLifecycleDTO#configurations configuration dependencies} of the
+	 * parent {@link ComponentLifecycleDTO}</li>
+	 *
 	 * <li><code>0..1</code> map can have a <code>service.factoryPid</code> which
 	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
-	 * {@link ComponentFactoryDTO#configurations configuration dependencies} of the
-	 * parent {@link ComponentFactoryDTO}, in which case the
+	 * {@link ComponentLifecycleDTO#configurations configuration dependencies} of the
+	 * parent {@link ComponentLifecycleDTO}, in which case the
 	 * <code>service.pid</code> of the map corresponds to one of the
 	 * {@link ConfigurationDTO#matches} of that configuration dependency.</li>
 	 * </ul>

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package org.osgi.service.cdi.dto.model;
 
@@ -6,6 +21,9 @@ import org.osgi.dto.DTO;
 
 /**
  * Abstract base to represent any type of dependency.
+ *
+ * @NotThreadSafe
+ * @author $Id$
  */
 public abstract class DependencyModelDTO extends DTO {
 	/**
@@ -29,7 +47,7 @@ public abstract class DependencyModelDTO extends DTO {
 
 		/**
 		 * Convert this upper cardinality boundary to an integer
-		 * 
+		 *
 		 * @return The integer representation of this upper cardinality boundary
 		 */
 		public int toInt() {
@@ -38,7 +56,7 @@ public abstract class DependencyModelDTO extends DTO {
 
 		/**
 		 * Resolve an integer to an upper cardinality boundary.
-		 * 
+		 *
 		 * @param value The integer representation of an upper cardinality boundary
 		 * @return The enum representation of the upper cardinality boundary descrubed
 		 *         by <code>value</code>

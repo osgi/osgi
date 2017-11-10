@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,11 @@ public class CdiConstants {
 	 * </pre>
 	 */
 	public static final String	CDI_CAPABILITY_NAME					= "osgi.cdi";
+
+	/**
+	 * The property of the CdiContainer service holding it's id.
+	 */
+	public static final String	CDI_CONTAINER_ID					= "osgi.cdi.container.id";
 
 	/**
 	 * The property of the CdiContainer service holding it's state.

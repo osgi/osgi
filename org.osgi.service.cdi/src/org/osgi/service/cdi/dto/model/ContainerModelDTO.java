@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import org.osgi.dto.DTO;
  */
 public class ContainerModelDTO extends DTO {
 	/**
-	 * The name of the CDI container.
+	 * The id of the CDI container.
 	 */
-	public String				name;
+	public String id;
 
 	/**
 	 * The extension dependencies of this CDI container.

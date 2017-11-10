@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.osgi.service.cdi.dto.model;
 
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.ComponentDTO;
-import org.osgi.service.cdi.dto.ComponentFactoryDTO;
+import org.osgi.service.cdi.dto.ComponentLifecycleDTO;
 
 /**
  * A description of a CDI component
@@ -26,7 +26,7 @@ import org.osgi.service.cdi.dto.ComponentFactoryDTO;
  * The content of this DTO is resolved form metadata at initialization time and
  * remains the same between the CDI bundle restarts.
  * <p>
- * At runtime it is spit between a {@link ComponentFactoryDTO} which handles the
+ * At runtime it is spit between a {@link ComponentLifecycleDTO} which handles the
  * resolution of the {@link #configurations} and the creation of
  * {@link ComponentDTO} instances and one or more {@link ComponentDTO}
  * instances, which handle the resolution of {@link #references} and the
