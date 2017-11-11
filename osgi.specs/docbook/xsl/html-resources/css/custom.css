@@ -138,17 +138,13 @@ div.table-contents td {
 	top: 120px;
 }
 
-#content, #sidebar {
-	bottom: 16px;
-	top: 140px;
-}
-
 #content {
+	bottom: 0;
 	margin-left: 250px;
 	overflow: auto;
 	padding: 0 2em 1em;
 	position: absolute;
-	top: 140px;
+	top: 130px;
 	width: 950px;
 }
 
