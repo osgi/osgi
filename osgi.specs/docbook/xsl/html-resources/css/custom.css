@@ -299,6 +299,11 @@ div.section.package div.section.class div.section.method h4.title:after {
 	content: "[METHOD]";
 }
 
+p.bibliomixed span.title::after {
+	content: "\000A";
+	white-space: pre;
+}
+
 @media (min-width: 1199px) {
 	.section.package .number {
 		margin: 0;

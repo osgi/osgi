@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
   xmlns:d="http://docbook.org/ns/docbook"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -33,6 +33,7 @@
 <xsl:param name="section.autolabel">1</xsl:param>
 <xsl:param name="toc.section.depth">1</xsl:param>
 <xsl:param name="webhelp.autolabel">1</xsl:param>
+<xsl:param name="bibliography.numbered">1</xsl:param>
 
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
 
@@ -165,7 +166,7 @@ example before
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="@fileref" > 
+<xsl:template match="@fileref" >
   <xsl:variable name="filename">
     <xsl:choose>
       <xsl:when test="contains(., ':')">
