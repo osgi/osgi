@@ -94,20 +94,6 @@
     <script type="text/javascript" src="{$webhelp.common.dir}js/jquery.modal.min.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/main.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.enable.js"></script>
-
-    <xsl:if test="/d:book/@status = 'final'">
-        <xsl:comment>Google Analytics</xsl:comment>
-        <script type="text/javascript">
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-801425-1', 'auto');
-        ga('send', 'pageview');
-        </script>
-        <xsl:comment>End Google Analytics</xsl:comment>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template name="user.header.navigation">
@@ -562,4 +548,3 @@ basic format:
     </xsl:call-template>
 </xsl:template>
 </xsl:stylesheet>
-
