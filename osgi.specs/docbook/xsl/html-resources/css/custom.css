@@ -140,12 +140,12 @@ div.table-contents td {
 
 #content {
 	bottom: 0;
-	margin-left: 250px;
+	margin-left: 242px;
 	overflow: auto;
-	padding: 0 2em 1em;
+	padding: 0 1em 0.4em;
 	position: absolute;
-	top: 130px;
-	width: 950px;
+	top: 122px;
+	width: 958px;
 }
 
 #content a:hover {
@@ -165,9 +165,9 @@ div.table-contents td {
 #sidebar {
 	bottom: 0;
 	overflow-y: scroll;
-	padding-left: 1em;
+	padding-left: 0.4em;
 	position: fixed;
-	top: 130px;
+	top: 122px;
 	width: 240px;
 }
 
