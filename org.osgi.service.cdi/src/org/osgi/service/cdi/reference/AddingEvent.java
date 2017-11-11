@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.reference;
 
 import java.util.Map;
+import java.util.function.Consumer;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cdi.ReferenceServiceObjects;
@@ -68,10 +69,66 @@ public interface AddingEvent<S> {
 	void onUpdate(Runnable action);
 
 	/**
+	 * Subscribe an action to the "updated" service event.
+	 *
+	 * @param action to subscribe to the "updated" service event
+	 */
+	void onUpdate(Consumer<S> action);
+
+	/**
+	 * Subscribe an action to the "updated" service event.
+	 *
+	 * @param consumer to subscribe to the "updated" service event
+	 */
+	void onUpdateServiceReference(Consumer<ServiceReference<S>> consumer);
+
+	/**
+	 * Subscribe an action to the "updated" service event.
+	 *
+	 * @param consumer to subscribe to the "updated" service event
+	 */
+	void onUpdateServiceObjects(Consumer<ReferenceServiceObjects<S>> consumer);
+
+	/**
+	 * Subscribe an action to the "updated" service event.
+	 *
+	 * @param consumer to subscribe to the "updated" service event
+	 */
+	void onUpdateProperties(Consumer<Map<String, ?>> consumer);
+
+	/**
 	 * Subscribe an action to the "removed" service event.
 	 *
 	 * @param action to subscribe to the "removed" service event
 	 */
 	void onRemove(Runnable action);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param consumer to subscribe to the "removed" service event
+	 */
+	void onRemove(Consumer<S> consumer);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param consumer to subscribe to the "removed" service event
+	 */
+	void onRemoveServiceReference(Consumer<ServiceReference<S>> consumer);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param consumer to subscribe to the "removed" service event
+	 */
+	void onRemoveServiceObjects(Consumer<ReferenceServiceObjects<S>> consumer);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param consumer to subscribe to the "removed" service event
+	 */
+	void onRemoveProperties(Consumer<Map<String, ?>> consumer);
 
 }
