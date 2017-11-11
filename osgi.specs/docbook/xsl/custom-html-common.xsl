@@ -79,7 +79,6 @@
     <meta name="Section-title" content="{$title}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="senna-route" href="regex:.*" type="senna.HtmlScreen" />
     <link rel="shortcut icon" href="{$webhelp.common.dir}images/favicon.png" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/custom.css"/>
     <xsl:if test="/d:book/@status = 'draft'">
@@ -87,7 +86,6 @@
     </xsl:if>
     <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/github.css"/>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
-    <script type="text/javascript" src="{$webhelp.common.dir}js/senna-min.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.pack.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/js.cookie.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/jquery-3.2.1.slim.min.js"></script>
@@ -226,7 +224,7 @@ basic format:
             <xsl:with-param name="next" select="$next"/>
         </xsl:call-template>
 
-        <body data-senna="">
+        <body>
             <div id="fullbody">
                 <xsl:call-template name="body.attributes"/>
 
@@ -239,7 +237,7 @@ basic format:
                 <div id="mobile-menu-icon">&#x22EE;</div>
 
                 <div id="column-two">
-                    <div id="content" data-senna-surface="">
+                    <div id="content">
                         <xsl:call-template name="user.header.content"/>
 
                         <xsl:copy-of select="$content"/>
@@ -275,9 +273,9 @@ basic format:
              <div id="ninja_forms_form_13_all_fields_wrap" class="ninja-forms-all-fields-wrap">
                 <h4>We would like to find out more information about the users of the OSGi Compendium. Please fill out the form below.</h4>
 
-                <p>No thanks, I’d like to go straight to the <a data-senna-off="true" href="javascript:dismissForm();">documentation</a>.</p>
+                <p>No thanks, I’d like to go straight to the <a href="javascript:dismissForm();">documentation</a>.</p>
 
-                <p>To find out how OSGi treats data we collect from you, please read our <a data-senna-off="true" href="https://www.osgi.org/osgi-alliance-privacy-policy/">Privacy Policy</a>.</p>
+                <p>To find out how OSGi treats data we collect from you, please read our <a href="https://www.osgi.org/osgi-alliance-privacy-policy/">Privacy Policy</a>.</p>
 
                 <div class="ninja-forms-required-items">Fields marked with <span class="ninja-forms-req-symbol">*</span> are required</div>
                 <div id="ninja_forms_field_26_div_wrap" data-visible="1">
@@ -332,6 +330,7 @@ basic format:
             </form>
 
             <script type="text/javascript">
+                hljs.initHighlightingOnLoad();
                 fixAnchors();
                 checkContactCookie();
             </script>
@@ -350,7 +349,7 @@ basic format:
     <div id="header">
         <div class="menu-top-container"></div>
         <div id="shadow-block">
-            <a class="logo" data-senna-off="true" href="index.html">
+            <a class="logo" href="index.html">
                 <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
 
                 <h1>
