@@ -77,9 +77,9 @@ example before
     <l:context name="xref-number-and-title">
       <l:template name="figure" text="Figure %n"/>
       <l:template name="table" text="Table %n"/>
-      <l:template name="chapter" text="%t on page %p"/>
-      <l:template name="appendix" text="%t on page %p"/>
-      <l:template name="section" text="%t on page %p"/>
+      <l:template name="chapter" text="%t"/>
+      <l:template name="appendix" text="%t"/>
+      <l:template name="section" text="%t"/>
     </l:context>
     <l:context name="title-numbered">
       <l:template name="appendix" text="%n %t"/>
