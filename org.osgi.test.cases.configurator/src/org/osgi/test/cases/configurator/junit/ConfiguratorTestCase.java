@@ -104,11 +104,10 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 	}
 
 	public void testExplicitDatatypes() throws Exception {
-		String pid = "org.osgi.test.pid3a";
 		Deferred<Configuration> updated = new Deferred<>();
 
 		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
-				pid, updated, null);
+				"org.osgi.test.pid3a", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
 			assertFalse("Precondition", updated.getPromise().isDone());
@@ -131,6 +130,222 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			reg.unregister();
 		}
 	}
+
+	public void testArraysBasic() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid4a", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			assertFalse("Precondition", updated.getPromise().isDone());
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertArrayEquals(new Boolean[] {
+					true, true, false, true
+			}, props.get("ba"));
+			assertArrayEquals(new Long[] {
+					Long.MAX_VALUE, Long.MIN_VALUE
+			}, props.get("la"));
+			assertArrayEquals(new Double[] {
+					-999.999
+			}, props.get("da"));
+			assertArrayEquals(new String[] {
+					"one", "two", "three"
+			}, props.get("sa"));
+			// TODO assertArraysEquals(new String[] {"complex1", "complex2"},
+			// props.get("oa"));
+			assertArrayEquals(new String[] {}, props.get("xa"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testArraysSpecificBoxed() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid4b", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			assertFalse("Precondition", updated.getPromise().isDone());
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertArrayEquals(new Boolean[] {
+					true, true, false, true
+			}, props.get("ba"));
+			assertArrayEquals(new Character[] {
+					'h', 'e', 'l', 'l', 'o'
+			}, props.get("ca"));
+			assertArrayEquals(new Double[] {
+					-999.999
+			}, props.get("da"));
+			assertArrayEquals(new Float[] {
+					-0.1f, 0f, 0.1f, 0f, -0.1f
+			}, props.get("fa"));
+			assertArrayEquals(new Integer[] {
+					-1, -2, -3
+			}, props.get("ia"));
+			assertArrayEquals(new Long[] {
+					Long.MAX_VALUE, Long.MIN_VALUE
+			}, props.get("la"));
+			assertArrayEquals(new String[] {
+					"one", "two", "three"
+			}, props.get("sa"));
+			assertArrayEquals(new Byte[] {
+					99
+			}, props.get("com.acme.ByteVal"));
+			assertArrayEquals(new Short[] {
+					32767, 32767
+			}, props.get("com.acme.ShortVal"));
+			assertArrayEquals(new Integer[] {}, props.get("xa"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testArraysSpecificPrimitive() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid4c", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			assertFalse("Precondition", updated.getPromise().isDone());
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertArrayEquals(new boolean[] {
+					true, true, false, true
+			}, props.get("ba"));
+			assertArrayEquals(new char[] {
+					'h', 'e', 'l', 'l', 'o'
+			}, props.get("ca"));
+			assertArrayEquals(new double[] {
+					-999.999
+			}, props.get("da"));
+			assertArrayEquals(new float[] {
+					-0.1f, 0f, 0.1f, 0f, -0.1f
+			}, props.get("fa"));
+			assertArrayEquals(new int[] {
+					-1, -2, -3
+			}, props.get("ia"));
+			assertArrayEquals(new long[] {
+					Long.MAX_VALUE, Long.MIN_VALUE
+			}, props.get("la"));
+			assertArrayEquals(new byte[] {
+					99
+			}, props.get("com.acme.ByteVal"));
+			assertArrayEquals(new short[] {
+					32767, 32767
+			}, props.get("com.acme.ShortVal"));
+			assertArrayEquals(new boolean[] {}, props.get("xa"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	private void assertArrayEquals(Object[] expected, Object actual) {
+		assertEquals(expected.getClass(), actual.getClass());
+		Object[] ao = (Object[]) actual;
+		assertEquals(expected.length, ao.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], ao[i]);
+		}
+	}
+
+	private void assertArrayEquals(boolean[] expected, Object actual) {
+		assertTrue(actual instanceof boolean[]);
+		boolean[] a = (boolean[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(byte[] expected, Object actual) {
+		assertTrue(actual instanceof byte[]);
+		byte[] a = (byte[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(char[] expected, Object actual) {
+		assertTrue(actual instanceof char[]);
+		char[] a = (char[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(double[] expected, Object actual) {
+		assertTrue(actual instanceof double[]);
+		double[] a = (double[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(float[] expected, Object actual) {
+		assertTrue(actual instanceof float[]);
+		float[] a = (float[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(int[] expected, Object actual) {
+		assertTrue(actual instanceof int[]);
+		int[] a = (int[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(long[] expected, Object actual) {
+		assertTrue(actual instanceof long[]);
+		long[] a = (long[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
+	private void assertArrayEquals(short[] expected, Object actual) {
+		assertTrue(actual instanceof short[]);
+		short[] a = (short[]) actual;
+		assertEquals(expected.length, a.length);
+
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], a[i]);
+		}
+	}
+
 
 	private ServiceRegistration<ConfigurationListener> registerConfigListener(
 			String pid,

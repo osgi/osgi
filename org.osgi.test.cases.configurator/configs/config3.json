@@ -10,5 +10,38 @@
     "Sval:String": false,
     "ByteVal:Byte": -128,
     "ShortVal:Short": 16384
+  },
+  "org.osgi.test.pid4a":
+  {
+    "ba": [true, true, false, true],
+    "la": [9223372036854775807, -9223372036854775808],
+    "da": [-999.999],
+    "sa": ["one", "two", "three"],
+    "xa": []
+  },
+  "org.osgi.test.pid4b":
+  {
+    "ba:Boolean[]": [true, true, false, true],
+    "ca:Character[]": ["h", "e", "l", "l", "o"],
+    "da:Double[]": [-999.999],
+    "fa:Float[]": [-0.1, 0, 0.1, 0, -0.1],
+    "ia:Integer[]": [-1, -2, -3],
+    "la:Long[]": [9223372036854775807, -9223372036854775808],
+    "sa:String[]": ["one", "two", "three"],
+    "xa:Integer[]": [],
+    "com.acme.ByteVal:Byte[]": [99],
+    "com.acme.ShortVal:Short[]": [32767, 32767]
+  },
+  "org.osgi.test.pid4c":
+  {
+    "ba:boolean[]": [true, true, false, true],
+    "ca:char[]": ["h", "e", "l", "l", "o"],
+    "da:double[]": [-999.999],
+    "fa:float[]": [-0.1, 0, 0.1, 0, -0.1],
+    "ia:int[]": [-1, -2, -3],
+    "la:long[]": [9223372036854775807, -9223372036854775808],
+    "xa:boolean[]": [],
+    "com.acme.ByteVal:byte[]": [99],
+    "com.acme.ShortVal:short[]": [32767, 32767]
   }
 }
