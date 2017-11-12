@@ -1,4 +1,6 @@
 {
+  ":configurator:resource-version": 1,
+  
   "org.osgi.test.pid1": 
   {
     "foo": "bar"

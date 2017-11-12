@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Iterator;
 
+import org.junit.Assert;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -36,7 +37,6 @@ import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.tracker.ServiceTracker;
-
 public class ConfiguratorTestCase extends OSGiTestCase {
 	private ConfigurationAdmin configAdmin;
 	private ServiceTracker<ConfigurationAdmin,ConfigurationAdmin> configAdminTracker;
@@ -146,21 +146,22 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 
 			Configuration cfg = updated.getPromise().getValue();
 			Dictionary<String,Object> props = cfg.getProperties();
-			assertArrayEquals(new Boolean[] {
+			Assert.assertArrayEquals(new Boolean[] {
 					true, true, false, true
-			}, props.get("ba"));
-			assertArrayEquals(new Long[] {
+			}, (Object[]) props.get("ba"));
+			Assert.assertArrayEquals(new Long[] {
 					Long.MAX_VALUE, Long.MIN_VALUE
-			}, props.get("la"));
-			assertArrayEquals(new Double[] {
+			}, (Object[]) props.get("la"));
+			Assert.assertArrayEquals(new Double[] {
 					-999.999
-			}, props.get("da"));
-			assertArrayEquals(new String[] {
+			}, (Object[]) props.get("da"));
+			Assert.assertArrayEquals(new String[] {
 					"one", "two", "three"
-			}, props.get("sa"));
+			}, (Object[]) props.get("sa"));
 			// TODO assertArraysEquals(new String[] {"complex1", "complex2"},
 			// props.get("oa"));
-			assertArrayEquals(new String[] {}, props.get("xa"));
+			Assert.assertArrayEquals(new String[] {},
+					(Object[]) props.get("xa"));
 
 			tb2.uninstall();
 		} finally {
@@ -179,34 +180,35 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 
 			Configuration cfg = updated.getPromise().getValue();
 			Dictionary<String,Object> props = cfg.getProperties();
-			assertArrayEquals(new Boolean[] {
+			Assert.assertArrayEquals(new Boolean[] {
 					true, true, false, true
-			}, props.get("ba"));
-			assertArrayEquals(new Character[] {
+			}, (Object[]) props.get("ba"));
+			Assert.assertArrayEquals(new Character[] {
 					'h', 'e', 'l', 'l', 'o'
-			}, props.get("ca"));
-			assertArrayEquals(new Double[] {
+			}, (Object[]) props.get("ca"));
+			Assert.assertArrayEquals(new Double[] {
 					-999.999
-			}, props.get("da"));
-			assertArrayEquals(new Float[] {
+			}, (Object[]) props.get("da"));
+			Assert.assertArrayEquals(new Float[] {
 					-0.1f, 0f, 0.1f, 0f, -0.1f
-			}, props.get("fa"));
-			assertArrayEquals(new Integer[] {
+			}, (Object[]) props.get("fa"));
+			Assert.assertArrayEquals(new Integer[] {
 					-1, -2, -3
-			}, props.get("ia"));
-			assertArrayEquals(new Long[] {
+			}, (Object[]) props.get("ia"));
+			Assert.assertArrayEquals(new Long[] {
 					Long.MAX_VALUE, Long.MIN_VALUE
-			}, props.get("la"));
-			assertArrayEquals(new String[] {
+			}, (Object[]) props.get("la"));
+			Assert.assertArrayEquals(new String[] {
 					"one", "two", "three"
-			}, props.get("sa"));
-			assertArrayEquals(new Byte[] {
+			}, (Object[]) props.get("sa"));
+			Assert.assertArrayEquals(new Byte[] {
 					99
-			}, props.get("com.acme.ByteVal"));
-			assertArrayEquals(new Short[] {
+			}, (Object[]) props.get("com.acme.ByteVal"));
+			Assert.assertArrayEquals(new Short[] {
 					32767, 32767
-			}, props.get("com.acme.ShortVal"));
-			assertArrayEquals(new Integer[] {}, props.get("xa"));
+			}, (Object[]) props.get("com.acme.ShortVal"));
+			Assert.assertArrayEquals(new Integer[] {},
+					(Object[]) props.get("xa"));
 
 			tb2.uninstall();
 		} finally {
@@ -278,18 +280,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
-	private void assertCollectionEquals(Collection< ? > expected,
-			Object actual) {
-		assertTrue(actual instanceof Collection);
-		Collection< ? > ac = (Collection< ? >) actual;
-		assertEquals(expected.size(), ac.size());
-		
-		for (Iterator< ? > ei = expected.iterator(), ea = ac.iterator(); ei
-				.hasNext();) {
-			assertEquals(ei.next(), ea.next());
-		}
-	}
-
 	public void testArraysSpecificPrimitive() throws Exception {
 		Deferred<Configuration> updated = new Deferred<>();
 
@@ -304,27 +294,27 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			assertArrayEquals(new boolean[] {
 					true, true, false, true
 			}, props.get("ba"));
-			assertArrayEquals(new char[] {
+			Assert.assertArrayEquals(new char[] {
 					'h', 'e', 'l', 'l', 'o'
-			}, props.get("ca"));
-			assertArrayEquals(new double[] {
+			}, (char[]) props.get("ca"));
+			Assert.assertArrayEquals(new double[] {
 					-999.999
-			}, props.get("da"));
-			assertArrayEquals(new float[] {
+			}, (double[]) props.get("da"), 0.0000001);
+			Assert.assertArrayEquals(new float[] {
 					-0.1f, 0f, 0.1f, 0f, -0.1f
-			}, props.get("fa"));
-			assertArrayEquals(new int[] {
+			}, (float[]) props.get("fa"), 0.0001f);
+			Assert.assertArrayEquals(new int[] {
 					-1, -2, -3
-			}, props.get("ia"));
-			assertArrayEquals(new long[] {
+			}, (int[]) props.get("ia"));
+			Assert.assertArrayEquals(new long[] {
 					Long.MAX_VALUE, Long.MIN_VALUE
-			}, props.get("la"));
-			assertArrayEquals(new byte[] {
+			}, (long[]) props.get("la"));
+			Assert.assertArrayEquals(new byte[] {
 					99
-			}, props.get("com.acme.ByteVal"));
-			assertArrayEquals(new short[] {
+			}, (byte[]) props.get("com.acme.ByteVal"));
+			Assert.assertArrayEquals(new short[] {
 					32767, 32767
-			}, props.get("com.acme.ShortVal"));
+			}, (short[]) props.get("com.acme.ShortVal"));
 			assertArrayEquals(new boolean[] {}, props.get("xa"));
 
 			tb2.uninstall();
@@ -362,96 +352,27 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
-	private void assertArrayEquals(Object[] expected, Object actual) {
-		assertEquals(expected.getClass(), actual.getClass());
-		Object[] ao = (Object[]) actual;
-		assertEquals(expected.length, ao.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], ao[i]);
-		}
-	}
-
+	// For some reason Assert doesn't provide this one...
 	private void assertArrayEquals(boolean[] expected, Object actual) {
 		assertTrue(actual instanceof boolean[]);
 		boolean[] a = (boolean[]) actual;
 		assertEquals(expected.length, a.length);
-
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], a[i]);
 		}
 	}
 
-	private void assertArrayEquals(byte[] expected, Object actual) {
-		assertTrue(actual instanceof byte[]);
-		byte[] a = (byte[]) actual;
-		assertEquals(expected.length, a.length);
+	private void assertCollectionEquals(Collection< ? > expected,
+			Object actual) {
+		assertTrue(actual instanceof Collection);
+		Collection< ? > ac = (Collection< ? >) actual;
+		assertEquals(expected.size(), ac.size());
 
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
+		for (Iterator< ? > ei = expected.iterator(), ea = ac.iterator(); ei
+				.hasNext();) {
+			assertEquals(ei.next(), ea.next());
 		}
 	}
-
-	private void assertArrayEquals(char[] expected, Object actual) {
-		assertTrue(actual instanceof char[]);
-		char[] a = (char[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
-	private void assertArrayEquals(double[] expected, Object actual) {
-		assertTrue(actual instanceof double[]);
-		double[] a = (double[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
-	private void assertArrayEquals(float[] expected, Object actual) {
-		assertTrue(actual instanceof float[]);
-		float[] a = (float[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
-	private void assertArrayEquals(int[] expected, Object actual) {
-		assertTrue(actual instanceof int[]);
-		int[] a = (int[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
-	private void assertArrayEquals(long[] expected, Object actual) {
-		assertTrue(actual instanceof long[]);
-		long[] a = (long[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
-	private void assertArrayEquals(short[] expected, Object actual) {
-		assertTrue(actual instanceof short[]);
-		short[] a = (short[]) actual;
-		assertEquals(expected.length, a.length);
-
-		for (int i = 0; i < expected.length; i++) {
-			assertEquals(expected[i], a[i]);
-		}
-	}
-
 
 	private ServiceRegistration<ConfigurationListener> registerConfigListener(
 			String pid,
