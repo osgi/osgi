@@ -352,6 +352,42 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
+	public void testFactoryConfigurations() throws Exception {
+		Deferred<Configuration> updated1 = new Deferred<>();
+		Deferred<Configuration> updated2 = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg1 = registerConfigListener(
+				"org.acme.factory~instance1", updated1, null);
+
+		ServiceRegistration<ConfigurationListener> reg2 = registerConfigListener(
+				"org.acme.factory~instance2", updated2, null);
+		try {
+			Bundle tb3 = install("tb3.jar");
+			tb3.start();
+
+			Configuration cfg1 = updated1.getPromise().getValue();
+			Dictionary<String,Object> props1 = cfg1.getProperties();
+			assertEquals("org.acme.factory~instance1",
+					props1.get(Constants.SERVICE_PID));
+			assertEquals("org.acme.factory",
+					props1.get(ConfigurationAdmin.SERVICE_FACTORYPID));
+			assertEquals("someval", props1.get("somekey"));
+
+			Configuration cfg2 = updated2.getPromise().getValue();
+			Dictionary<String,Object> props2 = cfg2.getProperties();
+			assertEquals("org.acme.factory~instance2",
+					props2.get(Constants.SERVICE_PID));
+			assertEquals("org.acme.factory",
+					props2.get(ConfigurationAdmin.SERVICE_FACTORYPID));
+			assertEquals("someval2", props2.get("somekey"));
+
+			tb3.uninstall();
+		} finally {
+			reg1.unregister();
+			reg2.unregister();
+		}
+	}
+
 	// For some reason Assert doesn't provide this one...
 	private void assertArrayEquals(boolean[] expected, Object actual) {
 		assertTrue(actual instanceof boolean[]);

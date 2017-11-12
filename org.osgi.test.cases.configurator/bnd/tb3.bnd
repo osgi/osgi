@@ -1,0 +1,15 @@
+Bundle-SymbolicName: ${p}.tb3
+Bundle-Name: tb3
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+
+Import-Package: *
+Private-Package                     = \
+    ${p}.tb.*
+
+Include-Resource: {OSGI-INF/configurator/config5.json=configs/config5.json}
+Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
+
+ 

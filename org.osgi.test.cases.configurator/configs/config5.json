@@ -1,0 +1,10 @@
+{
+  "org.acme.factory~instance1": 
+  {
+    "somekey": "someval"
+  },
+  "org.acme.factory~instance2": 
+  {
+    "somekey": "someval2"
+  }  
+}
