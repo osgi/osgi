@@ -17,7 +17,13 @@
 package org.osgi.test.cases.configurator.junit;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Iterator;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -80,7 +86,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 				"org.osgi.test.pid2", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
-			assertFalse("Precondition", updated.getPromise().isDone());
 			tb2.start();
 
 			Configuration cfg = updated.getPromise().getValue();
@@ -110,7 +115,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 				"org.osgi.test.pid3a", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
-			assertFalse("Precondition", updated.getPromise().isDone());
 			tb2.start();
 
 			Configuration cfg = updated.getPromise().getValue();
@@ -138,7 +142,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 				"org.osgi.test.pid4a", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
-			assertFalse("Precondition", updated.getPromise().isDone());
 			tb2.start();
 
 			Configuration cfg = updated.getPromise().getValue();
@@ -172,7 +175,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 				"org.osgi.test.pid4b", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
-			assertFalse("Precondition", updated.getPromise().isDone());
 			tb2.start();
 
 			Configuration cfg = updated.getPromise().getValue();
@@ -212,6 +214,82 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
+	public void xtestCollectionsImplicit() throws Exception {
+		fail("TODO");
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid4d", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertCollectionEquals(Arrays.asList(true, true, false, true),
+					props.get("bcg"));
+			assertCollectionEquals(Arrays.asList(-0.1, 0, 0.1, 0, -0.1),
+					props.get("dcg"));
+			assertCollectionEquals(Arrays.asList(-1, -2, -3), props.get("ic"));
+			assertCollectionEquals(
+					Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE),
+					props.get("lcg"));
+			assertCollectionEquals(Arrays.asList("one", "two", "three"),
+					props.get("scg"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testCollectionsSpecific() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid4e", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertCollectionEquals(Arrays.asList(true, true, false, true),
+					props.get("bc"));
+			assertCollectionEquals(Arrays.asList('h', 'e', 'l', 'l', 'o'),
+					props.get("cc"));
+			assertCollectionEquals(Arrays.asList(-999.999), props.get("dc"));
+			assertCollectionEquals(Arrays.asList(-0.1f, 0f, 0.1f, 0f, -0.1f),
+					props.get("fc"));
+			assertCollectionEquals(Arrays.asList(-1, -2, -3), props.get("ic"));
+			assertCollectionEquals(
+					Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE),
+					props.get("lc"));
+			assertCollectionEquals(Arrays.asList("one", "two", "three"),
+					props.get("sc"));
+			assertCollectionEquals(Arrays.asList((byte) 99),
+					props.get("com.acme.ByteVal"));
+			assertCollectionEquals(Arrays.asList((short) 32766, (short) 32766),
+					props.get("com.acme.ShortVal"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	private void assertCollectionEquals(Collection< ? > expected,
+			Object actual) {
+		assertTrue(actual instanceof Collection);
+		Collection< ? > ac = (Collection< ? >) actual;
+		assertEquals(expected.size(), ac.size());
+		
+		for (Iterator< ? > ei = expected.iterator(), ea = ac.iterator(); ei
+				.hasNext();) {
+			assertEquals(ei.next(), ea.next());
+		}
+	}
+
 	public void testArraysSpecificPrimitive() throws Exception {
 		Deferred<Configuration> updated = new Deferred<>();
 
@@ -219,7 +297,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 				"org.osgi.test.pid4c", updated, null);
 		try {
 			Bundle tb2 = install("tb2.jar");
-			assertFalse("Precondition", updated.getPromise().isDone());
 			tb2.start();
 
 			Configuration cfg = updated.getPromise().getValue();
@@ -249,6 +326,35 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 					32767, 32767
 			}, props.get("com.acme.ShortVal"));
 			assertArrayEquals(new boolean[] {}, props.get("xa"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testBinaries() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"binarytest", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			Path path = Paths.get(props.get("binaryval").toString());
+			assertTrue(path.toFile().isFile());
+			assertEquals("Binary file1", new String(Files.readAllBytes(path)));
+
+			String[] paths = (String[]) props.get("binaryarr");
+			assertEquals(2, paths.length);
+			Path path2 = Paths.get(paths[0]);
+			assertEquals("Binary file2", new String(Files.readAllBytes(path2)));
+
+			Path path3 = Paths.get(paths[1]);
+			assertEquals("Binary file3", new String(Files.readAllBytes(path3)));
 
 			tb2.uninstall();
 		} finally {

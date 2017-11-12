@@ -43,5 +43,24 @@
     "xa:boolean[]": [],
     "com.acme.ByteVal:byte[]": [99],
     "com.acme.ShortVal:short[]": [32767, 32767]
+  },
+  "org.osgi.test.pid4d":
+  {
+    "bcg:Collection": [true, true, false, true],
+    "dcg:Collection": [-0.1, 0, 0.1, 0, -0.1],
+    "lcg:Collection": [9223372036854775807, -9223372036854775808],
+    "scg:Collection": ["one", "two", "three"]
+  },
+  "org.osgi.test.pid4e":
+  {
+    "bc:Collection<Boolean>": [true, true, false, true],
+    "cc:Collection<Character>": ["h", "e", "l", "l", "o"],
+    "dc:Collection<Double>": [-999.999],
+    "fc:Collection<Float>": [-0.1, 0, 0.1, 0, -0.1],
+    "ic:Collection<Integer>": [-1, -2, -3],
+    "lc:Collection<Long>": [9223372036854775807, -9223372036854775808],
+    "sc:Collection<String>": ["one", "two", "three"],
+    "com.acme.ByteVal:Collection<Byte>": [99],
+    "com.acme.ShortVal:Collection<Short>": [32766, 32766]
   }
 }

@@ -1,0 +1,7 @@
+{
+  "binarytest": 
+  {
+    "binaryval:binary": "OSGI-INF/files/binary1.bin",
+    "binaryarr:binary[]": ["OSGI-INF/files/binary2.bin", "OSGI-INF/files/binary3.bin"]
+  }
+}

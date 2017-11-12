@@ -10,7 +10,11 @@ Private-Package                     = \
     ${p}.tb.*
 
 Include-Resource: {OSGI-INF/configurator/config2.json=configs/config2.json}, \
-    {OSGI-INF/configurator/config3.json=configs/config3.json}
+    {OSGI-INF/configurator/config3.json=configs/config3.json}, \
+    {OSGI-INF/configurator/config4.json=configs/config4.json}, \
+    {OSGI-INF/files/binary1.bin=configs/binary1.bin}, \
+    {OSGI-INF/files/binary2.bin=configs/binary2.bin}, \
+    {OSGI-INF/files/binary3.bin=configs/binary3.bin}
 Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.configurator)(version>=1.0)(!(version>=2.0)))"
 
  
