@@ -388,6 +388,34 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
+	public void testRanking() throws Exception {
+		Deferred<Configuration> updated1 = new Deferred<>();
+		Deferred<Configuration> updated2 = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg1 = registerConfigListener(
+				"pid1", updated1, null);
+
+		ServiceRegistration<ConfigurationListener> reg2 = registerConfigListener(
+				"pid2", updated2, null);
+		try {
+			Bundle tb4 = install("tb4.jar");
+			tb4.start();
+
+			Configuration cfg1 = updated1.getPromise().getValue();
+			Dictionary<String,Object> props1 = cfg1.getProperties();
+			assertEquals("winning", props1.get("akey"));
+
+			Configuration cfg2 = updated2.getPromise().getValue();
+			Dictionary<String,Object> props2 = cfg2.getProperties();
+			assertEquals("winning", props2.get("akey"));
+
+			tb4.uninstall();
+		} finally {
+			reg1.unregister();
+			reg2.unregister();
+		}
+	}
+
 	// For some reason Assert doesn't provide this one...
 	private void assertArrayEquals(boolean[] expected, Object actual) {
 		assertTrue(actual instanceof boolean[]);

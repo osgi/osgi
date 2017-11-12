@@ -1,0 +1,12 @@
+{
+  "pid1": 
+  {
+    ":configurator:ranking": 2,
+    "akey": "winning"
+  },
+  "pid2": 
+  {
+    ":configurator:ranking": -10,
+    "akey": "losing"
+  }  
+}
