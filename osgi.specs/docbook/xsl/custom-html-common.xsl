@@ -85,13 +85,12 @@
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/draft.css"/>
     </xsl:if>
     <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/github.css"/>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
     <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.pack.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/js.cookie.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/jquery.modal.min.js"></script>
     <script type="text/javascript" src="{$webhelp.common.dir}js/main.js"></script>
-    <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.enable.js"></script>
 </xsl:template>
 
 <xsl:template name="user.header.navigation">
