@@ -9,8 +9,7 @@ body, html, #fullbody {
 }
 
 body {
-	background-image: url(../images/solid.png);
-	background-attachment: fixed;
+	background-color: #cccccc;
 	color: #333;
 	font: 16px/1.5 Ubuntu, Arial, Helvetica, sans-serif;
 	margin: 0;
