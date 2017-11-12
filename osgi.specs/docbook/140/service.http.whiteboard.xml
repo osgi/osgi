@@ -2546,6 +2546,13 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
     <itemizedlist>
       <listitem>
+        <para>Added <xref
+        linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+        xrefstyle="hyperlink"/> to the Servlet Context Helper.
+        </para>
+      </listitem>
+    
+      <listitem>
         <para>Added Servlet support for Multipart Configuration Handling. 
         See <xref linkend="service.http.whiteboard.servlet.properties.table"/>.</para>
       </listitem>
