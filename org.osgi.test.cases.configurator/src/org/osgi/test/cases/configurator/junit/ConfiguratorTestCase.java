@@ -85,10 +85,15 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 
 			Configuration cfg = updated.getPromise().getValue();
 			Dictionary<String,Object> props = cfg.getProperties();
-			assertEquals(4, props.size());
+			assertEquals(6, props.size());
 			assertEquals(true, props.get("bval"));
 			assertEquals(1234L, props.get("ival"));
+			assertEquals(-2.718, props.get("dval"));
 			assertEquals("bar", props.get("sval"));
+			assertEquals(
+					"{\"a\":1,\"b\":\"2\",\"c\":{\"d\":true,\"e\":[999,1000]}}",
+					((String) props.get("oval")).replaceAll("\\s", ""));
+
 			assertEquals("org.osgi.test.pid2",
 					props.get(Constants.SERVICE_PID));
 
@@ -116,9 +121,8 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			assertEquals('q', props.get("Cval"));
 			assertEquals(Long.MAX_VALUE, props.get("Lval"));
 			assertEquals("false", props.get("Sval"));
-			assertEquals(-12.34f, (float) props.get("Fval"), 0.0001f);
-			assertEquals(3.141592653589793, (double) props.get("Dval"),
-					0.0000000000000001);
+			assertEquals(-12.34f, props.get("Fval"));
+			assertEquals(3.141592653589793, props.get("Dval"));
 			assertEquals(Byte.valueOf("-128"), props.get("ByteVal"));
 			assertEquals(Short.valueOf("16384"), props.get("ShortVal"));
 

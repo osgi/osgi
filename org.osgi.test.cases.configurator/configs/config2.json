@@ -2,7 +2,16 @@
   "org.osgi.test.pid2": 
   {
     "sval": "bar",
+    "dval": -2.718,
     "ival": 1234,
-    "bval": true
+    "bval": true,
+    "oval": {
+      "a": 1,
+      "b": "2",
+      "c": {
+        "d": true,
+        "e": [999, 1000]
+      }
+    }
   }
 }
