@@ -28,7 +28,7 @@
     <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
-    <xsl:param name="base.dir" select="concat($webhelp.base.dir,'/')"/>
+    <xsl:param name="base.dir" select="$webhelp.base.dir"/>
     <xsl:param name="suppress.navigation">0</xsl:param>
     <!-- Generate the end-of-the-book index -->
     <xsl:param name="generate.index" select="1"/>
@@ -189,8 +189,6 @@
     		</xsl:choose>
         </xsl:otherwise>
 	</xsl:choose>
-
-    <xsl:call-template name="index.html"/>
 </xsl:template>
 
 <!-- The WebHelp output structure. similar to main() method.
@@ -483,66 +481,4 @@ basic format:
 
 <xsl:template match="text()" mode="webhelptoc"/>
 
-<xsl:template name="user.footer.content">
-</xsl:template>
-
-    <!-- Generates index.html file at docs/. This is simply a redirection to content/$default.topic -->
-<xsl:template name="index.html">
-    <xsl:variable name="default.topic">
-        <xsl:choose>
-            <xsl:when test="$webhelp.default.topic != ''">
-                <xsl:value-of select="$webhelp.default.topic"/>
-            </xsl:when>
-            <xsl:when test="$htmlhelp.default.topic != ''">
-                <xsl:value-of select="$htmlhelp.default.topic"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="make-relative-filename">
-                    <xsl:with-param name="base.dir"/>
-                    <xsl:with-param name="base.name">
-                        <xsl:choose>
-                            <xsl:when test="$rootid != ''">
-                                <xsl:apply-templates select="key('id',$rootid)" mode="chunk-filename"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:apply-templates
-                                        select="*/*[self::d:preface|self::d:chapter|self::d:appendix|self::d:part][1]"
-                                        mode="chunk-filename"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:call-template name="write.chunk">
-        <xsl:with-param name="filename">
-            <xsl:choose>
-                <xsl:when test="$webhelp.start.filename">
-                    <xsl:value-of select="concat($webhelp.base.dir,'/',$webhelp.start.filename)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="'index.html'"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:with-param>
-        <xsl:with-param name="method" select="'xml'"/>
-        <xsl:with-param name="encoding" select="'utf-8'"/>
-        <xsl:with-param name="indent" select="'yes'"/>
-        <xsl:with-param name="content">
-            <html>
-                <head>
-                    <link rel="shortcut icon" href="{$webhelp.common.dir}images/favicon.png" type="image/x-icon"/>
-                    <meta http-equiv="Refresh" content="0; URL={$default.topic}"/>
-                    <title>
-                        <xsl:value-of select="//d:title[1]"/>&#160;<xsl:value-of select="$release.version"/>
-                    </title>
-                </head>
-                <body>
-                    If not automatically redirected, click <a href="{$default.topic}"><xsl:value-of select="$default.topic"/></a>
-                </body>
-            </html>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
 </xsl:stylesheet>

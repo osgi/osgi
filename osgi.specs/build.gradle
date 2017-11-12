@@ -329,7 +329,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
       def profileXSL = file('docbook/xsl/custom-html-profile.xsl')
       def htmlResources = file('docbook/xsl/html-resources')
       def licensedResources = file("${bnd.licensed}/webresources")
-      ext.destinationDir = new File(buildDir, "html/${book}")
+      ext.destinationDir = new File(buildDir, "html/${book}/")
 
       inputs.files booktask, rasterizetask, stylesheet, commonXSL, profileXSL, htmlResources, licensedResources
       outputs.dir destinationDir
@@ -355,8 +355,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
           param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
           param('name': 'draft.watermark.image', 'expression': 'draft.png')
           param('name': 'webhelp.base.dir', 'expression': destinationDir)
-          param('name': 'chunked.filename.prefix', 'expression': "${book}-")
-          param('name': 'webhelp.default.topic', 'expression': "${book}-index.html")
+          param('name': 'webhelp.default.topic', 'expression': "index.html")
           param('name': 'release.version', 'expression': version)
         }
 
