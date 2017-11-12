@@ -1058,33 +1058,30 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
         </table>
         
         <para>Below is an example of using the <code>PREFIX_</code> constant 
-        in an annotation. This example has a Declarative
-        Services component that is configured with the following configuration 
-        property:
-        <programlisting>"com.acme.config.type"="MULTI"</programlisting> 
-        When Declarative Services invokes the <code>@Activate</code>
-        method the configuration provided is already converted into the
-        <code>MyAnnotation</code> 
-        annotation. This example shows also how the annotation can be converted
-        back into a Map.
+        in an annotation. The example receives an untyped <code>Dictionary</code>
+        in the <code>updated()</code> callback with configuration information.
+        Each key in the dictionary is prefixed with the <code>PREFIX_</code>.
+        The annotation can be used to read the configuration using typed methods 
+        with short names.
         <programlisting>  public @interface MyAnnotation {
     static final String PREFIX_ = "com.acme.config.";
 
-    enum Type { SINGLE, MULTI };
-
     long timeout() default 1000L;
-    Type type() default Type.SINGLE;
+    String tempdir() default "/tmp";
+    int retries() default 10;
   }
   
-  @Activate
-  private void activate(MyAnnotation ann) {
-    long configuredTimeout = ann.timeout(); // value will be 1000
-    MyAnnotation.Type configuredType = ann.type(); // value will be MULTI
+  public void updated(Dictionary dict) {
+    // dict contains:
+    // "com.acme.config.timeout" = "500"
+    // "com.acme.config.tempdir" = "/temp"
     
-    Map m = converter.convert(ann).to(Map.class);
-    // m will contain:
-    // { "com.acme.config.timeout" = 1000L,
-    //   "com.acme.config.type" = MULTI }
+    MyAnnotation cfg = converter.convert(dict).to(MyAnnotation.class);
+    
+    long configuredTimeout = cfg.timeout(); // 500
+    int configuredRetries = cfg.retries(); // 10
+    
+    // ...
   }</programlisting></para>
 
         <para>However, if the type is a
