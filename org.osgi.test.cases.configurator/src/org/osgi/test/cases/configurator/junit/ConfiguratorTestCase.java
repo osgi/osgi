@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Iterator;
 
@@ -158,8 +159,9 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			Assert.assertArrayEquals(new String[] {
 					"one", "two", "three"
 			}, (Object[]) props.get("sa"));
-			// TODO assertArraysEquals(new String[] {"complex1", "complex2"},
-			// props.get("oa"));
+			Assert.assertArrayEquals(new String[] {
+					"{\"foo\":{\"yo\":\"ya\"}}", "{\"bar\":{\"to\":9182}}"
+			}, (Object[]) props.get("oa"));
 			Assert.assertArrayEquals(new String[] {},
 					(Object[]) props.get("xa"));
 
@@ -216,8 +218,8 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
-	public void xtestCollectionsImplicit() throws Exception {
-		fail("TODO");
+	public void testCollectionsImplicit() throws Exception {
+		fail("Is this not supported?");
 		Deferred<Configuration> updated = new Deferred<>();
 
 		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
@@ -273,6 +275,7 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 					props.get("com.acme.ByteVal"));
 			assertCollectionEquals(Arrays.asList((short) 32766, (short) 32766),
 					props.get("com.acme.ShortVal"));
+			assertCollectionEquals(Collections.emptyList(), props.get("ec"));
 
 			tb2.uninstall();
 		} finally {

@@ -17,6 +17,10 @@
     "la": [9223372036854775807, -9223372036854775808],
     "da": [-999.999],
     "sa": ["one", "two", "three"],
+    "oa": [
+      {"foo": { "yo": "ya" }}, 
+      {"bar": { "to": 9182 }}
+    ],
     "xa": []
   },
   "org.osgi.test.pid4b":
@@ -60,6 +64,7 @@
     "ic:Collection<Integer>": [-1, -2, -3],
     "lc:Collection<Long>": [9223372036854775807, -9223372036854775808],
     "sc:Collection<String>": ["one", "two", "three"],
+    "ec:Collection<String>": ["removethis"],
     "com.acme.ByteVal:Collection<Byte>": [99],
     "com.acme.ShortVal:Collection<Short>": [32766, 32766]
   }
