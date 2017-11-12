@@ -745,14 +745,12 @@ tracker.open();</programlisting>
     <section>
       <title>Confidential Remote Services: osgi.confidential</title>
 
-      <para>If the remote service must only be exported using a mechanism that supports
-      confidential message delivery the <code>osgi.confidential</code> intent can be specified.
-      This means that the Remote Services implementation can only export the service if
-      a confidential message layer, such as a TLS-based protocol, is supported.</para>
+      <para>The <code>osgi.confidential</code> intent can be used to state that the remote service 
+      communications must only be readable by the intended recipient, for example, through
+      the use of TLS-based transport encryption.</para>
 
-      <para>
-      If the Remote Services implementation does not support a confidential mechanism,
-      or is not configured as such, it should not expose the service remotely.
+      <para>If a Remote Services implementation does not support 
+      confidential communications, or is not configured as such, it must not expose the service remotely. 
       </para>
     </section>
 
