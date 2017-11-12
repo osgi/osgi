@@ -73,9 +73,71 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		}
 	}
 
+	public void testImplicitDatatypes() throws Exception {
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				"org.osgi.test.pid2", updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			assertFalse("Precondition", updated.getPromise().isDone());
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals(4, props.size());
+			assertEquals(true, props.get("bval"));
+			assertEquals(1234L, props.get("ival"));
+			assertEquals("bar", props.get("sval"));
+			assertEquals("org.osgi.test.pid2",
+					props.get(Constants.SERVICE_PID));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testExplicitDatatypes() throws Exception {
+		String pid = "org.osgi.test.pid3a";
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, null);
+		try {
+			Bundle tb2 = install("tb2.jar");
+			assertFalse("Precondition", updated.getPromise().isDone());
+			tb2.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals(Integer.valueOf(1234), props.get("Ival"));
+			assertEquals(Boolean.TRUE, props.get("Bval"));
+			assertEquals('q', props.get("Cval"));
+			assertEquals(Long.MAX_VALUE, props.get("Lval"));
+			assertEquals("false", props.get("Sval"));
+			assertEquals(-12.34f, (float) props.get("Fval"), 0.0001f);
+			assertEquals(3.141592653589793, (double) props.get("Dval"),
+					0.0000000000000001);
+			assertEquals(Byte.valueOf("-128"), props.get("ByteVal"));
+			assertEquals(Short.valueOf("16384"), props.get("ShortVal"));
+
+			tb2.uninstall();
+		} finally {
+			reg.unregister();
+		}
+	}
+
 	private ServiceRegistration<ConfigurationListener> registerConfigListener(
 			String pid,
 			Deferred<Configuration> updated, Deferred<Configuration> deleted) {
+		if (updated == null)
+			updated = new Deferred<>();
+		if (deleted == null)
+			deleted = new Deferred<>();
+
+		Deferred<Configuration> fupdated = updated;
+		Deferred<Configuration> fdeleted = deleted;
 		ConfigurationListener cl = new ConfigurationListener() {
 			@Override
 			public void configurationEvent(ConfigurationEvent event) {
@@ -87,11 +149,11 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 							.getService(event.getReference());
 					switch (event.getType()) {
 						case ConfigurationEvent.CM_UPDATED :
-							updated.resolve(
+							fupdated.resolve(
 									cm.getConfiguration(event.getPid()));
 							return;
 						case ConfigurationEvent.CM_DELETED :
-							deleted.resolve(
+							fdeleted.resolve(
 									cm.getConfiguration(event.getPid()));
 							return;
 					}

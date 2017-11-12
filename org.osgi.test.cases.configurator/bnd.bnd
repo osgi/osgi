@@ -12,7 +12,8 @@ Export-Package                      = \
 Import-Package: *
 
 Include-Resource                    = \
-   tb1.jar
+   tb1.jar, \
+   tb2.jar
    
 Test-Cases                          = ${testcases}
 # -signaturetest                      = org.osgi.service.clusterinfo

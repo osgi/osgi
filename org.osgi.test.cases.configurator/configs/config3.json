@@ -1,0 +1,14 @@
+{
+  "org.osgi.test.pid3a": 
+  {
+    "Bval:Boolean": "true",
+    "Cval:Character": "q",
+    "Dval:Double": "3.141592653589793",
+    "Fval:Float": -12.34,
+    "Ival:Integer": 1234,
+    "Lval:Long": "9223372036854775807",
+    "Sval:String": false,
+    "ByteVal:Byte": -128,
+    "ShortVal:Short": 16384
+  }
+}

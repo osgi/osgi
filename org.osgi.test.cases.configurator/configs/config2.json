@@ -1,0 +1,8 @@
+{
+  "org.osgi.test.pid2": 
+  {
+    "sval": "bar",
+    "ival": 1234,
+    "bval": true
+  }
+}
