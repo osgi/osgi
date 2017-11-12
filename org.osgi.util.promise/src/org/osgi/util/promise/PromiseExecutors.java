@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import static org.osgi.util.promise.PromiseImpl.uncaughtException;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -173,6 +174,36 @@ public class PromiseExecutors {
 	 */
 	public <T> Promise<T> failed(Throwable failure) {
 		return new PromiseImpl<>(null, requireNonNull(failure), this);
+	}
+
+	/**
+	 * Returns a new Promise that will hold the result of the specified task.
+	 * <p>
+	 * The specified task will be executed on the {@link #executor() callback
+	 * executor}.
+	 * 
+	 * @param task The task whose result will be available from the returned
+	 *            Promise.
+	 * @return A new Promise that will hold the result of the specified task.
+	 */
+	public <V> Promise<V> submit(final Callable< ? extends V> task) {
+		requireNonNull(task);
+		final Deferred<V> deferred = deferred();
+		try {
+			executor().execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						deferred.resolve(task.call());
+					} catch (Throwable t) {
+						deferred.fail(t);
+					}
+				}
+			});
+		} catch (Exception t) {
+			deferred.fail(t);
+		}
+		return deferred.getPromise();
 	}
 
 	/**

@@ -183,13 +183,13 @@
     implementations. This API contains the <xref
     linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
     which provides access to the standard Promise implementation. A Deferred
-    object can be created by calling the<xref
+    object can be created by calling the <xref
     linkend="org.osgi.util.promise.PromiseExecutors.deferred--"
     xrefstyle="hyperlink"/> method on a <xref
     linkend="org.osgi.util.promise.PromiseExecutors" xrefstyle="hyperlink"/>
     object or by using the <xref
     linkend="org.osgi.util.promise.Deferred.Deferred--"
-    xrefstyle="hyperlink"/> constructor. </para>
+    xrefstyle="hyperlink"/> constructor.</para>
 
     <para>A <xref linkend="org.osgi.util.promise.PromiseExecutors"
     xrefstyle="hyperlink"/> object is created with a specifed callback
@@ -658,6 +658,12 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     returning Promises which use the implementation default executors.</para>
 
     <programlisting>  return getTimeConsumingAnswer().fallbackTo(Promises.resolved("Fallback Value"));</programlisting>
+
+    <para>The <xref
+    linkend="org.osgi.util.promise.PromiseExecutors.submit-Callable-"
+    xrefstyle="hyperlink"/> method can be used to return a new Promise that
+    will hold the result of the specified task. The task will be executed on
+    the callback executor.</para>
 
     <para>The <xref linkend="org.osgi.util.promise.Promises"
     xrefstyle="hyperlink"/> class also provides the <xref

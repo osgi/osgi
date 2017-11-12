@@ -27,7 +27,9 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -2839,5 +2841,48 @@ public class PromiseTest extends TestCase {
 		} catch (NullPointerException e) {
 			// expected
 		}
+	}
+
+	public void testSubmitSuccess() throws Exception {
+		final PromiseExecutors executors = new PromiseExecutors(
+				callbackExecutor, scheduledExecutor);
+		Promise<String> p = executors.submit(new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return getName();
+			}
+		});
+		assertNull("wrong failure", p.getFailure());
+		assertEquals("wrong result", getName(), p.getValue());
+	}
+
+	public void testSubmitFailure() throws Exception {
+		final PromiseExecutors executors = new PromiseExecutors(
+				callbackExecutor, scheduledExecutor);
+		final Exception failure = new RuntimeException();
+		Promise<String> p = executors.submit(new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				throw failure;
+			}
+		});
+		assertSame("wrong failure", failure, p.getFailure());
+	}
+
+	public void testSubmitExecutorFailure() throws Exception {
+		final RuntimeException failure = new RuntimeException();
+		final PromiseExecutors executors = new PromiseExecutors(new Executor() {
+			@Override
+			public void execute(Runnable command) {
+				throw failure;
+			}
+		}, scheduledExecutor);
+		Promise<String> p = executors.submit(new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return getName();
+			}
+		});
+		assertSame("wrong failure", failure, p.getFailure());
 	}
 }
