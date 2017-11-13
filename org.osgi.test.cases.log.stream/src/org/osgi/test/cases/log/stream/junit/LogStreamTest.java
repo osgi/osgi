@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.LongUnaryOperator;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
@@ -51,6 +53,53 @@ public class LogStreamTest extends OSGiTestCase {
 		getContext().ungetService(logReaderServiceReference);
 		getContext().ungetService(logStreamProviderReference);
 
+	}
+
+	public void testLogStreamIsBuffered() throws Exception {
+		LongUnaryOperator backPressure = i -> 100L;
+		for (int i = 0; i < 5; i++) {
+			logService.getLogger(getName()).audit(String.valueOf(i + 1));
+		}
+
+		CountDownLatch latch = new CountDownLatch(30);
+
+		AtomicLong lastEventTime = new AtomicLong();
+		try (PushStream<LogEntry> stream = logStreamProvider
+				.createStream(LogStreamProvider.Options.HISTORY)) {
+
+			for (int i = 5; i < 10; i++) {
+				logService.getLogger(getName()).audit(String.valueOf(i + 1));
+			}
+
+			long startTime = System.nanoTime();
+			stream.adjustBackPressure(backPressure)
+					.filter(l -> getName().equals(l.getLoggerName()))
+					.forEach(l -> {
+						System.out.printf("%s[%s]: %s%n", l.getLoggerName(),
+								l.getSequence(), l.getMessage());
+						latch.countDown();
+						lastEventTime.set(System.nanoTime());
+					});
+
+			for (int i = 10; i < 30; i++) {
+				logService.getLogger(getName()).audit(String.valueOf(i + 1));
+			}
+
+			assertTrue("Latch is not zero indicating we blocked.",
+					latch.getCount() > 0);
+
+			latch.await(4, TimeUnit.SECONDS);
+			assertEquals("Did not get full history", 0, latch.getCount());
+
+			long timeForConsumer = lastEventTime.get() - startTime;
+			// making sure the timeForConsumer is greater than 2900
+			// We fire 30 events but the back-pressure is only used for the
+			// first 29 events, not the last event 30.
+			assertTrue(
+					"Did not take long enough: "
+							+ TimeUnit.NANOSECONDS.toMillis(timeForConsumer),
+					TimeUnit.NANOSECONDS.toMillis(timeForConsumer) > 2900);
+		}
 	}
 
 	public void testLogWithHistory() throws Exception {
@@ -103,7 +152,6 @@ public class LogStreamTest extends OSGiTestCase {
 		}
 		assertEquals("Some number of message, >0 not in stream", 0,
 				messageSet.size());
-
 	}
 
 	public void testCloseOnUnget() throws Exception {
