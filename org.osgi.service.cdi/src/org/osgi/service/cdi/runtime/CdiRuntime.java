@@ -21,7 +21,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.service.cdi.dto.ContainerDTO;
-import org.osgi.service.cdi.dto.model.ContainerModelDTO;
+import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
 
 /**
  * The {@code CdiRuntime} service represents the CDI Runtime that manages the
@@ -44,25 +44,25 @@ import org.osgi.service.cdi.dto.model.ContainerModelDTO;
 public interface CdiRuntime {
 
 	/**
-	 * Returns the container models declared by the specified active bundles.
+	 * Returns the container templates declared by the specified active bundles.
 	 *
 	 * <p>
-	 * Only container models from active bundles are returned. If the specified
+	 * Only container templates from active bundles are returned. If the specified
 	 * bundles have no declared container or are not active, an empty collection is
 	 * returned.
 	 *
-	 * @param bundles The bundles whose declared container models are to be
+	 * @param bundles The bundles whose declared container templates are to be
 	 *        returned. Specifying no bundles, or the equivalent of an empty
-	 *        {@code Bundle} array, will return the declared container models from
-	 *        all active bundles.
-	 * @return The declared container models of the specified active
+	 *        {@code Bundle} array, will return the declared container templates
+	 *        from all active bundles.
+	 * @return The declared container templates of the specified active
 	 *         {@code bundles}. An empty collection is returned if there are no
-	 *         container models for the specified active bundles.
+	 *         container templates for the specified active bundles.
 	 */
-	Collection<ContainerModelDTO> getContainerModelDTOs(Bundle... bundles);
+	Collection<ContainerTemplateDTO> getContainerTemplateDTOs(Bundle... bundles);
 
 	/**
-	 * Returns the {@link ContainerModelDTO} declared by the specified bundle.
+	 * Returns the {@link ContainerTemplateDTO} declared by the specified bundle.
 	 *
 	 * <p>
 	 * Only container models from active bundles are returned. {@code null} if no
@@ -73,16 +73,16 @@ public interface CdiRuntime {
 	 * @return The declared container model or {@code null} if the specified bundle
 	 *         is not active or does not declare a container.
 	 */
-	ContainerModelDTO getContainerModelDTO(Bundle bundle);
+	ContainerTemplateDTO getContainerModelDTO(Bundle bundle);
 
 	/**
-	 * Returns the container snapshot for the specified container model.
+	 * Returns the container snapshot for the specified container template.
 	 *
-	 * @param model The container model. Must not be {@code null}.
+	 * @param template The container template. Must not be {@code null}.
 	 * @return A snapshot of the current container for the specified container
-	 *         model. {@code null} is returned if the provided container model does
-	 *         not belong to an active bundle.
+	 *         template. {@code null} is returned if the provided container template
+	 *         does not belong to an active bundle.
 	 */
-	ContainerDTO getContainerDTO(ContainerModelDTO model);
+	ContainerDTO getContainerDTO(ContainerTemplateDTO template);
 
 }

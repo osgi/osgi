@@ -36,7 +36,7 @@
  */
 
 @Version(CdiConstants.CDI_SPECIFICATION_VERSION)
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import org.osgi.annotation.versioning.Version;
 import org.osgi.service.cdi.CdiConstants;

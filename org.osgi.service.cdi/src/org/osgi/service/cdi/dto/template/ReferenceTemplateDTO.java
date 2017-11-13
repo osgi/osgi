@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 /**
  * A description of a reference dependency of a component
@@ -26,7 +26,7 @@ package org.osgi.service.cdi.dto.model;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ReferenceModelDTO extends DependencyModelDTO {
+public class ReferenceTemplateDTO extends DependencyTemplateDTO {
 	/**
 	 * The name of the reference.
 	 * <p>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 /**
  * A description of a configuration dependency of a component
@@ -25,36 +25,36 @@ package org.osgi.service.cdi.dto.model;
  * Singleton mandatory configurations are <b>static</b> with cardinality
  * <code>1..1</code>:
  * <ul>
- * <li>{@link DependencyModelDTO#minimumCardinality minimumCardinality} = 1</li>
- * <li>{@link DependencyModelDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyModelDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyModelDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyModelDTO#greedy greedy} = true</li>
+ * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 1</li>
+ * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
+ * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
+ * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
+ * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
  * </ul>
  * <p>
  * Singleton optional configurations are <b>static</b> with cardinality
  * <code>0..1</code>:
  * <ul>
- * <li>{@link DependencyModelDTO#minimumCardinality minimumCardinality} = 0</li>
- * <li>{@link DependencyModelDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyModelDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyModelDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyModelDTO#greedy greedy} = true</li>
+ * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 0</li>
+ * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
+ * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
+ * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
+ * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
  * </ul>
  * <p>
  * Factory configurations are <b>dynamic</b> with cardinality <code>0..N</code>:
  * <ul>
- * <li>{@link DependencyModelDTO#minimumCardinality minimumCardinality} = 0</li>
- * <li>{@link DependencyModelDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyModelDTO.MaximumCardinality#MANY MANY}</li>
- * <li>{@link DependencyModelDTO#dynamic dynamic} = true</li>
- * <li>{@link DependencyModelDTO#greedy greedy} = true</li>
+ * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 0</li>
+ * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
+ * {@link DependencyTemplateDTO.MaximumCardinality#MANY MANY}</li>
+ * <li>{@link DependencyTemplateDTO#dynamic dynamic} = true</li>
+ * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
  * </ul>
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ConfigurationModelDTO extends DependencyModelDTO {
+public class ConfigurationTemplateDTO extends DependencyTemplateDTO {
 	/**
 	 * The pid of the tracked configuration objects
 	 * <p>

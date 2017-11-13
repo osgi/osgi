@@ -20,7 +20,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.cdi.CdiConstants;
 import org.osgi.service.cdi.dto.ContainerDTO;
-import org.osgi.service.cdi.dto.model.ContainerModelDTO;
+import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
 
 /**
  * A {@code CdiContainer} service is registered by the CDI extender for each
@@ -58,10 +58,10 @@ public interface CdiContainer {
 	public ContainerDTO getContainerDTO();
 
 	/**
-	 * Obtain the CDI container model.
+	 * Obtain the CDI container template.
 	 *
-	 * @return the CDI container model
+	 * @return the CDI container template
 	 */
-	public ContainerModelDTO getContainerModelDTO();
+	public ContainerTemplateDTO getContainerTemplateDTO();
 
 }

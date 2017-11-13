@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import org.osgi.service.cdi.dto.ContainerDTO;
 
@@ -22,17 +22,17 @@ import org.osgi.service.cdi.dto.ContainerDTO;
  * Models an extension dependency of the {@link ContainerDTO}
  *
  * <ul>
- * <li>{@link DependencyModelDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyModelDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyModelDTO#minimumCardinality minimumCardinality} = 1</li>
- * <li>{@link DependencyModelDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyModelDTO#greedy greedy} = true</li>
+ * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
+ * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
+ * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 1</li>
+ * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
+ * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
  * </ul>
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ExtensionModelDTO extends DependencyModelDTO {
+public class ExtensionTemplateDTO extends DependencyTemplateDTO {
 	/**
 	 * Target filter for the extension service.
 	 * <p>

@@ -17,8 +17,8 @@
 package org.osgi.service.cdi.dto;
 
 import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
-import org.osgi.service.cdi.dto.model.ReferenceModelDTO;
+import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
+import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
 
 /**
  * A snapshot of the runtime state of a {@link ComponentDTO component} reference
@@ -29,14 +29,13 @@ import org.osgi.service.cdi.dto.model.ReferenceModelDTO;
  */
 public class ReferenceDTO extends DependencyDTO {
 	/**
-	 * The static model of this reference dependency as resolved at initialization
-	 * time.
+	 * The template of this reference dependency as resolved at initialization time.
 	 */
-	public ReferenceModelDTO		model;
+	public ReferenceTemplateDTO		template;
 
 	/**
 	 * Indicates the runtime target filter used in addition to the
-	 * {@link ReferenceModelDTO#targetFilter model.serviceType} to match services.
+	 * {@link ReferenceTemplateDTO#targetFilter model.serviceType} to match services.
 	 */
 	public String					targetFilter;
 

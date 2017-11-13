@@ -18,8 +18,8 @@ package org.osgi.service.cdi.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
-import org.osgi.service.cdi.dto.model.ConfigurationModelDTO;
+import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
+import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a component
@@ -51,14 +51,14 @@ public class ComponentDTO extends DTO {
 	 * <p>
 	 * <ul>
 	 * <li><code>0..N</code> maps can have only <code>service.pid</code> which
-	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
-	 * {@link ComponentLifecycleDTO#configurations configuration dependencies} of the
-	 * parent {@link ComponentLifecycleDTO}</li>
+	 * corresponds to the {@link ConfigurationTemplateDTO#pid PID} of one of the
+	 * {@link LifecycleDTO#configurations configuration dependencies} of the
+	 * parent {@link LifecycleDTO}</li>
 	 *
 	 * <li><code>0..1</code> map can have a <code>service.factoryPid</code> which
-	 * corresponds to the {@link ConfigurationModelDTO#pid PID} of one of the
-	 * {@link ComponentLifecycleDTO#configurations configuration dependencies} of the
-	 * parent {@link ComponentLifecycleDTO}, in which case the
+	 * corresponds to the {@link ConfigurationTemplateDTO#pid PID} of one of the
+	 * {@link LifecycleDTO#configurations configuration dependencies} of the
+	 * parent {@link LifecycleDTO}, in which case the
 	 * <code>service.pid</code> of the map corresponds to one of the
 	 * {@link ConfigurationDTO#matches} of that configuration dependency.</li>
 	 * </ul>

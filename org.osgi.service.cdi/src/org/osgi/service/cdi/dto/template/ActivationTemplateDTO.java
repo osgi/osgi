@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import java.util.Map;
 import org.osgi.service.cdi.dto.ActivationDTO;
@@ -31,7 +31,7 @@ import org.osgi.service.cdi.dto.ActivationDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ActivationModelDTO {
+public class ActivationTemplateDTO {
 	/**
 	 * Possible values for {@link #scope}.
 	 */

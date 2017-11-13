@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.ComponentDTO;
-import org.osgi.service.cdi.dto.ComponentLifecycleDTO;
+import org.osgi.service.cdi.dto.LifecycleDTO;
 
 /**
  * A description of a CDI component
@@ -26,7 +26,7 @@ import org.osgi.service.cdi.dto.ComponentLifecycleDTO;
  * The content of this DTO is resolved form metadata at initialization time and
  * remains the same between the CDI bundle restarts.
  * <p>
- * At runtime it is spit between a {@link ComponentLifecycleDTO} which handles the
+ * At runtime it is spit between a {@link LifecycleDTO} which handles the
  * resolution of the {@link #configurations} and the creation of
  * {@link ComponentDTO} instances and one or more {@link ComponentDTO}
  * instances, which handle the resolution of {@link #references} and the
@@ -35,7 +35,7 @@ import org.osgi.service.cdi.dto.ComponentLifecycleDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentModelDTO extends DTO {
+public class LifecycleTemplateDTO extends DTO {
 
 	/**
 	 * Define the possible values for {@link #type}.
@@ -67,7 +67,7 @@ public class ComponentModelDTO extends DTO {
 	 * <p>
 	 * May contain one or more singleton configurations.
 	 */
-	public ConfigurationModelDTO[]	configurations;
+	public ConfigurationTemplateDTO[]	configurations;
 
 	/**
 	 * The service dependencies of the component.
@@ -75,7 +75,7 @@ public class ComponentModelDTO extends DTO {
 	 * Value must not be null. The array will be empty if there are no service
 	 * dependencies.
 	 */
-	public ReferenceModelDTO[]		references;
+	public ReferenceTemplateDTO[]		references;
 
 	/**
 	 * The activation beans of the component.
@@ -85,12 +85,12 @@ public class ComponentModelDTO extends DTO {
 	 * For {@link #type} = {@link Type#APPLICATION} the array may be empty.
 	 * <p>
 	 * For {@link #type} = {@link Type#APPLICATION} the array may contain multiple
-	 * entries where {@link ActivationModelDTO#serviceClasses} is not empty and
-	 * {@link ActivationModelDTO#scope} is {@link ActivationModelDTO.Scope#SINGLETON
+	 * entries where {@link ActivationTemplateDTO#serviceClasses} is not empty and
+	 * {@link ActivationTemplateDTO#scope} is {@link ActivationTemplateDTO.Scope#SINGLETON
 	 * SINGLETON}.
 	 * <p>
 	 * For {@link #type} = {@link Type#COMPONENT} the array must contain exactly one
 	 * entry.
 	 */
-	public ActivationModelDTO[]		activations;
+	public ActivationTemplateDTO[]		activations;
 }

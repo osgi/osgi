@@ -18,26 +18,26 @@ package org.osgi.service.cdi.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.model.ComponentModelDTO;
-import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
-import org.osgi.service.cdi.dto.model.ConfigurationModelDTO;
-import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
+import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
+import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
+import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO;
+import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a component factory.
  * <p>
  * A component factory maintains the binding of {@link ComponentDTO component
  * instances} to the {@link #configurations configuration dependencies}
- * described by one {@link ComponentModelDTO component model}
+ * described by one {@link LifecycleTemplateDTO component model}
  * <p>
  * Both the application component and the regular components have a
- * {@link ComponentLifecycleDTO}.
+ * {@link LifecycleDTO}.
  * <p>
- * When the referenced {@link ComponentModelDTO} has type
+ * When the referenced {@link LifecycleTemplateDTO} has type
  * {@link Type#APPLICATION} this factory can have <code>0..N</code>
  * {@link ConfigurationDTO} with {@link MaximumCardinality#ONE}.
  * <p>
- * When the referenced {@link ComponentModelDTO} has type {@link Type#COMPONENT}
+ * When the referenced {@link LifecycleTemplateDTO} has type {@link Type#COMPONENT}
  * this factory can have <code>0..N</code> {@link ConfigurationDTO} with
  * {@link MaximumCardinality#ONE} and <code>0..1</code> {@link ConfigurationDTO}
  * with {@link MaximumCardinality#MANY}.
@@ -79,17 +79,17 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentLifecycleDTO extends DTO {
+public class LifecycleDTO extends DTO {
 	/**
-	 * Model of the components this factory creates
+	 * The template of the components this factory creates
 	 */
-	public ComponentModelDTO	model;
+	public LifecycleTemplateDTO	template;
 
 	/**
 	 * The configuration dependencies.
 	 * <p>
 	 * Each entry in the array corresponds to the runtime state of one of the
-	 * statically defined {@link ConfigurationModelDTO configurations} of
+	 * statically defined {@link ConfigurationTemplateDTO configurations} of
 	 * {@link #model the component} managed by this factory.
 	 * <p>
 	 * Must never be null.

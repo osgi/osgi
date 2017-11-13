@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import java.util.Arrays;
 import org.osgi.dto.DTO;
@@ -25,7 +25,7 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public abstract class DependencyModelDTO extends DTO {
+public abstract class DependencyTemplateDTO extends DTO {
 	/**
 	 * Defines the possible values for {@link #maximumCardinality}
 	 */

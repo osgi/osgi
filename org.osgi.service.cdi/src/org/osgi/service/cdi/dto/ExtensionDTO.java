@@ -17,7 +17,7 @@
 package org.osgi.service.cdi.dto;
 
 import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.service.cdi.dto.model.ExtensionModelDTO;
+import org.osgi.service.cdi.dto.template.ExtensionTemplateDTO;
 
 /**
  * A snapshot of the runtime state of an extension dependency of a
@@ -28,11 +28,11 @@ import org.osgi.service.cdi.dto.model.ExtensionModelDTO;
  */
 public class ExtensionDTO extends DependencyDTO {
 	/**
-	 * The model of this extension dependency
+	 * The template of this extension dependency
 	 * <p>
 	 * Must not be null
 	 */
-	public ExtensionModelDTO	model;
+	public ExtensionTemplateDTO	template;
 
 	/**
 	 * The service to which the extension dependency is resolved.

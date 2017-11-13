@@ -18,8 +18,8 @@ package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.BundleDTO;
-import org.osgi.service.cdi.dto.model.ComponentModelDTO.Type;
-import org.osgi.service.cdi.dto.model.ContainerModelDTO;
+import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
+import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
 import org.osgi.service.cdi.runtime.CdiContainerState;
 
 /**
@@ -30,11 +30,11 @@ import org.osgi.service.cdi.runtime.CdiContainerState;
  */
 public class ContainerDTO extends DTO {
 	/**
-	 * The static description of this component as resolved at initialization time.
+	 * The template of this component as resolved at initialization time.
 	 * <p>
 	 * Must not be null
 	 */
-	public ContainerModelDTO		model;
+	public ContainerTemplateDTO	template;
 
 	/**
 	 * The CDI container's current state.
@@ -57,5 +57,5 @@ public class ContainerDTO extends DTO {
 	 * Must not be null. The array always contains at least one element representing
 	 * the {@link Type#APPLICATION APPLICATION}.
 	 */
-	public ComponentLifecycleDTO[]	componentLifecycles;
+	public LifecycleDTO[]	componentLifecycles;
 }

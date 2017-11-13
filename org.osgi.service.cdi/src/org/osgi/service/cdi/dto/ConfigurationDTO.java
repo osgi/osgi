@@ -17,11 +17,11 @@
 package org.osgi.service.cdi.dto;
 
 import java.util.Map;
-import org.osgi.service.cdi.dto.model.ConfigurationModelDTO;
-import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
+import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
+import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
 
 /**
- * A snapshot of the runtime state of a {@link ComponentLifecycleDTO component
+ * A snapshot of the runtime state of a {@link LifecycleDTO component
  * factory} configuration dependency
  *
  * @NotThreadSafe
@@ -29,10 +29,10 @@ import org.osgi.service.cdi.dto.model.DependencyModelDTO.MaximumCardinality;
  */
 public class ConfigurationDTO extends DependencyDTO {
 	/**
-	 * The static model of this configuration dependency as resolved at
-	 * initialization time.
+	 * The template of this configuration dependency as resolved at initialization
+	 * time.
 	 */
-	public ConfigurationModelDTO	model;
+	public ConfigurationTemplateDTO	template;
 
 	/**
 	 * The set of configuration properties that match this configuration

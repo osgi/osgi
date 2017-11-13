@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.model;
+package org.osgi.service.cdi.dto.template;
 
 import org.osgi.dto.DTO;
 
@@ -24,7 +24,7 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ContainerModelDTO extends DTO {
+public class ContainerTemplateDTO extends DTO {
 	/**
 	 * The id of the CDI container.
 	 */
@@ -33,10 +33,10 @@ public class ContainerModelDTO extends DTO {
 	/**
 	 * The extension dependencies of this CDI container.
 	 */
-	public ExtensionModelDTO[]	extensions;
+	public ExtensionTemplateDTO[]	extensions;
 
 	/**
 	 * The components defined in this CDI container.
 	 */
-	public ComponentModelDTO[]	components;
+	public LifecycleTemplateDTO[]	components;
 }

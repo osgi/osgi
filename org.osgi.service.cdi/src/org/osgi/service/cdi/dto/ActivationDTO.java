@@ -18,7 +18,7 @@ package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.service.cdi.dto.model.ActivationModelDTO;
+import org.osgi.service.cdi.dto.template.ActivationTemplateDTO;
 
 /**
  * A snapshot of the runtime state of a {@link ComponentDTO component}
@@ -29,14 +29,14 @@ import org.osgi.service.cdi.dto.model.ActivationModelDTO;
  */
 public class ActivationDTO extends DTO {
 	/**
-	 * The statically resolved model of this activation
+	 * The template of this activation
 	 */
-	public ActivationModelDTO	model;
+	public ActivationTemplateDTO	template;
 
 	/**
 	 * The service this activation may have registered.
 	 * <p>
-	 * Must not be null if {@link ActivationModelDTO#serviceClasses
+	 * Must not be null if {@link ActivationTemplateDTO#serviceClasses
 	 * model.serviceClasses} is not empty.
 	 */
 	public ServiceReferenceDTO	service;
@@ -46,7 +46,7 @@ public class ActivationDTO extends DTO {
 	 * <p>
 	 * Each instance is dependency injected.
 	 * <p>
-	 * Depends on {@link ActivationModelDTO#scope model.scope}
+	 * Depends on {@link ActivationTemplateDTO#scope model.scope}
 	 */
 	public int					instances;
 }
