@@ -22,6 +22,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Qualifier;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.service.cdi.reference.AddingEvent;
 
@@ -34,6 +35,7 @@ import org.osgi.service.cdi.reference.AddingEvent;
  * @author $Id$
  */
 @Documented
+@Qualifier
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
 public @interface Bundle {

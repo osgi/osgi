@@ -23,6 +23,7 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Qualifier;
 import org.osgi.service.cdi.CdiConstants;
 
 /**
@@ -32,6 +33,7 @@ import org.osgi.service.cdi.CdiConstants;
  * @author $Id$
  */
 @Documented
+@Qualifier
 @Repeatable(PIDs.class)
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, TYPE})
