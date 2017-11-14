@@ -1,13 +1,21 @@
 package org.osgi.test.cases.converter.junit;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
+import org.osgi.test.cases.converter.junit.MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest.MappingBean;
+import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.ConverterFunction;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
 import org.osgi.util.converter.TypeRule;
@@ -39,6 +47,21 @@ public class CustomizedConversionComplianceTest extends TestCase {
 
 		public boolean getEnabled() {
 			return this.enabled;
+		}
+	}
+
+	public static class MyErrorBean {
+		private String	property;
+
+		// empty constructor
+		public MyErrorBean() {}
+
+		public void setProperty(String property) {
+			this.property = property;
+		}
+
+		public String getProperty() {
+			return this.property;
 		}
 	}
 
@@ -93,16 +116,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 * <p/>
 	 * Custom conversions are also applied to embedded conversions that are part
 	 * of a map or other enclosing object
-	 * <p/>
-	 * A converter rule can return CANNOT_HANDLE to indicate that it cannot
-	 * handle the conversion, in which case next applicable rule is handed the
-	 * conversion. If none of the registered rules for the current converter can
-	 * handle the conversion, the parent converter object is asked to convert
-	 * the value. Since custom converters can be the basis for further custom
-	 * converters, a chain of custom converters can be created where a custom
-	 * converter rule can either decide to handle the conversion, or it can
-	 * delegate back to the next converter in the chain by returning
-	 * CANNOT_HANDLE if it wishes to do so.
+	 * 
 	 */
 	public void testCustomizedConversion()
 	{
@@ -125,7 +139,6 @@ public class CustomizedConversionComplianceTest extends TestCase {
 					@Override
 					public Date apply(String t) {
 						try {
-							System.out.println("PARSING "+t);
 							return sdf.parse(t);
 							
 						} catch (ParseException e) {
@@ -155,5 +168,204 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		Map<String, String> map = c.convert(mb).sourceAsBean().to(new TypeReference<Map<String,String>>(){});
 		assertEquals(booleanConverted, map.get("enabled"));
 		assertEquals(stringConverted, map.get("startDate"));
+	}
+		
+	/**
+	 * 707.6 - Customizing converters
+	 * <p/>	 
+	 * [...] 
+	 * <p/>
+	 * A converter rule can return CANNOT_HANDLE to indicate that it cannot
+	 * handle the conversion, in which case next applicable rule is handed the
+	 * conversion. If none of the registered rules for the current converter can
+	 * handle the conversion, the parent converter object is asked to convert
+	 * the value. Since custom converters can be the basis for further custom
+	 * converters, a chain of custom converters can be created where a custom
+	 * converter rule can either decide to handle the conversion, or it can
+	 * delegate back to the next converter in the chain by returning
+	 * CANNOT_HANDLE if it wishes to do so.
+	 */
+	public void testCustomizedChainConversion()
+	{
+		final AtomicInteger countUnhandledMappingBean = new AtomicInteger(0);
+		final AtomicInteger countHandledMappingBean = new AtomicInteger(0);
+
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+
+		
+		final String error = "MyErrorBean is not handled";
+		ConverterBuilder converterBuilder = Converters.newConverterBuilder();
+		Converter converter = converterBuilder.build();
+		
+		ConverterBuilder parentConverterBuilder = converter.newConverterBuilder();		
+		parentConverterBuilder.rule(new TypeRule<MappingBean,Map<String,String>>(MappingBean.class, Map.class,
+				new Function<MappingBean,Map<String,String>>() {
+					@Override
+					public Map<String,String> apply(MappingBean t) {	
+						
+						Map<String,String> m = new HashMap<String,String>();
+						m.put("MappingBean", t.toString());
+						m.put("prop1", t.getProp1());
+						m.put("prop2", t.getProp2());
+						m.put("prop3", t.getProp3());
+						m.put("embbeded", t.getEmbedded().toString());
+						countHandledMappingBean.incrementAndGet();	
+						return m;
+					}
+				}) {});
+		Converter parentConverter = parentConverterBuilder.build();	
+		
+		ConverterBuilder chilConverterBuilder = parentConverter.newConverterBuilder();
+		chilConverterBuilder.rule(new TypeRule<Date,String>(Date.class, String.class,
+				new Function<Date,String>() {
+					@Override
+					public String apply(Date t) {
+						return sdf.format(t);
+					}
+				}) {});
+		chilConverterBuilder.rule(new TypeRule<String,Date>(String.class, Date.class,
+				new Function<String,Date>() {
+					@Override
+					public Date apply(String t) {
+						try {
+							return sdf.parse(t);
+							
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				}) {});
+		chilConverterBuilder.rule(new ConverterFunction() {
+			@Override
+			public Object apply(Object obj, Type targetType) throws Exception{
+				Class clazz = obj.getClass();
+				if(MappingBean.class.isAssignableFrom(clazz)){
+					System.out.println("Unhandled MappingBean");
+					countUnhandledMappingBean.incrementAndGet();
+				}
+				if(MyErrorBean.class.isAssignableFrom(clazz)){
+					System.out.println("MyErrorBean trigger error");
+					throw new ConversionException(error);
+				}
+				return ConverterFunction.CANNOT_HANDLE;
+			}
+		});
+		Converter childConverter = chilConverterBuilder.build();	
+		String stringToBeConverted = "131224072100";
+		Date dateToBeConverted = new Date(Date.UTC(113, 11, 24, 6, 21, 0));
+
+		String stringConverted = childConverter.convert(dateToBeConverted).to(String.class);
+		assertEquals(stringConverted,stringToBeConverted);		
+	
+		Date dateConverted = childConverter.convert(stringToBeConverted).to(Date.class);
+		assertEquals(dateToBeConverted,dateConverted);
+		
+		MappingBean embbededBean = new MappingBean();
+		embbededBean.setEmbedded(new ExtObject());
+		embbededBean.setProp1("mappingBean_prop1");
+		embbededBean.setProp2("mappingBean_prop2");
+		embbededBean.setProp3("mappingBean_prop3");
+
+		Map<String,String> map = childConverter.convert(embbededBean).sourceAsBean().to(new TypeReference<Map<String,String>>(){});
+		System.out.println(map);
+
+		MyBean mb = new MyBean();
+		mb.setStartDate(dateToBeConverted);
+		mb.setEnabled(true);				
+		map = childConverter.convert(mb).sourceAsBean().to(new TypeReference<Map<String,String>>(){});
+		
+		String booleanConverted = "true";
+		assertEquals(stringConverted, map.get("startDate"));
+		assertEquals(booleanConverted, map.get("enabled"));
+		
+		MyErrorBean errorBean = new MyErrorBean();
+		errorBean.setProperty("simple_error");
+		try{
+			map = childConverter.convert(errorBean).sourceAsBean().to(new TypeReference<Map<String,String>>(){});
+			fail("ConversionException expected");
+		} catch(ConversionException e)
+		{}
+		
+	}
+	
+	/**
+	 * 707.7 - Conversion failures
+	 * <p/>
+	 * Not all conversions can be performed by the standard converter. It cannot convert 
+	 * text such as 'lorem ipsum' cannot into a <code>long</code> value. Or the number pi 
+	 * into a map. When a conversion fails, the converter will throw a 
+	 * org.osgi.util.converter.ConversionException.
+	 * <p/>   
+	 * If meaningful conversions exist between types not supported by the standard converter,
+	 *  a customized converter can be used. Some applications require different behaviour for 
+	 *  error scenarios. For example they can use an empty value such as 0 or "" instead of
+	 *   the exception, or they might require a different exception to be thrown. 
+	 *   For these scenarios a custom error handler can be registered. The error handler is 
+	 *   only invoked in cases where otherwise a <code>ConversionException</code> would be 
+	 *   thrown. The error handler can return a different value instead or throw another exception.
+	 *   <p/>
+	 *   An error handler is registered by creating a custom converter and providing it with an error 
+	 *   handler via the org.osgi.util.converter.ConverterBuilder.errorHandler(ConvertFunction) method.
+	 *   <p/>
+	 *   When multiple error handlers are registered for a given converter they are invoked in the order
+	 *   in which they were registered until an error handler either throws an exception or returns a 
+	 *   value other than org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE
+	 */
+	public void testErrorHandler()
+	{
+		final AtomicInteger countError = new AtomicInteger(0);	
+		final String error = "handled error";
+		final Map FAILURE = new HashMap();
+		
+		ConverterBuilder cb = Converters.newConverterBuilder();	
+		cb.errorHandler(new ConverterFunction() {
+			@Override
+			@SuppressWarnings("unchecked")
+			public Object apply(Object obj, Type targetType) throws Exception
+			{
+				if(countError.get() == 0){
+					return ConverterFunction.CANNOT_HANDLE;
+				}
+				Class clazz = null;
+				try{
+					clazz = (Class) ((ParameterizedType) targetType).getRawType();
+				} catch(ClassCastException e) {
+					clazz = (Class) targetType;
+				}				
+				if(Map.class.isAssignableFrom(clazz))
+				{
+					FAILURE.put("error", error);
+					return FAILURE;
+				}
+				return null;
+			}
+		});		
+		cb.errorHandler(new ConverterFunction() {
+			@Override
+			public Object apply(Object obj, Type targetType) throws Exception
+			{
+				countError.incrementAndGet();
+				Class clazz = null;
+				try{
+					clazz = (Class) ((ParameterizedType) targetType).getRawType();
+				} catch(ClassCastException e) {
+					clazz = (Class) targetType;
+				}				
+				throw new RuntimeException(error);
+			}
+		});		
+		Converter c = cb.build();	
+		Map m = null;
+		String tobeconverted = "to be converted";
+		try{
+			m = c.convert(tobeconverted).to(Map.class);
+			
+		} catch(RuntimeException e){
+			assertEquals(error, e.getMessage());
+			m = c.convert(tobeconverted).to(Map.class);
+			assertNotNull(m);
+			assertEquals(error, m.get("error"));
+		}
 	}
 }

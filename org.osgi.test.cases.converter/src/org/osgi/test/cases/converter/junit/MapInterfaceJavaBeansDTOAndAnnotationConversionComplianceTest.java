@@ -16,6 +16,7 @@ import java.util.NavigableMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
@@ -140,12 +141,12 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 			return table;
 		}
 	}
-
+	
 	public static class MappingBean {
 		private String			prop1;
 		private String			prop2;
 		private String			prop3;
-		private ConversionComplianceTest.ExtObject	embedded;
+		private ExtObject	embedded;
 
 		// empty constructor
 		public MappingBean() {}
@@ -174,15 +175,15 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 			return this.prop3;
 		}
 
-		public void setEmbedded(ConversionComplianceTest.ExtObject embedded) {
+		public void setEmbedded(ExtObject embedded) {
 			this.embedded = embedded;
 		}
 
-		public ConversionComplianceTest.ExtObject getEmbedded() {
+		public ExtObject getEmbedded() {
 			return this.embedded;
 		}
 	}
-
+	
 	public static class DTOLike {
 
 		public String	prop1;
