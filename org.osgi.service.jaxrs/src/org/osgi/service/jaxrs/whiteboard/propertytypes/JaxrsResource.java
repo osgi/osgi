@@ -21,10 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.osgi.annotation.bundle.Requirement;
-import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.component.annotations.ComponentPropertyType;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.annotations.RequireJaxRSWhiteboard;
 
 /**
  * Component Property Type for the {@code osgi.jaxrs.resource} service property.
@@ -40,9 +38,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
-		name = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_IMPLEMENTATION, //
-		version = JaxRSWhiteboardConstants.JAX_RS_WHITEBOARD_SPECIFICATION_VERSION)
+@RequireJaxRSWhiteboard
 public @interface JaxrsResource {
 	/**
 	 * Prefix for the property name. This value is prepended to each property
