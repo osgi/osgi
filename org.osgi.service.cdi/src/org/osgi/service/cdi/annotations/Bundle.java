@@ -24,13 +24,10 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 import org.osgi.framework.ServiceFactory;
-import org.osgi.service.cdi.reference.AddingEvent;
 
 /**
  * When used with {@link Service @Service} indicates that the bean should be
- * published as a {@link ServiceFactory ServiceFactory}. When used with
- * {@link Reference @Reference} or {@link AddingEvent AddingEvent} indicates
- * that the service must be {@code service.scope=bundle}.
+ * published as a {@link ServiceFactory ServiceFactory}.
  *
  * @author $Id$
  */
