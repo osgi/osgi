@@ -219,7 +219,6 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 	}
 
 	public void testCollectionsImplicit() throws Exception {
-		fail("Is this not supported?");
 		Deferred<Configuration> updated = new Deferred<>();
 
 		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
@@ -232,9 +231,8 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 			Dictionary<String,Object> props = cfg.getProperties();
 			assertCollectionEquals(Arrays.asList(true, true, false, true),
 					props.get("bcg"));
-			assertCollectionEquals(Arrays.asList(-0.1, 0, 0.1, 0, -0.1),
+			assertCollectionEquals(Arrays.asList(-0.1, 0.0, 0.1, 0.0, -0.1),
 					props.get("dcg"));
-			assertCollectionEquals(Arrays.asList(-1, -2, -3), props.get("ic"));
 			assertCollectionEquals(
 					Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE),
 					props.get("lcg"));
