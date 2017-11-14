@@ -30,7 +30,7 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version("1.1")
 package org.osgi.service.http.whiteboard.propertytypes;
 
 import org.osgi.annotation.versioning.Version;
