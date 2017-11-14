@@ -4,7 +4,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,32 +183,37 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 * converter rule can either decide to handle the conversion, or it can
 	 * delegate back to the next converter in the chain by returning
 	 * CANNOT_HANDLE if it wishes to do so.
+	 * <p/>
+	 * 
+	 * 707.6.1 - Catch-all-rules
+	 * <p/>
+	 * It is also possible to register converter rules which are invoked for 
+	 * every conversion with the rule(ConverterFunction) method. When multiple 
+	 * rules are registered, they are evaluated in the order of registration, 
+	 * until a rule indicates that it can handle a conversion. A rule can indicate
+	 * that it cannot handle the conversion by returning the CANNOT_HANDLE constant. 
+	 * Rules targeting specific types are evaluated before catch-all rules. 
 	 */
 	public void testCustomizedChainConversion()
 	{
-		final AtomicInteger countUnhandledMappingBean = new AtomicInteger(0);
-		final AtomicInteger countHandledMappingBean = new AtomicInteger(0);
-
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-
 		
 		final String error = "MyErrorBean is not handled";
 		ConverterBuilder converterBuilder = Converters.newConverterBuilder();
 		Converter converter = converterBuilder.build();
 		
 		ConverterBuilder parentConverterBuilder = converter.newConverterBuilder();		
-		parentConverterBuilder.rule(new TypeRule<MappingBean,Map<String,String>>(MappingBean.class, Map.class,
-				new Function<MappingBean,Map<String,String>>() {
+		parentConverterBuilder.rule(new TypeRule<MappingBean,Map>(MappingBean.class, Map.class,
+				new Function<MappingBean,Map>() {
 					@Override
-					public Map<String,String> apply(MappingBean t) {	
+					public Map apply(MappingBean t) {	
 						
 						Map<String,String> m = new HashMap<String,String>();
-						m.put("MappingBean", t.toString());
+						m.put("bean", t.toString());
 						m.put("prop1", t.getProp1());
 						m.put("prop2", t.getProp2());
 						m.put("prop3", t.getProp3());
 						m.put("embbeded", t.getEmbedded().toString());
-						countHandledMappingBean.incrementAndGet();	
 						return m;
 					}
 				}) {});
@@ -242,10 +246,9 @@ public class CustomizedConversionComplianceTest extends TestCase {
 				Class clazz = obj.getClass();
 				if(MappingBean.class.isAssignableFrom(clazz)){
 					System.out.println("Unhandled MappingBean");
-					countUnhandledMappingBean.incrementAndGet();
 				}
 				if(MyErrorBean.class.isAssignableFrom(clazz)){
-					System.out.println("MyErrorBean trigger error");
+					System.out.println("MyErrorBean triggers error");
 					throw new ConversionException(error);
 				}
 				return ConverterFunction.CANNOT_HANDLE;
@@ -267,8 +270,8 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		embbededBean.setProp2("mappingBean_prop2");
 		embbededBean.setProp3("mappingBean_prop3");
 
-		Map<String,String> map = childConverter.convert(embbededBean).sourceAsBean().to(new TypeReference<Map<String,String>>(){});
-		System.out.println(map);
+		Map map = childConverter.convert(embbededBean).to(Map.class);
+		assertEquals(embbededBean.toString(), map.get("bean"));
 
 		MyBean mb = new MyBean();
 		mb.setStartDate(dateToBeConverted);
