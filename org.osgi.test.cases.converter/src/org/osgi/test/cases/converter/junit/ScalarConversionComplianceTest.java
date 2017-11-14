@@ -388,6 +388,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 		c = converter.convert(string).to(char.class);
 		assertEquals('A', c);
 
+		// java 1.8 data structures
 //		String duration = "PT10H";
 //		Duration d = converter.convert(duration).to(Duration.class);
 //		assertEquals(Duration.parse("PT10H"), d);
@@ -615,35 +616,6 @@ public class ScalarConversionComplianceTest extends TestCase {
 		longConverted = converter.convert(sndToBeConverted).to(Long.class);
 		assertEquals(sndKey, longConverted);
 
-		Comparable< ? > comparableValue = Character.valueOf('z');
-
-		Map<Number,Comparable< ? >> thdMap = new HashMap<Number,Comparable< ? >>();
-		thdMap.put(fstKey, comparableValue);
-		Iterator<Map.Entry<Number,Comparable< ? >>> thdIterator = thdMap
-				.entrySet()
-				.iterator();
-
-		Map.Entry<Number,Comparable< ? >> thdToBeConverted = thdIterator.next();
-		Integer intConverted = converter.convert(thdToBeConverted)
-				.to(Integer.class);
-		characterConverted = converter.convert(thdToBeConverted)
-				.to(Character.class);
-
-		assertEquals(intConverted.intValue(), fstKey.intValue());
-		assertTrue(characterConverted.equals('z'));
-
-		sndKey = 20l;
-		longValue = 8l;
-
-		Map<Number,Number> fthMap = new HashMap<Number,Number>();
-		fthMap.put(sndKey, longValue);
-		Iterator<Map.Entry<Number,Number>> fthIterator = fthMap.entrySet()
-				.iterator();
-
-		Map.Entry<Number,Number> fthToBeConverted = fthIterator.next();
-		intConverted = converter.convert(fthToBeConverted).to(Integer.class);
-		assertEquals(intConverted.intValue(), sndKey.intValue());
-
 		fstKey = 0l;
 		String stringValue = "true";
 
@@ -672,14 +644,6 @@ public class ScalarConversionComplianceTest extends TestCase {
 		booleanConverted = converter.convert(sthToBeConverted)
 				.to(Boolean.class);
 
-		String tobeConverted = "map entry to be converted";
-
-		try {
-			converter.convert(tobeConverted)
-					.to(new TypeReference<Map.Entry<String,String>>() {});
-			fail("ConversionException expected");
-		} catch (ConversionException e) {}
-		
 		Number snKey = 1l;
 		Number numberValue = 0l;
 
@@ -690,5 +654,12 @@ public class ScalarConversionComplianceTest extends TestCase {
 		booleanConverted = converter.convert(snToBeConverted).to(boolean.class);
 		assertTrue(booleanConverted.booleanValue());
 
+		String tobeConverted = "map entry to be converted";
+
+		try {
+			converter.convert(tobeConverted)
+					.to(new TypeReference<Map.Entry<String,String>>() {});
+			fail("ConversionException expected");
+		} catch (ConversionException e) {}
 	}
 }
