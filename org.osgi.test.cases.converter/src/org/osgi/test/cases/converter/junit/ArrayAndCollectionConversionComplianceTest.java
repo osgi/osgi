@@ -134,12 +134,10 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * <p/>
 	 * 707.4.3.3- Converting to an Array or Collection
 	 * <p/>
-	 * Converting to an Array or Collection</h4> When converting an Array or
-	 * Collection to a <code class="code">java.util.Collection</code>,
-	 * <code class="code">java.util.List</code> or
-	 * <code class="code">java.util.Set</code> the converter will return a live
-	 * view over the backing object that changes when the backing object
-	 * changes. The live view can be prevented by providing the copy() modifier.
+	 * When converting an Array or Collection to a <code>java.util.Collection</code>,
+	 * <code>java.util.List</code> or <code>java.util.Set</code> the converter 
+	 * will return a live view over the backing object that changes when the backing 
+	 * object changes. The live view can be prevented by providing the copy() modifier.
 	 * When converting to other collection types or arrays a copy is always
 	 * produced.
 	 * <p/>
@@ -215,7 +213,6 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 	 * is then converted into the target type as described in the section called
 	 * Map.Entry before inserting in the target.</li>
 	 * </ul>
-	 * <p/>
 	 */
 	public void testConversionToArrayOrCollection() {
 		int[] backingObject = new int[] {
@@ -286,8 +283,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		list.add(1);
 		list.add(5);
 		try {
-			converter.convert(list)
-					.to(new TypeReference<Map<String,Integer>>() {});
+			converter.convert(list).to(new TypeReference<Map<String,Integer>>() {});
 			fail("Conversion to a map-like structure from an Array or Collection is not supported by the Standard Converter");
 		} catch (ConversionException e) {}
 	}

@@ -228,7 +228,7 @@ public class ScalarConversionComplianceTest extends TestCase {
 		Converter converter = Converters.standardConverter();
 
 		boolean booleanConverted = converter.convert(null).to(boolean.class);
-		assertTrue(booleanConverted);
+		assertFalse(booleanConverted);
 
 		char charConverted = converter.convert(null).to(char.class);
 		assertEquals((char) 0, charConverted);
@@ -644,6 +644,21 @@ public class ScalarConversionComplianceTest extends TestCase {
 		booleanConverted = converter.convert(sthToBeConverted)
 				.to(Boolean.class);
 
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		df.setTimeZone(tz);	
+		
+		Calendar calendar = Calendar.getInstance(tz);
+		String dateStr = df.format(calendar.getTime());
+		
+		sthMap = new HashMap<String,String>();
+		sthMap.put(dateStr, "date");
+
+		sthIterator = sthMap.entrySet().iterator();
+		sthToBeConverted = sthIterator.next();
+		Date date = converter.convert(sthToBeConverted).to(Date.class);
+		assertEquals((date.getTime()/1000), (calendar.getTime().getTime()/1000));
+		
 		Number snKey = 1l;
 		Number numberValue = 0l;
 
@@ -652,7 +667,8 @@ public class ScalarConversionComplianceTest extends TestCase {
 		Iterator<Map.Entry<Number,Number>> snIterator = snMap.entrySet().iterator();
 		Map.Entry<Number,Number> snToBeConverted = snIterator.next();
 		booleanConverted = converter.convert(snToBeConverted).to(boolean.class);
-		assertTrue(booleanConverted.booleanValue());
+		//number to String = "1", then parsed to identify boolean value = false
+		assertFalse(booleanConverted.booleanValue());
 
 		String tobeConverted = "map entry to be converted";
 

@@ -1,10 +1,11 @@
 
 package org.osgi.test.cases.converter.junit;
 
-import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -422,17 +423,30 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 */
 	public void testToScalarConversion() {
 		Converter converter = Converters.standardConverter();
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-		Calendar calendar = Calendar.getInstance(tz);
-
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		df.setTimeZone(tz);
-		String dateStr = df.format(calendar.getTime());
 		
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		df.setTimeZone(tz);	
+		
+		Calendar calendar = Calendar.getInstance(tz);	
+		Date date = calendar.getTime();
+		String dateStr = df.format(date);
+		//valid date format
+		date = converter.convert(dateStr).to(Date.class);
+
 		Map<String,String> map = new HashMap<String,String>();
-		map.put(dateStr, "epoch");
-		Date date = converter.convert(map).to(Date.class);
-		assertEquals(calendar.getTime(), date);
+		map.put(dateStr, "epoch");				
+		
+		//select the first entry and converts it like the converter is supposed to do
+		Iterator<Map.Entry<String, String>> iterator = map.entrySet().iterator();
+		Map.Entry<String, String> entry = iterator.next();
+		date = converter.convert(entry).to(Date.class);	
+		//System.out.println("--------------------------");
+		//System.out.println(date);
+		//System.out.println("--------------------------");
+		
+		date = converter.convert(map).to(Date.class);
+		assertEquals((calendar.getTime().getTime()/1000), (date.getTime()/1000));
 	}
 
 	/**
@@ -444,25 +458,32 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * by creating an ordered collection of Map.Entry objects. Then this
 	 * collection is converted to the target type as described in the section
 	 * called Arrays and Collections and the section called Map.Entry.
+	 * @throws ParseException 
 	 */
-	public void testToArrayOrCollectionConversion() {
-		long millisDay = 1000 * 3600 * 24;
-		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	public void testToArrayOrCollectionConversion() throws ParseException {
+				
+		TimeZone tz = TimeZone.getTimeZone("UTC");			
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		df.setTimeZone(tz);
+		
+		Calendar calendar = Calendar.getInstance(tz);			
 		long day = calendar.getTimeInMillis();
-
+		
+		long millisDay = 1000 * 3600 * 24;
+		
 		Map<String,String> map = new HashMap<String,String>();
 		for (int i = 0; i < 4; i++) {
-			map.put(String.valueOf(day + (i * millisDay)), "day".concat(String.valueOf(i)));
+			Date d = new Date((day + (i * millisDay)));
+			map.put(df.format(d), "day".concat(String.valueOf(i)));
 		}
 		Converter converter = Converters.standardConverter();
-		List<Date> dates = converter.convert(map)
-				.to(new TypeReference<List<Date>>() {});
+		List<Date> dates = converter.convert(map).to(new TypeReference<List<Date>>() {});
+		
 		assertEquals(map.size(), dates.size());
 
 		Iterator<String> keys = map.keySet().iterator();
-
 		while (keys.hasNext()) {
-			if (!dates.contains(new Date(Long.parseLong(keys.next())))) {
+			if (!dates.contains(df.parse(keys.next()))) {
 				fail();
 			}
 		}
