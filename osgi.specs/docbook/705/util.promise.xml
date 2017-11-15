@@ -187,9 +187,7 @@
     linkend="org.osgi.util.promise.PromiseFactory.deferred--"
     xrefstyle="hyperlink"/> method on a <xref
     linkend="org.osgi.util.promise.PromiseFactory" xrefstyle="hyperlink"/>
-    object or by using the <xref
-    linkend="org.osgi.util.promise.Deferred.Deferred--"
-    xrefstyle="hyperlink"/> constructor.</para>
+    object.</para>
 
     <para>A <xref linkend="org.osgi.util.promise.PromiseFactory"
     xrefstyle="hyperlink"/> object is created with a specifed callback
@@ -221,7 +219,7 @@
     result.</para>
 
     <programlisting>public Promise&lt;String&gt; getTimeConsumingAnswer() {
-  Deferred&lt;String&gt; deferred = new Deferred&lt;String&gt;();
+  Deferred&lt;String&gt; deferred = factory.deferred();
   asynchronously(() -&gt; doTask(deferred));
   return deferred.getPromise();
 }</programlisting>
@@ -633,10 +631,9 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     linkend="org.osgi.util.function.Predicate" xrefstyle="hyperlink"/>, and
     <xref linkend="org.osgi.util.function.Consumer" xrefstyle="hyperlink"/>.
     These are equivalent to functional interfaces which are part of the
-    <code>java.util.function</code> package introduced in Java 8. Since OSGi
-    intends the Promise API to be usable on versions of Java prior to Java 8,
-    we define our own interfaces. Our interfaces also allow throwing checked
-    exceptions which can be propagated in a chain of Promises.</para>
+    <code>java.util.function</code> package introduced in Java 8. OSGi defines
+    these interfaces to allow throwing checked exceptions which can be
+    propagated in a chain of Promises.</para>
   </section>
 
   <section>
@@ -657,7 +654,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     linkend="org.osgi.util.promise.Promises" xrefstyle="hyperlink"/> class
     returning Promises which use the implementation default executors.</para>
 
-    <programlisting>  return getTimeConsumingAnswer().fallbackTo(Promises.resolved("Fallback Value"));</programlisting>
+    <programlisting>  return getTimeConsumingAnswer().fallbackTo(factory.resolved("Fallback Value"));</programlisting>
 
     <para>The <xref
     linkend="org.osgi.util.promise.PromiseFactory.submit-Callable-"
@@ -671,7 +668,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     specified Promises. The returned Promise must resolve only when all of the
     specified Promises have resolved. This method also exists as a static
     method on the <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class returning a Promise which use the
+    xrefstyle="hyperlink"/> class returning a Promise which uses the
     implementation default executors.</para>
   </section>
 
@@ -731,7 +728,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
         </listitem>
 
         <listitem>
-          <para>The new PromiseFactory class has methods which allows the
+          <para>The new PromiseFactory class has constructors which allow the
           caller to specify the executors to be used by Deferred and Promise
           objects created by a PromiseFactory object. The PromiseFactory class
           provides an inlineExecutor which can be used to provide behavior

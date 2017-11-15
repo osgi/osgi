@@ -39,7 +39,7 @@
 <rect x="58.7" y="43.387" width="0.48" height="27.24"/>
 <rect x="3.5" y="70.147" width="55.44" height="0.479"/>
 <rect x="3.5" y="43.147" width="0.48" height="27.239"/>
-<text transform="matrix(1 0 0 1 6.1401 50.469)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;class&gt;&gt;</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Promises</tspan></text>
+<text transform="matrix(1 0 0 1 6.1401 50.469)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;class&gt;&gt;</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">PromiseFactory</tspan></text>
 <rect x="137.939" y="56.55" width="55.201" height="27"/>
 <rect x="137.939" y="56.309" width="55.438" height="0.479"/>
 <rect x="192.9" y="56.55" width="0.479" height="27.239"/>
