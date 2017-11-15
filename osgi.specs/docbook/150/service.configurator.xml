@@ -267,7 +267,9 @@
             </row>
             <row>
               <entry>Array</entry>
-              <entry>Array, contents are boxed</entry>
+              <entry>Array, or if requested <code>Collection</code>. Contents are boxed. If the array contents are of the same JSON type, 
+              the associated Java type is used as the array type. Otherwise the array elements are converted to String and a 
+              <code>String[]</code> array is used.</entry>
             </row>
             <row>
               <entry>Object</entry>
@@ -285,13 +287,19 @@
       arrays of Scalar or primitive types are supported and <code>Collection</code> of scalar. The primitive
       types that can be specified for arrays are: <code>int</code>, <code>long</code>, <code>float</code>,
       <code>double</code>, <code>byte</code>, <code>short</code>, <code>char</code>, <code>boolean</code>. For 
-      <code>Collection</code> the configurator picks a suitable implementation that preserves order. 
+      <code>Collection</code> the configurator picks a suitable implementation that preserves order. Both bare
+      <code>Collection</code> as well as typed collections that use the generics style notation are supported.
+      If a requested conversion cannot be performed, then the configuration is not processed and the Configurator
+      implementation should log an error. 
+      </para>
+      
+      <para>
       An example configuration resource with typed data:
       <programlisting>{
   "my.pid": {      
     "port:Integer" : 300,
     "an.int.array:int[]" : [2, 3, 4],
-    "an.Integer.collection:Collection&lt;Integer&gt;" : [2,3,4],
+    "an.Integer.collection:Collection&lt;Integer&gt;" : [2, 3, 4],
     "complex": {
       "a" : 1,
       "b" : "two"
