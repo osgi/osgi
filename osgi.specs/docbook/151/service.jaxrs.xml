@@ -70,7 +70,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>JAX-RS Whiteboard implementations must support version 2.0 of the JAX-RS
+    <para>JAX-RS Whiteboard implementations must support at least version 2.1 of the JAX-RS
     API.</para>
     
     <section>
@@ -627,14 +627,68 @@ public class Foo {
         discarded afterwards. Critically for OSGi services the JAX-RS whiteboard
         <emphasis>must not</emphasis> release a prototype scope service until 
         <emphasis>after</emphasis> the response has completed. If the resource
-        makes use of a JAX-RS <code>AsyncResponse</code> or a <code>StreamingOutput</code>
-        then this may be some time after the return of resource method, and potentially on
-        a different thread.</para>
+        makes use of a JAX-RS <code>AsyncResponse</code>, <code>SseEventSink</code> 
+        or a <code>StreamingOutput</code> then this may be some time after the return of 
+        resource method, and potentially on a different thread.</para>
         
         <para>JAX-RS whiteboard implementations must therefore take special care not to
         release request scoped instances until they are completely finished.</para>
       </section>
     
+      <section>
+        <title>Asynchronous Responses</title>
+        
+        <para>JAX-RS supports asynchronous responses either for single-valued results,
+        or for streams of data.</para>
+        
+        <para>Single valued results are provided by the <code>AsyncResponse</code> type
+        which is injected into resource methods using the <code>@Suspended</code> annotation.
+        If the resource is request scoped then the resource must not be released until after
+        the <code>AsyncResponse</code> has completed.</para>
+        
+        <para>The following example demonstrates the use of the <code>AsyncResponse</code>:</para>
+        
+        <programlisting>@Component(service = MyResource.class,
+      scope = ServiceScope.PROTOTYPE)
+ @JaxrsResource     
+ public class MyResource {
+  
+    @Path(“foo”)
+    @GET
+    public void getFoo(@Suspended AsyncResponse async) {
+        Promise&lt;String&gt; p = doLongRunningTaskAsynchronously();
+        p.onSuccess(v -> async.resume(v))
+            .onFailure(t -> async.resume(t));
+    }
+}</programlisting>
+
+        <para>Multi-valued results in JAX-RS are handled using Server Sent Events. To
+        send Server Sent Events a JAX-RS resource must declare its produced media type
+        appropriately, and inject its resource method with a <code>SseEventSink</code>.
+        The resource must also gain access to a <code>Sse</code> to use as a factory
+        for Outbound Server Sent Events. If the resource is request scoped then the 
+        resource must not be released until after the <code>SseEvent</code> has closed.</para>
+        
+        <para>The following example demonstrates the use of the Server Sent Events:</para>
+        
+                <programlisting>@Component(service = MyResource.class,
+      scope = ServiceScope.PROTOTYPE)
+ @JaxrsResource     
+ public class MyResource {
+  
+    @Context
+    Sse sse;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public void getFoo(@Context SseEventSink sink) {
+        PushStream&lt;String&gt; p = getStreamOfMessages();
+        p.map(sse::newEvent)
+            .forEach(e -> sink::send)
+            .onResolve(sink::close);
+    }
+}</programlisting>
+      </section>
     </section>
 
 
@@ -1454,7 +1508,100 @@ public class MyApplication extends Application {
       <para>In order to add filters, interceptors, readers and writers to the JAX-RS client users 
       should use the <code>ClientBuilder#register()</code> method when building their client.</para>
     </section>
+    
+    <section>
+      <title>Reactive Clients</title>
+      
+      <para>The JAX-RS client API supports both synchronous and asynchronous calls. In JAX-RS 2.1 
+      the asynchronous behaviour of the client was extended using the <code>RxInvoker</code>
+      (reactive invoker) interface. All clients are required to support a reactive invoker 
+      which returns CompletionStage instances, however in OSGi the common representation of 
+      an asynchronous return is the <code>Promise</code>. This specification therefore provides 
+      the <code>PromiseInvoker</code> interface which can be used to obtain Promises from the 
+      JAX-RS client.</para>
+      
+      <para>It is the responsibility of the JAX-RS whiteboard implementation to create instances
+      of <code>PromiseInvoker</code>. The exact mechanism by which instances are created is undefined,
+      however it is possible to register a portable factory to create <code>PromiseInvoker</code> 
+      instances by implementing the <code>RxInvokerProvider</code> interface and registering this 
+      type with the JAX-RS client. This portable implementation, however, is forced to use a 
+      blocking model by the underlying JAX-RS API, and so implementations may choose to implement
+      a more optimised non-blocking model using internal types.</para>
+      
+      <para>Clients of this specification may make use of the <code>PromiseInvoker</code> using
+      normal JAX-RS idioms. For example:</para>
+      
+      <programlisting>
+Client client = clientBuilder.build();
+Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
+    .path("/foo")
+    .path("/{name}")
+    .resolveTemplate("name", buzz)
+    .request()
+    .rx(PromiseInvoker.class)
+    .get(String.class);</programlisting>
+    </section>
 
+    <section>
+      <title>Consuming Server Sent Events</title>
+      
+      <para>In JAX-RS 2.1 support was added for Server Sent Events. These events are consumed 
+      by a REST client using the <code>SseEventSource</code>. The <code>SseEventSource</code> 
+      is not created by a JAX-RS client instance, but is normally created using a static 
+      factory method, which does not work in a modular environment. Therefore the JAX-RS 
+      whiteboard implementation must register a <code>SseEventSource.Builder</code> service 
+      with prototype scope in the service registry.</para>
+      
+      <para>Note that the SseEventSource has no way to register filters or message body processors.
+      All of the filters and necessary processors must be registered with the JAX-RS client that is 
+      used to create the <code>WebTarget</code> used when building the SseEventSource.
+      A client may therefore consume Server Sent Events in the following way:</para>
+      
+      <programlisting>
+Client client = clientBuilder.build();
+
+WebTarget target = client.target(REST_SERVICE_URL)
+    .path("/foo")
+    .path("/{name}")
+    .resolveTemplate("name", buzz);
+
+SseEventSource source = sseBuilder.target(target)
+    .build();
+    
+    source.register(event -> doSomething(event));
+    
+    source.open();
+</programlisting>
+
+      <para>A <code>SseEventSource</code> may easily be converted into a <code>PushEventSource</code>
+      (and consequently a <code>PushStream</code>) as follows. Note that the implementation does
+      not respond to back-pressure requests and should typically be used with a buffer.</para>
+      
+      <programlisting>
+SseEventSource source = sseBuilder.target(target)
+    .build();
+    
+PushEventSource&lt;InboundSseEvent&gt; pes = pec ->
+        source.register(e -> {
+                                try {
+                                    if(pec.accept(PushEvent.data(e)) &lt; 0) {
+                                        source.close();
+                                    }
+                                } catch (Exception e) {
+                                    try {
+                                        pec.accept(PushEvent.error(e));
+                                    } finally {
+                                        source.close();
+                                    } 
+                                }
+                            }
+                        t -> pec.accept(PushEvent.error(t))
+                        () -> pec.accept(PushEvent.close()))
+        source.open();
+        return source;
+    };
+</programlisting>
+    </section>
   </section>
 
   <section>
@@ -1476,7 +1623,7 @@ public class MyApplication extends Application {
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.jaxrs";
        uses:="javax.ws.rs, javax.ws.rs.client, javax.ws.rs.container,
-              javax.ws.rs.core, javax.ws.rs.ext, 
+              javax.ws.rs.core, javax.ws.rs.ext, javax.ws.rs.sse, 
               org.osgi.service.jaxrs.whiteboard";
        version:Version="1.0"</programlisting>
 
@@ -1529,6 +1676,17 @@ public class MyApplication extends Application {
       <programlisting>Provide-Capability: osgi.service;
   objectClass:List&lt;String&gt;="javax.ws.rs.client.ClientBuilder";
   uses:="javax.ws.rs.client";service.scope="prototype"</programlisting>
+
+      <para>The bundle providing the <code>javax.ws.rs.sse.SseEventSource.Builder</code> 
+      service must also provide a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must declare that the
+      service is prototype scope, and that there is a uses constraint for the 
+      <code>javax.ws.rs.sse</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="javax.ws.rs.sse.SseEventSource$Builder";
+  uses:="javax.ws.rs.sse";service.scope="prototype"</programlisting>
 
       <para>These capabilities must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
