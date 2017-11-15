@@ -64,7 +64,7 @@
     "ic:Collection<Integer>": [-1, -2, -3],
     "lc:Collection<Long>": [9223372036854775807, -9223372036854775808],
     "sc:Collection<String>": ["one", "two", "three"],
-    "ec:Collection<String>": ["removethis"],
+    "ec:Collection<String>": [],
     "com.acme.ByteVal:Collection<Byte>": [99],
     "com.acme.ShortVal:Collection<Short>": [32766, 32766]
   }
