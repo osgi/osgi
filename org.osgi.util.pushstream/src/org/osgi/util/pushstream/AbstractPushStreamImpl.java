@@ -257,6 +257,59 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 	}
 
 	@Override
+	public <R> PushStream<R> asyncMap(int n, int delay,
+			Function< ? super T,Promise< ? extends R>> mapper)
+			throws IllegalArgumentException, NullPointerException {
+
+		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<>(
+				psp, executors, this);
+		Semaphore s = new Semaphore(n);
+		updateNext(event -> {
+			try {
+				if (event.isTerminal()) {
+					s.acquire(n);
+					eventStream.close(event.nodata());
+					return ABORT;
+				}
+
+				s.acquire(1);
+
+				Promise< ? extends R> p = mapper.apply(event.getData());
+				p.thenAccept(d -> executors.execute(() -> {
+					try {
+							if (eventStream
+									.handleEvent(PushEvent.data(d)) < 0) {
+								PushEvent<R> close = PushEvent.close();
+								eventStream.close(close);
+								// Upstream close is needed as we have no direct
+								// backpressure
+								upstreamClose(close);
+							}
+					} finally {
+						s.release();
+					}
+				})).onFailure(t -> executors.execute(() -> {
+					PushEvent<T> error = PushEvent.error(t instanceof Exception
+							? (Exception) t : new RuntimeException(t));
+					close(error);
+					// Upstream close is needed as we have no direct
+					// backpressure
+					upstreamClose(error);
+				}));
+
+				// The number active before was one less than the active number
+				int activePromises = Math.max(0, n - s.availablePermits() - 1);
+				return (activePromises + s.getQueueLength()) * delay;
+			} catch (Exception e) {
+				close(PushEvent.error(e));
+				return ABORT;
+			}
+		});
+
+		return eventStream;
+	}
+
+	@Override
 	public <R> PushStream<R> flatMap(
 			Function< ? super T, ? extends PushStream< ? extends R>> mapper) {
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<>(

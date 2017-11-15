@@ -17,6 +17,7 @@ import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.TimeoutException;
 import org.osgi.util.pushstream.PushEvent;
 import org.osgi.util.pushstream.PushEvent.EventType;
@@ -1713,5 +1714,33 @@ public class PushStreamIntermediateOperationTest
 
 		assertEquals(5L, p.getValue().longValue());
 		assertEquals(14, gen.maxBackPressure());
+	}
+
+	/**
+	 * 706.3.1.1.4 : Async Mapping
+	 * <p/>
+	 * Mapping is the act of transforming an event from one type into another
+	 * 
+	 * @throws Exception
+	 */
+	public void testIntermediateOperationAsyncMapping() throws Exception {
+
+		ExtGenerator gen = new ExtGenerator(5);
+		PushStream<Integer> ps = new PushStreamProvider().buildStream(gen)
+				.unbuffered()
+				.build();
+
+		Promise<Object[]> p = ps.asyncMap(2, 110, e -> {
+			return Promises.resolved((char) ('a' + e)).delay(e * 100);
+		}).toArray();
+
+		assertEquals("[a, b, c, d, e]", Arrays.toString(p.getValue()));
+
+		gen.getExecutionThread().join();
+
+		assertFalse(gen.fixedBackPressure());
+		assertEquals(0, gen.minBackPressure());
+		assertEquals(110, gen.maxBackPressure());
+		assertFalse(gen.fixedBackPressure());
 	}
 }
