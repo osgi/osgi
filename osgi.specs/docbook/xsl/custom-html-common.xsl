@@ -255,81 +255,9 @@ basic format:
                 </div>
             </div>
 
-            <form action="https://www.osgi.org/developer/downloads/release-6/" id="ninja_forms_form_13" method="post" onsubmit="return false;">
-             <input type="hidden" id="_wpnonce" name="_wpnonce" value="b02bd313df"/>
-             <input type="hidden" name="_wp_http_referer" value="."/>
-             <input type="hidden" name="_ninja_forms_display_submit" value="1"/>
-             <input type="hidden" name="_form_id" id="_form_id" value="13"/>
-             <div class="hp-wrap">
-                <label>If you are a human and are seeing this field, please leave it blank.
-                   <input type="text" value="" name="_EQZzD"/>
-                   <input type="hidden" value="_EQZzD" name="_hp_name"/>
-                   </label>
-             </div>
-
-             <div id="ninja_forms_form_13_all_fields_wrap" class="ninja-forms-all-fields-wrap">
-                <h4>We would like to find out more information about the users of the OSGi Compendium. Please fill out the form below.</h4>
-
-                <p>No thanks, I’d like to go straight to the <a href="javascript:dismissForm();">documentation</a>.</p>
-
-                <p>To find out how OSGi treats data we collect from you, please read our <a href="https://www.osgi.org/osgi-alliance-privacy-policy/">Privacy Policy</a>.</p>
-
-                <div class="ninja-forms-required-items">Fields marked with <span class="ninja-forms-req-symbol">*</span> are required</div>
-                <div id="ninja_forms_field_26_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_26_type" value="text"/>
-                   <label for="ninja_forms_field_26" id="ninja_forms_field_26_label" class="">First Name <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
-                   <input id="ninja_forms_field_26" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_26" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req " value="" rel="26"/>
-                   <div id="ninja_forms_field_26_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-                <div id="ninja_forms_field_27_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_27_type" value="text"/>
-                   <label for="ninja_forms_field_27" id="ninja_forms_field_27_label" class="">Last Name <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
-                   <input id="ninja_forms_field_27" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_27" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req " value="" rel="27"/>
-                   <div id="ninja_forms_field_27_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-                <div id="ninja_forms_field_28_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_28_type" value="text"/>
-                   <label for="ninja_forms_field_28" id="ninja_forms_field_28_label" class="">Title</label>
-                   <input id="ninja_forms_field_28" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="character(s) left" name="ninja_forms_field_28" type="text" placeholder="" class="ninja-forms-field  " value="" rel="28"/>
-                   <div id="ninja_forms_field_28_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-                <div id="ninja_forms_field_29_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_29_type" value="text"/>
-                   <label for="ninja_forms_field_29" id="ninja_forms_field_29_label" class="">Company</label>
-                   <input id="ninja_forms_field_29" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="character(s) left" name="ninja_forms_field_29" type="text" placeholder="" class="ninja-forms-field  " value="" rel="29"/>
-                   <div id="ninja_forms_field_29_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-                <div id="ninja_forms_field_30_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_30_type" value="text"/>
-                   <label for="ninja_forms_field_30" id="ninja_forms_field_30_label" class="">Email <span class="ninja-forms-req-symbol"><strong>*</strong></span></label>
-                   <input id="ninja_forms_field_30" data-mask="" data-input-limit="" data-input-limit-type="char" data-input-limit-msg="" name="ninja_forms_field_30" type="text" placeholder="" class="ninja-forms-field  ninja-forms-req email " value="" rel="30"/>
-                   <div id="ninja_forms_field_30_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-                <div class="checkbox-wrap" id="ninja_forms_field_31_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_31_type" value="checkbox"/>
-                   <input name="ninja_forms_field_31" type="hidden" value="unchecked"/>
-                   <input id="ninja_forms_field_31" name="ninja_forms_field_31" type="checkbox" class="ninja-forms-field " value="checked" rel="31"/>
-                   <label for="ninja_forms_field_31" id="ninja_forms_field_31_label">May we contact you again with OSGi related information?</label>
-                   <div id="ninja_forms_field_31_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-
-                <div class="submit-wrap" id="ninja_forms_field_32_div_wrap" data-visible="1">
-                   <input type="hidden" id="ninja_forms_field_32_type" value="submit"/>
-                   <div id="nf_submit_13">
-                      <input type="submit" name="_ninja_forms_field_32" class="ninja-forms-field " id="ninja_forms_field_32" value="Submit" rel="32" onclick=""/>
-                   </div>
-                   <div id="nf_processing_13" style="display:none;">
-                      <input type="submit" name="_ninja_forms_field_32" class="ninja-forms-field " id="ninja_forms_field_32" value="Processing" rel="32" disabled=""/>
-                   </div>
-                   <div id="ninja_forms_field_32_error" style="display:none;" class="ninja-forms-field-error"></div>
-                </div>
-             </div>
-            </form>
-
             <script type="text/javascript">
                 hljs.initHighlightingOnLoad();
                 fixAnchors();
-                checkContactCookie();
             </script>
         </body>
     </html>
