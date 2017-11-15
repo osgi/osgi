@@ -30,6 +30,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.client.ClientBuilder;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
@@ -42,7 +44,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	private static final List<String> JAX_RS_PACKAGES = Arrays.asList(
 			"javax.ws.rs", "javax.ws.rs.core",
 			"javax.ws.rs.ext", "javax.ws.rs.client",
-			"javax.ws.rs.container");
+			"javax.ws.rs.container", "javax.ws.rs.sse");
 
 	/**
 	 * A basic test that ensures the provider of the JaxRSServiceRuntime service
@@ -74,7 +76,9 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				if (usesDirective != null) {
 					Set<String> packages = new HashSet<String>(Arrays
 							.asList(usesDirective.trim().split("\\s*,\\s*")));
-					uses = packages.contains("org.osgi.service.jaxrs.runtime");
+					uses = packages.contains("org.osgi.service.jaxrs.runtime")
+							&& packages.contains(
+									"org.osgi.service.jaxrs.runtime.dto");
 				}
 
 				break;
@@ -84,7 +88,51 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				"No osgi.service capability for the JaxRSServiceRuntime service",
 				hasCapability);
 		assertTrue(
-				"No uses constraint on the runtime package for the JaxRSServiceRuntime service",
+				"No suitable uses constraint on the runtime package for the JaxRSServiceRuntime service",
+				uses);
+	}
+
+	/**
+	 * A basic test that ensures the provider of the JaxRSServiceRuntime service
+	 * advertises the JaxRSServiceRuntime service capability (151.10.3)
+	 * 
+	 * @throws Exception
+	 */
+	public void testJaxRsClientBuilderServiceCapability() throws Exception {
+
+		List<BundleCapability> capabilities = runtime.getBundle()
+				.adapt(BundleWiring.class)
+				.getCapabilities(SERVICE_NAMESPACE);
+
+		boolean hasCapability = false;
+		boolean uses = false;
+
+		for (Capability cap : capabilities) {
+			Object o = cap.getAttributes()
+					.get(CAPABILITY_OBJECTCLASS_ATTRIBUTE);
+			@SuppressWarnings("unchecked")
+			List<String> objectClass = o instanceof List ? (List<String>) o
+					: asList(valueOf(o));
+
+			if (objectClass.contains(ClientBuilder.class.getName())) {
+				hasCapability = true;
+
+				String usesDirective = cap.getDirectives()
+						.get(CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					Set<String> packages = new HashSet<String>(Arrays
+							.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("javax.ws.rs.client");
+				}
+
+				break;
+			}
+		}
+		assertTrue(
+				"No osgi.service capability for the JaxRSServiceRuntime service",
+				hasCapability);
+		assertTrue(
+				"No suitable uses constraint on the runtime package for the JaxRSServiceRuntime service",
 				uses);
 	}
 
@@ -169,7 +217,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				hasCapability = "JavaJAXRS".equals(
 						cap.getAttributes().get(CONTRACT_NAMESPACE));
 				if (hasCapability) {
-					Version required = Version.valueOf("2");
+					Version required = Version.valueOf("2.1");
 					List<Version> toCheck = Collections.emptyList();
 					
 					Object rawVersion = cap.getAttributes().get(CAPABILITY_VERSION_ATTRIBUTE);
@@ -205,7 +253,7 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 				"No osgi.contract capability for the JAX-RS API",
 				hasCapability);
 		assertTrue(
-				"No osgi.contract capability for the JAX-RS API at version 2.0",
+				"No osgi.contract capability for the JAX-RS API at version 2.1",
 				version);
 		assertTrue(
 				"The osgi.contract capability for the JAX-RS API does not have the correct uses constraint",
