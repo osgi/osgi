@@ -1139,7 +1139,9 @@ public class ConfiguredExtension implements WriterInterceptor {
 
     <para>Each registered Whiteboard Application service is provided as a separate
     application within the whiteboard, and is isolated from other applications,
-    including the default application.</para>
+    including the default application. Whiteboard applications may be empty, may
+    include zero or more static resources, and may include zero or more static extensions.
+    </para>
 
     <section>
       <title>Application shadowing</title>
@@ -1148,7 +1150,9 @@ public class ConfiguredExtension implements WriterInterceptor {
       If two or more applications targeting the same whiteboard are registered with 
       the same base URI then only the highest ranked service will be made available.
       All other application services with that URI will have a failure DTO created
-      for them.</para>
+      for them. The same rules also apply to the <code>osgi.jaxrs.name</code>
+      property, with the highest ranked service shadowing other applications with
+      the same name.</para>
       
       <para>The default application is implicitly created by the whiteboard and has
       the name <code>.default</code>. The default application has a lower ranking 
@@ -1158,6 +1162,11 @@ public class ConfiguredExtension implements WriterInterceptor {
       <para>A whiteboard application service may set an <code>osgi.jaxrs.name</code> of 
       <code>.default</code> to replace the default application. This technique may be used
       to rebind the default application to a base uri other than <code>/</code>.</para>
+      
+      <para>If a whiteboard application fails (for example if the service get fails),
+      or cannot be immediately deployed (for example if it has an unsatisfied
+      <code>osgi.jaxrs.extension.select</code>) then any applications that it shadows 
+      are still shadowed and relevant failure DTOs are created for all of the applications.</para>
     </section>
 
     <section>
@@ -1371,20 +1380,6 @@ public class MyApplication extends Application {
         </para>
       </listitem>
       <listitem>
-        <para><emphasis>Overlapping resource mappings</emphasis> - 
-        When multiple bundles collaborate it is possible that two JAX-RS resources will 
-        register for the same path. Note that determining when two JAX-RS resources clash 
-        requires an analysis of the resource path, all sub-resource paths, and the content
-        types produced and consumed by the method. See <xref linkend="service.jaxrs.resource.services.clashes"/>
-        for further details.</para>
-        
-        <para>When a clash occurs for <emphasis>any</emphasis> resource method the lower ranked 
-        service object is shadowed, and a failure DTO is made available from the JAXRSServiceRuntime 
-        representing the shadowed object. It is an 
-        implementation error for some sub-resource paths to be available while others are shadowed.
-        </para>
-      </listitem>
-      <listitem>
         <para><emphasis>Overlapping Application mappings</emphasis> - 
         As with resources in a single application it is possible that two JAX-RS resources will 
         register for the same path across applications. In this case the application with the
@@ -1524,7 +1519,18 @@ public class MyApplication extends Application {
   objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime";
   uses:="org.osgi.service.jaxrs.runtime,org.osgi.service.jaxrs.runtime.dto"</programlisting>
 
-      <para>This capability must follow the rules defined for the <xref
+      <para>The bundle providing the <code>javax.ws.rs.client.ClientBuilder</code> 
+      service must also provide a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must declare that the
+      service is prototype scope, and that there is a uses constraint for the 
+      <code>javax.ws.rs.client</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="javax.ws.rs.client.ClientBuilder";
+  uses:="javax.ws.rs.client";service.scope="prototype"</programlisting>
+
+      <para>These capabilities must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>
     </section>
   </section>
