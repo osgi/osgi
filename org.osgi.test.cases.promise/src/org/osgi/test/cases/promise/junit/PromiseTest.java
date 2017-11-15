@@ -933,13 +933,13 @@ public class PromiseTest extends TestCase {
 		});
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<List<Number>> latched = factory
-				.all(Arrays.asList(p1, p2))
-				.onResolve(new Runnable() {
-					@Override
-					public void run() {
-						latch.countDown();
-					}
-				});
+				.all(Arrays.asList(p1, p2));
+		latched.onResolve(new Runnable() {
+			@Override
+			public void run() {
+				latch.countDown();
+			}
+		});
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
