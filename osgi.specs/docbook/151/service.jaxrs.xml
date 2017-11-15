@@ -1738,6 +1738,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec ->
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.runtime.dto.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.xml"/>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.annotations.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jaxrs.whiteboard.propertytypes.xml"/>
 

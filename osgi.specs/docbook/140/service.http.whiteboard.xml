@@ -2527,6 +2527,8 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.whiteboard.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.whiteboard.annotations.xml"/>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.whiteboard.propertytypes.xml"/>
 
   <section>
