@@ -34,7 +34,9 @@ import org.osgi.service.cm.ConfigurationConstants;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-@Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, name = ConfigurationConstants.CONFIGURATION_ADMIN_IMPLEMENTATION, version = ConfigurationConstants.CONFIGURATION_ADMIN_SPECIFICATION_VERSION)
+@Requirement(namespace = ImplementationNamespace.IMPLEMENTATION_NAMESPACE, //
+		name = ConfigurationConstants.CONFIGURATION_ADMIN_IMPLEMENTATION, //
+		version = ConfigurationConstants.CONFIGURATION_ADMIN_SPECIFICATION_VERSION)
 public @interface RequireConfigurationAdmin {
 	// This is a purely informational annotation and has no elements.
 }
