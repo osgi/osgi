@@ -171,8 +171,11 @@
     <section xml:id="i3113425">
       <title>Dependencies</title>
 
-      <para>This specification is based on JPA 2.1. Both JPA 2.1 and JPA 2.0
-      are backward compatible with JPA 1.0.</para>
+      <para>This specification requires a minimum JPA version of 2.1. Implementations
+      may choose to support newer versions of JPA, for example version 2.2, but must
+      offer the JavaJPA contract at version 2.1 as well as any future versions that
+      they support.
+      </para>
     </section>
 
     <section>
