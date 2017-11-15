@@ -53,22 +53,21 @@ public class Deferred<T> {
 	 * The {@link #getPromise() associated promise} will use the default
 	 * callback executor and default scheduled executor.
 	 * 
-	 * @see PromiseExecutors#deferred()
+	 * @see PromiseFactory#deferred()
 	 */
 	public Deferred() {
-		this(PromiseExecutors.defaultExecutors);
+		this(PromiseFactory.defaultFactory);
 	}
 
 	/**
 	 * Create a new Deferred with the specified callback and scheduled
 	 * executors.
 	 * 
-	 * @param executors The executors to use for callbacks and scheduled
-	 *            operations.
+	 * @param factory The factory to use for callbacks and scheduled operations.
 	 * @since 1.1
 	 */
-	Deferred(PromiseExecutors executors) {
-		promise = new PromiseImpl<>(executors);
+	Deferred(PromiseFactory factory) {
+		promise = new PromiseImpl<>(factory);
 	}
 
 	/**

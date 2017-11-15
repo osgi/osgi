@@ -44,23 +44,23 @@ import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.util.promise.PromiseImpl.Result;
 
 /**
- * The executors for Promise callbacks and scheduled operations.
+ * Promise factory to create Deferred and Promise objects.
  * <p>
- * Instances of this class can be used to create a Deferred that can be resolved
- * in the future as well as resolved Promises. The returned Deferred and Promise
- * objects all use the executors used to construct this object for any callback
- * or scheduled operation execution.
+ * Instances of this class can be used to create Deferred and Promise objects
+ * which use the executors used to construct this object for any callback or
+ * scheduled operation execution.
  * 
  * @Immutable
  * @author $Id$
  * @since 1.1
  */
 @ConsumerType
-public class PromiseExecutors {
+public class PromiseFactory {
 	/**
-	 * The default executors.
+	 * The default factory which uses the default callback executor and default
+	 * scheduled executor.
 	 */
-	final static PromiseExecutors			defaultExecutors	= new PromiseExecutors(
+	final static PromiseFactory				defaultFactory	= new PromiseFactory(
 			null, null);
 
 	/**
@@ -76,19 +76,19 @@ public class PromiseExecutors {
 
 
 	/**
-	 * Create a new PromiseExecutors with the specified callback executor.
+	 * Create a new PromiseFactory with the specified callback executor.
 	 * <p>
 	 * The default scheduled executor will be used.
 	 * 
 	 * @param callbackExecutor The executor to use for callbacks. {@code null}
 	 *            can be specified for the default callback executor.
 	 */
-	public PromiseExecutors(Executor callbackExecutor) {
+	public PromiseFactory(Executor callbackExecutor) {
 		this(callbackExecutor, null);
 	}
 
 	/**
-	 * Create a new PromiseExecutors with the specified callback executor and
+	 * Create a new PromiseFactory with the specified callback executor and
 	 * specified scheduled executor.
 	 * 
 	 * @param callbackExecutor The executor to use for callbacks. {@code null}
@@ -97,7 +97,7 @@ public class PromiseExecutors {
 	 *            operations. {@code null} can be specified for the default
 	 *            scheduled executor.
 	 */
-	public PromiseExecutors(Executor callbackExecutor,
+	public PromiseFactory(Executor callbackExecutor,
 			ScheduledExecutorService scheduledExecutor) {
 		this.callbackExecutor = callbackExecutor;
 		this.scheduledExecutor = scheduledExecutor;
@@ -108,7 +108,7 @@ public class PromiseExecutors {
 	 * 
 	 * @return The executor to use for callbacks. This will be the default
 	 *         callback executor if {@code null} was specified for the callback
-	 *         executor when this PromiseExecutors was created.
+	 *         executor when this PromiseFactory was created.
 	 */
 	protected Executor executor() {
 		if (callbackExecutor == null) {
@@ -122,7 +122,7 @@ public class PromiseExecutors {
 	 * 
 	 * @return The executor to use for scheduled operations. This will be the
 	 *         default scheduled executor if {@code null} was specified for the
-	 *         scheduled executor when this PromiseExecutors was created.
+	 *         scheduled executor when this PromiseFactory was created.
 	 */
 	protected ScheduledExecutorService scheduledExecutor() {
 		if (scheduledExecutor == null) {
@@ -133,7 +133,7 @@ public class PromiseExecutors {
 
 	/**
 	 * Create a new Deferred with the callback executor and scheduled executor
-	 * of this PromiseExecutors object.
+	 * of this PromiseFactory object.
 	 * <p>
 	 * Use this method instead of {@link Deferred#Deferred()} to create a new
 	 * {@link Deferred} whose associated Promise uses executors other than the
@@ -141,7 +141,7 @@ public class PromiseExecutors {
 	 * 
 	 * @param <T> The value type associated with the returned Deferred.
 	 * @return A new {@link Deferred} with the callback and scheduled executors
-	 *         of this PromiseExecutors object
+	 *         of this PromiseFactory object
 	 */
 	public <T> Deferred<T> deferred() {
 		return new Deferred<>(this);
@@ -151,7 +151,7 @@ public class PromiseExecutors {
 	 * Returns a new Promise that has been resolved with the specified value.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseExecutors object
+	 * this PromiseFactory object
 	 * <p>
 	 * Use this method instead of {@link Promises#resolved(Object)} to create a
 	 * Promise which uses executors other than the default executors.
@@ -168,7 +168,7 @@ public class PromiseExecutors {
 	 * Returns a new Promise that has been resolved with the specified failure.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseExecutors object
+	 * this PromiseFactory object
 	 * <p>
 	 * Use this method instead of {@link Promises#failed(Throwable)} to create a
 	 * Promise which uses executors other than the default executors.
@@ -186,7 +186,7 @@ public class PromiseExecutors {
 	 * Returns a new Promise that will hold the result of the specified task.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseExecutors object
+	 * this PromiseFactory object
 	 * <p>
 	 * The specified task will be executed on the {@link #executor() callback
 	 * executor}.
@@ -211,7 +211,7 @@ public class PromiseExecutors {
 	 * Promises.
 	 * <p>
 	 * The returned Promise uses the callback executor and scheduled executor of
-	 * this PromiseExecutors object
+	 * this PromiseFactory object
 	 * <p>
 	 * The returned Promise acts as a gate and must be resolved after all of the
 	 * specified Promises are resolved.
@@ -252,7 +252,7 @@ public class PromiseExecutors {
 
 	/**
 	 * A callback used to resolve the specified Promise when the specified list
-	 * of Promises are resolved for the {@link PromiseExecutors#all(Collection)}
+	 * of Promises are resolved for the {@link PromiseFactory#all(Collection)}
 	 * method.
 	 * 
 	 * @ThreadSafe

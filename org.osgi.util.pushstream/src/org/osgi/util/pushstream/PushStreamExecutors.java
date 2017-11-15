@@ -23,9 +23,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.osgi.util.promise.PromiseExecutors;
+import org.osgi.util.promise.PromiseFactory;
 
-class PushStreamExecutors extends PromiseExecutors {
+class PushStreamExecutors extends PromiseFactory {
 	PushStreamExecutors(Executor executor, ScheduledExecutorService scheduler) {
 		super(requireNonNull(executor), requireNonNull(scheduler));
 	}

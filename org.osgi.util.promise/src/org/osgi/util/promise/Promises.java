@@ -16,7 +16,7 @@
 
 package org.osgi.util.promise;
 
-import static org.osgi.util.promise.PromiseExecutors.defaultExecutors;
+import static org.osgi.util.promise.PromiseFactory.defaultFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,8 +24,13 @@ import java.util.List;
 
 /**
  * Static helper methods for {@link Promise}s.
+ * <p>
+ * These methods return Promises which use the default callback executor and
+ * default scheduled executor. See {@link PromiseFactory} for similar methods
+ * which use executors other than the default executors.
  * 
  * @ThreadSafe
+ * @see PromiseFactory
  * @author $Id$
  */
 public class Promises {
@@ -41,10 +46,10 @@ public class Promises {
 	 * @return A new Promise which uses the default callback executor and
 	 *         default scheduled executor that has been resolved with the
 	 *         specified value.
-	 * @see PromiseExecutors#resolved(Object)
+	 * @see PromiseFactory#resolved(Object)
 	 */
 	public static <T> Promise<T> resolved(T value) {
-		return defaultExecutors.resolved(value);
+		return defaultFactory.resolved(value);
 	}
 
 	/**
@@ -56,10 +61,10 @@ public class Promises {
 	 * @return A new Promise which uses the default callback executor and
 	 *         default scheduled executor that has been resolved with the
 	 *         specified failure.
-	 * @see PromiseExecutors#failed(Throwable)
+	 * @see PromiseFactory#failed(Throwable)
 	 */
 	public static <T> Promise<T> failed(Throwable failure) {
-		return defaultExecutors.failed(failure);
+		return defaultFactory.failed(failure);
 	}
 
 	/**
@@ -87,11 +92,11 @@ public class Promises {
 	 *         specified Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
-	 * @see PromiseExecutors#all(Collection)
+	 * @see PromiseFactory#all(Collection)
 	 */
 	public static <T, S extends T> Promise<List<T>> all(
 			Collection<Promise<S>> promises) {
-		return defaultExecutors.all(promises);
+		return defaultFactory.all(promises);
 	}
 
 	/**
@@ -116,11 +121,12 @@ public class Promises {
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
+	 * @see PromiseFactory#all(Collection)
 	 */
 	@SafeVarargs
 	public static <T> Promise<List<T>> all(Promise<? extends T>... promises) {
 		@SuppressWarnings("unchecked")
 		List<Promise<T>> list = Arrays.asList((Promise<T>[]) promises);
-		return defaultExecutors.all(list);
+		return defaultFactory.all(list);
 	}
 }

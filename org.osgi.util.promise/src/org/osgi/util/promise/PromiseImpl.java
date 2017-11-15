@@ -43,9 +43,9 @@ import org.osgi.util.function.Predicate;
  */
 final class PromiseImpl<T> implements Promise<T> {
 	/**
-	 * The executors to use for callbacks and scheduled operations.
+	 * The factory to use for callbacks and scheduled operations.
 	 */
-	private final PromiseExecutors					executors;
+	private final PromiseFactory					factory;
 	/**
 	 * A ConcurrentLinkedQueue to hold the callbacks for this Promise, so no
 	 * additional synchronization is required to write to or read from the
@@ -85,11 +85,11 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * Initialize this Promise.
 	 * 
-	 * @param executors The executors to use for callbacks and scheduled
+	 * @param factory The factory to use for callbacks and scheduled
 	 *            operations.
 	 */
-	PromiseImpl(PromiseExecutors executors) {
-		this.executors = executors;
+	PromiseImpl(PromiseFactory factory) {
+		this.factory = factory;
 		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(1);
 	}
@@ -99,16 +99,16 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @param v The value of this resolved Promise.
 	 * @param f The failure of this resolved Promise.
-	 * @param executors The executors to use for callbacks and scheduled
+	 * @param factory The factory to use for callbacks and scheduled
 	 *            operations.
 	 */
-	PromiseImpl(T v, Throwable f, PromiseExecutors executors) {
+	PromiseImpl(T v, Throwable f, PromiseFactory factory) {
 		if (f == null) {
 			value = v;
 		} else {
 			fail = f;
 		}
-		this.executors = executors;
+		this.factory = factory;
 		callbacks = new ConcurrentLinkedQueue<>();
 		resolved = new CountDownLatch(0);
 	}
@@ -231,7 +231,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
 			try {
 				try {
-					executors.executor().execute(callback);
+					factory.executor().execute(callback);
 				} catch (RejectedExecutionException e) {
 					callback.run();
 				}
@@ -333,7 +333,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
-		PromiseImpl<R> chained = new PromiseImpl<>(executors);
+		PromiseImpl<R> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new Then<>(this, success, failure));
 		return chained;
 	}
@@ -441,7 +441,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new ThenAccept(this, consumer));
 		return chained;
 	}
@@ -495,7 +495,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 *         resolved.
 	 */
 	Promise<Void> resolveWith(Promise<? extends T> with) {
-		PromiseImpl<Void> chained = new PromiseImpl<>(executors);
+		PromiseImpl<Void> chained = new PromiseImpl<>(factory);
 		with.onResolve(chained.new ResolveWith<>(this, with));
 		return chained;
 	}
@@ -533,7 +533,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> filter(Predicate<? super T> predicate) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new Filter(this, predicate));
 		return chained;
 	}
@@ -573,7 +573,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> map(Function<? super T, ? extends R> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<>(executors);
+		PromiseImpl<R> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new Map<>(this, mapper));
 		return chained;
 	}
@@ -613,7 +613,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public <R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper) {
-		PromiseImpl<R> chained = new PromiseImpl<>(executors);
+		PromiseImpl<R> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new FlatMap<>(this, mapper));
 		return chained;
 	}
@@ -657,7 +657,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recover(Function<Promise<?>, ? extends T> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new Recover(this, recovery));
 		return chained;
 	}
@@ -700,7 +700,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new RecoverWith(this, recovery));
 		return chained;
 	}
@@ -744,7 +744,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> fallbackTo(Promise<? extends T> fallback) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(chained.new FallbackTo(this, fallback));
 		return chained;
 	}
@@ -809,7 +809,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			TimeUnit unit) {
 		try {
 			try {
-				return executors.scheduledExecutor().schedule(operation, delay,
+				return factory.scheduledExecutor().schedule(operation, delay,
 						unit);
 			} catch (RejectedExecutionException e) {
 				operation.run();
@@ -827,10 +827,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> timeout(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		if (!isDone()) {
 			PromiseImpl<T> timedout = new PromiseImpl<>(null,
-					new TimeoutException(), executors);
+					new TimeoutException(), factory);
 			onResolve(new Timeout(chained.new ChainImpl(timedout), millis,
 					TimeUnit.MILLISECONDS));
 		}
@@ -867,7 +867,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	@Override
 	public Promise<T> delay(long millis) {
-		PromiseImpl<T> chained = new PromiseImpl<>(executors);
+		PromiseImpl<T> chained = new PromiseImpl<>(factory);
 		onResolve(new Delay(chained.new ChainImpl(this), millis,
 				TimeUnit.MILLISECONDS));
 		return chained;
@@ -898,7 +898,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * A callback used by the {@link PromiseExecutors#submit(Callable)} method.
+	 * A callback used by the {@link PromiseFactory#submit(Callable)} method.
 	 * 
 	 * @Immutable
 	 */
