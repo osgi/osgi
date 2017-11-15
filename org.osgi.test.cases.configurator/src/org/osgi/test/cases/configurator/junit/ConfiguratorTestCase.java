@@ -233,6 +233,7 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 					props.get("bcg"));
 			assertCollectionEquals(Arrays.asList(-0.1, 0.0, 0.1, 0.0, -0.1),
 					props.get("dcg"));
+			assertEquals(0, ((Collection< ? >) props.get("ecg")).size());
 			assertCollectionEquals(
 					Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE),
 					props.get("lcg"));

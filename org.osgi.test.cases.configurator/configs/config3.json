@@ -52,6 +52,7 @@
   {
     "bcg:Collection": [true, true, false, true],
     "dcg:Collection": [-0.1, 0, 0.1, 0, -0.1],
+    "ecg:Collection": [],
     "lcg:Collection": [9223372036854775807, -9223372036854775808],
     "scg:Collection": ["one", "two", "three"]
   },
