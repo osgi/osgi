@@ -93,8 +93,8 @@ public class LogStreamTest extends OSGiTestCase {
 
 			long timeForConsumer = lastEventTime.get() - startTime;
 			// making sure the timeForConsumer is greater than 2900
-			// We fire 30 events but the back-pressure is only used for the
-			// first 29 events, not the last event 30.
+			// We fire 30 events but there can be jitter on the delay
+			// so we allow a small margin
 			assertTrue(
 					"Did not take long enough: "
 							+ TimeUnit.NANOSECONDS.toMillis(timeForConsumer),
