@@ -665,14 +665,14 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
     will hold the result of the specified task. The task will be executed on
     the callback executor.</para>
 
-    <para>The <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class also provides the <xref
-    linkend="org.osgi.util.promise.Promises.all-Deferred-Promise...-"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.util.promise.Promises.all-Deferred-Collection-"
-    xrefstyle="hyperlink"/> methods which return a Promise that is a latch on
-    the specified Promises. The returned Promise must resolve only when all of
-    the specified Promises have resolved.</para>
+    <para>The <xref
+    linkend="org.osgi.util.promise.PromiseExecutors.all-Collection-"
+    xrefstyle="hyperlink"/> method returns a Promise that is a latch on the
+    specified Promises. The returned Promise must resolve only when all of the
+    specified Promises have resolved. This method also exists as a static
+    method on the <xref linkend="org.osgi.util.promise.Promises"
+    xrefstyle="hyperlink"/> class returning a Promise which use the
+    implementation default executors.</para>
   </section>
 
   <section>

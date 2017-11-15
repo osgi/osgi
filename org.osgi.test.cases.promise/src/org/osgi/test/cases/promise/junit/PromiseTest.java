@@ -20,6 +20,7 @@ import static org.osgi.util.promise.Promises.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -915,26 +916,24 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final PromiseExecutors executors = new PromiseExecutors(
 				callbackExecutor);
-		final Deferred<Integer> d1 = executors.deferred();
-		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
+		final Deferred<Number> d1 = executors.deferred();
+		final Promise<Number> p1 = d1.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
 				latch1.countDown();
 			}
 		});
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Deferred<Long> d2 = executors.deferred();
-		final Promise<Long> p2 = d2.getPromise().onResolve(new Runnable() {
+		final Deferred<Number> d2 = executors.deferred();
+		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
 			@Override
 			public void run() {
 				latch2.countDown();
 			}
 		});
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Promise<List<Number>> latched = Promises
-				.<Number> all(
-						executors.<List<Number>> deferred(),
-						p1, p2)
+		final Promise<List<Number>> latched = executors
+				.all(Arrays.asList(p1, p2))
 				.onResolve(new Runnable() {
 					@Override
 					public void run() {
@@ -994,9 +993,8 @@ public class PromiseTest extends TestCase {
 		promises.add(p1);
 		promises.add(p2);
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Promise<List<Number>> latched = Promises
+		final Promise<List<Number>> latched = executors
 				.<Number, Integer> all(
-						executors.<List<Number>> deferred(),
 						promises)
 				.onResolve(new Runnable() {
 					@Override

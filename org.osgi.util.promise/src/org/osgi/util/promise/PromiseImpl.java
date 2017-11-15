@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
@@ -893,6 +894,28 @@ final class PromiseImpl<T> implements Promise<T> {
 		@Override
 		public void run() {
 			schedule(operation, delay, unit);
+		}
+	}
+
+	/**
+	 * A callback used by the {@link PromiseExecutors#submit(Callable)} method.
+	 * 
+	 * @Immutable
+	 */
+	final class Submit implements Runnable {
+		private final Callable< ? extends T> task;
+
+		Submit(Callable< ? extends T> task) {
+			this.task = requireNonNull(task);
+		}
+
+		@Override
+		public void run() {
+			try {
+				tryResolve(task.call(), null);
+			} catch (Throwable t) {
+				tryResolve(null, t);
+			}
 		}
 	}
 

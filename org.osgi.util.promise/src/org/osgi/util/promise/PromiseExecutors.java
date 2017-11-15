@@ -19,6 +19,9 @@ package org.osgi.util.promise;
 import static java.util.Objects.requireNonNull;
 import static org.osgi.util.promise.PromiseImpl.uncaughtException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -35,8 +38,10 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.util.promise.PromiseImpl.Result;
 
 /**
  * The executors for Promise callbacks and scheduled operations.
@@ -134,6 +139,7 @@ public class PromiseExecutors {
 	 * {@link Deferred} whose associated Promise uses executors other than the
 	 * default executors.
 	 * 
+	 * @param <T> The value type associated with the returned Deferred.
 	 * @return A new {@link Deferred} with the callback and scheduled executors
 	 *         of this PromiseExecutors object
 	 */
@@ -179,31 +185,116 @@ public class PromiseExecutors {
 	/**
 	 * Returns a new Promise that will hold the result of the specified task.
 	 * <p>
+	 * The returned Promise uses the callback executor and scheduled executor of
+	 * this PromiseExecutors object
+	 * <p>
 	 * The specified task will be executed on the {@link #executor() callback
 	 * executor}.
 	 * 
+	 * @param <T> The value type associated with the returned Promise.
 	 * @param task The task whose result will be available from the returned
 	 *            Promise.
 	 * @return A new Promise that will hold the result of the specified task.
 	 */
-	public <V> Promise<V> submit(final Callable< ? extends V> task) {
-		requireNonNull(task);
-		final Deferred<V> deferred = deferred();
+	public <T> Promise<T> submit(Callable< ? extends T> task) {
+		PromiseImpl<T> promise = new PromiseImpl<>(this);
 		try {
-			executor().execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						deferred.resolve(task.call());
-					} catch (Throwable t) {
-						deferred.fail(t);
-					}
-				}
-			});
+			executor().execute(promise.new Submit(task));
 		} catch (Exception t) {
-			deferred.fail(t);
+			promise.tryResolve(null, t);
 		}
-		return deferred.getPromise();
+		return promise;
+	}
+
+	/**
+	 * Returns a new Promise that is a latch on the resolution of the specified
+	 * Promises.
+	 * <p>
+	 * The returned Promise uses the callback executor and scheduled executor of
+	 * this PromiseExecutors object
+	 * <p>
+	 * The returned Promise acts as a gate and must be resolved after all of the
+	 * specified Promises are resolved.
+	 * 
+	 * @param <T> The value type of the List value associated with the returned
+	 *            Promise.
+	 * @param <S> A subtype of the value type of the List value associated with
+	 *            the returned Promise.
+	 * @param promises The Promises which must be resolved before the returned
+	 *            Promise must be resolved. Must not be {@code null} and all of
+	 *            the elements in the collection must not be {@code null}.
+	 * @return A Promise that must be successfully resolved with a List of the
+	 *         values in the order of the specified Promises if all the
+	 *         specified Promises are successfully resolved. The List in the
+	 *         returned Promise is the property of the caller and is modifiable.
+	 *         The returned Promise must be resolved with a failure of
+	 *         {@link FailedPromisesException} if any of the specified Promises
+	 *         are resolved with a failure. The failure
+	 *         {@link FailedPromisesException} must contain all of the specified
+	 *         Promises which resolved with a failure.
+	 */
+	public <T, S extends T> Promise<List<T>> all(
+			Collection<Promise<S>> promises) {
+		if (promises.isEmpty()) {
+			List<T> result = new ArrayList<>();
+			return resolved(result);
+		}
+
+		PromiseImpl<List<T>> promise = new PromiseImpl<>(this);
+		/* make a copy and capture the ordering */
+		List<Promise<S>> list = new ArrayList<>(promises);
+		All<T,S> all = new All<>(promise, list);
+		for (Promise<S> p : list) {
+			p.onResolve(all);
+		}
+		return promise;
+	}
+
+	/**
+	 * A callback used to resolve the specified Promise when the specified list
+	 * of Promises are resolved for the {@link PromiseExecutors#all(Collection)}
+	 * method.
+	 * 
+	 * @ThreadSafe
+	 */
+	private static final class All<T, S extends T> implements Runnable {
+		private final PromiseImpl<List<T>>	promise;
+		private final List<Promise<S>>		promises;
+		private final AtomicInteger			promiseCount;
+
+		All(PromiseImpl<List<T>> promise,
+				List<Promise<S>> promises) {
+			this.promise = promise;
+			this.promises = promises;
+			this.promiseCount = new AtomicInteger(promises.size());
+		}
+
+		@Override
+		public void run() {
+			if (promiseCount.decrementAndGet() != 0) {
+				return;
+			}
+			List<T> value = new ArrayList<>(promises.size());
+			List<Promise< ? >> failed = new ArrayList<>(promises.size());
+			Throwable cause = null;
+			for (Promise<S> p : promises) {
+				Result<S> result = PromiseImpl.collect(p);
+				if (result.fail != null) {
+					failed.add(p);
+					if (cause == null) {
+						cause = result.fail;
+					}
+				} else {
+					value.add(result.value);
+				}
+			}
+			if (failed.isEmpty()) {
+				promise.tryResolve(value, null);
+			} else {
+				promise.tryResolve(null,
+						new FailedPromisesException(failed, cause));
+			}
+		}
 	}
 
 	/**

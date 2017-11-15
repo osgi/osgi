@@ -28,7 +28,6 @@ import java.util.concurrent.Semaphore;
 
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.promise.Promises;
 
 class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 		implements SimplePushEventSource<T> {
@@ -346,8 +345,7 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 					return doCall(event, pec);
 				}
 			}).collect(toList());
-			return Promises
-					.all(sameThread.deferred(), calls)
+			return sameThread.all(calls)
 					.map(l -> l.stream().max(Long::compareTo).orElseGet(
 							() -> Long.valueOf(System.nanoTime())));
 		}
