@@ -78,8 +78,8 @@
     protocols if these protocols can conform to the semantics of the Java
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support version 3.1 of the Java
-    Servlet API.</para>
+    <para>Http Whiteboard implementations must support version 3.1 or later
+    of the Java Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -1352,6 +1352,38 @@ public class MyServlet extends HttpServlet {
     <para>This will cause the servlet to move to
     <code>http://www.acme.com/myapp/myservlet</code> as configured by the
     custom Servlet Context Handler.</para>
+    
+    <section>
+      <title>Multipart file upload</title>
+      
+      <para>
+      Multipart file uploads are supported by specifying the 
+      <code>osgi.http.whiteboard.servlet.multipart.*</code> properties on the 
+      Servlet service registration. The following example illustrates this:
+       
+      <programlisting>@Component(service = Servlet.class)
+@HttpWhiteboardServletPattern("/image")
+@HttpWhiteboardServletMultipart(enabled = true, maxFileSize = 200000)
+public class ImageServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+
+        Collection&lt;Part&gt; parts = request.getParts();
+
+        for (Part part : parts) {
+            System.out.printf("File %s, %s, %d%n", part.getName(),
+                    part.getContentType(), part.getSize());
+
+            try (InputStream is = part.getInputStream()) {
+                // ...
+            }
+        }
+    }
+}</programlisting>
+      </para>
+    </section>
 
     <section>
       <title>Error Pages</title>
