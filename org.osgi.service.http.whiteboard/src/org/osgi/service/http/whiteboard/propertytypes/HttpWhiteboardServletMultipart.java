@@ -71,7 +71,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * @return The file size threshold for a multipart request..
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD
 	 */
-	int fileSizeThreshold();
+	int fileSizeThreshold() default 0;
 
 	/**
 	 * Service property identifying the location for a multipart request handled
@@ -80,7 +80,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * @return The location for a multipart request..
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION
 	 */
-	String location();
+	String location() default "";
 
 	/**
 	 * Service property identifying the max file size for a multipart request
@@ -89,7 +89,7 @@ public @interface HttpWhiteboardServletMultipart {
 	 * @return The max file size for a multipart request..
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE
 	 */
-	long maxFileSize();
+	long maxFileSize() default -1;
 
 	/**
 	 * Service property identifying the max request size for a multipart request
@@ -98,5 +98,5 @@ public @interface HttpWhiteboardServletMultipart {
 	 * @return The max request size for a multipart request..
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE
 	 */
-	long maxRequestSize();
+	long maxRequestSize() default -1;
 }
