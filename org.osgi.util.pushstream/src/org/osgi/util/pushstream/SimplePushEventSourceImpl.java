@@ -205,8 +205,8 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 	}
 
 	@Override
-	public void error(Exception e) {
-		enqueueEvent(PushEvent.error(e));
+	public void error(Throwable t) {
+		enqueueEvent(PushEvent.error(t));
 	}
 
 	private void enqueueEvent(PushEvent<T> event) {
@@ -303,7 +303,7 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 							}
 							return p;
 						}, p -> close(
-								PushEvent.error((Exception) p.getFailure())));
+								PushEvent.error(p.getFailure())));
 						return;
 					}
 				}

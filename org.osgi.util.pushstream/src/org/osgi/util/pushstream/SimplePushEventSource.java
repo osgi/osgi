@@ -76,9 +76,9 @@ public interface SimplePushEventSource<T>
 	 * {@link #open(PushEventConsumer)} this source, and will receive subsequent
 	 * events.
 	 *
-	 * @param e the error
+	 * @param t the error
 	 */
-	void error(Exception e);
+	void error(Throwable t);
 
 	/**
 	 * Determine whether there are any {@link PushEventConsumer}s for this

@@ -289,8 +289,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 						s.release();
 					}
 				})).onFailure(t -> executors.execute(() -> {
-					PushEvent<T> error = PushEvent.error(t instanceof Exception
-							? (Exception) t : new RuntimeException(t));
+					PushEvent<T> error = PushEvent.error(t);
 					close(error);
 					// Upstream close is needed as we have no direct
 					// backpressure

@@ -90,7 +90,7 @@ public abstract class PushEvent<T> {
 	 * @throws IllegalStateException if this event is not an
 	 *             {@link EventType#ERROR} event.
 	 */
-	public Exception getFailure() throws IllegalStateException {
+	public Throwable getFailure() throws IllegalStateException {
 		throw new IllegalStateException(
 				"Not an ERROR event, the event type is " + getType());
 	}
@@ -119,11 +119,11 @@ public abstract class PushEvent<T> {
 	 * Create a new error event.
 	 * 
 	 * @param <T> The payload type.
-	 * @param e The error.
+	 * @param t The error.
 	 * @return A new error event with the specified error.
 	 */
-	public static <T> PushEvent<T> error(Exception e) {
-		return new ErrorEvent<T>(e);
+	public static <T> PushEvent<T> error(Throwable t) {
+		return new ErrorEvent<T>(t);
 	}
 
 	/**
@@ -182,14 +182,14 @@ public abstract class PushEvent<T> {
 	}
 
 	static final class ErrorEvent<T> extends PushEvent<T> {
-		private final Exception error;
+		private final Throwable error;
 
-		ErrorEvent(Exception error) {
+		ErrorEvent(Throwable error) {
 			this.error = error;
 		}
 
 		@Override
-		public Exception getFailure() {
+		public Throwable getFailure() {
 			return error;
 		}
 

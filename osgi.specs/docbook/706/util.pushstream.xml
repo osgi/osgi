@@ -1292,7 +1292,7 @@
         
         <para>Close or error events can be sent equally easily using the 
         <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.endOfStream--" xrefstyle="hyperlink"/>  
-        and <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.error-Exception-" xrefstyle="hyperlink"/>  methods. These will 
+        and <xref linkend="org.osgi.util.pushstream.SimplePushEventSource.error-Throwable-" xrefstyle="hyperlink"/>  methods. These will 
         send disconnection events to all of the currently connected consumers and remove 
         them from the Simple Push Event Source. Note that sending these events does not 
         close the Simple Push Event Source. Subsequent connection attempts will succeed, 
