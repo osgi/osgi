@@ -35,7 +35,7 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * 
  * @see "Component Property Types"
  * @author $Id$
- * @since 1.0
+ * @since 1.1
  */
 @ComponentPropertyType
 @Retention(RetentionPolicy.CLASS)
