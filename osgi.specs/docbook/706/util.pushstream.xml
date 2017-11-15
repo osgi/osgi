@@ -378,6 +378,26 @@
           previous pipeline stages. Any subsequently received events must not
           be propagated and must return negative back pressure.</para>
         </section>
+        
+        <section>
+          <title>Asynchronous Mapping</title>
+          
+          <para>Mapping operations may sometimes take time to calculate their
+          results. PushStream operations should, in general be fast and non-blocking
+          and so long-running mapping operations should be run on a separate thread.
+          The <xref linkend="org.osgi.util.pushstream.PushStream.asyncMap-int-int-Function-" 
+          xrefstyle="hyperlink"/> operation allows the mapping function to return a 
+          Promise representing the ongoing calculation of the mapped value. When this
+          promise resolves then its value will be passed to the next pipeline stage.</para>
+          
+          <para>As asynchronous mapping operations are long-running they require
+          back pressure to be generated as the number of running operations increases.
+          The amount of back pressure returned is equal to the number of pending promises
+          (aside from the mapping operation that has just started) plus the number of
+          waiting threads if the maximum number of concurrent promises has been reached.
+          The returned back pressure when only a single promise is running is therefore
+          always zero.</para>
+        </section>
       </section>
       
       <section>
@@ -417,6 +437,16 @@
             <entry><para>Register a transformation function to adjust the back pressure
             returned by the previous entry in the stream. The result of this function
             will be returned as back pressure.</para></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="org.osgi.util.pushstream.PushStream.asyncMap-int-int-Function-" 
+          xrefstyle="hyperlink"/></entry>
+
+            <entry><para>Register a mapping function which will asynchronously calculate
+            the value to be passed to the next stage of the stream. The returned back
+            pressure is equal to one less than the number of outstanding promises, plus
+            the number of queued threads, multiplied by the delay value.</para></entry>
           </row>
 
           <row>

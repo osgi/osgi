@@ -104,6 +104,26 @@ public interface PushStream<T> extends AutoCloseable {
 	<R> PushStream<R> map(Function< ? super T, ? extends R> mapper);
 
 	/**
+	 * Asynchronously map the payload values. The mapping function returns a
+	 * Promise representing the asynchronous mapping operation.
+	 * <p>
+	 * The PushStream limits the number of concurrently running mapping
+	 * operations, and returns back pressure based on the number of existing
+	 * queued operations.
+	 * 
+	 * @param n number of simultaneous promises to use
+	 * @param delay Nr of ms/promise that is queued back pressure
+	 * @param mapper The mapping function
+	 * @return Builder style (can be a new or the same object)
+	 * @throws IllegalArgumentException if the number of threads is &lt; 1 or
+	 *             the delay is &lt; 0
+	 * @throws NullPointerException if the mapper is null
+	 */
+	<R> PushStream<R> asyncMap(int n, int delay,
+			Function< ? super T,Promise< ? extends R>> mapper)
+			throws IllegalArgumentException, NullPointerException;
+
+	/**
 	 * Flat map the payload value (turn one event into 0..n events of
 	 * potentially another type).
 	 * 
