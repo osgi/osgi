@@ -27,7 +27,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * next ruld found will be visited. If none of the rules can handle the
  * conversion, the original converter will be used to perform the conversion.
  *
- * @author $Id$
+ * @author $Id: 7b467a98fd2cd5107f5a546780abfae21d067a53 $
  */
 @ProviderType
 public interface ConverterBuilder {

@@ -21,7 +21,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * This is the base interface for the {@link Converting} and {@link Functioning}
  * interfaces and defines the common modifiers that can be applied to these.
  *
- * @author $Id$
+ * @author $Id: e6c20609b4db17a7e45b59975e0c3c6eae9f243a $
  * @NotThreadSafe
  */
 @ProviderType

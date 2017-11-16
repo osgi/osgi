@@ -26,7 +26,7 @@ import org.osgi.util.function.Function;
  * A {@link Functioning} instance can be obtained via the
  * {@link Converter}.
  *
- * @author $Id$
+ * @author $Id: 83db128a496153440bbe5c347e3de9a83dca7c59 $
  * @NotThreadSafe
  */
 @ProviderType
