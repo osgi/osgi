@@ -588,7 +588,8 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.to(new TypeReference<Map<Character,String>>() {});
 		assertNotNull(converted);
 		assertEquals(1, converted.size());
-		assertEquals(dtolike.prop2, converted.get('p'));
+		assertTrue(converted.get('p').equals(dtolike.prop1)
+				|| converted.get('p').equals(dtolike.prop2));
 	}
 
 	/**
