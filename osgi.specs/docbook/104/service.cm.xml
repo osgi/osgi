@@ -1571,11 +1571,11 @@ private       ::= '.' symbolic-name</programlisting>
       creation of the unique PID to the Configuration Admin service. The second set 
       allows to influence the generation of the PID.</para>
 
-      <para>The <code>ConfigurationAdmin</code> class provides the following two methods to
-      create a new instance of a Managed Service Factory. A new unique PID is created
-      for the Configuration object by the Configuration Admin service. The scheme used for
-      this PID is defined by the Configuration Admin service and is unrelated to the
-      factory PID, which is chosen by the registering bundle.</para>
+      <para>The <code>ConfigurationAdmin</code> class provides the following two methods
+      generating a unique PID to create a new instance of a Managed Service Factory. 
+      A new unique PID is created for the Configuration object by the Configuration Admin 
+      service. The scheme used for this PID is defined by the Configuration Admin service 
+      and is unrelated to the factory PID, which is chosen by the registering bundle.</para>
 
       <itemizedlist>
         <listitem>
@@ -1603,8 +1603,8 @@ private       ::= '.' symbolic-name</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The <code>ConfigurationAdmin</code> class provides the following two methods to
-      create a new instance of a Managed Service Factory. The PID for this Configuration
+      <para>The <code>ConfigurationAdmin</code> class provides the following two methods
+      allowing the caller to influence the generation of the PID. The PID for this Configuration
       object is generated from the provided factory PID and the provided name by starting 
       with the factory PID, appending the character ~ (tilde) and then appending the 
       name. The <code>getFactoryConfiguration</code> method must atomically create and 
@@ -1728,15 +1728,17 @@ private       ::= '.' symbolic-name</programlisting>
       object.</para>
       
       <para>To optimize configuration updates if the caller does not know whether
-      properties of a  <code>Configuration</code> object have changed, 
+      properties of a <code>Configuration</code> object have changed, 
       <code>Configuration.updateIfDifferent</code> can be used. The provided dictionary
       is compared with the existing properties. If there is no change, no action is
-      invoked. If there is any change or if the properties cannot be compared,
+      invoked. If there is any change detected,
       <code>Configuration.updateIfDifferent</code> acts exactly as 
       <code>Configuration.update</code>. Properties are compared as follows: scalars are 
       compared using <code>equals()</code>, arrays are compared using 
       <code>Arrays.equals()</code>, and collections are compared using 
-      <code>equals()</code>.</para>
+      <code>equals()</code>. The <code>boolean</code> result of 
+      <code>Configuration.updateIfDifferent</code> is <code>true</code> if the 
+      Configuration object has been updated.</para>
       
       <para>If the <code>Configuration</code> object has the <code>READ_ONLY</code>
       attribute set, calling one of the update methods results in a 
@@ -2280,8 +2282,7 @@ ConfigurationPermission[?application,<xref
       <code>service.cmRanking</code> property for the order of calling the
       Configuration Plugin services. In the event of more than one plugin
       having the same value of <code>service.cmRanking</code>, then the
-      Configuration Admin service arbitrarily chooses the order in which
-      they are called.</para>
+      order in which these are called is undefined.</para>
 
       <table xml:id="i1624384">
         <title><code>service.cmRanking</code> Usage For Ordering</title>
@@ -2329,6 +2330,23 @@ ConfigurationPermission[?application,<xref
           </tbody>
         </tgroup>
       </table>
+    </section>
+
+    <section>
+      <title>Manual Invocation</title>
+      
+      <para>The Configuration Admin service ensures that Configuration Plugin services
+      are automatically called for a Managed Service or a Managed Service Factory as
+      outlined above. If a bundle needs to get the configuration properties processed
+      by the Configuration Plugin services, <xref
+    linkend="org.osgi.service.cm.Configuration.getProcessedProperties-ServiceReference-"
+    xrefstyle="hyperlink"/> provides this view.</para>
+    
+      <para>The service reference passed into the method must either point to a 
+      Managed Service or Managed Service Factory registered on behalf of the bundle
+      getting the processed properties. If that service should not be called by the
+      Configuration Admin service, that service must be registered without a PID 
+      service property.</para>
     </section>
   </section>
 
@@ -2603,4 +2621,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.annotations.xml"/>
+
 </chapter>
