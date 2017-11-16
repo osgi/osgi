@@ -387,7 +387,10 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         }
 
         // Assume it's an interface
-        return MapDelegate.forInterface(object, this);
+		if (object.getClass().getInterfaces().length > 0) {
+			return MapDelegate.forInterface(object, this);
+		}
+		return null;
     }
 
     @SuppressWarnings("rawtypes")
