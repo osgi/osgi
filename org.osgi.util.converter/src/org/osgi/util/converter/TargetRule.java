@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * Interface for custom conversion rules.
  *
- * @author $Id: f028e2a4b4e3f0c9a1ddb14655998e46fa856b37 $
+ * @author $Id$
  */
 public interface TargetRule {
     /**

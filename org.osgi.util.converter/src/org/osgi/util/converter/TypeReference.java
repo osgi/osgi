@@ -34,7 +34,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * </pre>
  *
  * @param <T> The target type for the conversion.
- * @author $Id: 1ea7d4297e6ed805ce147d32614f23bb9145b24c $
+ * @author $Id$
  * @Immutable
  */
 @ConsumerType
