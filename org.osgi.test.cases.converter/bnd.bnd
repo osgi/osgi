@@ -19,8 +19,8 @@ Test-Cases = ${testcases}
 	${junit}
 
 -runbundles: \
-	org.osgi.impl.util.converter ;version=latest
-
+	org.osgi.util.converter;version=latest, \
+    org.osgi.util.function;version=1.0.0
 
 -runproperties = ${runproperties}
 
