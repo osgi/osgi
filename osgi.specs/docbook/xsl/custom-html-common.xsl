@@ -23,12 +23,13 @@
     </xsl:param>
 
     <!-- Set some reasonable defaults for webhelp output -->
-    <xsl:param name="webhelp.common.dir"></xsl:param>
-    <xsl:param name="img.src.path" select="concat($webhelp.common.dir,'images/')" />
+    <xsl:param name="webhelp.common.dir" select="concat($webhelp.base.dir, '/')" />
+    <xsl:param name="img.src.path">images/</xsl:param>
     <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
-    <xsl:param name="base.dir" select="$webhelp.base.dir"/>
+    <xsl:param name="base.dir" select="$webhelp.common.dir"/>
+    <xsl:param name="chunk.base.dir" select="$webhelp.common.dir"/>
     <xsl:param name="suppress.navigation">0</xsl:param>
     <!-- Generate the end-of-the-book index -->
     <xsl:param name="generate.index" select="1"/>
@@ -79,18 +80,12 @@
     <meta name="Section-title" content="{$title}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="shortcut icon" href="{$webhelp.common.dir}images/favicon.png" type="image/x-icon"/>
-    <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/custom.css"/>
-    <xsl:if test="/d:book/@status = 'draft'">
-        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/draft.css"/>
-    </xsl:if>
-    <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/github.css"/>
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+    <link rel="stylesheet" type="text/css" href="css/github.css"/>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&amp;subset=Latin" />
-    <script type="text/javascript" src="{$webhelp.common.dir}js/highlight.pack.js"></script>
-    <script type="text/javascript" src="{$webhelp.common.dir}js/js.cookie.js"></script>
-    <script type="text/javascript" src="{$webhelp.common.dir}js/jquery-3.2.1.slim.min.js"></script>
-    <script type="text/javascript" src="{$webhelp.common.dir}js/jquery.modal.min.js"></script>
-    <script type="text/javascript" src="{$webhelp.common.dir}js/main.js"></script>
+    <script type="text/javascript" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </xsl:template>
 
 <xsl:template name="user.header.navigation">
@@ -275,7 +270,7 @@ basic format:
         <div class="menu-top-container"></div>
         <div id="shadow-block">
             <a class="logo" href="index.html">
-                <img src='{$webhelp.common.dir}images/logo.svg' alt="{$brandname} Documentation"/>
+                <img src='images/logo.svg' alt="{$brandname} Documentation"/>
 
                 <h1>
                     <xsl:apply-templates select="/*[1]" mode="title.markup"/>&#160;Release&#160;<xsl:value-of select="$release.version"/>
