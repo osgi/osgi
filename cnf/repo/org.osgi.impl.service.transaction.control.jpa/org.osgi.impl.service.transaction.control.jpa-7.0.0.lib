@@ -1,4 +1,4 @@
-tx-control-provider-jpa-xa;    version=1.0.0.SNAPSHOT
+tx-control-provider-jpa-xa;    version=1.0.0
 org.osgi.impl.service.cm; version=latest
 
 slf4j.api;  version=1.7.7

@@ -55,6 +55,9 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.log.stream;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
+	${repo;org.osgi.impl.service.transaction.control;latest}, \
+	${repo;org.osgi.impl.service.transaction.control.jdbc;latest}, \
+	${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
     ${repo;org.osgi.impl.service.resolver;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
@@ -99,6 +102,9 @@ jar.enterprise.impls = \
     ${repo;org.osgi.impl.service.log.stream;latest}, \
 	${repo;org.osgi.impl.service.metatype;latest}, \
 	${repo;org.osgi.impl.service.provisioning;latest}, \
+	${repo;org.osgi.impl.service.transaction.control;latest}, \
+    ${repo;org.osgi.impl.service.transaction.control.jdbc;latest}, \
+    ${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
 	${repo;org.osgi.impl.service.resolver;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
