@@ -332,6 +332,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         for (Map.Entry entry : (Set<Entry>) m.entrySet()) {
             Object key = entry.getKey();
             Object value = entry.getValue();
+			key = convertMapKey(key);
             value = convertMapValue(value);
             instance.put(key, value);
         }
@@ -339,31 +340,39 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         return instance;
     }
 
+	Object convertMapKey(Object key) {
+		return convertMapElement(key, 0);
+	}
+
     Object convertMapValue(Object value) {
-        Type targetValueType = null;
-        if (typeArguments != null && typeArguments.length > 1) {
-            targetValueType = typeArguments[1];
-        }
+		return convertMapElement(value, 1);
+	}
 
-        if (value != null) {
-            if (targetValueType != null) {
-                value = converter.convert(value).to(targetValueType);
-            } else {
-                Class<?> cls = value.getClass();
-                if (isCopyRequiredType(cls)) {
-                    cls = getConstructableType(cls);
-                }
+	private Object convertMapElement(Object element, int typeIdx) {
+		Type targetType = null;
+		if (typeArguments != null && typeArguments.length > typeIdx) {
+			targetType = typeArguments[typeIdx];
+		}
 
-                if (sourceAsDTO || DTOUtil.isDTOType(cls))
-                    value = converter.convert(value).sourceAsDTO().to(cls);
-                else
-                    value = converter.convert(value).to(cls);
-            }
-        }
-        return value;
-    }
+		if (element != null) {
+			if (targetType != null) {
+				element = converter.convert(element).to(targetType);
+			} else {
+				Class< ? > cls = element.getClass();
+				if (isCopyRequiredType(cls)) {
+					cls = getConstructableType(cls);
+				}
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+				if (sourceAsDTO || DTOUtil.isDTOType(cls))
+					element = converter.convert(element).sourceAsDTO().to(cls);
+				else
+					element = converter.convert(element).to(cls);
+			}
+		}
+		return element;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
     private Map convertToMapDelegate() {
         if (Map.class.isAssignableFrom(sourceClass)) {
             return MapDelegate.forMap((Map) object, this);
@@ -867,5 +876,4 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         }
         return setters;
     }
-
 }
