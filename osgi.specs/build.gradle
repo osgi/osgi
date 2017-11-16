@@ -356,7 +356,7 @@ tasks.addRule('Pattern: <name>.html: Generate the docbook html files for the boo
           param('name': 'draft.watermark.image', 'expression': 'draft.png')
           param('name': 'webhelp.base.dir', 'expression': destinationDir)
           param('name': 'webhelp.default.topic', 'expression': "index.html")
-          param('name': 'release.version', 'expression': version)
+          param('name': 'release.version', 'expression': bnd('osgi.release'))
         }
 
         copy {
