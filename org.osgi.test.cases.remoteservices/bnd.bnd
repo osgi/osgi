@@ -15,6 +15,8 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.3.1	, \
 	osgi.cmpn;								version=4.3.1	, \
+	org.osgi.util.function;                 version=1.0.0   , \
+	org.osgi.util.promise;                  version=1.0.0   , \
 	${junit}
 
 -runbundles							= \
@@ -23,16 +25,19 @@ Test-Cases							= ${testcases}
     org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.metatype;           version=latest, \
 	org.osgi.impl.service.http;               version=latest, \
-	org.osgi.impl.service.remoteserviceadmin; version=latest
+	org.osgi.impl.service.remoteserviceadmin; version=latest, \
+	org.osgi.util.function;                   version=latest, \
+	org.osgi.util.promise;                    version=latest
 
 -runvm = -Xmx512m, -XX:MaxPermSize=350m
 
 -runproperties = ${runproperties}, \
-	rsa.ct.timeout=300000,\
+	rsa.ct.timeout=30000,\
 	rsa.ct.timeout.factor=3,\
 	amdatu.remote.logging.level=0,\
 	amdatu.remote.console.level=3,\
-	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@,equinox.use.ds=true", \
+	org.amdatu.remote.discovery.bonjour.host=127.0.0.1,\
+	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@,equinox.use.ds=true,org.amdatu.remote.discovery.bonjour.host=127.0.0.1", \
 	${p}.system.packages.extra="${junit.package}", \
     ${p}.serverconfig="service.exported.intents.extra,service.exported.configs", \
     service.exported.intents.extra="passByValue", \

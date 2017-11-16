@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2009, 2010, 2017). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,13 @@
  */
 package org.osgi.test.cases.remoteservices.junit;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -26,21 +30,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.cases.remoteservices.common.A;
+import org.osgi.test.cases.remoteservices.common.AsyncTypes;
 import org.osgi.test.cases.remoteservices.common.B;
+import org.osgi.test.cases.remoteservices.common.BasicTypes;
 import org.osgi.test.cases.remoteservices.common.C;
+import org.osgi.test.cases.remoteservices.common.DTOType;
+import org.osgi.test.cases.remoteservices.common.SlowService;
+import org.osgi.test.cases.remoteservices.impl.AsyncTypesImpl;
+import org.osgi.test.cases.remoteservices.impl.BasicTypesTestServiceImpl;
+import org.osgi.test.cases.remoteservices.impl.SlowServiceImpl;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
+import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -66,7 +85,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = getLongProperty("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.ct.timeout", 30000L);
 	}
 
 	/**
@@ -86,33 +105,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testSimpleRegistration() throws Exception {
-		// verify that the server framework is exporting the test packages
-		verifyFramework();
-
-		Set supportedConfigTypes = getSupportedConfigTypes();
-
-		// load the external properties file with the config types for the server side service
-		Hashtable properties = loadServerTCKProperties();
-
-		// make sure the given config type is in the set of supported config types
-		String str = (String) properties.get(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS);
-
-		// I hate not having String.split() available
-		StringTokenizer st = new StringTokenizer(str, " ");
-		boolean found = false;
-		while (st.hasMoreTokens()) {
-			if (supportedConfigTypes.contains(st.nextToken())) {
-				found = true;
-				break;
-			}
-		}
-		assertTrue("the given service.exported.configs type is not supported by the installed Distribution Provider", found);
-
-		// add some properties for testing
-		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
-		properties.put("implementation", "1");
-		properties.put(".myprop", "must not be visible on client side");
-		processFreePortProperties(properties);
+		Hashtable properties = registrationTestServiceProperties();
 
 		// install server side test service in the sub-framework
 		TestServiceImpl impl = new TestServiceImpl();
@@ -182,6 +175,627 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 			// invoke the proxy
 			assertEquals("B", clientB.getB());
+
+			clientTracker.close();
+
+		} finally {
+			srTestService.unregister();
+		}
+	}
+
+	private Hashtable registrationTestServiceProperties() throws Exception {
+		// verify that the server framework is exporting the test packages
+		verifyFramework();
+
+		Set supportedConfigTypes = getSupportedConfigTypes();
+
+		// load the external properties file with the config types for the
+		// server side service
+		Hashtable properties = loadServerTCKProperties();
+
+		// make sure the given config type is in the set of supported config
+		// types
+		String str = (String) properties
+				.get(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS);
+
+		// I hate not having String.split() available
+		StringTokenizer st = new StringTokenizer(str, " ");
+		boolean found = false;
+		while (st.hasMoreTokens()) {
+			if (supportedConfigTypes.contains(st.nextToken())) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue(
+				"the given service.exported.configs type is not supported by the installed Distribution Provider",
+				found);
+
+		// add some properties for testing
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
+		properties.put("implementation", "1");
+		properties.put(".myprop", "must not be visible on client side");
+		processFreePortProperties(properties);
+		return properties;
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testBasicTypesIntent() throws Exception {
+
+		Filter filter = getFramework().getBundleContext().createFilter(
+				"(" + DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED
+						+ "=*)");
+		ServiceTracker< ? , ? > dpTracker = new ServiceTracker<>(
+				getFramework().getBundleContext(), filter, null);
+		dpTracker.open();
+
+		Object dp = Tracker.waitForService(dpTracker, timeout);
+		assertNotNull("No DistributionProvider found", dp);
+		ServiceReference< ? > dpReference = dpTracker.getServiceReference();
+		assertNotNull(dpReference);
+		Object property = dpReference.getProperty(
+				DistributionProviderConstants.REMOTE_INTENTS_SUPPORTED);
+		assertNotNull("No intents supported", property);
+
+		Collection<String> intents;
+		if (property instanceof String) {
+			intents = Collections.singleton((String) property);
+		} else if (property instanceof String[]) {
+			intents = Arrays.asList((String[]) property);
+		} else if (property instanceof Collection) {
+			@SuppressWarnings("unchecked")
+			Collection<String> tmp = (Collection<String>) property;
+			intents = tmp;
+		} else {
+			throw new IllegalArgumentException(
+					"Supported intents are not of the correct type "
+							+ property.getClass());
+		}
+
+		assertTrue("Did not support osgi.basic",
+				intents.contains("osgi.basic"));
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testBasicTypes() throws Exception {
+		@SuppressWarnings("unchecked")
+		Hashtable<String,Object> properties = registrationTestServiceProperties();
+
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
+				"osgi.basic");
+
+		// install server side test service in the sub-framework
+		BasicTypesTestServiceImpl impl = new BasicTypesTestServiceImpl();
+
+		// register the service in the server side framework on behalf of the
+		// System Bundle
+		// the interface package is exported by the System Bundle
+		ServiceRegistration<BasicTypes> srTestService = getFramework()
+				.getBundleContext()
+				.registerService(BasicTypes.class, impl, properties);
+
+		System.out
+				.println("registered basic types test service on server side");
+
+		try {
+			// now check on the hosting framework for the service to become
+			// available
+			ServiceTracker<BasicTypes,BasicTypes> clientTracker = new ServiceTracker<>(
+					getContext(), BasicTypes.class, null);
+			clientTracker.open();
+
+			// the proxy should appear in this framework
+			BasicTypes client = Tracker.waitForService(clientTracker, timeout);
+			assertNotNull("no proxy for BasicTypes found!", client);
+
+			ServiceReference<BasicTypes> sr = clientTracker
+					.getServiceReference();
+
+			Object property = sr
+					.getProperty(RemoteServiceConstants.SERVICE_INTENTS);
+			assertNotNull("No intents supported", property);
+
+			Collection<String> intents;
+			if (property instanceof String) {
+				intents = Collections.singleton((String) property);
+			} else if (property instanceof String[]) {
+				intents = Arrays.asList((String[]) property);
+			} else if (property instanceof Collection) {
+				@SuppressWarnings("unchecked")
+				Collection<String> tmp = (Collection<String>) property;
+				intents = tmp;
+			} else {
+				throw new IllegalArgumentException(
+						"Supported intents are not of the correct type "
+								+ property.getClass());
+			}
+
+			assertTrue("Did not pick up the osgi.basic intent",
+					intents.contains("osgi.basic"));
+
+			// booleans
+			assertFalse(client.getBooleanPrimitive(true));
+			assertTrue(client.getBoolean(false));
+			assertTrue(Arrays.equals(new boolean[] {
+					true, false
+			}, client.getBooleanPrimitiveArray(new boolean[] {
+					false, true
+			})));
+			assertArrayEquals(new Boolean[] {
+					false, true
+			}, client.getBooleanArray(new Boolean[] {
+					true, false
+			}));
+			assertEquals(Arrays.asList(true, true, false),
+					client.getBooleanList(Arrays.asList(false, false, true)));
+			assertEquals(Collections.singleton(true),
+					client.getBooleanSet(Collections.singleton(false)));
+
+			// bytes
+			assertEquals(-1, client.getBytePrimitive((byte) 1));
+			assertEquals(Byte.valueOf((byte) -1), client.getByte((byte) 1));
+			assertArrayEquals(new byte[] {
+					-1, -2, -3
+			}, client.getBytePrimitiveArray(new byte[] {
+					1, 2, 3
+			}));
+			assertArrayEquals(new Byte[] {
+					(byte) 3, (byte) 2, (byte) 1
+			}, client.getByteArray(new Byte[] {
+					1, 2, 3
+			}));
+
+			assertEquals(Arrays.asList((byte) 1, (byte) 2, (byte) 3), client
+					.getByteList(Arrays.asList((byte) 3, (byte) 2, (byte) 1)));
+			assertEquals(
+					new HashSet<>(Arrays.asList((byte) 2, (byte) 4, (byte) 6)),
+					client.getByteSet(new HashSet<>(
+							Arrays.asList((byte) 1, (byte) 2, (byte) 3))));
+
+			// shorts
+			assertEquals(-1, client.getShortPrimitive((short) 1));
+			assertEquals(Short.valueOf((short) -1), client.getShort((short) 1));
+			assertArrayEquals(new short[] {
+					-1, -2, -3
+			}, client.getShortPrimitiveArray(new short[] {
+					1, 2, 3
+			}));
+			assertArrayEquals(new Short[] {
+					(short) 3, (short) 2, (short) 1
+			}, client.getShortArray(new Short[] {
+					1, 2, 3
+			}));
+
+			assertEquals(Arrays.asList((short) 1, (short) 2, (short) 3),
+					client.getShortList(
+							Arrays.asList((short) 3, (short) 2, (short) 1)));
+			assertEquals(
+					new HashSet<>(
+							Arrays.asList((short) 2, (short) 4, (short) 6)),
+					client.getShortSet(new HashSet<>(
+							Arrays.asList((short) 1, (short) 2, (short) 3))));
+
+			// chars
+			assertEquals('b', client.getCharPrimitive('a'));
+			assertEquals(Character.valueOf('b'), client.getChar('a'));
+			assertArrayEquals(new char[] {
+					'b', 'c', 'd'
+			}, client.getCharacterPrimitiveArray(new char[] {
+					'a', 'b', 'c'
+			}));
+			assertArrayEquals(new Character[] {
+					'c', 'b', 'a'
+			}, client.getCharacterArray(new Character[] {
+					'a', 'b', 'c'
+			}));
+
+			assertEquals(Arrays.asList('c', 'b', 'a'),
+					client.getCharacterList(Arrays.asList('a', 'b', 'c')));
+			assertEquals(new HashSet<>(Arrays.asList('A', 'B', 'C')),
+					client.getCharacterSet(
+							new HashSet<>(Arrays.asList('c', 'b', 'a'))));
+
+			// ints
+			assertEquals(-1, client.getIntPrimitive(1));
+			assertEquals(Integer.valueOf(-1), client.getInt(1));
+			assertArrayEquals(new int[] {
+					-1, -2, -3
+			}, client.getIntPrimitiveArray(new int[] {
+					1, 2, 3
+			}));
+			assertArrayEquals(new Integer[] {
+					3, 2, 1
+			}, client.getIntegerArray(new Integer[] {
+					1, 2, 3
+			}));
+
+			assertEquals(Arrays.asList(1, 2, 3),
+					client.getIntegerList(Arrays.asList(3, 2, 1)));
+			assertEquals(new HashSet<>(Arrays.asList(2, 4, 6)), client
+					.getIntegerSet(new HashSet<>(Arrays.asList(1, 2, 3))));
+
+			// longs
+			assertEquals(-1, client.getLongPrimitive(1));
+			assertEquals(Long.valueOf(-1), client.getLong((long) 1));
+			assertArrayEquals(new long[] {
+					-1, -2, -3
+			}, client.getLongPrimitiveArray(new long[] {
+					1, 2, 3
+			}));
+			assertArrayEquals(new Long[] {
+					(long) 3, (long) 2, (long) 1
+			}, client.getLongArray(new Long[] {
+					(long) 1, (long) 2, (long) 3
+			}));
+
+			assertEquals(Arrays.asList((long) 1, (long) 2, (long) 3), client
+					.getLongList(Arrays.asList((long) 3, (long) 2, (long) 1)));
+			assertEquals(
+					new HashSet<>(Arrays.asList((long) 2, (long) 4, (long) 6)),
+					client.getLongSet(new HashSet<>(
+							Arrays.asList((long) 1, (long) 2, (long) 3))));
+
+			// floats
+			assertEquals(-1f, client.getFloatPrimitive(1), 0.01f);
+			assertEquals(Float.valueOf(-1), client.getFloat((float) 1));
+			assertArrayEquals(new float[] {
+					-1, -2, -3
+			}, client.getFloatPrimitiveArray(new float[] {
+					1, 2, 3
+			}), 0.01f);
+			assertArrayEquals(new Float[] {
+					(float) 3, (float) 2, (float) 1
+			}, client.getFloatArray(new Float[] {
+					(float) 1, (float) 2, (float) 3
+			}));
+
+			assertEquals(Arrays.asList((float) 1, (float) 2, (float) 3),
+					client.getFloatList(
+							Arrays.asList((float) 3, (float) 2, (float) 1)));
+			assertEquals(
+					new HashSet<>(
+							Arrays.asList((float) 2, (float) 4, (float) 6)),
+					client.getFloatSet(new HashSet<>(
+							Arrays.asList((float) 1, (float) 2, (float) 3))));
+
+			// doubles
+			assertEquals(-1d, client.getDoublePrimitive(1), 0.01d);
+			assertEquals(Double.valueOf(-1), client.getDouble((double) 1));
+			assertArrayEquals(new double[] {
+					-1, -2, -3
+			}, client.getDoublePrimitiveArray(new double[] {
+					1, 2, 3
+			}), 0.01d);
+			assertArrayEquals(new Double[] {
+					(double) 3, (double) 2, (double) 1
+			}, client.getDoubleArray(new Double[] {
+					(double) 1, (double) 2, (double) 3
+			}));
+
+			assertEquals(Arrays.asList((double) 1, (double) 2, (double) 3),
+					client.getDoubleList(
+							Arrays.asList((double) 3, (double) 2, (double) 1)));
+			assertEquals(
+					new HashSet<>(
+							Arrays.asList((double) 2, (double) 4, (double) 6)),
+					client.getDoubleSet(new HashSet<>(Arrays.asList((double) 1,
+							(double) 2, (double) 3))));
+
+			// Strings
+			assertEquals("BANG", client.getString("bang"));
+			assertArrayEquals(new String[] {
+					"fum", "fo", "fi", "fee"
+			}, client.getStringArray(new String[] {
+					"fee", "fi", "fo", "fum"
+			}));
+
+			assertEquals(Arrays.asList("fum", "fo", "fi", "fee"), client
+					.getStringList(Arrays.asList("fee", "fi", "fo", "fum")));
+			assertEquals(new HashSet<>(Arrays.asList("FEE", "FI", "FO", "FUM")),
+					client.getStringSet(new HashSet<>(
+							Arrays.asList("fee", "fi", "fo", "fum"))));
+
+			// Versions
+			assertEquals(Version.parseVersion("2.3.4"),
+					client.getVersion(Version.parseVersion("1.2.3")));
+			assertArrayEquals(new Version[] {
+					Version.parseVersion("4.5.6"), Version.parseVersion("1.2.3")
+			}, client.getVersionArray(new Version[] {
+					Version.parseVersion("1.2.3"), Version.parseVersion("4.5.6")
+			}));
+
+			assertEquals(
+					Arrays.asList(Version.parseVersion("4.5.6"),
+							Version.parseVersion("1.2.3")),
+					client.getVersionList(
+							Arrays.asList(Version.parseVersion("1.2.3"),
+									Version.parseVersion("4.5.6"))));
+			assertEquals(
+					new HashSet<>(Arrays.asList(Version.parseVersion("2.3.4"),
+							Version.parseVersion("5.6.7"))),
+					client.getVersionSet(new HashSet<>(
+							Arrays.asList(Version.parseVersion("1.2.3"),
+									Version.parseVersion("4.5.6")))));
+
+			// enums
+			assertEquals(TimeUnit.MICROSECONDS,
+					client.getEnum(TimeUnit.NANOSECONDS));
+			assertArrayEquals(new TimeUnit[] {
+					TimeUnit.HOURS, TimeUnit.DAYS
+			}, client.getEnumArray(new TimeUnit[] {
+					TimeUnit.DAYS, TimeUnit.HOURS
+			}));
+
+			assertEquals(Arrays.asList(TimeUnit.HOURS, TimeUnit.DAYS), client
+					.getEnumList(Arrays.asList(TimeUnit.DAYS, TimeUnit.HOURS)));
+			assertEquals(
+					new HashSet<>(
+							Arrays.asList(TimeUnit.HOURS, TimeUnit.SECONDS)),
+					client.getEnumSet(new HashSet<>(Arrays
+							.asList(TimeUnit.MILLISECONDS, TimeUnit.MINUTES))));
+
+			// dtos
+			DTOType typeA = new DTOType();
+			typeA.value = "a";
+			DTOType typeB = new DTOType();
+			typeB.value = "b";
+			DTOType typeC = new DTOType();
+			typeC.value = "c";
+
+			assertEquals("A", client.getDTO(typeA).value);
+
+			DTOType[] array = client.getDTOTypeArray(new DTOType[] {
+					typeA, typeB, typeC
+			});
+			assertEquals(3, array.length);
+			assertEquals("c", array[0].value);
+			assertEquals("b", array[1].value);
+			assertEquals("a", array[2].value);
+
+			List<DTOType> list = client
+					.getDTOTypeList(Arrays.asList(typeA, typeB, typeC));
+			assertEquals(3, list.size());
+			assertEquals("c", list.get(0).value);
+			assertEquals("b", list.get(1).value);
+			assertEquals("a", list.get(2).value);
+
+			Set<String> values = new HashSet<>();
+			for (DTOType dtoType : client.getDTOTypeSet(
+					new HashSet<>(Arrays.asList(typeA, typeB, typeC)))) {
+				values.add(dtoType.value);
+			}
+
+			assertEquals(new HashSet<>(Arrays.asList("A", "B", "C")), values);
+
+			
+			Map<String, Integer> map = new HashMap<>();
+			map.put("foo", 1);
+			map.put("bar", 2);
+			
+			client.populateMap(map);
+			
+			assertEquals(map, client.getMap());
+			
+			clientTracker.close();
+
+		} finally {
+			srTestService.unregister();
+		}
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testBasicTimeout() throws Exception {
+		@SuppressWarnings("unchecked")
+		Hashtable<String,Object> properties = registrationTestServiceProperties();
+
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
+				"osgi.basic");
+
+		properties.put("osgi.basic.timeout", "3000");
+
+		// install server side test service in the sub-framework
+		SlowServiceImpl impl = new SlowServiceImpl();
+
+		// register the service in the server side framework on behalf of the
+		// System Bundle
+		// the interface package is exported by the System Bundle
+		ServiceRegistration<SlowService> srTestService = getFramework()
+				.getBundleContext()
+				.registerService(SlowService.class, impl, properties);
+
+		System.out.println("registered slow test service on server side");
+
+		try {
+			// now check on the hosting framework for the service to become
+			// available
+			ServiceTracker<SlowService,SlowService> clientTracker = new ServiceTracker<>(
+					getContext(), SlowService.class, null);
+			clientTracker.open();
+
+			// the proxy should appear in this framework
+			SlowService client = Tracker.waitForService(clientTracker, timeout);
+			assertNotNull("no proxy for SlowService found!", client);
+
+			ServiceReference<SlowService> sr = clientTracker
+					.getServiceReference();
+
+			Object property = sr
+					.getProperty(RemoteServiceConstants.SERVICE_INTENTS);
+			assertNotNull("No intents supported", property);
+
+			Collection<String> intents;
+			if (property instanceof String) {
+				intents = Collections.singleton((String) property);
+			} else if (property instanceof String[]) {
+				intents = Arrays.asList((String[]) property);
+			} else if (property instanceof Collection) {
+				@SuppressWarnings("unchecked")
+				Collection<String> tmp = (Collection<String>) property;
+				intents = tmp;
+			} else {
+				throw new IllegalArgumentException(
+						"Supported intents are not of the correct type "
+								+ property.getClass());
+			}
+
+			assertTrue("Did not pick up the osgi.basic intent",
+					intents.contains("osgi.basic"));
+
+			// should work fine
+			assertEquals("ready", client.goSlow(1000));
+
+			try {
+				client.goSlow(5000);
+				fail("Invocation should have timed out!");
+			} catch (ServiceException se) {
+				assertEquals(ServiceException.REMOTE, se);
+			}
+
+			clientTracker.close();
+
+		} finally {
+			srTestService.unregister();
+		}
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testAsyncTypesIntent() throws Exception {
+
+		Filter filter = getFramework().getBundleContext().createFilter(
+				"(" + DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED
+						+ "=*)");
+		ServiceTracker< ? , ? > dpTracker = new ServiceTracker<>(
+				getFramework().getBundleContext(), filter, null);
+		dpTracker.open();
+
+		Object dp = Tracker.waitForService(dpTracker, timeout);
+		assertNotNull("No DistributionProvider found", dp);
+		ServiceReference< ? > dpReference = dpTracker.getServiceReference();
+		assertNotNull(dpReference);
+		Object property = dpReference.getProperty(
+				DistributionProviderConstants.REMOTE_INTENTS_SUPPORTED);
+		assertNotNull("No intents supported", property);
+
+		Collection<String> intents;
+		if (property instanceof String) {
+			intents = Collections.singleton((String) property);
+		} else if (property instanceof String[]) {
+			intents = Arrays.asList((String[]) property);
+		} else if (property instanceof Collection) {
+			@SuppressWarnings("unchecked")
+			Collection<String> tmp = (Collection<String>) property;
+			intents = tmp;
+		} else {
+			throw new IllegalArgumentException(
+					"Supported intents are not of the correct type "
+							+ property.getClass());
+		}
+
+		assertTrue("Did not support osgi.async",
+				intents.contains("osgi.async"));
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testAsyncTypes() throws Exception {
+		@SuppressWarnings("unchecked")
+		Hashtable<String,Object> properties = registrationTestServiceProperties();
+
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
+				"osgi.async");
+
+		// install server side test service in the sub-framework
+		AsyncTypesImpl impl = new AsyncTypesImpl();
+
+		// register the service in the server side framework on behalf of the
+		// System Bundle
+		// the interface package is exported by the System Bundle
+		ServiceRegistration<AsyncTypes> srTestService = getFramework()
+				.getBundleContext()
+				.registerService(AsyncTypes.class, impl, properties);
+
+		System.out
+				.println("registered basic types test service on server side");
+
+		try {
+			// now check on the hosting framework for the service to become
+			// available
+			ServiceTracker<AsyncTypes,AsyncTypes> clientTracker = new ServiceTracker<>(
+					getContext(), AsyncTypes.class, null);
+			clientTracker.open();
+
+			// the proxy should appear in this framework
+			AsyncTypes client = Tracker.waitForService(clientTracker, timeout);
+			assertNotNull("no proxy for AsyncTypes found!", client);
+
+			ServiceReference<AsyncTypes> sr = clientTracker
+					.getServiceReference();
+
+			Object property = sr
+					.getProperty(RemoteServiceConstants.SERVICE_INTENTS);
+			assertNotNull("No intents supported", property);
+
+			Collection<String> intents;
+			if (property instanceof String) {
+				intents = Collections.singleton((String) property);
+			} else if (property instanceof String[]) {
+				intents = Arrays.asList((String[]) property);
+			} else if (property instanceof Collection) {
+				@SuppressWarnings("unchecked")
+				Collection<String> tmp = (Collection<String>) property;
+				intents = tmp;
+			} else {
+				throw new IllegalArgumentException(
+						"Supported intents are not of the correct type "
+								+ property.getClass());
+			}
+
+			assertTrue("Did not pick up the osgi.async intent",
+					intents.contains("osgi.async"));
+
+			Semaphore s = new Semaphore(0);
+
+			// Future
+			Future<String> f = client.getFuture(1000);
+			assertFalse(f.isDone());
+			assertEquals(AsyncTypes.RESULT, f.get(2, TimeUnit.SECONDS));
+
+			// CompletableFuture
+			CompletableFuture<String> cf = client.getCompletableFuture(1000);
+			cf.thenRun(s::release);
+			assertFalse(s.tryAcquire());
+			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
+			assertEquals(AsyncTypes.RESULT, cf.get());
+
+			// CompletionStage
+			CompletionStage<String> cs = client.getCompletionStage(1000);
+			cs.thenAccept(r -> {
+				if (AsyncTypes.RESULT.equals(r)) {
+					s.release();
+				} else {
+					System.out.println("Received the wrong result " + r);
+				}
+			});
+			assertFalse(s.tryAcquire());
+			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
+
+			// Promise
+			Promise<String> p = client.getPromise(1000);
+			p.filter(AsyncTypes.RESULT::equals).then(x -> {
+				s.release();
+				return null;
+			});
+			assertFalse(s.tryAcquire());
+			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
 
 			clientTracker.close();
 
