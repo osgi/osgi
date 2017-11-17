@@ -198,7 +198,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		public String	prop2;
 		public String	prop3;
 
-		NotDTOLike() {}
+		public NotDTOLike() {}
 
 		public void generateProp3() {
 			if (prop1 == null || prop2 == null) {

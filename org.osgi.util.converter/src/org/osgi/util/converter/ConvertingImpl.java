@@ -455,7 +455,8 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
                 return null;
             }
 
-            @Override
+					@SuppressWarnings("synthetic-access")
+					@Override
             public Type[] getActualTypeArguments() {
                 return typeArguments;
             }
@@ -485,7 +486,14 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
 
     @SuppressWarnings("rawtypes")
     private Object createInterface(Class<?> sourceCls, final Class<?> targetCls) {
-		final Map m = converter.convert(object).to(Map.class);
+		InternalConverting ic = converter.convert(object);
+		ic.sourceAs(sourceAsClass);
+		if (sourceAsDTO)
+			ic.sourceAsDTO();
+		if (sourceAsJavaBean)
+			ic.sourceAsBean();
+		final Map m = ic.to(Map.class);
+		
         return Proxy.newProxyInstance(targetCls.getClassLoader(), new Class[] {targetCls},
             new InvocationHandler() {
 					@SuppressWarnings("boxing")
