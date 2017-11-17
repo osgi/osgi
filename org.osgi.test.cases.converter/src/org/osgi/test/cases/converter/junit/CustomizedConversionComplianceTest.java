@@ -149,7 +149,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		
 		Converter c = cb.build();
 		
-		String stringToBeConverted = "131224072100";
+		String stringToBeConverted = "131223222100";
 		Date dateToBeConverted = new Date(Date.UTC(113, 11, 24, 6, 21, 0));
 
 		String stringConverted = c.convert(dateToBeConverted).to(String.class);
@@ -255,7 +255,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 			}
 		});
 		Converter childConverter = chilConverterBuilder.build();	
-		String stringToBeConverted = "131224072100";
+		String stringToBeConverted = "131223222100";
 		Date dateToBeConverted = new Date(Date.UTC(113, 11, 24, 6, 21, 0));
 
 		String stringConverted = childConverter.convert(dateToBeConverted).to(String.class);
