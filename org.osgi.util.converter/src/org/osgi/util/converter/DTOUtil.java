@@ -50,17 +50,12 @@ class DTOUtil {
             }
         }
 
-        for (Field f : cls.getDeclaredFields()) {
-            int modifiers = f.getModifiers();
-            if (Modifier.isStatic(modifiers)) {
-                // ignore static fields
-                continue;
-            }
-
-            if (!Modifier.isPublic(modifiers)) {
-                return false;
-            }
-        }
+		/*
+		 * for (Field f : cls.getDeclaredFields()) { int modifiers =
+		 * f.getModifiers(); if (Modifier.isStatic(modifiers)) { // ignore
+		 * static fields continue; } if (!Modifier.isPublic(modifiers)) { return
+		 * false; } }
+		 */
 
 		boolean foundField = false;
         for (Field f : cls.getFields()) {
