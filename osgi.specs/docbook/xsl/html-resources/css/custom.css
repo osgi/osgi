@@ -246,7 +246,9 @@ div.section.package div.section.class h3.title > span.number,
 div.section.package div.section.class div.section.field h4.title > span.number,
 div.section.package div.section.class div.section.method h4.title > span.number,
 div.section.package div.section.summary h3.title > span.number {
-	color: rgba(255,255,255,0.5);
+	color: rgba(0,0,0);
+	display: inline-block;
+	width: 5em;
 }
 
 div.section.package h2.title:after,
@@ -254,12 +256,12 @@ div.section.package div.section.class h3.title:after,
 div.section.package div.section.class div.section.field h4.title:after,
 div.section.package div.section.class div.section.method h4.title:after,
 div.section.package div.section.summary h3.title:after {
-	color: rgba(255,255,255,0.5);
+	color: rgba(255,255,255);
 	float: right;
 }
 
 div.section.package h2.title {
-	background-color: rgba(241, 138, 0, 1);
+	background-color: rgba(0, 67, 112, 0.33);
 }
 
 div.section.package h2.title:after {
@@ -267,7 +269,7 @@ div.section.package h2.title:after {
 }
 
 div.section.package div.section.class h3.title {
-	background-color: rgba(241, 138, 0, 0.66);
+	background-color: rgba(0, 67, 112, 0.33);
 }
 
 div.section.package div.section.class h3.title:after {
@@ -275,7 +277,7 @@ div.section.package div.section.class h3.title:after {
 }
 
 div.section.package div.section.summary h3.title {
-	background-color: rgba(0, 67, 112, 0.66);
+	background-color: rgba(0, 67, 112, 0.33);
 }
 
 div.section.package div.section.class div.section.field h4.title {
@@ -287,7 +289,7 @@ div.section.package div.section.class div.section.field h4.title:after {
 }
 
 div.section.package div.section.class div.section.method h4.title {
-	background-color: rgba(0, 67, 112, 0.66);
+	background-color: rgba(0, 67, 112, 0.33);
 }
 
 div.section.package div.section.class div.section.method h4.title:after {
