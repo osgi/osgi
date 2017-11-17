@@ -110,7 +110,7 @@ public class PromiseFactory {
 	 *         callback executor if {@code null} was specified for the callback
 	 *         executor when this PromiseFactory was created.
 	 */
-	protected Executor executor() {
+	public Executor executor() {
 		if (callbackExecutor == null) {
 			return DefaultExecutors.callbackExecutor();
 		}
@@ -118,13 +118,13 @@ public class PromiseFactory {
 	}
 
 	/**
-	 * Returns the executor to use for scheduled operations.
+	 * Returns the scheduled executor to use for scheduled operations.
 	 * 
-	 * @return The executor to use for scheduled operations. This will be the
-	 *         default scheduled executor if {@code null} was specified for the
-	 *         scheduled executor when this PromiseFactory was created.
+	 * @return The scheduled executor to use for scheduled operations. This will
+	 *         be the default scheduled executor if {@code null} was specified
+	 *         for the scheduled executor when this PromiseFactory was created.
 	 */
-	protected ScheduledExecutorService scheduledExecutor() {
+	public ScheduledExecutorService scheduledExecutor() {
 		if (scheduledExecutor == null) {
 			return DefaultExecutors.scheduledExecutor();
 		}
@@ -375,7 +375,7 @@ public class PromiseFactory {
 				}
 			}
 			Thread t = delegateThreadFactory.newThread(r);
-			t.setName("PromiseImpl," + t.getName());
+			t.setName("PromiseFactory," + t.getName());
 			t.setDaemon(true);
 			return t;
 		}
