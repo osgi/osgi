@@ -62,6 +62,7 @@ class DTOUtil {
             }
         }
 
+		boolean foundField = false;
         for (Field f : cls.getFields()) {
             int modifiers = f.getModifiers();
             if (Modifier.isStatic(modifiers)) {
@@ -72,7 +73,8 @@ class DTOUtil {
             if (!Modifier.isPublic(modifiers)) {
                 return false;
             }
+			foundField = true;
         }
-        return true;
+		return foundField;
     }
 }

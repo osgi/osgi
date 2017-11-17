@@ -168,6 +168,8 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         // At this point we know that the target is a 'singular' type: not a map, collection or array
         if (Collection.class.isAssignableFrom(sourceClass)) {
             return convertCollectionToSingleValue(targetAsClass);
+		} else if (isMapType(sourceClass, sourceAsJavaBean)) {
+			return convertMapToSingleValue(targetAsClass);
         } else if (object instanceof Map.Entry) {
             return convertMapEntryToSingleValue(targetAsClass);
         } else if ((object = asBoxedArray(object)) instanceof Object[]) {
@@ -185,7 +187,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         }
     }
 
-    private Object convertArrayToSingleValue(Class<?> cls) {
+	private Object convertArrayToSingleValue(Class< ? > cls) {
         Object[] arr = (Object[]) object;
         if (arr.length == 0)
             return null;
@@ -200,6 +202,15 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
         else
             return converter.convert(coll.iterator().next()).to(cls);
     }
+
+	private Object convertMapToSingleValue(Class< ? > cls) {
+		Map< ? , ? > m = mapView(object, sourceClass, converter);
+		if (m.size() > 0) {
+			return converter.convert(m.entrySet().iterator().next()).to(cls);
+		} else {
+			return null;
+		}
+	}
 
     @SuppressWarnings("rawtypes")
     private Object convertMapEntryToSingleValue(Class<?> cls) {
@@ -398,7 +409,9 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
 		return element;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
     private Map convertToMapDelegate() {
         if (Map.class.isAssignableFrom(sourceClass)) {
             return MapDelegate.forMap((Map) object, this);
@@ -478,8 +491,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
 
                 Class<?> setterType = setter.getParameterTypes()[0];
 				String key = propName.toString();
-				Object val = m
-						.get(Util.unMangleName(prefix, key));
+				Object val = m.get(Util.unMangleName(prefix, key));
 				setter.invoke(res, converter.convert(val).to(setterType));
             }
             return res;
@@ -498,7 +510,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
 		if (sourceAsJavaBean)
 			ic.sourceAsBean();
 		final Map m = ic.to(Map.class);
-		
+
         return Proxy.newProxyInstance(targetCls.getClassLoader(), new Class[] {targetCls},
             new InvocationHandler() {
 					@SuppressWarnings("boxing")
@@ -729,8 +741,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting> implements Convertin
     }
 
     @SuppressWarnings("rawtypes")
-	private static Map createMapFromInterface(Object obj,
-			Class< ? > srcCls) {
+	private static Map createMapFromInterface(Object obj, Class< ? > srcCls) {
         Map result = new HashMap();
 
 		for (Class i : getInterfaces(srcCls)) {
