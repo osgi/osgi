@@ -701,19 +701,20 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(dtolike.prop1, mappingInterface.prop1());
 		assertEquals(dtolike.prop2, mappingInterface.prop2());
 
-		mappingInterface.prop2("defaultValue");
-		mappingInterface.prop3("defaultValue");
+		// mappingInterface.prop2("defaultValue");
+		// mappingInterface.prop3("defaultValue");
 		
 		// report changes
 		dtolike.prop2 = "value3";
 		assertEquals(dtolike.prop2, mappingInterface.prop2());
+		assertEquals(dtolike.prop2, mappingInterface.prop2("defaultValue"));
 
 		// use default value
-		assertEquals("defaultValue", mappingInterface.prop3());
+		assertEquals("defaultValue", mappingInterface.prop3("defaultValue"));
 
 		// do not use default
 		dtolike.prop2 = null;
-		assertNull(mappingInterface.prop2());
+		assertNull(mappingInterface.prop2(null));
 
 		try {
 			mappingInterface.prop4();
