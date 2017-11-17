@@ -28,14 +28,15 @@ import java.util.concurrent.Semaphore;
 
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.PromiseFactory;
 
 class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 		implements SimplePushEventSource<T> {
 	
 	private final Object								lock		= new Object();
 
-	private final PushStreamExecutors					executors;
-	private final PushStreamExecutors					sameThread;
+	private final PromiseFactory						promiseFactory;
+	private final PromiseFactory						sameThread;
 
 	private final QueuePolicy<T,U>						queuePolicy;
 
@@ -56,13 +57,13 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 	private boolean										waitForFinishes;
 
 
-	public SimplePushEventSourceImpl(PushStreamExecutors executors,
+	public SimplePushEventSourceImpl(PromiseFactory promiseFactory,
 			QueuePolicy<T,U> queuePolicy,
 			U queue, int parallelism, Runnable onClose) {
-		this.executors = executors;
-		this.sameThread = new PushStreamExecutors(
-				PushStreamExecutors.inlineExecutor(),
-				executors.scheduledExecutor());
+		this.promiseFactory = promiseFactory;
+		this.sameThread = new PromiseFactory(
+				PromiseFactory.inlineExecutor(),
+				promiseFactory.scheduledExecutor());
 		this.queuePolicy = queuePolicy;
 		this.queue = queue;
 		this.parallelism = parallelism;
@@ -110,7 +111,7 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 
 	private void doSend(PushEventConsumer< ? super T> pec, PushEvent<T> event) {
 		try {
-			executors.execute(() -> safePush(pec, event));
+			promiseFactory.executor().execute(() -> safePush(pec, event));
 		} catch (RejectedExecutionException ree) {
 			// TODO log?
 			if (!event.isTerminal()) {
@@ -125,7 +126,7 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 			PushEventConsumer< ? super T> pec, PushEvent<T> event) {
 		Deferred<Long> d = sameThread.deferred();
 		try {
-			executors.execute(
+			promiseFactory.executor().execute(
 					() -> d.resolve(Long.valueOf(
 							System.nanoTime() + safePush(pec, event))));
 		} catch (RejectedExecutionException ree) {
@@ -236,7 +237,7 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 			"unchecked", "boxing"
 	})
 	private void startWorker() {
-		executors.execute(() -> {
+		promiseFactory.executor().execute(() -> {
 			try {
 				
 				for(;;) {
@@ -286,7 +287,8 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 								- System.nanoTime();
 
 						if (toWait > 0) {
-							executors.schedule(this::startWorker, toWait,
+							promiseFactory.scheduledExecutor().schedule(
+									this::startWorker, toWait,
 									NANOSECONDS);
 							return;
 						}
@@ -296,7 +298,8 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 							long toWait = p.getValue() - System.nanoTime();
 
 							if (toWait > 0) {
-								executors.schedule(this::startWorker, toWait,
+								promiseFactory.scheduledExecutor().schedule(
+										this::startWorker, toWait,
 										NANOSECONDS);
 							} else {
 								startWorker();
@@ -373,17 +376,17 @@ class SimplePushEventSourceImpl<T, U extends BlockingQueue<PushEvent< ? extends 
 
 			if (connected.isEmpty()) {
 				if (connectPromise == null) {
-					connectPromise = executors.deferred();
+					connectPromise = promiseFactory.deferred();
 				}
 				return connectPromise.getPromise();
 			} else {
-				return executors.resolved(null);
+				return promiseFactory.resolved(null);
 			}
 		}
 	}
 
 	private Promise<Void> closedConnectPromise() {
-		return executors.failed(new IllegalStateException(
+		return promiseFactory.failed(new IllegalStateException(
 				"This SimplePushEventSource is closed"));
 	}
 

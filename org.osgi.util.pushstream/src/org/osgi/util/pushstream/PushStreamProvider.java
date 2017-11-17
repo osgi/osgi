@@ -23,6 +23,7 @@ import static org.osgi.util.pushstream.PushbackPolicyOption.LINEAR;
 import static org.osgi.util.pushstream.QueuePolicyOption.FAIL;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,6 +36,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
+
+import org.osgi.util.promise.PromiseFactory;
 
 /**
  * A factory for {@link PushStream} instances, and utility methods for handling
@@ -164,7 +167,7 @@ public final class PushStreamProvider {
 			workerToUse = Executors.newFixedThreadPool(parallelism);
 			closeExecutorOnClose = true;
 		} else {
-			workerToUse = executor;
+			workerToUse = Objects.requireNonNull(executor);
 			closeExecutorOnClose = false;
 		}
 
@@ -174,7 +177,7 @@ public final class PushStreamProvider {
 			timerToUse = acquireScheduler();
 			releaseSchedulerOnClose = true;
 		} else {
-			timerToUse = scheduler;
+			timerToUse = Objects.requireNonNull(scheduler);
 			releaseSchedulerOnClose = false;
 		}
 
@@ -191,7 +194,7 @@ public final class PushStreamProvider {
 		}
 
 		PushStream<T> stream = new BufferedPushStreamImpl<>(this,
-				new PushStreamExecutors(workerToUse, timerToUse), queue,
+				new PromiseFactory(workerToUse, timerToUse), queue,
 				parallelism, queuePolicy,
 				pushbackPolicy, aec -> {
 					try {
@@ -231,7 +234,7 @@ public final class PushStreamProvider {
 			workerToUse = Executors.newFixedThreadPool(2);
 			closeExecutorOnClose = true;
 		} else {
-			workerToUse = executor;
+			workerToUse = Objects.requireNonNull(executor);
 			closeExecutorOnClose = false;
 		}
 
@@ -241,11 +244,11 @@ public final class PushStreamProvider {
 			timerToUse = acquireScheduler();
 			releaseSchedulerOnClose = true;
 		} else {
-			timerToUse = scheduler;
+			timerToUse = Objects.requireNonNull(scheduler);
 			releaseSchedulerOnClose = false;
 		}
 		PushStream<T> stream = new UnbufferedPushStreamImpl<>(this,
-				new PushStreamExecutors(workerToUse, timerToUse),
+				new PromiseFactory(workerToUse, timerToUse),
 				aec -> {
 					try {
 						return eventSource.open(aec);
@@ -533,7 +536,7 @@ public final class PushStreamProvider {
 			toUse = Executors.newFixedThreadPool(parallelism);
 			closeExecutorOnClose = true;
 		} else {
-			toUse = executor;
+			toUse = Objects.requireNonNull(executor);
 			closeExecutorOnClose = false;
 		}
 
@@ -546,7 +549,7 @@ public final class PushStreamProvider {
 		}
 
 		SimplePushEventSourceImpl<T,U> spes = new SimplePushEventSourceImpl<T,U>(
-				new PushStreamExecutors(toUse, acquireScheduler()), queuePolicy,
+				new PromiseFactory(toUse, acquireScheduler()), queuePolicy,
 				queue, parallelism,
 				() -> {
 					try {
@@ -712,7 +715,7 @@ public final class PushStreamProvider {
 			workerToUse = Executors.newFixedThreadPool(2);
 			closeExecutorOnClose = true;
 		} else {
-			workerToUse = executor;
+			workerToUse = Objects.requireNonNull(executor);
 			closeExecutorOnClose = false;
 		}
 
@@ -722,12 +725,12 @@ public final class PushStreamProvider {
 			timerToUse = acquireScheduler();
 			releaseSchedulerOnClose = true;
 		} else {
-			timerToUse = scheduler;
+			timerToUse = Objects.requireNonNull(scheduler);
 			releaseSchedulerOnClose = false;
 		}
 
 		PushStream<T> stream = new UnbufferedPushStreamImpl<T,BlockingQueue<PushEvent< ? extends T>>>(
-				this, new PushStreamExecutors(workerToUse, timerToUse), aec -> {
+				this, new PromiseFactory(workerToUse, timerToUse), aec -> {
 					return () -> { /* No action to take */ };
 				}) {
 
@@ -736,7 +739,7 @@ public final class PushStreamProvider {
 				if (super.begin()) {
 					Iterator<T> it = items.iterator();
 
-					executors.execute(() -> pushData(it));
+					promiseFactory.executor().execute(() -> pushData(it));
 
 					return true;
 				}
@@ -753,8 +756,9 @@ public final class PushStreamProvider {
 								close();
 								return;
 							} else {
-								executors.schedule(
-										() -> executors
+								promiseFactory.scheduledExecutor()
+										.schedule(
+										() -> promiseFactory.executor()
 												.execute(() -> pushData(it)),
 										returnValue, MILLISECONDS);
 								return;

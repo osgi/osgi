@@ -23,6 +23,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.osgi.util.promise.PromiseFactory;
+
 class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T>>>
 	extends AbstractPushStreamImpl<T> implements PushStream<T> {
 	
@@ -31,9 +33,9 @@ class UnbufferedPushStreamImpl<T, U extends BlockingQueue<PushEvent< ? extends T
 	protected final AtomicReference<AutoCloseable>					upstream	= new AtomicReference<AutoCloseable>();
 	
 	UnbufferedPushStreamImpl(PushStreamProvider psp,
-			PushStreamExecutors executors,
+			PromiseFactory promiseFactory,
 			Function<PushEventConsumer<T>,AutoCloseable> connector) {
-		super(psp, executors);
+		super(psp, promiseFactory);
 		this.connector = connector;
 	}
 

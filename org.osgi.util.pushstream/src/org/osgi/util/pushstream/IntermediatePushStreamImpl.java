@@ -18,15 +18,17 @@ package org.osgi.util.pushstream;
 
 import static org.osgi.util.pushstream.AbstractPushStreamImpl.State.*;
 
+import org.osgi.util.promise.PromiseFactory;
+
 class IntermediatePushStreamImpl<T> extends AbstractPushStreamImpl<T>
 		implements PushStream<T> {
 	
 	private final AbstractPushStreamImpl< ? > previous;
 	
 	IntermediatePushStreamImpl(PushStreamProvider psp,
-			PushStreamExecutors executors,
+			PromiseFactory promiseFactory,
 			AbstractPushStreamImpl< ? > previous) {
-		super(psp, executors);
+		super(psp, promiseFactory);
 		this.previous = previous;
 	}
 
