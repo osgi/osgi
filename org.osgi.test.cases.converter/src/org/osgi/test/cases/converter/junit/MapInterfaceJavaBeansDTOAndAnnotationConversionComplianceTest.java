@@ -33,6 +33,7 @@ import junit.framework.TestCase;
 public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		extends TestCase {
 
+	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface AnnotationInterface {
 		String prop1();
 
@@ -704,9 +705,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(dtolike.prop1, mappingInterface.prop1());
 		assertEquals(dtolike.prop2, mappingInterface.prop2());
 
-		// mappingInterface.prop2("defaultValue");
-		// mappingInterface.prop3("defaultValue");
-		
 		// report changes
 		dtolike.prop2 = "value3";
 		assertEquals(dtolike.prop2, mappingInterface.prop2());
@@ -801,7 +799,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		// use default value
 		assertEquals("value3", annotationInterface.prop3());
 
-		// do not use default
+		// still use default
 		dtolike.prop2 = null;
 		assertEquals("value2", annotationInterface.prop2());
 
@@ -814,14 +812,13 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.getAnnotation(AnnotationInterface.class);
 
 		Map convertedMap = converter.convert(annotation).to(Map.class);
-		assertNull(convertedMap);
-		// assertNotNull(convertedMap);
-		// // detach from live view
-		// convertedMap.put("prop5", "value5");
-		// assertEquals(annotation.prop1(), convertedMap.get("prop1"));
-		// assertEquals(annotation.prop2(), convertedMap.get("prop2"));
-		// assertEquals(annotation.prop3(), convertedMap.get("prop3"));
-		// assertEquals(annotation.prop4(), convertedMap.get("prop4"));
+		assertNotNull(convertedMap);
+		// detach from live view
+		convertedMap.put("prop5", "value5");
+		assertEquals(annotation.prop1(), convertedMap.get("prop1"));
+		assertEquals(annotation.prop2(), convertedMap.get("prop2"));
+		assertEquals(annotation.prop3(), convertedMap.get("prop3"));
+		assertEquals(annotation.prop4(), convertedMap.get("prop4"));
 	}
 
 	/**
@@ -1123,7 +1120,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.targetAsDTO()
 				.to(KeyMappingDTOLike.class);
 
-		// assertEquals(dto.special$prop, resultdto.special$prop);
+		assertEquals(dto.special$prop, resultdto.special$prop);
 		assertEquals(dto.special$$prop, resultdto.special$$prop);
 		assertEquals(dto.special_prop, resultdto.special_prop);
 		assertEquals(dto._specialprop, resultdto._specialprop);
@@ -1132,7 +1129,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(dto.special_$__prop, resultdto.special_$__prop);
 		assertEquals(dto.special_$_prop, resultdto.special_$_prop);
 		assertEquals(dto.special$_$prop, resultdto.special$_$prop);
-		// assertEquals(dto.special$$_$prop, resultdto.special$$_$prop);
+		assertEquals(dto.special$$_$prop, resultdto.special$$_$prop);
 
 		KeyMappingAnnotation keyMappingAnnotation = KeyMappingAnnotatedClass.class
 				.getAnnotation(KeyMappingAnnotation.class);
