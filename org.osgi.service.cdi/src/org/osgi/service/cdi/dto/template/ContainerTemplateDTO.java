@@ -38,5 +38,5 @@ public class ContainerTemplateDTO extends DTO {
 	/**
 	 * The components defined in this CDI container.
 	 */
-	public LifecycleTemplateDTO[]	components;
+	public ComponentTemplateDTO[]	components;
 }

@@ -17,10 +17,8 @@
 package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.framework.dto.BundleDTO;
+import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
 import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
-import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
-import org.osgi.service.cdi.runtime.CdiContainerState;
 
 /**
  * A snapshot of the runtime state of a CDI container
@@ -37,14 +35,9 @@ public class ContainerDTO extends DTO {
 	public ContainerTemplateDTO	template;
 
 	/**
-	 * The CDI container's current state.
-	 */
-	public CdiContainerState		state;
-
-	/**
 	 * The bundle declaring the CDI container.
 	 */
-	public BundleDTO				bundle;
+	public long					bundle;
 
 	/**
 	 * The extension dependencies of this CDI container.

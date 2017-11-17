@@ -17,7 +17,6 @@
 package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.cdi.dto.template.ActivationTemplateDTO;
 
 /**
@@ -34,12 +33,12 @@ public class ActivationDTO extends DTO {
 	public ActivationTemplateDTO	template;
 
 	/**
-	 * The service this activation may have registered.
+	 * The ID of the service this activation may have registered.
 	 * <p>
-	 * Must not be null if {@link ActivationTemplateDTO#serviceClasses
+	 * Must not be 0 if {@link ActivationTemplateDTO#serviceClasses
 	 * model.serviceClasses} is not empty.
 	 */
-	public ServiceReferenceDTO	service;
+	public long						service;
 
 	/**
 	 * The number of objects this activation has created.

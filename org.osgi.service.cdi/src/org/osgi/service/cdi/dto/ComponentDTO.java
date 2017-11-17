@@ -18,8 +18,7 @@ package org.osgi.service.cdi.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
-import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
+import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a component
@@ -29,12 +28,30 @@ import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
  */
 public class ComponentDTO extends DTO {
 	/**
+	 * The resolved configuration properties for the component.
+	 * <p>
+	 * Contains the merger of all consumed configurations merged in the order of
+	 * {@link #configurations their PIDs}
+	 */
+	public Map<String, Object>	properties;
+
+	/**
+	 * A list of the <code>service.pid</code> properties of all configurations
+	 * consumed by this component.
+	 * <p>
+	 * Each PID corresponds to an item from the {@link ConfigurationDTO#matches
+	 * matched list} of one of the {@link LifecycleDTO#configurations configuration
+	 * dependencies} of the parent {@link LifecycleDTO}
+	 */
+	public String[]				configurations;
+
+	/**
 	 * The service dependencies of the component.
 	 * <p>
 	 * Must not be null. The array will be empty if the component has no reference
-	 * rependencies.
+	 * dependencies.
 	 */
-	public ReferenceDTO[]			references;
+	public ReferenceDTO[]		references;
 
 	/**
 	 * The activations of the component.
@@ -43,28 +60,5 @@ public class ComponentDTO extends DTO {
 	 * {@link Type#APPLICATION APPLICATION}. The array will always contain 1 element
 	 * for a {@link Type#COMPONENT COMPONENT}.
 	 */
-	public ActivationDTO[]			activations;
-
-	/**
-	 * The exact set of configuration {@link Map Maps} used by this component
-	 * instance.
-	 * <p>
-	 * <ul>
-	 * <li><code>0..N</code> maps can have only <code>service.pid</code> which
-	 * corresponds to the {@link ConfigurationTemplateDTO#pid PID} of one of the
-	 * {@link LifecycleDTO#configurations configuration dependencies} of the
-	 * parent {@link LifecycleDTO}</li>
-	 *
-	 * <li><code>0..1</code> map can have a <code>service.factoryPid</code> which
-	 * corresponds to the {@link ConfigurationTemplateDTO#pid PID} of one of the
-	 * {@link LifecycleDTO#configurations configuration dependencies} of the
-	 * parent {@link LifecycleDTO}, in which case the
-	 * <code>service.pid</code> of the map corresponds to one of the
-	 * {@link ConfigurationDTO#matches} of that configuration dependency.</li>
-	 * </ul>
-	 * <p>
-	 * Must not be null. The array may be empty if this component instance does not
-	 * consume configurations.
-	 */
-	public Map<String, Object>[]	configurations;
+	public ActivationDTO[]		activations;
 }

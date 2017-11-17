@@ -16,9 +16,9 @@
 
 package org.osgi.service.cdi.dto;
 
-import java.util.Map;
+import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
-import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
+import org.osgi.service.cdi.dto.template.MaximumCardinality;
 
 /**
  * A snapshot of the runtime state of a {@link LifecycleDTO component
@@ -27,7 +27,7 @@ import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinalit
  * @NotThreadSafe
  * @author $Id$
  */
-public class ConfigurationDTO extends DependencyDTO {
+public class ConfigurationDTO extends DTO {
 	/**
 	 * The template of this configuration dependency as resolved at initialization
 	 * time.
@@ -35,8 +35,8 @@ public class ConfigurationDTO extends DependencyDTO {
 	public ConfigurationTemplateDTO	template;
 
 	/**
-	 * The set of configuration properties that match this configuration
-	 * dependencies.
+	 * The list of <code>service.pid</code> of the configurations that match this
+	 * configuration dependency.
 	 * <p>
 	 * The value must not be null. An empty array indicates no matching
 	 * configurations.
@@ -44,12 +44,9 @@ public class ConfigurationDTO extends DependencyDTO {
 	 * This dependency is satisfied when.
 	 * <p>
 	 * <pre>
-	 * {@link DependencyDTO#minimumCardinality minimumCardinality} <= matches.size <= {@link MaximumCardinality#toInt() model.maximumCardinality.toInt()}
+	 * 1 <= matches.length <= {@link MaximumCardinality#toInt() template.maximumCardinality.toInt()}
 	 * </pre>
 	 * <p>
-	 * Each map contains the standard Configuration Admin keys
-	 * <code>service.pid</code> and a <code>service.factoryPid<code> when
-	 * {@link MaximumCardinality#MANY model.maximumCardinality=MANY}
 	 */
-	public Map<String, Object>[]	matches;
+	public String[]					matches;
 }

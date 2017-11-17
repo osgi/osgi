@@ -16,8 +16,8 @@
 
 package org.osgi.service.cdi.dto;
 
-import org.osgi.framework.dto.ServiceReferenceDTO;
-import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
+import org.osgi.dto.DTO;
+import org.osgi.service.cdi.dto.template.MaximumCardinality;
 import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
 
 /**
@@ -27,11 +27,25 @@ import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ReferenceDTO extends DependencyDTO {
+public class ReferenceDTO extends DTO {
 	/**
 	 * The template of this reference dependency as resolved at initialization time.
 	 */
 	public ReferenceTemplateDTO		template;
+
+	/**
+	 * The runtime minimum cardinality of the dependency.
+	 * <p>
+	 * <ul>
+	 * <li>If {@link ReferenceTemplateDTO#maximumCardinality
+	 * template.maximumCardinality} is {@link MaximumCardinality#ONE ONE} the value
+	 * must be either 0 or 1.</li>
+	 * <li>If {@link ReferenceTemplateDTO#maximumCardinality
+	 * template.maximumCardinality} is {@link MaximumCardinality#MANY MANY} the
+	 * value must be from 0 to {@link Integer#MAX_VALUE}.
+	 * </ul>
+	 */
+	public int						minimumCardinality;
 
 	/**
 	 * Indicates the runtime target filter used in addition to the
@@ -40,15 +54,15 @@ public class ReferenceDTO extends DependencyDTO {
 	public String					targetFilter;
 
 	/**
-	 * The set of services that match this reference.
+	 * The list of IDs of the services that match this reference.
 	 * <p>
 	 * The value must not be null. An empty array indicates no matching services.
 	 * <p>
 	 * This dependency is satisfied when.
 	 * <p>
 	 * <pre>
-	 * {@link DependencyDTO#minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt() model.maximumCardinality.toInt()}
+	 * {@link #minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt() template.maximumCardinality.toInt()}
 	 * </pre>
 	 */
-	public ServiceReferenceDTO[]	matches;
+	public long[]				matches;
 }

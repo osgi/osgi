@@ -16,7 +16,7 @@
 
 package org.osgi.service.cdi.dto;
 
-import org.osgi.framework.dto.ServiceReferenceDTO;
+import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.template.ExtensionTemplateDTO;
 
 /**
@@ -26,7 +26,7 @@ import org.osgi.service.cdi.dto.template.ExtensionTemplateDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ExtensionDTO extends DependencyDTO {
+public class ExtensionDTO extends DTO {
 	/**
 	 * The template of this extension dependency
 	 * <p>
@@ -37,7 +37,7 @@ public class ExtensionDTO extends DependencyDTO {
 	/**
 	 * The service to which the extension dependency is resolved.
 	 * <p>
-	 * This extension dependency is satisfied when <code>match != null</code>.
+	 * This extension dependency is satisfied when <code>match != 0</code>.
 	 */
-	public ServiceReferenceDTO	match;
+	public long					match;
 }

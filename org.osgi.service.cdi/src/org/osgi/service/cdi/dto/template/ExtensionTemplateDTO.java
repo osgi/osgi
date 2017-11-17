@@ -16,23 +16,16 @@
 
 package org.osgi.service.cdi.dto.template;
 
+import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.ContainerDTO;
 
 /**
  * Models an extension dependency of the {@link ContainerDTO}
  *
- * <ul>
- * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 1</li>
- * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
- * </ul>
- *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ExtensionTemplateDTO extends DependencyTemplateDTO {
+public class ExtensionTemplateDTO extends DTO {
 	/**
 	 * Target filter for the extension service.
 	 * <p>

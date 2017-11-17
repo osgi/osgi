@@ -35,7 +35,7 @@ import org.osgi.service.cdi.dto.LifecycleDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class LifecycleTemplateDTO extends DTO {
+public class ComponentTemplateDTO extends DTO {
 
 	/**
 	 * Define the possible values for {@link #type}.

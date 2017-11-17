@@ -16,49 +16,34 @@
 
 package org.osgi.service.cdi.dto.template;
 
+import org.osgi.dto.DTO;
+
 /**
  * A description of a configuration dependency of a component
  *
  * The content of this DTO is resolved form metadata at initialization time and
  * remains the same between the CDI bundle restarts.
- * <p>
- * Singleton mandatory configurations are <b>static</b> with cardinality
- * <code>1..1</code>:
- * <ul>
- * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 1</li>
- * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
- * </ul>
- * <p>
- * Singleton optional configurations are <b>static</b> with cardinality
- * <code>0..1</code>:
- * <ul>
- * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 0</li>
- * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyTemplateDTO.MaximumCardinality#ONE ONE}</li>
- * <li>{@link DependencyTemplateDTO#dynamic dynamic} = false</li>
- * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
- * </ul>
- * <p>
- * Factory configurations are <b>dynamic</b> with cardinality <code>0..N</code>:
- * <ul>
- * <li>{@link DependencyTemplateDTO#minimumCardinality minimumCardinality} = 0</li>
- * <li>{@link DependencyTemplateDTO#maximumCardinality maximumCardinality} =
- * {@link DependencyTemplateDTO.MaximumCardinality#MANY MANY}</li>
- * <li>{@link DependencyTemplateDTO#dynamic dynamic} = true</li>
- * <li>{@link DependencyTemplateDTO#greedy greedy} = true</li>
- * </ul>
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ConfigurationTemplateDTO extends DependencyTemplateDTO {
+public class ConfigurationTemplateDTO extends DTO {
 	/**
-	 * The pid of the tracked configuration objects
+	 * The PID of the tracked configuration objects
 	 * <p>
 	 * The value must not be null.
 	 */
-	public String pid;
+	public String				targetPid;
+
+	/**
+	 * The maximum cardinality of the configuration dependency.
+	 * <p>
+	 * <ul>
+	 * <li>When {@link MaximumCardinality#ONE} this is a singleton
+	 * configuration.</li>
+	 * <li>When {@link MaximumCardinality#MANY} this is a factory
+	 * configuration.</li>
+	 * </ul>
+	 */
+	public MaximumCardinality	maximumCardinality;
 }

@@ -16,6 +16,8 @@
 
 package org.osgi.service.cdi.dto.template;
 
+import org.osgi.dto.DTO;
+
 /**
  * A description of a reference dependency of a component
  * <p>
@@ -26,7 +28,37 @@ package org.osgi.service.cdi.dto.template;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ReferenceTemplateDTO extends DependencyTemplateDTO {
+public class ReferenceTemplateDTO extends DTO {
+	/**
+	 * Defines the possible values of the policy of a reference towards propagating
+	 * service changes to the CDI runtime
+	 */
+	public enum Policy {
+		/**
+		 * Reboot the CDI component that depends on this reference
+		 */
+		STATIC,
+		/**
+		 * Update the CDI reference
+		 */
+		DYNAMIC
+	}
+
+	/**
+	 * Defines the possible values of the policy of a satisfied reference towards
+	 * new matching services appearing.
+	 */
+	public enum PolicyOption {
+		/**
+		 * Consume the matching service applying it's {@link Policy}
+		 */
+		GREEDY,
+		/**
+		 * Do not consume the matching service
+		 */
+		RELUCTANT
+	}
+
 	/**
 	 * The name of the reference.
 	 * <p>
@@ -49,4 +81,35 @@ public class ReferenceTemplateDTO extends DependencyTemplateDTO {
 	 * can be replaced by configuration at runtime.
 	 */
 	public String	targetFilter;
+
+	/**
+	 * The minimum cardinality of the reference.
+	 * <p>
+	 * Contains the minimum cardinality statically resolved from the CDI bundle
+	 * metadata. The minimum cardinality can be replaced by configuration at
+	 * runtime.
+	 * <p>
+	 * <ul>
+	 * <li>If {@link #maximumCardinality} is {@link MaximumCardinality#ONE ONE} the
+	 * value must be either 0 or 1.</li>
+	 * <li>If {@link #maximumCardinality} is {@link MaximumCardinality#MANY MANY}
+	 * the value must be from 0 to {@link Integer#MAX_VALUE}.
+	 * </ul>
+	 */
+	public int					minimumCardinality;
+
+	/**
+	 * The maximum cardinality of the reference.
+	 */
+	public MaximumCardinality	maximumCardinality;
+
+	/**
+	 * Indicates if the reference is dynamic or static in nature.
+	 */
+	public Policy				policy;
+
+	/**
+	 * Indicates if the reference is greedy or reluctant in nature.
+	 */
+	public PolicyOption			policyOption;
 }

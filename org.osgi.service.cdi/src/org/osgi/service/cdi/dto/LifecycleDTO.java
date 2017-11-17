@@ -18,29 +18,27 @@ package org.osgi.service.cdi.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.dto.template.ComponentTemplateDTO;
+import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
 import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
-import org.osgi.service.cdi.dto.template.DependencyTemplateDTO.MaximumCardinality;
-import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO;
-import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
+import org.osgi.service.cdi.dto.template.MaximumCardinality;
 
 /**
- * A snapshot of the runtime state of a component factory.
+ * A snapshot of the runtime state of a component lifecycle.
  * <p>
- * A component factory maintains the binding of {@link ComponentDTO component
+ * A component lifecycle maintains the binding of {@link ComponentDTO component
  * instances} to the {@link #configurations configuration dependencies}
- * described by one {@link LifecycleTemplateDTO component model}
+ * described by one {@link ComponentTemplateDTO component model}
  * <p>
- * Both the application component and the regular components have a
- * {@link LifecycleDTO}.
- * <p>
- * When the referenced {@link LifecycleTemplateDTO} has type
+ * When the referenced {@link ComponentTemplateDTO} has type
  * {@link Type#APPLICATION} this factory can have <code>0..N</code>
  * {@link ConfigurationDTO} with {@link MaximumCardinality#ONE}.
  * <p>
- * When the referenced {@link LifecycleTemplateDTO} has type {@link Type#COMPONENT}
- * this factory can have <code>0..N</code> {@link ConfigurationDTO} with
- * {@link MaximumCardinality#ONE} and <code>0..1</code> {@link ConfigurationDTO}
- * with {@link MaximumCardinality#MANY}.
+ * When the referenced {@link ComponentTemplateDTO} has type
+ * {@link Type#COMPONENT} this factory can have <code>0..N</code>
+ * {@link ConfigurationDTO} with {@link MaximumCardinality#ONE} and
+ * <code>0..1</code> {@link ConfigurationDTO} with
+ * {@link MaximumCardinality#MANY}.
  * <p>
  * When all configuration dependencies managed by this factory become satisfied
  * this factory will have:
@@ -61,7 +59,7 @@ import org.osgi.service.cdi.dto.template.LifecycleTemplateDTO.Type;
  * <li>Add the matching {@link Map Maps} of all singleton
  * {@link ConfigurationDTO}</li>
  * <li>Build one {@link ComponentDTO} that holds the
- * {@link ComponentDTO#configurations resulting set}</li>
+ * {@link ComponentDTO#properties merged set}</li>
  * </ol>
  * <p>
  * Therefore when all configuration dependencies are satisfied:
@@ -83,14 +81,14 @@ public class LifecycleDTO extends DTO {
 	/**
 	 * The template of the components this factory creates
 	 */
-	public LifecycleTemplateDTO	template;
+	public ComponentTemplateDTO	template;
 
 	/**
 	 * The configuration dependencies.
 	 * <p>
 	 * Each entry in the array corresponds to the runtime state of one of the
 	 * statically defined {@link ConfigurationTemplateDTO configurations} of
-	 * {@link #model the component} managed by this factory.
+	 * {@link #template the component} managed by this factory.
 	 * <p>
 	 * Must never be null.
 	 * <p>
@@ -102,7 +100,7 @@ public class LifecycleDTO extends DTO {
 	public ConfigurationDTO[]	configurations;
 
 	/**
-	 * All components created by this factory
+	 * All components created by this lifecycle
 	 * <p>
 	 * Must not be null. An empty array means on components are currently created.
 	 */
