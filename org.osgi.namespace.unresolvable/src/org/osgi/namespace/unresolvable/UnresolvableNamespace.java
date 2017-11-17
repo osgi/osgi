@@ -46,7 +46,7 @@ public final class UnresolvableNamespace extends Namespace {
 	 *   filter:="(&amp;(must.not.resolve=*)(!(must.not.resolve=*)))"
 	 * </pre>
 	 */
-	public static final String UNRESOLVBLE_NAMESPACE = "osgi.unresolvable";
+	public static final String UNRESOLVABLE_NAMESPACE = "osgi.unresolvable";
 
 	private UnresolvableNamespace() {
 		// empty
