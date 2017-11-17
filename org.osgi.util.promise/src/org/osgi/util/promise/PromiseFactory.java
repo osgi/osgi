@@ -198,8 +198,9 @@ public class PromiseFactory {
 	 */
 	public <T> Promise<T> submit(Callable< ? extends T> task) {
 		PromiseImpl<T> promise = new PromiseImpl<>(this);
+		Runnable submit = promise.new Submit(task);
 		try {
-			executor().execute(promise.new Submit(task));
+			executor().execute(submit);
 		} catch (Exception t) {
 			promise.tryResolve(null, t);
 		}
