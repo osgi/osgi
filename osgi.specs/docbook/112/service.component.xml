@@ -5168,11 +5168,12 @@ public class MyComponent {
         <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
         linkend="service.component-jls.ref"/>, then the property name for the
         <code>value</code> method is derived from the name of the component
-        property type rather than the name of the method. In this case, the
-        simple name of the component property type, that is, the name of the
-        class without any package name or outer class name, if the component
-        property type is an inner class, must be converted to the
-        <code>value</code> method's property name as follows:<itemizedlist>
+        property type rather than the name of the method.</para>
+
+        <para>In this case, the simple name of the component property type,
+        that is, the name of the class without any package name or outer class
+        name, if the component property type is an inner class, must be
+        converted to the property name as follows:<itemizedlist>
             <listitem>
               <para>When a lower case character is followed by an upper case
               character, a full stop (<code>'.' \u002E</code>) is inserted
@@ -5239,6 +5240,18 @@ public class MyComponent {
             </tbody>
           </tgroup>
         </table>
+
+        <para>If the component property type is a <emphasis>marker
+        annotation</emphasis>, see 9.7.2 in <xref
+        linkend="service.component-jls.ref"/>, then the property name is
+        derived from the name of the component property type, as is described
+        above for single-element annotations, and the value of the property is
+        <code>Boolean.TRUE</code>. Marker annotations can be used to annotate
+        component implementation classes to set a component property to the
+        value <code>Boolean.TRUE</code>. However, since marker annotations
+        have no methods, they are of no use as parameter types in the
+        component's constructor and life cycle methods, or as field types for
+        activation fields.</para>
 
         <para>The property type can be directly derived from the type of the
         method. All types supported for annotation elements can be used except
