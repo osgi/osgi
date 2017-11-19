@@ -45,7 +45,7 @@ public class Deferred<T> {
 	/**
 	 * The Promise associated with this Deferred.
 	 */
-	private final PromiseImpl<T>	promise;
+	private final DeferredPromiseImpl<T> promise;
 
 	/**
 	 * Create a new Deferred.
@@ -67,7 +67,7 @@ public class Deferred<T> {
 	 * @since 1.1
 	 */
 	Deferred(PromiseFactory factory) {
-		promise = new PromiseImpl<>(factory);
+		promise = new DeferredPromiseImpl<>(factory);
 	}
 
 	/**

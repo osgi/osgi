@@ -161,7 +161,7 @@ public class PromiseFactory {
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
 	public <T> Promise<T> resolved(T value) {
-		return new PromiseImpl<>(value, null, this);
+		return new ResolvedPromiseImpl<>(value, null, this);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class PromiseFactory {
 	 * @return A new Promise that has been resolved with the specified failure.
 	 */
 	public <T> Promise<T> failed(Throwable failure) {
-		return new PromiseImpl<>(null, requireNonNull(failure), this);
+		return new ResolvedPromiseImpl<>(null, requireNonNull(failure), this);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class PromiseFactory {
 	 * @return A new Promise that will hold the result of the specified task.
 	 */
 	public <T> Promise<T> submit(Callable< ? extends T> task) {
-		PromiseImpl<T> promise = new PromiseImpl<>(this);
+		DeferredPromiseImpl<T> promise = new DeferredPromiseImpl<>(this);
 		Runnable submit = promise.new Submit(task);
 		try {
 			executor().execute(submit);
@@ -241,7 +241,7 @@ public class PromiseFactory {
 			return resolved(result);
 		}
 
-		PromiseImpl<List<T>> promise = new PromiseImpl<>(this);
+		DeferredPromiseImpl<List<T>> promise = new DeferredPromiseImpl<>(this);
 		/* make a copy and capture the ordering */
 		List<Promise<S>> list = new ArrayList<>(promises);
 		All<T,S> all = new All<>(promise, list);
@@ -259,11 +259,11 @@ public class PromiseFactory {
 	 * @ThreadSafe
 	 */
 	private static final class All<T, S extends T> implements Runnable {
-		private final PromiseImpl<List<T>>	promise;
+		private final DeferredPromiseImpl<List<T>>	promise;
 		private final List<Promise<S>>		promises;
 		private final AtomicInteger			promiseCount;
 
-		All(PromiseImpl<List<T>> promise,
+		All(DeferredPromiseImpl<List<T>> promise,
 				List<Promise<S>> promises) {
 			this.promise = promise;
 			this.promises = promises;
