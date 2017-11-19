@@ -16,32 +16,36 @@
 
 package org.osgi.util.promise;
 
+import static java.util.Objects.requireNonNull;
+
+import java.lang.reflect.InvocationTargetException;
+
 /**
- * Resolved Promise implementation.
+ * Failed Promise implementation.
  * <p>
  * This class is not used directly by clients. Clients should use
- * {@link PromiseFactory#resolved(Object)} to create a resolved {@link Promise}.
+ * {@link PromiseFactory#failed(Throwable)} to create a failed {@link Promise}.
  * 
  * @param <T> The result type associated with the Promise.
  * @since 1.1
  * @ThreadSafe
  * @author $Id$
  */
-final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
+final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	/**
-	 * The value of this resolved Promise.
+	 * The failure of this failed Promise.
 	 */
-	private final T			value;
+	private final Throwable	fail;
 
 	/**
-	 * Initialize this resolved Promise.
+	 * Initialize this failed Promise.
 	 * 
-	 * @param value The value of this resolved Promise.
+	 * @param fail The failure of this failed Promise. Must not be {@code null}.
 	 * @param factory The factory to use for callbacks and scheduled operations.
 	 */
-	ResolvedPromiseImpl(T value, PromiseFactory factory) {
+	FailedPromiseImpl(Throwable fail, PromiseFactory factory) {
 		super(factory);
-		this.value = value;
+		this.fail = requireNonNull(fail);
 	}
 
 	/**
@@ -56,8 +60,8 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T getValue() {
-		return value;
+	public T getValue() throws InvocationTargetException {
+		throw new InvocationTargetException(fail);
 	}
 
 	/**
@@ -65,7 +69,7 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	@Override
 	public Throwable getFailure() {
-		return null;
+		return fail;
 	}
 
 	/**
@@ -73,11 +77,11 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	@Override
 	Result<T> collect() {
-		return new Result<T>(value);
+		return new Result<T>(fail);
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "[resolved: " + value + "]";
+		return super.toString() + "[failed: " + fail + "]";
 	}
 }

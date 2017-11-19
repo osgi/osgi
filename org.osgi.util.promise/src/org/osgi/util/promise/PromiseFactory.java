@@ -16,7 +16,6 @@
 
 package org.osgi.util.promise;
 
-import static java.util.Objects.requireNonNull;
 import static org.osgi.util.promise.PromiseImpl.uncaughtException;
 
 import java.util.ArrayList;
@@ -161,7 +160,7 @@ public class PromiseFactory {
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
 	public <T> Promise<T> resolved(T value) {
-		return new ResolvedPromiseImpl<>(value, null, this);
+		return new ResolvedPromiseImpl<>(value, this);
 	}
 
 	/**
@@ -179,7 +178,7 @@ public class PromiseFactory {
 	 * @return A new Promise that has been resolved with the specified failure.
 	 */
 	public <T> Promise<T> failed(Throwable failure) {
-		return new ResolvedPromiseImpl<>(null, requireNonNull(failure), this);
+		return new FailedPromiseImpl<>(failure, this);
 	}
 
 	/**

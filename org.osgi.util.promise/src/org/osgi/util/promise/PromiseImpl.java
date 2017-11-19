@@ -72,19 +72,6 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * Return a new {@link ResolvedPromiseImpl} using the {@link PromiseFactory}
-	 * of this PromiseImpl.
-	 * 
-	 * @param v The value of the resolved Promise.
-	 * @param f The failure of the resolved Promise.
-	 * @return A new ResolvedPromiseImpl.
-	 * @since 1.1
-	 */
-	<V> ResolvedPromiseImpl<V> resolved(V v, Throwable f) {
-		return new ResolvedPromiseImpl<>(v, f, factory);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -328,7 +315,8 @@ abstract class PromiseImpl<T> implements Promise<T> {
 		DeferredPromiseImpl<T> chained = deferred();
 		onResolve(chained.new ChainImpl(this));
 		if (!isDone()) {
-			PromiseImpl<T> timedout = resolved(null, new TimeoutException());
+			PromiseImpl<T> timedout = new FailedPromiseImpl<>(
+					new TimeoutException(), factory);
 			onResolve(new Timeout(chained.new ChainImpl(timedout), millis,
 					TimeUnit.MILLISECONDS));
 		}
@@ -401,8 +389,8 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 * @since 1.1
 	 */
 	static final class Result<P> {
-		Throwable	fail;
 		P			value;
+		Throwable	fail;
 	
 		Result(P value) {
 			this.value = value;
