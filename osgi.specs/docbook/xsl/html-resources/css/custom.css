@@ -105,6 +105,11 @@ td > p {
 	margin: 0;
 }
 
+div.book > div.titlepage > div > div:nth-child(1),
+div.book > div.titlepage > div > div:nth-child(3) {
+	display: none;
+}
+
 div.table-contents td {
 	vertical-align: top;
 }
@@ -137,12 +142,12 @@ div.table-contents td {
 }
 
 #header h1 {
-	color: #333;
+	color: rgba(0, 67, 112, 1);
 	display: inline-block;
-	font-weight: 200;
 	margin: 0;
 	padding: 0;
 	vertical-align: top;
+	font-size: 3em;
 }
 
 #header img {
@@ -374,10 +379,6 @@ p.bibliomixed span.title::after {
 	#header img {
 		height: 72px;
 		width: 100px;
-	}
-
-	#header h1 {
-		font-size: 1.2em;
 	}
 
 	h1.title {
