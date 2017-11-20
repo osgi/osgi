@@ -104,6 +104,10 @@ example before
   </l:l10n>
 </l:i18n>
 
+<xsl:param name="book.status">
+  <xsl:value-of select="/d:book/@status"/>
+</xsl:param>
+
 <xsl:template match="d:programlisting">
   <xsl:call-template name="anchor"/>
 
@@ -263,6 +267,24 @@ example before
         </xsl:attribute>
       </a>
     </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="label.this.section">
+  <xsl:param name="section" select="."/>
+
+  <xsl:variable name="level">
+    <xsl:call-template name="section.level"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <!-- bridgeheads are not numbered -->
+    <xsl:when test="$section/ancestor::*[local-name()='preface']">0</xsl:when>
+    <xsl:when test="$section/self::d:bridgehead">0</xsl:when>
+    <xsl:when test="$level &lt;= $section.autolabel.max.depth">
+      <xsl:value-of select="$section.autolabel"/>
+    </xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
