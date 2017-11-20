@@ -31,8 +31,10 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <!--  Parameter settings                                          -->
 <!--==============================================================-->
 <xsl:param name="table.borders.with.css" select="1" />
+<!--
 <xsl:param name="table.cell.border.style">none</xsl:param>
 <xsl:param name="table.frame.border.style">none</xsl:param>
+-->
 <xsl:param name="generate.css.header" select="1" />
 <xsl:param name="webhelp.include.search.tab" select="0" />
 <xsl:param name="generate.section.toc.level" select="0"/>
