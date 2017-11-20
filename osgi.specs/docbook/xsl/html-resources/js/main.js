@@ -6,3 +6,38 @@ var fixAnchors = function() {
 		return "<a class='permalink' href='" + currentUrl + "#" + this.id + "'>&#182;</a>";
 	});
 }
+
+$(function() {
+	var icon = document.getElementById('mobile-menu-icon');
+
+	if (icon) {
+		icon.addEventListener(
+			'click',
+			function(event) {
+				var sidebar = document.getElementById('sidebar');
+
+				if (icon && sidebar) {
+					if (icon.classList.contains('active')) {
+						icon.classList.remove('active');
+					}
+					else {
+						icon.classList.add('active');
+					}
+
+					if (sidebar.classList.contains('menu-open')) {
+						sidebar.classList.remove('menu-open');
+
+						window.onhashchange = null;
+					}
+					else {
+						sidebar.classList.add('menu-open');
+
+						window.onhashchange = function() {
+							sidebar.classList.remove('menu-open');
+						};
+					}
+				}
+			}
+		);
+	}
+});
