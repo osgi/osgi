@@ -463,6 +463,38 @@ example before
               level="any" format="1"/>
 </xsl:template>
 
+<!-- validate linkends -->
+
+<xsl:template name="check.id.unique">
+  <xsl:param name="linkend"></xsl:param>
+  <xsl:if test="$linkend != ''">
+    <xsl:variable name="targets" select="key('id',$linkend)"/>
+    <xsl:variable name="target" select="$targets[1]"/>
+
+    <xsl:if test="count($targets)=0">
+      <xsl:if test="count(ancestor::d:section[@role = 'package'])=0">
+        <xsl:message>
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+          <xsl:text>] Error: no ID for constraint linkend: </xsl:text>
+          <xsl:value-of select="$linkend"/>
+          <xsl:text>.</xsl:text>
+        </xsl:message>
+      </xsl:if>
+    </xsl:if>
+
+    <xsl:if test="count($targets)>1">
+      <xsl:message>
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+        <xsl:text>] Warning: multiple "IDs" for constraint linkend: </xsl:text>
+        <xsl:value-of select="$linkend"/>
+        <xsl:text>.</xsl:text>
+      </xsl:message>
+    </xsl:if>
+  </xsl:if>
+</xsl:template>
+
 <!-- Javadoc modifications -->
 
 <xsl:template match="d:formalpara[@role = 'parameter']">
