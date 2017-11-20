@@ -54,8 +54,15 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
 <xsl:param name="description.bullet" select="'&#x25A1;'" />
-<xsl:param name="linkend.core.api.prefix">../core/framework.api.html#</xsl:param>
-<xsl:param name="linkend.dto.api.prefix">../core/framework.dto.html#</xsl:param>
+<xsl:param name="linkend.root.core.api.prefix">../core/</xsl:param>
+<xsl:param name="linkend.core.api.prefix">
+  <xsl:value-of select="$linkend.root.core.api.prefix"/>
+  <xsl:text>framework.api.html#</xsl:text>
+</xsl:param>
+<xsl:param name="linkend.dto.api.prefix">
+  <xsl:value-of select="$linkend.root.core.api.prefix"/>
+  <xsl:text>framework.dto.html#</xsl:text>
+</xsl:param>
 
 <xsl:param name="generate.toc">
 appendix  toc,title
