@@ -16,6 +16,7 @@
 
 package org.osgi.service.cdi.dto;
 
+import java.util.List;
 import java.util.Map;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
@@ -24,9 +25,16 @@ import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
  * A snapshot of the runtime state of a component
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 5589616f2383593dab7a2422c8a86b2c5615c3c3 $
  */
 public class ComponentDTO extends DTO {
+	/**
+	 * The name of the template of this component
+	 * <p>
+	 * Must never be {@code null}
+	 */
+	public String				name;
+
 	/**
 	 * The resolved configuration properties for the component.
 	 * <p>
@@ -36,14 +44,14 @@ public class ComponentDTO extends DTO {
 	public Map<String, Object>	properties;
 
 	/**
-	 * A list of the <code>service.pid</code> properties of all configurations
-	 * consumed by this component.
+	 * A list of the {@code service.pid} properties of all configurations consumed
+	 * by this component.
 	 * <p>
 	 * Each PID corresponds to an item from the {@link ConfigurationDTO#matches
 	 * matched list} of one of the {@link LifecycleDTO#configurations configuration
 	 * dependencies} of the parent {@link LifecycleDTO}
 	 */
-	public String[]				configurations;
+	public List<String>			configurations;
 
 	/**
 	 * The service dependencies of the component.
@@ -51,7 +59,7 @@ public class ComponentDTO extends DTO {
 	 * Must not be null. The array will be empty if the component has no reference
 	 * dependencies.
 	 */
-	public ReferenceDTO[]		references;
+	public List<ReferenceDTO>	references;
 
 	/**
 	 * The activations of the component.
@@ -60,5 +68,5 @@ public class ComponentDTO extends DTO {
 	 * {@link Type#APPLICATION APPLICATION}. The array will always contain 1 element
 	 * for a {@link Type#COMPONENT COMPONENT}.
 	 */
-	public ActivationDTO[]		activations;
+	public List<ActivationDTO>	activations;
 }

@@ -16,23 +16,23 @@
 
 package org.osgi.service.cdi.dto;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
-import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
 
 /**
  * A snapshot of the runtime state of a CDI container
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 1deab4df27a168fe15c54b4ec4024442e6041c5c $
  */
 public class ContainerDTO extends DTO {
 	/**
 	 * The template of this component as resolved at initialization time.
 	 * <p>
-	 * Must not be null
+	 * Must not be <code>null</code>
 	 */
-	public ContainerTemplateDTO	template;
+	public String				id;
 
 	/**
 	 * The bundle declaring the CDI container.
@@ -42,7 +42,7 @@ public class ContainerDTO extends DTO {
 	/**
 	 * The extension dependencies of this CDI container.
 	 */
-	public ExtensionDTO[]			extensions;
+	public List<ExtensionDTO>	extensions;
 
 	/**
 	 * The component lifecycles defined by this CDI container.
@@ -50,5 +50,5 @@ public class ContainerDTO extends DTO {
 	 * Must not be null. The array always contains at least one element representing
 	 * the {@link Type#APPLICATION APPLICATION}.
 	 */
-	public LifecycleDTO[]	componentLifecycles;
+	public List<LifecycleDTO>	componentLifecycles;
 }

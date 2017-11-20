@@ -26,7 +26,7 @@ import org.osgi.dto.DTO;
  * <p>
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 684f6189fe7bac785e8816eef38fadc4429a3708 $
  */
 public class ReferenceTemplateDTO extends DTO {
 	/**
@@ -60,18 +60,20 @@ public class ReferenceTemplateDTO extends DTO {
 	}
 
 	/**
-	 * The name of the reference.
+	 * A unique within the container and persistent across reboots identified for
+	 * this activation
 	 * <p>
-	 * The value must not be null.
+	 * The value must not be <code>null</code>. The value must be equal to to the
+	 * reference name.
 	 */
-	public String	name;
+	public String				name;
 
 	/**
 	 * Indicates the type of service matched by the reference.
 	 * <p>
 	 * The value must not be null.
 	 */
-	public String	targetType;
+	public String				targetType;
 
 	/**
 	 * Indicates a target filter used in addition to the {@link #targetType} to
@@ -80,7 +82,7 @@ public class ReferenceTemplateDTO extends DTO {
 	 * Contains the target filter resolved from the CDI bundle metadata. The filter
 	 * can be replaced by configuration at runtime.
 	 */
-	public String	targetFilter;
+	public String				targetFilter;
 
 	/**
 	 * The minimum cardinality of the reference.

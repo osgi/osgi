@@ -25,13 +25,21 @@ import org.osgi.dto.DTO;
  * remains the same between the CDI bundle restarts.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: d43e4419bbd30e612a1e4d4b33819abb092dc0f7 $
  */
 public class ConfigurationTemplateDTO extends DTO {
 	/**
+	 * A name for this extension dependency that is unique within the container and
+	 * persistent across container restarts.
+	 * <p>
+	 * Equal to {@link #targetPid}.
+	 */
+	public String				name;
+
+	/**
 	 * The PID of the tracked configuration objects
 	 * <p>
-	 * The value must not be null.
+	 * Must not be {@code null}.
 	 */
 	public String				targetPid;
 
@@ -44,6 +52,8 @@ public class ConfigurationTemplateDTO extends DTO {
 	 * <li>When {@link MaximumCardinality#MANY} this is a factory
 	 * configuration.</li>
 	 * </ul>
+	 * <p>
+	 * Must not be {@code null}.
 	 */
 	public MaximumCardinality	maximumCardinality;
 }

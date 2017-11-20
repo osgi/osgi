@@ -17,27 +17,26 @@
 package org.osgi.service.cdi.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.template.ExtensionTemplateDTO;
 
 /**
  * A snapshot of the runtime state of an extension dependency of a
  * {@link ContainerDTO container}
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: f20ea02e3fffa20e885d64446e65474971dcc80d $
  */
 public class ExtensionDTO extends DTO {
 	/**
 	 * The template of this extension dependency
 	 * <p>
-	 * Must not be null
+	 * Must not be <code>null</code>
 	 */
-	public ExtensionTemplateDTO	template;
+	public String	name;
 
 	/**
 	 * The service to which the extension dependency is resolved.
 	 * <p>
-	 * This extension dependency is satisfied when <code>match != 0</code>.
+	 * This extension dependency is satisfied when {@code match > 0}.
 	 */
-	public long					match;
+	public long		match;
 }

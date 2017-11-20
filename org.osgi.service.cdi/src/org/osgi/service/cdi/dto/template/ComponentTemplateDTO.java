@@ -16,6 +16,7 @@
 
 package org.osgi.service.cdi.dto.template;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.ComponentDTO;
 import org.osgi.service.cdi.dto.LifecycleDTO;
@@ -33,7 +34,7 @@ import org.osgi.service.cdi.dto.LifecycleDTO;
  * creation of {@link #activations}.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 4e45c6891d860f3dfda81252ddf906d792ef498a $
  */
 public class ComponentTemplateDTO extends DTO {
 
@@ -52,10 +53,23 @@ public class ComponentTemplateDTO extends DTO {
 	}
 
 	/**
+	 * A unique within the container and persistent across reboots identified for
+	 * this activation
+	 * <p>
+	 * When {@link Type#APPLICATION type=APPLICATION} it is equal
+	 * {@link ContainerTemplateDTO#id to the parent container Id}
+	 * <p>
+	 * When {@link Type#COMPONENT type=COMPONENT} it is equal to the name of the
+	 * root component bean
+	 * 
+	 */
+	public String							name;
+
+	/**
 	 * Indicate whether the component is the <em>Application Component</em> or an
 	 * <em>OSGi Component<em>.
 	 */
-	public Type						type;
+	public Type								type;
 
 	/**
 	 * The configuration dependencies of this component.
@@ -67,7 +81,7 @@ public class ComponentTemplateDTO extends DTO {
 	 * <p>
 	 * May contain one or more singleton configurations.
 	 */
-	public ConfigurationTemplateDTO[]	configurations;
+	public List<ConfigurationTemplateDTO>	configurations;
 
 	/**
 	 * The service dependencies of the component.
@@ -75,7 +89,7 @@ public class ComponentTemplateDTO extends DTO {
 	 * Value must not be null. The array will be empty if there are no service
 	 * dependencies.
 	 */
-	public ReferenceTemplateDTO[]		references;
+	public List<ReferenceTemplateDTO>		references;
 
 	/**
 	 * The activation beans of the component.
@@ -86,11 +100,11 @@ public class ComponentTemplateDTO extends DTO {
 	 * <p>
 	 * For {@link #type} = {@link Type#APPLICATION} the array may contain multiple
 	 * entries where {@link ActivationTemplateDTO#serviceClasses} is not empty and
-	 * {@link ActivationTemplateDTO#scope} is {@link ActivationTemplateDTO.Scope#SINGLETON
-	 * SINGLETON}.
+	 * {@link ActivationTemplateDTO#scope} is
+	 * {@link ActivationTemplateDTO.Scope#SINGLETON SINGLETON}.
 	 * <p>
 	 * For {@link #type} = {@link Type#COMPONENT} the array must contain exactly one
 	 * entry.
 	 */
-	public ActivationTemplateDTO[]		activations;
+	public List<ActivationTemplateDTO>		activations;
 }

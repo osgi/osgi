@@ -75,26 +75,28 @@ import org.osgi.service.cdi.dto.template.MaximumCardinality;
  * </ul>
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: faf419dcf0cfdb44d0983ca976948403376a0e31 $
  */
 public class LifecycleDTO extends DTO {
 	/**
-	 * The template of the components this factory creates
+	 * Name of the component template used by this lifecycle
+	 * <p>
+	 * Must not be {@code null}
 	 */
-	public ComponentTemplateDTO	template;
+	public String				componentName;
 
 	/**
 	 * The configuration dependencies.
 	 * <p>
 	 * Each entry in the array corresponds to the runtime state of one of the
 	 * statically defined {@link ConfigurationTemplateDTO configurations} of
-	 * {@link #template the component} managed by this factory.
+	 * {@link #componentName the component} managed by this lifecycle.
 	 * <p>
 	 * Must never be null.
 	 * <p>
 	 * May contain many {@link MaximumCardinality#ONE singleton} configurations.
 	 * <p>
-	 * May contain at most one {@link MaximumCardinality#MANY factory}
+	 * May contain at most one {@link MaximumCardinality#MANY lifecycle}
 	 * configuration.
 	 */
 	public ConfigurationDTO[]	configurations;

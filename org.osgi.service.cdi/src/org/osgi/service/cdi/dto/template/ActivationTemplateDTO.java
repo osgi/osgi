@@ -16,8 +16,10 @@
 
 package org.osgi.service.cdi.dto.template;
 
+import java.util.List;
 import java.util.Map;
 import org.osgi.service.cdi.dto.ActivationDTO;
+import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A description an activation of a component
@@ -29,7 +31,7 @@ import org.osgi.service.cdi.dto.ActivationDTO;
  * case of {@link Scope#SINGLETON}.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 973cd7216f4d9eafbccf745c11857ad05d6b5498 $
  */
 public class ActivationTemplateDTO {
 	/**
@@ -78,6 +80,19 @@ public class ActivationTemplateDTO {
 	}
 
 	/**
+	 * A unique within the container and persistent across reboots identified for
+	 * this activation
+	 * <p>
+	 * When {@link Type#APPLICATION type=APPLICATION} it is equal to the bean name
+	 * or if one is not available it is generated from the bean attributes.
+	 * <p>
+	 * When {@link Type#COMPONENT type=COMPONENT} it is equal to the name of the
+	 * root component bean.
+	 * 
+	 */
+	public String				name;
+
+	/**
 	 * The {@link Scope} of this activation
 	 * <p>
 	 * Must not be null.
@@ -91,7 +106,7 @@ public class ActivationTemplateDTO {
 	 * Must not be null. An empty array indicated this activation will not publish
 	 * an OSGi service
 	 */
-	public String[]				serviceClasses;
+	public List<String>			serviceClasses;
 
 	/**
 	 * The default properties which will be used to configure this activation.

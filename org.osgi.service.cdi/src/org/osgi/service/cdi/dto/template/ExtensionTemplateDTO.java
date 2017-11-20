@@ -23,13 +23,21 @@ import org.osgi.service.cdi.dto.ContainerDTO;
  * Models an extension dependency of the {@link ContainerDTO}
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 2a6b16c6e027fe7f1b545282296fe821720b28d2 $
  */
 public class ExtensionTemplateDTO extends DTO {
 	/**
-	 * Target filter for the extension service.
+	 * A name for this extension dependency that is unique within the container and
+	 * persistent across container restarts.
 	 * <p>
-	 * The value must not be null.
+	 * Must not be {@code null}.
 	 */
-	public String target;
+	public String	name;
+
+	/**
+	 * Target LDAP filter used to select extension services.
+	 * <p>
+	 * Must not be {@code null}.
+	 */
+	public String	target;
 }

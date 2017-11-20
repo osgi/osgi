@@ -16,6 +16,7 @@
 
 package org.osgi.service.cdi.dto;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 import org.osgi.service.cdi.dto.template.MaximumCardinality;
 import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
@@ -25,13 +26,16 @@ import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
  * dependency
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: e8462ff43db112f04370ec4eb50253bbecb57de8 $
  */
 public class ReferenceDTO extends DTO {
 	/**
-	 * The template of this reference dependency as resolved at initialization time.
+	 * The name of this reference. Matches the name of the template of this
+	 * reference
+	 * <p>
+	 * Must not be {@code null}
 	 */
-	public ReferenceTemplateDTO		template;
+	public String		name;
 
 	/**
 	 * The runtime minimum cardinality of the dependency.
@@ -45,13 +49,14 @@ public class ReferenceDTO extends DTO {
 	 * value must be from 0 to {@link Integer#MAX_VALUE}.
 	 * </ul>
 	 */
-	public int						minimumCardinality;
+	public int			minimumCardinality;
 
 	/**
 	 * Indicates the runtime target filter used in addition to the
-	 * {@link ReferenceTemplateDTO#targetFilter model.serviceType} to match services.
+	 * {@link ReferenceTemplateDTO#targetFilter model.serviceType} to match
+	 * services.
 	 */
-	public String					targetFilter;
+	public String		targetFilter;
 
 	/**
 	 * The list of IDs of the services that match this reference.
@@ -61,8 +66,9 @@ public class ReferenceDTO extends DTO {
 	 * This dependency is satisfied when.
 	 * <p>
 	 * <pre>
-	 * {@link #minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt() template.maximumCardinality.toInt()}
-	 * </pre>
+	 * {@link #minimumCardinality minimumCardinality} <= matches.length <= {@link MaximumCardinality#toInt()}
+	 * </pre> where the maximum cardinality can be obtained from the associated
+	 * {@link ReferenceTemplateDTO}.
 	 */
-	public long[]				matches;
+	public List<Long>	matches;
 }
