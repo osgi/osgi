@@ -55,6 +55,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
 <xsl:param name="description.bullet" select="'&#x25A1;'" />
 <xsl:param name="linkend.core.api.prefix">../core/framework.api.html#</xsl:param>
+<xsl:param name="linkend.dto.api.prefix">../core/framework.dto.html#</xsl:param>
 
 <xsl:param name="generate.toc">
 appendix  toc,title
@@ -655,13 +656,26 @@ example before
         <xsl:variable name="href.target">
           <xsl:choose>
             <xsl:when test="$calculated.target = ''">
-              <xsl:message>
-                <xsl:text>LINKEND has no target. Using the URL: </xsl:text>
-                <xsl:value-of select="$linkend.core.api.prefix"/>
-                <xsl:value-of select="$linkend"/>
-              </xsl:message>
-              <xsl:value-of select="$linkend.core.api.prefix"/>
-              <xsl:value-of select="$linkend"/>
+              <xsl:choose>
+                <xsl:when test="contains($linkend, '.dto')">
+                  <xsl:message>
+                    <xsl:text>LINKEND has no target. Using the URL: </xsl:text>
+                    <xsl:value-of select="$linkend.dto.api.prefix"/>
+                    <xsl:value-of select="$linkend"/>
+                  </xsl:message>
+                  <xsl:value-of select="$linkend.dto.api.prefix"/>
+                  <xsl:value-of select="$linkend"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:message>
+                    <xsl:text>LINKEND has no target. Using the URL: </xsl:text>
+                    <xsl:value-of select="$linkend.core.api.prefix"/>
+                    <xsl:value-of select="$linkend"/>
+                  </xsl:message>
+                  <xsl:value-of select="$linkend.core.api.prefix"/>
+                  <xsl:value-of select="$linkend"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$calculated.target"/>
