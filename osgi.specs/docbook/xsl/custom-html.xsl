@@ -288,4 +288,16 @@ example before
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="processing-instruction('line-break')">
+  <br />
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="title.markup">
+  <br />
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="bibliomixed.mode">
+  <br />
+</xsl:template>
+
 </xsl:stylesheet>
