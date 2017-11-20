@@ -297,6 +297,37 @@ div.section.package div.section.class div.section.method h4.title:after {
 	content: "[METHOD]";
 }
 
+p.parameter > label,
+p.description > label {
+  float: left;
+  display: block;
+  width: 10em;
+  text-align: right;
+  padding-right: 1em;
+	font-style: italic;
+}
+
+p.parameter > span,
+p.description > span {
+	display: block;
+	margin-left: 10em;
+}
+
+div.section.class > div.itemizedlist,
+div.section.field > div.itemizedlist,
+div.section.method > div.itemizedlist,
+div.section.class > div.orderedlist,
+div.section.field > div.orderedlist,
+div.section.method > div.orderedlist,
+div.section.class > pre.programlisting,
+div.section.field > pre.programlisting,
+div.section.method > pre.programlisting,
+div.section.class > p:not(.description):not(.parameter),
+div.section.field > p:not(.description):not(.parameter),
+div.section.method > p:not(.description):not(.parameter) {
+  margin-left: 10em;
+}
+
 p.bibliomixed span.title {
   margin-left: .4em;
 }

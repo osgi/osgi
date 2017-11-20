@@ -51,6 +51,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="root.filename">index</xsl:param>
 
 <xsl:param name="autotoc.label.separator" select="'&#160;'" />
+<xsl:param name="description.bullet" select="'&#x25A1;'" />
 
 <xsl:param name="generate.toc">
 appendix  toc,title
@@ -459,6 +460,48 @@ example before
               count="d:biblioentry|d:bibliomixed"
               level="any" format="1"/>
 </xsl:template>
+
+<!-- Javadoc modifications -->
+
+<xsl:template match="d:formalpara[@role = 'parameter']">
+  <xsl:variable name="this.label" select="normalize-space(d:title)"/>
+  <xsl:variable name="prev.label"
+                select="normalize-space(preceding-sibling::*[1]
+                           [self::d:formalpara[@role = 'parameter']]/d:title)"/>
+  <p class="parameter">
+    <label>
+      <xsl:call-template name="anchor"/>
+      <xsl:choose>
+        <!-- Output only first "Throws" label in sequence -->
+        <xsl:when test="$this.label = 'Throws' and $prev.label = 'Throws'">
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="d:title"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </label>
+    <span>
+      <xsl:apply-templates select="d:para"/>
+    </span>
+  </p>
+</xsl:template>
+
+<xsl:template match="d:formalpara[@role='parameter']/d:title">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="d:para[@role = 'description']">
+  <p class="description">
+    <label>
+      <xsl:copy-of select="$description.bullet"/>
+    </label>
+    <span>
+      <xsl:apply-templates/>
+    </span>
+  </p>
+</xsl:template>
+
+<!-- remark modifications -->
 
 <xsl:template match="d:remark | d:remark[&comment.block.parents;]">
   <xsl:if test="$show.comments != 0">
