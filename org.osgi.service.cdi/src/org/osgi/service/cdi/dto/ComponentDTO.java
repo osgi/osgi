@@ -25,7 +25,7 @@ import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
  * A snapshot of the runtime state of a component
  *
  * @NotThreadSafe
- * @author $Id: 5589616f2383593dab7a2422c8a86b2c5615c3c3 $
+ * @author $Id$
  */
 public class ComponentDTO extends DTO {
 	/**

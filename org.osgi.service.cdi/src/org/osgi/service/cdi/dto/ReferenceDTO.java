@@ -26,7 +26,7 @@ import org.osgi.service.cdi.dto.template.ReferenceTemplateDTO;
  * dependency
  *
  * @NotThreadSafe
- * @author $Id: e8462ff43db112f04370ec4eb50253bbecb57de8 $
+ * @author $Id$
  */
 public class ReferenceDTO extends DTO {
 	/**

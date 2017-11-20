@@ -23,7 +23,7 @@ import org.osgi.dto.DTO;
  * {@link ContainerDTO container}
  *
  * @NotThreadSafe
- * @author $Id: f20ea02e3fffa20e885d64446e65474971dcc80d $
+ * @author $Id$
  */
 public class ExtensionDTO extends DTO {
 	/**

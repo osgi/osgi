@@ -26,7 +26,7 @@ import org.osgi.dto.DTO;
  * <p>
  *
  * @NotThreadSafe
- * @author $Id: 684f6189fe7bac785e8816eef38fadc4429a3708 $
+ * @author $Id$
  */
 public class ReferenceTemplateDTO extends DTO {
 	/**

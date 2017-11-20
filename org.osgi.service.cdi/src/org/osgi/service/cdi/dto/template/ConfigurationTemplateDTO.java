@@ -25,7 +25,7 @@ import org.osgi.dto.DTO;
  * remains the same between the CDI bundle restarts.
  *
  * @NotThreadSafe
- * @author $Id: d43e4419bbd30e612a1e4d4b33819abb092dc0f7 $
+ * @author $Id$
  */
 public class ConfigurationTemplateDTO extends DTO {
 	/**

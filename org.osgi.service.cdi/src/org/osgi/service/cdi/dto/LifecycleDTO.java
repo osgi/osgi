@@ -75,7 +75,7 @@ import org.osgi.service.cdi.dto.template.MaximumCardinality;
  * </ul>
  *
  * @NotThreadSafe
- * @author $Id: faf419dcf0cfdb44d0983ca976948403376a0e31 $
+ * @author $Id$
  */
 public class LifecycleDTO extends DTO {
 	/**

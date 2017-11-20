@@ -26,7 +26,7 @@ import org.osgi.service.cdi.dto.template.MaximumCardinality;
  * factory} configuration dependency
  *
  * @NotThreadSafe
- * @author $Id: 432d78a42219a50616ec587a34925e607eb4a2fd $
+ * @author $Id$
  */
 public class ConfigurationDTO extends DTO {
 	/**

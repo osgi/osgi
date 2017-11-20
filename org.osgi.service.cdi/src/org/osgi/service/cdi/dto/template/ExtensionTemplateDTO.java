@@ -23,7 +23,7 @@ import org.osgi.service.cdi.dto.ContainerDTO;
  * Models an extension dependency of the {@link ContainerDTO}
  *
  * @NotThreadSafe
- * @author $Id: 2a6b16c6e027fe7f1b545282296fe821720b28d2 $
+ * @author $Id$
  */
 public class ExtensionTemplateDTO extends DTO {
 	/**

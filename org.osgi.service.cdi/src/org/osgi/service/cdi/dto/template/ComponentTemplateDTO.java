@@ -34,7 +34,7 @@ import org.osgi.service.cdi.dto.LifecycleDTO;
  * creation of {@link #activations}.
  *
  * @NotThreadSafe
- * @author $Id: 4e45c6891d860f3dfda81252ddf906d792ef498a $
+ * @author $Id$
  */
 public class ComponentTemplateDTO extends DTO {
 

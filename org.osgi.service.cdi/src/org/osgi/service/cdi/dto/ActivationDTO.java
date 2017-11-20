@@ -24,7 +24,7 @@ import org.osgi.service.cdi.dto.template.ActivationTemplateDTO;
  * activation
  *
  * @NotThreadSafe
- * @author $Id: 1eb436c35a092163756928e4ad22d4dfd393e46e $
+ * @author $Id$
  */
 public class ActivationDTO extends DTO {
 	/**
