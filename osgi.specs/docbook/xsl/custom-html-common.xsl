@@ -231,6 +231,12 @@ basic format:
 
                 <div id="column-two">
                     <div id="content">
+                        <xsl:call-template name="header.navigation">
+                          <xsl:with-param name="prev" select="$prev"/>
+                          <xsl:with-param name="next" select="$next"/>
+                          <xsl:with-param name="nav.context" select="$nav.context"/>
+                        </xsl:call-template>
+
                         <xsl:call-template name="user.header.content"/>
 
                         <xsl:copy-of select="$content"/>
