@@ -225,6 +225,7 @@ div.table-contents td {
 
 span.remark {
 	color: red;
+	background-color: rgb(255,0,0,0.1);
 }
 
 /* JAVADOC Styles - all must be prefixed by div.section.package */

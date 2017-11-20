@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY comment.block.parents "parent::d:answer|
+parent::d:appendix|parent::d:article|parent::d:bibliodiv|
+parent::d:bibliography|parent::d:blockquote|parent::d:caution|parent::d:chapter|
+parent::d:glossary|parent::d:glossdiv|parent::d:important|parent::d:index|
+parent::d:indexdiv|parent::d:listitem|parent::d:note|parent::d:orderedlist|
+parent::d:partintro|parent::d:preface|parent::d:procedure|parent::d:qandadiv|
+parent::d:qandaset|parent::d:question|parent::d:refentry|parent::d:refnamediv|
+parent::d:refsect1|parent::d:refsect2|parent::d:refsect3|parent::d:refsection|
+parent::d:refsynopsisdiv|parent::d:sect1|parent::d:sect2|parent::d:sect3|parent::d:sect4|
+parent::d:sect5|parent::d:section|parent::d:setindex|parent::d:sidebar|
+parent::d:simplesect|parent::d:taskprerequisites|parent::d:taskrelated|
+parent::d:tasksummary|parent::d:warning|parent::d:topic">
+]>
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
@@ -106,6 +120,16 @@ example before
 
 <xsl:param name="book.status">
   <xsl:value-of select="/d:book/@status"/>
+</xsl:param>
+<xsl:param name="show.comments">
+  <xsl:choose>
+    <xsl:when test="$book.status = 'draft'">
+      <xsl:value-of select="1"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="0"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:param>
 
 <xsl:template match="d:programlisting">
@@ -298,6 +322,21 @@ example before
 
 <xsl:template match="processing-instruction('line-break')" mode="bibliomixed.mode">
   <br />
+</xsl:template>
+
+<xsl:template match="d:remark | d:remark[&comment.block.parents;]">
+  <xsl:if test="$show.comments != 0">
+    <span class="remark">
+      <xsl:text>### </xsl:text>
+      <xsl:apply-templates/>
+    </span>
+    <xsl:message>
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+      <xsl:text>] ### </xsl:text>
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:message>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
