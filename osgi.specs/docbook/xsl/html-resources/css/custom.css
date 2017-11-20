@@ -297,6 +297,10 @@ div.section.package div.section.class div.section.method h4.title:after {
 	content: "[METHOD]";
 }
 
+p.bibliomixed span.title {
+  margin-left: .4em;
+}
+
 p.bibliomixed span.title::after {
 	content: "\000A";
 	white-space: pre;

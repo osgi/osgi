@@ -324,6 +324,142 @@ example before
   <br />
 </xsl:template>
 
+<!-- Customize indentation of bibliomixed -->
+<xsl:template match="d:bibliomixed">
+  <xsl:param name="label">
+    <xsl:apply-templates select="." mode="label.markup"/>
+  </xsl:param>
+
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:choose>
+
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography//
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="$entry">
+                <xsl:with-param name="label" select="$label"/>
+              </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$entry"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <div id="{$id}">
+            <xsl:text>Error: no bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="bibliomixed">
+        <a class="anchor" id="{$id}" />
+        <p class="bibliomixed">
+          <xsl:text>[</xsl:text>
+          <xsl:copy-of select="$label"/>
+          <xsl:text>]</xsl:text>
+          <xsl:apply-templates mode="bibliomixed.mode"/>
+        </p>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- customized Reference  links -->
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-prefix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-suffix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose" select="1"/>
+
+  <!-- handles both biblioentry and bibliomixed -->
+  <xsl:choose>
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography/
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="." mode="label.markup"/>
+            </xsl:when>
+            <xsl:when test="local-name($entry/*[1]) = 'abbrev'">
+              <xsl:apply-templates select="$entry/*[1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="(@id|@xml:id)[1]"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="$bibliography.numbered != 0">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="." mode="label.markup"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:when test="local-name(*[1]) = 'abbrev'">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="*[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>[</xsl:text>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <em>
+        <xsl:value-of select="normalize-space(d:title)"/>
+      </em>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="d:bibliomixed" mode="label.markup">
+  <xsl:number from="d:bibliography|d:chapter|d:appendix"
+              count="d:biblioentry|d:bibliomixed"
+              level="any" format="1"/>
+</xsl:template>
+
 <xsl:template match="d:remark | d:remark[&comment.block.parents;]">
   <xsl:if test="$show.comments != 0">
     <span class="remark">
