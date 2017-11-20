@@ -194,6 +194,7 @@ div.table-contents td {
 #sidebar ul {
 	list-style-type: none;
 	padding-left: 0;
+	width: 30em;
 }
 
 #sidebar li {
