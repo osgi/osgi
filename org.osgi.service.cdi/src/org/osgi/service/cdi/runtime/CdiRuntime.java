@@ -29,8 +29,8 @@ import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
  * introspection of the CDI containers managed by CDI Runtime.
  * <p>
  * This service must be registered with a {@link Constants#SERVICE_CHANGECOUNT}
- * service property that must be updated each time the DTOs available from this
- * service change.
+ * service property that must be updated each time any of the DTOs available
+ * from this service change.
  * <p>
  * Access to this service requires the
  * {@code ServicePermission[CdiRuntime, GET]} permission. It is intended that
@@ -38,28 +38,46 @@ import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
  * to the potentially intrusive methods provided by this service.
  *
  * @ThreadSafe
- * @author $Id$
+ * @author $Id: 7eb44b532af575c65929deec4b97dcbefc7181f4 $
  */
 @ProviderType
 public interface CdiRuntime {
-
 	/**
-	 * Returns the container templates declared by the specified active bundles.
-	 *
+	 * Returns the container snapshots declared by the specified active bundles.
 	 * <p>
-	 * Only container templates from active bundles are returned. If the specified
+	 * Only container snapshots from active bundles are returned. If the specified
 	 * bundles have no declared container or are not active, an empty collection is
 	 * returned.
 	 *
-	 * @param bundles The bundles whose declared container templates are to be
-	 *        returned. Specifying no bundles, or the equivalent of an empty
-	 *        {@code Bundle} array, will return the declared container templates
-	 *        from all active bundles.
+	 * @param bundles The bundles who's container snapshots are to be returned.
+	 *        Specifying no bundles, or the equivalent of an empty {@code Bundle}
+	 *        array, will return the declared container templates from all active
+	 *        bundles.
 	 * @return The declared container templates of the specified active
 	 *         {@code bundles}. An empty collection is returned if there are no
 	 *         container templates for the specified active bundles.
 	 */
-	Collection<ContainerTemplateDTO> getContainerTemplateDTOs(Bundle... bundles);
+	Collection<ContainerDTO> getContainerDTOs(Bundle... bundles);
+
+	/**
+	 * Returns the container snapshot for the specified bundle.
+	 *
+	 * @param bundle The container bundle. Must not be {@code null}.
+	 * @return A snapshot of the current container for the specified container
+	 *         template. {@code null} is returned if the provided bundle does not
+	 *         have an associated CDI container.
+	 */
+	ContainerDTO getContainerDTO(Bundle bundle);
+
+	/**
+	 * Returns the change count of the container hosted in the specified bundle
+	 * 
+	 * @param bundle
+	 * @return A positive number indicating the last time this container changed
+	 *         it's {@link ContainerDTO}. If the supplied bundle does not have an
+	 *         associated CDI container returns {@code -1}.
+	 */
+	long getContainerChangeCount(Bundle bundle);
 
 	/**
 	 * Returns the {@link ContainerTemplateDTO} declared by the specified bundle.
@@ -73,16 +91,5 @@ public interface CdiRuntime {
 	 * @return The declared container model or {@code null} if the specified bundle
 	 *         is not active or does not declare a container.
 	 */
-	ContainerTemplateDTO getContainerModelDTO(Bundle bundle);
-
-	/**
-	 * Returns the container snapshot for the specified container template.
-	 *
-	 * @param template The container template. Must not be {@code null}.
-	 * @return A snapshot of the current container for the specified container
-	 *         template. {@code null} is returned if the provided container template
-	 *         does not belong to an active bundle.
-	 */
-	ContainerDTO getContainerDTO(ContainerTemplateDTO template);
-
+	ContainerTemplateDTO getContainerTemplateDTO(Bundle bundle);
 }
