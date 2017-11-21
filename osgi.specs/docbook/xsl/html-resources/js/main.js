@@ -8,6 +8,17 @@ var fixAnchors = function() {
 }
 
 $(function() {
+  var lastSegment = document.location.href.substr(document.location.href.lastIndexOf('/') + 1);
+  var link = document.querySelector("#sidebar a[href='" + lastSegment + "']");
+
+  if (!link) {
+    link = document.querySelector("#sidebar a[href='" + lastSegment.split("#")[0] + "']");
+  }
+
+  if (link) {
+    link.scrollIntoView();
+  }
+
 	var icon = document.getElementById('mobile-menu-icon');
 
 	if (icon) {
