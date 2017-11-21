@@ -65,15 +65,6 @@ public class CdiConstants {
 	public static final String	CDI_CONTAINER_ID					= "osgi.cdi.container.id";
 
 	/**
-	 * The property of the CdiContainer service holding it's state.
-	 * <p>
-	 * The property will be updated every time the CdiContainer's state changes. The
-	 * possible values are defined by
-	 * {@link org.osgi.service.cdi.runtime.CdiContainerState}.
-	 */
-	public static final String	CDI_CONTAINER_STATE		= "osgi.cdi.container.state";
-
-	/**
 	 * Namespace name for CDI extension capabilities and requirements.
 	 * <p>
 	 * Used in {@code Provide-Capability} and {@code Require-Capability}

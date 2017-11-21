@@ -44,6 +44,7 @@ import org.osgi.framework.ServiceFactory;
  * error.
  * <p>
  * Where this annotation is used affects how service scopes are supported:
+ * <ul>
  * <li>{@link Component @Component} or {@link Dependent @Dependent} bean - The
  * provided service can be of any scope. The bean can either implement
  * {@link ServiceFactory ServiceFactory} or {@link PrototypeServiceFactory

@@ -71,7 +71,7 @@ import org.osgi.service.cdi.dto.template.MaximumCardinality;
  * <li>For component {@link Type#COMPONENT} with a factory configuration there
  * will be <code>0..N</code> {@link ComponentDTO} where <code>N</code> is equal
  * to the {@link ConfigurationDTO#matches number of matches} of the factory
- * configuration.</li></li>
+ * configuration.</li>
  * </ul>
  *
  * @NotThreadSafe
