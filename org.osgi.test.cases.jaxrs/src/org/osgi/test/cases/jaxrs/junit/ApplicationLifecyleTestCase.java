@@ -459,7 +459,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 		ServiceRegistration<Application> reg = getContext().registerService(
 				Application.class,
 				new SimpleApplication(emptySet(),
-						singleton(new StringReplacer("fizz", "buzz"))),
+						singleton(new StringReplacer("fizz", "fizzbuzz"))),
 				properties);
 
 		try {
@@ -625,7 +625,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 							"(osgi.jaxrs.name=t*)");
 					ServiceRegistration<WriterInterceptor> extensionReg = getContext()
 							.registerService(WriterInterceptor.class,
-									new StringReplacer("fizz", "buzz"),
+									new StringReplacer("fizz", "fizzbuzz"),
 									properties);
 					try {
 
@@ -704,7 +704,7 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 					.registerService(Application.class,
 							new SimpleApplication(emptySet(),
 									singleton(new ExtensionConfigProvider(
-											"fizz", "buzz"))),
+											"fizz", "fizzbuzz"))),
 							properties);
 
 			try {

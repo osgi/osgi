@@ -46,6 +46,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ConfigurableStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ExtensionConfigProvider;
+import org.osgi.test.cases.jaxrs.extensions.HeaderStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.NPEMapper;
 import org.osgi.test.cases.jaxrs.extensions.OSGiTextMimeTypeCodec;
 import org.osgi.test.cases.jaxrs.extensions.PromiseConverterProvider;
@@ -770,7 +771,8 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 					Boolean.TRUE);
 			ServiceRegistration<ContainerRequestFilter> extensionReg = getContext()
 					.registerService(ContainerRequestFilter.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
+							new HeaderStringReplacer("fizz", "fizzbuzz"),
+							properties);
 			try {
 				awaitSelection.getValue();
 				
@@ -830,7 +832,8 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 					Boolean.TRUE);
 			ServiceRegistration<ContainerResponseFilter> extensionReg = getContext()
 					.registerService(ContainerResponseFilter.class,
-							new StringReplacer("fizz", "fizzbuzz"), properties);
+							new HeaderStringReplacer("fizz", "fizzbuzz"),
+							properties);
 			try {
 				awaitSelection.getValue();
 

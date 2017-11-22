@@ -568,8 +568,8 @@ public class JaxRSServiceRuntimeTestCase extends AbstractJAXRSTestCase {
 		try {
 			awaitSelection.getValue();
 
-			FailedResourceDTO[] dtos = runtimeService
-					.getRuntimeDTO().failedResourceDTOs;
+			FailedExtensionDTO[] dtos = runtimeService
+					.getRuntimeDTO().failedExtensionDTOs;
 			assertNotNull(dtos);
 			assertEquals(1, dtos.length);
 			assertEquals(FAILURE_REASON_NOT_AN_EXTENSION_TYPE,
