@@ -54,14 +54,21 @@ public @interface Reference {
 
 		/**
 		 * @param service
+		 * @param target
 		 * @return instance of {@link Reference}
 		 */
-		public static final Literal of(Class<?> service) {
-			return new Literal(service);
+		public static final Literal of(
+				Class<?> service,
+				String target) {
+
+			return new Literal(service, target);
 		}
 
-		private Literal(Class<?> service) {
+		private Literal(
+				Class<?> service,
+				String target) {
 			_service = service;
+			_target = target;
 		}
 
 		@Override
@@ -69,7 +76,13 @@ public @interface Reference {
 			return _service;
 		}
 
+		@Override
+		public String target() {
+			return _target;
+		}
+
 		private final Class<?>				_service;
+		private final String				_target;
 
 	}
 
@@ -84,5 +97,13 @@ public @interface Reference {
 	 * error will result.
 	 */
 	Class<?> value() default Object.class;
+
+	/**
+	 * The target property for this reference.
+	 *
+	 * <p>
+	 * If not specified, no target property is set.
+	 */
+	String target() default "";
 
 }
