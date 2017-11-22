@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cdi.ReferenceServiceObjects;
 
 /**
  * This interface is used in CDI Observer methods to watch OSGi service adding
