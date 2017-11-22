@@ -72,13 +72,33 @@ public @interface Service {
 	 */
 	public static final class Literal extends AnnotationLiteral<Service> implements Service {
 
+		private static final long serialVersionUID = 1L;
+
 		/**
-		 * Default instance
+		 * @param interfaces
+		 * @return instance of {@link Service}
 		 */
-		public static final Service	INSTANCE			= new Literal();
+		public static final Literal of(Class<?>[] interfaces) {
+			return new Literal(interfaces);
+		}
 
-		private static final long	serialVersionUID	= 1L;
+		private Literal(Class<?>[] interfaces) {
+			_interfaces = interfaces;
+		}
 
+		@Override
+		public Class<?>[] value() {
+			return _interfaces;
+		}
+
+		private final Class<?>[] _interfaces;
 	}
+
+	/**
+	 * Override the interfaces under which this service is published.
+	 *
+	 * @return the service types
+	 */
+	Class<?>[] value() default {};
 
 }
