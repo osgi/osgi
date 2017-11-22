@@ -64,7 +64,7 @@ import org.osgi.framework.ServiceFactory;
 @Documented
 @Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
 @Retention(RUNTIME)
-@Target({TYPE, TYPE_USE})
+@Target({FIELD, METHOD, TYPE, TYPE_USE})
 public @interface Service {
 
 	/**
