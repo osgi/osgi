@@ -40,8 +40,21 @@ import org.osgi.service.cdi.CdiConstants;
 public @interface PID {
 
 	/**
-	 * Support inline instantiation of the {@link PID}
-	 * annotation.
+	 * Values available for use with {@link #policy policy}.
+	 */
+	public static enum Policy {
+		/**
+		 * The configuration is not required.
+		 */
+		OPTIONAL,
+		/**
+		 * The configuration is required.
+		 */
+		REQUIRED
+	}
+
+	/**
+	 * Support inline instantiation of the {@link PID} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<PID> implements PID {
 
@@ -49,16 +62,16 @@ public @interface PID {
 
 		/**
 		 * @param pid the configuration pid
-		 * @param required true if the configuration is required
+		 * @param policy the policy of the configuration
 		 * @return an instance of {@link PID}
 		 */
-		public static final Literal of(String pid, boolean required) {
-			return new Literal(pid, required);
+		public static final Literal of(String pid, Policy policy) {
+			return new Literal(pid, policy);
 		}
 
-		private Literal(String pid, boolean required) {
+		private Literal(String pid, Policy policy) {
 			_pid = pid;
-			_required = required;
+			_policy = policy;
 		}
 
 		@Override
@@ -67,12 +80,12 @@ public @interface PID {
 		}
 
 		@Override
-		public boolean required() {
-			return _required;
+		public Policy policy() {
+			return _policy;
 		}
 
 		private final String _pid;
-		private final boolean	_required;
+		private final Policy	_policy;
 
 	}
 
@@ -109,6 +122,6 @@ public @interface PID {
 	 * <p>
 	 * If not specified, the configuration is not required.
 	 */
-	boolean required() default false;
+	Policy policy() default Policy.OPTIONAL;
 
 }
