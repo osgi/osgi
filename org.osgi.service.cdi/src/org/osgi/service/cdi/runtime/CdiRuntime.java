@@ -38,58 +38,62 @@ import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
  * to the potentially intrusive methods provided by this service.
  *
  * @ThreadSafe
- * @author $Id$
+ * @author $Id: ccfde01de427bf319588042619e24fd5501530fa $
  */
 @ProviderType
 public interface CdiRuntime {
 	/**
-	 * Returns the container snapshots declared by the specified active bundles.
-	 * <p>
-	 * Only container snapshots from active bundles are returned. If the specified
-	 * bundles have no declared container or are not active, an empty collection is
-	 * returned.
+	 * Returns the container description snapshot for a set of bundles
 	 *
-	 * @param bundles The bundles who's container snapshots are to be returned.
-	 *        Specifying no bundles, or the equivalent of an empty {@code Bundle}
-	 *        array, will return the declared container templates from all active
-	 *        bundles.
-	 * @return The declared container templates of the specified active
-	 *         {@code bundles}. An empty collection is returned if there are no
-	 *         container templates for the specified active bundles.
+	 * @param bundles The bundles who's container description snapshots are to be
+	 *        returned. Specifying no bundles, or the equivalent of an empty
+	 *        {@code Bundle} array, will return the container descriptions of all
+	 *        active bundles that define a container.
+	 * @return A set of descriptions of the container of the specified
+	 *         {@code bundles}. Only bundles that have an associated container are
+	 *         included. If a bundle is listed multiple times in {@code bundles}
+	 *         only one {@link ContainerDTO} is returned. Returns an empty
+	 *         collection rather than {@code null}.
 	 */
 	Collection<ContainerDTO> getContainerDTOs(Bundle... bundles);
 
 	/**
-	 * Returns the container snapshot for the specified bundle.
+	 * Returns the container description snapshot for the specified bundle
 	 *
 	 * @param bundle The container bundle. Must not be {@code null}.
-	 * @return A snapshot of the current container for the specified container
-	 *         template. {@code null} is returned if the provided bundle does not
-	 *         have an associated CDI container.
+	 * @return A snapshot of the current container for the specified active bundle.
+	 *         {@code null} is returned if the provided bundle does not have an
+	 *         associated container.
 	 */
 	ContainerDTO getContainerDTO(Bundle bundle);
 
 	/**
-	 * Returns the change count of the container hosted in the specified bundle
+	 * Returns the change count of the container of the specified bundle.
+	 * <p>
+	 * The returned change count is equal to the value of
+	 * {@link Constants#SERVICE_CHANGECOUNT} of this {@link CdiRuntime} service at
+	 * the time of the last change of the container of the specified bundle.
+	 * <p>
+	 * The returned number is equal or greater to the
+	 * {@link ContainerDTO#changeCount} of any previously created
+	 * {@link ContainerDTO} for the specified bundle.
+	 * <p>
+	 * It is permissible for multiple bundles to have the same change count.
 	 * 
 	 * @param bundle
-	 * @return A positive number indicating the last time this container changed
-	 *         it's {@link ContainerDTO}. If the supplied bundle does not have an
-	 *         associated CDI container returns {@code -1}.
+	 * @return A positive number indicating the last time the {@link ContainerDTO}
+	 *         of the specified bundle changed value. If the supplied bundle does
+	 *         not have an associated container returns {@code -1}.
 	 */
 	long getContainerChangeCount(Bundle bundle);
 
 	/**
-	 * Returns the {@link ContainerTemplateDTO} declared by the specified bundle.
+	 * Returns the {@link ContainerTemplateDTO} for the specified bundle
 	 *
-	 * <p>
-	 * Only container models from active bundles are returned. {@code null} if no
-	 * container is declared by the given {@code bundle} or the bundle is not
-	 * active.
-	 *
-	 * @param bundle The bundle declaring the container. Must not be {@code null}.
-	 * @return The declared container model or {@code null} if the specified bundle
-	 *         is not active or does not declare a container.
+	 * @param bundle The bundle defining a container. Must not be {@code null} and
+	 *        must be active.
+	 * @return The container template for of the specified bundle or {@code null} if
+	 *         it does not have an associated container.
 	 */
 	ContainerTemplateDTO getContainerTemplateDTO(Bundle bundle);
 }

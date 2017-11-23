@@ -18,7 +18,6 @@ package org.osgi.service.cdi.dto.template;
 
 import java.util.List;
 import java.util.Map;
-import org.osgi.service.cdi.dto.ActivationDTO;
 import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
 
 /**
@@ -31,7 +30,7 @@ import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
  * case of {@link Scope#SINGLETON}.
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 7c9bbf734104a5a764468f414f2f7dbe1d1d388d $
  */
 public class ActivationTemplateDTO {
 	/**
@@ -41,40 +40,31 @@ public class ActivationTemplateDTO {
 		/**
 		 * This activation will only ever create one instance
 		 * <p>
-		 * The instance is created as after the parent component becomes satisfied and
-		 * is destroyed before the parent component becomes unsatisfied.
-		 * <p>
-		 * The value of {@link ActivationDTO#instances} is at most <code>1</code> when
-		 * this scope is used.
+		 * The instance is created after the parent component becomes satisfied and is
+		 * destroyed before the parent component becomes unsatisfied.
 		 * <p>
 		 * If {@link #serviceClasses} is not empty the instance will be registered as an
-		 * OSGi service with <code>service.scope=singletion</code>
+		 * OSGi service with <code>service.scope=singleton</code>
 		 */
 		SINGLETON,
 		/**
 		 * This activation will register an OSGi service with
 		 * <code>service.scope=bundle</code>
 		 * <p>
-		 * The service is registered just after all {@link #SINGLETON} activations ares
+		 * The service is registered just after all {@link #SINGLETON} activations are
 		 * set up and just before all {@link #SINGLETON} activations are torn down.
 		 * <p>
 		 * The {@link #serviceClasses} is not empty when this scope is used.</code>
-		 * <p>
-		 * The value of {@link ActivationDTO#instances} is equal to the number of
-		 * bundles bound to the registered service.
 		 */
 		BUNDLE,
 		/**
 		 * This activation will register an OSGi service with
 		 * <code>service.scope=prototype</code>
 		 * <p>
-		 * The service is registered just after all {@link #SINGLETON} activations ares
+		 * The service is registered just after all {@link #SINGLETON} activations are
 		 * set up and just before all {@link #SINGLETON} activations are torn down.
 		 * <p>
 		 * The {@link #serviceClasses} is not empty when this scope is used.</code>
-		 * <p>
-		 * The value of {@link ActivationDTO#instances} is equal to the number of bound
-		 * service objects produced by the registered service.
 		 */
 		PROTOTYPE
 	}

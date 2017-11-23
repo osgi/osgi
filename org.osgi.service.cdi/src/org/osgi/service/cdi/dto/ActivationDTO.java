@@ -24,11 +24,11 @@ import org.osgi.service.cdi.dto.template.ActivationTemplateDTO;
  * activation
  *
  * @NotThreadSafe
- * @author $Id$
+ * @author $Id: 84b2c6bc94495ac389364b54053c1ee4c1c17b13 $
  */
 public class ActivationDTO extends DTO {
 	/**
-	 * The Id of the template of this activation
+	 * The {@link ActivationTemplateDTO#name} describing this activation
 	 * <p>
 	 * Must not be {@code null}
 	 */
@@ -37,17 +37,8 @@ public class ActivationDTO extends DTO {
 	/**
 	 * The ID of the service this activation may have registered.
 	 * <p>
-	 * Must not be 0 if {@link ActivationTemplateDTO#serviceClasses
-	 * model.serviceClasses} is not empty.
+	 * Must not be 0 if {@link ActivationTemplateDTO#serviceClasses} of the
+	 * associated template is not empty.
 	 */
 	public long		service;
-
-	/**
-	 * The number of objects this activation has created.
-	 * <p>
-	 * Each instance is dependency injected.
-	 * <p>
-	 * Depends on {@link ActivationTemplateDTO#scope model.scope}
-	 */
-	public int		instances;
 }
