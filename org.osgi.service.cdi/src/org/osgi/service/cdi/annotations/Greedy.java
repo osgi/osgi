@@ -23,12 +23,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
-import org.osgi.service.cdi.reference.AddingEvent;
+import org.osgi.service.cdi.reference.ReferenceEvent;
 
 /**
  * Annotation used to indicate that the behaviour of the reference should be
  * greedy. Used in conjunction with {@link Reference @Reference} or
- * {@link AddingEvent AddingEvent}.
+ * {@link ReferenceEvent ReferenceEvent}.
  *
  * @author $Id$
  */

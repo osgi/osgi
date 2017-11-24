@@ -22,8 +22,19 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 
 /**
- * This interface is used in CDI Observer methods to watch OSGi service adding
- * events.
+ * This interface is used in CDI Observer methods to watch OSGi service events.
+ *
+ * <p>
+ * The design follows the callback model. Callbacks are registered for each
+ * phase of the service lifecycle that is interesting to the application.
+ *
+ * <p>
+ * {@code ReferenceEvent}s are fired by the CDI Extender on behalf of the CDI
+ * Container. The events are fired synchronously.
+ *
+ * The event instance is only valid during the invocation of the observer
+ * method. Calling any of the event methods after the return of the observer
+ * method will result in an {@link IllegalStateException IllegalStateException}.
  *
  * @param <S> the service argument type.
  *
@@ -33,44 +44,56 @@ import org.osgi.framework.ServiceReference;
 public interface ReferenceEvent<S> {
 
 	/**
-	 * Obtain the service instance associated with this event.
+	 * Subscribe an action to the "adding" service event.
 	 *
-	 * @return the service instance
+	 * @param action to subscribe to the "adding" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
-	S getService();
+	void onAdding(Consumer<S> action);
 
 	/**
-	 * Obtain the service reference associated with this event.
+	 * Subscribe an action to the "adding" service event.
 	 *
-	 * @return the service reference
+	 * @param consumer to subscribe to the "adding" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
-	ServiceReference<S> getServiceReference();
+	void onAddingServiceReference(Consumer<ServiceReference<S>> consumer);
 
 	/**
-	 * Obtain the service objects associated with this event.
+	 * Subscribe an action to the "adding" service event.
 	 *
-	 * @return the service objects
+	 * @param consumer to subscribe to the "adding" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
-	ReferenceServiceObjects<S> getServiceObjects();
+	void onAddingServiceObjects(Consumer<ReferenceServiceObjects<S>> consumer);
 
 	/**
-	 * Obtain the service properties associated with this event.
+	 * Subscribe an action to the "adding" service event.
 	 *
-	 * @return the service properties
+	 * @param consumer to subscribe to the "adding" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
-	Map<String, ?> getServiceProperties();
+	void onAddingProperties(Consumer<Map<String, ?>> consumer);
+
+	/**
+	 * Subscribe an action to the "adding" service event.
+	 *
+	 * @param consumer to subscribe to the "adding" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
+	 */
+	void onAddingTuple(Consumer<Map.Entry<Map<String, ?>, S>> consumer);
 
 	/**
 	 * Subscribe an action to the "updated" service event.
 	 *
 	 * @param action to subscribe to the "updated" service event
-	 */
-	void onUpdate(Runnable action);
-
-	/**
-	 * Subscribe an action to the "updated" service event.
-	 *
-	 * @param action to subscribe to the "updated" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onUpdate(Consumer<S> action);
 
@@ -78,6 +101,8 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "updated" service event.
 	 *
 	 * @param consumer to subscribe to the "updated" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onUpdateServiceReference(Consumer<ServiceReference<S>> consumer);
 
@@ -85,6 +110,8 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "updated" service event.
 	 *
 	 * @param consumer to subscribe to the "updated" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onUpdateServiceObjects(Consumer<ReferenceServiceObjects<S>> consumer);
 
@@ -92,20 +119,26 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "updated" service event.
 	 *
 	 * @param consumer to subscribe to the "updated" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onUpdateProperties(Consumer<Map<String, ?>> consumer);
 
 	/**
-	 * Subscribe an action to the "removed" service event.
+	 * Subscribe an action to the "updated" service event.
 	 *
-	 * @param action to subscribe to the "removed" service event
+	 * @param consumer to subscribe to the "updated" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
-	void onRemove(Runnable action);
+	void onUpdateTuple(Consumer<Map.Entry<Map<String, ?>, S>> consumer);
 
 	/**
 	 * Subscribe an action to the "removed" service event.
 	 *
 	 * @param consumer to subscribe to the "removed" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onRemove(Consumer<S> consumer);
 
@@ -113,6 +146,8 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "removed" service event.
 	 *
 	 * @param consumer to subscribe to the "removed" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onRemoveServiceReference(Consumer<ServiceReference<S>> consumer);
 
@@ -120,6 +155,8 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "removed" service event.
 	 *
 	 * @param consumer to subscribe to the "removed" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onRemoveServiceObjects(Consumer<ReferenceServiceObjects<S>> consumer);
 
@@ -127,7 +164,18 @@ public interface ReferenceEvent<S> {
 	 * Subscribe an action to the "removed" service event.
 	 *
 	 * @param consumer to subscribe to the "removed" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
 	 */
 	void onRemoveProperties(Consumer<Map<String, ?>> consumer);
+
+	/**
+	 * Subscribe an action to the "removed" service event.
+	 *
+	 * @param consumer to subscribe to the "removed" service event
+	 * @throws IllegalStateException when called after completion of the observer
+	 *         method
+	 */
+	void onRemoveTuple(Consumer<Map.Entry<Map<String, ?>, S>> consumer);
 
 }
