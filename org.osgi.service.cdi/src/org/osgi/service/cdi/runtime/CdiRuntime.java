@@ -43,7 +43,7 @@ import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 @ProviderType
 public interface CdiRuntime {
 	/**
-	 * Returns the container description snapshot for a set of bundles
+	 * Returns a collection of container description snapshots for a set of bundles.
 	 *
 	 * @param bundles The bundles who's container description snapshots are to be
 	 *        returned. Specifying no bundles, or the equivalent of an empty
@@ -58,7 +58,7 @@ public interface CdiRuntime {
 	Collection<ContainerDTO> getContainerDTOs(Bundle... bundles);
 
 	/**
-	 * Returns the container description snapshot for the specified bundle
+	 * Returns the container description snapshot for the specified bundle.
 	 *
 	 * @param bundle The container bundle. Must not be {@code null}.
 	 * @return A snapshot of the current container for the specified active bundle.
@@ -70,20 +70,19 @@ public interface CdiRuntime {
 	/**
 	 * Returns the change count of the container of the specified bundle.
 	 * <p>
-	 * The returned change count is equal to the value of
-	 * {@link Constants#SERVICE_CHANGECOUNT} of this {@link CdiRuntime} service at
-	 * the time of the last change of the container of the specified bundle.
+	 * The change count only reflects the changes within the CDI container of the
+	 * specified bundle. In this way it's possible to recognize if a particular CDI
+	 * container has seen change.
 	 * <p>
-	 * The returned number is equal or greater to the
-	 * {@link ContainerDTO#changeCount} of any previously created
-	 * {@link ContainerDTO} for the specified bundle.
+	 * The returned number is always equal or greater to the change count previously
+	 * obtained for the specified bundle.
 	 * <p>
 	 * It is permissible for multiple bundles to have the same change count.
-	 * 
-	 * @param bundle
-	 * @return A positive number indicating the last time the {@link ContainerDTO}
-	 *         of the specified bundle changed value. If the supplied bundle does
-	 *         not have an associated container returns {@code -1}.
+	 *
+	 * @param bundle The container bundle. Must not be {@code null}.
+	 * @return A positive number indicating change in container of the specified
+	 *         bundle. If the supplied bundle does not have an associated container
+	 *         returns {@code -1}.
 	 */
 	long getContainerChangeCount(Bundle bundle);
 
