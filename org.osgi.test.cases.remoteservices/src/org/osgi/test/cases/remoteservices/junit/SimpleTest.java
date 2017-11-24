@@ -654,7 +654,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 				client.goSlow(5000);
 				fail("Invocation should have timed out!");
 			} catch (ServiceException se) {
-				assertEquals(ServiceException.REMOTE, se);
+				assertEquals(ServiceException.REMOTE, se.getType());
 			}
 
 			clientTracker.close();
