@@ -30,7 +30,7 @@ import org.osgi.framework.ServiceReference;
  * @author $Id$
  */
 @ProviderType
-public interface AddingEvent<S> {
+public interface ReferenceEvent<S> {
 
 	/**
 	 * Obtain the service instance associated with this event.
