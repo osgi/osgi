@@ -9,18 +9,20 @@ Private-Package						=  \
 Import-Package: ${-signaturetest}, *
 
 Include-Resource: \
+	serviceapi.jar
+	tb.jar,\
 	tb1.jar, \
 	tb2.jar, \
 	tb3.jar, \
-	tf3.jar, \
 	tb4.jar, \
 	tb5.jar, \
 	tb6.jar, \
-	serviceapi.jar,\
-	serviceclient.jar,\
-	serviceclient.required.jar,\
-	serviceclient.manifest.jar,\
-	serviceprovider.jar
+	tb7.jar,\
+	tb8.jar,\
+	tb9.jar,\
+	tb10.jar,\
+	tb11.jar,\
+	tf3.jar, \
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.cdi
