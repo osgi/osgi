@@ -1,7 +1,6 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb1
 Bundle-Version: 1.0.0.test
-Private-Package: org.osgi.test.cases.cdi.tb1.pkg1
+Private-Package: ${p}.tb1
 Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb1-beans.xml}

@@ -1,7 +1,6 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tf3
 Bundle-Version: 1.0.0.test
-Export-Package: org.osgi.test.cases.cdi.tf3.pkg3
+Export-Package: ${p}.tf3
 Fragment-Host: ${p}.tb3
 Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
 

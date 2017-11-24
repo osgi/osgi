@@ -61,7 +61,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 
 			tb1.start();
 			Callable<String> client = st.waitForService(2500);
-			assertEquals("From Provider", client.call());
+			assertEquals("From Foo", client.call());
 
 			ServiceReference<Callable<String>> ref = st.getServiceReference();
 			long serviceID = (Long) ref.getProperty(Constants.SERVICE_ID);
@@ -177,7 +177,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 
 		try {
 			Callable<String> client = st.waitForService(2500);
-			assertEquals("From Provider", client.call());
+			assertEquals("From Foo", client.call());
 		} finally {
 			st.close();
 			tb1.uninstall();
@@ -277,7 +277,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 
 		try {
 			Callable<String> client = st.waitForService(2500);
-			assertEquals("Precondition", "From Provider", client.call());
+			assertEquals("Precondition", "From Foo", client.call());
 
 			BeanManager bm = ccst.waitForService(2500);
 			assertNotNull("BeanManager service not found", bm);
@@ -296,7 +296,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 */
 	public void testInjectService() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
-		Bundle providerBundle = installBundle("serviceprovider.jar");
+		Bundle fooBundle = installBundle("servicefoo.jar");
 		Bundle clientBundle = installBundle("serviceclient.jar");
 
 		BundleContext ctx = getContext();
@@ -311,7 +311,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 		} finally {
 			st.close();
 			apiBundle.uninstall();
-			providerBundle.uninstall();
+			fooBundle.uninstall();
 			clientBundle.uninstall();
 		}
 	}
@@ -323,7 +323,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	public void testInjectServiceNullObject() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
 		Bundle clientBundle = installBundle("serviceclient.jar");
-		Bundle providerBundle = installBundle("serviceprovider.jar", false);
+		Bundle fooBundle = installBundle("servicefoo.jar", false);
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -338,7 +338,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			st.close();
 			apiBundle.uninstall();
 			clientBundle.uninstall();
-			providerBundle.uninstall();
+			fooBundle.uninstall();
 		}
 	}
 
@@ -349,7 +349,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	public void testInjectServiceRequired() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
 		Bundle clientBundle = installBundle("serviceclient.required.jar");
-		Bundle providerBundle = installBundle("serviceprovider.jar", false);
+		Bundle fooBundle = installBundle("servicefoo.jar", false);
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -361,7 +361,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			assertNull(
 					"No service should be found since the bundle was not yet started",
 					st.waitForService(2500));
-			providerBundle.start();
+			fooBundle.start();
 
 			Callable<String> client = st.waitForService(2500);
 			assertEquals("Precondition", "test", client.call());
@@ -369,7 +369,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			st.close();
 			apiBundle.uninstall();
 			clientBundle.uninstall();
-			providerBundle.uninstall();
+			fooBundle.uninstall();
 		}
 	}
 
@@ -381,7 +381,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	public void testInjectServiceRequiredBecomesUnavailable() throws Exception {
 		Bundle apiBundle = installBundle("serviceapi.jar");
 		Bundle clientBundle = installBundle("serviceclient.required.jar");
-		Bundle providerBundle = installBundle("serviceprovider.jar");
+		Bundle fooBundle = installBundle("servicefoo.jar");
 
 		BundleContext ctx = getContext();
 		ServiceTracker<Callable<String>, Callable<String>> st = new ServiceTracker<Callable<String>, Callable<String>>(
@@ -394,7 +394,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			Callable<String> client = st.waitForService(2500);
 			assertEquals("Precondition", "test", client.call());
 
-			providerBundle.stop();
+			fooBundle.stop();
 
 			assertNull(
 					"No service should be found since the bundle was not yet started",
@@ -403,7 +403,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 			st.close();
 			apiBundle.uninstall();
 			clientBundle.uninstall();
-			providerBundle.uninstall();
+			fooBundle.uninstall();
 		}
 	}
 
@@ -413,8 +413,8 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 */
 	/*
 	 * public void testReferencesViaManifest() throws Exception { Bundle
-	 * apiBundle = installBundle("serviceapi.jar"); Bundle providerBundle =
-	 * installBundle("serviceprovider.jar"); Bundle clientBundle =
+	 * apiBundle = installBundle("serviceapi.jar"); Bundle fooBundle =
+	 * installBundle("servicefoo.jar"); Bundle clientBundle =
 	 * installBundle("serviceclient.manifest.jar");
 	 *
 	 * BundleContext ctx = getContext(); ServiceTracker<Object, Object> st = new
@@ -430,7 +430,7 @@ public class CDITestCase extends DefaultTestBundleControl {
 	 *
 	 * Method m = client.getClass().getMethod("invokeIt");
 	 * assertEquals("test_via_manifest", m.invoke(client)); } finally {
-	 * st.close(); apiBundle.uninstall(); providerBundle.uninstall();
+	 * st.close(); apiBundle.uninstall(); fooBundle.uninstall();
 	 * clientBundle.uninstall(); } }
 	 */
 

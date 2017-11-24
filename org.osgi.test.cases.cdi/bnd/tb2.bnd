@@ -1,6 +1,5 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb2
 Bundle-Version: 1.0.0.test
-Export-Package: org.osgi.test.cases.cdi.tb2.pkg2
+Export-Package: ${p}.tb2
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb2-beans.xml}

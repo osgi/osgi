@@ -1,8 +1,6 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb6
 Bundle-Version: 1.0.0.test
-Export-Package: org.osgi.test.cases.cdi.tb6.intf;version="1.0.0"
-Private-Package: org.osgi.test.cases.cdi.tb6.pkg6
+Private-Package: ${p}.tb6
 Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb6-beans.xml}

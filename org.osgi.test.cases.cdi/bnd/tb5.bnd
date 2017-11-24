@@ -1,10 +1,8 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb5
 Bundle-Version: 1.0.0.test
-Private-Package: org.osgi.test.cases.cdi.tb5.pkg5
-Require-Capability: \
-	osgi.extender;filter:="(osgi.extender=osgi.cdi)",\
-	osgi.contract;filter:="(&(osgi.contract=JavaInject)(version=1.0))",\
-	osgi.contract;filter:="(&(osgi.contract=JavaCDI)(version=1.0))"
+Private-Package: ${p}.tb5
+Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.cdi)"
+
+-contract: JavaInject, JavaCDI
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb5-beans.xml}

@@ -1,7 +1,6 @@
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb4
 Bundle-Version: 1.0.0.test
-Export-Package: org.osgi.test.cases.cdi.tb4.pkg4
+Export-Package: ${p}.tb4
 Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
 
 -includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb4-beans.xml}

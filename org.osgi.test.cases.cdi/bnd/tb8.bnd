@@ -1,0 +1,6 @@
+Bundle-SymbolicName: ${p}.tb8
+Bundle-Version: 1.0.0.test
+Private-Package: ${p}.tb8
+Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+
+-includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb8-beans.xml}

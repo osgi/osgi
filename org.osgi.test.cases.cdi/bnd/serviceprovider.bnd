@@ -1,6 +1,0 @@
-Bundle-SymbolicName: ${p}.serviceprovider
-Bundle-Version: 1.0.0.test
-Private-Package: org.osgi.test.cases.cdi.tb.serviceprovider
-Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
-
--includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/serviceprovider-beans.xml}

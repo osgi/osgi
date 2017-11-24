@@ -1,0 +1,6 @@
+Bundle-SymbolicName: ${p}.tb7
+Bundle-Version: 1.0.0.test
+Private-Package: ${p}.tb7
+Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"
+
+-includeresource: {OSGI-INF/cdi/osgi-beans.xml=bnd/tb7-beans.xml}
