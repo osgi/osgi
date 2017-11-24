@@ -30,7 +30,7 @@ import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
  * case of {@link Scope#SINGLETON}.
  *
  * @NotThreadSafe
- * @author $Id: 7c9bbf734104a5a764468f414f2f7dbe1d1d388d $
+ * @author $Id$
  */
 public class ActivationTemplateDTO {
 	/**

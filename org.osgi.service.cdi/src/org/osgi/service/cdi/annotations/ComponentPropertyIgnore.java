@@ -16,7 +16,7 @@ import javax.inject.Qualifier;
  * This annotation is processed only to check the qualifiers used together with
  * {@link Service} and {@link Reference}.
  * 
- * @author $ID$
+ * @author $Id$
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

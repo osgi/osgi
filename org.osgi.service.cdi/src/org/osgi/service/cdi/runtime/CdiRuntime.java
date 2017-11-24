@@ -38,7 +38,7 @@ import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
  * to the potentially intrusive methods provided by this service.
  *
  * @ThreadSafe
- * @author $Id: ccfde01de427bf319588042619e24fd5501530fa $
+ * @author $Id$
  */
 @ProviderType
 public interface CdiRuntime {
