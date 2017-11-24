@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto;
+package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
-import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
+import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
+import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a CDI container

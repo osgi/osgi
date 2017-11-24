@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.template;
+package org.osgi.service.cdi.runtime.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.runtime.dto.template.ActivationTemplateDTO;
 
 /**
- * Description of a CDI container.
+ * A snapshot of the runtime state of a {@link ComponentDTO component}
+ * activation
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ContainerTemplateDTO extends DTO {
+public class ActivationDTO extends DTO {
 	/**
-	 * The id of the CDI container.
+	 * The {@link ActivationTemplateDTO#name} describing this activation
+	 * <p>
+	 * Must not be {@code null}
 	 */
-	public String id;
+	public String	name;
 
 	/**
-	 * The extension dependencies of this CDI container.
+	 * The ID of the service this activation may have registered.
+	 * <p>
+	 * Must not be 0 if {@link ActivationTemplateDTO#serviceClasses} of the
+	 * associated template is not empty.
 	 */
-	public ExtensionTemplateDTO[]	extensions;
-
-	/**
-	 * The components defined in this CDI container.
-	 */
-	public ComponentTemplateDTO[]	components;
+	public long		service;
 }

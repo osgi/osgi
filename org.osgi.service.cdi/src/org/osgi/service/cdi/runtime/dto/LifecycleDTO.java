@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto;
+package org.osgi.service.cdi.runtime.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.template.ComponentTemplateDTO;
-import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
-import org.osgi.service.cdi.dto.template.ConfigurationTemplateDTO;
-import org.osgi.service.cdi.dto.template.MaximumCardinality;
+import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO;
+import org.osgi.service.cdi.runtime.dto.template.ConfigurationTemplateDTO;
+import org.osgi.service.cdi.runtime.dto.template.MaximumCardinality;
+import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A snapshot of the runtime state of a component lifecycle.

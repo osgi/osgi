@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.template;
+package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
 import java.util.Map;
-import org.osgi.service.cdi.dto.template.ComponentTemplateDTO.Type;
+import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A description an activation of a component

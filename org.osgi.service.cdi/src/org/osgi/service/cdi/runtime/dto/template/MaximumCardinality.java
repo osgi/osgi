@@ -1,4 +1,4 @@
-package org.osgi.service.cdi.dto.template;
+package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.Arrays;
 

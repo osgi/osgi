@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto;
+package org.osgi.service.cdi.runtime.dto.template;
 
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 
 /**
- * A snapshot of the runtime state of an extension dependency of a
- * {@link ContainerDTO container}
+ * Models an extension dependency of the {@link ContainerDTO}
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public class ExtensionDTO extends DTO {
+public class ExtensionTemplateDTO extends DTO {
 	/**
-	 * The template of this extension dependency
+	 * A name for this extension dependency that is unique within the container and
+	 * persistent across container restarts.
 	 * <p>
-	 * Must not be <code>null</code>
+	 * Must not be {@code null}.
 	 */
 	public String	name;
 
 	/**
-	 * The service to which the extension dependency is resolved.
+	 * Target LDAP filter used to select extension services.
 	 * <p>
-	 * This extension dependency is satisfied when {@code match > 0}.
+	 * Must not be {@code null}.
 	 */
-	public long		match;
+	public String	target;
 }

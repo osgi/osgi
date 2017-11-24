@@ -20,8 +20,8 @@ import java.util.Collection;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.service.cdi.dto.ContainerDTO;
-import org.osgi.service.cdi.dto.template.ContainerTemplateDTO;
+import org.osgi.service.cdi.runtime.dto.ContainerDTO;
+import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 
 /**
  * The {@code CdiRuntime} service represents the CDI Runtime that manages the

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.service.cdi.dto.template;
+package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.dto.ComponentDTO;
-import org.osgi.service.cdi.dto.LifecycleDTO;
+import org.osgi.service.cdi.runtime.dto.ComponentDTO;
+import org.osgi.service.cdi.runtime.dto.LifecycleDTO;
 
 /**
  * A description of a CDI component
