@@ -1033,12 +1033,16 @@ public class ConfigProvider implements ContextResolver {
 public class ConfiguredExtension implements WriterInterceptor {
 
     @Context
-    private ObjectMapper mapper;
+    private Providers providers;
 
     public void aroundWriteTo(WriterInterceptorContext ctx) {
         Object entity = ctx.getEntity();
         
         if(entity != null) {
+            ObjectMapper mapper = providers
+                    .getContextResolver(ObjectMapper.class)
+                    .getContext(ObjectMapper.class);
+                    
             ctx.setEntity(mapper.writeValueAsString(entity));
         }
         ctx.proceed();
