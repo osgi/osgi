@@ -19,6 +19,9 @@ package org.osgi.util.converter;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @author $Id$
+ */
 class CollectionDelegate<T> extends AbstractCollectionDelegate<T>
 		implements List<T> {
 	private final Collection<T> delegate;

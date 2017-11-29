@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * @author $Id$
+ */
 class ListDelegate<T> implements List<T> {
 	private volatile List<T> delegate;
 	private volatile boolean	cloned;

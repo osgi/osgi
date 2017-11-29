@@ -25,6 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author $Id$
+ */
 class SetDelegate<T> implements Set<T> {
 	private volatile Set<T>			delegate;
 	private volatile boolean		cloned;

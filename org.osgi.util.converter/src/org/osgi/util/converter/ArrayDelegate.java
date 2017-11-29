@@ -19,6 +19,9 @@ package org.osgi.util.converter;
 import java.lang.reflect.Array;
 import java.util.List;
 
+/**
+ * @author $Id$
+ */
 class ArrayDelegate<T> extends AbstractCollectionDelegate<T>
 		implements List<T> {
 	// An array, either scalar or primitive

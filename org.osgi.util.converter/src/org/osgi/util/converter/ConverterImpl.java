@@ -34,7 +34,7 @@ import org.osgi.util.function.Function;
  * Note that this class avoids lambda's and hard dependencies on Java-8 (or later) types
  * to also work under Java 7.
  */
-public class ConverterImpl implements InternalConverter {
+class ConverterImpl implements InternalConverter {
     private static final SimpleDateFormat ISO8601_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
     static {
         ISO8601_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -50,7 +50,7 @@ public class ConverterImpl implements InternalConverter {
         return new FunctioningImpl(this);
     }
 
-    public void addStandardRules(ConverterBuilder cb) {
+	void addStandardRules(ConverterBuilder cb) {
         // Not written using lambda's because this code needs to run with Java 7
         cb.rule(new Rule<Calendar, String>(new Function<Calendar, String>() {
             @Override

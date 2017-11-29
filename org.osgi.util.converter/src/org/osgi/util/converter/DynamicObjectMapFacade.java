@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class DynamicObjectMapFacade implements List {
+class DynamicObjectMapFacade implements List {
 	private final Object[] backingObject;
 
-	public DynamicObjectMapFacade(Object[] arr) {
+	DynamicObjectMapFacade(Object[] arr) {
 		backingObject = arr;
 	}
 

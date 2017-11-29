@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * @author $Id$
+ */
 class CollectionSetDelegate<T> implements Set<T> {
 	private final Collection<T> delegate;
 

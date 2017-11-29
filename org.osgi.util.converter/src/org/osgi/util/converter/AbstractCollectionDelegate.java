@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * @author $Id$
+ */
 abstract class AbstractCollectionDelegate<T> implements List<T> {
 	@Override
 	public boolean add(T e) {
