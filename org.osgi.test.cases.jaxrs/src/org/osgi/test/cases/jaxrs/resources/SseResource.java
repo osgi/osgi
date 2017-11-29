@@ -18,28 +18,37 @@ package org.osgi.test.cases.jaxrs.resources;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.sse.Sse;
+import javax.ws.rs.sse.SseEventSink;
 
-@Path("whiteboard/string")
-public class StringResource {
+@Path("whiteboard/stream")
+public class SseResource {
 
-	private final String message;
+	@Context
+	Sse						sse;
 
-	public StringResource(String message) {
-		this.message = message;
+	private final MediaType	type;
+
+	public SseResource(MediaType type) {
+		this.type = type;
 	}
 
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getValues() {
-		return message;
+	@Produces(MediaType.SERVER_SENT_EVENTS)
+	public void stream(@Context SseEventSink sink) {
+		new Thread(() -> {
+			try {
+				for (int i = 0; i < 10; i++) {
+					Thread.sleep(500);
+					sse.newEventBuilder().data(i).mediaType(type);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				sink.send(sse.newEvent("error", e.getMessage()));
+			}
+			sink.close();
+		}).start();
 	}
-
-	@GET
-	@Path("length")
-	@Produces(MediaType.TEXT_PLAIN)
-	public int getLength() {
-		return message.length();
-	}
-
 }

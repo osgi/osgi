@@ -20,6 +20,8 @@ import static org.osgi.framework.Constants.*;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -27,7 +29,9 @@ import javax.ws.rs.client.WebTarget;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.jaxrs.client.PromiseRxInvoker;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
@@ -82,6 +86,61 @@ public class ClientTestCase extends AbstractJAXRSTestCase {
 		
 		} finally {
 			reg.unregister();
+			tracker.close();
+		}
+	}
+
+	/**
+	 * A basic test that ensures the PromiseRxInvoker can be used (151.9.2)
+	 * 
+	 * @throws Exception
+	 */
+	public void testJaxRsPromiseRxInvoker() throws Exception {
+
+		ServiceTracker<ClientBuilder,ClientBuilder> tracker = new ServiceTracker<>(
+				getContext(), ClientBuilder.class, null);
+		tracker.open();
+
+		assertNotNull(tracker.waitForService(2000));
+
+		Client c = tracker.getService().build();
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<AsyncWhiteboardResource> reg = getContext()
+				.registerService(AsyncWhiteboardResource.class,
+						new AsyncWhiteboardResource(() -> {}, () -> {}),
+						properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			WebTarget target = c.target(baseURI + "/whiteboard/async/{name}");
+
+			Promise<String> p = target.resolveTemplate("name", "Bob")
+					.request()
+					.rx(PromiseRxInvoker.class)
+					.get(String.class);
+
+			assertFalse(p.isDone());
+
+			Semaphore s = new Semaphore(0);
+
+			p.onResolve(s::release);
+
+			assertTrue(s.tryAcquire(5, TimeUnit.SECONDS));
+
+			assertEquals("Bob", p.getValue());
+
+		} finally {
+			reg.unregister();
+			tracker.close();
 		}
 	}
 

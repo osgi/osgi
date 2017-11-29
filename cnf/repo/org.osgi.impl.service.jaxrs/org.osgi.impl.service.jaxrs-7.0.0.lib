@@ -1,7 +1,7 @@
-org.apache.aries.jax.rs.jaxrs.api;version=0.0.1
+org.apache.aries.javax.jax.rs-api;version=0.0.1
 org.apache.aries.jax.rs.whiteboard;version=0.0.1
 
-org.apache.geronimo.specs.geronimo-annotation_1.2_spec;version=1.0.0
+org.apache.aries.javax.annotation-api;version=0.0.1
 org.apache.geronimo.specs.geronimo-json_1.0_spec;version=1.0.0
 
 org.osgi.service.jaxrs;version=latest

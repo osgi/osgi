@@ -37,6 +37,7 @@ import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Capability;
+import org.osgi.service.jaxrs.client.SseEventSourceFactory;
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
 
 public class CapabilityTestCase extends AbstractJAXRSTestCase {
@@ -93,8 +94,8 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 	}
 
 	/**
-	 * A basic test that ensures the provider of the JaxRSServiceRuntime service
-	 * advertises the JaxRSServiceRuntime service capability (151.10.3)
+	 * A basic test that ensures the provider of the ClientBuilder service
+	 * advertises the ClientBuilder service capability (151.10.3)
 	 * 
 	 * @throws Exception
 	 */
@@ -129,10 +130,55 @@ public class CapabilityTestCase extends AbstractJAXRSTestCase {
 			}
 		}
 		assertTrue(
-				"No osgi.service capability for the JaxRSServiceRuntime service",
+				"No osgi.service capability for the ClientBuilder service",
 				hasCapability);
 		assertTrue(
-				"No suitable uses constraint on the runtime package for the JaxRSServiceRuntime service",
+				"No suitable uses constraint on the runtime package for the ClientBuilder service",
+				uses);
+	}
+
+	/**
+	 * A basic test that ensures the provider of the SseEventSourceFactory
+	 * service advertises the SseEventSourceFactory service capability
+	 * (151.10.3)
+	 * 
+	 * @throws Exception
+	 */
+	public void testSseEventSourceFactoryServiceCapability() throws Exception {
+
+		List<BundleCapability> capabilities = runtime.getBundle()
+				.adapt(BundleWiring.class)
+				.getCapabilities(SERVICE_NAMESPACE);
+
+		boolean hasCapability = false;
+		boolean uses = false;
+
+		for (Capability cap : capabilities) {
+			Object o = cap.getAttributes()
+					.get(CAPABILITY_OBJECTCLASS_ATTRIBUTE);
+			@SuppressWarnings("unchecked")
+			List<String> objectClass = o instanceof List ? (List<String>) o
+					: asList(valueOf(o));
+
+			if (objectClass.contains(SseEventSourceFactory.class.getName())) {
+				hasCapability = true;
+
+				String usesDirective = cap.getDirectives()
+						.get(CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					Set<String> packages = new HashSet<String>(Arrays
+							.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.jaxrs.client");
+				}
+
+				break;
+			}
+		}
+		assertTrue(
+				"No osgi.service capability for the SseEventSourceFactory service",
+				hasCapability);
+		assertTrue(
+				"No suitable uses constraint on the runtime package for the SseEventSourceFactory service",
 				uses);
 	}
 

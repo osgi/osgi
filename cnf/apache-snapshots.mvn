@@ -5,7 +5,8 @@ org.apache.aries.cdi:org.apache.aries.javax.cdi-api:0.0.1-SNAPSHOT
 org.apache.aries.cdi:org.apache.aries.javax.el-api:0.0.1-SNAPSHOT
 org.apache.aries.cdi:org.apache.aries.javax.inject-api:0.0.1-SNAPSHOT
 org.apache.aries.cdi:org.apache.aries.javax.interceptor-api:0.0.1-SNAPSHOT
-org.apache.aries.jax.rs:org.apache.aries.jax.rs.jaxrs.api:0.0.1-SNAPSHOT
+org.apache.aries.cdi:org.apache.aries.javax.annotation-api:0.0.1-SNAPSHOT
+org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:0.0.1-SNAPSHOT
 org.apache.aries.jax.rs:org.apache.aries.jax.rs.whiteboard:0.0.1-SNAPSHOT
 org.apache.aries.jpa:org.apache.aries.jpa.container:2.7.0-SNAPSHOT
 org.apache.aries.jpa.javax.persistence:javax.persistence_2.1:2.7.0-SNAPSHOT

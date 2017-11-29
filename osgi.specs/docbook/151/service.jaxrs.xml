@@ -1521,18 +1521,18 @@ public class MyApplication extends Application {
       (reactive invoker) interface. All clients are required to support a reactive invoker 
       which returns CompletionStage instances, however in OSGi the common representation of 
       an asynchronous return is the <code>Promise</code>. This specification therefore provides 
-      the <code>PromiseInvoker</code> interface which can be used to obtain Promises from the 
+      the <code>PromiseRxInvoker</code> interface which can be used to obtain Promises from the 
       JAX-RS client.</para>
       
       <para>It is the responsibility of the JAX-RS whiteboard implementation to create instances
-      of <code>PromiseInvoker</code>. The exact mechanism by which instances are created is undefined,
-      however it is possible to register a portable factory to create <code>PromiseInvoker</code> 
+      of <code>PromiseRxInvoker</code>. The exact mechanism by which instances are created is undefined,
+      however it is possible to register a portable factory to create <code>PromiseRxInvoker</code> 
       instances by implementing the <code>RxInvokerProvider</code> interface and registering this 
       type with the JAX-RS client. This portable implementation, however, is forced to use a 
       blocking model by the underlying JAX-RS API, and so implementations may choose to implement
       a more optimised non-blocking model using internal types.</para>
       
-      <para>Clients of this specification may make use of the <code>PromiseInvoker</code> using
+      <para>Clients of this specification may make use of the <code>PromiseRxInvoker</code> using
       normal JAX-RS idioms. For example:</para>
       
       <programlisting>
@@ -1542,7 +1542,7 @@ Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
     .path("/{name}")
     .resolveTemplate("name", buzz)
     .request()
-    .rx(PromiseInvoker.class)
+    .rx(PromiseRxInvoker.class)
     .get(String.class);</programlisting>
     </section>
 
@@ -1553,8 +1553,8 @@ Promise&lt;String&gt; p = client.target(REST_SERVICE_URL)
       by a REST client using the <code>SseEventSource</code>. The <code>SseEventSource</code> 
       is not created by a JAX-RS client instance, but is normally created using a static 
       factory method, which does not work in a modular environment. Therefore the JAX-RS 
-      whiteboard implementation must register a <code>SseEventSource.Builder</code> service 
-      with prototype scope in the service registry.</para>
+      whiteboard implementation must register a <code>SseEventSourceFactory</code> service 
+      in the service registry. This object serves as a factory for the JAX-RS SSE types.</para>
       
       <para>Note that the SseEventSource has no way to register filters or message body processors.
       All of the filters and necessary processors must be registered with the JAX-RS client that is 
@@ -1569,12 +1569,11 @@ WebTarget target = client.target(REST_SERVICE_URL)
     .path("/{name}")
     .resolveTemplate("name", buzz);
 
-SseEventSource source = sseBuilder.target(target)
-    .build();
+SseEventSource source = sseFactory.newSource(target);;
     
-    source.register(event -> doSomething(event));
+source.register(event -> doSomething(event));
     
-    source.open();
+source.open();
 </programlisting>
 
       <para>A <code>SseEventSource</code> may easily be converted into a <code>PushEventSource</code>
@@ -1582,8 +1581,7 @@ SseEventSource source = sseBuilder.target(target)
       not respond to back-pressure requests and should typically be used with a buffer.</para>
       
       <programlisting>
-SseEventSource source = sseBuilder.target(target)
-    .build();
+SseEventSource source = sseBuilder.newSource(target);
     
 PushEventSource&lt;InboundSseEvent&gt; pes = pec ->
         source.register(e -> {
@@ -1679,18 +1677,17 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec ->
 
       <programlisting>Provide-Capability: osgi.service;
   objectClass:List&lt;String&gt;="javax.ws.rs.client.ClientBuilder";
-  uses:="javax.ws.rs.client";service.scope="prototype"</programlisting>
+  uses:="javax.ws.rs.client;service.scope="prototype""</programlisting>
 
-      <para>The bundle providing the <code>javax.ws.rs.sse.SseEventSource.Builder</code> 
+      <para>The bundle providing the <code>org.osgi.service.jaxrs.client.SseEventSourceFactory</code> 
       service must also provide a capability in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-      namespace representing this service. This capability must declare that the
-      service is prototype scope, and that there is a uses constraint for the 
-      <code>javax.ws.rs.sse</code> package:</para>
+      namespace representing this service. This capability must declare a 
+      uses constraint for the <code>org.osgi.service.jaxrs.client</code> package:</para>
 
       <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="javax.ws.rs.sse.SseEventSource$Builder";
-  uses:="javax.ws.rs.sse";service.scope="prototype"</programlisting>
+  objectClass:List&lt;String&gt;="org.osgi.service.jaxrs.client.SseEventSourceFactory";
+  uses:="org.osgi.service.jaxrs.client"</programlisting>
 
       <para>These capabilities must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.service.namespace"/>.</para>

@@ -21,7 +21,7 @@ DynamicImport-Package: javax.servlet.*
 -buildpath: \
 	org.osgi.test.support;version=project,\
 	org.osgi.service.jaxrs;version=project,\
-	org.apache.aries.jax.rs.jaxrs.api;version=latest,\
+	org.apache.aries.javax.jax.rs-api;version=latest,\
 	org.apache.geronimo.specs.geronimo-servlet_3.0_spec;version=1.0,\
     org.apache.commons.logging;version=1.2,\
 	org.apache.httpcomponents.httpcore;version=4.4.6,\
