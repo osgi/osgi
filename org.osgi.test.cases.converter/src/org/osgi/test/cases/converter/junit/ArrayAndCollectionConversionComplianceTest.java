@@ -231,6 +231,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 
 		backingObject[2] = 5;
 		iterator = converted.iterator();
+
 		for (int index = 0; index < 3; index++) {
 			assertEquals(backingObject[index], iterator.next().intValue());
 		}
@@ -238,20 +239,24 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		converted.set(2, 8l);
 
 		iterator = converted.iterator();
-		for (int index = 0; index < 3; index++) {
-			switch (index) {
-				case 0 :
-				case 1 :
-					assertTrue(
-							backingObject[index] == iterator.next().intValue());
-					break;
-				case 2 :
-					assertFalse(
-							backingObject[index] == iterator.next().intValue());
-					break;
-			}
-		}
+		assertEquals(Long.valueOf(1l), iterator.next());
+		assertEquals(Long.valueOf(2l), iterator.next());
+		assertEquals(Long.valueOf(8l), iterator.next());
+		// for (int index = 0; index < 3; index++) {
+		// switch (index) {
+		// case 0 :
+		// case 1 :
+		// assertTrue(
+		// backingObject[index] == iterator.next().intValue());
+		// break;
+		// case 2 :
+		// assertFalse(
+		// backingObject[index] == iterator.next().intValue());
+		// break;
+		// }
+		// }
 		assertFalse(iterator.hasNext());
+
 		// preserve iteration order
 		int[] arr = new int[] {
 				2, 3, 2, 1
@@ -259,14 +264,18 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		Set<Double> result = converter.convert(arr). to(new
 			TypeReference<Set<Double>>() {});
 
-		int n = 0;
+		// int n = 0;
 		Iterator<Double> resultIterator = result.iterator();
-		while (resultIterator.hasNext() && n < result.size())
-		{
-			assertEquals(0,
-					((Integer) arr[n++])
-							.compareTo(resultIterator.next().intValue()));
-		}
+		assertEquals(2.0, resultIterator.next(), 0.00001);
+		assertEquals(3.0, resultIterator.next(), 0.00001);
+		assertEquals(1.0, resultIterator.next(), 0.00001);
+		assertFalse(resultIterator.hasNext());
+		// while (resultIterator.hasNext() && n < result.size())
+		// {
+		// assertEquals(0,
+		// ((Integer) arr[n++])
+		// .compareTo(resultIterator.next().intValue()));
+		// }
 	}
 
 	/**

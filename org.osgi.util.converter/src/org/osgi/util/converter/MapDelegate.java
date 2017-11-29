@@ -29,6 +29,9 @@ import java.util.Set;
  * @author $Id$
  */
 class MapDelegate<K, V> implements Map<K, V> {
+	// not synchronized. Worst that can happen is that cloning is done more than
+	// once, which is harmless.
+	private volatile boolean		cloned	= false;
     private final ConvertingImpl convertingImpl;
     Map<K, V> delegate;
 
@@ -155,6 +158,7 @@ class MapDelegate<K, V> implements Map<K, V> {
 
 	@Override
 	public void clear() {
+		cloned = true;
         delegate = new HashMap<>();
     }
 
@@ -204,7 +208,12 @@ class MapDelegate<K, V> implements Map<K, V> {
     }
 
     private void cloneDelegate() {
-        delegate = new HashMap<>(delegate);
+		if (cloned) {
+			return;
+		} else {
+			cloned = true;
+			delegate = new HashMap<>(delegate);
+		}
     }
 
     @Override
