@@ -16,7 +16,7 @@ batik_buildpath: ${replace;${join;${findfile;${fop_home};batik*.jar};${findfile;
     org.eclipse.persistence.jpa_spec; version=latest, \
     org.apache.aries.javax.inject-api;version=latest, \
     org.apache.aries.javax.cdi-api;version=latest, \
-    org.apache.aries.jax.rs.jaxrs.api;version=latest,\
+    org.apache.aries.javax.jax.rs-api;version=latest,\
     com.icl.saxon; version=latest, \
     org.osgi.service.io; version=project, \
     ${batik_buildpath}
