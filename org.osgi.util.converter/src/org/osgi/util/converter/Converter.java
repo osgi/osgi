@@ -37,6 +37,7 @@ public interface Converter {
 
 	/**
 	 * Start defining a function that can perform given conversions.
+	 * 
 	 * @return A {@link Functioning} object to complete the definition.
 	 */
 	Functioning function();

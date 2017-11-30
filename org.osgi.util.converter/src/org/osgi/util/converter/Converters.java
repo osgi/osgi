@@ -23,32 +23,34 @@ package org.osgi.util.converter;
  * @ThreadSafe
  */
 public class Converters {
-    private static final Converter CONVERTER;
+	private static final Converter CONVERTER;
 
-    static {
-        ConverterImpl impl = new ConverterImpl();
-        ConverterBuilder cb = impl.newConverterBuilder();
-        impl.addStandardRules(cb);
-        CONVERTER = cb.build();
-    }
+	static {
+		ConverterImpl impl = new ConverterImpl();
+		ConverterBuilder cb = impl.newConverterBuilder();
+		impl.addStandardRules(cb);
+		CONVERTER = cb.build();
+	}
 
-    private Converters() {
-        // Do not instantiate this factory class
-    }
+	private Converters() {
+		// Do not instantiate this factory class
+	}
 
-    /**
-     * Obtain the standard converter.
-     * @return The standard converter.
-     */
-    public static Converter standardConverter() {
-        return CONVERTER;
-    }
+	/**
+	 * Obtain the standard converter.
+	 * 
+	 * @return The standard converter.
+	 */
+	public static Converter standardConverter() {
+		return CONVERTER;
+	}
 
-    /**
-     * Obtain a converter builder based on the standard converter.
-     * @return A new converter builder.
-     */
-    public static ConverterBuilder newConverterBuilder() {
-        return CONVERTER.newConverterBuilder();
-    }
+	/**
+	 * Obtain a converter builder based on the standard converter.
+	 * 
+	 * @return A new converter builder.
+	 */
+	public static ConverterBuilder newConverterBuilder() {
+		return CONVERTER.newConverterBuilder();
+	}
 }

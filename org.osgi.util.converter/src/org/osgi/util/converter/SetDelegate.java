@@ -33,7 +33,7 @@ class SetDelegate<T> implements Set<T> {
 	private volatile boolean		cloned;
 	private final ConvertingImpl	convertingImpl;
 
-    static <T> Set<T> forCollection(Collection<T> collection,
+	static <T> Set<T> forCollection(Collection<T> collection,
 			ConvertingImpl converting) {
 		if (collection instanceof Set) {
 			return new SetDelegate<T>((Set<T>) collection, converting);

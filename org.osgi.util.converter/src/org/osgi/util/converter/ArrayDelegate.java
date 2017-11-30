@@ -25,7 +25,7 @@ import java.util.List;
 class ArrayDelegate<T> extends AbstractCollectionDelegate<T>
 		implements List<T> {
 	// An array, either scalar or primitive
-	private final Object			backingArray;
+	private final Object backingArray;
 
 	ArrayDelegate(Object arr) {
 		backingArray = arr;
@@ -44,7 +44,7 @@ class ArrayDelegate<T> extends AbstractCollectionDelegate<T>
 	@Override
 	public Object[] toArray() {
 		Object[] arr = (Object[]) Array.newInstance(Object.class, size());
-		for (int i=0; i<size(); i++) {
+		for (int i = 0; i < size(); i++) {
 			arr[i] = Array.get(backingArray, i);
 		}
 		return arr;

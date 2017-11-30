@@ -29,7 +29,7 @@ class CollectionDelegate<T> extends AbstractCollectionDelegate<T>
 	CollectionDelegate(Collection<T> coll) {
 		delegate = coll;
 	}
-	
+
 	@Override
 	public int size() {
 		return delegate.size();

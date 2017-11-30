@@ -24,31 +24,32 @@ import java.lang.reflect.Modifier;
  * @author $Id$
  */
 class DTOUtil {
-    private DTOUtil() {
-        // Do not instantiate. This is a utility class.
-    }
+	private DTOUtil() {
+		// Do not instantiate. This is a utility class.
+	}
 
 	static boolean isDTOType(Class< ? > cls) {
-        try {
-            cls.getDeclaredConstructor();
-        } catch (NoSuchMethodException | SecurityException e) {
-            // No zero-arg constructor, not a DTO
-            return false;
-        }
+		try {
+			cls.getDeclaredConstructor();
+		} catch (NoSuchMethodException | SecurityException e) {
+			// No zero-arg constructor, not a DTO
+			return false;
+		}
 
-        if (cls.getDeclaredMethods().length > 0) {
-            // should not have any methods
-            return false;
-        }
+		if (cls.getDeclaredMethods().length > 0) {
+			// should not have any methods
+			return false;
+		}
 
-        for (Method m : cls.getMethods()) {
-            try {
-                Object.class.getMethod(m.getName(), m.getParameterTypes());
-            } catch (NoSuchMethodException snme) {
-                // Not a method defined by Object.class (or override of such method)
-                return false;
-            }
-        }
+		for (Method m : cls.getMethods()) {
+			try {
+				Object.class.getMethod(m.getName(), m.getParameterTypes());
+			} catch (NoSuchMethodException snme) {
+				// Not a method defined by Object.class (or override of such
+				// method)
+				return false;
+			}
+		}
 
 		/*
 		 * for (Field f : cls.getDeclaredFields()) { int modifiers =
@@ -58,18 +59,18 @@ class DTOUtil {
 		 */
 
 		boolean foundField = false;
-        for (Field f : cls.getFields()) {
-            int modifiers = f.getModifiers();
-            if (Modifier.isStatic(modifiers)) {
-                // ignore static fields
-                continue;
-            }
+		for (Field f : cls.getFields()) {
+			int modifiers = f.getModifiers();
+			if (Modifier.isStatic(modifiers)) {
+				// ignore static fields
+				continue;
+			}
 
-            if (!Modifier.isPublic(modifiers)) {
-                return false;
-            }
+			if (!Modifier.isPublic(modifiers)) {
+				return false;
+			}
 			foundField = true;
-        }
+		}
 		return foundField;
-    }
+	}
 }
