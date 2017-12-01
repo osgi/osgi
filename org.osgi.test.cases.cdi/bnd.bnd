@@ -9,7 +9,7 @@ Private-Package						=  \
 Import-Package: ${-signaturetest}, *
 
 Include-Resource: \
-	serviceapi.jar
+	serviceapi.jar,\
 	tb.jar,\
 	tb1.jar, \
 	tb2.jar, \
@@ -22,7 +22,7 @@ Include-Resource: \
 	tb9.jar,\
 	tb10.jar,\
 	tb11.jar,\
-	tf3.jar, \
+	tf3.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.cdi
@@ -35,7 +35,7 @@ javac.profile=
 	osgi.core;                              version=6.0, \
 	org.apache.aries.javax.inject-api;      version=latest, \
 	org.apache.aries.javax.cdi-api;         version=latest, \
-	org.apache.geronimo.specs.geronimo-annotation_1.2_spec; version=1.0, \
+	org.apache.geronimo.specs.geronimo-annotation_1.2_spec; version=latest, \
 	${junit}
 
 -runbundles							= \

@@ -2,3 +2,4 @@ Bundle-SymbolicName: ${p}.tb3
 Bundle-Version: 1.0.0.test
 
 -resourceonly: true
+-fixupmessages.empty: The JAR is empty
