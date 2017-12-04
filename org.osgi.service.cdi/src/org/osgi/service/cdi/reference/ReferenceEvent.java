@@ -41,7 +41,7 @@ import org.osgi.service.cdi.annotations.Reference;
  * 
  * @param <S> the service argument type.
  *
- * @author $Id: 0b9171cabee0256d12b4ffa1e7bc3470f423c979 $
+ * @author $Id$
  */
 @ProviderType
 public interface ReferenceEvent<S> {

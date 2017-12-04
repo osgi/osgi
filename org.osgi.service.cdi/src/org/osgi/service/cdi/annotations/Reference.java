@@ -164,7 +164,7 @@ import org.osgi.service.cdi.reference.ReferenceEvent;
  * </li>
  * </ul>
  * 
- * @author $Id: df1b8c4478d938e78b65acca6c792603aa32dae5 $
+ * @author $Id$
  */
 @Documented
 @Qualifier
