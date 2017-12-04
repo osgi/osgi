@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cdi.annotations.Reference;
 
 /**
  * This interface is used in CDI Observer methods to watch OSGi service events.
@@ -36,9 +37,11 @@ import org.osgi.framework.ServiceReference;
  * method. Calling any of the event methods after the return of the observer
  * method will result in an {@link IllegalStateException IllegalStateException}.
  *
+ * @see Reference
+ * 
  * @param <S> the service argument type.
  *
- * @author $Id$
+ * @author $Id: 0b9171cabee0256d12b4ffa1e7bc3470f423c979 $
  */
 @ProviderType
 public interface ReferenceEvent<S> {
