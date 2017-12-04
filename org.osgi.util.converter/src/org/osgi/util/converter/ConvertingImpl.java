@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -352,12 +353,13 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 
 			T dto = (T) targetClass.newInstance();
 
+			List<String> names = getNames(targetAsClass);
 			for (Map.Entry entry : (Set<Map.Entry>) m.entrySet()) {
 				Object key = entry.getKey();
 				if (key == null)
 					continue;
 
-				String fieldName = Util.mangleName(prefix, key.toString());
+				String fieldName = Util.mangleName(prefix, key.toString(), names);
 				if (fieldName == null)
 					continue;
 
@@ -407,6 +409,23 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			throw new ConversionException("Cannot create DTO " + targetClass,
 					e);
 		}
+	}
+
+	private List<String> getNames(Class< ? > cls) {
+		List<String> names = new ArrayList<>();
+		for (Field field : cls.getDeclaredFields()) {
+			int modifiers = field.getModifiers();
+			if (Modifier.isStatic(modifiers))
+				continue;
+			if (!Modifier.isPublic(modifiers))
+				continue;
+
+			String name = field.getName();
+			if (!names.contains(name))
+				names.add(name);
+
+		}
+		return names;
 	}
 
 	@SuppressWarnings({

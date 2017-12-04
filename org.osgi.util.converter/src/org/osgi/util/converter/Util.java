@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -329,27 +330,33 @@ class Util {
 		return "";
 	}
 
-	static String mangleName(String prefix, String key) {
+	static String mangleName(String prefix, String key, List<String> names) {
 		if (!key.startsWith(prefix))
 			return null;
 
 		key = key.substring(prefix.length());
 
+		// Do a reverse search because some characters get removed as part of
+		// the mangling
+		for (String name : names) {
+			if (key.equals(unMangleName(name)))
+				return name;
+		}
+
+		// Fallback if not found in the list - TODO maybe this can be removed.
 		String res = key.replace("_", "__");
 		res = res.replace("$", "$$");
 		res = res.replace("-", "$_$");
 		res = res.replaceAll("[.]([._])", "_\\$$1");
 		res = res.replace('.', '_');
-		// TODO handle Java keywords
 		return res;
 	}
 
 	static String unMangleName(String prefix, String key) {
-		// TODO handle Java keywords
-		return prefix + mangleMethodName(key);
+		return prefix + unMangleName(key);
 	}
 
-	static String mangleMethodName(String id) {
+	static String unMangleName(String id) {
 		char[] array = id.toCharArray();
 		int out = 0;
 
