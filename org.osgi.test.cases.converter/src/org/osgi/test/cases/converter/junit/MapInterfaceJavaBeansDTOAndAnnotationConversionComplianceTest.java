@@ -436,19 +436,9 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		Calendar calendar = Calendar.getInstance(tz);	
 		Date date = calendar.getTime();
 		String dateStr = df.format(date);
-		//valid date format
-		date = converter.convert(dateStr).to(Date.class);
 
 		Map<String,String> map = new HashMap<String,String>();
 		map.put(dateStr, "epoch");				
-		
-		//select the first entry and converts it like the converter is supposed to do
-		Iterator<Map.Entry<String, String>> iterator = map.entrySet().iterator();
-		Map.Entry<String, String> entry = iterator.next();
-		date = converter.convert(entry).to(Date.class);	
-		//System.out.println("--------------------------");
-		//System.out.println(date);
-		//System.out.println("--------------------------");
 		
 		date = converter.convert(map).to(Date.class);
 		assertEquals((calendar.getTime().getTime()/1000), (date.getTime()/1000));
@@ -1283,13 +1273,5 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(inter.special_$_prop(), resultinter.special_$_prop());
 		assertEquals(inter.special$_$prop(), resultinter.special$_$prop());
 		assertEquals(inter.special$$_$prop(), resultinter.special$$_$prop());
-
-		/*
-		 * SingleElementAnnotation singleElementAnnotation =
-		 * SingleElementAnnotatedClass.class
-		 * .getAnnotation(SingleElementAnnotation.class); Map convertedMap =
-		 * converter.convert(singleElementAnnotation) .to(Map.class);
-		 * assertNotNull(convertedMap.get("key.mapping.annotation"));
-		 */
 	}
 }

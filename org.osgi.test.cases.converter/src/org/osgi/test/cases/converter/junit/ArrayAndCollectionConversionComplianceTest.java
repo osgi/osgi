@@ -242,19 +242,6 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		assertEquals(Long.valueOf(1l), iterator.next());
 		assertEquals(Long.valueOf(2l), iterator.next());
 		assertEquals(Long.valueOf(8l), iterator.next());
-		// for (int index = 0; index < 3; index++) {
-		// switch (index) {
-		// case 0 :
-		// case 1 :
-		// assertTrue(
-		// backingObject[index] == iterator.next().intValue());
-		// break;
-		// case 2 :
-		// assertFalse(
-		// backingObject[index] == iterator.next().intValue());
-		// break;
-		// }
-		// }
 		assertFalse(iterator.hasNext());
 
 		// preserve iteration order
@@ -270,12 +257,6 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		assertEquals(3.0, resultIterator.next(), 0.00001);
 		assertEquals(1.0, resultIterator.next(), 0.00001);
 		assertFalse(resultIterator.hasNext());
-		// while (resultIterator.hasNext() && n < result.size())
-		// {
-		// assertEquals(0,
-		// ((Integer) arr[n++])
-		// .compareTo(resultIterator.next().intValue()));
-		// }
 	}
 
 	/**
