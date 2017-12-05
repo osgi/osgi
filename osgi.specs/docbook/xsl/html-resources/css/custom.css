@@ -373,7 +373,7 @@ p.bibliomixed span.title::after {
 	}
 
 	#header {
-		height: 90px;
+		height: 76px;
 		position: fixed;
 		z-index: 1;
 	}
@@ -382,9 +382,19 @@ p.bibliomixed span.title::after {
 		line-height: 72px;
 	}
 
+	#header h1 {
+		font-size: 4vw;
+		white-space: normal;
+		word-wrap: break-word;
+	}
+
 	#header img {
 		height: 72px;
 		width: 100px;
+	}
+
+	#header .menu-top-container {
+		height: 4px;
 	}
 
 	h1.title {
@@ -415,17 +425,20 @@ p.bibliomixed span.title::after {
 		margin-left: 0;
 		padding: 10px;
 		position: fixed;
-		top: 90px;
+		top: 76px;
 	}
 
 	#mobile-menu-icon {
+		background-color: rgba(0, 67, 112, 0.1);
 		color: rgba(0, 67, 112, 1);
 		cursor: pointer;
 		display: block;
 		font-size: 2em;
 		line-height: 72px;
-		right: 0.5em;
-		top: 18px;
+		right: 0em;
+		width: 1em;
+		text-align: center;
+		top: 4px;
 		z-index: 1;
 	}
 
@@ -440,5 +453,9 @@ p.bibliomixed span.title::after {
 
 	#sidebar.menu-open {
 		display: block;
+	}
+
+	img {
+		width: 100%;
 	}
 }
