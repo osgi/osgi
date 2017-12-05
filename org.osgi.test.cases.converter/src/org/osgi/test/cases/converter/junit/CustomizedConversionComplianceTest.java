@@ -200,6 +200,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	public void testCustomizedChainConversion()
 	{
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		
 		final String error = "MyErrorBean is not handled";
 		ConverterBuilder converterBuilder = Converters.newConverterBuilder();
@@ -258,8 +259,8 @@ public class CustomizedConversionComplianceTest extends TestCase {
 			}
 		});
 		Converter childConverter = chilConverterBuilder.build();	
-		String stringToBeConverted = "131223222100";
-		Date dateToBeConverted = new Date(Date.UTC(113, 11, 24, 6, 21, 0));
+		String stringToBeConverted = "131124072100";
+		Date dateToBeConverted = new Date(Date.UTC(113, 10, 24, 7, 21, 0));
 
 		String stringConverted = childConverter.convert(dateToBeConverted).to(String.class);
 		assertEquals(stringConverted,stringToBeConverted);		
