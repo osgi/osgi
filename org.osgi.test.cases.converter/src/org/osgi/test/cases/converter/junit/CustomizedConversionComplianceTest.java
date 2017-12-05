@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
@@ -120,6 +121,8 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	public void testCustomizedConversion()
 	{
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
 		final AtomicInteger counter = new AtomicInteger(0);
 
 		ConverterBuilder cb = Converters.standardConverter()
@@ -149,11 +152,11 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		
 		Converter c = cb.build();
 		
-		String stringToBeConverted = "131223222100";
-		Date dateToBeConverted = new Date(Date.UTC(113, 11, 24, 6, 21, 0));
+		String stringToBeConverted = "131124072100";
+		Date dateToBeConverted = new Date(Date.UTC(113, 10, 24, 7, 21, 0));
 
 		String stringConverted = c.convert(dateToBeConverted).to(String.class);
-		assertEquals(stringConverted,stringToBeConverted);		
+		assertEquals(stringToBeConverted, stringConverted);
 	
 		Date dateConverted = c.convert(stringToBeConverted).to(Date.class);
 		assertEquals(dateToBeConverted,dateConverted);
