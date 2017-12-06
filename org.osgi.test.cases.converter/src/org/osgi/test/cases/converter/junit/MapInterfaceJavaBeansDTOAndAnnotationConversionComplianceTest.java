@@ -541,7 +541,8 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		dtolike.prop1 = "value1";
 		dtolike.prop2 = "value2";
 
-		Map converted = converter.convert(dtolike).to(Map.class);
+		// with live view
+		Map converted = converter.convert(dtolike).view().to(Map.class);
 		assertNotNull(converted);
 		assertEquals(2, converted.size());
 		assertEquals(dtolike.prop1, converted.get("prop1"));
@@ -556,8 +557,8 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		dtolike.prop1 = "value1frth";
 		assertFalse(dtolike.prop1.equals(converted.get("prop1")));
 
-		// prevent live view
-		converted = converter.convert(dtolike).copy().to(Map.class);
+		// without live view
+		converted = converter.convert(dtolike).to(Map.class);
 		assertNotNull(converted);
 		assertEquals(2, converted.size());
 		assertEquals(dtolike.prop1, converted.get("prop1"));
@@ -718,6 +719,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		// select the appropriate interface
 		Map converted = converter.convert(multiInterface)
 				.sourceAs(MappingInterface.class)
+				.view()
 				.to(Map.class);
 
 		multiInterface.prop2("newValue2");
@@ -736,7 +738,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertFalse(multiInterface.prop4().equals(converted.get("prop4")));
 
 		// use the first implemented interface
-		converted = converter.convert(multiInterface).to(Map.class);
+		converted = converter.convert(multiInterface).view().to(Map.class);
 
 		assertNotNull(converted);
 		assertEquals(1, converted.size());
@@ -1102,7 +1104,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		dto.special$$_$prop = "org.osgi.util.converter.test.special$.prop";
 
 		Map<String,String> map = converter.convert(dto)
-				.copy()
 				.to(new TypeReference<Map<String,String>>() {});
 		assertEquals(resultmap, map);
 
@@ -1125,7 +1126,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				.getAnnotation(KeyMappingAnnotation.class);
 
 		map = converter.convert(keyMappingAnnotation)
-				.copy()
 				.to(new TypeReference<Map<String,String>>() {});
 		assertEquals(resultmap, map);
 
@@ -1168,7 +1168,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 
 		map = converter.convert(bean)
 				.sourceAsBean()
-				.copy()
 				.to(new TypeReference<Map<String,String>>() {});
 		Map<String,String> resultmap2 = new HashMap<>(resultmap);
 		resultmap2.remove("org.osgi.util.converter.test..specialprop");
@@ -1254,7 +1253,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		};
 
 		map = converter.convert(inter)
-				.copy()
 				.sourceAs(KeyMappingInterface.class)
 				.to(
 				new TypeReference<Map<String,String>>() {});

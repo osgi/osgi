@@ -279,7 +279,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 	}
 
 	private Collection< ? > convertToCollectionDelegate() {
-		if (forceCopy)
+		if (!liveView)
 			return null;
 
 		if (List.class.equals(targetClass)
@@ -543,7 +543,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 					"Cannot convert " + object + " to " + targetAsClass);
 		}
 
-		if (Map.class.equals(targetClass) && !forceCopy) {
+		if (Map.class.equals(targetClass) && liveView) {
 			Map res = convertToMapDelegate();
 			if (res != null)
 				return res;
@@ -621,7 +621,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 	private Object convertToInterface(Class< ? > sourceCls,
 			final Class< ? > targetCls) {
 		InternalConverting ic = converter.convert(object);
-		ic.sourceAs(sourceAsClass);
+		ic.sourceAs(sourceAsClass).view();
 		if (sourceAsDTO)
 			ic.sourceAsDTO();
 		if (sourceAsJavaBean)

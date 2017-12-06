@@ -220,7 +220,7 @@ public class ArrayAndCollectionConversionComplianceTest extends TestCase {
 		};
 
 		Converter converter = Converters.standardConverter();
-		List<Long> converted = converter.convert(backingObject)
+		List<Long> converted = converter.convert(backingObject).view()
 				.to(new TypeReference<List<Long>>() {});
 
 		Iterator<Long> iterator = converted.iterator();
