@@ -457,5 +457,6 @@ p.bibliomixed span.title::after {
 
 	img {
 		width: 100%;
+		height: auto;
 	}
 }
