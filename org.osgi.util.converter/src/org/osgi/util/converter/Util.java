@@ -223,7 +223,9 @@ class Util {
 			Object res = md.invoke(obj);
 			if (res instanceof Class)
 				return (Class< ? >) res;
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			// Ignore exception
+		}
 		return null;
 	}
 
@@ -271,7 +273,9 @@ class Util {
 				Object cls = md.invoke(object);
 				if (cls instanceof Class && ((Class< ? >) cls).isAnnotation())
 					return null;
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				// Ignore exception
+			}
 		}
 
 		if (md.getDeclaringClass().getSimpleName().startsWith("$Proxy")) {
