@@ -16,7 +16,9 @@
 
 package org.osgi.service.cdi.runtime.dto.template;
 
+import java.util.List;
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * Description of a CDI container.
@@ -32,11 +34,20 @@ public class ContainerTemplateDTO extends DTO {
 
 	/**
 	 * The extension dependencies of this CDI container.
+	 * <p>
+	 * Must not be {@code null}
+	 * <p>
+	 * May be empty if the container does not require CDI extensions.
 	 */
-	public ExtensionTemplateDTO[]	extensions;
+	public List<ExtensionTemplateDTO>	extensions;
 
 	/**
 	 * The components defined in this CDI container.
+	 * <p>
+	 * Must not be {@code null}
+	 * <p>
+	 * Has at lest one element for the {@link Type#APPLICATION application
+	 * component}.
 	 */
-	public ComponentTemplateDTO[]	components;
+	public List<ComponentTemplateDTO>	components;
 }
