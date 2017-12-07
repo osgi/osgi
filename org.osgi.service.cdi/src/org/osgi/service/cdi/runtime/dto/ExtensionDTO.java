@@ -29,7 +29,7 @@ public class ExtensionDTO extends DTO {
 	/**
 	 * The template of this extension dependency
 	 * <p>
-	 * Must not be <code>null</code>
+	 * Must not be {@code null}
 	 */
 	public String	name;
 

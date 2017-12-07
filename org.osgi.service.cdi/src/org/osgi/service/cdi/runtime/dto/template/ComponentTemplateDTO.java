@@ -18,8 +18,8 @@ package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
 import org.osgi.dto.DTO;
+import org.osgi.service.cdi.runtime.dto.ComponentInstanceDTO;
 import org.osgi.service.cdi.runtime.dto.ComponentDTO;
-import org.osgi.service.cdi.runtime.dto.LifecycleDTO;
 
 /**
  * A description of a CDI component
@@ -27,9 +27,9 @@ import org.osgi.service.cdi.runtime.dto.LifecycleDTO;
  * The content of this DTO is resolved form metadata at initialization time and
  * remains the same between the CDI bundle restarts.
  * <p>
- * At runtime it is spit between a {@link LifecycleDTO} which handles the
+ * At runtime it is spit between a {@link ComponentDTO} which handles the
  * resolution of the {@link #configurations} and the creation of
- * {@link ComponentDTO} instances and one or more {@link ComponentDTO}
+ * {@link ComponentInstanceDTO} instances and one or more {@link ComponentInstanceDTO}
  * instances, which handle the resolution of {@link #references} and the
  * creation of {@link #activations}.
  *

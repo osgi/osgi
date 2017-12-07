@@ -22,7 +22,7 @@ import org.osgi.service.cdi.runtime.dto.template.MaximumCardinality;
 import org.osgi.service.cdi.runtime.dto.template.ReferenceTemplateDTO;
 
 /**
- * A snapshot of the runtime state of a {@link ComponentDTO component} reference
+ * A snapshot of the runtime state of a {@link ComponentInstanceDTO component} reference
  * dependency
  *
  * @NotThreadSafe
@@ -61,7 +61,9 @@ public class ReferenceDTO extends DTO {
 	/**
 	 * The list of IDs of the services that match this reference.
 	 * <p>
-	 * The value must not be null. An empty array indicates no matching services.
+	 * Must not be {@code null}
+	 * <p>
+	 * Can be empty when there are no matching services.
 	 * <p>
 	 * This dependency is satisfied when.
 	 * <p>

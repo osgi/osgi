@@ -63,5 +63,5 @@ public class ContainerDTO extends DTO {
 	 * Must not be {@code null}. The list always contains at least one element
 	 * representing the {@link Type#APPLICATION APPLICATION}.
 	 */
-	public List<LifecycleDTO>	componentLifecycles;
+	public List<ComponentDTO>	componentLifecycles;
 }

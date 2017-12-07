@@ -20,7 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.service.cdi.runtime.dto.template.ActivationTemplateDTO;
 
 /**
- * A snapshot of the runtime state of a {@link ComponentDTO component}
+ * A snapshot of the runtime state of a {@link ComponentInstanceDTO component}
  * activation
  *
  * @NotThreadSafe
@@ -37,7 +37,7 @@ public class ActivationDTO extends DTO {
 	/**
 	 * The ID of the service this activation may have registered.
 	 * <p>
-	 * Must not be 0 if {@link ActivationTemplateDTO#serviceClasses} of the
+	 * Must be greater than 0 if {@link ActivationTemplateDTO#serviceClasses} of the
 	 * associated template is not empty.
 	 */
 	public long		service;
