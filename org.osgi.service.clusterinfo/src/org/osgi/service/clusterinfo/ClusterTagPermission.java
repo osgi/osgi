@@ -60,7 +60,7 @@ public final class ClusterTagPermission extends Permission {
 	 * Defines the authority to add a tag to the NodeStatus service.
 	 *
 	 * @param tag Tag to add.
-	 * @param actions {@code publish},{@code subscribe} (canonical order).
+	 * @param actions {@code add}.
 	 */
 	public ClusterTagPermission(String tag, String actions) {
 		this(tag, parseActions(actions));
@@ -69,7 +69,7 @@ public final class ClusterTagPermission extends Permission {
 	/**
 	 * Package private constructor used by ClusterTagPermissionCollection.
 	 * 
-	 * @param name class name
+	 * @param name Tag name
 	 * @param mask action mask
 	 */
 	ClusterTagPermission(String name, int mask) {
@@ -80,7 +80,7 @@ public final class ClusterTagPermission extends Permission {
 	/**
 	 * Called by constructors and when deserialized.
 	 * 
-	 * @param name topic name
+	 * @param name Tag name
 	 * @param mask action mask
 	 */
 	private synchronized void setTransients(final int mask) {

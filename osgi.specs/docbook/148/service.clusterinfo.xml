@@ -19,18 +19,18 @@
   <section>
     <title>Introduction</title>
 
-    <para>Modern enterprise applications are most often deployed on a distributed 
-    infrastructure cluster such as a private or public Cloud environment, 
-    instead of a single server. This is done to exploit dedicated hardware 
-    for certain application functionality (e.g. a database server),
-    to distribute the application load or to replicate the application to guarantee 
-    availability.</para>
+    <para>Modern enterprise applications are most often deployed on distributed 
+    infrastructure such as a private or public cloud environment, 
+    instead of on a single server. This is done to distribute the application load, 
+    to replicate the application to guarantee availability or to exploit dedicated hardware 
+    for certain application functionality (e.g. a database server).</para>
     
-    <para>Also, the units of management are no longer limited to physical machines.
+    <para>Also the unit of management is often no longer a single physical machine.
     Server infrastructure is nowadays mostly offered in a virtualized fashion, such as
-    hardware virtualization with a hypervisor or operating system virtualization using
-    containers. Potentially this might also be hierarchically managed having multiple
-    containers running inside a virtual machine.</para> 
+    hardware virtualization using a hypervisor or operating system virtualization using
+    containers. Potentially these can also be hierarchically managed, for example having multiple
+    containers running inside a virtual machine. Therefore, it becomes key to manage an
+    application running on a cluster of such (virtual) machines and/or containers.</para> 
 
     <para>The OSGi specification already provides chapters describing how to
     deploy software on remote infrastructure, how to call remote services or how 
@@ -43,12 +43,12 @@
 	    <listitem>
 	      <para><emphasis>Cluster</emphasis> - A cluster is a collection of nodes
 	      connected by a network. Most often the nodes are managed by a public or private
-	      Cloud provider.</para>
+	      cloud provider.</para>
 		</listitem>
 		
 		<listitem>
 	      <para><emphasis>Node</emphasis> - A node is a discoverable entity in the cluster,
-	      for example a physical machine, virtual machine (VM), container or OSGi framework.</para>
+	      for example a physical machine, a virtual machine (VM), a container or an OSGi framework.</para>
 		</listitem>
 	  </itemizedlist>
 	</section>
@@ -57,14 +57,14 @@
 	  <title>Entities</title>
 	  <itemizedlist>
 	    <listitem>
-	      <para><emphasis>NodeStatus</emphasis>- The NodeStatus service represents a node 
+	      <para><emphasis>NodeStatus</emphasis> - The NodeStatus service represents a node 
 	      in the cluster. This can be any entity in the cluster such as a database server, 
 	      a virtual machine, a container, an OSGi framework, etc.</para>
 		</listitem>
 
 		<listitem>
 		  <para><emphasis>FrameworkNodeStatus</emphasis> - The FrameworkNodeStatus service
-		  represents an OSGi framework running on a node in the cluster.</para>
+		  represents an OSGi framework in the cluster.</para>
 	    </listitem>
 	    
 	    <listitem>
@@ -91,14 +91,14 @@
   <section>
     <title>OSGi frameworks in a cluster</title>
     
-    <para>We distinguish two types of nodes in a cluster. On the one hand we have OSGi frameworks 
-    that are running in the cluster. These publish their presence using a FrameworkNodeStatus service.
-    On the other hand there can be other nodes in the system, such as the virtual machines or containers
-    the OSGi frameworks are running in, or an external server such as a database. These can be represented
-    as well using a NodeStatus service.</para>
+    <para>We distinguish two types of nodes in a cluster. On the one hand we have OSGi frameworks, which
+    publish their presence using a FrameworkNodeStatus service.
+    On the other hand there can be other nodes in the cluster, such as the virtual machines or containers
+    the OSGi frameworks are running on, or an external server such as a database. 
+    These can be represented using a NodeStatus service.</para>
     
     <para>When an OSGi framework is part of a cluster, this means it gets access to remote services of any
-    other OSGi framework in the cluster. Ensuring the discovery, visibility and access of remote services 
+    other OSGi framework in that cluster. Ensuring the discovery, visibility and access of remote services 
     within the cluster is the responsibility of the <xref linkend="service.remoteserviceadmin"/>.</para>
 
     <para>An example cluster deployment is shown in Figure 148.2. Here, a cluster consisting
@@ -107,7 +107,7 @@
     service. Besides these, there can also be an entity managing the virtual machines/containers (e.g. the 
     cloud provider), that exposes three NodeStatus services, one for each VM/container. In this case, each
     FrameworkNodeStatus will have a parent id pointing to the id of the NodeStatus of the VM/container 
-    it is deployed in.</para>
+    it is deployed on.</para>
 
     <figure>
       <title>Example cluster deployment</title>
@@ -130,8 +130,8 @@
     This node can be any entity in the cluster such as a physical machine, a virtual 
     machine, a container or an OSGi framework.</para>
     
-    <para>The NodeStatus service provides metadata about the node via service properties.
-    Each NodeStatus must provide an id, cluster. Optionally additional service properties 
+    <para>The NodeStatus service provides metadata about the node via its service properties.
+    Each NodeStatus must provide an id and cluster name. Optionally additional service properties 
     can be provided such as the physical location of the node, the endpoints at which this 
     node can be accessed, etc. These service properties can be converted to a <code>NodeStatusDTO</code> 
     to have type-safe access to these properties using the <xref linkend="util.converter"/>.</para>
@@ -140,9 +140,9 @@
       <title>Service properties of the NodeStatus service</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.2*"/>
+        <colspec colnum="1" colwidth="2.3*"/>
 
-        <colspec colnum="2" colwidth="0.8*"/>
+        <colspec colnum="2" colwidth="0.7*"/>
 
         <colspec colnum="3" colwidth="3.5*"/>
 
@@ -269,48 +269,48 @@
       </tgroup>
     </table>
     
-    <para>The NodeStatus service can also provides access to dynamic properties from the node.
+    <para>The NodeStatus service can also provide access to some dynamic properties of the node.
     The <code>getMetrics</code>  method allows to query key-value pairs, that are specific for 
-    that node. For example, for an OSGi framework this could be CPU and memory usage, for a database 
-    node this could be the number of database reads/writes, and for a VM these could be metrics made 
-    accessible by the Cloud provider. In this case the service implementor can provide you with 
+    that node. For example, for an OSGi framework these could be CPU and memory usage, for a database 
+    node these could be the number of database reads and writes, and for a VM these could be metrics made 
+    accessible by the cloud provider. In this case the service implementor can provide you with 
     DTOs to have a type-safe way to access these metrics by converting the returned map to one of 
     these DTOs. For example, an implementation could expose JMX metrics together with a type-safe DTO:</para>
     
      <programlisting>
-public class JMXMetricsDTO extends DTO {
+	public class JMXMetricsDTO extends DTO {
+		
+		/**
+		 * The number of processors available
+		 */
+		public int availableProcessors;
+		
+		/**
+		 * The average system load
+		 */
+		public float systemLoadAverage; 
+		
+		/**
+		 * The maximal amount of heap memory available to the JVM
+		 */
+		public long heapMemoryMax;
+		
+		/**
+		 * The amount of heap memory used by the JVM
+		 */
+		public long heapMemoryUsed;
+		
+		/**
+		 * The maximal amount of non-heap memory available to the JVM
+		 */
+		public long nonHeapMemoryMax;
+		
+		/**
+		 * The amount of non-heap memory used by the JVM
+		 */
+		public long nonHeapMemoryUsed; 
 	
-	/**
-	 * The number of processors available
-	 */
-	public int availableProcessors;
-	
-	/**
-	 * The average system load
-	 */
-	public float systemLoadAverage; 
-	
-	/**
-	 * The maximal amount of heap memory available to the JVM
-	 */
-	public long heapMemoryMax;
-	
-	/**
-	 * The amount of heap memory used by the JVM
-	 */
-	public long heapMemoryUsed;
-	
-	/**
-	 * The maximal amount of non-heap memory available to the JVM
-	 */
-	public long nonHeapMemoryMax;
-	
-	/**
-	 * The amount of non-heap memory used by the JVM
-	 */
-	public long nonHeapMemoryUsed; 
-
-}
+	}
      </programlisting>
 
   </section> 
