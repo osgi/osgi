@@ -992,7 +992,46 @@
 
     <itemizedlist>
       <listitem>
+        <para>Added <xref linkend="service.transaction.control"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Added <xref linkend="service.clusterinfo"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Added <xref linkend="service.configurator"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Added <xref linkend="service.jaxrs"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Added <xref linkend="util.pushstream"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Added <xref linkend="util.converter"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.remoteservices"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.log"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.cm"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.component"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.jpa"/>.</para>
+      </listitem>
+      <listitem>
         <para>Updated <xref linkend="service.namespaces"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="service.http.whiteboard"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Updated <xref linkend="util.promise"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
