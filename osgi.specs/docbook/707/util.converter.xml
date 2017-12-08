@@ -507,13 +507,17 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
       
       <section>
         <title>Converting to an Array or Collection</title>
-        <para>When converting an Array or Collection  
+        <para>When converting to an Array or Collection a separate instance is returned that can be owned
+        by the caller. By default the result is created eagerly and populated with the converted content.</para>
+        
+        <para>
+        When converting   
           to a <code>java.util.Collection</code>, <code>java.util.List</code> 
-          or <code>java.util.Set</code> the converter will return a live view 
+          or <code>java.util.Set</code> the converter can produce a live view 
           over the backing object that changes when the backing object changes. The live view can be 
-          prevented by providing the 
-          <xref linkend="org.osgi.util.converter.Specifying.copy--" xrefstyle="hyperlink"/>
-          modifier. When converting to other collection types or arrays a copy is always produced.
+          enabled by specifying the 
+          <xref linkend="org.osgi.util.converter.Specifying.view--" xrefstyle="hyperlink"/>
+          modifier. 
         </para>
 
         <para>In all cases the object returned is a separate instance that
@@ -532,12 +536,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             </thead>         
             <tbody>
               <row>
-                <entry><code>Collection</code>, <code>List</code> or <code>Set</code></entry>
-                <entry>A live view over the backing object is created, changes to the backing
-                object will be reflected, unless the view object is modified by the client.</entry>
-              </row>
-              <row>
-                <entry>Other Collection interface</entry>
+                <entry>Collection interface</entry>
                 <entry>A mutable implementation is created. For example, if the target type is 
                 <code>java.util.Queue</code> then the converter can create a
                 <code>java.util.LinkedList</code>. When converting to a subinterface of <code>java.util.Set</code>
@@ -550,6 +549,12 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
                 converter creates a target object by calling <code>ArrayDeque.class.newInstance()</code>.
                 The converter may choose to use a call a well-known constructor to optimize the
                 creation of the collection.</entry>
+              </row>
+              <row>
+                <entry><code>Collection</code>, <code>List</code> or <code>Set</code> with <code>view()</code>
+                modifier</entry>
+                <entry>A live view over the backing object is created, changes to the backing
+                object will be reflected, unless the view object is modified by the client.</entry>
               </row>
               <row>
                 <entry><code>T[]</code></entry>
@@ -658,12 +663,15 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
         <title>Converting to a map-like structure</title>
       <section>
         <title>Converting to a Map</title>
-        <para>When converting a map-like structure to a <code>java.util.Map</code>
-          the converter will return a live view 
+        <para>When converting to a Map a separate instance is returned that can be owned by the caller.
+        By default the result is created eagerly and populated with converted content.</para>
+        
+        <para>When converting to a <code>java.util.Map</code>
+          the converter can produce a live view  
           over the backing object that changes when the backing object changes. The live view can be 
-          prevented by providing the 
-          <xref linkend="org.osgi.util.converter.Specifying.copy--" xrefstyle="hyperlink"/>
-          modifier. When converting to other map types a copy is always produced.
+          enabled by specifying the 
+          <xref linkend="org.osgi.util.converter.Specifying.view--" xrefstyle="hyperlink"/>
+          modifier. 
         </para>
 
         <para>In all cases the object returned is a separate instance that
@@ -681,12 +689,7 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
             </thead>         
             <tbody>
               <row>
-                <entry><code>java.util.Map</code></entry>
-                <entry>A map view over the backing object is created, changes to the backing
-                object will be reflected in the map, unless the map is modified by the client.</entry>
-              </row>
-              <row>
-                <entry>Other Map interface</entry>
+                <entry>Map interface</entry>
                 <entry>A mutable implementation is created. For example, if the target type is 
                 <code>ConcurrentNavigableMap</code> then the implementation can create a 
                 <code>ConcurrentSkipListMap</code>.</entry>
@@ -699,6 +702,11 @@ int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting>
                 <code>HashMap.class.newInstance()</code>.
                 The converter may choose to use a call a well-known constructor to optimize the
                 creation of the map.</entry>
+              </row>
+              <row>
+                <entry><code>java.util.Map</code> with <code>view()</code> modifier</entry>
+                <entry>A map view over the backing object is created, changes to the backing
+                object will be reflected in the map, unless the map is modified by the client.</entry>
               </row>
             </tbody>
           </tgroup>
