@@ -60,22 +60,15 @@ public class CdiConstants {
 	public static final String	CDI_COMPONENT_NAME					= "$";
 
 	/**
-	 * The property of the CdiContainer service holding it's id.
-	 */
-	public static final String	CDI_CONTAINER_ID					= "osgi.cdi.container.id";
-
-	/**
-	 * Namespace name for CDI extension capabilities and requirements.
-	 * <p>
-	 * Used in {@code Provide-Capability} and {@code Require-Capability}
-	 * manifest headers. For example:
+	 * The attribute of the CDI extender requirement declaring the container's id.
 	 *
 	 * <pre>
-	 * Require-Capability: osgi.cdi.extension;
-	 *  filter:="(&amp;(osgi.cdi.extension=foo)(version&gt;=1.0)(!(version&gt;=2.0)))"
+	 * Require-Capability: osgi.extender;\
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))";\
+	 *  container.id="my.container"
 	 * </pre>
 	 */
-	public static final String	CDI_EXTENSION_NAMESPACE				= "osgi.cdi.extension";
+	public static final String	CDI_CONTAINER_ID					= "container.id";
 
 	/**
 	 * Compile time constant for the Specification Version of CDI Integration.
