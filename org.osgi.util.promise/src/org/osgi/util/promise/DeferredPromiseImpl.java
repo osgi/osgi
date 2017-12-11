@@ -22,6 +22,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.util.function.Consumer;
 import org.osgi.util.function.Function;
@@ -91,10 +93,30 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
+	 * Return a resolved PromiseImpl if this DeferredPromiseImpl is resolved.
+	 * 
+	 * @return A ResolvedPromiseImpl holding the value of this
+	 *         DeferredPromiseImpl or a FailedPromiseImpl holding the failure of
+	 *         this DeferredPromiseImpl or this DeferredPromiseImpl if this
+	 *         DeferredPromiseImpl is not resolved.
+	 */
+	PromiseImpl<T> orDone() {
+		// ensure latch open before reading state
+		if (!isDone()) {
+			return this;
+		}
+		if (fail == null) {
+			return resolved(value);
+		}
+		return failed(fail);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public T getValue() throws InvocationTargetException, InterruptedException {
+		// ensure latch open before reading state
 		resolved.await();
 		if (fail == null) {
 			return value;
@@ -107,12 +129,13 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	@Override
 	public Throwable getFailure() throws InterruptedException {
+		// ensure latch open before reading state
 		resolved.await();
 		return fail;
 	}
 
 	/**
-	 * Return a holder of the result of this PromiseImpl.
+	 * {@inheritDoc}
 	 */
 	@Override
 	Result<T> collect() {
@@ -207,8 +230,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	Promise<Void> resolveWith(Promise< ? extends T> with) {
 		DeferredPromiseImpl<Void> chained = deferred();
-		with.onResolve(chained.new ResolveWith<>(this, with));
-		return chained;
+		chain(with, chained.new ResolveWith<>(this, with));
+		return chained.orDone();
 	}
 
 	/**
@@ -278,8 +301,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e; // propagate new exception
 				}
 				if (returned != null) {
-					// resolve chained when returned promise is resolved
-					returned.onResolve(new Chain(returned));
+					chain(returned, new Chain(returned));
 					return;
 				}
 			}
@@ -440,7 +462,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e;
 				}
 				if (flatmap != null) {
-					flatmap.onResolve(new Chain(flatmap));
+					chain(flatmap, new Chain(flatmap));
 					return;
 				}
 			}
@@ -507,7 +529,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 					result.fail = e;
 				}
 				if (recovered != null) {
-					recovered.onResolve(new Chain(recovered));
+					chain(recovered, new Chain(recovered));
 					return;
 				}
 			}
@@ -533,7 +555,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		public void run() {
 			Result<T> result = promise.collect();
 			if (result.fail != null) {
-				fallback.onResolve(new FallbackChain(fallback, result.fail));
+				chain(fallback, new FallbackChain(fallback, result.fail));
 				return;
 			}
 			tryResolve(result.value, null);
@@ -562,6 +584,37 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 				result.fail = failure;
 			}
 			tryResolve(result.value, result.fail);
+		}
+	}
+
+	/**
+	 * A callback used the {@link PromiseImpl#timeout(long)} method to schedule
+	 * the timeout and to resolve the chained Promise and cancel the timeout.
+	 * 
+	 * @Immutable
+	 */
+	final class Timeout implements Runnable {
+		private final PromiseImpl<T>		promise;
+		private final ScheduledFuture< ? > future;
+
+		Timeout(PromiseImpl<T> promise, long delay, TimeUnit unit) {
+			this.promise = promise;
+			if (promise.isDone()) {
+				this.future = null;
+			} else {
+				FailedPromiseImpl<T> timedout = failed(new TimeoutException());
+				Runnable operation = new ChainImpl(timedout);
+				this.future = schedule(operation, delay, unit);
+			}
+		}
+
+		@Override
+		public void run() {
+			Result<T> result = promise.collect();
+			tryResolve(result.value, result.fail);
+			if (future != null) {
+				future.cancel(false);
+			}
 		}
 	}
 
