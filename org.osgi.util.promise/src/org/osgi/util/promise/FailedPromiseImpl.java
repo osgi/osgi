@@ -20,6 +20,10 @@ import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.osgi.util.function.Consumer;
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
+
 /**
  * Failed Promise implementation.
  * <p>
@@ -73,7 +77,7 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * Return a holder of the result of this PromiseImpl.
+	 * {@inheritDoc}
 	 */
 	@Override
 	Result<T> collect() {
@@ -83,5 +87,81 @@ final class FailedPromiseImpl<T> extends PromiseImpl<T> {
 	@Override
 	public String toString() {
 		return super.toString() + "[failed: " + fail + "]";
+	}
+
+	/**
+	 * Coerce the value type of this FailedPromiseImpl.
+	 * 
+	 * @return This FailedPromiseImpl.
+	 */
+	@SuppressWarnings("unchecked")
+	private <V> FailedPromiseImpl<V> coerce() {
+		return (FailedPromiseImpl<V>) this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> onSuccess(Consumer< ? super T> success) {
+		requireNonNull(success);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <R> Promise<R> then(Success< ? super T, ? extends R> success,
+			Failure failure) {
+		if (failure == null) {
+			return coerce();
+		}
+		return super.then(success, failure);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> thenAccept(Consumer< ? super T> consumer) {
+		requireNonNull(consumer);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> filter(Predicate< ? super T> predicate) {
+		requireNonNull(predicate);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <R> Promise<R> map(Function< ? super T, ? extends R> mapper) {
+		requireNonNull(mapper);
+		return coerce();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <R> Promise<R> flatMap(
+			Function< ? super T,Promise< ? extends R>> mapper) {
+		requireNonNull(mapper);
+		return coerce();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> timeout(long millis) {
+		return this;
 	}
 }

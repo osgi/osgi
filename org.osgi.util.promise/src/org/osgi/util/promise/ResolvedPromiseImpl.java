@@ -16,6 +16,11 @@
 
 package org.osgi.util.promise;
 
+import static java.util.Objects.requireNonNull;
+
+import org.osgi.util.function.Consumer;
+import org.osgi.util.function.Function;
+
 /**
  * Resolved Promise implementation.
  * <p>
@@ -69,7 +74,7 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * Return a holder of the result of this PromiseImpl.
+	 * {@inheritDoc}
 	 */
 	@Override
 	Result<T> collect() {
@@ -79,5 +84,62 @@ final class ResolvedPromiseImpl<T> extends PromiseImpl<T> {
 	@Override
 	public String toString() {
 		return super.toString() + "[resolved: " + value + "]";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> onFailure(Consumer< ? super Throwable> failure) {
+		requireNonNull(failure);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <R> Promise<R> then(Success< ? super T, ? extends R> success,
+			Failure failure) {
+		if (success == null) {
+			return resolved(null);
+		}
+		return super.then(success, failure);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> recover(Function<Promise< ? >, ? extends T> recovery) {
+		requireNonNull(recovery);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> recoverWith(
+			Function<Promise< ? >,Promise< ? extends T>> recovery) {
+		requireNonNull(recovery);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> fallbackTo(Promise< ? extends T> fallback) {
+		requireNonNull(fallback);
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Promise<T> timeout(long millis) {
+		return this;
 	}
 }

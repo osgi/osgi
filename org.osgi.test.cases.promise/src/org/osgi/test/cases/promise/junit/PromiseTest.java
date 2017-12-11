@@ -554,6 +554,85 @@ public class PromiseTest extends TestCase {
 		assertNull("wrong failure", p2.getFailure());
 	}
 
+	public void testThenSuccessNull1() throws Exception {
+		String value = new String("20");
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		d.resolve(value); // resolve before then
+		Promise<String> p2 = p1.then(null, null);
+
+		assertNull("wrong failure", p2.getFailure());
+		assertEquals(null, p2.getValue());
+	}
+
+	public void testThenSuccessNull2() throws Exception {
+		String value = new String("20");
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		Promise<String> p2 = p1.then(null, null);
+		d.resolve(value); // resolve after then
+
+		assertNull("wrong failure", p2.getFailure());
+		assertEquals(null, p2.getValue());
+	}
+
+	public void testThenSuccessNull3() throws Exception {
+		String value = new String("20");
+		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
+		Promise<String> p1 = factory.resolved(value);
+		Promise<String> p2 = p1.then(null, null);
+
+		assertNull("wrong failure", p2.getFailure());
+		assertEquals(null, p2.getValue());
+	}
+
+	public void testThenFailureNull1() throws Exception {
+		Exception failure = new Exception("20");
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		d.fail(failure); // fail before then
+		Promise<String> p2 = p1.then(null, null);
+
+		assertSame(failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			// expected
+		}
+	}
+
+	public void testThenFailureNull2() throws Exception {
+		Exception failure = new Exception("20");
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		Promise<String> p2 = p1.then(null, null);
+		d.fail(failure); // fail after then
+
+		assertSame(failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			// expected
+		}
+	}
+
+	public void testThenFailureNull3() throws Exception {
+		Exception failure = new Exception("20");
+		final PromiseFactory factory = new PromiseFactory(callbackExecutor);
+		Promise<String> p1 = factory.failed(failure);
+		Promise<String> p2 = p1.then(null, null);
+
+		assertSame(failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			// expected
+		}
+	}
+
 	public void testValueInterrupted() throws Exception {
 		final Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
