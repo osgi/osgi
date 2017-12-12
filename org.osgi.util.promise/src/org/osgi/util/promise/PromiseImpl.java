@@ -56,7 +56,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 *            operations.
 	 */
 	PromiseImpl(PromiseFactory factory) {
-		this.factory = factory;
+		this.factory = requireNonNull(factory);
 		callbacks = new ConcurrentLinkedQueue<>();
 	}
 

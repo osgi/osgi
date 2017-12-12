@@ -246,7 +246,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		ResolveWith(DeferredPromiseImpl<P> promise,
 				Promise< ? extends P> with) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.with = requireNonNull(with);
 		}
 
@@ -277,7 +277,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		@SuppressWarnings("unchecked")
 		Then(PromiseImpl<P> promise, Success< ? super P, ? extends T> success,
 				Failure failure) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.success = (Success<P, ? extends T>) success;
 			this.failure = failure;
 		}
@@ -319,7 +319,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Promise< ? extends T> promise;
 
 		Chain(Promise< ? extends T> promise) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 		}
 
 		@Override
@@ -339,7 +339,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final PromiseImpl<T> promise;
 
 		ChainImpl(PromiseImpl<T> promise) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 		}
 
 		@Override
@@ -359,7 +359,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Consumer< ? super T>	consumer;
 
 		ThenAccept(PromiseImpl<T> promise, Consumer< ? super T> consumer) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.consumer = requireNonNull(consumer);
 		}
 
@@ -387,7 +387,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Predicate< ? super T>	predicate;
 
 		Filter(PromiseImpl<T> promise, Predicate< ? super T> predicate) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.predicate = requireNonNull(predicate);
 		}
 
@@ -417,7 +417,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Function< ? super P, ? extends T>	mapper;
 
 		Map(PromiseImpl<P> promise, Function< ? super P, ? extends T> mapper) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.mapper = requireNonNull(mapper);
 		}
 
@@ -447,7 +447,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		FlatMap(PromiseImpl<P> promise,
 				Function< ? super P,Promise< ? extends T>> mapper) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.mapper = requireNonNull(mapper);
 		}
 
@@ -481,7 +481,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		Recover(PromiseImpl<T> promise,
 				Function<Promise< ? >, ? extends T> recovery) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.recovery = requireNonNull(recovery);
 		}
 
@@ -514,7 +514,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 
 		RecoverWith(PromiseImpl<T> promise,
 				Function<Promise< ? >,Promise< ? extends T>> recovery) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.recovery = requireNonNull(recovery);
 		}
 
@@ -547,7 +547,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Promise< ? extends T>	fallback;
 
 		FallbackTo(PromiseImpl<T> promise, Promise< ? extends T> fallback) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			this.fallback = requireNonNull(fallback);
 		}
 
@@ -573,8 +573,8 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final Throwable				failure;
 
 		FallbackChain(Promise< ? extends T> fallback, Throwable failure) {
-			this.fallback = fallback;
-			this.failure = failure;
+			this.fallback = requireNonNull(fallback);
+			this.failure = requireNonNull(failure);
 		}
 
 		@Override
@@ -598,7 +598,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final ScheduledFuture< ? > future;
 
 		Timeout(PromiseImpl<T> promise, long delay, TimeUnit unit) {
-			this.promise = promise;
+			this.promise = requireNonNull(promise);
 			if (promise.isDone()) {
 				this.future = null;
 			} else {
