@@ -343,7 +343,7 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> timeout(long millis) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, chained.new Timeout(this, millis, TimeUnit.MILLISECONDS));
+		chain(this, chained.new Timeout(this, millis));
 		return chained.orDone();
 	}
 
@@ -353,33 +353,8 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	@Override
 	public Promise<T> delay(long millis) {
 		DeferredPromiseImpl<T> chained = deferred();
-		chain(this, new Delay(chained.new ChainImpl(this), millis,
-				TimeUnit.MILLISECONDS));
+		chain(this, chained.new Delay(this, millis));
 		return chained.orDone();
-	}
-
-	/**
-	 * Delay class used by the {@link PromiseImpl#delay(long)} method to delay
-	 * chaining a promise.
-	 * 
-	 * @Immutable
-	 * @since 1.1
-	 */
-	private final class Delay implements Runnable {
-		private final Runnable	operation;
-		private final long		delay;
-		private final TimeUnit	unit;
-
-		Delay(Runnable operation, long delay, TimeUnit unit) {
-			this.operation = operation;
-			this.delay = delay;
-			this.unit = unit;
-		}
-
-		@Override
-		public void run() {
-			schedule(operation, delay, unit);
-		}
 	}
 
 	/**

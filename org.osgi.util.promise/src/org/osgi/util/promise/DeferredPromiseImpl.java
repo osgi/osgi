@@ -335,7 +335,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * 
 	 * @Immutable
 	 */
-	final class ChainImpl implements Runnable {
+	private final class ChainImpl implements Runnable {
 		private final PromiseImpl<T> promise;
 
 		ChainImpl(PromiseImpl<T> promise) {
@@ -588,8 +588,9 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	}
 
 	/**
-	 * A callback used the {@link PromiseImpl#timeout(long)} method to schedule
-	 * the timeout and to resolve the chained Promise and cancel the timeout.
+	 * A callback used by the {@link PromiseImpl#timeout(long)} method to
+	 * schedule the timeout and to resolve the chained Promise and cancel the
+	 * timeout.
 	 * 
 	 * @Immutable
 	 */
@@ -597,14 +598,14 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 		private final PromiseImpl<T>		promise;
 		private final ScheduledFuture< ? > future;
 
-		Timeout(PromiseImpl<T> promise, long delay, TimeUnit unit) {
+		Timeout(PromiseImpl<T> promise, long millis) {
 			this.promise = requireNonNull(promise);
 			if (promise.isDone()) {
 				this.future = null;
 			} else {
 				FailedPromiseImpl<T> timedout = failed(new TimeoutException());
 				Runnable operation = new ChainImpl(timedout);
-				this.future = schedule(operation, delay, unit);
+				this.future = schedule(operation, millis, TimeUnit.MILLISECONDS);
 			}
 		}
 
@@ -615,6 +616,27 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 			if (future != null) {
 				future.cancel(false);
 			}
+		}
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#delay(long)} method to delay
+	 * chaining a promise.
+	 * 
+	 * @Immutable
+	 */
+	final class Delay implements Runnable {
+		private final Runnable	operation;
+		private final long		millis;
+
+		Delay(PromiseImpl<T> promise, long millis) {
+			this.operation = new ChainImpl(promise);
+			this.millis = millis;
+		}
+
+		@Override
+		public void run() {
+			schedule(operation, millis, TimeUnit.MILLISECONDS);
 		}
 	}
 
