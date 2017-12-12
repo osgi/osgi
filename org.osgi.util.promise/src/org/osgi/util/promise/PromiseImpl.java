@@ -173,7 +173,11 @@ abstract class PromiseImpl<T> implements Promise<T> {
 	 */
 	static <V> void chain(Promise<V> promise, Runnable chain) {
 		if (promise.isDone()) {
-			chain.run();
+			try {
+				chain.run();
+			} catch (Throwable t) {
+				uncaughtException(t);
+			}
 		} else {
 			promise.onResolve(chain);
 		}
