@@ -230,7 +230,7 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 */
 	Promise<Void> resolveWith(Promise< ? extends T> with) {
 		DeferredPromiseImpl<Void> chained = deferred();
-		chain(with, chained.new ResolveWith<>(this, with));
+		chain(with, chained.new ResolveWith<>(with, this));
 		return chained.orDone();
 	}
 
@@ -241,21 +241,21 @@ final class DeferredPromiseImpl<T> extends PromiseImpl<T> {
 	 * @Immutable
 	 */
 	private final class ResolveWith<P> implements Runnable {
-		private final DeferredPromiseImpl<P>	promise;
-		private final Promise< ? extends P>		with;
+		private final Promise< ? extends P>		promise;
+		private final DeferredPromiseImpl<P>	target;
 
-		ResolveWith(DeferredPromiseImpl<P> promise,
-				Promise< ? extends P> with) {
+		ResolveWith(Promise< ? extends P> promise,
+				DeferredPromiseImpl<P> target) {
 			this.promise = requireNonNull(promise);
-			this.with = requireNonNull(with);
+			this.target = requireNonNull(target);
 		}
 
 		@Override
 		public void run() {
 			Throwable f = null;
-			Result<P> result = collect(with);
+			Result<P> result = collect(promise);
 			try {
-				promise.resolve(result.value, result.fail);
+				target.resolve(result.value, result.fail);
 			} catch (Throwable e) {
 				f = e; // propagate new exception
 			}
