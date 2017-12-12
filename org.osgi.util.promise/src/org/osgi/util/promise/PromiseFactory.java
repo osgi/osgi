@@ -16,7 +16,8 @@
 
 package org.osgi.util.promise;
 
-import static org.osgi.util.promise.PromiseImpl.uncaughtException;
+import static java.util.Objects.requireNonNull;
+import static org.osgi.util.promise.PromiseImpl.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -203,7 +204,7 @@ public class PromiseFactory {
 		} catch (Exception t) {
 			promise.tryResolve(null, t);
 		}
-		return promise;
+		return promise.orDone();
 	}
 
 	/**
@@ -236,18 +237,19 @@ public class PromiseFactory {
 	public <T, S extends T> Promise<List<T>> all(
 			Collection<Promise<S>> promises) {
 		if (promises.isEmpty()) {
-			List<T> result = new ArrayList<>();
-			return resolved(result);
+			List<T> value = new ArrayList<>();
+			return resolved(value);
 		}
 
-		DeferredPromiseImpl<List<T>> promise = new DeferredPromiseImpl<>(this);
 		/* make a copy and capture the ordering */
 		List<Promise<S>> list = new ArrayList<>(promises);
-		All<T,S> all = new All<>(promise, list);
+
+		DeferredPromiseImpl<List<T>> chained = new DeferredPromiseImpl<>(this);
+		All<T,S> all = new All<>(chained, list);
 		for (Promise<S> p : list) {
-			p.onResolve(all);
+			chain(p, all);
 		}
-		return promise;
+		return chained.orDone();
 	}
 
 	/**
@@ -258,14 +260,14 @@ public class PromiseFactory {
 	 * @ThreadSafe
 	 */
 	private static final class All<T, S extends T> implements Runnable {
-		private final DeferredPromiseImpl<List<T>>	promise;
-		private final List<Promise<S>>		promises;
-		private final AtomicInteger			promiseCount;
+		private final DeferredPromiseImpl<List<T>>	chained;
+		private final List<Promise<S>>				promises;
+		private final AtomicInteger					promiseCount;
 
-		All(DeferredPromiseImpl<List<T>> promise,
+		All(DeferredPromiseImpl<List<T>> chained,
 				List<Promise<S>> promises) {
-			this.promise = promise;
-			this.promises = promises;
+			this.chained = requireNonNull(chained);
+			this.promises = requireNonNull(promises);
 			this.promiseCount = new AtomicInteger(promises.size());
 		}
 
@@ -289,9 +291,9 @@ public class PromiseFactory {
 				}
 			}
 			if (failed.isEmpty()) {
-				promise.tryResolve(value, null);
+				chained.tryResolve(value, null);
 			} else {
-				promise.tryResolve(null,
+				chained.tryResolve(null,
 						new FailedPromisesException(failed, cause));
 			}
 		}
