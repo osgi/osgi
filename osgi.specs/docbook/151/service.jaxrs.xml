@@ -586,11 +586,14 @@ public class Foo {
       
       <para>The JAX-RS whiteboard implementation is responsible for managing the
       mismatch between the OSGi service lifecycle model and the JAX-RS resource
-      lifecycle model. If the JAX-RS whiteboard service is registered as prototype
+      lifecycle model. If the JAX-RS whiteboard resource is registered as prototype
       scope then the implementation must treat the resources as request-scoped,
       creating a new service instance for each request and releasing it when the
       request completes. Otherwise the JAX-RS whiteboard service must be registered
-      as a singleton scope resource within the application.</para>
+      as a singleton scope resource within the application. Singleton scope 
+      whiteboard resources must be released by the JAX-RS whiteboard when the
+      application with which they have been registered is removed from the
+      whiteboard, even if this is only a temporary situation.</para>
       
       <para>If a failure occurs when getting the resource service this will 
       prevent the service from being used, which is reflected using a failure 
@@ -690,7 +693,6 @@ public class Foo {
 }</programlisting>
       </section>
     </section>
-
 
     <section>
       <title>Resource Service Properties</title>
@@ -1066,6 +1068,14 @@ public class ConfiguredExtension implements WriterInterceptor {
     <section>
       <title>JAX-RS Whiteboard Extension Lifecycle</title>
       
+      <para>JAX-RS extensions have a different lifecycle from JAX-RS resources,
+      within a single application a JAX-RS extension always behaves as a singleton. 
+      If a JAX-RS whiteboard extension is registered as prototype scope then the 
+      whiteboard implementation must obtain a separate instance for every application
+      to which the extension is applied. Whiteboard extension services must be released 
+      by the JAX-RS whiteboard when the application with which they have been registered 
+      is removed from the whiteboard, even if this is only a temporary situation.</para>
+
       <para>JAX-RS extensions often require configuration, and need to
       be configured differently for different applications. This configuration
       is typically provided by a JAX-RS <code>ContextResolver</code> and
@@ -1080,7 +1090,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       extensions, however this behaviour is non portable, and may lead to errors at 
       runtime when using other implementations.
       </para>
-    
+      
     </section>
 
 
@@ -1285,7 +1295,36 @@ public class ConfiguredExtension implements WriterInterceptor {
         </tgroup>
       </table>
     </section>
-
+    
+    <section>
+      <title>Accessing the Application service properties</title>
+      
+      <para>In JAX-RS the <code>@Context</code> annotation may be used to inject
+      the <code>Application</code> instance into a resource or extension. Application 
+      configuration properties can also be injected using the 
+      <code>Configuration</code> type.</para>
+      
+      <para>When using the JAX-RS Whiteboard it can also be necessary to access the
+      service properties associated with the application hosting the resource, for
+      example to allow customization of the resource's response. To this end, the
+      JAX-RS whiteboard implementation must make the Application service properties
+      available as a <code>Map</code> in the configuration. The key
+      used to store this map is <code>osgi.jaxrs.application.serviceProperties</code>,
+      and it can be found in any injected <code>Configuration</code> instance.</para>
+      
+      <para>Furthermore, for <code>Feature</code> and <code>DynamicFeature</code> extensions
+      the application service properties must be visible in the <code>FeatureContext</code>
+      passed to the extension when applying it to the application. The <code>FeatureContext</code>
+      interface provides programmatic access to the <code>Configuration</code> for the application, 
+      so this visibility is achieved in the same manner as for an injected Configuration instance.</para>
+      
+      <para>In the case where the hosting application is not an OSGi service, for example
+      a Whiteboard implementation may choose to provide its default application as an
+      internal detail, then the <code>osgi.jaxrs.application.serviceProperties</code> map
+      must exist containing the <code>osgi.jaxrs.name</code> of the application and the
+      service properties associated with the JaxRSServiceRuntime service.</para>
+    </section>
+    
     <section>
       <title>A JAX-RS Whiteboard Application Example</title>
     

@@ -17,15 +17,19 @@
 
 package org.osgi.test.cases.jaxrs.junit;
 
+import static java.util.Collections.*;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.PAYMENT_REQUIRED;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -43,6 +47,7 @@ import org.apache.http.entity.StringEntity;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.extensions.BoundStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ConfigurableStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ExtensionConfigProvider;
@@ -1086,6 +1091,77 @@ public class ExtensionLifecyleTestCase extends AbstractJAXRSTestCase {
 			}
 		} finally {
 			resourceReg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.4.2 Singleton services must be released if the application
+	 * goes out of scope
+	 * 
+	 * @throws Exception
+	 */
+	public void testExtensionWhenApplicationChanges() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION, Boolean.TRUE);
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(foo=bar)");
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		Semaphore getSemaphore = new Semaphore(0);
+
+		Semaphore releaseSemaphore = new Semaphore(0);
+
+		ServiceRegistration<WriterInterceptor> reg = getContext()
+				.registerService(WriterInterceptor.class,
+						getServiceFactory(() -> {
+							getSemaphore.release();
+							return new StringReplacer("fizz", "fizzbuzz");
+						}, (sr, s) -> releaseSemaphore.release()), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			properties = new Hashtable<>();
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+					"/test");
+			properties.put("foo", "bar");
+
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			ServiceRegistration<Application> appReg = getContext()
+					.registerService(Application.class,
+							new SimpleApplication(singleton(WhiteboardResource.class), emptySet()),
+							properties);
+
+			try {
+
+				awaitSelection.getValue();
+
+				String baseURI = getBaseURI();
+
+				// Do a get
+
+				CloseableHttpResponse httpResponse = client.execute(
+						RequestBuilder.get(baseURI + "test/whiteboard/resource")
+								.build());
+
+				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizzbuzz, fizzbuzzbuzz]", response);
+
+			} finally {
+				appReg.unregister();
+			}
+
+			assertTrue(getSemaphore.availablePermits() > 0);
+			assertTrue(
+					releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
+							100, TimeUnit.MILLISECONDS));
+
+		} finally {
+			reg.unregister();
 		}
 	}
 }

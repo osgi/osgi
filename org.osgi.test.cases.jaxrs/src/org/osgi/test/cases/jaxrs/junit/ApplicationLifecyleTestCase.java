@@ -21,8 +21,11 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Feature;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.WriterInterceptor;
 
@@ -39,6 +42,7 @@ import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.extensions.ConfigurableStringReplacer;
 import org.osgi.test.cases.jaxrs.extensions.ExtensionConfigProvider;
 import org.osgi.test.cases.jaxrs.extensions.StringReplacer;
+import org.osgi.test.cases.jaxrs.resources.ConfigurationAwareResource;
 import org.osgi.test.cases.jaxrs.resources.SessionManipulator;
 import org.osgi.test.cases.jaxrs.resources.StringResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
@@ -1245,6 +1249,111 @@ public class ApplicationLifecyleTestCase extends AbstractJAXRSTestCase {
 			} finally {
 				reg2.unregister();
 			}
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.6 Application service property access
+	 * 
+	 * @throws Exception
+	 */
+	public void testApplicationServiceProps() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test");
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<Application> reg = getContext()
+				.registerService(Application.class,
+						new SimpleApplication(emptySet(),
+								singleton(new ConfigurationAwareResource())),
+						properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			String baseURI = getBaseURI();
+
+			// Do a get
+
+			CloseableHttpResponse httpResponse = client.execute(RequestBuilder
+					.get(baseURI + "test/whiteboard/config/service.id")
+					.build());
+
+			String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+			assertEquals(
+					String.valueOf(
+							reg.getReference().getProperty("service.id")),
+					response);
+
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.6 Application service property access
+	 * 
+	 * @throws Exception
+	 */
+	public void testApplicationServicePropsInFeature() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+				"/test");
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_NAME, "test");
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		ServiceRegistration<Application> reg = getContext().registerService(
+				Application.class,
+				new SimpleApplication(emptySet(),
+						singleton(new ConfigurationAwareResource())),
+				properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			properties = new Hashtable<>();
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_EXTENSION,
+					Boolean.TRUE);
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+					"(osgi.jaxrs.name=test)");
+
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			AtomicReference<Object> value = new AtomicReference<Object>();
+
+			ServiceRegistration<Feature> extensionReg = getContext()
+					.registerService(Feature.class,
+							ctx -> {
+								value.set(ctx.getConfiguration().getProperty(
+										JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SERVICE_PROPERTIES));
+								return true;
+							}, properties);
+
+			try {
+
+				awaitSelection.getValue();
+
+				Object o = value.get();
+
+				assertNotNull(o);
+				assertTrue(o instanceof Map);
+				assertEquals(
+						reg.getReference().getProperty("service.id"),
+						((Map< ? , ? >) o).get("service.id"));
+
+			} finally {
+				extensionReg.unregister();
+			}
+
 		} finally {
 			reg.unregister();
 		}

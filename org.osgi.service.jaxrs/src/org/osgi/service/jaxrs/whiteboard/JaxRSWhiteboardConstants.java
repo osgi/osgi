@@ -21,6 +21,7 @@ import java.nio.file.DirectoryStream.Filter;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -102,6 +103,12 @@ public final class JaxRSWhiteboardConstants {
 	 * a valid OSGi filter.
 	 */
 	public static final String	JAX_RS_APPLICATION_SELECT	= "osgi.jaxrs.application.select";
+
+	/**
+	 * The property key which can be used to find the application service
+	 * properties inside an injected {@link Configuration}
+	 */
+	public static final String	JAX_RS_APPLICATION_SERVICE_PROPERTIES	= "osgi.jaxrs.application.serviceProperties";
 
 	/**
 	 * The name of the default JAX-RS application in every Whiteboard instance.
@@ -197,4 +204,5 @@ public final class JaxRSWhiteboardConstants {
 	 * specification
 	 */
 	public static final String	JAX_RS_WHITEBOARD_SPECIFICATION_VERSION	= "1.0.0";
+
 }

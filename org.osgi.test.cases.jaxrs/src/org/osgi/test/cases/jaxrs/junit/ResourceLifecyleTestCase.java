@@ -17,14 +17,18 @@
 
 package org.osgi.test.cases.jaxrs.junit;
 
+import static java.util.Collections.emptySet;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource.CUSTOM_HEADER;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.ws.rs.core.Application;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -32,6 +36,7 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+import org.osgi.test.cases.jaxrs.applications.SimpleApplication;
 import org.osgi.test.cases.jaxrs.resources.AsyncWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.ContextInjectedWhiteboardResource;
 import org.osgi.test.cases.jaxrs.resources.WhiteboardResource;
@@ -312,6 +317,94 @@ public class ResourceLifecyleTestCase extends AbstractJAXRSTestCase {
 
 			response = assertResponse(httpResponse, 200, TEXT_PLAIN);
 			assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	/**
+	 * Section 151.4.2 Singleton services must be released if the application
+	 * goes out of scope
+	 * 
+	 * @throws Exception
+	 */
+	public void testSingletonResourceWhenApplicationChanges() throws Exception {
+
+		Dictionary<String,Object> properties = new Hashtable<>();
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_RESOURCE, Boolean.TRUE);
+		properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_SELECT,
+				"(foo=bar)");
+
+		Promise<Void> awaitSelection = helper.awaitModification(runtime, 5000);
+
+		Semaphore getSemaphore = new Semaphore(0);
+
+		Semaphore releaseSemaphore = new Semaphore(0);
+
+		ServiceRegistration<WhiteboardResource> reg = getContext()
+				.registerService(WhiteboardResource.class,
+						getServiceFactory(() -> {
+							getSemaphore.release();
+							return new WhiteboardResource();
+						}, (sr, s) -> releaseSemaphore.release()), properties);
+
+		try {
+
+			awaitSelection.getValue();
+
+			properties = new Hashtable<>();
+			properties.put(JaxRSWhiteboardConstants.JAX_RS_APPLICATION_BASE,
+					"/test");
+			properties.put("foo", "bar");
+
+			awaitSelection = helper.awaitModification(runtime, 5000);
+
+			ServiceRegistration<Application> appReg = getContext()
+					.registerService(Application.class,
+							new SimpleApplication(emptySet(), emptySet()),
+							properties);
+
+			try {
+
+				awaitSelection.getValue();
+
+				String baseURI = getBaseURI();
+
+				// Do a get
+
+				CloseableHttpResponse httpResponse = client.execute(
+						RequestBuilder.get(baseURI + "test/whiteboard/resource")
+								.build());
+
+				String response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[buzz, fizz, fizzbuzz]", response);
+
+				// Do a delete
+
+				httpResponse = client.execute(RequestBuilder
+						.delete(baseURI + "test/whiteboard/resource/buzz")
+						.build());
+
+				response = assertResponse(httpResponse, 200, null);
+				assertEquals("", response);
+
+				// Do another get to show the singleton-ness
+
+				httpResponse = client.execute(RequestBuilder
+						.get(baseURI + "test/whiteboard/resource").build());
+
+				response = assertResponse(httpResponse, 200, TEXT_PLAIN);
+				assertEquals("[fizz, fizzbuzz]", response);
+
+			} finally {
+				appReg.unregister();
+			}
+
+			assertTrue(getSemaphore.availablePermits() > 0);
+			assertTrue(
+					releaseSemaphore.tryAcquire(getSemaphore.availablePermits(),
+							100, TimeUnit.MILLISECONDS));
 
 		} finally {
 			reg.unregister();

@@ -31,6 +31,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.PrototypeServiceFactory;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
@@ -100,6 +101,25 @@ public abstract class AbstractJAXRSTestCase extends OSGiTestCase {
 			Supplier<T> supplier,
 			BiConsumer<ServiceRegistration<T>,T> destroyer) {
 		return new PrototypeServiceFactory<T>() {
+
+			@Override
+			public T getService(Bundle bundle,
+					ServiceRegistration<T> registration) {
+				return supplier.get();
+			}
+
+			@Override
+			public void ungetService(Bundle bundle,
+					ServiceRegistration<T> registration, T service) {
+				destroyer.accept(registration, service);
+			}
+
+		};
+	}
+
+	protected <T> ServiceFactory<T> getServiceFactory(Supplier<T> supplier,
+			BiConsumer<ServiceRegistration<T>,T> destroyer) {
+		return new ServiceFactory<T>() {
 
 			@Override
 			public T getService(Bundle bundle,
