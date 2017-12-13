@@ -153,6 +153,26 @@
           as discovering services in the network. See <xref
           linkend="service.remoteserviceadmin"/>.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Cluster Information Specification</emphasis> - 
+          This specification defines services that facilitate the discovery, 
+          introspection and 
+          management of a cluster of nodes in a networked environment. This applies to 
+          Cloud environments as well as Embedded and IoT use cases where
+          multiple nodes are exist that need to be orchestrated into performing
+          a coordinated set of functionalities. See <xref linkend="service.clusterinfo"/>.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>JAX-RS Whiteboard Specification</emphasis> - Support for the 
+          development of REST-style microservices is
+          provided through the integration of JAX-RS technology in the JAX-RS Whiteboard
+          Specification. This defines a model to provide microservice endpoints using
+          the OSGi services-based whiteboard model. See <xref linkend="service.jaxrs"/>. 
+          </para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -233,6 +253,16 @@
           used by other specifications, such as the Asynchronous Services
           specification, but can also be used independently.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Push Streams</emphasis> - This specification defines
+          a library supporting the handling of push-based event streams. 
+          It focuses on reactive programming and builds on the 
+          Promises specification. As with Promises, the Push Streams can be 
+          used both inside an OSGi framework as well as outside.
+          See <xref linkend="util.pushstream"/>.
+          </para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -301,6 +331,16 @@
           Configuration Admin Service. See <xref
           linkend="service.metatype"/>.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Configurator Specification</emphasis> - The 
+          Configurator Specification defines
+          a convenient way to provide Configuration Admin with configuration
+          information based on JSON-based resources in bundles. It specifies
+          the format of the JSON configuration resources, and defines how
+          these are processed and submitted to the Configuration Admin service.
+          See <xref linkend="service.configurator"/>.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -367,6 +407,18 @@
           the ending of a transaction. See <xref
           linkend="service.jta"/>.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Transaction Control Service Specification</emphasis> -
+          This specification adds a concise and convenient programming model to
+          work with ACID Transactions. Rather than taking a purely declarative approach
+          as is done in some other Transaction solutions,
+          the Transaction Control Service Specification defines a simple 
+          programming model to execute specific parts of code under transactional 
+          scope. It works very well with Java™ lambas. See 
+          <xref linkend="service.transaction.control"/>.
+          </para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -407,6 +459,17 @@
           initiator to create a Coordination where collaborators can decide to
           participate. When the Coordination is ended, all participants are
           informed. See <xref linkend="service.coordinator"/>.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Converter Specification</emphasis> -
+          The Converter Specification provides a uniform API to convert a given 
+          Java object into a myriad of other representations. Conversions include
+          from untyped data, such as a configuration map, into a typed instance such as 
+          an annotation or interface. Or between various types of scalars, arrays or collections.
+          The converter can also be customized to perform domain-specific conversions.  
+          See <xref linkend="util.converter"/>.
+          </para>
         </listitem>
       </itemizedlist>
     </section>
