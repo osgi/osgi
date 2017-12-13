@@ -885,6 +885,8 @@
 
               <entry><para><code><xref
               linkend="org.osgi.service.http.whiteboard"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.whiteboard.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.whiteboard.propertytypes"/></code></para><para><code><xref
               linkend="org.osgi.service.http.context"/></code></para><para><code><xref
               linkend="org.osgi.service.http.runtime"/></code></para><para><code><xref
               linkend="org.osgi.service.http.runtime.dto"/></code></para></entry>
@@ -931,6 +933,26 @@
               <entry><code><xref
               endterm="org.osgi.service.configurator-version"
               linkend="service.configurator"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.jaxrs"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.jaxrs.runtime"/></code></para>
+              <para><code><xref
+              linkend="org.osgi.service.jaxrs.runtime.dto"/></code></para>
+              <para><code><xref
+              linkend="org.osgi.service.jaxrs.whiteboard"/></code></para>
+              <para><code><xref
+              linkend="org.osgi.service.jaxrs.whiteboard.annotations"/></code></para>
+              <para><code><xref
+              linkend="org.osgi.service.jaxrs.whiteboard.propertytypes"/></code></para></entry>
+
+              <entry><code><xref
+              endterm="org.osgi.service.jaxrs.whiteboard-version"
+              linkend="service.jaxrs"/></code></entry>
             </row>
 
             <row>
