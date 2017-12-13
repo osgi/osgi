@@ -2125,7 +2125,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     service properties can include implementation-specific key-value pairs.
     They also include the following:</para>
 
-    <table xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
+    <table pgwide="1" xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
       <title>Service properties for the <code>HttpServiceRuntime</code>
       service</title>
 
