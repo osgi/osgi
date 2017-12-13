@@ -479,27 +479,6 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Resolver Hook Service Specification</emphasis> - An
-        enabling technology defined by <xref linkend="intro.core.release"
-        xrefstyle="template:%t"/> for OSGi frameworks to support isolation of
-        bundles.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Resolver Specification</emphasis> - A service that can
-        be the base for provisioning, deployment, build, and diagnostic
-        tooling. Based on the generic Requirement/Capability model from <xref
-        linkend="intro.core.release" xrefstyle="template:%t"/> a management
-        agent can use the Resolver service to compute the set of necessary
-        resources needed to satisfy the given set of requirements. These
-        requirements could represent the dependencies of a core set of bundles
-        that need to be deployed. While the framework already hosts a Resolver
-        for Bundle wiring, this specification makes a generic Resolver
-        available as a service to resolve dependencies on resources beyond
-        Bundle wiring. See <xref linkend="service.resolver"/>.</para>
-      </listitem>
-
-      <listitem>
         <para><emphasis>Repository Specification</emphasis> - The Repository
         specification provides a standard API to access (possibly remote)
         repositories. Resources can be obtained from the repository by
@@ -877,17 +856,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.resolver"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.resolver"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.resolver-version"
-              linkend="service.resolver"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.rest"
               xrefstyle="template:%n %t"/></entry>
 
@@ -1084,6 +1052,12 @@
       </listitem>
       <listitem>
         <para>Updated <xref linkend="util.promise"/>.</para>
+      </listitem>
+      <listitem>
+        <para>Moved <emphasis>Resolver Service Specification</emphasis> to the <emphasis>Core Specification</emphasis> book.</para>
+      </listitem>
+      <listitem>
+        <para>Removed <emphasis>Blueprint Container Specification</emphasis>.</para>
       </listitem>
     </itemizedlist>
   </section>
