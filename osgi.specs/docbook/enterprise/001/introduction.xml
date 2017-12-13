@@ -86,19 +86,16 @@
     <title>Overview of Services</title>
 
     <section>
-      <title>Component Models</title>
+      <title>Component Model</title>
 
       <para>While the OSGi framework API is relatively simple to use, it is
       still considered infrastructure that can bleed into the application code
-      of a bundle. This Enterprise Specification therefore provides multiple,
-      interoperable, Dependency Injection based component models. These DI
-      models ensure decoupling of the application code from the OSGi APIs;
-      they provide an OSGi bundle programming model with minimal
+      of a bundle. This Enterprise Specification therefore provides
+      a Dependency Injection based component model. This DI
+      model ensures decoupling of the application code from the OSGi APIs;
+      it provides an OSGi bundle programming model with minimal
       implementation dependencies and virtually no accidental complexity in
-      the Java code. Both models provide support for handling the life cycle
-      of services, albeit in different ways. These component models are the
-      Declarative Services Specification and the Blueprint Container
-      Specification:</para>
+      the Java code.</para>
 
       <itemizedlist>
         <listitem>
@@ -107,14 +104,6 @@
           services. It handles the service life cycle dynamics by notifying
           the component or managing the component's life cycle. See chapter
           <xref linkend="service.component"/>.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Blueprint Container Specification</emphasis> - The
-          Blueprint Container is derived from the Spring Dynamic Module
-          project. It provides a general DI framework; services are supported
-          by proxying them and damping their life cycle. See chapter <xref
-          linkend="service.blueprint"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
