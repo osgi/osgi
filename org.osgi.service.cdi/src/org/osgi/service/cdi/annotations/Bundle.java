@@ -38,7 +38,7 @@ import org.osgi.framework.ServiceFactory;
 public @interface Bundle {
 
 	/**
-	 * Support inline instantiation of the {@link Component} annotation.
+	 * Support inline instantiation of the {@link Bundle} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<Bundle> implements Bundle {
 

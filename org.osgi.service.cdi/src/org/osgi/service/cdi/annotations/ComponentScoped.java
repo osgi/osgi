@@ -30,8 +30,9 @@ import org.osgi.annotation.bundle.Requirement;
 
 /**
  * This scope is used to declare a bean who's lifecycle is determined by the
- * state of it's OSGi dependencies and the {@link Component Component(s)} that
- * may reference it through injection.
+ * state of it's OSGi dependencies and the {@link SingleComponent
+ * SingleComponent(s)} and {@link FactoryComponent FactoryComponent(s)} that may
+ * reference it through injection.
  *
  * @author $Id$
  */

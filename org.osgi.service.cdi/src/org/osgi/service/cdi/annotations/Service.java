@@ -46,12 +46,14 @@ import org.osgi.framework.ServiceFactory;
  * <p>
  * Where this annotation is used affects how service scopes are supported:
  * <ul>
- * <li>{@link Component @Component} or {@link Dependent @Dependent} bean - The
- * provided service can be of any scope. The bean can either implement
- * {@link ServiceFactory ServiceFactory} or {@link PrototypeServiceFactory
- * PrototypeServiceFactory} or use {@link Bundle @Bundle} or
- * {@link Prototype @Prototype} to set it's service scope. If none of those
- * options are used the service is a singleton scope service.</li>
+ * <li>{@link SingleComponent @SingleComponent},
+ * {@link FactoryComponent @FactoryComponent} or {@link Dependent @Dependent}
+ * bean - The provided service can be of any scope. The bean can either
+ * implement {@link ServiceFactory ServiceFactory} or
+ * {@link PrototypeServiceFactory PrototypeServiceFactory} or use
+ * {@link Bundle @Bundle} or {@link Prototype @Prototype} to set it's service
+ * scope. If none of those options are used the service is a singleton scope
+ * service.</li>
  * <li>{@link ApplicationScoped @ApplicationScoped} bean - The provided service
  * is a singleton scope service unless the bean implements {@link ServiceFactory
  * ServiceFactory} or {@link PrototypeServiceFactory PrototypeServiceFactory}.

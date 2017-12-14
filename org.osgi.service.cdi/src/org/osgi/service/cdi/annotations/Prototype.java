@@ -42,7 +42,7 @@ import org.osgi.service.cdi.reference.ReferenceEvent;
 public @interface Prototype {
 
 	/**
-	 * Support inline instantiation of the {@link Component} annotation.
+	 * Support inline instantiation of the {@link Prototype} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<Prototype> implements Prototype {
 

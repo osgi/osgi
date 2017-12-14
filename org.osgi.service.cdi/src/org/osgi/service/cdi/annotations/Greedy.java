@@ -39,7 +39,7 @@ import org.osgi.service.cdi.reference.ReferenceEvent;
 public @interface Greedy {
 
 	/**
-	 * Support inline instantiation of the {@link Component} annotation.
+	 * Support inline instantiation of the {@link Greedy} annotation.
 	 */
 	public static final class Literal extends AnnotationLiteral<Greedy> implements Greedy {
 

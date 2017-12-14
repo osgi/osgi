@@ -42,7 +42,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class CDITestCase extends DefaultTestBundleControl {
 	/**
-	 * Test that a component annotation with @Component appears in the OSGi
+	 * Test that a component annotation with @SingleComponent appears in the OSGi
 	 * Service Registry when the bundle is started and disappears again when the
 	 * bundle is stopped.
 	 */
@@ -77,11 +77,10 @@ public class CDITestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test that a component annotation with @Component appears in the OSGi
-	 * Service Registry when the bundle and it's attached fragment is started
-	 * and disappears again when the bundle is stopped. This test is similar to
-	 * the testBundleLifecycle() except that the CDI components reside in a
-	 * fragment.
+	 * Test that a component annotation with @SingleComponent appears in the OSGi
+	 * Service Registry when the bundle and it's attached fragment is started and
+	 * disappears again when the bundle is stopped. This test is similar to the
+	 * testBundleLifecycle() except that the CDI components reside in a fragment.
 	 */
 	public void testFragmentLifecycle() throws Exception {
 		Bundle tb3 = installBundle("tb3.jar", false);
@@ -123,13 +122,13 @@ public class CDITestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * This test ensures that packages that are imported, and have CDI
-	 * annotations are not processed as beans. In this case tb4 imports a
-	 * package from tb2. This package contains a class with the @Component
-	 * annotation but tb2 is not an OSGi/CDI bundle as it does not have
+	 * This test ensures that packages that are imported, and have CDI annotations
+	 * are not processed as beans. In this case tb4 imports a package from tb2. This
+	 * package contains a class with the @SingleComponent annotation but tb2 is not
+	 * an OSGi/CDI bundle as it does not have
 	 * {@code Require-Capability: osgi.extender; filter:="(osgi.extender=osgi.cdi)"}
-	 * . Therefore the component from tb2 should not turned into a CDI bean that
-	 * is registered in the OSGi Service Registry.
+	 * . Therefore the component from tb2 should not turned into a CDI bean that is
+	 * registered in the OSGi Service Registry.
 	 */
 	public void testImportedPackageNotProcessed() throws Exception {
 		Bundle tb2 = installBundle("tb2.jar");

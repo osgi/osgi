@@ -4,9 +4,9 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import org.osgi.service.cdi.annotations.Component;
+import org.osgi.service.cdi.annotations.SingleComponent;
 
-@Component
+@SingleComponent
 public class Client implements Callable<String> {
 	@Inject
 	IntermediateDependency callable;

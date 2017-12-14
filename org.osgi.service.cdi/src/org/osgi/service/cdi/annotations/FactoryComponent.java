@@ -27,15 +27,16 @@ import javax.enterprise.inject.Stereotype;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Named;
 import org.osgi.annotation.bundle.Requirement;
+import org.osgi.service.cdi.CdiConstants;
 
 /**
- * Identify the annotated CDI bean class as a Component who's lifecycle is
- * determined by the state of it's OSGi dependencies.
+ * Identifies a factory component.
  * <p>
- * Components MUST always be {@link ComponentScoped ComponentScoped}. Applying
- * any other scope will result in a definition error.
+ * Factory components MUST always be {@link ComponentScoped ComponentScoped}.
+ * Applying any other scope will result in a definition error.
  *
  * @author $Id$
+ * @see "Factory Component"
  */
 @ComponentScoped
 @Documented
@@ -44,20 +45,55 @@ import org.osgi.annotation.bundle.Requirement;
 @Retention(RUNTIME)
 @Stereotype
 @Target(TYPE)
-public @interface Component {
+public @interface FactoryComponent {
 
 	/**
-	 * Support inline instantiation of the {@link Component} annotation.
+	 * Support inline instantiation of the {@link FactoryComponent} annotation.
 	 */
-	public static final class Literal extends AnnotationLiteral<Component> implements Component {
+	public static final class Literal extends AnnotationLiteral<FactoryComponent> implements FactoryComponent {
+
+		private static final long serialVersionUID = 1L;
 
 		/**
-		 * Default instance.
+		 * @param pid the factory configuration pid
+		 * @return an instance of {@link FactoryComponent}
 		 */
-		public static final Component	INSTANCE			= new Literal();
+		public static final Literal of(String pid) {
+			return new Literal(pid);
+		}
 
-		private static final long		serialVersionUID	= 1L;
+		private Literal(String pid) {
+			_pid = pid;
+		}
+
+		@Override
+		public String value() {
+			return _pid;
+		}
+
+		private final String _pid;
 
 	}
+
+	/**
+	 * The configuration PID for the configuration of this Component.
+	 *
+	 * <p>
+	 * The value specifies a configuration PID who's configuration properties are
+	 * available at injection points in the component.
+	 *
+	 * <p>
+	 * A special string (<code>"$"</code>) can be used to specify the name of the
+	 * component as a configuration PID. The {@link CdiConstants#CDI_COMPONENT_NAME
+	 * CDI_COMPONENT_NAME} constant holds this special string.
+	 *
+	 * <p>
+	 * For example:
+	 *
+	 * <pre>
+	 * {@code @FactoryPID(CDI_COMPONENT_NAME)}
+	 * </pre>
+	 */
+	String value() default CdiConstants.CDI_COMPONENT_NAME;
 
 }

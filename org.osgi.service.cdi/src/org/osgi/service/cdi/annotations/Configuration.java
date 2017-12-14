@@ -32,9 +32,9 @@ import org.osgi.annotation.bundle.Requirement;
  * Annotation used with {@link Inject} in order to have configuration properties
  * injected. Properties are a combination of qualifiers and properties provided
  * through Configuration Admin in association with the configuration PIDs
- * defined by {@link PID} and {@link FactoryPID} or in the case of
- * non-components which were specified in the requirement (who's default value
- * is the CDI container id).
+ * defined by {@link PID} and {@link FactoryComponent} or in the case of the
+ * application component which were specified by the configuration object who's
+ * PID matches the CDI container id.
  *
  * @author $Id$
  */

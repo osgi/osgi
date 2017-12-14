@@ -17,7 +17,7 @@
 package org.osgi.service.cdi;
 
 import org.osgi.annotation.versioning.ProviderType;
-import org.osgi.service.cdi.annotations.FactoryPID;
+import org.osgi.service.cdi.annotations.FactoryComponent;
 import org.osgi.service.cdi.annotations.PID;
 
 /**
@@ -49,7 +49,8 @@ public class CdiConstants {
 	 *
 	 * <p>
 	 * This string can be used with {@link PID#value() PID} OR
-	 * {@link FactoryPID#value() FactoryPID} to specify the name of the component.
+	 * {@link FactoryComponent#value() factory PID} to specify the name of the
+	 * component.
 	 * <p>
 	 * For example:
 	 *

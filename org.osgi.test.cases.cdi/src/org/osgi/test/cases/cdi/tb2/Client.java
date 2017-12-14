@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Qualifier;
 
 import org.osgi.service.cdi.annotations.Bundle;
-import org.osgi.service.cdi.annotations.Component;
+import org.osgi.service.cdi.annotations.SingleComponent;
 import org.osgi.service.cdi.annotations.Service;
 import org.osgi.test.cases.cdi.serviceapi.Foo;
 
@@ -42,7 +42,7 @@ import org.osgi.test.cases.cdi.serviceapi.Foo;
 	String value();
 }
 
-@Component
+@SingleComponent
 @Service
 @Bundle
 @Tb("tb2")

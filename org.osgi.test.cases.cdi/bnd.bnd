@@ -30,8 +30,10 @@ Test-Cases							= ${testcases}
 javac.profile=
 
 -buildpath							= \
+	org.osgi.service.event;                 version=project, \
 	org.osgi.service.cdi;                   version=project, \
 	org.osgi.test.support;                  version=project, \
+	org.osgi.util.converter;                version=project, \
 	osgi.core;                              version=6.0, \
 	org.apache.aries.javax.inject-api;      version=latest, \
 	org.apache.aries.javax.cdi-api;         version=latest, \
