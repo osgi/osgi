@@ -70,16 +70,6 @@ public final class ConfiguratorConstants {
 			+ "json-version";
 
 	/**
-	 * Configuration property holding the optional information about the
-	 * environments where the configuration applies.
-	 * <p>
-	 * The value of this property must either be of type {@code String} or {code
-	 * String[]}.
-	 */
-	public static final String	PROPERTY_ENVIRONMENTS	= PROPERTY_PREFIX
-			+ "environments";
-
-	/**
 	 * Configuration property for the configuration ranking.
 	 * <p>
 	 * The value of this property must be convertible to a number.

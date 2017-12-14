@@ -30,7 +30,7 @@
     <para>
       This specification defines a mechanism to feed configurations into the Configuration Admin service
       through configuration resources. A single configuration resource can feed multiple PIDs with configuration
-      and multiple configuration resources can be provided in one ore more bundles.
+      and multiple configuration resources can be provided in one or more bundles.
     </para>
   </section> 
   
@@ -183,7 +183,7 @@
               <entry><code>:configurator:version</code></entry>
               <entry>String</entry>
               <entry><emphasis>version</emphasis></entry>
-              <entry>The version of this configuration resource. If not specified the symbolic name of
+              <entry>The version of this configuration resource. If not specified the version of
               the bundle containing the resource is used. <emphasis>Mandatory</emphasis> for configuration 
               resources that do not reside in a bundle.</entry>
             </row>
