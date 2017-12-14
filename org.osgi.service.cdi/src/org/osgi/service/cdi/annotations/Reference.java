@@ -24,10 +24,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Provider;
 import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
-import org.osgi.service.cdi.reference.ReferenceEvent;
 
 /**
  * Annotation used on injection points informing the CDI container that the
@@ -104,5 +102,4 @@ public @interface Reference {
 	 * If not specified, no target property is set.
 	 */
 	String target() default "";
-
 }
