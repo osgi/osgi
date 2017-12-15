@@ -70,11 +70,13 @@ releaserepo             = ${build}/${target-dir}/repo
             poll.time=-1;\
             cache=${.}/cache/stable/Amdatu,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
-            name='Local',\
+            name='Local';\
+            noupdateOnRelease=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
             name='Release';\
             releaseUrl="${fileuri;${releaserepo}}";\
-            snapshotUrl="${fileuri;${releaserepo}}",\
+            snapshotUrl="${fileuri;${releaserepo}}";\
+            noupdateOnRelease=true,\
           aQute.bnd.repository.maven.provider.MavenBndRepository;\
            releaseUrl="${centralrepo}";\
            index=${.}/baseline.mvn;\
