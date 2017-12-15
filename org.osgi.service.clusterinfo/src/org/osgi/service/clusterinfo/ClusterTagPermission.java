@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ package org.osgi.service.clusterinfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ import java.util.Map;
  * A bundle's authority to add a tag to a NodeStatus service.
  */
 public final class ClusterTagPermission extends Permission {
-	static final long					serialVersionUID	= -5855563886961618301L;
+	private static final long			serialVersionUID	= 1L;
 	/**
 	 * The action string {@code add}.
 	 */
@@ -43,11 +43,18 @@ public final class ClusterTagPermission extends Permission {
 	 * The add action mask
 	 */
 	private final static int			ACTION_ADD			= 0x00000001;
+	private final static int			ACTION_ALL			= ACTION_ADD;
+	final static int					ACTION_NONE			= 0;
 
 	/**
 	 * The actions mask.
 	 */
 	private transient int				action_mask;
+
+	/**
+	 * If the name is "*".
+	 */
+	private transient volatile boolean	all;
 
 	/**
 	 * The actions in canonical form.
@@ -89,10 +96,12 @@ public final class ClusterTagPermission extends Permission {
 			throw new IllegalArgumentException("invalid name");
 		}
 
-		if ((mask != ACTION_ADD)) {
+		if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 		action_mask = mask;
+
+		all = name.equals("*");
 	}
 
 	/**
@@ -113,38 +122,43 @@ public final class ClusterTagPermission extends Permission {
 	 * @return action mask.
 	 */
 	private static int parseActions(final String actions) {
-		int mask = 0;
 		boolean seencomma = false;
+
+		int mask = ACTION_NONE;
+
 		if (actions == null) {
-			throw new IllegalArgumentException(
-					"invalid permission: " + actions);
+			return mask;
 		}
+
 		char[] a = actions.toCharArray();
+
 		int i = a.length - 1;
 		if (i < 0)
-			throw new IllegalArgumentException(
-					"invalid permission: " + actions);
+			return mask;
 
 		while (i != -1) {
 			char c;
 			// skip whitespace
-			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n' || c == '\f' || c == '\t'))
+			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n'
+					|| c == '\f' || c == '\t'))
 				i--;
 			// check for the known strings
 			int matchlen;
+
 			if (i >= 2 && (a[i - 2] == 'a' || a[i - 2] == 'A')
 					&& (a[i - 1] == 'd' || a[i - 1] == 'D')
 					&& (a[i] == 'd' || a[i] == 'D')) {
-				matchlen = 9;
+				matchlen = 3;
 				mask = ACTION_ADD;
-			}
-			else
+
+			} else {
 				// parse error
 				throw new IllegalArgumentException(
-						"invalid permission: " + actions);
+						"invalid actions: " + actions);
+			}
 
 			// make sure we didn't just match the tail of a word
-			// like "ackbarfpublish". Also, skip to the comma.
+			// like "ackbarfadd". Also, skip to the comma.
 			seencomma = false;
 			while (i >= matchlen && !seencomma) {
 				switch (a[i - matchlen]) {
@@ -158,7 +172,8 @@ public final class ClusterTagPermission extends Permission {
 					case '\t' :
 						break;
 					default :
-						throw new IllegalArgumentException("invalid permission: " + actions);
+						throw new IllegalArgumentException(
+								"invalid actions: " + actions);
 				}
 				i--;
 			}
@@ -166,7 +181,7 @@ public final class ClusterTagPermission extends Permission {
 			i -= matchlen;
 		}
 		if (seencomma) {
-			throw new IllegalArgumentException("invalid permission: " + actions);
+			throw new IllegalArgumentException("invalid actions: " + actions);
 		}
 		return mask;
 	}
@@ -187,6 +202,9 @@ public final class ClusterTagPermission extends Permission {
 			ClusterTagPermission requested = (ClusterTagPermission) p;
 			int requestedMask = requested.getActionsMask();
 			if ((getActionsMask() & requestedMask) == requestedMask) {
+				if (all) {
+					return true;
+				}
 				String requestedName = requested.getName();
 				return requestedName.equals(getName());
 			}
@@ -207,7 +225,7 @@ public final class ClusterTagPermission extends Permission {
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
-			result = ADD;
+			actions = result = ADD;
 		}
 		return result;
 	}
@@ -242,8 +260,9 @@ public final class ClusterTagPermission extends Permission {
 		if (!(obj instanceof ClusterTagPermission)) {
 			return false;
 		}
-		ClusterTagPermission tp = (ClusterTagPermission) obj;
-		return (getActionsMask() == tp.getActionsMask()) && getName().equals(tp.getName());
+		ClusterTagPermission p = (ClusterTagPermission) obj;
+		return (getActionsMask() == p.getActionsMask())
+				&& getName().equals(p.getName());
 	}
 
 	/**
@@ -263,7 +282,8 @@ public final class ClusterTagPermission extends Permission {
 	 * stream. The actions are serialized, and the superclass takes care of the
 	 * name.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws IOException {
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
 		if (actions == null)
@@ -275,7 +295,8 @@ public final class ClusterTagPermission extends Permission {
 	 * readObject is called to restore the state of this permission from a
 	 * stream.
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s)
+			throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
 		setTransients(parseActions(actions));
@@ -290,19 +311,28 @@ public final class ClusterTagPermission extends Permission {
  * @see java.security.PermissionCollection
  */
 final class ClusterTagPermissionCollection extends PermissionCollection {
-	static final long								serialVersionUID	= -614647783533924048L;
+	private static final long							serialVersionUID	= 1L;
 	/**
 	 * Table of permissions.
 	 * 
+	 * @serial
 	 * @GuardedBy this
 	 */
-	private transient Map<String, ClusterTagPermission>	permissions;
+	private Map<String,ClusterTagPermission>	permissions;
+	/**
+	 * Boolean saying if "*" is in the collection.
+	 * 
+	 * @serial
+	 * @GuardedBy this
+	 */
+	private boolean										all_allowed;
 
 	/**
 	 * Create an empty ClusterTagPermission object.
 	 */
 	public ClusterTagPermissionCollection() {
-		permissions = new HashMap<String, ClusterTagPermission>();
+		permissions = new HashMap<String,ClusterTagPermission>();
+		all_allowed = false;
 	}
 
 	/**
@@ -318,24 +348,32 @@ final class ClusterTagPermissionCollection extends PermissionCollection {
 	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof ClusterTagPermission)) {
-			throw new IllegalArgumentException("invalid permission: " + permission);
+			throw new IllegalArgumentException(
+					"invalid permission: " + permission);
 		}
 		if (isReadOnly()) {
-			throw new SecurityException("attempt to add a Permission to a " + "readonly PermissionCollection");
+			throw new SecurityException("attempt to add a Permission to a "
+					+ "readonly PermissionCollection");
 		}
-		final ClusterTagPermission tp = (ClusterTagPermission) permission;
-		final String name = tp.getName();
-		final int newMask = tp.getActionsMask();
+		final ClusterTagPermission p = (ClusterTagPermission) permission;
+		final String name = p.getName();
 
 		synchronized (this) {
 			final ClusterTagPermission existing = permissions.get(name);
 			if (existing != null) {
+				final int newMask = p.getActionsMask();
 				final int oldMask = existing.getActionsMask();
 				if (oldMask != newMask) {
-					permissions.put(name, new ClusterTagPermission(name, oldMask | newMask));
+					permissions.put(name,
+							new ClusterTagPermission(name, oldMask | newMask));
 				}
 			} else {
-				permissions.put(name, tp);
+				permissions.put(name, p);
+			}
+			if (!all_allowed) {
+				if (name.equals("*")) {
+					all_allowed = true;
+				}
 			}
 		}
 	}
@@ -354,9 +392,29 @@ final class ClusterTagPermissionCollection extends PermissionCollection {
 		if (!(permission instanceof ClusterTagPermission)) {
 			return false;
 		}
+		final ClusterTagPermission requested = (ClusterTagPermission) permission;
+		String name = requested.getName();
+		final int desired = requested.getActionsMask();
+		int effective = ClusterTagPermission.ACTION_NONE;
 
-		for (Permission p : permissions.values()) {
-			if (p.implies(permission)) {
+		ClusterTagPermission x;
+		// short circuit if the "*" Permission was added
+		synchronized (this) {
+			if (all_allowed) {
+				x = permissions.get("*");
+				if (x != null) {
+					effective |= x.getActionsMask();
+					if ((effective & desired) == desired) {
+						return true;
+					}
+				}
+			}
+			x = permissions.get(name);
+		}
+		if (x != null) {
+			// we have a direct hit!
+			effective |= x.getActionsMask();
+			if ((effective & desired) == desired) {
 				return true;
 			}
 		}
@@ -376,17 +434,27 @@ final class ClusterTagPermissionCollection extends PermissionCollection {
 		return Collections.enumeration(all);
 	}
 
-	private synchronized void writeObject(ObjectOutputStream out) throws IOException {
-		Hashtable<String, ClusterTagPermission> hashtable = new Hashtable<String, ClusterTagPermission>(permissions);
+	/* serialization logic */
+	private static final ObjectStreamField[] serialPersistentFields = {
+			new ObjectStreamField("permissions", HashMap.class),
+			new ObjectStreamField("all_allowed", Boolean.TYPE)
+	};
+
+	private synchronized void writeObject(ObjectOutputStream out)
+			throws IOException {
 		ObjectOutputStream.PutField pfields = out.putFields();
-		pfields.put("permissions", hashtable);
+		pfields.put("permissions", permissions);
+		pfields.put("all_allowed", all_allowed);
 		out.writeFields();
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
 		@SuppressWarnings("unchecked")
-		Hashtable<String, ClusterTagPermission> hashtable = (Hashtable<String, ClusterTagPermission>) gfields.get("permissions", null);
-		permissions = new HashMap<String, ClusterTagPermission>(hashtable);
+		HashMap<String,ClusterTagPermission> p = (HashMap<String,ClusterTagPermission>) gfields
+				.get("permissions", null);
+		permissions = p;
+		all_allowed = gfields.get("all_allowed", false);
 	}
 }
