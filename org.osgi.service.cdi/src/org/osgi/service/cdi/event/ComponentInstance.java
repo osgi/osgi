@@ -37,6 +37,6 @@ public interface ComponentInstance extends ComponentProperties {
 	 *
 	 * @return the component
 	 */
-	public <C> C get();
+	public Object get();
 
 }

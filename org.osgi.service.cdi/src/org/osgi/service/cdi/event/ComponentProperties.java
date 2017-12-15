@@ -16,6 +16,7 @@
 
 package org.osgi.service.cdi.event;
 
+import java.util.Map;
 import javax.enterprise.context.Destroyed;
 import org.osgi.service.cdi.annotations.ComponentScoped;
 
@@ -29,13 +30,10 @@ import org.osgi.service.cdi.annotations.ComponentScoped;
 public interface ComponentProperties {
 
 	/**
-	 * The properties that were used to initialize the component converted into
-	 * {@code P}, using the converter specification. {@code null} otherwise.
+	 * The properties that were used to initialize the component.
 	 *
-	 * @return the properties that were used to initialize the component converted
-	 *         into {@code P}, using the converter specification. {@code null}
-	 *         otherwise
+	 * @return the properties that were used to initialize the component
 	 */
-	public <P> P getProperties();
+	public Map<String, ?> getProperties();
 
 }
