@@ -18,8 +18,8 @@ package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
+import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
 
 /**
  * A snapshot of the runtime state of a CDI container
@@ -28,6 +28,12 @@ import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
  * @author $Id$
  */
 public class ContainerDTO extends DTO {
+	/**
+	 * The list of errors reported during attempted initialization of the container
+	 * instance.
+	 */
+	public List<String>			errors;
+
 	/**
 	 * The {@link ContainerTemplateDTO#id} of the template associated with this
 	 * {@link ContainerDTO}

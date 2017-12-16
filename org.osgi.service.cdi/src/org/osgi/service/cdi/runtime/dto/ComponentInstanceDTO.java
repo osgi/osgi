@@ -29,6 +29,12 @@ import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
  */
 public class ComponentInstanceDTO extends DTO {
 	/**
+	 * The list of errors reported during attempted creation of the component
+	 * instance.
+	 */
+	public List<String>			errors;
+
+	/**
 	 * The name of the template of this component
 	 * <p>
 	 * Must never be {@code null}
