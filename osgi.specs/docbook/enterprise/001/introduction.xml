@@ -702,19 +702,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.blueprint"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><para><code><xref
-              linkend="org.osgi.service.blueprint.container"/></code></para><para><code><xref
-              linkend="org.osgi.service.blueprint.reflect"/></code></para></entry>
-
-              <entry><code><xref
-              endterm="org.osgi.service.blueprint.container-version"
-              linkend="service.blueprint"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.remoteserviceadmin"
               xrefstyle="template:%n %t"/></entry>
 
@@ -1087,8 +1074,8 @@
       </listitem>
 
       <listitem>
-        <para>Removed <emphasis>Blueprint Container
-        Specification</emphasis>.</para>
+        <para><emphasis>Blueprint Container Specification</emphasis> is now
+        available in OSGi Compendium specification.</para>
       </listitem>
     </itemizedlist>
   </section>
