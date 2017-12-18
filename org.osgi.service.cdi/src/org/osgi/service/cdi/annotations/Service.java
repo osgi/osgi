@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Qualifier;
 import org.osgi.annotation.bundle.Requirement;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
@@ -62,6 +63,7 @@ import org.osgi.framework.ServiceFactory;
  * @author $Id$
  */
 @Documented
+@Qualifier
 @Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, TYPE, TYPE_USE})
