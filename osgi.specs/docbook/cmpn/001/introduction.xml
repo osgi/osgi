@@ -474,17 +474,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.resolver"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code><xref
-              linkend="org.osgi.service.resolver"/></code></entry>
-
-              <entry><code><xref endterm="org.osgi.service.resolver-version"
-              linkend="service.resolver"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.rest"
               xrefstyle="template:%n %t"/></entry>
 
@@ -652,6 +641,11 @@
     <itemizedlist>
       <listitem>
         <para>Updated <xref linkend="service.namespaces"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Resolver Service Specification moved to OSGi Core, Chapter
+        58.</para>
       </listitem>
     </itemizedlist>
   </section>

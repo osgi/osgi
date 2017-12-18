@@ -76,8 +76,6 @@
 
   <xi:include href="../135/service.namespaces.xml"/>
 
-  <xi:include href="../136/service.resolver.xml"/>
-
   <xi:include href="../137/service.rest.xml"/>
 
   <xi:include href="../138/service.async.xml"/>

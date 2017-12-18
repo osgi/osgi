@@ -60,16 +60,16 @@
     provided by the target runtime. Management agents are responsible for
     ensuring additional bundles are installed to plug these gaps such that the
     collection of bundles will resolve and run. The <xref
-    linkend="service.resolver"/> and <xref linkend="service.repository"/> help
-    management agents address these needs but do not cover how deployment
-    works for resource collections, especially when those collections are
-    scoped. Scoping affects requirement and capability resolution and
-    therefore affects the choice of resources. The Subsystems specification
-    defines resolution and provisioning rules to help management agents
-    consistently deploy collections of resources. The specification also
-    defines a format for developers and testers to provide predetermined
-    deployment resolutions to help ensure consistency between test and
-    production environments.</para>
+    linkend="service.subsystem-ref.service.resolver"/> and <xref
+    linkend="service.repository"/> help management agents address these needs
+    but do not cover how deployment works for resource collections, especially
+    when those collections are scoped. Scoping affects requirement and
+    capability resolution and therefore affects the choice of resources. The
+    Subsystems specification defines resolution and provisioning rules to help
+    management agents consistently deploy collections of resources. The
+    specification also defines a format for developers and testers to provide
+    predetermined deployment resolutions to help ensure consistency between
+    test and production environments.</para>
 
     <section>
       <title>Essentials</title>
@@ -183,7 +183,7 @@
           <para><emphasis>Resolver</emphasis> - A service used to resolve
           requirements against capabilities to determine the resources
           required by a Subsystem. The resolver service is described in the
-          <xref linkend="service.resolver"/>.</para>
+          <xref linkend="service.subsystem-ref.service.resolver"/>.</para>
         </listitem>
 
         <listitem>
@@ -245,12 +245,12 @@
 
       <para>A Subsystem that does not have a Deployment Manifest has its
       deployment details calculated during installation. This may be done
-      using the <xref linkend="service.resolver"/>, if available. The starting
-      set of requirements to be resolved are those identifying the Subsystem
-      content (that is, requirements for content resources). The Subsystems
-      implementation provides a resolve context that implements the policy for
-      the Subsystem and consults the configured Repository services to find
-      candidates to satisfy requirements.</para>
+      using the <xref linkend="service.subsystem-ref.service.resolver"/>, if
+      available. The starting set of requirements to be resolved are those
+      identifying the Subsystem content (that is, requirements for content
+      resources). The Subsystems implementation provides a resolve context
+      that implements the policy for the Subsystem and consults the configured
+      Repository services to find candidates to satisfy requirements.</para>
 
       <para>This resolve context can also represent the target deployment
       environment, which might be a live framework, or a static definition of
@@ -1934,12 +1934,13 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     the Subsystems implementation should attempt to resolve the Subsystem
     content resources before installing the content resources. One possible
     way of resolving the content resources, before installing them, is to use
-    a Resolver service, see <xref linkend="service.resolver"/>. This
-    specification illustrates the behavior of dependency resource discovery
-    using terms defined by the Resolver service. A Subsystems implementation
-    is not required to use the Resolver service to accomplish dependency
-    resource discovery. Other mechanisms may be used to accomplish the same
-    goal as long as the resolution results in a valid class space. Subsystems
+    a Resolver service, see <xref
+    linkend="service.subsystem-ref.service.resolver"/>. This specification
+    illustrates the behavior of dependency resource discovery using terms
+    defined by the Resolver service. A Subsystems implementation is not
+    required to use the Resolver service to accomplish dependency resource
+    discovery. Other mechanisms may be used to accomplish the same goal as
+    long as the resolution results in a valid class space. Subsystems
     implementations need not guarantee to find a solution to every resolution
     problem, but if a valid solution is not found, then discovery of the
     dependencies must fail, resulting in an installation failure.</para>
@@ -5013,6 +5014,11 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <bibliomixed xml:id="subsystems.osi"><title>Open Source
       initiative</title> http://www.opensource.org/</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.subsystem-ref.service.resolver"><title>Resolver Service
+      Specification</title>OSGi Core, Chapter 58 Resolver Service
+      Specification</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

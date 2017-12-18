@@ -751,6 +751,17 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
           </row>
 
           <row>
+            <entry><xref linkend="service.resolver"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.resolver"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.service.resolver-version"
+            linkend="service.resolver"/></code></entry>
+          </row>
+
+          <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 
@@ -834,6 +845,11 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <listitem>
         <para>Added <xref linkend="org.osgi.annotation.bundle"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="service.resolver"/> moved to Core from OSGi
+        Compendium, Chapter 136.</para>
       </listitem>
     </itemizedlist>
   </section>

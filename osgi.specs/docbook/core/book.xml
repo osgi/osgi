@@ -66,5 +66,7 @@
 
   <xi:include href="057/framework.dto.xml"/>
 
+  <xi:include href="058/service.resolver.xml"/>
+
   <xi:include href="../701/util.tracker.xml"/>
 </book>

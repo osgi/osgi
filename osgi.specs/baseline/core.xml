@@ -42660,6 +42660,1617 @@ The identifier of the resource associated with the wiring node.
   </section>
 </chapter>
 
+  <chapter label="58" revision="$Id: db19fe056306399c3f05bd23481f75dbdb455720 $" version="5" xml:id="service.resolver" xml:base="../136/service.resolver.xml">
+  <title>Resolver Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.resolver-version" linkend="org.osgi.service.resolver"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Today very few applications are self contained, the predominant
+    development model is that applications are built from (external)
+    components, which are often open source. Application developers add
+    business logic, glue code, and assemble the diverse components into a
+    resource that provides the desired capabilities when installed in an
+    environment. Designing the assembly has long been a manual and error prone
+    process, partly due to the complexity of external dependencies. Although
+    the direct dependencies are often given, the largest number of
+    dependencies are usually the transitive dependencies: the dependencies of
+    the dependencies. Modern applications can end up with hundreds to
+    thousands of external dependencies. Numbers that make tooling
+    inevitable.</para>
+
+    <para>The OSGi framework is the first specification that provides a
+    foundation for automating a significant part of this assembly process. The
+    Requirement-Capability model defined in <xref linkend="i3333846"/>
+    provides a dependency model that allows resources to express dependencies,
+    constraints, and capabilities. If a resource's constraints are met it
+    provides capabilities that can satisfy further requirements. The OSGi
+    dependency model is fully generic and is not limited to bundles. Resources
+    can be bundles but also certificates, plugged in devices, etc.</para>
+
+    <para>Resolving transitive dependencies is a non-trivial process that
+    requires careful design to achieve the required performance since the
+    underlying problem is NP-complete. OSGi frameworks have always included
+    such resolvers but these were built into the frameworks. They were not
+    usable outside the framework for tooling, for example automatically
+    finding the dependencies of a bundle that needs to be installed.</para>
+
+    <para>The number of dependencies is rapidly reaching a threshold where
+    manual methods no longer can provide reliable results. This specification
+    therefore provides the <emphasis>Resolver service</emphasis>, a service
+    that can be the base for provisioning, deployment, build, and diagnostic
+    tooling. The service can take a requirement and resolve it to a wiring of
+    resources. For example, with cloud computing a new requirement can be
+    translated into a new OSGi framework instance being started on a node and
+    provisioned with the set of bundles that satisfy the given requirement.
+    The OSGi Resolver service is intended be a corner stone of such an
+    auto-provisioning tool.</para>
+
+    <para>However, the OSGi Resolver service is not limited to these higher
+    end schemes. Build tools can use the Resolver to find components for the
+    build path and/or run time environment and predict the results of
+    installing a set of bundles on a target environment. The OSGi Resolver
+    service is an essential part of a software model where applications are
+    built out of independent components.</para>
+
+    <para>This specification is based on the concepts and API defined in the
+    <xref linkend="i3333846"/>, <xref linkend="i3335981"/>, and the <xref linkend="i3333826"/>. These specifications are required reading for
+    understanding this specification. This specification is for highly
+    specialized use, it is not intended to be used in applications, the
+    Resolver API is a low level service intended for system developers with
+    deep knowledge of the OSGi module layer.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Transitive</emphasis> - From a requirement, find a
+          consistent set of resources that satisfy that requirement.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Diagnostics</emphasis> - Provide diagnostic
+          information when no resolution can be found.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Scoped Repositories</emphasis> - Allow the
+          environment to control the repositories to use.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Build Tools</emphasis> - Must be useful in
+          establishing build and run time class paths.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Provisioning</emphasis> - Must be useful to find a
+          set of bundles that can be installed in a system without running
+          into unresolved dependencies.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>OSGi</emphasis> - Provide the semantics of all the
+          OSGi namespaces, including the uses constraints.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>API</emphasis> - The API for the Resolver must
+          provide the base for the Framework Bundle Wiring API.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Performant</emphasis> - Enable highly performant
+          implementations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Frameworks</emphasis> - Allow Frameworks to provide
+          their resolver as a service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Scalable</emphasis> - Allow access to, and use of,
+          very large repositories.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i3331037">
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Environment</emphasis> - A container or framework
+          that can install resources and uses a Resolver to wire these
+          resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resolve Context</emphasis> - An interface
+          implemented by the management agent to provide the context of the
+          resolution.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Wiring</emphasis> - Represents the state of a
+          resource's wires, requirements, and capabilities in an
+          environment.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resolver</emphasis> - A service that can find a set
+          of wires that can be applied to an existing wiring state where a set
+          of initial resources have all their mandatory requirements
+          satisfied.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Wire</emphasis> - Links requirement to a
+          capability.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resource</emphasis> -An artifact with requirements
+          that need to be provisioned and resolved to provide its
+          capabilities.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Requirement</emphasis> - A necessity for a given
+          resource before it can provide its capabilities; expressed as a
+          filter expression on the attributes of a capability in a given
+          namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Capability</emphasis> - A set of attributes and
+          directives defined by a namespace, describes what a resource
+          provides when resolved.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Hosted Capability</emphasis> - Pairs a resource with
+          a capability to model hosting capabilities in another
+          resource.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Namespace</emphasis> - The type for a capability and
+          requirement.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resolution</emphasis> - The result of a resolve
+          operation.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.743in" contentwidth="7.000in" fileref="resolver-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The Resolver service can find a complete and consistent set of
+      transitive dependencies starting with an initial set of mandatory and
+      optional resources. Such a set can be used to install resources in the
+      environment from local or remote repositories. To use the Resolver
+      service, the client must provide a <xref linkend="org.osgi.service.resolver.ResolveContext" xrefstyle="hyperlink"/> object. This complex object represents the
+      context of a resolution; it provides the initial resources (optional and
+      mandatory), defines a number of namespaces specific policies, and
+      provides the state of the environment.</para>
+
+      <para>A resolution can be based on an existing wiring in the
+      environment, for example the current framework state. For the framework,
+      the Resolve Context can find this existing state via the <xref linkend="i3335981"/>. The Resolver must then satisfy all the
+      requirements of the mandatory resources. The Resolver must always ask
+      the Resolve Context to find additional capabilities for the unsatisfied
+      requirements. A capability is always associated with a resource, which
+      is subsequently associated with additional requirements. The final
+      resolution must contain a set of resources that include the initial set
+      of mandatory resources, has no unsatisfied mandatory requirements, and
+      is consistent with the implied constraints. Otherwise it fails.</para>
+
+      <para>The Requirement-Capability model is fully generic but provides
+      special semantics through the use of namespaces. The Resolver must
+      implement the standard OSGi namespaces as described in <xref linkend="i3335981"/>, which includes the <code>uses</code> constraints.
+      Part of the semantics of the OSGi namespaces are delegated to the
+      Resolve Context so that it can implement different policies. Singletons,
+      ordering of capabilities, and matching are the responsibility of the
+      Resolve Context; the Resolver never matches a requirement to a
+      capability.</para>
+
+      <para>Requirements have an <code>effective</code> directive that
+      indicates in what situations the requirement must be resolved. Also
+      here, the Resolve Context decides if a particular requirement is
+      effective or not. Only effective requirements are wired in the
+      resolution.</para>
+
+      <para>Since capabilities are declared by resources that have additional
+      requirements, the Resolver must create a set of resources where all
+      transitive requirements are satisfied or fail with a Resolution
+      Exception. This Resolution Exception can provide additional details why
+      the resolution failed, if possible.</para>
+
+      <para>At the end of a successful resolve operation the Resolver returns
+      a <code>Map&lt;Resource,List&lt;Wire&gt;&gt;</code>. These wires are a
+      delta on the existing state, if any. The wires can then be used to
+      provision missing resources or to provide diagnostic feedback.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>The Resolve Context</title>
+
+    <para>Provisioning is the process of providing a framework with the
+    necessary resources to allow it to operate according to set goals. In OSGi
+    terms, this consists of installing bundles and ensuring that the
+    configuration is set up correctly. With OSGi, bundles explicitly describe
+    their capabilities and requirements as manifest headers. This can range
+    from Export-Package (a capability) to a generic Provide-Capability
+    header.</para>
+
+    <para>OSGi Frameworks have a <emphasis>resolving</emphasis> stage that
+    ensures requirements are satisfied before a bundle is allowed to provide
+    code to the shared space. As long as the requirements are not met, the
+    bundle remains in the <code>INSTALLED</code> state and is thus prohibited
+    from contributing capabilities. Once all the mandatory requirements are
+    met, the bundle becomes <code>RESOLVED</code>. That is, a framework
+    combines two decisions when it resolves bundles:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Find a resolution based on the existing set of installed
+        bundles.</para>
+      </listitem>
+
+      <listitem>
+        <para>Move the bundles that have all their mandatory requirements
+        satisfied to the <code>RESOLVED</code> state.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The <emphasis>Resolver service</emphasis> separates these two stages
+    and thus allows a third party, the <emphasis>management agent</emphasis>,
+    to define the <emphasis>environment</emphasis> of the resolution. A
+    management agent can interact with the Resolver service while it is
+    searching for a resolution because the Resolver service calls back the
+    management agent through a <xref linkend="org.osgi.service.resolver.ResolveContext" xrefstyle="hyperlink"/>
+    object. The Resolver service will therefore allow the management agent to
+    handle more scenarios, better diagnostics, etc.</para>
+
+    <para>The Resolve Context is provided by the management agent, it is an
+    abstract base class and must therefore be extended. It is a non-trivial
+    class to implement since it is tightly coupled to the rules of the
+    environment; it represents the policies of the management agent for that
+    environment. For OSGi framework resolvers, the Resolve Context must
+    understand and implement a part of the OSGi framework namespaces.</para>
+
+    <para>With the Resolver service, a management agent can try out
+    resolutions before any bundle can see the result of such a resolution but
+    it can also include extra bundles or other resources on demand. The
+    Resolver service will also allow resolutions to be calculated for other
+    frameworks.</para>
+
+    <para>For example, a management agent could use a Resolver service to find
+    missing dependencies and install them on demand from a local directory
+    with bundles. Such a Provisioner could have the following skeleton:</para>
+
+    <programlisting>public class Provisioner {
+  File                 bundles   = ...;
+  Map&lt;String,Resource&gt; resources = ...;
+  Resolver             resolver  = ...;
+  BundleContext        context   = ...;
+
+  public void install(String location) {
+    Resource resource = resources.get( location );
+    if ( resource == null ) error(...);
+    
+    try {
+       ResolveContextImpl rc = ...
+       rc.addMandatory( resource );
+      Set&lt;Resource&gt; provision = resolver.resolve( rc ).keySet();
+
+      for ( Resource rb : provision ) {
+        String location = getLocation( rb );
+        
+        Bundle bundle = context.installBundle( location );
+            if ( !isFragment( bundle ) )
+            bundle.start();
+      }
+    } catch(ResolutionException re) {
+      ... // diagnostics
+    } catch(BundleException be) {
+      ... // diagnostics
+    }
+  }
+}</programlisting>
+
+    <section>
+      <title>Mandatory and Optional Resources</title>
+
+      <para>The Resolve Context provides all the parameters for the resolve
+      operation, the Resolver does not maintain any state between invocations.
+      The Resolve Context must therefore provide the mandatory and optional
+      resources, which are essentially the input parameters to the resolve
+      operation. The resolver must find a solution that includes at least the
+      initial mandatory resources and should include the optional
+      resources.</para>
+    </section>
+
+    <section xml:id="i3344409">
+      <title>Finding Capabilities</title>
+
+      <para>The Resolve Context's <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method must be implemented in such a way that it
+      returns an ordered list of capabilities. The Resolver will treat the
+      order of the capabilities as preferences, the first element is more
+      preferred than a later element. The Resolver cannot guarantee that the
+      wiring obeys this preference since there can be other constraints.
+      However, a Resolver must use this preference order for simple cases and
+      try to use it in more constrained situations.</para>
+
+      <para>The Resolver does not make any assumptions, this means that the
+      <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method must do all the matching. Even though the
+      Resolver gets the mandatory and optional resources it will not search
+      these for capabilities to satisfy requirements. If the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method does not search these resources then
+      their capabilities will not be used. The same is true for the existing
+      wiring state used.</para>
+
+      <para>Since this section describes the Resolver with respect to a
+      provisioning agent, the set of resources is not limited to the installed
+      set. That is, normally when a framework is resolved the Resolver only
+      has to include installed resources. However, for a provisioning agent it
+      is possible to retrieve external resources. The <xref linkend="service.repository"/> provides access to resource repositories
+      but a management agent is free to find capabilities by any alternative
+      means.</para>
+
+      <para>For resolving an OSGi framework the specifications outlines a
+      number of heuristics that guide the order of wiring bundles and
+      packages:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>A resource that is already resolved, that is, it is already
+          wired</para>
+        </listitem>
+
+        <listitem>
+          <para>The highest version</para>
+        </listitem>
+
+        <listitem>
+          <para>The lowest bundle id</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The Resolver can, and likely will, use the returned list to
+      maintain its internal state during the resolve operation while trying
+      out different potential solutions. It can add and remove capabilities at
+      will. The returned list must therefore be mutable and not reused, after
+      it is returned; it becomes owned by the Resolver. However, the Resolver
+      can call back later with the <xref linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-" xrefstyle="hyperlink"/> method, giving back the returned list as the
+      first parameter, see <xref linkend="i3344346"/>.</para>
+
+      <para>For example, assume that all possible resources in the previous
+      example can be gotten with the <code>getSortedResources</code> method in
+      the preferred resource order. This list contains all installed resources
+      as well as any potentially installable resources. This list is sorted
+      once on the given ordering criteria, this only has to be done once and
+      not for each <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method invocation. The following code, which
+      does not order by capability versions, could then be a simple skeleton
+      for the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method on the <code>ResolveContextImpl</code>
+      inner class:</para>
+
+      <programlisting>public List&lt;Capability&gt; findProviders(Requirement requirement ) {
+  List&lt;Capability&gt; result = new ArrayList&lt;Capability&gt;();
+
+  for ( Resource r : getSortedResources() )
+    for ( Capability c : r.getCapabilities( null ) )
+      if ( match( requirement, c ) )
+          result.add( c );
+
+  return result;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Matching</title>
+
+      <para>The <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method is responsible for only returning the
+      capabilities that the management agent wants to be considered by the
+      Resolver. Since the Resolver must never match any requirements to
+      capabilities it allows the management agent to fully control the
+      matching. However, in an OSGi environment the following matching
+      behavior is expected:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Requirements and capabilities must be in the same
+          namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para>Only requirements and capabilities that have no
+          <code>effective</code> directive or have the directive set to
+          <code>resolve</code> should be considered.</para>
+        </listitem>
+
+        <listitem>
+          <para>The requirement's filter must match the capability's
+          attributes.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the namespace is an <code>osgi.wiring.*</code> namespace
+          then the <code>mandatory</code> directive on the capability must be
+          supported. Mandatory attributes are defined with a
+          <code>mandatory</code> directive on a capability, they contain a
+          list of attribute names. Each of these attributes must be used in
+          the filter. Since the filter must be constructed from the
+          corresponding manifest header it is sufficient to search the filter
+          string with a regular expression that detects the usage of an
+          attribute name.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following example shows a skeleton <code>match</code> method
+      that provides OSGi semantics:</para>
+
+      <programlisting>boolean match(Requirement r, Capability c){
+  if ( !r.getNamespace().equals( c.getNamespace() ) )
+    return false;
+
+  String effective = c.getDirectives().get("effective");
+  if ( !(effective == null || effective.equals( "resolve") ) ) 
+    return false;
+
+  String f = r.getDirectives().get( "filter" );
+  if ( f  != null ) {
+    Filter filter = context.createFilter( f );
+    if ( !filter.matches( c.getAttributes() ) )
+      return false;
+  }
+
+  if ( !c.getNamespace().startsWith( "osgi.wiring." ) )
+    return true;
+
+  String mandatory = c.getDirectives().get("mandatory");
+  if ( mandatory == null)
+    return true;
+
+  List&lt;String&gt; attrs = 
+    Arrays.asList( mandatory.toLowerCase().split( "\\s*,\\s*") );
+
+  Matcher m = FILTER_ASSERT_PATTERN.matcher( f == null ? "": f );
+  while( m.find() )
+    attrs.remove(m.group(1)); // the attribute name
+
+  return mandatory.isEmpty();
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Repositories</title>
+
+      <para>Resolving to provision a framework is different than a framework
+      resolving itself. During provisioning remote repositories can be
+      consulted to find external resources while the framework only resolves a
+      limited set (the installed bundles). These repositories generally
+      contain magnitudes more bundles than what is installed in a
+      framework.</para>
+
+      <para>Repositories do not implement any namespace specific semantics and
+      therefore do not understand any directives. Repositories only verify the
+      requirement's filter (if any) against the capability's attributes. The
+      Resolver expects the Resolve Context to do the namespace specific
+      matching. The <xref linkend="service.repository"/> provides the details
+      for a service that abstracts a Requirement-Capability aware
+      repository.</para>
+
+      <para>With such a repository service the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method can be implemented as follows:</para>
+
+      <programlisting>List&lt;Repository&gt; repositories = new CopyOnWriteArrayList&lt;Repository&gt;();
+
+void addRepository(  Repository repository) { repositories.add(repository);}
+void removeRepository(Repository repository){ repositories.remove(repository);}
+
+public List&lt;Capability&gt; findProviders( Requirement requirement) {
+  List&lt;Capability&gt; result = new ArrayList&lt;Capability&gt;();
+
+  // previous findProviders that searches the initial resources
+
+  for ( Repository repository : repositories ) {
+     Collection&lt;Capability&gt; capabilities = repository.findProviders(
+            Collections.singleton( requirement ) ).get( requirement);
+     for ( Capability c : capabilities )
+       if ( match( requirement, c ) )
+           result.add( c );
+  }
+  return result;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Existing Wiring State</title>
+
+      <para>The Resolver service always creates a list of wires that should be
+      added to an existing state. To get the existing state, the <xref linkend="org.osgi.service.resolver.ResolveContext" xrefstyle="hyperlink"/> interface specifies the <xref linkend="org.osgi.service.resolver.ResolveContext.getWirings--" xrefstyle="hyperlink"/> method. This method must return the existing
+      state as a <code>Map&lt;Resource,Wiring&gt;</code>. A
+      <code>Wiring</code> is an object that reflects the wired state of a
+      resource in the environment. From this object, all declared and hosted
+      capabilities and requirements can be found, including their wires if
+      any. The Resolver needs this existing state to create a consistent
+      resolution. For example, uses constraints require access to the existing
+      state.</para>
+
+      <para>The Resolver service API is based on the generic
+      Requirement-Capability model. This API is implemented by the OSGi
+      framework to reflect its internal wiring, see <xref linkend="i3335981"/>. When the Resolver service is used for an OSGi
+      framework then the Resolve Context can provide the existing wiring state
+      based on the Framework Wiring API. The interfaces used in the
+      <code>org.osgi.framework.wiring</code> package all extend their
+      counterpart in the <code>org.osgi.resource</code> package (the generic
+      model). For example, the <code>BundleCapability</code> interface extends
+      the <code>Capability</code> interface.</para>
+
+      <para>The framework wiring API models all the power and complexities of
+      the OSGi framework. One of those aspects is <emphasis>removal
+      pending</emphasis>. Each installed bundle is represented by one or more
+      bundle revisions. Each bundle revision is a <code>Resource</code> object
+      but only one is the current bundle revision. During a resolve operation
+      a framework can actually wire to the current bundle revision but is not
+      forbidden to also select the pending removal bundle revisions. The
+      Resolve Context must therefore decide if it provides only the current
+      bundle revisions or all. The best policy solution in this case is to
+      always refresh after a (batch) of install operations and only resolve
+      when there are no pending-removal bundle revisions. However, certain
+      management agents attempt to manage a system that is in this half-way
+      state and will then be required to include the pending-removal
+      revisions.</para>
+
+      <para>The following example code shows a possible implementation of the
+      <xref linkend="org.osgi.service.resolver.ResolveContext.getWirings--" xrefstyle="hyperlink"/> method. It only uses the current wiring and
+      ignores removal pending bundle revisions:</para>
+
+      <programlisting>public Map&lt;Resource,Wiring&gt; getWirings(){
+    Map&lt;Resource,Wiring&gt; wirings = new HashMap&lt;Resource,Wiring&gt;();
+
+   for ( Bundle b : context.getBundles() ) {
+     BundleRevision revision = b.adapt( BundleRevision.class);
+     if ( revision != null ) {
+       Wiring wiring = revision.getWiring();
+       if ( wiring != null )
+           wirings.put( revision, wiring );
+     }
+   }
+   return wirings;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Effective</title>
+
+      <para>The Resolver service is designed to work with OSGi frameworks but
+      the scope is broader; its design allows many alternative usages. The
+      <code>effective</code> directive on the capabilities and requirements is
+      meant to allow requirements and capabilities to be effective in
+      different phases. The default is <code>resolve</code>, the value for an
+      OSGi framework resolving process. Bundles and other OSGi defined
+      artifacts must declare their capabilities and requirements in the
+      <code>resolve</code> effective time to be considered by an OSGi
+      resolver.</para>
+
+      <para>However, Resolvers can use the <code>effective</code> directive to
+      run the Resolver at other times than the standard OSGi framework
+      resolve. For example, it could be possible to define an <emphasis>active
+      time</emphasis> to resolve the service dependencies.</para>
+
+      <para>For this reason, the Resolver is designed to be agnostic for this
+      directive, it will always ask the <xref linkend="org.osgi.service.resolver.ResolveContext" xrefstyle="hyperlink"/> if a requirement is effective. It does this with
+      the <xref linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-" xrefstyle="hyperlink"/> method. Since the Resolver service never matches
+      requirements to capabilities it is also up to the Resolve Context to
+      decide how to treat the <code>effective</code> directive. For an OSGi
+      resolve operation, capabilities should also have an effective time value
+      of <code>resolve</code> (or not set since <code>resolve</code> is the
+      default).</para>
+
+      <para>To make requirements effective during the resolving of bundles it
+      will be necessary to implement the <xref linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-" xrefstyle="hyperlink"/> method similar to:</para>
+
+      <programlisting>public boolean isEffective( Requirement requirement) {
+  String e = requirement.getDirectives().get( "effective");
+  return e==null || "resolve".equals( e );
+}</programlisting>
+    </section>
+
+    <section xml:id="i3344346">
+      <title>Insert Hosted Capabilities</title>
+
+      <para>One of the complex aspects of resolving for an OSGi framework is
+      handling fragments. For fragments, the declared capabilities are going
+      to be hosted by their hosts. The <code>Requirement</code> and
+      <code>Capability</code> objects have a <code>getResource</code> method
+      that returns the associated resource. For hosted capabilities and
+      requirements this must be the hosting resource and for others the
+      declaring resource.</para>
+
+      <para>The <xref linkend="org.osgi.service.resolver.HostedCapability" xrefstyle="hyperlink"/> interface defines the interface for allowing the
+      hosting resource to be returned instead of the declaring resource. Since
+      the Resolver service creates these Hosted Capabilities the Resolver
+      needs a way to add them to the lists of capabilities returned from <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/>. The Resolver service cannot add them itself
+      since this list has a preference order, the Resolver service must
+      therefore ask the Resolve Context to insert this new capability to allow
+      the Resolve Context to maintain the desired order.</para>
+
+      <para>The Resolve Context must therefore implement an <xref linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-" xrefstyle="hyperlink"/> method. The given list must have been returned
+      earlier from a <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method invocation. The Resolve Context must find
+      the appropriate position to insert the <xref linkend="org.osgi.service.resolver.HostedCapability" xrefstyle="hyperlink"/> object, insert it, and return the index of the
+      inserted object.</para>
+
+      <para>It is the responsibility of the Resolve Context to find the proper
+      position. In <xref linkend="i3344409"/> it was discussed how the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method must return an ordered list. The <xref linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-" xrefstyle="hyperlink"/> has that same responsibility.</para>
+
+      <para>The following example shows how the Hosted Capability is inserted
+      based on the index of the hosted resource's index in the sorted list of
+      resources the management agent maintained. The example iterates through
+      the capabilities and compares the index of sorted resources to indicate
+      preference. If it finds a capability from a resource that was later in
+      the list of sorted resources then it inserts it at that position. A real
+      implementation should also take the version of the capability into
+      account.</para>
+
+      <programlisting>public int insertHostedCapability( 
+    List&lt;Capability&gt; caps, HostedCapability hc ) {
+
+    List&lt;Resource&gt; resources = getSortedResources();
+    int index = resources.indexOf( hc.getResource() );
+
+    for ( int i =0; i &lt; caps.size(); i++ ) {
+        Capability c = caps.get( i );
+        int otherIndex = resources.indexOf( c.getResource() );
+        if ( otherIndex &gt; index ) {
+            caps.add( i, hc );
+            return i;
+        }
+    }
+    caps.add( hc );
+    return caps.size()-1;
+}</programlisting>
+    </section>
+
+    <section xml:id="i3347565">
+      <title>Fragments</title>
+
+      <para>Fragments are resources that have an <code>osgi.wiring.host</code>
+      requirement that must match a capability from one or more host bundles.
+      However, for example an Export-Package in a fragment must be merged with
+      its attached hosts. These capabilities and requirements from namespaces
+      that appear as if they come from the host bundle are called
+      <emphasis>hosted</emphasis>.</para>
+
+      <para>Since fragments are not required by the host bundle, there will be
+      no resource requiring the fragment bundles. The Resolver will therefore
+      never ask the Resolve Context to provide fragments. However, fragments
+      will require their hosts. A Resolver should attach any fragments
+      available in a resolution to suitable hosts.</para>
+
+      <para>Since fragments will not be discovered from their hosts, it can be
+      necessary to run the resolver twice in certain scenarios. The first
+      resolve operation finds a resolution that is then used to find fragments
+      that could be attached to the included bundles. These fragments can then
+      be added to set of mandatory or optional resources for an additional
+      resolve operation.</para>
+
+      <para>Fragments can of course also be found by the normal finding of
+      capabilities.</para>
+    </section>
+
+    <section>
+      <title>Singleton Capabilities</title>
+
+      <para>A resource can be marked as a <emphasis>singleton</emphasis>. A
+      singleton resource has the <code>singleton</code> directive set to true
+      on the <code>osgi.identity</code> capability. A singleton resource
+      <emphasis>conflicts</emphasis> with another singleton resource
+      if:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>They have the same <code>osgi.identity</code>, and</para>
+        </listitem>
+
+        <listitem>
+          <para>They have the same <code>type</code>, and</para>
+        </listitem>
+
+        <listitem>
+          <para>They have a different or identical version.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This constraint is not enforced by the Resolver service to give
+      more flexibility to management agents. The Resolve Context must ensure
+      that it does not return capabilities from conflicting singleton
+      resources from the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method. When the Resolver is used with a limited
+      set of resources then it is possible to enumerate all singletons ahead
+      of time and use permutations. However, when repositories are used an
+      incremental method works better because the scope is so much
+      larger.</para>
+
+      <para>When the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method is called for a requirement that selects
+      a capability declared in a singleton then it is likely that repositories
+      will return multiple versions of this singleton including the resource
+      with the highest available version for conflicting resources. It is
+      therefore possible to maintain a white list of singletons
+      incrementally.</para>
+
+      <para>Once the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method has created a result list, it is possible
+      to prune this list of conflicting singletons. This can be an incremental
+      process, the first time a singleton is encountered in such a list of
+      capabilities the highest version can be <emphasis>selected</emphasis> as
+      the singleton. Other singletons that are in that list or come in other
+      invocations of <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> can then no longer provide capabilities. For
+      example:</para>
+
+      <programlisting>    Map&lt;String,Resource&gt; whitelist = new HashMap&lt;String,Resource&gt;();
+    
+    void prune( List&lt;Capability&gt; list ) {
+        Map&lt;String,Resource&gt; singletons = new HashMap&lt;String,Resource&gt;();
+
+        for ( Capability c : list) {
+            Resource r = c.getResource();
+            Version now = getVersion( r );
+            String identity = getIdentity( r );
+
+            if ( isSingleton( r ) &amp;&amp; !whitelist.containsKey(identity ) ) {
+                Resource selected = singletons.get( identity );
+                if ( selected == null )
+                    singletons.put( identity, r );
+                else {
+                    Version old = getVersion( selected );
+                    if ( now.compareTo( old )&gt; 0 )
+                        singletons.put( identity, r );
+                }
+            }
+      }
+
+      this.whitelist.putAll( singletons );
+        
+        for ( Iterator&lt;Capability&gt; i=list.iterator(); i.hasNext();) {
+            Capability c = i.next();
+            Resource r = c.getResource();
+            String identity = getIdentity( r );
+            Resource selected = this.whitelist.get( identity );
+            if ( selected != null &amp;&amp; !selected.equals( r ))
+                i.remove();
+        }
+  }</programlisting>
+    </section>
+
+    <section>
+      <title>Diagnostics</title>
+
+      <para>The Resolver service throws a <xref linkend="org.osgi.service.resolver.ResolutionException" xrefstyle="hyperlink"/> when the <code>resolve</code> operation cannot
+      find a solution. This Exception provides the standard human readable
+      message. However, there is also the <xref linkend="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--" xrefstyle="hyperlink"/> method. With this method it is possible to find
+      what requirements could not be matched. Though this is very useful in
+      many cases it must be realized that resolving is a complicated process.
+      It is not possible to establish the exact set of missing requirements
+      because any unresolved resolution can have many, different, sets of
+      unresolved requirements. This is an intrinsic part of the resolution
+      problem. There is also no guarantee that providing capabilities that
+      satisfy these requirements will give a successful resolution. There
+      could still be other constraints that cannot be satisfied. In general,
+      the Resolve Context can already detect any unresolved mandatory
+      requirements when it cannot find a matching capability in the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method.</para>
+
+      <para>That said, the <xref linkend="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--" xrefstyle="hyperlink"/> can often point to a potential solution.</para>
+    </section>
+
+    <section>
+      <title>Complexity</title>
+
+      <para>Implementing a Resolve Context is a non-trivial task that requires
+      extensive knowledge of the OSGi framework, especially the module layer.
+      Though this section contains numerous code examples, they are not
+      sufficient to implement a real Resolve Context since this would require
+      too much code for a specification.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Resolver Service</title>
+
+    <para>The <emphasis>Resolver</emphasis> service is an interface to a
+    generic constraint solver based on the
+    <emphasis>Require-Capability</emphasis> model defined in <xref linkend="i3333846"/>. This model defines a constraint-solving language
+    that is used by the Framework, see <xref linkend="i3333826"/>, to create
+    the mesh of class loaders. However, the Resolver service has been designed
+    to be useful in solving other types of constraint problems.</para>
+
+    <para>The task of the Resolver is to find a
+    <emphasis>resolution</emphasis>. The resolve method returns a
+    <emphasis>delta</emphasis> on an <emphasis>existing wiring
+    state</emphasis>. The total of existing wiring state and the applied delta
+    is the resolution. The delta is a set of wires between requirements and
+    capabilities.</para>
+
+    <section>
+      <title>Variables</title>
+
+      <para>The <xref linkend="org.osgi.service.resolver.Resolver.resolve-ResolveContext-" xrefstyle="hyperlink"/> method uses a Resolve Context to provide the
+      context and parameters of the resolution. During the resolution process
+      the Resolver service can callback the Resolve Context to retrieve the
+      following information:</para>
+
+      <informaltable>
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="5*"/>
+
+          <colspec colnum="3" colwidth="6*"/>
+
+          <tbody>
+            <row>
+              <entry><emphasis>R</emphasis><subscript>m</subscript></entry>
+
+              <entry><code>Collection&lt;Resource&gt;</code></entry>
+
+              <entry><xref linkend="org.osgi.service.resolver.ResolveContext.getMandatoryResources--" xrefstyle="hyperlink"/></entry>
+            </row>
+
+            <row>
+              <entry><emphasis>R</emphasis><subscript>o</subscript></entry>
+
+              <entry><code>Collection&lt;Resource&gt;</code></entry>
+
+              <entry><xref linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--" xrefstyle="hyperlink"/></entry>
+            </row>
+
+            <row>
+              <entry><emphasis>C</emphasis><subscript>env</subscript></entry>
+
+              <entry><code>Map&lt;Requirement,List&lt;Capability&gt;&gt;</code></entry>
+
+              <entry>Combined answers from the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method</entry>
+            </row>
+
+            <row>
+              <entry><emphasis>Q</emphasis><subscript>eff</subscript></entry>
+
+              <entry><code>Collection&lt;Requirement&gt;</code></entry>
+
+              <entry>Set of effective requirements as defined by the <xref linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-" xrefstyle="hyperlink"/> method</entry>
+            </row>
+
+            <row>
+              <entry>X</entry>
+
+              <entry><code>Map&lt;Resource,Wiring&gt;</code></entry>
+
+              <entry>An existing Wiring state, <xref linkend="org.osgi.service.resolver.ResolveContext.getWirings--" xrefstyle="hyperlink"/></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>The Resolver service returns the following:</para>
+
+      <informaltable>
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="5*"/>
+
+          <colspec colnum="3" colwidth="6*"/>
+
+          <tbody>
+            <row>
+              <entry><emphasis>D</emphasis></entry>
+
+              <entry><code>Map&lt;Resource,List&lt;Wire&gt;&gt;</code></entry>
+
+              <entry>The resolution, a delta on the existing state</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>The <xref linkend="org.osgi.service.resolver.Resolver.resolve-ResolveContext-" xrefstyle="hyperlink"/> method returns a resolution <code>D</code> that
+      is a delta on the existing Wiring state <code>X</code>. It is up to the
+      Resolve Context to ensure that the delta <code>D</code> is installed. In
+      for example the OSGi framework the framework hooks can be used to guide
+      the framework's resolving process.</para>
+    </section>
+
+    <section>
+      <title>Resolving</title>
+
+      <para>The goal of the Resolver is to provide a set of wires between a
+      set of <emphasis>resolved</emphasis> resources. A resource is resolved
+      when all its <emphasis>mandatory</emphasis> and
+      <emphasis>effective</emphasis> requirements are satisfied by
+      capabilities from resolved resources. A Resolver must not return wires
+      between resources that have unsatisfied mandatory requirements.</para>
+
+      <para>A <emphasis>mandatory</emphasis> requirement has a
+      <code>resolution</code> directive that is not set or that is set to
+      <code>mandatory</code>. The <emphasis>effectiveness</emphasis> of a
+      requirement is defined by the Resolve Context, a Resolver service must
+      call the <xref linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-" xrefstyle="hyperlink"/> method to establish if a requirement is
+      effective for a given resolve operation. A Resolver must never create a
+      wire from a requirement that is not effective.</para>
+
+      <para>To find a resolution, the Resolver must use the Resolve Context to
+      find <emphasis>candidate</emphasis> capabilities for the requirements
+      declared in the resources that it needs to resolve. A candidate
+      capability is a capability that <emphasis>satisfies</emphasis> the
+      requirement. From the perspective of the Resolver service, a requirement
+      is satisfied by a capability when that capability is returned from the
+      <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method. A Resolver has no alternative way to
+      find out if a requirement is satisfied by a capability and must
+      therefore not make any assumptions about matching. Any matching rules
+      like for example the <code>osgi.wiring.*</code> <code>mandatory</code>
+      directive must be implemented by the Resolve Context. A Resolve Context
+      must always return the same capabilities during a resolving operation
+      when given the same requirement.</para>
+
+      <para>Since the resolver cannot match requirements and capabilities the
+      Resolve Context must return capabilities for all possible resources,
+      this must include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The given mandatory resources <emphasis>R</emphasis>
+          <subscript>m</subscript></para>
+        </listitem>
+
+        <listitem>
+          <para>The given optional resources <emphasis>R</emphasis>
+          <subscript>o</subscript></para>
+        </listitem>
+
+        <listitem>
+          <para>The existing Wiring state X</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It can include additional resources that were indirectly returned
+      through the <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> method.</para>
+
+      <para>The existing wiring X provides an existing set of constraints that
+      the Resolver service must abide by. It can get this state with the <xref linkend="org.osgi.service.resolver.ResolveContext.getWirings--" xrefstyle="hyperlink"/> method. The purpose of the existing state is to
+      ensure that any wires are compatible with existing wiring. For an OSGi
+      framework it is crucial that the uses constraints are maintained for the
+      resolution, see <xref linkend="i3333826"/>.</para>
+
+      <para>The Resolver service can wire new requirements to existing
+      capabilities but it can never create wires for an existing requirement
+      from the existing wiring.</para>
+
+      <para>If the Resolver service attaches a hosted resource like a
+      fragment, and thereby needs to add new <xref linkend="org.osgi.service.resolver.HostedCapability" xrefstyle="hyperlink"/> objects to a previously returned list from <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> then it must call the Resolve Context's <xref linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-" xrefstyle="hyperlink"/> method.</para>
+
+      <para>Fragments can be attached from resolved resources or from
+      resources that declare the capabilities returned from <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/>, that is,
+      <emphasis>C</emphasis><subscript>env.</subscript></para>
+
+      <para>This specification does not define the detailed rules and
+      constraints associated with resolving; these rules are defined in their
+      namespaces. An OSGi Resolver service must support at least all
+      namespaces defined in <xref linkend="i3332036"/> except for the
+      following directives:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>mandatory</code> - Mandatory attributes on the
+          <code>osgi.wiring.*</code> namespaces must be implemented by the
+          Resolve Context. The Resolve Context should not return capabilities
+          from <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> unless the rules of the OSGi
+          <code>mandatory</code> directive are followed.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>singleton</code> - Singletons are not implemented by the
+          Resolver, the Resolve Context must not return capabilities from
+          <xref linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-" xrefstyle="hyperlink"/> from conflicting singleton resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>effective</code> - The Resolve Context decides what
+          requirements are effective in the <xref linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-" xrefstyle="hyperlink"/> method.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A Resolver service must support the uses constraints and any
+      applicable rule defined in the <xref linkend="i3333826"/> for the
+      <code>osgi.wiring.*</code> namespaces.</para>
+
+      <para>The Resolver must return a delta wiring to the existing state
+      (potentially empty) or throw an Exception. The resolution:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Must contain all mandatory resources
+          <emphasis>R</emphasis><subscript>m </subscript>as provided by <xref linkend="org.osgi.service.resolver.ResolveContext.getMandatoryResources--" xrefstyle="hyperlink"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Must have all resources resolved.</para>
+        </listitem>
+
+        <listitem>
+          <para>Must have no wired capabilities that are declared or hosted in
+          resources that are not resolved.</para>
+        </listitem>
+
+        <listitem>
+          <para>Should include optional resources <emphasis>R</emphasis>
+          <subscript>o </subscript>as provided by <xref linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--" xrefstyle="hyperlink"/>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Resolution Exception</title>
+
+      <para>If the Resolver cannot find a solution or it runs into problems
+      then it must throw a Resolution Exception, which is a Runtime
+      Exception.</para>
+
+      <para>The <xref linkend="org.osgi.service.resolver.ResolutionException" xrefstyle="hyperlink"/> provides the <xref linkend="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--" xrefstyle="hyperlink"/> method. If the resolution failed then it is
+      possible that this was caused because it failed to find matches for
+      certain requirements. The information in this method can be very helpful
+      to find a solution that will work, however, there are a number of
+      caveats.</para>
+
+      <para>Resolving is an NP-complete problem. For these problems there
+      exists no algorithm that can infer a solution from the desired outcome.
+      Therefore, the Resolver tries a potential solution and if that solution
+      does not match the constraints it will backtrack and attempt another
+      solution. An unavoidable aspect of such solutions is that it is
+      impossible to pin-point a single failure point if the algorithm fails to
+      find a solution, in general the algorithm gives up after having
+      exhausted its search space. However, during its search it might have
+      been very close to a solution, for example it only missed a single
+      requirement, but its final failure missed many requirements.</para>
+
+      <para>The implication is that the reported missing requirements neither
+      give a guarantee for a resolution when satisfied nor indicate that this
+      is the smallest set of missing requirements.</para>
+
+      <para>Therefore, <xref linkend="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--" xrefstyle="hyperlink"/> is intended for human consumption and not for
+      automated solutions.</para>
+    </section>
+  </section>
+
+  <section xml:id="i3331809">
+    <title>Security</title>
+
+    <section>
+      <title>Resolving</title>
+
+      <para>The Resolver service is a pure function that has no state. The
+      Resolve Context maintains the state and is therefore the actor that
+      requires most permissions. In general, it will require access to the
+      Wiring API and Repositories.</para>
+
+      <para>Since the Resolver requires no external access it does not have to
+      be a trusted service. Resolve Contexts that support security must ensure
+      that the callbacks are executed in a privileged block.</para>
+    </section>
+
+    <section>
+      <title>Minimum Implementation Permissions</title>
+
+      <programlisting>PackagePermission[org.osgi.service.resolver,IMPORT]
+ServicePermission[...Resolver, REGISTER ]</programlisting>
+    </section>
+
+    <section>
+      <title>Minimum Using Permissions</title>
+
+      <programlisting>PackagePermission[org.osgi.service.repository,IMPORT]
+PackagePermission[org.osgi.service.resolver,IMPORT]
+PackagePermission[org.osgi.resource,IMPORT]
+PackagePermission[org.osgi.framework.wiring,IMPORT]
+PackagePermission[org.osgi.framework.namespaces,IMPORT]
+ServicePermission[...Resolver, GET ]
+... likely needs AdaptPermissions and ServicePermission[...Repository,GET]</programlisting>
+    </section>
+  </section>
+
+  <section version="5" role="package" xreflabel="org.osgi.service.resolver" xml:id="org.osgi.service.resolver" xml:base="../../generated/javadoc/docbook/org.osgi.service.resolver.xml">
+   <title>org.osgi.service.resolver</title>
+   <info>
+      <releaseinfo xml:id="org.osgi.service.resolver-version">Version 1.0</releaseinfo>
+      <edition xml:id="org.osgi.service.resolver-version.number">1.0</edition>
+   </info>
+   <para>
+Resolver Service Package Version 1.0.
+ 
+ </para>
+   <para>
+ Bundles wishing to use this package must list the package in the
+ Import-Package header of the bundle's manifest. This package has two types of
+ users: the consumers that use the API in this package and the providers that
+ implement the API in this package.
+ 
+ </para>
+   <para>
+ Example import for consumers using the API in this package:
+ </para>
+   <para>
+      <code>Import-Package: org.osgi.service.resolver; version="[1.0,2.0)"</code>
+   </para>
+   <para>
+ Example import for providers implementing the API in this package:
+ </para>
+   <para>
+      <code>Import-Package: org.osgi.service.resolver; version="[1.0,1.1)"</code>
+   </para>
+   <section role="summary">
+      <title>Summary</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.resolver.HostedCapability">
+                  <code>HostedCapability</code>
+               </link> - 
+A capability hosted by a resource.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.resolver.ResolutionException">
+                  <code>ResolutionException</code>
+               </link> - 
+Indicates failure to resolve a set of requirements.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.resolver.ResolveContext">
+                  <code>ResolveContext</code>
+               </link> - 
+A resolve context provides resources, options and constraints to the
+ potential solution of a <link linkend="org.osgi.service.resolver.Resolver.resolve-ResolveContext-">resolve</link>
+ operation.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.resolver.Resolver">
+                  <code>Resolver</code>
+               </link> - 
+A resolver service resolves the specified resources in the context supplied
+ by the caller.
+   </para>
+         </listitem>
+      </itemizedlist>
+   </section>
+   <section role="class" xreflabel="HostedCapability" xml:id="org.osgi.service.resolver.HostedCapability">
+      <title>public interface HostedCapability<?line-break?> extends Capability</title>
+      <para>
+A capability hosted by a resource.
+ 
+ </para>
+      <para>
+ A HostedCapability is a Capability where the <link linkend="org.osgi.service.resolver.HostedCapability.getResource--">getResource()</link> method
+ returns a Resource that hosts this Capability instead of declaring it. This
+ is necessary for cases where the declaring Resource of a Capability does not
+ match the runtime state. For example, this is the case for fragments attached
+ to a host. Most fragment declared capabilities and requirements become hosted
+ by the host resource. Since a fragment can attach to multiple hosts, a single
+ capability can actually be hosted multiple times.</para>
+      <formalpara role="parameter">
+         <title>Concurrency</title>
+         <para>Thread-safe </para>
+      </formalpara>
+      <formalpara role="parameter">
+         <title>Provider Type</title>
+         <para>Consumers of this API must not implement this type</para>
+      </formalpara>
+      <section role="method" xreflabel="getDeclaredCapability()" xml:id="org.osgi.service.resolver.HostedCapability.getDeclaredCapability--">
+         <title>public Capability getDeclaredCapability()</title>
+         <para role="description">
+Return the Capability hosted by the Resource.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The Capability hosted by the Resource.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="getResource()" xml:id="org.osgi.service.resolver.HostedCapability.getResource--">
+         <title>public Resource getResource()</title>
+         <para role="description">
+Return the Resource that hosts this Capability.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The Resource that hosts this Capability.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section role="class" xreflabel="ResolutionException" xml:id="org.osgi.service.resolver.ResolutionException">
+      <title>public class ResolutionException<?line-break?> extends Exception</title>
+      <para>
+Indicates failure to resolve a set of requirements.
+ 
+ </para>
+      <para>
+ If a resolution failure is caused by a missing mandatory dependency a
+ resolver may include any requirements it has considered in the resolution
+ exception. Clients may access this set of dependencies via the
+ <link linkend="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--">getUnresolvedRequirements()</link> method.
+ 
+ </para>
+      <para>
+ Resolver implementations may extend this class to provide extra state
+ information about the reason for the resolution failure.</para>
+      <section role="method" xreflabel="ResolutionException(String,Throwable,Collection)" xml:id="org.osgi.service.resolver.ResolutionException.ResolutionException-String-Throwable-Collection-">
+         <title>public  ResolutionException(String message,Throwable cause,Collection&lt;Requirement&gt; unresolvedRequirements)</title>
+         <formalpara role="parameter">
+            <title>message</title>
+            <para>The message.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>cause</title>
+            <para>The cause of this exception.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>unresolvedRequirements</title>
+            <para>The unresolved mandatory requirements from
+        mandatory resources or <code>null</code> if no unresolved requirements
+        information is provided.</para>
+         </formalpara>
+         <para role="description">
+Create a <code>ResolutionException</code> with the specified message, cause
+ and unresolved requirements.
+   </para>
+      </section>
+      <section role="method" xreflabel="ResolutionException(String)" xml:id="org.osgi.service.resolver.ResolutionException.ResolutionException-String-">
+         <title>public  ResolutionException(String message)</title>
+         <formalpara role="parameter">
+            <title>message</title>
+            <para>The message.</para>
+         </formalpara>
+         <para role="description">
+Create a <code>ResolutionException</code> with the specified message.
+   </para>
+      </section>
+      <section role="method" xreflabel="ResolutionException(Throwable)" xml:id="org.osgi.service.resolver.ResolutionException.ResolutionException-Throwable-">
+         <title>public  ResolutionException(Throwable cause)</title>
+         <formalpara role="parameter">
+            <title>cause</title>
+            <para>The cause of this exception.</para>
+         </formalpara>
+         <para role="description">
+Create a <code>ResolutionException</code> with the specified cause.
+   </para>
+      </section>
+      <section role="method" xreflabel="getUnresolvedRequirements()" xml:id="org.osgi.service.resolver.ResolutionException.getUnresolvedRequirements--">
+         <title>public Collection&lt;Requirement&gt; getUnresolvedRequirements()</title>
+         <para role="description">
+Return the unresolved requirements, if any, for this exception.
+ 
+ </para>
+         <para>
+ The unresolved requirements are provided for informational purposes and
+ the specific set of unresolved requirements that are provided after a
+ resolve failure is not defined.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A collection of the unresolved requirements for this exception.
+         The returned collection may be empty if no unresolved
+         requirements information is available.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section role="class" xreflabel="ResolveContext" xml:id="org.osgi.service.resolver.ResolveContext">
+      <title>public abstract class ResolveContext</title>
+      <para>
+A resolve context provides resources, options and constraints to the
+ potential solution of a <link linkend="org.osgi.service.resolver.Resolver.resolve-ResolveContext-">resolve</link>
+ operation.
+ 
+ </para>
+      <para>
+ Resolve Contexts:
+ </para>
+      <itemizedlist>
+         <listitem>
+            <para>Specify the mandatory and optional resources to resolve. The mandatory
+ and optional resources must be consistent and correct. For example, they must
+ not violate the singleton policy of the implementer.</para>
+         </listitem>
+         <listitem>
+            <para>Provide <link linkend="org.osgi.resource.Capability">capabilities</link> that the Resolver can use to
+ satisfy <link linkend="org.osgi.resource.Requirement">requirements</link> via the
+ <link linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-">findProviders(Requirement)</link> method</para>
+         </listitem>
+         <listitem>
+            <para>Constrain solutions via the <link linkend="org.osgi.service.resolver.ResolveContext.getWirings--">getWirings()</link> method. A wiring
+ consists of a map of existing <link linkend="org.osgi.resource.Resource">resources</link> to <link linkend="org.osgi.resource.Wiring">wiring</link>.</para>
+         </listitem>
+         <listitem>
+            <para>Filter requirements that are part of a resolve operation via the
+ <link linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-">isEffective(Requirement)</link>.</para>
+         </listitem>
+      </itemizedlist>
+      <para>
+ A resolver may call the methods on the resolve context any number of times
+ during a resolve operation using any thread. Implementors should ensure that
+ this class is properly thread safe.
+ 
+ </para>
+      <para>
+ Except for <link linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-">insertHostedCapability(List, HostedCapability)</link>, the
+ resolve context methods must be <emphasis>idempotent</emphasis>. This means that resources
+ must have constant capabilities and requirements and the resolve context must
+ return a consistent set of capabilities, wires and effective requirements.</para>
+      <formalpara role="parameter">
+         <title>Concurrency</title>
+         <para>Thread-safe </para>
+      </formalpara>
+      <section role="method" xreflabel="ResolveContext()" xml:id="org.osgi.service.resolver.ResolveContext.ResolveContext--">
+         <title>public  ResolveContext()</title>
+         <para/>
+      </section>
+      <section role="method" xreflabel="findProviders(Requirement)" xml:id="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-">
+         <title>public abstract List&lt;Capability&gt; findProviders(Requirement requirement)</title>
+         <formalpara role="parameter">
+            <title>requirement</title>
+            <para>The requirement that a resolver is attempting to
+        satisfy. Must not be <code>null</code>.</para>
+         </formalpara>
+         <para role="description">
+Find Capabilities that match the given Requirement.
+ </para>
+         <para>
+ The returned list contains <link linkend="org.osgi.resource.Capability">Capability</link> objects where the Resource
+ must be the declared Resource of the Capability. The Resolver can then
+ add additional <link linkend="org.osgi.service.resolver.HostedCapability">HostedCapability</link> objects with the
+ <link linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-">insertHostedCapability(List, HostedCapability)</link> method when it,
+ for example, attaches fragments. Those <link linkend="org.osgi.service.resolver.HostedCapability">HostedCapability</link> objects
+ will then use the host's Resource which likely differs from the declared
+ Resource of the corresponding Capability.
+ 
+ </para>
+         <para>
+ The returned list is in priority order such that the Capabilities with a
+ lower index have a preference over those with a higher index. The
+ resolver must use the
+ <link linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-">insertHostedCapability(List, HostedCapability)</link> method to add
+ additional Capabilities to maintain priority order. In general, this is
+ necessary when the Resolver uses Capabilities declared in a Resource but
+ that must originate from an attached host.
+ 
+ </para>
+         <para>
+ Each returned Capability must match the given Requirement. This means
+ that the filter in the Requirement must match as well as any namespace
+ specific directives. For example, the mandatory attributes for the
+ <code>osgi.wiring.package</code> namespace.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A list of <link linkend="org.osgi.resource.Capability">Capability</link> objects that match the specified
+         requirement.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="getMandatoryResources()" xml:id="org.osgi.service.resolver.ResolveContext.getMandatoryResources--">
+         <title>public Collection&lt;Resource&gt; getMandatoryResources()</title>
+         <para role="description">
+Return the resources that must be resolved for this resolve context.
+ 
+ </para>
+         <para>
+ The default implementation returns an empty collection.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A collection of the resources that must be resolved for this
+         resolve context. May be empty if there are no mandatory
+         resources. The returned collection may be unmodifiable.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="getOptionalResources()" xml:id="org.osgi.service.resolver.ResolveContext.getOptionalResources--">
+         <title>public Collection&lt;Resource&gt; getOptionalResources()</title>
+         <para role="description">
+Return the resources that the resolver should attempt to resolve for this
+ resolve context. Inability to resolve one of the specified resources will
+ not result in a resolution exception.
+ 
+ </para>
+         <para>
+ The default implementation returns an empty collection.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A collection of the resources that the resolver should attempt to
+         resolve for this resolve context. May be empty if there are no
+         optional resources. The returned collection may be unmodifiable.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="getWirings()" xml:id="org.osgi.service.resolver.ResolveContext.getWirings--">
+         <title>public abstract Map&lt;Resource,Wiring&gt; getWirings()</title>
+         <para role="description">
+Returns the wirings for existing resolved resources.
+ 
+ </para>
+         <para>
+ For example, if this resolve context is for an OSGi framework, then the
+ result would contain all the currently resolved bundles with each
+ bundle's current wiring.
+ 
+ </para>
+         <para>
+ Multiple calls to this method for this resolve context must return the
+ same result.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The wirings for existing resolved resources. The returned map is
+         unmodifiable.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="insertHostedCapability(List,HostedCapability)" xml:id="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-">
+         <title>public abstract int insertHostedCapability(List&lt;Capability&gt; capabilities,HostedCapability hostedCapability)</title>
+         <formalpara role="parameter">
+            <title>capabilities</title>
+            <para>The list returned from
+        <link linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-">findProviders(Requirement)</link>. Must not be <code>null</code>.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>hostedCapability</title>
+            <para>The HostedCapability to insert in the specified
+        list. Must not be <code>null</code>.</para>
+         </formalpara>
+         <para role="description">
+Add a <link linkend="org.osgi.service.resolver.HostedCapability">HostedCapability</link> to the list of capabilities returned from
+ <link linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-">findProviders(Requirement)</link>.
+ 
+ </para>
+         <para>
+ This method is used by the <link linkend="org.osgi.service.resolver.Resolver">Resolver</link> to add Capabilities that are
+ hosted by another Resource to the list of Capabilities returned from
+ <link linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-">findProviders(Requirement)</link>. This function is necessary to allow
+ fragments to attach to hosts, thereby changing the origin of a
+ Capability. This method must insert the specified HostedCapability in a
+ place that makes the list maintain the preference order. It must return
+ the index in the list of the inserted <link linkend="org.osgi.service.resolver.HostedCapability">HostedCapability</link>.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The index in the list of the inserted HostedCapability.</para>
+         </formalpara>
+      </section>
+      <section role="method" xreflabel="isEffective(Requirement)" xml:id="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-">
+         <title>public abstract boolean isEffective(Requirement requirement)</title>
+         <formalpara role="parameter">
+            <title>requirement</title>
+            <para>The Requirement to test. Must not be <code>null</code>.</para>
+         </formalpara>
+         <para role="description">
+Test if a given requirement should be wired in the resolve operation. If
+ this method returns <code>false</code>, then the resolver should ignore this
+ requirement during the resolve operation.
+ 
+ </para>
+         <para>
+ The primary use case for this is to test the <code>effective</code> directive
+ on the requirement, though implementations are free to use any effective
+ test.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>
+               <code>true</code> if the requirement should be considered as part of
+         the resolve operation.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section role="class" xreflabel="Resolver" xml:id="org.osgi.service.resolver.Resolver">
+      <title>public interface Resolver</title>
+      <para>
+A resolver service resolves the specified resources in the context supplied
+ by the caller.
+   </para>
+      <formalpara role="parameter">
+         <title>Concurrency</title>
+         <para>Thread-safe </para>
+      </formalpara>
+      <formalpara role="parameter">
+         <title>Provider Type</title>
+         <para>Consumers of this API must not implement this type</para>
+      </formalpara>
+      <section role="method" xreflabel="resolve(ResolveContext)" xml:id="org.osgi.service.resolver.Resolver.resolve-ResolveContext-">
+         <title>public Map&lt;Resource,List&lt;Wire&gt;&gt; resolve(ResolveContext context) throws ResolutionException</title>
+         <formalpara role="parameter">
+            <title>context</title>
+            <para>The resolve context for the resolve operation. Must not be
+        <code>null</code>.</para>
+         </formalpara>
+         <para role="description">
+Resolve the specified resolve context and return any new resources and
+ wires to the caller.
+ 
+ </para>
+         <para>
+ The resolver considers two groups of resources:
+ </para>
+         <itemizedlist>
+            <listitem>
+               <para>Mandatory - any resource in the
+ <link linkend="org.osgi.service.resolver.ResolveContext.getMandatoryResources--">mandatory group</link> must be
+ resolved. A failure to satisfy any mandatory requirement for these
+ resources will result in throwing a <link linkend="org.osgi.service.resolver.ResolutionException">ResolutionException</link>
+               </para>
+            </listitem>
+            <listitem>
+               <para>Optional - any resource in the
+ <link linkend="org.osgi.service.resolver.ResolveContext.getOptionalResources--">optional group</link> may be
+ resolved. A failure to satisfy a mandatory requirement for a resource in
+ this group will not fail the overall resolution but no resources or wires
+ will be returned for that resource.</para>
+            </listitem>
+         </itemizedlist>
+         <para>
+ The resolve method returns the delta between the start state defined by
+ <link linkend="org.osgi.service.resolver.ResolveContext.getWirings--">ResolveContext.getWirings()</link> and the end resolved state. That is,
+ only new resources and wires are included.
+ 
+ </para>
+         <para>
+ The behavior of the resolver is not defined if the specified resolve
+ context supplies inconsistent information.</para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The new resources and wires required to satisfy the specified
+         resolve context. The returned map is the property of the caller
+         and can be modified by the caller.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>ResolutionException</code>– If the resolution cannot be satisfied.   </para>
+         </formalpara>
+      </section>
+   </section>
+</section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i3333826"><title>Framework Module Layer</title>OSGi
+      Core, Chapter 3 Module Layer</bibliomixed>
+
+      <bibliomixed xml:id="i3335981"><title>Framework Wiring API
+      (Core)</title>OSGi Core, Chapter 7 Bundle Wiring API
+      Specification</bibliomixed>
+
+      <bibliomixed xml:id="i3333846"><title>Framework Resource API
+      (Core)</title>OSGi Core, Chapter 6 Resource API
+      Specification</bibliomixed>
+
+      <bibliomixed xml:id="i3332036"><title>Framework Namespace
+      (Core)</title>OSGi Core, Chapter 8 Framework Namespaces
+      Specification</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
+
   <chapter label="701" revision="$Id: a28138dea249999db013df399ec496c601d67a5d $" version="5" xml:id="util.tracker" xml:base="../701/util.tracker.xml">
   <title>Tracker Specification</title>
 

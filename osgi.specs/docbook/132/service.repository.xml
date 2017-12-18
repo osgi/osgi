@@ -31,7 +31,7 @@
     <para>Though the Repository service can be used as a standalone service to
     search and retrieve general binary artifacts, called resources, it is
     intended to be used in conjunction with the <xref
-    linkend="service.resolver"/>.</para>
+    linkend="service.repository-ref.service.resolver"/>.</para>
 
     <para>The model of the Repository is based on the generic
     Requirement-Capability model defined in <xref linkend="i3273380"/>, this
@@ -408,7 +408,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     or even a collection of bundles inside a ZIP file. A Repository
     communicates in terms of requirements and capabilities as defined in <xref
     linkend="i3273380"/>. This model is closely aligned with the <xref
-    linkend="service.resolver"/>.</para>
+    linkend="service.repository-ref.service.resolver"/>.</para>
 
     <para>A Repository service must be registered with the service properties
     given in the following table.</para>
@@ -1344,6 +1344,11 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
       xml:id="service.repository-resolving.relative.uris"><title>XML Base
       (Second Edition), Resolving Relative
       URIs</title>https://www.w3.org/TR/xmlbase/#resolution</bibliomixed>
+
+      <bibliomixed
+      xml:id="service.repository-ref.service.resolver"><title>Resolver Service
+      Specification</title>OSGi Core, Chapter 58 Resolver Service
+      Specification</bibliomixed>
     </bibliolist>
   </section>
 

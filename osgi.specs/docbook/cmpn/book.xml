@@ -96,8 +96,6 @@
 
   <xi:include href="../135/service.namespaces.xml"/>
 
-  <xi:include href="../136/service.resolver.xml"/>
-
   <xi:include href="../137/service.rest.xml"/>
 
   <xi:include href="../138/service.async.xml"/>
@@ -105,7 +103,7 @@
   <xi:include href="../140/service.http.whiteboard.xml"/>
 
   <xi:include href="../147/service.transaction.control.xml"/>
-  
+
   <xi:include href="../148/service.clusterinfo.xml"/>
 
   <xi:include href="../150/service.configurator.xml"/>
