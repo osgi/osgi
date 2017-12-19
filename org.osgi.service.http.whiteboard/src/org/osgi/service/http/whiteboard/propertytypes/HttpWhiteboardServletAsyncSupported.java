@@ -29,8 +29,8 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED
+ * HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -51,6 +51,7 @@ public @interface HttpWhiteboardServletAsyncSupported {
 	 * 
 	 * @return Whether the servlet supports asynchronous processing.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED
+	 *      HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED
 	 */
 	boolean asyncSupported() default true;
 }

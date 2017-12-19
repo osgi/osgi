@@ -29,8 +29,8 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a http whiteboard component to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+ * HTTP_WHITEBOARD_CONTEXT_SELECT} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -52,6 +52,7 @@ public @interface HttpWhiteboardContextSelect {
 	 * 
 	 * @return The filter expression.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+	 *      HTTP_WHITEBOARD_CONTEXT_SELECT
 	 */
 	String value();
 }

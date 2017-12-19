@@ -29,8 +29,8 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED
+ * HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -51,6 +51,7 @@ public @interface HttpWhiteboardFilterAsyncSupported {
 	 * 
 	 * @return Whether the filter supports asynchronous processing.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED
+	 *      HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED
 	 */
 	boolean asyncSupported() default true;
 }

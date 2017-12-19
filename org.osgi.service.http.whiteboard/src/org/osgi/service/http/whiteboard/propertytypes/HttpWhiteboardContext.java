@@ -26,15 +26,15 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
 
 /**
  * Component Property Type for the {@code osgi.http.whiteboard.context.name} and
- * {@code osgi.http.whiteboard.context.path} service property.
+ * {@code osgi.http.whiteboard.context.path} service properties.
  * <p>
  * This annotation can be used on a
- * {@link org.osgi.service.http.context.ServletContextHelper} to declare the
- * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME}
- * and
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH}
- * service property.
+ * {@link org.osgi.service.http.context.ServletContextHelper
+ * ServletContextHelper} to declare the values of the
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
+ * HTTP_WHITEBOARD_CONTEXT_NAME} and
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
+ * HTTP_WHITEBOARD_CONTEXT_PATH} service properties.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -56,6 +56,7 @@ public @interface HttpWhiteboardContext {
 	 * 
 	 * @return The context name.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
+	 *      HTTP_WHITEBOARD_CONTEXT_NAME
 	 */
 	String name();
 
@@ -64,6 +65,7 @@ public @interface HttpWhiteboardContext {
 	 * 
 	 * @return The context path.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
+	 *      HTTP_WHITEBOARD_CONTEXT_PATH
 	 */
 	String path();
 }

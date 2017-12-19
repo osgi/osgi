@@ -30,8 +30,8 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Servlet} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
+ * HTTP_WHITEBOARD_SERVLET_ERROR_PAGE} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -53,6 +53,7 @@ public @interface HttpWhiteboardServletErrorPage {
 	 * 
 	 * @return The servlet error pages.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
+	 *      HTTP_WHITEBOARD_SERVLET_ERROR_PAGE
 	 */
 	String[] errorPage();
 }

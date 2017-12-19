@@ -30,8 +30,8 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_REGEX}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_REGEX
+ * HTTP_WHITEBOARD_FILTER_REGEX} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -53,6 +53,7 @@ public @interface HttpWhiteboardFilterRegex {
 	 * 
 	 * @return The regular expressions for the filter.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_REGEX
+	 *      HTTP_WHITEBOARD_FILTER_REGEX
 	 */
 	String[] value();
 }

@@ -29,8 +29,8 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
+ * HTTP_WHITEBOARD_FILTER_DISPATCHER} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -47,9 +47,8 @@ public @interface HttpWhiteboardFilterDispatcher {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Values of the
-	 * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * service property.
+	 * Values of the {@code osgi.http.whiteboard.filter.dispatcher} service
+	 * property.
 	 */
 	public enum Dispatcher {
 		/**
@@ -79,6 +78,7 @@ public @interface HttpWhiteboardFilterDispatcher {
 	 * 
 	 * @return The dispatcher values for the filter.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_DISPATCHER
+	 *      HTTP_WHITEBOARD_FILTER_DISPATCHER
 	 */
 	Dispatcher[] value() default Dispatcher.REQUEST;
 }

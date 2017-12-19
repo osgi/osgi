@@ -26,13 +26,13 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
 
 /**
  * Component Property Type for the {@code osgi.http.whiteboard.resource.pattern}
- * and {@code osgi.http.whiteboard.resource.prefix} service property.
+ * and {@code osgi.http.whiteboard.resource.prefix} service properties.
  * <p>
- * This annotation can be used on any service to declare the value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN}
- * and
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX}
- * service property.
+ * This annotation can be used on any service to declare the values of the
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
+ * HTTP_WHITEBOARD_RESOURCE_PATTERN} and
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
+ * HTTP_WHITEBOARD_RESOURCE_PREFIX} service properties.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -54,6 +54,7 @@ public @interface HttpWhiteboardResource {
 	 * 
 	 * @return The resource patterns.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PATTERN
+	 *      HTTP_WHITEBOARD_RESOURCE_PATTERN
 	 */
 	String[] pattern();
 
@@ -62,6 +63,7 @@ public @interface HttpWhiteboardResource {
 	 * 
 	 * @return The resource patterns.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_RESOURCE_PREFIX
+	 *      HTTP_WHITEBOARD_RESOURCE_PREFIX
 	 */
 	String prefix();
 }

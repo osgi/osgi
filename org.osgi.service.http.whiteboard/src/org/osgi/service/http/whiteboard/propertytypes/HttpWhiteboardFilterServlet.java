@@ -30,8 +30,8 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * <p>
  * This annotation can be used on a {@link javax.servlet.Filter} to declare the
  * value of the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_SERVLET}
- * service property.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_SERVLET
+ * HTTP_WHITEBOARD_FILTER_SERVLET} service property.
  * 
  * @see "Component Property Types"
  * @author $Id$
@@ -53,6 +53,7 @@ public @interface HttpWhiteboardFilterServlet {
 	 * 
 	 * @return The servlet names.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_FILTER_SERVLET
+	 *      HTTP_WHITEBOARD_FILTER_SERVLET
 	 */
 	String[] value();
 }
