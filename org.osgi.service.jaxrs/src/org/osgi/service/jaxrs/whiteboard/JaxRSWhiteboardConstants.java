@@ -175,6 +175,20 @@ public final class JaxRSWhiteboardConstants {
 	public static final String	JAX_RS_EXTENSION_SELECT		= "osgi.jaxrs.extension.select";
 
 	/**
+	 * A service property specifying that a JAX-RS extension service, JAX-RS
+	 * application service, or JAX-RS Whiteboard implementation provides support
+	 * for reading from and writing to a specific media type.
+	 * <p>
+	 * The value of this property will be one or more media type identifiers,
+	 * and where possible IANA registered names, such as
+	 * <code>application/json</code> should be used. The value must not be a
+	 * wildcard type. Support for multiple media types that use the same suffix
+	 * should be supported by registering the media type associated with the
+	 * suffix.
+	 */
+	public static final String	JAX_RS_MEDIA_TYPE						= "osgi.jaxrs.media.type";
+
+	/**
 	 * Service property specifying the target filter to select the JAX-RS
 	 * Whiteboard implementation to process the service.
 	 * <p>

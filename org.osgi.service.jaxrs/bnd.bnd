@@ -13,4 +13,6 @@ Export-Package: ${p}.*; -split-package:=first
 	org.apache.aries.javax.jax.rs-api;version=latest,\
 	org.osgi.util.promise;version=latest,\
 	org.osgi.service.component.annotations;version=latest,\
-	org.osgi.namespace.implementation;version=latest
+	org.osgi.namespace.implementation;version=latest,\
+	org.osgi.namespace.service;version=latest,\
+	org.osgi.resource;version=latest
