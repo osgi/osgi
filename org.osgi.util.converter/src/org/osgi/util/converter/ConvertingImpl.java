@@ -399,7 +399,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 						val = converter.convert(val).sourceAsDTO().to(
 								f.getType());
 					else
-						val = converter.convert(val).to(f.getType());
+						val = converter.convert(val).to(f.getGenericType());
 					f.set(dto, val);
 				}
 			}
@@ -662,8 +662,6 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 				if (propName == null)
 					return null;
 
-				Class< ? > targetType = method.getReturnType();
-
 				Object val = m.get(propName);
 				if (val == null && keysIgnoreCase) {
 					// try in a case-insensitive way
@@ -692,7 +690,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 					}
 				}
 
-				return converter.convert(val).to(targetType);
+				return converter.convert(val).to(method.getGenericReturnType());
 			}
 		});
 	}
