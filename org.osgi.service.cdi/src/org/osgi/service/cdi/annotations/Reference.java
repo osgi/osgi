@@ -39,7 +39,7 @@ import org.osgi.annotation.bundle.Requirement;
 @Qualifier
 @Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, TYPE})
+@Target({FIELD, PARAMETER})
 public @interface Reference {
 
 	/**
