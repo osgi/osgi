@@ -51,7 +51,7 @@ javadoc {
       if (matcher) {
         def linkProject = project(":${matcher[0][1]}")
         dependsOn linkProject.javadoc
-        options.linksOffline("../${matcher[0][2]}", linkProject.javadoc.destinationDir.absolutePath)
+        options.linksOffline("../../${matcher[0][1]}/${linkProject.bnd.osgi_version}", linkProject.javadoc.destinationDir.absolutePath)
       }
     }
   }
