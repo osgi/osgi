@@ -1739,105 +1739,123 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 </programlisting>
     </section>
   </section>
+
   <section>
     <title>Portability and Interoperability</title>
-    
-    <para>The extensions defined by the JAX-RS specification make JAX-RS runtimes 
-    highly pluggable, and it is common to extend the behaviour of an application
-    using this model. In many cases the custom behaviours are specific to a 
-    particular use case, for example mapping a specific exception into a 
-    <code>Response</code>, and there is no need for portability. In some
-    common cases, however, there are extensions that can be used across
-    a great many applications.</para>
-    
+
+    <para>The extensions defined by the JAX-RS specification make JAX-RS
+    runtimes highly pluggable, and it is common to extend the behaviour of an
+    application using this model. In many cases the custom behaviours are
+    specific to a particular use case, for example mapping a specific
+    exception into a <code>Response</code>, and there is no need for
+    portability. In some common cases, however, there are extensions that can
+    be used across a great many applications.</para>
+
     <para>In order to ensure that a JAX-RS whiteboard application can make use
     of a common extension service in a portable way this specification defines
     standard service property names that should be registered, as appropriate,
-    by whiteboard extension services, whiteboard applications with static extensions,
-    and JAX-RS whiteboard implementations that provide built-in extension capabilities.</para>
-    
+    by whiteboard extension services, whiteboard applications with static
+    extensions, and JAX-RS whiteboard implementations that provide built-in
+    extension capabilities.</para>
+
     <section>
       <title>Media Type support</title>
-      
-      <para>A common use of the JAX-RS extension mechanism is to provide support for additional
-      media types, both for consuming incoming requests and for producing responses. All JAX-RS
-      whiteboards must implicitly support <code>text/plain</code> and <code>application/xml</code>
-      (using JAXB), however commonly used media types, such as <code>application/json</code> must
-      be provided as an extension.</para>
-      
-      <para>To ensure that whiteboard resources can depend on support for a particular media type
-      in a a portable way this specification defines the <code>osgi.jaxrs.media.type</code> property.
-      This property key should be registered with one or more media types that are supported, and may
-      be provided by:</para>
-      
+
+      <para>A common use of the JAX-RS extension mechanism is to provide
+      support for additional media types, both for consuming incoming requests
+      and for producing responses. All JAX-RS whiteboards must implicitly
+      support <code>text/plain</code> and <code>application/xml</code> (using
+      JAXB), however commonly used media types, such as
+      <code>application/json</code> must be provided as an extension.</para>
+
+      <para>To ensure that whiteboard resources can depend on support for a
+      particular media type in a a portable way this specification defines the
+      <code>osgi.jaxrs.media.type</code> property. This property key should be
+      registered with one or more media types that are supported, and may be
+      provided by:</para>
+
       <itemizedlist>
         <listitem>
-          <para>A Whiteboard extension - if the extension provides general purpose support for 
-          reading from and writing to a media type then it should register this property.</para>
+          <para>A Whiteboard extension - if the extension provides general
+          purpose support for reading from and writing to a media type then it
+          should register this property.</para>
         </listitem>
+
         <listitem>
-          <para>A Whiteboard application - if the application provides general purpose support for 
-          reading from and writing to a media type using a static exension then it should register 
-          this property.</para>
+          <para>A Whiteboard application - if the application provides general
+          purpose support for reading from and writing to a media type using a
+          static exension then it should register this property.</para>
         </listitem>
+
         <listitem>
-          <para>A JAX-RS Whiteboard implementation - if the implementation provides general purpose 
-          built-in support for reading from and writing to a media type then it should register this 
-          property. If the built-in extension is always available then it should also be advertised
-          by the <xref linkend="service.jaxrs-service.capability"/> for the JaxRSServiceRuntime.</para>
+          <para>A JAX-RS Whiteboard implementation - if the implementation
+          provides general purpose built-in support for reading from and
+          writing to a media type then it should register this property. If
+          the built-in extension is always available then it should also be
+          advertised by the <xref linkend="service.jaxrs-service.capability"/>
+          for the JaxRSServiceRuntime.</para>
         </listitem>
       </itemizedlist>
-      
-      <para>The term general purpose is used to indicate that the media type support must not require
-      implementation specific mapping metadata (for example annotations) and should, at a minimum,
-      work with the OSGi scalar types and DTOs. The property key is available as a constant in 
-      <xref linkend="org.osgi.service.jaxrs.runtime.JaxRSWhiteboardConstants.JAX_RS_MEDIA_TYPE"
+
+      <para>The term general purpose is used to indicate that the media type
+      support must not require implementation specific mapping metadata (for
+      example annotations) and should, at a minimum, work with the OSGi scalar
+      types and DTOs. The property key is available as a constant in <xref
+      linkend="org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants.JAX_RS_MEDIA_TYPE"
       xrefstyle="hyperlink"/>.</para>
-      
+
       <section>
         <title>Media Type names, wildcards and suffixes</title>
-        
-        <para>Where possible the value(s) of the <code>osgi.jaxrs.media.type</code> property should
-        use the IANA registered names of the media type(s) supported, for example 
-        <code>application/json</code>. Officially registered media types are available from
-        <xref linkend="service.jaxrs-iana.media.types"/>.
-        If there is no officially registered media type then
-        a vendor type should be used. Personal types may also be used, however due to the
-        lack of portability afforded by personal types it is recommended that a non-standard
-        property key is used for personal types.</para>
-        
-        <para>Wildcard types (containing a <code>*</code>) are often used by extensions to indicate 
-        that they can create a variety of different media types. Rarely this is because the extension
-        can serialise into multiple different formats. More typically this is because the extension
-        can serialize into a format which has multiple names, or multiple formats which use the same
-        basic serialization. Suffixes can further modify this behaviour, for example VCards may be
-        serialized as XML using <code>application/vcard+xml</code> or as JSON using
+
+        <para>Where possible the value(s) of the
+        <code>osgi.jaxrs.media.type</code> property should use the IANA
+        registered names of the media type(s) supported, for example
+        <code>application/json</code>. Officially registered media types are
+        available from <xref linkend="service.jaxrs-iana.media.types"/>. If
+        there is no officially registered media type then a vendor type should
+        be used. Personal types may also be used, however due to the lack of
+        portability afforded by personal types it is recommended that a
+        non-standard property key is used for personal types.</para>
+
+        <para>Wildcard types (containing a <code>*</code>) are often used by
+        extensions to indicate that they can create a variety of different
+        media types. Rarely this is because the extension can serialise into
+        multiple different formats. More typically this is because the
+        extension can serialize into a format which has multiple names, or
+        multiple formats which use the same basic serialization. Suffixes can
+        further modify this behaviour, for example VCards may be serialized as
+        XML using <code>application/vcard+xml</code> or as JSON using
         <code>application/vcard+json</code>.</para>
-        
-        <para>Wildcard types must not be used as values for the <code>osgi.jaxrs.media.type</code>
-        property as these do not provide sufficient information for whiteboard resources to
-        reliably select a media type provider. Where a provider wishes to advertise support for
-        a general suffix, for example <code>+json</code> or <code>+cbor</code> then the provider
-        must advertise the primary media type associated with the suffix; in the supplied
-        example these would be <code>application/json</code> and <code>application/cbor</code>.
-        Clients wishing to use suffixed types should therefore also depend on the primary
-        media type, not the suffixed type, if they wish to be portable. Where greater specificity
-        is required it is recommended that the extension be selected based on additional custom 
-        properties. This should also be used for suffixes that have no primary type, for example
-        <code>+der</code>. Official media type registrations are available from 
-        <xref linkend="service.jaxrs-iana.media.type.suffixes"/>
-        </para>
-        
+
+        <para>Wildcard types must not be used as values for the
+        <code>osgi.jaxrs.media.type</code> property as these do not provide
+        sufficient information for whiteboard resources to reliably select a
+        media type provider. Where a provider wishes to advertise support for
+        a general suffix, for example <code>+json</code> or <code>+cbor</code>
+        then the provider must advertise the primary media type associated
+        with the suffix; in the supplied example these would be
+        <code>application/json</code> and <code>application/cbor</code>.
+        Clients wishing to use suffixed types should therefore also depend on
+        the primary media type, not the suffixed type, if they wish to be
+        portable. Where greater specificity is required it is recommended that
+        the extension be selected based on additional custom properties. This
+        should also be used for suffixes that have no primary type, for
+        example <code>+der</code>. Official media type registrations are
+        available from <xref
+        linkend="service.jaxrs-iana.media.type.suffixes"/></para>
       </section>
+
       <section>
         <title>Media Type Selection Example</title>
-        
-        <para>The most common media type extension used in JAX-RS is to provide JSON support.
-        This specification therefore defines a component property type which can be used to 
-        require that JSON support is available. This property type also adds an optional, active-time
-        requirement in the <code>osgi.service</code> namespace for the JSON media type, which
-        ensures that a suitable extension can be provisioned if needed.</para>
-        
+
+        <para>The most common media type extension used in JAX-RS is to
+        provide JSON support. This specification therefore defines a component
+        property type which can be used to require that JSON support is
+        available. This property type also adds an optional, active-time
+        requirement in the <code>osgi.service</code> namespace for the JSON
+        media type, which ensures that a suitable extension can be provisioned
+        if needed.</para>
+
         <programlisting>@Component(service = MyResource.class,
       scope = ServiceScope.PROTOTYPE)
  @JaxrsResource
@@ -1852,12 +1870,13 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     }
 }
         </programlisting>
-        
-        <para>A corresponding component property type exists for use on a JAX-RS whiteboard
-        extension or application service which provides media type support. This can be used
-        to declare that one or more media types are supported.</para>
-        
-              <programlisting>@Component(scope = ServiceScope.PROTOTYPE)
+
+        <para>A corresponding component property type exists for use on a
+        JAX-RS whiteboard extension or application service which provides
+        media type support. This can be used to declare that one or more media
+        types are supported.</para>
+
+        <programlisting>@Component(scope = ServiceScope.PROTOTYPE)
  @JaxrsExtension
  @JaxrsMediaType(MediaType.APPLICATION_JSON)
  public class MyFeature implements Feature {
@@ -1871,6 +1890,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       </section>
     </section>
   </section>
+
   <section>
     <title>Capabilities</title>
 
@@ -2030,12 +2050,12 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       xml:id="service.jaxrs-whiteboard.pattern.ref"><title>Whiteboard
       Pattern</title>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
 
-      <bibliomixed
-      xml:id="service.jaxrs-iana.media.types"><title>IANA Media Type Registrations</title>
+      <bibliomixed xml:id="service.jaxrs-iana.media.types"><title>IANA Media
+      Type Registrations</title>
       https://www.iana.org/assignments/media-types/media-types.xhtml</bibliomixed>
 
-      <bibliomixed
-      xml:id="service.jaxrs-iana.media.type.suffixes"><title>IANA Media Type Suffix Registrations</title>
+      <bibliomixed xml:id="service.jaxrs-iana.media.type.suffixes"><title>IANA
+      Media Type Suffix Registrations</title>
       https://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xhtml</bibliomixed>
     </bibliolist>
   </section>
