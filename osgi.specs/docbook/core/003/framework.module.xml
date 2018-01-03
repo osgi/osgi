@@ -5002,9 +5002,9 @@ bundle-description  ::= symbolic-name
     <title>Extension Bundles</title>
 
     <para>Extension bundles can deliver optional parts of the Framework
-    implementation. The contents of extension bundles cannot
-    be provided by the normal bundles because they need to be loaded
-    by the framework implementation.</para>
+    implementation. The contents of extension bundles cannot be provided by
+    the normal bundles because they need to be loaded by the framework
+    implementation.</para>
 
     <para>Framework extensions are necessary to provide implementation aspects
     of the Framework. For example, a Framework vendor could supply the
@@ -5026,8 +5026,7 @@ bundle-description  ::= symbolic-name
 
     <programlisting>Fragment-Host: com.acme.impl.framework</programlisting>
 
-    <para>The following describe the life cycle of an extension
-    bundle:</para>
+    <para>The following describe the life cycle of an extension bundle:</para>
 
     <orderedlist>
       <listitem>
@@ -5037,18 +5036,17 @@ bundle-description  ::= symbolic-name
 
       <listitem>
         <para>The extension bundle is allowed to enter the
-        <code>RESOLVED</code> state at the frameworks discretion. For
-        example, a framework may choose to immediately resolve the
-        extension after it has entered the <code>INSTALLED</code> state.
-        If all requirements of an extension bundle are satisfied then
-        resolving the extension bundle must not require a framework
-        restart.</para>
+        <code>RESOLVED</code> state at the frameworks discretion. For example,
+        a framework may choose to immediately resolve the extension after it
+        has entered the <code>INSTALLED</code> state. If all requirements of
+        an extension bundle are satisfied then resolving the extension bundle
+        must not require a framework restart.</para>
       </listitem>
 
       <listitem>
         <para>If a <code>RESOLVED</code> extension bundle is refreshed then
-        the framework must shutdown and the framework must be re-launched.
-        In this case a Framework Event is fired of type <xref
+        the framework must shutdown and the framework must be re-launched. In
+        this case a Framework Event is fired of type <xref
         linkend="org.osgi.framework.FrameworkEvent.STOPPED_SYSTEM_REFRESHED"
         xrefstyle="hyperlink"/>.</para>
       </listitem>
@@ -5057,8 +5055,8 @@ bundle-description  ::= symbolic-name
         <para>When a <code>RESOLVED</code> extension bundle is updated or
         <code>UNINSTALLED</code>, it is not allowed to re-enter the
         <code>RESOLVED</code> state. If the extension bundle is refreshed then
-        the Framework must shutdown and the framework must be re-launched.
-        In this case a Framework Event is fired of type <xref
+        the Framework must shutdown and the framework must be re-launched. In
+        this case a Framework Event is fired of type <xref
         linkend="org.osgi.framework.FrameworkEvent.STOPPED_SYSTEM_REFRESHED"
         xrefstyle="hyperlink"/>.</para>
       </listitem>
@@ -5101,53 +5099,50 @@ bundle-description  ::= symbolic-name
         </listitem>
       </itemizedlist>
 
-      <para>Extension bundles are permitted to specify an
-      Export-Package header. Any exported packages specified by
-      an extension bundle must be hosted (exported) by the System
-      Bundle when the extension bundle is resolved.</para>
+      <para>Extension bundles are permitted to specify an Export-Package
+      header. Any exported packages specified by an extension bundle must be
+      hosted (exported) by the System Bundle when the extension bundle is
+      resolved.</para>
 
-      <para>Extension bundles are permitted to specify
-      Import-Package and Require-Capability headers to 
-      declare dependencies on packages and capabilities.</para>
+      <para>Extension bundles are permitted to specify Import-Package and
+      Require-Capability headers to declare dependencies on packages and
+      capabilities.</para>
     </section>
 
     <section>
       <title>Resolving Extensions</title>
 
-      <para>Extension bundles may specify requirements on
-      packages (Import-Package) and capabilities (Require-Capability).
-      An extension bundle is allowed to become resolved when all
-      of its mandatory requirements are wired to valid packages or
-      capabilities.</para>
+      <para>Extension bundles may specify requirements on packages
+      (Import-Package) and capabilities (Require-Capability). An extension
+      bundle is allowed to become resolved when all of its mandatory
+      requirements are wired to valid packages or capabilities.</para>
 
-      <para>Extension bundle requirements may only be wired
-      to packages and capabilities provided by the system bundle 
-      or another extension bundle that is also attached to the
-      system bundle. All other capabilities are considered invalid
-      for resolving an extension bundle. This ensures that the system
-      bundle wiring never hosts a requirement from an extension bundle
-      which is wired to a capability hosted by another bundle other than
-      the system bundle.
-      </para>
+      <para>Extension bundle requirements may only be wired to packages and
+      capabilities provided by the system bundle or another extension bundle
+      that is also attached to the system bundle. All other capabilities are
+      considered invalid for resolving an extension bundle. This ensures that
+      the system bundle wiring never hosts a requirement from an extension
+      bundle which is wired to a capability hosted by another bundle other
+      than the system bundle.</para>
     </section>
 
     <section>
       <title>Class Path Treatment</title>
 
-      <para>A extension bundle's JAR is appended to the class path
-      of the Framework. Extension bundles that are resolved together must
-      have their JAR appended in the order in which the extension
-      bundles are installed: that is, ascending bundle ID order.</para>
+      <para>A extension bundle's JAR is appended to the class path of the
+      Framework. Extension bundles that are resolved together must have their
+      JAR appended in the order in which the extension bundles are installed:
+      that is, ascending bundle ID order.</para>
     </section>
 
     <section xml:id="framework.module.extensionActivator">
       <title>Extension Bundle Activator</title>
 
-      <para>A extension may hook into the Framework initialization
-      and shutdown process by specifying an Extension Bundle Activator. The
-      <xref linkend="org.osgi.framework.BundleActivator"
-      xrefstyle="hyperlink"/> interface defines methods that the Framework
-      invokes when the Framework is initialized and shutdown.</para>
+      <para>A extension may hook into the Framework initialization and
+      shutdown process by specifying an Extension Bundle Activator. The <xref
+      linkend="org.osgi.framework.BundleActivator" xrefstyle="hyperlink"/>
+      interface defines methods that the Framework invokes when the Framework
+      is initialized and shutdown.</para>
 
       <para>To inform the OSGi environment of a fully qualified class name
       serving as its Extension Bundle Activator, a framework extension
@@ -5187,8 +5182,8 @@ bundle-description  ::= symbolic-name
         restart. When an extension bundle is resolved dynamically after
         Framework initialization, then the Extension Bundle Activator start
         method must be called as soon as the extension bundle is resolved.
-        This must happen before the Bundle Event of type
-        <code>RESOLVED</code> is fired for the extension bundle.</para>
+        This must happen before the Bundle Event of type <code>RESOLVED</code>
+        is fired for the extension bundle.</para>
       </section>
 
       <section>
@@ -5205,8 +5200,9 @@ bundle-description  ::= symbolic-name
 
     <section>
       <title>Support Properties</title>
-      <para>Frameworks must implement fragments, require bundle,
-      and extensions. They must therefore set the following properties to
+
+      <para>Frameworks must implement fragments, require bundle, and
+      extensions. They must therefore set the following properties to
       <code>true</code>.</para>
 
       <itemizedlist>
@@ -5223,7 +5219,6 @@ bundle-description  ::= symbolic-name
         </listitem>
       </itemizedlist>
     </section>
-
   </section>
 
   <section>
@@ -5576,8 +5571,7 @@ URL(String protocol, String host, String file)</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i3311293"><title>Java Virtual Machine
-      Specification, Second
-      Edition</title>http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</bibliomixed>
+      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
 
       <bibliomixed xml:id="i3024180"><title>The Standard for the Format of
       ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August
@@ -5587,18 +5581,17 @@ URL(String protocol, String host, String file)</programlisting>
       HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
       1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
 
-      <bibliomixed xml:id="i3024191"><title>The Java Language Specification,
-      Second Edition, Sun Microsystems,
-      2000</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+      <bibliomixed xml:id="i3024191"><title>Java Language
+      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
 
       <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
       Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
 
-      <bibliomixed xml:id="i3024199"><title>The Java Security Architecture for
-      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
+      <bibliomixed xml:id="i3024199"><title>Java Security
+      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
 
-      <bibliomixed xml:id="i3024203"><title>The Java 2 Package Versioning
-      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
+      <bibliomixed xml:id="i3024203"><title>Java Package Versioning
+      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
 
       <bibliomixed xml:id="i3024206"><title>Codes for the Representation of
       Names of Languages</title>ISO 639, International Standards
@@ -5608,7 +5601,7 @@ URL(String protocol, String host, String file)</programlisting>
       file format as defined by the java.util.zip package.</bibliomixed>
 
       <bibliomixed xml:id="i3024211"><title>Manifest
-      Format</title>http://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
+      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
 
       <bibliomixed xml:id="i3024215"><title>W3C
       EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
@@ -5652,10 +5645,10 @@ URL(String protocol, String host, String file)</programlisting>
       Android</title>http://developer.android.com/index.html</bibliomixed>
 
       <bibliomixed xml:id="i3246276"><title>Google App
-      Engine</title>http://developer.android.com/index.html</bibliomixed>
+      Engine</title>https://cloud.google.com/appengine/</bibliomixed>
 
       <bibliomixed xml:id="i3246284"><title>Google Web
-      Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
+      Toolkit</title>http://www.gwtproject.org/</bibliomixed>
 
       <bibliomixed xml:id="framework.module-spdx.license.list"><title>Software
       Package Data Exchange (SPDX) License
@@ -5698,7 +5691,8 @@ URL(String protocol, String host, String file)</programlisting>
       </listitem>
 
       <listitem>
-        <para>Removed specification for bootclasspath extension bundles.</para>
+        <para>Removed specification for bootclasspath extension
+        bundles.</para>
       </listitem>
 
       <listitem>
@@ -5711,7 +5705,8 @@ URL(String protocol, String host, String file)</programlisting>
       </listitem>
 
       <listitem>
-        <para>Mandate support for dynamically resolving extension bundles.</para>
+        <para>Mandate support for dynamically resolving extension
+        bundles.</para>
       </listitem>
     </itemizedlist>
   </section>

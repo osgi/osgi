@@ -3945,24 +3945,24 @@ D: Export-Package: s</programlisting>
       HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
       1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
 
-      <bibliomixed xml:id="i1199923"><title>The Java Language Specification,
-      Second Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+      <bibliomixed xml:id="i1199923"><title>Java Language
+      Specification</title>https://docs.oracle.com/javase/specs/</bibliomixed>
 
       <bibliomixed xml:id="i1199796"><title>A String Representation of LDAP
       Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
 
-      <bibliomixed xml:id="i1200042"><title>The Java Security Architecture for
-      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
+      <bibliomixed xml:id="i1200042"><title>Java Security
+      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
 
-      <bibliomixed xml:id="i1201324"><title>The Java 2 Package Versioning
-      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
+      <bibliomixed xml:id="i1201324"><title>Java Package Versioning
+      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
 
       <bibliomixed xml:id="i1304871"><title>Codes for the Representation of
       Names of Languages</title>ISO 639, International Standards
       Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
       <bibliomixed xml:id="i2164952"><title>Manifest
-      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
+      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
 
       <bibliomixed xml:id="i2461629"><title>W3C
       EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
@@ -3977,7 +3977,7 @@ D: Export-Package: s</programlisting>
       engineered)</title>http://metastatic.org/source/JKS.html</bibliomixed>
 
       <bibliomixed xml:id="i3300085"><title>Java Service Provider
-      Configuration</title>http://docs.oracle.com/javase/6/docs/technotes/guides/jar/jar.html#Service%20Provider</bibliomixed>
+      Configuration</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Service_Provider</bibliomixed>
 
       <bibliomixed xml:id="i3324333"><title>IETF RFC 1422 A Universally Unique
       IDentifier (UUID) URN

@@ -1007,15 +1007,14 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <bibliomixed xml:id="i1485767"><title>X.509
       Certificates</title>http://www.ietf.org/rfc/rfc2459.txt</bibliomixed>
 
-      <bibliomixed xml:id="i1488926"><title>Java 2 Security
-      Architecture</title>Version 1.2, Sun Microsystems, March
-      2002</bibliomixed>
+      <bibliomixed xml:id="i1488926"><title>Java Security
+      Architecture</title>https://docs.oracle.com/javase/8/docs/technotes/guides/security/spec/security-spec.doc.html</bibliomixed>
 
       <bibliomixed xml:id="i1509711"><title>Java Package Versioning
-      Specification</title>http://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
+      Specification</title>https://docs.oracle.com/javase/8/docs/technotes/guides/versioning/index.html</bibliomixed>
 
       <bibliomixed xml:id="i1488938"><title>Manifest
-      Format</title>http://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
+      Format</title>https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR_Manifest</bibliomixed>
 
       <bibliomixed xml:id="i1483030"><title>Secure Hash
       Standard</title>http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf</bibliomixed>
