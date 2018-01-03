@@ -385,7 +385,7 @@
             <entry><code>JavaSE</code></entry>
 
             <entry><para>Should be used for all Java SE execution environments
-            since Java 2. The name for the Java Runtime Environment has
+            since Java 1.2. The name for the Java Runtime Environment has
             changed several times but for all environments the Java SE name
             must be used.</para></entry>
           </row>

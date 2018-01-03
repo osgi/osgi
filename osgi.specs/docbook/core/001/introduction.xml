@@ -93,11 +93,11 @@
       </mediaobject>
     </figure>
 
-    <para>The Security Layer is based on Java 2 security but adds a number of
+    <para>The Security Layer is based on Java security but adds a number of
     constraints and fills in some of the blanks that standard Java leaves
     open. It defines a secure packaging format as well as the runtime
-    interaction with the Java 2 security layer. The Security Layer is
-    described in <xref linkend="framework.security"/>.</para>
+    interaction with the Java security layer. The Security Layer is described
+    in <xref linkend="framework.security"/>.</para>
 
     <para>The Module Layer defines a modularization model for Java. It
     addresses some of the shortcomings of Java's deployment model. The
@@ -196,7 +196,7 @@
     system environment is recommended. A Framework implementation will use
     areas of Java that are not normally encountered in traditional
     applications. Detailed understanding is required of class loaders, garbage
-    collection, Java 2 security, and Java native library loading.</para>
+    collection, Java security, and Java native library loading.</para>
 
     <para>Architects should focus on the introduction of each subject. This
     introduction contains a general overview of the subject, the requirements

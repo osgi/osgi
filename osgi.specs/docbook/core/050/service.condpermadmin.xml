@@ -18,14 +18,14 @@
   <section>
     <title>Introduction</title>
 
-    <para>The OSGi security model is based on the powerful and flexible Java 2
+    <para>The OSGi security model is based on the powerful and flexible Java
     security architecture, specifically the permission model. This
-    specification adds several new features to the Java 2 model to adapt it to
+    specification adds several new features to the Java model to adapt it to
     the typical use cases of OSGi deployments.</para>
 
     <para>Key aspects of this security management API is the use of policies.
     Policies contain a set of permissions that are applicable when the related
-    conditions are met. A policy can both allow (the Java 2 model) as well as
+    conditions are met. A policy can both allow (the Java model) as well as
     deny access when the permissions are implied. Deny permissions can
     significantly simplify security management. The real time management of
     Conditional Permission Admin enables management applications to control
@@ -61,8 +61,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Java 2 Security</emphasis> - Provide full
-          compatibility with the existing Java 2 security model, existing
+          <para><emphasis>Java Security</emphasis> - Provide full
+          compatibility with the existing Java security model, existing
           applications must not require modifications.</para>
         </listitem>
 
@@ -179,7 +179,7 @@
 
         <listitem>
           <para><emphasis>Permission</emphasis> - An object that defines a
-          certain permission type. Same as the Java 2 Security model.</para>
+          certain permission type. Same as the Java Security model.</para>
         </listitem>
 
         <listitem>
@@ -745,7 +745,7 @@ name        ::= quoted-string</programlisting>
   <section>
     <title>Effective Permissions</title>
 
-    <para>Once a bundle is installed, it gets Java 2
+    <para>Once a bundle is installed, it gets Java
     <emphasis>permissions</emphasis> associated from the framework. Some of
     these permissions are <emphasis>implied</emphasis>. Implied permissions
     are given by the framework because they are required for normal operation,
@@ -803,10 +803,10 @@ name        ::= quoted-string</programlisting>
     <title>Conditional Permissions</title>
 
     <para>The conditional permissions provide a very general model that is
-    related to the Java 2 Security model. The Java 2 Security model assigns a
-    set of permissions to a code base or signer. During the permission check,
-    this set is consulted for permissions that imply the checked permissions.
-    If the checked permission is implied, access is granted.</para>
+    related to the Java Security model. The Java Security model assigns a set
+    of permissions to a code base or signer. During the permission check, this
+    set is consulted for permissions that imply the checked permissions. If
+    the checked permission is implied, access is granted.</para>
 
     <para>The Conditional Permission Admin service model assumes a more
     general approach. It conceptually has a system wide <emphasis>policy
@@ -845,7 +845,7 @@ name        ::= quoted-string</programlisting>
 
       <listitem>
         <para>At least one of its permissions implies <code>P</code>, as
-        defined by Java 2 security.</para>
+        defined by Java security.</para>
       </listitem>
     </itemizedlist>
 
@@ -1003,7 +1003,7 @@ ALLOW {
   <section xml:id="service.condpermadmin.permissioncheck">
     <title>The Permission Check</title>
 
-    <para>The Java 2 security model has both a Security Manager and an Access
+    <para>The Java security model has both a Security Manager and an Access
     Controller to perform a permission check. The core functionality is
     located in the <code>AccessController</code> and the
     <code>AccessControlContext</code> classes that cooperate with

@@ -2768,7 +2768,7 @@ D: Export-Package: s</programlisting>
       Protection Domain.</para>
 
       <para>The parameter type is <code>Object</code> so that the Framework
-      can be implemented on Java platforms that do not support Java 2 based
+      can be implemented on Java platforms that do not support Java based
       security.</para>
 
       <para>See <xref linkend="service.condpermadmin.permissioncheck"/> for

@@ -19,7 +19,7 @@
     <title>Introduction</title>
 
     <para>The OSGi Security Layer is an optional layer that underlies the OSGi
-    framework. The layer is based on the Java 2 security architecture. It
+    framework. The layer is based on the Java security architecture. It
     provides the infrastructure to deploy and manage applications that must
     run in fine-grained controlled environments.</para>
 
@@ -50,8 +50,8 @@
   <section xml:id="framework.security.securityoverview">
     <title>Security Overview</title>
 
-    <para>The Framework security model is based on the Java 2 specification.
-    If security checks are performed, they must be done according to <xref
+    <para>The Framework security model is based on the Java specification. If
+    security checks are performed, they must be done according to <xref
     linkend="i1488926"/>. It is assumed that the reader is familiar with this
     specification. The security layer is optional, see <xref
     linkend="i1526852"/>.</para>
@@ -98,7 +98,7 @@
       <title>Optional Security</title>
 
       <para>The Java platform on which the Framework runs must provide the
-      Java Security APIs necessary for Java 2 permissions. On
+      Java Security APIs necessary for Java permissions. On
       resource-constrained platforms, these Java Security APIs may be stubs
       that allow the bundle classes to be loaded and executed, but the stubs
       never actually perform the security checks. The behavior of these stubs
@@ -200,7 +200,7 @@
     message (assuming the public key is trusted, this is discussed in <xref
     linkend="i1485854"/>).</para>
 
-    <para>The digital signing process used is based on Java 2 JAR signing. The
+    <para>The digital signing process used is based on Java JAR signing. The
     process of signing is repeated, restricted and augmented here to improve
     the inter-operability of OSGi bundles.</para>
 
@@ -846,8 +846,8 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
   <section>
     <title>Permissions</title>
 
-    <para>The OSGi Framework uses Java 2 permissions for securing bundles.
-    Each bundle is associated with a set of permissions. During runtime, the
+    <para>The OSGi Framework uses Java permissions for securing bundles. Each
+    bundle is associated with a set of permissions. During runtime, the
     permissions are queried when a permission is requested through the
     Security Manager. If a Framework uses postponed conditions, then it must
     install its own security manager, otherwise it can use any Security

@@ -5227,7 +5227,7 @@ bundle-description  ::= symbolic-name
     <section>
       <title>Extension Bundles</title>
 
-      <para>In an environment that has Java 2 security enabled the Framework
+      <para>In an environment that has Java security enabled the Framework
       must perform an additional security check before allowing an extension
       bundle to be installed. In order for an extension bundle to successfully
       install, the Framework must check that the extension bundle has All
