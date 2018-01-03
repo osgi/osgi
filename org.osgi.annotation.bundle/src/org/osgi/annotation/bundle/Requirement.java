@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,12 +124,23 @@ public @interface Requirement {
 		/**
 		 * Indicates if the requirement can only be wired a single time.
 		 */
-		SINGLE,
+		SINGLE("single"), // Namespace.CARDINALITY_SINGLE
 
 		/**
 		 * Indicates if the requirement can be wired multiple times.
 		 */
-		MULTIPLE
+		MULTIPLE("multiple"); // Namespace.CARDINALITY_MULTIPLE
+
+		private final String value;
+
+		Cardinality(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 
 	/**
@@ -152,12 +163,23 @@ public @interface Requirement {
 		 * A mandatory requirement forbids the bundle to resolve when the
 		 * requirement is not satisfied.
 		 */
-		MANDATORY,
+		MANDATORY("mandatory"), // Namespace.RESOLUTION_MANDATORY
 
 		/**
 		 * An optional requirement allows a bundle to resolve even if the
 		 * requirement is not satisfied.
 		 */
-		OPTIONAL
+		OPTIONAL("optional"); // Namespace.RESOLUTION_OPTIONAL
+
+		private final String value;
+
+		Resolution(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 }
