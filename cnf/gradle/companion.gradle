@@ -3,13 +3,20 @@
  */
 
 jar {
-  ext.javadocIncludes = new File(docsDir, 'javadoc.includes')
+  ext.javadocIncludes = new File(docsDir, 'javadocIncludes.txt')
   outputs.file javadocIncludes
   doLast {
     project.mkdir(javadocIncludes.parent)
     javadocIncludes.text = bnd.project.getExports().collect { packageRef, attrs ->
        "${packageRef.getBinary()}/*.java"
     }.join(',')
+  }
+  ext.javadocVersion = new File(docsDir, 'javadocVersion.txt')
+  outputs.file javadocVersion
+  doLast {
+    project.mkdir(javadocVersion.parent)
+    def version = bnd.project.getVersion(project.name)
+    javadocVersion.text = bnd.project.getReplacer().process("\${versionmask;===s;${version}}", bnd.project)
   }
 }
 
@@ -18,10 +25,7 @@ javadoc {
   source bnd.allSrcDirs
   ext.javadocTitle = bnd('javadoc.title', project.name)
   configure(options) {
-    docTitle = "OSGi&trade; ${javadocTitle} Release ${bnd.osgi_release}"
-    windowTitle = "OSGi ${javadocTitle} Release ${bnd.osgi_release}"
     bottom = "${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a>"
-    header = "<b>OSGi&trade; ${javadocTitle}</b><br/>Release ${bnd.osgi_release}"
     memberLevel = JavadocMemberLevel.PROTECTED
     charSet = 'UTF-8'
     encoding = 'UTF-8'
@@ -43,16 +47,14 @@ javadoc {
             'noimplement:t:"Consumers of this API must not implement this interface"']
     links('http://docs.oracle.com/javase/8/docs/api/')
   }
-  if (project.name.startsWith('osgi.')) {
-    // compute dependencies on other javadoc builds based upon the classpath
-    compileJava.classpath.each {
-      def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
-      def matcher = entry =~ /^(osgi\.([^\/]*))/
-      if (matcher) {
-        def linkProject = project(":${matcher[0][1]}")
-        dependsOn linkProject.javadoc
-        options.linksOffline("../../${matcher[0][1]}/${linkProject.bnd.osgi_version}", linkProject.javadoc.destinationDir.absolutePath)
-      }
+  // compute dependencies on other javadoc builds based upon the classpath
+  def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
+  compileJava.classpath.each {
+    def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
+    def matcher = pattern.matcher(entry)
+    if (matcher) {
+      def linkProject = project(":${matcher[0][1]}")
+      dependsOn linkProject.javadoc
     }
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
@@ -61,7 +63,19 @@ javadoc {
   }
   doFirst {
     project.delete(destinationDir)
+    def javadocTitleVersion = project.name.startsWith('osgi.') ? "Release ${bnd.osgi_release}" : "Version ${jar.javadocVersion.text}"
+    options.docTitle = "OSGi&trade; ${javadocTitle} ${javadocTitleVersion}"
+    options.windowTitle = "OSGi ${javadocTitle} ${javadocTitleVersion}"
+    options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
     include jar.javadocIncludes.text.tokenize(',')
+    compileJava.classpath.each {
+      def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
+      def matcher = pattern.matcher(entry)
+      if (matcher) {
+        def linkProject = project(":${matcher[0][1]}")
+        options.linksOffline("../../${linkProject.name}/${linkProject.jar.javadocVersion.text}", linkProject.javadoc.destinationDir.absolutePath)
+      }
+    }
     logger.info 'Title         : {}', options.windowTitle
     logger.info 'Packages      : {}', includes
     logger.info 'Destdir       : {}', destinationDir
