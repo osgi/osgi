@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,19 @@ public final class UnresolvableNamespace extends Namespace {
 	 * </pre>
 	 */
 	public static final String UNRESOLVABLE_NAMESPACE = "osgi.unresolvable";
+
+	/**
+	 * An unresolvable filter expression.
+	 * <p>
+	 * This can be used as the filter expression for an UnresolvableNamespace
+	 * requirement.
+	 * 
+	 * <pre>
+	 * &#64;Requirement(namespace = UnresolvableNamespace.UNRESOLVABLE_NAMESPACE,
+	 *              filter = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	 * </pre>
+	 */
+	public static final String	UNRESOLVABLE_FILTER		= "(&(must.not.resolve=*)(!(must.not.resolve=*)))";
 
 	private UnresolvableNamespace() {
 		// empty
