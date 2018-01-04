@@ -1,0 +1,2 @@
+Import-Package: pkg100
+Require-Capability: cap100

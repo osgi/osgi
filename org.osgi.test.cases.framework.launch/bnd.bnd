@@ -27,7 +27,8 @@ Include-Resource = \
     dependency.tb1.v3.jar, \
     dependency.tb2.v1.jar, \
     dependency.tb3.v1.jar, \
-    dependency.tb4.v1.jar
+    dependency.tb4.v1.jar, \
+    mrjars.tb1.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.launch
@@ -46,4 +47,11 @@ Test-Cases							= ${testcases}
 
 -runproperties = ${runproperties}, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \
-	${p}.bundles=
+	${p}.bundles=, \
+	${p}.java.version.8="java.specification.version=1.8", \
+	${p}.java.version.99="java.specification.version=99", \
+	${p}.java.version.100="java.specification.version=100", \
+	${p}.java.version.101="java.specification.version=101"
+
+
+
