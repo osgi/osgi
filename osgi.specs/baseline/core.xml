@@ -34842,15 +34842,6 @@ Returns the string representation of this <code>ConditionInfo</code>. The
       </section>
    </section>
 </section>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title>Java
-      1.3</title>http://www.oracle.com/technetwork/java/archive-139210.html</bibliomixed>
-    </bibliolist>
-  </section>
 </chapter>
 
   <chapter label="51" revision="$Id: be1eb1a45992002292f6ad416612ccc6f52f9b19 $" version="5" xml:id="service.permissionadmin" xml:base="051/service.permissionadmin.xml">
