@@ -53,7 +53,7 @@ task('rdmtsummary') {
   group 'documentation'
   ext.destinationDir = new File(buildDir, 'residentialdmt')
   ext.treesummaryxml = new File(destinationDir, 'treesummary.xml')
-  inputs.files project(':dmforest').sourceSets.main.allJava, sourceSets.main.runtimeClasspath
+  inputs.files parent.project('dmforest').sourceSets.main.allJava, sourceSets.main.runtimeClasspath
   outputs.dir destinationDir
   doFirst {
     project.mkdir(destinationDir)
@@ -73,7 +73,7 @@ task('rdmtsummary') {
 task('xmlns', 'type': Copy) {
   description 'Build the docbook flavored schemas.'
   group 'documentation'
-  from rootProject.file('xmlns')
+  from parent.file('xmlns')
   into new File(buildDir, 'xmlns')
   include '**/*.xsd'
   includeEmptyDirs = false

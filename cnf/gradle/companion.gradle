@@ -50,10 +50,10 @@ javadoc {
   // compute dependencies on other javadoc builds based upon the classpath
   def pattern = project.name.startsWith('osgi.') ? ~/^(osgi\.([^\/]*))/ : ~/^(org\.osgi\.([^\/]*))/
   compileJava.classpath.each {
-    def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
+    def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
     def matcher = pattern.matcher(entry)
     if (matcher) {
-      def linkProject = project(":${matcher[0][1]}")
+      def linkProject = parent.project(matcher[0][1])
       dependsOn linkProject.javadoc
     }
   }
@@ -69,10 +69,10 @@ javadoc {
     options.header = "<b>OSGi&trade; ${javadocTitle}</b><br/>${javadocTitleVersion}"
     include jar.javadocIncludes.text.tokenize(',')
     compileJava.classpath.each {
-      def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
+      def entry = parent.relativePath(it).replace(File.separatorChar, '/' as char)
       def matcher = pattern.matcher(entry)
       if (matcher) {
-        def linkProject = project(":${matcher[0][1]}")
+        def linkProject = parent.project(matcher[0][1])
         options.linksOffline("../../${linkProject.name}/${linkProject.jar.javadocVersion.text}", linkProject.javadoc.destinationDir.absolutePath)
       }
     }
@@ -80,7 +80,7 @@ javadoc {
     logger.info 'Packages      : {}', includes
     logger.info 'Destdir       : {}', destinationDir
   }
-  def legal = rootProject.file('osgi.companion/legal/javadoc')
+  def legal = parent.file('osgi.companion/legal/javadoc')
   inputs.dir legal
   doLast {
     copy {

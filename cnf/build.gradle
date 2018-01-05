@@ -10,7 +10,7 @@ task('refresh') {
   doLast {
     logger.info 'Refresh bnd Projects after building bnd plugins in {}', project.name
     bnd.project.refresh()
-    rootProject.subprojects {
+    parent.subprojects {
       if (project != cnf) {
         bnd.project.refresh()
       }
@@ -23,7 +23,7 @@ classes {
 }
 
 /* bnd plugins influence bundle contents, so add cnf output to jar inputs */
-rootProject.subprojects {
+parent.subprojects {
   if (project != cnf) {
     jar.inputs.files cnf.sourceSets.main.output
   }

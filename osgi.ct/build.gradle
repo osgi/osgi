@@ -2,7 +2,7 @@
  * osgi.ct Gradle build script
  */
 
-ext.riBuildDir = rootProject.file("osgi.ri/${bnd('target-dir')}")
+ext.riBuildDir = parent.file("osgi.ri/${bnd('target-dir')}")
 
 apply from: file('test.gradle')
 
