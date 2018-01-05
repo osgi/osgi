@@ -787,8 +787,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Class Path Order</emphasis> - Scan the bundle class
-        path resources.</para>
+        <para><emphasis>Bundle Class Path Order</emphasis> - Scan the bundle
+        class path containers.</para>
       </listitem>
 
       <listitem>
@@ -800,7 +800,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <para>These two different ways are outlined in the following
     sections.</para>
 
-    <section>
+    <section xml:id="framework.wiring-bundleclasspathorder">
       <title>Bundle Class Path Order</title>
 
       <para>Once a bundle is resolved all its container namespaces are
@@ -822,16 +822,35 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       class resources) and a flag to indicate if the scan should recurs into
       directories or not.</para>
 
-      <para>This method has no counterpart in the standard class loader
-      API.</para>
+      <para>When the bundle class path has a multi-release container, see
+      <xref linkend="framework.module-multireleasecontainer"/>, and an
+      argument to the <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.listResources-String-String-int-"
+      xrefstyle="hyperlink"/> method would include a resource name in the
+      method result if the resource was not available from the root directory
+      but is available from a versioned directory visible on the current Java
+      version, then the method result must include the resource name from the
+      root directory. For example, if the multi-release container has the
+      following entry </para>
+
+      <programlisting>META-INF/versions/9/com/foo/resource.txt</programlisting>
+
+      <para>and the call <code>listResources(“/com/foo”, “*.txt”, 0)</code> is
+      made when running on Java 9, or later, the result must include</para>
+
+      <programlisting>com/foo/resource.txt</programlisting>
+
+      <para>The <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.listResources-String-String-int-"
+      xrefstyle="hyperlink"/> method has no counterpart in the standard class
+      loader API.</para>
     </section>
 
     <section>
       <title>Entry Order</title>
 
-      <para>A Bundle Wiring reflects a resolved bundle. This bundle
-      constitutes of the bundle's main container and any attached fragments.
-      The <xref
+      <para>A Bundle Wiring reflects a resolved bundle. This wiring
+      constitutes the bundle and any attached fragments. The <xref
       linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"
       xrefstyle="hyperlink"/> method is similar to the
       <code>Bundle.</code><xref
@@ -889,6 +908,17 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
         xrefstyle="hyperlink"/> and <xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"
         xrefstyle="hyperlink"/></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added support for multi-release JARs. See <xref
+        linkend="framework.wiring-bundleclasspathorder"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -2399,31 +2399,34 @@ policy ::= 'lazy'</programlisting>
       removed.</para>
     </section>
 
-    <section>
-      <title>Detecting Bundle Changes</title>
+    <section xml:id="framework.lifecycle-lastmodified">
+      <title>Detecting Bundle Modifications</title>
 
-      <para>The Bundle object provides a convenient way to detect changes in a
-      bundle. The Framework must keep the time that a bundle is changed by any
-      of the life cycle operations. The <xref
+      <para>The Bundle object provides a convenient way to detect
+      modifications in a bundle. The Framework must keep the time that a
+      bundle is modified by any of the life cycle operations or, in the case
+      of multi-release JARs, by changing the version of Java platform being
+      used. See <xref linkend="framework.module-multireleasejar"/>. The <xref
       linkend="org.osgi.framework.Bundle.getLastModified--"
       xrefstyle="hyperlink"/> method will return the last time the bundle was
-      installed, updated, or uninstalled. This last modified time must be
-      stored persistently.</para>
+      effectively modified. This last modified time must be stored
+      persistently.</para>
 
       <para>The method must return the number of milliseconds since midnight
-      Jan. 1, 1970 UTC with the condition that a change must always result in
-      a higher value than the previous last modified time of any
+      Jan. 1, 1970 UTC with the condition that a modification must always
+      result in a higher value than the previous last modified time of any
       bundle.</para>
 
       <para>The <xref linkend="org.osgi.framework.Bundle.getLastModified--"
-      xrefstyle="hyperlink"/> is very useful when a bundle is caching
+      xrefstyle="hyperlink"/> method is very useful when a bundle is caching
       resources from another bundle and needs to refresh the cache when the
-      bundle changes. This life cycle change of the target bundle can happen
-      while the caching bundle is not active. The last modified time is
-      therefore a convenient way to track these target bundles.</para>
+      other bundle is effectively modified. A modification in the other bundle
+      can happen while the caching bundle is not active. The last modified
+      time is therefore a convenient way to track modifications in
+      bundles.</para>
     </section>
 
-    <section xml:id="i3293423">
+    <section xml:id="framework.lifecycle-getheaders">
       <title>Retrieving Manifest Headers</title>
 
       <para>The <code>Bundle</code> interface defines two methods to return
@@ -2467,6 +2470,13 @@ policy ::= 'lazy'</programlisting>
           </itemizedlist>
         </listitem>
       </itemizedlist>
+
+      <para>If the bundle is a multi-release JAR, see <xref
+      linkend="framework.module-multireleasejar"/>, then then returned
+      manifest header information must be the supplemented manifest
+      information. That is, the main manifest with the replacement values from
+      a supplemental manifest, if any, for the current Java platform version.
+      </para>
 
       <para>Localization is performed according to the description in <xref
       linkend="framework.module.localization"/>. If no translation is found
@@ -2577,8 +2587,9 @@ policy ::= 'lazy'</programlisting>
           <code>findEntries(String,String,boolean)</code> is an intermediate
           form. Useful when configuration or setup information is needed from
           another bundle. It considers Fragment bundles but it must never
-          create a class loader. The method provides access to all directories
-          in the associated JAR files.</para>
+          create a class loader or use the bundle class path. The method
+          provides access to all directories in the associated JAR
+          files.</para>
         </listitem>
       </itemizedlist>
 
@@ -3992,6 +4003,12 @@ D: Export-Package: s</programlisting>
       <listitem>
         <para>Launching property <code>org.osgi.framework.storage</code> must
         be set when default value used.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for multi-release JARs. See <xref
+        linkend="framework.lifecycle-lastmodified"/> and <xref
+        linkend="framework.lifecycle-getheaders"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

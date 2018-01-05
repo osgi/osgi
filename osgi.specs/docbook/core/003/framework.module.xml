@@ -78,17 +78,22 @@
         a bundle. Management systems may remove this information to save
         storage space in the OSGi framework.</para>
       </listitem>
+
+      <listitem>
+        <para>Can be a multi-release JAR. See <xref
+        linkend="framework.module-multireleasejar"/>.</para>
+      </listitem>
     </itemizedlist>
 
-    <para>Once a bundle is started, its functionality is provided and services
-    are exposed to other bundles installed in the OSGi framework.</para>
+    <para>Once a bundle is resolved, its functionality is provided to other
+    bundles installed in the OSGi framework.</para>
 
     <section xml:id="i2654895">
       <title>Bundle Manifest Headers</title>
 
       <para xml:id="i2654900">A bundle can carry descriptive information about
       itself in the manifest file that is contained in its JAR file under the
-      name of <code>META-INF/ MANIFEST.MF</code>.</para>
+      name of <code>META-INF/MANIFEST.MF</code>.</para>
 
       <para xml:id="i3200116">The Framework defines OSGi manifest headers such
       as Export-Package and Bundle-ClassPath, which bundle developers use to
@@ -903,6 +908,60 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>.<xref
       linkend="org.osgi.framework.BundleContext.createFilter-String-"
       xrefstyle="hyperlink"/> method.</para>
+    </section>
+
+    <section xml:id="framework.module-multireleasejar">
+      <title>Multi-release JAR</title>
+
+      <para>A bundle JAR file can be a multi-release JAR. See <xref
+      linkend="framework.module-ref.multireleasejar"/>. When a bundle is a
+      multi-release JAR, that is, the manifest contains</para>
+
+      <programlisting>Multi-Release: true</programlisting>
+
+      <para>then the Framework must look for a supplemental manifest file,
+      <code>OSGI-INF/MANIFEST.MF</code>, in the versioned directories. For
+      example:</para>
+
+      <programlisting>META-INF/versions/9/OSGI-INF/MANIFEST.MF</programlisting>
+
+      <para>The Framework must first look in the versioned directory for the
+      major version of the current Java platform and then prior versioned
+      directories in descending order. The first supplemental manifest file
+      found must be used and the Framework must replace the values of the
+      following manifest headers in the manifest with the values of these
+      headers, if present, in the supplemental manifest file.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>Import-Package</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Require-Capability</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Any other headers in the supplemental manifest file must be
+      ignored.</para>
+
+      <para>The Framework APIs which provide access to the bundle metadata,
+      such as <xref linkend="org.osgi.framework.Bundle.getHeaders--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.framework.wiring.BundleRevision"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.framework.wiring.BundleWiring"
+      xrefstyle="hyperlink"/>, must present the supplemented manifest
+      information. That is, the main manifest with the replacement values from
+      a supplemental manifest, if any, for the running Java platform version.
+      </para>
+
+      <para>Both fragment bundles as well as non-fragment bundles can be
+      multi-release JARs.</para>
+
+      <para>Support for multi-release JARs must only be active on Java 9 and
+      later. On Java 8 and earlier, the JAR must be treated as a
+      non-multi-release JAR.</para>
     </section>
   </section>
 
@@ -3051,6 +3110,10 @@ B: Bundle-SymbolicName: B
       <emphasis>container paths</emphasis>. Each container path can be found
       on the entry path.</para>
 
+      <para>Each container, independent of any other containers, can be a
+      multi-release container. See <xref
+      linkend="framework.module-multireleasecontainer"/>.</para>
+
       <para>The full stop (<code>'.' \u002E</code>) container path is a
       synonym for the solidus (<code>'/' \u002F</code>) or the root of a
       container. The full stop is the default value for a bundle or fragment
@@ -3164,6 +3227,27 @@ B:fragment.jar</programlisting>
 
       <para>The exclamation mark (!) indicates a load from a JAR
       resource.</para>
+
+      <section xml:id="framework.module-multireleasecontainer">
+        <title>Multi-release Container</title>
+
+        <para>A container can be a <emphasis>multi-release
+        container</emphasis> . A multi-release container supports versioned
+        directories as specified in <xref
+        linkend="framework.module-ref.multireleasejar"/>. When a container is
+        a multi-release container, that is, the container has a
+        <code>META-INF/MANIFEST.MF</code> manifest which specifies</para>
+
+        <programlisting>Multi-Release: true</programlisting>
+
+        <para>then the Framework must search the container's versioned
+        directories when attempting to locate an entry in the
+        container.</para>
+
+        <para>Support for multi-release containers must only be active on Java
+        9 and later. On Java 8 and earlier, the container must be treated as a
+        non-multi-release container.</para>
+      </section>
     </section>
 
     <section xml:id="framework.module.dynamicimportpackage">
@@ -5661,6 +5745,10 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed xml:id="framework.module-maven.pom.scm"><title>Maven POM
       Reference,
       SCM</title>https://maven.apache.org/pom.html#SCM</bibliomixed>
+
+      <bibliomixed
+      xml:id="framework.module-ref.multireleasejar"><title>Multi-release JAR
+      File</title>https://docs.oracle.com/javase/9/docs/specs/jar/jar.html#Multi-release</bibliomixed>
     </bibliolist>
   </section>
 
@@ -5707,6 +5795,11 @@ URL(String protocol, String host, String file)</programlisting>
       <listitem>
         <para>Mandate support for dynamically resolving extension
         bundles.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for multi-release JARs. See <xref
+        linkend="framework.module-multireleasejar"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
