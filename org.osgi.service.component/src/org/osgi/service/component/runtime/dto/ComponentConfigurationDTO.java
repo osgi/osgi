@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.osgi.service.component.runtime.dto;
 import java.util.Map;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.component.ComponentContext;
 
 /**
@@ -147,4 +148,14 @@ public class ComponentConfigurationDTO extends DTO {
 	 * @since 1.4
 	 */
 	public String						failure;
+
+	/**
+	 * The registered service of the component configuration.
+	 * <p>
+	 * This must be non-{@code null} if the component configuration is
+	 * registered as a service. Otherwise is must be {@code null}.
+	 * 
+	 * @since 1.4
+	 */
+	public ServiceReferenceDTO			service;
 }
