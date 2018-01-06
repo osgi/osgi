@@ -363,7 +363,7 @@
                   </listitem>
 
                   <listitem>
-                    <para><code>app</code> - The applicaton class
+                    <para><code>app</code> - The application class
                     loader</para>
                   </listitem>
 
@@ -1146,7 +1146,7 @@
       <para>The properties in the following table are the fixed properties of
       the framework. The values of these properties are established by the
       framework implementation and added to the launching properties. If these
-      properties are set in the configuration properies, the framework must
+      properties are set in the configuration properties, the framework must
       ignore them.</para>
 
       <table xml:id="framework.lifecycle-fixed.property.names">
@@ -2472,11 +2472,10 @@ policy ::= 'lazy'</programlisting>
       </itemizedlist>
 
       <para>If the bundle is a multi-release JAR, see <xref
-      linkend="framework.module-multireleasejar"/>, then then returned
-      manifest header information must be the supplemented manifest
-      information. That is, the main manifest with the replacement values from
-      a supplemental manifest, if any, for the current Java platform version.
-      </para>
+      linkend="framework.module-multireleasejar"/>, then the returned manifest
+      header information must be the supplemented manifest information. That
+      is, the main manifest with the replacement values from a supplemental
+      manifest, if any, for the current Java platform version.</para>
 
       <para>Localization is performed according to the description in <xref
       linkend="framework.module.localization"/>. If no translation is found

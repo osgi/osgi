@@ -953,8 +953,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       linkend="org.osgi.framework.wiring.BundleWiring"
       xrefstyle="hyperlink"/>, must present the supplemented manifest
       information. That is, the main manifest with the replacement values from
-      a supplemental manifest, if any, for the running Java platform version.
-      </para>
+      a supplemental manifest, if any, for the running Java platform
+      version.</para>
 
       <para>Both fragment bundles as well as non-fragment bundles can be
       multi-release JARs.</para>
@@ -2137,7 +2137,7 @@ package-names   ::= package-name                // See <xref
     <section xml:id="i3238802">
       <title>Importing Exported Packages</title>
 
-      <para>Bundles that collaborate require the same classloader for types
+      <para>Bundles that collaborate require the same class loader for types
       used in the collaboration. If multiple bundles export packages with
       collaboration types then they will have to be placed in disjoint
       class-spaces, making collaboration impossible. Collaboration is
@@ -2531,7 +2531,7 @@ B: Export-Package: p; «
       prepared to handle the fact that the packages may not be available: that
       is, an exception can be thrown when there is a reference to a class from
       a missing package. This can be prevented by including a fallback package
-      on the bundle's classpath. When an optional package cannot be resolved,
+      on the bundle's class path. When an optional package cannot be resolved,
       any attempts by the bundle to load classes from it will follow normal
       bundle class loading search order as if the import never existed. It
       will load it from the bundle's class path or in the end through dynamic
@@ -3130,9 +3130,9 @@ target           ::= path | '.'     // See <xref
       <para>The Framework must ignore any unrecognized parameters.</para>
 
       <para>The content of the <emphasis>effective</emphasis> bundle class
-      path is constructed from the bundle's Bundle-Classpath header,
-      concatenated with the Bundle-Classpath headers of any fragments, in
-      ascending bundle id order. The effective Bundle-Classpath is calculated
+      path is constructed from the bundle's Bundle-ClassPath header,
+      concatenated with the Bundle-ClassPath headers of any fragments, in
+      ascending bundle id order. The effective Bundle-ClassPath is calculated
       during resolve time, however, a dynamically attached fragment can append
       elements at the end if the Framework supports dynamically attached
       fragments.</para>
@@ -3143,7 +3143,7 @@ target           ::= path | '.'     // See <xref
 
       <para>An example can illustrate this:</para>
 
-      <programlisting>A: Bundle-Classpath: .,resource.jar
+      <programlisting>A: Bundle-ClassPath: .,resource.jar
 B: Fragment-Host: A</programlisting>
 
       <para>The previous example uses an effective bundle class path
@@ -3185,7 +3185,7 @@ B:/</programlisting>
       Bundle-ClassPath.</para>
 
       <para>A host bundle can allow a fragment to insert code ahead of its own
-      code by naming a container in its Bundle-Classpath that will be provided
+      code by naming a container in its Bundle-ClassPath that will be provided
       by a fragment. Fragments can never unilaterally insert code ahead of
       their host's bundle class path. The following example illustrates the
       possibilities of the bundle class path in more detail:</para>
@@ -3428,12 +3428,12 @@ boot-description    ::= package-name        // See <xref
           delegated to the class loaders of the other bundles, in the order in
           which they are specified in this bundle's manifest. This entails a
           depth-first strategy; all required bundles are searched before the
-          bundle classpath is used. If the class or resource is not found,
+          bundle class path is used. If the class or resource is not found,
           then the search continues with the next step.</para>
         </listitem>
 
         <listitem>
-          <para>Search the bundle's embedded classpath, see <xref
+          <para>Search the bundle's embedded class path, see <xref
           linkend="framework.module.bundleclasspath"/>. If the class or
           resource is not found, then continue with the next step.</para>
         </listitem>
@@ -3627,7 +3627,7 @@ C: Require-Bundle: D</programlisting>
       then the required bundle search order is the following: <code>B</code>,
       <code>D</code>, <code>C</code>, <code>A</code>. This is a depth first
       search order because required bundles are searched before the bundle
-      classpath is searched (see step <xref linkend="i3187927"/> ). The
+      class path is searched (see step <xref linkend="i3187927"/> ). The
       required bundles are searched in the order that they appear in the
       Require-Bundle header. The depth first search order can introduce
       endless search cycles if the dependency graph has a cycle in it.</para>

@@ -37,7 +37,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Bundle Revision</emphasis> - Represents the
-          class/resource container of an install or update (i.e. the JAR,
+          class/resource container of an install or update (that is, the JAR,
           directory, or other form of archive). Each update creates a new
           Bundle Revision and an uninstall removes the Bundle Revisions. A
           Bundle Revision is modeled after a Resource.</para>
@@ -426,7 +426,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     <para>To forcefully remove all these non-current in use Bundle Wirings the
     framework can <emphasis>refresh</emphasis> a set of bundles at the request
     of a management agent. The refresh will create a transitive dependency
-    graph on an initial set of bundles and then un-resolves each bundle in the
+    graph on an initial set of bundles and then unresolves each bundle in the
     graph, which will make any of the stale Bundle Wirings no longer in use so
     they can be cleaned up. After this refresh, any previously active bundles
     will be restored to their previous state.</para>
@@ -778,7 +778,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <para>A resolved bundle can consist of a number of containers: the basic
     bundle container (usually a JAR), embedded JARs or directories, and
     fragments. Containers contain <emphasis>entries</emphasis> but the
-    Bundle-Classpath header turns these entries into a single namespace,
+    Bundle-ClassPath header turns these entries into a single namespace,
     called <emphasis>resources</emphasis>. These concepts are fully defined in
     <xref linkend="framework.module.bundleclasspath"/>.</para>
 
@@ -831,7 +831,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       but is available from a versioned directory visible on the current Java
       version, then the method result must include the resource name from the
       root directory. For example, if the multi-release container has the
-      following entry </para>
+      following entry</para>
 
       <programlisting>META-INF/versions/9/com/foo/resource.txt</programlisting>
 
