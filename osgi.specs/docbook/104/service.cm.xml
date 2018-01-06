@@ -655,11 +655,9 @@
       linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-String-"
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-"
-      xrefstyle="hyperlink"/> as well as the three argument version of
-      <xref
+      xrefstyle="hyperlink"/> as well as the three argument version of <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-String-"
-      xrefstyle="hyperlink"/>
-      take a location <code>String</code> as their
+      xrefstyle="hyperlink"/> take a location <code>String</code> as their
       last argument. These methods require the correct permission, and they
       create <xref linkend="org.osgi.service.cm.Configuration"
       xrefstyle="hyperlink"/> objects bound to the specified location.</para>
@@ -1566,16 +1564,19 @@ private       ::= '.' symbolic-name</programlisting>
     <section xml:id="i1761778">
       <title>Creating a Managed Service Factory Configuration Object</title>
 
-      <para>The <code>ConfigurationAdmin</code> class provides two sets of methods to
-      create a new instance of a Managed Service Factory. The first set delegates the
-      creation of the unique PID to the Configuration Admin service. The second set 
-      allows to influence the generation of the PID.</para>
+      <para>The <code>ConfigurationAdmin</code> class provides two sets of
+      methods to create a new instance of a Managed Service Factory. The first
+      set delegates the creation of the unique PID to the Configuration Admin
+      service. The second set allows to influence the generation of the
+      PID.</para>
 
-      <para>The <code>ConfigurationAdmin</code> class provides the following two methods
-      generating a unique PID to create a new instance of a Managed Service Factory. 
-      A new unique PID is created for the Configuration object by the Configuration Admin 
-      service. The scheme used for this PID is defined by the Configuration Admin service 
-      and is unrelated to the factory PID, which is chosen by the registering bundle.</para>
+      <para>The <code>ConfigurationAdmin</code> class provides the following
+      two methods generating a unique PID to create a new instance of a
+      Managed Service Factory. A new unique PID is created for the
+      Configuration object by the Configuration Admin service. The scheme used
+      for this PID is defined by the Configuration Admin service and is
+      unrelated to the factory PID, which is chosen by the registering
+      bundle.</para>
 
       <itemizedlist>
         <listitem>
@@ -1603,11 +1604,12 @@ private       ::= '.' symbolic-name</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The <code>ConfigurationAdmin</code> class provides the following two methods
-      allowing the caller to influence the generation of the PID. The PID for this Configuration
-      object is generated from the provided factory PID and the provided name by starting 
-      with the factory PID, appending the character ~ (tilde) and then appending the 
-      name. The <code>getFactoryConfiguration</code> method must atomically create and 
+      <para>The <code>ConfigurationAdmin</code> class provides the following
+      two methods allowing the caller to influence the generation of the PID.
+      The PID for this Configuration object is generated from the provided
+      factory PID and the provided name by starting with the factory PID,
+      appending the character ~ (tilde) and then appending the name. The
+      <code>getFactoryConfiguration</code> method must atomically create and
       persistently store an object if it does not yet exist.</para>
 
       <itemizedlist>
@@ -1616,14 +1618,15 @@ private       ::= '.' symbolic-name</programlisting>
           linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-"
           xrefstyle="hyperlink"/> - This method is used by a bundle with a
           given location to configure its own
-          <code>ManagedServiceFactory</code> objects. The first argument specifies
-          the PID of the targeted <code>ManagedServiceFactory</code> object.
-          This <emphasis>factory PID</emphasis> can be obtained from the
-          returned <code>Configuration</code> object with the
-          <code>getFactoryPid()</code> method. The second argument specifies the
-          <emphasis>name</emphasis> of the factory configuration. The generated PID can
-          be obtained from the returned <code>Configuration</code> object with the
-          <code>getPid()</code> method.</para>
+          <code>ManagedServiceFactory</code> objects. The first argument
+          specifies the PID of the targeted <code>ManagedServiceFactory</code>
+          object. This <emphasis>factory PID</emphasis> can be obtained from
+          the returned <code>Configuration</code> object with the
+          <code>getFactoryPid()</code> method. The second argument specifies
+          the <emphasis>name</emphasis> of the factory configuration. The
+          generated PID can be obtained from the returned
+          <code>Configuration</code> object with the <code>getPid()</code>
+          method.</para>
         </listitem>
 
         <listitem>
@@ -1631,16 +1634,17 @@ private       ::= '.' symbolic-name</programlisting>
           linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-String-"
           xrefstyle="hyperlink"/> - This method is used by a management bundle
           to configure another bundle's <code>ManagedServiceFactory</code>
-          object. The first argument is the PID, the second argument is the name, 
-          and the third is the location identifier of the targeted <code>ManagedServiceFactory</code>
-          object. The <emphasis>factory PID</emphasis> can be obtained from
-          the returned <code>Configuration</code> object with
-          <code>getFactoryPid</code> method. The generated PID can
-          be obtained from the returned <code>Configuration</code> object with the
-          <code>getPid()</code> method.</para>
+          object. The first argument is the PID, the second argument is the
+          name, and the third is the location identifier of the targeted
+          <code>ManagedServiceFactory</code> object. The <emphasis>factory
+          PID</emphasis> can be obtained from the returned
+          <code>Configuration</code> object with <code>getFactoryPid</code>
+          method. The generated PID can be obtained from the returned
+          <code>Configuration</code> object with the <code>getPid()</code>
+          method.</para>
         </listitem>
       </itemizedlist>
-      
+
       <para>Creating a new factory configuration must <emphasis>not</emphasis>
       initiate a callback to the Managed Service Factory <code>updated</code>
       method until the properties are set in the <code>Configuration</code>
@@ -1682,7 +1686,7 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-"
       xrefstyle="hyperlink"/>, <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-"
-      xrefstyle="hyperlink"/> or  <xref
+      xrefstyle="hyperlink"/> or <xref
       linkend="org.osgi.service.cm.ConfigurationAdmin.getFactoryConfiguration-String-String-"
       xrefstyle="hyperlink"/> should be used to get a
       <code>Configuration</code> object. The properties can be obtained with
@@ -1720,30 +1724,30 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED"
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
-      
-      <para>Invoking the <code>update</code> method results in Configuration Admin
-      service blindly updating the <code>Configuration</code> object and performing
-      the above outlined actions. This even happens if the updated set of properties
-      is the same as the already existing properties in the <code>Configuration</code>
-      object.</para>
-      
-      <para>To optimize configuration updates if the caller does not know whether
-      properties of a <code>Configuration</code> object have changed, 
-      <code>Configuration.updateIfDifferent</code> can be used. The provided dictionary
-      is compared with the existing properties. If there is no change, no action is
-      invoked. If there is any change detected,
-      <code>Configuration.updateIfDifferent</code> acts exactly as 
-      <code>Configuration.update</code>. Properties are compared as follows: scalars are 
-      compared using <code>equals()</code>, arrays are compared using 
-      <code>Arrays.equals()</code>, and collections are compared using 
-      <code>equals()</code>. The <code>boolean</code> result of 
-      <code>Configuration.updateIfDifferent</code> is <code>true</code> if the 
+
+      <para>Invoking the <code>update</code> method results in Configuration
+      Admin service blindly updating the <code>Configuration</code> object and
+      performing the above outlined actions. This even happens if the updated
+      set of properties is the same as the already existing properties in the
+      <code>Configuration</code> object.</para>
+
+      <para>To optimize configuration updates if the caller does not know
+      whether properties of a <code>Configuration</code> object have changed,
+      <code>Configuration.updateIfDifferent</code> can be used. The provided
+      dictionary is compared with the existing properties. If there is no
+      change, no action is invoked. If there is any change detected,
+      <code>Configuration.updateIfDifferent</code> acts exactly as
+      <code>Configuration.update</code>. Properties are compared as follows:
+      scalars are compared using <code>equals()</code>, arrays are compared
+      using <code>Arrays.equals()</code>, and collections are compared using
+      <code>equals()</code>. The <code>boolean</code> result of
+      <code>Configuration.updateIfDifferent</code> is <code>true</code> if the
       Configuration object has been updated.</para>
-      
-      <para>If the <code>Configuration</code> object has the <code>READ_ONLY</code>
-      attribute set, calling one of the update methods results in a 
-      <code>ReadOnlyConfigurationException</code> and the configuration is not changed.
-      </para>
+
+      <para>If the <code>Configuration</code> object has the
+      <code>READ_ONLY</code> attribute set, calling one of the update methods
+      results in a <code>ReadOnlyConfigurationException</code> and the
+      configuration is not changed.</para>
     </section>
 
     <section xml:id="service.cm-multi.locations">
@@ -1941,11 +1945,11 @@ ConfigurationPermission[?application,<xref
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED"
       xrefstyle="hyperlink"/> to all registered Configuration
       Listeners.</para>
-      
-      <para>If the <code>Configuration</code> object has the <code>READ_ONLY</code>
-      attribute set, calling the delete method results in a 
-      <code>ReadOnlyConfigurationException</code> and the configuration is not deleted.
-      </para>
+
+      <para>If the <code>Configuration</code> object has the
+      <code>READ_ONLY</code> attribute set, calling the delete method results
+      in a <code>ReadOnlyConfigurationException</code> and the configuration
+      is not deleted.</para>
     </section>
 
     <section>
@@ -1969,20 +1973,21 @@ ConfigurationPermission[?application,<xref
     <section>
       <title>Configuration Attributes</title>
 
-      <para>The <code>Configuration</code> object allows to set attributes, similar 
-      to setting attributes on files in a file system. Currently only the 
-      <code>READ_ONLY</code> attribute is supported.</para>
+      <para>The <code>Configuration</code> object allows to set attributes,
+      similar to setting attributes on files in a file system. Currently only
+      the <code>READ_ONLY</code> attribute is supported.</para>
 
-      <para>Attributes can be set by calling the <code>Configuration.addAttributes</code>
-      method and listing the attributes to be added. In the same way attributes
-      can be removed by calling <code>Configuration.removeAttributes</code>. Each
-      successful change in attributes is persisted.</para>
-      
-      <para>A Bundle can only change the attributes if it has 
-      <code>ConfigurationPermission[location, ATTRIBUTE]</code>. Otherwise 
-      a Security Exception is thrown.</para>
+      <para>Attributes can be set by calling the
+      <code>Configuration.addAttributes</code> method and listing the
+      attributes to be added. In the same way attributes can be removed by
+      calling <code>Configuration.removeAttributes</code>. Each successful
+      change in attributes is persisted.</para>
 
-      <para>The currently set attributes can be queried using 
+      <para>A Bundle can only change the attributes if it has
+      <code>ConfigurationPermission[location, ATTRIBUTE]</code>. Otherwise a
+      Security Exception is thrown.</para>
+
+      <para>The currently set attributes can be queried using
       <code>Configuration.getAttributes</code>.</para>
     </section>
   </section>
@@ -2281,8 +2286,8 @@ ConfigurationPermission[?application,<xref
       <xref linkend="i1624384"/> shows the usage of the
       <code>service.cmRanking</code> property for the order of calling the
       Configuration Plugin services. In the event of more than one plugin
-      having the same value of <code>service.cmRanking</code>, then the
-      order in which these are called is undefined.</para>
+      having the same value of <code>service.cmRanking</code>, then the order
+      in which these are called is undefined.</para>
 
       <table xml:id="i1624384">
         <title><code>service.cmRanking</code> Usage For Ordering</title>
@@ -2305,9 +2310,9 @@ ConfigurationPermission[?application,<xref
               <entry><code>&lt; 0</code></entry>
 
               <entry><para>The Configuration Plugin service should not modify
-              properties and must be called before any modifications are
-              made. Any modification from the Configuration Plugin service
-              is ignored.</para></entry>
+              properties and must be called before any modifications are made.
+              Any modification from the Configuration Plugin service is
+              ignored.</para></entry>
             </row>
 
             <row>
@@ -2323,9 +2328,9 @@ ConfigurationPermission[?application,<xref
               <entry><code>&gt; 1000</code></entry>
 
               <entry><para>The Configuration Plugin service should not modify
-              data and is called after all modifications are
-              made. Any modification from the Configuration Plugin service
-              is ignored.</para></entry>
+              data and is called after all modifications are made. Any
+              modification from the Configuration Plugin service is
+              ignored.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2334,19 +2339,20 @@ ConfigurationPermission[?application,<xref
 
     <section>
       <title>Manual Invocation</title>
-      
-      <para>The Configuration Admin service ensures that Configuration Plugin services
-      are automatically called for a Managed Service or a Managed Service Factory as
-      outlined above. If a bundle needs to get the configuration properties processed
-      by the Configuration Plugin services, <xref
-    linkend="org.osgi.service.cm.Configuration.getProcessedProperties-ServiceReference-"
-    xrefstyle="hyperlink"/> provides this view.</para>
-    
-      <para>The service reference passed into the method must either point to a 
-      Managed Service or Managed Service Factory registered on behalf of the bundle
-      getting the processed properties. If that service should not be called by the
-      Configuration Admin service, that service must be registered without a PID 
-      service property.</para>
+
+      <para>The Configuration Admin service ensures that Configuration Plugin
+      services are automatically called for a Managed Service or a Managed
+      Service Factory as outlined above. If a bundle needs to get the
+      configuration properties processed by the Configuration Plugin services,
+      <xref
+      linkend="org.osgi.service.cm.Configuration.getProcessedProperties-ServiceReference-"
+      xrefstyle="hyperlink"/> provides this view.</para>
+
+      <para>The service reference passed into the method must either point to
+      a Managed Service or Managed Service Factory registered on behalf of the
+      bundle getting the processed properties. If that service should not be
+      called by the Configuration Admin service, that service must be
+      registered without a PID service property.</para>
     </section>
   </section>
 
@@ -2385,7 +2391,69 @@ ConfigurationPermission[?application,<xref
     available to a management system due to the many open issues regarding
     remote management.</para>
   </section>
-  
+
+  <section>
+    <title>Coordinator Support</title>
+
+    <para>The <xref linkend="service.coordinator"/> defines a mechanism for
+    multiple parties to collaborate on a common task without <emphasis>a
+    priori</emphasis> knowledge of who will collaborate in that task. The
+    Configuration Admin service must participate in such scenarios to
+    coordinate with provisioning or configuration tasks.</para>
+
+    <para>If configurations are created, updated or deleted and an implicit
+    coordination exists, the Configuration Admin service must delay
+    notifications until the coordination terminates. However the configuration
+    changes are persisted immediately. Updating a Managed Service or Managed
+    Service Factory and informing asynchronous listeners is delayed until the
+    coordination terminates, regardless of whether the coordination fails or
+    terminates regularly. Registered synchronous listeners will be informed
+    immediately when the change happens regardless of a coordination.</para>
+  </section>
+
+  <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>The Configuration Admin implementation bundle must provide the
+      <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with the name <code>osgi.cm</code>. This capability can be
+      used by provisioning tools and during resolution to ensure that a
+      Configuration Admin implementation is present to manage configurations.
+      The capability must also declare a uses constraint for the
+      <code>org.osgi.service.cm</code> package and provide the version of this
+      specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.cm";
+       uses:="org.osgi.service.cm";
+       version:Version="1.6"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The bundle providing the Configuration Admin service must provide
+      a capability in the <link
+      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+      namespace representing this service. This capability must also declare a
+      uses constraint for the <code>org.osgi.service.cm</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.cm.ConfigurationAdmin";
+  uses:="org.osgi.service.cm"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>
+  </section>
+
   <section>
     <title>Security</title>
 
@@ -2562,66 +2630,17 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     </section>
   </section>
 
-  <section>
-    <title>Capabilities</title>
-
-    <section>
-      <title>osgi.implementation Capability</title>
-
-      <para>The Configuration Admin implementation bundle must provide the <link
-      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
-      capability with the name <code>osgi.cm</code>. This capability can be used
-      by provisioning tools and during resolution to ensure that a Configuration Admin
-      implementation is present to manage configurations. The capability must also declare a uses
-      constraint for the <code>org.osgi.service.cm</code> package and provide
-      the version of this specification:</para>
-
-      <programlisting>Provide-Capability: osgi.implementation;
-       osgi.implementation="osgi.cm";
-       uses:="org.osgi.service.cm";
-       version:Version="1.6"</programlisting>
-
-      <para>This capability must follow the rules defined for the <xref
-      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
-    </section>
-
-    <section>
-      <title>osgi.service Capability</title>
-
-      <para>The bundle providing the Configuration Admin service must provide a capability in the <link
-      linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
-      namespace representing this service. This capability must also declare a
-      uses constraint for the <code>org.osgi.service.cm</code> package:</para>
-
-      <programlisting>Provide-Capability: osgi.service;
-  objectClass:List&lt;String&gt;="org.osgi.service.cm.ConfigurationAdmin";
-  uses:="org.osgi.service.cm"</programlisting>
-
-      <para>This capability must follow the rules defined for the <xref
-      linkend="service.namespaces-osgi.service.namespace"/>.</para>
-    </section>
-  </section>
-  
-  <section>
-    <title>Coordinator Support</title>
-    
-    <para>The <link linkend="service.coordinator">Coordinator Service Specification</link> defines
-    a mechanism for multiple parties to collaborate on a common task without a priori knowledge of
-    who will collaborate in that task. The Configuration Admin service can participate in such
-    scenarios to coordinate provisioning or configuration tasks.</para>
-    
-    <para>If configurations are created, updated or deleted and an implicit coordination exists, 
-    the Configuration Admin service must delay notifications until the coordination terminates. 
-    However the configuration changes are persisted immediately. Updating a Managed Service or
-    Managed Service Factory and informing asynchronous listeners is delayed until the 
-    coordination terminates, regardless whether the coordination fails or terminates regularly. 
-    Registered synchronous listeners will be informed immediately when the change happens
-    regardless of a coordination. 
-    </para>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
-  
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.annotations.xml"/>
 
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><remark>BJH Need changes section writeup.</remark></para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>
