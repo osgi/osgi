@@ -1444,4 +1444,15 @@ ServicePermission[...Resolver, GET ]
       Service Specification</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added new methods: findRelatedResources, onCanel,
+        getSubstitutionWires, and resolveDynamic.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>
