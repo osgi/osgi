@@ -4371,8 +4371,8 @@ void unsetLogService( LogService log ) {
         setting the reference's minimum cardinality property to <code>m</code>
         such that <code>m</code> is a positive integer. The minimum
         cardinality of a reference cannot be lowered. That is, a
-        <code>1..1</code> or <code>1..n</code> cardinality cannot be lowered to a
-        <code>0..1</code> or <code>0..n</code> cardinality because the
+        <code>1..1</code> or <code>1..n</code> cardinality cannot be lowered
+        to a <code>0..1</code> or <code>0..n</code> cardinality because the
         component was coded to expect at least one bound service.</para>
 
         <para>The name of a minimum cardinality property is the name of a
@@ -4399,16 +4399,14 @@ void unsetLogService( LogService log ) {
   <section xml:id="service.component-deployment">
     <title>Deployment</title>
 
-    <para><remark>BJH Need to cover changes regarding CM. SCR _SHOULD_ support
-    Coordinations and delay action regarding Configurations until the
-    Coordination ends. </remark>A component description contains default
-    information to select target services for each reference. However, when a
-    component is deployed, it is often necessary to influence the target
-    service selection in a way that suits the needs of the deployer.
-    Therefore, SCR uses <code>Configuration</code> objects from Configuration
-    Admin to replace and extend the component properties for a component
-    configuration. That is, through Configuration Admin, a deployer can
-    configure component properties.</para>
+    <para>A component description contains default information to select
+    target services for each reference. However, when a component is deployed,
+    it is often necessary to influence the target service selection in a way
+    that suits the needs of the deployer. Therefore, SCR uses
+    <code>Configuration</code> objects from Configuration Admin to replace and
+    extend the component properties for a component configuration. That is,
+    through Configuration Admin, a deployer can configure component
+    properties.</para>
 
     <para>A component's configuration PIDs are used as keys for obtaining
     additional component properties from Configuration Admin. When
@@ -4673,6 +4671,22 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
             SCR must modify the service properties.</para>
           </listitem>
         </itemizedlist>
+      </section>
+
+      <section xml:id="service.component-coordinatorsupport">
+        <title>Coordinator Support</title>
+
+        <para>The <xref linkend="service.coordinator"/> defines a mechanism
+        for multiple parties to collaborate on a common task without
+        <emphasis>a priori</emphasis> knowledge of who will collaborate in
+        that task. Like <xref linkend="service.cm"/>, SCR must participate in
+        such scenarios to coordinate with provisioning or configuration
+        tasks.</para>
+
+        <para>If configurations changes occur and an implicit coordination
+        exists, SCR must delay taking action on the configuration changes
+        until the coordination terminates, regardless of whether the
+        coordination fails or terminates regularly.</para>
       </section>
     </section>
   </section>
@@ -5733,7 +5747,7 @@ public class MyComponent implements AcmeService {}</programlisting>
       component as the first argument and the fully qualified name of the
       component implementation class as the second argument. If SCR cannot
       know the component implementation class name, because the error is not
-      associated with a component or the error occured before the component
+      associated with a component or the error occurred before the component
       description is processed, then SCR must use the bundle's Root Logger,
       that is, the Logger named <code>ROOT</code>.</para>
     </section>
@@ -6248,8 +6262,13 @@ public class MyComponent implements AcmeService {}</programlisting>
 
       <listitem>
         <para>SCR must ensure Configuration Plugins participate in the
-        coniguration process. See <xref
+        configuration process. See <xref
         linkend="service.component-deployment"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>SCR must support implicit coordinations. See <xref
+        linkend="service.component-coordinatorsupport"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
