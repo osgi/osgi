@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,12 +50,13 @@ import java.lang.annotation.Target;
  * whose value is a compile-time constant String, then the id is prefixed with
  * the value of the {@code PREFIX_} field.</li>
  * </ul>
- * However, if the type is a <em>single-element annotation</em>, then the id for
- * the {@code value} method is derived from the name of the annotation type
- * rather than the name of the method. In this case, the simple name of the
- * annotation type, that is, the name of the class without any package name or
- * outer class name, if the annotation type is an inner class, must be converted
- * to the {@code value} method's id as follows:
+ * However, if the type annotated by {@link ObjectClassDefinition} is a
+ * <em>single-element annotation</em>, then the id for the {@code value} method
+ * is derived from the name of the annotation type rather than the name of the
+ * method. In this case, the simple name of the annotation type, that is, the
+ * name of the class without any package name or outer class name, if the
+ * annotation type is an inner class, must be converted to the {@code value}
+ * method's id as follows:
  * <ul>
  * <li>When a lower case character is followed by an upper case character, a
  * full stop ({@code '.'} &#92;u002E) is inserted between them.</li>

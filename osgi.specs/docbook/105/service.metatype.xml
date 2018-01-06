@@ -1545,7 +1545,9 @@ female=Female</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>However, if the type is a <emphasis>single-element
+      <para>However, if the type annotated by <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> is a <emphasis>single-element
       annotation</emphasis>, see 9.7.3 in <xref
       linkend="service.metatype-jls.ref"/>, then the id for the
       <code>value</code> method is derived from the name of the annotation
