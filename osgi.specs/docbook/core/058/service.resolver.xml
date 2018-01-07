@@ -1450,7 +1450,7 @@ ServicePermission[...Resolver, GET ]
 
     <itemizedlist>
       <listitem>
-        <para>Added new methods: findRelatedResources, onCanel,
+        <para>Added new methods: findRelatedResources, onCancel,
         getSubstitutionWires, and resolveDynamic.</para>
       </listitem>
     </itemizedlist>
