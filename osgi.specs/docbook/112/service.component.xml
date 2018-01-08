@@ -1306,26 +1306,26 @@ public class HttpResourceImpl {
       ensures that the bundle will only be exposed to a single instance of the
       service object at any given time.</para>
 
-      <para>For a bound service of a reference with prototype or prototype
-      required reference scope, SCR must use a Service Objects object obtained
-      from the OSGi Framework's service registry using the component's Bundle
-      Context to get any service objects. If service objects for a bound
-      service have been obtained and the service becomes unbound, SCR must
-      unget any unreleased service objects using the Service Objects object
-      obtained from the OSGi Framework's service registry using the
-      component's Bundle Context. This means that if a component instance used
-      a Component Service Objects object to obtain service objects, SCR must
-      track those service objects so that when the service becomes unbound,
-      SCR can unget any unreleased service objects.</para>
+      <para>For a bound service of a reference with prototype or
+      prototype_required reference scope, SCR must use a Service Objects
+      object obtained from the OSGi Framework's service registry using the
+      component's Bundle Context to get any service objects. If service
+      objects for a bound service have been obtained and the service becomes
+      unbound, SCR must unget any unreleased service objects using the Service
+      Objects object obtained from the OSGi Framework's service registry using
+      the component's Bundle Context. This means that if a component instance
+      used a Component Service Objects object to obtain service objects, SCR
+      must track those service objects so that when the service becomes
+      unbound, SCR can unget any unreleased service objects.</para>
 
-      <para>Additionally, for a bound service of a reference with prototype
-      required reference scope, only services registered with prototype
-      service scope can be considered as target services. This ensures that
-      each component instance can be exposed to a single, distinct instance of
-      the service object. Using prototype required reference scope effectively
-      adds <code>service.scope=prototype</code> to the target property for the
+      <para>Additionally, for a reference with prototype_required reference
+      scope, only services registered with prototype service scope can be
+      considered as target services. This ensures that each component instance
+      can be exposed to a single, distinct instance of the service object.
+      Using prototype_required reference scope effectively adds
+      <code>service.scope=prototype</code> to the target property for the
       reference. A service that does not use prototype service scope cannot be
-      used as a bound service for a reference with prototype required
+      used as a bound service for a reference with prototype_required
       reference scope since the service cannot provide a distinct service
       object for each component instance.</para>
     </section>
