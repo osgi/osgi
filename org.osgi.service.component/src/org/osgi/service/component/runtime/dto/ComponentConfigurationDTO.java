@@ -153,7 +153,7 @@ public class ComponentConfigurationDTO extends DTO {
 	 * The registered service of the component configuration.
 	 * <p>
 	 * This must be non-{@code null} if the component configuration is
-	 * registered as a service. Otherwise is must be {@code null}.
+	 * registered as a service. Otherwise it must be {@code null}.
 	 * 
 	 * @since 1.4
 	 */
