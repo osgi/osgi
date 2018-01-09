@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,8 +120,7 @@ public interface PushStream<T> extends AutoCloseable {
 	 * @throws NullPointerException if the mapper is null
 	 */
 	<R> PushStream<R> asyncMap(int n, int delay,
-			Function< ? super T,Promise< ? extends R>> mapper)
-			throws IllegalArgumentException, NullPointerException;
+			Function< ? super T,Promise< ? extends R>> mapper);
 
 	/**
 	 * Flat map the payload value (turn one event into 0..n events of
@@ -213,8 +212,7 @@ public interface PushStream<T> extends AutoCloseable {
 	 *             the delay is &lt; 0
 	 * @throws NullPointerException if the Executor is null
 	 */
-	PushStream<T> fork(int n, int delay, Executor e)
-			throws IllegalArgumentException, NullPointerException;
+	PushStream<T> fork(int n, int delay, Executor e);
 
 	/**
 	 * Buffer the events in a queue using default values for the queue size and

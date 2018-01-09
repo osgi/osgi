@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public abstract class PushEvent<T> {
 	 * @throws IllegalStateException if this event is not a
 	 *             {@link EventType#DATA} event.
 	 */
-	public T getData() throws IllegalStateException {
+	public T getData() {
 		throw new IllegalStateException(
 				"Not a DATA event, the event type is " + getType());
 	}
@@ -90,7 +90,7 @@ public abstract class PushEvent<T> {
 	 * @throws IllegalStateException if this event is not an
 	 *             {@link EventType#ERROR} event.
 	 */
-	public Throwable getFailure() throws IllegalStateException {
+	public Throwable getFailure() {
 		throw new IllegalStateException(
 				"Not an ERROR event, the event type is " + getType());
 	}
@@ -147,7 +147,7 @@ public abstract class PushEvent<T> {
 	 * @throws IllegalStateException if the event is a {@link EventType#DATA}
 	 *             event.
 	 */
-	public <X> PushEvent<X> nodata() throws IllegalStateException {
+	public <X> PushEvent<X> nodata() {
 		@SuppressWarnings("unchecked")
 		PushEvent<X> result = (PushEvent<X>) this;
 		return result;
@@ -161,7 +161,7 @@ public abstract class PushEvent<T> {
 		}
 
 		@Override
-		public T getData() throws IllegalStateException {
+		public T getData() {
 			return data;
 		}
 
@@ -176,7 +176,7 @@ public abstract class PushEvent<T> {
 		}
 
 		@Override
-		public <X> PushEvent<X> nodata() throws IllegalStateException {
+		public <X> PushEvent<X> nodata() {
 			throw new IllegalStateException("This event is a DATA event");
 		}
 	}

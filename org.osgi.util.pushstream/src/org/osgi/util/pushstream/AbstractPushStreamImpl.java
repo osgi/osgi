@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -260,8 +260,7 @@ abstract class AbstractPushStreamImpl<T> implements PushStream<T> {
 
 	@Override
 	public <R> PushStream<R> asyncMap(int n, int delay,
-			Function< ? super T,Promise< ? extends R>> mapper)
-			throws IllegalArgumentException, NullPointerException {
+			Function< ? super T,Promise< ? extends R>> mapper) {
 
 		AbstractPushStreamImpl<R> eventStream = new IntermediatePushStreamImpl<>(
 				psp, promiseFactory, this);
