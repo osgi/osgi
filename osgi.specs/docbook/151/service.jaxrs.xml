@@ -198,7 +198,7 @@
       <para>Each JAX-RS Whiteboard implementation registers exactly one
       <code>JaxRSServiceRuntime</code> service per JAX-RS Whiteboard. The
       service properties of the JAX-RS Service Runtime Service can be used to
-      target JAX-RS Whiteboard services at specific JAX RS whiteboards, as
+      target JAX-RS Whiteboard services at specific JAX-RS whiteboards, as
       described by the <code>osgi.jaxrs.whiteboard.target</code> property in
       <xref linkend="service.jaxrs.common.properties"/>.</para>
 
@@ -255,7 +255,7 @@
               <entry><code>Long</code></entry>
 
               <entry><para>Whenever the DTOs available from the JAX-RS Service
-              Runtime service change, the value of this property property will
+              Runtime service change, the value of this property will
               increase.</para> <para>This allows interested parties to be
               notified of changes to the DTOs by observing Service Events of
               type <code>MODIFIED</code> for the <xref
@@ -323,7 +323,7 @@
         service registry then it cannot be introspected for annotations. A
         failure DTO will always contain the service id for the failed service
         and the failure reason. The whiteboard implementation must then fill
-        in other dto properties on a best effort basis.</para>
+        in other DTO properties on a best effort basis.</para>
       </section>
     </section>
 
@@ -342,7 +342,7 @@
 
       <para>Information about the surrounding Servlet Container, including
       ServletContext information and HttpSession data, is available to JAX-RS
-      Whiteboard resources using standard JAX-RS injection behaviour.</para>
+      Whiteboard resources using standard JAX-RS injection behavior.</para>
 
       <programlisting>@GET
 @Path("{name}")
@@ -634,7 +634,7 @@ public class Foo {
         are injected into fields by the JAX-RS container then the resource
         should be declared as a <code>prototype</code> scope. JAX-RS
         Whiteboard implementations may support field injection for singleton
-        resources, however this behaviour is non portable, and may lead to
+        resources, however this behavior is non portable, and may lead to
         errors at runtime when using other implementations.</para>
       </section>
 
@@ -991,7 +991,7 @@ public class FizzResource {
           <para>The list of <code>MessageBodyReader</code>s applicable to the
           path and incoming content type are tried according to the standard
           ordering rules. The first <code>MessageBodyReader</code> which
-          states that it can deserialise the entity “wins” and is used to
+          states that it can deserialize the entity “wins” and is used to
           create the entity object. If the incoming request has no body then
           no <code>MessageBodyReader</code>s are called.</para>
         </listitem>
@@ -1028,7 +1028,7 @@ public class FizzResource {
         <listitem>
           <para>The list of <code>MessageBodyWriter</code>s applicable to the
           path and outgoing content type are tried according to the standard
-          ordering rules. The first writer which states that it can serialise
+          ordering rules. The first writer which states that it can serialize
           the entity “wins” and is used to write out the entity object. If
           there is no response body then no writers are called.</para>
         </listitem>
@@ -1133,7 +1133,7 @@ public class ConfiguredExtension implements WriterInterceptor {
       <para>If an extension is registered as a singleton service then it
       should not rely on any fields being injected by the JAX-RS Whiteboard
       implementation. JAX-RS Whiteboard implementations may support field
-      injection for singleton extensions, however this behaviour is non
+      injection for singleton extensions, however this behavior is non
       portable, and may lead to errors at runtime when using other
       implementations.</para>
     </section>
@@ -1536,7 +1536,7 @@ public class MyApplication extends Application {
         <para><emphasis>Failure to obtain a service instance</emphasis> - In
         the case where a published service is unable to obtained by the JAX-RS
         whiteboard then the service is blacklisted by the container. A failure
-        DTO is made available from the JAXRSServiceRuntime representing the
+        DTO is made available from the JaxRSServiceRuntime representing the
         blacklisted service object.</para>
       </listitem>
 
@@ -1547,7 +1547,7 @@ public class MyApplication extends Application {
         JAX-RS whiteboard service property, but fails to advertise an
         appropriate JAX-RS type, or fails to provide any resource methods then
         this is an error and the service must be blacklisted by the container.
-        A failure DTO is available from the JAXRSServiceRuntime representing
+        A failure DTO is available from the JaxRSServiceRuntime representing
         the blacklisted service object.</para>
       </listitem>
 
@@ -1556,7 +1556,7 @@ public class MyApplication extends Application {
         resources in a single application it is possible that two JAX-RS
         resources will register for the same path across applications. In this
         case the application with the longer base URI is shadowed, and a
-        failure DTO is available from the JAXRSServiceRuntime representing the
+        failure DTO is available from the JaxRSServiceRuntime representing the
         shadowed Application. Note that determining when two JAX-RS
         applications overlap requires an analysis of the resource paths and
         all of sub-resource paths. If any of these paths clash then the
@@ -1619,7 +1619,7 @@ public class MyApplication extends Application {
         <listitem>
           <para>There is no simple way to scope the filters and interceptors
           that would be applied to a given client. In a multi-tenant
-          environment this could lead to unexpected behaviours.</para>
+          environment this could lead to unexpected behaviors.</para>
         </listitem>
 
         <listitem>
@@ -1641,7 +1641,7 @@ public class MyApplication extends Application {
       <title>Reactive Clients</title>
 
       <para>The JAX-RS client API supports both synchronous and asynchronous
-      calls. In JAX-RS 2.1 the asynchronous behaviour of the client was
+      calls. In JAX-RS 2.1 the asynchronous behavior of the client was
       extended using the <code>RxInvoker</code> (reactive invoker) interface.
       All clients are required to support a reactive invoker which returns
       CompletionStage instances, however in OSGi the common representation of
@@ -1657,7 +1657,7 @@ public class MyApplication extends Application {
       <code>RxInvokerProvider</code> interface and registering this type with
       the JAX-RS client. This portable implementation, however, is forced to
       use a blocking model by the underlying JAX-RS API, and so
-      implementations may choose to implement a more optimised non-blocking
+      implementations may choose to implement a more optimized non-blocking
       model using internal types.</para>
 
       <para>Clients of this specification may make use of the
@@ -1744,8 +1744,8 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
     <title>Portability and Interoperability</title>
 
     <para>The extensions defined by the JAX-RS specification make JAX-RS
-    runtimes highly pluggable, and it is common to extend the behaviour of an
-    application using this model. In many cases the custom behaviours are
+    runtimes highly pluggable, and it is common to extend the behavior of an
+    application using this model. In many cases the custom behaviors are
     specific to a particular use case, for example mapping a specific
     exception into a <code>Response</code>, and there is no need for
     portability. In some common cases, however, there are extensions that can
@@ -1769,7 +1769,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
       <code>application/json</code> must be provided as an extension.</para>
 
       <para>To ensure that whiteboard resources can depend on support for a
-      particular media type in a a portable way this specification defines the
+      particular media type in a portable way this specification defines the
       <code>osgi.jaxrs.media.type</code> property. This property key should be
       registered with one or more media types that are supported, and may be
       provided by:</para>
@@ -1784,7 +1784,7 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
         <listitem>
           <para>A Whiteboard application - if the application provides general
           purpose support for reading from and writing to a media type using a
-          static exension then it should register this property.</para>
+          static extension then it should register this property.</para>
         </listitem>
 
         <listitem>
@@ -1819,11 +1819,11 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
 
         <para>Wildcard types (containing a <code>*</code>) are often used by
         extensions to indicate that they can create a variety of different
-        media types. Rarely this is because the extension can serialise into
+        media types. Rarely this is because the extension can serialize into
         multiple different formats. More typically this is because the
         extension can serialize into a format which has multiple names, or
         multiple formats which use the same basic serialization. Suffixes can
-        further modify this behaviour, for example VCards may be serialized as
+        further modify this behavior, for example VCards may be serialized as
         XML using <code>application/vcard+xml</code> or as JSON using
         <code>application/vcard+json</code>.</para>
 

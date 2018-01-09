@@ -703,7 +703,7 @@ logger.error("Cannot access file %s", myFile);</programlisting>
     linkend="org.osgi.service.log.stream.LogStreamProvider"
     xrefstyle="hyperlink"/> requires Java 8, the <xref
     linkend="org.osgi.service.log.stream.LogStreamProvider"
-    xrefstyle="hyperlink"/> service is optional when implementions of this
+    xrefstyle="hyperlink"/> service is optional when implementations of this
     specification run on Java versions prior to Java 8.</para>
   </section>
 

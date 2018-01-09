@@ -18,62 +18,74 @@
 
   <section>
     <title>Introduction</title>
-    
-    <para>Data conversion is an inherent part of writing 
-     software in a type safe language. In Java, converting strings to proper types or to convert one type to a more 
-     convenient type is often done manually. Any errors are then handled inline.</para>
-      
-	<para>In release 6, the OSGi specifications introduced Data Transfer Objects (DTOs). DTOs are public objects without 
-	open generics that only contain public instance fields based on simple types, arrays, and collections. 
-	In many ways DTOs can be used as an alternative to Java beans. 
-	Java beans are hiding their fields and provide access methods which separates 
-	the contract (the public interface) from the internal usage. Though this model has advantages in technical applications 
-    it tends to add overhead. DTOs unify the specification with the data since the data is what is already public 
-	when it is sent to another process or serialized.</para>
-	
-    <para>This specification defines the OSGi Converter that makes it easy to convert many types to other types, including scalars,
-    Collections, Maps, Beans, Interfaces and DTOs without having to write the boilerplate conversion code. The converter
-    strictly adheres to the rules specified in this chapter. Converters can also be customized using converter
-    builders. 
-    </para>
-  </section> 
-  
+
+    <para>Data conversion is an inherent part of writing software in a type
+    safe language. In Java, converting strings to proper types or to convert
+    one type to a more convenient type is often done manually. Any errors are
+    then handled inline.</para>
+
+    <para>In release 6, the OSGi specifications introduced Data Transfer
+    Objects (DTOs). DTOs are public objects without open generics that only
+    contain public instance fields based on simple types, arrays, and
+    collections. In many ways DTOs can be used as an alternative to Java
+    beans. Java beans are hiding their fields and provide access methods which
+    separates the contract (the public interface) from the internal usage.
+    Though this model has advantages in technical applications it tends to add
+    overhead. DTOs unify the specification with the data since the data is
+    what is already public when it is sent to another process or
+    serialized.</para>
+
+    <para>This specification defines the OSGi Converter that makes it easy to
+    convert many types to other types, including scalars, Collections, Maps,
+    Beans, Interfaces and DTOs without having to write the boilerplate
+    conversion code. The converter strictly adheres to the rules specified in
+    this chapter. Converters can also be customized using converter
+    builders.</para>
+  </section>
+
   <section>
     <title>Entities</title>
-    
+
     <para>The following entities are used in this specification:</para>
-    
+
     <itemizedlist>
       <listitem>
-        <para><emphasis>Converter</emphasis> - a converter can perform conversion operations.</para>
+        <para><emphasis>Converter</emphasis> - a converter can perform
+        conversion operations.</para>
       </listitem>
-      
+
       <listitem>
-        <para><emphasis>Standard Converter</emphasis> - a converter implementation that follows this specification.</para>
+        <para><emphasis>Standard Converter</emphasis> - a converter
+        implementation that follows this specification.</para>
       </listitem>
-      
+
       <listitem>
-        <para><emphasis>Converter Builder</emphasis> - can create customized converters by specifying rules for specific conversions.</para>
+        <para><emphasis>Converter Builder</emphasis> - can create customized
+        converters by specifying rules for specific conversions.</para>
       </listitem>
-      
+
       <listitem>
         <para><emphasis>Source</emphasis> - the object to be converted.</para>
       </listitem>
-    
+
       <listitem>
-        <para><emphasis>Target</emphasis> - the target of the conversion.</para>
+        <para><emphasis>Target</emphasis> - the target of the
+        conversion.</para>
       </listitem>
-    
+
       <listitem>
-        <para><emphasis>Source Type</emphasis> - the type of the source to be converted.</para>
+        <para><emphasis>Source Type</emphasis> - the type of the source to be
+        converted.</para>
       </listitem>
-      
+
       <listitem>
-        <para><emphasis>Target Type</emphasis> - the desired type of the conversion target.</para>
+        <para><emphasis>Target Type</emphasis> - the desired type of the
+        conversion target.</para>
       </listitem>
-      
+
       <listitem>
-        <para><emphasis>Rule</emphasis> - a rule is used to customize the behavior of the converter.</para>
+        <para><emphasis>Rule</emphasis> - a rule is used to customize the
+        behavior of the converter.</para>
       </listitem>
     </itemizedlist>
 
@@ -87,20 +99,20 @@
         </imageobject>
       </mediaobject>
     </figure>
-  </section> 
+  </section>
 
   <section>
     <title>Standard Converter</title>
-    
-    <para>The Standard Converter is a converter that follows precisely what is described in this 
-    specification. It converts source objects to the desired target type if a suitable conversion is 
-    available. 
-    An instance can be obtained by calling the static
-    <xref linkend="org.osgi.util.converter.Converters.standardConverter--" xrefstyle="hyperlink"/>
-    method on the <code>Converters</code> class.</para> 
-    
-    <para>Some example conversions:
-    <programlisting>Converter c = Converters.standardConverter();
+
+    <para>The Standard Converter is a converter that follows precisely what is
+    described in this specification. It converts source objects to the desired
+    target type if a suitable conversion is available. An instance can be
+    obtained by calling the static <xref
+    linkend="org.osgi.util.converter.Converters.standardConverter--"
+    xrefstyle="hyperlink"/> method on the <code>Converters</code>
+    class.</para>
+
+    <para>Some example conversions: <programlisting>Converter c = Converters.standardConverter();
     
 // Scalar conversions    
 MyEnum e = c.convert(MyOtherEnum.BLUE).to(MyEnum.class);
@@ -114,373 +126,433 @@ long[] la = c.convert(ls).to(long[].class);
 Map someMap = new HashMap();
 someMap.put("timeout", "700"); 
 MyInterface mi = c.convert(someMap).to(MyInterface.class);
-int t = mi.timeout(); // t=700</programlisting>
-    </para>
-    
-  </section> 
+int t = mi.timeout(); // t=700</programlisting></para>
+  </section>
 
   <section>
     <title>Conversions</title>
-    
-    <para>For scalars, conversions are only performed when the target type is not compatible
-    with the source type. For example, when requesting to convert a <code>java.math.BigDecimal</code> to a 
-    <code>java.lang.Number</code> the big decimal is simply used as-is as this type is assignable to the 
-    requested target type.</para>
-    
-    <para>In the case of arrays, Collections and Map-like structures a new object is always returned, 
-    even if the target type is compatible with the source type. This copy can be owned and optionally further
-    modified by the caller.</para>
-    
+
+    <para>For scalars, conversions are only performed when the target type is
+    not compatible with the source type. For example, when requesting to
+    convert a <code>java.math.BigDecimal</code> to a
+    <code>java.lang.Number</code> the big decimal is simply used as-is as this
+    type is assignable to the requested target type.</para>
+
+    <para>In the case of arrays, Collections and Map-like structures a new
+    object is always returned, even if the target type is compatible with the
+    source type. This copy can be owned and optionally further modified by the
+    caller.</para>
+
     <section>
       <title>Generics</title>
-      <para>When converting to a target type with generic type parameters it is necessary to capture 
-      thes to instruct the converter to produce the correct parameterized type.
-      This can be achieved with the <code>TypeReference</code> based APIs, for example:
-      <programlisting>Converter c = Converters.standardConverter();
+
+      <para>When converting to a target type with generic type parameters it
+      is necessary to capture these to instruct the converter to produce the
+      correct parameterized type. This can be achieved with the
+      <code>TypeReference</code> based APIs, for example: <programlisting>Converter c = Converters.standardConverter();
 List&lt;Long&gt; list = c.convert("123").to(new TypeReference&lt;List&lt;Long&gt;&gt;());
 // list will contain the Long value 123L</programlisting></para>
     </section>
-    
+
     <section>
       <title>Scalars</title>
-          
+
       <section>
         <title>Direct conversion between scalars</title>
-        
-        <para>
-        Direct conversion between the following scalars is supported:
-        </para>
-  
+
+        <para>Direct conversion between the following scalars is
+        supported:</para>
+
         <table pgwide="1" rowheader="firstcol">
           <title>Scalar types that support direct conversions</title>
-          
+
           <tgroup cols="5">
             <colspec colnum="1" colwidth="0.5*"/>
+
             <colspec colnum="5" colwidth="0.5*"/>
-           
+
             <thead>
               <row>
-                <entry><subscript>to</subscript> \ <superscript>from</superscript></entry>
+                <entry><subscript>to</subscript> \
+                <superscript>from</superscript></entry>
+
                 <entry>Boolean</entry>
+
                 <entry>Character</entry>
+
                 <entry><emphasis>Number</emphasis></entry>
+
                 <entry><code>null</code></entry>
               </row>
             </thead>
-            
+
             <tbody>
               <row>
                 <entry>boolean</entry>
+
                 <entry><code>v.booleanValue()</code></entry>
+
                 <entry><code>v.charValue() != 0</code></entry>
-                <entry><code>v.</code><emphasis>number</emphasis><code>Value() != 0</code></entry>
+
+                <entry><code>v.</code><emphasis>number</emphasis><code>Value()
+                != 0</code></entry>
+
                 <entry><code>false</code></entry>
               </row>
-            
+
               <row>
                 <entry>char</entry>
+
                 <entry><code>v.booleanValue() ? 1 : 0</code></entry>
+
                 <entry><code>v.charValue()</code></entry>
+
                 <entry><code>(char) v.intValue()</code></entry>
+
                 <entry>0</entry>
               </row>
-              
+
               <row>
                 <entry><emphasis>number</emphasis></entry>
+
                 <entry><code>v.booleanValue() ? 1 : 0</code></entry>
-                <entry><code>(</code><emphasis>number</emphasis><code>) v.charValue()</code></entry>
+
+                <entry><code>(</code><emphasis>number</emphasis><code>)
+                v.charValue()</code></entry>
+
                 <entry><code>v.</code><emphasis>number</emphasis><code>Value()</code></entry>
+
                 <entry>0</entry>
               </row>
             </tbody>
           </tgroup>
-        </table>   
-        
-        <para>Where conversion is done from corresponding primitive types, these types
-        are boxed before converting. Where conversion is done to corresponding boxed types,
-        the types are boxed after converting.</para>     
+        </table>
 
-        <para>Direct conversions between Enums and ints and between Dates and longs are also supported, see
-        the sections below.</para>
-        
-        <para>Conversions between from <code>Map.Entry</code> to scalars follow special rules, 
-        see <xref linkend="util.converter-special.cases.map.entry"/>.
-        </para>
-        
-        <para>All other conversions between scalars are done by converting the source object to a String first and then
-        converting the String value to the target type.
-        </para>
+        <para>Where conversion is done from corresponding primitive types,
+        these types are boxed before converting. Where conversion is done to
+        corresponding boxed types, the types are boxed after
+        converting.</para>
+
+        <para>Direct conversions between Enums and ints and between Dates and
+        longs are also supported, see the sections below.</para>
+
+        <para>Conversions between from <code>Map.Entry</code> to scalars
+        follow special rules, see <xref
+        linkend="util.converter-special.cases.map.entry"/>.</para>
+
+        <para>All other conversions between scalars are done by converting the
+        source object to a String first and then converting the String value
+        to the target type.</para>
       </section>
-  
+
       <section>
         <title>Conversion to String</title>
-        
-        <para>Conversion of scalars to <code>String</code> is done by calling <code>toString()</code> on the object to
-        be converted. In the case of a primitive type, the object is boxed first.</para>
-        
-        <para>A <code>null</code> object results in a <code>null</code> String value.</para>
-        
-        <para><emphasis>Exceptions: </emphasis>
-          <itemizedlist>
+
+        <para>Conversion of scalars to <code>String</code> is done by calling
+        <code>toString()</code> on the object to be converted. In the case of
+        a primitive type, the object is boxed first.</para>
+
+        <para>A <code>null</code> object results in a <code>null</code> String
+        value.</para>
+
+        <para><emphasis>Exceptions: </emphasis> <itemizedlist>
             <listitem>
-              <para>
-               <code>java.util.Calendar</code> and 
-               <code>java.util.Date</code> are converted to <code>String</code> as described in 
-               <xref linkend="util.converter-date.calendar"/>.
-              </para>
+              <para><code>java.util.Calendar</code> and
+              <code>java.util.Date</code> are converted to <code>String</code>
+              as described in <xref
+              linkend="util.converter-date.calendar"/>.</para>
             </listitem>
-            
+
             <listitem>
-              <para>
-                <code>Map.Entry</code> is converter to String according to the rules in 
-                <xref linkend="util.converter-special.cases.map.entry"/>.
-              </para>
+              <para><code>Map.Entry</code> is converter to String according to
+              the rules in <xref
+              linkend="util.converter-special.cases.map.entry"/>.</para>
             </listitem>
-          </itemizedlist>
-        </para>
+          </itemizedlist></para>
       </section>
-      
+
       <section>
         <title>Conversion from String</title>
-        
-        <para>Conversion from String is done by attempting to invoke the following methods, in order: 
-        
-          <orderedlist>
+
+        <para>Conversion from String is done by attempting to invoke the
+        following methods, in order: <orderedlist>
             <listitem>
               <para><code>public static valueOf(String s)</code></para>
             </listitem>
-  
+
             <listitem>
-              <para>public constructor taking a single <code>String</code> argument.</para>
+              <para>public constructor taking a single <code>String</code>
+              argument.</para>
             </listitem>
-          </orderedlist>
-          
-          Some scalars have special rules for converting from String
-          values. See below.
-        </para>
+          </orderedlist> Some scalars have special rules for converting from
+        String values. See below.</para>
 
         <table xml:id="util.converter-special.cases.string">
           <title>Special cases converting to scalars from String</title>
+
           <tgroup cols="2">
             <thead>
               <row>
                 <entry>Target</entry>
+
                 <entry>Method</entry>
               </row>
-            </thead>         
+            </thead>
+
             <tbody>
               <row>
                 <entry><code>char / Character</code></entry>
-                <entry><code>v.length() > 0 ? v.charAt(0) : 0</code></entry>
+
+                <entry><code>v.length() &gt; 0 ? v.charAt(0) :
+                0</code></entry>
               </row>
-                
+
               <row>
                 <entry><code>java.time.Duration</code></entry>
+
                 <entry><code>Duration.parse(v)</code></entry>
               </row>
 
               <row>
                 <entry><code>java.time.Instant</code></entry>
+
                 <entry><code>Instant.parse(v)</code></entry>
               </row>
 
               <row>
                 <entry><code>java.time.LocalDate</code></entry>
+
                 <entry><code>LocalDate.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.LocalDateTime</code></entry>
+
                 <entry><code>LocalDateTime.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.LocalTime</code></entry>
+
                 <entry><code>LocalTime.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.MonthDay</code></entry>
+
                 <entry><code>MonthDay.parse(v)</code></entry>
               </row>
 
               <row>
                 <entry><code>java.time.OffsetTime</code></entry>
+
                 <entry><code>OffsetTime.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.OffsetDateTime</code></entry>
+
                 <entry><code>OffsetDateTime.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.Year</code></entry>
+
                 <entry><code>Year.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.YearMonth</code></entry>
+
                 <entry><code>YearMonth.parse(v)</code></entry>
               </row>
-  
+
               <row>
                 <entry><code>java.time.ZonedDateTime</code></entry>
+
                 <entry><code>ZonedDateTime.parse(v)</code></entry>
               </row>
-              
+
               <row>
                 <entry><code>java.util.Calendar</code></entry>
-                <entry>See <xref linkend="util.converter-date.calendar"/>.</entry>
+
+                <entry>See <xref
+                linkend="util.converter-date.calendar"/>.</entry>
               </row>
 
               <row>
                 <entry><code>java.util.Date</code></entry>
-                <entry>See <xref linkend="util.converter-date.calendar"/>.</entry>
+
+                <entry>See <xref
+                linkend="util.converter-date.calendar"/>.</entry>
               </row>
-              
+
               <row>
                 <entry><code>java.util.UUID</code></entry>
+
                 <entry><code>UUID.fromString(v)</code></entry>
-              </row>              
-  
+              </row>
+
               <row>
                 <entry><code>java.util.regex.Pattern</code></entry>
+
                 <entry><code>Pattern.compile(v)</code></entry>
-              </row>
-            </tbody>   
-          </tgroup>
-        </table>
-        
-        <para><emphasis>Note to implementors:</emphasis> some of the classes mentioned in table 
-        <xref linkend="util.converter-special.cases.string"/> are introduced 
-        in Java 8. However, a converter implementation does not need to depend on 
-        Java 8 in order to function. An implementation of the converter
-        specification could determine its Java runtime dynamically and 
-        handle classes in this table depending on availability.</para>
-      </section>
-      
-      <section xml:id="util.converter-date.calendar">
-        <title>Date and Calendar</title>
-        <para>A <code>java.util.Date</code> instance is converted to 
-        a <code>long</code> value by calling <code>Date.getTime()</code>.
-        Converting a <code>long</code> into a <code>java.util.Date</code>
-        is done by calling <code>new Date(long)</code>.</para> 
-        
-        <para>Converting a Date to a String will produce a ISO-8601 UTC 
-        date/time string in the following 
-        format: <code>2011-12-03T10:15:30Z</code>. In Java 8 this can be done
-        by calling <code>Date.toInstant().toString()</code>.
-        Converting a String to
-        a Date is done by parsing this ISO-8601 format back into a Date. In Java 8
-        this function is performed by  
-        calling <code>Date.from(Instant.parse(v))</code>.
-        </para>
-          
-        <para>Conversions from Calendar objects are done by converting the Calendar
-        to a Date via <code>getTime()</code> first, and then converting the resulting Date to the 
-        target type. Convertions to a Calendar object are done by converting the
-        source to a Date object with the desired time (always in UTC) and then setting the 
-        time in the Calendar object via <code>setTime()</code>.</para>
-      </section>
-        
-        <section>
-          <title>Enums</title>
-          <para>Conversions to Enum types are supported as follows.</para>
-          <table>
-            <title>Converting to Enum types</title>
-            <tgroup cols="2">
-              <thead>
-                <row>
-                  <entry>Source</entry>
-                  <entry>Method</entry>
-                </row>
-              </thead>         
-              <tbody>
-              <row>
-                <entry><emphasis>Number</emphasis></entry>
-                <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>
-              </row>
-                
-              <row>
-                <entry><code>String</code></entry>
-                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>. If this does not produce a result
-                a case-insensitive lookup is done for a matching enum value.
-                </entry>
               </row>
             </tbody>
           </tgroup>
-        </table>  
-        <para>
-        Primitives are boxed before conversion is done.
-          Other source types are converted to String before converting to Enum.</para>
+        </table>
+
+        <para><emphasis>Note to implementors:</emphasis> some of the classes
+        mentioned in table <xref
+        linkend="util.converter-special.cases.string"/> are introduced in Java
+        8. However, a converter implementation does not need to depend on Java
+        8 in order to function. An implementation of the converter
+        specification could determine its Java runtime dynamically and handle
+        classes in this table depending on availability.</para>
       </section>
-        
+
+      <section xml:id="util.converter-date.calendar">
+        <title>Date and Calendar</title>
+
+        <para>A <code>java.util.Date</code> instance is converted to a
+        <code>long</code> value by calling <code>Date.getTime()</code>.
+        Converting a <code>long</code> into a <code>java.util.Date</code> is
+        done by calling <code>new Date(long)</code>.</para>
+
+        <para>Converting a Date to a String will produce a ISO-8601 UTC
+        date/time string in the following format:
+        <code>2011-12-03T10:15:30Z</code>. In Java 8 this can be done by
+        calling <code>Date.toInstant().toString()</code>. Converting a String
+        to a Date is done by parsing this ISO-8601 format back into a Date. In
+        Java 8 this function is performed by calling
+        <code>Date.from(Instant.parse(v))</code>.</para>
+
+        <para>Conversions from Calendar objects are done by converting the
+        Calendar to a Date via <code>getTime()</code> first, and then
+        converting the resulting Date to the target type. Conversions to a
+        Calendar object are done by converting the source to a Date object
+        with the desired time (always in UTC) and then setting the time in the
+        Calendar object via <code>setTime()</code>.</para>
+      </section>
+
+      <section>
+        <title>Enums</title>
+
+        <para>Conversions to Enum types are supported as follows.</para>
+
+        <table>
+          <title>Converting to Enum types</title>
+
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Source</entry>
+
+                <entry>Method</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><emphasis>Number</emphasis></entry>
+
+                <entry><emphasis>EnumType</emphasis><code>.values()[v.intValue()]</code></entry>
+              </row>
+
+              <row>
+                <entry><code>String</code></entry>
+
+                <entry><emphasis>EnumType</emphasis><code>.valueOf(v)</code>.
+                If this does not produce a result a case-insensitive lookup is
+                done for a matching enum value.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Primitives are boxed before conversion is done. Other source
+        types are converted to String before converting to Enum.</para>
+      </section>
+
       <section xml:id="util.converter-special.cases.map.entry">
         <title>Map.Entry</title>
-        <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target scalar type is done by evaluating the compatibility of the 
-        target type with both the key and the value in the entry and then using the best match. This is done in the following order:
-        <orderedlist>
-          <listitem><para>If one of the key or value is the same as the target type, then this is used.
-          If both are the same, the key is used.</para></listitem>
-          <listitem><para>If one of the key or value type is assignable to the target type, then this is used.
-          If both are assignable the key is used.</para></listitem>
-          <listitem><para>If one of the key or value is of type <code>String</code>, this is used and converted to the target type. If both are of type <code>String</code> the key is used.</para></listitem>
-          <listitem><para>If none of the above matches the key is converted into a <code>String</code> and this
-          value is then converted to the target type.</para></listitem>
-        </orderedlist>
-        </para>
-                        
-        <para>Conversion to <code>Map.Entry</code> from a scalar is not supported.</para>
+
+        <para>Conversion of <code>Map.Entry&lt;K,V&gt;</code> to a target
+        scalar type is done by evaluating the compatibility of the target type
+        with both the key and the value in the entry and then using the best
+        match. This is done in the following order: <orderedlist>
+            <listitem>
+              <para>If one of the key or value is the same as the target type,
+              then this is used. If both are the same, the key is used.</para>
+            </listitem>
+
+            <listitem>
+              <para>If one of the key or value type is assignable to the
+              target type, then this is used. If both are assignable the key
+              is used.</para>
+            </listitem>
+
+            <listitem>
+              <para>If one of the key or value is of type <code>String</code>,
+              this is used and converted to the target type. If both are of
+              type <code>String</code> the key is used.</para>
+            </listitem>
+
+            <listitem>
+              <para>If none of the above matches the key is converted into a
+              <code>String</code> and this value is then converted to the
+              target type.</para>
+            </listitem>
+          </orderedlist></para>
+
+        <para>Conversion to <code>Map.Entry</code> from a scalar is not
+        supported.</para>
       </section>
-      </section>
-    
+    </section>
+
     <section xml:id="util.converter-arrays.collections">
       <title>Arrays and Collections</title>
-  
-      <para>This section describes conversions from, to and between Arrays and Collections.
-      This includes Lists, Sets, Queues and 
-      Double-ended Queues (<emphasis>Deques</emphasis>).</para>
-      
+
+      <para>This section describes conversions from, to and between Arrays and
+      Collections. This includes Lists, Sets, Queues and Double-ended Queues
+      (<emphasis>Deques</emphasis>).</para>
+
       <section>
         <title>Converting from a scalar</title>
-        
-        <para>
-        Scalars are converted into a Collection or Array by creating an instance of the target type
-        suitable for holding a single element. The scalar source object will be converted to target element type 
-        if necessary and then set as the element.
-        </para>
-        
-        <para>
-        A <code>null</code> value will result in an empty Collection or Array.
-        </para>
-        
-        <para><emphasis>Exceptions: </emphasis>
-          <itemizedlist>
+
+        <para>Scalars are converted into a Collection or Array by creating an
+        instance of the target type suitable for holding a single element. The
+        scalar source object will be converted to target element type if
+        necessary and then set as the element.</para>
+
+        <para>A <code>null</code> value will result in an empty Collection or
+        Array.</para>
+
+        <para><emphasis>Exceptions: </emphasis> <itemizedlist>
             <listitem>
-              <para>
-                Converting a <code>String</code> to a <code>char[]</code> or <code>Character[]</code>
-                will result in an array with characters representing the characters in the String.
-              </para>
+              <para>Converting a <code>String</code> to a <code>char[]</code>
+              or <code>Character[]</code> will result in an array with
+              characters representing the characters in the String.</para>
             </listitem>
-          </itemizedlist>
-        </para>
+          </itemizedlist></para>
       </section>
-      
+
       <section>
         <title>Converting to a scalar</title>
-        <para>
-        If a Collection or array needs to be converted to a scalar,
-        the first element is taken and converted into the target type. Example:
+
+        <para>If a Collection or array needs to be converted to a scalar, the
+        first element is taken and converted into the target type. Example:
         <programlisting>Converter converter = Converters.standardConverter();
 String s = converter.convert(new int[] {1,2}).to(String.class)); // s="1"</programlisting></para>
-        
-        <para>If the collection or array has no elements, the <code>null</code> value is
-        used to convert into the target type.</para>
-        
-        <para><emphasis>Note: </emphasis>deviations from this mechanism can be achieved by using a 
-          <xref linkend="org.osgi.util.converter.ConverterBuilder" xrefstyle="hyperlink"/>. For example:
-          <programlisting>// Use an ConverterBuilder to create a customized converter          
+
+        <para>If the collection or array has no elements, the
+        <code>null</code> value is used to convert into the target
+        type.</para>
+
+        <para><emphasis>Note: </emphasis>deviations from this mechanism can be
+        achieved by using a <xref
+        linkend="org.osgi.util.converter.ConverterBuilder"
+        xrefstyle="hyperlink"/>. For example: <programlisting>// Use an ConverterBuilder to create a customized converter          
 ConverterBuilder cb = converter.newConverterBuilder();
 cb.rule(new Rule&lt;int[], String&gt;(v -&gt; Arrays.stream(v).
     mapToObj(Integer::toString).collect(Collectors.joining(","))) {});
@@ -489,279 +561,329 @@ cb.rule(new Rule&lt;String, int[]&gt;(v -&gt; Arrays.stream(v.split(",")).
 Converter c = cb.build();
 
 String s2 = c.convert(new int[] {1,2}).to(String.class)); // s2="1,2"
-int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting> 
-        </para>
-        
-        <para><emphasis>Exceptions: </emphasis>
-          <itemizedlist>
+int[] sa = c.convert("1,2").to(String[].class); // sa={1,2}</programlisting></para>
+
+        <para><emphasis>Exceptions: </emphasis> <itemizedlist>
             <listitem>
-              <para>
-                Converting a <code>char[]</code> or <code>Character[]</code> into a <code>String</code>
-                results in a String where each character represents the elements of the character
-                array.
-              </para>
+              <para>Converting a <code>char[]</code> or
+              <code>Character[]</code> into a <code>String</code> results in a
+              String where each character represents the elements of the
+              character array.</para>
             </listitem>
-          </itemizedlist>
-        </para>        
+          </itemizedlist></para>
       </section>
-      
+
       <section>
         <title>Converting to an Array or Collection</title>
-        <para>When converting to an Array or Collection a separate instance is returned that can be owned
-        by the caller. By default the result is created eagerly and populated with the converted content.</para>
-        
-        <para>
-        When converting   
-          to a <code>java.util.Collection</code>, <code>java.util.List</code> 
-          or <code>java.util.Set</code> the converter can produce a live view 
-          over the backing object that changes when the backing object changes. The live view can be 
-          enabled by specifying the 
-          <xref linkend="org.osgi.util.converter.Specifying.view--" xrefstyle="hyperlink"/>
-          modifier. 
-        </para>
 
-        <para>In all cases the object returned is a separate instance that
-          can be owned by the client. Once the client modifies
-          the returned object a live view will stop reflecting changes to the backing object.</para>
-        
+        <para>When converting to an Array or Collection a separate instance is
+        returned that can be owned by the caller. By default the result is
+        created eagerly and populated with the converted content.</para>
+
+        <para>When converting to a <code>java.util.Collection</code>,
+        <code>java.util.List</code> or <code>java.util.Set</code> the
+        converter can produce a live view over the backing object that changes
+        when the backing object changes. The live view can be enabled by
+        specifying the <xref
+        linkend="org.osgi.util.converter.Specifying.view--"
+        xrefstyle="hyperlink"/> modifier.</para>
+
+        <para>In all cases the object returned is a separate instance that can
+        be owned by the client. Once the client modifies the returned object a
+        live view will stop reflecting changes to the backing object.</para>
+
         <table>
           <title>Collection / Array target creation</title>
+
           <tgroup cols="2">
             <colspec colnum="1" colwidth="0.5*"/>
+
             <thead>
               <row>
                 <entry>Target</entry>
+
                 <entry>Method</entry>
               </row>
-            </thead>         
+            </thead>
+
             <tbody>
               <row>
                 <entry>Collection interface</entry>
-                <entry>A mutable implementation is created. For example, if the target type is 
-                <code>java.util.Queue</code> then the converter can create a
-                <code>java.util.LinkedList</code>. When converting to a subinterface of <code>java.util.Set</code>
-                the converter must choose a set implementation that preserves iteration order.</entry>
+
+                <entry>A mutable implementation is created. For example, if
+                the target type is <code>java.util.Queue</code> then the
+                converter can create a <code>java.util.LinkedList</code>. When
+                converting to a subinterface of <code>java.util.Set</code> the
+                converter must choose a set implementation that preserves
+                iteration order.</entry>
               </row>
+
               <row>
                 <entry>Collection concrete type</entry>
-                <entry>A new instance is created by calling <code>Class.newInstance()</code> on the 
-                provided type. For example if the target type is <code>ArrayDeque</code> then the 
-                converter creates a target object by calling <code>ArrayDeque.class.newInstance()</code>.
-                The converter may choose to use a call a well-known constructor to optimize the
+
+                <entry>A new instance is created by calling
+                <code>Class.newInstance()</code> on the provided type. For
+                example if the target type is <code>ArrayDeque</code> then the
+                converter creates a target object by calling
+                <code>ArrayDeque.class.newInstance()</code>. The converter may
+                choose to use a call a well-known constructor to optimize the
                 creation of the collection.</entry>
               </row>
+
               <row>
-                <entry><code>Collection</code>, <code>List</code> or <code>Set</code> with <code>view()</code>
-                modifier</entry>
-                <entry>A live view over the backing object is created, changes to the backing
-                object will be reflected, unless the view object is modified by the client.</entry>
+                <entry><code>Collection</code>, <code>List</code> or
+                <code>Set</code> with <code>view()</code> modifier</entry>
+
+                <entry>A live view over the backing object is created, changes
+                to the backing object will be reflected, unless the view
+                object is modified by the client.</entry>
               </row>
+
               <row>
                 <entry><code>T[]</code></entry>
-                <entry>A new array is created via <code>Array.newInstance(Class&lt;T&gt; cls, int x)</code> where 
-                <code>x</code> is the required size of the target collection.</entry>
+
+                <entry>A new array is created via
+                <code>Array.newInstance(Class&lt;T&gt; cls, int x)</code>
+                where <code>x</code> is the required size of the target
+                collection.</entry>
               </row>
             </tbody>
           </tgroup>
         </table>
-        
-        <para>Before inserting values into the resulting collection/array they are converted to the desired
-        target type. In the case of arrays this is the type of the array. When inserting into a 
-        Collection generic type information about the target type can be made available by using the
-        <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
-        or <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
-        methods. If no type information is available, source elements are inserted into the target 
-        object as-is without further treatment.</para>
-        
-        <para>For example, 
-        to convert an array of <code>String</code>s into a list of <code>Integer</code>s:
-        
-        <programlisting>List&lt;Integer&gt; result =
+
+        <para>Before inserting values into the resulting collection/array they
+        are converted to the desired target type. In the case of arrays this
+        is the type of the array. When inserting into a Collection generic
+        type information about the target type can be made available by using
+        the <xref
+        linkend="org.osgi.util.converter.Converting.to-TypeReference-"
+        xrefstyle="hyperlink"/> or <xref
+        linkend="org.osgi.util.converter.Converting.to-Type-"
+        xrefstyle="hyperlink"/> methods. If no type information is available,
+        source elements are inserted into the target object as-is without
+        further treatment.</para>
+
+        <para>For example, to convert an array of <code>String</code>s into a
+        list of <code>Integer</code>s: <programlisting>List&lt;Integer&gt; result =
   converter.convert(Arrays.asList("1","2","3")).
     to(new TypeReference&lt;List&lt;Integer&gt;&gt;() {});</programlisting>
-    
-        The following example converts an array of <code>int</code>s into a set of <code>Double</code>s. Note that
-        the resulting set must preserve the same iteration order as the original array:
-        
-        <programlisting>Set&lt;Double&gt; result =
+        The following example converts an array of <code>int</code>s into a
+        set of <code>Double</code>s. Note that the resulting set must preserve
+        the same iteration order as the original array: <programlisting>Set&lt;Double&gt; result =
   converter.convert(new int[] {2,3,2,1}).
     to(new TypeReference&lt;Set&lt;Double&gt;&gt;() {})
-// result is 2.0, 3.0, 1.0</programlisting>
-        
-        Values are inserted in the target Collection/array as follows:
-        
-          <itemizedlist>
+// result is 2.0, 3.0, 1.0</programlisting> Values are inserted in the target
+        Collection/array as follows: <itemizedlist>
             <listitem>
-              <para>If the source object is <code>null</code>, an empty collection/array is produced.</para>
+              <para>If the source object is <code>null</code>, an empty
+              collection/array is produced.</para>
             </listitem>
-                        
+
             <listitem>
-              <para>If the source is a Collection or Array, then each of its elements is converted 
-              into desired target type, if known, before inserting. Elements are inserted into the target
-              collection in their normal iteration order.</para>
+              <para>If the source is a Collection or Array, then each of its
+              elements is converted into desired target type, if known, before
+              inserting. Elements are inserted into the target collection in
+              their normal iteration order.</para>
             </listitem>
-            
+
             <listitem>
-              <para>If the source is a Map-like structure (as described
-              in <xref linkend="util.converter-maps"/>) then <code>Map.Entry</code> elements 
-              are obtained from it by converting the source to a <code>Map</code> (if needed) and then 
-              calling<code>Map.entrySet()</code>. 
-              Each <code>Map.Entry</code> element is then converted into the target type 
-              as described in <xref linkend="util.converter-special.cases.map.entry"/> 
-              before inserting in the
-              target.</para>
+              <para>If the source is a Map-like structure (as described in
+              <xref linkend="util.converter-maps"/>) then
+              <code>Map.Entry</code> elements are obtained from it by
+              converting the source to a <code>Map</code> (if needed) and then
+              calling<code>Map.entrySet()</code>. Each <code>Map.Entry</code>
+              element is then converted into the target type as described in
+              <xref linkend="util.converter-special.cases.map.entry"/> before
+              inserting in the target.</para>
             </listitem>
-          </itemizedlist>         
-        </para>
+          </itemizedlist></para>
       </section>
-      
+
       <section>
         <title>Converting to maps</title>
-        <para>Conversion to a map-like structure from an Array or Collection is not supported by the Standard Converter.</para>
+
+        <para>Conversion to a map-like structure from an Array or Collection
+        is not supported by the Standard Converter.</para>
       </section>
     </section>
-    
+
     <section xml:id="util.converter-maps">
       <title>Maps, Interfaces, Java Beans, DTOs and Annotations</title>
-      <para>Entities that can hold multiple key-value pairs are all treated in a similar way. These entities
-      include Maps, Dictionaries, Interfaces, Java Beans, Annotations and OSGi DTOs. We call these 
-      <emphasis>map-like</emphasis> types.
-      Additionally objects that provide a map view via <code>getProperties()</code>
-      are supported.</para>
-      
-      <para>When converting between map-like types, a <code>Map</code> can be used as intermediary.
-      When converting to other, non <emphasis>map-like</emphasis>, structures 
-      the map is converted into an iteration order preserving collection of
-      <code>Map.Entry</code> values which in turn is converted into the target type.
-      </para>
-      
+
+      <para>Entities that can hold multiple key-value pairs are all treated in
+      a similar way. These entities include Maps, Dictionaries, Interfaces,
+      Java Beans, Annotations and OSGi DTOs. We call these
+      <emphasis>map-like</emphasis> types. Additionally objects that provide a
+      map view via <code>getProperties()</code> are supported.</para>
+
+      <para>When converting between map-like types, a <code>Map</code> can be
+      used as intermediary. When converting to other, non
+      <emphasis>map-like</emphasis>, structures the map is converted into an
+      iteration order preserving collection of <code>Map.Entry</code> values
+      which in turn is converted into the target type.</para>
+
       <section>
         <title>Converting from a scalar</title>
-        <para>Conversions from a scalar to a map-like type are not supported by the standard converter.</para>
+
+        <para>Conversions from a scalar to a map-like type are not supported
+        by the standard converter.</para>
       </section>
-      
+
       <section>
         <title>Converting to a scalar</title>
-        <para>Conversions of a map-like structure to a scalar are done by iterating through the entries of the map
-        and taking the first <code>Map.Entry</code> instance. Then this instance is converted into the target 
-        scalar type as described in <xref linkend="util.converter-special.cases.map.entry"/>.
-        </para>
-        
+
+        <para>Conversions of a map-like structure to a scalar are done by
+        iterating through the entries of the map and taking the first
+        <code>Map.Entry</code> instance. Then this instance is converted into
+        the target scalar type as described in <xref
+        linkend="util.converter-special.cases.map.entry"/>.</para>
+
         <para>An empty map results in a <code>null</code> scalar value.</para>
       </section>
-      
+
       <section>
         <title>Converting to an Array or Collection</title>
-        <para>A map-like structure is converted to an Array or Collection target type by creating an ordered collection
-        of <code>Map.Entry</code> objects. Then this collection is converted to the target type as described in 
-        <xref linkend="util.converter-arrays.collections"/> and
-        <xref linkend="util.converter-special.cases.map.entry"/>.
-        </para>
+
+        <para>A map-like structure is converted to an Array or Collection
+        target type by creating an ordered collection of
+        <code>Map.Entry</code> objects. Then this collection is converted to
+        the target type as described in <xref
+        linkend="util.converter-arrays.collections"/> and <xref
+        linkend="util.converter-special.cases.map.entry"/>.</para>
       </section>
-      
+
       <section>
         <title>Converting to a map-like structure</title>
-      <section>
-        <title>Converting to a Map</title>
-        <para>When converting to a Map a separate instance is returned that can be owned by the caller.
-        By default the result is created eagerly and populated with converted content.</para>
-        
-        <para>When converting to a <code>java.util.Map</code>
-          the converter can produce a live view  
-          over the backing object that changes when the backing object changes. The live view can be 
-          enabled by specifying the 
-          <xref linkend="org.osgi.util.converter.Specifying.view--" xrefstyle="hyperlink"/>
-          modifier. 
-        </para>
 
-        <para>In all cases the object returned is a separate instance that
-          can be owned by the client. When the client modifies
-          the returned object a live view will stop reflecting changes to the backing object.</para>
-        <table>
-          <title>Map target creation</title>
-          <tgroup cols="2">
-            <colspec colnum="1" colwidth="0.5*"/>
-            <thead>
-              <row>
-                <entry>Target</entry>
-                <entry>Method</entry>
-              </row>
-            </thead>         
-            <tbody>
-              <row>
-                <entry>Map interface</entry>
-                <entry>A mutable implementation is created. For example, if the target type is 
-                <code>ConcurrentNavigableMap</code> then the implementation can create a 
-                <code>ConcurrentSkipListMap</code>.</entry>
-              </row>
-              <row>
-                <entry>Map concrete type</entry>
-                <entry>A new instance is created by calling <code>Class.newInstance()</code> 
-                on the provided type. For example if the target type is <code>HashMap</code> 
-                then the converter creates a target object by calling
-                <code>HashMap.class.newInstance()</code>.
-                The converter may choose to use a call a well-known constructor to optimize the
-                creation of the map.</entry>
-              </row>
-              <row>
-                <entry><code>java.util.Map</code> with <code>view()</code> modifier</entry>
-                <entry>A map view over the backing object is created, changes to the backing
-                object will be reflected in the map, unless the map is modified by the client.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
-        
-        <para>When converting from a map-like object to a <code>Map</code> or sub-type, each key-value pair 
-        in the source map is converted to desired types of the target map
-        using the generic information if available.
-        
-        Map type information for the target type can be made available by using the
-        <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> 
-        or <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> 
-        methods. If no type information is available, key-value pairs are used in the map as-is.    
-        </para>      
-      </section>
-      
-      <section>
-        <title>Dictionary</title>
-        <para>Converting between a map and a <code>Dictionary</code> is done by iterating over the
-        source and inserting the key value pairs in the target, converting them to the requested target 
-        type, if known. As with other generic types, target type information for Dictionaries can be provided
-        via a <xref linkend="org.osgi.util.converter.TypeReference" xrefstyle="hyperlink"/>.</para> 
-      </section>
-      
-      <section>
-        <title>Interface</title>
-        <para>Converting a map-like structure into an interface can be a useful way to give a map of 
-        untyped data a typed API. The converter synthesizes an interface instance to represent the
-        conversion.</para>
-        
-        <para>Note that converting to annotations provides similar functionality 
-        with the added benefit of being able to specify default values in the annotation code.
-        </para>
         <section>
-        <title>Converting to an Interface</title>
-        <para>When converting into an interface the converter will create a dynamic proxy to 
-        implement the interface. The name of the method returning the value should match the key 
-        of the map entry, taking into account the mapping rules specified in 
-        <xref linkend="util.converter-key.mapping"/>.
-        The key of the map may need to be converted into a <code>String</code> first.</para>
-        
-        <para>Conversion is done <emphasis>on demand</emphasis>: only when the method on 
-        the interface is actually invoked. This avoids conversion errors on methods 
-        for which the information is missing or cannot be converted, but which the caller 
-        does not require.</para>
-        
-        <para>Note that the converter will not copy the source map when converting to an interface
-        allowing changes to the source map to be reflected live to the proxy. 
-        The proxy cannot cache the conversions.</para>
-        
-        <para>Interfaces can provide methods for default values by providing a single-argument method
-        override in addition to the no-parameter method matching the key name. If the type of the default
-        does not match the target type it is converted first. 
-        For example:  
-        <programlisting>interface Config {
+          <title>Converting to a Map</title>
+
+          <para>When converting to a Map a separate instance is returned that
+          can be owned by the caller. By default the result is created eagerly
+          and populated with converted content.</para>
+
+          <para>When converting to a <code>java.util.Map</code> the converter
+          can produce a live view over the backing object that changes when
+          the backing object changes. The live view can be enabled by
+          specifying the <xref
+          linkend="org.osgi.util.converter.Specifying.view--"
+          xrefstyle="hyperlink"/> modifier.</para>
+
+          <para>In all cases the object returned is a separate instance that
+          can be owned by the client. When the client modifies the returned
+          object a live view will stop reflecting changes to the backing
+          object.</para>
+
+          <table>
+            <title>Map target creation</title>
+
+            <tgroup cols="2">
+              <colspec colnum="1" colwidth="0.5*"/>
+
+              <thead>
+                <row>
+                  <entry>Target</entry>
+
+                  <entry>Method</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>Map interface</entry>
+
+                  <entry>A mutable implementation is created. For example, if
+                  the target type is <code>ConcurrentNavigableMap</code> then
+                  the implementation can create a
+                  <code>ConcurrentSkipListMap</code>.</entry>
+                </row>
+
+                <row>
+                  <entry>Map concrete type</entry>
+
+                  <entry>A new instance is created by calling
+                  <code>Class.newInstance()</code> on the provided type. For
+                  example if the target type is <code>HashMap</code> then the
+                  converter creates a target object by calling
+                  <code>HashMap.class.newInstance()</code>. The converter may
+                  choose to use a call a well-known constructor to optimize
+                  the creation of the map.</entry>
+                </row>
+
+                <row>
+                  <entry><code>java.util.Map</code> with <code>view()</code>
+                  modifier</entry>
+
+                  <entry>A map view over the backing object is created,
+                  changes to the backing object will be reflected in the map,
+                  unless the map is modified by the client.</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>When converting from a map-like object to a <code>Map</code>
+          or sub-type, each key-value pair in the source map is converted to
+          desired types of the target map using the generic information if
+          available. Map type information for the target type can be made
+          available by using the <xref
+          linkend="org.osgi.util.converter.Converting.to-TypeReference-"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.util.converter.Converting.to-Type-"
+          xrefstyle="hyperlink"/> methods. If no type information is
+          available, key-value pairs are used in the map as-is.</para>
+        </section>
+
+        <section>
+          <title>Dictionary</title>
+
+          <para>Converting between a map and a <code>Dictionary</code> is done
+          by iterating over the source and inserting the key value pairs in
+          the target, converting them to the requested target type, if known.
+          As with other generic types, target type information for
+          Dictionaries can be provided via a <xref
+          linkend="org.osgi.util.converter.TypeReference"
+          xrefstyle="hyperlink"/>.</para>
+        </section>
+
+        <section>
+          <title>Interface</title>
+
+          <para>Converting a map-like structure into an interface can be a
+          useful way to give a map of untyped data a typed API. The converter
+          synthesizes an interface instance to represent the
+          conversion.</para>
+
+          <para>Note that converting to annotations provides similar
+          functionality with the added benefit of being able to specify
+          default values in the annotation code.</para>
+
+          <section>
+            <title>Converting to an Interface</title>
+
+            <para>When converting into an interface the converter will create
+            a dynamic proxy to implement the interface. The name of the method
+            returning the value should match the key of the map entry, taking
+            into account the mapping rules specified in <xref
+            linkend="util.converter-key.mapping"/>. The key of the map may
+            need to be converted into a <code>String</code> first.</para>
+
+            <para>Conversion is done <emphasis>on demand</emphasis>: only when
+            the method on the interface is actually invoked. This avoids
+            conversion errors on methods for which the information is missing
+            or cannot be converted, but which the caller does not
+            require.</para>
+
+            <para>Note that the converter will not copy the source map when
+            converting to an interface allowing changes to the source map to
+            be reflected live to the proxy. The proxy cannot cache the
+            conversions.</para>
+
+            <para>Interfaces can provide methods for default values by
+            providing a single-argument method override in addition to the
+            no-parameter method matching the key name. If the type of the
+            default does not match the target type it is converted first. For
+            example: <programlisting>interface Config {
   int my_value(); // no default
   int my_value(int defVal);
   int my_value(String defVal); // String value is automatically converted to int
@@ -774,59 +896,61 @@ myMap.put("my.other.value", "true");
 Config cfg = converter.convert(myMap).to(Config.class);
 int val = cfg.my_value(17); // if not set then use 17
 boolean val2 = cfg.my_other_value(); // val2=true
-</programlisting>
-        Default values are used when the key is not present in the map for the method. If a key is 
-        present with a <code>null</code> value, then <code>null</code> is taken as the value and 
-        converted to the target type.</para>
-        
-        <para>If no default is specified and a requested value is not present in the map,
-        a <code>ConversionException</code> is thrown.</para>
-      </section>
-      <section>
-        <title>Converting from an Interface</title>
-        <para>
-        An interface can also be the source of a conversion to another map-like type. The name of each
-        method without parameters is taken as key, taking into account the 
-        <xref linkend="util.converter-key.mapping"/>. The method is invoked using reflection to produce
-        the associated value.
-        </para>
-        
-        <para>
-        Whether a conversion source object is an interface is determined dynamically. 
-        When an object implements multiple interfaces
-        by default the first interface from these that has no-parameter methods 
-        is taken as the source type. To select a different
-        interface use the 
-        <xref linkend="org.osgi.util.converter.Specifying.sourceAs-Class-" xrefstyle="hyperlink"/> modifier:
-        <programlisting>  Map m = converter.convert(myMultiInterface).
-      sourceAs(MyInterfaceB.class).to(Map.class);</programlisting>
-      
-        If the source object also has a <code>getProperties()</code> method as described in
-        <xref linkend="util.converter-getProperties"/>, this getProperties() method is used to obtain the map view 
-        by default. This behaviour can be overridden by using the   
-        <xref linkend="org.osgi.util.converter.Specifying.sourceAs-Class-" xrefstyle="hyperlink"/> modifier.
-        </para>
-      </section>
-              
-      </section>
-      
-      <section>
-        <title>Annotation</title>
-        <para>Conversion to and from annotations behaves similar to 
-        interface conversion with the added capability of specifying a default in the annotation definition.
-        </para>
-        
-        <para>When converting to an annotation type, the converter will return an instance of the requested
-        annotation class. As with interfaces, values are only obtained from the conversion source when the 
-        annotation method is actually called. If the requested value is not available, the default as 
-        specified in the annotation class is used. If no default is specified a <code>ConversionException</code>
-        is thrown.
-        </para>
-        
-        <para>Similar to interfaces, conversions to and from annotations also follow the
-        <xref linkend="util.converter-key.mapping"/> for annotation element names.
-        Below a few examples of conversions to an annotation:
-        <programlisting>@interface MyAnnotation {
+</programlisting> Default values are used when the key is not present in the
+            map for the method. If a key is present with a <code>null</code>
+            value, then <code>null</code> is taken as the value and converted
+            to the target type.</para>
+
+            <para>If no default is specified and a requested value is not
+            present in the map, a <code>ConversionException</code> is
+            thrown.</para>
+          </section>
+
+          <section>
+            <title>Converting from an Interface</title>
+
+            <para>An interface can also be the source of a conversion to
+            another map-like type. The name of each method without parameters
+            is taken as key, taking into account the <xref
+            linkend="util.converter-key.mapping"/>. The method is invoked
+            using reflection to produce the associated value.</para>
+
+            <para>Whether a conversion source object is an interface is
+            determined dynamically. When an object implements multiple
+            interfaces by default the first interface from these that has
+            no-parameter methods is taken as the source type. To select a
+            different interface use the <xref
+            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
+            xrefstyle="hyperlink"/> modifier: <programlisting>  Map m = converter.convert(myMultiInterface).
+      sourceAs(MyInterfaceB.class).to(Map.class);</programlisting> If the
+            source object also has a <code>getProperties()</code> method as
+            described in <xref linkend="util.converter-getProperties"/>, this
+            getProperties() method is used to obtain the map view by default.
+            This behavior can be overridden by using the <xref
+            linkend="org.osgi.util.converter.Specifying.sourceAs-Class-"
+            xrefstyle="hyperlink"/> modifier.</para>
+          </section>
+        </section>
+
+        <section>
+          <title>Annotation</title>
+
+          <para>Conversion to and from annotations behaves similar to
+          interface conversion with the added capability of specifying a
+          default in the annotation definition.</para>
+
+          <para>When converting to an annotation type, the converter will
+          return an instance of the requested annotation class. As with
+          interfaces, values are only obtained from the conversion source when
+          the annotation method is actually called. If the requested value is
+          not available, the default as specified in the annotation class is
+          used. If no default is specified a <code>ConversionException</code>
+          is thrown.</para>
+
+          <para>Similar to interfaces, conversions to and from annotations
+          also follow the <xref linkend="util.converter-key.mapping"/> for
+          annotation element names. Below a few examples of conversions to an
+          annotation: <programlisting>@interface MyAnnotation {
   String[] args() default {"arg1", "arg2"};
 }
 
@@ -847,231 +971,253 @@ String[] a2 = converter.convert(m2).to(MyAnnotation.class).args();
 
 // Will set a3={","}
 Map m3 = Collections.singletonMap("args", ",")
-String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisting>
-        </para>
-      </section>
-      
-      <section>
-        <title>Java Beans</title>
-        <para>Java Beans are concrete (non-abstract) classes that follow the Java Bean naming convention. They provide 
-        public getters and setters to
-        access their properties and have a public no-parameter constructor. When converting from a Java Bean introspection
-        is used to find the read accessors. A read accessor must have no arguments and a non-<code>void</code> return 
-        value. The method name must start with <code>get</code> followed by a capitalized property name, 
-        for example <code>getSize()</code> provides access to the property <code>size</code>. 
-        For <code>boolean/Boolean</code> properties a prefix of <code>is</code>
-        is also permitted. Properties names follow the <xref linkend="util.converter-key.mapping"/>.</para> 
-        <para>
-        For the converter to consider an object as a Java Bean the 
-          <xref linkend="org.osgi.util.converter.Specifying.sourceAsBean--" xrefstyle="hyperlink"/> or
-          <xref linkend="org.osgi.util.converter.Specifying.targetAsBean--" xrefstyle="hyperlink"/>
-        modifier needs to be invoked, for example:
+String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisting></para>
+        </section>
+
+        <section>
+          <title>Java Beans</title>
+
+          <para>Java Beans are concrete (non-abstract) classes that follow the
+          Java Bean naming convention. They provide public getters and setters
+          to access their properties and have a public no-parameter
+          constructor. When converting from a Java Bean introspection is used
+          to find the read accessors. A read accessor must have no arguments
+          and a non-<code>void</code> return value. The method name must start
+          with <code>get</code> followed by a capitalized property name, for
+          example <code>getSize()</code> provides access to the property
+          <code>size</code>. For <code>boolean/Boolean</code> properties a
+          prefix of <code>is</code> is also permitted. Properties names follow
+          the <xref linkend="util.converter-key.mapping"/>.</para>
+
+          <para>For the converter to consider an object as a Java Bean the
+          <xref linkend="org.osgi.util.converter.Specifying.sourceAsBean--"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsBean--"
+          xrefstyle="hyperlink"/> modifier needs to be invoked, for example:
           <programlisting>  Map m = converter.convert(myBean).sourceAsBean().to(Map.class);</programlisting></para>
-        <para>When converting to a Java Bean, the bean is constructed eagerly. All available properties
-            are set in the bean using the bean's write accessors, that is, public setters methods with a single argument. 
-            All methods of the bean class itself and its 
-            super classes are considered. 
-            When a property cannot be converted this will cause a 
-            <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
-            If a property is missing in the source, the property will not be set in the bean.
-            </para>
-        <para><emphasis>Note: </emphasis>access via indexed bean properties is not supported.
-        </para>
-        <para><emphasis>Note: </emphasis>the <code>getClass()</code> method of the <code>java.lang.Object</code>
-        class is not considered an accessor.
-        </para>
-      </section>
-      
-      <section>
-        <title>DTOs</title>
-        <para>
-        DTOs are classes with public non-static fields and no methods other than the ones provided by the 
-        <code>java.lang.Object class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code> class,
-        however objects following the DTO rules that do not extend the DTO
-        class are also treated as DTOs by the converter. 
-        DTOs may have static fields, or non-public instance fields. These are ignored by the converter.</para>
-        
-        <para>When converting from a DTO to another map-like structure each public instance field is 
-        considered. The field name is taken as the key for the map entry, taking into account 
-        <xref linkend="util.converter-key.mapping"/>,
-        the field value is taken as the value for the map entry.
-        </para>
 
-        <para>When converting to a DTO, the converter attempts to find fields that match the key of each 
-        entry in the source map and then converts the value to the field type before assigning it. The key of
-        the map entries may need to be converted into a String first. Keys are mapped according to 
-        <xref linkend="util.converter-key.mapping"/>.</para>
-        
-        <para>The DTO is constructed using its no-parameter constructor and each public 
-        field is filled with data from the source eagerly. Fields present in the DTO but missing in the source
-        object not be set. 
-        </para>
-        
-        <para>The converter only considers a type to be a DTO type if it declares no methods. However, if a type
-        needs to be treated as a DTO that has methods, the converter can be instructed to do this using the
-        <xref linkend="org.osgi.util.converter.Specifying.sourceAsDTO--" xrefstyle="hyperlink"/> and 
-        <xref linkend="org.osgi.util.converter.Specifying.targetAsDTO--" xrefstyle="hyperlink"/> modifiers. 
-        </para>
-      </section>
-      
-      <section xml:id="util.converter-getProperties">
-        <title>Types with getProperties()</title>
-        
-        <para>The converter uses reflection to find a public <code>java.util.Map getProperties()</code> or 
-        <code>java.util.Dictionary getProperties()</code> method on the source type to obtain a map view over
-        the source object. This map view is used to convert the source object to a map-like structure.</para>
-        
-        <para>If the source object both implements an interface and also has a public <code>getProperties()</code>
-        method, the converter uses the <code>getProperties()</code> method to obtain the map view.
-        This <code>getProperties()</code> may or may not be part of an implemented interface.</para>
-        
-        <para><emphasis>Note: </emphasis>this mechanism can only be used to convert <emphasis>to</emphasis> another type. 
-        The reverse is not supported</para>
-      </section>
+          <para>When converting to a Java Bean, the bean is constructed
+          eagerly. All available properties are set in the bean using the
+          bean's write accessors, that is, public setters methods with a
+          single argument. All methods of the bean class itself and its super
+          classes are considered. When a property cannot be converted this
+          will cause a <xref
+          linkend="org.osgi.util.converter.ConversionException"
+          xrefstyle="hyperlink"/>. If a property is missing in the source, the
+          property will not be set in the bean.</para>
 
-      <section xml:id="util.converter-key.mapping">
-        <title>Key Mapping</title>
+          <para><emphasis>Note: </emphasis>access via indexed bean properties
+          is not supported.</para>
 
-        <para>When converting to or from a Java type, the key is derived from the method or field name.
-        Certain common property name characters, such as full stop (<code>'.'
-        \u002E</code>) and hyphen-minus (<code>'-' \u002D</code>) are not
-        valid in Java identifiers. So the name of a method must be converted
-        to its corresponding key name as follows:<itemizedlist>
-            <listitem>
-              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
-              unless it is followed by:<itemizedlist>
-                  <listitem>
-                    <para>A low line (<code>'_' \u005F</code>) and a dollar
-                    sign in which case the three consecutive characters
-                    (<code>"$_$"</code>) are converted to a single
-                    hyphen-minus (<code>'-' \u002D</code>).</para>
-                  </listitem>
+          <para><emphasis>Note: </emphasis>the <code>getClass()</code> method
+          of the <code>java.lang.Object</code> class is not considered an
+          accessor.</para>
+        </section>
 
-                  <listitem>
-                    <para>Another dollar sign in which case the two
-                    consecutive dollar signs (<code>"$$"</code>) are converted
-                    to a single dollar sign.</para>
-                  </listitem>
-                </itemizedlist></para>
-            </listitem>
+        <section>
+          <title>DTOs</title>
 
-            <listitem>
-              <para>A single low line (<code>'_' \u005F</code>) is converted
-              into a full stop (<code>'.' \u002E</code>) unless is it followed
-              by another low line in which case the two consecutive low lines
-              (<code>"__"</code>) are converted to a single low line.</para>
-            </listitem>
+          <para>DTOs are classes with public non-static fields and no methods
+          other than the ones provided by the <code>java.lang.Object
+          class</code>. OSGi DTOs extend the <code>org.osgi.dto.DTO</code>
+          class, however objects following the DTO rules that do not extend
+          the DTO class are also treated as DTOs by the converter. DTOs may
+          have static fields, or non-public instance fields. These are ignored
+          by the converter.</para>
 
-            <listitem>
-              <para>All other characters are unchanged.</para>
-            </listitem>
+          <para>When converting from a DTO to another map-like structure each
+          public instance field is considered. The field name is taken as the
+          key for the map entry, taking into account <xref
+          linkend="util.converter-key.mapping"/>, the field value is taken as
+          the value for the map entry.</para>
 
-            <listitem>
-              <para>If the type that declares the method also declares a static final
-              <code>PREFIX_</code> field whose value is a compile-time
-              constant <code>String</code>, then the key name is prefixed with the
-              value of the <code>PREFIX_</code> field. <code>PREFIX_</code>
-              fields in super-classes or super-interfaces are ignored.</para>
-            </listitem>
-          </itemizedlist></para>
+          <para>When converting to a DTO, the converter attempts to find
+          fields that match the key of each entry in the source map and then
+          converts the value to the field type before assigning it. The key of
+          the map entries may need to be converted into a String first. Keys
+          are mapped according to <xref
+          linkend="util.converter-key.mapping"/>.</para>
 
-        <para><xref
-        linkend="util.converter-key.name.mapping"/> contains
-        some name mapping examples.</para>
+          <para>The DTO is constructed using its no-parameter constructor and
+          each public field is filled with data from the source eagerly.
+          Fields present in the DTO but missing in the source object not be
+          set.</para>
 
-        <table xml:id="util.converter-key.name.mapping">
-          <title>Component Property Name Mapping Examples</title>
+          <para>The converter only considers a type to be a DTO type if it
+          declares no methods. However, if a type needs to be treated as a DTO
+          that has methods, the converter can be instructed to do this using
+          the <xref linkend="org.osgi.util.converter.Specifying.sourceAsDTO--"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsDTO--"
+          xrefstyle="hyperlink"/> modifiers.</para>
+        </section>
 
-          <tgroup cols="2">
-            <colspec colnum="1" colwidth="1*"/>
+        <section xml:id="util.converter-getProperties">
+          <title>Types with getProperties()</title>
 
-            <colspec colnum="2" colwidth="1*"/>
+          <para>The converter uses reflection to find a public
+          <code>java.util.Map getProperties()</code> or
+          <code>java.util.Dictionary getProperties()</code> method on the
+          source type to obtain a map view over the source object. This map
+          view is used to convert the source object to a map-like
+          structure.</para>
 
-            <thead>
-              <row>
-                <entry>Component Property Type Method Name</entry>
+          <para>If the source object both implements an interface and also has
+          a public <code>getProperties()</code> method, the converter uses the
+          <code>getProperties()</code> method to obtain the map view. This
+          <code>getProperties()</code> may or may not be part of an
+          implemented interface.</para>
 
-                <entry>Component Property Name</entry>
-              </row>
-            </thead>
+          <para><emphasis>Note: </emphasis>this mechanism can only be used to
+          convert <emphasis>to</emphasis> another type. The reverse is not
+          supported</para>
+        </section>
 
-            <tbody>
-              <row>
-                <entry><code>myProperty143</code></entry>
+        <section xml:id="util.converter-key.mapping">
+          <title>Key Mapping</title>
 
-                <entry><code>myProperty143</code></entry>
-              </row>
+          <para>When converting to or from a Java type, the key is derived
+          from the method or field name. Certain common property name
+          characters, such as full stop (<code>'.' \u002E</code>) and
+          hyphen-minus (<code>'-' \u002D</code>) are not valid in Java
+          identifiers. So the name of a method must be converted to its
+          corresponding key name as follows:<itemizedlist>
+              <listitem>
+                <para>A single dollar sign (<code>'$' \u0024</code>) is
+                removed unless it is followed by:<itemizedlist>
+                    <listitem>
+                      <para>A low line (<code>'_' \u005F</code>) and a dollar
+                      sign in which case the three consecutive characters
+                      (<code>"$_$"</code>) are converted to a single
+                      hyphen-minus (<code>'-' \u002D</code>).</para>
+                    </listitem>
 
-              <row>
-                <entry><code>$new</code></entry>
+                    <listitem>
+                      <para>Another dollar sign in which case the two
+                      consecutive dollar signs (<code>"$$"</code>) are
+                      converted to a single dollar sign.</para>
+                    </listitem>
+                  </itemizedlist></para>
+              </listitem>
 
-                <entry><code>new</code></entry>
-              </row>
+              <listitem>
+                <para>A single low line (<code>'_' \u005F</code>) is converted
+                into a full stop (<code>'.' \u002E</code>) unless is it
+                followed by another low line in which case the two consecutive
+                low lines (<code>"__"</code>) are converted to a single low
+                line.</para>
+              </listitem>
 
-              <row>
-                <entry><code>my$$prop</code></entry>
+              <listitem>
+                <para>All other characters are unchanged.</para>
+              </listitem>
 
-                <entry><code>my$prop</code></entry>
-              </row>
+              <listitem>
+                <para>If the type that declares the method also declares a
+                static final <code>PREFIX_</code> field whose value is a
+                compile-time constant <code>String</code>, then the key name
+                is prefixed with the value of the <code>PREFIX_</code> field.
+                <code>PREFIX_</code> fields in super-classes or
+                super-interfaces are ignored.</para>
+              </listitem>
+            </itemizedlist></para>
 
-              <row>
-                <entry><code>dot_prop</code></entry>
+          <para><xref linkend="util.converter-key.name.mapping"/> contains
+          some name mapping examples.</para>
 
-                <entry><code>dot.prop</code></entry>
-              </row>
+          <table xml:id="util.converter-key.name.mapping">
+            <title>Component Property Name Mapping Examples</title>
 
-              <row>
-                <entry><code>_secret</code></entry>
+            <tgroup cols="2">
+              <colspec colnum="1" colwidth="1*"/>
 
-                <entry><code>.secret</code></entry>
-              </row>
+              <colspec colnum="2" colwidth="1*"/>
 
-              <row>
-                <entry><code>another__prop</code></entry>
+              <thead>
+                <row>
+                  <entry>Component Property Type Method Name</entry>
 
-                <entry><code>another_prop</code></entry>
-              </row>
+                  <entry>Component Property Name</entry>
+                </row>
+              </thead>
 
-              <row>
-                <entry><code>three___prop</code></entry>
+              <tbody>
+                <row>
+                  <entry><code>myProperty143</code></entry>
 
-                <entry><code>three_.prop</code></entry>
-              </row>
+                  <entry><code>myProperty143</code></entry>
+                </row>
 
-              <row>
-                <entry><code>four_$__prop</code></entry>
+                <row>
+                  <entry><code>$new</code></entry>
 
-                <entry><code>four._prop</code></entry>
-              </row>
+                  <entry><code>new</code></entry>
+                </row>
 
-              <row>
-                <entry><code>five_$_prop</code></entry>
+                <row>
+                  <entry><code>my$$prop</code></entry>
 
-                <entry><code>five..prop</code></entry>
-              </row>
+                  <entry><code>my$prop</code></entry>
+                </row>
 
-              <row>
-                <entry><code>six$_$prop</code></entry>
+                <row>
+                  <entry><code>dot_prop</code></entry>
 
-                <entry><code>six-prop</code></entry>
-              </row>
+                  <entry><code>dot.prop</code></entry>
+                </row>
 
-              <row>
-                <entry><code>seven$$_$prop</code></entry>
+                <row>
+                  <entry><code>_secret</code></entry>
 
-                <entry><code>seven$.prop</code></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
-        
-        <para>Below is an example of using the <code>PREFIX_</code> constant 
-        in an annotation. The example receives an untyped <code>Dictionary</code>
-        in the <code>updated()</code> callback with configuration information.
-        Each key in the dictionary is prefixed with the <code>PREFIX_</code>.
-        The annotation can be used to read the configuration using typed methods 
-        with short names.
-        <programlisting>  public @interface MyAnnotation {
+                  <entry><code>.secret</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>another__prop</code></entry>
+
+                  <entry><code>another_prop</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>three___prop</code></entry>
+
+                  <entry><code>three_.prop</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>four_$__prop</code></entry>
+
+                  <entry><code>four._prop</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>five_$_prop</code></entry>
+
+                  <entry><code>five..prop</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>six$_$prop</code></entry>
+
+                  <entry><code>six-prop</code></entry>
+                </row>
+
+                <row>
+                  <entry><code>seven$$_$prop</code></entry>
+
+                  <entry><code>seven$.prop</code></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Below is an example of using the <code>PREFIX_</code> constant
+          in an annotation. The example receives an untyped
+          <code>Dictionary</code> in the <code>updated()</code> callback with
+          configuration information. Each key in the dictionary is prefixed
+          with the <code>PREFIX_</code>. The annotation can be used to read
+          the configuration using typed methods with short names.
+          <programlisting>  public @interface MyAnnotation {
     static final String PREFIX_ = "com.acme.config.";
 
     long timeout() default 1000L;
@@ -1092,182 +1238,193 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
     // ...
   }</programlisting></para>
 
-        <para>However, if the type is a
-        <emphasis>single-element annotation</emphasis>, see 9.7.3 in <xref
-        linkend="util.converter-jls.ref"/>, then the key name for the
-        <code>value</code> method is derived from the name of the component
-        property type rather than the name of the method. In this case, the
-        simple name of the component property type, that is, the name of the
-        class without any package name or outer class name, if the component
-        property type is an inner class, must be converted to the
-        <code>value</code> method's property name as follows:<itemizedlist>
-            <listitem>
-              <para>When a lower case character is followed by an upper case
-              character, a full stop (<code>'.' \u002E</code>) is inserted
-              between them.</para>
-            </listitem>
+          <para>However, if the type is a <emphasis>single-element
+          annotation</emphasis>, see 9.7.3 in <xref
+          linkend="util.converter-jls.ref"/>, then the key name for the
+          <code>value</code> method is derived from the name of the component
+          property type rather than the name of the method. In this case, the
+          simple name of the component property type, that is, the name of the
+          class without any package name or outer class name, if the component
+          property type is an inner class, must be converted to the
+          <code>value</code> method's property name as follows:<itemizedlist>
+              <listitem>
+                <para>When a lower case character is followed by an upper case
+                character, a full stop (<code>'.' \u002E</code>) is inserted
+                between them.</para>
+              </listitem>
 
-            <listitem>
-              <para>Each uppercase character is converted to lower
-              case.</para>
-            </listitem>
+              <listitem>
+                <para>Each uppercase character is converted to lower
+                case.</para>
+              </listitem>
 
-            <listitem>
-              <para>All other characters are unchanged.</para>
-            </listitem>
+              <listitem>
+                <para>All other characters are unchanged.</para>
+              </listitem>
 
-            <listitem>
-              <para>If the annotation type declares a <code>PREFIX_</code> 
-              field whose value is a 
-              compile-time constant <code>String</code>,
-              then the id is prefixed with the value of the 
-              <code>PREFIX_</code> field.</para>
-            </listitem>
-          </itemizedlist></para>
+              <listitem>
+                <para>If the annotation type declares a <code>PREFIX_</code>
+                field whose value is a compile-time constant
+                <code>String</code>, then the id is prefixed with the value of
+                the <code>PREFIX_</code> field.</para>
+              </listitem>
+            </itemizedlist></para>
 
-        <para><xref linkend="util.converter-single.element.name.mapping"/>
-        contains some mapping examples for the <code>value</code>
-        method.</para>
+          <para><xref linkend="util.converter-single.element.name.mapping"/>
+          contains some mapping examples for the <code>value</code>
+          method.</para>
 
-        <table xml:id="util.converter-single.element.name.mapping">
-          <title>Single-Element Annotaton Mapping Examples for
-          <code>value</code> Method</title>
+          <table xml:id="util.converter-single.element.name.mapping">
+            <title>Single-Element Annotation Mapping Examples for
+            <code>value</code> Method</title>
 
-          <tgroup cols="2">
-            <colspec colnum="1" colwidth="1*"/>
+            <tgroup cols="2">
+              <colspec colnum="1" colwidth="1*"/>
 
-            <colspec colnum="2" colwidth="1*"/>
+              <colspec colnum="2" colwidth="1*"/>
 
-            <thead>
-              <row>
-                <entry>Type Name</entry>
+              <thead>
+                <row>
+                  <entry>Type Name</entry>
 
-                <entry><code>value</code> Method Component Property
-                Name</entry>
-              </row>
-            </thead>
+                  <entry><code>value</code> Method Component Property
+                  Name</entry>
+                </row>
+              </thead>
 
-            <tbody>
-              <row>
-                <entry><code>ServiceRanking</code></entry>
+              <tbody>
+                <row>
+                  <entry><code>ServiceRanking</code></entry>
 
-                <entry><code>service.ranking</code></entry>
-              </row>
+                  <entry><code>service.ranking</code></entry>
+                </row>
 
-              <row>
-                <entry><code>Some_Name</code></entry>
+                <row>
+                  <entry><code>Some_Name</code></entry>
 
-                <entry><code>some_name</code></entry>
-              </row>
+                  <entry><code>some_name</code></entry>
+                </row>
 
-              <row>
-                <entry><code>OSGiProperty</code></entry>
+                <row>
+                  <entry><code>OSGiProperty</code></entry>
 
-                <entry><code>osgi.property</code></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table>
+                  <entry><code>osgi.property</code></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </section>
+
+        <section>
+          <title>Marker annotations</title>
+
+          <para>If the component property type is a <emphasis>marker
+          annotation</emphasis>, see 9.7.2 in <xref
+          linkend="service.component-jls.ref"/>, then the property name is
+          derived from the name of the component property type, as is
+          described above for single-element annotations, and the value of the
+          property is <code>Boolean.TRUE</code>.</para>
+
+          <para>Marker annotations can only be used as a source of a
+          conversion. Specifying a marker annotation as the target of a
+          conversion will result in a Conversion Exception.</para>
+        </section>
+
+        <section>
+          <title>Specifying target types</title>
+
+          <para>The converter always produces an instance of the target type
+          as specified with the <xref
+          linkend="org.osgi.util.converter.Converting.to-Class-"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.util.converter.Converting.to-TypeReference-"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.util.converter.Converting.to-Type-"
+          xrefstyle="hyperlink"/> method. In some cases the converter needs to
+          be instructed how to treat this target object. For example the
+          desired target type might extend a DTO class adding some methods and
+          behavior to the DTO. As this target class now has methods, the
+          converter will not recognize it as a DTO. The <xref
+          linkend="org.osgi.util.converter.Specifying.targetAs-Class-"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsBean--"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.converter.Specifying.targetAsDTO--"
+          xrefstyle="hyperlink"/> methods can be used here to instruct the
+          converter to treat the target object as certain type of object to
+          guide the conversion.</para>
+
+          <para>For example: <programlisting>  MyExtendedDTO med = converter.convert(someMap).
+      targetAsDTO().to(MyExtendedDTO.class)</programlisting> In this example
+          the converter will return a <code>MyExtendedDTO</code> instance but
+          it will treat is as a <code>MyDTO</code> type.</para>
+        </section>
       </section>
-      
-      <section>
-        <title>Marker annotations</title>  
-        <para>If the component property type is a <emphasis>marker
-        annotation</emphasis>, see 9.7.2 in <xref
-        linkend="service.component-jls.ref"/>, then the property name is
-        derived from the name of the component property type, as is described
-        above for single-element annotations, and the value of the property is
-        <code>Boolean.TRUE</code>.
-        </para>
-        
-        <para>Marker annotations can only be used as a source of a conversion. Specifying a marker
-        annotation as the target of a conversion will result in a Conversion Exception.</para>        
-      </section>
-
-      <section>
-        <title>Specifying target types</title>
-        <para>The converter always produces an instance of the target type as specified with the
-        <xref linkend="org.osgi.util.converter.Converting.to-Class-" xrefstyle="hyperlink"/>,
-        <xref linkend="org.osgi.util.converter.Converting.to-TypeReference-" xrefstyle="hyperlink"/> or
-        <xref linkend="org.osgi.util.converter.Converting.to-Type-" xrefstyle="hyperlink"/> method.
-        In some cases the converter needs to be instructed how to treat this target object.
-        For example the desired target type might extend a DTO class adding some methods and behavior to 
-        the DTO. As this target class now has methods, the converter will not recognize it as a DTO.
-        The <xref linkend="org.osgi.util.converter.Specifying.targetAs-Class-" xrefstyle="hyperlink"/>,
-        <xref linkend="org.osgi.util.converter.Specifying.targetAsBean--" xrefstyle="hyperlink"/>
-        and <xref linkend="org.osgi.util.converter.Specifying.targetAsDTO--" xrefstyle="hyperlink"/>
-        methods can be used here to instruct the converter to treat the target object as certain type
-        of object to guide the conversion.
-        </para>
-        
-        <para>For example:
-        <programlisting>  MyExtendedDTO med = converter.convert(someMap).
-      targetAsDTO().to(MyExtendedDTO.class)</programlisting>
-        In this example the converter will return a <code>MyExtendedDTO</code> instance
-        but it will treat is as a <code>MyDTO</code> type.      
-      </para>
-      </section>
-    </section>
     </section>
   </section>
 
   <section>
     <title>Repeated or Deferred Conversions</title>
-    
-    <para>In certain situations the same conversion needs to be performed multiple times, on different source
-    objects. Or maybe the conversion needs to be performed asynchronously as part of a async stream processing 
-    pipeline. For such cases the Converter can produce a Function, which will perform the conversion once 
-    applied. The function can be invoked multiple times with different source objects. The 
-    <code>Converter</code> can produce this function through the 
-    <xref linkend="org.osgi.util.converter.Converter.function--" xrefstyle="hyperlink"/> method, which provides 
-    an API similar to the <xref linkend="org.osgi.util.converter.Converter.convert-Object-" xrefstyle="hyperlink"/>
-    method, with the difference that instead of returning the conversion, once <code>to()</code> is called,
-    a <code>Function</code> that can perform the conversion on 
-    <xref linkend="org.osgi.util.function.Function.apply-T-" xrefstyle="hyperlink"/> is returned.
-    </para>
-    
-    <para>The following example sets up a Function that can perform conversions to <code>Integer</code>
-    objects. A default value of <code>999</code> is specified for the conversion:
-    <programlisting>  Converter c = Converters.standardConverter();
+
+    <para>In certain situations the same conversion needs to be performed
+    multiple times, on different source objects. Or maybe the conversion needs
+    to be performed asynchronously as part of a async stream processing
+    pipeline. For such cases the Converter can produce a Function, which will
+    perform the conversion once applied. The function can be invoked multiple
+    times with different source objects. The <code>Converter</code> can
+    produce this function through the <xref
+    linkend="org.osgi.util.converter.Converter.function--"
+    xrefstyle="hyperlink"/> method, which provides an API similar to the <xref
+    linkend="org.osgi.util.converter.Converter.convert-Object-"
+    xrefstyle="hyperlink"/> method, with the difference that instead of
+    returning the conversion, once <code>to()</code> is called, a
+    <code>Function</code> that can perform the conversion on <xref
+    linkend="org.osgi.util.function.Function.apply-T-" xrefstyle="hyperlink"/>
+    is returned.</para>
+
+    <para>The following example sets up a Function that can perform
+    conversions to <code>Integer</code> objects. A default value of
+    <code>999</code> is specified for the conversion: <programlisting>  Converter c = Converters.standardConverter();
 
   // Obtain a function for the conversion 
   Function&lt;Object, Integer&gt; cf = c.function().defaultValue(999).to(Integer.class);
 
   // Use the converter multiple times:
   Integer i1 = cf.apply("123"); // i1 = 123
-  Integer i2 = cf.apply("");    // i2 = 999</programlisting>
-    The <code>Function</code> returned by the converter is thread safe and can be used concurrently or 
-    asynchronously in other threads.
-    </para>
+  Integer i2 = cf.apply("");    // i2 = 999</programlisting> The
+    <code>Function</code> returned by the converter is thread safe and can be
+    used concurrently or asynchronously in other threads.</para>
   </section>
 
   <section xml:id="util.converter-customizing.converters">
     <title>Customizing converters</title>
-    <para>The Standard Converter applies the conversion rules described in this specification. While this is 
-    useful for many applications, in some cases deviations from the specified rules may be necessary.
-    This can be done by creating a customized converter. 
-    Customized converters are created based on an existing converter with additional rules specified that
-    override the existing converter's behavior.
-    A customized converter is created through a 
-    <xref linkend="org.osgi.util.converter.ConverterBuilder" xrefstyle="hyperlink"/>. Customized converters
-    implement the converter interface and as such can be used to create further customized converters.
-    Converters are immutable, once created they cannot be modified, so they can be freely shared without the 
-    risk of modification to the converter's behavior.
-    </para>
-    
-    <para>For example converting a Date to a String may require a specific format. The default 
-    <code>Date</code> to <code>String</code> conversion produces a String in the format 
-    <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If we want to produce a String in the format 
-    <code>yyMMddHHmmssZ</code> instead a custom converter can be applied:
-    <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
+
+    <para>The Standard Converter applies the conversion rules described in
+    this specification. While this is useful for many applications, in some
+    cases deviations from the specified rules may be necessary. This can be
+    done by creating a customized converter. Customized converters are created
+    based on an existing converter with additional rules specified that
+    override the existing converter's behavior. A customized converter is
+    created through a <xref linkend="org.osgi.util.converter.ConverterBuilder"
+    xrefstyle="hyperlink"/>. Customized converters implement the converter
+    interface and as such can be used to create further customized converters.
+    Converters are immutable, once created they cannot be modified, so they
+    can be freely shared without the risk of modification to the converter's
+    behavior.</para>
+
+    <para>For example converting a Date to a String may require a specific
+    format. The default <code>Date</code> to <code>String</code> conversion
+    produces a String in the format <code>yyyy-MM-ddTHH:mm:ss.SSSZ</code>. If
+    we want to produce a String in the format <code>yyMMddHHmmssZ</code>
+    instead a custom converter can be applied: <programlisting>SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssZ");
 ConverterBuilder cb = Converters.newConverterBuilder();
 cb.rule(new TypeRule&lt;&gt;(Date.class, String.class, sdf::format));
 Converter c = cb.build();
     
 String s = c.convert(new Date()).to(String.class);
-// s = "160923102853+0100" or similar</programlisting>
-    Custom conversions are also applied to embedded conversions that are part of a map or other enclosing object:
-    <programlisting>class MyBean {
+// s = "160923102853+0100" or similar</programlisting> Custom conversions are
+    also applied to embedded conversions that are part of a map or other
+    enclosing object: <programlisting>class MyBean {
   //... fields ommitted
   boolean getEnabled() { /* ... */ }
   void setEnabled(boolean e)  { /* ... */ }
@@ -1283,73 +1440,79 @@ Map&lt;String, String&gt; m = c.convert(mb).sourceAsBean().
     to(new TypeReference&lt;Map&lt;String, String&gt;&gt;(){});
 String en = m.get("enabled");   // en = "true"
 String sd = m.get("startDate"); // sd = "160923102853+0100" or similar</programlisting>
-	A converter rule can return
-    <xref linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE" xrefstyle="hyperlink"/> 
-    to indicate that it cannot handle
-	the conversion, in which case next applicable rule is handed the conversion. If none of the registered rules for the 
-    current converter can handle the conversion, the parent converter object is asked to convert the value.
-	Since custom converters can be the basis for further custom converters, a chain of custom converters can be 
-	created where a custom converter rule can either decide to handle the conversion, or it can delegate
-	back to the next converter in the chain by returning
-    <xref linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE" xrefstyle="hyperlink"/>  
-    if it wishes to do so.
-	</para>
-  
+    A converter rule can return <xref
+    linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE"
+    xrefstyle="hyperlink"/> to indicate that it cannot handle the conversion,
+    in which case next applicable rule is handed the conversion. If none of
+    the registered rules for the current converter can handle the conversion,
+    the parent converter object is asked to convert the value. Since custom
+    converters can be the basis for further custom converters, a chain of
+    custom converters can be created where a custom converter rule can either
+    decide to handle the conversion, or it can delegate back to the next
+    converter in the chain by returning <xref
+    linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE"
+    xrefstyle="hyperlink"/> if it wishes to do so.</para>
+
     <section>
-    <title>Catch-all rules</title>
-    <para>It is also possible to register converter rules which are invoked for every conversion with the 
-    <xref linkend="org.osgi.util.converter.ConverterBuilder.rule-ConverterFunction-" xrefstyle="hyperlink"/>
-    method. When multiple rules are registered, they are evaluated in the order of registration,
-    until a rule indicates that it can handle a conversion.
-    A rule can indicate that it cannot handle the conversion by returning the 
-    <xref linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE" xrefstyle="hyperlink"/>
-    constant. Rules targeting specific types are evaluated before catch-all rules.
-    </para>
+      <title>Catch-all rules</title>
+
+      <para>It is also possible to register converter rules which are invoked
+      for every conversion with the <xref
+      linkend="org.osgi.util.converter.ConverterBuilder.rule-ConverterFunction-"
+      xrefstyle="hyperlink"/> method. When multiple rules are registered, they
+      are evaluated in the order of registration, until a rule indicates that
+      it can handle a conversion. A rule can indicate that it cannot handle
+      the conversion by returning the <xref
+      linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE"
+      xrefstyle="hyperlink"/> constant. Rules targeting specific types are
+      evaluated before catch-all rules.</para>
     </section>
   </section>
 
   <section>
     <title>Conversion failures</title>
-    <para>Not all conversions can be performed by the standard converter. 
-    It cannot convert text such as 'lorem ipsum' cannot
-    into a <code>long</code> value. Or the number <emphasis>pi</emphasis> 
-    into a map. When a conversion fails, the converter will throw a 
-    <xref linkend="org.osgi.util.converter.ConversionException" xrefstyle="hyperlink"/>.
-    </para>
-    
-    <para>If meaningful conversions exist between types not supported by the standard converter,
-    a customized converter can be used, see <xref linkend="util.converter-customizing.converters"/>. 
-    </para>
-    
-    <para>Some applications require different behaviour for error scenarios. For example they 
-    can use an empty value such as 0 or "" instead of the exception, or they might
-    require a different exception to be thrown. For these scenarios a custom error handler can
-    be registered. The error handler is only invoked in cases where otherwise a 
-    <code>ConversionException</code> would be thrown. The error handler can return a different
-    value instead or throw another exception.
-    </para>
-    <para>An error handler is registered by creating a custom converter and providing it with an error 
-    handler via the 
-    <xref linkend="org.osgi.util.converter.ConverterBuilder.errorHandler-ConverterFunction-" xrefstyle="hyperlink"/>
-    method.
-    
-    When multiple error handlers are registered for a given converter they are invoked in the order
-    in which they were registered until an error handler either throws an exception or returns a 
-    value other than 
-    <xref linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE" xrefstyle="hyperlink"/>.
-    </para>
+
+    <para>Not all conversions can be performed by the standard converter. It
+    cannot convert text such as 'lorem ipsum' into a <code>long</code> value.
+    Or the number <emphasis>pi</emphasis> into a map. When a conversion fails,
+    the converter will throw a <xref
+    linkend="org.osgi.util.converter.ConversionException"
+    xrefstyle="hyperlink"/>.</para>
+
+    <para>If meaningful conversions exist between types not supported by the
+    standard converter, a customized converter can be used, see <xref
+    linkend="util.converter-customizing.converters"/>.</para>
+
+    <para>Some applications require different behavior for error scenarios.
+    For example they can use an empty value such as 0 or "" instead of the
+    exception, or they might require a different exception to be thrown. For
+    these scenarios a custom error handler can be registered. The error
+    handler is only invoked in cases where otherwise a
+    <code>ConversionException</code> would be thrown. The error handler can
+    return a different value instead or throw another exception.</para>
+
+    <para>An error handler is registered by creating a custom converter and
+    providing it with an error handler via the <xref
+    linkend="org.osgi.util.converter.ConverterBuilder.errorHandler-ConverterFunction-"
+    xrefstyle="hyperlink"/> method. When multiple error handlers are
+    registered for a given converter they are invoked in the order in which
+    they were registered until an error handler either throws an exception or
+    returns a value other than <xref
+    linkend="org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE"
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section>
     <title>Security</title>
-    <para>
-    An implementation of this specification will require the use of Java Reflection APIs. Therefore
-    it should have the appropriate permissions to perform these operations when running under the Java 
-    Security model.</para>
-  </section> 
+
+    <para>An implementation of this specification will require the use of Java
+    Reflection APIs. Therefore it should have the appropriate permissions to
+    perform these operations when running under the Java Security
+    model.</para>
+  </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.util.converter.xml"/>
- 
+
   <section>
     <title>References</title>
 

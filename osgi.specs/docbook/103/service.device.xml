@@ -438,7 +438,7 @@
 
     <para>Other specifications must specify a number of device categories
     before this specification can be made operational. Without a set of
-    defined device categories, no inter-operability can be achieved.</para>
+    defined device categories, no interoperability can be achieved.</para>
 
     <para>Device categories are related to a specific device technology, such
     as USB, IEEE 1394, JINI, UPnP, Salutation, CEBus, Lonworks, and others.

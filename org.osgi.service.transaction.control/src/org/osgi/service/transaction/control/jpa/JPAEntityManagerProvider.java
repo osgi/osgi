@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.service.transaction.control.ResourceProvider;
 
 /**
- * A specialised {@link ResourceProvider} suitable for obtaining JPA
+ * A specialized {@link ResourceProvider} suitable for obtaining JPA
  * {@link EntityManager} instances.
  * <p>
  * Instances of this interface may be available in the Service Registry, or can
@@ -30,7 +30,7 @@ import org.osgi.service.transaction.control.ResourceProvider;
 @ConsumerType
 public interface JPAEntityManagerProvider extends ResourceProvider<EntityManager> {
 	/**
-	 * This interface specialises the ResourceProvider for creating JPA
+	 * This interface specializes the ResourceProvider for creating JPA
 	 * {@link EntityManager} instances
 	 */
 }

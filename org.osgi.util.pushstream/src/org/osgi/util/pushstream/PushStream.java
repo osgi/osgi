@@ -62,7 +62,7 @@ public interface PushStream<T> extends AutoCloseable {
 	 * {@link PushEvent.EventType#CLOSE} downstream. Closing a PushStream is a
 	 * safe operation that will not throw an Exception.
 	 * <p>
-	 * Calling <code>close()</code> on a closed PushStream has no effect.
+	 * Calling {@code close()} on a closed PushStream has no effect.
 	 */
 	@Override
 	void close();
@@ -216,10 +216,10 @@ public interface PushStream<T> extends AutoCloseable {
 
 	/**
 	 * Buffer the events in a queue using default values for the queue size and
-	 * other behaviours. Buffered work will be processed asynchronously in the
+	 * other behaviors. Buffered work will be processed asynchronously in the
 	 * rest of the chain. Buffering also blocks the transmission of back
 	 * pressure to previous elements in the chain, although back pressure is
-	 * honoured by the buffer.
+	 * honored by the buffer.
 	 * <p>
 	 * Buffers are useful for "bursty" event sources which produce a number of
 	 * events close together, then none for some time. These bursts can
@@ -235,10 +235,10 @@ public interface PushStream<T> extends AutoCloseable {
 
 	/**
 	 * Build a buffer to enqueue events in a queue using custom values for the
-	 * queue size and other behaviours. Buffered work will be processed
+	 * queue size and other behaviors. Buffered work will be processed
 	 * asynchronously in the rest of the chain. Buffering also blocks the
 	 * transmission of back pressure to previous elements in the chain, although
-	 * back pressure is honoured by the buffer.
+	 * back pressure is honored by the buffer.
 	 * <p>
 	 * Buffers are useful for "bursty" event sources which produce a number of
 	 * events close together, then none for some time. These bursts can
@@ -280,8 +280,8 @@ public interface PushStream<T> extends AutoCloseable {
 	 * predicate is true, the event is dispatched to that channel on the same
 	 * position. All predicates are tested for every event.
 	 * <p>
-	 * This method differs from other methods of AsyncStream in three
-	 * significant ways:
+	 * This method differs from other methods of PushStream in three significant
+	 * ways:
 	 * <ul>
 	 * <li>The return value contains multiple streams.</li>
 	 * <li>This stream will only close when all of these child streams have
@@ -545,14 +545,15 @@ public interface PushStream<T> extends AutoCloseable {
 	 * 
 	 * @param identity
 	 * @param accumulator
-	 * @param combiner combines to U's into one U (e.g. how combine two lists)
+	 * @param combiner combines two U's into one U (for example, combine two
+	 *            lists)
 	 * @return The promise
 	 */
 	<U> Promise<U> reduce(U identity, BiFunction<U, ? super T,U> accumulator,
 			BinaryOperator<U> combiner);
 
 	/**
-	 * See Stream. Will resolve onces the channel closes.
+	 * See Stream. Will resolve once the channel closes.
 	 * <p>
 	 * This is a <strong>terminal operation</strong>
 	 * 
@@ -607,7 +608,7 @@ public interface PushStream<T> extends AutoCloseable {
 
 	/**
 	 * Closes the channel and resolve the promise with false when the predicate
-	 * does not matches a pay load.If the channel is closed before, the promise
+	 * does not matches a pay load. If the channel is closed before, the promise
 	 * is resolved with true.
 	 * <p>
 	 * This is a <strong>short circuiting terminal operation</strong>

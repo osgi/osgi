@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,11 +44,10 @@ public abstract class TransactionBuilder implements TransactionStarter {
 	 * {@link #noRollbackFor(Class, Class...)} then that type will not trigger
 	 * rollback. If the same type is registered using both
 	 * {@link #rollbackFor(Class, Class...)} and
-	 * {@link #noRollbackFor(Class, Class...)} then the transaction
-	 * <em>will not</em> begin and will instead throw a
-	 * {@link TransactionException}
+	 * {@link #noRollbackFor(Class, Class...)} then the transaction <em>will
+	 * not</em> begin and will instead throw a {@link TransactionException}
 	 * <p>
-	 * Note that the behaviour of this method differs from Java EE and Spring in
+	 * Note that the behavior of this method differs from Java EE and Spring in
 	 * two ways:
 	 * <ul>
 	 * <li>In Java EE and Spring transaction management checked exceptions are
@@ -56,8 +55,8 @@ public abstract class TransactionBuilder implements TransactionStarter {
 	 * Exception as a normal return value is considered a <em>bad</em> design
 	 * practice. In addition this means that checked Exceptions such as
 	 * java.sql.SQLException do not trigger rollback by default. This, in turn,
-	 * leads to implementation mistakes that break the transactional behaviour
-	 * of applications.</li>
+	 * leads to implementation mistakes that break the transactional behavior of
+	 * applications.</li>
 	 * <li>In Java EE it is legal to specify the same Exception type in
 	 * {@link #rollbackFor} and {@link #noRollbackFor}. Stating that the same
 	 * Exception should both trigger <em>and</em> not trigger rollback is a
@@ -86,17 +85,16 @@ public abstract class TransactionBuilder implements TransactionStarter {
 	}
 
 	/**
-	 * Declare a list of Exception types (and their subtypes) that
-	 * <em>must not</em> trigger a rollback. By default the transaction will
-	 * rollback for all {@link Exception}s. If an Exception type is registered
-	 * using this method then that type and its subtypes will <em>not</em>
-	 * trigger rollback. If the same type is registered using both
+	 * Declare a list of Exception types (and their subtypes) that <em>must
+	 * not</em> trigger a rollback. By default the transaction will rollback for
+	 * all {@link Exception}s. If an Exception type is registered using this
+	 * method then that type and its subtypes will <em>not</em> trigger
+	 * rollback. If the same type is registered using both
 	 * {@link #rollbackFor(Class, Class...)} and
-	 * {@link #noRollbackFor(Class, Class...)} then the transaction
-	 * <em>will not</em> begin and will instead throw a
-	 * {@link TransactionException}
+	 * {@link #noRollbackFor(Class, Class...)} then the transaction <em>will
+	 * not</em> begin and will instead throw a {@link TransactionException}
 	 * <p>
-	 * Note that the behaviour of this method differs from Java EE and Spring in
+	 * Note that the behavior of this method differs from Java EE and Spring in
 	 * two ways:
 	 * <ul>
 	 * <li>In Java EE and Spring transaction management checked exceptions are
@@ -104,8 +102,8 @@ public abstract class TransactionBuilder implements TransactionStarter {
 	 * Exception as a normal return value is considered a <em>bad</em> design
 	 * practice. In addition this means that checked Exceptions such as
 	 * java.sql.SQLException do not trigger rollback by default. This, in turn,
-	 * leads to implementation mistakes that break the transactional behaviour
-	 * of applications.</li>
+	 * leads to implementation mistakes that break the transactional behavior of
+	 * applications.</li>
 	 * <li>In Java EE it is legal to specify the same Exception type in
 	 * {@link #rollbackFor} and {@link #noRollbackFor}. Stating that the same
 	 * Exception should both trigger <em>and</em> not trigger rollback is a
@@ -136,19 +134,19 @@ public abstract class TransactionBuilder implements TransactionStarter {
 	}
 	
 	/**
-	 * Indicate to the Transaction Control service that this transaction
-	 * will be read-only. This hint may be used by the Transaction Control
-	 * service and associated resources to optimise the transaction.
-	 * 
+	 * Indicate to the Transaction Control service that this transaction will be
+	 * read-only. This hint may be used by the Transaction Control service and
+	 * associated resources to optimize the transaction.
 	 * <p>
-	 * Note that this method is for optimisation purposes only. The TransactionControl
-	 * service is free to ignore the call if it does not offer read-only optimisation. 
-	 * 
+	 * Note that this method is for optimization purposes only. The
+	 * TransactionControl service is free to ignore the call if it does not
+	 * offer read-only optimization.
 	 * <p>
-	 * If a transaction is marked read-only and then the scoped work performs a write
-	 * operation on a resource then this is a programming error. The resource is
-	 * free to raise an exception when the write is attempted, or to permit the write 
-	 * operation. As a result the transaction may commit successfully, or may rollback.
+	 * If a transaction is marked read-only and then the scoped work performs a
+	 * write operation on a resource then this is a programming error. The
+	 * resource is free to raise an exception when the write is attempted, or to
+	 * permit the write operation. As a result the transaction may commit
+	 * successfully, or may rollback.
 	 * 
 	 * @return this builder
 	 */

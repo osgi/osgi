@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.metatype;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -61,7 +62,6 @@ public interface ObjectClassDefinition {
 
 	/**
 	 * Return the id of this object class.
-	 * 
 	 * <p>
 	 * {@code ObjectDefintion} objects share a global namespace in the registry.
 	 * They share this aspect with LDAP/X.500 attributes. In these standards the
@@ -69,7 +69,7 @@ public interface ObjectClassDefinition {
 	 * If such an OID exists, (which can be requested at several standard
 	 * organizations and many companies already have a node in the tree) it can
 	 * be returned here. Otherwise, a unique id should be returned which can be
-	 * a java class name (reverse domain name) or generated with a GUID
+	 * a Java class name (reverse domain name) or generated with a GUID
 	 * algorithm. Note that all LDAP defined object classes already have an OID
 	 * associated. It is strongly advised to define the object classes from
 	 * existing LDAP schemes which will give the OID for free. Many such schemes

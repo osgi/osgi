@@ -563,7 +563,7 @@ Bundle-SymbolicName: com.acme.simple.persistence
 Bundle-Version: 3.2.4.200912231004</programlisting>
 
       <para>A Persistence Bundle is a normal bundle; it must follow all the
-      rules of OSGi and can use all OSGi constructs like Bundle-Classpath,
+      rules of OSGi and can use all OSGi constructs like Bundle-ClassPath,
       fragment bundles, import packages, export packages, etc. However, there
       is one limitation: any entity classes must originate in the bundle's
       JAR, it cannot come from a fragment. This requirement is necessary to
@@ -1503,7 +1503,7 @@ Require-Capability: osgi.contract;
       <para>The JPA Service implementation is responsible for registering both
       an <code>EntityManagerFactoryBuilder</code> service and a
       <code>EntityManagerFactory</code> service on behalf of the persistence
-      bundle. The persistence bundle should thereforeprovide two capabilities
+      bundle. The persistence bundle should therefore provide two capabilities
       in the <link
       linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
       namespace, one representing the <xref

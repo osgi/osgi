@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * <p>
  * This annotation is applied to several of the Http Whiteboard component
  * property annotations meaning that it does not normally need to be applied to
- * DS components which use the Http Whiteboard.
+ * Declarative Services components which use the Http Whiteboard.
  * 
  * @author $Id$
  * @since 1.0

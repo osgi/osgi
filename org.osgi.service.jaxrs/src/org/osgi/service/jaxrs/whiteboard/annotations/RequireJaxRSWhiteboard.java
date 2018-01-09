@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@ import org.osgi.namespace.implementation.ImplementationNamespace;
 import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 
 /**
- * This annotation can be used to require the Http Whiteboard implementation. It
- * can be used directly, or as a meta-annotation.
+ * This annotation can be used to require the JAX-RS Whiteboard implementation.
+ * It can be used directly, or as a meta-annotation.
  * <p>
- * This annotation is applied to several of the Http Whiteboard component
+ * This annotation is applied to several of the JAX-RS Whiteboard component
  * property annotations meaning that it does not normally need to be applied to
- * DS components which use the Http Whiteboard.
+ * Declarative Services components which use the JAX-RS Whiteboard.
  * 
  * @author $Id$
  * @since 1.0

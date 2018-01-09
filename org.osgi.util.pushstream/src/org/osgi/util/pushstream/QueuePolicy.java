@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ public interface QueuePolicy<T, U extends BlockingQueue<PushEvent<? extends T>>>
 	 * 
 	 * @param queue
 	 * @param event
-	 * @throws Exception If an error ocurred adding the event to the queue. This
-	 *         exception will cause the connection between the
-	 *         {@link PushEventSource} and the {@link PushEventConsumer} to be
-	 *         closed with an {@link EventType#ERROR}
+	 * @throws Exception If an error occurred adding the event to the queue.
+	 *             This exception will cause the connection between the
+	 *             {@link PushEventSource} and the {@link PushEventConsumer} to
+	 *             be closed with an {@link EventType#ERROR}
 	 */
 	public void doOffer(U queue, PushEvent<? extends T> event) throws Exception;
 	

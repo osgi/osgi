@@ -54,8 +54,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Inter-operability</emphasis> - The Initial
-          Provisioning must permit arbitrary inter-operability between
+          <para><emphasis>Interoperability</emphasis> - The Initial
+          Provisioning must permit arbitrary interoperability between
           management systems and OSGi frameworks. Any compliant Remote Manager
           should be able to manage any compliant OSGi framework, even in the
           absence of a prior business relationship. Adhering to this

@@ -21,7 +21,7 @@
 
     <para>In large-scale distributed systems <emphasis>events</emphasis> are a
     commonly used communication mechanism for passing data and triggering
-    behaviours. Events are typically generated
+    behaviors. Events are typically generated
     <emphasis>asynchronously</emphasis> rather than at the request of the
     processing system, and once received an event usually undergoes some level
     of transformation before being stored, acted upon, or forwarded to another
@@ -30,7 +30,7 @@
     <para>Pipelines and streams are a popular and effective model for
     consuming and processing events, with numerous APIs providing this sort of
     model. One of the most well-known processing pipeline APIs is the Java 8
-    Streams API, which provides a functional pipleline for operating on
+    Streams API, which provides a functional pipeline for operating on
     Collections. The Streams API is inherently <emphasis>pull
     based</emphasis>” as it relies on iterators and spliterators to
     <emphasis>pull</emphasis> the next entry from the stream. This is the
@@ -303,7 +303,7 @@
         <para>The simplest intermediate operations on a Push Stream are
         <emphasis>mapping</emphasis> and <emphasis>filtering</emphasis>. These
         operations use stateless, non-interfering functions to alter the data
-        receieved by the next stage in the pipeline.</para>
+        received by the next stage in the pipeline.</para>
 
         <section>
           <title>Mapping</title>
@@ -312,8 +312,8 @@
           another. This may involve taking a field from the object, or
           performing some simple processing on it. When mapping there is an
           <emphasis>one to one</emphasis> relationship between input and
-          output events, i.e. each input event is mapped to exactly one output
-          event.</para>
+          output events, that is, each input event is mapped to exactly one
+          output event.</para>
 
           <programlisting>
     PushStream&lt;String&gt; streamOfStrings = getStreamOfStrings();
@@ -339,8 +339,8 @@
           into multiple events of another type. This may involve taking fields
           from an object, or performing some simple processing on it. When
           flat mapping there is a <emphasis>one to many</emphasis>
-          relationship between input and output events, i.e. each input event
-          is mapped to zero or more output events.</para>
+          relationship between input and output events, that is, each input
+          event is mapped to zero or more output events.</para>
 
           <para>A flat mapping function should asynchronously consume the
           event data and return a Push Stream containing the flow of
@@ -749,8 +749,8 @@
         handler function.</para>
 
         <para>Some terminal operations, like <code>count</code> require the
-        full stream to be processed, others are are able to finish before the
-        end of the stream. These are known as <emphasis>short
+        full stream to be processed, others are able to finish before the end
+        of the stream. These are known as <emphasis>short
         circuiting</emphasis> operations. An example of a short-circuiting
         operation is <xref
         linkend="org.osgi.util.pushstream.PushStream.findFirst--"
@@ -920,7 +920,7 @@
                 <entry><para>Resolves with an Optional representing the data
                 from the first event that reaches the end of the pipeline. If
                 the stream ends without any data reaching the end of the
-                pipleine then the promise resolves with an empty
+                pipeline then the promise resolves with an empty
                 Optional.</para></entry>
               </row>
 
@@ -932,7 +932,7 @@
                 <entry><para>Resolves with an Optional representing the data
                 from the first event that reaches the end of the pipeline. If
                 the stream ends without any data reaching the end of the
-                pipleine then the promise resolves with an empty
+                pipeline then the promise resolves with an empty
                 Optional.</para></entry>
               </row>
 
@@ -970,7 +970,7 @@
         asynchronous systems to allow consumers to control the speed at which
         producers provide data.</para>
 
-        <para>Back pressure in the asynchronous event processing model is is
+        <para>Back pressure in the asynchronous event processing model is
         provided by the PushEventConsumer. The value returned by the
         <code>accept</code> method of the PushEventConsumer is an indication
         of the requested back pressure. A return of zero indicates that event
@@ -1019,7 +1019,7 @@
         to “smooth out” sources that produce bursts of events more quickly
         than they can be immediately processed. This simplifies the creation
         of PushEventConsumer instances, which can rely on their back-pressure
-        requests being honoured.</para>
+        requests being honored.</para>
 
         <para>Buffering is provided by the Push Stream using default
         configuration values, either when creating the Push Stream from the
@@ -1468,7 +1468,7 @@
     events can still be published.</para>
 
     <section>
-      <title>Optimising Event Creation</title>
+      <title>Optimizing Event Creation</title>
 
       <para>In addition to the publication methods the Simple Push Event
       Source provides <code>isConnected()</code> and
@@ -1482,7 +1482,7 @@
       immediately as it is created). If the Simple Push Event Source is closed
       before the Promise resolves then the Promise is failed with an
       IllegalStateException. The connect Promise can be used to trigger the
-      initialisation of an event thread, allowing lazier startup.</para>
+      initialization of an event thread, allowing lazier startup.</para>
 
       <programlisting>
 PushStreamProvider psp = new PushStreamProvider();

@@ -78,8 +78,8 @@
     protocols if these protocols can conform to the semantics of the Java
     Servlet API.</para>
 
-    <para>Http Whiteboard implementations must support version 3.1 or later
-    of the Java Servlet API.</para>
+    <para>Http Whiteboard implementations must support version 3.1 or later of
+    the Java Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -170,7 +170,7 @@
 
     <para>To achieve the required behavior for
     <code>ServletContext.getClassLoader()</code> each bundle must be provided
-    with a separate Servlet Context instance to serve the classloader of the
+    with a separate Servlet Context instance to serve the class loader of the
     Whiteboard services for that bundle. For more information see
     <code>getClassLoader()</code> in <xref
     linkend="service.http.whiteboard.servletcontext.methods"
@@ -254,7 +254,7 @@
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
-          
+
           <row>
             <entry><code>context.init.*</code></entry>
 
@@ -397,27 +397,26 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para>This method is invoked to handle implementation-defined security
       on the request. It is invoked before the request is sent to the
       filter-servlet pipeline.</para>
-      
-      <para>When the request returns from the filter-servlet pipeline the 
-        <xref
-        linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
-        xrefstyle="hyperlink"/>
-        method is called. This method can be used by the security handling 
-        mechanism to clean up any context associated with the current request.
-        <code>finishSecurity()</code> is only called if <code>handleSecurity()</code>
-        returned <code>true</code> for the specified request.
-      </para>
-      
-      <para>
-        In the case a request is dispatched either using the include or forward method 
-        <code>handleSecurity()</code> and <code>finishSecurity()</code> are called again
-        on this new context. These calls are nested within the originating request. 
-        Servlet Context Helpers that implement these methods must be prepared to 
-        deal with such nested invocations. 
-      </para>
 
-      <para><emphasis>Default Behavior</emphasis> - <code>handleSecurity()</code> always returns
-      <code>true</code>. <code>finishSecurity()</code> does nothing by default.</para>
+      <para>When the request returns from the filter-servlet pipeline the
+      <xref
+      linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+      xrefstyle="hyperlink"/> method is called. This method can be used by the
+      security handling mechanism to clean up any context associated with the
+      current request. <code>finishSecurity()</code> is only called if
+      <code>handleSecurity()</code> returned <code>true</code> for the
+      specified request.</para>
+
+      <para>In the case a request is dispatched either using the include or
+      forward method <code>handleSecurity()</code> and
+      <code>finishSecurity()</code> are called again on this new context.
+      These calls are nested within the originating request. Servlet Context
+      Helpers that implement these methods must be prepared to deal with such
+      nested invocations.</para>
+
+      <para><emphasis>Default Behavior</emphasis> -
+      <code>handleSecurity()</code> always returns <code>true</code>.
+      <code>finishSecurity()</code> does nothing by default.</para>
     </section>
 
     <section>
@@ -547,7 +546,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
               specification can achieve this by returning separate façades of
               the ServletContext to each Whiteboard service. Each façade
               accesses the Whiteboard service's Bundle Wiring to obtain its
-              classloader. </para></entry>
+              class loader. </para></entry>
             </row>
 
             <row>
@@ -1117,7 +1116,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
     linkend="service.http.whiteboard.common.properties.table"
     xrefstyle="template:Table %n on page %p"/> are supported.</para>
 
-    <table pgwide="1" xml:id="service.http.whiteboard.servlet.properties.table">
+    <table pgwide="1"
+           xml:id="service.http.whiteboard.servlet.properties.table">
       <title>Service properties for <code>Servlet</code> Whiteboard
       services.</title>
 
@@ -1142,7 +1142,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><para><code>Boolean | String</code></para><para><emphasis>optional</emphasis></para></entry>
+            <entry><para><code>Boolean |
+            String</code></para><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet supports the
             asynchronous operation mode. Allowed values are <code>true</code>
@@ -1195,60 +1196,73 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.enabled</code></para></entry>
 
-            <entry><para><code>Boolean | String</code></para><para><emphasis>optional</emphasis></para></entry>
-            
-            <entry><para>Enables support for multipart configuration on the servlet. Allowed values are <code>true</code> and
-            false independent of case. Defaults to <code>false</code>. See 
-            <xref linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED" xrefstyle="hyperlink"/>.</para></entry>
+            <entry><para><code>Boolean |
+            String</code></para><para><emphasis>optional</emphasis></para></entry>
+
+            <entry><para>Enables support for multipart configuration on the
+            servlet. Allowed values are <code>true</code> and false
+            independent of case. Defaults to <code>false</code>. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_ENABLED"
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.fileSizeThreshold</code></para></entry>
 
             <entry><para><code>Integer</code></para><para><emphasis>optional</emphasis></para></entry>
-            
-            <entry><para>The file size threshold after which the file is stored as a temporary file on disk while
-            uploading. Defaults to <emphasis>0</emphasis>. Files will be stored in the directory 
-            as specified in <code>...location</code> on the file system. See 
-            <xref linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD" xrefstyle="hyperlink"/>.</para></entry>
+
+            <entry><para>The file size threshold after which the file is
+            stored as a temporary file on disk while uploading. Defaults to
+            <emphasis>0</emphasis>. Files will be stored in the directory as
+            specified in <code>...location</code> on the file system. See
+            <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_FILESIZETHRESHOLD"
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.location</code></para></entry>
 
             <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
-            
-            <entry><para>The location where files are stored on disk. Defaults to the value of 
-            <code>javax.servlet.context.tempdir</code> servlet context attribute. If this attribute is
-            not set, the value of the <code>java.io.tmpdir</code> system property will be used as default. 
-            If an absolute path is specified then this path is used as-is. If a relative path
-            is specified, it will be used as relative to the default
-            value. <code>java.io.File.isAbsolute()</code> must be used to evaluate whether a path
-            is absolute or relative. See 
-            <xref linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION" xrefstyle="hyperlink"/>.</para></entry>
+
+            <entry><para>The location where files are stored on disk. Defaults
+            to the value of <code>javax.servlet.context.tempdir</code> servlet
+            context attribute. If this attribute is not set, the value of the
+            <code>java.io.tmpdir</code> system property will be used as
+            default. If an absolute path is specified then this path is used
+            as-is. If a relative path is specified, it will be used as
+            relative to the default value.
+            <code>java.io.File.isAbsolute()</code> must be used to evaluate
+            whether a path is absolute or relative. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_LOCATION"
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.maxFileSize</code></para></entry>
 
             <entry><para><code>Long</code></para><para><emphasis>optional</emphasis></para></entry>
-            
-            <entry><para>The maximum size for an uploaded file. Defaults to <emphasis>unlimited</emphasis>. Files larger 
-            than this size will cause a servlet exception. See 
-            <xref linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE" xrefstyle="hyperlink"/>.</para></entry>
+
+            <entry><para>The maximum size for an uploaded file. Defaults to
+            <emphasis>unlimited</emphasis>. Files larger than this size will
+            cause a servlet exception. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXFILESIZE"
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;multipart.maxRequestSize</code></para></entry>
 
             <entry><para><code>Long</code></para><para><emphasis>optional</emphasis></para></entry>
-            
-            <entry><para>The maximum size of a <code>multipart/form-data</code> request, in bytes. 
-            Defaults to <emphasis>unlimited</emphasis>. Requests larger than
-            this value will cause a servlet exception. See  
-            <xref linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE" xrefstyle="hyperlink"/>.</para></entry>
-          </row>    
-          
+
+            <entry><para>The maximum size of a
+            <code>multipart/form-data</code> request, in bytes. Defaults to
+            <emphasis>unlimited</emphasis>. Requests larger than this value
+            will cause a servlet exception. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_MULTIPART_MAXREQUESTSIZE"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
           <row>
             <entry><code>servlet.init.*</code></entry>
 
@@ -1270,7 +1284,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
     Whiteboard services: <programlisting>    osgi.http.whiteboard.servlet.pattern
     osgi.http.whiteboard.servlet.name
     osgi.http.whiteboard.servlet.errorPage</programlisting></para>
-    
+
     <para><code>Servlet</code> objects are initialized by a Http Whiteboard
     implementation before they start serving requests. The initialization is
     done by calling the <code>Servlet</code> object's
@@ -1352,15 +1366,13 @@ public class MyServlet extends HttpServlet {
     <para>This will cause the servlet to move to
     <code>http://www.acme.com/myapp/myservlet</code> as configured by the
     custom Servlet Context Handler.</para>
-    
+
     <section>
       <title>Multipart file upload</title>
-      
-      <para>
-      Multipart file uploads are supported by specifying the 
-      <code>osgi.http.whiteboard.servlet.multipart.*</code> properties on the 
+
+      <para>Multipart file uploads are supported by specifying the
+      <code>osgi.http.whiteboard.servlet.multipart.*</code> properties on the
       Servlet service registration. The following example illustrates this:
-       
       <programlisting>@Component(service = Servlet.class)
 @HttpWhiteboardServletPattern("/image")
 @HttpWhiteboardServletMultipart(enabled = true, maxFileSize = 200000)
@@ -1381,8 +1393,7 @@ public class ImageServlet extends HttpServlet {
             }
         }
     }
-}</programlisting>
-      </para>
+}</programlisting></para>
     </section>
 
     <section>
@@ -1692,103 +1703,102 @@ public class MyFilter implements Filter {
     public void destroy() {}
 }</programlisting>
 
-  <section xml:id="service.http.whiteboard.servlet.preprocessors">
-    <title>Servlet Pre-Processors</title>
-    
-    <para>
-    Servlet Filters are always run after 
-    <xref
-    linkend="org.osgi.service.http.context.ServletContextHelper.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
-    xrefstyle="hyperlink"/>
-    is called. However in some cases
-    it is necessary to process servlet requests before security is handled. For example
-    when all requests must be logged, even ones that are rejected by security.
-    In other scenarios, requests may need to be prepared for the <code>handleSecurity()</code> call.
-    </para>
-    
-    <para>A whiteboard <xref
-    linkend="org.osgi.service.http.whiteboard.Preprocessor"
-    xrefstyle="hyperlink"/> service can be registered to handle such cases. The <code>Preprocessor</code>
-    service only supports the following service registration properties:</para>
-    
-    <table pgwide="1">
-      <title>Service properties for <code>Preprocessor</code> Whiteboard
-      services.</title>
+    <section xml:id="service.http.whiteboard.servlet.preprocessors">
+      <title>Servlet Pre-Processors</title>
 
-      <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.4*"/>
+      <para>Servlet Filters are always run after <xref
+      linkend="org.osgi.service.http.context.ServletContextHelper.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
+      xrefstyle="hyperlink"/> is called. However in some cases it is necessary
+      to process servlet requests before security is handled. For example when
+      all requests must be logged, even ones that are rejected by security. In
+      other scenarios, requests may need to be prepared for the
+      <code>handleSecurity()</code> call.</para>
 
-        <colspec colnum="2" colwidth="0.7*"/>
+      <para>A whiteboard <xref
+      linkend="org.osgi.service.http.whiteboard.Preprocessor"
+      xrefstyle="hyperlink"/> service can be registered to handle such cases.
+      The <code>Preprocessor</code> service only supports the following
+      service registration properties:</para>
 
-        <colspec colnum="3" colwidth="5*"/>
+      <table pgwide="1">
+        <title>Service properties for <code>Preprocessor</code> Whiteboard
+        services.</title>
 
-        <thead>
-          <row>
-            <entry>Service Property Name</entry>
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="2.4*"/>
 
-            <entry>Type</entry>
+          <colspec colnum="2" colwidth="0.7*"/>
 
-            <entry>Description</entry>
-          </row>
-        </thead>
+          <colspec colnum="3" colwidth="5*"/>
 
-        <tbody>
-          <row>
-            <entry><code>osgi.http.whiteboard.target</code></entry>
+          <thead>
+            <row>
+              <entry>Service Property Name</entry>
 
-            <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
+              <entry>Type</entry>
 
-            <entry><para>The value of this service property is an LDAP-style
-            filter expression to select the Http Whiteboard implementation(s)
-            to handle this Whiteboard service. The LDAP filter is used to
-            match <xref
-            linkend="org.osgi.service.http.runtime.HttpServiceRuntime"
-            xrefstyle="hyperlink"/> services. Each Http Whiteboard
-            <emphasis>implementation</emphasis> exposes exactly one
-            <code>HttpServiceRuntime</code> service. This property is used to
-            associate the Whiteboard service with the Http Whiteboard
-            implementation that registered the <code>HttpServiceRuntime</code>
-            service. If this property is not specified, all Http Whiteboard
-            implementations can handle the service. See <xref
-            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
-            xrefstyle="hyperlink"/>.</para></entry>
-          </row>
+              <entry>Description</entry>
+            </row>
+          </thead>
 
-          <row>
-            <entry><code>preprocessor.init.*</code></entry>
+          <tbody>
+            <row>
+              <entry><code>osgi.http.whiteboard.target</code></entry>
 
-            <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
+              <entry><para><code>String</code></para><para><emphasis>optional</emphasis></para></entry>
 
-            <entry><para>Properties starting with this prefix are passed as
-            init parameters to the <code>Filter.init()</code>method. The
-            <code>preprocessor.init.</code> prefix is removed from the parameter
-            name. See <xref
-            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_PREPROCESSOR_INIT_PARAM_PREFIX"
-            xrefstyle="hyperlink"/>.</para></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
-              
-    <para>
-    A <code>Preprocessor</code> is invoked before request dispatching is performed.
-    If multiple pre-processors are registered they are invoked in the order as described 
-    for servlet filters.
-    </para>
-    
-    <para>The <code>Preprocessor</code> has the same API as the servlet <code>Filter</code> and is
-    handled in the same way, the <code>init()</code> and <code>destroy()</code> are called at the
-    appropriate life-cycle events.
-    However, as pre-processors are called before dispatching, the targeted servlet context is not yet know. 
-    Therefore the <code>FilterConfig.getServletContext()</code> returns the servlet context of the backing
-    implementation, the same context as returned by the request.
-    </para>
-    
-    <para>When called in the <code>doFilter()</code> method, the pre-processor can use the 
-    <code>FilterChain</code> to invoke the next pre-processor, or if the end of the chain is 
-    reached, start processing the request. The pre-processor can also terminate the processing and
-    generate a response directly.</para>
-  </section>
+              <entry><para>The value of this service property is an LDAP-style
+              filter expression to select the Http Whiteboard
+              implementation(s) to handle this Whiteboard service. The LDAP
+              filter is used to match <xref
+              linkend="org.osgi.service.http.runtime.HttpServiceRuntime"
+              xrefstyle="hyperlink"/> services. Each Http Whiteboard
+              <emphasis>implementation</emphasis> exposes exactly one
+              <code>HttpServiceRuntime</code> service. This property is used
+              to associate the Whiteboard service with the Http Whiteboard
+              implementation that registered the
+              <code>HttpServiceRuntime</code> service. If this property is not
+              specified, all Http Whiteboard implementations can handle the
+              service. See <xref
+              linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>preprocessor.init.*</code></entry>
+
+              <entry><para><code>String+</code></para><para><emphasis>optional</emphasis></para></entry>
+
+              <entry><para>Properties starting with this prefix are passed as
+              init parameters to the <code>Filter.init()</code>method. The
+              <code>preprocessor.init.</code> prefix is removed from the
+              parameter name. See <xref
+              linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_PREPROCESSOR_INIT_PARAM_PREFIX"
+              xrefstyle="hyperlink"/>.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>A <code>Preprocessor</code> is invoked before request dispatching
+      is performed. If multiple pre-processors are registered they are invoked
+      in the order as described for servlet filters.</para>
+
+      <para>The <code>Preprocessor</code> has the same API as the servlet
+      <code>Filter</code> and is handled in the same way, the
+      <code>init()</code> and <code>destroy()</code> are called at the
+      appropriate life-cycle events. However, as pre-processors are called
+      before dispatching, the targeted servlet context is not yet know.
+      Therefore the <code>FilterConfig.getServletContext()</code> returns the
+      servlet context of the backing implementation, the same context as
+      returned by the request.</para>
+
+      <para>When called in the <code>doFilter()</code> method, the
+      pre-processor can use the <code>FilterChain</code> to invoke the next
+      pre-processor, or if the end of the chain is reached, start processing
+      the request. The pre-processor can also terminate the processing and
+      generate a response directly.</para>
+    </section>
   </section>
 
   <section>
@@ -2125,7 +2135,8 @@ public class MyServletRequestListener implements ServletRequestListener {
     service properties can include implementation-specific key-value pairs.
     They also include the following:</para>
 
-    <table pgwide="1" xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
+    <table pgwide="1"
+           xml:id="service.http.whiteboard.httpserviceruntime.properties.table">
       <title>Service properties for the <code>HttpServiceRuntime</code>
       service</title>
 
@@ -2182,20 +2193,19 @@ public class MyServletRequestListener implements ServletRequestListener {
 
           <row>
             <entry><code>service.changecount</code></entry>
-            
+
             <entry><code>Long</code></entry>
-            
-            <entry><para>Whenever the DTOs available from the Http Service Runtime
-            service change, the value of this property will increase by 
-            an amount of 1 or more.</para>
-            <para>This allows interested parties to be notified of changes to the 
-            DTOs by observice Service Events of type <code>MODIFIED</code>
-            for the 
-            <xref linkend="org.osgi.service.http.runtime.HttpServiceRuntime" xrefstyle="hyperlink"/>
-            service. See
-            <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in <xref
-            linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
-            </entry>
+
+            <entry><para>Whenever the DTOs available from the Http Service
+            Runtime service change, the value of this property will increase
+            by an amount of 1 or more.</para> <para>This allows interested
+            parties to be notified of changes to the DTOs by observing Service
+            Events of type <code>MODIFIED</code> for the <xref
+            linkend="org.osgi.service.http.runtime.HttpServiceRuntime"
+            xrefstyle="hyperlink"/> service. See
+            <code>org.osgi.framework.Constants.SERVICE_CHANGECOUNT</code> in
+            <xref linkend="intro.core.release"
+            xrefstyle="template:%t"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -2257,39 +2267,39 @@ public class MyServletRequestListener implements ServletRequestListener {
 
   <section xml:id="service.http.whiteboard.httpservice.integration">
     <title>Integration with Http Service contexts</title>
-    
-    <para>Some systems are implemented using a mixture of Http Whiteboard services and 
-    Http Service servlets and contexts as specified in the <xref linkend="service.http"/>.
-    When a servlet is registered with the Http Service it is either registered with a provided
-    <code>HttpContext</code> or it uses the default Http Context. 
-    It can be desirable to register a Http Whiteboard
-    filter, listener or error page that also acts on servlets registered with the Http Service.  
-    </para>
-    
-    <para>A Http Whiteboard service which should be registered with a Http Context from the 
-    Http Service can achieve this by targeting a <code>ServletContextHelper</code> with the
-    registration property <code>osgi.http.whiteboard.context.httpservice</code>. The value
-    for this property is not further specified. Note that this mechanism only works if the 
-    Http Service is provided by the same implementation that also provides the Http Whiteboard implementation.</para>
-    
-    <para>The following example registers a servlet filter for all servlets managed by the Http Service.
 
-    <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE)
+    <para>Some systems are implemented using a mixture of Http Whiteboard
+    services and Http Service servlets and contexts as specified in the <xref
+    linkend="service.http"/>. When a servlet is registered with the Http
+    Service it is either registered with a provided <code>HttpContext</code>
+    or it uses the default Http Context. It can be desirable to register a
+    Http Whiteboard filter, listener or error page that also acts on servlets
+    registered with the Http Service.</para>
+
+    <para>A Http Whiteboard service which should be registered with a Http
+    Context from the Http Service can achieve this by targeting a
+    <code>ServletContextHelper</code> with the registration property
+    <code>osgi.http.whiteboard.context.httpservice</code>. The value for this
+    property is not further specified. Note that this mechanism only works if
+    the Http Service is provided by the same implementation that also provides
+    the Http Whiteboard implementation.</para>
+
+    <para>The following example registers a servlet filter for all servlets
+    managed by the Http Service. <programlisting>@Component(service = Filter.class, scope=ServiceScope.PROTOTYPE)
 @HttpWhiteboardFilterPattern("/*")
 @HttpWhiteboardContextSelect("(osgi.http.whiteboard.context.httpservice=*)")
-public class MyFilter implements Filter</programlisting>
+public class MyFilter implements Filter</programlisting> This specification
+    does not provide a way to select in individual Http Context from the Http
+    Service, however a Http Whiteboard implementation may provide an
+    implementation-specific mechanism to do this. Also, the Http Service
+    implementation is not required to register the Http Context objects in the
+    service registry. The matching can be done internally by the
+    implementation.</para>
 
-    This specification does not provide a way to select in individual Http Context from the Http Service,
-    however a Http Whiteboard implementation may provide an implementation-specific mechanism to do this.
-     
-    Also, the Http Service implementation
-    is not required to register the Http Context objects in the service registry. The matching can be done internally
-    by the implementation.
-    </para>
-    
-    <para>Association with Http Context from the Http Service can only be done for servlet filters,
-    error pages and listeners. Servlets and resources cannot be associated with Http Contexts managed by
-    the Http Service. If this is attempted this will be reflected in the failure DTOs.</para>
+    <para>Association with Http Context from the Http Service can only be done
+    for servlet filters, error pages and listeners. Servlets and resources
+    cannot be associated with Http Contexts managed by the Http Service. If
+    this is attempted this will be reflected in the failure DTOs.</para>
   </section>
 
   <section>
@@ -2498,24 +2508,31 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       use a <code>doPrivileged</code> block when performing privileged
       operations.</para>
     </section>
-    
+
     <section>
       <title>Multipart Upload</title>
 
-      <para>If multipart upload is enabled for a servlet, the uploaded data is usually
-      temporarily written to a file. Therefore if security is enabled file permissions
-      must be granted accordingly.</para>
-      <para>If a servlet is using the default path to store uploaded data, the Http
-      Whiteboard implementation needs <code>FilePermission[path, "read,write"]</code>
-      for that path. As the servlet is reading the data, the bundle containing the servlet
-      needs <code>FilePermission[path, "read"]</code> for that path.</para>
-      <para>If a servlet is providing the path to store uploaded data, the bundle containing 
-      the servlet needs <code>FilePermission[path, "read,write"]</code> for that path.
-      Therefore, it is the responsibility of the Http Whiteboard service implementations to
-      use a <code>doPrivileged</code> block when performing the write operation.</para>
-      <para>If security is enabled and any of the above required permissions is not
-      granted, the multipart handling servlet is regarded invalid and will not be registered.
-      This state is reflected in the error DTOs.</para>
+      <para>If multipart upload is enabled for a servlet, the uploaded data is
+      usually temporarily written to a file. Therefore if security is enabled
+      file permissions must be granted accordingly.</para>
+
+      <para>If a servlet is using the default path to store uploaded data, the
+      Http Whiteboard implementation needs <code>FilePermission[path,
+      "read,write"]</code> for that path. As the servlet is reading the data,
+      the bundle containing the servlet needs <code>FilePermission[path,
+      "read"]</code> for that path.</para>
+
+      <para>If a servlet is providing the path to store uploaded data, the
+      bundle containing the servlet needs <code>FilePermission[path,
+      "read,write"]</code> for that path. Therefore, it is the responsibility
+      of the Http Whiteboard service implementations to use a
+      <code>doPrivileged</code> block when performing the write
+      operation.</para>
+
+      <para>If security is enabled and any of the above required permissions
+      is not granted, the multipart handling servlet is regarded invalid and
+      will not be registered. This state is reflected in the error
+      DTOs.</para>
     </section>
   </section>
 
@@ -2582,33 +2599,35 @@ AccessControlContext acc = servletContextHelperReference.getBundle()
       <listitem>
         <para>Added <xref
         linkend="org.osgi.service.http.context.ServletContextHelper.finishSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
-        xrefstyle="hyperlink"/> to the Servlet Context Helper.
-        </para>
+        xrefstyle="hyperlink"/> to the Servlet Context Helper.</para>
       </listitem>
-    
+
       <listitem>
-        <para>Added Servlet support for Multipart Configuration Handling. 
-        See <xref linkend="service.http.whiteboard.servlet.properties.table"/>.</para>
+        <para>Added Servlet support for Multipart Configuration Handling. See
+        <xref
+        linkend="service.http.whiteboard.servlet.properties.table"/>.</para>
       </listitem>
-      
+
       <listitem>
-        <para>Added  
-        <xref linkend="service.http.whiteboard.servlet.preprocessors"/>.</para>
+        <para>Added <xref
+        linkend="service.http.whiteboard.servlet.preprocessors"/>.</para>
       </listitem>
-      
+
       <listitem>
-        <para>Added <code>service.changecount</code> service property to Http Service 
-        Runtime Service. 
-        See table <xref linkend="service.http.whiteboard.httpserviceruntime.properties.table"/></para>
+        <para>Added <code>service.changecount</code> service property to Http
+        Service Runtime Service. See table <xref
+        linkend="service.http.whiteboard.httpserviceruntime.properties.table"/></para>
       </listitem>
-      
+
       <listitem>
-        <para>Added <xref linkend="service.http.whiteboard.httpservice.integration"/>.</para>
+        <para>Added <xref
+        linkend="service.http.whiteboard.httpservice.integration"/>.</para>
       </listitem>
-      
+
       <listitem>
         <para>Added component property types and annotations, see
-        <code>org.osgi.service.http.whiteboard.propertytypes</code> in the API section.</para>
+        <code>org.osgi.service.http.whiteboard.propertytypes</code> in the API
+        section.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,25 +94,22 @@ public final class PushStreamProvider {
 	 * Create a stream with the default configured buffer, executor size, queue,
 	 * queue policy and pushback policy. This is equivalent to calling
 	 * 
-	 * <code>
-	 *   buildStream(source).create();
-	 * </code>
-	 * 
+	 * <pre>
+	 * buildStream(source).create();
+	 * </pre>
 	 * <p>
-	 * This stream will be buffered from the event producer, and will honour
-	 * back pressure even if the source does not.
-	 * 
+	 * This stream will be buffered from the event producer, and will honor back
+	 * pressure even if the source does not.
 	 * <p>
 	 * Buffered streams are useful for "bursty" event sources which produce a
 	 * number of events close together, then none for some time. These bursts
 	 * can sometimes overwhelm downstream processors. Buffering will not,
 	 * however, protect downstream components from a source which produces
 	 * events faster (on average) than they can be consumed.
-	 * 
 	 * <p>
 	 * Event delivery will not begin until a terminal operation is reached on
-	 * the chain of AsyncStreams. Once a terminal operation is reached the
-	 * stream will be connected to the event source.
+	 * the chain of PushStreams. Once a terminal operation is reached the stream
+	 * will be connected to the event source.
 	 * 
 	 * @param eventSource
 	 * @return A {@link PushStream} with a default initial buffer
@@ -265,15 +262,14 @@ public final class PushStreamProvider {
 	/**
 	 * Convert an {@link PushStream} into an {@link PushEventSource}. The first
 	 * call to {@link PushEventSource#open(PushEventConsumer)} will begin event
-	 * processing.
+	 * processing. The {@link PushEventSource} will remain active until the
+	 * backing stream is closed, and permits multiple consumers to
+	 * {@link PushEventSource#open(PushEventConsumer)} it. This is equivalent
+	 * to:
 	 * 
-	 * The {@link PushEventSource} will remain active until the backing stream
-	 * is closed, and permits multiple consumers to
-	 * {@link PushEventSource#open(PushEventConsumer)} it.
-	 * 
-	 * This is equivalent to: <code>
-	 *   buildEventSourceFromStream(stream).create();
-	 * </code>
+	 * <pre>
+	 * buildEventSourceFromStream(stream).create();
+	 * </pre>
 	 * 
 	 * @param stream
 	 * @return a {@link PushEventSource} backed by the {@link PushStream}
@@ -477,12 +473,13 @@ public final class PushStreamProvider {
 
 	/**
 	 * Create a {@link SimplePushEventSource} with the supplied type and default
-	 * buffering behaviours. The SimplePushEventSource will respond to back
-	 * pressure requests from the consumers connected to it.
+	 * buffering behaviors. The SimplePushEventSource will respond to back
+	 * pressure requests from the consumers connected to it. This is equivalent
+	 * to:
 	 * 
-	 * This is equivalent to: <code>
-	 *   buildSimpleEventSource(type).create();
-	 * </code>
+	 * <pre>
+	 * buildSimpleEventSource(type).create();
+	 * </pre>
 	 * 
 	 * @param type
 	 * @return a {@link SimplePushEventSource}
@@ -494,13 +491,11 @@ public final class PushStreamProvider {
 	}
 	
 	/**
-	 * 
 	 * Build a {@link SimplePushEventSource} with the supplied type and custom
-	 * buffering behaviours. The SimplePushEventSource will respond to back
+	 * buffering behaviors. The SimplePushEventSource will respond to back
 	 * pressure requests from the consumers connected to it.
 	 * 
 	 * @param type
-	 * 
 	 * @return a {@link SimplePushEventSource}
 	 */
 
@@ -570,15 +565,13 @@ public final class PushStreamProvider {
 	 * buffer, executor size, queue, queue policy and pushback policy. This is
 	 * equivalent to calling
 	 * 
-	 * <code>
-	 *   buildBufferedConsumer(delegate).create();
-	 * </code>
-	 * 
+	 * <pre>
+	 * buildBufferedConsumer(delegate).create();
+	 * </pre>
 	 * <p>
 	 * The returned consumer will be buffered from the event source, and will
-	 * honour back pressure requests from its delegate even if the event source
+	 * honor back pressure requests from its delegate even if the event source
 	 * does not.
-	 * 
 	 * <p>
 	 * Buffered consumers are useful for "bursty" event sources which produce a
 	 * number of events close together, then none for some time. These bursts

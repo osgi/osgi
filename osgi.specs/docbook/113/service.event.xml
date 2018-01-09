@@ -1064,12 +1064,12 @@ UNREGISTERING</programlisting>
   </section>
 
   <section>
-    <title>Inter-operability with Native Applications</title>
+    <title>Interoperability with Native Applications</title>
 
     <para>Implementations of the Event Admin service can support passing
     events to, and/or receiving events from native applications.</para>
 
-    <para>If the implementation supports native inter-operability, it must be
+    <para>If the implementation supports native interoperability, it must be
     able to pass the topic of the event and its properties to/from native
     code. Implementations must be able to support property values of the
     following types:</para>

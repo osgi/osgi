@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -156,7 +156,7 @@ public interface Promise<T> {
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
-	 * @param success The Consumer callback that receives the the value of this
+	 * @param success The Consumer callback that receives the value of this
 	 *            Promise. Must not be {@code null}.
 	 * @return This Promise.
 	 * @since 1.1
@@ -181,8 +181,8 @@ public interface Promise<T> {
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
-	 * @param failure The Consumer callback that receives the the failure of
-	 *            this Promise. Must not be {@code null}.
+	 * @param failure The Consumer callback that receives the failure of this
+	 *            Promise. Must not be {@code null}.
 	 * @return This Promise.
 	 * @since 1.1
 	 */
@@ -282,7 +282,7 @@ public interface Promise<T> {
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
-	 * @param consumer The Consumer callback that receives the the value of this
+	 * @param consumer The Consumer callback that receives the value of this
 	 *            Promise. Must not be {@code null}.
 	 * @return A new Promise which is chained to this Promise. The returned
 	 *         Promise must be resolved when this Promise is resolved after the

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * Represents the state of a Http Service Runtime.
+ * Represents the state of a JAX-RS Service Runtime.
  * 
  * @NotThreadSafe
  * @author $Id$

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.osgi.service.transaction.control.recovery.RecoverableXAResource;
 
 /**
  * A transaction context defines the current transaction, and allows resources
- * to register information and/or synchronisations
+ * to register information and/or synchronizations
  */
 @ProviderType
 public interface TransactionContext {
@@ -85,7 +85,7 @@ public interface TransactionContext {
 	 * <p>
 	 * Exceptions thrown by pre-completion callbacks are treated as if they were
 	 * thrown by the scoped work, including any configured commit or rollback
-	 * behaviours for transactional scopes.
+	 * behaviors for transactional scopes.
 	 * 
 	 * @param job The action to perform before completing the scope
 	 * @throws IllegalStateException if the transaction has already passed
@@ -123,10 +123,10 @@ public interface TransactionContext {
 	boolean supportsLocal();
 
 	/**
-	 * @return true if the TransactionContext supports read-only optimisations
-	 * <em>and</em> the transaction was marked read only. In particular it is
-	 * legal for this method to return false even if the transaction was marked
-	 * read only by the initiating client.
+	 * @return true if the TransactionContext supports read-only optimizations
+	 *         <em>and</em> the transaction was marked read only. In particular
+	 *         it is legal for this method to return false even if the
+	 *         transaction was marked read only by the initiating client.
 	 */
 	boolean isReadOnly();
 

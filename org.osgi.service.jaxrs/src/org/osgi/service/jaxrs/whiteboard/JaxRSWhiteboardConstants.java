@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -196,7 +196,7 @@ public final class JaxRSWhiteboardConstants {
 	 * properties which can be referenced by the target filter. The service
 	 * properties should always include the
 	 * {@link JaxRSServiceRuntimeConstants#JAX_RS_SERVICE_ENDPOINT
-	 * osgi.http.endpoint} service property if the endpoint information is
+	 * osgi.jaxrs.endpoint} service property if the endpoint information is
 	 * known.
 	 * <p>
 	 * If this service property is not specified, then all JAX-RS Whiteboard

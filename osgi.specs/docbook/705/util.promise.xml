@@ -190,8 +190,8 @@
     object.</para>
 
     <para>A <xref linkend="org.osgi.util.promise.PromiseFactory"
-    xrefstyle="hyperlink"/> object is created with a specifed callback
-    executor and a specifed scheduled executor to use for created Promise
+    xrefstyle="hyperlink"/> object is created with a specified callback
+    executor and a specified scheduled executor to use for created Promise
     objects and the Promise objects associated with created Deferred objects.
     If the callback executor or the scheduled executor is not specified or is
     specified as <code>null</code>, then implementation default executors will
@@ -637,7 +637,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; getStream(p.getValue()));</p
   </section>
 
   <section>
-    <title>Utiltity Methods</title>
+    <title>Utility Methods</title>
 
     <para>The API also provides several useful utility methods when working
     with Promises.</para>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class RuntimeDTO extends DTO {
 	 * Runtime is currently not using any
 	 * {@code  org.osgi.service.http.whiteboard.Preprocessor} objects.
 	 * 
-	 * @since 1.1.0
+	 * @since 1.1
 	 */
 	public PreprocessorDTO[]			preprocessorDTOs;
 
@@ -79,8 +79,8 @@ public class RuntimeDTO extends DTO {
 	 * {@code org.osgi.service.http.whiteboard.Preprocessor} services associated
 	 * with this runtime but currently not used due to some problem. The
 	 * returned array may be empty.
-	*
-	 * since 1.1
+	 *
+	 * @since 1.1
 	 */
 	public FailedPreprocessorDTO[]		failedPreprocessorDTOs;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public final class DTOConstants {
 
 	/**
 	 * The extension service is registered in the service registry but the
-	 * service is not registered using a recognised extension type
+	 * service is not registered using a recognized extension type
 	 */
 	public static final int	FAILURE_REASON_NOT_AN_EXTENSION_TYPE			= 4;
 

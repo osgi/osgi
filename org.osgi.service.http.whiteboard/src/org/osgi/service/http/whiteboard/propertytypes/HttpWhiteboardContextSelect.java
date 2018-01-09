@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ComponentPropertyType;
  * Component Property Type for the {@code osgi.http.whiteboard.context.select}
  * service property.
  * <p>
- * This annotation can be used on a http whiteboard component to declare the
+ * This annotation can be used on a Http Whiteboard component to declare the
  * value of the
  * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
  * HTTP_WHITEBOARD_CONTEXT_SELECT} service property.
@@ -47,7 +47,7 @@ public @interface HttpWhiteboardContextSelect {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying the select property of a http whiteboard
+	 * Service property identifying the select property of a Http Whiteboard
 	 * component.
 	 * 
 	 * @return The filter expression.

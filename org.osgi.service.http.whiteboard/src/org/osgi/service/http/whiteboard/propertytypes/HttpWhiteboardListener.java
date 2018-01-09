@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.osgi.service.http.whiteboard.annotations.RequireHttpWhiteboard;
  * Component Property Type for the {@code osgi.http.whiteboard.listener} service
  * property.
  * <p>
- * This annotation can be used on a http whiteboard listener to declare the
+ * This annotation can be used on a Http Whiteboard listener to declare the
  * value of the
  * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
  * HTTP_WHITEBOARD_LISTENER} service property.
@@ -49,9 +49,9 @@ public @interface HttpWhiteboardListener {
 	String PREFIX_ = "osgi.";
 
 	/**
-	 * Service property identifying a http whiteboard listener.
+	 * Service property identifying a Http Whiteboard listener.
 	 * 
-	 * @return Whether the service should be picked up by the whiteboard
+	 * @return Whether the service should be picked up by the Http Whiteboard
 	 *         implementation.
 	 * @see org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_LISTENER
 	 *      HTTP_WHITEBOARD_LISTENER

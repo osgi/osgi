@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,9 +60,9 @@ public interface PushEventConsumer<T> {
 	 * @param event The event
 	 * @return less than 0 means abort, 0 means continue, more than 0 means
 	 *         delay ms
-	 * @throws Exception to indicate that an error has occured and that no
-	 *         further events should be delivered to this
-	 *         {@link PushEventConsumer}
+	 * @throws Exception to indicate that an error has occurred and that no
+	 *             further events should be delivered to this
+	 *             {@link PushEventConsumer}
 	 */
 	long accept(PushEvent<? extends T> event) throws Exception;
 
