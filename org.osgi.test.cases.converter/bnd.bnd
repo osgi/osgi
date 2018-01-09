@@ -16,11 +16,13 @@ Test-Cases = ${testcases}
 	org.osgi.test.support;version=project,\
 	org.osgi.util.converter;version=project,\
 	org.osgi.util.function;version=1.0.0,\
+	org.osgi.dto;version=1.0.0,\
 	${junit}
 
 -runbundles: \
 	org.osgi.util.converter;version=latest, \
-    org.osgi.util.function;version=1.0.0
+    org.osgi.util.function;version=1.0.0, \
+    org.osgi.dto;version=1.0.0
 
 -runproperties = ${runproperties}
 

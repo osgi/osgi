@@ -6,18 +6,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import org.osgi.dto.DTO;
 import org.osgi.test.cases.converter.junit.ConversionComplianceTest.ExtObject;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
@@ -396,6 +401,34 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	@SingleElementAnnotation(@KeyMappingAnnotation(_specialprop = "org.osgi.util.converter.test..specialprop", special$$_$prop = "org.osgi.util.converter.test.special$.prop", special$$prop = "org.osgi.util.converter.test.special$prop", special$_$prop = "org.osgi.util.converter.test.special-prop", special$prop = "org.osgi.util.converter.test.specialprop", special_$__prop = "org.osgi.util.converter.test.special._prop", special_$_prop = "org.osgi.util.converter.test.special..prop", special___prop = "org.osgi.util.converter.test.special_.prop", special__prop = "org.osgi.util.converter.test.special_prop", special_prop = "org.osgi.util.converter.test.special.prop"))
 	public static class SingleElementAnnotatedClass {
 		public SingleElementAnnotatedClass() {}
+	}
+
+	public static class MyDTO2 extends DTO {
+		public static String		shouldBeIgnored	= "ignoreme";
+
+		public List<Long>			longList;
+
+		public Map<String,MyDTO3>	dtoMap;
+	}
+
+	public static class MyDTO3 extends DTO {
+		public Set<Character> charSet;
+	}
+
+	public static class MyGenericDTOWithVariables<T> extends DTO {
+		public Set<T>	set;
+		public T		raw;
+		public T[]		array;
+	}
+
+	public interface MyGenericInterface {
+		public Set<Character> charSet();
+	}
+
+	public interface MyGenericInterfaceWithVariables<T> {
+		public Set<T> set();
+		public T raw();
+		public T[] array();
 	}
 
 	/**
@@ -1271,5 +1304,101 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(inter.special_$_prop(), resultinter.special_$_prop());
 		assertEquals(inter.special$_$prop(), resultinter.special$_$prop());
 		assertEquals(inter.special$$_$prop(), resultinter.special$$_$prop());
+	}
+
+	public void testMapToDTOWithGenerics() {
+		Map<String,Object> dto = new HashMap<>();
+
+		dto.put("longList", Arrays.asList((short) 999, "1000"));
+
+		Map<String,Object> dtoMap = new LinkedHashMap<>();
+		dto.put("dtoMap", dtoMap);
+
+		Map<String,Object> subDTO1 = new HashMap<>();
+		subDTO1.put("charSet",
+				new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
+		dtoMap.put("zzz", subDTO1);
+
+		Map<String,Object> subDTO2 = new HashMap<>();
+		subDTO2.put("charSet", new HashSet<>(Arrays.asList('b', 'a', 'r')));
+		dtoMap.put("aaa", subDTO2);
+
+		Converter converter = Converters.standardConverter();
+		MyDTO2 converted = converter.convert(dto).to(MyDTO2.class);
+
+		assertEquals(Arrays.asList(999L, 1000L), converted.longList);
+		Map<String,MyDTO3> nestedMap = converted.dtoMap;
+
+		// Check iteration order is preserved by iterating
+		int i = 0;
+		for (Iterator<Map.Entry<String,MyDTO3>> it = nestedMap.entrySet()
+				.iterator(); it.hasNext(); i++) {
+			Map.Entry<String,MyDTO3> entry = it.next();
+			switch (i) {
+				case 0 :
+					assertEquals("zzz", entry.getKey());
+					MyDTO3 dto1 = entry.getValue();
+					assertEquals(
+							new HashSet<Character>(Arrays.asList('f', 'o')),
+							dto1.charSet);
+					break;
+				case 1 :
+					assertEquals("aaa", entry.getKey());
+					MyDTO3 dto2 = entry.getValue();
+					assertEquals(
+							new HashSet<Character>(
+									Arrays.asList('b', 'a', 'r')),
+							dto2.charSet);
+					break;
+				default :
+					fail("Unexpected number of elements on map");
+			}
+		}
+	}
+
+	public void testMapToDTOWithGenericVariables() {
+		Map<String,Object> dto = new HashMap<>();
+		dto.put("set", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
+		dto.put("raw", "1234");
+		dto.put("array", Arrays.asList("foo", (int) 'o', 'o'));
+
+		Converter converter = Converters.standardConverter();
+		MyGenericDTOWithVariables<Character> converted = converter.convert(dto)
+				.to(new TypeReference<MyGenericDTOWithVariables<Character>>() {});
+		assertEquals(Character.valueOf('1'), converted.raw);
+		assertTrue(Arrays.equals(new Character[] {
+				'f', 'o', 'o'
+		}, converted.array));
+		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
+				converted.set);
+	}
+
+	public void testMapToInterfaceWithGenerics() {
+		Map<String,Object> dto = new HashMap<>();
+		dto.put("charSet", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
+
+		Converter converter = Converters.standardConverter();
+		MyGenericInterface converted = converter.convert(dto)
+				.to(MyGenericInterface.class);
+		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
+				converted.charSet());
+	}
+
+	public void testMapToInterfaceWithGenericVariables() {
+		Map<String,Object> dto = new HashMap<>();
+		dto.put("set", new HashSet<>(Arrays.asList("foo", (int) 'o', 'o')));
+		dto.put("raw", "1234");
+		dto.put("array", Arrays.asList("foo", (int) 'o', 'o'));
+
+		Converter converter = Converters.standardConverter();
+		MyGenericInterfaceWithVariables<Character> converted = converter
+				.convert(dto)
+				.to(new TypeReference<MyGenericInterfaceWithVariables<Character>>() {});
+		assertEquals(Character.valueOf('1'), converted.raw());
+		assertTrue(Arrays.equals(new Character[] {
+				'f', 'o', 'o'
+		}, converted.array()));
+		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
+				converted.set());
 	}
 }
