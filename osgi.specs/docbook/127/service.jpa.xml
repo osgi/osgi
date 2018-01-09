@@ -25,9 +25,9 @@
     model that is configured through persistence descriptors. This Java
     Persistence Service specification defines how persistence units can be
     published in an OSGi framework, how client bundles can find these
-    persistence units, how database drivers are found with the OSGi JDBC
-    Specification, as well as how JPA providers can be made available within
-    an OSGi framework.</para>
+    persistence units, how database drivers are found with the <xref
+    linkend="service.jdbc"/>, as well as how JPA providers can be made
+    available within an OSGi framework.</para>
 
     <para>Applications can be managed or they can be unmanaged. Managed
     applications run inside a Java EE Container and unmanaged applications run
@@ -63,8 +63,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>JDBC</emphasis> - Leverage the OSGi JDBC
-          Specification for access to the database.</para>
+          <para><emphasis>JDBC</emphasis> - Leverage the <xref
+          linkend="service.jdbc"/> for access to the database.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -171,11 +171,10 @@
     <section xml:id="i3113425">
       <title>Dependencies</title>
 
-      <para>This specification requires a minimum JPA version of 2.1. Implementations
-      may choose to support newer versions of JPA, for example version 2.2, but must
-      offer the JavaJPA contract at version 2.1 as well as any future versions that
-      they support.
-      </para>
+      <para>This specification requires a minimum JPA version of 2.1.
+      Implementations may choose to support newer versions of JPA, for example
+      version 2.2, but must offer the JavaJPA contract at version 2.1 as well
+      as any future versions that they support.</para>
     </section>
 
     <section>
@@ -184,13 +183,13 @@
       <para>A JPA Provider tracks Persistence Bundles; a Persistence Bundle
       contains a Meta-Persistence manifest header. This manifest header
       enumerates the Persistence Descriptor resources in the Persistence
-      Bundle. Each resource's XML schema is defined by the JPA 
-      specification. The JPA Provider reads the resource accordingly and
-      extracts the information for one or more Persistence Units. For each
-      found Persistence Unit, the JPA Provider registers an Entity Manager
-      Factory Builder service. If the database is defined in the Persistence
-      Unit, then the JPA Provider registers an Entity Manager Factory service
-      during the availability of the corresponding Data Source Factory.</para>
+      Bundle. Each resource's XML schema is defined by the JPA specification.
+      The JPA Provider reads the resource accordingly and extracts the
+      information for one or more Persistence Units. For each found
+      Persistence Unit, the JPA Provider registers an Entity Manager Factory
+      Builder service. If the database is defined in the Persistence Unit,
+      then the JPA Provider registers an Entity Manager Factory service during
+      the availability of the corresponding Data Source Factory.</para>
 
       <para>The identification of these services is handled through a number
       of service properties. The Entity Manager Factory service is named by
@@ -525,7 +524,8 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
           of creating an <code>EntityManagerFactory</code> object with
           additional configuration properties. The Entity Manager Factory
           Builder service also provides information about the JPA Provider
-          that will be used to create the <code>EntityManagerFactory</code> object.</para>
+          that will be used to create the <code>EntityManagerFactory</code>
+          object.</para>
         </listitem>
       </itemizedlist>
 
@@ -641,9 +641,9 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       the Persistence Unit is incomplete or if the database selection needs to
       be overridden. The Entity Manager Factory Builder service also provides
       information about the JPA Provider that will be used to create the
-      Entity Manager Factory. This information can be used by the Client 
-      Bundle when determining what (if any) JPA Provider implementation specific 
-      configuration that the Client Bundle will provide.</para>
+      Entity Manager Factory. This information can be used by the Client
+      Bundle when determining what (if any) JPA Provider implementation
+      specific configuration that the Client Bundle will provide.</para>
 
       <para>The Entity Manager Factory Builder service's life cycle must not
       depend on the availability of any Data Source Factory, even if a JDBC
@@ -666,24 +666,28 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
           method must return a proper Entity Manager Factory or throw an
           Exception.</para>
         </listitem>
+
         <listitem>
           <para><xref
           linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.getPersistenceProviderName--"
-          xrefstyle="hyperlink"/> - Returns the name of the <code>PersistenceProvider</code>
-          implementation class used in Entity Manager Factory creation. This name will
-          be the same as the value of the <xref
+          xrefstyle="hyperlink"/> - Returns the name of the
+          <code>PersistenceProvider</code> implementation class used in Entity
+          Manager Factory creation. This name will be the same as the value of
+          the <xref
           linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_UNIT_PROVIDER"
           xrefstyle="hyperlink"/> service property.</para>
         </listitem>
+
         <listitem>
           <para><xref
           linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.getPersistenceProviderBundle--"
-          xrefstyle="hyperlink"/> - Returns the bundle JPA Provider implementation bundle
-          which provides the <code>PersistenceProvider</code>. If the Persistence Provider
-          was provided as an OSGi service then this method must return the bundle 
-          which registered the service. Otherwise  this method must return the bundle which 
-          loaded the <code>PersistenceProvider</code> implementation class.
-          </para>
+          xrefstyle="hyperlink"/> - Returns the bundle JPA Provider
+          implementation bundle which provides the
+          <code>PersistenceProvider</code>. If the Persistence Provider was
+          provided as an OSGi service then this method must return the bundle
+          which registered the service. Otherwise this method must return the
+          bundle which loaded the <code>PersistenceProvider</code>
+          implementation class.</para>
         </listitem>
       </itemizedlist>
 
@@ -1057,7 +1061,7 @@ suffix:     META-INF/persistence.xml</programlisting>
       <para>If the Entity Manager Factory Builder service is later used to
       change the configuration being used by the Entity Manager Factory
       Service then the registered Entity Manager Factory service must be
-      unregistered and closed. The newly created Entity Manager Factory object 
+      unregistered and closed. The newly created Entity Manager Factory object
       must then be registered as a service.</para>
     </section>
 
@@ -1075,27 +1079,28 @@ suffix:     META-INF/persistence.xml</programlisting>
       unregister all JPA Services that it registered through the Persistence
       Bundles and clean up as if those bundles were stopped.</para>
     </section>
-    
+
     <section>
       <title>Entity Manager Factory lifecycle</title>
-      
+
       <para>The Entity Manager Factory object has a <code>close</code> method.
       This method closes the EntityManagerFactory and all associated Entity
-      Manager instances. As an OSGi framework is a multi-tenant environment
-      it should not be possible for one user of an Entity Manager Factory
-      service to break the valid usage of another. Therefore calls to the
-      <code>close</code> method of the EntityManagerFactory registered in
-      the service registry <emphasis>must not</emphasis> close the Entity Manager
+      Manager instances. As an OSGi framework is a multi-tenant environment it
+      should not be possible for one user of an Entity Manager Factory service
+      to break the valid usage of another. Therefore calls to the
+      <code>close</code> method of the EntityManagerFactory registered in the
+      service registry <emphasis>must not</emphasis> close the Entity Manager
       Factory.</para>
-      
-      <para>When an Entity Manager Factory Builder service is used to create an
-      Entity Manager Factory the same rules apply to the resulting Entity Manager 
-      Factory service, however the object returned by the Entity Manager Factory 
-      Builder behaves differently. This object has a working close method which
-      must unregister the Entity Manager Factory service and close the 
-      Entity Manager Factory. This allows callers of the Entity Manager Factory
-      Builder to invalidate the Entity Manager Factories that they create if,
-      for example, a configuration changes, or a Data Source becomes invalid.</para>
+
+      <para>When an Entity Manager Factory Builder service is used to create
+      an Entity Manager Factory the same rules apply to the resulting Entity
+      Manager Factory service, however the object returned by the Entity
+      Manager Factory Builder behaves differently. This object has a working
+      close method which must unregister the Entity Manager Factory service
+      and close the Entity Manager Factory. This allows callers of the Entity
+      Manager Factory Builder to invalidate the Entity Manager Factories that
+      they create if, for example, a configuration changes, or a Data Source
+      becomes invalid.</para>
     </section>
   </section>
 
@@ -1524,8 +1529,8 @@ Require-Capability: osgi.contract;
   <section>
     <title>Security</title>
 
-        <para>When Java permissions are enabled, the JPA service must perform the following
-    security procedures.</para>
+    <para>When Java permissions are enabled, the JPA service must perform the
+    following security procedures.</para>
 
     <section>
       <title>Service Permissions</title>
@@ -1534,31 +1539,34 @@ Require-Capability: osgi.contract;
       infrastructure. This means that Service Permission applies regarding the
       ability to publish services. A persistence bundle therefore must have
       <code>ServicePermission[&lt;interface&gt;, REGISTER]</code> for both the
-      <code>EntityManagerFactory</code> and <code>EntityManagerFactoryBuilder</code>
-      services.</para>
+      <code>EntityManagerFactory</code> and
+      <code>EntityManagerFactoryBuilder</code> services.</para>
 
-      <para>If a persistence bundle specifies a complete persistence unit
-      then the persistence bundle must either have
-      <code>ServicePermission[&lt;org.osgi.service.jdbc.DataSourceFactory&gt;, GET]</code>, 
-      or be able to directly load the configured database driver. </para>
-      
-      <para> Client bundles that wish to configure a persistence unit using the
-      <code>EntityManagerFactoryBuilder</code> service must have 
-      <code>ServicePermission[&lt;org.osgi.service.jpa.EntityManagerFactoryBuilder&gt;, GET]</code>.
-      Furthermore, if this service is used to configure an incomplete persistence unit 
-      with a database driver name then it is the getter of the 
-      <code>EntityManagerFactoryBuilder</code> service whose 
-      permissions must be checked when obtaining the <code>DataSourceFactory</code> 
-      service. If the caller of the EntityManagerFactory Builder passes a ready
-      constructed database <code>Driver</code> or <code>DataSource</code> then no
-      permission check is required.</para>
+      <para>If a persistence bundle specifies a complete persistence unit then
+      the persistence bundle must either have
+      <code>ServicePermission[&lt;org.osgi.service.jdbc.DataSourceFactory&gt;,
+      GET]</code>, or be able to directly load the configured database
+      driver.</para>
+
+      <para>Client bundles that wish to configure a persistence unit using the
+      <code>EntityManagerFactoryBuilder</code> service must have
+      <code>ServicePermission[&lt;org.osgi.service.jpa.EntityManagerFactoryBuilder&gt;,
+      GET]</code>. Furthermore, if this service is used to configure an
+      incomplete persistence unit with a database driver name then it is the
+      getter of the <code>EntityManagerFactoryBuilder</code> service whose
+      permissions must be checked when obtaining the
+      <code>DataSourceFactory</code> service. If the caller of the
+      EntityManagerFactory Builder passes a ready constructed database
+      <code>Driver</code> or <code>DataSource</code> then no permission check
+      is required.</para>
     </section>
 
     <section>
       <title>Required Admin Permission</title>
 
-      <para>The JPA service implementation requires <code>AdminPermission[*,CONTEXT]</code> 
-      because it needs access to the bundle's Bundle Context object with the
+      <para>The JPA service implementation requires
+      <code>AdminPermission[*,CONTEXT]</code> because it needs access to the
+      bundle's Bundle Context object with the
       <code>Bundle.getBundleContext()</code> method.</para>
     </section>
   </section>
@@ -1609,7 +1617,7 @@ Require-Capability: osgi.contract;
         <para>Added methods to the <xref
         linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder"
         xrefstyle="hyperlink"/> so that users can query which JPA Provider
-        bundle is being used to create the <code>EntityManagerFactory</code>. 
+        bundle is being used to create the <code>EntityManagerFactory</code>.
         See <xref linkend="i3095031" xrefstyle="hyperlink"/></para>
       </listitem>
 

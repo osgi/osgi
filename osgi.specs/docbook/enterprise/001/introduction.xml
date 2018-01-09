@@ -98,11 +98,11 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Declarative Services Specification</emphasis> - The
-          Declarative Services specification provides dependency injection for
-          services. It handles the service life cycle dynamics by notifying
-          the component or managing the component's life cycle. See chapter
-          <xref linkend="service.component"/>.</para>
+          <para><xref linkend="service.component" xrefstyle="template:%t"/> -
+          The Declarative Services specification provides dependency injection
+          for services. It handles the service life cycle dynamics by
+          notifying the component or managing the component's life cycle. See
+          chapter <xref linkend="service.component"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -123,28 +123,30 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Remote Services</emphasis> - The Remote Services
-          specification defines a number of service properties that
-          participating bundles can use to convey information to a
-          distribution provider. The distribution provider creates endpoints
-          that are accessible to remote clients or registers proxies that
-          access services hosted external to the OSGi framework. See chapter
-          <xref linkend="service.remoteservices"/>.</para>
+          <para><xref linkend="service.remoteservices"
+          xrefstyle="template:%t"/> - The Remote Services specification
+          defines a number of service properties that participating bundles
+          can use to convey information to a distribution provider. The
+          distribution provider creates endpoints that are accessible to
+          remote clients or registers proxies that access services hosted
+          external to the OSGi framework. See chapter <xref
+          linkend="service.remoteservices"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote Service Admin Specification</emphasis> - The
-          Remote Services Admin Service Specification defines an API for the
-          distribution provider and discovery of services in a network. A
-          management agent can use this API to provide an actual distribution
-          policy. This management agent can export and import services as well
-          as discovering services in the network. See <xref
+          <para><xref linkend="service.remoteserviceadmin"
+          xrefstyle="template:%t"/> - The Remote Services Admin Service
+          Specification defines an API for the distribution provider and
+          discovery of services in a network. A management agent can use this
+          API to provide an actual distribution policy. This management agent
+          can export and import services as well as discovering services in
+          the network. See <xref
           linkend="service.remoteserviceadmin"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Cluster Information Specification</emphasis> - This
-          specification defines services that facilitate the discovery,
+          <para><xref linkend="service.clusterinfo" xrefstyle="template:%t"/>
+          - This specification defines services that facilitate the discovery,
           introspection and management of a cluster of nodes in a networked
           environment. This applies to Cloud environments as well as Embedded
           and IoT use cases where multiple nodes are exist that need to be
@@ -153,12 +155,12 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>JAX-RS Whiteboard Specification</emphasis> - Support
-          for the development of REST-style microservices is provided through
-          the integration of JAX-RS technology in the JAX-RS Whiteboard
-          Specification. This defines a model to provide microservice
-          endpoints using the OSGi services-based whiteboard model. See <xref
-          linkend="service.jaxrs"/>.</para>
+          <para><xref linkend="service.jaxrs" xrefstyle="template:%t"/> -
+          Support for the development of REST-style microservices is provided
+          through the integration of JAX-RS technology in the JAX-RS
+          Whiteboard Specification. This defines a model to provide
+          microservice endpoints using the OSGi services-based whiteboard
+          model. See <xref linkend="service.jaxrs"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -173,8 +175,8 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Web Application Specification</emphasis> - The Web
-          Application specification provides support for web applications
+          <para><xref linkend="service.war" xrefstyle="template:%t"/> - The
+          Web Application specification provides support for web applications
           written to the Servlet 2.5 specification as well as the JSP 2.1
           specification. This specification details how web applications
           packaged as a WAR or as bundles (WABs) can be installed into an OSGi
@@ -183,8 +185,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Service Specification</emphasis> - Bundle
-          developers typically need to develop communication and user
+          <para><xref linkend="service.http" xrefstyle="template:%t"/> -
+          Bundle developers typically need to develop communication and user
           interface solutions for standard technologies such as HTTP, HTML,
           XML, and servlets. The Http Service supports two standard techniques
           for this purpose: registering servlets and registering resources.
@@ -192,7 +194,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Http Whiteboard Specification</emphasis> - The <xref
+          <para><xref linkend="service.http.whiteboard"
+          xrefstyle="template:%t"/> - The <xref
           linkend="enterprise.intro-whiteboard.pattern.ref"/> pattern has
           shown to be a powerful and flexible mechanism for registering
           customized functionality with a container. The Http Whiteboard
@@ -214,7 +217,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event Admin Service Specification</emphasis> - The
+          <para><xref linkend="service.event" xrefstyle="template:%t"/> - The
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
           popular in many message based systems. See <xref
@@ -222,32 +225,33 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Asynchronous Services</emphasis> - Asynchronous
-          processing can be the key to scalability for large enterprise
-          applications, especially under heavy load. OSGi Services have
-          traditionally followed the Java interface-based design which by
+          <para><xref linkend="service.async" xrefstyle="template:%t"/> -
+          Asynchronous processing can be the key to scalability for large
+          enterprise applications, especially under heavy load. OSGi Services
+          have traditionally followed the Java interface-based design which by
           default provides synchronous semantics. The Asynchronous Services
           specification adds an asynchronous programming model to new and
           existing OSGi services. See <xref linkend="service.async"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Promises</emphasis> - Many JavaScript applications
-          use Promises-based APIs to facilitate asynchronous processing of a
-          workflow in which executions are time consuming or subject to
-          waiting for I/O operations. The OSGi Promises specification defines
-          a Promises API for use in OSGi applications. The Promises API is
-          used by other specifications, such as the Asynchronous Services
-          specification, but can also be used independently.</para>
+          <para><xref linkend="util.promise" xrefstyle="template:%t"/> - Many
+          JavaScript applications use Promises-based APIs to facilitate
+          asynchronous processing of a workflow in which executions are time
+          consuming or subject to waiting for I/O operations. The Promises
+          specification defines a Promises API for use in OSGi applications.
+          The Promises API is used by other specifications, such as the
+          Asynchronous Services specification, but can also be used
+          independently. See <xref linkend="util.promise"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Push Streams</emphasis> - This specification defines
-          a library supporting the handling of push-based event streams. It
-          focuses on reactive programming and builds on the Promises
-          specification. As with Promises, the Push Streams can be used both
-          inside an OSGi framework as well as outside. See <xref
-          linkend="util.pushstream"/>.</para>
+          <para><xref linkend="util.pushstream" xrefstyle="template:%t"/> -
+          This specification defines a library supporting the handling of
+          push-based event streams. It focuses on reactive programming and
+          builds on the Promises specification. As with Promises, the Push
+          Streams can be used both inside an OSGi framework as well as
+          outside. See <xref linkend="util.pushstream"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -263,19 +267,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JMX™ Management Model Specification</emphasis> - The
+          <para><xref linkend="service.jmx" xrefstyle="template:%t"/> - The
           Java Management Extensions (JMX) is the standard API specification
           for providing a management interface to Java SE and Java EE
-          applications. The JMX Management Model specification provides an
-          MBean interface adaptation of the existing OSGi framework artifacts;
-          these can then be used to expose an OSGi Framework manipulation API
-          over JMX. See <xref linkend="service.jmx"/>.</para>
+          applications. This specification provides an MBean interface
+          adaptation of the existing OSGi framework artifacts; these can then
+          be used to expose an OSGi Framework manipulation API over JMX. See
+          <xref linkend="service.jmx"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>REST Management Service Specification</emphasis> -
-          REST is a powerful paradigm for accessing resources over a network
-          and is widely used in Enterprise and Cloud settings as a protocol of
+          <para><xref linkend="service.rest" xrefstyle="template:%t"/> - REST
+          is a powerful paradigm for accessing resources over a network and is
+          widely used in Enterprise and Cloud settings as a protocol of
           choice, especially since it generally avoids problems with internet
           firewalls, from which other protocols may suffer. The REST
           Management Service Specification provides an API to manage and
@@ -284,34 +288,34 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Service Specification</emphasis> - The
-          User Admin Service Specification provides authorization for OSGi
+          <para><xref linkend="service.useradmin" xrefstyle="template:%t"/> -
+          The User Admin Service Specification provides authorization for OSGi
           framework actions based on authenticated users, instead of using the
           Java code-based permission model. See <xref
           linkend="service.useradmin"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Initial Provisioning Specification</emphasis> - This
-          specification defines how the Management Agent can make its way into
-          the OSGi framework, and gives a structured view of the problems and
-          their corresponding resolution methods. The purpose of this
-          specification is to enable the management of a OSGi framework by an
-          operator, and (optionally) to hand over the management of the OSGi
-          framework later to another operator. See <xref
+          <para><xref linkend="service.provisioning" xrefstyle="template:%t"/>
+          - This specification defines how the Management Agent can make its
+          way into the OSGi framework, and gives a structured view of the
+          problems and their corresponding resolution methods. The purpose of
+          this specification is to enable the management of a OSGi framework
+          by an operator, and (optionally) to hand over the management of the
+          OSGi framework later to another operator. See <xref
           linkend="service.provisioning"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Admin Service Specification</emphasis>
-          - The Configuration Admin service allows an operator to set the
+          <para><xref linkend="service.cm" xrefstyle="template:%t"/> - The
+          Configuration Admin service allows an operator to set the
           configuration information of bundles. See <xref
           linkend="service.cm"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Metatype Service Specification</emphasis> - The
-          Metatype specification defines interfaces that allow bundle
+          <para><xref linkend="service.metatype" xrefstyle="template:%t"/> -
+          The Metatype specification defines interfaces that allow bundle
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
           Configuration Admin Service. See <xref
@@ -319,8 +323,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Configurator Specification</emphasis> - The
-          Configurator Specification defines a convenient way to provide
+          <para><xref linkend="service.configurator" xrefstyle="template:%t"/>
+          - The Configurator Specification defines a convenient way to provide
           Configuration Admin with configuration information based on
           JSON-based resources in bundles. It specifies the format of the JSON
           configuration resources, and defines how these are processed and
@@ -339,9 +343,9 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JNDI Services Specification</emphasis> - The Java
-          Naming and Directory Interface (JNDI) is a registry technology in
-          Java applications, both in the Java SE and Java EE space. JNDI
+          <para><xref linkend="service.jndi" xrefstyle="template:%t"/> - The
+          Java Naming and Directory Interface (JNDI) is a registry technology
+          in Java applications, both in the Java SE and Java EE space. JNDI
           provides a vendor-neutral set of APIs that allow clients to interact
           with a naming service. See <xref linkend="service.jndi"/>.</para>
         </listitem>
@@ -357,15 +361,16 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JDBC™ Service Specification</emphasis> - provides an
-          API for applications to interact with relational database systems
-          from different vendors. See <xref linkend="service.jdbc"/>.</para>
+          <para><xref linkend="service.jdbc" xrefstyle="template:%t"/> -
+          provides an API for applications to interact with relational
+          database systems from different vendors. See <xref
+          linkend="service.jdbc"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JPA Service Specification</emphasis> - The Java
-          Persistence API (JPA) is a specification that sets a standard for
-          persistence in enterprise and non-enterprise JRE™-based
+          <para><xref linkend="service.jpa" xrefstyle="template:%t"/> - The
+          Java Persistence API (JPA) is a specification that sets a standard
+          for persistence in enterprise and non-enterprise JRE™-based
           environments. The JPA Service Specification defines how bundles may
           access and use JPA persistence units in applications, as well as how
           a JPA implementation can become available and be invoked within an
@@ -383,26 +388,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JTA Transaction Services Specification</emphasis> -
-          This specification provides the User Transaction, Transaction
-          Manager, and Synchronization Registry services, which are based on
-          their counterparts in the Java EE™ JTA Specifications. These
-          services can be used to demarcate transaction boundaries, enlists
-          durable and volatile resources, and provides transactional aware
-          code to influence the outcome of a transaction and synchronize with
-          the ending of a transaction. See <xref
-          linkend="service.jta"/>.</para>
+          <para><xref linkend="service.jta" xrefstyle="template:%t"/> - This
+          specification provides the User Transaction, Transaction Manager,
+          and Synchronization Registry services, which are based on their
+          counterparts in the Java EE™ JTA Specifications. These services can
+          be used to demarcate transaction boundaries, enlists durable and
+          volatile resources, and provides transactional aware code to
+          influence the outcome of a transaction and synchronize with the
+          ending of a transaction. See <xref linkend="service.jta"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Transaction Control Service Specification</emphasis>
-          - This specification adds a concise and convenient programming model
-          to work with ACID Transactions. Rather than taking a purely
-          declarative approach as is done in some other Transaction solutions,
-          the Transaction Control Service Specification defines a simple
-          programming model to execute specific parts of code under
-          transactional scope. It works very well with Java™ lambas. See <xref
-          linkend="service.transaction.control"/>.</para>
+          <para><xref linkend="service.transaction.control"
+          xrefstyle="template:%t"/> - This specification adds a concise and
+          convenient programming model to work with ACID Transactions. Rather
+          than taking a purely declarative approach as is done in some other
+          Transaction solutions, the Transaction Control Service Specification
+          defines a simple programming model to execute specific parts of code
+          under transactional scope. It works very well with Java™ lambas. See
+          <xref linkend="service.transaction.control"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -415,19 +419,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Log Service Specification</emphasis> - Provides a
-          general purpose message logger for the OSGi framework. See <xref
-          linkend="service.log"/>.</para>
+          <para><xref linkend="service.log" xrefstyle="template:%t"/> -
+          Provides a general purpose message logger for the OSGi framework.
+          See <xref linkend="service.log"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>XML Parser Service Specification</emphasis> -
-          Addresses how the classes defined in JAXP can be used in an OSGi
-          framework. See <xref linkend="util.xml"/>.</para>
+          <para><xref linkend="util.xml" xrefstyle="template:%t"/> - Addresses
+          how the classes defined in JAXP can be used in an OSGi framework.
+          See <xref linkend="util.xml"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Loader Mediator Specification</emphasis> -
+          <para><xref linkend="service.loader" xrefstyle="template:%t"/> -
           Addresses common problems of bundles that rely on the JRE provided
           Service Loader API to load custom Service Provider Implementations.
           This specification describes how to use the service registry for
@@ -437,23 +441,23 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Coordinator Specification</emphasis> - The
-          Coordinator service provides a mechanism for multiple parties to
-          collaborate on a common task without a priori knowledge of who will
-          collaborate in that task. The service provides a rendezvous for an
-          initiator to create a Coordination where collaborators can decide to
-          participate. When the Coordination is ended, all participants are
+          <para><xref linkend="service.coordinator" xrefstyle="template:%t"/>
+          - The Coordinator service provides a mechanism for multiple parties
+          to collaborate on a common task without a priori knowledge of who
+          will collaborate in that task. The service provides a rendezvous for
+          an initiator to create a Coordination where collaborators can decide
+          to participate. When the Coordination is ended, all participants are
           informed. See <xref linkend="service.coordinator"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Converter Specification</emphasis> - The Converter
-          Specification provides a uniform API to convert a given Java object
-          into a myriad of other representations. Conversions include from
-          untyped data, such as a configuration map, into a typed instance
-          such as an annotation or interface. Or between various types of
-          scalars, arrays or collections. The converter can also be customized
-          to perform domain-specific conversions. See <xref
+          <para><xref linkend="util.converter" xrefstyle="template:%t"/> - The
+          Converter Specification provides a uniform API to convert a given
+          Java object into a myriad of other representations. Conversions
+          include from untyped data, such as a configuration map, into a typed
+          instance such as an annotation or interface. Or between various
+          types of scalars, arrays or collections. The converter can also be
+          customized to perform domain-specific conversions. See <xref
           linkend="util.converter"/>.</para>
         </listitem>
       </itemizedlist>
@@ -475,29 +479,29 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Repository Specification</emphasis> - The Repository
-        specification provides a standard API to access (possibly remote)
-        repositories. Resources can be obtained from the repository by
-        specifying declarative requirements, which might include for example
-        'provide all resources that export a given package' or 'provide the
-        bundle with the given symbolic name and version', but can also be used
-        with any other generic capabilities. While the Repository API can be
-        used on its own, in conjunction with the Resolver Specification it
-        provides the capability to manage retrieval of external resources
-        during the resolution process. Typically one or multiple repositories
-        provide the metadata for the Resolver service to draw the resolution
-        from. A management agent can then use the repositories to apply the
-        result of the resolution. See <xref
+        <para><xref linkend="service.repository" xrefstyle="template:%t"/> -
+        The Repository specification provides a standard API to access
+        (possibly remote) repositories. Resources can be obtained from the
+        repository by specifying declarative requirements, which might include
+        for example 'provide all resources that export a given package' or
+        'provide the bundle with the given symbolic name and version', but can
+        also be used with any other generic capabilities. While the Repository
+        API can be used on its own, in conjunction with the Resolver
+        Specification it provides the capability to manage retrieval of
+        external resources during the resolution process. Typically one or
+        multiple repositories provide the metadata for the Resolver service to
+        draw the resolution from. A management agent can then use the
+        repositories to apply the result of the resolution. See <xref
         linkend="service.repository"/>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Subsystems Specification</emphasis> - The core
-        framework defines the life cycle of bundles and their relationships,
-        but it is missing the ability to define a common life cycle and
-        scoping rules for a set of bundles that are conceptually tied
-        together. The Subsystems Specification provides the ability not only
-        to group multiple bundles into a single manageable entity, but
+        <para><xref linkend="service.subsystem" xrefstyle="template:%t"/> -
+        The core framework defines the life cycle of bundles and their
+        relationships, but it is missing the ability to define a common life
+        cycle and scoping rules for a set of bundles that are conceptually
+        tied together. The Subsystems Specification provides the ability not
+        only to group multiple bundles into a single manageable entity, but
         furthermore include arbitrary resources in this grouping. This allows
         for complete isolation as well as various sharing models of code,
         services, and resources through a management agent. See <xref

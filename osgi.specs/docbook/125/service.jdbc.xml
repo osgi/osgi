@@ -9,7 +9,7 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>JDBC™ Service Specification</title>
+  <title>Data Service Specification for JDBC™ Technology</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jdbc-version"

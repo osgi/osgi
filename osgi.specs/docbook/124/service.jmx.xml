@@ -9,7 +9,7 @@
          xmlns:ns4="http://www.w3.org/2000/svg"
          xmlns:ns3="http://www.w3.org/1998/Math/MathML"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>JMX™ Management Model Specification</title>
+  <title>Management Model Specification for JMX™ Technology</title>
 
   <info>
     <releaseinfo><xref endterm="org.osgi.jmx-version"

@@ -22,11 +22,12 @@
     management of bundles, services and other items. Since the API has a lot
     of behavior and is not designed for serialization, any management model
     must design its own representation of the relevant OSGi objects for
-    communication with remote management systems. We see this in the JMX
-    Management Model Specification, the Dmt Admin Service Specification and
-    Residential Device Management Tree Specification: the JMX Management Model
-    Specification must define the MBeans and the Residential Device Management
-    Tree Specification must define the tree representation.</para>
+    communication with remote management systems. We see this in the
+    Management Model Specification for JMX™ Technology, the Dmt Admin Service
+    Specification and Residential Device Management Tree Specification: the
+    Management Model Specification for JMX™ Technology must define the MBeans
+    and the Residential Device Management Tree Specification must define the
+    tree representation.</para>
 
     <para>The OSGi API continues to evolve and at each update of the OSGi API,
     the management models will all need to update their representations of the

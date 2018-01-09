@@ -310,7 +310,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP™ Device Service Specification</emphasis> - The
+          <para><xref linkend="service.upnp" xrefstyle="template:%t"/> - The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
           control points. The specification is based on <xref
@@ -339,7 +339,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>EnOcean Device Service Specification</emphasis> -
+          <para><xref linkend="service.enocean" xrefstyle="template:%t"/> -
           This specification defines how OSGi bundles can be developed to
           discover and control EnOcean devices on the one hand, and act as
           EnOcean devices and interoperate with EnOcean clients on the other
