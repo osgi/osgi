@@ -1,5 +1,7 @@
 package org.osgi.test.cases.converter.junit;
 
+import static java.util.Collections.singletonMap;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.osgi.dto.DTO;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeReference;
@@ -81,5 +84,80 @@ public class StandardConverterComplianceTest extends TestCase{
 		assertNotNull(list);
 		assertEquals(3, list.size());
 	}
+
+	/**
+	 * Section 707.4 : Conversions
+	 * <p/>
+	 * 707.4.1 - Generics
+	 * <p/>
+	 * When converting to a target type with generic fields the converter should
+	 * convert the nested data as necessary
+	 */
+	public void testGenericFieldConversion() {
+		Converter converter = Converters.standardConverter();
+		GenericFieldDto dto = converter
+				.convert(singletonMap("values",
+						Arrays.<Integer> asList(1, 2, 3)))
+				.to(GenericFieldDto.class);
+
+		assertNotNull(dto);
+		assertEquals(Arrays.asList("1", "2", "3"), dto.values);
+	}
+
+	public static class GenericFieldDto extends DTO {
+		public List<String> values;
+	}
+
+	/**
+	 * Section 707.4 : Conversions
+	 * <p/>
+	 * 707.4.1 - Generics
+	 * <p/>
+	 * When converting to a target type with parameterized fields the converter
+	 * should convert the nested data as defined by the {@link TypeReference}
+	 */
+	public void testParameterizedGenericFieldConversion() {
+		Converter converter = Converters.standardConverter();
+		ParameterizedFieldDto<String> dto = converter
+				.convert(singletonMap("values",
+						Arrays.<Integer> asList(1, 2, 3)))
+				.to(new TypeReference<ParameterizedFieldDto<String>>() {});
+
+		assertNotNull(dto);
+		assertEquals(Arrays.asList("1", "2", "3"), dto.values);
+
+		ParameterizedFieldDto<Long> dto2 = converter
+				.convert(singletonMap("values",
+						Arrays.<Integer> asList(1, 2, 3)))
+				.to(new TypeReference<ParameterizedFieldDto<Long>>() {});
+
+		assertNotNull(dto2);
+		assertEquals(Arrays.asList(1L, 2L, 3L), dto2.values);
+	}
+
+	public static class ParameterizedFieldDto<T> extends DTO {
+		public List<T> values;
+	}
+
+	/**
+	 * Section 707.4 : Conversions
+	 * <p/>
+	 * 707.4.1 - Generics
+	 * <p/>
+	 * When converting to a target type which reifies parameterized fields the
+	 * converter should convert the nested data as defined by the type variables
+	 */
+	public void testReifiedGenericFieldConversion() {
+		Converter converter = Converters.standardConverter();
+		ReifiedFieldDto dto = converter
+				.convert(singletonMap("values",
+						Arrays.<Integer> asList(1, 2, 3)))
+				.to(ReifiedFieldDto.class);
+
+		assertNotNull(dto);
+		assertEquals(Arrays.asList("1", "2", "3"), dto.values);
+	}
+
+	public static class ReifiedFieldDto extends ParameterizedFieldDto<String> {}
 
 }
