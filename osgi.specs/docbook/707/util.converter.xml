@@ -1169,6 +1169,20 @@ String[] a3 = converter.convert(m3).to(MyAnnotation.class).args();</programlisti
           </tgroup>
         </table>
       </section>
+      
+      <section>
+        <title>Marker annotations</title>  
+        <para>If the component property type is a <emphasis>marker
+        annotation</emphasis>, see 9.7.2 in <xref
+        linkend="service.component-jls.ref"/>, then the property name is
+        derived from the name of the component property type, as is described
+        above for single-element annotations, and the value of the property is
+        <code>Boolean.TRUE</code>.
+        </para>
+        
+        <para>Marker annotations can only be used as a source of a conversion. Specifying a marker
+        annotation as the target of a conversion will result in a Conversion Exception.</para>        
+      </section>
 
       <section>
         <title>Specifying target types</title>
