@@ -217,7 +217,7 @@ class Util {
 		return toSingleElementAnnotationKey(ann.getSimpleName());
 	}
 
-	private static Class< ? > getAnnotationType(Class< ? > intf, Object obj) {
+	static Class< ? > getAnnotationType(Class< ? > intf, Object obj) {
 		try {
 			Method md = intf.getMethod("annotationType");
 			Object res = md.invoke(obj);
@@ -229,7 +229,7 @@ class Util {
 		return null;
 	}
 
-	private static String toSingleElementAnnotationKey(String simpleName) {
+	static String toSingleElementAnnotationKey(String simpleName) {
 		StringBuilder sb = new StringBuilder();
 
 		boolean capitalSeen = true;

@@ -431,6 +431,14 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		public T[] array();
 	}
 
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface MyMarkerAnnotation {}
+
+	@MyMarkerAnnotation
+	public interface MarkedInterface {
+		String foo();
+	}
+
 	/**
 	 * Section 707.4.4 : Maps, Interfaces, Java Beans, DTOs and Annotations
 	 * <p/>
@@ -1400,5 +1408,26 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		}, converted.array()));
 		assertEquals(new HashSet<Character>(Arrays.asList('f', 'o')),
 				converted.set());
+	}
+
+	public void testConvertMarkerAnnotation() {
+		Converter converter = Converters.standardConverter();
+
+		MyMarkerAnnotation ann = MarkedInterface.class
+				.getAnnotation(MyMarkerAnnotation.class);
+		Map< ? , ? > m = converter.convert(ann).to(Map.class);
+		assertEquals(1, m.size());
+		assertEquals(Boolean.TRUE, m.get("my.marker.annotation"));
+
+		try {
+			converter.convert(m).to(MyMarkerAnnotation.class);
+			fail("Should have thrown a Conversion Exception");
+		} catch (ConversionException ce) {
+			// good
+		}
+
+		Map<String,String> m2 = converter.convert(ann)
+				.to(new TypeReference<Map<String,String>>() {});
+		assertEquals("true", m2.get("my.marker.annotation"));
 	}
 }

@@ -100,6 +100,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 	private volatile Class< ? >	sourceClass;
 	private volatile Class< ? >	targetClass;
 	private volatile Type[]		typeArguments;
+	private volatile Type		targetType;
 
 	ConvertingImpl(InternalConverter c, Object obj) {
 		converter = c;
@@ -154,6 +155,7 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 			}
 
 		}
+		targetType = type;
 		if (cls == null)
 			return null;
 
@@ -868,6 +870,29 @@ class ConvertingImpl extends AbstractSpecifying<Converting>
 					}
 				}
 			}
+		} else if (Annotation.class.isAssignableFrom(sourceClass)) {
+			// Special treatment for marker annotations
+			for (Method m : sourceClass.getDeclaredMethods()) {
+				try {
+					if (Annotation.class.getMethod(m.getName(),
+							m.getParameterTypes()).getReturnType().equals(
+									m.getReturnType()))
+						// this is a base annotation method
+						continue;
+				} catch (Exception ex) {
+					// Method not found, not a marker annotation
+				}
+				return null;
+			}
+
+			Class< ? > ann = Util.getAnnotationType(sourceClass, object);
+			String key = Util.toSingleElementAnnotationKey(
+					ann.getSimpleName());
+			return converter
+					.convert(Collections.singletonMap(key, Boolean.TRUE))
+					.targetAs(targetAsClass)
+					.to(targetType);
+
 		}
 		return null;
 	}
