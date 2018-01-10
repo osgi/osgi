@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -1419,8 +1420,21 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(1, m.size());
 		assertEquals(Boolean.TRUE, m.get("my.marker.annotation"));
 
+		Object res = converter.convert(m).to(MyMarkerAnnotation.class);
+		assertTrue(res instanceof MyMarkerAnnotation);
+		Object res2 = converter.convert(
+				Collections.singletonMap("my.marker.annotation", Boolean.TRUE))
+				.to(MyMarkerAnnotation.class);
+		assertTrue(res2 instanceof MyMarkerAnnotation);
+		Object res3 = converter
+				.convert(Collections.singletonMap("my.marker.annotation",
+						"true"))
+				.to(MyMarkerAnnotation.class);
+		assertTrue(res3 instanceof MyMarkerAnnotation);
+
 		try {
-			converter.convert(m).to(MyMarkerAnnotation.class);
+			converter.convert(new HashMap<String,Object>())
+					.to(MyMarkerAnnotation.class);
 			fail("Should have thrown a Conversion Exception");
 		} catch (ConversionException ce) {
 			// good
