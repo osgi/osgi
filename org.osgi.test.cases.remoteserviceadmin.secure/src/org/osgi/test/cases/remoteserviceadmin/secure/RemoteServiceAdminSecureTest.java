@@ -15,11 +15,13 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.secure;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
@@ -142,10 +144,14 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		// this will run the test in the child framework and fail
 		try {
 			tbexporterBundle.start();
-			fail("SecurityException expected");
-		} catch (Exception se) {
-			assertNotNull(se.getCause());
-			assertTrue(se.getCause() instanceof SecurityException);
+			fail("The bundle should not start cleanly");
+		} catch (BundleException be) {
+			assertNotNull(be.getCause());
+			assertTrue("Not caused by a failed ExportRegistration",
+					be.getCause() instanceof InvocationTargetException
+							&& "Export Failed"
+									.equals(be.getCause().getMessage()));
+			assertTrue(be.getCause().getCause() instanceof SecurityException);
 		}
 
 		tbexporterBundle.stop();

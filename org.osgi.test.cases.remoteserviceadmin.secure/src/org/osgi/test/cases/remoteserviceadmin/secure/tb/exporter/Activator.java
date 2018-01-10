@@ -20,6 +20,7 @@ import static junit.framework.TestCase.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.ExportReference;
@@ -46,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.secure.common.A;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -99,9 +100,11 @@ public class Activator implements BundleActivator, A {
 
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service
-		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
-		assertNotNull(rsaRef);
-		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
+		ServiceTracker<RemoteServiceAdmin,RemoteServiceAdmin> rsaTracker = new ServiceTracker<>(
+				context, RemoteServiceAdmin.class, null);
+		rsaTracker.open();
+
+		rsa = rsaTracker.waitForService(timeout);
 		assertNotNull(rsa);
 
 		//
@@ -129,7 +132,11 @@ public class Activator implements BundleActivator, A {
 		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 			ExportRegistration er = it.next();
 
-			assertNull(er.getException());
+			Throwable exception = er.getException();
+			if (exception != null) {
+				throw new InvocationTargetException(exception, "Export Failed");
+			}
+			assertNull(exception);
 			ExportReference ref = er.getExportReference();
 			assertNotNull(ref);
 
