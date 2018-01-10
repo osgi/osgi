@@ -25,6 +25,8 @@ import java.util.Map;
 /**
  * A custom converter wraps another converter by adding rules and/or error
  * handlers.
+ * 
+ * @author $Id$
  */
 class CustomConverterImpl implements InternalConverter {
 	private final InternalConverter					delegate;

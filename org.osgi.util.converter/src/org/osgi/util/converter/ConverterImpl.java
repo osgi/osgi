@@ -33,6 +33,8 @@ import org.osgi.util.function.Function;
  * <p>
  * Note that this class avoids lambda's and hard dependencies on Java-8 (or
  * later) types to also work under Java 7.
+ * 
+ * @author $Id$
  */
 class ConverterImpl implements InternalConverter {
 	static final SimpleDateFormat ISO8601_DATE_FORMAT = new SimpleDateFormat(

@@ -19,6 +19,8 @@ package org.osgi.util.converter;
 /**
  * This interface specifies a {@link #convert(Object)} method that returns an
  * {@link InternalConverting} rather than a normal Converting instance.
+ * 
+ * @author $Id$
  */
 interface InternalConverter extends Converter {
 	/**

@@ -21,6 +21,8 @@ package org.osgi.util.converter;
  * addition that the current converter (which may include custom rules) can be
  * set on it. This allows the converter to be re-entrant and use itself for
  * sub-conversions if applicable.
+ * 
+ * @author $Id$
  */
 interface InternalConverting extends Converting {
 	/**
