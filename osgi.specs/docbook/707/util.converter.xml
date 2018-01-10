@@ -129,7 +129,7 @@ MyInterface mi = c.convert(someMap).to(MyInterface.class);
 int t = mi.timeout(); // t=700</programlisting></para>
   </section>
 
-  <section>
+  <section xml:id="util.converter-conversions">
     <title>Conversions</title>
 
     <para>For scalars, conversions are only performed when the target type is
