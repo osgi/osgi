@@ -580,7 +580,9 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
     <para>A bundle that wants to provide meta type resources must place these
     resources in the <code>OSGI-INF/metatype</code> directory. The name of the
     resource must be a valid bundle entry path. All resources in that
-    directory must be meta type documents. Fragments can contain additional
+    directory must be meta type documents. Resources in that directory that
+    are not valid meta type documents must be ignored and an error should be
+    logged with the Log Service, if present. Fragments can contain additional
     meta type resources in the same directory and they must be taken into
     account when the meta type resources are searched. A meta type resource
     must be encoded in UTF-8.</para>
