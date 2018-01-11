@@ -791,7 +791,9 @@
       capability with name <code>osgi.configurator</code> with the version of
       this specification: <programlisting>Provide-Capability: osgi.extender;
        osgi.extender="osgi.configurator";
-       version:Version="1.0"</programlisting></para>
+       version:Version="<xref
+            endterm="org.osgi.service.configurator-version.number"
+            linkend="org.osgi.service.configurator"/>"</programlisting></para>
 
       <para>Bundles providing configuration resources must require the
       <code>osgi.extender</code> capability to opt in to being processed by
@@ -813,7 +815,9 @@
 
       <programlisting>Require-Capability: osgi.extender;
        filter:="(&amp;(osgi.extender=osgi.configurator)
-                 (version&gt;=1.0)(!(version&gt;=2.0)))";
+                 (version&gt;=<xref
+          endterm="org.osgi.service.configurator-version.number"
+          linkend="org.osgi.service.configurator"/>)(!(version&gt;=2.0)))";
        configurations="resources/configs"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref

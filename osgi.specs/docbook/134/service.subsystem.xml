@@ -4819,7 +4819,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
         <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.subsystem";
-    version:Version="1.1";
+    version:Version="<xref endterm="org.osgi.service.subsystem-version.number"
+            linkend="org.osgi.service.subsystem"/>";
     uses:="org.osgi.service.subsystem"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref

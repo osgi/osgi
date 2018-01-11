@@ -1401,7 +1401,8 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <programlisting>Provide-Capability: osgi.extender;
     osgi.extender="osgi.jpa";
-    version:Version="1.1";
+    version:Version="<xref endterm="org.osgi.service.jpa-version.number"
+          linkend="org.osgi.service.jpa"/>";
     uses:="org.osgi.service.jpa,javax.persistence"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
@@ -1414,7 +1415,9 @@ suffix:     META-INF/persistence.xml</programlisting>
       packages as the persistence bundle.</para>
 
       <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.jpa)(version&gt;=1.1)(!(version&gt;=2.0)))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.jpa)(version&gt;=<xref
+          endterm="org.osgi.service.jpa-version.number"
+          linkend="org.osgi.service.jpa"/>)(!(version&gt;=2.0)))"</programlisting>
 
       <para>The JPA extender must only process a persistence bundle's
       persistence units if the following is true:</para>

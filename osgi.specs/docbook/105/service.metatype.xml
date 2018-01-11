@@ -1684,7 +1684,8 @@ public class MyComponent {
 
         <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.metatype";
-    version:Version="1.4";
+    version:Version="<xref endterm="org.osgi.service.metatype-version.number"
+            linkend="org.osgi.service.metatype"/>";
     uses:="org.osgi.service.metatype"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref
@@ -1702,7 +1703,8 @@ public class MyComponent {
 
         <programlisting>Provide-Capability: osgi.extender;
     osgi.extender="osgi.metatype";
-    version:Version="1.4";
+    version:Version="<xref endterm="org.osgi.service.metatype-version.number"
+            linkend="org.osgi.service.metatype"/>";
     uses:="org.osgi.service.metatype"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref

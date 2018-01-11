@@ -5976,7 +5976,8 @@ public class MyComponent implements AcmeService {}</programlisting>
 
           <programlisting>Provide-Capability: osgi.extender;
     osgi.extender="osgi.component";
-    version:Version="1.4";
+    version:Version="<xref endterm="org.osgi.service.component-version.number"
+              linkend="org.osgi.service.component"/>";
     uses:="org.osgi.service.component"</programlisting>
 
           <para>This capability must follow the rules defined for the <xref
@@ -5989,7 +5990,9 @@ public class MyComponent implements AcmeService {}</programlisting>
           the bundle if the bundle uses that package.</para>
 
           <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.4)(!(version&gt;=2.0)))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=<xref
+              endterm="org.osgi.service.component-version.number"
+              linkend="org.osgi.service.component"/>)(!(version&gt;=2.0)))"</programlisting>
 
           <para>SCR must only process a bundle's service components if one of
           the following is true:</para>

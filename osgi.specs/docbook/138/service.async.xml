@@ -778,7 +778,8 @@ public synchronized void doStuff() {
 
         <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.async";
-    version:Version="1.0";
+    version:Version="<xref endterm="org.osgi.service.async-version.number"
+            linkend="org.osgi.service.async"/>";
     uses:="org.osgi.service.async,org.osgi.service.async.delegate"</programlisting>
 
         <para>This capability must follow the rules defined for the <xref

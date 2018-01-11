@@ -1912,7 +1912,9 @@ PushEventSource&lt;InboundSseEvent&gt; pes = pec -&gt;
        uses:="javax.ws.rs, javax.ws.rs.client, javax.ws.rs.container,
               javax.ws.rs.core, javax.ws.rs.ext, javax.ws.rs.sse, 
               org.osgi.service.jaxrs.whiteboard";
-       version:Version="1.0"</programlisting>
+       version:Version="<xref
+          endterm="org.osgi.service.jaxrs.whiteboard-version.number"
+          linkend="org.osgi.service.jaxrs.whiteboard"/>"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>

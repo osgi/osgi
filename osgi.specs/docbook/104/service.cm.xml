@@ -2430,7 +2430,8 @@ ConfigurationPermission[?application,<xref
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.cm";
        uses:="org.osgi.service.cm";
-       version:Version="1.6"</programlisting>
+       version:Version="<xref endterm="org.osgi.service.cm-version.number"
+          linkend="org.osgi.service.cm"/>"</programlisting>
 
       <para>This capability must follow the rules defined for the <xref
       linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
