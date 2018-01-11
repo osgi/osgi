@@ -1,6 +1,7 @@
 build.impls                 = ${uniq; ${build.core.impls}, ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
 
 build.core.impls = \
+    org.osgi.dto, \
     org.osgi.util.tracker
 
 jar.core.impls = \
@@ -30,6 +31,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
 	org.osgi.impl.service.useradmin, \
+    org.osgi.util.converter, \
     org.osgi.util.function, \
     org.osgi.util.measurement, \
     org.osgi.util.position, \
@@ -78,6 +80,7 @@ build.enterprise.impls = \
     org.osgi.impl.service.rest.client , \
     org.osgi.impl.service.rest.client.js , \
 	org.osgi.impl.service.useradmin, \
+    org.osgi.util.converter, \
     org.osgi.util.function, \
     org.osgi.util.promise, \
     org.osgi.util.pushstream, \

@@ -29,6 +29,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
     org.osgi.test.cases.component.annotations, \
+    org.osgi.test.cases.converter, \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.deploymentadmin.mo, \
@@ -98,6 +99,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
     org.osgi.test.cases.component.annotations, \
+    org.osgi.test.cases.converter, \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.event, \
