@@ -123,8 +123,6 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		final AtomicInteger counter = new AtomicInteger(0);
-
 		ConverterBuilder cb = Converters.standardConverter()
 				.newConverterBuilder();
 
@@ -153,6 +151,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		Converter c = cb.build();
 		
 		String stringToBeConverted = "131124072100";
+		@SuppressWarnings("deprecation")
 		Date dateToBeConverted = new Date(Date.UTC(113, 10, 24, 7, 21, 0));
 
 		String stringConverted = c.convert(dateToBeConverted).to(String.class);
@@ -207,10 +206,12 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		Converter converter = converterBuilder.build();
 		
 		ConverterBuilder parentConverterBuilder = converter.newConverterBuilder();		
-		parentConverterBuilder.rule(new TypeRule<MappingBean,Map>(MappingBean.class, Map.class,
-				new Function<MappingBean,Map>() {
+		parentConverterBuilder.rule(
+				new TypeRule<MappingBean,Map<String,String>>(MappingBean.class,
+						Map.class,
+						new Function<MappingBean,Map<String,String>>() {
 					@Override
-					public Map apply(MappingBean t) {	
+							public Map<String,String> apply(MappingBean t) {
 						
 						Map<String,String> m = new HashMap<String,String>();
 						m.put("bean", t.toString());
@@ -247,7 +248,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		chilConverterBuilder.rule(new ConverterFunction() {
 			@Override
 			public Object apply(Object obj, Type targetType) throws Exception{
-				Class clazz = obj.getClass();
+				Class< ? > clazz = obj.getClass();
 				if(MappingBean.class.isAssignableFrom(clazz)){
 					System.out.println("Unhandled MappingBean");
 				}
@@ -260,6 +261,7 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		});
 		Converter childConverter = chilConverterBuilder.build();	
 		String stringToBeConverted = "131124072100";
+		@SuppressWarnings("deprecation")
 		Date dateToBeConverted = new Date(Date.UTC(113, 10, 24, 7, 21, 0));
 
 		String stringConverted = childConverter.convert(dateToBeConverted).to(String.class);
@@ -268,14 +270,16 @@ public class CustomizedConversionComplianceTest extends TestCase {
 		Date dateConverted = childConverter.convert(stringToBeConverted).to(Date.class);
 		assertEquals(dateToBeConverted,dateConverted);
 		
-		MappingBean embbededBean = new MappingBean();
-		embbededBean.setEmbedded(new ExtObject());
-		embbededBean.setProp1("mappingBean_prop1");
-		embbededBean.setProp2("mappingBean_prop2");
-		embbededBean.setProp3("mappingBean_prop3");
+		MappingBean embeddedBean = new MappingBean();
+		embeddedBean.setEmbedded(new ExtObject());
+		embeddedBean.setProp1("mappingBean_prop1");
+		embeddedBean.setProp2("mappingBean_prop2");
+		embeddedBean.setProp3("mappingBean_prop3");
 
-		Map map = childConverter.convert(embbededBean).to(Map.class);
-		assertEquals(embbededBean.toString(), map.get("bean"));
+		@SuppressWarnings("unchecked")
+		Map<String,String> map = childConverter.convert(embeddedBean)
+				.to(Map.class);
+		assertEquals(embeddedBean.toString(), map.get("bean"));
 
 		MyBean mb = new MyBean();
 		mb.setStartDate(dateToBeConverted);
@@ -319,26 +323,27 @@ public class CustomizedConversionComplianceTest extends TestCase {
 	 *   in which they were registered until an error handler either throws an exception or returns a 
 	 *   value other than org.osgi.util.converter.ConverterFunction.CANNOT_HANDLE
 	 */
+	// @SuppressWarnings("unchecked")
 	public void testErrorHandler()
 	{
 		final AtomicInteger countError = new AtomicInteger(0);	
 		final String error = "handled error";
-		final Map FAILURE = new HashMap();
+		final Map<String,String> FAILURE = new HashMap<String,String>();
 		
 		ConverterBuilder cb = Converters.newConverterBuilder();	
 		cb.errorHandler(new ConverterFunction() {
 			@Override
-			@SuppressWarnings("unchecked")
 			public Object apply(Object obj, Type targetType) throws Exception
 			{
 				if(countError.get() == 0){
 					return ConverterFunction.CANNOT_HANDLE;
 				}
-				Class clazz = null;
+				Class< ? > clazz = null;
 				try{
-					clazz = (Class) ((ParameterizedType) targetType).getRawType();
+					clazz = (Class< ? >) ((ParameterizedType) targetType)
+							.getRawType();
 				} catch(ClassCastException e) {
-					clazz = (Class) targetType;
+					clazz = (Class< ? >) targetType;
 				}				
 				if(Map.class.isAssignableFrom(clazz))
 				{
@@ -353,24 +358,28 @@ public class CustomizedConversionComplianceTest extends TestCase {
 			public Object apply(Object obj, Type targetType) throws Exception
 			{
 				countError.incrementAndGet();
-				Class clazz = null;
+				@SuppressWarnings("unused")
+				Class< ? > clazz = null;
 				try{
-					clazz = (Class) ((ParameterizedType) targetType).getRawType();
+					clazz = (Class< ? >) ((ParameterizedType) targetType)
+							.getRawType();
 				} catch(ClassCastException e) {
-					clazz = (Class) targetType;
+					clazz = (Class< ? >) targetType;
 				}				
 				throw new RuntimeException(error);
 			}
 		});		
 		Converter c = cb.build();	
-		Map m = null;
 		String tobeconverted = "to be converted";
 		try{
-			m = c.convert(tobeconverted).to(Map.class);
-			
+			@SuppressWarnings({
+					"unchecked", "unused"
+			})
+			Map<Object,Object> m = c.convert(tobeconverted).to(Map.class);
 		} catch(RuntimeException e){
 			assertEquals(error, e.getMessage());
-			m = c.convert(tobeconverted).to(Map.class);
+			@SuppressWarnings("unchecked")
+			Map<Object,Object> m = c.convert(tobeconverted).to(Map.class);
 			assertNotNull(m);
 			assertEquals(error, m.get("error"));
 		}

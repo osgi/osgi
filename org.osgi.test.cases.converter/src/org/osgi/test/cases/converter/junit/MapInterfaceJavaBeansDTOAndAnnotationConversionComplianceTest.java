@@ -140,8 +140,8 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 			super(b);
 		}
 
-		public Dictionary getProperties() {
-			Hashtable table = new Hashtable();
+		public Dictionary<String,String> getProperties() {
+			Hashtable<String,String> table = new Hashtable<String,String>();
 			table.put("prop1", prop1());
 			table.put("prop2", prop2());
 			table.put("prop3", prop3());
@@ -220,6 +220,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	public static class WithStaticAndPrivateFieldsDTOLike {
 		public static final String	STATIC_FIELD	= "STATIC_FIELD";
 
+		@SuppressWarnings("unused")
 		private String				prop0			= "private";
 		public String				prop1;
 		public String				prop2;
@@ -577,6 +578,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * to(TypeReference) or to(Type) methods. If no type information is
 	 * available, key-value pairs are used in the map as-is
 	 */
+	@SuppressWarnings("unchecked")
 	public void testMapConversion() {
 		Converter converter = Converters.standardConverter();
 		DTOLike dtolike = new DTOLike();
@@ -584,7 +586,8 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		dtolike.prop2 = "value2";
 
 		// with live view
-		Map converted = converter.convert(dtolike).view().to(Map.class);
+		Map<String,String> converted = converter.convert(dtolike).view().to(
+				Map.class);
 		assertNotNull(converted);
 		assertEquals(2, converted.size());
 		assertEquals(dtolike.prop1, converted.get("prop1"));
@@ -621,12 +624,12 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(converted.getClass(), TreeMap.class);
 
 		// handle generic type
-		converted = converter.convert(dtolike)
+		Map<Character,String> converted2 = converter.convert(dtolike)
 				.to(new TypeReference<Map<Character,String>>() {});
-		assertNotNull(converted);
-		assertEquals(1, converted.size());
-		assertTrue(converted.get('p').equals(dtolike.prop1)
-				|| converted.get('p').equals(dtolike.prop2));
+		assertNotNull(converted2);
+		assertEquals(1, converted2.size());
+		assertTrue(converted2.get('p').equals(dtolike.prop1)
+				|| converted2.get('p').equals(dtolike.prop2));
 	}
 
 	/**
@@ -648,17 +651,19 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		dtolike.prop1 = "value1";
 		dtolike.prop2 = "value2";
 
-		Dictionary converted = converter.convert(dtolike).to(Dictionary.class);
+		@SuppressWarnings("unchecked")
+		Dictionary<String,String> converted = converter.convert(dtolike)
+				.to(Dictionary.class);
 		assertNotNull(converted);
 		assertEquals(2, converted.size());
 		assertEquals(dtolike.prop1, converted.get("prop1"));
 		assertEquals(dtolike.prop2, converted.get("prop2"));
 
-		converted = converter.convert(dtolike)
+		Dictionary<Character,Character> converted2 = converter.convert(dtolike)
 				.to(new TypeReference<Dictionary<Character,Character>>() {});
-		assertNotNull(converted);
-		assertEquals(1, converted.size());
-		assertEquals('v', converted.get('p'));
+		assertNotNull(converted2);
+		assertEquals(1, converted2.size());
+		assertEquals(Character.valueOf('v'), converted2.get('p'));
 	}
 
 	/**
@@ -724,6 +729,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	 * to obtain the map view by default. This behaviour can be overridden by
 	 * using the sourceAs(Class) modifier.
 	 */
+	@SuppressWarnings("unchecked")
 	public void testInterfaceConversion() {
 
 		DTOLike dtolike = new DTOLike();
@@ -759,7 +765,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 				false);
 
 		// select the appropriate interface
-		Map converted = converter.convert(multiInterface)
+		Map<String,String> converted = converter.convert(multiInterface)
 				.sourceAs(MappingInterface.class)
 				.view()
 				.to(Map.class);
@@ -845,7 +851,9 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		AnnotationInterface annotation = AnnotatedMappingClass.class
 				.getAnnotation(AnnotationInterface.class);
 
-		Map convertedMap = converter.convert(annotation).to(Map.class);
+		@SuppressWarnings("unchecked")
+		Map<String,String> convertedMap = converter.convert(annotation)
+				.to(Map.class);
 		assertNotNull(convertedMap);
 		// detach from live view
 		convertedMap.put("prop5", "value5");
@@ -908,7 +916,9 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 			fail("No rule if not declared as JavaBean");
 		} catch (ConversionException e) {}
 
-		Map converted = converter.convert(bean).sourceAsBean().to(
+		Map<String,String> converted = converter.convert(bean)
+				.sourceAsBean()
+				.to(
 				new TypeReference<Map<String,String>>() {});
 		assertNotNull(converted);
 		assertEquals(4, converted.size());
@@ -970,7 +980,10 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		WithStaticAndPrivateFieldsDTOLike withStaticAndPrivateFieldsDTOLike = new WithStaticAndPrivateFieldsDTOLike();
 		withStaticAndPrivateFieldsDTOLike.prop1 = "value1";
 		withStaticAndPrivateFieldsDTOLike.prop2 = "value2";
-		Map map = converter.convert(withStaticAndPrivateFieldsDTOLike).sourceAsDTO()
+		@SuppressWarnings("unchecked")
+		Map<String,String> map = converter
+				.convert(withStaticAndPrivateFieldsDTOLike)
+				.sourceAsDTO()
 				.to(Map.class);
 		assertNotNull(map);
 		assertNull(map.get("prop0"));
@@ -996,7 +1009,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 			fail("ConversionException expected for undefined field");
 		} catch (ConversionException e) {}
 
-		map = new HashMap();
+		map = new HashMap<String,String>();
 		map.put("prop1", "mapValue1");
 		map.put("prop3", "mapValue3");
 		map.put("prop4", "mapValue4");
@@ -1034,7 +1047,9 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		Converter converter = Converters.standardConverter();
 		TypeWithGetProperties typeWithGetProperties = new TypeWithGetProperties(
 				true);
-		Map map = converter.convert(typeWithGetProperties).to(Map.class);
+		@SuppressWarnings("unchecked")
+		Map<String,String> map = converter.convert(typeWithGetProperties)
+				.to(Map.class);
 
 		assertNotNull(map);
 		assertEquals(map.get("prop1"), typeWithGetProperties.prop1());
@@ -1044,6 +1059,7 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		assertEquals(map.get("prop5"), typeWithGetProperties.prop5());
 
 		try {
+			@SuppressWarnings("unused")
 			TypeWithGetProperties convertedTypeWithGetProperties = converter
 					.convert(map)
 					.to(TypeWithGetProperties.class);
