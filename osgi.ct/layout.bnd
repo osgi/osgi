@@ -10,6 +10,7 @@ build.core.tests = \
     org.osgi.test.cases.framework.launch.secure, \
     org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
+    org.osgi.test.cases.resolver, \
     org.osgi.test.cases.url, \
     org.osgi.test.cases.tracker
 
@@ -67,7 +68,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.repository, \
-    org.osgi.test.cases.resolver, \
     org.osgi.test.cases.rest, \
     org.osgi.test.cases.rest.client, \
     org.osgi.test.cases.rest.client.js, \
@@ -129,7 +129,6 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.repository, \
-    org.osgi.test.cases.resolver, \
     org.osgi.test.cases.rest, \
     org.osgi.test.cases.rest.client, \
     org.osgi.test.cases.rest.client.js, \

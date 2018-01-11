@@ -5,7 +5,8 @@ build.core.impls = \
     org.osgi.util.tracker
 
 jar.core.impls = \
-	${repo;org.osgi.impl.framework;latest}
+	${repo;org.osgi.impl.framework;latest}, \
+    ${repo;org.osgi.impl.service.resolver;latest}
 
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
@@ -61,7 +62,6 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.transaction.control.jdbc;latest}, \
 	${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
-    ${repo;org.osgi.impl.service.resolver;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
     ${repo;org.osgi.impl.service.repository;latest}, \
     ${repo;org.osgi.impl.service.subsystem;latest}, \
@@ -109,7 +109,6 @@ jar.enterprise.impls = \
     ${repo;org.osgi.impl.service.transaction.control.jdbc;latest}, \
     ${repo;org.osgi.impl.service.transaction.control.jpa;latest}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
-	${repo;org.osgi.impl.service.resolver;latest}, \
     ${repo;org.osgi.impl.service.rest.support;latest}, \
 	${repo;org.osgi.impl.service.repository;latest}, \
 	${repo;org.osgi.impl.service.subsystem;latest}
