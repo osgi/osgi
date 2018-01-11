@@ -58,7 +58,9 @@ class ConverterImpl implements InternalConverter {
 		cb.rule(new Rule<Calendar,String>(new Function<Calendar,String>() {
 			@Override
 			public String apply(Calendar f) {
-				return ISO8601_DATE_FORMAT.format(f.getTime());
+				synchronized (ISO8601_DATE_FORMAT) {
+					return ISO8601_DATE_FORMAT.format(f.getTime());
+				}
 			}
 		}) {
 			// empty subclass to capture generics
@@ -68,9 +70,11 @@ class ConverterImpl implements InternalConverter {
 			@Override
 			public Calendar apply(String f) {
 				try {
-					Calendar cc = Calendar.getInstance();
-					cc.setTime(ISO8601_DATE_FORMAT.parse(f));
-					return cc;
+					synchronized (ISO8601_DATE_FORMAT) {
+						Calendar cc = Calendar.getInstance();
+						cc.setTime(ISO8601_DATE_FORMAT.parse(f));
+						return cc;
+					}
 				} catch (ParseException e) {
 					throw new ConversionException(
 							"Cannot convert " + f + " to Date", e);
@@ -177,7 +181,9 @@ class ConverterImpl implements InternalConverter {
 		cb.rule(new Rule<Date,String>(new Function<Date,String>() {
 			@Override
 			public String apply(Date d) {
-				return ISO8601_DATE_FORMAT.format(d);
+				synchronized (ISO8601_DATE_FORMAT) {
+					return ISO8601_DATE_FORMAT.format(d);
+				}
 			}
 		}) {
 			// empty subclass to capture generics
@@ -187,7 +193,9 @@ class ConverterImpl implements InternalConverter {
 			@Override
 			public Date apply(String f) {
 				try {
-					return ISO8601_DATE_FORMAT.parse(f);
+					synchronized (ISO8601_DATE_FORMAT) {
+						return ISO8601_DATE_FORMAT.parse(f);
+					}
 				} catch (ParseException e) {
 					throw new ConversionException(
 							"Cannot convert " + f + " to Date", e);
