@@ -56,7 +56,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	org.osgi.test.filter; version=latest, \
 	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}
