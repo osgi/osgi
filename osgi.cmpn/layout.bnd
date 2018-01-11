@@ -32,7 +32,6 @@ osgi.cmpn.specs = \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
      org.osgi.service.repository, \
-     org.osgi.service.resolver, \
      org.osgi.service.rest, \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \

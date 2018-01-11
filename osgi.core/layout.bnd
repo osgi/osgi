@@ -6,6 +6,7 @@ osgi.core.specs = \
  org.osgi.service.condpermadmin, \
  org.osgi.service.packageadmin, \
  org.osgi.service.startlevel, \
+ org.osgi.service.resolver, \
  org.osgi.service.url, \
  org.osgi.util.tracker
 
