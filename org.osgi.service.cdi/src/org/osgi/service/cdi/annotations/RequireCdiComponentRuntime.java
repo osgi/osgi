@@ -16,8 +16,8 @@
 
 package org.osgi.service.cdi.annotations;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.CLASS;
 import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
 import static org.osgi.service.cdi.CdiConstants.*;
 import java.lang.annotation.Documented;
@@ -32,8 +32,8 @@ import org.osgi.annotation.bundle.Requirement;
  * @author $Id$
  */
 @Documented
-@Retention(RUNTIME)
-@Target({TYPE, PACKAGE})
+@Retention(CLASS)
+@Target(TYPE)
 @Requirement(
 		namespace = EXTENDER_NAMESPACE,
 		name = CDI_CAPABILITY_NAME,

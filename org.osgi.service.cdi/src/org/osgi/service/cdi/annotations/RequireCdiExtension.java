@@ -16,8 +16,8 @@
 
 package org.osgi.service.cdi.annotations;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.CLASS;
 import static org.osgi.service.cdi.PortableExtensionNamespace.CDI_EXTENSION_NAMESPACE;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -25,14 +25,14 @@ import java.lang.annotation.Target;
 import org.osgi.annotation.bundle.Requirement;
 
 /**
- * This annotation can be used to require the CDI Component Runtime extender. It
- * can be used directly, or as a meta-annotation.
+ * This annotation can be used to require a CDI Extension. It can be used
+ * directly, or as a meta-annotation.
  *
  * @author $Id$
  */
 @Documented
-@Retention(RUNTIME)
-@Target({TYPE, PACKAGE})
+@Retention(CLASS)
+@Target(TYPE)
 @Requirement(
 		namespace = CDI_EXTENSION_NAMESPACE)
 public @interface RequireCdiExtension {
