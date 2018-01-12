@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -232,6 +232,21 @@ public interface EventConstants {
 	 * property is {@code Long}.
 	 */
 	public static final String	TIMESTAMP					= "timestamp";
+
+	/**
+	 * The name of the implementation capability for the Event Admin
+	 * specification
+	 * 
+	 * @since 1.4
+	 */
+	public static final String	EVENT_ADMIN_IMPLEMENTATION			= "osgi.event";
+	/**
+	 * The version of the implementation capability for the Event Admin
+	 * specification
+	 * 
+	 * @since 1.4
+	 */
+	public static final String	EVENT_ADMIN_SPECIFICATION_VERSION	= "1.4.0";
 
 	/**
 	 * This constant was released with an incorrectly spelled name. It has been

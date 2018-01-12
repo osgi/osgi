@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,19 @@
  */
 
 /**
- * Event Admin Package Version 1.4.
+ * Event Admin Annotations Package Version 1.4.
  * <p>
- * Bundles wishing to use this package must list the package in the
- * Import-Package header of the bundle's manifest. This package has two types of
- * users: the consumers that use the API in this package and the providers that
- * implement the API in this package.
+ * This package contains annotations that can be used to require the Event Admin
+ * implementation.
  * <p>
- * Example import for consumers using the API in this package:
- * <p>
- * {@code  Import-Package: org.osgi.service.event; version="[1.4,2.0)"}
- * <p>
- * Example import for providers implementing the API in this package:
- * <p>
- * {@code  Import-Package: org.osgi.service.event; version="[1.4,1.5)"}
+ * Bundles should not normally need to import this package as the annotations
+ * are only used at build-time.
  * 
  * @author $Id$
  */
 
 @Version(EVENT_ADMIN_SPECIFICATION_VERSION)
-package org.osgi.service.event;
+package org.osgi.service.event.annotations;
 
 import static org.osgi.service.event.EventConstants.EVENT_ADMIN_SPECIFICATION_VERSION;
 
