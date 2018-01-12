@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * JAX-RS Whiteboard Annotations Package Version 1.0.
  * <p>
  * This package contains annotations that can be used to require the JAX-RS
- * Whiteboard implementations
+ * Whiteboard implementation.
  * <p>
  * Bundles should not normally need to import this package as the annotations
  * are only used at build-time.
