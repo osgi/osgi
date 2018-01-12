@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,38 +18,25 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.namespace.implementation.ImplementationNamespace.IMPLEMENTATION_NAMESPACE;
+import static org.osgi.service.cdi.CdiConstants.*;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Qualifier;
-import org.osgi.framework.ServiceFactory;
+import org.osgi.annotation.bundle.Requirement;
 
 /**
- * When used with {@link Service @Service} indicates that the bean should be
- * published as a {@link ServiceFactory ServiceFactory}.
+ * This annotation can be used to require the CDI Component Runtime
+ * implementation. It can be used directly, or as a meta-annotation.
  *
  * @author $Id$
  */
 @Documented
-@Qualifier
-@RequireCdiComponentRuntime
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, TYPE})
-public @interface Bundle {
-
-	/**
-	 * Support inline instantiation of the {@link Bundle} annotation.
-	 */
-	public static final class Literal extends AnnotationLiteral<Bundle> implements Bundle {
-
-		/**
-		 * Default instance
-		 */
-		public static final Bundle	INSTANCE			= new Literal();
-
-		private static final long			serialVersionUID	= 1L;
-
-	}
-
+@Target({TYPE, PACKAGE})
+@Requirement(
+		namespace = IMPLEMENTATION_NAMESPACE,
+		name = CDI_CAPABILITY_NAME,
+		version = CDI_SPECIFICATION_VERSION)
+public @interface RequireCdiComponentRuntimeImpl {
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,11 @@ public class CdiConstants {
 	/**
 	 * Capability name for CDI Integration.
 	 * <p>
-	 * Used in {@code Provide-Capability} and {@code Require-Capability}
-	 * manifest headers with the {@code osgi.extender} namespace. For example:
+	 * Used in {@code Provide-Capability} and {@code Require-Capability} manifest
+	 * headers with the {@code osgi.extender} namespace. For example:
 	 *
 	 * <pre>
-	 * Require-Capability: osgi.extender;
+	 * Require-Capability: osgi.extender; «
 	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"
 	 * </pre>
 	 */
@@ -64,19 +64,25 @@ public class CdiConstants {
 	 * The attribute of the CDI extender requirement declaring the container's id.
 	 *
 	 * <pre>
-	 * Require-Capability: osgi.extender;\
-	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))";\
+	 * Require-Capability: osgi.extender; «
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
 	 *  container.id="my.container"
 	 * </pre>
 	 */
 	public static final String	CDI_CONTAINER_ID					= "container.id";
 
 	/**
+	 * The key used for the container id service property in services provided by
+	 * CCR.
+	 */
+	public static final String	CDI_CONTAINER_ID_PROPERTY			= "osgi.cdi." + CDI_CONTAINER_ID;
+
+	/**
 	 * Compile time constant for the Specification Version of CDI Integration.
 	 * <p>
 	 * Used in {@code Version} and {@code Requirement} annotations. The value of
-	 * this compile time constant will change when the specification version of
-	 * CDI Integration is updated.
+	 * this compile time constant will change when the specification version of CDI
+	 * Integration is updated.
 	 */
 	public static final String	CDI_SPECIFICATION_VERSION			= "1.0.0";
 
@@ -84,12 +90,11 @@ public class CdiConstants {
 	 * The 'beans' attribute on the CDI extender requirement.
 	 * <p>
 	 * The value of this attribute is a comma delimited list of bean CDI bean
-	 * descriptor files to be searched on the {@code Bundle-ClassPath}. For
-	 * example:
+	 * descriptor files to be searched on the {@code Bundle-ClassPath}. For example:
 	 *
 	 * <pre>
-	 * Require-Capability: osgi.extender;\
-	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))";\
+	 * Require-Capability: osgi.extender; «
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
 	 *  beans:List&lt;String&gt;="META-INF/beans.xml"
 	 * </pre>
 	 */
@@ -98,13 +103,13 @@ public class CdiConstants {
 	/**
 	 * The 'osgi.beans' attribute on the CDI extender requirement.
 	 * <p>
-	 * The value of this attribute is the name of the OSGi Beans Description
-	 * file. The default value when unspecified is
-	 * {@code OSGI-INF/cdi/osgi-beans.xml}. For example:
+	 * The value of this attribute is the name of the OSGi Beans Description file.
+	 * The default value when unspecified is {@code OSGI-INF/cdi/osgi-beans.xml}.
+	 * For example:
 	 *
 	 * <pre>
-	 * Require-Capability: osgi.extender;\
-	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))";\
+	 * Require-Capability: osgi.extender; «
+	 *  filter:="(&amp;(osgi.extender=osgi.cdi)(version&gt;=1.0)(!(version&gt;=2.0)))"; «
 	 *  osgi.beans="OSGI-INF/cdi/osgi-beans.xml"
 	 * </pre>
 	 */

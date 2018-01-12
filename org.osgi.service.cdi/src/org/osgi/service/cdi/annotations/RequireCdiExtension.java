@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,41 +18,32 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.osgi.service.cdi.PortableExtensionNamespace.CDI_EXTENSION_NAMESPACE;
 import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Scope;
+import org.osgi.annotation.bundle.Requirement;
 
 /**
- * This scope is used to declare a bean who's lifecycle is determined by the
- * state of it's OSGi dependencies and the {@link SingleComponent
- * SingleComponent(s)} and {@link FactoryComponent FactoryComponent(s)} that may
- * reference it through injection.
+ * This annotation can be used to require the CDI Component Runtime extender. It
+ * can be used directly, or as a meta-annotation.
  *
  * @author $Id$
  */
 @Documented
-@Inherited
-@RequireCdiComponentRuntime
 @Retention(RUNTIME)
-@Scope
-@Target({FIELD, METHOD, TYPE})
-public @interface ComponentScoped {
+@Target({TYPE, PACKAGE})
+@Requirement(
+		namespace = CDI_EXTENSION_NAMESPACE)
+public @interface RequireCdiExtension {
 
 	/**
-	 * Support inline instantiation of the {@link ComponentScoped} annotation.
+	 * The name of the extension required.
 	 */
-	public static final class Literal extends AnnotationLiteral<ComponentScoped> implements ComponentScoped {
+	String name();
 
-		/**
-		 * Default instance.
-		 */
-		public static final ComponentScoped	INSTANCE			= new Literal();
-
-		private static final long			serialVersionUID	= 1L;
-
-	}
-
+	/**
+	 * The version of the extension required.
+	 */
+	String version() default "";
 }

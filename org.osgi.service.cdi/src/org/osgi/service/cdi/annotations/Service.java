@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package org.osgi.service.cdi.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.osgi.namespace.extender.ExtenderNamespace.EXTENDER_NAMESPACE;
-import static org.osgi.service.cdi.CdiConstants.*;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -27,7 +25,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
-import org.osgi.annotation.bundle.Requirement;
 import org.osgi.framework.PrototypeServiceFactory;
 import org.osgi.framework.ServiceFactory;
 
@@ -66,7 +63,7 @@ import org.osgi.framework.ServiceFactory;
  */
 @Documented
 @Qualifier
-@Requirement(namespace = EXTENDER_NAMESPACE, name = CDI_CAPABILITY_NAME, version = CDI_SPECIFICATION_VERSION)
+@RequireCdiComponentRuntime
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, TYPE, TYPE_USE})
 public @interface Service {

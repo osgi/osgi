@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
  * @author $Id$
  */
 @ProviderType
-public interface CdiRuntime {
+public interface CdiComponentRuntime {
 	/**
 	 * Returns a collection of container description snapshots for a set of bundles.
 	 *
