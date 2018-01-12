@@ -39,4 +39,5 @@ import org.osgi.annotation.bundle.Requirement;
 		name = CDI_CAPABILITY_NAME,
 		version = CDI_SPECIFICATION_VERSION)
 public @interface RequireCdiComponentRuntimeImpl {
+	// A marker annotation.
 }
