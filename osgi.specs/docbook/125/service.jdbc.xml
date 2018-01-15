@@ -204,7 +204,7 @@ java.sql</programlisting>
 
       <para>A Database Driver must import the <code>javax.sql</code> package.
       The <code>java.sql</code> package that contains the <code>Driver</code>
-      and <code>SQLException</code> interface is automatically imported
+      and <code>SQLException</code> interface is automatically visible
       because it starts with <code>java.</code>. Both packages are contained
       in the JRE since Java SE 1.4. These packages are not normally versioned
       with OSGi version numbers. Bundles using the Data Source Factory must
