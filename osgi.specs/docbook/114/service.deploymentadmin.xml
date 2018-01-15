@@ -491,7 +491,7 @@ chess.dp</programlisting>
 
       <para>Deployment packages are optionally signed by JAR signing,
       compatible with the operation of the standard
-      java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
+      <code>java.util.jar.JarInputStream</code> class, i.e. as defined in
       <emphasis>JAR Structure and Manifest</emphasis> of <xref
       linkend="i1516004"/>. This compatibility requires that the manifest must
       be the first file in the input stream, and the signature files must
