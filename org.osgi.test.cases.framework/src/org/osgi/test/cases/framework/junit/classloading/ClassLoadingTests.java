@@ -695,14 +695,15 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	// Permission Checking -----------------------
 
 	/**
-	 * In keeping with previous OSGi specifications, the set of implicitly
-	 * imported class path packages is defined as all java.* packages, since
-	 * these packages are required by the Java runtime and using multiple
-	 * versions at the same time is not easily possible. Explicitly, this means
-	 * that a bundle must not declare imports or exports for java.* packages;
-	 * doing so is considered an error and any such bundle should fail to
-	 * install.
-	 *
+	 * Since Java SE 9 added support for the Java Platform Module System to Java
+	 * SE, The set of java.* provided by the Java platform is no longer constant
+	 * for a specific version of the Java Platform. It depends on the set of
+	 * modules that are enabled for the runtime instance. The OSGi framework
+	 * specification is updated to support requirements on java.* packages.
+	 * Explicitly, this means, a bundle can now declare imports for java.*
+	 * packages. But, exporting java.* packages is not allowed by a bundle and
+	 * doing so will result in an error.
+	 * 
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -715,10 +716,9 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb7a = getContext().installBundle(
 					getWebServer() + "classloading.tb7a.jar");
 			tb7a.uninstall();
-			fail("A bundle which declares imports for java.* packages should fail to install");
 		}
 		catch (BundleException ex) {
-			// Ignore this exception
+			fail("Should not have thrown the exception: " + ex.toString());
 		}
 
 		try {
@@ -729,7 +729,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			fail("A bundle which declares exports for java.* packages should fail to install");
 		}
 		catch (BundleException ex) {
-			// Ignore this exception
+			assertEquals("It should throw a bundle exception of type manifest error", BundleException.MANIFEST_ERROR, ex.getType());
 		}
 	}
 
