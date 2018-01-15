@@ -266,14 +266,12 @@
     <programlisting>Require-Capability: «
    osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.6))"</programlisting>
 
-    <para>It is also possible to exclude certain execution environments. For
-    example, a bundle provides packages that are part of the execution
-    environment in a later version but not in an earlier version. This bundle
-    should not resolve in the later version to ensure the latest version is
-    used. The following code shows such an example:</para>
-
-    <programlisting>Require-Capability: «
-   osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.4)(!(version=1.5)))"</programlisting>
+    <para>This is useful when the bundle contains class files compiled to
+    target a version of the Java VM and thus cannot be loaded by prior
+    versions of the Java VM. If a bundle needs to require that specific
+    <code>java.*</code> packages are available in the runtime, it should use
+    the Import-Package header to require those packages. See <xref
+    linkend="framework.module-execution.environment"/>.</para>
 
     <para>The <code>osgi.ee</code> requirement is not hosted when it is part
     of a Fragment. That is, a requirement from this namespace must be treated
@@ -411,8 +409,8 @@
           <row>
             <entry><code>OSGi/Minimum</code></entry>
 
-            <entry><para>The OSGi Minimum execution environment, see the OSGi
-            Compendium</para></entry>
+            <entry><para>The OSGi Minimum execution
+            environment.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -627,7 +625,7 @@ Bundle B:
     <para>A bundle must only provide this capability when the
     Bundle-ManifestVersion &gt;= 2. The <code>osgi.wiring.bundle</code>
     attributes are defined in table <xref
-    linkend="framework.namespaces-wiring.bundle.namespace"/>. and in the <xref
+    linkend="framework.namespaces-wiring.bundle.namespace"/> and in the <xref
     linkend="org.osgi.framework.namespace.BundleNamespace"
     xrefstyle="hyperlink"/> class.</para>
 
@@ -914,7 +912,7 @@ Bundle B:
     uniquely identify a resource. Its purpose is to identify a type for the
     resource and then provide a name that is unique for that type. That is,
     the type can be <code>osgi.bundle</code> and then the name is a
-    Bundle-SymbolicName. For example. for a certificate the type could be x509
+    Bundle-SymbolicName. For example, for a certificate the type could be x509
     and the name could then its SHA-1 fingerprint. Each must have associated
     rules for the names uses as the identity name. It is required that the
     value of the <code>osgi.identity</code> attribute, plus the value of the
@@ -1384,6 +1382,12 @@ Bundle B:
         <para>Added <code>osgi.ee</code> capability names for Java SE Embedded
         compact profiles in <xref
         linkend="framework.namespaces.osgi.ee"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <code>osgi.ee</code> description to indicate that
+        bundles should import the java.* packages they require to ensure the
+        runtime provides them.</para>
       </listitem>
     </itemizedlist>
   </section>

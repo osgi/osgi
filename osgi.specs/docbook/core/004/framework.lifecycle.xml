@@ -536,7 +536,7 @@
               <entry><para>Specifies the capabilities of the environment in
               the grammar specified for the <code>Provide-Capability</code>
               header, see <xref linkend="framework.module.dependencies"/>.
-              These capabilities will be provided from the system bundle. If
+              These capabilities must be provided from the system bundle. If
               this property is not set, the framework must calculate this
               header based on the environment. It should at least set the
               following namespaces:</para><itemizedlist>
@@ -565,9 +565,10 @@
             <row>
               <entry><para><code>org.osgi.framework.system.«</code></para><para><code>&#160;packages</code></para></entry>
 
-              <entry><para>The packages that should be exported from the
-              System Bundle. If not set, the framework must provide a
-              reasonable default for the current VM.</para></entry>
+              <entry><para>The packages that must be exported from the System
+              Bundle. If not set, the framework must provide a reasonable
+              default for the current execution environment. See <xref
+              linkend="framework.module-execution.environment"/>.</para></entry>
             </row>
 
             <row>
@@ -576,9 +577,9 @@
               <entry><para>Packages specified in this property are added to
               the <code>org.osgi.framework.system.packages</code> property and
               therefore have the same syntax. This allows the configurator to
-              only define the additional packages and leave the standard VM
-              packages to be defined by the framework. For
-              example:</para><programlisting>org.osgi.framework.system.packages.extra=«
+              only define the additional packages and leave the standard
+              execution environment packages to be defined by the framework.
+              For example:</para><programlisting>org.osgi.framework.system.packages.extra=«
    org.acme.foo; version=1.2, org.acme.foo.impl</programlisting></entry>
             </row>
 
@@ -586,7 +587,7 @@
               <entry><para><code>org.osgi.framework.trust.«</code></para><para><code>&#160;repositories</code></para></entry>
 
               <entry><para>This property is used to configure trust
-              repositories for the framework. The value is path of files.The
+              repositories for the framework. The value is path of files. The
               file paths are separated by the <code>pathSeparator</code>
               defined in the <code>File</code> class. Each file path should
               point to a key store. The Framework must support the JKS type

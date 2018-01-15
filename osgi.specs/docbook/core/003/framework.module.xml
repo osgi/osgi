@@ -394,7 +394,8 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <para>The Bundle-RequiredExecutionEnvironment contains a
         comma-separated list of execution environments that must be present on
-        the OSGi framework. See <xref linkend="i3274877"/>. This header is
+        the OSGi framework. See <xref
+        linkend="framework.module-execution.environment"/>. This header is
         deprecated.</para>
       </section>
 
@@ -1442,17 +1443,17 @@ requirement        ::= name-space ( ';' directive | typed-attr )*</programlistin
     </section>
   </section>
 
-  <section xml:id="i3274877">
+  <section xml:id="framework.module-execution.environment">
     <title>Execution Environment</title>
 
     <para>The Java environment provides all packages in the
-    <code>java.*</code> namespace. This namespace is not well defined and can
-    be different for different runtime environments. For example, Java SE 5 is
-    not equal to Java SE 7 and an Android environment has substantial
-    differences between a Java SE environment. However, Java SE 6 is backward
-    compatible for Java SE 5, Java SE 1.4, Java SE 1.3 and Java SE 1.2. That
-    is, applications written for Java SE 1.3 must run unchanged on a Java SE 5
-    environment.</para>
+    <code>java.*</code> namespace. Prior to Java SE 9, this namespace was not
+    well defined and could be different for different runtime environments.
+    For example, Java SE 5 is not equal to Java SE 7 and an Android
+    environment has substantial differences to a Java SE environment. However,
+    Java SE 6 is backward compatible for Java SE 5, Java SE 1.4, Java SE 1.3
+    and Java SE 1.2. That is, applications written for Java SE 1.3 must run
+    unchanged on a Java SE 5 environment.</para>
 
     <para>These differences and backward compatibilities can not be captured
     using versions because they are <emphasis>variations</emphasis>. For
@@ -1461,29 +1462,43 @@ requirement        ::= name-space ( ';' directive | typed-attr )*</programlistin
     linkend="i3246284"/>. All these variations have a different set of
     packages, types, and methods in the <code>java.*</code> namespace.</para>
 
-    <para>Bundles do not import the <code>java.*</code> packages and can
-    therefore not specify their dependencies on these variations in the
-    environment using the Import-Package header. The <emphasis>OSGi Execution
-    Environment</emphasis> defines how frameworks can inform bundles about the
-    available execution environments. The primary purpose of an execution
-    environment is to define the variations in the <code>java.*</code>
-    namespace, an execution environment can also include packages in other
-    namespaces.</para>
+    <para>Starting in Java SE 9, the platform has been modularized and its
+    packages organized into a set of modules. Depending upon how the platform
+    is configured for execution, some modules and their contained packages may
+    not be present at runtime. However, Java SE 9 provides a standard way to
+    interrogate the Java platform for the packages currently available at
+    runtime. Therefore, the Framework must set the
+    <code>org.osgi.framework.system.packages</code> launching property, see
+    <xref linkend="framework.lifecycle.launchingproperties"/>, to the list of
+    Java platform packages currently available at runtime.</para>
 
-    <para>Execution environments require a proper name to identify a variation
-    so that:</para>
+    <para>For Java platform versions prior to Java SE 9, the Framework must
+    also set the <code>org.osgi.framework.system.packages</code> launching
+    property to the list of Java platform packages generally known to be
+    available at runtime. Since there is no standard way to interrogate the
+    Java platform for the packages currently available at runtime, a Framework
+    implementation may use a predefined list of packages for the Java platform
+    version.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>A bundle can require that a Framework provides a certain
-        execution environment before it is resolved.</para>
-      </listitem>
-
-      <listitem>
-        <para>To provide information about which execution environments a
-        Framework provides.</para>
-      </listitem>
-    </itemizedlist>
+    <para>In additional to specifying the version of the execution environment
+    via an <code>osgi.ee</code> requirement, see <xref
+    linkend="framework.namespaces.osgi.ee"/>, a Bundle may also import
+    <code>java.*</code> packages using the Import-Package header. Imports of
+    <code>java.*</code> packages by a bundle will be used during the
+    resolution process, see <xref
+    linkend="framework.module.resolvingprocess"/>, to ensure the bundle has
+    visibility to the requested packages by wiring the bundle's import of a
+    <code>java.*</code> package to the export of the <code>java.*</code>
+    package by the Framework's system bundle. However, a bundle always loads
+    classes in <code>java.*</code> packages via parent delegation. See <xref
+    linkend="framework.module.parentdelegation"/>. Therefore, a bundle is not
+    required to import a <code>java.*</code> package to have visibility to the
+    classes in the package, if the package is present in the current runtime.
+    It only needs to import a <code>java.*</code> package to have the
+    resolution process ensure the package is available from the execution
+    environment. This can avoid a <code>NoClassDefFoundError</code> during
+    execution of the bundle due to a missing <code>java.*</code> package
+    required by the bundle.</para>
 
     <section xml:id="framework.module.bree">
       <title>Bundle-RequiredExecutionEnvironment</title>
@@ -1728,7 +1743,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     linkend="framework.module.resolvingprocess"/> for further information. The
     runtime aspects are described in <xref linkend="i2570775"/>.</para>
 
-    <section xml:id="i3068208">
+    <section xml:id="framework.module-resolving">
       <title>Resolving</title>
 
       <para>The Framework must <emphasis>resolve</emphasis> bundles. Resolving
@@ -1975,8 +1990,7 @@ package-names ::= package-name
         </listitem>
       </itemizedlist>
 
-      <para>In order to be allowed to import a package (except for packages
-      starting with <code>java.)</code>, a bundle must have
+      <para>In order to be allowed to import a package, a bundle must have
       <code>PackagePermission[&lt;package-name&gt;, IMPORT]</code>. See
       <code>PackagePermission</code> for more information.</para>
 
@@ -3486,15 +3500,17 @@ boot-description    ::= package-name        // See <xref
     <section xml:id="framework.module.parentclassloader">
       <title>Parent Class Loader</title>
 
-      <para>The set of implicitly imported packages are all
-      <code>java.*</code> packages, since these packages are required by the
-      Java runtime, and using multiple versions at the same time is not easy.
-      For example, all objects must extend the same Object class.</para>
+      <para>The set of implicitly visible packages are all <code>java.*</code>
+      packages, since these packages are required by the Java runtime, and
+      using multiple versions at the same time is not easy. For example, all
+      objects must extend the same Object class.</para>
 
-      <para>A bundle must not declare imports or exports for
-      <code>java.*</code> packages; doing so is an error and any such bundle
-      must fail to install. All other packages available through the parent
-      class loader must be hidden from executing bundles.</para>
+      <para>A bundle must not declare exports for <code>java.*</code>
+      packages; doing so is an error and any such bundle must fail to install
+      or update. A bundle may declare imports for <code>java.*</code>
+      packages; but this is for resolution purposes only. All other packages
+      visible through the parent class loader must be hidden from executing
+      bundles.</para>
 
       <para>However, the Framework must explicitly export relevant packages
       from the parent class loader. The system property</para>
@@ -3523,8 +3539,10 @@ boot-description    ::= package-name        // See <xref
 
       <para>The set of export definitions for the parent class loader can
       either be set by this property or calculated by the Framework. The
-      export definitions must have the implementation specific bundle symbolic
-      name and version value of the system bundle.</para>
+      export definitions must have the <code>bundle-symbolic-name</code> and
+      <code>bundle-version</code> attributes with the implementation-specific
+      bundle symbolic name and bundle version value of the system
+      bundle.</para>
 
       <para>Exposing packages from the parent class loader in this fashion
       must also take into account any <code>uses</code> directives of the
@@ -4440,7 +4458,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
       </listitem>
 
       <listitem>
-        <para>Export or import of <code>java.*</code>.</para>
+        <para>Export of <code>java.*</code> packages.</para>
       </listitem>
 
       <listitem>
@@ -5800,6 +5818,15 @@ URL(String protocol, String host, String file)</programlisting>
       <listitem>
         <para>Added support for multi-release JARs. See <xref
         linkend="framework.module-multireleasejar"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Bundles may now import java.* packages to ensure the Java
+        platform provides the required java.* packages. See <xref
+        linkend="framework.module-execution.environment"/>. Importing a java.*
+        package only affects bundle resolution and wiring. Classes in java.*
+        packages are always loaded from the parent class loader. See <xref
+        linkend="framework.module.parentdelegation"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

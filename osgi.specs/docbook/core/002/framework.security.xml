@@ -870,12 +870,12 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         <listitem>
           <para>File Permission for the bundle persistent storage area, for
           the <code>READ</code>, <code>WRITE</code>, and <code>DELETE</code>
-          actions</para>
+          actions.</para>
         </listitem>
 
         <listitem>
           <para>Property Permission with the <code>READ</code> action for
-          <code>org.osgi.framework.*</code></para>
+          <code>org.osgi.framework.*</code>.</para>
         </listitem>
 
         <listitem>
@@ -892,6 +892,11 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         <listitem>
           <para>Capability Permission <code>REQUIRE</code> for the
           <code>osgi.native</code> namespace.</para>
+        </listitem>
+
+        <listitem>
+          <para>Package Permission <code>IMPORT</code> for
+          <code>java.*</code>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1051,6 +1056,12 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
       <listitem>
         <para>Removed MD5 and added SHA-256 digest algorithms.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added Package Permission <code>IMPORT</code> for
+        <code>java.*</code> to the implied permissions. See <xref
+        linkend="framework.security.impliedpermissions"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
