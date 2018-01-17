@@ -19,10 +19,6 @@ buildscript {
 }
 
 /* Configure the subprojects */
-def signatures7 = ['':'org.codehaus.mojo.signature:java17:1.0@signature',
-                   'compact1':':java17:1.0:compact1@signature',
-                   'compact2':':java17:1.0:compact2@signature',
-                   'compact3':':java17:1.0:compact3@signature']
 subprojects {
   if (plugins.hasPlugin('biz.aQute.bnd')) {
     if (bndis('companion.code')) {
@@ -43,6 +39,10 @@ subprojects {
           options.compilerArgs.removeAll(['-profile', javacProfile])
         }
       }
+      def signatures7 = ['':'org.codehaus.mojo.signature:java17:1.0@signature',
+                         'compact1':':java17:1.0:compact1@signature',
+                         'compact2':':java17:1.0:compact2@signature',
+                         'compact3':':java17:1.0:compact3@signature']
       dependencies {
         signature signatures7[javacProfile]
       }
