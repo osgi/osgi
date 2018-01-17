@@ -17,6 +17,7 @@
 package org.osgi.service.cdi.runtime.dto.template;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.Version;
 import org.osgi.service.cdi.runtime.dto.ContainerDTO;
 
 /**
@@ -27,17 +28,35 @@ import org.osgi.service.cdi.runtime.dto.ContainerDTO;
  */
 public class ExtensionTemplateDTO extends DTO {
 	/**
-	 * A name for this extension dependency that is unique within the container and
-	 * persistent across container restarts.
+	 * The name of the extension. The name must be unique within the container.
+	 * <p>
+	 * The value must be associated to a requirement in the
+	 * {@code osgi.cdi.extension} namespace who's attribute
+	 * {@code osgi.cdi.extension} value is equal to {@link #name}.
 	 * <p>
 	 * Must not be {@code null}.
 	 */
 	public String	name;
 
 	/**
-	 * Target LDAP filter used to select extension services.
+	 * The implementation class name of the extension.
+	 * <p>
+	 * The value must be associated to a requirement in the
+	 * {@code osgi.cdi.extension} namespace who's attribute {@code implementation}
+	 * value is equal to {@link #implementation}.
 	 * <p>
 	 * Must not be {@code null}.
 	 */
-	public String	target;
+	public String	implementation;
+
+	/**
+	 * The version of the extension.
+	 * <p>
+	 * The value must be associated to a requirement in the
+	 * {@code osgi.cdi.extension} namespace who's attribute {@code version} value is
+	 * equal to {@link #version}.
+	 * <p>
+	 * The value may be {@code null} if no version was specified in the requirement.
+	 */
+	public Version	version;
 }

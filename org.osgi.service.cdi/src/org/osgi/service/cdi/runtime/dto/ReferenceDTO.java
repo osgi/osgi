@@ -30,12 +30,11 @@ import org.osgi.service.cdi.runtime.dto.template.ReferenceTemplateDTO;
  */
 public class ReferenceDTO extends DTO {
 	/**
-	 * The name of this reference. Matches the name of the template of this
-	 * reference
+	 * The template of this reference.
 	 * <p>
 	 * Must not be {@code null}
 	 */
-	public String		name;
+	public ReferenceTemplateDTO	template;
 
 	/**
 	 * The runtime minimum cardinality of the dependency.

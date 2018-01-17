@@ -17,26 +17,29 @@
 package org.osgi.service.cdi.runtime.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.BundleDTO;
+import org.osgi.service.cdi.runtime.dto.template.ExtensionTemplateDTO;
 
 /**
- * A snapshot of the runtime state of an extension dependency of a
- * {@link ContainerDTO container}
+ * A snapshot of the runtime state of an
+ * {@code javax.enterprise.inject.spi.Extension} dependency required by this CDI
+ * container.
  *
  * @NotThreadSafe
  * @author $Id$
  */
 public class ExtensionDTO extends DTO {
 	/**
-	 * The template of this extension dependency
+	 * The template of this extension dependency.
 	 * <p>
 	 * Must not be {@code null}
 	 */
-	public String	name;
+	public ExtensionTemplateDTO	template;
 
 	/**
-	 * The service to which the extension dependency is resolved.
+	 * The bundle providing the extension.
 	 * <p>
-	 * This extension dependency is satisfied when {@code match > 0}.
+	 * This extension is satisfied when not {@code null}.
 	 */
-	public long		match;
+	public BundleDTO			bundle;
 }

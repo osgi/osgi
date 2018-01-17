@@ -37,7 +37,7 @@ public class ContainerTemplateDTO extends DTO {
 	 * <p>
 	 * Must not be {@code null}
 	 * <p>
-	 * May be empty if the container does not require CDI extensions.
+	 * May be empty if the CDI container does not require CDI extensions.
 	 */
 	public List<ExtensionTemplateDTO>	extensions;
 
@@ -46,8 +46,8 @@ public class ContainerTemplateDTO extends DTO {
 	 * <p>
 	 * Must not be {@code null}
 	 * <p>
-	 * Has at lest one element for the {@link Type#APPLICATION application
-	 * component}.
+	 * Has at lest one element for the {@link Type#CONTAINER container component}.
+	 * See <em>Container Component</em>.
 	 */
 	public List<ComponentTemplateDTO>	components;
 }

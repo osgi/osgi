@@ -18,6 +18,7 @@ package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.cdi.runtime.dto.template.ActivationTemplateDTO;
 
 /**
@@ -29,19 +30,19 @@ import org.osgi.service.cdi.runtime.dto.template.ActivationTemplateDTO;
  */
 public class ActivationDTO extends DTO {
 	/**
-	 * The {@link ActivationTemplateDTO#name} describing this activation
+	 * The template describing this activation.
 	 * <p>
 	 * Must not be {@code null}
 	 */
-	public String	name;
+	public ActivationTemplateDTO	template;
 
 	/**
-	 * The ID of the service this activation may have registered.
+	 * The service this activation may have registered.
 	 * <p>
-	 * Must be greater than 0 if {@link ActivationTemplateDTO#serviceClasses} of the
-	 * associated template is not empty.
+	 * Must not be {@code null} if {@link ActivationTemplateDTO#serviceClasses
+	 * template.serviceClasses} is not empty.
 	 */
-	public long		service;
+	public ServiceReferenceDTO		service;
 
 	/**
 	 * The list of activation errors which occurred during initialization. An empty

@@ -29,18 +29,17 @@ import org.osgi.service.cdi.runtime.dto.template.ContainerTemplateDTO;
  */
 public class ContainerDTO extends DTO {
 	/**
+	 * The template of this Container DTO.
+	 * <p>
+	 * Must not be {@code null}.
+	 */
+	public ContainerTemplateDTO	template;
+
+	/**
 	 * The list of errors reported during attempted initialization of the container
 	 * instance.
 	 */
 	public List<String>			errors;
-
-	/**
-	 * The {@link ContainerTemplateDTO#id} of the template associated with this
-	 * {@link ContainerDTO}
-	 * <p>
-	 * Must not be {@code null}.
-	 */
-	public String				id;
 
 	/**
 	 * The change count of the container at the time this DTO was created
@@ -67,7 +66,8 @@ public class ContainerDTO extends DTO {
 	 * The component lifecycles defined by this CDI container.
 	 * <p>
 	 * Must not be {@code null}. The list always contains at least one element
-	 * representing the {@link Type#APPLICATION APPLICATION}.
+	 * representing the {@link Type#CONTAINER container component}. See
+	 * <em>Container Component</em>.
 	 */
 	public List<ComponentDTO>	componentLifecycles;
 }

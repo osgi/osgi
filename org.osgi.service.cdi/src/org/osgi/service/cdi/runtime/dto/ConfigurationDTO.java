@@ -18,7 +18,6 @@ package org.osgi.service.cdi.runtime.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
-import org.osgi.service.cdi.runtime.dto.template.MaximumCardinality;
 import org.osgi.service.cdi.runtime.dto.template.ConfigurationTemplateDTO;
 
 /**
@@ -30,11 +29,11 @@ import org.osgi.service.cdi.runtime.dto.template.ConfigurationTemplateDTO;
  */
 public class ConfigurationDTO extends DTO {
 	/**
-	 * The Id of the template of this configuration dependency
+	 * The template of this configuration dependency
 	 * <p>
 	 * Must never be {@code null}
 	 */
-	public String	name;
+	public ConfigurationTemplateDTO	template;
 
 	/**
 	 * The list of {@code service.pid} of the configurations that match this
@@ -45,9 +44,9 @@ public class ConfigurationDTO extends DTO {
 	 * Can be empty when three are no matching configurations.
 	 * <p>
 	 * This dependency is satisfied when: <pre>
-	 * 1 <= matches.length <= {@link MaximumCardinality#toInt()}
-	 * </pre> where the maximum cardinality can be obtained from the respective
-	 * {@link ConfigurationTemplateDTO}
+	 * 1 <= {@linkplain List#size() size()} <= {@link ConfigurationTemplateDTO#maximumCardinality
+	 * this.template.maximumCardinality.toInt()}
+	 * </pre> .
 	 * <p>
 	 */
 	public List<String>	matches;

@@ -18,7 +18,6 @@ package org.osgi.service.cdi.runtime.dto.template;
 
 import java.util.List;
 import java.util.Map;
-import org.osgi.service.cdi.runtime.dto.template.ComponentTemplateDTO.Type;
 
 /**
  * A description an activation of a component
@@ -68,19 +67,6 @@ public class ActivationTemplateDTO {
 		 */
 		PROTOTYPE
 	}
-
-	/**
-	 * A unique within the container and persistent across reboots identified for
-	 * this activation
-	 * <p>
-	 * When {@link Type#APPLICATION type=APPLICATION} it is equal to the bean name
-	 * or if one is not available it is generated from the bean attributes.
-	 * <p>
-	 * When {@link Type#COMPONENT type=COMPONENT} it is equal to the name of the
-	 * root component bean.
-	 * 
-	 */
-	public String				name;
 
 	/**
 	 * The {@link Scope} of this activation
