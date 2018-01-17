@@ -35,6 +35,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -47,19 +48,23 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.cases.remoteservices.common.A;
+import org.osgi.test.cases.remoteservices.common.AsyncJava8Types;
 import org.osgi.test.cases.remoteservices.common.AsyncTypes;
 import org.osgi.test.cases.remoteservices.common.B;
 import org.osgi.test.cases.remoteservices.common.BasicTypes;
 import org.osgi.test.cases.remoteservices.common.C;
 import org.osgi.test.cases.remoteservices.common.DTOType;
 import org.osgi.test.cases.remoteservices.common.SlowService;
+import org.osgi.test.cases.remoteservices.impl.AsyncJava8TypesImpl;
 import org.osgi.test.cases.remoteservices.impl.AsyncTypesImpl;
 import org.osgi.test.cases.remoteservices.impl.BasicTypesTestServiceImpl;
 import org.osgi.test.cases.remoteservices.impl.SlowServiceImpl;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
+import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Success;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -762,37 +767,27 @@ public class SimpleTest extends MultiFrameworkTestCase {
 			assertTrue("Did not pick up the osgi.async intent",
 					intents.contains("osgi.async"));
 
-			Semaphore s = new Semaphore(0);
+			final Semaphore s = new Semaphore(0);
 
 			// Future
 			Future<String> f = client.getFuture(1000);
 			assertFalse(f.isDone());
 			assertEquals(AsyncTypes.RESULT, f.get(2, TimeUnit.SECONDS));
 
-			// CompletableFuture
-			CompletableFuture<String> cf = client.getCompletableFuture(1000);
-			cf.thenRun(s::release);
-			assertFalse(s.tryAcquire());
-			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
-			assertEquals(AsyncTypes.RESULT, cf.get());
-
-			// CompletionStage
-			CompletionStage<String> cs = client.getCompletionStage(1000);
-			cs.thenAccept(r -> {
-				if (AsyncTypes.RESULT.equals(r)) {
-					s.release();
-				} else {
-					System.out.println("Received the wrong result " + r);
-				}
-			});
-			assertFalse(s.tryAcquire());
-			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
-
 			// Promise
 			Promise<String> p = client.getPromise(1000);
-			p.filter(AsyncTypes.RESULT::equals).then(x -> {
-				s.release();
-				return null;
+			p.filter(new Predicate<String>() {
+				@Override
+				public boolean test(String x) {
+					return AsyncTypes.RESULT.equals(x);
+				}
+			}).then(new Success<String,Object>() {
+				@Override
+				public Promise<Object> call(Promise<String> x)
+						throws Exception {
+					s.release();
+					return null;
+				}
 			});
 			assertFalse(s.tryAcquire());
 			assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
@@ -801,6 +796,109 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 		} finally {
 			srTestService.unregister();
+		}
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testAsyncJava8Types() throws Exception {
+		try {
+			@SuppressWarnings("unchecked")
+			Hashtable<String,Object> properties = registrationTestServiceProperties();
+
+			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS,
+					"osgi.async");
+
+			// install server side test service in the sub-framework
+			AsyncJava8TypesImpl impl = new AsyncJava8TypesImpl();
+
+			// register the service in the server side framework on behalf of
+			// the
+			// System Bundle
+			// the interface package is exported by the System Bundle
+			ServiceRegistration<AsyncJava8Types> srTestService = getFramework()
+					.getBundleContext()
+					.registerService(AsyncJava8Types.class, impl, properties);
+
+			System.out.println(
+					"registered basic types test service on server side");
+
+			try {
+				// now check on the hosting framework for the service to become
+				// available
+				ServiceTracker<AsyncJava8Types,AsyncJava8Types> clientTracker = new ServiceTracker<>(
+						getContext(), AsyncJava8Types.class, null);
+				clientTracker.open();
+
+				// the proxy should appear in this framework
+				AsyncJava8Types client = Tracker.waitForService(clientTracker,
+						timeout);
+				assertNotNull("no proxy for AsyncJava8Types found!", client);
+
+				ServiceReference<AsyncJava8Types> sr = clientTracker
+						.getServiceReference();
+
+				Object property = sr
+						.getProperty(RemoteServiceConstants.SERVICE_INTENTS);
+				assertNotNull("No intents supported", property);
+
+				Collection<String> intents;
+				if (property instanceof String) {
+					intents = Collections.singleton((String) property);
+				} else if (property instanceof String[]) {
+					intents = Arrays.asList((String[]) property);
+				} else if (property instanceof Collection) {
+					@SuppressWarnings("unchecked")
+					Collection<String> tmp = (Collection<String>) property;
+					intents = tmp;
+				} else {
+					throw new IllegalArgumentException(
+							"Supported intents are not of the correct type "
+									+ property.getClass());
+				}
+
+				assertTrue("Did not pick up the osgi.async intent",
+						intents.contains("osgi.async"));
+
+				final Semaphore s = new Semaphore(0);
+
+				// CompletableFuture
+				CompletableFuture<String> cf = client
+						.getCompletableFuture(1000);
+				cf.thenRun(new Runnable() {
+					@Override
+					public void run() {
+						s.release();
+					}
+				});
+				assertFalse(s.tryAcquire());
+				assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
+				assertEquals(AsyncJava8Types.RESULT, cf.get());
+
+				// CompletionStage
+				CompletionStage<String> cs = client.getCompletionStage(1000);
+				cs.thenAccept(new Consumer<String>() {
+					@Override
+					public void accept(String r) {
+						if (AsyncJava8Types.RESULT.equals(r)) {
+							s.release();
+						} else {
+							System.out
+									.println("Received the wrong result " + r);
+						}
+					}
+				});
+				assertFalse(s.tryAcquire());
+				assertTrue(s.tryAcquire(2, TimeUnit.SECONDS));
+
+				clientTracker.close();
+
+			} finally {
+				srTestService.unregister();
+			}
+		} catch (NoClassDefFoundError e) {
+			// must be less than java 8.
 		}
 	}
 

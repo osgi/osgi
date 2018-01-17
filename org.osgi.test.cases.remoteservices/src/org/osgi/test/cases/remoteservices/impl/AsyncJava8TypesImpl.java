@@ -15,31 +15,18 @@
  */
 package org.osgi.test.cases.remoteservices.impl;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.util.function.Function;
 
-import org.osgi.test.cases.remoteservices.common.AsyncTypes;
-import org.osgi.util.promise.Deferred;
-import org.osgi.util.promise.Promise;
+import org.osgi.test.cases.remoteservices.common.AsyncJava8Types;
 
-public class AsyncTypesImpl implements AsyncTypes {
+public class AsyncJava8TypesImpl implements AsyncJava8Types {
 
 	private final Executor		executor	= Executors
 			.newSingleThreadExecutor();
-
-	public Future<String> getFuture(final int millis) {
-		FutureTask<String> task = new FutureTask<>(new Runnable() {
-			@Override
-			public void run() {
-				waitFor(millis);
-			}
-		},
-				AsyncTypes.RESULT);
-		executor.execute(task);
-		return task;
-	}
 
 	void waitFor(int millis) {
 		try {
@@ -49,18 +36,21 @@ public class AsyncTypesImpl implements AsyncTypes {
 		}
 	}
 
-	public Promise<String> getPromise(final int millis) {
-		final Deferred<String> d = new Deferred<>();
-
-		executor.execute(new Runnable() {
+	public CompletableFuture<String> getCompletableFuture(final int millis) {
+		return CompletableFuture.runAsync(new Runnable() {
 			@Override
 			public void run() {
 				waitFor(millis);
-				d.resolve(AsyncTypes.RESULT);
+			}
+		}, executor).thenApply(new Function<Void,String>() {
+			@Override
+			public String apply(Void x) {
+				return AsyncJava8Types.RESULT;
 			}
 		});
-
-		return d.getPromise();
 	}
 
+	public CompletionStage<String> getCompletionStage(int millis) {
+		return getCompletableFuture(millis);
+	}
 }

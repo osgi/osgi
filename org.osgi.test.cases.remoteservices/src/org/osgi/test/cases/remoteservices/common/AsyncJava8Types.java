@@ -15,15 +15,14 @@
  */
 package org.osgi.test.cases.remoteservices.common;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
-import org.osgi.util.promise.Promise;
-
-public interface AsyncTypes {
+public interface AsyncJava8Types {
 
 	String	RESULT		= "DONE";
 
-	Future<String> getFuture(int millis);
+	CompletableFuture<String> getCompletableFuture(int millis);
 
-	Promise<String> getPromise(int millis);
+	CompletionStage<String> getCompletionStage(int millis);
 }

@@ -14,7 +14,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.2.0'
+    classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3'
   }
 }
 
