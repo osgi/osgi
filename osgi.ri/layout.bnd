@@ -48,6 +48,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.clusterinfo;latest}, \
 	${repo;org.osgi.impl.service.cm;latest}, \
 	${repo;org.osgi.impl.service.component;latest}, \
+	${repo;org.osgi.impl.service.configurator;latest}, \
 	${repo;org.osgi.impl.service.coordinator;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
@@ -95,6 +96,7 @@ jar.enterprise.impls = \
     ${repo;org.osgi.impl.service.clusterinfo;latest}, \
 	${repo;org.osgi.impl.service.cm;latest}, \
 	${repo;org.osgi.impl.service.component;latest}, \
+    ${repo;org.osgi.impl.service.configurator;latest}, \
 	${repo;org.osgi.impl.service.coordinator;latest}, \
 	${repo;org.osgi.impl.service.event;latest}, \
 	${repo;org.osgi.impl.service.http;latest}, \
