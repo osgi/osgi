@@ -441,15 +441,15 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 	}
 
 	private ServiceRegistration<ConfigurationListener> registerConfigListener(
-			String pid,
+			final String pid,
 			Deferred<Configuration> updated, Deferred<Configuration> deleted) {
 		if (updated == null)
 			updated = new Deferred<>();
 		if (deleted == null)
 			deleted = new Deferred<>();
 
-		Deferred<Configuration> fupdated = updated;
-		Deferred<Configuration> fdeleted = deleted;
+		final Deferred<Configuration> fupdated = updated;
+		final Deferred<Configuration> fdeleted = deleted;
 		ConfigurationListener cl = new ConfigurationListener() {
 			@Override
 			public void configurationEvent(ConfigurationEvent event) {
