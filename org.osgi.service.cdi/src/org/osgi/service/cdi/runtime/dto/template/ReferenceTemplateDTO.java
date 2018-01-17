@@ -73,10 +73,10 @@ public class ReferenceTemplateDTO extends DTO {
 	 * <p>
 	 * The value must not be null.
 	 */
-	public String				targetType;
+	public String				serviceType;
 
 	/**
-	 * Indicates a target filter used in addition to the {@link #targetType} to
+	 * Indicates a target filter used in addition to the {@link #serviceType} to
 	 * match services.
 	 * <p>
 	 * Contains the target filter resolved from the CDI bundle metadata. The filter

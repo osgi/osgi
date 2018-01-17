@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,28 +29,35 @@ import org.osgi.dto.DTO;
  */
 public class ConfigurationTemplateDTO extends DTO {
 	/**
-	 * A name for this extension dependency that is unique within the container and
-	 * persistent across container restarts.
-	 * <p>
-	 * Equal to {@link #targetPid}.
-	 */
-	public String				name;
-
-	/**
-	 * The PID of the tracked configuration objects
+	 * Indicates that the configuration is used for configuring the component as
+	 * opposed to only being used as injectable dependency.
 	 * <p>
 	 * Must not be {@code null}.
 	 */
-	public String				targetPid;
+	public boolean				componentConfiguration;
+
+	/**
+	 * The PID of the tracked configuration object(s).
+	 * <p>
+	 * Must not be {@code null}.
+	 */
+	public String				pid;
+
+	/**
+	 * The policy for the configuration dependency.
+	 * <p>
+	 * Must not be {@code null}.
+	 */
+	public ConfigurationPolicy	policy;
 
 	/**
 	 * The maximum cardinality of the configuration dependency.
 	 * <p>
 	 * <ul>
-	 * <li>When {@link MaximumCardinality#ONE} this is a singleton
-	 * configuration.</li>
-	 * <li>When {@link MaximumCardinality#MANY} this is a factory
-	 * configuration.</li>
+	 * <li>When {@link MaximumCardinality#ONE} this is a singleton configuration
+	 * dependency.</li>
+	 * <li>When {@link MaximumCardinality#MANY} this is a factory configuration
+	 * dependency.</li>
 	 * </ul>
 	 * <p>
 	 * Must not be {@code null}.
