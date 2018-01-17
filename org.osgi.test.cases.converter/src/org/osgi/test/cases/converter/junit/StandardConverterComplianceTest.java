@@ -158,6 +158,28 @@ public class StandardConverterComplianceTest extends TestCase{
 		assertEquals(Arrays.asList("1", "2", "3"), dto.values);
 	}
 
+	/**
+	 * Section 707.4 : Conversions
+	 * <p/>
+	 * 707.4.1 - Generics
+	 * <p/>
+	 * When converting to a target type which reifies parameterized fields the
+	 * converter should convert the nested data as defined by the type variables
+	 * This test looks at a subclass that indirectly binds a type variable
+	 */
+	public void testReifiedGenericFieldConversionSubclass() {
+		Converter converter = Converters.standardConverter();
+		ReifiedFieldDtoSub dto = converter
+				.convert(singletonMap("values",
+						Arrays.<Integer> asList(1, 2, 3)))
+				.to(ReifiedFieldDtoSub.class);
+
+		assertNotNull(dto);
+		assertEquals(Arrays.asList("1", "2", "3"), dto.values);
+	}
+
 	public static class ReifiedFieldDto extends ParameterizedFieldDto<String> {}
+
+	public static class ReifiedFieldDtoSub extends ReifiedFieldDto {}
 
 }
