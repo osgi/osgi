@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.junit.Assert;
@@ -53,6 +54,36 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		configAdminTracker.close();
 	}
 
+	public void testIgnoreComments() throws Exception {
+		String pid = "org.osgi.test.pid1";
+		Deferred<Configuration> deleted = new Deferred<>();
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, deleted);
+		try {
+			assertNull("Precondition, should not yet have the test config",
+					readConfig(pid));
+
+			Bundle tb1 = install("tb1.jar");
+			assertFalse(updated.getPromise().isDone());
+			tb1.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals("bar", props.get("foo"));
+			assertNull(props.get("comment1"));
+			assertNull(props.get("comment2"));
+			assertEquals("bar", props.get("foo2"));
+
+			assertFalse(deleted.getPromise().isDone());
+			tb1.uninstall();
+			assertEquals(pid, deleted.getPromise().getValue().getPid());
+		} finally {
+			reg.unregister();
+		}
+	}
+
 	public void testBasicConfigurationLifecycle() throws Exception {
 		String pid = "org.osgi.test.pid1";
 		Deferred<Configuration> deleted = new Deferred<>();
@@ -78,6 +109,158 @@ public class ConfiguratorTestCase extends OSGiTestCase {
 		} finally {
 			reg.unregister();
 		}
+	}
+	
+	public void testIgnoreOverwrite() throws Exception {
+		String pid = "org.osgi.test.pid1";
+		Deferred<Configuration> deleted = new Deferred<>();
+		Deferred<Configuration> updated = new Deferred<>();
+
+		Configuration cfg = configAdmin.getConfiguration(pid, "?");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("foo", "baz");
+		cfg.update(props);
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, deleted);
+		try {
+			Bundle tb1 = install("tb1.jar");
+			assertFalse(updated.getPromise().isDone());
+			tb1.start();
+
+			// should not be updated
+			assertFalse(updated.getPromise().isDone());
+
+			cfg = configAdmin.getConfiguration(pid, "?");
+			props = cfg.getProperties();
+			assertEquals("baz", props.get("foo"));
+
+			// nothing should happen on uninstall either
+			assertFalse(deleted.getPromise().isDone());
+			tb1.uninstall();
+			assertFalse(deleted.getPromise().isDone());
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testIgnoreRemove() throws Exception {
+		String pid = "org.osgi.test.pid1";
+		Deferred<Configuration> deleted = new Deferred<>();
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, deleted);
+		try {
+			assertNull("Precondition, should not yet have the test config",
+					readConfig(pid));
+
+			Bundle tb1 = install("tb1.jar");
+			assertFalse(updated.getPromise().isDone());
+			tb1.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals("bar", props.get("foo"));
+
+			// update configuration
+			props.put("foo", "baz");
+			cfg.update(props);
+
+			// the configuration should not be deleted
+			assertFalse(deleted.getPromise().isDone());
+			tb1.uninstall();
+			assertFalse(deleted.getPromise().isDone());
+
+			cfg = readConfig(pid);
+			props = cfg.getProperties();
+			assertEquals("baz", props.get("foo"));
+
+			// cleanup ourselves
+			cfg.delete();
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testOverwrite() throws Exception {
+		String pid = "org.osgi.test.pid1";
+		Deferred<Configuration> deleted = new Deferred<>();
+		Deferred<Configuration> updated = new Deferred<>();
+
+		Configuration cfg = configAdmin.getConfiguration(pid, "?");
+		Dictionary<String,Object> props = new Hashtable<>();
+		props.put("foo", "baz");
+		cfg.update(props);
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, deleted);
+		try {
+			Bundle tb6 = install("tb6.jar");
+			assertFalse(updated.getPromise().isDone());
+			tb6.start();
+
+			cfg = updated.getPromise().getValue();
+			props = cfg.getProperties();
+			assertEquals("bar", props.get("foo"));
+
+			assertFalse(deleted.getPromise().isDone());
+			tb6.uninstall();
+			assertEquals(pid, deleted.getPromise().getValue().getPid());
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testOverwriteRemove() throws Exception {
+		String pid = "org.osgi.test.pid1";
+		Deferred<Configuration> deleted = new Deferred<>();
+		Deferred<Configuration> updated = new Deferred<>();
+
+		ServiceRegistration<ConfigurationListener> reg = registerConfigListener(
+				pid, updated, deleted);
+		try {
+			assertNull("Precondition, should not yet have the test config",
+					readConfig(pid));
+
+			Bundle tb6 = install("tb6.jar");
+			assertFalse(updated.getPromise().isDone());
+			tb6.start();
+
+			Configuration cfg = updated.getPromise().getValue();
+			Dictionary<String,Object> props = cfg.getProperties();
+			assertEquals("bar", props.get("foo"));
+
+			// update configuration
+			props.put("foo", "baz");
+			cfg.update(props);
+
+			// the configuration should still be deleted
+			assertFalse(deleted.getPromise().isDone());
+			tb6.uninstall();
+			assertEquals(pid, deleted.getPromise().getValue().getPid());
+		} finally {
+			reg.unregister();
+		}
+	}
+
+	public void testNoRequirement() throws Exception {
+		String pid = "org.osgi.test.pid1";
+
+		try {
+			assertNull("Precondition, should not yet have the test config",
+					readConfig(pid));
+
+			Bundle tb5 = install("tb5.jar");
+			tb5.start();
+
+			assertNull(
+					"This test bundle has no requirement (osgi.extender=osgi.configurator),"
+							+ " hence no configuration should be done",
+					readConfig(pid));
+
+			tb5.uninstall();
+		} finally {}
 	}
 
 	public void testImplicitDatatypes() throws Exception {

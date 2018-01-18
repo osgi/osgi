@@ -1,0 +1,10 @@
+{
+  ":configurator:resource-version": 1,
+  ":configurator:symbolicname": "org.osgi.test.config.init",
+  ":configurator:version": "1.0.0",
+  
+  "org.osgi.test.init.pid": 
+  {
+    "foo": "bar"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "org.osgi.test.pid1": 
+  {
+    ":configurator:policy": "force",
+    "foo": "bar"
+  }
+}

@@ -3,6 +3,9 @@
   
   "org.osgi.test.pid1": 
   {
-    "foo": "bar"
+    "foo": "bar",
+    //"comment1": "should not be in config",
+    /*"comment2": "this also shouldn't be there",*/
+    "foo2": "bar"
   }
 }

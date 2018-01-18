@@ -15,7 +15,11 @@ Include-Resource                    = \
    tb1.jar, \
    tb2.jar, \
    tb3.jar, \
-   tb4.jar
+   tb4.jar, \
+   tb5.jar ,\
+   tb6.jar ,\
+   init_config.json=configs/init_config.json
+   
    
 Test-Cases                          = ${testcases}
 # -signaturetest                      = org.osgi.service.clusterinfo
@@ -38,4 +42,5 @@ Test-Cases                          = ${testcases}
     
 
 
--runproperties = ${runproperties}
+-runproperties = ${runproperties},\
+    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.configurator;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.util.function;latest},${repo;org.osgi.util.promise;latest}}"
