@@ -14,7 +14,8 @@ Private-Package						=  \
 -runbundles						= \
 	org.osgi.impl.service.transaction.control; version=latest
 
--runproperties = ${runproperties}
+-runproperties = ${runproperties},\
+ org.apache.aries.tx.control.service.xa.recovery.log.enabled=true
 
 Test-Cases							= ${testcases}
 	

@@ -91,19 +91,10 @@ public class ScopedWorkException extends RuntimeException {
 	 * @return This method will always throw an exception
 	 * @throws T
 	 */
+	@SuppressWarnings("unchecked")
 	public <T extends Throwable> T as(Class<T> throwable) throws T {
-		Throwable t = getCause();
-
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		}
-
-		possibleThrow(throwable, t);
-
-		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of "
-						+ throwable.getName(),
-				this);
+		ScopedWorkException.<RuntimeException> throwCause(getCause());
+		return (T) getCause();
 	}
 
 	/**
@@ -130,19 +121,7 @@ public class ScopedWorkException extends RuntimeException {
 	 */
 	public <A extends Throwable, B extends Throwable> RuntimeException asOneOf(
 			Class<A> a, Class<B> b) throws A, B {
-		Throwable t = getCause();
-
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		}
-
-		possibleThrow(a, t);
-		possibleThrow(b, t);
-
-		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of "
-						+ a.getName() + " or " + b.getName(),
-				this);
+		return ScopedWorkException.<RuntimeException> throwCause(getCause());
 	}
 
 	/**
@@ -157,23 +136,10 @@ public class ScopedWorkException extends RuntimeException {
 	 * @throws A
 	 * @throws B
 	 */
+	@SuppressWarnings("unused")
 	public <A extends Throwable, B extends Throwable, C extends Throwable> RuntimeException asOneOf(
 			Class<A> a, Class<B> b, Class<C> c) throws A, B, C {
-		Throwable t = getCause();
-
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		}
-
-		possibleThrow(a, t);
-		possibleThrow(b, t);
-		possibleThrow(c, t);
-
-		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of "
-						+ a.getName() + ", " + b.getName() + ", or "
-						+ c.getName(),
-				this);
+		return ScopedWorkException.<RuntimeException> throwCause(getCause());
 	}
 
 	/**
@@ -193,30 +159,12 @@ public class ScopedWorkException extends RuntimeException {
 	 */
 	public <A extends Throwable, B extends Throwable, C extends Throwable, D extends Throwable> RuntimeException asOneOf(
 			Class<A> a, Class<B> b, Class<C> c, Class<D> d) throws A, B, C, D {
-		Throwable t = getCause();
-
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		}
-
-		possibleThrow(a, t);
-		possibleThrow(b, t);
-		possibleThrow(c, t);
-		possibleThrow(d, t);
-
-		throw new IllegalArgumentException(
-				"The cause of this Exception is not an instance of "
-						+ a.getName() + ", " + b.getName() + ", " + c.getName()
-						+ ", or " + d.getName(),
-				this);
+		return ScopedWorkException.<RuntimeException> throwCause(getCause());
 	}
 
 	@SuppressWarnings("unchecked")
-	private <X extends Throwable> void possibleThrow(Class<X> x, Throwable t)
-			throws X {
-		if (x.isInstance(t)) {
-			throw (X) t;
-		}
+	private static <E extends Throwable> RuntimeException throwCause(
+			Throwable e) throws E {
+		throw (E) e;
 	}
-
 }

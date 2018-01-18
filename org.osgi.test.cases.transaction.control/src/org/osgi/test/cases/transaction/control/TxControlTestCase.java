@@ -33,6 +33,8 @@ public abstract class TxControlTestCase extends OSGiTestCase {
 
 	protected boolean												xaEnabled;
 
+	protected boolean												recoveryEnabled;
+
 	protected void setUp() throws InterruptedException {
 		tracker = new ServiceTracker<TransactionControl,TransactionControl>(
 				getContext(), TransactionControl.class, null);
@@ -49,6 +51,7 @@ public abstract class TxControlTestCase extends OSGiTestCase {
 
 		localEnabled = toBoolean(ref.getProperty("osgi.local.enabled"));
 		xaEnabled = toBoolean(ref.getProperty("osgi.xa.enabled"));
+		recoveryEnabled = toBoolean(ref.getProperty("osgi.recovery.enabled"));
 
 		assertTrue(
 				"This transaction control service does not support local or xa transactions",
