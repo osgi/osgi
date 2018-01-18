@@ -17,11 +17,14 @@
 
 package org.osgi.test.cases.framework.secure.junit.permissions;
 
+import static org.osgi.test.support.PermissionTestCase.assertImplies;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-import org.osgi.test.support.PermissionTestCase;
+import org.osgi.test.support.OSGiTestCase;
 
-public class AdminPermissionBundleTests extends PermissionTestCase {
+
+public class AdminPermissionBundleTests extends OSGiTestCase {
 
 	public void testRecursion() throws Exception {
 		Bundle admin2 = install("permissions.admin2.jar");

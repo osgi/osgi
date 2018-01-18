@@ -42,10 +42,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
-public abstract class PermissionTestCase extends OSGiTestCase {
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+
+public abstract class PermissionTestCase extends TestCase {
 
 	public static void checkEnumeration(Enumeration< ? > en, boolean isEmpty) {
 		assertEquals(en + " empty state is invalid", !isEmpty, en
@@ -134,6 +138,19 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		catch (Exception e) {
 			fail("serialization error", e);
 		}
+	}
+
+	/**
+	 * Fail with cause t.
+	 *
+	 * @param message Failure message.
+	 * @param t Cause of the failure.
+	 */
+	public static void fail(String message, Throwable t) {
+		AssertionFailedError e = new AssertionFailedError(
+				message + ": " + t.getMessage());
+		e.initCause(t);
+		throw e;
 	}
 
 	private static <T> Set<T> enumerationAsSet(Enumeration<T> e) {
