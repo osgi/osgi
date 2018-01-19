@@ -16,12 +16,18 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.NameBinding;
+import javax.ws.rs.Produces;
 
 import org.osgi.dto.DTO;
 
 /**
- * Represents information about a JAX-RS resource method.
+ * Represents information about a JAX-RS resource method. All information is
+ * determined by reading the relevant annotations, from the JAX-RS type and not
+ * interpreted further. Dynamic information, or information provided in other
+ * ways may not be represented in this DTO.
  *
  * @NotThreadSafe
  * @author $Id$
@@ -30,17 +36,19 @@ public class ResourceMethodInfoDTO extends DTO {
 
 	/**
 	 * The HTTP verb being handled, for example GET, DELETE, PUT, POST, HEAD,
-	 * OPTIONS
+	 * OPTIONS, null if no {@link HttpMethod} is defined
 	 */
 	public String	method;
 
 	/**
-	 * The mime-type(s) consumed by this resource method, null if not defined
+	 * The mime-type(s) consumed by this resource method, null if
+	 * {@link Consumes} is not defined
 	 */
 	public String[]	consumingMimeType;
 
 	/**
-	 * The mime-type(s) produced by this resource method, null if not defined
+	 * The mime-type(s) produced by this resource method, null if
+	 * {@link Produces} is not defined
 	 */
 	public String[]	producingMimeType;
 
@@ -51,7 +59,8 @@ public class ResourceMethodInfoDTO extends DTO {
 	public String[]	nameBindings;
 
 	/**
-	 * The path of this resource method
+	 * The path of this resource method. Placeholder information present in the
+	 * URI pattern will not be interpreted and simply returned as defined.
 	 */
 	public String	path;
 }

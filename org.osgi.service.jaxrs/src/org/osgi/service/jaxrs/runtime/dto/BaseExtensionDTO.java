@@ -17,23 +17,15 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
 /**
- * Represents a JAX-RS Extension service which is currently not being used due
- * to a problem.
- * 
+ * Represents common information about a JAX-RS extension service.
+ *
  * @NotThreadSafe
  * @author $Id$
  */
-public class FailedExtensionDTO extends BaseExtensionDTO {
+public abstract class BaseExtensionDTO extends BaseDTO {
 
 	/**
-	 * The reason why the extension represented by this DTO is not used.
-	 * 
-	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
-	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
-	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
-	 * @see DTOConstants#FAILURE_REASON_NOT_AN_EXTENSION_TYPE
-	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
+	 * The extension types recognized for this service.
 	 */
-	public int	failureReason;
-
+	public String[] extensionTypes;
 }

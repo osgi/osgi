@@ -16,24 +16,25 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
+import org.osgi.dto.DTO;
+import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
+
 /**
- * Represents a JAX-RS Extension service which is currently not being used due
- * to a problem.
- * 
+ * Represents common information about a JAX-RS service.
+ *
  * @NotThreadSafe
  * @author $Id$
  */
-public class FailedExtensionDTO extends BaseExtensionDTO {
+public abstract class BaseDTO extends DTO {
+	/**
+	 * The name of the service if it set one using
+	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, otherwise this value will
+	 * contain the generated name for this service
+	 */
+	public String					name;
 
 	/**
-	 * The reason why the extension represented by this DTO is not used.
-	 * 
-	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
-	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
-	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
-	 * @see DTOConstants#FAILURE_REASON_NOT_AN_EXTENSION_TYPE
-	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
+	 * Service property identifying the JAX-RS service
 	 */
-	public int	failureReason;
-
+	public long						serviceId;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.NameBinding;
 import javax.ws.rs.Produces;
 
-import org.osgi.dto.DTO;
 import org.osgi.service.jaxrs.runtime.JaxRSServiceRuntime;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
 
 /**
  * Represents a JAX-RS Filter service currently being hosted by the
@@ -31,17 +29,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ExtensionDTO extends DTO {
-
-	/**
-	 * The {@link JaxRSWhiteboardConstants#JAX_RS_NAME} for this extension
-	 */
-	public String			name;
-
-	/**
-	 * The extension types recognized for this service.
-	 */
-	public String[]			extensionTypes;
+public class ExtensionDTO extends BaseExtensionDTO {
 
 	/**
 	 * The media types produced by this service, if provided in an
@@ -66,9 +54,4 @@ public class ExtensionDTO extends DTO {
 	 * {@link NameBinding} annotation
 	 */
 	public ResourceDTO[]	filteredByName;
-
-	/**
-	 * Service property identifying the JAX-RS extension service.
-	 */
-	public long				serviceId;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,13 @@
 package org.osgi.service.jaxrs.runtime.dto;
 
 /**
- * Represents a JAX-RS service which is currently not being used due to a
- * problem.
- * <p>
- * As the service represented by this DTO is not used due to a failure, the
- * field {@link ResourceDTO#resourceMethods} always returns null.
+ * Represents a JAX-RS resource service which is currently not being used due to
+ * a problem.
  * 
  * @NotThreadSafe
  * @author $Id$
  */
-public class FailedResourceDTO extends ResourceDTO {
+public class FailedResourceDTO extends BaseDTO {
 
 	/**
 	 * The reason why the resource represented by this DTO is not used.
@@ -34,7 +31,6 @@ public class FailedResourceDTO extends ResourceDTO {
 	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
 	 * @see DTOConstants#FAILURE_REASON_SERVICE_NOT_GETTABLE
 	 * @see DTOConstants#FAILURE_REASON_VALIDATION_FAILED
-	 * @see DTOConstants#FAILURE_REASON_SHADOWED_BY_OTHER_SERVICE
 	 * @see DTOConstants#FAILURE_REASON_REQUIRED_EXTENSIONS_UNAVAILABLE
 	 */
 	public int	failureReason;

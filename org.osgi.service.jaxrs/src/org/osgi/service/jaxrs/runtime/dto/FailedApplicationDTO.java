@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,15 @@ package org.osgi.service.jaxrs.runtime.dto;
  * Represents a JAX-RS service which is currently not being used due to a
  * problem.
  * <p>
- * As the service represented by this DTO is not used due to a failure, the
- * field {@link ResourceDTO#resourceMethods} always returns null.
+ * The service represented by this DTO is not used due to a failure, but the
+ * {@link BaseApplicationDTO#extensionDTOs} and
+ * {@link BaseApplicationDTO#resourceDTOs} may be non-empty if whiteboard
+ * services have been associated with this failed application.
  * 
  * @NotThreadSafe
  * @author $Id$
  */
-public class FailedApplicationDTO extends ApplicationDTO {
+public class FailedApplicationDTO extends BaseApplicationDTO {
 
 	/**
 	 * The reason why the resource represented by this DTO is not used.

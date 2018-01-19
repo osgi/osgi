@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2017, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,16 @@
 
 package org.osgi.service.jaxrs.runtime.dto;
 
-import org.osgi.dto.DTO;
-import org.osgi.service.jaxrs.whiteboard.JaxRSWhiteboardConstants;
-
 /**
  * Represents common information about a JAX-RS resource service.
  *
  * @NotThreadSafe
  * @author $Id$
  */
-public abstract class ResourceDTO extends DTO {
-	/**
-	 * The name of the resource if it set one using
-	 * {@link JaxRSWhiteboardConstants#JAX_RS_NAME}, otherwise this value will
-	 * contain the generated name for this resource
-	 */
-	public String					name;
+public class ResourceDTO extends BaseDTO {
 
 	/**
 	 * The RequestPaths handled by this resource
 	 */
 	public ResourceMethodInfoDTO[]	resourceMethods;
-
-	/**
-	 * Service property identifying the JAX-RS resource service
-	 */
-	public long						serviceId;
 }
