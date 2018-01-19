@@ -133,8 +133,14 @@ public class XATxControlTestCase extends TxControlTestCase {
 								@Override
 								public void commit(Xid xid, boolean onePhase)
 										throws XAException {
-									stored.remove(name, xid);
-									sem.release();
+									Xid removed = stored.remove(name);
+									if (xid.equals(removed)) {
+										sem.release();
+									} else {
+										System.out.println("Expected to remove "
+												+ xid + " but found "
+												+ removed);
+									}
 								}
 
 								@Override
