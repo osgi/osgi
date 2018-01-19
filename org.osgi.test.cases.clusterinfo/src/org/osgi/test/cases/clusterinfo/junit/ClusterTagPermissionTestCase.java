@@ -64,7 +64,7 @@ public class ClusterTagPermissionTestCase extends PermissionTestCase {
 		assertEquals(p3, p3);
 		assertEquals(p_all, p_all);
 
-		assertNotEquals(p, p2);
+		assertEquals(p, p2);
 		assertNotEquals(p, p3);
 		assertNotEquals(p, p_all);
 		assertNotEquals(p2, p3);
