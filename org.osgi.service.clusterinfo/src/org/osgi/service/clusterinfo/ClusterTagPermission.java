@@ -66,7 +66,8 @@ public final class ClusterTagPermission extends Permission {
 	/**
 	 * Defines the authority to add a tag to the NodeStatus service.
 	 *
-	 * @param tag Tag to add.
+	 * @param tag Give permission to add this tag, use * wildcard to give
+	 *            permission to add any tag.
 	 * @param actions {@code add}.
 	 */
 	public ClusterTagPermission(String tag, String actions) {

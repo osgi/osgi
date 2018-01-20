@@ -26,7 +26,7 @@
     dedicated hardware for certain application functionality (for example, a
     database server).</para>
 
-    <para>Also the unit of management is often no longer a single physical
+    <para>The unit of management is often no longer a single physical
     machine. Server infrastructure is nowadays mostly offered in a virtualized
     fashion, such as hardware virtualization using a hypervisor or operating
     system virtualization using containers. Potentially these can also be
@@ -34,6 +34,11 @@
     inside a virtual machine. Therefore, it becomes key to manage an
     application running on a cluster of such (virtual) machines and/or
     containers.</para>
+    
+    <para>Also in the context of the Internet of Things (IoT), often a number
+    of gateway devices is deployed in the network that connect various sensors
+    and actuators creating a smart environment. Again, it becomes key to discover and
+    manage these devices, and query their capabilities.</para>
 
     <para>The OSGi specification already provides chapters describing how to
     deploy software on remote infrastructure, how to call remote services or
@@ -468,8 +473,9 @@
       <title>Cluster Tag Permission</title>
 
       <para>The <code>ClusterTagPermission</code> class allows fine-grained
-      control over which bundles may add tags to the FrameworkNodeStatus
-      service.</para>
+      control over which bundles may add which tags to the FrameworkNodeStatus
+      service. A bundle can be granted to add a certain tag to the FrameworkNodeStatus,
+      or be granted to add any tag using the * wildcard.</para>
     </section>
 
     <section>
@@ -485,7 +491,7 @@
       GET]</code>.</para>
 
       <para>Only trusted bundles who must be able to add NodeStatus tags
-      should be assigned <code>ServicePermission[ClusterTag,
+      should be assigned <code>ClusterTagPermission[ClusterTag,
       ADD]</code>.</para>
     </section>
 
