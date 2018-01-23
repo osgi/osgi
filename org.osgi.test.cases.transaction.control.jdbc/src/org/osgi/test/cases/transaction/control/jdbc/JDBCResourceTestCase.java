@@ -17,6 +17,7 @@ package org.osgi.test.cases.transaction.control.jdbc;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
@@ -25,7 +26,11 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 	
 	private ServiceTracker<JDBCConnectionProviderFactory,JDBCConnectionProviderFactory>	tracker;
 
+	private ServiceTracker<DataSourceFactory,DataSourceFactory>							dsfTracker;
+
 	protected JDBCConnectionProviderFactory												jdbcResourceProviderFactory;
+
+	protected DataSourceFactory															dataSourceFactory;
 
 	protected Bundle																	jdbcResourceProviderBundle;
 
@@ -33,11 +38,17 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 
 	protected boolean												xaEnabled;
 
-	protected void setUp() throws InterruptedException {
+	protected void setUp() throws Exception {
 		tracker = new ServiceTracker<JDBCConnectionProviderFactory,JDBCConnectionProviderFactory>(
 				getContext(), JDBCConnectionProviderFactory.class, null);
 		tracker.open();
+
+		dsfTracker = new ServiceTracker<DataSourceFactory,DataSourceFactory>(
+				getContext(), DataSourceFactory.class, null);
+		dsfTracker.open();
+
 		jdbcResourceProviderFactory = tracker.waitForService(5000);
+		dataSourceFactory = dsfTracker.waitForService(5000);
 
 		assertNotNull("No Tx Control service available within 5 seconds",
 				jdbcResourceProviderFactory);

@@ -15,19 +15,19 @@
  */
 package org.osgi.test.cases.transaction.control.jdbc;
 
-import static org.junit.Assume.assumeTrue;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Properties;
 
-public class XATxControlTestCase extends JDBCResourceTestCase {
-	
-	/**
-	 * A basic test that ensures that an XA Provider does something
-	 * 
-	 * @throws Exception
-	 */
-	public void testSomethingXA() throws Exception {
-		assumeTrue(xaEnabled);
+import org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider;
 
-		// TODO
+public class DataSourceFactoryJDBCProviderFactoryTestCase
+		extends CommonJDBCProviderFactoryTestCase {
 
+	@Override
+	protected JDBCConnectionProvider getProvider(Properties props,
+			Map<String,Object> providerConfig) throws SQLException {
+		return jdbcResourceProviderFactory.getProviderFor(dataSourceFactory,
+				props, providerConfig);
 	}
 }

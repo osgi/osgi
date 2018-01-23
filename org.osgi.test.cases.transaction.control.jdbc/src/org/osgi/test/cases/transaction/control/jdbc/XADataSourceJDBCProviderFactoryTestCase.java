@@ -15,19 +15,21 @@
  */
 package org.osgi.test.cases.transaction.control.jdbc;
 
-import static org.junit.Assume.assumeTrue;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Properties;
 
-public class LocalJDBCProviderFactoryTestCase extends JDBCResourceTestCase {
-	
-	/**
-	 * A basic test that ensures that a Local Provider does something
-	 * 
-	 * @throws Exception
-	 */
-	public void testSomethingLocal() throws Exception {
-		assumeTrue(localEnabled);
+import org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider;
 
-		// TODO
+public class XADataSourceJDBCProviderFactoryTestCase
+		extends CommonJDBCProviderFactoryTestCase {
 
+	@Override
+	protected JDBCConnectionProvider getProvider(Properties props,
+			Map<String,Object> providerConfig) throws SQLException {
+		return jdbcResourceProviderFactory.getProviderFor(
+				dataSourceFactory.createXADataSource(props), providerConfig);
 	}
+	
+	
 }
