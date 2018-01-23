@@ -220,6 +220,13 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
   }
 }
 
+configure(tasks.getByName('core.fo')) {
+  ext.watermark = 'docbook/graphics/proposed-final-draft.svg'
+}
+configure(tasks.getByName('cmpn.fo')) {
+  ext.watermark = 'docbook/graphics/proposed-final-draft.svg'
+}
+
 tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <name>.') { taskName ->
   if (taskName.endsWith('.pdf')) {
     task(taskName) {
