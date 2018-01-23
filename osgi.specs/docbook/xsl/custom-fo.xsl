@@ -260,9 +260,20 @@ actual para elements -->
 </xsl:attribute-set>
 
 <xsl:attribute-set name="section.title.level4.properties">
-  <xsl:attribute name="font-family"><xsl:value-of
-           select="$body.fontset"/></xsl:attribute>
-  <xsl:attribute name="font-style">italic</xsl:attribute>
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+  <xsl:attribute name="line-height">11pt</xsl:attribute>
+  <xsl:attribute name="space-before">5pt</xsl:attribute>
+  <xsl:attribute name="space-after">3pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level5.properties">
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+  <xsl:attribute name="line-height">11pt</xsl:attribute>
+  <xsl:attribute name="space-before">5pt</xsl:attribute>
+  <xsl:attribute name="space-after">3pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="section.title.level6.properties">
   <xsl:attribute name="font-size">9pt</xsl:attribute>
   <xsl:attribute name="line-height">11pt</xsl:attribute>
   <xsl:attribute name="space-before">5pt</xsl:attribute>
