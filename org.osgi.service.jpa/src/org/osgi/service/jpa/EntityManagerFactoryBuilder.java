@@ -63,6 +63,13 @@ public interface EntityManagerFactoryBuilder {
 	public static final String	JPA_CAPABILITY_NAME	= "osgi.jpa";
 
 	/**
+	 * The version of the extender capability for the JPA Service specification
+	 * 
+	 * @since 1.1
+	 */
+	public static final String	JPA_SPECIFICATION_VERSION	= "1.1";
+
+	/**
 	 * Return an EntityManagerFactory instance configured according to the
 	 * properties defined in the corresponding persistence descriptor, as well
 	 * as the properties passed into the method.

@@ -34,8 +34,10 @@
  * @author $Id$
  */
 
-@Version("1.1")
+@Version(JPA_SPECIFICATION_VERSION)
 package org.osgi.service.jpa;
+
+import static org.osgi.service.jpa.EntityManagerFactoryBuilder.JPA_SPECIFICATION_VERSION;
 
 import org.osgi.annotation.versioning.Version;
 

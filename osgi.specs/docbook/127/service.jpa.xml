@@ -1418,6 +1418,9 @@ suffix:     META-INF/persistence.xml</programlisting>
   filter:="(&amp;(osgi.extender=osgi.jpa)(version&gt;=<xref
           endterm="org.osgi.service.jpa-version.number"
           linkend="org.osgi.service.jpa"/>)(!(version&gt;=2.0)))"</programlisting>
+          
+      <para>This requirement can be easily generated using the <code>RequireJPAExtender</code>
+      annotation.</para>
 
       <para>The JPA extender must only process a persistence bundle's
       persistence units if the following is true:</para>
