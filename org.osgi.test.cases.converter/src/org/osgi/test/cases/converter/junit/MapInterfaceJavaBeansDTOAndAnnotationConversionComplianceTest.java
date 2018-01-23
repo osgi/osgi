@@ -396,15 +396,6 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		public String special$$_$prop();// "org.osgi.util.converter.test.special$.prop";
 	}
 
-	public static @interface SingleElementAnnotation {
-		KeyMappingAnnotation value();
-	}
-
-	@SingleElementAnnotation(@KeyMappingAnnotation(_specialprop = "org.osgi.util.converter.test..specialprop", special$$_$prop = "org.osgi.util.converter.test.special$.prop", special$$prop = "org.osgi.util.converter.test.special$prop", special$_$prop = "org.osgi.util.converter.test.special-prop", special$prop = "org.osgi.util.converter.test.specialprop", special_$__prop = "org.osgi.util.converter.test.special._prop", special_$_prop = "org.osgi.util.converter.test.special..prop", special___prop = "org.osgi.util.converter.test.special_.prop", special__prop = "org.osgi.util.converter.test.special_prop", special_prop = "org.osgi.util.converter.test.special.prop"))
-	public static class SingleElementAnnotatedClass {
-		public SingleElementAnnotatedClass() {}
-	}
-
 	public static class MyDTO2 extends DTO {
 		public static String		shouldBeIgnored	= "ignoreme";
 
@@ -439,6 +430,15 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 	@MyMarkerAnnotation
 	public interface MarkedInterface {
 		String foo();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface SingleElementAnnotation {
+		String value() default "nothing!";
+	}
+
+	@SingleElementAnnotation("123")
+	public static class SingleElementAnnotatedClass {
 	}
 
 	/**
@@ -1459,5 +1459,34 @@ public class MapInterfaceJavaBeansDTOAndAnnotationConversionComplianceTest
 		Map<String,String> m2 = converter.convert(ann)
 				.to(new TypeReference<Map<String,String>>() {});
 		assertEquals("true", m2.get("my.marker.annotation"));
+	}
+
+	public void testConvertSingleElementAnnotation() {
+		Converter converter = Converters.standardConverter();
+
+		SingleElementAnnotation ann = SingleElementAnnotatedClass.class
+				.getAnnotation(SingleElementAnnotation.class);
+		Map< ? , ? > m = converter.convert(ann).to(Map.class);
+		assertEquals(1, m.size());
+		assertEquals("123", m.get("single.element.annotation"));
+		Map<Object, Object> m2 = new HashMap<>(m);
+		m2.put("some.key", "some.value");
+
+		SingleElementAnnotation res = converter.convert(m2)
+				.to(SingleElementAnnotation.class);
+		assertEquals("123", res.value());
+		SingleElementAnnotation res2 = converter
+				.convert(Collections.singletonMap("single.element.annotation",
+						456))
+				.to(SingleElementAnnotation.class);
+		assertEquals("456", res2.value());
+
+		SingleElementAnnotation res3 = converter.convert(Collections.emptyMap())
+				.to(SingleElementAnnotation.class);
+		assertEquals("nothing!", res3.value());
+
+		Map<String,Long> m3 = converter.convert(res2)
+				.to(new TypeReference<Map<String,Long>>() {});
+		assertEquals(Long.valueOf(456L), m3.get("single.element.annotation"));
 	}
 }
