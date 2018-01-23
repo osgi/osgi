@@ -1678,7 +1678,7 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="service.cm-targeted.pids"/>.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-updating.configuration">
       <title>Updating a Configuration</title>
 
       <para>The process of updating a <code>Configuration</code> object is the
@@ -1970,7 +1970,7 @@ ConfigurationPermission[?application,<xref
       updates, and initialization.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-configuration.attributes">
       <title>Configuration Attributes</title>
 
       <para>The <code>Configuration</code> object allows to set attributes,
@@ -2277,7 +2277,7 @@ ConfigurationPermission[?application,<xref
       that all applicable plug-ins get called again.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-plugin.order">
       <title>Calling Order</title>
 
       <para>The order in which the <code>ConfigurationPlugin</code> objects
@@ -2337,7 +2337,7 @@ ConfigurationPermission[?application,<xref
       </table>
     </section>
 
-    <section>
+    <section xml:id="service.cm-plugin.manual">
       <title>Manual Invocation</title>
 
       <para>The Configuration Admin service ensures that Configuration Plugin
@@ -2392,7 +2392,7 @@ ConfigurationPermission[?application,<xref
     remote management.</para>
   </section>
 
-  <section>
+  <section xml:id="service.cm-coordinatorsupport">
     <title>Coordinator Support</title>
 
     <para>The <xref linkend="service.coordinator"/> defines a mechanism for
@@ -2411,7 +2411,7 @@ ConfigurationPermission[?application,<xref
     immediately when the change happens regardless of a coordination.</para>
   </section>
 
-  <section>
+  <section xml:id="service.cm-capabilities">
     <title>Capabilities</title>
 
     <section>
@@ -2639,8 +2639,41 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     <title>Changes</title>
 
     <itemizedlist>
+
       <listitem>
-        <para><remark>BJH Need changes section writeup.</remark></para>
+        <para>Support for named factory configurations is added. 
+        See <xref linkend="i1761778"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New method <code>Configuration.updateIfDifferent</code> is added..
+        See <xref linkend="service.cm-updating.configuration"/>.</para>
+      </listitem>
+   
+      <listitem>
+        <para>Attributes are added to configuration objects and a <code>READ_ONLY</code>
+        attribute is defined. See <xref linkend="service.cm-configuration.attributes"/>
+        and <xref linkend="i1693439"/>.</para>
+      </listitem>
+      
+      <listitem>
+        <para>Call order and handling of <code>ConfigurationPlugin</code> services is
+        clarified. See <xref linkend="service.cm-plugin.order"/>.</para>        
+      </listitem>
+
+      <listitem>
+        <para>A way to manually call Configuration Plugin services is added.
+        See <xref linkend="service.cm-plugin.manual"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Configuration Admin must support implicit coordinations. See <xref
+        linkend="service.cm-coordinatorsupport"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Service and implementation capabilities are added.
+        See <xref linkend="service.cm-capabilities"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
