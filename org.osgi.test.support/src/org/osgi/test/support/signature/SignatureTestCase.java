@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.osgi.framework.Bundle;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -324,18 +325,22 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 
 	private void checkExceptions(String[] exceptions,
 			Class< ? >[] exceptionTypes) {
-		if (exceptions == null
-				&& (exceptionTypes == null || exceptionTypes.length == 0))
-			return;
-
-		Set<String> set = new TreeSet<String>(Arrays.asList(exceptions));
-		for (int i = 0; exceptionTypes != null && i < exceptionTypes.length; i++) {
-			String name = exceptionTypes[i].getName().replace('.', '/');
-			if (!set.remove(name))
-				fail("Superfluous Exception " + exceptionTypes[i]);
+		Set<String> expected = new TreeSet<>();
+		if (exceptions != null) {
+			expected.addAll(Arrays.asList(exceptions));
 		}
-		if (!set.isEmpty())
-			fail("Missing declared exceptions: " + set);
+		if (exceptionTypes != null) {
+			Set<String> actual = new TreeSet<>();
+			for (Class< ? > exceptionType : exceptionTypes) {
+				actual.add(exceptionType.getName().replace('.', '/'));
+			}
+			for (String name : actual) {
+				if (!expected.remove(name))
+					fail("Superfluous Exception " + name);
+			}
+		}
+		if (!expected.isEmpty())
+			fail("Missing declared exceptions: " + expected);
 	}
 
 	private void checkInterfaces(Class< ? > c, String[] interfaces) {
