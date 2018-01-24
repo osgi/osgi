@@ -79,6 +79,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.transaction, \
     org.osgi.test.cases.transaction.control, \
     org.osgi.test.cases.transaction.control.jdbc, \
+    org.osgi.test.cases.transaction.control.jpa, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
@@ -141,6 +142,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.transaction, \
     org.osgi.test.cases.transaction.control, \
     org.osgi.test.cases.transaction.control.jdbc, \
+    org.osgi.test.cases.transaction.control.jpa, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
     org.osgi.test.cases.xml
