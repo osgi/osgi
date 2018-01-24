@@ -1712,7 +1712,9 @@ private       ::= '.' symbolic-name</programlisting>
       linkend="org.osgi.service.cm.Configuration.getChangeCount--"
       xrefstyle="hyperlink"/> method.</para>
 
-      <para>The <code>update</code> method calls in <code>Configuration</code>
+      <para>The <xref
+      linkend="org.osgi.service.cm.Configuration.update-Dictionary-"
+      xrefstyle="hyperlink"/> method calls in <code>Configuration</code>
       objects are not executed synchronously with the related target services
       <code>updated</code> method. The <code>updated</code> method must be
       called asynchronously. The Configuration Admin service, however, must
@@ -1733,11 +1735,15 @@ private       ::= '.' symbolic-name</programlisting>
 
       <para>To optimize configuration updates if the caller does not know
       whether properties of a <code>Configuration</code> object have changed,
-      <code>Configuration.updateIfDifferent</code> can be used. The provided
+      <xref
+      linkend="org.osgi.service.cm.Configuration.updateIfDifferent-Dictionary-"
+      xrefstyle="hyperlink"/> can be used. The provided
       dictionary is compared with the existing properties. If there is no
       change, no action is invoked. If there is any change detected,
       <code>Configuration.updateIfDifferent</code> acts exactly as
-      <code>Configuration.update</code>. Properties are compared as follows:
+      <xref
+      linkend="org.osgi.service.cm.Configuration.update-Dictionary-"
+      xrefstyle="hyperlink"/>. Properties are compared as follows:
       scalars are compared using <code>equals()</code>, arrays are compared
       using <code>Arrays.equals()</code>, and collections are compared using
       <code>equals()</code>. The <code>boolean</code> result of
@@ -1745,8 +1751,12 @@ private       ::= '.' symbolic-name</programlisting>
       Configuration object has been updated.</para>
 
       <para>If the <code>Configuration</code> object has the
-      <code>READ_ONLY</code> attribute set, calling one of the update methods
-      results in a <code>ReadOnlyConfigurationException</code> and the
+      <xref
+      linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
+      xrefstyle="hyperlink"/> attribute set, calling one of the update methods
+      results in a <xref
+      linkend="org.osgi.service.cm.ReadOnlyConfigurationException"
+      xrefstyle="hyperlink"/> and the
       configuration is not changed.</para>
     </section>
 
@@ -1947,8 +1957,12 @@ ConfigurationPermission[?application,<xref
       Listeners.</para>
 
       <para>If the <code>Configuration</code> object has the
-      <code>READ_ONLY</code> attribute set, calling the delete method results
-      in a <code>ReadOnlyConfigurationException</code> and the configuration
+          <xref
+          linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
+          xrefstyle="hyperlink"/> attribute set, calling the delete method results
+          in a <xref
+          linkend="org.osgi.service.cm.ReadOnlyConfigurationException"
+          xrefstyle="hyperlink"/> and the configuration
       is not deleted.</para>
     </section>
 
@@ -1975,20 +1989,30 @@ ConfigurationPermission[?application,<xref
 
       <para>The <code>Configuration</code> object allows to set attributes,
       similar to setting attributes on files in a file system. Currently only
-      the <code>READ_ONLY</code> attribute is supported.</para>
+      the <xref
+      linkend="org.osgi.service.cm.Configuration.ConfigurationAttribute.READ_ONLY"
+          xrefstyle="hyperlink"/> attribute is supported.</para>
 
       <para>Attributes can be set by calling the
-      <code>Configuration.addAttributes</code> method and listing the
+          <xref
+          linkend="org.osgi.service.cm.Configuration.addAttributes-ConfigurationAttribute...-"
+          xrefstyle="hyperlink"/> method and listing the
       attributes to be added. In the same way attributes can be removed by
-      calling <code>Configuration.removeAttributes</code>. Each successful
+      calling <xref
+      linkend="org.osgi.service.cm.Configuration.removeAttributes-ConfigurationAttribute...-"
+      xrefstyle="hyperlink"/>. Each successful
       change in attributes is persisted.</para>
 
       <para>A Bundle can only change the attributes if it has
-      <code>ConfigurationPermission[location, ATTRIBUTE]</code>. Otherwise a
+          <xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.ATTRIBUTE"
+          xrefstyle="hyperlink"/>. Otherwise a
       Security Exception is thrown.</para>
 
-      <para>The currently set attributes can be queried using
-      <code>Configuration.getAttributes</code>.</para>
+      <para>The currently set attributes can be queried using the
+          <xref
+          linkend="org.osgi.service.cm.Configuration.getAttributes--"
+          xrefstyle="hyperlink"/> method.</para>
     </section>
   </section>
 
