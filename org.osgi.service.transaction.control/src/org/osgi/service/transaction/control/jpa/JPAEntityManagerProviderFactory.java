@@ -23,6 +23,7 @@ import javax.persistence.EntityManagerFactory;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.osgi.service.transaction.control.TransactionException;
+import org.osgi.service.transaction.control.jdbc.JDBCConnectionProvider;
 
 /**
  * A factory for creating JPAEntityManagerProvider instances
@@ -46,7 +47,43 @@ public interface JPAEntityManagerProviderFactory {
 	public static final String	LOCAL_ENLISTMENT_ENABLED	= "osgi.local.enabled";
 
 	/**
-	 * The property used to provide a {@link JPAEntityManagerProvider} to the
+	 * The property used to determine whether connection pooling is enabled for
+	 * this resource provider
+	 */
+	public static final String	CONNECTION_POOLING_ENABLED	= "osgi.connection.pooling.enabled";
+
+	/**
+	 * The property used to set the maximum amount of time that the pool should
+	 * wait for a connection
+	 */
+	public static final String	CONNECTION_TIMEOUT			= "osgi.connection.timeout";
+
+	/**
+	 * The property used to set the maximum amount of time that connections in
+	 * the pool should remain idle before being closed
+	 */
+	public static final String	IDLE_TIMEOUT				= "osgi.idle.timeout";
+
+	/**
+	 * The property used to set the maximum amount of time that connections in
+	 * the pool should remain open
+	 */
+	public static final String	CONNECTION_LIFETIME			= "osgi.connection.lifetime";
+
+	/**
+	 * The property used to set the minimum number of connections that should be
+	 * held in the pool
+	 */
+	public static final String	MIN_CONNECTIONS				= "osgi.connection.min";
+
+	/**
+	 * The property used to set the maximum number of connections that should be
+	 * held in the pool
+	 */
+	public static final String	MAX_CONNECTIONS				= "osgi.connection.max";
+
+	/**
+	 * The property used to provide a {@link JDBCConnectionProvider} to the
 	 * resource provider. This will be converted into a DataSource by the
 	 * factory, and passed to the {@link EntityManagerFactoryBuilder} using the
 	 * javax.persistence.jtaDataSource property

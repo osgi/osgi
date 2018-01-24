@@ -1792,8 +1792,10 @@ txControl.required(() -&gt;
         <para>When enlisted in a Transaction a JPA EntityManager will
         automatically track the state of persisted entity types and update the
         database as necessary. When participating in a transaction it is
-        forbidden to call the <code>getTransaction</code> method on the
-        EntityManager as manual transaction management is disabled.</para>
+        forbidden to call the <code>getTransaction</code> 
+        method on the EntityManager as manual transaction management is disabled.
+        The <code>joinTransaction</code> method, however must be a no-op, and
+        the <code>isJoinedToTransaction</code> must always return <code>true</code>.</para>
 
         <para>If the Transaction commits the JPA EntityManager must commit any
         work performed in the transaction. Similarly if the Transaction rolls
@@ -1813,6 +1815,9 @@ txControl.required(() -&gt;
         back, it is therefore the client's responsibility to set up an
         EntityTransaction and to call <code>commit</code> or
         <code>rollback</code> as appropriate.</para>
+        
+        <para>The <code>joinTransaction</code> method must throw a <code>TransactionException</code>, and
+        the <code>isJoinedToTransaction</code> must always return <code>false</code>.</para>
 
         <para>After the end of the scope the EntityManager must be
         automatically cleaned up in an appropriate way, for example by closing
@@ -1879,7 +1884,10 @@ txControl.required(() -&gt;
           <para>Passing String class names and expecting the JPA provider to
           load the Database driver reflectively should be avoided, however a
           configured DataSource can be passed using the
-          <code>javax.persistence.jtaDataSource</code> property.</para>
+          <code>javax.persistence.jtaDataSource</code> property. If the JPA
+          resource provider supports XA transactions then this property may
+          be used to pass a configured <code>XADataSource</code> to be
+          enlisted by the provider.</para>
 
           <para>The <code>osgi.jdbc.provider</code> property can be passed to
           the resource provider defining a JDBCConnectionProvider that should

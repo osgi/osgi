@@ -13,50 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.transaction.control.jdbc;
+package org.osgi.test.cases.transaction.control.jpa;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jdbc.DataSourceFactory;
-import org.osgi.service.transaction.control.jdbc.JDBCConnectionProviderFactory;
+import org.osgi.service.jpa.EntityManagerFactoryBuilder;
+import org.osgi.service.transaction.control.jpa.JPAEntityManagerProviderFactory;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
-public abstract class JDBCResourceTestCase extends OSGiTestCase {
+public abstract class JPAResourceTestCase extends OSGiTestCase {
 	
-	private ServiceTracker<JDBCConnectionProviderFactory,JDBCConnectionProviderFactory>	tracker;
+	private ServiceTracker<JPAEntityManagerProviderFactory,JPAEntityManagerProviderFactory>	tracker;
 
 	private ServiceTracker<DataSourceFactory,DataSourceFactory>							dsfTracker;
 
-	protected JDBCConnectionProviderFactory												jdbcResourceProviderFactory;
+	private ServiceTracker<EntityManagerFactoryBuilder,EntityManagerFactoryBuilder>			emfBuilderTracker;
+
+	protected JPAEntityManagerProviderFactory												jpaResourceProviderFactory;
 
 	protected DataSourceFactory															dataSourceFactory;
 
-	protected Bundle																	jdbcResourceProviderBundle;
+	protected EntityManagerFactoryBuilder													emfBuilder;
+
+	protected Bundle																		jpaResourceProviderBundle;
 
 	protected boolean												localEnabled;
 
 	protected boolean												xaEnabled;
 
 	protected void setUp() throws Exception {
-		tracker = new ServiceTracker<JDBCConnectionProviderFactory,JDBCConnectionProviderFactory>(
-				getContext(), JDBCConnectionProviderFactory.class, null);
+		tracker = new ServiceTracker<>(getContext(),
+				JPAEntityManagerProviderFactory.class, null);
 		tracker.open();
 
-		dsfTracker = new ServiceTracker<DataSourceFactory,DataSourceFactory>(
-				getContext(), DataSourceFactory.class, null);
+		dsfTracker = new ServiceTracker<>(getContext(), DataSourceFactory.class,
+				null);
 		dsfTracker.open();
 
-		jdbcResourceProviderFactory = tracker.waitForService(5000);
+		emfBuilderTracker = new ServiceTracker<>(getContext(),
+				EntityManagerFactoryBuilder.class, null);
+		emfBuilderTracker.open();
+
+		jpaResourceProviderFactory = tracker.waitForService(5000);
 		dataSourceFactory = dsfTracker.waitForService(5000);
+		emfBuilder = emfBuilderTracker.waitForService(5000);
 
 		assertNotNull("No Tx Control service available within 5 seconds",
-				jdbcResourceProviderFactory);
+				jpaResourceProviderFactory);
 
-		ServiceReference<JDBCConnectionProviderFactory> ref = tracker
+		ServiceReference<JPAEntityManagerProviderFactory> ref = tracker
 				.getServiceReference();
 
-		jdbcResourceProviderBundle = ref.getBundle();
+		jpaResourceProviderBundle = ref.getBundle();
 
 		localEnabled = toBoolean(ref.getProperty("osgi.local.enabled"));
 		xaEnabled = toBoolean(ref.getProperty("osgi.xa.enabled"));
@@ -69,6 +79,7 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 	protected void tearDown() {
 		tracker.close();
 		dsfTracker.close();
+		emfBuilderTracker.close();
 	}
 	
 	protected boolean toBoolean(Object o) {

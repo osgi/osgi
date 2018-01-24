@@ -7,11 +7,6 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.*
 
-#Just to bootstrap the CT - the pre-release should be removed in aries and a snapshot used
-Export-Package: org.osgi.service.transaction.control;api.status=aries.prerelease, \
- org.osgi.service.transaction.control.jdbc;api.status=aries.prerelease,\
- org.osgi.service.transaction.control.recovery;api.status=aries.prerelease
-
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.transaction.control;version=project,\
 	org.osgi.service.jdbc; version=project, \
