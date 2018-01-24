@@ -38,6 +38,8 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 
 	protected boolean												xaEnabled;
 
+	protected boolean																	recoveryEnabled;
+
 	protected void setUp() throws Exception {
 		tracker = new ServiceTracker<JDBCConnectionProviderFactory,JDBCConnectionProviderFactory>(
 				getContext(), JDBCConnectionProviderFactory.class, null);
@@ -64,6 +66,8 @@ public abstract class JDBCResourceTestCase extends OSGiTestCase {
 		assertTrue(
 				"This transaction control service does not support local or xa transactions",
 				localEnabled || xaEnabled);
+
+		recoveryEnabled = toBoolean(ref.getProperty("osgi.recovery.enabled"));
 	}
 	
 	protected void tearDown() {
