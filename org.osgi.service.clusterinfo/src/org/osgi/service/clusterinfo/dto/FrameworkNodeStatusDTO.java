@@ -15,10 +15,17 @@
  */
 package org.osgi.service.clusterinfo.dto;
 
+import org.osgi.service.clusterinfo.FrameworkNodeStatus;
+
 /**
  * Data Transfer Object for a FrameworkNodeStatus Service.
  */
 public class FrameworkNodeStatusDTO extends NodeStatusDTO {
+	/**
+	 * This DTO can be used to provide type safe access to properties of the
+	 * {@link FrameworkNodeStatus} service.
+	 */
+	public FrameworkNodeStatusDTO() {}
 	
 	/**
 	 * The OSGi framework version.
