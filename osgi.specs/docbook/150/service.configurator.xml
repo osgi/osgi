@@ -49,13 +49,18 @@
 
       <listitem>
         <para><emphasis>Configuration Resource</emphasis> - A JSON resource in
-        a bundle containing configuration. This resource is processed, or
-        <emphasis>extended</emphasis>, by an implementation of this
-        specification.</para>
+        a bundle containing configuration. This resource is processed by an 
+        implementation of this specification.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Configurator</emphasis> - The configurator implements
+        <para><emphasis>Extendee</emphasis> - The extendee is a bundle
+        containing configuration resources. It is <emphasis>extended</emphasis> by
+        an implementation of this specification.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Configurator</emphasis> - The Configurator implements
         the behavior specified in this specification. It processes
         configuration resources found in bundles and passes the configuration
         data on to the Configuration Admin Service.</para>
@@ -90,24 +95,38 @@
   </section>
 
   <section xml:id="service.configurator-resources">
-    <title>Configurator Resources</title>
+    <title>Configuration Resources</title>
 
-    <para>The configurator follows the OSGi extender model and looks for JSON
-    configuration files in installed bundles, if the bundle has opted-in to be
-    processed. In order to get processed, a bundle must require the
-    configurator implementation: <programlisting>Require-Capability: osgi.extender;
+    <para>The Configurator is processing configuration resources containing configurations.
+    The format for the configuration resources is JSON and they must be UTF-8 encoded.
+    The resources can either be part of a bundle or provided to the Configurator 
+    on startup.</para>
+    
+    <section>
+      <title>Bundle Configuration Resources</title>
+
+      <para>The Configurator follows the OSGi extender model and looks for JSON
+      configuration resources in installed bundles, if the bundle has opted-in to be
+      processed. In order to get processed, a bundle must require the
+      Configurator extender: <programlisting>Require-Capability: osgi.extender;
   filter := "(&amp;(osgi.extender=osgi.configurator)
               (version&gt;=1.0)(!(version&gt;=2.0)))"
-      </programlisting> The configurator must ensure to only process bundles
-    that it is wired to it by the resolver.</para>
+      </programlisting> The Configurator must ensure to only process bundles
+    that it is wired to by the resolver.</para>
 
-    <para>By default the configuration resources are in the
-    <code>OSGI-INF/configurator</code> directory in the bundle.</para>
+      <para>By default the configuration resources are in the
+      <code>OSGI-INF/configurator</code> directory in the bundle.</para>
 
-    <para>Configuration files are UTF-8 encoded and have the
-    <code>.json</code> file extension. The Configurator processes the
-    configuration resources within a single bundle directory in lexical order.
-    An example configuration resource has the following structure:
+      <para>Configuration files are UTF-8 encoded and have the
+      <code>.json</code> file extension. Files not having this extension are ignored.
+      The Configurator processes the configuration resources within a single bundle 
+      in lexical order using the full resource path for sorting.</para>
+  </section>
+      
+    <section>
+      <title>Configuration Resource Format</title>
+      
+      <para>An example configuration resource has the following structure:
     <programlisting>{
     // Global Settings
     ":configurator:resource-version" : 1,
@@ -127,27 +146,28 @@
 
     <para>This Configurator specification supports configuration resources in
     version 1. This is specified as <code>":configurator:resource-version":
-    1</code>. If the configurator resource version is omitted, 1 is
-    assumed.</para>
+    1</code>. If the Configurator resource version is omitted, <code>1</code> is
+    assumed. Resources specifying an unsupported version are ignored. The
+    Configurator should log an error with the Log Service in such a case.</para>
 
     <para>If multiple bundles provide configuration for the same PID ranking
     rules are used to decide which configuration gets applied, see <xref
     linkend="service.configurator-ranking"/>.</para>
 
-    <para>The configurator removes any comments and the special
+    <para>The Configurator removes any comments and the special
     <code>:configurator:</code> keys from the configuration before providing
-    it to the Configuration Admin Service. The configurator uses the
+    it to the Configuration Admin Service. The Configurator uses the
     <code>Configuration.updateIfDifferent()</code> method on the Configuration
     object to avoid any volatility in the system if the configuration applied
-    has not been changed. The configurator obtains all configurations with the
+    has not been changed. The Configurator obtains all configurations with the
     location value of <code>?</code> to allow the configurations to be
     received by multiple bundles.</para>
 
-    <para>The configurator defines special keys on the global resource level
+    <para>The Configurator defines special keys on the global resource level
     and on pid level.</para>
 
     <table pgwide="1">
-      <title>Resource-level configurator keys</title>
+      <title>Resource-level Configurator keys</title>
 
       <tgroup cols="4">
         <colspec colnum="1" colwidth="1*"/>
@@ -213,7 +233,7 @@
     </table>
 
     <table pgwide="1">
-      <title>PID-level configurator keys</title>
+      <title>PID-level Configurator keys</title>
 
       <tgroup cols="4">
         <colspec colnum="1" colwidth="1*"/>
@@ -245,7 +265,7 @@
             <entry><code>default</code> or <code>force</code></entry>
 
             <entry>Specifies the overwrite policy on configurations set by
-            non-configurator sources. See <xref
+            non-Configurator sources. See <xref
             linkend="service.configurator-policy"/>.</entry>
           </row>
 
@@ -263,13 +283,13 @@
       </tgroup>
     </table>
   </section>
-
+</section>
   <section>
     <title>Factory Configurations</title>
 
     <para>Factory configurations can be addressed in the configuration PID
     using <code>PID~name</code> structure. This ensures a well-known name for
-    the factory configuration instance. The configurator must use the
+    the factory configuration instance. The Configurator must use the
     <code>getFactoryConfiguration()</code> methods on Configuration Admin to
     create or obtain configurations with the given PID and name.</para>
   </section>
@@ -331,7 +351,7 @@
           </tbody>
         </tgroup>
       </table> If a specific data type is required for a configuration, the
-    configurator can be instructed to convert the JSON value to a given data
+    Configurator can be instructed to convert the JSON value to a given data
     type. The target type can be specified by adding a colon <code>:</code>
     and the desired data type to the property name. Supported data types are
     <code>String</code>, <code>Integer</code>, <code>Long</code>,
@@ -342,7 +362,7 @@
     specified for arrays are: <code>int</code>, <code>long</code>,
     <code>float</code>, <code>double</code>, <code>byte</code>,
     <code>short</code>, <code>char</code>, <code>boolean</code>. For
-    <code>Collection</code> the configurator picks a suitable implementation
+    <code>Collection</code> the Configurator picks a suitable implementation
     that preserves order. Both bare <code>Collection</code> as well as typed
     collections that use the generics style notation are supported. If a
     requested conversion cannot be performed, then the configuration is not
@@ -360,7 +380,7 @@
   }
 }</programlisting></para>
 
-    <para>As an alternative of specifying data types for the configurator,
+    <para>As an alternative of specifying data types for the Configurator,
     consumers of configuration can convert the configuration values to the
     desired type by using the OSGi Converter see <xref
     linkend="util.converter"/>. A convenient way to convert a configuration
@@ -372,7 +392,7 @@
       <title>Binary Data</title>
 
       <para>In some cases binary data is associated with configurations such
-      as certificates, security keys or other resources. The configurator can
+      as certificates, security keys or other resources. The Configurator can
       manage this binary data. The bundle developer places the binaries in a
       location in the configuration bundle and references it from the
       configuration resource, marking its type as <code>binary</code>:
@@ -381,12 +401,12 @@
     "security.enabled": true,
     "public.key:binary" : "/OSGI-INF/files/mykey.pub"
   }
-}</programlisting> When the configurator applies the configuration, it
+}</programlisting> When the Configurator applies the configuration, it
       extracts the binary file to a public area on the file system. The
-      configurator creates a subdirectory with as name the PID of the
+      Configurator creates a subdirectory with as name the PID of the
       configuration. The PID must be URL-encoded to ensure that it does not
       contain characters that are illegal on a file system. The binary file is
-      extracted in this subdirectory. The configurator then applies the
+      extracted in this subdirectory. The Configurator then applies the
       configuration with as value for the binary entry the absolute path of
       the extracted binary file.</para>
 
@@ -397,18 +417,18 @@
       being the full path of one extracted binary.</para>
 
       <para>By default a directory called <code>binaries</code> in the bundle
-      data area of the configurator implementation is used. An alternative
+      data area of the Configurator implementation is used. An alternative
       location can be specified via the <code>configurator.binaries</code>
       framework property. The value of this property must be an absolute path
-      on the file system to which the configurator has write access. If the
-      directory does not exist the configurator will create it. If the
-      configurator cannot write to this location, it logs an error and uses
+      on the file system to which the Configurator has write access. If the
+      directory does not exist the Configurator will create it. If the
+      Configurator cannot write to this location, it logs an error and uses
       the default location instead.</para>
 
       <para>When a configuration is removed, its associated binary files are
       also removed from the file system. When a configuration is updated,
       associated binary files are updated, if necessary. In the case of an
-      update the configurator should use a different filename for the
+      update the Configurator should use a different filename for the
       extracted binary file to avoid any open file lock issues.</para>
     </section>
   </section>
@@ -421,9 +441,9 @@
     ranking can be used. Configuration ranking is similar to service ranking;
     it is an integer which defaults to 0. Configurations with a higher ranking
     are preferred over configurations with a lower ranking. When multiple
-    configurations arrive over time it is possible that the configurator
+    configurations arrive over time it is possible that the Configurator
     changes the effective configuration if a higher ranked configuration
-    arrives later. The design of the configurator is such that the effective
+    arrives later. The design of the Configurator is such that the effective
     set of configurations once the system stabilizes is consistent, regardless
     of the order in which bundles are installed and processed.</para>
 
@@ -448,7 +468,7 @@
     bundles with configuration resources are used to enforce best practices or
     compliance with corporate guidelines, which should replace any previous
     manual settings. This specification defines policies to define the
-    overwrite behavior of the configurator when configurations have been set
+    overwrite behavior of the Configurator when configurations have been set
     or modified by another entity.</para>
 
     <para>Configuration policies are set by specifying the
@@ -456,7 +476,7 @@
     <code>default</code> and <code>force</code>. This policy defines the
     behavior when a configuration to be applied was set by another entity in
     the system, or if it was modified by someone from the values set by the
-    configurator. The default value for this property is <code>default</code>.
+    Configurator. The default value for this property is <code>default</code>.
     If the specified value is invalid an error is logged and the default value
     is used. <table>
         <title>Applying Configurations: Overwrite Policies</title>
@@ -484,14 +504,14 @@
             </row>
           </tbody>
         </tgroup>
-      </table> The configurator must keep track of configuration change count
+      </table> The Configurator must keep track of configuration change count
     values to identify configurations that were changed by other entities or
     administrators.</para>
 
     <para>When a bundle that provides configuration resources is uninstalled,
-    the configurator removes any configurations that is has provided on behalf
+    the Configurator removes any configurations that is has provided on behalf
     of this bundle from the system. Before it removes a configuration the
-    configurator checks with Configuration Admin whether the configuration it
+    Configurator checks with Configuration Admin whether the configuration it
     has provided has been changed by another entity. If the configuration has
     not been changed by another entity it is removed. If it has been changed
     then whether the configuration is removed depends on the value of the
@@ -521,28 +541,28 @@
             </row>
           </tbody>
         </tgroup>
-      </table> When a configuration is removed the configurator checks whether
+      </table> When a configuration is removed the Configurator checks whether
     another, lower ranked, configuration resource is available. If present the
-    configurator sets this configuration.</para>
+    Configurator sets this configuration.</para>
   </section>
 
   <section>
     <title>Initial Configurations</title>
 
-    <para>When the configurator starts it calls
+    <para>When the Configurator starts it calls
     <code>bundleContext.getProperty("configurator.initial")</code> to obtain
     initial configurations from the runtime environment. If this property is
     available its value is processed as follows: <orderedlist>
         <listitem>
           <para>If the value starts with a left curly bracket ('{'
           <code>\u007B</code>), ignoring any leading white space, the
-          configurator will interpret the value as a literal configuration
+          Configurator will interpret the value as a literal configuration
           JSON resource.</para>
         </listitem>
 
         <listitem>
           <para>Otherwise the value is treated as a comma-separated list of
-          URLs. The configurator will read the resource at each URL and parse
+          URLs. The Configurator will read the resource at each URL and parse
           it as a JSON Configuration resource. If any errors occur during this
           process they are logged and the URL is skipped.</para>
         </listitem>
@@ -550,25 +570,25 @@
   </section>
 
   <section>
-    <title>Lifecycle</title>
+    <title>Life Cycle</title>
 
-    <para>The configurator uses the Configuration Admin service. Therefore the
-    configurator implementation should require the Configuration Admin service
-    through a service requirement. The configurator should not start
+    <para>The Configurator uses the Configuration Admin service. Therefore the
+    Configurator implementation should require the Configuration Admin service
+    through a service requirement. The Configurator should not start
     processing configuration resources until it has runtime access to the
     Configuration Admin service.</para>
 
-    <para>The configurator uses the Configuration Admin Service that is
-    visible to both the configurator itself as well as the bundle that is
+    <para>The Configurator uses the Configuration Admin Service that is
+    visible to both the Configurator itself as well as the bundle that is
     being processed. If there are multiple candidates, the service with the
     highest ranking is used. If there is no Configuration Admin Service
-    visible to both the bundle that is processed and the configurator, the
+    visible to both the bundle that is processed and the Configurator, the
     processing is delayed until such a service becomes available.</para>
 
-    <para>When the configurator starts, it processes all started bundles and
+    <para>When the Configurator starts, it processes all started bundles and
     applies configurations provided by those bundles. From then on, the
-    configurator processes bundles as they enter the <code>STARTING</code>
-    state. The configurator should process as many bundles as possible in a
+    Configurator processes bundles as they enter the <code>STARTING</code>
+    state. The Configurator should process as many bundles as possible in a
     single pass to minimize volatility for PIDs where multiple configurations
     with different rankings are provided.</para>
 
@@ -577,74 +597,74 @@
     they were originally provided, keeping in mind that the system might have
     been restarted in-between. One way of keeping track of the original
     Configuration Admin Service is via the bundle location of the bundle
-    providing the service. If this service is not available the configurator
+    providing the service. If this service is not available the Configurator
     must attempt to apply the updated configuration when this Configuration
     Admin Service re-appears.</para>
 
     <para>Configurations remain in the system until the bundle that provided
-    the configurations is uninstalled. When this happens, the configurator
+    the configurations is uninstalled. When this happens, the Configurator
     must uninstall the configurations from the Configuration Admin Service to
     which it originally installed it as is the case with updates. If this
     Configuration Admin Service is not available at this time, the
-    configurator must remember the configurations that are to be removed, and
+    Configurator must remember the configurations that are to be removed, and
     remove them when the Configuration Admin Service re-appears at a later
     time.</para>
 
-    <para>When the configurator becomes active, it must check whether
+    <para>When the Configurator becomes active, it must check whether
     configurations that it installed previously are still valid. If the
     bundles that provided these configurations have been uninstalled, the
     associated configurations must be removed. If a bundle is updated the
-    associated configurations are also updated. The configurator calls
+    associated configurations are also updated. The Configurator calls
     <code>updateIfDifferent()</code> on the configuration to avoid volatility
     in the system if the actual configuration values did not change.</para>
 
-    <para>When updating or removing configurations, the configurator must take
+    <para>When updating or removing configurations, the Configurator must take
     the <xref linkend="service.configurator-policy"/> into account. This means
     that for certain policy values an externally modified configuration is not
     replaced or removed.</para>
 
     <para>When a bundle that provides the Configuration Admin Service is
-    uninstalled, the configurator considers all configurations previously
+    uninstalled, the Configurator considers all configurations previously
     provided to that Configuration Admin Service as not yet applied. If
     another Configuration Admin Service is or becomes visible to both the
-    configurator and the bundle containing configuration resources, the
-    configurator will provide the configurations to this Configuration Admin
+    Configurator and the bundle containing configuration resources, the
+    Configurator will provide the configurations to this Configuration Admin
     Service as new.</para>
 
-    <para>When the configurator is stopped or uninstalled the configurations
+    <para>When the Configurator is stopped or uninstalled the configurations
     applied will remain in the system.</para>
   </section>
 
   <section>
     <title>Grouping and Coordinations</title>
 
-    <para>If a coordinator is available the configurator ensures that a
+    <para>If a coordinator is available the Configurator ensures that a
     coordination is active while it's applying configurations. For this, the
-    configurator checks if a coordinator is there. If it is, it checks whether
+    Configurator checks if a coordinator is there. If it is, it checks whether
     a current implicit coordination is present on the thread. If no
-    coordination is present the configurator starts an implicit coordination
+    coordination is present the Configurator starts an implicit coordination
     on the current thread and ends it when it is finished doing its
     work.</para>
 
     <para>If no coordinator service is present or if there is already an
-    implicit coordination, the configurator does not need to do
+    implicit coordination, the Configurator does not need to do
     anything.</para>
 
-    <para>The configurator does not need to delay applying any changes to the
+    <para>The Configurator does not need to delay applying any changes to the
     Configuration Admin until the coordination ends.</para>
   </section>
 
   <section>
     <title>Security</title>
 
-    <para>When Java permissions are enabled, the configurator must perform the
+    <para>When Java permissions are enabled, the Configurator must perform the
     following security procedures.</para>
 
     <section>
       <title>Configuration Permission</title>
 
-      <para>The configurator manages configurations on behalf of the bundle
-      containing the configuration resources. Therefore the configurator needs
+      <para>The Configurator manages configurations on behalf of the bundle
+      containing the configuration resources. Therefore the Configurator needs
       to have the <code>ConfigurationPermission[*,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
       xrefstyle="hyperlink"/> <code>]</code>.</para>
@@ -658,7 +678,7 @@
     <section>
       <title>Service Permission</title>
 
-      <para>The configurator needs <code>ServicePermission[&lt;interface&gt;,
+      <para>The Configurator needs <code>ServicePermission[&lt;interface&gt;,
       GET]</code> for the <code>Coordinator</code> service.</para>
 
       <para>The extended bundle needs
@@ -669,11 +689,11 @@
     <section>
       <title>Using hasPermission</title>
 
-      <para>The configurator does get the <code>ConfigurationAdmin</code>
+      <para>The Configurator does get the <code>ConfigurationAdmin</code>
       service on behalf of the extended bundle. This means that normal
-      stack-based permission checks will check the configurator and not the
-      extended bundle. Since the configurator is getting the service on behalf
-      of the extended bundle, the configurator must call the
+      stack-based permission checks will check the Configurator and not the
+      extended bundle. Since the Configurator is getting the service on behalf
+      of the extended bundle, the Configurator must call the
       <code>Bundle.hasPermission</code> method to validate that the extended
       bundle has the necessary permission to get the
       <code>ConfigurationAdmin</code>.</para>
@@ -682,7 +702,7 @@
     <section>
       <title>File Permission</title>
 
-      <para>If binaries are used, the configurator needs to have read/write
+      <para>If binaries are used, the Configurator needs to have read/write
       permission to the configured directory to store the binaries.</para>
 
       <para>A bundle using a binary referenced from a configuration needs to
@@ -797,7 +817,7 @@
 
       <para>Bundles providing configuration resources must require the
       <code>osgi.extender</code> capability to opt in to being processed by
-      the configurator. The default location for configuration resources is in
+      the Configurator. The default location for configuration resources is in
       <code>OSGI-INF/configurator</code>. A bundle can specify alternate
       locations for configuration resources through the
       <code>configurations</code> attribute. The value of this attribute is of
@@ -805,7 +825,7 @@
       represents a path inside the bundle. This path is always relative to the
       root of the bundle and may start with a slash <code>/</code>. A path
       value of <code>/</code> indicates the root of the bundle. The
-      configurator uses <code>Bundle.findEntries()</code> to find all
+      Configurator uses <code>Bundle.findEntries()</code> to find all
       resources with the <code>.json</code> extension in this location. Sub
       directories are not considered. If the <code>configuration</code>
       attribute specifies multiple paths, these are visited in the order
