@@ -128,7 +128,7 @@
     text between <code>/* */</code> is ignored.</para>
     
     <para>Configuration resources provide a set of configurations
-    each with a <emphasis>Service PID</emphasis> key to target a specific PID
+    each with a <emphasis>PID</emphasis> key to target a specific PID
     in the Configuration Admin Service and zero or more configuration values
     for this PID. Keys starting with the prefix <code>:configurator:</code>
     contain information about the resource or instructions for the Configurator 
@@ -211,13 +211,13 @@
       <title>PIDs and Factory Configurations</title>
 
       <para>Configuration resources provide a set of configurations
-      each with a <emphasis>Service PID</emphasis> key to target a specific PID
+      each with a <emphasis>PID</emphasis> key to target a specific PID
       in the Configuration Admin Service.</para>
 
       <para>Factory configurations can be addressed using the factory PID and 
       a name by starting with the factory PID, appending the character ~ (tilde)
       and then appending the name. This ensures a well-known name for
-      the factory configuration instance and the <emphasis>Service PID</emphasis>
+      the factory configuration instance and the <emphasis>PID</emphasis>
       for such a configuration is exactly this key. The Configurator must use the
       <code>getFactoryConfiguration()</code> methods on Configuration Admin Service 
       to create or obtain configurations with the given factory PID and name.</para>
@@ -235,7 +235,7 @@
 
       <para>A configuration for Configuration Admin is specified through a JSON
       object in the configuration resource. It is introduced using the 
-      <emphasis>Service PID</emphasis> as the key. The value is a JSON object
+      <emphasis>PID</emphasis> as the key. The value is a JSON object
       containing the configuration properties and their values.</para>
       
       <para>The Configurator removes any comments and the special
