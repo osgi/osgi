@@ -82,7 +82,7 @@
     </itemizedlist>
 
     <figure>
-      <title>Configurator Entity overview</title>
+      <title>Configurator Entity Overview</title>
 
       <mediaobject>
         <imageobject>
@@ -104,7 +104,8 @@
     <section>
       <title>Configuration Resource Format</title>
       
-      <para>The format for a configuration resource is JSON and it must be UTF-8 encoded.
+      <para>The format for a configuration resource is JSON (see <xref
+      linkend="service.configurator-json.ref"/>) and it must be UTF-8 encoded.
       An example configuration resource has the following structure:
       <programlisting>{
     // Resource Format Version
@@ -121,7 +122,8 @@
            "a_boolean": true
         }
 }</programlisting> 
-    Comments in the form of JSMin comments are supported, that
+    Comments in the form of JSMin comments (see <xref
+      linkend="service.configurator-jsmin.ref"/>) are supported, that
     is, any text on the same line after <code>//</code> is ignored and any
     text between <code>/* */</code> is ignored.</para>
     
@@ -674,20 +676,22 @@
   <section>
     <title>Grouping and Coordinations</title>
 
-    <para>If a coordinator is available the Configurator ensures that a
-    coordination is active while it's applying configurations. For this, the
-    Configurator checks if a coordinator is there. If it is, it checks whether
-    a current implicit coordination is present on the thread. If no
-    coordination is present the Configurator starts an implicit coordination
-    on the current thread and ends it when it is finished doing its
-    work.</para>
+    <para>The <xref linkend="service.coordinator"/> defines a mechanism for
+    multiple parties to collaborate on a common task without <emphasis>a
+    priori</emphasis> knowledge of who will collaborate in that task. The
+    Configurator must participate in such scenarios to coordinate with 
+    provisioning or configuration tasks.</para>
 
-    <para>If no coordinator service is present or if there is already an
-    implicit coordination, the Configurator does not need to do
-    anything.</para>
-
-    <para>The Configurator does not need to delay applying any changes to the
-    Configuration Admin until the coordination ends.</para>
+    <para>Whenever the Configurator is processing configuration resources and
+    interacting with the Configuration Admin service, the Configurator must check
+    whether a Coordinator Service is present. If it is present, the Configurator
+    checks for an implicit coordination on the current thread. If such an implicit
+    coordination exists, the Configurator does not need to create one. However, if
+    such an implicit coordination is not present, the Configurator starts an implicit
+    coordination on the current thread when interacting with the Configuration Admin
+    service and ends this coordinator when it is finished doing the current set of
+    work. The Configurator does not need to delay applying any changes to the
+    Configuration Admin Service until the coordination ends.</para>
   </section>
 
   <section>
@@ -939,6 +943,10 @@
     <bibliolist>
       <bibliomixed><title><xref linkend="intro.core.release"
       xrefstyle="template:%t"/></title>https://www.osgi.org/developer/specifications/</bibliomixed>
+      <bibliomixed xml:id="service.configurator-json.ref"><title>JSON (JavaScript Object Notation)
+      </title>https://www.json.org</bibliomixed>
+      <bibliomixed xml:id="service.configurator-jsmin.ref"><title>JSMin - The JavaScript Minifier
+      </title>https://www.crockford.com/javascript/jsmin.html</bibliomixed>      
     </bibliolist>
   </section>
 </chapter>
