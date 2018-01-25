@@ -74,8 +74,8 @@ public interface FrameworkManager {
 	 * Get the state for a given bundle Id.
 	 * 
 	 * @param id Addresses the bundle by its identifier.
-	 * @return Returns the current bundle state as defined in (@link
-	 *         org.osgi.framework.Bundle}.
+	 * @return Returns the current bundle state as defined in
+	 *         {@link org.osgi.framework.Bundle}.
 	 * @throws Exception An exception representing a failure in the underlying
 	 *             remote call.
 	 */
