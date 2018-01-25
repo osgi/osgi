@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ public interface ZigBeeNode {
 
 	/**
 	 * ZigBee receiver on when idle, that is, 4th bit of "MAC Capabilities" in
-	 * Node Descriptor. Set to to <code>true</code> if the device does not
+	 * Node Descriptor. Set to <code>true</code> if the device does not
 	 * disable its receiver to conserve power during idle periods, set to
 	 * <code>false</code> otherwise.
 	 * <p>
@@ -365,7 +365,7 @@ public interface ZigBeeNode {
 	 *
 	 * @param clusterID the cluster ID the broadcast message is directed.
 	 * @param frame a ZCL Frame that contains the command that have to be
-	 *        broadcasted to the specific cluster of all the endpoints running
+	 *        broadcast to the specific cluster of all the endpoints running
 	 *        on the node.
 	 * @return a response stream instance that collects and allows a client to
 	 *         be asynchronously notified about the ZCLFrame responses sent back
@@ -381,7 +381,7 @@ public interface ZigBeeNode {
 	 * 
 	 * @param clusterID the cluster ID the broadcast message is directed.
 	 * @param frame a ZCL Frame that contains the command that have to be
-	 *        broadcasted to the specific cluster of all the endpoints running
+	 *        broadcast to the specific cluster of all the endpoints running
 	 *        on the node.
 	 * @param exportedServicePID the source endpoint of the command request. In
 	 *        targeted situations, the source endpoint is the valid service PID

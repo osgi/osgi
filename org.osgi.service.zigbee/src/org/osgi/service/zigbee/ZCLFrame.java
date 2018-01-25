@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public interface ZCLFrame {
 
 	/**
 	 * Retrieve the current size of the internal raw frame (that is the size of
-	 * the byte[] that whould be returned if calling the {@link #getBytes()}
+	 * the byte[] that would be returned if calling the {@link #getBytes()}
 	 * method.
 	 * 
 	 * @return The size of the raw ZCL frame.

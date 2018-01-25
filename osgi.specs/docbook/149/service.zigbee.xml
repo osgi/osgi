@@ -285,9 +285,8 @@
     emulate those objects as ZigBee endpoints associated to the ZigBee node
     represented by the underlying ZigBee host (ZigBee chip) on the ZigBee
     network. This is a <emphasis role="italic">device export</emphasis>
-    situation. For more information about this process, please report to section
-    <xref linkend="service.zigbee.implementinganendpoint"/>.
-    </para>
+    situation. For more information about this process, please report to
+    section <xref linkend="service.zigbee.implementinganendpoint"/>.</para>
 
     <figure xml:id="service.zigbee-export-figure_id_20160712_18h57_18">
       <title>ZigBee device export</title>
@@ -324,8 +323,8 @@
     the device export situation. A <xref
     linkend="org.osgi.service.zigbee.ZCLCommandResponseStream"
     xrefstyle="hyperlink"/> is used instead of a Promise in case of a method
-    that generates a message broadcasted (or groupcasted) to potentially
-    several endpoints.</para>
+    that generates a message broadcast (or groupcast) to potentially several
+    endpoints.</para>
 
     <para>OSGi bundles – called listeners in <xref
     linkend="service.zigbee-figure_id_20160712_18h51_11"
@@ -343,9 +342,9 @@
     services in this situation. Local <xref
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint" xrefstyle="hyperlink"/>
     objects directly call these methods to notify listeners with reports in
-    the export situation. The Base Driver conveys events received
-    through a <xref linkend="org.osgi.service.zigbee.ZCLEventListener" 
-    xrefstyle="hyperlink"/> to networked the ZigBee endpoints that have 
+    the export situation. The Base Driver conveys events received through a
+    <xref linkend="org.osgi.service.zigbee.ZCLEventListener"
+    xrefstyle="hyperlink"/> to networked the ZigBee endpoints that have
     subscribed to relevant reports.</para>
 
     <para>Endpoints, clusters, commands and attributes are specified by ZigBee
@@ -426,14 +425,15 @@
     xrefstyle="template:Figure %n on page %p"/>). In the case of a generic
     device abstraction layer, the model is agnostic to technologies.</para>
 
-    <figure pgwide="1" xml:id="service.zigbee-basedriver-figure_id_20160713_9h23_46">
+    <figure pgwide="1"
+            xml:id="service.zigbee-basedriver-figure_id_20160713_9h23_46">
       <title>The ZigBee Base Driver and a refining driver representing devices
       in an abstract model</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="4in"
-                     contentwidth="6in" fileref="RefinedDriver-2.svg"/>
+          <imagedata align="center" contentdepth="4in" contentwidth="6in"
+                     fileref="RefinedDriver-2.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -473,8 +473,8 @@
       <listitem>
         <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
         xrefstyle="hyperlink"/> –
-        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies 
-        the IEEE Address of a ZigBee node.</para>
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies the IEEE
+        Address of a ZigBee node.</para>
       </listitem>
 
       <listitem>
@@ -654,9 +654,9 @@
     send network frames within ZDP layer, while invoking ZigBee Cluster
     Library (ZCL) commands is enabled on <xref
     linkend="org.osgi.service.zigbee.ZCLCluster" xrefstyle="hyperlink"/>
-    objects. ZCL commands can be however broadcasted on a ZigBee node thanks
-    to <code>broadcast</code> methods. Broadcasting enables the sending of a
-    ZCL command to all clusters identified with an identifier of all endpoints
+    objects. ZCL commands can be however broadcast on a ZigBee node thanks to
+    <code>broadcast</code> methods. Broadcasting enables the sending of a ZCL
+    command to all clusters identified with an identifier of all endpoints
     available on the targeted ZigBee node.</para>
 
     <para>All discovered ZigBee nodes in the local networks are registered
@@ -747,10 +747,10 @@ public class UI {
       <listitem>
         <para><xref linkend="org.osgi.service.zigbee.ZigBeeNode.IEEE_ADDRESS"
         xrefstyle="hyperlink"/> –
-        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies 
-        the IEEE Address of the parent node.</para>
+        (<code>zigbee.node.ieee.address/BigInteger</code>) specifies the IEEE
+        Address of the parent node.</para>
       </listitem>
-      
+
       <listitem>
         <para><xref
         linkend="org.osgi.service.zigbee.ZigBeeEndpoint.ENDPOINT_ID"
@@ -1910,8 +1910,8 @@ public class UI {
     or the base driver is not active on the OSGi framework, an endpoint
     implementation MAY not have any of the above identifiers.</para>
 
-    <para>If the Base Driver is active and at a ZigBee host is started, then 
-    the Base Driver makes an attempt to export the endpoint on the ZigBee 
+    <para>If the Base Driver is active and at a ZigBee host is started, then
+    the Base Driver makes an attempt to export the endpoint on the ZigBee
     network associated to the ZigBee <xref
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint.HOST_PID"
     xrefstyle="hyperlink"/>, <xref
@@ -1932,12 +1932,12 @@ public class UI {
     xrefstyle="hyperlink"/> returns a different array of ZigBeeEndpoint
     objects).</para>
 
-    <para>If - and only if - an error is detected on the properties of the 
+    <para>If - and only if - an error is detected on the properties of the
     ZigBee endpoint to be exported, then the Base Driver calls the <xref
     linkend="org.osgi.service.zigbee.ZigBeeEndpoint.notExported-ZigBeeException-"
     xrefstyle="hyperlink"/> method with a relevant ZigBeeException object as
-    the input argument. The method SHOULD be called even if a ZigBee Host is not 
-    started. </para>
+    the input argument. The method SHOULD be called even if a ZigBee Host is
+    not started.</para>
 
     <para>The endpoint has to be registered with an ID that is unique. If the
     chosen ID already exists as a property of a local endpoint with the same
@@ -2356,7 +2356,7 @@ public class UI {
     linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-"
     xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.service.zigbee.ZigBeeGroup.groupcast-int-ZCLFrame-String-"
-    xrefstyle="hyperlink"/> methods. A groupcasted message is received by the
+    xrefstyle="hyperlink"/> methods. A groupcast message is received by the
     endpoints that are members of the targeted group.</para>
   </section>
 
@@ -2609,7 +2609,7 @@ public class UI {
       xml:id="service.zigbee-ref-whiteboard-pattern"><title>Listeners
       considered harmful: The whiteboard pattern</title>Peter Kriens, BJ
       Hargrave for the OSGi Alliance, Technical Whitepaper, August
-      2004.</bibliomixed>
+      2004.<?line-break ?>https://www.osgi.org/wp-content/uploads/whiteboard1.pdf</bibliomixed>
 
       <bibliomixed xml:id="service.zigbee-ref-zigbee-gateway"><title>ZigBee
       Gateway</title>ZigBee Alliance, 2011.</bibliomixed>

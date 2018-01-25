@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016, 2017). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,7 +162,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * with the channel parameter.
 	 * 
 	 * @param channel The network channel.
-	 * @throws IllegalStateException If the host is started started, or the host
+	 * @throws IllegalStateException If the host is started, or the host
 	 *         is not a network manager.
 	 * @throws IOException for serial communication exception.
 	 */

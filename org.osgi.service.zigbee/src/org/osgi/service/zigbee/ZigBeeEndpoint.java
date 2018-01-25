@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2016). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2016, 2018). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ public interface ZigBeeEndpoint {
 	/**
 	 * Property containing a list of output clusters. This list is contained
 	 * also in the ZigBee Simple Descriptor of the ZigBeeEndpoint service.
-	 * property is of type int[].
+	 * This property is of type int[].
 	 * <p>
 	 * It is a <b>mandatory</b> service property for this service.
 	 */
